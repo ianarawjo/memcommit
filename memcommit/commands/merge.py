@@ -1,0 +1,36 @@
+from typing import Annotated
+
+import typer
+
+import memcommit.ops as ops
+from memcommit.context import Context, Memory
+from memcommit.store import MemoryStore
+
+
+def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge into the current one")]) -> None:
+    store = MemoryStore()
+    if not store.context_exists(other):
+        typer.secho(f"Error: context '{other}' does not exist.", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+    try:
+        target = store.load_current()
+    except RuntimeError as e:
+        typer.secho(str(e), fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+    if target.name == other:
+        typer.secho("Error: cannot merge a context into itself.", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+
+    source = store.load(other)
+    added = ops.merge(source, target)
+    store.save(target)
+
+    mem_count = sum(1 for i in added if isinstance(i, Memory))
+    ctx_count = sum(1 for i in added if isinstance(i, Context))
+    parts = []
+    if mem_count:
+        parts.append(f"{mem_count} memor{'y' if mem_count == 1 else 'ies'}")
+    if ctx_count:
+        parts.append(f"{ctx_count} embedded context{'s' if ctx_count != 1 else ''}")
+    summary = ", ".join(parts) if parts else "nothing new"
+    typer.secho(f"Merged '{other}' into '{target.name}': added {summary}.", fg=typer.colors.GREEN)
