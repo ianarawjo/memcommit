@@ -7,51 +7,55 @@
 """
 from __future__ import annotations
 
-from typing import Protocol, TypeAlias, runtime_checkable
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Protocol, TypeAlias, runtime_checkable
+
 
 @runtime_checkable
 class Identifiable(Protocol):
-    """
-        Any object that has a unique identifier (uid) can be considered an Identifiable.
-    """
     uid: str
 
-class Memory(Identifiable):
-    """
-        Atomic chunk of information.
-        Note that the format of the memory does not matter here; format is abstracted. 
-    """
+
+class Memory:
+    """Atomic chunk of information."""
 
     def __init__(self, uid: str, content: str):
         self.uid = uid
         self.content = content
 
-class Context(Identifiable):
+
+class Context:
     """
-        Abstract memory store. 
-        A Context is a collection of Memories or other Contexts.
+    Abstract memory store.
+    A Context is a collection of Memories or other Contexts (nested by reference).
     """
 
     def __init__(self, uid: str, name: str):
         self.uid = uid
         self.name = name
-        self.memories: dict[str, Information] = dict()
+        self.memories: dict[str, Information] = {}
 
-    def add(self, memory: Information):
-        """Add a memory to the context."""
-        self.memories[memory.uid] = memory
-    
-    def remove(self, uid: str):
-        """Remove a memory from the context by its uid."""
-        if uid in self.memories:
-            del self.memories[uid]
-        else:
-            raise KeyError(f"Memory with uid {uid} not found in context.")
+    def add(self, info: Information) -> None:
+        self.memories[info.uid] = info
+
+    def remove(self, uid: str) -> None:
+        if uid not in self.memories:
+            raise KeyError(f"No item with uid '{uid}' in context '{self.name}'.")
+        del self.memories[uid]
 
     def get_all(self) -> dict[str, Information]:
-        """Get all memories in the context."""
         return self.memories
 
 
-# A piece of information in a context can be either a Memory or another Context (i.e., a nested context).
+# A piece of information in a context is either an atomic Memory or a nested Context.
 Information: TypeAlias = Memory | Context
+
+
+@dataclass
+class Checkpoint:
+    """Point-in-time snapshot of a context's direct state."""
+    uid: str
+    message: str
+    timestamp: datetime
+    snapshot: dict[str, Any]  # serialized memories (context refs stored by ref, not inline)

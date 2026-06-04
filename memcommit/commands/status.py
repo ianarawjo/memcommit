@@ -1,0 +1,42 @@
+import typer
+
+from memcommit.context import Context, Memory
+from memcommit.store import ContextStore
+
+
+def cmd() -> None:
+    store = ContextStore()
+    name = store.current_context_name()
+    if not name:
+        typer.secho("No current context. Run 'mem init <name>' to get started.", fg=typer.colors.YELLOW)
+        return
+
+    ctx = store.load_context(name)
+    memories = [v for v in ctx.memories.values() if isinstance(v, Memory)]
+    embedded = [v for v in ctx.memories.values() if isinstance(v, Context)]
+    checkpoints = store.list_checkpoints(name)
+
+    typer.secho(f"On context: {name}", bold=True)
+    typer.echo(
+        f"  {len(memories)} memor{'y' if len(memories) == 1 else 'ies'}"
+        f"  |  {len(embedded)} embedded context{'s' if len(embedded) != 1 else ''}"
+        f"  |  {len(checkpoints)} checkpoint{'s' if len(checkpoints) != 1 else ''}"
+    )
+
+    if embedded:
+        typer.secho("\nEmbedded contexts:", bold=True)
+        for ec in embedded:
+            typer.echo(f"  [{ec.uid[:8]}] {ec.name}")
+
+    if memories:
+        typer.secho("\nRecent memories:", bold=True)
+        for mem in memories[-5:]:
+            typer.echo(f"  [{mem.uid[:8]}] {mem.content}")
+    else:
+        typer.echo("\n  (no memories yet)")
+
+    if checkpoints:
+        last = checkpoints[-1]
+        ts = last["timestamp"][:19].replace("T", " ")
+        msg = last["message"] or "(no message)"
+        typer.secho(f"\nLast checkpoint: [{last['uid'][:8]}] {ts}  {msg}", dim=True)
