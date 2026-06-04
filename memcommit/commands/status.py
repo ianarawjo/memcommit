@@ -1,17 +1,17 @@
 import typer
 
 from memcommit.context import Context, Memory
-from memcommit.store import ContextStore
+from memcommit.store import MemoryStore
 
 
 def cmd() -> None:
-    store = ContextStore()
+    store = MemoryStore()
     name = store.current_context_name()
     if not name:
         typer.secho("No current context. Run 'mem init <name>' to get started.", fg=typer.colors.YELLOW)
         return
 
-    ctx = store.load_context(name)
+    ctx = store.load(name)
     memories = [v for v in ctx.memories.values() if isinstance(v, Memory)]
     embedded = [v for v in ctx.memories.values() if isinstance(v, Context)]
     checkpoints = store.list_checkpoints(name)

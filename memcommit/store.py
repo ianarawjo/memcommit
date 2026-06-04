@@ -1,6 +1,9 @@
 """
-    ContextStore manages all persistence for mem contexts.
+    MemoryStore manages all persistence for mem contexts.
     Single source of truth for reading/writing ~/.mem/.
+
+    Serialization is delegated to Context.to_dict() / Context.from_dict().
+    All disk I/O is explicit: callers must call store.save(ctx) to persist mutations.
 """
 from __future__ import annotations
 
@@ -10,14 +13,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from memcommit.context import Checkpoint, Context, Information, Memory
+from memcommit.context import Checkpoint, Context
 
 STORE_DIR = Path.home() / ".mem"
 CONTEXTS_DIR = STORE_DIR / "contexts"
 STATE_FILE = STORE_DIR / "state.json"
 
 
-class ContextStore:
+class MemoryStore:
 
     def __init__(self):
         STORE_DIR.mkdir(exist_ok=True)
@@ -25,7 +28,7 @@ class ContextStore:
         if not STATE_FILE.exists():
             self._write_state({"current": None})
 
-    # --- State ---
+    # --- Global state ---
 
     def _read_state(self) -> dict:
         with open(STATE_FILE) as f:
@@ -60,64 +63,47 @@ class ContextStore:
             if d.is_dir() and (d / "context.json").exists()
         )
 
-    # --- Serialization ---
-
-    def _serialize_context(self, ctx: Context) -> dict:
-        """Serialize a context to a JSON-safe dict; embedded contexts stored as refs."""
-        memories: dict[str, dict] = {}
-        for uid, info in ctx.memories.items():
-            if isinstance(info, Memory):
-                memories[uid] = {"type": "memory", "uid": info.uid, "content": info.content}
-            elif isinstance(info, Context):
-                memories[uid] = {"type": "context_ref", "uid": info.uid, "name": info.name}
-        return {"uid": ctx.uid, "name": ctx.name, "memories": memories}
-
-    def _deserialize_context(self, data: dict, _loading: frozenset[str] = frozenset()) -> Context:
-        """Deserialize a context, resolving context_refs as live loads from disk."""
-        ctx = Context(uid=data["uid"], name=data["name"])
-        for uid, item in data["memories"].items():
-            if item["type"] == "memory":
-                ctx.add(Memory(uid=item["uid"], content=item["content"]))
-            elif item["type"] == "context_ref":
-                ref_name = item["name"]
-                if ref_name in _loading:
-                    # Circular reference — skip silently to avoid infinite recursion.
-                    continue
-                if self.context_exists(ref_name):
-                    nested = self.load_context(ref_name, _loading | {ctx.name})
-                    ctx.add(nested)
-        return ctx
-
     # --- Load / Save ---
 
-    def load_context(self, name: str, _loading: frozenset[str] = frozenset()) -> Context:
+    def load(self, name: str, _loading: frozenset[str] = frozenset()) -> Context:
+        """Load a context by name, resolving embedded context refs as live loads."""
         if not self.context_exists(name):
             raise FileNotFoundError(f"Context '{name}' not found.")
         with open(self._context_file(name)) as f:
             data = json.load(f)
-        return self._deserialize_context(data, _loading)
 
-    def save_context(self, ctx: Context) -> None:
-        ctx_dir = self._context_dir(ctx.name)
-        ctx_dir.mkdir(exist_ok=True)
-        (ctx_dir / "checkpoints").mkdir(exist_ok=True)
-        with open(self._context_file(ctx.name), "w") as f:
-            json.dump(self._serialize_context(ctx), f, indent=2)
+        def loader(ref_name: str) -> Context | None:
+            if ref_name in _loading:
+                return None  # break circular reference
+            if not self.context_exists(ref_name):
+                return None
+            return self.load(ref_name, _loading | {name})
+
+        return Context.from_dict(data, loader=loader)
 
     def load_current(self) -> Context:
         name = self.current_context_name()
         if not name:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
-        return self.load_context(name)
+        return self.load(name)
+
+    def save(self, ctx: Context) -> None:
+        """Persist a context to disk. Caller is responsible for calling this after mutations."""
+        ctx_dir = self._context_dir(ctx.name)
+        ctx_dir.mkdir(exist_ok=True)
+        (ctx_dir / "checkpoints").mkdir(exist_ok=True)
+        with open(self._context_file(ctx.name), "w") as f:
+            json.dump(ctx.to_dict(), f, indent=2)
 
     # --- Checkpoints ---
 
-    def save_checkpoint(self, ctx: Context, message: str = "") -> Checkpoint:
+    def checkpoint(self, ctx: Context, message: str = "") -> Checkpoint:
+        """Save a point-in-time snapshot of ctx's current state."""
         cp = Checkpoint(
             uid=str(uuid.uuid4()),
             message=message,
             timestamp=datetime.now(),
-            snapshot=self._serialize_context(ctx),
+            snapshot=ctx.to_dict(),
         )
         ts = cp.timestamp.strftime("%Y%m%dT%H%M%S")
         slug = message[:24].replace(" ", "-").replace("/", "-") if message else "checkpoint"

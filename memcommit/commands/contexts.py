@@ -1,10 +1,10 @@
 import typer
 
-from memcommit.store import ContextStore
+from memcommit.store import MemoryStore
 
 
 def cmd() -> None:
-    store = ContextStore()
+    store = MemoryStore()
     names = store.list_context_names()
     current = store.current_context_name()
     if not names:

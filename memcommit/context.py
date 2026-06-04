@@ -1,15 +1,13 @@
 """
     Defines an abstract memory store, called a "context" in memcommit.
     Contexts store atomic chunks of information, called memories.
-
-    At the basic level, a Context simply stores a set of memories
-    and manages this set's updating and retrieval.
 """
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Protocol, TypeAlias, runtime_checkable
+from typing import Any, Callable, Protocol, TypeAlias, runtime_checkable
 
 
 @runtime_checkable
@@ -24,6 +22,13 @@ class Memory:
         self.uid = uid
         self.content = content
 
+    def to_dict(self) -> dict[str, Any]:
+        return {"type": "memory", "uid": self.uid, "content": self.content}
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> Memory:
+        return cls(uid=data["uid"], content=data["content"])
+
 
 class Context:
     """
@@ -36,8 +41,16 @@ class Context:
         self.name = name
         self.memories: dict[str, Information] = {}
 
-    def add(self, info: Information) -> None:
+    def add(self, info: str | Information) -> Information:
+        """
+        Add information to this context.
+        If info is a plain string, it is wrapped in a new Memory automatically.
+        Returns the added Information (useful when a string was auto-promoted).
+        """
+        if isinstance(info, str):
+            info = Memory(uid=str(uuid.uuid4()), content=info)
         self.memories[info.uid] = info
+        return info
 
     def remove(self, uid: str) -> None:
         if uid not in self.memories:
@@ -46,6 +59,37 @@ class Context:
 
     def get_all(self) -> dict[str, Information]:
         return self.memories
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize to a JSON-safe dict. Embedded contexts are stored as refs, not inline."""
+        memories: dict[str, Any] = {}
+        for uid, info in self.memories.items():
+            if isinstance(info, Memory):
+                memories[uid] = info.to_dict()
+            elif isinstance(info, Context):
+                memories[uid] = {"type": "context_ref", "uid": info.uid, "name": info.name}
+        return {"uid": self.uid, "name": self.name, "memories": memories}
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+        loader: Callable[[str], Context | None] | None = None,
+    ) -> Context:
+        """
+        Deserialize from a dict produced by to_dict().
+        loader(name) is called to resolve context_refs; if absent or returning None,
+        the ref is silently skipped.
+        """
+        ctx = cls(uid=data["uid"], name=data["name"])
+        for item in data["memories"].values():
+            if item["type"] == "memory":
+                ctx.add(Memory.from_dict(item))
+            elif item["type"] == "context_ref" and loader is not None:
+                nested = loader(item["name"])
+                if nested is not None:
+                    ctx.add(nested)
+        return ctx
 
 
 # A piece of information in a context is either an atomic Memory or a nested Context.
@@ -58,4 +102,4 @@ class Checkpoint:
     uid: str
     message: str
     timestamp: datetime
-    snapshot: dict[str, Any]  # serialized memories (context refs stored by ref, not inline)
+    snapshot: dict[str, Any]  # result of ctx.to_dict() at checkpoint time

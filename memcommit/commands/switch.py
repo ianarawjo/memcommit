@@ -2,11 +2,11 @@ from typing import Annotated
 
 import typer
 
-from memcommit.store import ContextStore
+from memcommit.store import MemoryStore
 
 
 def cmd(name: Annotated[str, typer.Argument(help="Name of the context to switch to")]) -> None:
-    store = ContextStore()
+    store = MemoryStore()
     if not store.context_exists(name):
         typer.secho(f"Error: context '{name}' does not exist.", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

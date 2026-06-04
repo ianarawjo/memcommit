@@ -1,10 +1,10 @@
 import typer
 
-from memcommit.store import ContextStore
+from memcommit.store import MemoryStore
 
 
 def cmd() -> None:
-    store = ContextStore()
+    store = MemoryStore()
     name = store.current_context_name()
     if not name:
         typer.secho("No current context. Run 'mem init <name>' first.", fg=typer.colors.RED, err=True)
