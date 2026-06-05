@@ -4,7 +4,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.config import Config
-from memcommit.context import Context
+from memcommit.context import AutoCheckpoint, Context
 from memcommit.semantic.llm import LLMClient, LLMError
 from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange, apply_changes
 from memcommit.store import MemoryStore
@@ -100,4 +100,15 @@ def cmd(info: Annotated[str, typer.Argument(help="Description of memories to for
         raise typer.Exit(1)
 
     if applied:
-        store.save(ctx)
+        removes = [c for c in applied if isinstance(c, RemoveChange)]
+        edits = [c for c in applied if isinstance(c, EditChange)]
+        parts = []
+        if removes:
+            parts.append(f'removed "{removes[0].content[:40]}"' if len(removes) == 1 else f"removed {len(removes)}")
+        if edits:
+            parts.append(f'edited "{edits[0].old_content[:40]}"' if len(edits) == 1 else f"edited {len(edits)}")
+        store.save(ctx, AutoCheckpoint(
+            command="forget",
+            args={"query": info},
+            description=f'Forgot ({info[:40]}): {", ".join(parts)}',
+        ))

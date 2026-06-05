@@ -14,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from memcommit.context import Checkpoint, Context
+from memcommit.context import AutoCheckpoint, Checkpoint, Context
 
 STORE_DIR = Path.home() / ".mem"
 CONTEXTS_DIR = STORE_DIR / "contexts"
@@ -88,11 +88,20 @@ class MemoryStore:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
         return self.load(name)
 
-    def save(self, ctx: Context) -> None:
+    def save(self, ctx: Context, auto_checkpoint: Optional[AutoCheckpoint] = None) -> None:
         """Persist a context to disk. Caller is responsible for calling this after mutations."""
         ctx_dir = self._context_dir(ctx.name)
         ctx_dir.mkdir(exist_ok=True)
         (ctx_dir / "checkpoints").mkdir(exist_ok=True)
+        if auto_checkpoint is not None:
+            self.checkpoint(
+                ctx,
+                message=auto_checkpoint.description,
+                command=auto_checkpoint.command,
+                args=auto_checkpoint.args,
+                description=auto_checkpoint.description,
+                auto=True,
+            )
         with open(self._context_file(ctx.name), "w") as f:
             json.dump(ctx.to_dict(), f, indent=2)
 
@@ -106,16 +115,28 @@ class MemoryStore:
 
     # --- Checkpoints ---
 
-    def checkpoint(self, ctx: Context, message: str = "") -> Checkpoint:
+    def checkpoint(
+        self,
+        ctx: Context,
+        message: str = "",
+        command: Optional[str] = None,
+        args: Optional[dict] = None,
+        description: Optional[str] = None,
+        auto: bool = False,
+    ) -> Checkpoint:
         """Save a point-in-time snapshot of ctx's current state."""
         cp = Checkpoint(
             uid=str(uuid.uuid4()),
             message=message,
             timestamp=datetime.now(),
             snapshot=ctx.to_dict(),
+            command=command,
+            args=args,
+            description=description,
+            auto=auto,
         )
         ts = cp.timestamp.strftime("%Y%m%dT%H%M%S")
-        slug = message[:24].replace(" ", "-").replace("/", "-") if message else "checkpoint"
+        slug = message[:24].replace(" ", "-").replace("/", "-") if message else (command or "checkpoint")
         cp_dir = self._context_dir(ctx.name) / "checkpoints"
         cp_dir.mkdir(exist_ok=True)
         with open(cp_dir / f"{ts}-{slug}.json", "w") as f:
@@ -124,10 +145,15 @@ class MemoryStore:
                 "message": cp.message,
                 "timestamp": cp.timestamp.isoformat(),
                 "snapshot": cp.snapshot,
+                "command": cp.command,
+                "args": cp.args,
+                "description": cp.description,
+                "auto": cp.auto,
             }, f, indent=2)
         return cp
 
     def list_checkpoints(self, name: str) -> list[dict]:
+        """Return checkpoints for a context, sorted newest-first."""
         cp_dir = self._context_dir(name) / "checkpoints"
         if not cp_dir.exists():
             return []
@@ -135,4 +161,47 @@ class MemoryStore:
         for path in sorted(cp_dir.glob("*.json")):
             with open(path) as f:
                 entries.append(json.load(f))
-        return sorted(entries, key=lambda x: x["timestamp"])
+        return sorted(entries, key=lambda x: x["timestamp"], reverse=True)
+
+    def revert(self, ctx_name: str, uid_prefix: str) -> tuple[Checkpoint, Checkpoint]:
+        """Revert context to a checkpoint. Returns (pre_revert_cp, target_cp)."""
+        entries = self.list_checkpoints(ctx_name)
+        matches = [e for e in entries if e["uid"].startswith(uid_prefix)]
+        if not matches:
+            raise KeyError(f"No checkpoint with uid prefix '{uid_prefix}'.")
+        if len(matches) > 1:
+            raise ValueError(
+                f"Ambiguous prefix '{uid_prefix}' matches {len(matches)} checkpoints."
+            )
+
+        target_data = matches[0]
+        ctx = self.load(ctx_name)
+
+        pre_cp = self.checkpoint(
+            ctx,
+            message=f"Pre-revert (targeting {target_data['uid'][:8]})",
+            command="revert",
+            args={"target_uid": target_data["uid"]},
+            description=f"Pre-revert snapshot before reverting to [{target_data['uid'][:8]}]",
+            auto=True,
+        )
+
+        def loader(ref_name: str) -> "Context | None":
+            if not self.context_exists(ref_name):
+                return None
+            return self.load(ref_name)
+
+        restored = Context.from_dict(target_data["snapshot"], loader=loader)
+        self.save(restored)
+
+        target_cp = Checkpoint(
+            uid=target_data["uid"],
+            message=target_data.get("message", ""),
+            timestamp=datetime.fromisoformat(target_data["timestamp"]),
+            snapshot=target_data["snapshot"],
+            command=target_data.get("command"),
+            args=target_data.get("args"),
+            description=target_data.get("description"),
+            auto=target_data.get("auto", False),
+        )
+        return pre_cp, target_cp

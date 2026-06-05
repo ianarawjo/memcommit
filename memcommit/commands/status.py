@@ -1,6 +1,7 @@
 import typer
 
 from memcommit.context import Context, Memory
+from memcommit.commands.log import render_checkpoint_rows
 from memcommit.store import MemoryStore
 
 
@@ -36,7 +37,7 @@ def cmd() -> None:
         typer.echo("\n  (no memories yet)")
 
     if checkpoints:
-        last = checkpoints[-1]
-        ts = last["timestamp"][:19].replace("T", " ")
-        msg = last["message"] or "(no message)"
-        typer.secho(f"\nLast checkpoint: [{last['uid'][:8]}] {ts}  {msg}", dim=True)
+        typer.secho("\nRecent checkpoints:", bold=True)
+        render_checkpoint_rows(checkpoints, limit=5)
+    else:
+        typer.echo("\n  (no checkpoints yet)")

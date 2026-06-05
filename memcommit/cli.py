@@ -7,7 +7,6 @@ from memcommit.commands import (
     add,
     branch,
     checkpoint,
-    checkpoints,
     contexts,
     delete,
     embed,
@@ -17,8 +16,10 @@ from memcommit.commands import (
     init,
     integrate,
     list_memories,
+    log,
     merge,
     remove,
+    revert,
     status,
     switch,
 )
@@ -45,8 +46,9 @@ app.command("embed",          help="Embed one context inside another.")(embed.cm
 
 # --- Editing ---
 app.command("remove",         help="Remove a memory from the current context by uid.")(remove.cmd)
-app.command("checkpoint",     help="Save a checkpoint of the current context state.")(checkpoint.cmd)
-app.command("checkpoints",    help="List checkpoints for the current context.")(checkpoints.cmd)
+app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
+app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)
+app.command("log",            help="List checkpoints (history) for the current context.")(log.cmd)
 
 # --- Semantic (require mem config set llm <model>) ---
 app.command("forget",         help="Forget memories matching a description (uses LLM).")(forget.cmd)

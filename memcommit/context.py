@@ -5,9 +5,9 @@
 from __future__ import annotations
 
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Callable, Protocol, TypeAlias, runtime_checkable
+from typing import Any, Callable, Optional, Protocol, TypeAlias, runtime_checkable
 
 
 @runtime_checkable
@@ -105,9 +105,21 @@ Information: TypeAlias = Memory | Context
 
 
 @dataclass
+class AutoCheckpoint:
+    """Passed to store.save() to trigger an automatic post-operation checkpoint."""
+    command: str
+    args: dict[str, Any]
+    description: str
+
+
+@dataclass
 class Checkpoint:
     """Point-in-time snapshot of a context's direct state."""
     uid: str
     message: str
     timestamp: datetime
     snapshot: dict[str, Any]  # result of ctx.to_dict() at checkpoint time
+    command: Optional[str] = None
+    args: Optional[dict[str, Any]] = None
+    description: Optional[str] = None
+    auto: bool = False

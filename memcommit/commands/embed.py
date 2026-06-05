@@ -3,6 +3,7 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
+from memcommit.context import AutoCheckpoint
 from memcommit.store import MemoryStore
 
 
@@ -24,5 +25,9 @@ def cmd(
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    store.save(parent)
+    store.save(parent, AutoCheckpoint(
+        command="embed",
+        args={"child": a, "into": into},
+        description=f"Embedded '{a}' into '{into}'",
+    ))
     typer.secho(f"Embedded '{a}' into '{into}'.", fg=typer.colors.GREEN)

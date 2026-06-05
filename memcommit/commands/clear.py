@@ -2,6 +2,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.context import AutoCheckpoint
 from memcommit.store import MemoryStore
 
 
@@ -33,5 +34,9 @@ def cmd(
         typer.confirm("Continue?", abort=True)
 
     ctx.memories.clear()
-    store.save(ctx)
+    store.save(ctx, AutoCheckpoint(
+        command="clear",
+        args={"count": count, "context": context_name},
+        description=f"Cleared all {count} item(s) from '{context_name}'",
+    ))
     typer.secho(f"Cleared {count} item(s) from '{context_name}'.", fg=typer.colors.GREEN)

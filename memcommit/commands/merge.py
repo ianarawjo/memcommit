@@ -3,7 +3,7 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
-from memcommit.context import Context, Memory
+from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.store import MemoryStore
 
 
@@ -23,7 +23,6 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
 
     source = store.load(other)
     added = ops.merge(source, target)
-    store.save(target)
 
     mem_count = sum(1 for i in added if isinstance(i, Memory))
     ctx_count = sum(1 for i in added if isinstance(i, Context))
@@ -33,4 +32,10 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
     if ctx_count:
         parts.append(f"{ctx_count} embedded context{'s' if ctx_count != 1 else ''}")
     summary = ", ".join(parts) if parts else "nothing new"
+
+    store.save(target, AutoCheckpoint(
+        command="merge",
+        args={"source": other},
+        description=f"Merged '{other}' into '{target.name}': added {summary}",
+    ))
     typer.secho(f"Merged '{other}' into '{target.name}': added {summary}.", fg=typer.colors.GREEN)
