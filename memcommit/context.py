@@ -60,6 +60,14 @@ class Context:
     def get_all(self) -> dict[str, Information]:
         return self.memories
 
+    def replace(self, memory: Memory) -> None:
+        """Replace an existing Memory in-place by uid. Raises if uid is absent or is a Context."""
+        if memory.uid not in self.memories:
+            raise KeyError(f"No memory with uid '{memory.uid}' in context '{self.name}'.")
+        if not isinstance(self.memories[memory.uid], Memory):
+            raise TypeError(f"'{memory.uid}' is an embedded context, not a Memory.")
+        self.memories[memory.uid] = memory
+
     def to_dict(self) -> dict[str, Any]:
         """Serialize to a JSON-safe dict. Embedded contexts are stored as refs, not inline."""
         memories: dict[str, Any] = {}

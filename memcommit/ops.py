@@ -1,11 +1,21 @@
 """
-    Pure in-memory operations on Context objects.
-    No disk I/O here — callers persist via MemoryStore.save(ctx) when needed.
+    In-memory operations on Context objects.
+    No disk I/O — callers persist via MemoryStore.save(ctx) when needed.
 
-    These functions form the public Python API for memcommit:
+    Semantic operations (forget, find_conflicts, integrate, find) require an
+    LLMClient.  They live here alongside their system prompts so all logic for
+    a given operation is co-located in one place.
+
+    Public API:
         import memcommit.ops as ops
-        mem = ops.add(ctx, "some information")
+        mem  = ops.add(ctx, "some information")
         ops.embed(child_ctx, parent_ctx)
+
+        # Semantic — forget candidate generation (non-mutating):
+        proposals, history = ops.forget(ctx, "elephants", llm_client)
+        proposals, history = ops.revise_forget("keep only the edit", llm_client, history, ctx)
+        from memcommit.semantic.changes import apply_changes
+        apply_changes(ctx, proposals)
 """
 from __future__ import annotations
 
@@ -15,8 +25,13 @@ from typing import TYPE_CHECKING
 from memcommit.context import Context, Information, Memory
 
 if TYPE_CHECKING:
-    pass
+    from memcommit.llm import LLMClient
+    from memcommit.semantic.changes import ProposedChange
 
+
+# ---------------------------------------------------------------------------
+# Structural operations (no LLM)
+# ---------------------------------------------------------------------------
 
 def init(name: str) -> Context:
     """Create a new, empty Context. Does not persist — caller must store.save(ctx)."""
@@ -96,6 +111,95 @@ def merge(source: Context, target: Context) -> list[Information]:
     return added
 
 
+# ---------------------------------------------------------------------------
+# Semantic operation: forget
+# ---------------------------------------------------------------------------
+
+_FORGET_SYSTEM = """\
+You are a memory management assistant. Your job is to identify which stored memories \
+should be removed or edited based on a user's forget request.
+
+Respond with ONLY a valid JSON object — no prose, no markdown fences. Use this schema:
+{
+  "analysis": "<one-sentence summary of what matched>",
+  "proposed_changes": [
+    {"operation": "remove", "uid": "<uid>", "reason": "<why>"},
+    {"operation": "edit",   "uid": "<uid>", "new_content": "<revised text>", "reason": "<why>"}
+  ]
+}
+
+Rules:
+- Use "remove" when the entire memory is about the forget topic.
+- Use "edit" when only part of the memory mentions the forget topic; preserve everything else.
+- Preserve the exact uid strings from the input — do not invent or alter them.
+- Only include memories that are relevant to the forget request.
+- If nothing matches, return {"analysis": "...", "proposed_changes": []}.
+"""
+
+
+def _format_forget_user_msg(ctx: Context, query: str) -> str:
+    lines = [
+        f"[{uid}] {info.content}"
+        for uid, info in ctx.memories.items()
+        if isinstance(info, Memory)
+    ]
+    memory_block = "\n".join(lines) or "(no memories)"
+    return (
+        f"## Memories\n{memory_block}\n\n"
+        f'## Forget request\n"{query}"\n\n'
+        "Respond with valid JSON only."
+    )
+
+
+def forget(
+    ctx: Context,
+    query: str,
+    llm: LLMClient,
+) -> tuple[list[ProposedChange], list[dict]]:
+    """
+    Ask the LLM to identify which memories match the forget request.
+
+    Returns (proposals, history) where:
+      proposals — list of RemoveChange / EditChange (does NOT modify ctx)
+      history   — raw message list; pass to revise_forget() for follow-up turns
+    """
+    from memcommit.semantic.changes import parse_proposals
+    from memcommit.semantic.utils import build_messages, extract_json
+
+    messages = build_messages(_FORGET_SYSTEM, _format_forget_user_msg(ctx, query))
+    text = llm.chat(messages)
+    history = messages + [{"role": "assistant", "content": text}]
+    proposals = parse_proposals(extract_json(text), ctx)
+    return proposals, history
+
+
+def revise_forget(
+    feedback: str,
+    llm: LLMClient,
+    history: list[dict],
+    ctx: Context,
+) -> tuple[list[ProposedChange], list[dict]]:
+    """
+    Send user feedback to the LLM and get a revised set of forget proposals.
+
+    Pass the history returned by a prior forget() or revise_forget()
+    call. The full conversation is preserved so the LLM sees the negotiation context.
+    Returns (revised_proposals, updated_history).
+    """
+    from memcommit.semantic.changes import parse_proposals
+    from memcommit.semantic.utils import build_messages, extract_json
+
+    messages = build_messages(history=history, feedback=feedback)
+    text = llm.chat(messages)
+    updated_history = messages + [{"role": "assistant", "content": text}]
+    proposals = parse_proposals(extract_json(text), ctx)
+    return proposals, updated_history
+
+
+# ---------------------------------------------------------------------------
+# Semantic stubs
+# ---------------------------------------------------------------------------
+
 def find_conflicts(ctx: Context, info: str) -> list[tuple[Information, str]]:
     """
     [stub] Find information in ctx that semantically conflicts with info.
@@ -141,17 +245,6 @@ def integrate(ctx: Context, info: str) -> dict:
       {"action": "conflict", "conflicts": [(Information, str), ...]}
     """
     raise NotImplementedError("'integrate' is not yet implemented.")
-
-
-def forget(ctx: Context, query: str) -> list[Information]:
-    """
-    [stub] Find and remove memories matching a natural-language description.
-
-    Implementation sketch: embed query, retrieve nearest neighbours, present
-    candidates to the user for confirmation, then call ctx.remove() for each
-    confirmed item.
-    """
-    raise NotImplementedError("'forget' is not yet implemented.")
 
 
 def find(ctx: Context, query: str) -> list[Information]:

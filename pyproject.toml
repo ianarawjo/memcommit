@@ -14,4 +14,12 @@ dependencies = ["typer>=0.12"]
 mem = "memcommit.cli:app"
 
 [tool.setuptools]
-packages = ["memcommit", "memcommit.commands"]
+packages = [
+  "memcommit",
+  "memcommit.commands",
+  "memcommit.semantic",
+  "memcommit.eval",
+]
+
+[tool.setuptools.package-data]
+"memcommit.eval" = ["fixtures/*.json"]
