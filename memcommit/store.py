@@ -163,9 +163,19 @@ class MemoryStore:
                 entries.append(json.load(f))
         return sorted(entries, key=lambda x: x["timestamp"], reverse=True)
 
-    def revert(self, ctx_name: str, uid_prefix: str) -> tuple[Checkpoint, Checkpoint]:
-        """Revert context to a checkpoint. Returns (pre_revert_cp, target_cp)."""
-        entries = self.list_checkpoints(ctx_name)
+    def revert(
+        self, ctx_name: str, uid_prefix: str, keep_history: bool = False
+    ) -> tuple[Checkpoint, Checkpoint]:
+        """Revert context to a checkpoint. Returns (pre_revert_cp, target_cp).
+
+        By default, checkpoints newer than the target are removed and the
+        pre-revert snapshot is appended as the new head. If the target is itself
+        a pre-revert checkpoint carrying a log_snapshot, the full original log
+        is rebuilt from that snapshot instead of just truncating.
+
+        Pass keep_history=True to leave all checkpoint files untouched.
+        """
+        entries = self.list_checkpoints(ctx_name)  # captured before any mutations
         matches = [e for e in entries if e["uid"].startswith(uid_prefix)]
         if not matches:
             raise KeyError(f"No checkpoint with uid prefix '{uid_prefix}'.")
@@ -175,14 +185,44 @@ class MemoryStore:
             )
 
         target_data = matches[0]
+        target_ts = target_data["timestamp"]
         ctx = self.load(ctx_name)
+        cp_dir = self._context_dir(ctx_name) / "checkpoints"
+
+        if not keep_history:
+            log_snapshot = (target_data.get("args") or {}).get("log_snapshot")
+
+            if log_snapshot is not None:
+                # Target carries a log snapshot — fully restore the log from it
+                for path in cp_dir.glob("*.json"):
+                    path.unlink()
+                for entry in sorted(log_snapshot, key=lambda x: x["timestamp"]):
+                    ts_file = datetime.fromisoformat(entry["timestamp"]).strftime("%Y%m%dT%H%M%S")
+                    fname = f"{ts_file}-{entry['uid'][:8]}.json"
+                    with open(cp_dir / fname, "w") as f:
+                        json.dump(entry, f, indent=2)
+            else:
+                # Simple truncation: remove checkpoints newer than target
+                for path in cp_dir.glob("*.json"):
+                    with open(path) as f:
+                        entry_data = json.load(f)
+                    if entry_data["timestamp"] > target_ts:
+                        path.unlink()
+
+        # Strip nested log_snapshots before storing to prevent recursive size growth
+        thin_entries = []
+        for e in entries:
+            args = e.get("args") or {}
+            if "log_snapshot" in args:
+                e = {**e, "args": {k: v for k, v in args.items() if k != "log_snapshot"}}
+            thin_entries.append(e)
 
         pre_cp = self.checkpoint(
             ctx,
-            message=f"Pre-revert (targeting {target_data['uid'][:8]})",
+            message=f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo",
             command="revert",
-            args={"target_uid": target_data["uid"]},
-            description=f"Pre-revert snapshot before reverting to [{target_data['uid'][:8]}]",
+            args={"target_uid": target_data["uid"], "log_snapshot": thin_entries},
+            description=f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo",
             auto=True,
         )
 
