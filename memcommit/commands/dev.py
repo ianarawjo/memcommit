@@ -31,7 +31,7 @@ def dev_eval(
         )
         raise typer.Exit(1)
 
-    from memcommit.llm import LLMError
+    from memcommit.semantic.llm import LLMError
     from memcommit.eval.runner import run_forget_eval
 
     try:

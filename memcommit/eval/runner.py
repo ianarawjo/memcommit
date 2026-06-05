@@ -10,7 +10,7 @@ from typing import Callable
 
 from memcommit.context import Context, Memory
 from memcommit.eval.scoring import score_forget, score_stability
-from memcommit.llm import LLMClient, LLMError
+from memcommit.semantic.llm import LLMClient, LLMError
 from memcommit.semantic.changes import ProposedChange
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
@@ -79,11 +79,17 @@ def run_forget_eval(
             case_results.append({"id": case["id"], "status": "error"})
             continue
 
-        avg_p = sum(s["precision"] for s in valid_scores if s["precision"] is not None) / len(valid_scores) if valid_scores else 0
+        has_expected_matches = len(expected) > 0
+        avg_p = (
+            sum(s["precision"] for s in valid_scores if s["precision"] is not None) / len(valid_scores)
+            if valid_scores else 0
+        )
         avg_r = sum(s["recall"]    for s in valid_scores if s["recall"]    is not None) / len(valid_scores) if valid_scores else 0
         stability = score_stability(run_proposals)
 
-        ok_p   = avg_p >= PASS_PRECISION
+        # Precision is undefined when the expected set is empty (no-match case),
+        # so skip precision gating there.
+        ok_p   = (avg_p >= PASS_PRECISION) if has_expected_matches else True
         ok_r   = avg_r >= PASS_RECALL
         ok_stab = stability >= PASS_STABILITY
         case_pass = ok_p and ok_r and ok_stab
@@ -92,7 +98,8 @@ def run_forget_eval(
 
         verdict = "PASS" if case_pass else "FAIL"
         issues = []
-        if not ok_p:   issues.append(f"precision {avg_p:.2f} < {PASS_PRECISION}")
+        if has_expected_matches and not ok_p:
+            issues.append(f"precision {avg_p:.2f} < {PASS_PRECISION}")
         if not ok_r:   issues.append(f"recall {avg_r:.2f} < {PASS_RECALL}")
         if not ok_stab: issues.append(f"stability {stability:.2f} < {PASS_STABILITY}")
         issue_str = "  (" + ", ".join(issues) + ")" if issues else ""

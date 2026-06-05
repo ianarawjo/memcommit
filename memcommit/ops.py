@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING
 from memcommit.context import Context, Information, Memory
 
 if TYPE_CHECKING:
-    from memcommit.llm import LLMClient
+    from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
 
 

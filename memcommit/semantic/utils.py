@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import re
+import warnings
 
 
 def build_messages(
@@ -38,12 +39,23 @@ def extract_json(text: str) -> dict:
     """
     Find and parse the first JSON object in text.
     Tolerates prose before and after the JSON block (common LLM leakage).
-    Raises ValueError if no valid JSON object can be found or parsed.
+    If no valid JSON object can be found or parsed, emits a warning and
+    returns an empty object.
     """
     match = re.search(r'\{.*\}', text, re.DOTALL)
     if not match:
-        raise ValueError(f"No JSON object found in LLM response:\n{text[:400]}")
+        warnings.warn(
+            f"No JSON object found in LLM response; using empty response.\n{text[:400]}",
+            RuntimeWarning,
+            stacklevel=2,
+        )
+        return {}
     try:
         return json.loads(match.group())
     except json.JSONDecodeError as e:
-        raise ValueError(f"Could not parse JSON from LLM response: {e}\n{match.group()[:400]}")
+        warnings.warn(
+            f"Could not parse JSON from LLM response; using empty response: {e}\n{match.group()[:400]}",
+            RuntimeWarning,
+            stacklevel=2,
+        )
+        return {}

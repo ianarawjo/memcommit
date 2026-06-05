@@ -5,7 +5,7 @@ import typer
 import memcommit.ops as ops
 from memcommit.config import Config
 from memcommit.context import Context
-from memcommit.llm import LLMClient, LLMError
+from memcommit.semantic.llm import LLMClient, LLMError
 from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange, apply_changes
 from memcommit.store import MemoryStore
 
