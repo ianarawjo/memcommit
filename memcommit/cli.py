@@ -7,6 +7,7 @@ from memcommit.commands import (
     add,
     branch,
     checkpoint,
+    chunk,
     contexts,
     delete,
     embed,
@@ -46,6 +47,7 @@ app.command("embed",          help="Embed one context inside another.")(embed.cm
 
 # --- Editing ---
 app.command("remove",         help="Remove a memory from the current context by uid.")(remove.cmd)
+app.command("chunk",          help="Split a memory into chunks (markdown_headers, paragraphs, sentences).")(chunk.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
 app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)
 app.command("log",            help="List checkpoints (history) for the current context.")(log.cmd)

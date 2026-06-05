@@ -255,3 +255,44 @@ def find(ctx: Context, query: str) -> list[Information]:
     return the top-k results above a relevance threshold.
     """
     raise NotImplementedError("'find' is not yet implemented.")
+
+
+# ---------------------------------------------------------------------------
+# Structural operation: chunk
+# ---------------------------------------------------------------------------
+
+def chunk(ctx: Context, uid: str, method: str) -> tuple[Memory, list[Memory]]:
+    """
+    Propose a chunked split of a Memory without mutating ctx.
+
+    Resolves *uid* (or an unambiguous prefix) to a Memory, applies the named
+    chunking method, and returns ``(original_memory, new_memories)``.
+
+    When ``len(new_memories) <= 1`` the content could not be split further
+    with the chosen method — the caller should take no action.
+
+    Raises:
+        KeyError   — uid not found in ctx
+        ValueError — ambiguous prefix or unknown method name
+        TypeError  — uid resolves to an embedded Context, not a Memory
+    """
+    from memcommit.chunking import chunk_content
+
+    matches = [k for k in ctx.memories if k.startswith(uid)]
+    if not matches:
+        raise KeyError(f"No item with uid starting with '{uid}'.")
+    if len(matches) > 1:
+        raise ValueError(
+            f"Ambiguous prefix '{uid}' matches {len(matches)} items: "
+            + ", ".join(m[:8] for m in matches)
+        )
+    full_uid = matches[0]
+    item = ctx.memories[full_uid]
+    if not isinstance(item, Memory):
+        raise TypeError(
+            f"'{uid[:8]}' is an embedded context, not a Memory — cannot chunk."
+        )
+
+    raw_chunks = chunk_content(item.content, method)
+    new_memories = [Memory(uid=str(uuid.uuid4()), content=c) for c in raw_chunks]
+    return item, new_memories

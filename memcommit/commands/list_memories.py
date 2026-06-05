@@ -39,6 +39,7 @@ def cmd(
     if memories:
         typer.secho("\nMemories:", bold=True)
         for mem in memories:
-            typer.echo(f"  [{mem.uid[:8]}] {mem.content}")
+            typer.echo(f"  [{mem.uid[:8]}] ", nl=False)
+            typer.secho(mem.content, dim=True)
     else:
         typer.echo("\n  (no memories)")

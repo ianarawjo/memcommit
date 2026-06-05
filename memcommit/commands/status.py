@@ -32,7 +32,11 @@ def cmd() -> None:
     if memories:
         typer.secho("\nRecent memories:", bold=True)
         for mem in memories[-5:]:
-            typer.echo(f"  [{mem.uid[:8]}] {mem.content}")
+            typer.echo(f"  [{mem.uid[:8]}] ", nl=False)
+            lines = mem.content.splitlines()
+            preview = "\n         ".join(lines[:5])
+            suffix = "\n         …" if len(lines) > 5 else ""
+            typer.secho(f"{preview}{suffix}", dim=True)
     else:
         typer.echo("\n  (no memories yet)")
 

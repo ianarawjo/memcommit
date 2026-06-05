@@ -13,7 +13,7 @@ def render_checkpoint_rows(entries: Sequence[dict[str, Any]], limit: int | None 
         uid_short = cp["uid"][:8]
         is_auto = cp.get("auto", False)
         command = cp.get("command") or "checkpoint"
-        label = cp.get("description") or cp.get("message") or "(no message)"
+        label = " ".join((cp.get("description") or cp.get("message") or "(no message)").split())
 
         if is_auto:
             typer.secho(f"  {uid_short}  {ts}  {command:<12}  {label}")
