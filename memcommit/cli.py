@@ -9,17 +9,20 @@ from memcommit.commands import (
     checkpoint,
     checkpoints,
     contexts,
+    delete,
     embed,
     find,
     find_conflicts,
     forget,
     init,
     integrate,
+    list_memories,
     merge,
     remove,
     status,
     switch,
 )
+from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
 from memcommit.commands.dev import app as dev_app
 
@@ -29,7 +32,10 @@ app = typer.Typer(no_args_is_help=True, help="mem — a git-like memory store")
 app.command("init",           help="Initialize a new context and switch to it.")(init.cmd)
 app.command("add",            help="Add a memory to the current context.")(add.cmd)
 app.command("status",         help="Show current context and recent memories.")(status.cmd)
+app.command("list",           help="Print all memories in the current (or given) context.")(list_memories.cmd)
 app.command("contexts",       help="List all available contexts.")(contexts.cmd)
+app.command("clear",          help="Clear all memories from the current (or given) context.")(clear_cmd)
+app.command("delete",         help="Delete a context and all its data.")(delete.cmd)
 
 # --- Navigation ---
 app.command("switch",         help="Switch to a different context.")(switch.cmd)

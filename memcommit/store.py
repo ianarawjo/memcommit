@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -94,6 +95,14 @@ class MemoryStore:
         (ctx_dir / "checkpoints").mkdir(exist_ok=True)
         with open(self._context_file(ctx.name), "w") as f:
             json.dump(ctx.to_dict(), f, indent=2)
+
+    def delete(self, name: str) -> None:
+        """Delete a context and all its data from disk. Clears current if it matches."""
+        if not self.context_exists(name):
+            raise FileNotFoundError(f"Context '{name}' not found.")
+        shutil.rmtree(self._context_dir(name))
+        if self.current_context_name() == name:
+            self._write_state({"current": None})
 
     # --- Checkpoints ---
 
