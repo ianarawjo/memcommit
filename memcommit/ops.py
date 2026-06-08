@@ -197,6 +197,119 @@ def revise_forget(
 
 
 # ---------------------------------------------------------------------------
+# Semantic operation: integrate
+# ---------------------------------------------------------------------------
+
+#: Maximum total characters of memory content sent to the LLM in one integrate call.
+#: A single memory exceeding this limit is still sent alone in its own batch.
+INTEGRATE_BATCH_CHAR_LIMIT = 8_000
+
+_INTEGRATE_SYSTEM = """\
+You are a memory integration assistant. Your job is to decide how a piece of new \
+information should be integrated into an existing set of memories.
+
+You will be shown a batch of existing memories and a piece of new information. Classify the \
+relationship, propose any required changes, then report whether the new information is now \
+captured in the context.
+
+Respond with ONLY a valid JSON object — no prose, no markdown fences. Use this schema:
+{
+  "analysis": "<one-sentence summary of your decision>",
+  "already_captured": <true or false>,
+  "proposed_changes": [
+    {"operation": "edit", "uid": "<uid>", "new_content": "<full revised text>", "reason": "<why>"}
+  ]
+}
+
+STEP 1 — Classify the new information against existing memories:
+
+  DUPLICATE  The new information is semantically equivalent to an existing memory.
+             → No changes. Set "already_captured": true.
+
+  UPDATE     The new information refines, corrects, extends, or fully replaces information \
+in an existing memory (whether a partial update or a complete rewrite of that memory).
+             → You MUST propose an "edit" of that memory.
+               Write new_content as the full revised text of the memory: incorporate the new \
+information for the relevant part, and preserve any other facts in that memory that are \
+unrelated to the update.
+               Set "already_captured": true.
+
+  NOVEL      The new information is unrelated to any existing memory.
+             → No changes. Set "already_captured": false (the caller will add it).
+
+STEP 2 — Apply these rules strictly:
+  - "already_captured": true  means the new information is fully represented in the context \
+after your changes.
+  - "already_captured": false means the new information is NOT yet in the context — \
+the caller will add it as a new memory.
+  - If UPDATE: you MUST propose an edit. Do not skip.
+  - The only valid operation is "edit". Never propose "remove".
+  - An edit may completely rewrite a memory when the entire content is superseded.
+  - When only part of a memory is affected, preserve the unrelated content in new_content.
+  - Only reference uids from the memories shown in this batch. Preserve exact uid strings.
+"""
+
+
+def _make_integrate_batches(
+    memories: list[Memory],
+    char_limit: int,
+) -> list[list[Memory]]:
+    """
+    Group memories into batches whose total content length stays within char_limit.
+    A single memory exceeding char_limit is placed in a batch of its own.
+    """
+    batches: list[list[Memory]] = []
+    current: list[Memory] = []
+    current_len = 0
+
+    for mem in memories:
+        n = len(mem.content)
+        if current and current_len + n > char_limit:
+            batches.append(current)
+            current = [mem]
+            current_len = n
+        else:
+            current.append(mem)
+            current_len += n
+
+    if current:
+        batches.append(current)
+
+    return batches
+
+
+def _run_integrate_batch(
+    new_info: str,
+    batch: list[Memory],
+    ctx: Context,
+    llm: "LLMClient",
+) -> "tuple[list[ProposedChange], list[dict], bool]":
+    """Run one LLM call for a single integrate batch. Returns (proposals, history, should_add)."""
+    from memcommit.semantic.changes import parse_proposals
+    from memcommit.semantic.utils import build_messages, extract_json
+
+    lines = [f"[{m.uid}] {m.content}" for m in batch]
+    memory_block = "\n".join(lines) or "(no memories in this batch)"
+    user_msg = (
+        f"## Existing memories\n{memory_block}\n\n"
+        f'## New information\n"{new_info}"\n\n'
+        "Respond with valid JSON only."
+    )
+    messages = build_messages(_INTEGRATE_SYSTEM, user_msg)
+    text = llm.chat(messages)
+    history = messages + [{"role": "assistant", "content": text}]
+    data = extract_json(text)
+    # already_captured=true  → should_add=false (caller should NOT add)
+    # already_captured=false → should_add=true  (caller SHOULD add)
+    # Default: if field is missing, assume novel → should add.
+    should_add: bool = not bool(data.get("already_captured", False))
+    # Integrate never removes — filter defensively in case the model misbehaves.
+    from memcommit.semantic.changes import RemoveChange
+    proposals = [p for p in parse_proposals(data, ctx) if not isinstance(p, RemoveChange)]
+    return proposals, history, should_add
+
+
+# ---------------------------------------------------------------------------
 # Semantic stubs
 # ---------------------------------------------------------------------------
 
@@ -223,28 +336,91 @@ def find_conflicts(ctx: Context, info: str) -> list[tuple[Information, str]]:
     raise NotImplementedError("'find_conflicts' is not yet implemented.")
 
 
-def integrate(ctx: Context, info: str) -> dict:
+def integrate(
+    ctx: Context,
+    new_info: str,
+    llm: "LLMClient",
+) -> "tuple[list[ProposedChange], list[list[dict]]]":
     """
-    [stub] Intelligently update ctx with new info — smarter than a plain add().
+    Propose changes to intelligently integrate new_info into ctx.
 
-    Performs three passes before committing any change:
-      1. Duplicate check: embed info and find semantically near-identical memories
-         (above a similarity threshold). If a match is found, skip or update the
-         existing memory rather than adding a duplicate.
-      2. Conflict check: call find_conflicts(ctx, info). If conflicts are found,
-         surface them for resolution before proceeding. In the CLI this means an
-         interactive prompt; in the API it means returning the conflict list for
-         the caller to resolve.
-      3. Write: once duplicates and conflicts are handled, call ops.add() (or an
-         edit operation if an existing memory is being updated).
+    Existing memories are processed in batches capped at
+    INTEGRATE_BATCH_CHAR_LIMIT characters of content each. A single memory
+    that exceeds the limit on its own is still processed in a batch by itself.
 
-    Returns a result dict describing what happened, e.g.:
-      {"action": "added",    "memory": <Memory>}
-      {"action": "updated",  "memory": <Memory>, "previous": <Memory>}
-      {"action": "skipped",  "reason": "duplicate", "existing": <Memory>}
-      {"action": "conflict", "conflicts": [(Information, str), ...]}
+    An AddChange is included only when *every* batch agrees the information is
+    novel (i.e. no batch found a duplicate or absorbed it via an edit).
+
+    Returns ``(proposals, batch_histories)`` where ``batch_histories[i]`` is
+    the raw message list for batch i; pass it to ``revise_integrate()`` for
+    interactive follow-up.
+
+    Does NOT mutate ctx — call apply_changes(ctx, proposals) then
+    store.save(ctx) to commit.
     """
-    raise NotImplementedError("'integrate' is not yet implemented.")
+    from memcommit.semantic.changes import AddChange
+
+    memories = [m for m in ctx.memories.values() if isinstance(m, Memory)]
+    batches = _make_integrate_batches(memories, INTEGRATE_BATCH_CHAR_LIMIT)
+
+    all_proposals: list[ProposedChange] = []
+    all_histories: list[list[dict]] = []
+    all_should_add: list[bool] = []
+
+    for batch in batches:
+        proposals, history, should_add = _run_integrate_batch(new_info, batch, ctx, llm)
+        all_proposals.extend(proposals)
+        all_histories.append(history)
+        all_should_add.append(should_add)
+
+    # Add iff every batch (including the vacuous case of an empty context) agrees.
+    if all(all_should_add):
+        all_proposals.insert(0, AddChange(
+            content=new_info,
+            reason="Novel — not found in existing memories.",
+        ))
+
+    return all_proposals, all_histories
+
+
+def revise_integrate(
+    feedback: str,
+    llm: "LLMClient",
+    batch_histories: "list[list[dict]]",
+    ctx: Context,
+    new_info: str,
+) -> "tuple[list[ProposedChange], list[list[dict]]]":
+    """
+    Re-run each integrate batch with user feedback appended, return revised proposals.
+
+    Pass the batch_histories returned by integrate() or a prior revise_integrate().
+    Returns (revised_proposals, updated_batch_histories).
+    """
+    from memcommit.semantic.changes import AddChange, parse_proposals
+    from memcommit.semantic.utils import build_messages, extract_json
+
+    all_proposals: list[ProposedChange] = []
+    new_histories: list[list[dict]] = []
+    all_should_add: list[bool] = []
+
+    for history in batch_histories:
+        messages = build_messages(history=history, feedback=feedback)
+        text = llm.chat(messages)
+        updated = messages + [{"role": "assistant", "content": text}]
+        data = extract_json(text)
+        from memcommit.semantic.changes import RemoveChange
+        batch_proposals = [p for p in parse_proposals(data, ctx) if not isinstance(p, RemoveChange)]
+        all_proposals.extend(batch_proposals)
+        new_histories.append(updated)
+        all_should_add.append(not bool(data.get("already_captured", False)))
+
+    if all(all_should_add):
+        all_proposals.insert(0, AddChange(
+            content=new_info,
+            reason="Novel — not found in existing memories.",
+        ))
+
+    return all_proposals, new_histories
 
 
 def find(ctx: Context, query: str) -> list[Information]:

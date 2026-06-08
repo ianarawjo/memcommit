@@ -11,6 +11,13 @@ if TYPE_CHECKING:
 
 
 @dataclass
+class AddChange:
+    """Proposed addition of new information as a fresh memory."""
+    content: str
+    reason: str
+
+
+@dataclass
 class RemoveChange:
     """Proposed deletion of an entire memory."""
     uid: str
@@ -27,7 +34,7 @@ class EditChange:
     reason: str
 
 
-ProposedChange: TypeAlias = RemoveChange | EditChange
+ProposedChange: TypeAlias = AddChange | RemoveChange | EditChange
 
 
 def parse_proposals(data: dict, ctx: Context) -> list[ProposedChange]:
@@ -75,8 +82,11 @@ def apply_changes(ctx: Context, changes: list[ProposedChange]) -> None:
     Apply approved ProposedChanges to ctx in-memory.
     Call store.save(ctx) afterwards to persist.
     """
+    import uuid
     for change in changes:
-        if isinstance(change, RemoveChange):
+        if isinstance(change, AddChange):
+            ctx.add(Memory(uid=str(uuid.uuid4()), content=change.content))
+        elif isinstance(change, RemoveChange):
             if change.uid in ctx.memories:
                 ctx.remove(change.uid)
         elif isinstance(change, EditChange):

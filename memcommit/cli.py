@@ -56,7 +56,7 @@ app.command("log",            help="List checkpoints (history) for the current c
 app.command("forget",         help="Forget memories matching a description (uses LLM).")(forget.cmd)
 app.command("find",           help="[stub] Find memories matching a natural language query.")(find.cmd)
 app.command("find-conflicts", help="[stub] Find memories that conflict with given info.")(find_conflicts.cmd)
-app.command("integrate",      help="[stub] Intelligently integrate info into the current context.")(integrate.cmd)
+app.command("integrate",      help="Intelligently integrate info into the current context (uses LLM).")(integrate.cmd)
 
 # --- Sub-apps ---
 app.add_typer(config_app, name="config", help="Read and write global configuration.")

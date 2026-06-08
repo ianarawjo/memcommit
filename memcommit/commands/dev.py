@@ -6,7 +6,7 @@ import typer
 
 app = typer.Typer(help="Developer tools: evals, diagnostics.")
 
-_SUPPORTED_COMMANDS = ("forget",)
+_SUPPORTED_COMMANDS = ("forget", "integrate")
 
 _FAKE_SYSTEM_PROMPT = """\
 You are a test-data generator for a memory store.
@@ -116,11 +116,13 @@ def dev_eval(
         raise typer.Exit(1)
 
     from memcommit.semantic.llm import LLMError
-    from memcommit.eval.runner import run_forget_eval
+    from memcommit.eval.runner import run_forget_eval, run_integrate_eval
 
     try:
         if command == "forget":
             run_forget_eval(llm_model=llm, runs=runs, print_fn=typer.echo)
+        elif command == "integrate":
+            run_integrate_eval(llm_model=llm, runs=runs, print_fn=typer.echo)
     except LLMError as e:
         typer.secho(f"LLM error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

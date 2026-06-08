@@ -4,7 +4,7 @@
 """
 from __future__ import annotations
 
-from memcommit.semantic.changes import EditChange, ProposedChange, RemoveChange
+from memcommit.semantic.changes import AddChange, EditChange, ProposedChange, RemoveChange
 
 
 def score_forget(
@@ -56,14 +56,51 @@ def score_stability(results: list[list[ProposedChange]]) -> float:
     """
     Measure how consistent the LLM is across N runs of the same case.
 
-    Returns the fraction of runs whose uid set matches the majority uid set
+    Returns the fraction of runs whose change-key set matches the majority set
     (1.0 = perfectly stable, 0.0 = every run different).
+
+    AddChange has no uid; it is fingerprinted as the sentinel ``"__add__"`` so
+    that two runs that both propose an add are counted as agreeing.
     """
     if not results:
         return 1.0
 
-    uid_sets = [frozenset(c.uid for c in run) for run in results]
+    def _key(c: ProposedChange) -> str:
+        return "__add__" if isinstance(c, AddChange) else c.uid  # type: ignore[union-attr]
+
+    key_sets = [frozenset(_key(c) for c in run) for run in results]
     from collections import Counter
-    counts = Counter(uid_sets)
+    counts = Counter(key_sets)
     majority_count = counts.most_common(1)[0][1]
     return majority_count / len(results)
+
+
+def score_integrate(
+    expected: list[dict],
+    proposals: list[ProposedChange],
+) -> dict:
+    """
+    Score an integrate result.
+
+    Non-add operations (edit/remove) are scored by uid using the same
+    precision/recall logic as ``score_forget``.  The add decision is scored
+    as a binary flag: correct when ``expected_add == proposed_add``.
+
+    Returns a dict with all keys from ``score_forget`` plus:
+      add_expected  — True if an add was expected
+      add_proposed  — True if an add was proposed
+      add_correct   — True when the two agree
+    """
+    expected_add = any(e["operation"] == "add" for e in expected)
+    expected_non_add = [e for e in expected if e["operation"] != "add"]
+
+    proposed_add = any(isinstance(p, AddChange) for p in proposals)
+    proposed_non_add = [p for p in proposals if not isinstance(p, AddChange)]
+
+    base = score_forget(expected_non_add, proposed_non_add)
+    return {
+        **base,
+        "add_expected": expected_add,
+        "add_proposed": proposed_add,
+        "add_correct":  expected_add == proposed_add,
+    }
