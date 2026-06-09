@@ -105,6 +105,15 @@ class MemoryStore:
         with open(self._context_file(ctx.name), "w") as f:
             json.dump(ctx.to_dict(), f, indent=2)
 
+    def copy_checkpoints(self, source_name: str, target_name: str) -> None:
+        """Copy all checkpoint files from source into target's checkpoints directory."""
+        src_dir = self._context_dir(source_name) / "checkpoints"
+        tgt_dir = self._context_dir(target_name) / "checkpoints"
+        tgt_dir.mkdir(exist_ok=True)
+        if src_dir.exists():
+            for path in sorted(src_dir.glob("*.json")):
+                shutil.copy2(path, tgt_dir / path.name)
+
     def delete(self, name: str) -> None:
         """Delete a context and all its data from disk. Clears current if it matches."""
         if not self.context_exists(name):

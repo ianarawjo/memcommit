@@ -19,5 +19,6 @@ def cmd(name: Annotated[str, typer.Argument(help="Name for the new branch contex
     source_name = ctx.name
     new_ctx = ops.branch(ctx, name)
     store.save(new_ctx)
+    store.copy_checkpoints(source_name, name)
     store.set_current(name)
     typer.secho(f"Branched '{source_name}' → '{name}' and switched to it.", fg=typer.colors.GREEN)
