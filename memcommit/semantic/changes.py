@@ -42,7 +42,11 @@ def parse_proposals(data: dict, ctx: Context) -> list[ProposedChange]:
     Convert a parsed LLM response dict into ProposedChange objects.
     Silently skips entries with unknown uids (hallucinations) or missing fields.
     """
-    valid_uids = set(ctx.memories.keys())
+    valid_uids = {
+        uid
+        for uid, info in ctx.iter_entries()
+        if isinstance(info, Memory)
+    }
     changes: list[ProposedChange] = []
 
     for item in data.get("proposed_changes", []):
@@ -54,10 +58,10 @@ def parse_proposals(data: dict, ctx: Context) -> list[ProposedChange]:
 
         if op == "remove":
             mem = ctx.memories[uid]
-            content = mem.content if isinstance(mem, Memory) else f"<context: {uid}>"
+            assert isinstance(mem, Memory)
             changes.append(RemoveChange(
                 uid=uid,
-                content=content,
+                content=mem.content,
                 reason=item.get("reason", ""),
             ))
 
@@ -66,10 +70,10 @@ def parse_proposals(data: dict, ctx: Context) -> list[ProposedChange]:
             if not new_content:
                 continue
             mem = ctx.memories[uid]
-            old_content = mem.content if isinstance(mem, Memory) else ""
+            assert isinstance(mem, Memory)
             changes.append(EditChange(
                 uid=uid,
-                old_content=old_content,
+                old_content=mem.content,
                 new_content=new_content,
                 reason=item.get("reason", ""),
             ))

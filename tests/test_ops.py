@@ -60,6 +60,51 @@ def test_add_multiple_memories():
 
 
 # ---------------------------------------------------------------------------
+# resolve
+# ---------------------------------------------------------------------------
+
+def test_resolve_memory_by_uid_prefix():
+    ctx = make_ctx()
+    memory = ops.add(ctx, "selected")
+
+    assert ops.resolve(ctx, memory.uid[:8]) is memory
+
+
+def test_resolve_embedded_context_by_exact_name():
+    parent = make_ctx("parent")
+    child = make_ctx("child")
+    ops.embed(child, parent)
+
+    assert ops.resolve(parent, "child") is child
+
+
+def test_resolve_only_searches_direct_children():
+    parent = make_ctx("parent")
+    child = make_ctx("child")
+    nested_memory = ops.add(child, "nested")
+    ops.embed(child, parent)
+
+    with pytest.raises(KeyError, match="No direct item matching"):
+        ops.resolve(parent, nested_memory.uid[:8])
+
+
+def test_resolve_not_found_raises_key_error():
+    ctx = make_ctx()
+
+    with pytest.raises(KeyError, match="No direct item matching"):
+        ops.resolve(ctx, "missing")
+
+
+def test_resolve_ambiguous_selector_raises_value_error():
+    ctx = make_ctx()
+    ctx.add(Memory(uid="aaaa1111-0000-0000-0000-000000000000", content="first"))
+    ctx.add(Memory(uid="aaaa2222-0000-0000-0000-000000000000", content="second"))
+
+    with pytest.raises(ValueError, match="Ambiguous selector"):
+        ops.resolve(ctx, "aaaa")
+
+
+# ---------------------------------------------------------------------------
 # remove
 # ---------------------------------------------------------------------------
 

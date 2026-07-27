@@ -44,8 +44,8 @@ class TestResearchNotesWorkflow:
         mem("add", "Arctic sea ice extent is declining at 13% per decade")
         mem("add", "The ozone layer is in the stratosphere")  # not a mistake, just unrelated
 
-        # List confirms all four memories are present.
-        r = mem("list")
+        # Show confirms all four memories are present.
+        r = mem("show")
         assert r.exit_code == 0
         assert "CO2 levels" in r.output
         assert "Arctic sea ice" in r.output
@@ -177,13 +177,13 @@ class TestMultiProjectIsolation:
         mem("add", "Beta uses Vue 3")
         mem("add", "Beta backend: FastAPI")
 
-        # Alpha's list contains only its own memories.
-        r = mem("list", "project-alpha")
+        # Showing Alpha contains only its own memories.
+        r = mem("show", "--context", "project-alpha")
         assert "Alpha uses React" in r.output
         assert "Beta" not in r.output
 
-        # Beta's list contains only its own.
-        r = mem("list", "project-beta")
+        # Showing Beta contains only its own memories.
+        r = mem("show", "--context", "project-beta")
         assert "Beta uses Vue" in r.output
         assert "Alpha" not in r.output
 

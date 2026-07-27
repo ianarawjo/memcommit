@@ -33,7 +33,7 @@ def cmd(
         typer.echo(f"This will remove all {count} item(s) from '{context_name}'.")
         typer.confirm("Continue?", abort=True)
 
-    ctx.memories.clear()
+    ctx.clear()
     store.save(ctx, AutoCheckpoint(
         command="clear",
         args={"count": count, "context": context_name},

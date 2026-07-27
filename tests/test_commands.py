@@ -87,28 +87,56 @@ class TestAdd:
 # ---------------------------------------------------------------------------
 
 class TestList:
-    def test_lists_memories_in_current_context(self, isolated_store):
+    def test_lists_memory_ids_without_contents(self, isolated_store):
         invoke("init", "ctx")
         invoke("add", "fact one")
         invoke("add", "fact two")
-        result = invoke("list")
-        assert result.exit_code == 0
-        assert "fact one" in result.output
-        assert "fact two" in result.output
 
-    def test_empty_context_shows_no_memories(self, isolated_store):
+        store = MemoryStore()
+        uids = list(store.load_current().memories)
+        result = invoke("list")
+
+        assert result.exit_code == 0
+        assert all(uid[:8] in result.output for uid in uids)
+        assert result.output.count("(untitled)") == 2
+        assert "fact one" not in result.output
+        assert "fact two" not in result.output
+
+    def test_empty_context_shows_no_items(self, isolated_store):
         invoke("init", "empty")
         result = invoke("list")
         assert result.exit_code == 0
-        assert "no memories" in result.output
+        assert "no items" in result.output
 
     def test_list_explicit_context_name(self, isolated_store):
         invoke("init", "alpha")
         invoke("add", "alpha fact")
+        alpha_uid = next(iter(MemoryStore().load_current().memories))
         invoke("init", "beta")  # switches current to beta
         result = invoke("list", "alpha")
         assert result.exit_code == 0
-        assert "alpha fact" in result.output
+        assert alpha_uid[:8] in result.output
+        assert "alpha fact" not in result.output
+
+    def test_ls_is_alias_for_list(self, isolated_store):
+        invoke("init", "ctx")
+        invoke("add", "listed through either command")
+        result = invoke("list")
+        alias_result = invoke("ls")
+        assert alias_result.exit_code == 0
+        assert alias_result.output == result.output
+
+    def test_ls_lists_embedded_context_without_leaking_child_contents(self, isolated_store):
+        invoke("init", "building-access")
+        invoke("add", "The east entrance is closed until Friday.")
+        invoke("init", "task-123")
+        invoke("embed", "building-access", "--into", "task-123")
+
+        result = invoke("ls")
+
+        assert result.exit_code == 0
+        assert "building-access" in result.output
+        assert "The east entrance is closed until Friday." not in result.output
 
     def test_fails_for_nonexistent_context(self, isolated_store):
         result = invoke("list", "ghost")
@@ -118,6 +146,85 @@ class TestList:
     def test_fails_with_no_current_context(self, isolated_store):
         result = invoke("list")
         assert result.exit_code == 1
+
+
+# ---------------------------------------------------------------------------
+# show
+# ---------------------------------------------------------------------------
+
+class TestShow:
+    def test_without_selector_shows_all_memory_contents(self, isolated_store):
+        invoke("init", "ctx")
+        invoke("add", "fact one")
+        invoke("add", "fact two")
+
+        result = invoke("show")
+
+        assert result.exit_code == 0
+        assert "fact one" in result.output
+        assert "fact two" in result.output
+
+    def test_shows_one_memory_by_uid_prefix(self, isolated_store):
+        invoke("init", "ctx")
+        invoke("add", "First line.\nSecond line.")
+        invoke("add", "another memory")
+        uid = next(iter(MemoryStore().load_current().memories))
+
+        result = invoke("show", uid[:8])
+
+        assert result.exit_code == 0
+        assert uid in result.output
+        assert "First line.\nSecond line." in result.output
+        assert "another memory" not in result.output
+
+    def test_shows_contents_of_explicit_context(self, isolated_store):
+        invoke("init", "alpha")
+        invoke("add", "alpha fact")
+        invoke("init", "beta")
+        invoke("add", "beta fact")
+
+        result = invoke("show", "--context", "alpha")
+
+        assert result.exit_code == 0
+        assert "alpha fact" in result.output
+        assert "beta fact" not in result.output
+
+    def test_shows_embedded_context_by_exact_name(self, isolated_store):
+        invoke("init", "child")
+        invoke("add", "child-only fact")
+        invoke("init", "parent")
+        invoke("add", "parent-only fact")
+        invoke("embed", "child", "--into", "parent")
+
+        result = invoke("show", "child")
+
+        assert result.exit_code == 0
+        assert "Context: child" in result.output
+        assert "child-only fact" in result.output
+        assert "parent-only fact" not in result.output
+
+    def test_fails_for_unknown_selector(self, isolated_store):
+        invoke("init", "ctx")
+
+        result = invoke("show", "missing")
+
+        assert result.exit_code == 1
+        assert "No direct item matching" in result.output
+
+    def test_fails_for_ambiguous_uid_prefix(self, isolated_store):
+        from memcommit.context import Memory as Mem
+
+        invoke("init", "ctx")
+        store = MemoryStore()
+        ctx = store.load_current()
+        ctx.add(Mem(uid="aaaa1111-1111-1111-1111-111111111111", content="first"))
+        ctx.add(Mem(uid="aaaa2222-2222-2222-2222-222222222222", content="second"))
+        store.save(ctx)
+
+        result = invoke("show", "aaaa")
+
+        assert result.exit_code == 1
+        assert "Ambiguous selector" in result.output
 
 
 # ---------------------------------------------------------------------------
@@ -242,7 +349,7 @@ class TestMerge:
         invoke("init", "target")
         result = invoke("merge", "source")
         assert result.exit_code == 0
-        assert "sourced fact" in invoke("list").output
+        assert "sourced fact" in invoke("show").output
 
     def test_merge_reports_added_count(self, isolated_store):
         invoke("init", "src")

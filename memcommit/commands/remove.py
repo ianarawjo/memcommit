@@ -3,7 +3,7 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.store import MemoryStore
 
 
@@ -23,6 +23,11 @@ def cmd(uid: Annotated[str, typer.Argument(help="UID (or unambiguous prefix) of 
 
     if isinstance(item, Memory):
         description = f'Removed memory [{item.uid[:8]}]: "{item.content[:80]}"'
+    elif isinstance(item, MemoryRef):
+        description = (
+            f"Removed memory reference [{item.uid[:8]}] to "
+            f"'{item.target_context_name}' [{item.target_memory_uid[:8]}]"
+        )
     else:
         description = f"Removed embedded context '{item.name}' [{item.uid[:8]}]"
 
@@ -34,5 +39,11 @@ def cmd(uid: Annotated[str, typer.Argument(help="UID (or unambiguous prefix) of 
 
     if isinstance(item, Memory):
         typer.secho(f"Removed [{item.uid[:8]}] {item.content}", fg=typer.colors.GREEN)
+    elif isinstance(item, MemoryRef):
+        typer.secho(
+            f"Removed reference [{item.uid[:8]}] to "
+            f"'{item.target_context_name}' [{item.target_memory_uid[:8]}].",
+            fg=typer.colors.GREEN,
+        )
     else:
         typer.secho(f"Removed embedded context '{item.name}' [{item.uid[:8]}]", fg=typer.colors.GREEN)

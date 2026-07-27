@@ -69,9 +69,10 @@ def cmd(
         typer.echo("Aborted — no changes made.")
         raise typer.Exit(0)
 
+    original_position = ctx.ordered_uids().index(original.uid)
     ctx.remove(original.uid)
-    for chunk_mem in chunks:
-        ctx.add(chunk_mem)
+    for offset, chunk_mem in enumerate(chunks):
+        ctx.add(chunk_mem, position=original_position + offset)
 
     store.save(
         ctx,

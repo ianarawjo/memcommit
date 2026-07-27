@@ -18,7 +18,9 @@ from memcommit.commands import (
     integrate,
     list_memories,
     log,
+    show,
     merge,
+    reference,
     remove,
     revert,
     status,
@@ -34,7 +36,9 @@ app = typer.Typer(no_args_is_help=True, help="mem — a git-like memory store")
 app.command("init",           help="Initialize a new context and switch to it.")(init.cmd)
 app.command("add",            help="Add a memory to the current context.")(add.cmd)
 app.command("status",         help="Show current context and recent memories.")(status.cmd)
-app.command("list",           help="Print all memories in the current (or given) context.")(list_memories.cmd)
+app.command("list",           help="List direct items in the current (or given) context.")(list_memories.cmd)
+app.command("ls",             help="Alias for 'list'.")(list_memories.cmd)
+app.command("show",           help="Show a memory, embedded context, or the current context in full.")(show.cmd)
 app.command("contexts",       help="List all available contexts.")(contexts.cmd)
 app.command("clear",          help="Clear all memories from the current (or given) context.")(clear_cmd)
 app.command("delete",         help="Delete a context and all its data.")(delete.cmd)
@@ -44,9 +48,10 @@ app.command("switch",         help="Switch to a different context.")(switch.cmd)
 app.command("branch",         help="Create a new context branched from the current one.")(branch.cmd)
 app.command("merge",          help="Merge another context into the current one.")(merge.cmd)
 app.command("embed",          help="Embed one context inside another.")(embed.cmd)
+app.command("reference",      help="Add a read-only live reference to a memory.")(reference.cmd)
 
 # --- Editing ---
-app.command("remove",         help="Remove a memory from the current context by uid.")(remove.cmd)
+app.command("remove",         help="Remove a direct item from the current context by uid.")(remove.cmd)
 app.command("chunk",          help="Split a memory into chunks (markdown_headers, paragraphs, sentences).")(chunk.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
 app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)

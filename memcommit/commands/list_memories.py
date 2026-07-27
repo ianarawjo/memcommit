@@ -2,8 +2,32 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.context import Context, Memory
+from memcommit.context import Context, MemoryRef
 from memcommit.store import MemoryStore
+
+
+def render_index(ctx: Context) -> None:
+    """Print a compact index of a context's direct children."""
+    typer.secho(f"Context: {ctx.name}", bold=True)
+    count = len(ctx.memories)
+    typer.echo(f"  {count} item{'s' if count != 1 else ''}")
+
+    if not ctx.memories:
+        typer.echo("\n  (no items)")
+        return
+
+    typer.echo()
+    for info in ctx.iter_items():
+        if isinstance(info, Context):
+            typer.echo(f"  [context {info.uid[:8]}] {info.name}")
+        elif isinstance(info, MemoryRef):
+            state = "" if info.is_resolved else " (dangling)"
+            typer.echo(
+                f"  [ref     {info.uid[:8]}] "
+                f"{info.target_context_name}#{info.target_memory_uid[:8]}{state}"
+            )
+        else:
+            typer.echo(f"  [memory  {info.uid[:8]}] (untitled)")
 
 
 def cmd(
@@ -21,25 +45,4 @@ def cmd(
         typer.secho(f"Error: context '{context_name}' not found.", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    ctx = store.load(context_name)
-    memories = [v for v in ctx.memories.values() if isinstance(v, Memory)]
-    embedded = [v for v in ctx.memories.values() if isinstance(v, Context)]
-
-    typer.secho(f"Context: {context_name}", bold=True)
-    typer.echo(
-        f"  {len(memories)} memor{'y' if len(memories) == 1 else 'ies'}"
-        f"  |  {len(embedded)} embedded context{'s' if len(embedded) != 1 else ''}"
-    )
-
-    if embedded:
-        typer.secho("\nEmbedded contexts:", bold=True)
-        for ec in embedded:
-            typer.echo(f"  [{ec.uid[:8]}] {ec.name}")
-
-    if memories:
-        typer.secho("\nMemories:", bold=True)
-        for mem in memories:
-            typer.echo(f"  [{mem.uid[:8]}] ", nl=False)
-            typer.secho(mem.content, dim=True)
-    else:
-        typer.echo("\n  (no memories)")
+    render_index(store.load(context_name))

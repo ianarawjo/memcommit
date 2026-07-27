@@ -22,7 +22,7 @@ from __future__ import annotations
 import uuid
 from typing import TYPE_CHECKING
 
-from memcommit.context import Context, Information, Memory
+from memcommit.context import Context, Information, Memory, MemoryRef
 
 if TYPE_CHECKING:
     from memcommit.semantic.llm import LLMClient
@@ -43,6 +43,73 @@ def add(ctx: Context, content: str) -> Memory:
     result = ctx.add(content)
     assert isinstance(result, Memory)
     return result
+
+
+def reference_memory(
+    memory: Memory,
+    source: Context,
+    target: Context,
+) -> MemoryRef:
+    """
+    Add a read-only live reference to a directly owned source Memory.
+
+    The reference has its own uid and stores only target identity metadata.
+    Target content is refreshed whenever the containing Context is reloaded.
+    """
+    source_item = source.memories.get(memory.uid)
+    if not isinstance(source_item, Memory):
+        raise ValueError(
+            f"Memory [{memory.uid[:8]}] is not directly owned by '{source.name}'."
+        )
+    memory = source_item
+
+    for info in target.iter_items():
+        if (
+            isinstance(info, MemoryRef)
+            and info.target_context_uid == source.uid
+            and info.target_memory_uid == memory.uid
+        ):
+            raise ValueError(
+                f"Memory [{memory.uid[:8]}] from '{source.name}' is already "
+                f"referenced in '{target.name}'."
+            )
+
+    ref = MemoryRef(
+        uid=str(uuid.uuid4()),
+        target_context_uid=source.uid,
+        target_context_name=source.name,
+        target_memory_uid=memory.uid,
+        target=memory,
+    )
+    target.add(ref)
+    return ref
+
+
+def resolve(ctx: Context, selector: str) -> Information:
+    """
+    Resolve one direct child of *ctx* by UID prefix or embedded-context name.
+
+    Atomic memories currently have no name, so they can only be selected by
+    UID (or an unambiguous UID prefix). Embedded contexts can additionally be
+    selected by their exact name. Raises KeyError if nothing matches and
+    ValueError if the selector is ambiguous.
+    """
+    matches = [
+        info
+        for uid, info in ctx.iter_entries()
+        if uid.startswith(selector)
+        or (isinstance(info, Context) and info.name == selector)
+    ]
+    if not matches:
+        raise KeyError(
+            f"No direct item matching '{selector}' in context '{ctx.name}'."
+        )
+    if len(matches) > 1:
+        raise ValueError(
+            f"Ambiguous selector '{selector}' matches {len(matches)} items: "
+            + ", ".join(item.uid[:8] for item in matches)
+        )
+    return matches[0]
 
 
 def remove(ctx: Context, uid: str) -> Information:
@@ -71,7 +138,7 @@ def embed(child: Context, parent: Context) -> None:
     """
     if child.uid == parent.uid:
         raise ValueError("Cannot embed a context into itself.")
-    for info in parent.memories.values():
+    for info in parent.iter_items():
         if isinstance(info, Context) and info.name == child.name:
             raise ValueError(f"'{child.name}' is already embedded in '{parent.name}'.")
     parent.add(child)
@@ -87,9 +154,11 @@ def branch(ctx: Context, new_name: str) -> Context:
     are preserved; the sub-contexts themselves are not cloned).
     """
     new_ctx = Context(uid=str(uuid.uuid4()), name=new_name)
-    for info in ctx.memories.values():
+    for info in ctx.iter_items():
         if isinstance(info, Memory):
             new_ctx.add(Memory(uid=info.uid, content=info.content))
+        elif isinstance(info, MemoryRef):
+            new_ctx.add(info.copy())
         else:
             new_ctx.add(info)
     return new_ctx
@@ -104,10 +173,19 @@ def merge(source: Context, target: Context) -> list[Information]:
     the list of items that were newly added to target.
     """
     added: list[Information] = []
-    for info in source.memories.values():
-        if info.uid not in target.memories:
-            target.add(info)
-            added.append(info)
+    for info in source.iter_items():
+        if info.uid in target.memories:
+            continue
+        if isinstance(info, MemoryRef) and any(
+            isinstance(existing, MemoryRef)
+            and existing.target_context_uid == info.target_context_uid
+            and existing.target_memory_uid == info.target_memory_uid
+            for existing in target.iter_items()
+        ):
+            continue
+        item = info.copy() if isinstance(info, MemoryRef) else info
+        target.add(item)
+        added.append(item)
     return added
 
 
@@ -140,7 +218,7 @@ Rules:
 def _format_forget_user_msg(ctx: Context, query: str) -> str:
     lines = [
         f"[{uid}] {info.content}"
-        for uid, info in ctx.memories.items()
+        for uid, info in ctx.iter_entries()
         if isinstance(info, Memory)
     ]
     memory_block = "\n".join(lines) or "(no memories)"
@@ -360,7 +438,7 @@ def integrate(
     """
     from memcommit.semantic.changes import AddChange
 
-    memories = [m for m in ctx.memories.values() if isinstance(m, Memory)]
+    memories = [m for m in ctx.iter_items() if isinstance(m, Memory)]
     batches = _make_integrate_batches(memories, INTEGRATE_BATCH_CHAR_LIMIT)
 
     all_proposals: list[ProposedChange] = []
@@ -450,7 +528,7 @@ def chunk(ctx: Context, uid: str, method: str) -> tuple[Memory, list[Memory]]:
     Raises:
         KeyError   — uid not found in ctx
         ValueError — ambiguous prefix or unknown method name
-        TypeError  — uid resolves to an embedded Context, not a Memory
+        TypeError  — uid resolves to a reference or embedded Context, not a Memory
     """
     from memcommit.chunking import chunk_content
 
@@ -466,7 +544,7 @@ def chunk(ctx: Context, uid: str, method: str) -> tuple[Memory, list[Memory]]:
     item = ctx.memories[full_uid]
     if not isinstance(item, Memory):
         raise TypeError(
-            f"'{uid[:8]}' is an embedded context, not a Memory — cannot chunk."
+            f"'{uid[:8]}' is not a Memory directly owned by this Context — cannot chunk."
         )
 
     raw_chunks = chunk_content(item.content, method)

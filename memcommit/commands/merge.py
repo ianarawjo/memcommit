@@ -3,7 +3,7 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.store import MemoryStore
 
 
@@ -25,10 +25,15 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
     added = ops.merge(source, target)
 
     mem_count = sum(1 for i in added if isinstance(i, Memory))
+    ref_count = sum(1 for i in added if isinstance(i, MemoryRef))
     ctx_count = sum(1 for i in added if isinstance(i, Context))
     parts = []
     if mem_count:
         parts.append(f"{mem_count} memor{'y' if mem_count == 1 else 'ies'}")
+    if ref_count:
+        parts.append(
+            f"{ref_count} memory reference{'s' if ref_count != 1 else ''}"
+        )
     if ctx_count:
         parts.append(f"{ctx_count} embedded context{'s' if ctx_count != 1 else ''}")
     summary = ", ".join(parts) if parts else "nothing new"

@@ -14,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from memcommit.context import AutoCheckpoint, Checkpoint, Context
+from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
 
 STORE_DIR = Path.home() / ".mem"
 CONTEXTS_DIR = STORE_DIR / "contexts"
@@ -66,6 +66,35 @@ class MemoryStore:
 
     # --- Load / Save ---
 
+    def _load_direct_memory(
+        self,
+        context_name: str,
+        expected_context_uid: str,
+        memory_uid: str,
+    ) -> Memory | None:
+        """
+        Resolve one directly owned Memory without recursively loading its Context.
+
+        Reading the raw context file avoids MemoryRef chains and Context embed
+        cycles. The Context uid check prevents a deleted/recreated context with
+        the same name from silently becoming the new target.
+        """
+        if not self.context_exists(context_name):
+            return None
+        with open(self._context_file(context_name)) as f:
+            data = json.load(f)
+        if data.get("uid") != expected_context_uid:
+            return None
+
+        item = data.get("memories", {}).get(memory_uid)
+        if (
+            not isinstance(item, dict)
+            or item.get("type") != "memory"
+            or item.get("uid") != memory_uid
+        ):
+            return None
+        return Memory.from_dict(item)
+
     def load(self, name: str, _loading: frozenset[str] = frozenset()) -> Context:
         """Load a context by name, resolving embedded context refs as live loads."""
         if not self.context_exists(name):
@@ -80,7 +109,11 @@ class MemoryStore:
                 return None
             return self.load(ref_name, _loading | {name})
 
-        return Context.from_dict(data, loader=loader)
+        return Context.from_dict(
+            data,
+            loader=loader,
+            memory_loader=self._load_direct_memory,
+        )
 
     def load_current(self) -> Context:
         name = self.current_context_name()
@@ -240,7 +273,19 @@ class MemoryStore:
                 return None
             return self.load(ref_name)
 
-        restored = Context.from_dict(target_data["snapshot"], loader=loader)
+        # A branch inherits checkpoint files whose snapshots still carry the
+        # source Context identity. Restore their contents into the Context the
+        # caller requested instead of writing back to the source Context.
+        restored_snapshot = {
+            **target_data["snapshot"],
+            "uid": ctx.uid,
+            "name": ctx.name,
+        }
+        restored = Context.from_dict(
+            restored_snapshot,
+            loader=loader,
+            memory_loader=self._load_direct_memory,
+        )
         self.save(restored)
 
         target_cp = Checkpoint(
