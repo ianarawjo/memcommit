@@ -19,7 +19,7 @@ def cmd(name: Annotated[str, typer.Argument(help="Unique name for the new contex
             args={"name": name},
             description=f"Initialized context '{name}'",
         ))
-    except ValueError as e:
+    except (OSError, ValueError) as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     store.set_current(name)

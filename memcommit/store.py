@@ -19,6 +19,7 @@ from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
 STORE_DIR = Path.home() / ".mem"
 CONTEXTS_DIR = STORE_DIR / "contexts"
 STATE_FILE = STORE_DIR / "state.json"
+RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
 
 
 def _context_name_parts(name: str) -> tuple[str, ...]:
@@ -43,6 +44,16 @@ def _context_name_parts(name: str) -> tuple[str, ...]:
     if any(part in {".", ".."} for part in parts):
         raise ValueError(
             f"Invalid context name '{name}': '.' and '..' segments are not allowed."
+        )
+    reserved = [
+        part
+        for part in parts
+        if part.casefold() in RESERVED_CONTEXT_SEGMENTS
+    ]
+    if reserved:
+        raise ValueError(
+            f"Invalid context name '{name}': '{reserved[0]}' is reserved for "
+            "Context storage."
         )
     if any(ord(character) < 32 or ord(character) == 127 for character in name):
         raise ValueError(
@@ -158,7 +169,7 @@ class MemoryStore:
                 continue
             name = context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
             try:
-                parts = _context_name_parts(name)
+                _context_name_parts(name)
             except ValueError:
                 continue
             try:
@@ -170,60 +181,30 @@ class MemoryStore:
             except ValueError:
                 continue
 
-            # A valid namespace cannot descend from another Context. Besides
-            # enforcing the Git-like file/directory rule, this prevents a file
-            # named checkpoints/context.json from being listed as a Context.
-            if any(
-                self.context_exists("/".join(parts[:index]))
-                for index in range(1, len(parts))
-            ):
-                continue
             names.append(name)
         return sorted(names)
 
-    def _prefix_conflict(self, name: str) -> str | None:
-        """Return an existing Context whose name conflicts with *name*."""
-        parts = _context_name_parts(name)
-
-        for index in range(1, len(parts)):
-            ancestor_name = "/".join(parts[:index])
-            if self.context_exists(ancestor_name):
-                return ancestor_name
-
+    def _assert_context_storage_available(self, name: str) -> None:
+        """Allow a new root Context when only namespace directories predate it."""
         context_dir = self._context_dir(name)
         if not context_dir.exists():
-            return None
-        exact_file = self._context_file(name)
-        for context_file in context_dir.rglob("context.json"):
-            if context_file == exact_file or not context_file.is_file():
-                continue
-            return context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
-        return None
-
-    def _assert_name_available(self, name: str) -> None:
-        """Reject Git-style file/directory prefix conflicts for a new Context."""
-        conflict = self._prefix_conflict(name)
-        if conflict is not None:
-            raise ValueError(
-                f"Context name '{name}' conflicts with existing context "
-                f"'{conflict}'. A context and its namespace prefix cannot both exist."
-            )
-
-    def _descendant_context_names(self, name: str) -> list[str]:
-        context_dir = self._context_dir(name)
-        if not context_dir.exists():
-            return []
-        exact_file = self._context_file(name)
-        checkpoints_dir = self._checkpoints_dir(name)
-        return sorted(
-            context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
-            for context_file in context_dir.rglob("context.json")
+            return
+        invalid_entries = [
+            entry.name
+            for entry in context_dir.iterdir()
             if (
-                context_file != exact_file
-                and context_file.is_file()
-                and checkpoints_dir not in context_file.parents
+                entry.is_symlink()
+                or not entry.is_dir()
+                or entry.name.casefold() in RESERVED_CONTEXT_SEGMENTS
             )
-        )
+        ]
+        if invalid_entries:
+            raise ValueError(
+                f"Cannot create context '{name}': its storage directory already "
+                "exists and is not empty; only child namespace directories may "
+                "precede a root Context. Invalid entries: "
+                + ", ".join(sorted(invalid_entries))
+            )
 
     @staticmethod
     def _prune_empty_namespace_dirs(start: Path) -> None:
@@ -312,12 +293,7 @@ class MemoryStore:
                 f"Refusing to write context '{ctx.name}' through a symbolic link."
             )
         if not self.context_exists(ctx.name):
-            self._assert_name_available(ctx.name)
-            if ctx_dir.exists() and any(ctx_dir.iterdir()):
-                raise ValueError(
-                    f"Cannot create context '{ctx.name}': its storage directory "
-                    "already exists and is not empty."
-                )
+            self._assert_context_storage_available(ctx.name)
         ctx_dir.mkdir(parents=True, exist_ok=True)
         self._checkpoints_dir(ctx.name).mkdir(parents=True, exist_ok=True)
         if auto_checkpoint is not None:
@@ -328,6 +304,7 @@ class MemoryStore:
                 args=auto_checkpoint.args,
                 description=auto_checkpoint.description,
                 auto=True,
+                _allow_unsaved=True,
             )
         with open(context_file, "w") as f:
             json.dump(ctx.to_dict(), f, indent=2)
@@ -350,20 +327,47 @@ class MemoryStore:
                 shutil.copy2(path, destination)
 
     def delete(self, name: str) -> None:
-        """Delete a context and all its data from disk. Clears current if it matches."""
+        """Delete one Context while preserving descendant Context namespaces."""
         if not self.context_exists(name):
             raise FileNotFoundError(f"Context '{name}' not found.")
-        descendants = self._descendant_context_names(name)
-        if descendants:
-            raise ValueError(
-                f"Cannot delete context '{name}': nested contexts exist: "
-                + ", ".join(descendants)
-            )
         ctx_dir = self._context_dir(name)
-        shutil.rmtree(ctx_dir)
-        self._prune_empty_namespace_dirs(ctx_dir.parent)
+        context_file = self._context_file(name)
+        checkpoints_dir = self._checkpoints_dir(name)
+        if checkpoints_dir.exists() and not checkpoints_dir.is_dir():
+            raise ValueError(
+                f"Cannot delete context '{name}': its checkpoints path is not "
+                "a directory."
+            )
+
+        # Move exact Context artifacts aside before deletion. Renames within a
+        # directory are atomic, and descendants are never part of these paths.
+        # If staging fails, restore the Context file before surfacing the error.
+        token = uuid.uuid4().hex
+        staged_context = ctx_dir / f".context.json.delete-{token}"
+        staged_checkpoints = ctx_dir / f".checkpoints.delete-{token}"
+        context_file.rename(staged_context)
+        checkpoints_staged = False
+        try:
+            if checkpoints_dir.exists():
+                checkpoints_dir.rename(staged_checkpoints)
+                checkpoints_staged = True
+        except OSError:
+            staged_context.rename(context_file)
+            raise
+
+        try:
+            staged_context.unlink()
+        except OSError:
+            if checkpoints_staged:
+                staged_checkpoints.rename(checkpoints_dir)
+            staged_context.rename(context_file)
+            raise
+
         if self.current_context_name() == name:
             self._write_state({"current": None})
+        if checkpoints_staged:
+            shutil.rmtree(staged_checkpoints)
+        self._prune_empty_namespace_dirs(ctx_dir)
 
     # --- Checkpoints ---
 
@@ -375,10 +379,13 @@ class MemoryStore:
         args: Optional[dict] = None,
         description: Optional[str] = None,
         auto: bool = False,
+        _allow_unsaved: bool = False,
     ) -> Checkpoint:
         """Save a point-in-time snapshot of ctx's current state."""
-        if not self.context_exists(ctx.name):
-            self._assert_name_available(ctx.name)
+        if not _allow_unsaved and not self.context_exists(ctx.name):
+            raise FileNotFoundError(
+                f"Context '{ctx.name}' must be saved before checkpointing."
+            )
         cp = Checkpoint(
             uid=str(uuid.uuid4()),
             message=message,
@@ -393,7 +400,7 @@ class MemoryStore:
         slug = message[:24].replace(" ", "-").replace("/", "-") if message else (command or "checkpoint")
         cp_dir = self._checkpoints_dir(ctx.name)
         cp_dir.mkdir(parents=True, exist_ok=True)
-        cp_file = cp_dir / f"{ts}-{slug}.json"
+        cp_file = cp_dir / f"{ts}-{slug}-{cp.uid[:8]}.json"
         if cp_file.is_symlink():
             raise ValueError(
                 f"Refusing to write checkpoint for '{ctx.name}' through a "

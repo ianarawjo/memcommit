@@ -87,7 +87,7 @@ class TestAdd:
 # ---------------------------------------------------------------------------
 
 class TestList:
-    def test_lists_memory_ids_without_contents(self, isolated_store):
+    def test_lists_memory_ids_with_atomic_contents(self, isolated_store):
         invoke("init", "ctx")
         invoke("add", "fact one")
         invoke("add", "fact two")
@@ -98,9 +98,8 @@ class TestList:
 
         assert result.exit_code == 0
         assert all(uid[:8] in result.output for uid in uids)
-        assert result.output.count("(untitled)") == 2
-        assert "fact one" not in result.output
-        assert "fact two" not in result.output
+        assert "fact one" in result.output
+        assert "fact two" in result.output
 
     def test_empty_context_shows_no_items(self, isolated_store):
         invoke("init", "empty")
@@ -116,7 +115,7 @@ class TestList:
         result = invoke("list", "alpha")
         assert result.exit_code == 0
         assert alpha_uid[:8] in result.output
-        assert "alpha fact" not in result.output
+        assert "alpha fact" in result.output
 
     def test_ls_is_alias_for_list(self, isolated_store):
         invoke("init", "ctx")
@@ -137,6 +136,156 @@ class TestList:
         assert result.exit_code == 0
         assert "building-access" in result.output
         assert "The east entrance is closed until Friday." not in result.output
+
+    def test_lists_aaa_slash_ab_context_before_aaa_memory_and_preserves_groups(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "source")
+        invoke("add", "Referenced atomic name.")
+        source_memory_uid = next(
+            iter(MemoryStore().load_current().memories)
+        )
+        invoke("init", "aaa/ab")
+        invoke("init", "parent")
+        invoke("add", "aaa")
+        invoke("embed", "aaa/ab", "--into", "parent")
+        invoke("reference", source_memory_uid[:8], "--from", "source")
+        invoke("add", "Last atomic name.")
+
+        store = MemoryStore()
+        stored_items = list(store.load("parent").iter_items())
+        assert stored_items[0].content == "aaa"
+        assert stored_items[1].name == "aaa/ab"
+        assert stored_items[2].target_context_name == "source"
+        assert stored_items[3].content == "Last atomic name."
+
+        result = invoke("ls", "parent")
+
+        assert result.exit_code == 0
+        lines = result.output.splitlines()
+        context_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[context " in line and line.endswith("] aaa/ab")
+        )
+        first_memory_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[memory  " in line and line.endswith("] aaa")
+        )
+        reference_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[ref     " in line and "Referenced atomic name." in line
+        )
+        last_memory_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[memory  " in line and line.endswith("] Last atomic name.")
+        )
+        assert context_index < first_memory_index < reference_index < last_memory_index
+
+    def test_recursive_list_descends_contexts_before_listing_memories(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "grandchild")
+        invoke("add", "Grandchild memory.")
+        invoke("init", "child")
+        invoke("add", "Child memory.")
+        invoke("embed", "grandchild", "--into", "child")
+        invoke("init", "parent")
+        invoke("add", "Parent memory.")
+        invoke("embed", "child", "--into", "parent")
+
+        result = invoke("ls", "-R", "parent")
+
+        assert result.exit_code == 0
+        lines = result.output.splitlines()
+        child_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[context " in line and line.endswith("] child")
+        )
+        grandchild_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[context " in line and line.endswith("] grandchild")
+        )
+        grandchild_memory_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[memory  " in line and line.endswith("] Grandchild memory.")
+        )
+        child_memory_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[memory  " in line and line.endswith("] Child memory.")
+        )
+        parent_memory_index = next(
+            index
+            for index, line in enumerate(lines)
+            if "[memory  " in line and line.endswith("] Parent memory.")
+        )
+        assert (
+            child_index
+            < grandchild_index
+            < grandchild_memory_index
+            < child_memory_index
+            < parent_memory_index
+        )
+
+    def test_recursive_long_option_matches_short_option(self, isolated_store):
+        invoke("init", "child")
+        invoke("add", "Nested memory.")
+        invoke("init", "parent")
+        invoke("embed", "child", "--into", "parent")
+
+        short_result = invoke("ls", "-R", "parent")
+        long_result = invoke("ls", "--recursive", "parent")
+        canonical_result = invoke("list", "-R", "parent")
+
+        assert short_result.exit_code == 0
+        assert long_result.exit_code == 0
+        assert canonical_result.exit_code == 0
+        assert short_result.output == long_result.output == canonical_result.output
+
+    def test_recursive_list_terminates_for_persisted_indirect_cycle(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "cycle/a")
+        invoke("init", "cycle/b")
+        invoke("embed", "cycle/b", "--into", "cycle/a")
+        invoke("embed", "cycle/a", "--into", "cycle/b")
+
+        result = invoke("ls", "-R", "cycle/a")
+
+        assert result.exit_code == 0
+        assert len(result.output) < 1_000
+        assert result.output.count("cycle/a") == 1
+        assert result.output.count("cycle/b") == 1
+
+    def test_recursive_list_visits_shared_context_along_each_embed_path(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "graph/shared")
+        invoke("add", "Shared atomic memory.")
+        invoke("init", "graph/left")
+        invoke("embed", "graph/shared", "--into", "graph/left")
+        invoke("init", "graph/right")
+        invoke("embed", "graph/shared", "--into", "graph/right")
+        invoke("init", "graph/root")
+        invoke("embed", "graph/left", "--into", "graph/root")
+        invoke("embed", "graph/right", "--into", "graph/root")
+
+        result = invoke("ls", "-R", "graph/root")
+
+        assert result.exit_code == 0
+        assert result.output.count("graph/shared") == 2
+        assert result.output.count("Shared atomic memory.") == 2
 
     def test_fails_for_nonexistent_context(self, isolated_store):
         result = invoke("list", "ghost")

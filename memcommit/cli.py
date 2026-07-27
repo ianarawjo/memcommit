@@ -41,7 +41,7 @@ app.command("ls",             help="Alias for 'list'.")(list_memories.cmd)
 app.command("show",           help="Show a memory, embedded context, or the current context in full.")(show.cmd)
 app.command("contexts",       help="List all available contexts.")(contexts.cmd)
 app.command("clear",          help="Clear all memories from the current (or given) context.")(clear_cmd)
-app.command("delete",         help="Delete a context and all its data.")(delete.cmd)
+app.command("delete",         help="Delete a context and its history; preserve descendants.")(delete.cmd)
 
 # --- Navigation ---
 app.command("switch",         help="Switch to a different context.")(switch.cmd)

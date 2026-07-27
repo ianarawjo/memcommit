@@ -158,6 +158,36 @@ def test_list_checkpoints_sorted_newest_first(isolated_store):
     assert cps[0]["command"] == "second"  # newest first
 
 
+def test_rapid_checkpoints_with_same_description_use_unique_files(isolated_store):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    ctx = ops.init("rapid-history")
+    for index in range(6):
+        ops.add(ctx, f"memory {index}")
+        store.save(
+            ctx,
+            AutoCheckpoint(
+                command="embed",
+                args={"index": index},
+                description="Repeated operation description",
+            ),
+        )
+
+    checkpoints = store.list_checkpoints("rapid-history")
+    checkpoint_files = list(
+        (
+            isolated_store
+            / "contexts"
+            / "rapid-history"
+            / "checkpoints"
+        ).glob("*.json")
+    )
+    assert len(checkpoints) == 6
+    assert len(checkpoint_files) == 6
+    assert len({checkpoint["uid"] for checkpoint in checkpoints}) == 6
+
+
 def test_revert_restores_earlier_state(isolated_store):
     from memcommit.context import AutoCheckpoint
     store = MemoryStore()

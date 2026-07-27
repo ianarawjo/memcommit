@@ -16,12 +16,15 @@ def cmd(
         raise typer.Exit(1)
 
     if not force:
-        typer.echo(f"This will permanently delete context '{context_name}' and all its data.")
+        typer.echo(
+            f"This will permanently delete context '{context_name}' and its "
+            "checkpoint history. Descendant contexts will be preserved."
+        )
         typer.confirm("Continue?", abort=True)
 
     try:
         store.delete(context_name)
-    except ValueError as e:
+    except (OSError, ValueError) as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     typer.secho(f"Deleted context '{context_name}'.", fg=typer.colors.GREEN)

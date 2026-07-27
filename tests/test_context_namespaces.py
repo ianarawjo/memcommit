@@ -38,23 +38,22 @@ def test_nested_contexts_are_listed_by_full_name(isolated_store):
     for name in (
         "construction-updates/route-changes",
         "alpha",
-        "construction-updates/main",
+        "construction-updates",
     ):
         store.save(ops.init(name))
-    store.set_current("construction-updates/main")
+    store.set_current("construction-updates")
 
     assert store.list_context_names() == [
         "alpha",
-        "construction-updates/main",
+        "construction-updates",
         "construction-updates/route-changes",
     ]
 
     result = runner.invoke(app, ["contexts"])
     assert result.exit_code == 0
     assert "  alpha" in result.output
-    assert "* construction-updates/main" in result.output
+    assert "* construction-updates" in result.output
     assert "  construction-updates/route-changes" in result.output
-    assert "\n  construction-updates\n" not in result.output
 
 
 def test_nested_context_can_be_switched_and_updated(isolated_store):
@@ -169,35 +168,345 @@ def test_namespace_siblings_can_coexist(isolated_store):
     assert not store.context_exists("construction-updates")
 
 
-def test_existing_context_cannot_become_a_namespace(isolated_store):
+def test_root_and_descendant_contexts_coexist_when_root_is_created_first(
+    isolated_store,
+):
     store = MemoryStore()
-    store.save(ops.init("construction-updates"))
+    root = ops.init("construction-updates")
+    ops.add(root, "Root summary.")
+    store.save(
+        root,
+        AutoCheckpoint(command="init", args={}, description="root first"),
+    )
+    child = ops.init("construction-updates/building-access")
+    ops.add(child, "Child detail.")
+    store.save(
+        child,
+        AutoCheckpoint(command="init", args={}, description="child second"),
+    )
 
-    with pytest.raises(ValueError, match="conflicts with existing context"):
-        store.save(ops.init("construction-updates/main"))
+    assert store.context_exists("construction-updates")
+    assert store.context_exists("construction-updates/building-access")
+    assert store.list_context_names() == [
+        "construction-updates",
+        "construction-updates/building-access",
+    ]
+    assert [item.content for item in store.load("construction-updates").iter_items()] == [
+        "Root summary."
+    ]
+    assert [
+        item.content
+        for item in store.load("construction-updates/building-access").iter_items()
+    ] == ["Child detail."]
+    assert len(store.list_checkpoints("construction-updates")) == 1
+    assert len(store.list_checkpoints("construction-updates/building-access")) == 1
 
-    assert not store.context_exists("construction-updates/main")
 
-
-def test_existing_namespace_cannot_become_a_context(isolated_store):
+def test_root_context_can_be_created_after_descendant_without_changing_child(
+    isolated_store,
+):
     store = MemoryStore()
-    store.save(ops.init("construction-updates/main"))
+    child = ops.init("construction-updates/building-access")
+    ops.add(child, "Existing child detail.")
+    store.save(
+        child,
+        AutoCheckpoint(command="init", args={}, description="child first"),
+    )
+    child_uid = child.uid
+    child_checkpoints = store.list_checkpoints(
+        "construction-updates/building-access"
+    )
 
-    with pytest.raises(ValueError, match="conflicts with existing context"):
-        store.save(ops.init("construction-updates"))
+    root = ops.init("construction-updates")
+    store.save(
+        root,
+        AutoCheckpoint(command="init", args={}, description="root second"),
+    )
 
-    assert store.context_exists("construction-updates/main")
-    assert not store.context_exists("construction-updates")
+    assert store.context_exists("construction-updates")
+    assert store.context_exists("construction-updates/building-access")
+    reloaded_child = store.load("construction-updates/building-access")
+    assert reloaded_child.uid == child_uid
+    assert [item.content for item in reloaded_child.iter_items()] == [
+        "Existing child detail."
+    ]
+    assert (
+        store.list_checkpoints("construction-updates/building-access")
+        == child_checkpoints
+    )
+    assert len(store.list_checkpoints("construction-updates")) == 1
 
 
-def test_cli_reports_prefix_conflict_without_changing_current(isolated_store):
-    assert runner.invoke(app, ["init", "construction-updates/main"]).exit_code == 0
+def test_cli_initializes_root_after_child_and_switches_to_root(isolated_store):
+    assert (
+        runner.invoke(
+            app,
+            ["init", "construction-updates/building-access"],
+        ).exit_code
+        == 0
+    )
 
     result = runner.invoke(app, ["init", "construction-updates"])
 
+    assert result.exit_code == 0
+    assert MemoryStore().current_context_name() == "construction-updates"
+    assert MemoryStore().context_exists("construction-updates/building-access")
+
+
+def test_path_descendant_is_not_implicitly_embedded_in_root(isolated_store):
+    assert (
+        runner.invoke(
+            app,
+            ["init", "construction-updates/building-access"],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(app, ["add", "Child-only detail."]).exit_code
+        == 0
+    )
+    assert runner.invoke(app, ["init", "construction-updates"]).exit_code == 0
+
+    direct = runner.invoke(app, ["ls", "construction-updates"])
+    recursive = runner.invoke(app, ["ls", "-R", "construction-updates"])
+
+    assert direct.exit_code == 0
+    assert recursive.exit_code == 0
+    assert "construction-updates/building-access" not in direct.output
+    assert "construction-updates/building-access" not in recursive.output
+    assert "Child-only detail." not in recursive.output
+
+
+def test_root_explicit_embed_controls_direct_and_recursive_listing(
+    isolated_store,
+):
+    assert (
+        runner.invoke(
+            app,
+            ["init", "construction-updates/building-access"],
+        ).exit_code
+        == 0
+    )
+    assert runner.invoke(app, ["add", "Embedded child detail."]).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["init", "construction-updates/unembedded"],
+        ).exit_code
+        == 0
+    )
+    assert runner.invoke(app, ["add", "Unembedded detail."]).exit_code == 0
+    assert runner.invoke(app, ["init", "construction-updates"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Root summary."]).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            [
+                "embed",
+                "construction-updates/building-access",
+                "--into",
+                "construction-updates",
+            ],
+        ).exit_code
+        == 0
+    )
+
+    direct = runner.invoke(app, ["ls", "construction-updates"])
+    recursive = runner.invoke(app, ["ls", "-R", "construction-updates"])
+
+    assert direct.exit_code == 0
+    assert "construction-updates/building-access" in direct.output
+    assert "Root summary." in direct.output
+    assert "Embedded child detail." not in direct.output
+    assert "construction-updates/unembedded" not in direct.output
+    assert recursive.exit_code == 0
+    assert "Embedded child detail." in recursive.output
+    assert "Unembedded detail." not in recursive.output
+
+
+def test_switch_and_add_to_root_is_independent_of_descendant(isolated_store):
+    assert (
+        runner.invoke(
+            app,
+            ["init", "construction-updates/building-access"],
+        ).exit_code
+        == 0
+    )
+    assert runner.invoke(app, ["add", "Child detail."]).exit_code == 0
+    assert runner.invoke(app, ["init", "construction-updates"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Root detail."]).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["switch", "construction-updates/building-access"],
+        ).exit_code
+        == 0
+    )
+    assert runner.invoke(app, ["add", "Second child detail."]).exit_code == 0
+    assert (
+        runner.invoke(app, ["switch", "construction-updates"]).exit_code
+        == 0
+    )
+
+    store = MemoryStore()
+    assert store.current_context_name() == "construction-updates"
+    assert [item.content for item in store.load_current().iter_items()] == [
+        "Root detail."
+    ]
+    assert [
+        item.content
+        for item in store.load(
+            "construction-updates/building-access"
+        ).iter_items()
+    ] == ["Child detail.", "Second child detail."]
+
+
+def test_clear_root_preserves_descendant_context_and_data(isolated_store):
+    assert (
+        runner.invoke(
+            app,
+            ["init", "construction-updates/building-access"],
+        ).exit_code
+        == 0
+    )
+    assert runner.invoke(app, ["add", "Child survives."]).exit_code == 0
+    assert runner.invoke(app, ["init", "construction-updates"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Root is cleared."]).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            [
+                "embed",
+                "construction-updates/building-access",
+                "--into",
+                "construction-updates",
+            ],
+        ).exit_code
+        == 0
+    )
+
+    result = runner.invoke(
+        app,
+        ["clear", "construction-updates", "--force"],
+    )
+
+    assert result.exit_code == 0
+    store = MemoryStore()
+    assert store.load("construction-updates").memories == {}
+    assert store.context_exists("construction-updates/building-access")
+    assert [
+        item.content
+        for item in store.load(
+            "construction-updates/building-access"
+        ).iter_items()
+    ] == ["Child survives."]
+
+
+def test_branch_can_create_root_alongside_existing_descendant(isolated_store):
+    assert runner.invoke(app, ["init", "source"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Branched root data."]).exit_code == 0
+    assert (
+        runner.invoke(app, ["init", "review/existing-child"]).exit_code
+        == 0
+    )
+    assert runner.invoke(app, ["add", "Existing child data."]).exit_code == 0
+    store = MemoryStore()
+    child_before = store.load("review/existing-child")
+    assert runner.invoke(app, ["switch", "source"]).exit_code == 0
+    source_history = store.list_checkpoints("source")
+
+    result = runner.invoke(app, ["branch", "review"])
+
+    assert result.exit_code == 0
+    assert store.current_context_name() == "review"
+    assert store.context_exists("review")
+    assert store.context_exists("review/existing-child")
+    assert [item.content for item in store.load("review").iter_items()] == [
+        "Branched root data."
+    ]
+    child_after = store.load("review/existing-child")
+    assert child_after.uid == child_before.uid
+    assert [item.content for item in child_after.iter_items()] == [
+        "Existing child data."
+    ]
+    assert store.list_checkpoints("review") == source_history
+    assert runner.invoke(app, ["add", "Review-only change."]).exit_code == 0
+    assert store.list_checkpoints("source") == source_history
+    assert len(store.list_checkpoints("review")) == len(source_history) + 1
+
+
+def test_failed_root_branch_rollback_preserves_existing_descendant(
+    isolated_store,
+    monkeypatch,
+):
+    assert runner.invoke(app, ["init", "source"]).exit_code == 0
+    assert runner.invoke(app, ["init", "review/existing-child"]).exit_code == 0
+    store = MemoryStore()
+    child_uid = store.load("review/existing-child").uid
+    assert runner.invoke(app, ["switch", "source"]).exit_code == 0
+
+    def fail_copy(self, source_name, target_name):
+        raise OSError("forced checkpoint copy failure")
+
+    monkeypatch.setattr(MemoryStore, "copy_checkpoints", fail_copy)
+
+    result = runner.invoke(app, ["branch", "review"])
+
     assert result.exit_code == 1
-    assert "conflicts with existing context" in result.stderr
-    assert MemoryStore().current_context_name() == "construction-updates/main"
+    assert "forced checkpoint copy failure" in result.stderr
+    assert not store.context_exists("review")
+    assert store.context_exists("review/existing-child")
+    assert store.load("review/existing-child").uid == child_uid
+    assert store.current_context_name() == "source"
+
+
+def test_root_revert_does_not_change_descendant_data_or_history(isolated_store):
+    assert runner.invoke(app, ["init", "root/child"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Child before root revert."]).exit_code == 0
+    store = MemoryStore()
+    child_uid = store.load("root/child").uid
+    child_history = store.list_checkpoints("root/child")
+    assert runner.invoke(app, ["init", "root"]).exit_code == 0
+    root_init_checkpoint = store.list_checkpoints("root")[0]["uid"]
+    assert runner.invoke(app, ["add", "Root change to revert."]).exit_code == 0
+
+    result = runner.invoke(app, ["revert", root_init_checkpoint[:8]])
+
+    assert result.exit_code == 0
+    assert store.load("root").memories == {}
+    assert store.load("root/child").uid == child_uid
+    assert [
+        item.content for item in store.load("root/child").iter_items()
+    ] == ["Child before root revert."]
+    assert store.list_checkpoints("root/child") == child_history
+
+
+def test_delete_and_recreate_root_keeps_descendant_identity_and_history(
+    isolated_store,
+):
+    store = MemoryStore()
+    root = ops.init("root")
+    store.save(root)
+    old_root_uid = root.uid
+    child = ops.init("root/child")
+    ops.add(child, "Persistent child.")
+    store.save(
+        child,
+        AutoCheckpoint(command="init", args={}, description="child"),
+    )
+    child_history = store.list_checkpoints("root/child")
+
+    store.delete("root")
+    result = runner.invoke(app, ["init", "root"])
+
+    assert result.exit_code == 0
+    assert store.load("root").uid != old_root_uid
+    assert store.load("root").memories == {}
+    assert store.load("root/child").uid == child.uid
+    assert [item.content for item in store.load("root/child").iter_items()] == [
+        "Persistent child."
+    ]
+    assert store.list_checkpoints("root/child") == child_history
 
 
 @pytest.mark.parametrize(
@@ -216,6 +525,12 @@ def test_cli_reports_prefix_conflict_without_changing_current(isolated_store):
         r"a\b",
         "C:/absolute",
         "control/\x1fcharacter",
+        "context.json",
+        "checkpoints",
+        "parent/context.json",
+        "parent/checkpoints",
+        "CONTEXT.JSON/child",
+        "Checkpoints/child",
     ],
 )
 def test_invalid_context_names_cannot_be_saved(isolated_store, name):
@@ -234,6 +549,43 @@ def test_cli_rejects_invalid_name_without_partial_state(isolated_store):
     assert "Invalid context name" in result.stderr
     assert MemoryStore().current_context_name() is None
     assert not (isolated_store.parent / "outside").exists()
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "context.json",
+        "checkpoints",
+        "parent/context.json",
+        "parent/checkpoints",
+        "CONTEXT.JSON/child",
+        "Checkpoints/child",
+    ],
+)
+def test_cli_rejects_reserved_storage_segments_without_partial_state(
+    isolated_store,
+    name,
+):
+    result = runner.invoke(app, ["init", name])
+
+    assert result.exit_code == 1
+    assert "reserved for Context storage" in result.stderr
+    assert MemoryStore().current_context_name() is None
+    assert MemoryStore().list_context_names() == []
+
+
+def test_checkpoint_requires_saved_context_and_leaves_no_orphan_directory(
+    isolated_store,
+):
+    store = MemoryStore()
+    unsaved = ops.init("unsaved/root")
+
+    with pytest.raises(FileNotFoundError, match="must be saved"):
+        store.checkpoint(unsaved, "must fail")
+
+    assert not (
+        isolated_store / "contexts" / "unsaved" / "root" / "checkpoints"
+    ).exists()
 
 
 def test_init_rejects_file_used_as_namespace_component(isolated_store):
@@ -320,6 +672,9 @@ def test_checkpoint_symlink_cannot_write_outside_store(isolated_store):
 
 def test_deleting_leaf_preserves_sibling_and_prunes_empty_namespace(isolated_store):
     store = MemoryStore()
+    root = ops.init("construction-updates")
+    ops.add(root, "Root remains.")
+    store.save(root)
     store.save(ops.init("construction-updates/main"))
     store.save(ops.init("construction-updates/building-access"))
     store.set_current("construction-updates/building-access")
@@ -327,31 +682,89 @@ def test_deleting_leaf_preserves_sibling_and_prunes_empty_namespace(isolated_sto
     store.delete("construction-updates/main")
 
     assert not store.context_exists("construction-updates/main")
+    assert store.context_exists("construction-updates")
     assert store.context_exists("construction-updates/building-access")
     assert store.current_context_name() == "construction-updates/building-access"
     assert (isolated_store / "contexts" / "construction-updates").is_dir()
 
     store.delete("construction-updates/building-access")
 
-    assert not (isolated_store / "contexts" / "construction-updates").exists()
+    assert store.context_exists("construction-updates")
+    assert [item.content for item in store.load("construction-updates").iter_items()] == [
+        "Root remains."
+    ]
+    assert (isolated_store / "contexts" / "construction-updates").is_dir()
     assert store.current_context_name() is None
 
 
-def test_delete_refuses_corrupt_prefix_tree(isolated_store):
+def test_deleting_root_preserves_descendant_context_and_history(isolated_store):
+    store = MemoryStore()
+    root = ops.init("parent")
+    ops.add(root, "Root data.")
+    store.save(
+        root,
+        AutoCheckpoint(command="init", args={}, description="root"),
+    )
+    child = ops.init("parent/child")
+    ops.add(child, "Child data.")
+    store.save(
+        child,
+        AutoCheckpoint(command="init", args={}, description="child"),
+    )
+    child_uid = child.uid
+    child_checkpoints = store.list_checkpoints("parent/child")
+    store.set_current("parent/child")
+
+    store.delete("parent")
+
+    assert not store.context_exists("parent")
+    assert store.context_exists("parent/child")
+    assert store.current_context_name() == "parent/child"
+    assert store.load("parent/child").uid == child_uid
+    assert [item.content for item in store.load("parent/child").iter_items()] == [
+        "Child data."
+    ]
+    assert store.list_checkpoints("parent/child") == child_checkpoints
+    root_dir = isolated_store / "contexts" / "parent"
+    assert not (root_dir / "context.json").exists()
+    assert not (root_dir / "checkpoints").exists()
+    assert (root_dir / "child" / "context.json").is_file()
+
+
+def test_deleting_current_root_clears_current_but_preserves_child(isolated_store):
     store = MemoryStore()
     store.save(ops.init("parent"))
+    store.save(ops.init("parent/child"))
+    store.set_current("parent")
 
-    child_dir = isolated_store / "contexts" / "parent" / "child"
-    child_dir.mkdir()
-    (child_dir / "context.json").write_text(
-        json.dumps(ops.init("parent/child").to_dict())
-    )
+    store.delete("parent")
 
-    with pytest.raises(ValueError, match="nested contexts exist"):
+    assert store.current_context_name() is None
+    assert not store.context_exists("parent")
+    assert store.context_exists("parent/child")
+
+
+def test_delete_rejects_checkpoint_symlink_without_touching_child_or_target(
+    isolated_store,
+):
+    store = MemoryStore()
+    root = ops.init("parent")
+    store.save(root)
+    store.save(ops.init("parent/child"))
+    checkpoints = isolated_store / "contexts" / "parent" / "checkpoints"
+    checkpoints.rmdir()
+    outside = isolated_store.parent / "outside-root-delete"
+    outside.mkdir()
+    sentinel = outside / "keep.txt"
+    sentinel.write_text("keep")
+    checkpoints.symlink_to(outside, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="checkpoints.*symbolic link"):
         store.delete("parent")
 
     assert store.context_exists("parent")
     assert store.context_exists("parent/child")
+    assert sentinel.read_text() == "keep"
 
 
 def test_load_rejects_context_name_mismatch(isolated_store):
@@ -423,6 +836,7 @@ def test_malformed_context_is_not_listed_or_switchable(
 
 def test_checkpoint_artifact_is_not_listed_as_nested_context(isolated_store):
     store = MemoryStore()
+    store.save(ops.init("construction-updates"))
     context = ops.init("construction-updates/main")
     store.save(
         context,
@@ -440,8 +854,12 @@ def test_checkpoint_artifact_is_not_listed_as_nested_context(isolated_store):
         json.dumps(ops.init("construction-updates/main/checkpoints").to_dict())
     )
 
-    assert store.list_context_names() == ["construction-updates/main"]
+    assert store.list_context_names() == [
+        "construction-updates",
+        "construction-updates/main",
+    ]
 
     store.delete("construction-updates/main")
 
     assert not store.context_exists("construction-updates/main")
+    assert store.context_exists("construction-updates")
