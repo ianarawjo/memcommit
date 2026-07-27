@@ -21,11 +21,63 @@ CONTEXTS_DIR = STORE_DIR / "contexts"
 STATE_FILE = STORE_DIR / "state.json"
 
 
+def _context_name_parts(name: str) -> tuple[str, ...]:
+    """Validate a Context name and return its POSIX namespace segments."""
+    if not isinstance(name, str) or not name:
+        raise ValueError("Context name must be a non-empty relative path.")
+    if "\\" in name:
+        raise ValueError(
+            f"Invalid context name '{name}': use '/' as the namespace separator."
+        )
+    if ":" in name:
+        raise ValueError(
+            f"Invalid context name '{name}': ':' is not allowed in context names."
+        )
+
+    parts = tuple(name.split("/"))
+    if any(part == "" for part in parts):
+        raise ValueError(
+            f"Invalid context name '{name}': leading, trailing, or repeated '/' "
+            "is not allowed."
+        )
+    if any(part in {".", ".."} for part in parts):
+        raise ValueError(
+            f"Invalid context name '{name}': '.' and '..' segments are not allowed."
+        )
+    if any(ord(character) < 32 or ord(character) == 127 for character in name):
+        raise ValueError(
+            f"Invalid context name '{name}': control characters are not allowed."
+        )
+    return parts
+
+
+def _validate_context_header(data: object, expected_name: str) -> dict:
+    """Validate the minimum Context JSON structure needed for safe loading."""
+    if not isinstance(data, dict):
+        raise ValueError(
+            f"Context file for '{expected_name}' must contain a JSON object."
+        )
+    if data.get("name") != expected_name:
+        raise ValueError(
+            f"Context file for '{expected_name}' declares a different name "
+            f"('{data.get('name')}')."
+        )
+    if not isinstance(data.get("uid"), str) or not data["uid"]:
+        raise ValueError(
+            f"Context file for '{expected_name}' has no valid uid."
+        )
+    if not isinstance(data.get("memories"), dict):
+        raise ValueError(
+            f"Context file for '{expected_name}' has no valid memories object."
+        )
+    return data
+
+
 class MemoryStore:
 
     def __init__(self):
-        STORE_DIR.mkdir(exist_ok=True)
-        CONTEXTS_DIR.mkdir(exist_ok=True)
+        STORE_DIR.mkdir(parents=True, exist_ok=True)
+        CONTEXTS_DIR.mkdir(parents=True, exist_ok=True)
         if not STATE_FILE.exists():
             self._write_state({"current": None})
 
@@ -50,19 +102,139 @@ class MemoryStore:
     # --- Context paths ---
 
     def _context_dir(self, name: str) -> Path:
-        return CONTEXTS_DIR / name
+        parts = _context_name_parts(name)
+        path = CONTEXTS_DIR.joinpath(*parts)
+        candidate = CONTEXTS_DIR
+        for part in parts:
+            candidate /= part
+            if candidate.is_symlink():
+                raise ValueError(
+                    f"Invalid context name '{name}': symbolic links are not "
+                    "allowed in context namespaces."
+                )
+            if candidate.exists() and not candidate.is_dir():
+                raise ValueError(
+                    f"Invalid context name '{name}': namespace component "
+                    f"'{candidate.name}' is not a directory."
+                )
+        contexts_root = CONTEXTS_DIR.resolve()
+        resolved = path.resolve(strict=False)
+        if resolved != contexts_root and contexts_root not in resolved.parents:
+            raise ValueError(
+                f"Invalid context name '{name}': path escapes the context store."
+            )
+        return path
 
     def _context_file(self, name: str) -> Path:
         return self._context_dir(name) / "context.json"
 
+    def _checkpoints_dir(self, name: str) -> Path:
+        path = self._context_dir(name) / "checkpoints"
+        if path.is_symlink():
+            raise ValueError(
+                f"Refusing to access checkpoints for '{name}' through a "
+                "symbolic link."
+            )
+        contexts_root = CONTEXTS_DIR.resolve()
+        resolved = path.resolve(strict=False)
+        if resolved != contexts_root and contexts_root not in resolved.parents:
+            raise ValueError(
+                f"Refusing to access checkpoints for '{name}' outside the "
+                "context store."
+            )
+        return path
+
     def context_exists(self, name: str) -> bool:
-        return self._context_file(name).exists()
+        try:
+            context_file = self._context_file(name)
+        except (OSError, TypeError, ValueError):
+            return False
+        return context_file.is_file() and not context_file.is_symlink()
 
     def list_context_names(self) -> list[str]:
+        names: list[str] = []
+        for context_file in CONTEXTS_DIR.rglob("context.json"):
+            if not context_file.is_file() or context_file.is_symlink():
+                continue
+            name = context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
+            try:
+                parts = _context_name_parts(name)
+            except ValueError:
+                continue
+            try:
+                with open(context_file) as f:
+                    data = json.load(f)
+                _validate_context_header(data, name)
+            except (OSError, json.JSONDecodeError):
+                continue
+            except ValueError:
+                continue
+
+            # A valid namespace cannot descend from another Context. Besides
+            # enforcing the Git-like file/directory rule, this prevents a file
+            # named checkpoints/context.json from being listed as a Context.
+            if any(
+                self.context_exists("/".join(parts[:index]))
+                for index in range(1, len(parts))
+            ):
+                continue
+            names.append(name)
+        return sorted(names)
+
+    def _prefix_conflict(self, name: str) -> str | None:
+        """Return an existing Context whose name conflicts with *name*."""
+        parts = _context_name_parts(name)
+
+        for index in range(1, len(parts)):
+            ancestor_name = "/".join(parts[:index])
+            if self.context_exists(ancestor_name):
+                return ancestor_name
+
+        context_dir = self._context_dir(name)
+        if not context_dir.exists():
+            return None
+        exact_file = self._context_file(name)
+        for context_file in context_dir.rglob("context.json"):
+            if context_file == exact_file or not context_file.is_file():
+                continue
+            return context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
+        return None
+
+    def _assert_name_available(self, name: str) -> None:
+        """Reject Git-style file/directory prefix conflicts for a new Context."""
+        conflict = self._prefix_conflict(name)
+        if conflict is not None:
+            raise ValueError(
+                f"Context name '{name}' conflicts with existing context "
+                f"'{conflict}'. A context and its namespace prefix cannot both exist."
+            )
+
+    def _descendant_context_names(self, name: str) -> list[str]:
+        context_dir = self._context_dir(name)
+        if not context_dir.exists():
+            return []
+        exact_file = self._context_file(name)
+        checkpoints_dir = self._checkpoints_dir(name)
         return sorted(
-            d.name for d in CONTEXTS_DIR.iterdir()
-            if d.is_dir() and (d / "context.json").exists()
+            context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
+            for context_file in context_dir.rglob("context.json")
+            if (
+                context_file != exact_file
+                and context_file.is_file()
+                and checkpoints_dir not in context_file.parents
+            )
         )
+
+    @staticmethod
+    def _prune_empty_namespace_dirs(start: Path) -> None:
+        """Remove empty namespace directories without removing CONTEXTS_DIR."""
+        candidate = start
+        while candidate != CONTEXTS_DIR:
+            try:
+                candidate.rmdir()
+            except OSError:
+                break
+            candidate = candidate.parent
 
     # --- Load / Save ---
 
@@ -83,6 +255,10 @@ class MemoryStore:
             return None
         with open(self._context_file(context_name)) as f:
             data = json.load(f)
+        try:
+            data = _validate_context_header(data, context_name)
+        except ValueError:
+            return None
         if data.get("uid") != expected_context_uid:
             return None
 
@@ -101,6 +277,7 @@ class MemoryStore:
             raise FileNotFoundError(f"Context '{name}' not found.")
         with open(self._context_file(name)) as f:
             data = json.load(f)
+        data = _validate_context_header(data, name)
 
         def loader(ref_name: str) -> Context | None:
             if ref_name in _loading:
@@ -109,11 +286,16 @@ class MemoryStore:
                 return None
             return self.load(ref_name, _loading | {name})
 
-        return Context.from_dict(
-            data,
-            loader=loader,
-            memory_loader=self._load_direct_memory,
-        )
+        try:
+            return Context.from_dict(
+                data,
+                loader=loader,
+                memory_loader=self._load_direct_memory,
+            )
+        except (KeyError, TypeError) as e:
+            raise ValueError(
+                f"Context file for '{name}' has an invalid memory structure: {e}"
+            ) from e
 
     def load_current(self) -> Context:
         name = self.current_context_name()
@@ -124,8 +306,20 @@ class MemoryStore:
     def save(self, ctx: Context, auto_checkpoint: Optional[AutoCheckpoint] = None) -> None:
         """Persist a context to disk. Caller is responsible for calling this after mutations."""
         ctx_dir = self._context_dir(ctx.name)
-        ctx_dir.mkdir(exist_ok=True)
-        (ctx_dir / "checkpoints").mkdir(exist_ok=True)
+        context_file = self._context_file(ctx.name)
+        if context_file.is_symlink():
+            raise ValueError(
+                f"Refusing to write context '{ctx.name}' through a symbolic link."
+            )
+        if not self.context_exists(ctx.name):
+            self._assert_name_available(ctx.name)
+            if ctx_dir.exists() and any(ctx_dir.iterdir()):
+                raise ValueError(
+                    f"Cannot create context '{ctx.name}': its storage directory "
+                    "already exists and is not empty."
+                )
+        ctx_dir.mkdir(parents=True, exist_ok=True)
+        self._checkpoints_dir(ctx.name).mkdir(parents=True, exist_ok=True)
         if auto_checkpoint is not None:
             self.checkpoint(
                 ctx,
@@ -135,23 +329,39 @@ class MemoryStore:
                 description=auto_checkpoint.description,
                 auto=True,
             )
-        with open(self._context_file(ctx.name), "w") as f:
+        with open(context_file, "w") as f:
             json.dump(ctx.to_dict(), f, indent=2)
 
     def copy_checkpoints(self, source_name: str, target_name: str) -> None:
         """Copy all checkpoint files from source into target's checkpoints directory."""
-        src_dir = self._context_dir(source_name) / "checkpoints"
-        tgt_dir = self._context_dir(target_name) / "checkpoints"
-        tgt_dir.mkdir(exist_ok=True)
+        src_dir = self._checkpoints_dir(source_name)
+        tgt_dir = self._checkpoints_dir(target_name)
+        tgt_dir.mkdir(parents=True, exist_ok=True)
         if src_dir.exists():
             for path in sorted(src_dir.glob("*.json")):
-                shutil.copy2(path, tgt_dir / path.name)
+                if path.is_symlink() or not path.is_file():
+                    continue
+                destination = tgt_dir / path.name
+                if destination.is_symlink():
+                    raise ValueError(
+                        f"Refusing to copy checkpoint to '{target_name}' through "
+                        "a symbolic link."
+                    )
+                shutil.copy2(path, destination)
 
     def delete(self, name: str) -> None:
         """Delete a context and all its data from disk. Clears current if it matches."""
         if not self.context_exists(name):
             raise FileNotFoundError(f"Context '{name}' not found.")
-        shutil.rmtree(self._context_dir(name))
+        descendants = self._descendant_context_names(name)
+        if descendants:
+            raise ValueError(
+                f"Cannot delete context '{name}': nested contexts exist: "
+                + ", ".join(descendants)
+            )
+        ctx_dir = self._context_dir(name)
+        shutil.rmtree(ctx_dir)
+        self._prune_empty_namespace_dirs(ctx_dir.parent)
         if self.current_context_name() == name:
             self._write_state({"current": None})
 
@@ -167,6 +377,8 @@ class MemoryStore:
         auto: bool = False,
     ) -> Checkpoint:
         """Save a point-in-time snapshot of ctx's current state."""
+        if not self.context_exists(ctx.name):
+            self._assert_name_available(ctx.name)
         cp = Checkpoint(
             uid=str(uuid.uuid4()),
             message=message,
@@ -179,9 +391,15 @@ class MemoryStore:
         )
         ts = cp.timestamp.strftime("%Y%m%dT%H%M%S")
         slug = message[:24].replace(" ", "-").replace("/", "-") if message else (command or "checkpoint")
-        cp_dir = self._context_dir(ctx.name) / "checkpoints"
-        cp_dir.mkdir(exist_ok=True)
-        with open(cp_dir / f"{ts}-{slug}.json", "w") as f:
+        cp_dir = self._checkpoints_dir(ctx.name)
+        cp_dir.mkdir(parents=True, exist_ok=True)
+        cp_file = cp_dir / f"{ts}-{slug}.json"
+        if cp_file.is_symlink():
+            raise ValueError(
+                f"Refusing to write checkpoint for '{ctx.name}' through a "
+                "symbolic link."
+            )
+        with open(cp_file, "w") as f:
             json.dump({
                 "uid": cp.uid,
                 "message": cp.message,
@@ -196,11 +414,13 @@ class MemoryStore:
 
     def list_checkpoints(self, name: str) -> list[dict]:
         """Return checkpoints for a context, sorted newest-first."""
-        cp_dir = self._context_dir(name) / "checkpoints"
+        cp_dir = self._checkpoints_dir(name)
         if not cp_dir.exists():
             return []
         entries = []
         for path in sorted(cp_dir.glob("*.json")):
+            if path.is_symlink() or not path.is_file():
+                continue
             with open(path) as f:
                 entries.append(json.load(f))
         return sorted(entries, key=lambda x: x["timestamp"], reverse=True)
@@ -229,7 +449,7 @@ class MemoryStore:
         target_data = matches[0]
         target_ts = target_data["timestamp"]
         ctx = self.load(ctx_name)
-        cp_dir = self._context_dir(ctx_name) / "checkpoints"
+        cp_dir = self._checkpoints_dir(ctx_name)
 
         if not keep_history:
             log_snapshot = (target_data.get("args") or {}).get("log_snapshot")
@@ -237,15 +457,24 @@ class MemoryStore:
             if log_snapshot is not None:
                 # Target carries a log snapshot — fully restore the log from it
                 for path in cp_dir.glob("*.json"):
-                    path.unlink()
+                    if path.is_symlink() or path.is_file():
+                        path.unlink()
                 for entry in sorted(log_snapshot, key=lambda x: x["timestamp"]):
                     ts_file = datetime.fromisoformat(entry["timestamp"]).strftime("%Y%m%dT%H%M%S")
                     fname = f"{ts_file}-{entry['uid'][:8]}.json"
-                    with open(cp_dir / fname, "w") as f:
+                    cp_file = cp_dir / fname
+                    if cp_file.is_symlink():
+                        raise ValueError(
+                            f"Refusing to restore checkpoint for '{ctx_name}' "
+                            "through a symbolic link."
+                        )
+                    with open(cp_file, "w") as f:
                         json.dump(entry, f, indent=2)
             else:
                 # Simple truncation: remove checkpoints newer than target
                 for path in cp_dir.glob("*.json"):
+                    if path.is_symlink() or not path.is_file():
+                        continue
                     with open(path) as f:
                         entry_data = json.load(f)
                     if entry_data["timestamp"] > target_ts:

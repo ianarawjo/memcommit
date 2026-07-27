@@ -18,7 +18,18 @@ def cmd(name: Annotated[str, typer.Argument(help="Name for the new branch contex
         raise typer.Exit(1)
     source_name = ctx.name
     new_ctx = ops.branch(ctx, name)
-    store.save(new_ctx)
-    store.copy_checkpoints(source_name, name)
+    created = False
+    try:
+        # Validate the source history before creating the target so an unsafe
+        # checkpoint path cannot leave behind a partial branch.
+        store.list_checkpoints(source_name)
+        store.save(new_ctx)
+        created = True
+        store.copy_checkpoints(source_name, name)
+    except (OSError, ValueError) as e:
+        if created:
+            store.delete(name)
+        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
     store.set_current(name)
     typer.secho(f"Branched '{source_name}' → '{name}' and switched to it.", fg=typer.colors.GREEN)

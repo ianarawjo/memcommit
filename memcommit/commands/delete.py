@@ -19,5 +19,9 @@ def cmd(
         typer.echo(f"This will permanently delete context '{context_name}' and all its data.")
         typer.confirm("Continue?", abort=True)
 
-    store.delete(context_name)
+    try:
+        store.delete(context_name)
+    except ValueError as e:
+        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
     typer.secho(f"Deleted context '{context_name}'.", fg=typer.colors.GREEN)
