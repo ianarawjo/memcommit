@@ -2,7 +2,13 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.context import Context, Information, Memory, MemoryRef
+from memcommit.context import (
+    Context,
+    Information,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.store import MemoryStore
 
 
@@ -11,12 +17,14 @@ def _one_line(content: str) -> str:
     return " ".join(content.split()) or "(empty)"
 
 
-def _grouped_items(ctx: Context) -> tuple[list[Context], list[Memory | MemoryRef]]:
-    """Return Contexts first while preserving order within each item group."""
-    contexts: list[Context] = []
+def _grouped_items(
+    ctx: Context,
+) -> tuple[list[Context | QueryContextRef], list[Memory | MemoryRef]]:
+    """Return context-like items first, preserving order within each group."""
+    contexts: list[Context | QueryContextRef] = []
     memories: list[Memory | MemoryRef] = []
     for item in ctx.iter_items():
-        if isinstance(item, Context):
+        if isinstance(item, (Context, QueryContextRef)):
             contexts.append(item)
         else:
             memories.append(item)
@@ -27,6 +35,10 @@ def _render_item(item: Information, indent: int) -> None:
     prefix = " " * indent
     if isinstance(item, Context):
         typer.echo(f"{prefix}[context {item.uid[:8]}] {item.name}")
+    elif isinstance(item, QueryContextRef):
+        typer.echo(
+            f"{prefix}[query   {item.uid[:8]}] {item.name} (query-only)"
+        )
     elif isinstance(item, MemoryRef):
         if item.target is None:
             typer.echo(
@@ -54,7 +66,7 @@ def _render_contents(
     contexts, memories = _grouped_items(ctx)
     for child in contexts:
         _render_item(child, indent)
-        if not recursive:
+        if not recursive or isinstance(child, QueryContextRef):
             continue
         child_indent = indent + 2
         if child.uid in ancestors:

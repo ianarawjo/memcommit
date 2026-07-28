@@ -3,7 +3,13 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.context import (
+    AutoCheckpoint,
+    Context,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.store import MemoryStore
 
 
@@ -22,10 +28,15 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
         raise typer.Exit(1)
 
     source = store.load(other)
-    added = ops.merge(source, target)
+    try:
+        added = ops.merge(source, target)
+    except ValueError as e:
+        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
 
     mem_count = sum(1 for i in added if isinstance(i, Memory))
     ref_count = sum(1 for i in added if isinstance(i, MemoryRef))
+    query_count = sum(1 for i in added if isinstance(i, QueryContextRef))
     ctx_count = sum(1 for i in added if isinstance(i, Context))
     parts = []
     if mem_count:
@@ -33,6 +44,11 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
     if ref_count:
         parts.append(
             f"{ref_count} memory reference{'s' if ref_count != 1 else ''}"
+        )
+    if query_count:
+        parts.append(
+            f"{query_count} query-only context"
+            f"{'s' if query_count != 1 else ''}"
         )
     if ctx_count:
         parts.append(f"{ctx_count} embedded context{'s' if ctx_count != 1 else ''}")

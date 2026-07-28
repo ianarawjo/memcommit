@@ -1,10 +1,16 @@
 """mem dev — developer tools for evaluation and testing (hidden from main help)."""
+import copy
+from pathlib import Path
 from typing import Annotated, Optional
 
 import json
 import typer
 
 app = typer.Typer(help="Developer tools: evals, diagnostics.")
+query_source_app = typer.Typer(
+    help="Install concealed sources for the query-only research prototype."
+)
+app.add_typer(query_source_app, name="query-source")
 
 _SUPPORTED_COMMANDS = ("forget", "integrate")
 
@@ -15,6 +21,94 @@ Given a theme, produce a JSON object with a single key "memories" whose value is
 memories on that theme. Each sentence should be distinct and specific. Try to generate 
 a diverse set of facts, opinions, and experiences related to the theme. Avoid generic or vague statements.
 Return ONLY valid JSON — no markdown, no commentary."""
+
+
+@query_source_app.command("install")
+def dev_query_source_install(
+    name: Annotated[
+        str,
+        typer.Argument(help="Name shown for the query-only Context"),
+    ],
+    source_file: Annotated[
+        Path,
+        typer.Option(
+            "--from",
+            help="UTF-8 text or Markdown file containing the concealed source",
+        ),
+    ],
+    into: Annotated[
+        str,
+        typer.Option("--into", help="Context that will receive the query reference"),
+    ],
+) -> None:
+    """
+    Install one local query-only source for a study fixture.
+
+    This hidden command simulates query-only access. The source remains
+    readable to the local OS user and is not a production security boundary.
+    """
+    import memcommit.ops as ops
+    from memcommit.store import MemoryStore
+
+    store = MemoryStore()
+    try:
+        parent = store.load(into)
+    except (FileNotFoundError, ValueError) as e:
+        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+    original_parent = copy.deepcopy(parent)
+
+    try:
+        content = source_file.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as e:
+        typer.secho(
+            f"Error: could not read UTF-8 source file: {e}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    source = None
+    parent_saved = False
+    try:
+        source = store.create_query_source(name, content)
+        ref = ops.reference_query_context(name, source.uid, parent)
+        store.save(parent)
+        parent_saved = True
+        store.checkpoint(
+            parent,
+            message=f"Installed query-only Context '{name}' in '{into}'",
+            command="dev query-source install",
+            args={"name": name, "into": into, "provider": ref.provider},
+            description=(
+                f"Installed query-only Context '{name}' in '{into}'"
+            ),
+            auto=True,
+        )
+    except (OSError, ValueError) as e:
+        rollback_error = None
+        if parent_saved:
+            try:
+                store.save(original_parent)
+            except (OSError, ValueError) as restore_error:
+                rollback_error = restore_error
+        if source is not None and rollback_error is None:
+            try:
+                store.delete_query_source(source.uid)
+            except (FileNotFoundError, OSError, ValueError) as delete_error:
+                rollback_error = delete_error
+        detail = (
+            f"{e}; rollback also failed: {rollback_error}"
+            if rollback_error is not None
+            else str(e)
+        )
+        typer.secho(f"Error: {detail}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+
+    typer.secho(
+        f"Installed query-only Context '{name}' in '{into}'.",
+        fg=typer.colors.GREEN,
+    )
 
 
 @app.command("fake")

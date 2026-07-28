@@ -20,11 +20,12 @@
 from __future__ import annotations
 
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
-from memcommit.context import Context, Information, Memory, MemoryRef
+from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
 
 if TYPE_CHECKING:
+    from memcommit.search import PromptProvider, SearchMatch
     from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
 
@@ -43,6 +44,97 @@ def add(ctx: Context, content: str) -> Memory:
     result = ctx.add(content)
     assert isinstance(result, Memory)
     return result
+
+
+def add_many(ctx: Context, contents: list[str]) -> list[Memory]:
+    """Append multiple Memories in input order and return the created records."""
+    memories = [
+        Memory(uid=str(uuid.uuid4()), content=content)
+        for content in contents
+    ]
+    for memory in memories:
+        ctx.add(memory)
+    return memories
+
+
+def edit(ctx: Context, selector: str, content: str) -> Memory:
+    """
+    Replace one directly owned Memory's content while preserving its uid and order.
+
+    *selector* is resolved as an exact uid or unambiguous uid prefix.  The
+    original Memory is returned as a detached before-edit view.  Supplying the
+    existing content is a no-op.  References and embedded Contexts are
+    intentionally read-only through this operation.
+    """
+    matches = [uid for uid in ctx.memories if uid.startswith(selector)]
+    if not matches:
+        raise KeyError(f"No item with uid starting with '{selector}'.")
+    if len(matches) > 1:
+        raise ValueError(
+            f"Ambiguous prefix '{selector}' matches {len(matches)} items: "
+            + ", ".join(uid[:8] for uid in matches)
+        )
+
+    item = ctx.memories[matches[0]]
+    if not isinstance(item, Memory):
+        raise TypeError(
+            f"'{selector}' is not a Memory directly owned by this Context — "
+            "cannot edit."
+        )
+
+    original = Memory(uid=item.uid, content=item.content)
+    if item.content != content:
+        ctx.replace(Memory(uid=item.uid, content=content))
+    return original
+
+
+def edit_many(
+    ctx: Context,
+    edits: list[tuple[str, str]],
+) -> list[tuple[Memory, Memory]]:
+    """
+    Apply multiple direct-Memory replacements as one in-memory operation.
+
+    Every selector is resolved and validated before the Context is mutated.
+    The same canonical Memory uid may appear only once.  Returned pairs contain
+    ``(before, after)`` records for actual changes; exact no-ops are omitted.
+    """
+    prepared: list[tuple[Memory, Memory]] = []
+    seen_uids: set[str] = set()
+
+    for selector, content in edits:
+        matches = [uid for uid in ctx.memories if uid.startswith(selector)]
+        if not matches:
+            raise KeyError(f"No item with uid starting with '{selector}'.")
+        if len(matches) > 1:
+            raise ValueError(
+                f"Ambiguous prefix '{selector}' matches {len(matches)} items: "
+                + ", ".join(uid[:8] for uid in matches)
+            )
+
+        item = ctx.memories[matches[0]]
+        if not isinstance(item, Memory):
+            raise TypeError(
+                f"'{selector}' is not a Memory directly owned by this Context "
+                "— cannot edit."
+            )
+        if item.uid in seen_uids:
+            raise ValueError(
+                f"Memory [{item.uid[:8]}] appears more than once in the edit input."
+            )
+        seen_uids.add(item.uid)
+
+        if item.content != content:
+            prepared.append(
+                (
+                    Memory(uid=item.uid, content=item.content),
+                    Memory(uid=item.uid, content=content),
+                )
+            )
+
+    for _, replacement in prepared:
+        ctx.replace(replacement)
+    return prepared
 
 
 def reference_memory(
@@ -85,6 +177,37 @@ def reference_memory(
     return ref
 
 
+def reference_query_context(
+    name: str,
+    target_source_uid: str,
+    target: Context,
+    provider: str = "codex_chatgpt",
+) -> QueryContextRef:
+    """Attach an opaque query-only source to a Context."""
+    for info in target.iter_items():
+        if (
+            isinstance(info, QueryContextRef)
+            and info.target_source_uid == target_source_uid
+        ):
+            raise ValueError(
+                f"Query source '{name}' is already referenced in '{target.name}'."
+            )
+        if isinstance(info, (Context, QueryContextRef)) and info.name == name:
+            raise ValueError(
+                f"A context-like item named '{name}' already exists in "
+                f"'{target.name}'."
+            )
+
+    ref = QueryContextRef(
+        uid=str(uuid.uuid4()),
+        name=name,
+        target_source_uid=target_source_uid,
+        provider=provider,
+    )
+    target.add(ref)
+    return ref
+
+
 def resolve(ctx: Context, selector: str) -> Information:
     """
     Resolve one direct child of *ctx* by UID prefix or embedded-context name.
@@ -98,7 +221,10 @@ def resolve(ctx: Context, selector: str) -> Information:
         info
         for uid, info in ctx.iter_entries()
         if uid.startswith(selector)
-        or (isinstance(info, Context) and info.name == selector)
+        or (
+            isinstance(info, (Context, QueryContextRef))
+            and info.name == selector
+        )
     ]
     if not matches:
         raise KeyError(
@@ -139,7 +265,10 @@ def embed(child: Context, parent: Context) -> None:
     if child.uid == parent.uid:
         raise ValueError("Cannot embed a context into itself.")
     for info in parent.iter_items():
-        if isinstance(info, Context) and info.name == child.name:
+        if (
+            isinstance(info, (Context, QueryContextRef))
+            and info.name == child.name
+        ):
             raise ValueError(f"'{child.name}' is already embedded in '{parent.name}'.")
     parent.add(child)
 
@@ -157,7 +286,7 @@ def branch(ctx: Context, new_name: str) -> Context:
     for info in ctx.iter_items():
         if isinstance(info, Memory):
             new_ctx.add(Memory(uid=info.uid, content=info.content))
-        elif isinstance(info, MemoryRef):
+        elif isinstance(info, (MemoryRef, QueryContextRef)):
             new_ctx.add(info.copy())
         else:
             new_ctx.add(info)
@@ -172,6 +301,38 @@ def merge(source: Context, target: Context) -> list[Information]:
     branch back into its origin (or merging twice) is idempotent. Returns
     the list of items that were newly added to target.
     """
+    # Preflight context-like names before mutating target. Name-based resolve
+    # must remain unambiguous after a merge.
+    context_names: dict[str, Context | QueryContextRef] = {
+        info.name: info
+        for info in target.iter_items()
+        if isinstance(info, (Context, QueryContextRef))
+    }
+    query_sources = {
+        info.target_source_uid
+        for info in target.iter_items()
+        if isinstance(info, QueryContextRef)
+    }
+    for info in source.iter_items():
+        if info.uid in target.memories:
+            continue
+        if not isinstance(info, (Context, QueryContextRef)):
+            continue
+        if (
+            isinstance(info, QueryContextRef)
+            and info.target_source_uid in query_sources
+        ):
+            continue
+        existing = context_names.get(info.name)
+        if existing is not None:
+            raise ValueError(
+                f"Cannot merge context-like item '{info.name}': that name "
+                f"already exists in '{target.name}'."
+            )
+        context_names[info.name] = info
+        if isinstance(info, QueryContextRef):
+            query_sources.add(info.target_source_uid)
+
     added: list[Information] = []
     for info in source.iter_items():
         if info.uid in target.memories:
@@ -183,7 +344,17 @@ def merge(source: Context, target: Context) -> list[Information]:
             for existing in target.iter_items()
         ):
             continue
-        item = info.copy() if isinstance(info, MemoryRef) else info
+        if isinstance(info, QueryContextRef) and any(
+            isinstance(existing, QueryContextRef)
+            and existing.target_source_uid == info.target_source_uid
+            for existing in target.iter_items()
+        ):
+            continue
+        item = (
+            info.copy()
+            if isinstance(info, (MemoryRef, QueryContextRef))
+            else info
+        )
         target.add(item)
         added.append(item)
     return added
@@ -501,14 +672,37 @@ def revise_integrate(
     return all_proposals, new_histories
 
 
-def find(ctx: Context, query: str) -> list[Information]:
+def find(
+    ctx: Context,
+    query: str,
+    provider_factory: Callable[[], "PromptProvider"],
+    *,
+    recursive: bool = True,
+    limit: int = 5,
+) -> "list[SearchMatch]":
     """
-    [stub] Return memories from ctx that match a natural-language query.
+    Rank visible Context items for a natural-language query.
 
-    Implementation sketch: embed query, rank ctx.memories by cosine similarity,
-    return the top-k results above a relevance threshold.
+    The provider selects short candidate IDs only. Returned matches always
+    point back to the canonical local Information objects. QueryContextRefs
+    contribute their public names but never their concealed source contents.
     """
-    raise NotImplementedError("'find' is not yet implemented.")
+    from memcommit.search import (
+        FindError,
+        collect_candidates,
+        rank_candidates,
+    )
+
+    if not isinstance(query, str) or not query.strip():
+        raise FindError("Find query must be non-empty.")
+    if not 1 <= limit <= 20:
+        raise FindError("Find limit must be between 1 and 20.")
+
+    candidates = collect_candidates(ctx, recursive=recursive)
+    if not candidates:
+        return []
+    provider = provider_factory()
+    return rank_candidates(query, candidates, provider, limit=limit)
 
 
 # ---------------------------------------------------------------------------

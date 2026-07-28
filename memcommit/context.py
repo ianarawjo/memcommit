@@ -95,11 +95,55 @@ class MemoryRef:
         )
 
 
+class QueryContextRef:
+    """Opaque reference to a Context that can be accessed only through queries."""
+
+    def __init__(
+        self,
+        uid: str,
+        name: str,
+        target_source_uid: str,
+        provider: str,
+    ):
+        self.uid = uid
+        self.name = name
+        self.target_source_uid = target_source_uid
+        self.provider = provider
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize query routing metadata without serializing source content."""
+        return {
+            "type": "query_context_ref",
+            "uid": self.uid,
+            "name": self.name,
+            "target_source_uid": self.target_source_uid,
+            "provider": self.provider,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> QueryContextRef:
+        return cls(
+            uid=data["uid"],
+            name=data["name"],
+            target_source_uid=data["target_source_uid"],
+            provider=data["provider"],
+        )
+
+    def copy(self) -> QueryContextRef:
+        """Copy the pointer record while preserving its source identity."""
+        return QueryContextRef(
+            uid=self.uid,
+            name=self.name,
+            target_source_uid=self.target_source_uid,
+            provider=self.provider,
+        )
+
+
 class Context:
     """
     Abstract memory store.
-    A Context is an ordered collection of Memories, MemoryRefs, or other
-    Contexts (nested by reference).
+    A Context is an ordered collection of Memories, MemoryRefs,
+    QueryContextRefs, or other Contexts (nested by reference).
     """
 
     def __init__(self, uid: str, name: str):
@@ -194,6 +238,9 @@ class Context:
             elif isinstance(info, MemoryRef):
                 memories[uid] = info.to_dict()
                 order.append(uid)
+            elif isinstance(info, QueryContextRef):
+                memories[uid] = info.to_dict()
+                order.append(uid)
             elif isinstance(info, Context):
                 memories[uid] = {"type": "context_ref", "uid": info.uid, "name": info.name}
                 order.append(uid)
@@ -250,6 +297,8 @@ class Context:
                         item["target_memory_uid"],
                     )
                 ctx.add(MemoryRef.from_dict(item, target=target))
+            elif item["type"] == "query_context_ref":
+                ctx.add(QueryContextRef.from_dict(item))
             elif item["type"] == "context_ref" and loader is not None:
                 nested = loader(item["name"])
                 if nested is not None:
@@ -257,8 +306,9 @@ class Context:
         return ctx
 
 
-# A direct item is an atomic Memory, a read-only MemoryRef, or a nested Context.
-Information: TypeAlias = Memory | MemoryRef | Context
+# A direct item is an atomic Memory, a read-only MemoryRef, an opaque
+# QueryContextRef, or a nested Context.
+Information: TypeAlias = Memory | MemoryRef | QueryContextRef | Context
 
 
 @dataclass

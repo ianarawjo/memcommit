@@ -3,7 +3,13 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.context import (
+    AutoCheckpoint,
+    Context,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.store import MemoryStore
 
 
@@ -28,7 +34,11 @@ def cmd(uid: Annotated[str, typer.Argument(help="UID (or unambiguous prefix) of 
             f"Removed memory reference [{item.uid[:8]}] to "
             f"'{item.target_context_name}' [{item.target_memory_uid[:8]}]"
         )
-    else:
+    elif isinstance(item, QueryContextRef):
+        description = (
+            f"Removed query-only Context '{item.name}' [{item.uid[:8]}]"
+        )
+    elif isinstance(item, Context):
         description = f"Removed embedded context '{item.name}' [{item.uid[:8]}]"
 
     store.save(ctx, AutoCheckpoint(
@@ -45,5 +55,10 @@ def cmd(uid: Annotated[str, typer.Argument(help="UID (or unambiguous prefix) of 
             f"'{item.target_context_name}' [{item.target_memory_uid[:8]}].",
             fg=typer.colors.GREEN,
         )
-    else:
+    elif isinstance(item, QueryContextRef):
+        typer.secho(
+            f"Removed query-only Context '{item.name}' [{item.uid[:8]}].",
+            fg=typer.colors.GREEN,
+        )
+    elif isinstance(item, Context):
         typer.secho(f"Removed embedded context '{item.name}' [{item.uid[:8]}]", fg=typer.colors.GREEN)

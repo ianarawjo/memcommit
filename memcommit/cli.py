@@ -10,21 +10,26 @@ from memcommit.commands import (
     chunk,
     contexts,
     delete,
+    diff,
+    edit,
     embed,
     find,
     find_conflicts,
     forget,
+    impact,
     init,
     integrate,
     list_memories,
     log,
     show,
     merge,
+    query,
     reference,
     remove,
     revert,
     status,
     switch,
+    update,
 )
 from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
@@ -34,7 +39,7 @@ app = typer.Typer(no_args_is_help=True, help="mem — a git-like memory store")
 
 # --- Core ---
 app.command("init",           help="Initialize a new context and switch to it.")(init.cmd)
-app.command("add",            help="Add a memory to the current context.")(add.cmd)
+app.command("add",            help="Add one or more memories to the current context.")(add.cmd)
 app.command("status",         help="Show current context and recent memories.")(status.cmd)
 app.command("list",           help="List direct items in the current (or given) context.")(list_memories.cmd)
 app.command("ls",             help="Alias for 'list'.")(list_memories.cmd)
@@ -42,6 +47,7 @@ app.command("show",           help="Show a memory, embedded context, or the curr
 app.command("contexts",       help="List all available contexts.")(contexts.cmd)
 app.command("clear",          help="Clear all memories from the current (or given) context.")(clear_cmd)
 app.command("delete",         help="Delete a context and its history; preserve descendants.")(delete.cmd)
+app.command("diff",           help="Show the active staged update.")(diff.cmd)
 
 # --- Navigation ---
 app.command("switch",         help="Switch to a different context.")(switch.cmd)
@@ -49,8 +55,10 @@ app.command("branch",         help="Create a new context branched from the curre
 app.command("merge",          help="Merge another context into the current one.")(merge.cmd)
 app.command("embed",          help="Embed one context inside another.")(embed.cmd)
 app.command("reference",      help="Add a read-only live reference to a memory.")(reference.cmd)
+app.command("query",          help="Ask a question of a query-only Context.")(query.cmd)
 
 # --- Editing ---
+app.command("edit",           help="Replace the content of one or more direct Memories by uid.")(edit.cmd)
 app.command("remove",         help="Remove a direct item from the current context by uid.")(remove.cmd)
 app.command("chunk",          help="Split a memory into chunks (markdown_headers, paragraphs, sentences).")(chunk.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
@@ -59,9 +67,11 @@ app.command("log",            help="List checkpoints (history) for the current c
 
 # --- Semantic (require mem config set llm <model>) ---
 app.command("forget",         help="Forget memories matching a description (uses LLM).")(forget.cmd)
-app.command("find",           help="[stub] Find memories matching a natural language query.")(find.cmd)
+app.command("find",           help="Find relevant items with temporary Codex ranking.")(find.cmd)
 app.command("find-conflicts", help="[stub] Find memories that conflict with given info.")(find_conflicts.cmd)
+app.command("impact",         help="Preview changes from the current Context to a target.")(impact.cmd)
 app.command("integrate",      help="Intelligently integrate info into the current context (uses LLM).")(integrate.cmd)
+app.command("update",         help="Stage changes from the current Context to a target.")(update.cmd)
 
 # --- Sub-apps ---
 app.add_typer(config_app, name="config", help="Read and write global configuration.")

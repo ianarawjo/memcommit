@@ -8,8 +8,10 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import uuid
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -19,7 +21,36 @@ from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
 STORE_DIR = Path.home() / ".mem"
 CONTEXTS_DIR = STORE_DIR / "contexts"
 STATE_FILE = STORE_DIR / "state.json"
+QUERY_SOURCES_DIR = STORE_DIR / "query-sources"
+IMPACT_PLAN_FILE = STORE_DIR / "impact-plan.json"
+STAGED_UPDATE_FILE = STORE_DIR / "staged-update.json"
 RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
+
+
+def _reject_duplicate_json_keys(
+    pairs: list[tuple[str, object]],
+) -> dict[str, object]:
+    """Build a JSON object while rejecting duplicate keys."""
+    result: dict[str, object] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"Duplicate JSON key: {key}")
+        result[key] = value
+    return result
+
+
+def _write_json_atomic(path: Path, data: object) -> None:
+    """Write JSON through a same-directory temporary file, then replace."""
+    temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
+    try:
+        with open(temporary, "x", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists() and not temporary.is_symlink():
+            temporary.unlink()
 
 
 def _context_name_parts(name: str) -> tuple[str, ...]:
@@ -84,13 +115,30 @@ def _validate_context_header(data: object, expected_name: str) -> dict:
     return data
 
 
+@dataclass(frozen=True)
+class QuerySource:
+    """Research-only source text kept outside the normal Context namespace."""
+
+    uid: str
+    name: str
+    content: str
+
+
 class MemoryStore:
 
-    def __init__(self):
-        STORE_DIR.mkdir(parents=True, exist_ok=True)
-        CONTEXTS_DIR.mkdir(parents=True, exist_ok=True)
-        if not STATE_FILE.exists():
-            self._write_state({"current": None})
+    def __init__(self, *, create: bool = True):
+        """
+        Open the store.
+
+        Normal commands create missing store infrastructure. Read-only
+        inspection commands can pass create=False to guarantee that merely
+        checking absent state does not create ~/.mem or state.json.
+        """
+        if create:
+            STORE_DIR.mkdir(parents=True, exist_ok=True)
+            CONTEXTS_DIR.mkdir(parents=True, exist_ok=True)
+            if not STATE_FILE.exists():
+                self._write_state({"current": None})
 
     # --- Global state ---
 
@@ -109,6 +157,54 @@ class MemoryStore:
         state = self._read_state()
         state["current"] = name
         self._write_state(state)
+
+    # --- Semantic update sessions ---
+
+    @staticmethod
+    def _load_update_session(path: Path):
+        """Load and validate one cached semantic update session."""
+        from memcommit.update import UpdateSession
+
+        if not path.exists():
+            return None
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Semantic update session storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f, object_pairs_hook=_reject_duplicate_json_keys)
+        except (json.JSONDecodeError, ValueError) as error:
+            raise ValueError("Semantic update session is invalid JSON.") from error
+        try:
+            return UpdateSession.from_dict(data)
+        except ValueError as error:
+            raise ValueError("Semantic update session is invalid.") from error
+
+    @staticmethod
+    def _save_update_session(path: Path, session) -> None:
+        """Atomically persist one validated semantic update session."""
+        from memcommit.update import UpdateSession
+
+        if not isinstance(session, UpdateSession):
+            raise TypeError("Expected an UpdateSession.")
+        if path.exists() and (not path.is_file() or path.is_symlink()):
+            raise ValueError("Semantic update session storage is invalid.")
+        _write_json_atomic(path, session.to_dict())
+
+    def load_impact_plan(self):
+        """Return the cached impact plan, or None when no plan exists."""
+        return self._load_update_session(IMPACT_PLAN_FILE)
+
+    def save_impact_plan(self, session) -> None:
+        """Atomically cache a non-mutating impact plan."""
+        self._save_update_session(IMPACT_PLAN_FILE, session)
+
+    def load_staged_update(self):
+        """Return the active staged update, or None when none exists."""
+        return self._load_update_session(STAGED_UPDATE_FILE)
+
+    def save_staged_update(self, session) -> None:
+        """Atomically save the active staged update."""
+        self._save_update_session(STAGED_UPDATE_FILE, session)
 
     # --- Context paths ---
 
@@ -306,8 +402,115 @@ class MemoryStore:
                 auto=True,
                 _allow_unsaved=True,
             )
-        with open(context_file, "w") as f:
-            json.dump(ctx.to_dict(), f, indent=2)
+        _write_json_atomic(context_file, ctx.to_dict())
+
+    # --- Query-only research sources ---
+
+    @staticmethod
+    def _canonical_query_source_uid(source_uid: str) -> str:
+        if not isinstance(source_uid, str):
+            raise ValueError("Query source uid must be a canonical UUID.")
+        try:
+            parsed = uuid.UUID(source_uid)
+        except (AttributeError, TypeError, ValueError) as e:
+            raise ValueError("Query source uid must be a canonical UUID.") from e
+        canonical = str(parsed)
+        if source_uid != canonical:
+            raise ValueError("Query source uid must be a canonical UUID.")
+        return canonical
+
+    def _query_source_dir(self, source_uid: str) -> Path:
+        canonical = self._canonical_query_source_uid(source_uid)
+        if QUERY_SOURCES_DIR.is_symlink():
+            raise ValueError("Query source storage cannot be a symbolic link.")
+        source_dir = QUERY_SOURCES_DIR / canonical
+        if source_dir.is_symlink():
+            raise ValueError("Query source directory cannot be a symbolic link.")
+        root = QUERY_SOURCES_DIR.resolve()
+        resolved = source_dir.resolve(strict=False)
+        if root not in resolved.parents:
+            raise ValueError("Query source path escapes query source storage.")
+        return source_dir
+
+    def _query_source_file(self, source_uid: str) -> Path:
+        source_file = self._query_source_dir(source_uid) / "source.json"
+        if source_file.is_symlink():
+            raise ValueError("Query source file cannot be a symbolic link.")
+        return source_file
+
+    def create_query_source(self, name: str, content: str) -> QuerySource:
+        """
+        Store a concealed research source outside normal Context storage.
+
+        This is UI-level concealment for a study prototype, not a security
+        boundary. The local user can still read files under ~/.mem.
+        """
+        _context_name_parts(name)
+        if not isinstance(content, str) or not content.strip():
+            raise ValueError("Query source content must be non-empty text.")
+        if QUERY_SOURCES_DIR.is_symlink():
+            raise ValueError("Query source storage cannot be a symbolic link.")
+        QUERY_SOURCES_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
+        os.chmod(QUERY_SOURCES_DIR, 0o700)
+
+        source = QuerySource(uid=str(uuid.uuid4()), name=name, content=content)
+        source_dir = self._query_source_dir(source.uid)
+        source_file = self._query_source_file(source.uid)
+        source_dir.mkdir(mode=0o700)
+        os.chmod(source_dir, 0o700)
+        try:
+            with open(source_file, "x", encoding="utf-8") as f:
+                json.dump(
+                    {
+                        "schema_version": 1,
+                        "uid": source.uid,
+                        "name": source.name,
+                        "content": source.content,
+                    },
+                    f,
+                    indent=2,
+                )
+            os.chmod(source_file, 0o600)
+        except Exception:
+            if source_file.exists() and not source_file.is_symlink():
+                source_file.unlink()
+            source_dir.rmdir()
+            raise
+        return source
+
+    def load_query_source(
+        self,
+        source_uid: str,
+        *,
+        expected_name: str,
+    ) -> QuerySource:
+        source_file = self._query_source_file(source_uid)
+        if not source_file.is_file():
+            raise FileNotFoundError("Query source is unavailable.")
+        with open(source_file, encoding="utf-8") as f:
+            data = json.load(f)
+        if (
+            not isinstance(data, dict)
+            or data.get("schema_version") != 1
+            or data.get("uid") != source_uid
+            or data.get("name") != expected_name
+            or not isinstance(data.get("content"), str)
+        ):
+            raise ValueError("Query source identity or structure is invalid.")
+        return QuerySource(
+            uid=data["uid"],
+            name=data["name"],
+            content=data["content"],
+        )
+
+    def delete_query_source(self, source_uid: str) -> None:
+        """Delete one exact hidden source, used to roll back failed setup."""
+        source_dir = self._query_source_dir(source_uid)
+        source_file = self._query_source_file(source_uid)
+        if not source_file.is_file():
+            raise FileNotFoundError("Query source is unavailable.")
+        source_file.unlink()
+        source_dir.rmdir()
 
     def copy_checkpoints(self, source_name: str, target_name: str) -> None:
         """Copy all checkpoint files from source into target's checkpoints directory."""
@@ -371,6 +574,15 @@ class MemoryStore:
 
     # --- Checkpoints ---
 
+    # Storage design note:
+    # Checkpoints intentionally embed a complete serialization of the Context's
+    # direct state.  At the current research-prototype scale, this keeps
+    # persistence, recovery, and migration simpler than an object store; nested
+    # Contexts and MemoryRefs are already serialized as pointers rather than
+    # recursively copied.  If Contexts or histories grow substantially, retain
+    # the same logical snapshot semantics while moving Memory contents to
+    # content-addressed blobs and having checkpoints point to ordered tree
+    # manifests.  A pure delta/event chain is not required by the current model.
     def checkpoint(
         self,
         ctx: Context,
@@ -406,8 +618,9 @@ class MemoryStore:
                 f"Refusing to write checkpoint for '{ctx.name}' through a "
                 "symbolic link."
             )
-        with open(cp_file, "w") as f:
-            json.dump({
+        _write_json_atomic(
+            cp_file,
+            {
                 "uid": cp.uid,
                 "message": cp.message,
                 "timestamp": cp.timestamp.isoformat(),
@@ -416,7 +629,8 @@ class MemoryStore:
                 "args": cp.args,
                 "description": cp.description,
                 "auto": cp.auto,
-            }, f, indent=2)
+            },
+        )
         return cp
 
     def list_checkpoints(self, name: str) -> list[dict]:
