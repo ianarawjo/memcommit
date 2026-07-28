@@ -64,3 +64,10 @@ The implementation delegates raw-terminal handling and bracketed-paste parsing
 to `prompt_toolkit`. Memcommit owns only the small state machine around it:
 capture, count, confirm, parse, and save. This avoids maintaining
 platform-specific terminal mode and escape-sequence code in the repository.
+
+## Downstream refinement
+
+Paste intake intentionally does not deduplicate, resolve apparent conflicts,
+infer audiences, normalize wording, or choose organizational destinations.
+Those decisions belong to separate, reviewable operations described in the
+[memory refinement pipeline](memory-refinement-pipeline-design-rationale.md).
