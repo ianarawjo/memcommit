@@ -14,7 +14,9 @@ from memcommit.commands import (
     edit,
     embed,
     find,
+    find_ambiguities,
     find_conflicts,
+    find_duplicates,
     forget,
     impact,
     init,
@@ -65,10 +67,12 @@ app.command("checkpoint",     help="Save a manual checkpoint of the current cont
 app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)
 app.command("log",            help="List checkpoints (history) for the current context.")(log.cmd)
 
-# --- Semantic (require mem config set llm <model>) ---
+# --- Semantic (legacy configured LLM or isolated Codex provider) ---
 app.command("forget",         help="Forget memories matching a description (uses LLM).")(forget.cmd)
 app.command("find",           help="Find relevant items with temporary Codex ranking.")(find.cmd)
-app.command("find-conflicts", help="[stub] Find memories that conflict with given info.")(find_conflicts.cmd)
+app.command("find-duplicates", help="Find duplicate direct Memories.")(find_duplicates.cmd)
+app.command("find-ambiguities", help="Find ambiguous or underspecified direct Memories.")(find_ambiguities.cmd)
+app.command("find-conflicts", help="Find conflicting direct Memory pairs.")(find_conflicts.cmd)
 app.command("impact",         help="Preview changes from the current Context to a target.")(impact.cmd)
 app.command("integrate",      help="Intelligently integrate info into the current context (uses LLM).")(integrate.cmd)
 app.command("update",         help="Stage changes from the current Context to a target.")(update.cmd)

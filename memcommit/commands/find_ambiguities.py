@@ -1,4 +1,4 @@
-"""Find conflicting direct Memory pairs without modifying the Context."""
+"""Find ambiguous or underspecified direct Memories without modifying them."""
 from __future__ import annotations
 
 from typing import Annotated, Optional
@@ -21,10 +21,10 @@ from memcommit.query_provider import (
 from memcommit.store import MemoryStore
 
 
-_CONFLICT_COLORS = {
-    "YES": typer.colors.RED,
-    "MAY": typer.colors.YELLOW,
-    "NO": typer.colors.GREEN,
+_CLARIFICATION_COLORS = {
+    "NONE": typer.colors.GREEN,
+    "HELPFUL": typer.colors.YELLOW,
+    "REQUIRED": typer.colors.RED,
 }
 
 
@@ -38,7 +38,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Report conflicting Memory pairs; never reconcile or checkpoint them."""
+    """Report per-Memory ambiguity; never edit or checkpoint the Context."""
     store = MemoryStore(create=False)
     try:
         ctx = (
@@ -48,17 +48,17 @@ def cmd(
         )
     except (FileNotFoundError, RuntimeError, ValueError) as error:
         typer.secho(
-            f"Find conflicts error: {error}",
+            f"Find ambiguities error: {error}",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
 
     try:
-        report = ops.find_conflicts(ctx, connect_codex_chatgpt_provider)
+        report = ops.find_ambiguities(ctx, connect_codex_chatgpt_provider)
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
-            f"Find conflicts error: {error}",
+            f"Find ambiguities error: {error}",
             fg=typer.colors.RED,
             err=True,
         )
@@ -67,22 +67,24 @@ def cmd(
     render_heading(
         context_name=ctx.name,
         memory_count=report.memory_count,
-        pair_count=report.pair_count,
         finding_count=len(report.findings),
     )
     if not report.findings:
-        typer.echo("\n  (no conflict findings)")
+        typer.echo("\n  (no ambiguity findings)")
         return
 
     for finding in report.findings:
         typer.echo()
         typer.secho(
-            f"  CONFLICT  {finding.conflict}",
-            fg=_CONFLICT_COLORS.get(finding.conflict, typer.colors.YELLOW),
+            f"  AMBIGUITY  {finding.interpretation} / "
+            f"{finding.clarification}",
+            fg=_CLARIFICATION_COLORS.get(
+                finding.clarification,
+                typer.colors.YELLOW,
+            ),
             bold=True,
         )
-        render_memory("LEFT", finding.left)
-        render_memory("RIGHT", finding.right)
-        render_values("Scope dimensions", finding.scope_dimensions)
+        render_memory("MEMORY", finding.memory)
+        render_values("Ordinary readings", finding.ordinary_readings)
         render_reason(finding.reason)
         render_question(finding.question)

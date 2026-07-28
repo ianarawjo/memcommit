@@ -1,4 +1,4 @@
-"""Find conflicting direct Memory pairs without modifying the Context."""
+"""Find duplicate direct Memories without modifying the Context."""
 from __future__ import annotations
 
 from typing import Annotated, Optional
@@ -9,9 +9,7 @@ import memcommit.ops as ops
 from memcommit.commands.findings_render import (
     render_heading,
     render_memory,
-    render_question,
     render_reason,
-    render_values,
 )
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
@@ -21,10 +19,11 @@ from memcommit.query_provider import (
 from memcommit.store import MemoryStore
 
 
-_CONFLICT_COLORS = {
-    "YES": typer.colors.RED,
-    "MAY": typer.colors.YELLOW,
-    "NO": typer.colors.GREEN,
+_RELATION_COLORS = {
+    "EXACT": typer.colors.GREEN,
+    "SURFACE_EQUIVALENT": typer.colors.GREEN,
+    "SEMANTIC_EQUIVALENT": typer.colors.YELLOW,
+    "OVERLAP": typer.colors.CYAN,
 }
 
 
@@ -38,7 +37,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Report conflicting Memory pairs; never reconcile or checkpoint them."""
+    """Report duplicate evidence; never merge, remove, or checkpoint it."""
     store = MemoryStore(create=False)
     try:
         ctx = (
@@ -48,17 +47,17 @@ def cmd(
         )
     except (FileNotFoundError, RuntimeError, ValueError) as error:
         typer.secho(
-            f"Find conflicts error: {error}",
+            f"Find duplicates error: {error}",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
 
     try:
-        report = ops.find_conflicts(ctx, connect_codex_chatgpt_provider)
+        report = ops.find_duplicates(ctx, connect_codex_chatgpt_provider)
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
-            f"Find conflicts error: {error}",
+            f"Find duplicates error: {error}",
             fg=typer.colors.RED,
             err=True,
         )
@@ -67,22 +66,19 @@ def cmd(
     render_heading(
         context_name=ctx.name,
         memory_count=report.memory_count,
-        pair_count=report.pair_count,
         finding_count=len(report.findings),
     )
     if not report.findings:
-        typer.echo("\n  (no conflict findings)")
+        typer.echo("\n  (no duplicate findings)")
         return
 
     for finding in report.findings:
         typer.echo()
         typer.secho(
-            f"  CONFLICT  {finding.conflict}",
-            fg=_CONFLICT_COLORS.get(finding.conflict, typer.colors.YELLOW),
+            f"  DUPLICATE  {finding.relation}",
+            fg=_RELATION_COLORS.get(finding.relation, typer.colors.YELLOW),
             bold=True,
         )
         render_memory("LEFT", finding.left)
         render_memory("RIGHT", finding.right)
-        render_values("Scope dimensions", finding.scope_dimensions)
         render_reason(finding.reason)
-        render_question(finding.question)

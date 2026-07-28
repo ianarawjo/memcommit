@@ -374,11 +374,38 @@ class MemoryStore:
                 f"Context file for '{name}' has an invalid memory structure: {e}"
             ) from e
 
+    def load_direct(self, name: str) -> Context:
+        """
+        Load one Context record without opening any referenced Context files.
+
+        Read-only operations whose scope is explicitly limited to directly
+        owned Memories must not resolve embedded Contexts or MemoryRef targets
+        before filtering. QueryContextRefs remain opaque under both load paths.
+        """
+        if not self.context_exists(name):
+            raise FileNotFoundError(f"Context '{name}' not found.")
+        with open(self._context_file(name)) as f:
+            data = json.load(f)
+        data = _validate_context_header(data, name)
+        try:
+            return Context.from_dict(data)
+        except (KeyError, TypeError) as e:
+            raise ValueError(
+                f"Context file for '{name}' has an invalid memory structure: {e}"
+            ) from e
+
     def load_current(self) -> Context:
         name = self.current_context_name()
         if not name:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
         return self.load(name)
+
+    def load_current_direct(self) -> Context:
+        """Load the current Context through the non-resolving direct path."""
+        name = self.current_context_name()
+        if not name:
+            raise RuntimeError("No current context. Run 'mem init <name>' first.")
+        return self.load_direct(name)
 
     def save(self, ctx: Context, auto_checkpoint: Optional[AutoCheckpoint] = None) -> None:
         """Persist a context to disk. Caller is responsible for calling this after mutations."""

@@ -14,6 +14,12 @@ deduplication. The intended model combines:
   `clozemaking` project.
 
 This note fixes the first semantic contract. It does not implement the command.
+The later quality-finding stages intentionally use a different evidence
+boundary: atomization protects one source occurrence and does not borrow
+neighboring Memories as hidden source evidence, while quality finding reads
+all direct Memories in the selected Context as a local interpretation frame.
+The reason for that asymmetry is documented in
+[`memory-quality-judgment-theory-and-decision-history.md`](memory-quality-judgment-theory-and-decision-history.md).
 
 ## Decision
 

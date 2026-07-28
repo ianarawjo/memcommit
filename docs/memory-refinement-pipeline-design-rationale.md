@@ -1,5 +1,14 @@
 # Memory refinement pipeline
 
+The detailed reasoning behind the three quality judgments—including why
+ambiguity is unary, conflict is pair-targeted, duplicate returns binary
+relation evidence from a whole-Context discovery pass, why ambiguity uses two
+independent axes, and why detection is separated from resolution—is
+preserved in
+[`memory-quality-judgment-theory-and-decision-history.md`](memory-quality-judgment-theory-and-decision-history.md).
+The finder implementation contract is specified separately in
+[`memory-quality-finders-design-rationale.md`](memory-quality-finders-design-rationale.md).
+
 ## Decision history
 
 ### Initial order
@@ -14,13 +23,24 @@
 → 범주별 배치
 ```
 
-여기서 `충돌`과 `모호성`은 서로 다른 operation으로 나누지 않는다.
-현실의 장면에서는 모순처럼 보이는 두 설명이 대상, 시간, 장소, 접근
-방법, 예외 조건에 따라 모두 참일 수 있다. 따라서 이 프로토타입에서는
-현실적인 충돌을 곧바로 어느 한쪽이 거짓이라는 뜻으로 보지 않고, 현재
-지식만으로 두 설명을 함께 설명할 수 없다는 상태로 먼저 다룬다. 이는
-보편적 사실 주장이 아니라 이 refinement pipeline의 open-world 설계
-가정이다.
+이 초기안에서는 `충돌`과 `모호성`을 하나의 operation으로 검토하려
+했다. 현실의 장면에서는 모순처럼 보이는 두 설명이 대상, 시간, 장소,
+접근 방법, 예외 조건에 따라 모두 참일 수 있기 때문이다. 따라서 이
+프로토타입에서는 현실적인 충돌을 곧바로 어느 한쪽이 거짓이라는 뜻으로
+보지 않고, 현재 지식만으로 두 설명을 함께 설명할 수 없다는 상태로
+먼저 다룬다. 이는 보편적 사실 주장이 아니라 이 refinement pipeline의
+open-world 설계 가정이다.
+
+여기서 open-world는 무제한의 possible world를 발명한다는 뜻이 아니다.
+선택된 Context와 통상적 독해가 실제로 지지하는 미기재 scope는 열어
+두되, 임의의 숨은 전제를 만들어 충돌을 억지로 만들거나 없애지 않는
+**bounded open-world**를 뜻한다.
+
+후속 설계에서는 이 결합을 **해결 단계에만** 유지하기로 했다. 모호성은
+Memory 하나를 판정하고 충돌은 Memory 쌍을 판정하므로 탐지 단위와
+결과가 다르다. 따라서 `find-ambiguities`와 `find-conflicts`는 별도의
+읽기 전용 탐지기이고, 이후 `reconcile`이 두 결과를 함께 설명하거나
+해결안을 제안한다.
 
 또한 `비공개 분리`를 단순한 공개/비공개 이진 분류로 보지 않는다.
 학생, 교직원, 방문자, 시설 담당자처럼 정보를 전달받을 대상과 목적에
@@ -52,6 +72,39 @@ line을 Memory 하나로 보는 intake 관점에서 atomic claim을 정제하는
 관점으로 설계가 바뀐 근거를 이후 연구 기록에서 추적할 수 있게 하기
 위해서다.
 
+### Revised quality analysis: detect before resolving
+
+`dedup`과 `reconcile`이라는 이름만으로 탐지와 변경을 함께 표현하면,
+사용자가 단순히 문제를 찾아보려는 시점에도 삭제나 수정이 일어날 수
+있는 것처럼 보인다. 또한 ambiguity는 unary이고 conflict는 pairwise이며,
+duplicate는 whole-Context discovery에서 binary relation evidence를
+반환하므로 하나의 opaque quality pass로 합치면 어떤 단위가 어떻게
+판정되었는지 검증하기 어렵다.
+
+현재 working order는 탐지와 후속 mutation을 분리한다.
+
+```text
+원문 intake
+→ atomize
+→ find-duplicates
+→ confirmed dedup
+→ find-ambiguities
+→ find-conflicts
+→ reconcile
+→ audience
+→ normalize
+→ duplicate verification
+→ place
+```
+
+세 `find-*` 명령은 모두 읽기 전용이고 checkpoint를 만들지 않는다.
+`find-duplicates`는 여러 Memory 쌍을 보고하며 삭제 대상을 정하지
+않지만, 그 쌍을 검색 입력으로 미리 열거하지는 않는다.
+`find-ambiguities`는 Memory 하나씩, `find-conflicts`는 Memory 쌍씩
+판정한다. `dedup`은 확인된 duplicate 결과를 실제 survivor plan으로
+바꾸는 미래 mutation 단계이고, `reconcile`은 ambiguity와 conflict
+결과를 함께 해석하는 미래 후속 단계다.
+
 ## Intent
 
 `mem add --paste` preserves raw notes without trying to understand them. The
@@ -59,22 +112,25 @@ refinement pipeline turns that intake into explainable, audience-appropriate,
 rule-conforming Memories without hiding semantic decisions inside a single
 opaque cleanup step.
 
-The primary order is intentional:
+The current primary order is intentional:
 
 1. **Atomize** explicit multi-claim Memories while preserving order and source
    lineage.
-2. **Deduplicate mechanically** using only meaning-preserving comparison
-   normalization.
-3. **Deduplicate semantically** only when two atomic claims are mutually
-   substitutable without information loss.
-4. **Reconcile conflict and ambiguity together** to identify what the current
-   knowledge cannot yet explain.
-5. **Classify audiences** so differences caused by applicability, recipient,
+2. **Find duplicates** in mechanical and semantic trust tiers without
+   removing either member of a reported pair.
+3. **Deduplicate only confirmed equivalence findings** through a separate
+   stale-safe mutation plan.
+4. **Find ambiguities** one Memory at a time under ordinary local reading.
+5. **Find conflicts** pairwise, preserving `YES`, `MAY`, and `NO` as semantic
+   outcomes rather than confidence scores.
+6. **Reconcile the separate findings together** to identify what the current
+   knowledge cannot yet explain and which clarification would help.
+7. **Classify audiences** so differences caused by applicability, recipient,
    or disclosure purpose become explicit.
-6. **Normalize** only after meaning and scope are sufficiently clear.
-7. **Verify deduplication again** because later qualification and normalization
+8. **Normalize** only after meaning and scope are sufficiently clear.
+9. **Verify duplicate relations again** because later qualification and normalization
    can expose new equivalence.
-8. **Place by category** after the Memory contents have stable semantics.
+10. **Place by category** after the Memory contents have stable semantics.
 
 These are separable operations with distinct previews, reasons, provenance,
 and checkpoints. A single `clean up everything` command would make it hard to
@@ -90,12 +146,14 @@ batch of raw line-based Memory candidates and stops. The working design for
 ```text
 source intake
 → atomize
-→ mechanical dedup
-→ semantic dedup
+→ find-duplicates
+→ confirmed dedup
+→ find-ambiguities
+→ find-conflicts
 → reconcile
 → audience
 → normalize
-→ dedup verification
+→ duplicate verification
 → place
 ```
 
@@ -220,11 +278,13 @@ The focal-commitment rules, Q/A ledger, size lint, golden cases, and validation
 contract are specified separately in the
 [`mem atomize` design rationale](mem-atomize-design-rationale.md).
 
-## Deduplication in two trust layers
+## Duplicate detection in two trust layers
 
-Both mechanical and semantic deduplication are necessary, but they should be
-two phases of one public `mem dedup` operation with visibly different trust
-levels.
+Both mechanical and semantic duplicate detection are necessary, but they are
+two visibly different trust layers of the read-only public
+`mem find-duplicates` operation. A separate future `mem dedup` operation may
+consume confirmed findings and propose mutation; detection itself never
+chooses a survivor or removes a UID.
 
 ### Mechanical dedup
 
@@ -241,11 +301,19 @@ potentially meaningful symbols. Case folding, punctuation tolerance,
 translation, typo correction, and synonym expansion may produce candidates
 for review, but they are not mechanically applicable equivalence.
 
+The implementation builds exact and surface components with keyed lookups and
+emits a canonical spanning tree for each component. It does not construct the
+quadratic clique of every within-component pair. Only the first representative
+of each mechanical component proceeds to semantic discovery.
+
 ### Semantic dedup
 
-Semantic detection considers only atomic Memories that remain after the
-mechanical phase. Two claims are eligible only when they are mutually
-substitutable without information loss under the same:
+After deterministic `EXACT`/`SURFACE_EQUIVALENT` grouping, semantic detection
+receives every remaining component representative once in one Context-wide
+payload. It discovers disjoint semantic-equivalence groups instead of
+receiving an enumerated unresolved-pair list. Two claims are semantically
+equivalent only when they are mutually substitutable without information loss
+under the same:
 
 - subject and applicability;
 - predicate or operational state;
@@ -254,23 +322,24 @@ substitutable without information loss under the same:
 - modality and uncertainty;
 - access method, exception, and relevant causal scope.
 
-If one Memory entails the other but contains additional information, the
-result is `OVERLAP`, not a removable duplicate. Missing qualifiers or
-uncertain scope produce `UNKNOWN` and are handed to `reconcile`. The model
+If one Memory entails the other but contains additional information, its
+relation is `OVERLAP`, not a removable duplicate. Missing qualifiers or
+uncertain scope make the relation `UNKNOWN`. `OVERLAP`, `UNKNOWN`, and
+`DISTINCT` are explicit golden rejection boundaries, but the public
+`find-duplicates` output contains only positive duplicate relations. The model
 acts as a classifier and reason generator, not as a canonical-text author.
-Application keeps a stable existing survivor UID and existing survivor
-wording; later normalization owns rewriting.
 
-Both phases are previewed before mutation because even an exact removal changes
-UID availability, provenance, order, and references. The shared apply path
-must check inbound references, bind the plan to a Context fingerprint, reject
-stale plans, and record every absorbed UID in one checkpoint.
+The finder is read-only and creates no checkpoint. A later `dedup` apply path
+must independently confirm eligible equivalence findings, keep a stable
+existing survivor UID and wording, check inbound references, bind the plan to
+a Context fingerprint, reject stale plans, and record every absorbed UID in
+one checkpoint. Later normalization owns rewriting.
 
 An optional byte-exact scan can run before atomization as a cheap read-only
 diagnostic, but it cannot replace the post-atomization passes. The current
 Task 1 intake has zero exact full-record duplicates.
 
-## Why conflict and ambiguity are one operation
+## Why conflict and ambiguity are detected separately
 
 Classical logical contradiction asks whether both `P` and `not P` can be true
 under the same interpretation. Operational campus knowledge rarely arrives
@@ -291,26 +360,31 @@ The parking pedestrian door is available only to staff.
 ```
 
 The statements become contradictory only if they are assumed to describe the
-same entrance and conditions. The operation should therefore ask:
+same entrance and conditions. The separate finders therefore preserve the
+distinction between:
 
-> What missing distinction, condition, or evidence would make these Memories
-> jointly explainable?
+- a unary ambiguity or underspecification in one Memory; and
+- a pairwise conflict whose result is `YES`, `MAY`, or `NO` under ordinary
+  reading of the selected Context.
 
-This document calls such a case an **explainability gap**: the current
-qualifiers and evidence are insufficient to explain a set of Memories
-together. This is an open-world stance. Lack of a current explanation is not
-treated as proof that one statement is false.
+`MAY` means the Context supports an ordinary reading on which the pair
+conflicts and another ordinary reading on which it is jointly explainable. It
+is not a model-confidence label. This is a bounded open-world stance: lack of
+a current explanation is not treated as proof that one statement is false,
+but the finder may consider only distinctions supported by the selected
+Context and ordinary reading—not arbitrary hidden premises.
 
-The working operation name is `reconcile`. It replaces the planned conceptual
-role of a narrow `find-conflicts` command. `direct conflict` and `ambiguous`
-may remain useful result labels, but they are severity or evidence labels
-inside one operation, not separate workflows.
+The public detectors are `mem find-ambiguities` and `mem find-conflicts`.
+They remain separate because their arity, labels, and regression cases differ.
+Both are read-only and create no checkpoint.
 
-`reconcile` must not silently choose a winner. Its first responsibility is to
-surface the unexplained relationship and the smallest clarifying question.
-A later confirmed edit can add the missing scope, preserve both scoped facts,
-or mark one statement as superseded when evidence actually supports that
-decision.
+The later working operation `reconcile` consumes their separate findings and
+asks what missing distinction, condition, or evidence would make the relevant
+Memories usable or jointly explainable. It must not silently choose a winner.
+A later confirmed edit can add missing scope, preserve both scoped facts, or
+mark one statement as superseded when evidence actually supports that
+decision. `reconcile` combines follow-up reasoning; it does not replace either
+finder.
 
 ## Audience classification is not merely privacy separation
 
@@ -402,12 +476,15 @@ important than final CLI spelling.
 |---|---|---|---|
 | Envelope | `mem import` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
 | 1 | `mem atomize` | atomic/composite classifications and ordered split proposals with lineage | preview first; confirmed direct-item batch applies as one checkpoint |
-| 2 | `mem dedup` | mechanical and semantic equivalence groups, survivor UIDs, absorbed UIDs, reasons | preview by trust tier; confirmed groups share one stale-safe apply path |
-| 3 | `mem reconcile` | jointly unexplained groups, missing dimensions, clarifying questions | read-only first; edits require a separate confirmed plan |
-| 4 | `mem audience` | applicability, recipient, purpose, and disclosure assignments | preview first; storage representation must be explicit |
-| 5 | `mem normalize` | named rule violations and full replacement proposals | confirmed batch applies as one checkpoint |
-| 6 | `mem dedup --check` | post-normalization exact scan and deferred semantic reclassification | read-only verification; any removal requires a newly confirmed plan |
-| 7 | `mem place` | destination Context plan and multi-category references | staged plan in v1; apply requires a recoverable multi-Context boundary |
+| 2 | `mem find-duplicates` | positive pair evidence discovered from the whole direct Context | read-only; no checkpoint |
+| 2a | future `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed groups apply as one checkpoint |
+| 3 | `mem find-ambiguities` | unary interpretation and clarification findings | read-only; no checkpoint |
+| 4 | `mem find-conflicts` | pairwise `YES`/`MAY` conflict findings and questions | read-only; no checkpoint |
+| 5 | future `mem reconcile` | combined missing dimensions and clarification proposals | read-only first; edits require a separate confirmed plan |
+| 6 | `mem audience` | applicability, recipient, purpose, and disclosure assignments | preview first; storage representation must be explicit |
+| 7 | `mem normalize` | named rule violations and full replacement proposals | confirmed batch applies as one checkpoint |
+| 8 | `mem find-duplicates` verification | post-normalization mechanical and semantic reclassification | read-only; any removal requires a new `dedup` plan |
+| 9 | `mem place` | destination Context plan and multi-category references | staged plan in v1; apply requires a recoverable multi-Context boundary |
 
 ### `atomize`
 
@@ -421,27 +498,41 @@ important than final CLI spelling.
 - Does not perform deduplication, reconciliation, audience inference, or
   deletion of non-propositional notes.
 
-### `dedup`
+### `find-duplicates` and future `dedup`
 
-- Runs deterministic `EXACT`/`SURFACE_EQUIVALENT` detection before semantic
-  classification and shows the tiers separately.
-- Semantic duplicate detection distinguishes `SEMANTIC_EQUIVALENT`,
-  `OVERLAP`, `UNKNOWN`, and `DISTINCT`.
-- A group is applicable only when its Memories make the same operational
-  claim under the same scope. If either Memory contains a unique fact,
-  constraint, or exception, `OVERLAP` is reported but nothing is absorbed.
-- `UNKNOWN` is not a dedup outcome to apply; missing scope is handed to
-  `reconcile`.
-- Dedup keeps one stable survivor UID and its existing wording, and names every
-  absorbed source UID. Canonical rewriting belongs to `normalize`; combining
-  unique facts is a different integration operation.
+- `find-duplicates` runs deterministic `EXACT`/`SURFACE_EQUIVALENT` detection
+  before semantic classification and shows the tiers separately.
+- Neither trust layer materializes every possible pair. Mechanical keyed
+  components and semantic groups are rendered as canonical spanning evidence.
+- Semantic duplicate detection emits `SEMANTIC_EQUIVALENT`; its calibration
+  boundary distinguishes rejected `OVERLAP`, `UNKNOWN`, and `DISTINCT` pairs.
+- The finder reports unordered positive duplicate pairs, not mutation-ready
+  groups. If either Memory contains a unique fact, constraint, or exception,
+  `OVERLAP` is a rejected calibration result and is not emitted as a duplicate.
+- `UNKNOWN` is not a duplicate finding or a dedup outcome to apply.
+- A future `dedup` plan keeps one stable survivor UID and its existing wording,
+  and names every absorbed source UID. Canonical rewriting belongs to
+  `normalize`; combining unique facts is a different integration operation.
 - Referenced Memories cannot be removed until inbound references have been
   checked and safely migrated or the group has been blocked.
 
-### `reconcile`
+### `find-ambiguities` and `find-conflicts`
 
-- Operates on relationships among Memories, not only one new statement against
-  the Context.
+- `find-ambiguities` judges each direct Memory separately while using the
+  selected Context as its ordinary-reading frame.
+- It crosses `SINGLE`/`DOMINANT`/`COMPETING` interpretation with
+  `NONE`/`HELPFUL`/`REQUIRED` clarification need.
+- `find-conflicts` judges every unordered pair under the same local frame and
+  distinguishes `YES`, `MAY`, and `NO`.
+- `MAY` denotes competing ordinary readings with different conflict outcomes,
+  not lower model confidence.
+- Both operations are read-only, create no checkpoints, and do not propose
+  rewritten contents.
+
+### Future `reconcile`
+
+- Consumes the separate ambiguity and conflict findings instead of replacing
+  either detector.
 - Treats missing scope as the default hypothesis, not proof that one statement
   is false.
 - Records the dimension that could explain the difference and the evidence
@@ -487,16 +578,19 @@ Every refinement operation should:
 
 - be previewable without changing Contexts or checkpoints;
 - show source UIDs, proposed result, and a human-readable reason;
-- bind its plan to the Context UID and content fingerprint;
-- refuse to apply a stale plan;
-- record one operation-level history event; a multi-Context operation requires
-  linked checkpoints carrying one shared operation ID;
+- bind any reusable mutation plan to the Context UID and content fingerprint;
+- refuse to apply a stale mutation plan;
+- record one operation-level history event for a confirmed mutation; a
+  multi-Context mutation requires linked checkpoints carrying one shared
+  operation ID;
 - preserve the raw intake through history or an explicit working branch;
 - avoid opening query-only sources or treating model output as trusted IDs;
 - make no silent deletion, conflict resolution, audience inference, or move.
 
-The operations should be idempotent at their intended stage. Re-running an
-operation on unchanged, already-processed input should report no work.
+The operations should be idempotent at their intended stage. Re-running a
+finder on unchanged input should be evaluated for stability under the same
+ruleset and resolved provider/model; re-running a mutation stage on already-processed input
+should report no work.
 
 ## Initial graph scope
 
@@ -521,23 +615,26 @@ read-only verification pass:
 
 ```text
 atomize
-→ mechanical dedup
-→ semantic dedup
+→ find-duplicates
+→ confirmed dedup
+→ find-ambiguities
+→ find-conflicts
 → reconcile
 → audience
 → normalize
-→ dedup verification
+→ duplicate verification
 → place
 ```
 
-An `uncertain` atomization is not sent through dedup as if it were atomic.
-It remains intact and goes to `reconcile`; after the missing scope is supplied,
-that item returns to `atomize` and then enters the dedup phases. This is a
-targeted retry, not permission for atomization to guess during the first pass.
+An `uncertain` atomization is not treated as atomic merely because a finder can
+inspect it. Its quality finding records the stored Memory boundary; after a
+later clarification supplies the missing scope, that item returns to
+`atomize` and then enters the quality-analysis phases. This is a targeted
+retry, not permission for atomization or a finder to guess.
 
-The verification does not silently apply previously deferred candidates. Any
-new removal is a new previewed plan. This check does not collapse the
-operations or change their primary order.
+Verification does not silently apply previously deferred candidates. Any new
+removal requires a new `dedup` plan. This check does not collapse detection
+and mutation or change their primary order.
 
 ## Current Task 1 implications
 
@@ -547,7 +644,8 @@ Immediate examples are:
 - rear-door closure and staff-entrance availability each contain semantic
   dedup candidates, but their instruction-versus-fact and scope differences
   still require review;
-- physical-card versus app access is a `reconcile` case, not safe dedup;
+- physical-card versus app access may produce ambiguity or conflict findings
+  that a later `reconcile` can combine; it is not safe dedup;
 - restroom directions differ by visitor and accessibility audience;
 - public closure guidance and internal construction reasons need different
   audiences and detail levels;
@@ -555,11 +653,12 @@ Immediate examples are:
   normalization;
 - the final facts belong in the six `construction-updates/*` Contexts.
 
-The first implementation should therefore be the `mem atomize` preview
-contract and its golden regression harness, followed by its apply path.
-It should be run on a branch or otherwise preserve the raw paste checkpoint.
-Mechanical and semantic phases of `mem dedup` should follow, then
-`reconcile`, `audience`, `normalize`, dedup verification, and `place`, one at
-a time so their contracts remain observable in the study. A later
-`mem import` can orchestrate those same tested operations without replacing
-their visible plans, reasons, or checkpoints.
+The `mem atomize` contract and its golden regression harness define the
+preferred source boundary before analysis. The current quality-analysis
+implementation tranche adds `find-duplicates`, `find-ambiguities`, and
+`find-conflicts` as separate read-only commands so that their binary-relation,
+pair-target, and unary contracts remain observable. A future `dedup` apply path and
+`reconcile`, followed by `audience`, `normalize`, duplicate verification, and
+`place`, can then be added one at a time. A later `mem import` may orchestrate
+those same tested operations without replacing their visible findings, plans,
+reasons, or checkpoints.

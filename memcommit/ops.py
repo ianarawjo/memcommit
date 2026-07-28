@@ -2,9 +2,9 @@
     In-memory operations on Context objects.
     No disk I/O — callers persist via MemoryStore.save(ctx) when needed.
 
-    Semantic operations (forget, find_conflicts, integrate, find) require an
-    LLMClient.  They live here alongside their system prompts so all logic for
-    a given operation is co-located in one place.
+    Semantic operations require either an LLMClient or a validated one-shot
+    prompt provider. Newer provider-backed implementations live in focused
+    modules and retain thin wrappers here as the public in-memory API.
 
     Public API:
         import memcommit.ops as ops
@@ -25,6 +25,12 @@ from typing import TYPE_CHECKING, Callable
 from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
 
 if TYPE_CHECKING:
+    from memcommit.findings import (
+        AmbiguityReport,
+        ConflictReport,
+        DuplicateReport,
+        FindingsProvider,
+    )
     from memcommit.search import PromptProvider, SearchMatch
     from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
@@ -559,30 +565,37 @@ def _run_integrate_batch(
 
 
 # ---------------------------------------------------------------------------
-# Semantic stubs
+# Read-only semantic quality finders
 # ---------------------------------------------------------------------------
 
-def find_conflicts(ctx: Context, info: str) -> list[tuple[Information, str]]:
-    """
-    [stub] Find information in ctx that semantically conflicts with info.
+def find_duplicates(
+    ctx: Context,
+    provider_factory: Callable[[], "FindingsProvider"],
+) -> "DuplicateReport":
+    """Find duplicate direct-Memory pairs without mutating *ctx*."""
+    from memcommit.findings import find_duplicates as _find_duplicates
 
-    Returns a list of (Information, conflict_level) pairs, where conflict_level
-    is one of:
-      "direct"    — clear factual contradiction (e.g. "Paris is in France" vs
-                    "Paris is in Germany").
-      "ambiguous" — potential conflict that may depend on context or time (e.g.
-                    "the meeting is at 3 pm" vs "the meeting is at 4 pm" where
-                    it's unclear whether they refer to the same meeting).
+    return _find_duplicates(ctx, provider_factory)
 
-    Implementation sketch:
-      1. Embed info and retrieve the k nearest neighbours from ctx by cosine
-         similarity (candidate set).
-      2. For each candidate, prompt an LLM: "Does statement A contradict
-         statement B? Answer: direct / ambiguous / no conflict."
-      3. Return only those classified as direct or ambiguous, together with
-         the classification label.
-    """
-    raise NotImplementedError("'find_conflicts' is not yet implemented.")
+
+def find_ambiguities(
+    ctx: Context,
+    provider_factory: Callable[[], "FindingsProvider"],
+) -> "AmbiguityReport":
+    """Find ambiguous direct Memories without mutating *ctx*."""
+    from memcommit.findings import find_ambiguities as _find_ambiguities
+
+    return _find_ambiguities(ctx, provider_factory)
+
+
+def find_conflicts(
+    ctx: Context,
+    provider_factory: Callable[[], "FindingsProvider"],
+) -> "ConflictReport":
+    """Find conflicting direct-Memory pairs without mutating *ctx*."""
+    from memcommit.findings import find_conflicts as _find_conflicts
+
+    return _find_conflicts(ctx, provider_factory)
 
 
 def integrate(
