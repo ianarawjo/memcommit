@@ -1,0 +1,819 @@
+{
+  "command": "atomize",
+  "schema_version": 1,
+  "ruleset_version": "atomize-v1-draft",
+  "profile": {
+    "id": "task1-campus",
+    "version": "1",
+    "locale": "ko-en",
+    "segmenter_version": "sentence-like-v1",
+    "size_review_chars": 80,
+    "size_review_segments": 2,
+    "fingerprint": "sha256:3ca12405af018faafc3801d61349401d34b463f64dc02380defd9699d80f193b"
+  },
+  "description": "Source-first golden cases for the proposed semantic atomization operation. Known-wrong results are regression boundaries, not alternative acceptable answers.",
+  "cases": [
+    {
+      "id": "short-but-composite",
+      "description": "A short sentence still contains two independently addressable access commitments.",
+      "source": "주차장에는 차량이 들어갈 수 없고 보행자 출입문은 열려 있다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "COMPOSITE",
+        "result": [
+          "주차장에는 차량이 들어갈 수 없다.",
+          "주차장 보행자 출입문은 열려 있다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "claim-1",
+            "source_spans": [
+              "주차장에는 차량이 들어갈 수 없"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "vehicle_entry_access",
+            "scope": {
+              "subject": ["차량"],
+              "audience": [],
+              "place": ["주차장"],
+              "time": [],
+              "modality": ["불가"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "주차장에 차량이 들어갈 수 있는가?",
+            "answer": "차량은 들어갈 수 없다."
+          },
+          {
+            "occurrence_id": "claim-2",
+            "source_spans": [
+              "보행자 출입문은 열려 있다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "pedestrian_door_state",
+            "scope": {
+              "subject": ["보행자 출입문"],
+              "audience": [],
+              "place": ["주차장"],
+              "time": [],
+              "modality": ["개방"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 1,
+            "question": "주차장 보행자 출입문은 열려 있는가?",
+            "answer": "보행자 출입문은 열려 있다."
+          }
+        ],
+        "reason_codes": [
+          "A01_ONE_FOCUS",
+          "A04_SOURCE_GROUNDED",
+          "A05_MINIMAL_EXPANSION"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "주차장에는 차량이 들어갈 수 없고 보행자 출입문은 열려 있다."
+          ],
+          "violates": [
+            "A01_ONE_FOCUS"
+          ],
+          "reason": "Keeping both clauses together leaves two independently revisable access facts in one Memory."
+        }
+      ]
+    },
+    {
+      "id": "long-but-atomic-conditional",
+      "description": "A long conditional policy remains one commitment because the time, credential failure, urgency, and action jointly define its scope.",
+      "source": "공사 기간 중 오후 5시 이후에 Main Building 정문에서 실물 학생카드 인증이 실패한 학생은 긴급한 학업 용무가 있는 경우에만 안내 번호로 전화해야 한다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "ATOMIC",
+        "result": [
+          "공사 기간 중 오후 5시 이후에 Main Building 정문에서 실물 학생카드 인증이 실패한 학생은 긴급한 학업 용무가 있는 경우에만 안내 번호로 전화해야 한다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "policy-1",
+            "source_spans": [
+              "공사 기간 중 오후 5시 이후에 Main Building 정문에서 실물 학생카드 인증이 실패한 학생은 긴급한 학업 용무가 있는 경우에만 안내 번호로 전화해야 한다"
+            ],
+            "speech_act": "DIRECTIVE",
+            "focal_predicate": "emergency_contact_requirement",
+            "scope": {
+              "subject": ["실물 학생카드 인증이 실패한 학생"],
+              "audience": ["학생"],
+              "place": ["Main Building 정문"],
+              "time": ["공사 기간 중 오후 5시 이후"],
+              "modality": ["의무"],
+              "condition": ["긴급한 학업 용무가 있는 경우에만"],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "공사 기간 중 오후 5시 이후 Main Building 정문에서 학생카드 인증이 실패한 학생은 언제 안내 번호로 전화해야 하는가?",
+            "answer": "긴급한 학업 용무가 있는 경우에만 전화해야 한다."
+          }
+        ],
+        "reason_codes": [
+          "A02_SCOPE_ATTACHED",
+          "A03_RELATION_PRESERVED",
+          "A09_SIZE_IS_LINT"
+        ],
+        "lint": [
+          "SIZE_REVIEW"
+        ]
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "공사 기간은 오후 5시 이후이다.",
+            "실물 학생카드 인증이 실패한다.",
+            "학생에게 긴급한 학업 용무가 있다.",
+            "학생은 안내 번호로 전화해야 한다."
+          ],
+          "violates": [
+            "A02_SCOPE_ATTACHED",
+            "A03_RELATION_PRESERVED",
+            "A04_SOURCE_GROUNDED"
+          ],
+          "reason": "The split turns conditional restrictions into asserted facts and detaches them from the action rule."
+        }
+      ]
+    },
+    {
+      "id": "opening-hours-transition",
+      "description": "An old-to-new hours change is one transition relation rather than two independent timeless claims.",
+      "source": "정문은 원래는 10시까지 개방 - 5시로 단축.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "ATOMIC",
+        "result": [
+          "정문은 원래는 10시까지 개방 - 5시로 단축."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "change-1",
+            "source_spans": [
+              "정문은 원래는 10시까지 개방 - 5시로 단축"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "entrance_hours_transition",
+            "scope": {
+              "subject": ["정문"],
+              "audience": [],
+              "place": [],
+              "time": ["기존 10시까지", "변경 5시까지"],
+              "modality": [],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "정문 개방 마감 시간은 어떻게 바뀌는가?",
+            "answer": "10시에서 5시로 단축된다."
+          }
+        ],
+        "reason_codes": [
+          "A03_RELATION_PRESERVED"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "정문은 원래 10시까지 개방한다.",
+            "정문은 5시까지 개방한다."
+          ],
+          "violates": [
+            "A03_RELATION_PRESERVED"
+          ],
+          "reason": "The children lose the old-to-new transition and can be misread as simultaneous schedules."
+        }
+      ]
+    },
+    {
+      "id": "restroom-closure-and-alternative",
+      "description": "A facility closure and the location of an alternative facility are independently addressable.",
+      "source": "메인 빌딩 1-3층은 일반 및 장애 화장실은 공사기간동안 이용할 수 없다. 가장 가까운 화장실은 은행 건물 3층 미술관에 있다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "COMPOSITE",
+        "result": [
+          "메인 빌딩 1-3층 일반 및 장애 화장실은 공사기간동안 이용할 수 없다.",
+          "가장 가까운 화장실은 은행 건물 3층 미술관에 있다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "closure-1",
+            "source_spans": [
+              "메인 빌딩 1-3층은 일반 및 장애 화장실은 공사기간동안 이용할 수 없다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "restroom_availability",
+            "scope": {
+              "subject": ["일반 및 장애 화장실"],
+              "audience": [],
+              "place": ["메인 빌딩 1-3층"],
+              "time": ["공사기간"],
+              "modality": ["이용 불가"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "공사기간 동안 메인 빌딩 1-3층 일반 및 장애 화장실을 이용할 수 있는가?",
+            "answer": "이용할 수 없다."
+          },
+          {
+            "occurrence_id": "alternative-1",
+            "source_spans": [
+              "가장 가까운 화장실은 은행 건물 3층 미술관에 있다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "nearest_restroom_location",
+            "scope": {
+              "subject": ["가장 가까운 화장실"],
+              "audience": [],
+              "place": ["은행 건물 3층 미술관"],
+              "time": [],
+              "modality": [],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 1,
+            "question": "가장 가까운 화장실은 어디에 있는가?",
+            "answer": "은행 건물 3층 미술관에 있다."
+          }
+        ],
+        "reason_codes": [
+          "A01_ONE_FOCUS",
+          "A04_SOURCE_GROUNDED",
+          "A05_MINIMAL_EXPANSION"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "메인 빌딩 1-3층은 일반 및 장애 화장실은 공사기간동안 이용할 수 없다. 가장 가까운 화장실은 은행 건물 3층 미술관에 있다."
+          ],
+          "violates": [
+            "A01_ONE_FOCUS"
+          ],
+          "reason": "Closure and alternative location can be corrected, referenced, and placed independently."
+        }
+      ]
+    },
+    {
+      "id": "explicit-exception-policy",
+      "description": "An explicit exception limits one quantified staff-access policy and must remain attached.",
+      "source": "공사 기간에도 교직원 출입문은 지하주차장 계단을 제외하고 계속 열린다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "ATOMIC",
+        "result": [
+          "공사 기간에도 교직원 출입문은 지하주차장 계단을 제외하고 계속 열린다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "policy-1",
+            "source_spans": [
+              "공사 기간에도 교직원 출입문은 지하주차장 계단을 제외하고 계속 열린다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "staff_entrance_exception_policy",
+            "scope": {
+              "subject": ["교직원 출입문"],
+              "audience": ["교직원"],
+              "place": [],
+              "time": ["공사 기간"],
+              "modality": ["계속 개방"],
+              "condition": [],
+              "exception": ["지하주차장 계단"],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "공사 기간 중 교직원 출입문 운영 규칙과 예외는 무엇인가?",
+            "answer": "교직원 출입문은 계속 열리지만 지하주차장 계단은 예외이다."
+          }
+        ],
+        "reason_codes": [
+          "A02_SCOPE_ATTACHED",
+          "A03_RELATION_PRESERVED"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "공사 기간에도 교직원 출입문은 계속 열린다.",
+            "지하주차장 계단은 제외한다."
+          ],
+          "violates": [
+            "A02_SCOPE_ATTACHED",
+            "A03_RELATION_PRESERVED"
+          ],
+          "reason": "The second child is an exception fragment and the first child becomes overbroad without it."
+        }
+      ]
+    },
+    {
+      "id": "alternative-authentication-policy",
+      "description": "The two authentication methods are alternatives inside one access policy, not two simultaneously required directives.",
+      "source": "시간 외 출입은 실물 학생카드 또는 모바일 앱으로 인증할 수 있다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "ATOMIC",
+        "result": [
+          "시간 외 출입은 실물 학생카드 또는 모바일 앱으로 인증할 수 있다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "policy-1",
+            "source_spans": [
+              "시간 외 출입은 실물 학생카드 또는 모바일 앱으로 인증할 수 있다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "after_hours_authentication_methods",
+            "scope": {
+              "subject": ["시간 외 출입"],
+              "audience": [],
+              "place": [],
+              "time": ["시간 외"],
+              "modality": ["인증 가능"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "시간 외 출입에 사용할 수 있는 인증 방법은 무엇인가?",
+            "answer": "실물 학생카드 또는 모바일 앱을 사용할 수 있다."
+          }
+        ],
+        "reason_codes": [
+          "A02_SCOPE_ATTACHED",
+          "A03_RELATION_PRESERVED"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "시간 외 출입은 실물 학생카드로 인증해야 한다.",
+            "시간 외 출입은 모바일 앱으로 인증해야 한다."
+          ],
+          "violates": [
+            "A03_RELATION_PRESERVED",
+            "A04_SOURCE_GROUNDED"
+          ],
+          "reason": "The split changes an either-or permission into two independent requirements."
+        }
+      ]
+    },
+    {
+      "id": "clear-three-commitment-store-update",
+      "description": "Closure, alternative guidance, and alternative-store hours have distinct focal predicates.",
+      "source": "공사 기간에는 1층 Campus Store가 닫는다. 이용자는 공학관 Campus Store로 안내한다. 공학관 Campus Store는 공사 기간에 오전 7시부터 오후 11시까지 연장 운영한다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "COMPOSITE",
+        "result": [
+          "공사 기간에는 1층 Campus Store가 닫는다.",
+          "이용자는 공학관 Campus Store로 안내한다.",
+          "공학관 Campus Store는 공사 기간에 오전 7시부터 오후 11시까지 연장 운영한다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "closure-1",
+            "source_spans": [
+              "공사 기간에는 1층 Campus Store가 닫는다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "store_operating_state",
+            "scope": {
+              "subject": ["1층 Campus Store"],
+              "audience": [],
+              "place": ["1층"],
+              "time": ["공사 기간"],
+              "modality": ["폐쇄"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "공사 기간에 1층 Campus Store는 운영하는가?",
+            "answer": "닫는다."
+          },
+          {
+            "occurrence_id": "guidance-1",
+            "source_spans": [
+              "이용자는 공학관 Campus Store로 안내한다"
+            ],
+            "speech_act": "DIRECTIVE",
+            "focal_predicate": "alternative_store_guidance",
+            "scope": {
+              "subject": ["이용자 안내"],
+              "audience": ["Campus Store 이용자"],
+              "place": ["공학관 Campus Store"],
+              "time": [],
+              "modality": ["안내"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 1,
+            "question": "Campus Store 이용자는 어디로 안내하는가?",
+            "answer": "공학관 Campus Store로 안내한다."
+          },
+          {
+            "occurrence_id": "hours-1",
+            "source_spans": [
+              "공학관 Campus Store는 공사 기간에 오전 7시부터 오후 11시까지 연장 운영한다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "alternative_store_hours",
+            "scope": {
+              "subject": ["공학관 Campus Store"],
+              "audience": [],
+              "place": ["공학관"],
+              "time": ["공사 기간", "오전 7시부터 오후 11시까지"],
+              "modality": ["연장 운영"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 2,
+            "question": "공사 기간에 공학관 Campus Store는 몇 시부터 몇 시까지 연장 운영하는가?",
+            "answer": "오전 7시부터 오후 11시까지 연장 운영한다."
+          }
+        ],
+        "reason_codes": [
+          "A01_ONE_FOCUS",
+          "A04_SOURCE_GROUNDED"
+        ],
+        "lint": [
+          "SIZE_REVIEW"
+        ]
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "공사 기간에는 1층 Campus Store가 닫고 이용자는 오전 7시부터 오후 11시까지 운영하는 공학관 Campus Store로 안내한다."
+          ],
+          "violates": [
+            "A01_ONE_FOCUS",
+            "A10_STAGE_BOUNDARY"
+          ],
+          "reason": "The rewrite recombines three commitments and performs stylistic normalization instead of atomization."
+        }
+      ]
+    },
+    {
+      "id": "undeclared-deictic-frame",
+      "description": "The period is not available from the Memory itself, so the atomizer cannot silently recover it from a neighbor.",
+      "source": "해당 기간에는 공학관 Campus Store가 오전 7시부터 오후 11시까지 연장 운영한다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "UNCERTAIN",
+        "result": [
+          "해당 기간에는 공학관 Campus Store가 오전 7시부터 오후 11시까지 연장 운영한다."
+        ],
+        "qa": [],
+        "reason_codes": [
+          "A06_NO_HIDDEN_CONTEXT"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "여름방학 공사 기간에는 공학관 Campus Store가 오전 7시부터 오후 11시까지 연장 운영한다."
+          ],
+          "violates": [
+            "A04_SOURCE_GROUNDED",
+            "A06_NO_HIDDEN_CONTEXT"
+          ],
+          "reason": "The proposed child invents the referent of 해당 기간 from undeclared context."
+        }
+      ]
+    },
+    {
+      "id": "declared-frame-grounds-shared-scope",
+      "description": "A fingerprinted import frame may ground shared deictic scope, which is copied into each independently addressable child.",
+      "source": "해당 기간에는 1층 Campus Store가 닫고 공학관 Campus Store가 연장 운영한다.",
+      "declared_frames": [
+        {
+          "id": "construction-period",
+          "content": "해당 기간은 2026년 6월 15일부터 2026년 8월 15일까지이다.",
+          "fingerprint": "sha256:f2495620d8577de50e756911b70752ca9f7c291e75f7bfc5dc8b8c45d3352825"
+        }
+      ],
+      "expected": {
+        "classification": "COMPOSITE",
+        "result": [
+          "2026년 6월 15일부터 2026년 8월 15일까지 1층 Campus Store가 닫는다.",
+          "2026년 6월 15일부터 2026년 8월 15일까지 공학관 Campus Store가 연장 운영한다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "closure-1",
+            "source_spans": [
+              "해당 기간",
+              "1층 Campus Store가 닫"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "store_operating_state",
+            "scope": {
+              "subject": ["1층 Campus Store"],
+              "audience": [],
+              "place": ["1층"],
+              "time": ["2026년 6월 15일부터 2026년 8월 15일까지"],
+              "modality": ["폐쇄"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": ["construction-period"],
+            "child_index": 0,
+            "question": "2026년 6월 15일부터 2026년 8월 15일까지 1층 Campus Store는 운영하는가?",
+            "answer": "닫는다."
+          },
+          {
+            "occurrence_id": "hours-1",
+            "source_spans": [
+              "해당 기간",
+              "공학관 Campus Store가 연장 운영한다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "alternative_store_operating_state",
+            "scope": {
+              "subject": ["공학관 Campus Store"],
+              "audience": [],
+              "place": ["공학관"],
+              "time": ["2026년 6월 15일부터 2026년 8월 15일까지"],
+              "modality": ["연장 운영"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": ["construction-period"],
+            "child_index": 1,
+            "question": "2026년 6월 15일부터 2026년 8월 15일까지 공학관 Campus Store는 어떻게 운영되는가?",
+            "answer": "연장 운영한다."
+          }
+        ],
+        "reason_codes": [
+          "A01_ONE_FOCUS",
+          "A04_SOURCE_GROUNDED",
+          "A05_MINIMAL_EXPANSION"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "1층 Campus Store가 닫는다.",
+            "공학관 Campus Store가 연장 운영한다."
+          ],
+          "violates": [
+            "A02_SCOPE_ATTACHED",
+            "A05_MINIMAL_EXPANSION"
+          ],
+          "reason": "The children omit the shared time scope instead of grounding it through the declared frame."
+        }
+      ]
+    },
+    {
+      "id": "non-propositional-heading",
+      "description": "A heading remains addressable but must not be converted into a factual statement.",
+      "source": "Main Building 여름방학 시설개선 공사 리스트",
+      "declared_frames": [],
+      "expected": {
+        "classification": "NON_PROPOSITIONAL",
+        "result": [
+          "Main Building 여름방학 시설개선 공사 리스트"
+        ],
+        "qa": [],
+        "reason_codes": [
+          "A07_RETAIN_NON_CLAIMS"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "Main Building은 여름방학에 시설개선 공사를 실시한다."
+          ],
+          "violates": [
+            "A04_SOURCE_GROUNDED",
+            "A07_RETAIN_NON_CLAIMS"
+          ],
+          "reason": "The heading is rewritten as an asserted event that the heading alone does not grammatically assert."
+        }
+      ]
+    },
+    {
+      "id": "duplicate-occurrences-preserved",
+      "description": "Repeated source occurrences remain separate children so the later dedup stage can report and absorb them with provenance.",
+      "source": "후문은 공사 기간에 폐쇄된다. 후문은 공사 기간에 폐쇄된다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "COMPOSITE",
+        "result": [
+          "후문은 공사 기간에 폐쇄된다.",
+          "후문은 공사 기간에 폐쇄된다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "claim-1",
+            "source_spans": [
+              "후문은 공사 기간에 폐쇄된다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "rear_door_operating_state",
+            "scope": {
+              "subject": ["후문"],
+              "audience": [],
+              "place": [],
+              "time": ["공사 기간"],
+              "modality": ["폐쇄"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "공사 기간에 후문은 어떻게 운영되는가?",
+            "answer": "폐쇄된다."
+          },
+          {
+            "occurrence_id": "claim-2",
+            "source_spans": [
+              "후문은 공사 기간에 폐쇄된다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "rear_door_operating_state",
+            "scope": {
+              "subject": ["후문"],
+              "audience": [],
+              "place": [],
+              "time": ["공사 기간"],
+              "modality": ["폐쇄"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 1,
+            "question": "공사 기간에 후문은 어떻게 운영되는가?",
+            "answer": "폐쇄된다."
+          }
+        ],
+        "reason_codes": [
+          "A01_ONE_FOCUS",
+          "A08_PRESERVE_OCCURRENCES"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "후문은 공사 기간에 폐쇄된다."
+          ],
+          "violates": [
+            "A08_PRESERVE_OCCURRENCES",
+            "A10_STAGE_BOUNDARY"
+          ],
+          "reason": "Collapsing the repeated occurrence performs deduplication and loses source-occurrence lineage."
+        }
+      ]
+    },
+    {
+      "id": "joint-integrated-test",
+      "description": "A named integrated commissioning test is one joint event despite listing several systems.",
+      "source": "전체 공사 완료 후 전기·소방·승강기·공조 통합 시운전을 실시한다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "ATOMIC",
+        "result": [
+          "전체 공사 완료 후 전기·소방·승강기·공조 통합 시운전을 실시한다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "event-1",
+            "source_spans": [
+              "전체 공사 완료 후 전기·소방·승강기·공조 통합 시운전을 실시한다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "integrated_commissioning_test",
+            "scope": {
+              "subject": ["전기·소방·승강기·공조 통합 시운전"],
+              "audience": [],
+              "place": [],
+              "time": ["전체 공사 완료 후"],
+              "modality": ["실시"],
+              "condition": [],
+              "exception": [],
+              "cause": []
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "전체 공사 완료 후 어떤 시운전을 실시하는가?",
+            "answer": "전기·소방·승강기·공조 통합 시운전을 실시한다."
+          }
+        ],
+        "reason_codes": [
+          "A01_ONE_FOCUS",
+          "A03_RELATION_PRESERVED"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "전체 공사 완료 후 전기 시운전을 실시한다.",
+            "전체 공사 완료 후 소방 시운전을 실시한다.",
+            "전체 공사 완료 후 승강기 시운전을 실시한다.",
+            "전체 공사 완료 후 공조 시운전을 실시한다."
+          ],
+          "violates": [
+            "A03_RELATION_PRESERVED",
+            "A04_SOURCE_GROUNDED"
+          ],
+          "reason": "The split invents four independent events and removes the fact that the source specifies one integrated test."
+        }
+      ]
+    },
+    {
+      "id": "causal-relation-preserved",
+      "description": "The reason is asserted only as the cause of the closure and should not become an unrelated bare fact.",
+      "source": "지하주차장 계단은 자재를 보관하고 있기 때문에 공사 기간에 폐쇄된다.",
+      "declared_frames": [],
+      "expected": {
+        "classification": "ATOMIC",
+        "result": [
+          "지하주차장 계단은 자재를 보관하고 있기 때문에 공사 기간에 폐쇄된다."
+        ],
+        "qa": [
+          {
+            "occurrence_id": "causal-policy-1",
+            "source_spans": [
+              "지하주차장 계단은 자재를 보관하고 있기 때문에 공사 기간에 폐쇄된다"
+            ],
+            "speech_act": "ASSERTION",
+            "focal_predicate": "stairwell_closure_reason",
+            "scope": {
+              "subject": ["지하주차장 계단"],
+              "audience": [],
+              "place": ["지하주차장 계단"],
+              "time": ["공사 기간"],
+              "modality": ["폐쇄"],
+              "condition": [],
+              "exception": [],
+              "cause": ["자재를 보관하고 있기 때문에"]
+            },
+            "frame_ids": [],
+            "child_index": 0,
+            "question": "지하주차장 계단은 공사 기간에 왜 폐쇄되는가?",
+            "answer": "자재를 보관하고 있기 때문에 폐쇄된다."
+          }
+        ],
+        "reason_codes": [
+          "A02_SCOPE_ATTACHED",
+          "A03_RELATION_PRESERVED"
+        ],
+        "lint": []
+      },
+      "known_wrong": [
+        {
+          "result": [
+            "지하주차장 계단은 공사 기간에 폐쇄된다.",
+            "자재를 보관하고 있다."
+          ],
+          "violates": [
+            "A03_RELATION_PRESERVED"
+          ],
+          "reason": "The second child no longer records that storage is the reason for the stairwell closure."
+        }
+      ]
+    }
+  ]
+}

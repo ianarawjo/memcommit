@@ -5,7 +5,8 @@
 `mem add --paste` is an interactive intake mode for notes that are already on
 the clipboard. It keeps a large or sensitive-looking paste from flooding the
 terminal while retaining the existing rule that every non-empty physical line
-becomes one atomic Memory.
+becomes one raw Memory record. A line is an intake boundary, not a claim that
+the content is semantically atomic.
 
 The terminal view shows only a running summary such as
 `[24 lines pasted]`. It never places the captured payload in the editable
@@ -69,5 +70,8 @@ platform-specific terminal mode and escape-sequence code in the repository.
 
 Paste intake intentionally does not deduplicate, resolve apparent conflicts,
 infer audiences, normalize wording, or choose organizational destinations.
-Those decisions belong to separate, reviewable operations described in the
-[memory refinement pipeline](memory-refinement-pipeline-design-rationale.md).
+It also does not decide whether a line contains one focal commitment or
+several. Those decisions belong to separate, reviewable operations described
+in the
+[memory refinement pipeline](memory-refinement-pipeline-design-rationale.md)
+and the [`mem atomize` design](mem-atomize-design-rationale.md).

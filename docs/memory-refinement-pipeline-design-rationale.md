@@ -81,6 +81,92 @@ and checkpoints. A single `clean up everything` command would make it hard to
 tell whether a Memory disappeared because it was a duplicate, was classified
 for an audience, was normalized, or was moved to another category.
 
+## `mem import` as a pipeline orchestrator
+
+`mem add` remains the low-level intake operation: it stores one Memory or a
+batch of raw line-based Memory candidates and stops. The working design for
+`mem import` is a higher-level envelope around the refinement pipeline:
+
+```text
+source intake
+→ atomize
+→ mechanical dedup
+→ semantic dedup
+→ reconcile
+→ audience
+→ normalize
+→ dedup verification
+→ place
+```
+
+Import must not hide these stages inside one irreversible model rewrite. It
+creates an import-run manifest, preserves the raw intake checkpoint, invokes
+the same independently callable stage contracts, and records:
+
+- a locally generated run UUID;
+- source identity and content hash;
+- destination Context UID and starting fingerprint;
+- optional explicit document frame with its own ID and fingerprint;
+- ruleset and provider versions;
+- each stage's status, plan ID, reasons, and unresolved items;
+- the operation IDs of checkpoints created by confirmed stages.
+
+Manifests are per run, not one global active-import slot:
+
+```text
+~/.mem/import-runs/<run-uuid>.json
+```
+
+The conceptual state machine is:
+
+```text
+CREATED
+→ INTAKEN
+→ PLANNED_<stage>
+→ AWAITING_CONFIRMATION_<stage>
+→ APPLIED_<stage>
+→ ... next stage ...
+→ COMPLETED
+
+Any stage may instead become BLOCKED_<stage> or FAILED_RECOVERABLE.
+```
+
+The run UUID, stage name, input fingerprint, and plan fingerprint form the
+stage idempotency key. Repeating a confirmed apply with that key returns the
+recorded result rather than writing a second checkpoint. A new invocation with
+the same source creates a new run unless the user explicitly supplies
+`--resume <run-uuid>`; silently selecting “the latest” run would be unsafe
+when terminals or agents work in parallel.
+
+Each semantic stage retains its own preview and confirmation boundary. A
+confirmed stage creates its own checkpoint; the entire import does not become
+one opaque checkpoint. If `reconcile` cannot resolve a scope or a later stage
+cannot safely mutate several Contexts, the import pauses and can be resumed
+from the manifest. It does not guess or mark the run complete.
+
+A convenience form such as `mem import --input notes.txt --through atomize`
+means: commit deterministic raw intake, then generate previews through the
+named stage and stop at its first required confirmation or block. `--through`
+does not auto-approve semantic mutations. The default first implementation
+should create the intake plus a previewable manifest rather than silently
+applying every semantic proposal. `mem import` orchestrates provenance and
+progress; it does not own a second implementation of atomization,
+deduplication, or placement.
+
+The intake checkpoint and manifest share the run UUID. The checkpoint is
+written first, then the manifest is atomically replaced. If the process fails
+between them, the raw intake remains recoverable and a later recovery scan can
+reconstruct a `FAILED_RECOVERABLE` manifest from the checkpoint operation ID.
+A stage apply is all-or-nothing at the operation's documented mutation
+boundary; unresolved items block that stage rather than being silently
+skipped. Cross-Context placement still requires the recovery mechanism
+described below.
+
+This also gives source-level expressions such as `해당 기간` a safe future
+home. An import may declare a document frame, but every stage plan must bind
+that frame's fingerprint. Ordinary neighboring Memories remain unavailable as
+implicit context.
+
 ## Atomization before deduplication
 
 `atomize` is a source-preserving semantic split, not sentence tokenization and
@@ -129,6 +215,10 @@ The previous checkpoint preserves recoverability, while the explicit mapping
 provides operation provenance. If lineage later needs to be queried without
 history traversal, that requirement should motivate a separate schema change
 rather than silently adding fields during atomization.
+
+The focal-commitment rules, Q/A ledger, size lint, golden cases, and validation
+contract are specified separately in the
+[`mem atomize` design rationale](mem-atomize-design-rationale.md).
 
 ## Deduplication in two trust layers
 
@@ -310,6 +400,7 @@ important than final CLI spelling.
 
 | Stage | Working operation | Primary output | Mutation boundary |
 |---|---|---|---|
+| Envelope | `mem import` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
 | 1 | `mem atomize` | atomic/composite classifications and ordered split proposals with lineage | preview first; confirmed direct-item batch applies as one checkpoint |
 | 2 | `mem dedup` | mechanical and semantic equivalence groups, survivor UIDs, absorbed UIDs, reasons | preview by trust tier; confirmed groups share one stale-safe apply path |
 | 3 | `mem reconcile` | jointly unexplained groups, missing dimensions, clarifying questions | read-only first; edits require a separate confirmed plan |
@@ -464,8 +555,11 @@ Immediate examples are:
   normalization;
 - the final facts belong in the six `construction-updates/*` Contexts.
 
-The first implementation should therefore be `mem atomize`, preview-first. It
-should be run on a branch or otherwise preserve the raw paste checkpoint.
+The first implementation should therefore be the `mem atomize` preview
+contract and its golden regression harness, followed by its apply path.
+It should be run on a branch or otherwise preserve the raw paste checkpoint.
 Mechanical and semantic phases of `mem dedup` should follow, then
 `reconcile`, `audience`, `normalize`, dedup verification, and `place`, one at
-a time so their contracts remain observable in the study.
+a time so their contracts remain observable in the study. A later
+`mem import` can orchestrate those same tested operations without replacing
+their visible plans, reasons, or checkpoints.
