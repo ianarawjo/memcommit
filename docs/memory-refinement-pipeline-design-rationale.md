@@ -1,8 +1,10 @@
 # Memory refinement pipeline
 
-## Original decision
+## Decision history
 
-정리 전 원문 Memory는 다음 순서로 다듬는다.
+### Initial order
+
+처음에는 정리 전 원문 Memory를 다음 순서로 다듬기로 했다.
 
 ```text
 중복 제거
@@ -24,6 +26,32 @@
 학생, 교직원, 방문자, 시설 담당자처럼 정보를 전달받을 대상과 목적에
 따라 필요한 설명과 세부 수준을 정하는 `대상 분류`로 다룬다.
 
+### Revised order: atomize before deduplication
+
+Task 1 원문을 검토하면서, 하나의 Memory 안에 폐쇄 사실, 대체 위치,
+운영 시간, 이유가 함께 들어 있는 경우가 많다는 점을 확인했다. 이러한
+복합 Memory를 먼저 dedup하면 일부만 같은 두 Memory를 통째로 중복으로
+오판하거나, 내부에 숨어 있는 실제 중복을 찾지 못한다.
+
+따라서 primary pipeline을 다음과 같이 수정한다.
+
+```text
+원문 intake
+→ atomize
+→ 기계적 dedup
+→ 의미론적 dedup
+→ reconcile
+→ audience
+→ normalize
+→ dedup 재검증
+→ place
+```
+
+초기 순서를 덮어 지우지 않고 decision history로 남기는 이유는, raw
+line을 Memory 하나로 보는 intake 관점에서 atomic claim을 정제하는
+관점으로 설계가 바뀐 근거를 이후 연구 기록에서 추적할 수 있게 하기
+위해서다.
+
 ## Intent
 
 `mem add --paste` preserves raw notes without trying to understand them. The
@@ -33,19 +61,124 @@ opaque cleanup step.
 
 The primary order is intentional:
 
-1. **Deduplicate** first to reduce repeated evidence and review volume.
-2. **Reconcile conflict and ambiguity together** to identify what the current
+1. **Atomize** explicit multi-claim Memories while preserving order and source
+   lineage.
+2. **Deduplicate mechanically** using only meaning-preserving comparison
+   normalization.
+3. **Deduplicate semantically** only when two atomic claims are mutually
+   substitutable without information loss.
+4. **Reconcile conflict and ambiguity together** to identify what the current
    knowledge cannot yet explain.
-3. **Classify audiences** so differences caused by applicability, recipient,
+5. **Classify audiences** so differences caused by applicability, recipient,
    or disclosure purpose become explicit.
-4. **Atomize and normalize** only after meaning and scope are sufficiently
-   clear.
-5. **Place by category** after the Memory contents have stable semantics.
+6. **Normalize** only after meaning and scope are sufficiently clear.
+7. **Verify deduplication again** because later qualification and normalization
+   can expose new equivalence.
+8. **Place by category** after the Memory contents have stable semantics.
 
 These are separable operations with distinct previews, reasons, provenance,
 and checkpoints. A single `clean up everything` command would make it hard to
-tell whether a Memory disappeared because it was a duplicate, was rewritten
-for an audience, or was moved to another category.
+tell whether a Memory disappeared because it was a duplicate, was classified
+for an audience, was normalized, or was moved to another category.
+
+## Atomization before deduplication
+
+`atomize` is a source-preserving semantic split, not sentence tokenization and
+not stylistic rewriting. It separates only explicit multi-claim Memories. The
+ordered children must collectively preserve the parent's information without
+adding a decision that belongs to reconciliation, audience classification, or
+normalization.
+
+If the scope of a qualifier is uncertain, atomization reports the uncertainty
+instead of guessing which children inherit it. A heading, question, or process
+note is classified and retained rather than silently deleted for not being an
+atomic operational fact.
+
+The existing `mem chunk` provides a useful structural primitive but is not the
+Task 1 atomizer:
+
+- it splits one Memory by Markdown headers, paragraphs, or an approximate
+  English sentence boundary;
+- against the current 51 Memories, header and paragraph modes split none, and
+  sentence mode splits only one Memory into an operational clause plus the
+  incomplete fragment `Main building cafe`;
+- it replaces the original with fresh UIDs and preserves child order at the
+  original position;
+- its checkpoint records the source UID and method, but not source-to-child
+  lineage;
+- it does not scan for inbound `memory_ref` values before removing the source.
+
+The first `atomize` contract should therefore:
+
+- inspect directly owned Memories as one previewable batch;
+- label each item `atomic`, `composite`, `uncertain`, or
+  `non-propositional`;
+- return an ordered child-content list only for a clear composite;
+- bind the plan to the Context UID, source UID, source-content fingerprint,
+  and source position;
+- allocate fresh UIDs to all confirmed children and replace the source at its
+  original position;
+- record `source_uid → ordered child UIDs and contents` in the staged plan and
+  checkpoint metadata while keeping the base Memory schema at `uid + content`;
+- block v1 application when any Context contains an inbound reference to the
+  source, because a one-to-many split has no single safe retarget;
+- apply every approved split in one Context-level checkpoint;
+- perform no deduplication itself.
+
+The previous checkpoint preserves recoverability, while the explicit mapping
+provides operation provenance. If lineage later needs to be queried without
+history traversal, that requirement should motivate a separate schema change
+rather than silently adding fields during atomization.
+
+## Deduplication in two trust layers
+
+Both mechanical and semantic deduplication are necessary, but they should be
+two phases of one public `mem dedup` operation with visibly different trust
+levels.
+
+### Mechanical dedup
+
+Mechanical detection has no model dependency. It reports:
+
+- `EXACT`: stored content is identical;
+- `SURFACE_EQUIVALENT`: a conservative comparison key is identical after
+  line-ending normalization, Unicode NFC, outer trimming, and horizontal
+  whitespace normalization that preserves paragraph boundaries.
+
+Comparison normalization never rewrites stored content. It must not remove
+negation, question marks, numbers, dates, modality, list markers, or other
+potentially meaningful symbols. Case folding, punctuation tolerance,
+translation, typo correction, and synonym expansion may produce candidates
+for review, but they are not mechanically applicable equivalence.
+
+### Semantic dedup
+
+Semantic detection considers only atomic Memories that remain after the
+mechanical phase. Two claims are eligible only when they are mutually
+substitutable without information loss under the same:
+
+- subject and applicability;
+- predicate or operational state;
+- object and place;
+- audience and time;
+- modality and uncertainty;
+- access method, exception, and relevant causal scope.
+
+If one Memory entails the other but contains additional information, the
+result is `OVERLAP`, not a removable duplicate. Missing qualifiers or
+uncertain scope produce `UNKNOWN` and are handed to `reconcile`. The model
+acts as a classifier and reason generator, not as a canonical-text author.
+Application keeps a stable existing survivor UID and existing survivor
+wording; later normalization owns rewriting.
+
+Both phases are previewed before mutation because even an exact removal changes
+UID availability, provenance, order, and references. The shared apply path
+must check inbound references, bind the plan to a Context fingerprint, reject
+stale plans, and record every absorbed UID in one checkpoint.
+
+An optional byte-exact scan can run before atomization as a cheap read-only
+diagnostic, but it cannot replace the post-atomization passes. The current
+Task 1 intake has zero exact full-record duplicates.
 
 ## Why conflict and ambiguity are one operation
 
@@ -129,15 +262,6 @@ references behave.
 
 ## Normalization
 
-The normalization phase contains two explicit operations.
-
-`atomize` is the structural operation that splits a composite Memory into
-atomic operational facts. It is separate because one-to-many identity and
-provenance changes are not merely wording cleanup. A split requires new UIDs,
-ordered outputs, and lineage back to the original UID. The current Memory
-schema has no lineage field, so the implementation must define that
-representation before applying splits.
-
 `normalize` conforms each atomic Memory to explicit wording and scope rules
 while preserving its resolved meaning. It is not another opportunity for
 semantic invention.
@@ -149,14 +273,15 @@ Candidate rules include:
 - replace vague references such as `앞서`, `적절히`, and `등등`;
 - use consistent building, entrance, and service names;
 - express times and date ranges in an unambiguous format;
-- keep one operational fact per Memory;
+- verify that one operational fact remains per Memory, handing residual
+  composites back to `atomize`;
 - preserve an unresolved placeholder rather than inventing a missing value.
 
-Atomization and normalization follow audience classification because a
+Normalization follows reconciliation and audience classification because a
 sentence cannot be made fully explicit until its applicability, intended
-recipient, and scope are known. They follow reconciliation because polishing
-two unexplained statements too early can make uncertainty less visible
-without resolving it.
+recipient, and scope are known. Early atomization establishes the claim
+boundaries; normalization later makes the resolved scope explicit without
+changing those identities.
 
 ## Category placement
 
@@ -185,25 +310,40 @@ important than final CLI spelling.
 
 | Stage | Working operation | Primary output | Mutation boundary |
 |---|---|---|---|
-| 1 | `mem dedup` | equivalent groups, survivor UID, canonical content, reasons | preview by default; confirmed groups apply as one checkpoint |
-| 2 | `mem reconcile` | jointly unexplained groups, missing dimensions, clarifying questions | read-only first; edits require a separate confirmed plan |
-| 3 | `mem audience` | applicability, recipient, purpose, and disclosure assignments | preview first; storage representation must be explicit |
-| 4a | `mem atomize` | composite violations and ordered split proposals with lineage | preview first; lineage representation must exist before apply |
-| 4b | `mem normalize` | named rule violations and full replacement proposals | confirmed batch applies as one checkpoint |
-| 5 | `mem place` | destination Context plan and multi-category references | staged plan in v1; apply requires a recoverable multi-Context boundary |
+| 1 | `mem atomize` | atomic/composite classifications and ordered split proposals with lineage | preview first; confirmed direct-item batch applies as one checkpoint |
+| 2 | `mem dedup` | mechanical and semantic equivalence groups, survivor UIDs, absorbed UIDs, reasons | preview by trust tier; confirmed groups share one stale-safe apply path |
+| 3 | `mem reconcile` | jointly unexplained groups, missing dimensions, clarifying questions | read-only first; edits require a separate confirmed plan |
+| 4 | `mem audience` | applicability, recipient, purpose, and disclosure assignments | preview first; storage representation must be explicit |
+| 5 | `mem normalize` | named rule violations and full replacement proposals | confirmed batch applies as one checkpoint |
+| 6 | `mem dedup --check` | post-normalization exact scan and deferred semantic reclassification | read-only verification; any removal requires a newly confirmed plan |
+| 7 | `mem place` | destination Context plan and multi-category references | staged plan in v1; apply requires a recoverable multi-Context boundary |
+
+### `atomize`
+
+- Identifies clear composite Memories without resolving ambiguous modifier
+  scope.
+- Proposes ordered child contents without normalizing their wording.
+- Gives every child a fresh UID and records the ordered source-to-child mapping
+  in plan and checkpoint provenance.
+- Replaces each source at its original position and blocks sources with inbound
+  references in v1.
+- Does not perform deduplication, reconciliation, audience inference, or
+  deletion of non-propositional notes.
 
 ### `dedup`
 
-- Exact duplicate detection is deterministic.
-- Semantic duplicate detection must distinguish `equivalent`, `overlap`, and
-  `distinct`.
+- Runs deterministic `EXACT`/`SURFACE_EQUIVALENT` detection before semantic
+  classification and shows the tiers separately.
+- Semantic duplicate detection distinguishes `SEMANTIC_EQUIVALENT`,
+  `OVERLAP`, `UNKNOWN`, and `DISTINCT`.
 - A group is applicable only when its Memories make the same operational
   claim under the same scope. If either Memory contains a unique fact,
-  constraint, or exception, `overlap` is reported but nothing is absorbed.
-- `conflict` is not a dedup outcome to apply; it is handed to `reconcile`.
-- Dedup keeps one stable survivor UID, chooses a meaning-equivalent canonical
-  wording, and names every absorbed source UID. Combining unique facts is a
-  different integration operation and is outside dedup.
+  constraint, or exception, `OVERLAP` is reported but nothing is absorbed.
+- `UNKNOWN` is not a dedup outcome to apply; missing scope is handed to
+  `reconcile`.
+- Dedup keeps one stable survivor UID and its existing wording, and names every
+  absorbed source UID. Canonical rewriting belongs to `normalize`; combining
+  unique facts is a different integration operation.
 - Referenced Memories cannot be removed until inbound references have been
   checked and safely migrated or the group has been blocked.
 
@@ -225,13 +365,6 @@ important than final CLI spelling.
 - Distinguishes intended recipient from enforced visibility.
 - Records why each audience needs the information and which details they need.
 - Must not remove facts merely because one audience should not see them.
-
-### `atomize`
-
-- Identifies composite Memories by a named atomicity rule.
-- Proposes ordered child contents without rewriting their resolved meaning.
-- Defines new-UID and source-lineage policy before any split is applied.
-- Does not silently delete the relationship to the original Memory.
 
 ### `normalize`
 
@@ -288,27 +421,41 @@ their target instead of counting them as copied contents.
 
 ## Iteration without changing the primary order
 
-Atomization can split a composite Memory and reveal a duplicate that was not
-visible during the first dedup pass. Audience classification can also supply
-the missing distinction that explains a reconcile finding. The pipeline
-therefore allows read-only verification passes:
+Early atomization exposes the claims that the primary dedup pass should
+compare. Later reconciliation and audience classification can supply a missing
+qualifier that proves a deferred candidate equivalent or distinct.
+Normalization can also make two previously different surface forms
+mechanically identical. The pipeline therefore includes a deliberate
+read-only verification pass:
 
 ```text
-dedup → reconcile → audience → atomize → normalize → place
-   ↑                                                   |
-   └──────────── final dedup/reconcile check ──────────┘
+atomize
+→ mechanical dedup
+→ semantic dedup
+→ reconcile
+→ audience
+→ normalize
+→ dedup verification
+→ place
 ```
 
-This feedback check does not collapse the operations or change their primary
-order. It verifies that later structural improvements did not expose new work.
+An `uncertain` atomization is not sent through dedup as if it were atomic.
+It remains intact and goes to `reconcile`; after the missing scope is supplied,
+that item returns to `atomize` and then enters the dedup phases. This is a
+targeted retry, not permission for atomization to guess during the first pass.
+
+The verification does not silently apply previously deferred candidates. Any
+new removal is a new previewed plan. This check does not collapse the
+operations or change their primary order.
 
 ## Current Task 1 implications
 
 The 51 Memories in `temp/task-1` are raw intake, not final fixture data.
 Immediate examples are:
 
-- rear-door closure and staff-entrance availability contain semantic
-  duplicates suitable for `dedup`;
+- rear-door closure and staff-entrance availability each contain semantic
+  dedup candidates, but their instruction-versus-fact and scope differences
+  still require review;
 - physical-card versus app access is a `reconcile` case, not safe dedup;
 - restroom directions differ by visitor and accessibility audience;
 - public closure guidance and internal construction reasons need different
@@ -317,7 +464,8 @@ Immediate examples are:
   normalization;
 - the final facts belong in the six `construction-updates/*` Contexts.
 
-The first implementation should therefore be `mem dedup`, preview-first. It
+The first implementation should therefore be `mem atomize`, preview-first. It
 should be run on a branch or otherwise preserve the raw paste checkpoint.
-`reconcile`, `audience`, `atomize`, `normalize`, and `place` should follow one
-at a time so their contracts remain observable in the study.
+Mechanical and semantic phases of `mem dedup` should follow, then
+`reconcile`, `audience`, `normalize`, dedup verification, and `place`, one at
+a time so their contracts remain observable in the study.
