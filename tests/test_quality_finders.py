@@ -310,6 +310,9 @@ def test_find_ambiguities_calls_provider_once_and_restores_context_order():
         "Write every ordinary reading, reason, and question in English"
         in prompt
     )
+    assert "clean SINGLE/NONE and must be omitted" in prompt
+    assert "after that time a card is required" in prompt
+    assert "Never expose candidate IDs" in prompt
     assert "what cannot be determined reliably" in prompt
     assert "what remains possible" in prompt
 
@@ -748,6 +751,11 @@ def test_ambiguity_fixture_covers_the_complete_three_by_three_matrix():
     }
 
     assert data["schema_version"] == 1
+    assert any(
+        case["id"] == "single-none-context-resolved-time"
+        and case["expected"]["clarification"] == "NONE"
+        for case in data["cases"]
+    )
     assert combinations == {
         (interpretation, clarification)
         for interpretation in ["SINGLE", "DOMINANT", "COMPETING"]

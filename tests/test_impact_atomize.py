@@ -160,6 +160,13 @@ def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
         fourth.content,
     ]
     assert "For the ATOMIZE CLASSIFICATION AND CHILDREN" in prompt
+    assert (
+        "an UNCERTAIN atomize classification does not itself prove"
+        in prompt
+    )
+    assert "clean SINGLE/NONE and MUST be omitted" in prompt
+    assert "after that time a card is required" in prompt
+    assert "Never expose candidate IDs such as m000007" in prompt
     assert payload["context"]["declared_frame"] is None
     assert set(payload["context"]) == {
         "direct_memory_count",

@@ -867,6 +867,39 @@ Prompt strengthening improves the sample but is not independent validation,
 and run-to-run count changes are themselves evidence against treating one
 completion as a deterministic golden result.
 
+On 2026-07-29, the first combined atomize/quality workbench exposed a different
+over-reporting failure. It returned 47 actionable cards:
+
+```text
+21 ambiguity + 4 conflict + 15 atomize uncertainty + 7 split
+```
+
+All 15 uncertainty sources also had a same-source ambiguity card. In
+particular, the quality scan called expressions such as `시간 이후` and
+`안 되고` unresolved even though preceding entrance, time, card, and NFC
+Memories supplied an ordinary Context reading. The cause was not the numerical
+limit or parser: the strong source-only atomize instruction had leaked into the
+later Context-wide ambiguity judgment.
+
+The prompt and ambiguity calibration now make the two frames explicit.
+Atomization still cannot borrow neighboring content as child evidence, but the
+quality scan must first resolve ordinary antecedents and scope from the complete
+selected Context. A clean `SINGLE/NONE` is omitted even if source-only atomize
+remains `UNCERTAIN`. `SINGLE/REQUIRED` is reserved for information still absent
+from the full Context and necessary for a reliable operation. The live
+replacement analysis `b09fa457…` returned:
+
+```text
+51 direct Memories -> 60 projected
+5 ambiguity + 1 conflict + 12 atomize uncertainty + 7 split = 25 cards
+7 proposed splits -> 16 children
+```
+
+Same-source unary overlaps fell from 17 to 2. This was accepted as the focused
+correction: the remaining pairs describe distinct review work, and a hard card
+cap or lossy projection filter would hide evidence rather than improve the
+semantic boundary.
+
 The first run using the implemented saved-preview/apply contract, on
 2026-07-28, returned:
 

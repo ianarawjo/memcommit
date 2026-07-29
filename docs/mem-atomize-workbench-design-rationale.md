@@ -127,6 +127,41 @@ query or finder should still fail on its ordinary boundary. The larger window
 does not add retries, provider calls, or a guarantee that an arbitrarily large
 analysis will finish.
 
+### Two evidence frames must not be conflated
+
+The aggregate completion performs two judgments with deliberately asymmetric
+evidence:
+
+- atomize classification remains source-local because neighboring Memories
+  cannot become unrecorded child evidence; and
+- ambiguity/conflict uses the complete selected Context as its bounded ordinary
+  reading frame.
+
+An `UNCERTAIN` atomize result therefore does not imply an ambiguity card. Before
+emitting ambiguity, the quality scan must resolve ordinary antecedents,
+ellipsis, deixis, and shared scope against every supplied Memory. If the
+Context gives one usable reading and no operational decision changes, the
+result is clean `SINGLE/NONE` and is omitted. `SINGLE/REQUIRED` remains valid
+only when the complete Context still lacks information needed to perform or
+reliably verify an explicit operation.
+
+This boundary was added after the first aggregate Task 1 run produced 47 cards:
+21 ambiguity, 4 conflict, 15 atomize uncertainty, and 7 split. Every uncertainty
+source also received a same-source ambiguity card, showing that the provider
+had copied its source-local judgment into the Context-wide scan. A contrastive
+calibration case now pairs “the main entrance closes at 5” with “after that
+time, a student card is required”; the latter may remain source-locally
+uncertain for atomization while being clean for Context-wide ambiguity.
+
+The corrected live rerun produced 25 cards: 5 ambiguity, 1 conflict, 12
+uncertainty, and 7 split. Same-source unary overlaps fell from 17 to 2 without
+an arbitrary result cap or a storage migration. The remaining two contain
+distinct work: one combines a live card/app reading question with a source-local
+atomization boundary, and one combines a real split proposal with a missing
+relocation destination. If future use still finds those two-card sources too
+dense, the next step is a provenance-aware compound card, not silently hiding
+one result.
+
 ### Staleness is not reanalysis
 
 If the Context UID, direct Memory content, or canonical direct-Memory order no

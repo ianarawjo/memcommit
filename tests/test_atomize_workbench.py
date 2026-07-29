@@ -309,6 +309,40 @@ def test_aggregate_contract_rejects_items_without_overview_or_quality_scan():
         impact_atomize(ctx, ItemsOnlyProvider)
 
 
+def test_context_clean_quality_scan_does_not_duplicate_source_uncertainty():
+    ctx = ops.init("aggregate/context-clean")
+    ops.add(ctx, "The main entrance closes at 5 p.m.")
+    ops.add(ctx, "After that time, a student card is required.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    # A compliant quality scan may resolve the antecedent from the complete
+    # Context even though source-only atomization remains conservative.
+    report = replace(
+        report,
+        items=(
+            replace(
+                report.items[0],
+                classification="ATOMIC",
+                reason_codes=("A01_ONE_FOCUS",),
+                reason="The entrance-hours source has one focus.",
+            ),
+            replace(
+                report.items[1],
+                classification="UNCERTAIN",
+                reason_codes=("A06_NO_HIDDEN_CONTEXT",),
+                reason=(
+                    "The target's time antecedent is unavailable source-locally."
+                ),
+            ),
+        ),
+        quality_issues=(),
+    )
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+
+    assert workbench.issue_count == 1
+    assert workbench.issues[0].uid.startswith("atomize:")
+
+
 def test_cli_reuses_one_analysis_across_impact_atomize_and_review(
     isolated_store,
     monkeypatch,

@@ -2,7 +2,7 @@
   "operation": "find-ambiguities",
   "schema_version": 1,
   "ruleset_version": "ambiguity-v1-draft",
-  "description": "Initial calibration cases for the unary ambiguity finder. The nine cases cover the cross-product of ordinary-reading structure and clarification need; they are golden contract examples, not an independent held-out evaluation set.",
+  "description": "Initial calibration cases for the unary ambiguity finder. Nine core cases cover the cross-product of ordinary-reading structure and clarification need, with an additional Context-resolution contrast; they are golden contract examples, not an independent held-out evaluation set.",
   "labels": {
     "interpretation": [
       "SINGLE",
@@ -31,6 +31,23 @@
         ],
         "question": "",
         "rationale": "The location, action, and time have one ordinary reading in the stated frame, and no missing detail prevents use of the notice."
+      }
+    },
+    {
+      "id": "single-none-context-resolved-time",
+      "scenario": "Another Memory in the same selected Context states that the main entrance closes at 5 p.m.; the target Memory immediately continues that access sequence.",
+      "memory": {
+        "uid": "ambiguity-single-none-context-resolved",
+        "content": "After that time, a student card is required."
+      },
+      "expected": {
+        "interpretation": "SINGLE",
+        "clarification": "NONE",
+        "ordinary_readings": [
+          "A student card is required after the main entrance's stated 5 p.m. closing time."
+        ],
+        "question": "",
+        "rationale": "The complete selected Context supplies one ordinary antecedent for that time, so the target is not an actionable ambiguity even if it would be underspecified in isolation."
       }
     },
     {
