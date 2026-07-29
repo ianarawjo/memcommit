@@ -120,7 +120,7 @@ app.add_typer(dev_app,    name="dev",    help="Developer tools (eval, diagnostic
 
 app.command(
     "help",
-    help="List commands with implementation levels and descriptions.",
+    help="Browse commands with implementation levels and syntax help.",
 )(help_inventory.cmd)
 
 

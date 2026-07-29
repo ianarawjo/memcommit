@@ -17,6 +17,33 @@ name - implementation level - short description
 It reports capabilities; it does not recommend a command sequence or perform
 work for the participant.
 
+## Interactive terminal contract
+
+In an interactive terminal, `mem help` presents the inventory as a
+prompt-toolkit selector:
+
+- Up and Down move one command at a time.
+- Page Up, Page Down, Home, and End move through the longer list.
+- Enter closes the selector, prints `Command: mem <name>`, and renders that
+  registered command's syntax help.
+- `q`, Escape, and Ctrl-C cancel without selecting or invoking anything.
+
+The selected command's callback is deliberately never invoked. Some commands
+can change local state with no additional arguments, while other commands
+require operands or provider work. Treating a single Enter in a help browser
+as execution would therefore make inspection unexpectedly mutate state or
+produce an avoidable usage error.
+
+The child `mem help` process also cannot portably prefill its parent shell's
+next editable command line. That would require separate integration for zsh
+ZLE, Bash Readline, Fish, and other shells. Unsafe terminal input injection is
+not used. The printed `mem <name>` line and syntax screen are the portable
+boundary: they expose the real command while keeping execution explicit.
+
+When stdin or stdout is not a TTY, `mem help` retains the stable plain-text
+inventory. This keeps pipes, captured study records, and automated tests
+deterministic instead of emitting a terminal-control interface.
+
 ## Levels
 
 - `implemented`: the behavior advertised by that command's current short
@@ -53,8 +80,8 @@ the external function inventory.
 ## Relationship to `mem --help`
 
 `mem --help` remains Typer's syntax-oriented reference, including global
-options. `mem help` is the compact implementation inventory. Per-command
-syntax continues to use:
+options. `mem help` is the compact implementation inventory and interactive
+syntax browser. Per-command syntax continues to use:
 
 ```text
 mem <command> --help

@@ -5,11 +5,16 @@ the full user-facing path (argument parsing, error messages, exit codes).
 All tests use the `isolated_store` fixture from conftest.py to avoid touching
 the real ~/.mem directory.
 """
+import click
 import pytest
+from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
+import memcommit.commands.help_inventory as help_inventory
 from memcommit.cli import app
 import memcommit.ops as ops
+from memcommit.commands.help_inventory import CommandEntry, run_help_selector
 from memcommit.store import MemoryStore
 
 runner = CliRunner()
@@ -29,6 +34,18 @@ def invoke(*args):
 # ---------------------------------------------------------------------------
 
 class TestHelp:
+    @staticmethod
+    def selector_entries():
+        return [
+            CommandEntry(
+                name=name,
+                level="implemented",
+                description=f"{name} description",
+                command=click.Command(name),
+            )
+            for name in ("alpha", "beta", "gamma")
+        ]
+
     def test_lists_commands_with_levels_and_descriptions(self):
         result = invoke("help")
 
@@ -57,6 +74,61 @@ class TestHelp:
             and " - legacy " in line
             for line in lines
         )
+
+    def test_selector_moves_down_and_returns_selected_command(self):
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("\x1b[B\r")
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected == "beta"
+
+    def test_selector_clamps_at_first_command_and_can_cancel(self):
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("\x1b[A\r")
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+        assert selected == "alpha"
+
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("q")
+            cancelled = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+        assert cancelled is None
+
+    def test_enter_opens_command_help_without_running_command(
+        self,
+        monkeypatch,
+    ):
+        monkeypatch.setattr(
+            help_inventory,
+            "_interactive_terminal",
+            lambda: True,
+        )
+        monkeypatch.setattr(
+            help_inventory,
+            "run_help_selector",
+            lambda entries: "impact",
+        )
+
+        result = invoke("help")
+
+        assert result.exit_code == 0
+        assert "Command: mem impact" in result.output
+        assert "Usage: mem impact" in result.output
+        assert "no Context changes" in result.output
 
 
 
