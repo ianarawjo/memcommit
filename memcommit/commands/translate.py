@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
-from memcommit.commands.review_shell import safe_terminal_text
+from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.query_provider import (
     QueryProviderError,

@@ -1,4 +1,4 @@
-"""Deterministic CLI rendering of staged semantic updates."""
+"""Deterministic CLI rendering of staged and locally applied updates."""
 from __future__ import annotations
 
 import json
@@ -26,12 +26,12 @@ class Provider:
 
 
 def _stage(store: MemoryStore, *, changes: bool = True):
-    source = ops.init("verified-updates")
+    source = ops.init("participant/construction-updates")
     source_memory = ops.add(
         source,
         "Lot C now provides temporary visitor parking.",
     )
-    target = ops.init("campus/wiki")
+    target = ops.init("participant/campus-wiki-fork")
     target_memory = ops.add(
         target,
         "Visitor parking is available in Lot A.\nHours remain unchanged.",
@@ -79,13 +79,13 @@ def _stage(store: MemoryStore, *, changes: bool = True):
     return session, source_memory, target_memory, provider
 
 
-def test_diff_requires_a_staged_update(isolated_store):
+def test_diff_requires_a_local_update(isolated_store):
     assert not isolated_store.exists()
 
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 1
-    assert "no staged update" in result.stderr
+    assert "no local update" in result.stderr
     assert "mem update --to <context>" in result.stderr
     assert not isolated_store.exists()
 
@@ -101,16 +101,29 @@ def test_diff_renders_readable_semantic_edit_addition_and_provenance(
 
     assert result.exit_code == 0, result.output
     assert "Update preview" in result.output
-    assert "verified-updates → campus/wiki" in result.output
+    assert (
+        "participant/construction-updates → "
+        "participant/campus-wiki-fork"
+        in result.output
+    )
     assert "2 changes · 1 edited · 1 added" in result.output
-    assert f"EDIT  campus/wiki  [{target_memory.uid[:8]}]" in result.output
+    assert (
+        f"EDIT  participant/campus-wiki-fork  "
+        f"[{target_memory.uid[:8]}]"
+        in result.output
+    )
     assert "  - Visitor parking is available in Lot A." in result.output
     assert "  + Visitor parking is available in Lot C." in result.output
     assert "    Hours remain unchanged." in result.output
-    assert f"ADD   campus/wiki  [new:{addition.memory_uid[:8]}]" in result.output
+    assert (
+        "ADD   participant/campus-wiki-fork  "
+        f"[new:{addition.memory_uid[:8]}]"
+        in result.output
+    )
     assert "  + Follow temporary parking signs." in result.output
     assert (
-        f"Source  verified-updates [{source_memory.uid[:8]}]"
+        "Source  participant/construction-updates "
+        f"[{source_memory.uid[:8]}]"
         in result.output
     )
     assert "Reason  The verified update changes the visitor lot." in result.output
@@ -128,19 +141,40 @@ def test_diff_raw_preserves_exact_unified_diff(isolated_store):
     result = runner.invoke(app, ["diff", "--raw"])
 
     assert result.exit_code == 0
-    assert f"diff --mem campus/wiki#{target_memory.uid}" in result.output
-    assert f"--- a/campus/wiki#{target_memory.uid}" in result.output
-    assert f"+++ b/campus/wiki#{target_memory.uid}" in result.output
+    assert (
+        "diff --mem participant/campus-wiki-fork"
+        f"#{target_memory.uid}"
+        in result.output
+    )
+    assert (
+        "--- a/participant/campus-wiki-fork"
+        f"#{target_memory.uid}"
+        in result.output
+    )
+    assert (
+        "+++ b/participant/campus-wiki-fork"
+        f"#{target_memory.uid}"
+        in result.output
+    )
     assert "@@ -1,2 +1,2 @@" in result.output
     assert "-Visitor parking is available in Lot A." in result.output
     assert "+Visitor parking is available in Lot C." in result.output
     assert " Hours remain unchanged." in result.output
-    assert f"diff --mem campus/wiki#{addition.memory_uid}" in result.output
+    assert (
+        "diff --mem participant/campus-wiki-fork"
+        f"#{addition.memory_uid}"
+        in result.output
+    )
     assert "--- /dev/null" in result.output
-    assert f"+++ b/campus/wiki#{addition.memory_uid}" in result.output
+    assert (
+        "+++ b/participant/campus-wiki-fork"
+        f"#{addition.memory_uid}"
+        in result.output
+    )
     assert "+Follow temporary parking signs." in result.output
     assert (
-        f"Sources: verified-updates#{source_memory.uid}"
+        "Sources: participant/construction-updates"
+        f"#{source_memory.uid}"
         in result.output
     )
 
@@ -180,7 +214,11 @@ def test_diff_is_read_only_and_does_not_depend_on_current_context(
         if path.is_file()
     }
     assert result.exit_code == 0
-    assert "verified-updates → campus/wiki" in result.output
+    assert (
+        "participant/construction-updates → "
+        "participant/campus-wiki-fork"
+        in result.output
+    )
     assert store.current_context_name() == "unrelated-current"
     assert after == before
 
@@ -197,12 +235,62 @@ def test_diff_renders_empty_fresh_stage(isolated_store):
     assert "EDIT  " not in result.output
 
 
+def test_diff_renders_applied_local_update_from_recorded_base_read_only(
+    isolated_store,
+):
+    store = MemoryStore()
+    staged, _, target_memory, provider = _stage(store)
+    applied = store.apply_staged_update(staged)
+    assert applied.application is not None
+    assert provider.calls == 1
+    assert (
+        store.load("participant/campus-wiki-fork")
+        .memories[target_memory.uid]
+        .content
+        == "Visitor parking is available in Lot C.\nHours remain unchanged."
+    )
+    before = {
+        path.relative_to(isolated_store): path.read_bytes()
+        for path in isolated_store.rglob("*")
+        if path.is_file()
+    }
+
+    result = runner.invoke(app, ["diff", "--verbose"])
+
+    after = {
+        path.relative_to(isolated_store): path.read_bytes()
+        for path in isolated_store.rglob("*")
+        if path.is_file()
+    }
+    assert result.exit_code == 0, result.output
+    assert "Applied local update" in result.output
+    assert (
+        "participant/construction-updates → "
+        "participant/campus-wiki-fork"
+        in result.output
+    )
+    assert f"Update  {applied.uid}" in result.output
+    assert (
+        f"Base    {applied.target_uid}  {applied.target_digest}"
+        in result.output
+    )
+    assert (
+        f"Result  {applied.target_uid}  "
+        f"{applied.application.target_digest}"
+        in result.output
+    )
+    assert "  - Visitor parking is available in Lot A." in result.output
+    assert "  + Visitor parking is available in Lot C." in result.output
+    assert "STALE" not in result.stderr
+    assert after == before
+
+
 def test_diff_shows_captured_content_but_fails_when_target_is_stale(
     isolated_store,
 ):
     store = MemoryStore()
     _stage(store)
-    target = store.load("campus/wiki")
+    target = store.load("participant/campus-wiki-fork")
     ops.add(target, "A concurrent Wiki edit.")
     store.save(target)
 
@@ -212,7 +300,10 @@ def test_diff_shows_captured_content_but_fails_when_target_is_stale(
     assert "  - Visitor parking is available in Lot A." in result.output
     assert "  + Visitor parking is available in Lot C." in result.output
     assert "STALE — source or target changed" in result.stderr
-    assert "Re-run impact and update before pushing." in result.stderr
+    assert (
+        "Review the local fork and re-run impact/update before contributing."
+        in result.stderr
+    )
 
 
 def test_diff_fails_stale_when_source_is_missing_but_still_renders(
@@ -220,16 +311,20 @@ def test_diff_fails_stale_when_source_is_missing_but_still_renders(
 ):
     store = MemoryStore()
     _stage(store)
-    store.delete("verified-updates")
+    store.delete("participant/construction-updates")
 
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 1
-    assert "verified-updates → campus/wiki" in result.output
+    assert (
+        "participant/construction-updates → "
+        "participant/campus-wiki-fork"
+        in result.output
+    )
     assert "STALE — source or target changed" in result.stderr
 
 
-def test_diff_rejects_an_impact_plan_saved_in_the_stage_slot(isolated_store):
+def test_diff_rejects_an_impact_plan_saved_in_the_update_slot(isolated_store):
     store = MemoryStore()
     session, _, _, _ = _stage(store)
     store.save_staged_update(session.with_status("impact"))
@@ -237,7 +332,7 @@ def test_diff_rejects_an_impact_plan_saved_in_the_stage_slot(isolated_store):
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 1
-    assert "not staged" in result.stderr
+    assert "not an update result" in result.stderr
     assert "Update preview" not in result.output
 
 
@@ -312,7 +407,7 @@ def test_diff_stat_and_verbose_modes(isolated_store):
     assert "ADD   " not in stat.output
 
     assert verbose.exit_code == 0
-    assert f"Stage   {session.uid}" in verbose.output
+    assert f"Update  {session.uid}" in verbose.output
     assert session.source_digest in verbose.output
     assert session.target_digest in verbose.output
     assert f"[{target_memory.uid}]" in verbose.output

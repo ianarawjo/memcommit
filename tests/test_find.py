@@ -150,7 +150,7 @@ def test_query_context_contributes_name_only_and_never_loads_source(
 ):
     store = MemoryStore()
     hidden = store.create_query_source("contractor-agreements", HIDDEN_SECRET)
-    parent = ops.init("campus-wiki")
+    parent = ops.init("facilities-reference")
     ref = ops.reference_query_context(
         "contractor-agreements",
         hidden.uid,
@@ -162,7 +162,7 @@ def test_query_context_contributes_name_only_and_never_loads_source(
         raise AssertionError("find opened a concealed query source")
 
     monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
-    loaded = store.load("campus-wiki")
+    loaded = store.load("facilities-reference")
     candidates = collect_candidates(loaded)
     provider = KeywordProvider()
     matches = rank_candidates(
@@ -294,12 +294,12 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     child = ops.init("campus/parking")
     memory = ops.add(child, "Temporary parking is available in Lot C.")
     store.save(child)
-    root = ops.init("campus-wiki")
+    root = ops.init("facilities-reference")
     ops.add(root, "The library opens at 8 a.m.")
     ops.embed(child, root)
     store.save(root)
-    store.set_current("campus-wiki")
-    checkpoints_before = store.list_checkpoints("campus-wiki")
+    store.set_current("facilities-reference")
+    checkpoints_before = store.list_checkpoints("facilities-reference")
     provider = KeywordProvider()
     monkeypatch.setattr(
         "memcommit.commands.find.connect_codex_chatgpt_provider",
@@ -315,11 +315,11 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
         f"[memory  {memory.uid[:8]}] "
         "Temporary parking is available in Lot C."
     ) in result.output
-    assert store.list_checkpoints("campus-wiki") == checkpoints_before
+    assert store.list_checkpoints("facilities-reference") == checkpoints_before
 
     direct = runner.invoke(app, ["find", "parking", "--direct"])
     assert direct.exit_code == 0
-    assert direct.output == "campus-wiki\n  (no matching items)\n"
+    assert direct.output == "facilities-reference\n  (no matching items)\n"
     assert "Temporary parking" not in direct.output
 
 
@@ -332,7 +332,7 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
     first_child = ops.add(child, "First child line\ncontinued detail")
     second_child = ops.add(child, "Second child result")
     store.save(child)
-    root = ops.init("campus-wiki")
+    root = ops.init("facilities-reference")
     root_memory = ops.add(root, "Root result")
     ops.embed(child, root)
     store.save(root)
@@ -371,13 +371,13 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
     )
     root_row = f"[memory  {root_memory.uid[:8]}] Root result"
     assert result.output.count("campus/parking\n") == 1
-    assert result.output.count("campus-wiki\n") == 1
+    assert result.output.count("facilities-reference\n") == 1
     assert (
         result.output.index("campus/parking\n")
         < result.output.index(first_row)
         < result.output.index(continuation)
         < result.output.index(second_row)
-        < result.output.index("campus-wiki\n")
+        < result.output.index("facilities-reference\n")
         < result.output.index(root_row)
     )
 
@@ -444,14 +444,14 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
         "contractor-agreements",
         HIDDEN_SECRET,
     )
-    parent = ops.init("campus-wiki")
+    parent = ops.init("facilities-reference")
     ref = ops.reference_query_context(
         "contractor-agreements",
         source.uid,
         parent,
     )
     store.save(parent)
-    store.set_current("campus-wiki")
+    store.set_current("facilities-reference")
     monkeypatch.setattr(
         "memcommit.commands.find.connect_codex_chatgpt_provider",
         lambda: KeywordProvider(),
@@ -460,7 +460,7 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
     result = runner.invoke(app, ["find", "contractor"])
 
     assert result.exit_code == 0
-    assert "campus-wiki\n" in result.output
+    assert "facilities-reference\n" in result.output
     assert (
         f"[query   {ref.uid[:8]}] "
         "contractor-agreements (query-only)"

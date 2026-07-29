@@ -31,6 +31,10 @@ from memcommit.atomize_workflow import (
 )
 from memcommit.cli import app
 from memcommit.commands.atomize_workbench_shell import (
+    _finding_map,
+    _list_fragments,
+    _list_text,
+    _source_map,
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
@@ -403,7 +407,9 @@ def test_cli_reuses_one_analysis_across_impact_atomize_and_review(
     assert "the provider was not called" in direct.output
     for output in [first.output, review.output]:
         assert "WHAT MEM UNDERSTOOD" in output
-        assert "WHAT CHANGED / REMAINS UNRESOLVED" in output
+        assert "WHAT HAPPENED" in output
+        assert "WHAT REMAINS UNRESOLVED" in output
+        assert "REPRESENTATIVE / BOUNDARY CASES" in output
         assert "ISSUES" in output
         assert RESPONSE_LABEL in output
     resumed = store.load_atomize_workbench(analysis)
@@ -693,7 +699,9 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
 
     saved: list[dict] = []
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("2\rNeeds the staff-only qualifier.\x13q")
+        # Open the current issue, move to its second reading, choose it,
+        # then use Tab to enter the independent free-form response.
+        pipe_input.send_text("\r\x1b[B\r\tNeeds the staff-only qualifier.\x13q")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -714,6 +722,226 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
     assert "Selected ordinary reading: Use the prior NFC credential" not in (
         frames[next(iter(frames))]
     )
+    assert saved
+
+
+def test_enter_drills_into_readings_and_toggles_the_selected_choice():
+    ctx = ops.init("workbench/reading-drilldown")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+    first = workbench.ordered_issues()[0]
+
+    expanded = _list_text(
+        workbench,
+        analysis,
+        _finding_map(analysis),
+        _source_map(analysis),
+        expanded_issue_uid=first.uid,
+        reading_index=1,
+    )
+    assert "It accepts the previously described credential." in expanded
+    assert "› ○ 2. [ALTERNATIVE]" in expanded
+    fragments = _list_fragments(
+        workbench,
+        analysis,
+        _finding_map(analysis),
+        _source_map(analysis),
+        expanded_issue_uid=first.uid,
+        reading_index=1,
+    )
+    cursor_markers = [
+        index
+        for index, fragment in enumerate(fragments)
+        if fragment[0] == "[SetCursorPosition]"
+    ]
+    assert len(cursor_markers) == 1
+    cursor_line = fragments[cursor_markers[0] + 1][1]
+    assert cursor_line.lstrip().startswith("› ○ 2. [ALTERNATIVE]")
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r\x1b[B\rq")
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: None,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    assert workbench.response_for(
+        first.uid
+    ).selected_choice_uid.endswith(":reading:2")
+
+    # Reopening starts on the selected reading. Entering it again clears the
+    # selection, so a separate numeric "clear" command is unnecessary.
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r\rq")
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: None,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    assert workbench.response_for(first.uid).selected_choice_uid is None
+
+
+def test_atomize_shell_embeds_read_only_result_case_navigation() -> None:
+    ctx = ops.init("workbench/result-view")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+    before = workbench.to_dict()
+    saved: list[dict] = []
+
+    with create_pipe_input() as pipe_input:
+        # V opens the shared result view, Enter expands its selected case,
+        # Backspace collapses it, and V returns to the complete issue ledger.
+        pipe_input.send_text("v\r\x7fvq")
+        result = run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: saved.append(session.to_dict()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is workbench
+    assert workbench.answered_count == 0
+    assert workbench.cursor_uid == before["cursor_uid"]
+    assert all(
+        not response.answered for response in workbench.responses.values()
+    )
+    assert saved
+    assert saved[-1]["analysis_uid"] == before["analysis_uid"]
+
+
+def test_drilldown_back_and_numeric_keys_do_not_change_a_reading():
+    ctx = ops.init("workbench/reading-back")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+    first = workbench.ordered_issues()[0]
+    saved: list[dict] = []
+
+    with create_pipe_input() as pipe_input:
+        # Opening, hovering reading 2, and going back are presentation-only.
+        # The former direct numeric shortcut is intentionally inert.
+        pipe_input.send_text("\r\x1b[B\x7f2q")
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: saved.append(session.to_dict()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert workbench.cursor_uid == first.uid
+    assert workbench.response_for(first.uid).selected_choice_uid is None
+    assert len(saved) == 1
+
+
+def test_response_backspace_still_edits_text_instead_of_navigating_up():
+    ctx = ops.init("workbench/response-backspace")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+    first = workbench.ordered_issues()[0]
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\tab\x7f\tq")
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: None,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert workbench.response_for(first.uid).text == "a"
+
+
+def test_enter_expands_and_closes_an_issue_without_readings():
+    ctx = ops.init("workbench/detail-only-drilldown")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+    workbench.move(1)
+    issue = workbench.current_issue()
+    assert issue is not None
+    assert not issue.choice_uids
+
+    expanded = _list_text(
+        workbench,
+        analysis,
+        _finding_map(analysis),
+        _source_map(analysis),
+        expanded_issue_uid=issue.uid,
+    )
+    assert "ATOMIZE UNCERTAINTY 2/2" in expanded
+    assert "Which local reading or scope should govern this source?" in (
+        expanded
+    )
+
+    saved: list[dict] = []
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r\rq")
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: saved.append(session.to_dict()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    assert workbench.cursor_uid == issue.uid
+    assert len(saved) == 1
+
+
+def test_tui_up_and_down_follow_the_vertical_issue_list():
+    ctx = ops.init("workbench/vertical-navigation")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+    ordered = workbench.ordered_issues()
+    assert len(ordered) == 2
+
+    saved: list[dict] = []
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Bq")
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: saved.append(session.to_dict()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    assert workbench.cursor_uid == ordered[1].uid
+    assert workbench.response_for(ordered[0].uid).selected_choice_uid is None
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Aq")
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: saved.append(session.to_dict()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    assert workbench.cursor_uid == ordered[0].uid
     assert saved
 
 

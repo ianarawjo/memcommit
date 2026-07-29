@@ -4,7 +4,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.atomize import AtomizeImpactReport, AtomizeItem
-from memcommit.commands.review_shell import safe_terminal_text
+from memcommit.commands.tui_primitives import safe_terminal_text
 
 
 _CLASSIFICATION_COLORS = {

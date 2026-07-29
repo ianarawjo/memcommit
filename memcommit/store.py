@@ -7,7 +7,7 @@
 """
 from __future__ import annotations
 
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 import fcntl
 import hashlib
 import json
@@ -17,7 +17,7 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Iterator, Optional
+from typing import Iterable, Iterator, Optional
 
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
 
@@ -33,7 +33,9 @@ ATOMIZE_WORKBENCHES_DIR = STORE_DIR / "atomize-workbenches"
 ATOMIZE_GROUNDING_SESSIONS_DIR = STORE_DIR / "atomize-groundings"
 ATOMIZE_GROUNDING_HISTORY_DIR = STORE_DIR / "atomize-grounding-history"
 GROUND_SESSIONS_DIR = STORE_DIR / "ground-sessions"
+MELD_SESSIONS_DIR = STORE_DIR / "meld-sessions"
 RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
+_NO_UPDATE_SESSION_EXPECTATION = object()
 
 
 def _reject_duplicate_json_keys(
@@ -85,8 +87,30 @@ def context_record_digest(value: Context | dict[str, object]) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def ground_session_record_digest(value: object) -> str:
+    """Hash one complete validated Ground record canonically."""
+    from memcommit.ground import GroundSession
+
+    record = (
+        value.to_dict()
+        if isinstance(value, GroundSession)
+        else GroundSession.from_dict(value).to_dict()
+    )
+    encoded = json.dumps(
+        record,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
 class ConcurrentContextUpdateError(RuntimeError):
     """A Context changed after a caller captured its expected record."""
+
+
+class ConcurrentGroundUpdateError(RuntimeError):
+    """A named Ground changed after a caller captured its expected record."""
 
 
 def _context_name_parts(name: str) -> tuple[str, ...]:
@@ -210,11 +234,95 @@ class MemoryStore:
             raise
 
     @contextmanager
+    def _context_write_locks(
+        self,
+        names: Iterable[str],
+    ) -> Iterator[None]:
+        """Hold several Context locks in one deterministic deadlock-free order."""
+        ordered = sorted(set(names))
+        with ExitStack() as stack:
+            for name in ordered:
+                stack.enter_context(self._context_write_lock(name))
+            yield
+
+    @contextmanager
     def _state_write_lock(self) -> Iterator[None]:
         """Serialize cooperative changes to the global current Context."""
         lock_path = STORE_DIR / "state-write.lock"
         if lock_path.is_symlink():
             raise ValueError("Refusing to use a symbolic-link state lock.")
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
+    @contextmanager
+    def _update_session_write_lock(self) -> Iterator[None]:
+        """Serialize promotion and application of the one active update."""
+        lock_path = STORE_DIR / "update-session-write.lock"
+        if lock_path.is_symlink():
+            raise ValueError("Refusing to use a symbolic-link update lock.")
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
+    @contextmanager
+    def _ground_session_write_lock(
+        self,
+        contract_name: str,
+    ) -> Iterator[None]:
+        """Serialize cooperative saves of one portable named Ground."""
+        from memcommit.ground import validate_ground_contract_name
+
+        canonical = validate_ground_contract_name(contract_name)
+        if GROUND_SESSIONS_DIR.is_symlink():
+            raise ValueError(
+                "Grounding session storage cannot be a symbolic link."
+            )
+        if (
+            GROUND_SESSIONS_DIR.exists()
+            and not GROUND_SESSIONS_DIR.is_dir()
+        ):
+            raise ValueError("Grounding session storage is invalid.")
+        GROUND_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+        # Keep coordination artifacts within the Ground storage boundary so
+        # Ground-only work does not create unrelated top-level store state.
+        lock_dir = GROUND_SESSIONS_DIR / ".locks"
+        if lock_dir.is_symlink():
+            raise ValueError(
+                "Refusing to use a symbolic-link Ground lock directory."
+            )
+        lock_dir.mkdir(parents=True, exist_ok=True)
+        lock_path = lock_dir / (
+            hashlib.sha256(canonical.encode("utf-8")).hexdigest() + ".lock"
+        )
         flags = os.O_RDWR | os.O_CREAT
         if hasattr(os, "O_NOFOLLOW"):
             flags |= os.O_NOFOLLOW
@@ -327,9 +435,18 @@ class MemoryStore:
 
         if not isinstance(session, UpdateSession):
             raise TypeError("Expected an UpdateSession.")
+        try:
+            data = session.to_dict()
+            restored = UpdateSession.from_dict(data)
+        except ValueError as error:
+            raise ValueError("Semantic update session is invalid.") from error
+        if restored != session:
+            raise ValueError(
+                "Semantic update session changed during validation."
+            )
         if path.exists() and (not path.is_file() or path.is_symlink()):
             raise ValueError("Semantic update session storage is invalid.")
-        _write_json_atomic(path, session.to_dict())
+        _write_json_atomic(path, data)
 
     def load_impact_plan(self):
         """Return the cached impact plan, or None when no plan exists."""
@@ -340,12 +457,262 @@ class MemoryStore:
         self._save_update_session(IMPACT_PLAN_FILE, session)
 
     def load_staged_update(self):
-        """Return the active staged update, or None when none exists."""
+        """Return the active staged/applied update record, if one exists."""
         return self._load_update_session(STAGED_UPDATE_FILE)
 
-    def save_staged_update(self, session) -> None:
-        """Atomically save the active staged update."""
-        self._save_update_session(STAGED_UPDATE_FILE, session)
+    def save_staged_update(
+        self,
+        session,
+        *,
+        expected_current: object = _NO_UPDATE_SESSION_EXPECTATION,
+    ) -> None:
+        """Atomically save the active update, optionally using record CAS."""
+        with self._update_session_write_lock():
+            if expected_current is not _NO_UPDATE_SESSION_EXPECTATION:
+                current = self._load_update_session(STAGED_UPDATE_FILE)
+                if current != expected_current:
+                    raise ConcurrentContextUpdateError(
+                        "The active update record changed before it could be "
+                        "saved."
+                    )
+            self._save_update_session(STAGED_UPDATE_FILE, session)
+
+    def apply_staged_update(self, session):
+        """Apply one exact staged plan to its local target Context graph.
+
+        Every owner is preflighted before the first write. Cooperative Context
+        locks remain held through the last checkpoint and the application
+        receipt. If an ordinary write fails, already-written owners and their
+        new checkpoints are rolled back before the error escapes.
+
+        A process crash can still interrupt the sequence of per-Context atomic
+        replacements. A durable transaction journal is intentionally deferred
+        with remote publication; this prototype provides exception atomicity,
+        not crash atomicity, across several Context files.
+        """
+        from memcommit.update import (
+            UpdateApplicationReceipt,
+            UpdateCheckpointReceipt,
+            UpdateError,
+            UpdateSession,
+            applied_session_matches,
+            collect_update_inputs,
+            operation_digest,
+            session_matches,
+        )
+        from memcommit.update_application import prepare_update_application
+
+        if not isinstance(session, UpdateSession) or session.status != "staged":
+            raise ValueError("Expected one staged UpdateSession.")
+
+        lock_names = {
+            context.name
+            for context in (
+                *session.source_contexts,
+                *session.target_contexts,
+            )
+        }
+        lock_names.update(
+            {
+                session.source_name,
+                session.target_name,
+            }
+        )
+
+        with self._update_session_write_lock():
+            current = self._load_update_session(STAGED_UPDATE_FILE)
+            if current != session:
+                raise ConcurrentContextUpdateError(
+                    "The active staged update changed before application."
+                )
+
+            with self._context_write_locks(lock_names):
+                source = self.load(session.source_name)
+                target = self.load(session.target_name)
+                if not session_matches(session, source, target):
+                    raise ConcurrentContextUpdateError(
+                        "The update source or local fork changed before "
+                        "application."
+                    )
+
+                result = prepare_update_application(session, target)
+                base_by_identity = {
+                    (context.uid, context.name): context
+                    for context in session.target_contexts
+                }
+                original_records: dict[str, dict[str, object]] = {}
+                expected_digests: dict[str, str] = {}
+                for owner in result.affected_owners:
+                    identity = (
+                        owner.owner_context_uid,
+                        owner.owner_context_name,
+                    )
+                    base = base_by_identity.get(identity)
+                    if base is None:
+                        raise UpdateError(
+                            "Update owner is outside the recorded local fork."
+                        )
+                    direct = self.load_direct(owner.owner_context_name)
+                    if (
+                        direct.uid != owner.owner_context_uid
+                        or context_record_digest(direct) != base.digest
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            f"Local fork Context '{owner.owner_context_name}' "
+                            "changed before application."
+                        )
+                    if (
+                        owner.post_image.uid != owner.owner_context_uid
+                        or owner.post_image.name != owner.owner_context_name
+                    ):
+                        raise UpdateError(
+                            "Update application changed an owner identity."
+                        )
+                    original_records[owner.owner_context_name] = (
+                        direct.to_dict()
+                    )
+                    expected_digests[owner.owner_context_name] = base.digest
+
+                created_checkpoints: list[
+                    tuple[str, str]
+                ] = []
+                written_owner_names: list[str] = []
+                try:
+                    operation_hash = operation_digest(session.operations)
+                    for owner in result.affected_owners:
+                        owner_operations = [
+                            operation
+                            for operation in session.operations
+                            if (
+                                operation.owner_context_uid
+                                == owner.owner_context_uid
+                            )
+                        ]
+                        checkpoint = self._save_locked(
+                            owner.post_image,
+                            AutoCheckpoint(
+                                command="update",
+                                args={
+                                    "update_session_uid": session.uid,
+                                    "operation_digest": operation_hash,
+                                    "source_context_uid": session.source_uid,
+                                    "source_context_name": session.source_name,
+                                    "target_context_uid": session.target_uid,
+                                    "target_context_name": session.target_name,
+                                    "owner_context_uid": (
+                                        owner.owner_context_uid
+                                    ),
+                                    "operation_memory_uids": [
+                                        operation.memory_uid
+                                        for operation in owner_operations
+                                    ],
+                                },
+                                description=(
+                                    "Applied semantic update "
+                                    f"{session.uid[:8]} from "
+                                    f"{session.source_name}."
+                                ),
+                            ),
+                            expected_context_digest=expected_digests[
+                                owner.owner_context_name
+                            ],
+                        )
+                        if checkpoint is None:
+                            raise RuntimeError(
+                                "Update application created no checkpoint."
+                            )
+                        written_owner_names.append(
+                            owner.owner_context_name
+                        )
+                        created_checkpoints.append(
+                            (
+                                owner.owner_context_name,
+                                checkpoint.uid,
+                            )
+                        )
+
+                    source_after = self.load(session.source_name)
+                    target_after = self.load(session.target_name)
+                    inputs_after = collect_update_inputs(
+                        source_after,
+                        target_after,
+                    )
+                    checkpoint_uid_by_name = dict(created_checkpoints)
+                    receipt = UpdateApplicationReceipt(
+                        applied_at=datetime.now().astimezone().isoformat(),
+                        operation_digest=operation_hash,
+                        target_digest=inputs_after.target_digest,
+                        target_contexts=(
+                            inputs_after.target_context_fingerprints
+                        ),
+                        checkpoints=tuple(
+                            UpdateCheckpointReceipt(
+                                context_uid=owner.owner_context_uid,
+                                context_name=owner.owner_context_name,
+                                checkpoint_uid=checkpoint_uid_by_name[
+                                    owner.owner_context_name
+                                ],
+                            )
+                            for owner in result.affected_owners
+                        ),
+                    )
+                    applied = session.with_application(receipt)
+                    if not applied_session_matches(
+                        applied,
+                        source_after,
+                        target_after,
+                    ):
+                        raise RuntimeError(
+                            "Applied local fork does not match its receipt."
+                        )
+                    self._save_update_session(
+                        STAGED_UPDATE_FILE,
+                        applied,
+                    )
+                except Exception:
+                    rollback_error: Exception | None = None
+                    for name in written_owner_names:
+                        try:
+                            _write_json_atomic(
+                                self._context_file(name),
+                                original_records[name],
+                            )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    for name, checkpoint_uid in created_checkpoints:
+                        try:
+                            removed = False
+                            for path in self._checkpoints_dir(name).glob(
+                                f"*-{checkpoint_uid[:8]}.json"
+                            ):
+                                if path.is_symlink() or not path.is_file():
+                                    continue
+                                with open(path, encoding="utf-8") as file:
+                                    value = json.load(
+                                        file,
+                                        object_pairs_hook=(
+                                            _reject_duplicate_json_keys
+                                        ),
+                                    )
+                                if value.get("uid") == checkpoint_uid:
+                                    path.unlink()
+                                    removed = True
+                                    break
+                            if not removed:
+                                raise RuntimeError(
+                                    "Update checkpoint could not be found "
+                                    "during rollback."
+                                )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    if rollback_error is not None:
+                        raise RuntimeError(
+                            "Update application failed and its local fork "
+                            "could not be fully rolled back."
+                        ) from rollback_error
+                    raise
+
+        return applied
 
     # --- Semantic review sessions ---
 
@@ -444,28 +811,67 @@ class MemoryStore:
         ) as error:
             raise ValueError("Saved grounding session is invalid.") from error
 
-    def save_ground_session(self, session, *, replace: bool = False) -> None:
-        """Atomically persist one strictly validated grounding session."""
+    def save_ground_session(
+        self,
+        session,
+        *,
+        replace: bool = False,
+        expected_uid: str | None = None,
+        expected_revision: int | None = None,
+        expected_digest: str | None = None,
+        verify_bound_frames: bool = False,
+    ) -> None:
+        """Persist one validated Ground, optionally using save-boundary CAS.
+
+        The three expected-state fields are intentionally all-or-none.  A
+        caller that presents them gets a compare-and-swap whose comparison
+        and atomic file replacement occur under the same per-Ground process
+        lock.  This closes the gap left by a UI-side freshness check followed
+        by a separately launched CLI mutation.  Interactive mutations may
+        additionally lock and verify every bound Context frame before taking
+        the Ground lock; ordinary setup saves keep that stricter check off.
+        """
         from memcommit.ground import GroundError, GroundSession
 
         if not isinstance(session, GroundSession):
             raise TypeError("Expected a GroundSession.")
+        if not isinstance(verify_bound_frames, bool):
+            raise ValueError("Ground frame verification flag is invalid.")
         path = self._ground_session_path(session.contract_name)
-        if GROUND_SESSIONS_DIR.exists() and (
-            not GROUND_SESSIONS_DIR.is_dir()
-            or GROUND_SESSIONS_DIR.is_symlink()
+        expected_values = (
+            expected_uid,
+            expected_revision,
+            expected_digest,
+        )
+        if any(value is not None for value in expected_values) and any(
+            value is None for value in expected_values
         ):
-            raise ValueError("Grounding session storage is invalid.")
-        GROUND_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
-        if path.exists() and (not path.is_file() or path.is_symlink()):
-            raise ValueError("Grounding session storage is invalid.")
-        if path.exists() and not replace:
-            existing = self.load_ground_session(session.contract_name)
-            if existing is not None and existing.uid != session.uid:
-                raise ValueError(
-                    "A different grounding session already uses this "
-                    "contract name."
-                )
+            raise ValueError(
+                "Expected Ground uid, revision, and digest must be supplied "
+                "together."
+            )
+        if expected_uid is not None:
+            try:
+                canonical_expected_uid = str(uuid.UUID(expected_uid))
+            except (AttributeError, TypeError, ValueError) as error:
+                raise ValueError("Expected Ground uid is invalid.") from error
+            if canonical_expected_uid != expected_uid:
+                raise ValueError("Expected Ground uid is invalid.")
+        if expected_revision is not None and (
+            isinstance(expected_revision, bool)
+            or not isinstance(expected_revision, int)
+            or expected_revision < 0
+        ):
+            raise ValueError("Expected Ground revision is invalid.")
+        if expected_digest is not None and (
+            not isinstance(expected_digest, str)
+            or len(expected_digest) != 64
+            or any(
+                character not in "0123456789abcdef"
+                for character in expected_digest
+            )
+        ):
+            raise ValueError("Expected Ground digest is invalid.")
         data = session.to_dict()
         try:
             restored = GroundSession.from_dict(data)
@@ -473,7 +879,201 @@ class MemoryStore:
             raise ValueError("Grounding session is invalid.") from error
         if restored.contract_name != session.contract_name:
             raise ValueError("Grounding session identity changed during save.")
-        _write_json_atomic(path, data)
+        with ExitStack() as locks:
+            if verify_bound_frames:
+                if not session.frames:
+                    raise ValueError(
+                        "Bound Ground frame verification requires a bound "
+                        "Ground."
+                    )
+                # Context locks always precede the Ground lock. Future
+                # operations that need both must retain this order.
+                locks.enter_context(
+                    self._context_write_locks(
+                        frame.context_name for frame in session.frames
+                    )
+                )
+            locks.enter_context(
+                self._ground_session_write_lock(session.contract_name)
+            )
+            if GROUND_SESSIONS_DIR.exists() and (
+                not GROUND_SESSIONS_DIR.is_dir()
+                or GROUND_SESSIONS_DIR.is_symlink()
+            ):
+                raise ValueError("Grounding session storage is invalid.")
+            GROUND_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+            if path.exists() and (not path.is_file() or path.is_symlink()):
+                raise ValueError("Grounding session storage is invalid.")
+            if verify_bound_frames:
+                self._verify_ground_frames_locked(session)
+            existing = (
+                self.load_ground_session(session.contract_name)
+                if expected_uid is not None or not replace
+                else None
+            )
+            if expected_uid is not None:
+                if existing is None:
+                    raise ConcurrentGroundUpdateError(
+                        "The named Ground no longer exists."
+                    )
+                if (
+                    existing.uid != expected_uid
+                    or existing.revision != expected_revision
+                    or ground_session_record_digest(existing)
+                    != expected_digest
+                ):
+                    raise ConcurrentGroundUpdateError(
+                        "The named Ground changed before it could be saved."
+                    )
+            elif (
+                existing is not None
+                and not replace
+                and existing.uid != session.uid
+            ):
+                raise ValueError(
+                    "A different grounding session already uses this "
+                    "contract name."
+                )
+            _write_json_atomic(path, data)
+
+    def _verify_ground_frames_locked(self, session) -> None:
+        """Require every bound frame to match while its Context lock is held."""
+        from memcommit.ground import context_frame_digest
+
+        for frame in session.frames:
+            try:
+                context = self.load_direct(frame.context_name)
+            except FileNotFoundError as error:
+                raise ConcurrentGroundUpdateError(
+                    f"Bound Context '{frame.context_name}' no longer exists."
+                ) from error
+            direct_items = tuple(context.iter_items())
+            if (
+                context.uid != frame.context_uid
+                or context_frame_digest(context) != frame.context_digest
+                or sum(
+                    isinstance(item, Memory) for item in direct_items
+                )
+                != frame.direct_memory_count
+                or len(direct_items) != frame.direct_item_count
+            ):
+                raise ConcurrentGroundUpdateError(
+                    f"Bound Context '{frame.context_name}' changed before "
+                    "the Ground could be saved."
+                )
+
+    # --- Context-to-Context meld sessions ---
+
+    @staticmethod
+    def _meld_session_path(target_context_uid: str) -> Path:
+        try:
+            canonical = str(uuid.UUID(target_context_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid meld target Context uid.") from error
+        if canonical != target_context_uid:
+            raise ValueError("Invalid meld target Context uid.")
+        if MELD_SESSIONS_DIR.is_symlink():
+            raise ValueError("Meld session storage cannot be a symbolic link.")
+        if (
+            MELD_SESSIONS_DIR.exists()
+            and not MELD_SESSIONS_DIR.is_dir()
+        ):
+            raise ValueError("Meld session storage is invalid.")
+        return MELD_SESSIONS_DIR / f"{canonical}.json"
+
+    def load_meld_session(self, target_context_uid: str):
+        """Return the saved meld for one target Context, if present."""
+        from memcommit.meld import MeldError, MeldSession
+
+        path = self._meld_session_path(target_context_uid)
+        if not path.exists():
+            return None
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Meld session storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as file:
+                data = json.load(
+                    file,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            session = MeldSession.from_dict(data)
+        except (
+            json.JSONDecodeError,
+            MeldError,
+            ValueError,
+        ) as error:
+            raise ValueError("Saved meld session is invalid.") from error
+        if session.target.context_uid != target_context_uid:
+            raise ValueError(
+                "Saved meld session does not match its target storage key."
+            )
+        return session
+
+    def save_meld_session(
+        self,
+        session,
+        *,
+        expected_session_digest: str | None = None,
+    ) -> None:
+        """Persist one meld session with target-scoped optimistic concurrency."""
+        from memcommit.meld import (
+            MeldError,
+            MeldSession,
+            meld_canonical_digest,
+        )
+
+        if not isinstance(session, MeldSession):
+            raise TypeError("Expected a MeldSession.")
+        path = self._meld_session_path(session.target.context_uid)
+        data = session.to_dict()
+        try:
+            restored = MeldSession.from_dict(data)
+        except MeldError as error:
+            raise ValueError("Meld session is invalid.") from error
+        if restored.uid != session.uid:
+            raise ValueError("Meld session identity changed during save.")
+
+        # The Context lock coordinates the target artifact with its Context
+        # transaction.  The session digest separately prevents two semantic
+        # replies from silently replacing one another.
+        with self._context_write_lock(session.target.context_name):
+            if MELD_SESSIONS_DIR.exists() and (
+                not MELD_SESSIONS_DIR.is_dir()
+                or MELD_SESSIONS_DIR.is_symlink()
+            ):
+                raise ValueError("Meld session storage is invalid.")
+            MELD_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+            if path.exists() and (not path.is_file() or path.is_symlink()):
+                raise ValueError("Meld session storage is invalid.")
+            if path.exists():
+                with open(path, encoding="utf-8") as file:
+                    current = json.load(
+                        file,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+                current_digest = meld_canonical_digest(current)
+                if expected_session_digest is None:
+                    raise ConcurrentContextUpdateError(
+                        "A meld session already exists for this target."
+                    )
+                if current_digest != expected_session_digest:
+                    raise ConcurrentContextUpdateError(
+                        "The meld session changed before it could be saved."
+                    )
+            elif expected_session_digest is not None:
+                raise ConcurrentContextUpdateError(
+                    "The meld session no longer exists."
+                )
+            _write_json_atomic(path, data)
+
+    def delete_meld_session(self, target_context_uid: str) -> None:
+        """Remove one exact target-bound meld artifact."""
+        path = self._meld_session_path(target_context_uid)
+        if not path.exists():
+            return
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Meld session storage is invalid.")
+        path.unlink()
 
     # --- Saved semantic analyses ---
 
@@ -1149,6 +1749,53 @@ class MemoryStore:
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
+    def save_meld_target(
+        self,
+        ctx: Context,
+        auto_checkpoint: AutoCheckpoint,
+        *,
+        expected_context_digest: str,
+        source_bindings: Iterable[tuple[str, str, str]],
+    ) -> Checkpoint | None:
+        """Save one meld target while its exact source snapshots stay locked.
+
+        Ordinary Context CAS protects only the target. A meld result also
+        depends on two read-only source snapshots, so all participating
+        Context locks must remain held from the final source recheck through
+        the target checkpoint and write.
+        """
+        bindings = tuple(source_bindings)
+        source_names = tuple(name for name, _, _ in bindings)
+        if (
+            not bindings
+            or len(source_names) != len(set(source_names))
+            or ctx.name in source_names
+        ):
+            raise ValueError("Invalid meld source lock set.")
+        with self._context_write_locks((*source_names, ctx.name)):
+            for name, expected_uid, expected_digest in bindings:
+                try:
+                    source = self.load_direct(name)
+                except FileNotFoundError as error:
+                    raise ConcurrentContextUpdateError(
+                        f"Source Context '{name}' no longer exists."
+                    ) from error
+                if (
+                    source.uid != expected_uid
+                    or context_record_digest(source) != expected_digest
+                ):
+                    raise ConcurrentContextUpdateError(
+                        f"Source Context '{name}' changed before the meld "
+                        "target could be saved."
+                    )
+            checkpoint = self._save_locked(
+                ctx,
+                auto_checkpoint,
+                expected_context_digest=expected_context_digest,
+            )
+        ctx._store_digest = context_record_digest(ctx)
+        return checkpoint
+
     def create_context(
         self,
         ctx: Context,
@@ -1437,17 +2084,23 @@ class MemoryStore:
             if canonical_context_uid == context_uid
             else None
         )
+        meld_path = (
+            self._meld_session_path(context_uid)
+            if canonical_context_uid == context_uid
+            else None
+        )
         for artifact, label in (
-            (analysis_path, "analysis"),
-            (workbench_path, "workbench"),
-            (grounding_path, "grounding"),
+            (analysis_path, "Atomize analysis"),
+            (workbench_path, "Atomize workbench"),
+            (grounding_path, "Atomize grounding"),
+            (meld_path, "Meld session"),
         ):
             if (
                 artifact is not None
                 and (artifact.exists() or artifact.is_symlink())
                 and (not artifact.is_file() or artifact.is_symlink())
             ):
-                raise ValueError(f"Atomize {label} storage is invalid.")
+                raise ValueError(f"{label} storage is invalid.")
         if (
             grounding_history_dir is not None
             and grounding_history_dir.exists()
@@ -1516,6 +2169,10 @@ class MemoryStore:
             # them after their exact Context is gone would be both misleading
             # state and an avoidable privacy leak.
             grounding_path.unlink()
+        if meld_path is not None and meld_path.exists():
+            # Meld dialogue may retain both source text and verbatim user
+            # comments. Its privacy and validity lifetime is the target.
+            meld_path.unlink()
         delete_comparison_paths(comparison_paths)
         if (
             grounding_history_dir is not None

@@ -35,6 +35,9 @@ from memcommit.atomize_grounding import (
     atomize_grounding_canonical_digest,
     atomize_grounding_context_digest,
 )
+from memcommit.atomize_meld_adapter import (
+    project_atomize_grounding_as_meld,
+)
 from memcommit.atomize_workbench import (
     AtomizeWorkbenchFinding,
     project_atomize_workbench_findings,
@@ -387,6 +390,7 @@ def _build_provider_view(
         raise AtomizeGroundingProviderError(
             "The grounding session does not match this Context and analysis."
         )
+    meld_view = project_atomize_grounding_as_meld(session)
 
     direct = [
         (position, item)
@@ -489,6 +493,14 @@ def _build_provider_view(
         "text": session.anchor.workbench_response,
     }
     payload = {
+        "meld_contract": {
+            # The adapter is operational input to the semantic turn, not only
+            # documentation: clarification has directional authority over one
+            # selected issue while the complete bounded baseline is rechecked.
+            "authority_mode": meld_view.authority_mode,
+            "turn_scope": meld_view.scope,
+            "input_roles": list(meld_view.input_roles),
+        },
         "context": {
             # Context identity is irrelevant to interpretation and remains
             # local.  The label is useful semantic data, not an authority ID.
@@ -819,8 +831,11 @@ def _prompt(payload: dict[str, object]) -> str:
             "Input is never truncated or split into hidden provider calls."
         )
     return (
-        "Assess the latest turn in a multi-turn human grounding dialogue "
-        "about one selected atomize issue. Recompute a cumulative active "
+        "Assess the latest turn as an issue-scoped DIRECTIONAL meld inside a "
+        "multi-turn human grounding dialogue. The user's CLARIFICATION is "
+        "incoming evidence and the supplied local frame is the BASELINE; do "
+        "not silently generalize that evidence beyond demonstrated effects. "
+        "Recompute a cumulative active "
         "understanding: a correction, retraction, or qualification replaces "
         "the affected earlier understanding instead of being concatenated "
         "with it. If a full retraction leaves no supported proposition, "

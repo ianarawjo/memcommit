@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import sys
 from collections.abc import Callable
+from dataclasses import dataclass
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.filters import has_focus
@@ -21,6 +22,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.atomize import AtomizeAnalysisSession
+from memcommit.atomize_result_adapter import AtomizeResultWorkbenchAdapter
 from memcommit.atomize_workbench import (
     ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
     AtomizeWorkbenchFinding,
@@ -31,12 +33,45 @@ from memcommit.atomize_workbench import (
 from memcommit.commands.review_shell import (
     RESPONSE_LABEL,
     ReviewCancelled,
+)
+from memcommit.commands.result_workbench_shell import (
+    render_result_workbench_snapshot,
+    result_workbench_fragments,
+)
+from memcommit.commands.tui_primitives import (
     safe_terminal_text,
+)
+from memcommit.result_workbench import (
+    ResultCase,
+    ResultCaseDetail,
+    ResultWorkbenchView,
 )
 
 _LIST_READING_PREVIEW_LIMIT = 2
 _LIST_READING_LABEL_LIMIT = 160
 _LIST_REASON_TEXT_LIMIT = 220
+# prompt-toolkit follows only one cursor marker. This private NUL-delimited
+# token cannot collide with rendered data because terminal sanitization
+# replaces C0 controls before list fragments are assembled.
+_LIST_CURSOR_TOKEN = "\x00atomize-list-cursor\x00"
+
+
+@dataclass
+class _AtomizeNavigation:
+    """Ephemeral drill-down state; semantic answers remain in the session."""
+
+    expanded_issue_uid: str | None = None
+    reading_index: int = 0
+    result_mode: bool = False
+    result_case_index: int = 0
+    result_detail: ResultCaseDetail | None = None
+
+    def close(self) -> None:
+        self.expanded_issue_uid = None
+        self.reading_index = 0
+
+    def close_result_detail(self) -> None:
+        self.result_detail = None
 
 
 def _assert_matches(
@@ -144,54 +179,22 @@ def _overview_text(
     session: AtomizeWorkbenchSession,
     analysis: AtomizeAnalysisSession,
     findings: dict[str, AtomizeWorkbenchFinding],
+    *,
+    result_view: ResultWorkbenchView | None = None,
 ) -> str:
-    split_count = sum(
-        item.classification == "COMPOSITE" for item in analysis.items
+    view = result_view or AtomizeResultWorkbenchAdapter(analysis).view()
+    result = render_result_workbench_snapshot(view).rstrip()
+    return "\n".join(
+        [
+            result,
+            "",
+            (
+                f"Analysis [{analysis.uid[:8]}] · "
+                f"ORDER: {session.sort_mode} · "
+                f"{session.answered_count}/{len(findings)} answered"
+            ),
+        ]
     )
-    child_count = sum(
-        len(item.children)
-        for item in analysis.items
-        if item.classification == "COMPOSITE"
-    )
-    overview = analysis.overview
-    if overview is None:
-        raise ValueError("The saved atomize analysis has no overview.")
-    lines = [
-        (
-            f"MEM IMPACT · ATOMIZE · "
-            f"{safe_terminal_text(analysis.context_name)}"
-        ),
-        (
-            f"{analysis.memory_count} source Memories → "
-            f"{analysis.projected_memory_count} projected"
-        ),
-        (
-            f"{split_count} proposed "
-            f"{'split' if split_count == 1 else 'splits'} → "
-            f"{child_count} "
-            f"{'child' if child_count == 1 else 'children'}"
-        ),
-        (
-            f"Analysis [{analysis.uid[:8]}] · "
-            f"ORDER: {session.sort_mode} · "
-            f"{session.answered_count}/{len(findings)} answered"
-        ),
-        "",
-        "WHAT MEM UNDERSTOOD",
-        safe_terminal_text(
-            overview.understood.text or "No content summary was returned."
-        ),
-        "",
-        "WHAT CHANGED / REMAINS UNRESOLVED",
-        safe_terminal_text(
-            overview.changed.text or "No structural change was proposed."
-        ),
-        safe_terminal_text(
-            overview.unresolved.text
-            or "No unresolved local expression was reported."
-        ),
-    ]
-    return "\n".join(lines)
 
 
 def _list_text(
@@ -199,12 +202,22 @@ def _list_text(
     analysis: AtomizeAnalysisSession,
     findings: dict[str, AtomizeWorkbenchFinding],
     sources: dict[str, str],
+    *,
+    expanded_issue_uid: str | None = None,
+    reading_index: int = 0,
+    cursor_token: str = "",
+    result_view: ResultWorkbenchView | None = None,
 ) -> str:
     current = session.current_issue()
     lines = [
-        _overview_text(session, analysis, findings),
+        _overview_text(
+            session,
+            analysis,
+            findings,
+            result_view=result_view,
+        ),
         "",
-        "ISSUES",
+        "ACTIONABLE ISSUES",
     ]
     for index, descriptor in enumerate(
         session.ordered_issues(),
@@ -212,18 +225,37 @@ def _list_text(
     ):
         finding = findings[descriptor.uid]
         response = session.responses.get(descriptor.uid)
-        pointer = (
-            "›"
-            if current is not None and current.uid == descriptor.uid
-            else " "
+        is_current = current is not None and current.uid == descriptor.uid
+        is_expanded = is_current and expanded_issue_uid == descriptor.uid
+        pointer = "▾" if is_expanded else ("›" if is_current else " ")
+        marker = (
+            cursor_token
+            if is_current and (not is_expanded or not finding.readings)
+            else ""
         )
         status = "✓" if response is not None and response.answered else "·"
         source = sources.get(finding.source_uids[0], "")
         lines.append(
-            f"{pointer} {index:>2}. {status} {_issue_label(finding)} · "
+            f"{marker}{pointer} {index:>2}. {status} "
+            f"{_issue_label(finding)} · "
             f"{finding.classification}  “{_single_line(source, limit=48)}”"
         )
-        lines.extend(_reading_preview_lines(finding))
+        if is_expanded:
+            lines.extend(
+                f"      {line}" if line else ""
+                for line in _detail_text(
+                    session,
+                    analysis,
+                    findings,
+                    sources,
+                    reading_cursor_index=(
+                        reading_index if finding.readings else None
+                    ),
+                    reading_cursor_token=cursor_token,
+                ).splitlines()
+            )
+        else:
+            lines.extend(_reading_preview_lines(finding))
     if not findings:
         lines.append("  (no actionable atomize, ambiguity, or conflict issues)")
     return "\n".join(lines)
@@ -234,11 +266,25 @@ def _list_fragments(
     analysis: AtomizeAnalysisSession,
     findings: dict[str, AtomizeWorkbenchFinding],
     sources: dict[str, str],
+    *,
+    expanded_issue_uid: str | None = None,
+    reading_index: int = 0,
+    result_view: ResultWorkbenchView | None = None,
 ):
     """Keep the selected issue visible when a long list scrolls."""
     fragments: list[tuple[str, str]] = []
-    for line in _list_text(session, analysis, findings, sources).splitlines():
-        if line.startswith("›"):
+    for line in _list_text(
+        session,
+        analysis,
+        findings,
+        sources,
+        expanded_issue_uid=expanded_issue_uid,
+        reading_index=reading_index,
+        cursor_token=_LIST_CURSOR_TOKEN,
+        result_view=result_view,
+    ).splitlines():
+        if _LIST_CURSOR_TOKEN in line:
+            line = line.replace(_LIST_CURSOR_TOKEN, "", 1)
             fragments.append(("[SetCursorPosition]", ""))
         fragments.append(("", line + "\n"))
     return fragments
@@ -261,6 +307,9 @@ def _detail_text(
     analysis: AtomizeAnalysisSession,
     findings: dict[str, AtomizeWorkbenchFinding],
     sources: dict[str, str],
+    *,
+    reading_cursor_index: int | None = None,
+    reading_cursor_token: str = "",
 ) -> str:
     descriptor = session.current_issue()
     if descriptor is None:
@@ -318,9 +367,18 @@ def _detail_text(
         selected = session.selected_choice_index(descriptor)
         lines.extend(["", "READING OPTIONS"])
         for index, reading in enumerate(finding.readings, start=1):
-            pointer = "›" if selected == index - 1 else " "
+            if reading_cursor_index is None:
+                pointer = "›" if selected == index - 1 else " "
+                marker = ""
+            else:
+                pointer = "›" if reading_cursor_index == index - 1 else " "
+                marker = "● " if selected == index - 1 else "○ "
+            cursor_marker = (
+                reading_cursor_token if reading_cursor_index == index - 1 else ""
+            )
             lines.append(
-                f"{pointer} {index}. [{safe_terminal_text(reading.role)}] "
+                f"{cursor_marker}{pointer} {marker}{index}. "
+                f"[{safe_terminal_text(reading.role)}] "
                 f"{safe_terminal_text(reading.label)}"
             )
             if reading.label != reading.text:
@@ -352,6 +410,7 @@ def render_atomize_workbench_snapshot(
     _assert_matches(session, analysis)
     findings = _finding_map(analysis)
     sources = _source_map(analysis)
+    result_view = AtomizeResultWorkbenchAdapter(analysis).view()
     current = session.current_issue()
     response_text = ""
     if current is not None:
@@ -359,7 +418,13 @@ def render_atomize_workbench_snapshot(
         if response is not None:
             response_text = safe_terminal_text(response.text)
     lines = [
-        _list_text(session, analysis, findings, sources),
+        _list_text(
+            session,
+            analysis,
+            findings,
+            sources,
+            result_view=result_view,
+        ),
         "",
         _detail_text(session, analysis, findings, sources),
         "",
@@ -407,8 +472,33 @@ def run_atomize_workbench_shell(
         )
     findings = _finding_map(analysis)
     sources = _source_map(analysis)
+    result_adapter = AtomizeResultWorkbenchAdapter(analysis)
+    result_view = result_adapter.view()
     bindings = KeyBindings()
     status_message = {"value": ""}
+    navigation = _AtomizeNavigation()
+
+    def selected_result_case() -> ResultCase | None:
+        if not result_view.cases:
+            return None
+        navigation.result_case_index = max(
+            0,
+            min(
+                navigation.result_case_index,
+                len(result_view.cases) - 1,
+            ),
+        )
+        return result_view.cases[navigation.result_case_index]
+
+    def current_result_fragments():
+        selected_case = selected_result_case()
+        return result_workbench_fragments(
+            result_view,
+            selected_case_uid=(
+                selected_case.uid if selected_case is not None else None
+            ),
+            detail=navigation.result_detail,
+        )
 
     list_control = FormattedTextControl(
         text=lambda: _list_fragments(
@@ -416,7 +506,15 @@ def run_atomize_workbench_shell(
             analysis,
             findings,
             sources,
+            expanded_issue_uid=navigation.expanded_issue_uid,
+            reading_index=navigation.reading_index,
+            result_view=result_view,
         ),
+        focusable=True,
+        show_cursor=False,
+    )
+    result_control = FormattedTextControl(
+        text=current_result_fragments,
         focusable=True,
         show_cursor=False,
     )
@@ -469,8 +567,15 @@ def run_atomize_workbench_shell(
             detail_panel,
         ]
     )
-    body = DynamicContainer(
+    issue_body = DynamicContainer(
         lambda: split_body if session.layout == "SPLIT" else stacked_body
+    )
+    result_body = Window(
+        result_control,
+        wrap_lines=True,
+    )
+    body = DynamicContainer(
+        lambda: result_body if navigation.result_mode else issue_body
     )
     header = Window(
         FormattedTextControl(
@@ -478,6 +583,7 @@ def run_atomize_workbench_shell(
                 f" mem impact atomize · "
                 f"{safe_terminal_text(analysis.context_name)} · "
                 f"analysis={analysis.uid[:8]} "
+                f"view={'RESULT' if navigation.result_mode else 'ISSUES'} "
                 f"sort={session.sort_mode} layout={session.layout} "
                 f"answered={session.answered_count}/{len(findings)}"
             )
@@ -485,17 +591,37 @@ def run_atomize_workbench_shell(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    footer = Window(
-        FormattedTextControl(
-            lambda: (
-                f" {status_message['value']}"
-                if status_message["value"]
-                else (
-                    " ←/→ issue  ↑/↓ reading  1-5 choose  Enter input  "
-                    "Esc review  F2/Ctrl-S save+next  S sort  L layout  Q quit "
+
+    def footer_text() -> str:
+        if status_message["value"]:
+            return f" {status_message['value']}"
+        if navigation.result_mode:
+            if navigation.result_detail is None:
+                return (
+                    " ↑/↓ case  Enter expand  Esc/V issues  "
+                    "Q save+quit · result view is read-only "
                 )
+            return (
+                " Esc/Backspace collapse  V issues  "
+                "Q save+quit · result view is read-only "
             )
-        ),
+        expanded_uid = navigation.expanded_issue_uid
+        if expanded_uid is None:
+            navigation_help = " ↑/↓ issue  Enter open  Tab input  V result  "
+        elif findings[expanded_uid].readings:
+            navigation_help = (
+                " ↑/↓ reading  Enter choose/clear  "
+                "Esc/Backspace up  Tab input  "
+            )
+        else:
+            navigation_help = " Enter close  Esc/Backspace up  Tab input  "
+        return (
+            navigation_help
+            + "F2/Ctrl-S save+next  S sort  L layout  Q quit "
+        )
+
+    footer = Window(
+        FormattedTextControl(footer_text),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -531,20 +657,124 @@ def run_atomize_workbench_shell(
     def move(delta: int) -> None:
         if not capture_response():
             return
+        navigation.close()
         session.move(delta)
         load_response()
         save(session)
 
-    def move_choice(delta: int) -> None:
+    def current_expanded_issue():
         issue = session.current_issue()
+        if issue is None or navigation.expanded_issue_uid != issue.uid:
+            return None
+        return issue
+
+    def move_reading(delta: int) -> None:
+        issue = current_expanded_issue()
         if issue is None or not issue.choice_uids:
             return
-        selected = session.selected_choice_index(issue)
-        next_index = 0 if selected is None else selected + delta
-        next_index = max(0, min(next_index, len(issue.choice_uids) - 1))
-        session.select_choice(next_index)
-        save(session)
+        navigation.reading_index = max(
+            0,
+            min(
+                navigation.reading_index + delta,
+                len(issue.choice_uids) - 1,
+            ),
+        )
 
+    def open_or_choose() -> None:
+        issue = session.current_issue()
+        if issue is None:
+            return
+        if navigation.expanded_issue_uid != issue.uid:
+            navigation.expanded_issue_uid = issue.uid
+            selected = session.selected_choice_index(issue)
+            navigation.reading_index = 0 if selected is None else selected
+            return
+        if issue.choice_uids:
+            selected = session.selected_choice_index(issue)
+            session.select_choice(
+                None
+                if selected == navigation.reading_index
+                else navigation.reading_index
+            )
+            save(session)
+        navigation.close()
+
+    def show_result(event) -> None:
+        if not capture_response():
+            event.app.invalidate()
+            return
+        navigation.close()
+        navigation.result_mode = True
+        navigation.close_result_detail()
+        event.app.layout.focus(result_control)
+        event.app.invalidate()
+
+    def show_issues(event) -> None:
+        navigation.result_mode = False
+        navigation.close_result_detail()
+        event.app.layout.focus(list_control)
+        event.app.invalidate()
+
+    def move_result_case(delta: int) -> None:
+        if not result_view.cases:
+            return
+        navigation.result_case_index = max(
+            0,
+            min(
+                navigation.result_case_index + delta,
+                len(result_view.cases) - 1,
+            ),
+        )
+        navigation.close_result_detail()
+
+    @bindings.add("v", filter=has_focus(list_control))
+    def _show_result(event) -> None:
+        show_result(event)
+
+    @bindings.add("v", filter=has_focus(result_control))
+    def _show_issues(event) -> None:
+        show_issues(event)
+
+    @bindings.add("down", filter=has_focus(result_control))
+    def _next_result_case(event) -> None:
+        move_result_case(1)
+        event.app.invalidate()
+
+    @bindings.add("up", filter=has_focus(result_control))
+    def _previous_result_case(event) -> None:
+        move_result_case(-1)
+        event.app.invalidate()
+
+    @bindings.add("enter", filter=has_focus(result_control))
+    def _toggle_result_detail(event) -> None:
+        selected_case = selected_result_case()
+        if selected_case is None:
+            status_message["value"] = "No inspection case is available."
+            event.app.invalidate()
+            return
+        if (
+            navigation.result_detail is not None
+            and navigation.result_detail.case_uid == selected_case.uid
+        ):
+            navigation.close_result_detail()
+        else:
+            navigation.result_detail = result_adapter.case_detail(
+                selected_case.uid
+            )
+        status_message["value"] = ""
+        event.app.invalidate()
+
+    @bindings.add("escape", filter=has_focus(result_control))
+    @bindings.add("backspace", filter=has_focus(result_control))
+    def _collapse_result_or_return(event) -> None:
+        if navigation.result_detail is not None:
+            navigation.close_result_detail()
+            event.app.invalidate()
+        else:
+            show_issues(event)
+
+    # Keep horizontal issue movement as a compatibility alias for remote
+    # controllers; vertical arrows follow whichever list level is visible.
     @bindings.add("right", filter=has_focus(list_control))
     def _next_issue(event) -> None:
         move(1)
@@ -556,35 +786,35 @@ def run_atomize_workbench_shell(
         event.app.invalidate()
 
     @bindings.add("down", filter=has_focus(list_control))
-    def _next_reading(event) -> None:
-        move_choice(1)
+    def _next_issue_vertical(event) -> None:
+        if current_expanded_issue() is None:
+            move(1)
+        else:
+            move_reading(1)
         event.app.invalidate()
 
     @bindings.add("up", filter=has_focus(list_control))
-    def _previous_reading(event) -> None:
-        move_choice(-1)
-        event.app.invalidate()
-
-    for number in range(1, 6):
-
-        @bindings.add(str(number), filter=has_focus(list_control))
-        def _choose_number(event, number=number) -> None:
-            issue = session.current_issue()
-            if issue is not None and number <= len(issue.choice_uids):
-                session.select_choice(number - 1)
-                save(session)
-                event.app.invalidate()
-
-    @bindings.add("0", filter=has_focus(list_control))
-    def _clear_choice(event) -> None:
-        session.select_choice(None)
-        save(session)
+    def _previous_issue_vertical(event) -> None:
+        if current_expanded_issue() is None:
+            move(-1)
+        else:
+            move_reading(-1)
         event.app.invalidate()
 
     @bindings.add("enter", filter=has_focus(list_control))
+    def _open_or_choose(event) -> None:
+        open_or_choose()
+        event.app.invalidate()
+
     @bindings.add("tab", filter=has_focus(list_control))
     def _focus_response(event) -> None:
         event.app.layout.focus(response_area)
+
+    @bindings.add("escape", filter=has_focus(list_control))
+    @bindings.add("backspace", filter=has_focus(list_control))
+    def _close_expanded(event) -> None:
+        navigation.close()
+        event.app.invalidate()
 
     @bindings.add("escape", filter=has_focus(response_area))
     @bindings.add("tab", filter=has_focus(response_area))
@@ -598,6 +828,7 @@ def run_atomize_workbench_shell(
     def _save_and_next(event) -> None:
         if persist():
             event.app.layout.focus(list_control)
+            navigation.close()
             session.move(1)
             load_response()
             save(session)
@@ -606,6 +837,7 @@ def run_atomize_workbench_shell(
     @bindings.add("s", filter=has_focus(list_control))
     def _toggle_sort(event) -> None:
         if capture_response():
+            navigation.close()
             session.toggle_sort()
             load_response()
             save(session)
@@ -618,6 +850,7 @@ def run_atomize_workbench_shell(
         event.app.invalidate()
 
     @bindings.add("q", filter=has_focus(list_control), eager=True)
+    @bindings.add("q", filter=has_focus(result_control), eager=True)
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
         if persist():

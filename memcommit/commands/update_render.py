@@ -20,10 +20,21 @@ def _render_sources(operation: EditOperation | AddOperation) -> None:
     typer.secho(f"       Reason: {operation.reason}", dim=True)
 
 
-def render_plan(session: UpdateSession, *, staged: bool) -> None:
+def render_plan(
+    session: UpdateSession,
+    *,
+    staged: bool = False,
+    applied: bool = False,
+) -> None:
     """Render a canonical local plan without trusting model-formatted prose."""
+    if staged and applied:
+        raise ValueError("A plan cannot be both staged and applied.")
     edits, additions = count_operations(session)
-    heading = "Staged update" if staged else "Impact"
+    heading = (
+        "Applied update"
+        if applied
+        else ("Staged update" if staged else "Impact")
+    )
     typer.secho(
         f"{heading}: {session.source_name} -> {session.target_name}",
         bold=True,
@@ -60,7 +71,13 @@ def render_plan(session: UpdateSession, *, staged: bool) -> None:
         _render_sources(operation)
 
     typer.echo()
-    if staged:
+    if applied:
+        typer.echo(f"Updated local working copy {session.target_name}.")
+        typer.echo(
+            "No shared origin was changed. Contribution still requires "
+            "mem push or PR."
+        )
+    elif staged:
         typer.echo(f"Shared {session.target_name} is unchanged.")
     else:
         typer.echo("No changes applied.")

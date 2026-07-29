@@ -430,10 +430,11 @@ entry point therefore does not produce a different model proposal. A stale
 analysis fails closed. `mem impact atomize --refresh` is the explicit unframed
 reanalysis boundary.
 
-The first frame combines compact counts, source-linked `WHAT MEM UNDERSTOOD`
-and `WHAT CHANGED / REMAINS UNRESOLVED` blocks, the full typed issue list, and
-one selected detail. A reading-bearing list entry shows its explanatory reason
-once, then up to two provider-generated labels that aim for 2-10 words. The
+The first frame combines compact counts, source-linked `WHAT MEM UNDERSTOOD`,
+`WHAT HAPPENED`, and `WHAT REMAINS UNRESOLVED` blocks, sampled
+representative/boundary cases, the full typed issue list, and one selected
+detail. A reading-bearing list entry shows its explanatory reason once, then
+up to two provider-generated labels that aim for 2-10 words. The
 saved reading text remains complete and is the authority for detail, choice
 semantics, and reviewed reanalysis; the label is only a navigation aid.
 `SOURCE` means `Context.order`, not chronology.

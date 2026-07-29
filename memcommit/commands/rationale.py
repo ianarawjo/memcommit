@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands.review_shell import safe_terminal_text
+from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.provenance import ProvenanceError, TraceEvent, build_trace
 from memcommit.query_provider import connect_codex_chatgpt_provider
 from memcommit.rationale import (

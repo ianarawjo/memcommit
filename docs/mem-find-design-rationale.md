@@ -24,7 +24,7 @@ accepted as find results.
 
 ```bash
 mem find "accessible entrance during construction"
-mem find "parking changes" --context campus-wiki
+mem find "parking changes" --context facilities-reference
 mem find "parking changes" --limit 5
 mem find "parking changes" --direct
 ```

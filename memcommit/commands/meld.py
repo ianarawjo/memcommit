@@ -1,0 +1,950 @@
+"""Create, ground, resume, and explicitly apply a symmetric Context meld."""
+from __future__ import annotations
+
+import hashlib
+import sys
+from typing import Annotated, Optional
+
+import typer
+
+from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.meld import (
+    MeldError,
+    MeldIssue,
+    MeldSession,
+    meld_canonical_digest,
+)
+from memcommit.meld_provider import (
+    MeldProviderError,
+    assess_meld_turn,
+)
+from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.commands.meld_shell import run_meld_shell
+from memcommit.query_provider import (
+    CodexChatGPTProvider,
+    QueryProviderError,
+    connect_codex_chatgpt_provider,
+)
+from memcommit.store import (
+    ConcurrentContextUpdateError,
+    MemoryStore,
+    context_record_digest,
+)
+
+
+MELD_AGGREGATE_TIMEOUT_SECONDS = 300
+
+
+class MeldCommandError(RuntimeError):
+    """Safe user-facing orchestration failure."""
+
+
+def _connect_meld_provider(provider_factory):
+    provider = provider_factory()
+    if isinstance(provider, CodexChatGPTProvider):
+        provider.timeout = max(
+            provider.timeout,
+            MELD_AGGREGATE_TIMEOUT_SECONDS,
+        )
+    return provider
+
+
+def _single_line(value: str, *, limit: int = 90) -> str:
+    normalized = " ".join(safe_terminal_text(value).split())
+    return (
+        normalized
+        if len(normalized) <= limit
+        else normalized[: limit - 1].rstrip() + "…"
+    )
+
+
+def _issue_selector(
+    session: MeldSession,
+    selector: str,
+) -> MeldIssue:
+    assessment = session.current_assessment
+    if assessment is None:
+        raise MeldCommandError("The meld has no assessed issues.")
+    if selector.isdigit():
+        index = int(selector)
+        if 1 <= index <= len(assessment.issues):
+            return assessment.issues[index - 1]
+    matches = [
+        issue
+        for issue in assessment.issues
+        if issue.uid.startswith(selector)
+    ]
+    if len(matches) == 1:
+        return matches[0]
+    if not matches:
+        raise MeldCommandError(f"No meld issue matches '{selector}'.")
+    raise MeldCommandError(
+        f"Meld issue selector '{selector}' is ambiguous."
+    )
+
+
+def render_meld_session(
+    session: MeldSession,
+    *,
+    expanded_issue_uid: str | None = None,
+) -> str:
+    """Render one provider-free snapshot over a saved meld session."""
+    lines = [
+        f"MEM MELD · {session.mode}",
+        (
+            f"{session.frames[0].context_name} + "
+            f"{session.frames[1].context_name} → "
+            f"{session.target.context_name}"
+        ),
+        (
+            f"State: {session.state} · "
+            f"Round: {len(session.turns)}"
+        ),
+    ]
+    assessment = session.current_assessment
+    if assessment is None:
+        lines.extend(["", "Analysis is pending."])
+        return "\n".join(lines)
+    lines.extend(
+        [
+            "",
+            "WHAT MEM UNDERSTOOD",
+            safe_terminal_text(assessment.overview),
+            "",
+            (
+                f"RELATIONS · {len(assessment.relations)}  "
+                f"ISSUES · {len(assessment.issues)}  "
+                f"RESULTS · {len(assessment.proposals)}"
+            ),
+        ]
+    )
+    for index, relation in enumerate(assessment.relations, start=1):
+        marker = "?" if relation.status == "UNRESOLVED" else "✓"
+        lines.append(
+            f"  {marker} R{index}. {relation.kind} · "
+            f"{_single_line(relation.summary)}"
+        )
+    lines.extend(["", "ISSUES"])
+    relation_number = {
+        relation.uid: index
+        for index, relation in enumerate(assessment.relations, start=1)
+    }
+    relation_by_uid = {
+        relation.uid: relation for relation in assessment.relations
+    }
+    frame_by_uid = {frame.uid: frame for frame in session.frames}
+    memory_by_key = {
+        (frame.uid, memory.uid): memory
+        for frame in session.frames
+        for memory in frame.memories
+    }
+    if not assessment.issues:
+        lines.append("  (none)")
+    for index, issue in enumerate(assessment.issues, start=1):
+        expanded = issue.uid == expanded_issue_uid
+        pointer = "▾" if expanded else "›"
+        lines.append(
+            f"{pointer} {index:>2}. [{issue.priority}] "
+            f"{_single_line(issue.title)}"
+        )
+        lines.append(f"      WHY · {_single_line(issue.why_it_matters)}")
+        for option_index, option in enumerate(issue.options, start=1):
+            lines.append(
+                f"      ↳ {option_index}. {_single_line(option.label)}"
+            )
+            if expanded:
+                lines.append(
+                    f"         {safe_terminal_text(option.text)}"
+                )
+        if expanded:
+            lines.extend(
+                [
+                    f"      QUESTION · {safe_terminal_text(issue.question)}",
+                    f"      ISSUE UID · {issue.uid}",
+                    "      SOURCE MEMORIES",
+                ]
+            )
+            seen_members: set[tuple[str, str]] = set()
+            for relation_uid in issue.relation_uids:
+                relation = relation_by_uid[relation_uid]
+                for member in relation.members:
+                    key = (member.frame_uid, member.memory_uid)
+                    if key in seen_members:
+                        continue
+                    seen_members.add(key)
+                    frame = frame_by_uid[member.frame_uid]
+                    memory = memory_by_key[key]
+                    lines.append(
+                        "        - "
+                        f"{safe_terminal_text(frame.context_name)} "
+                        f"#{memory.position + 1} [{memory.uid[:8]}] · "
+                        f"{safe_terminal_text(memory.content)}"
+                    )
+            lines.append("      RELATED RELATIONS")
+            for relation_uid in issue.relation_uids:
+                relation = relation_by_uid[relation_uid]
+                lines.append(
+                    f"        - R{relation_number[relation_uid]} "
+                    f"{relation.kind} · "
+                    f"{safe_terminal_text(relation.reason)}"
+                )
+            affected = [
+                proposal
+                for proposal in assessment.proposals
+                if set(proposal.relation_uids) & set(issue.relation_uids)
+            ]
+            lines.append("      AFFECTED RESULTS")
+            if not affected:
+                lines.append(
+                    "        - unresolved; no target Memory is proposed yet"
+                )
+            for proposal in affected:
+                lines.append(
+                    f"        - [{proposal.disposition}] "
+                    f"{safe_terminal_text(proposal.content)}"
+                )
+    lines.extend(["", "PROPOSED TARGET MEMORIES"])
+    if not assessment.proposals:
+        lines.append("  (none until required issues are grounded)")
+    for index, proposal in enumerate(assessment.proposals, start=1):
+        lines.append(
+            f"  + {index:>2}. [{proposal.disposition}] "
+            f"{safe_terminal_text(proposal.content)}"
+        )
+        lines.append(
+            f"       WHY · {safe_terminal_text(proposal.reason)}"
+        )
+    if session.state == "AWAITING_REPLY":
+        lines.extend(
+            [
+                "",
+                "Resolve one: mem meld LEFT RIGHT --issue N --comment TEXT",
+                "Guide all:  mem meld LEFT RIGHT --comment TEXT",
+                "Preserve:   mem meld LEFT RIGHT --preserve-all",
+                "Defer:      mem meld LEFT RIGHT --defer-all",
+            ]
+        )
+    elif session.state == "READY_TO_APPLY":
+        lines.extend(
+            [
+                "",
+                "Apply exactly this proposal: mem meld LEFT RIGHT --accept",
+            ]
+        )
+    return "\n".join(lines)
+
+
+def _load_bound_contexts(
+    store: MemoryStore,
+    session: MeldSession,
+) -> tuple[Context, Context, Context]:
+    left = store.load_direct(session.frames[0].context_name)
+    right = store.load_direct(session.frames[1].context_name)
+    target = store.load_direct(session.target.context_name)
+    return left, right, target
+
+
+def _assert_source_bindings(
+    session: MeldSession,
+    left: Context,
+    right: Context,
+) -> None:
+    for frame, context in zip(
+        session.frames,
+        (left, right),
+        strict=True,
+    ):
+        if (
+            context.uid != frame.context_uid
+            or context.name != frame.context_name
+            or context_record_digest(context) != frame.context_digest
+        ):
+            raise MeldCommandError(
+                f"Source Context '{frame.context_name}' changed after this "
+                "meld was analyzed."
+            )
+
+
+def _assert_unapplied_target(
+    session: MeldSession,
+    target: Context,
+) -> None:
+    if (
+        target.uid != session.target.context_uid
+        or target.name != session.target.context_name
+        or context_record_digest(target) != session.target.context_digest
+    ):
+        raise MeldCommandError(
+            "The meld target changed after analysis; the proposal is stale."
+        )
+
+
+def _assess_and_save(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    provider_factory,
+    expected_session_digest: str | None,
+) -> MeldSession:
+    provider = _connect_meld_provider(provider_factory)
+    assessment = assess_meld_turn(session, provider)
+    # Provider latency creates a real race window. Rebind every source and the
+    # target after the call before persisting a claim about them.
+    left, right, target = _load_bound_contexts(store, session)
+    _assert_source_bindings(session, left, right)
+    _assert_unapplied_target(session, target)
+    current = session.current_turn
+    assert current is not None
+    session.record_assessment(current.uid, assessment)
+    store.save_meld_session(
+        session,
+        expected_session_digest=expected_session_digest,
+    )
+    return session
+
+
+def _meld_checkpoint_record(
+    session: MeldSession,
+    change_set,
+) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "session_uid": session.uid,
+        "turn_uid": change_set.turn_uid,
+        "mode": session.mode,
+        "change_set_digest": change_set.digest,
+        "change_set": change_set.to_dict(),
+        "sources": [
+            {
+                "frame_uid": frame.uid,
+                "context_uid": frame.context_uid,
+                "context_name": frame.context_name,
+                "context_digest": frame.context_digest,
+                "memories": [
+                    memory.to_dict() for memory in frame.memories
+                ],
+            }
+            for frame in session.frames
+        ],
+        "target_baseline": session.target.to_dict(),
+        "turns": [
+            {
+                "uid": turn.uid,
+                "sequence": turn.sequence,
+                "revision": turn.revision,
+                "scope": turn.scope,
+                "issue_uids": list(turn.issue_uids),
+                "comment": turn.comment,
+                "comment_sha256": hashlib.sha256(
+                    turn.comment.encode("utf-8")
+                ).hexdigest(),
+                "revises_turn_uids": list(turn.revises_turn_uids),
+            }
+            for turn in session.turns
+        ],
+        "results": [
+            {
+                "proposal_uid": proposal.uid,
+                "memory_uid": proposal.memory_uid,
+                "disposition": proposal.disposition,
+                "content_sha256": hashlib.sha256(
+                    proposal.content.encode("utf-8")
+                ).hexdigest(),
+                "source_members": [
+                    member.to_dict() for member in proposal.source_members
+                ],
+                "grounded_by_turn_uids": list(
+                    proposal.grounded_by_turn_uids
+                ),
+                "relation_uids": list(proposal.relation_uids),
+                "reason": proposal.reason,
+            }
+            for proposal in change_set.proposals
+        ],
+    }
+
+
+def _recover_application(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    target: Context,
+    change_set,
+) -> tuple[str, tuple[str, ...]] | None:
+    expected_uids = tuple(
+        proposal.memory_uid for proposal in change_set.proposals
+    )
+    current_items = tuple(target.iter_items())
+    if any(not isinstance(item, Memory) for item in current_items):
+        return None
+    current_memories = tuple(current_items)
+    if tuple(memory.uid for memory in current_memories) != expected_uids:
+        return None
+    if tuple(memory.content for memory in current_memories) != tuple(
+        proposal.content for proposal in change_set.proposals
+    ):
+        return None
+    for checkpoint in reversed(store.list_checkpoints(target.name)):
+        if checkpoint.get("command") != "meld":
+            continue
+        args = checkpoint.get("args")
+        record = args.get("meld") if isinstance(args, dict) else None
+        if (
+            isinstance(record, dict)
+            and record.get("session_uid") == session.uid
+            and record.get("change_set_digest") == change_set.digest
+            and isinstance(checkpoint.get("uid"), str)
+        ):
+            return checkpoint["uid"], expected_uids
+    return None
+
+
+def _accept(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    expected_session_digest: str,
+) -> tuple[bool, str, int]:
+    change_set = session.prepare_changes()
+    left, right, direct_target = _load_bound_contexts(store, session)
+    _assert_source_bindings(session, left, right)
+    if session.state == "APPLIED":
+        assert session.application is not None
+        recovered = _recover_application(
+            store=store,
+            session=session,
+            target=direct_target,
+            change_set=change_set,
+        )
+        if (
+            recovered is None
+            or recovered[0] != session.application.checkpoint_uid
+            or recovered[1] != session.application.result_memory_uids
+        ):
+            raise MeldCommandError(
+                "The applied meld receipt no longer matches the current "
+                "target and checkpoint."
+            )
+        return (
+            True,
+            session.application.checkpoint_uid,
+            len(session.application.result_memory_uids),
+        )
+    if context_record_digest(direct_target) != session.target.context_digest:
+        recovered = _recover_application(
+            store=store,
+            session=session,
+            target=direct_target,
+            change_set=change_set,
+        )
+        if recovered is None:
+            raise MeldCommandError(
+                "The meld target changed and does not match a recoverable "
+                "prior application."
+            )
+        checkpoint_uid, result_uids = recovered
+        session.record_application(
+            change_set_digest=change_set.digest,
+            checkpoint_uid=checkpoint_uid,
+            result_memory_uids=result_uids,
+        )
+        store.save_meld_session(
+            session,
+            expected_session_digest=expected_session_digest,
+        )
+        return True, checkpoint_uid, len(result_uids)
+
+    target = store.load_for_update(session.target.context_name)
+    _assert_unapplied_target(session, target)
+    for proposal in change_set.proposals:
+        target.add(
+            Memory(
+                uid=proposal.memory_uid,
+                content=proposal.content,
+            )
+        )
+    checkpoint = store.save_meld_target(
+        target,
+        AutoCheckpoint(
+            command="meld",
+            args={"meld": _meld_checkpoint_record(session, change_set)},
+            description=(
+                f"Melded '{session.frames[0].context_name}' and "
+                f"'{session.frames[1].context_name}' into "
+                f"'{target.name}': {len(change_set.proposals)} results"
+            ),
+        ),
+        expected_context_digest=session.target.context_digest,
+        source_bindings=(
+            (
+                frame.context_name,
+                frame.context_uid,
+                frame.context_digest,
+            )
+            for frame in session.frames
+        ),
+    )
+    if checkpoint is None:
+        raise MeldCommandError("Meld application created no checkpoint.")
+    result_uids = tuple(
+        proposal.memory_uid for proposal in change_set.proposals
+    )
+    session.record_application(
+        change_set_digest=change_set.digest,
+        checkpoint_uid=checkpoint.uid,
+        result_memory_uids=result_uids,
+    )
+    store.save_meld_session(
+        session,
+        expected_session_digest=expected_session_digest,
+    )
+    return False, checkpoint.uid, len(result_uids)
+
+
+def _run_interactive(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    provider_factory,
+) -> MeldSession:
+    """Run issue and whole-set turns through one shared interactive shell."""
+    while session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}:
+        action = run_meld_shell(session)
+        if action is None:
+            break
+        expected = meld_canonical_digest(session.to_dict())
+        if action.kind == "DEFER_ALL":
+            session.keep_review_only()
+            store.save_meld_session(
+                session,
+                expected_session_digest=expected,
+            )
+            break
+        if action.kind == "ACCEPT":
+            _accept(
+                store=store,
+                session=session,
+                expected_session_digest=expected,
+            )
+            break
+        if action.kind == "PRESERVE_ALL":
+            session.start_turn(
+                (
+                    "Preserve every remaining supported source distinction "
+                    "with explicit scope and provenance. Do not present "
+                    "unresolved alternatives as one consistent rule."
+                ),
+                scope="REMAINING",
+            )
+        elif action.kind == "COMMENT_ALL":
+            session.start_turn(action.comment, scope="ALL")
+        elif action.kind == "COMMENT_ISSUE":
+            assessment = session.current_assessment
+            assert assessment is not None and action.issue_uid is not None
+            issue = next(
+                item
+                for item in assessment.issues
+                if item.uid == action.issue_uid
+            )
+            parts: list[str] = []
+            if action.choice_index is not None:
+                option = issue.options[action.choice_index]
+                parts.append(f"Choose this reading: {option.text}")
+            if action.comment:
+                parts.append(action.comment)
+            session.start_turn(
+                "\n\n".join(parts),
+                scope="ISSUE",
+                issue_uids=(issue.uid,),
+            )
+        else:
+            raise MeldCommandError(
+                f"Unsupported interactive meld action '{action.kind}'."
+            )
+        session = _assess_and_save(
+            store=store,
+            session=session,
+            provider_factory=provider_factory,
+            expected_session_digest=expected,
+        )
+    return session
+
+
+def cmd(
+    left: Annotated[
+        str,
+        typer.Argument(help="First PEER source Context"),
+    ],
+    right: Annotated[
+        str,
+        typer.Argument(help="Second PEER source Context"),
+    ],
+    issue: Annotated[
+        Optional[str],
+        typer.Option(
+            "--issue",
+            help="Issue number or unique uid prefix for this comment",
+        ),
+    ] = None,
+    choice: Annotated[
+        Optional[int],
+        typer.Option(
+            "--choice",
+            min=1,
+            help="Choose one displayed reading for --issue",
+        ),
+    ] = None,
+    comment: Annotated[
+        Optional[str],
+        typer.Option(
+            "--comment",
+            help="Explain one issue or guide all remaining relations",
+        ),
+    ] = None,
+    preserve_all: Annotated[
+        bool,
+        typer.Option(
+            "--preserve-all",
+            help="Ask to retain every remaining source distinction",
+        ),
+    ] = False,
+    defer_all: Annotated[
+        bool,
+        typer.Option(
+            "--defer-all",
+            help="Close as review-only without applying the target",
+        ),
+    ] = False,
+    accept: Annotated[
+        bool,
+        typer.Option(
+            "--accept",
+            help="Apply the exact ready proposal without another model call",
+        ),
+    ] = False,
+    restart: Annotated[
+        bool,
+        typer.Option(
+            "--restart",
+            help=(
+                "Replace the saved review session after rechecking an empty "
+                "target"
+            ),
+        ),
+    ] = False,
+    revision: Annotated[
+        Optional[str],
+        typer.Option(
+            "--revision",
+            help="How the comment relates to prior dialogue",
+        ),
+    ] = None,
+    revises_turn: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--revises-turn",
+            help="Prior turn uid for a correction or retraction",
+        ),
+    ] = None,
+    expand: Annotated[
+        Optional[str],
+        typer.Option(
+            "--expand",
+            help="Render one issue's complete options provider-free",
+        ),
+    ] = None,
+) -> None:
+    """Meld two equal-authority Contexts into the current empty Context."""
+    action_count = sum(
+        (
+            comment is not None or choice is not None,
+            preserve_all,
+            defer_all,
+            accept,
+            restart,
+        )
+    )
+    if action_count > 1:
+        typer.secho(
+            "Meld error: use one comment, preserve, defer, accept, or restart "
+            "action.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if expand is not None and action_count:
+        typer.secho(
+            "Meld error: --expand cannot be combined with a semantic or "
+            "terminal action.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if choice is not None and issue is None:
+        typer.secho(
+            "Meld error: --choice requires --issue.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if issue is not None and comment is None and choice is None:
+        typer.secho(
+            "Meld error: --issue requires --comment or --choice.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if (
+        (revision is not None or revises_turn)
+        and comment is None
+        and choice is None
+    ):
+        typer.secho(
+            "Meld error: --revision and --revises-turn require a comment "
+            "or choice.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+
+    store = MemoryStore(create=False)
+    try:
+        target_name = store.current_context_name()
+        if not target_name:
+            raise MeldCommandError(
+                "No current target Context. Run 'mem init TARGET' "
+                "first."
+            )
+        if left == right or target_name in {left, right}:
+            raise MeldCommandError(
+                "The two sources and active target must be distinct Contexts."
+            )
+        if not store.context_exists(left) or not store.context_exists(right):
+            raise MeldCommandError("One or both source Contexts do not exist.")
+        target = store.load_direct(target_name)
+        session = store.load_meld_session(target.uid)
+
+        if session is None:
+            if any(
+                (
+                    comment is not None,
+                    choice,
+                    preserve_all,
+                    defer_all,
+                    accept,
+                    restart,
+                )
+            ):
+                raise MeldCommandError(
+                    "Start the meld with a plain 'mem meld LEFT RIGHT' first."
+                )
+            left_ctx = store.load_direct(left)
+            right_ctx = store.load_direct(right)
+            session = MeldSession.create_symmetric(
+                left_ctx,
+                right_ctx,
+                target,
+            )
+            session.start_initial_analysis()
+            session = _assess_and_save(
+                store=store,
+                session=session,
+                provider_factory=connect_codex_chatgpt_provider,
+                expected_session_digest=None,
+            )
+            if sys.stdin.isatty() and sys.stdout.isatty():
+                session = _run_interactive(
+                    store=store,
+                    session=session,
+                    provider_factory=connect_codex_chatgpt_provider,
+                )
+            typer.echo(render_meld_session(session))
+            return
+
+        if restart:
+            prior_digest = meld_canonical_digest(session.to_dict())
+            left_ctx = store.load_direct(left)
+            right_ctx = store.load_direct(right)
+            replacement = MeldSession.create_symmetric(
+                left_ctx,
+                right_ctx,
+                target,
+            )
+            replacement.start_initial_analysis()
+            session = _assess_and_save(
+                store=store,
+                session=replacement,
+                provider_factory=connect_codex_chatgpt_provider,
+                expected_session_digest=prior_digest,
+            )
+            if sys.stdin.isatty() and sys.stdout.isatty():
+                session = _run_interactive(
+                    store=store,
+                    session=session,
+                    provider_factory=connect_codex_chatgpt_provider,
+                )
+            typer.echo(render_meld_session(session))
+            return
+
+        if {frame.context_name for frame in session.frames} != {left, right}:
+            raise MeldCommandError(
+                "The active target already has a meld from different sources."
+            )
+        expected_session_digest = meld_canonical_digest(session.to_dict())
+        left_ctx, right_ctx, target = _load_bound_contexts(store, session)
+        _assert_source_bindings(session, left_ctx, right_ctx)
+        if not accept and session.state != "APPLIED":
+            _assert_unapplied_target(session, target)
+
+        if accept:
+            recovered, checkpoint_uid, result_count = _accept(
+                store=store,
+                session=session,
+                expected_session_digest=expected_session_digest,
+            )
+            typer.echo(render_meld_session(session))
+            if recovered:
+                typer.secho(
+                    "Recovered the prior meld application; no duplicate "
+                    "checkpoint was created.",
+                    fg=typer.colors.YELLOW,
+                )
+            else:
+                typer.secho(
+                    f"Applied {result_count} meld results in checkpoint "
+                    f"[{checkpoint_uid[:8]}].",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+            return
+
+        if defer_all:
+            session.keep_review_only()
+            store.save_meld_session(
+                session,
+                expected_session_digest=expected_session_digest,
+            )
+            typer.echo(render_meld_session(session))
+            typer.secho(
+                "Deferred this meld without changing the target.",
+                fg=typer.colors.YELLOW,
+            )
+            return
+
+        if preserve_all:
+            session.start_turn(
+                (
+                    "Preserve every remaining supported source distinction "
+                    "with explicit scope and provenance. Do not present "
+                    "unresolved alternatives as one consistent rule."
+                ),
+                scope="REMAINING",
+            )
+            session = _assess_and_save(
+                store=store,
+                session=session,
+                provider_factory=connect_codex_chatgpt_provider,
+                expected_session_digest=expected_session_digest,
+            )
+            typer.echo(render_meld_session(session))
+            return
+
+        if comment is not None or choice is not None:
+            selected_issue = (
+                _issue_selector(session, issue) if issue is not None else None
+            )
+            text_parts: list[str] = []
+            if choice is not None:
+                assert selected_issue is not None
+                if choice > len(selected_issue.options):
+                    raise MeldCommandError(
+                        f"Issue has only {len(selected_issue.options)} choices."
+                    )
+                option = selected_issue.options[choice - 1]
+                text_parts.append(
+                    f"Choose this reading: {option.text}"
+                )
+            if comment is not None and comment.strip():
+                text_parts.append(comment)
+            turn_comment = "\n\n".join(text_parts)
+            revision_value = (revision or "extend").strip().upper()
+            if revision_value not in {
+                "CONFIRM",
+                "EXTEND",
+                "CORRECT",
+                "RETRACT",
+            }:
+                raise MeldCommandError(
+                    "--revision must be confirm, extend, correct, or retract."
+                )
+            revises = tuple(revises_turn or ())
+            if revises and revision_value not in {"CORRECT", "RETRACT"}:
+                raise MeldCommandError(
+                    "--revises-turn is valid only with --revision correct or "
+                    "retract."
+                )
+            session.start_turn(
+                turn_comment,
+                scope=("ISSUE" if selected_issue is not None else "ALL"),
+                issue_uids=(
+                    (selected_issue.uid,)
+                    if selected_issue is not None
+                    else ()
+                ),
+                revision=revision_value,  # type: ignore[arg-type]
+                revises_turn_uids=revises,
+            )
+            session = _assess_and_save(
+                store=store,
+                session=session,
+                provider_factory=connect_codex_chatgpt_provider,
+                expected_session_digest=expected_session_digest,
+            )
+            typer.echo(render_meld_session(session))
+            return
+
+        expanded_uid = None
+        if expand is not None:
+            expanded_uid = _issue_selector(session, expand).uid
+        interactive_ran = (
+            expand is None
+            and sys.stdin.isatty()
+            and sys.stdout.isatty()
+            and session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}
+        )
+        if interactive_ran:
+            session = _run_interactive(
+                store=store,
+                session=session,
+                provider_factory=connect_codex_chatgpt_provider,
+            )
+        typer.echo(
+            render_meld_session(
+                session,
+                expanded_issue_uid=expanded_uid,
+            )
+        )
+        if interactive_ran:
+            typer.secho(
+                "Interactive meld state saved.",
+                fg=typer.colors.CYAN,
+            )
+        else:
+            typer.secho(
+                "Resumed without calling the semantic provider.",
+                fg=typer.colors.CYAN,
+            )
+    except (
+        FileNotFoundError,
+        OSError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+        ConcurrentContextUpdateError,
+        MeldError,
+        MeldProviderError,
+        MeldCommandError,
+        QueryProviderError,
+    ) as error:
+        typer.secho(f"Meld error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)

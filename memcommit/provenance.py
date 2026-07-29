@@ -34,6 +34,7 @@ EventKind = Literal[
     "TRANSLATED",
     "ATOMIZE_KEEP",
     "ATOMIZE_PRESERVED",
+    "MELDED",
     "REORDERED",
     "HISTORY_GAP",
 ]
@@ -785,6 +786,287 @@ def _grounding_change_evidence(
         seen_change_proposals.add(proposal_uid)
     if seen_change_proposals != set(change_set_proposals):
         return {}, "has incomplete grounding change evidence"
+    return by_uid, None
+
+
+def _meld_change_evidence(
+    *,
+    args: dict[str, Any],
+    before: _Frame,
+    after: _Frame,
+) -> tuple[dict[str, dict[str, Any]], str | None]:
+    """Validate one symmetric meld receipt against its target snapshots."""
+    record = args.get("meld")
+    required = {
+        "schema_version",
+        "session_uid",
+        "turn_uid",
+        "mode",
+        "change_set_digest",
+        "change_set",
+        "sources",
+        "target_baseline",
+        "turns",
+        "results",
+    }
+    if not isinstance(record, dict) or set(record) != required:
+        return {}, "has no valid meld record"
+    if (
+        record.get("schema_version") != 1
+        or record.get("mode") != "SYMMETRIC"
+    ):
+        return {}, "has an unsupported meld record"
+    try:
+        from memcommit.meld import MeldChangeSet, meld_canonical_digest
+
+        change_set = MeldChangeSet.from_dict(record["change_set"])
+    except (KeyError, TypeError, ValueError):
+        return {}, "has an invalid meld change set"
+    if (
+        record.get("session_uid") != change_set.session_uid
+        or record.get("turn_uid") != change_set.turn_uid
+        or record.get("change_set_digest") != change_set.digest
+        or change_set.target_uid != before.context_uid
+        or change_set.target_digest != before.record_digest
+    ):
+        return {}, "has mismatched meld identities or target binding"
+    target = record.get("target_baseline")
+    if (
+        not isinstance(target, dict)
+        or set(target) != {
+            "context_uid",
+            "context_name",
+            "context_digest",
+        }
+        or target.get("context_uid") != before.context_uid
+        or target.get("context_name") != before.context_name
+        or target.get("context_digest") != before.record_digest
+    ):
+        return {}, "has a mismatched meld target baseline"
+    sources = record.get("sources")
+    if not isinstance(sources, list) or len(sources) != len(
+        change_set.source_frame_digests
+    ):
+        return {}, "has invalid meld source bindings"
+    expected_frame_digests = dict(change_set.source_frame_digests)
+    source_labels: dict[str, str] = {}
+    source_memory_text: dict[tuple[str, str], str] = {}
+    for source in sources:
+        if (
+            not isinstance(source, dict)
+            or set(source)
+            != {
+                "frame_uid",
+                "context_uid",
+                "context_name",
+                "context_digest",
+                "memories",
+            }
+            or source.get("frame_uid") not in expected_frame_digests
+            or source.get("context_digest")
+            != expected_frame_digests[source["frame_uid"]]
+            or not isinstance(source.get("context_uid"), str)
+            or not isinstance(source.get("context_name"), str)
+        ):
+            return {}, "has invalid meld source bindings"
+        raw_memories = source.get("memories")
+        if not isinstance(raw_memories, list) or not raw_memories:
+            return {}, "has invalid meld source snapshots"
+        memory_records: dict[str, dict[str, object]] = {}
+        order: list[str] = []
+        for position, memory in enumerate(raw_memories):
+            if (
+                not isinstance(memory, dict)
+                or set(memory)
+                != {
+                    "uid",
+                    "content",
+                    "position",
+                    "content_digest",
+                }
+                or not isinstance(memory.get("uid"), str)
+                or not isinstance(memory.get("content"), str)
+                or memory.get("position") != position
+                or memory["uid"] in memory_records
+                or memory.get("content_digest")
+                != hashlib.sha256(
+                    memory["content"].encode("utf-8")
+                ).hexdigest()
+            ):
+                return {}, "has invalid meld source snapshots"
+            memory_records[memory["uid"]] = {
+                "type": "memory",
+                "uid": memory["uid"],
+                "content": memory["content"],
+            }
+            order.append(memory["uid"])
+            source_memory_text[
+                (source["frame_uid"], memory["uid"])
+            ] = memory["content"]
+        try:
+            source_context = Context.from_dict(
+                {
+                    "uid": source["context_uid"],
+                    "name": source["context_name"],
+                    "memories": memory_records,
+                    "order": order,
+                }
+            )
+        except (KeyError, TypeError, ValueError):
+            return {}, "has invalid meld source snapshots"
+        if (
+            context_record_digest(source_context)
+            != source["context_digest"]
+        ):
+            return {}, "has source snapshots that do not match their digest"
+        source_labels[source["frame_uid"]] = (
+            f"{source['context_name']}#{source['context_uid'][:8]}"
+        )
+    if set(source_labels) != set(expected_frame_digests):
+        return {}, "has incomplete meld source bindings"
+
+    turns = record.get("turns")
+    expected_turn_digests = dict(change_set.turn_digests)
+    if (
+        not isinstance(turns, list)
+        or len(turns) != len(expected_turn_digests)
+    ):
+        return {}, "has invalid meld turns"
+    turn_comments: dict[str, str] = {}
+    for turn in turns:
+        if (
+            not isinstance(turn, dict)
+            or set(turn)
+            != {
+                "uid",
+                "sequence",
+                "revision",
+                "scope",
+                "issue_uids",
+                "comment",
+                "comment_sha256",
+                "revises_turn_uids",
+            }
+            or not isinstance(turn.get("uid"), str)
+            or not isinstance(turn.get("comment"), str)
+            or not isinstance(turn.get("comment_sha256"), str)
+            or hashlib.sha256(
+                turn["comment"].encode("utf-8")
+            ).hexdigest()
+            != turn["comment_sha256"]
+            or turn["uid"] in turn_comments
+        ):
+            return {}, "has invalid meld turns"
+        evidence_payload = {
+            key: turn[key]
+            for key in (
+                "uid",
+                "sequence",
+                "revision",
+                "scope",
+                "issue_uids",
+                "comment",
+                "revises_turn_uids",
+            )
+        }
+        if (
+            turn["uid"] not in expected_turn_digests
+            or meld_canonical_digest(evidence_payload)
+            != expected_turn_digests[turn["uid"]]
+        ):
+            return {}, "has meld turns outside the accepted change set"
+        turn_comments[turn["uid"]] = turn["comment"]
+    if set(turn_comments) != set(expected_turn_digests):
+        return {}, "has incomplete meld turn evidence"
+
+    results = record.get("results")
+    if not isinstance(results, list) or len(results) != len(
+        change_set.proposals
+    ):
+        return {}, "has invalid meld result records"
+    proposal_by_uid = {
+        proposal.uid: proposal for proposal in change_set.proposals
+    }
+    by_uid: dict[str, dict[str, Any]] = {}
+    for result in results:
+        if (
+            not isinstance(result, dict)
+            or set(result)
+            != {
+                "proposal_uid",
+                "memory_uid",
+                "disposition",
+                "content_sha256",
+                "source_members",
+                "grounded_by_turn_uids",
+                "relation_uids",
+                "reason",
+            }
+        ):
+            return {}, "has invalid meld result records"
+        proposal = proposal_by_uid.get(result.get("proposal_uid"))
+        memory_uid = result.get("memory_uid")
+        if (
+            proposal is None
+            or memory_uid != proposal.memory_uid
+            or memory_uid in before.memories
+            or memory_uid not in after.memories
+            or after.memories[memory_uid].content != proposal.content
+            or result.get("disposition") != proposal.disposition
+            or result.get("content_sha256")
+            != hashlib.sha256(
+                proposal.content.encode("utf-8")
+            ).hexdigest()
+            or result.get("source_members")
+            != [
+                member.to_dict() for member in proposal.source_members
+            ]
+            or result.get("grounded_by_turn_uids")
+            != list(proposal.grounded_by_turn_uids)
+            or result.get("relation_uids")
+            != list(proposal.relation_uids)
+            or result.get("reason") != proposal.reason
+            or any(
+                (member.frame_uid, member.memory_uid)
+                not in source_memory_text
+                for member in proposal.source_members
+            )
+        ):
+            return {}, "does not match its recorded meld result"
+        source_lines = [
+            (
+                f"Source {source_labels[member.frame_uid]} "
+                f"Memory [{member.memory_uid[:8]}]: "
+                f"{source_memory_text[(member.frame_uid, member.memory_uid)]}"
+            )
+            for member in proposal.source_members
+            if member.frame_uid in source_labels
+        ]
+        turn_lines = [
+            f"Turn [{turn_uid[:8]}]: {turn_comments[turn_uid]}"
+            for turn_uid in proposal.grounded_by_turn_uids
+            if turn_uid in turn_comments and turn_comments[turn_uid]
+        ]
+        by_uid[memory_uid] = {
+            "session_uid": change_set.session_uid,
+            "change_set_digest": change_set.digest,
+            "disposition": proposal.disposition,
+            "reason": proposal.reason,
+            "declared_frame": "\n".join([*source_lines, *turn_lines]),
+        }
+    if set(by_uid) != {
+        proposal.memory_uid for proposal in change_set.proposals
+    }:
+        return {}, "has incomplete meld result evidence"
+    if (
+        set(after.memories) - set(before.memories) != set(by_uid)
+        or set(before.memories) - set(after.memories)
+        or any(
+            before.memories[uid].content != after.memories[uid].content
+            for uid in set(before.memories) & set(after.memories)
+        )
+    ):
+        return {}, "does not match the meld target snapshot transition"
     return by_uid, None
 
 
@@ -1643,6 +1925,18 @@ def _transition_events(
                 f"Checkpoint [{checkpoint_uid[:8]}] {grounding_error}; "
                 "its changes were reconstructed from snapshots."
             )
+    meld_changes: dict[str, dict[str, Any]] = {}
+    if command == "meld":
+        meld_changes, meld_error = _meld_change_evidence(
+            args=args,
+            before=before,
+            after=after,
+        )
+        if meld_error is not None:
+            warnings.append(
+                f"Checkpoint [{checkpoint_uid[:8]}] {meld_error}; "
+                "its results were reconstructed from snapshots."
+            )
 
     (
         translation_events,
@@ -1796,9 +2090,16 @@ def _transition_events(
     for uid in sorted(added, key=lambda item: after.memories[item].position):
         occurrence, occurrence_evidence = occurrences.get(uid, (None, None))
         grounding = grounding_changes.get(uid)
-        event_kind: EventKind = "MERGED_IN" if command == "merge" else "CREATED"
+        meld = meld_changes.get(uid)
+        event_kind: EventKind = (
+            "MERGED_IN"
+            if command == "merge"
+            else ("MELDED" if meld is not None else "CREATED")
+        )
         evidence: Evidence
         if grounding is not None:
+            evidence = "RECORDED"
+        elif meld is not None:
             evidence = "RECORDED"
         elif occurrence_evidence is not None:
             evidence = occurrence_evidence
@@ -1821,49 +2122,83 @@ def _transition_events(
                     grounding["reason"]
                     if grounding is not None
                     else (
-                        "Copied into this Context's source-based initial frame "
-                        f"from '{source_context['name']}'."
-                        if recorded_init_copy
-                        else None
+                        meld["reason"]
+                        if meld is not None
+                        else (
+                            "Copied into this Context's source-based initial "
+                            f"frame from '{source_context['name']}'."
+                            if recorded_init_copy
+                            else None
+                        )
                     )
                 ),
                 reason_codes=(
                     ("ATOMIZE_GROUNDING",)
                     if grounding is not None
-                    else ()
+                    else (
+                        ("MELD", meld["disposition"])
+                        if meld is not None
+                        else ()
+                    )
                 ),
                 source_occurrence=occurrence,
                 operation_id=(
                     grounding["session_uid"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["session_uid"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 declared_frame=(
                     grounding["declared_frame"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["declared_frame"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 declared_frame_digest=(
                     hashlib.sha256(
                         grounding["declared_frame"].encode("utf-8")
                     ).hexdigest()
                     if grounding is not None
-                    else None
+                    else (
+                        hashlib.sha256(
+                            meld["declared_frame"].encode("utf-8")
+                        ).hexdigest()
+                        if meld is not None
+                        else None
+                    )
                 ),
                 uncertainty_reason=(
                     "Created after a multi-turn atomize grounding dialogue."
                     if grounding is not None
-                    else None
+                    else (
+                        "Created by an accepted symmetric Context meld."
+                        if meld is not None
+                        else None
+                    )
                 ),
                 source_review_uid=(
                     grounding["session_uid"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["session_uid"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 source_review_digest=(
                     grounding["change_set_digest"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["change_set_digest"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 source_analysis_uid=(
                     grounding["source_analysis_uid"]

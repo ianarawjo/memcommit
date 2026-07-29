@@ -17,6 +17,14 @@ def invoke(*args: str):
     return runner.invoke(app, list(args))
 
 
+def test_switch_help_documents_namespace_parent_navigation():
+    result = invoke("switch", "--help")
+
+    assert result.exit_code == 0
+    assert "use '..' for an existing" in result.output
+    assert "namespace parent" in result.output
+
+
 def test_picker_preselects_current_and_accepts_enter():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\r")
@@ -166,3 +174,66 @@ def test_explicit_switch_remains_noninteractive(
 
     assert result.exit_code == 0
     assert MemoryStore().current_context_name() == "alpha"
+
+
+def test_switch_dot_dot_moves_to_existing_lexical_namespace_parent(
+    isolated_store,
+):
+    invoke("init", "organization/wiki")
+    invoke("init", "organization/wiki/facilities")
+
+    result = invoke("switch", "..")
+
+    assert result.exit_code == 0
+    assert "Switched to context 'organization/wiki'." in result.output
+    assert MemoryStore().current_context_name() == "organization/wiki"
+
+
+def test_switch_dot_dot_without_current_context_preserves_state(
+    isolated_store,
+):
+    result = invoke("switch", "..")
+
+    assert result.exit_code == 1
+    assert "no current context is set" in result.output
+    assert MemoryStore().current_context_name() is None
+
+
+def test_switch_dot_dot_from_root_context_preserves_state(
+    isolated_store,
+):
+    invoke("init", "campus")
+
+    result = invoke("switch", "..")
+
+    assert result.exit_code == 1
+    assert "context 'campus' has no namespace parent" in result.output
+    assert MemoryStore().current_context_name() == "campus"
+
+
+def test_switch_dot_dot_requires_exact_parent_context(
+    isolated_store,
+):
+    invoke("init", "organization/wiki")
+
+    result = invoke("switch", "..")
+
+    assert result.exit_code == 1
+    assert "namespace parent context 'organization' does not exist" in result.output
+    assert MemoryStore().current_context_name() == "organization/wiki"
+
+
+def test_switch_dot_dot_does_not_infer_an_embedding_parent(
+    isolated_store,
+):
+    invoke("init", "container")
+    invoke("init", "topic/leaf")
+    embedded = invoke("embed", "topic/leaf", "--into", "container")
+    assert embedded.exit_code == 0
+    invoke("switch", "topic/leaf")
+
+    result = invoke("switch", "..")
+
+    assert result.exit_code == 1
+    assert "namespace parent context 'topic' does not exist" in result.output
+    assert MemoryStore().current_context_name() == "topic/leaf"

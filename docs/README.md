@@ -24,6 +24,16 @@ limitation, the relevant focused `*-design-rationale.md` document must state
 the reason and the remaining boundary. A conversation-only explanation is not
 considered sufficient design history.
 
+## Directional update contract notes
+
+- [`task-1-naming-contract.md`](task-1-naming-contract.md) fixes the distinct
+  names and authority roles of the query-only organizational origin, writable
+  participant fork, and verified local source.
+- [`mem-impact-update-design-rationale.md`](mem-impact-update-design-rationale.md)
+  defines impact preview, validated local application, per-owner checkpoints,
+  applied-result receipts, exception rollback, deterministic diff, and the
+  still-separate future publication boundary.
+
 ## Translation contract
 
 - [`mem-translate-design-rationale.md`](mem-translate-design-rationale.md)
@@ -33,6 +43,12 @@ considered sufficient design history.
 
 ## Atomize contract notes
 
+- [`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md)
+  generalizes the result-explanation hierarchy shared by bounded semantic
+  operations: compact counts, what was understood, what happened, what remains
+  unresolved, and traceable representative or boundary cases. It also records
+  why that shared presentation must not flatten operation-specific semantics
+  or mutation authority.
 - [`mem-atomize-design-rationale.md`](mem-atomize-design-rationale.md) defines
   atomicity, source grounding, preview/application boundaries, and lineage.
 - [`mem-atomize-workbench-design-rationale.md`](mem-atomize-workbench-design-rationale.md)
@@ -49,6 +65,15 @@ considered sufficient design history.
 - [`mem-atomize-grounding-screen-captures.md`](mem-atomize-grounding-screen-captures.md)
   indexes exact tested CLI captures for the workbench, awaiting, resumed,
   corrected ready, and applied states.
+
+## Meld contract note
+
+- [`mem-meld-design-rationale.md`](mem-meld-design-rationale.md) distills the
+  directional and symmetric authority modes; explains issue/all/remaining
+  turn scope; documents the implemented symmetric Context workbench and
+  the atomize flow's lossless directional/issue projection with shared
+  turn-lineage validation; and records their relation, provenance, approval,
+  and mutation contracts.
 
 ## Compare contract note
 

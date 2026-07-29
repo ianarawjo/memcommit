@@ -194,7 +194,7 @@ def _origin_events(trace: TraceReport) -> tuple[TraceEvent, ...]:
     return tuple(
         event
         for event in trace.events
-        if event.kind in {"CREATED", "MERGED_IN"}
+        if event.kind in {"CREATED", "MERGED_IN", "MELDED"}
         and any(state.uid in root_uids for state in event.after)
     )
 
@@ -205,8 +205,9 @@ def _recorded_reason_events(trace: TraceReport) -> tuple[TraceEvent, ...]:
         for event in trace.events
         if event.reason
         and (
-            event.kind not in {"CREATED", "MERGED_IN"}
+            event.kind not in {"CREATED", "MERGED_IN", "MELDED"}
             or event.command == "atomize-grounding"
+            or event.command == "meld"
         )
     )
 
@@ -305,7 +306,7 @@ def _proposal_evidence(
     sessions = []
     for label, loader in (
         ("impact", store.load_impact_plan),
-        ("staged update", store.load_staged_update),
+        ("active update", store.load_staged_update),
     ):
         try:
             session = loader()

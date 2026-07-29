@@ -16,8 +16,8 @@ UPDATE_RESPONSE_CHAR_LIMIT = 1_000_000
 UPDATE_OPERATION_LIMIT = 200
 UPDATE_SOURCE_REFS_PER_OPERATION = 50
 UPDATE_REASON_CHAR_LIMIT = 1_000
-UPDATE_SCHEMA_VERSION = 1
-UpdateStatus = Literal["impact", "staged"]
+UPDATE_SCHEMA_VERSION = 2
+UpdateStatus = Literal["impact", "staged", "applied"]
 
 
 class UpdateError(RuntimeError):
@@ -230,6 +230,127 @@ class AddOperation:
 UpdateOperation: TypeAlias = EditOperation | AddOperation
 
 
+def operation_digest(operations: tuple[UpdateOperation, ...]) -> str:
+    """Hash the exact ordered operation set approved for one update."""
+    return _sha256_json([operation.to_dict() for operation in operations])
+
+
+@dataclass(frozen=True)
+class UpdateCheckpointReceipt:
+    context_uid: str
+    context_name: str
+    checkpoint_uid: str
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "context_uid": self.context_uid,
+            "context_name": self.context_name,
+            "checkpoint_uid": self.checkpoint_uid,
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> UpdateCheckpointReceipt:
+        data = _require_exact_keys(
+            value,
+            {"context_uid", "context_name", "checkpoint_uid"},
+            "update checkpoint receipt",
+        )
+        return cls(
+            context_uid=_require_string(
+                data["context_uid"],
+                "checkpoint owner Context uid",
+            ),
+            context_name=_require_string(
+                data["context_name"],
+                "checkpoint owner Context name",
+            ),
+            checkpoint_uid=_require_uuid(
+                data["checkpoint_uid"],
+                "update checkpoint uid",
+            ),
+        )
+
+
+@dataclass(frozen=True)
+class UpdateApplicationReceipt:
+    applied_at: str
+    operation_digest: str
+    target_digest: str
+    target_contexts: tuple[ContextFingerprint, ...]
+    checkpoints: tuple[UpdateCheckpointReceipt, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "applied_at": self.applied_at,
+            "operation_digest": self.operation_digest,
+            "target_digest": self.target_digest,
+            "target_contexts": [
+                context.to_dict()
+                for context in self.target_contexts
+            ],
+            "checkpoints": [
+                checkpoint.to_dict()
+                for checkpoint in self.checkpoints
+            ],
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> UpdateApplicationReceipt:
+        data = _require_exact_keys(
+            value,
+            {
+                "applied_at",
+                "operation_digest",
+                "target_digest",
+                "target_contexts",
+                "checkpoints",
+            },
+            "update application receipt",
+        )
+        operation_hash = data["operation_digest"]
+        target_digest = data["target_digest"]
+        if not _is_sha256(operation_hash):
+            raise ValueError("Invalid update operation digest.")
+        if not _is_sha256(target_digest):
+            raise ValueError("Invalid applied target digest.")
+        if not isinstance(data["target_contexts"], list):
+            raise ValueError("Invalid applied target Context fingerprints.")
+        if not isinstance(data["checkpoints"], list):
+            raise ValueError("Invalid update checkpoint receipts.")
+        target_contexts = tuple(
+            ContextFingerprint.from_dict(item)
+            for item in data["target_contexts"]
+        )
+        checkpoints = tuple(
+            UpdateCheckpointReceipt.from_dict(item)
+            for item in data["checkpoints"]
+        )
+        context_identities = [
+            (context.uid, context.name)
+            for context in target_contexts
+        ]
+        if len(context_identities) != len(set(context_identities)):
+            raise ValueError("Duplicate applied target Context fingerprint.")
+        checkpoint_owners = [
+            (checkpoint.context_uid, checkpoint.context_name)
+            for checkpoint in checkpoints
+        ]
+        if len(checkpoint_owners) != len(set(checkpoint_owners)):
+            raise ValueError("Duplicate update checkpoint owner.")
+        if not set(checkpoint_owners) <= set(context_identities):
+            raise ValueError("Update checkpoint owner is outside the target.")
+        return cls(
+            applied_at=_require_string(
+                data["applied_at"],
+                "update application time",
+            ),
+            operation_digest=operation_hash,
+            target_digest=target_digest,
+            target_contexts=target_contexts,
+            checkpoints=checkpoints,
+        )
+
+
 def _parse_owner(value: object) -> tuple[str, str]:
     owner = _require_exact_keys(value, {"uid", "name"}, "operation owner")
     return (
@@ -338,9 +459,33 @@ class UpdateSession:
     target_digest: str
     target_contexts: tuple[ContextFingerprint, ...]
     operations: tuple[UpdateOperation, ...]
+    application: UpdateApplicationReceipt | None = None
 
     def with_status(self, status: UpdateStatus) -> UpdateSession:
-        return replace(self, status=status)
+        if status not in {"impact", "staged"}:
+            raise ValueError(
+                "Only impact or staged status can be assigned without an "
+                "application receipt."
+            )
+        return replace(self, status=status, application=None)
+
+    def with_application(
+        self,
+        application: UpdateApplicationReceipt,
+    ) -> UpdateSession:
+        if self.status != "staged":
+            raise ValueError(
+                "Only a staged update can receive an application receipt."
+            )
+        if application.operation_digest != operation_digest(self.operations):
+            raise ValueError(
+                "Application receipt does not match the update operations."
+            )
+        return replace(
+            self,
+            status="applied",
+            application=application,
+        )
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -370,28 +515,60 @@ class UpdateSession:
                 operation.to_dict()
                 for operation in self.operations
             ],
+            "application": (
+                self.application.to_dict()
+                if self.application is not None
+                else None
+            ),
         }
 
     @classmethod
     def from_dict(cls, value: object) -> UpdateSession:
-        data = _require_exact_keys(
-            value,
-            {
-                "schema_version",
-                "uid",
-                "status",
-                "created_at",
-                "source",
-                "target",
-                "operations",
-            },
-            "update session",
-        )
-        if data["schema_version"] != UPDATE_SCHEMA_VERSION:
+        if not isinstance(value, dict):
+            raise ValueError("Invalid update session.")
+        schema_version = value.get("schema_version")
+        if schema_version == 1:
+            data = _require_exact_keys(
+                value,
+                {
+                    "schema_version",
+                    "uid",
+                    "status",
+                    "created_at",
+                    "source",
+                    "target",
+                    "operations",
+                },
+                "update session",
+            )
+            application = None
+        elif schema_version == UPDATE_SCHEMA_VERSION:
+            data = _require_exact_keys(
+                value,
+                {
+                    "schema_version",
+                    "uid",
+                    "status",
+                    "created_at",
+                    "source",
+                    "target",
+                    "operations",
+                    "application",
+                },
+                "update session",
+            )
+            application = (
+                None
+                if data["application"] is None
+                else UpdateApplicationReceipt.from_dict(data["application"])
+            )
+        else:
             raise ValueError("Unsupported update session schema version.")
         status = data["status"]
-        if status not in {"impact", "staged"}:
+        if status not in {"impact", "staged", "applied"}:
             raise ValueError("Invalid update session status.")
+        if (status == "applied") != (application is not None):
+            raise ValueError("Invalid update application state.")
 
         source = _require_exact_keys(
             data["source"],
@@ -433,6 +610,40 @@ class UpdateSession:
         ]
         if len(operation_identities) != len(set(operation_identities)):
             raise ValueError("Duplicate Memory uid in update session.")
+        if (
+            application is not None
+            and application.operation_digest != operation_digest(operations)
+        ):
+            raise ValueError(
+                "Update application receipt does not match its operations."
+            )
+        if application is not None:
+            target_contexts = tuple(
+                ContextFingerprint.from_dict(item)
+                for item in target["contexts"]
+            )
+            if [
+                (context.uid, context.name)
+                for context in application.target_contexts
+            ] != [
+                (context.uid, context.name)
+                for context in target_contexts
+            ]:
+                raise ValueError(
+                    "Applied target Context identities changed."
+                )
+            operation_owners = {
+                (operation.owner_context_uid, operation.owner_context_name)
+                for operation in operations
+            }
+            checkpoint_owners = {
+                (checkpoint.context_uid, checkpoint.context_name)
+                for checkpoint in application.checkpoints
+            }
+            if operation_owners != checkpoint_owners:
+                raise ValueError(
+                    "Update checkpoints do not cover every affected Context."
+                )
 
         return cls(
             uid=_require_uuid(data["uid"], "update session uid"),
@@ -456,6 +667,7 @@ class UpdateSession:
                 for item in target["contexts"]
             ),
             operations=operations,
+            application=application,
         )
 
 
@@ -998,6 +1210,10 @@ def plan_update(
     status: UpdateStatus = "impact",
 ) -> UpdateSession:
     """Ask a provider for a validated, non-mutating update plan."""
+    if status not in {"impact", "staged"}:
+        raise ValueError(
+            "Planning may create only an impact or staged update."
+        )
     if source.uid == target.uid:
         raise UpdateError("A Context cannot update itself.")
     inputs = collect_update_inputs(source, target)
@@ -1052,6 +1268,36 @@ def session_matches(
         and session.source_contexts == inputs.source_contexts
         and session.target_contexts
         == inputs.target_context_fingerprints
+    )
+
+
+def applied_session_matches(
+    session: UpdateSession,
+    source: Context,
+    target: Context,
+) -> bool:
+    """Return whether A and the locally applied B still match the receipt."""
+    application = session.application
+    if (
+        session.status != "applied"
+        or application is None
+        or session.source_uid != source.uid
+        or session.source_name != source.name
+        or session.target_uid != target.uid
+        or session.target_name != target.name
+    ):
+        return False
+    try:
+        inputs = collect_update_inputs(source, target)
+    except UpdateError:
+        return False
+    return (
+        session.source_digest == inputs.source_digest
+        and session.source_contexts == inputs.source_contexts
+        and application.target_digest == inputs.target_digest
+        and application.target_contexts
+        == inputs.target_context_fingerprints
+        and application.operation_digest == operation_digest(session.operations)
     )
 
 

@@ -18,16 +18,81 @@ These commands express a directional semantic operation:
 update target Context B from current Context A
 ```
 
-Context A is verified evidence. Context B is the working target. This is not a
-symmetric merge and it is not a command for manually replacing one Memory by
-UID.
+Context A is verified evidence. Context B is a writable local working target.
+This is not a symmetric merge and it is not a command for manually replacing
+one Memory by UID.
+
+## Task 1 authority boundary: query-only origin and writable local fork
+
+Task 1 uses two different wiki-bearing objects and must not collapse them into
+one Context. The canonical identifiers follow
+[`task-1-naming-contract.md`](task-1-naming-contract.md):
+
+| Role | Task 1 example | Authority |
+| --- | --- | --- |
+| organizational origin | `campus-wiki` | query-only; never an `impact` or `update` mutation target |
+| participant fork | `participant/campus-wiki-fork` | writable local Context graph containing only the participant's assigned wiki scope |
+| verified change source | `participant/construction-updates` | readable local evidence |
+
+The study setup is assumed to provision the scoped local fork before the
+participant begins. The current `mem branch` command does not create it from
+the query-only origin. The fork contains a writable snapshot of the wiki
+sections for which the participant is responsible, not a readable clone of the
+whole organizational wiki. Its scope is selected by responsibility and
+authority, not by foreknowledge of the impact result: it must include every
+page that could reasonably be affected in the assigned scope, plus relevant
+unchanged pages, rather than only the records already known to require edits.
+`impact` still has to identify the affected subset. It may also carry a
+`QueryContextRef` named `campus-wiki`, allowing questions to be sent to the
+opaque organizational origin without copying that origin into ordinary Context
+storage.
+
+For the current study simplification, that provisioned fork is assumed to be
+the latest approved snapshot of the assigned organizational scope when Task 1
+starts, and that remote scope is assumed not to change concurrently during the
+task. The query-only adapter cannot verify either condition. A future
+publication adapter must replace this assumption with an upstream base revision
+and a compare-and-swap or equivalent remote-divergence check.
+
+Fixture review must separately verify that the fork covers the complete
+authorized candidate scope. Otherwise a missing affected page would be
+indistinguishable from a correct no-change judgment, and Task 1 could not claim
+that all affected parts were updated.
+
+This separation makes the mutation boundary explicit:
+
+```text
+query campus-wiki when additional organizational context is needed
+→ preview verified changes against participant/campus-wiki-fork
+→ apply them to participant/campus-wiki-fork
+→ inspect the local diff
+→ later push or propose that diff to campus-wiki
+```
+
+`impact` and `update` therefore target the local fork. A future `push` or PR is
+the only operation that may contribute from that fork toward the
+organizational origin, and it remains a separate approval and permission
+boundary. `update` must never interpret access to a query-only origin as write
+authority.
+
+The current prototype does not yet create this fork, persist its upstream
+binding, refresh it, or publish it. Its `QueryContextRef` can represent the
+opaque origin pointer, but the scoped fork and origin relationship is presently
+a Task 1 fixture and future persistence contract. This section records the
+intended model; it does not claim that remote collaboration or access control
+has been implemented.
+
+This revises the original example workflow: the participant does not
+`mem switch campus-wiki` or use the organizational origin as the `--to`
+target. The participant may query that origin through its pointer, inspect the
+local fork, and run `impact` and `update` against the fork.
 
 ## Usage
 
 ```bash
-mem switch construction-updates
-mem impact --to campus-wiki
-mem update --to campus-wiki
+mem switch participant/construction-updates
+mem impact --to participant/campus-wiki-fork
+mem update --to participant/campus-wiki-fork
 ```
 
 The two impact forms are mutually exclusive:
@@ -45,15 +110,40 @@ A. It does not change either Context. The validated plan is cached locally so
 an immediately following `update` can reuse exactly what the participant
 reviewed.
 
-`update` stages that validated plan locally. It still does not modify B.
-`mem diff` renders the same staged operations as a deterministic unified diff.
-A future `mem push` can verify the recorded base state before applying or
-contributing them.
+The **current implementation** of `update` promotes a matching impact plan to
+a staged intent and then materializes its validated edits and additions in B.
+It changes only directly owned `Memory` values in the writable local fork.
+`MemoryRef`, `QueryContextRef`, embedded-Context pointers, the verified source,
+and the query-only organizational origin remain unchanged. Deletion is not an
+update operation.
+
+Before the first write, application reloads the complete recorded A/B graph,
+checks its identities and fingerprints, validates every operation and old
+content value, and prepares detached post-images for all affected direct owner
+Contexts. It then holds the active-update lock and all recorded Context write
+locks, saves one post-image per affected owner, and creates one automatic
+checkpoint per affected owner. Every checkpoint carries the same update
+session UID and ordered-operation digest. Only after all owners have been
+saved does the active record become `applied` and receive the result
+fingerprints and checkpoint receipts.
+
+`mem diff` renders the captured baseline-to-result operations deterministically
+after application. It does not recompute a model result or compare arbitrary
+Contexts. Publication still requires a later `push` or PR.
 
 If the cached impact plan is stale because A or B changed, `update` plans again
 instead of promoting stale operations. Running `update` repeatedly with the
-same A and B is idempotent. A different staged update is preserved unless the
+same A and applied B is idempotent: it recognizes the result receipt and
+neither reconnects to the provider nor creates another checkpoint. A
+different, stale, or diverged active update record is preserved unless the
 participant explicitly supplies `--replace-stage`.
+
+An ordinary exception during a multi-owner write restores every owner already
+written and removes the checkpoints created by that attempt, leaving the
+staged record available for inspection or retry. Per-file writes are atomic,
+but there is not yet a durable transaction journal. A process or machine crash
+between owner writes can therefore leave a partial local application. This is
+an explicit prototype limitation to resolve before remote publication.
 
 ## Task 1 resolution boundary and incomplete general path
 
@@ -62,12 +152,12 @@ directional impact is expected to be reasonable and conflict-free, so the
 participant path does not open a clarification or reconciliation dialogue:
 
 ```text
-verified A
-→ impact preview
+verified local A
+→ impact preview against writable local fork B
 → optional provenance review
-→ update stage
-→ diff
-→ future local application and contribution
+→ update applies B locally
+→ diff of fork baseline versus local result
+→ future contribution to query-only organizational origin
 ```
 
 This is an intentional **Task 1 scenario boundary**, not a general invariant
@@ -90,12 +180,25 @@ recorded in
 [`cross-operation-grounding-design-rationale.md`](cross-operation-grounding-design-rationale.md).
 It is documented design work, not behavior advertised by the current command.
 
+The same missing state currently prevents Update from adopting the common
+semantic-result workbench defined in
+[`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md).
+An edits/additions-only plan can explain exact proposed changes, but it cannot
+say whether an omitted source was already present, irrelevant, overlooked, or
+unresolved. Update must first record exhaustive source disposition,
+source-linked understanding and outcome sections, unresolved findings, and
+traceable inspection cases. Until then, displaying “no unresolved finding”
+would fabricate evidence rather than reuse a presentation asset honestly.
+
 ## Method
 
 Both commands use one planner:
 
-1. Recursively visit explicitly embedded Contexts in A and B.
-2. Treat directly owned `Memory` values in B as writable.
+1. Recursively visit explicitly embedded Contexts in A and the writable local
+   fork B.
+2. Treat directly owned `Memory` values in B as writable only because B is the
+   participant-owned fork; never use the query-only organizational origin as
+   B.
 3. Treat resolved `MemoryRef` values in A as readable evidence.
 4. Never open `QueryContextRef` sources and never edit `MemoryRef` values.
 5. Give a temporary Codex process only per-run candidate IDs and visible text.
@@ -132,10 +235,12 @@ Every detailed mode prints each operation's source provenance and reason. The
 command does not depend on the currently selected Context and it does not write
 Contexts, checkpoints, state, or session files.
 
-Before rendering, the command reloads the recorded A and B Context graphs. If
-their identities or planner-visible contents changed after staging, the
-captured diff is still shown but marked stale and the command exits with a
-failure status. A future push must refuse that stale stage.
+Before rendering, the command reloads the recorded A and B Context graphs. For
+a staged record it verifies the captured base; for an applied record it
+verifies the captured source and the receipt's result fingerprints. If those
+identities or planner-visible contents changed, the captured diff is still
+shown but marked stale and the command exits with a failure status. A future
+push must refuse a stale applied result.
 
 ## Local artifacts
 
@@ -144,10 +249,14 @@ failure status. A future push must refuse that stale stage.
 ~/.mem/staged-update.json
 ```
 
-These files contain canonical operation records, owner Context identities,
-old and new content, provenance hashes, and source/target fingerprints. They
-are written atomically. Context JSON and checkpoints are not modified by
-either command.
+These files contain canonical operation records, owner Context identities, old
+and new content, provenance hashes, and source/target base fingerprints. The
+impact file remains read-only planning evidence. During `update`, the active
+file first records the staged intent and, after successful local application,
+records status `applied`, the operation digest, applied target fingerprints,
+the application time, and one checkpoint receipt per affected owner. An empty
+plan has no affected owners or checkpoints but still records an applied result.
+Each individual JSON file replacement is atomic.
 
 `mem impact atomize` deliberately neither reads nor overwrites these files.
 Its one-shot result is provisional but is cached separately at
@@ -156,6 +265,6 @@ artifact for explicit in-place or save-as application; it is not interchangeable
 with a directional update plan.
 
 This is a research-prototype trust boundary, not remote collaboration or an
-access-control system. A later push implementation must reload every owner
-Context, verify the recorded identities and base fingerprints, and perform a
-full preflight before writing any Context.
+access-control system. A later push implementation must separately verify the
+fork's upstream binding, remote base, and publication authority before
+contributing anything to `campus-wiki`.

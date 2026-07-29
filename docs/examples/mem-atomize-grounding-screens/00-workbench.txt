@@ -1,16 +1,26 @@
-MEM IMPACT · ATOMIZE · temp/grounding
-2 source Memories → 2 projected
-0 proposed splits → 0 children
+ RESULT · atomize · temp/grounding
+ STATUS · READ-ONLY PREVIEW · sources=2 · projected=2 · splits=0 · children=0 · review issues=4
+
+ WHAT MEM UNDERSTOOD
+ The notes describe student and staff NFC access.
+
+ WHAT HAPPENED
+ No source has yet been rewritten.
+
+ WHAT REMAINS UNRESOLVED
+ The accepted NFC method remains unclear.
+
+Saved records contain 2 actionable quality findings and 2 uncertain atomization items.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [BOUNDARY] AMBIGUITY · COMPETING / REQUIRED
+       The note permits physical-card or app guidance, but the accepted Main Building method is unclear.
+    2. [BOUNDARY] UNCERTAIN · RECONCILE
+       The source needs a local authentication reading.
+
 Analysis [<ANALYSIS>] · ORDER: SOURCE · 0/4 answered
 
-WHAT MEM UNDERSTOOD
-The notes describe student and staff NFC access.
-
-WHAT CHANGED / REMAINS UNRESOLVED
-No source has yet been rewritten.
-The accepted NFC method remains unclear.
-
-ISSUES
+ACTIONABLE ISSUES
 ›  1. · AMBIGUITY · COMPETING · REQUIRED  “Students should be guided to use a physical car…”
       WHY · The note permits physical-card or app guidance, but the accepted Main Building method is unclear.
       ↳ R1 · Physical card only

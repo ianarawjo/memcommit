@@ -45,6 +45,7 @@ IMPLEMENTATION_LEVELS = {
     "list": "implemented",
     "log": "implemented",
     "ls": "implemented",
+    "meld": "partial",
     "merge": "partial",
     "query": "implemented",
     "rationale": "implemented",

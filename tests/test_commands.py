@@ -58,7 +58,8 @@ class TestHelp:
         assert any(
             line.startswith("update ")
             and " - partial " in line
-            and "target remains unchanged" in line
+            and "local target" in line
+            and "no shared publication" in line
             for line in lines
         )
         list_row = next(line for line in lines if line.startswith("list "))

@@ -292,6 +292,11 @@ def test_one_call_uses_opaque_ids_preserves_pair_and_never_mutates():
         for source_uid in source_uids
     )
     assert len(payload["context"]["memories"]) == 3
+    assert payload["meld_contract"] == {
+        "authority_mode": "DIRECTIONAL",
+        "turn_scope": "ISSUE",
+        "input_roles": ["CLARIFICATION", "BASELINE"],
+    }
     assert payload["anchor"]["arity"] == "UNARY"
     assert len(payload["turns"]) == 1
     assert payload["previous_assessment"] is None

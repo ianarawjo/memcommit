@@ -207,13 +207,18 @@ is rejected regardless.
 ## Overview screen
 
 The first screen should be an overview, not the detail page for issue 1.
+Its information hierarchy is the first concrete adapter for the
+operation-neutral contract in
+[`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md).
+Atomize still owns its classifications, complete issue list, response state,
+reanalysis, and application boundary; only the result explanation and case
+inspection grammar are shared.
+
 A representative shape is:
 
 ```text
-MEM IMPACT · ATOMIZE · temp/task-1
-
-51 source Memories -> 61 projected
-7 proposed splits -> 17 children
+RESULT · atomize · temp/task-1
+STATUS · READ-ONLY PREVIEW · sources=51 · projected=61 · splits=7 · children=17
 
 WHAT MEM UNDERSTOOD
 The notes describe a summer building closure affecting entrances, parking,
@@ -221,11 +226,17 @@ routes, stores, dining, visitor services, restrooms, and event reservations,
 while preserving staff-access and elevator exceptions and identifying
 replacement services elsewhere on campus.
 
-WHAT CHANGED / REMAINS UNRESOLVED
+WHAT HAPPENED
 Compound notes were separated into independently revisable closures,
-exceptions, alternatives, and continuing services. Unresolved expressions
-such as "the same NFC," "after that time," and "this building" were retained
-without guessing their referents.
+exceptions, alternatives, and continuing services.
+
+WHAT REMAINS UNRESOLVED
+Expressions such as "the same NFC," "after that time," and "this building"
+were retained without guessing their referents.
+
+REPRESENTATIVE / BOUNDARY CASES
+> REPRESENTATIVE · Split a compound closure from its replacement service
+  BOUNDARY       · Retain "the same NFC" pending an exact local referent
 
 ISSUES · 0/4 answered                             ORDER: SOURCE
 > 1. AMBIGUITY · DOMINANT/REQUIRED  "the same NFC..."
@@ -279,13 +290,15 @@ The block must not:
 - claim independent verification merely because the proposal model generated
   the summary.
 
-### `WHAT CHANGED / REMAINS UNRESOLVED`
+### `WHAT HAPPENED` and `WHAT REMAINS UNRESOLVED`
 
-This block answers a different question: "What did atomization do to that
+The first block answers a different question: "What did atomization do to that
 content?" It identifies meaningful structural changes, such as separating a
 closure from its replacement service or preserving a condition with the claim
-it scopes. It also names expressions that could not safely be resolved from
-the current Context.
+it scopes. The second names expressions that could not safely be resolved from
+the current Context. They are separate because a successful structural result
+must not visually absorb or soften the uncertainty that still blocks a
+judgment.
 
 It exists because the content summary alone can be correct while the proposed
 split is poor. Conversely, a list of split counts cannot explain whether
@@ -492,12 +505,14 @@ issue happened to appear first. The reviewer must consolidate the exact
 context into one response and clear the other. Supporting multiple structured
 origins would require a later provenance-schema revision.
 
-### Future issue types
+### Other operation adapters
 
-Update, reconcile, distill, meld, and sever may reuse the list, detail, choice,
-and response controls. They must define their own arity, evidence, mutation,
-and trace contracts before being added. Visual similarity is not permission
-to erase operation-specific semantics.
+Update, reconcile, distill, and sever may reuse the list, detail, choice, and
+response controls, but must define their own arity, evidence, mutation, and
+trace contracts before being added. Context-to-Context symmetric meld now
+reuses the interaction grammar in a separate workbench with its own peer
+relation ledger. Visual similarity is not permission to erase
+operation-specific semantics.
 
 ## Detail screen
 
@@ -596,14 +611,51 @@ it was a refinement, comment, replacement, or new canonical Memory.
 
 The implemented prompt-toolkit interaction is:
 
-- left/right: previous or next issue;
-- up/down or digits: select a reading or other typed choice when available;
-- Enter or Tab: focus the unified response field;
-- Escape or Tab: return to issue navigation;
+- `V`: toggle between the common semantic-result view and Atomize's complete
+  actionable issue workbench;
+- in the common result view, up/down selects a sampled representative or
+  boundary case, Enter expands its saved
+  evidence--judgment--outcome/unresolved trace, and Escape/Backspace collapses
+  it or returns to the issue workbench;
+- up/down at the issue level: previous or next issue, matching the vertical
+  list;
+- Enter at the issue level: expand that issue inline with its complete typed
+  detail and reading text;
+- up/down inside an expanded issue: move over its available readings;
+- Enter on a reading: select it, or clear it when it was already selected,
+  then return to the issue level;
+- Enter again on an expanded issue with no reading choices: collapse it;
+- Escape or Backspace: collapse the expanded issue without changing the
+  semantic selection;
+- left/right: compatibility aliases for previous or next issue;
+- Tab: focus the unified response field;
+- Escape or Tab from that field: return to list navigation;
 - F2 or Ctrl-S: save the current response and move to the next issue;
 - `S`: toggle `SOURCE` and `PRIORITY`;
 - `L`: toggle split and stacked layouts; and
 - `Q` or Ctrl-C: save and close.
+
+Earlier builds used left/right for issue movement and up/down for choices.
+That spatial split made an up arrow move within the current issue instead of
+to the visibly preceding issue. An intermediate design moved issues vertically
+but retained numbered choice shortcuts. That still required the reviewer to
+map a number to a collapsed reading instead of navigating the visible
+structure. The workbench now uses Enter to drill into one expanded issue,
+up/down to move within that level, and Enter again to toggle the reading.
+Left/right remain issue aliases so existing remote controllers do not break.
+
+Expansion and the hovered reading are ephemeral presentation state. Reopening
+the shell starts at the durable issue cursor in a collapsed list, while the
+selected reading and freeform response remain saved. Persisting a half-open
+terminal layout would add no semantic evidence and could restore poorly at a
+different terminal size.
+
+The result view is also ephemeral and read-only. It samples the first
+source-order validated outcome per realized Atomize result class and at most
+one saved example per quality-boundary kind, preferring actionable findings.
+This is deterministic outcome coverage, not a claim that the examples are
+statistically typical or semantically hardest. The complete `ACTIONABLE
+ISSUES` list remains authoritative and must not be replaced by the sample.
 
 Split and stacked layouts are two presentations of the same state, not two
 review models. Cursor, choices, and responses must survive a layout switch.
@@ -778,10 +830,10 @@ The following decisions are stable enough to guide implementation and tests:
   active.
 - Reopening or taking a snapshot never silently reruns semantic analysis.
 - Reanalysis is explicit, and applying it must identify the exact analysis.
-- The first screen contains counts, `WHAT MEM UNDERSTOOD`,
-  `WHAT CHANGED / REMAINS UNRESOLVED`, and the complete actionable issue list;
-  reading-bearing issues include one explanatory `WHY` line and up to two
-  compact reading labels.
+- The first screen contains counts, `WHAT MEM UNDERSTOOD`, `WHAT HAPPENED`,
+  `WHAT REMAINS UNRESOLVED`, sampled representative/boundary cases, and the
+  complete actionable issue list; reading-bearing issues include one
+  explanatory `WHY` line and up to two compact reading labels.
 - The count line is a scale signal, not evidence of correctness.
 - Understanding and transformation summaries are concise and traceable.
 - Unknown referents are retained and reported rather than guessed.
@@ -801,7 +853,9 @@ The following decisions are stable enough to guide implementation and tests:
 - Choice selection and freeform evidence are independent.
 - The shell uses one field labeled
   `REFINE, COMMENT, OR ENTER A DIFFERENT READING`.
-- Left/right navigate issues; up/down or digits select typed choices.
+- Up/down navigate the current list level; Enter expands an issue or toggles
+  its focused reading, while Escape/Backspace returns one presentation level.
+- Left/right remain issue-navigation compatibility aliases.
 - Split and stacked terminal layouts present the same durable state.
 - A stable snapshot supports remote control and non-TTY inspection.
 - Natural-language chat instructions are translated by the controlling agent,
@@ -852,9 +906,11 @@ optional and explicitly confirmed.
 
 The complete design rationale is
 [`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md).
-The immediate follow-up is to extract the human-grounding turn invariant for
-the existing `mem ground` workbench. That generalization, artifact migration,
-and cross-operation sharing are not part of the atomize slice.
+The atomize dialogue now reuses the common meld turn-lineage invariant and
+declares itself as `DIRECTIONAL` / `ISSUE` with `CLARIFICATION` and `BASELINE`
+roles in each semantic-turn payload. This is a lossless adapter: artifact
+migration and a generic cross-operation persistence schema remain outside the
+atomize slice.
 
 ## Deferred decisions
 
@@ -865,16 +921,16 @@ The following must not be accidentally encoded as settled behavior:
 - the exact action vocabulary for accepting, refining, keeping, or deferring
   an atomize split;
 - a hard word limit for overview paragraphs;
-- generalization of the atomize grounding-session turn engine into
-  `mem ground`, including artifact compatibility and cross-operation
-  provenance;
+- migration of atomize grounding into a generic cross-operation persistence
+  schema; its current lossless meld adapter deliberately preserves the
+  atomize-specific artifact;
 - true creation-time ordering and timestamp migration;
 - a relationship-map secondary view;
 - the exact read-only interaction offered after an analysis has been applied;
 - automatic use of predecessor, parent, or neighboring Contexts as declared
   evidence;
-- conflict, update, reconcile, distill, meld, and sever application adapters;
-  and
+- conflict, update, reconcile, distill, public directional Context meld, and
+  sever application adapters; and
 - provider/model pinning and reproducible semantic rerun policy for formal
   evaluation.
 
@@ -905,8 +961,9 @@ These boxes describe the current implementation and its regression boundary.
 - [x] Render ambiguity and conflict details with their agreed labels and
       arity.
 - [x] Support the unified response field and typed choice selection.
-- [x] Support left/right, up/down, digits, Enter/Tab, Escape, F2/Ctrl-S, `S`,
-      `L`, and `Q` consistently.
+- [x] Support vertical issue navigation, Enter-based inline drill-down and
+      choice toggling, Escape/Backspace return, left/right compatibility
+      aliases, Tab, F2/Ctrl-S, `S`, `L`, and `Q`.
 - [x] Provide a deterministic, terminal-safe non-interactive snapshot.
 - [x] Keep analysis, review, snapshot, and reanalysis non-mutating.
 - [x] Bind `--save` and `--save-as` to the exact reviewed analysis and record

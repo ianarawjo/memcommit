@@ -19,6 +19,7 @@ scriptable behavior:
 ```bash
 mem switch NAME   # validate and switch directly
 mem switch        # choose interactively
+mem switch ..     # switch to an existing lexical namespace parent
 ```
 
 ## Interaction contract
@@ -49,10 +50,27 @@ ambiguity `ReviewSession` shell. The two interfaces share key-handling
 conventions, but Context selection has no semantic finding, response,
 checkpoint, or resumable review state.
 
+## Lexical parent navigation
+
+`mem switch ..` treats `/`-delimited Context names as a navigable lexical
+namespace. From `organization/wiki/facilities`, it resolves exactly
+`organization/wiki`; it does not search for another Context that happens to embed
+the current one. This keeps the command deterministic because a Context may
+be embedded in zero, one, or multiple unrelated Contexts.
+
+The resolved parent must itself be a persisted Context, not merely a
+directory created to hold descendants. With no current Context, at a
+single-segment root, or when the exact parent Context is absent, the command
+reports the specific boundary and leaves current state unchanged. Parent
+resolution and validation happen before writing `state.json`, and the common
+switch path still loads the parent before committing the state change.
+
 ## Limitations and non-goals
 
 - `mem checkout` still requires a name; this change is scoped to the explicit
   `switch` operation requested for the study workflow.
+- `..` walks only a name namespace. It does not represent an embedded-Context
+  relationship, and there is no implicit search for an embedding parent.
 - The picker does not yet filter or fuzzy-search names. Rendering is bounded,
   but `list_context_names()` still enumerates and validates every Context.
   A store with very many Contexts needs an indexed name search rather than a
@@ -60,8 +78,7 @@ checkpoint, or resumable review state.
 - The global current Context remains the repository's existing single-state
   mechanism. The picker does not add multi-terminal locking or per-shell
   current state.
-- Atomize uncertainty now uses the shared semantic review shell, but it remains
-  unrelated to Context selection. `mem review atomize` navigates
-  `UNCERTAIN / RECONCILE` analysis items and stages per-Memory context or
-  comments; the switch picker only returns one Context name and has no durable
+- The atomize workbench remains unrelated to Context selection. It navigates
+  typed split, uncertainty, ambiguity, and conflict issues bound to one
+  analysis; the switch picker only returns one Context name and has no durable
   response state.

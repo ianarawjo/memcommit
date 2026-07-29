@@ -1,0 +1,231 @@
+# Shared TUI Chrome and Exact-Command Review
+
+## Problem
+
+Several memcommit operations use full-screen terminal interaction, but they do
+not share one semantic or persistence model:
+
+- `ground` maintains a Goal, Rules, Cases, and explicit review decisions;
+- `meld` maintains a relation ledger, issues, readings, and staged proposals;
+- finder results become interactive through `mem review`, whose responses are
+  autosaved but do not apply Memory changes; and
+- `atomize` has typed source findings and its own drill-down navigation.
+
+They nevertheless repeat presentation mechanics: terminal-safe text,
+interactive-terminal checks, fixed and scrollable regions, viewport anchors,
+input panels, footers, and full-screen application setup. Ground also needs a
+stronger mutation boundary: one exact locally constructed command must remain
+visible and may run at most once after a dedicated approval.
+
+## Decision
+
+Reuse terminal mechanics and approval receipts, not a generic semantic
+session.
+
+The neutral layer contains:
+
+1. `safe_terminal_text`, interactive-terminal validation, viewport anchoring,
+   and slot-based vertical TUI composition;
+2. an immutable `ExactCommandReview` holding only an argv tuple and effect
+   lines; and
+3. deterministic rendering of injectively display-escaped arguments with
+   `shlex.join`.
+
+The display escape is part of the approval contract. Newlines, tabs,
+backslashes, terminal controls, bidi controls, zero-width format characters,
+and Unicode line separators are rendered as visible escapes inside command
+arguments and effect lines. This prevents untrusted text from drawing a fake
+second command or trusted heading. The displayed representation remains
+unambiguous, while execution still uses the original frozen argv directly and
+never reparses the display text.
+
+Operation adapters retain:
+
+- their provider schema and prompt;
+- their state, item identities, and evidence contract;
+- the meaning of Enter, arrows, choices, and comments;
+- persistence and cancellation behavior; and
+- construction and validation of any exact argv.
+
+The provider never returns command authority. It returns typed domain fields.
+The operation adapter validates those fields against local state, freezes one
+argv and its complete effects, and only then passes the receipt to the shared
+review component. Ground-specific concurrency fields, such as the expected
+Ground identity, revision, and digest, remain typed fields on the Ground
+proposal. Their guard token is carried opaquely inside the frozen argv, but
+the operation-neutral receipt neither parses nor assigns meaning to it.
+
+## Ground vertical slice
+
+The blank Ground TUI creates only a named schema-version-1 scaffold. That
+scaffold is intentionally unbound: the existing Ground engine does not permit
+Goal revision, Rule proposal, or Case proposal until exact evidence and target
+Context frames have been bound.
+
+The continuing named-Ground TUI therefore follows the engine's existing
+sequence:
+
+```text
+create named Ground
+→ show SAVED · UNBOUND
+→ ask for explicit Task/raw/derived/publication-target names
+→ approve one exact binding command
+→ show SAVED · BOUND
+→ propose one Rule
+→ separately review that proposed Rule
+→ propose one traceable Case from a bound candidate Memory
+→ separately review that proposed Case
+```
+
+The fixed upper panel always shows the current Goal, most recent Rule and Case,
+their stable local `rN`/`cN` aliases, counts and proposal states, the binding
+state, and the Ground revision. The lower panel owns conversation,
+clarification questions, the frozen command receipt, errors, and input.
+
+An exact UUID in a review command is not enough for informed approval. The
+Ground adapter therefore augments the neutral effect block with the selected
+alias, item kind, current status and wording, and action-specific semantics.
+In particular, Rule `REFINE` replaces Rule content and changes provenance to
+`JOINTLY_REVISED`, whereas Case `REFINE` replaces only expected output while
+preserving the source, linked Rule, role, disposition, and targets. Proposal
+receipts similarly name the prospective `rN` or `cN`, provenance or
+classification, exact locally resolved source Memory, linked Rule, targets,
+and expected output.
+
+Each approval applies exactly one normal CLI argv through
+`python -m memcommit.cli`; it never invokes a shell and never writes Ground
+JSON directly. After success, the controller reloads the named Ground and
+updates the fixed panel. Proposal and semantic acceptance are deliberately
+different commands. Pressing `A` on a Rule proposal permits recording a
+`PROPOSED` Rule; it does not mean the Rule is accepted.
+
+The reviewed argv contains an opaque `--if-ground-version` token that freezes
+the Ground UID, revision, and canonical serialized-state digest. Revision
+alone is insufficient because binding can change a revision-zero scaffold
+without incrementing its semantic revision. The adapter performs an early
+comparison for useful feedback, and the ordinary CLI repeats the comparison
+at the actual save boundary while holding a per-Ground process lock. For a
+bound Ground, it first locks and rechecks every bound Context frame, then
+takes the Ground lock and performs the compare-and-swap. A concurrent Ground
+or bound-Context change therefore rejects the command before replacement
+rather than letting the reviewed command act on newer evidence.
+Ordinary non-replacement `mem ground NAME ...` writers automatically compare
+against the Ground record they originally loaded as well. This matters because
+a stale ordinary writer must not be able to overwrite a newer guarded TUI
+mutation merely by omitting the hidden token.
+Because an unbound Ground has no saved frames yet, a binding receipt also
+contains one opaque `--if-context-version` token for every reviewed raw,
+derived, and target Context. The child CLI requires the frames it loaded to
+match those tokens before entering the locked verification and save path.
+Here “opaque” means opaque to the shared presentation component, not secret:
+the displayed guards contain local Ground or Context identity/version data,
+digests, and counts. A Case argv can likewise display its locally resolved
+source UID. None of those locally constructed receipt fields are added to the
+provider payload.
+
+The shell reloads durable Ground state before interpreting a new turn and
+again after an unconfirmed application. It never automatically retries the
+same approval. This mirrors the project's grounding model: a changed shared
+state requires a fresh interpretation and a fresh, visible command.
+
+## Information boundary
+
+The blank TUI still sends only submitted text to the provider. Once the Ground
+has a name, the named-turn provider receives only:
+
+- the portable Ground name;
+- saved Goal and completion text;
+- saved Rule and Case text with local aliases such as `r1` and `c1`;
+- Rule rationale, provenance, and linked Case aliases, plus each Case's
+  rationale, linked Rule alias, role, disposition, target Context names, and
+  expected output;
+- Ground state and revision;
+- bound candidate and target Context **names**; and
+- the submitted dialogue text plus the provider's own visible understanding
+  and question from the current unresolved turn cycle.
+
+It does not receive a live Context projection, source references, durable
+Ground/Context/Memory UIDs, filesystem paths, query-only material,
+current-Context state, or command authority. Saved Case content is part of the
+Ground payload and may itself be an earlier exact copy of source Memory text;
+the provider is not given the corresponding source identity. For a new Case,
+the person must supply a source Memory selector. Before inference, the host
+matches that selector locally against the bound candidate Context and replaces
+it throughout the unresolved dialogue with a stable local alias such as
+`m1`. The provider may return only an alias actually introduced by that local
+redaction. The host then maps it back and freezes the full UID only in the
+reviewed CLI argv. Ambiguous selectors and invented aliases fail closed.
+Other command-looking dialogue remains untrusted provider data rather than
+executable authority.
+
+The repeated provider calls are otherwise stateless. Carrying the visible
+question forward prevents a short answer such as “that one” or “yes” from
+losing the exact question it answered, without relying on hidden provider
+conversation state. The cycle is cleared after an approved command reloads the
+Ground.
+
+## Why keymaps and persistence remain local
+
+The same key cannot be given one global meaning:
+
+- Enter sends a Ground turn;
+- Enter expands a meld issue;
+- Enter focuses the response editor in review; and
+- atomize uses it for issue drill-down and choice behavior.
+
+Persistence is equally different. Ground is unchanged until exact approval;
+review and atomize save responses while navigating; meld's outer controller
+owns provider calls and staged application. A generic keymap or `GenericSession`
+would hide these differences and weaken the state boundary.
+
+The shared frame is therefore slot-based. Each operation supplies its own
+header/state panel, body, action/input region, and footer. Ground, meld, and
+review now use that frame composition without sharing semantic state.
+
+## Alternatives rejected
+
+### A generic provider-returned command
+
+Rejected because provider text would become executable authority and because
+operation-specific validation, privacy, and effects could be bypassed.
+
+### A single generic semantic workbench
+
+Rejected because Goal–Rules–Cases, meld relations, finder findings, and
+atomize issues have different identities, evidence requirements, approval
+semantics, and persistence timing.
+
+### Allow Rules before binding
+
+Rejected for this slice because it would silently overturn the existing
+Ground invariant that Rules and Cases are judged against explicit evidence
+frames. A future general-purpose unbound Ground schema would require an
+explicit versioned data-model decision rather than TUI wiring.
+
+### Automatically bind the current Context
+
+Rejected because it would make terminal location an implicit evidence
+decision, conflict with multi-Context Ground work, and transmit or persist
+state the person did not approve.
+
+## Current limitations
+
+- Provider calls are synchronous inside the prompt-toolkit handler, so a slow
+  semantic turn can temporarily stop repainting. A reusable progress state
+  should later move provider work into an outer controller or async task.
+- Dialogue transcripts are ephemeral. Saved Ground items and decisions
+  persist, but the natural-language exchange does not.
+- Completion-criterion revision has no existing CLI action.
+- A Case still requires the person to supply a candidate Memory selector,
+  which is converted to a provider-safe local alias.
+  The TUI has no local read-only candidate picker yet; provider access remains
+  deliberately insufficient to invent or inspect that selector.
+- Arbitrary Goal and completion fields may be much taller than a small
+  terminal. The seven-row state panel uses display-cell-aware truncation so
+  Goal, Rules, and Cases remain present, while the command/effect viewport can
+  be switched with the arrow keys. A hard guarantee for a maximum-length argv
+  still requires a dedicated scrollable command-only panel or tighter field
+  limits.
+- Static `mem find-*` output does not become interactive merely by sharing
+  chrome. Its interactive route remains `mem review`; each finder needs an
+  explicit adapter before it can adopt additional dialogue behavior.

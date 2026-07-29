@@ -11,8 +11,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Name of the Context to switch to; omit to choose "
-                "interactively"
+                "Context name to switch to; use '..' for an existing "
+                "namespace parent, or omit to choose interactively"
             )
         ),
     ] = None,
@@ -42,6 +42,34 @@ def cmd(
         if name is None:
             typer.echo("Switch cancelled.")
             return
+
+    if name == "..":
+        current = store.current_context_name()
+        if current is None:
+            typer.secho(
+                "Error: cannot switch to '..': no current context is set.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if "/" not in current:
+            typer.secho(
+                f"Error: context '{current}' has no namespace parent.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        parent = current.rsplit("/", 1)[0]
+        # Slash namespaces are lexical only. An explicit Context embedding is
+        # not a unique filesystem-style parent and must not affect `..`.
+        if not store.context_exists(parent):
+            typer.secho(
+                f"Error: namespace parent context '{parent}' does not exist.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        name = parent
 
     # Revalidate after the picker closes: another process may have changed or
     # deleted the selected Context while the terminal UI was open.

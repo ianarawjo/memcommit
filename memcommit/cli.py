@@ -27,6 +27,7 @@ from memcommit.commands import (
     integrate,
     list_memories,
     log,
+    meld,
     show,
     merge,
     query,
@@ -60,7 +61,10 @@ app.command("clear",          help="Clear all memories from the current (or give
 app.command("delete",         help="Delete a context and its history; preserve descendants.")(delete.cmd)
 app.command(
     "diff",
-    help="Render the active staged update; not an arbitrary Context diff.",
+    help=(
+        "Render the active staged or locally applied update; not an "
+        "arbitrary Context diff."
+    ),
 )(diff.cmd)
 app.command(
     "compare",
@@ -77,6 +81,13 @@ app.command(
     "merge",
     help="Add UID-new direct items from another Context; no semantic reconciliation.",
 )(merge.cmd)
+app.command(
+    "meld",
+    help=(
+        "Interactively combine two equal-authority Contexts into the current "
+        "empty Context."
+    ),
+)(meld.cmd)
 app.command("embed",          help="Embed one context inside another.")(embed.cmd)
 app.command("reference",      help="Add a read-only live reference to a memory.")(reference.cmd)
 app.command(
@@ -127,8 +138,8 @@ app.command(
 app.command(
     "ground",
     help=(
-        "Build a revisable Goal–rules–cases contract over bound Context "
-        "frames without applying it."
+        "Open or revise a Goal–Rules–Cases Ground; blank or plain named "
+        "TTY use starts a provider-backed dialogue."
     ),
 )(ground.cmd)
 app.command(
@@ -138,7 +149,7 @@ app.command(
 app.command("integrate",      help="Intelligently integrate info into the current context (uses LLM).")(integrate.cmd)
 app.command(
     "update",
-    help="Stage a directional update plan; the target remains unchanged.",
+    help="Apply a directional plan to a local target; no shared publication.",
 )(update.cmd)
 
 # --- Sub-apps ---

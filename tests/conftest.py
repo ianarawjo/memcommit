@@ -26,6 +26,7 @@ def isolated_store(tmp_path, monkeypatch):
         store_dir / "atomize-grounding-history"
     )
     ground_sessions_dir = store_dir / "ground-sessions"
+    meld_sessions_dir = store_dir / "meld-sessions"
 
     monkeypatch.setattr(store_module, "STORE_DIR", store_dir)
     monkeypatch.setattr(store_module, "CONTEXTS_DIR", contexts_dir)
@@ -66,6 +67,11 @@ def isolated_store(tmp_path, monkeypatch):
         store_module,
         "GROUND_SESSIONS_DIR",
         ground_sessions_dir,
+    )
+    monkeypatch.setattr(
+        store_module,
+        "MELD_SESSIONS_DIR",
+        meld_sessions_dir,
     )
 
     return store_dir

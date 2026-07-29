@@ -557,8 +557,9 @@ important than final CLI spelling.
 - The ambiguity controller establishes a visual shell intended for later
   reuse; it is not yet a code-generic adapter framework, a pipeline stage, or
   a hidden reconciliation operation. Conflict and update adapters are future
-  work; `reconcile`, `distill`, `meld`, and `sever` remain future or
-  design-only contracts.
+  work; `reconcile`, `distill`, and `sever` remain future or design-only
+  contracts. Symmetric `mem meld` is now implemented as a separate bounded
+  Context workbench, while public Context-directional meld remains future.
 
 The focused rationale is
 [`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md).

@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands.review_shell import safe_terminal_text
+from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.provenance import (
     MemoryState,
     ProvenanceError,

@@ -1,8 +1,6 @@
 """Prompt-toolkit controller and deterministic snapshot for semantic review."""
 from __future__ import annotations
 
-import sys
-import unicodedata
 from collections.abc import Callable
 
 from prompt_toolkit.application import Application
@@ -21,6 +19,12 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import TextArea
 
+from memcommit.commands.tui_primitives import (
+    TuiRegion,
+    build_tui_frame,
+    require_interactive_terminal,
+    safe_terminal_text,
+)
 from memcommit.context import Context, Memory
 from memcommit.review import (
     REVIEW_RESPONSE_CHAR_LIMIT,
@@ -51,19 +55,6 @@ def visible_ordinal_index(selector: str, item_count: int) -> int | None:
     if selector != str(ordinal) or not 1 <= ordinal <= item_count:
         return None
     return ordinal - 1
-
-
-def safe_terminal_text(value: str) -> str:
-    """Replace terminal control characters while retaining textual layout."""
-    result: list[str] = []
-    for character in value:
-        if character in {"\n", "\t"}:
-            result.append(character)
-        elif unicodedata.category(character) == "Cc":
-            result.append("�")
-        else:
-            result.append(character)
-    return "".join(result)
 
 
 def _direct_memory_map(ctx: Context) -> dict[str, Memory]:
@@ -224,12 +215,12 @@ def run_review_shell(
     require_tty: bool = True,
 ) -> ReviewSession:
     """Run one resumable semantic-review adapter and return its staged state."""
-    if require_tty and (
-        not sys.stdin.isatty() or not sys.stdout.isatty()
-    ):
-        raise ValueError(
-            "Review requires an interactive terminal. "
-            "Use 'mem review --snapshot' to inspect the saved session."
+    if require_tty:
+        require_interactive_terminal(
+            "Review",
+            snapshot_hint=(
+                "Use 'mem review --snapshot' to inspect the saved session."
+            ),
         )
 
     memories = _direct_memory_map(ctx)
@@ -487,7 +478,11 @@ def run_review_shell(
 
     app: Application[ReviewSession] = Application(
         layout=Layout(
-            HSplit([header, body, footer]),
+            build_tui_frame(
+                TuiRegion(header),
+                TuiRegion(body),
+                TuiRegion(footer),
+            ),
             focused_element=list_control,
         ),
         key_bindings=bindings,

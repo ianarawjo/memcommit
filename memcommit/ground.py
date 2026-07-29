@@ -87,7 +87,7 @@ _WINDOWS_RESERVED_NAMES = {
 DEFAULT_COMPLETION_CRITERION = (
     "The reviewed cases in the current scope are adequately explained by "
     "the rules, unresolved boundaries are explicit, and the user has "
-    "approved the grounded contract."
+    "approved the Ground."
 )
 
 
@@ -96,7 +96,7 @@ class GroundError(ValueError):
 
 
 def validate_ground_contract_name(value: object) -> str:
-    """Return one portable contract ID that is safe as a local filename."""
+    """Return one portable Ground ID that is safe as a local filename."""
     if (
         not isinstance(value, str)
         or _CONTRACT_NAME.fullmatch(value) is None
@@ -104,7 +104,7 @@ def validate_ground_contract_name(value: object) -> str:
         or value.split(".", 1)[0] in _WINDOWS_RESERVED_NAMES
     ):
         raise GroundError(
-            "Grounding contract names must match "
+            "Ground names must match "
             "[a-z0-9][a-z0-9._-]{0,127} and must not use a reserved "
             "Windows device name."
         )
@@ -293,7 +293,7 @@ class GroundFrame:
 
 @dataclass(frozen=True)
 class GroundTargetSpec:
-    """Input contract for one target slot when binding a workbench."""
+    """Input requirement for one target slot when binding a workbench."""
 
     context_name: str
     description: str
@@ -775,7 +775,7 @@ class GroundItem:
 
 @dataclass(frozen=True)
 class GroundSession:
-    """One resumable, operation-independent common-grounding contract."""
+    """One resumable, operation-independent common Ground."""
 
     uid: str
     contract_name: str
@@ -1448,7 +1448,7 @@ def _proposal_contexts(
     contexts = tuple(current_contexts)
     if not ground_matches_workbench(session, contexts):
         raise GroundError(
-            "Grounding workbench is stale. Create a new named contract, or "
+            "Grounding workbench is stale. Create a new named Ground, or "
             "explicitly replace and rebind this one."
         )
     if session.status != "OPEN":
@@ -1464,7 +1464,7 @@ def propose_ground_rule(
     current_contexts: Iterable[Context],
     rule_provenance: GroundRuleProvenance = "DISTILLED_FROM_GOAL",
 ) -> GroundSession:
-    """Propose one reusable Working Rule without manufacturing a case."""
+    """Propose one reusable Rule without manufacturing a Case."""
     _proposal_contexts(session, current_contexts)
     rule = _string(rule, "grounding proposed rule")
     rationale = _string(rationale, "grounding proposal rationale")
@@ -1756,7 +1756,7 @@ def review_ground_item(
     contexts = tuple(current_contexts)
     if not ground_matches_workbench(session, contexts):
         raise GroundError(
-            "Grounding workbench is stale. Create a new named contract, or "
+            "Grounding workbench is stale. Create a new named Ground, or "
             "explicitly replace and rebind this one before deciding."
         )
     action = _string(action, "grounding review action", limit=20).upper()
@@ -1841,6 +1841,47 @@ def review_ground_item(
     return GroundSession.from_dict(reviewed.to_dict())
 
 
+def resolve_ground_requirement(
+    session: GroundSession,
+    requirement_selector: str,
+) -> GroundTargetRequirement:
+    """Resolve one target requirement by exact Context name or UID prefix."""
+    requirement_selector = _string(
+        requirement_selector,
+        "grounding requirement selector",
+        limit=500,
+    )
+    frame_name_by_uid = {
+        frame.context_uid: frame.context_name
+        for frame in session.frames
+        if frame.role in _TARGET_FRAME_ROLES
+    }
+    exact_matches = [
+        requirement
+        for requirement in session.requirements
+        if requirement.target_context_uid in frame_name_by_uid
+        and frame_name_by_uid[requirement.target_context_uid]
+        == requirement_selector
+    ]
+    if len(exact_matches) == 1:
+        return exact_matches[0]
+    if len(exact_matches) > 1:
+        raise GroundError(
+            "Grounding requirement target is missing or ambiguous."
+        )
+    prefix_matches = [
+        requirement
+        for requirement in session.requirements
+        if requirement.target_context_uid in frame_name_by_uid
+        and requirement.uid.startswith(requirement_selector)
+    ]
+    if len(prefix_matches) != 1:
+        raise GroundError(
+            "Grounding requirement target is missing or ambiguous."
+        )
+    return prefix_matches[0]
+
+
 def revise_ground_requirement(
     session: GroundSession,
     requirement_selector: str,
@@ -1851,7 +1892,7 @@ def revise_ground_requirement(
     reason: str,
     current_contexts: Iterable[Context],
 ) -> GroundSession:
-    """Revise the negotiable upper contract and record why it changed.
+    """Revise the negotiable Goal layer and record why it changed.
 
     The copied task brief and evidence frames stay fixed.  Requirements are
     working hypotheses: awkward lower cases may reveal that a category,
@@ -1861,30 +1902,10 @@ def revise_ground_requirement(
     contexts = tuple(current_contexts)
     if not ground_matches_workbench(session, contexts):
         raise GroundError(
-            "Grounding workbench is stale. Create a new named contract, or "
+            "Grounding workbench is stale. Create a new named Ground, or "
             "explicitly replace and rebind this one before revising it."
         )
-    requirement_selector = _string(
-        requirement_selector,
-        "grounding requirement selector",
-        limit=500,
-    )
-    matches = [
-        requirement
-        for requirement in session.requirements
-        if requirement.uid.startswith(requirement_selector)
-        or next(
-            frame.context_name
-            for frame in session.frames
-            if frame.context_uid == requirement.target_context_uid
-        )
-        == requirement_selector
-    ]
-    if len(matches) != 1:
-        raise GroundError(
-            "Grounding requirement target is missing or ambiguous."
-        )
-    current = matches[0]
+    current = resolve_ground_requirement(session, requirement_selector)
     if (
         description is None
         and minimum_accepted_cases is None
@@ -1964,7 +1985,7 @@ def revise_ground_goal(
     contexts = tuple(current_contexts)
     if not ground_matches_workbench(session, contexts):
         raise GroundError(
-            "Grounding workbench is stale. Create a new named contract, or "
+            "Grounding workbench is stale. Create a new named Ground, or "
             "explicitly replace and rebind this one before revising its goal."
         )
     goal = _string(goal, "revised grounding goal")
@@ -1995,7 +2016,7 @@ def accepted_ground_case_count(
     session: GroundSession,
     target_context_uid: str,
 ) -> int:
-    """Count accepted INCLUDE cases backed by an accepted Working Rule."""
+    """Count accepted INCLUDE Cases backed by an accepted Rule."""
     accepted_rule_uids = {
         item.uid
         for item in session.items

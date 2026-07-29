@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import uuid
 from dataclasses import replace
 from pathlib import Path
@@ -11,8 +12,14 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.store as store_module
+import memcommit.commands.ground as ground_command
 from memcommit.cli import app
-from memcommit.commands.ground import render_ground_snapshot
+from memcommit.commands.ground import (
+    render_ground_focus,
+    render_ground_snapshot,
+    render_ground_start,
+)
+from memcommit.commands.ground_shell import GroundShellResult
 from memcommit.ground import (
     GroundError,
     GroundItem,
@@ -27,12 +34,18 @@ from memcommit.ground import (
     propose_ground_case,
     propose_ground_round,
     propose_ground_rule,
+    resolve_ground_requirement,
     review_ground_item,
     revise_ground_goal,
     revise_ground_requirement,
     target_requirement_status,
 )
-from memcommit.store import MemoryStore
+from memcommit.ground_dialogue import (
+    GroundDialogueError,
+    GroundDialogueProposal,
+)
+from memcommit.ground_turn_dialogue import GroundTurnAction
+from memcommit.store import MemoryStore, ground_session_record_digest
 
 
 runner = CliRunner()
@@ -127,11 +140,20 @@ def _non_ground_store_bytes(root):
     }
 
 
+def _store_bytes(root):
+    """Capture every persisted file in the isolated store."""
+    return {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+
+
 def test_empty_ground_session_round_trip_and_method_provenance():
     session = create_ground_session(
         "task-1-fixture",
         goal="Agree on Task 1 wiki and local Memory contents.",
-        scope=("campus/wiki", "construction-updates"),
+        scope=("organization/wiki", "construction-updates"),
     )
 
     restored = GroundSession.from_dict(session.to_dict())
@@ -296,7 +318,7 @@ def test_cli_creates_resumes_and_snapshots_without_touching_context(
             "--goal",
             "Agree on wiki and local Task 1 Memories.",
             "--scope",
-            "campus/wiki",
+            "organization/wiki",
             "--scope",
             "construction-updates",
             "--snapshot",
@@ -347,6 +369,786 @@ def test_cli_ground_does_not_create_context_state_in_a_fresh_store(
     ).is_file()
     assert not (isolated_store / "state.json").exists()
     assert not (isolated_store / "contexts").exists()
+
+
+def test_cli_ground_without_name_opens_unsaved_blank_frame(
+    isolated_store,
+):
+    assert not isolated_store.exists()
+
+    first = runner.invoke(app, ["ground"])
+    second = runner.invoke(app, ["ground"])
+
+    assert first.exit_code == 0, first.output
+    assert second.exit_code == 0, second.output
+    expected = f"{render_ground_start()}\n"
+    assert first.output == expected
+    assert second.output == expected
+    assert "\x1b" not in first.output
+    assert not isolated_store.exists()
+
+
+@pytest.mark.parametrize(
+    "args",
+    (
+        ("--goal", "A nameless Goal must not be saved."),
+        ("--snapshot",),
+        ("--focus-target", "campus-wiki"),
+        ("--replace-ground",),
+        ("--scope", "campus-wiki"),
+        ("--description", "A binding requires a name."),
+        ("--propose-rule", "A proposal requires a name."),
+        ("--decide", "deadbeef"),
+        ("--revise-goal", "A revision requires a name."),
+    ),
+)
+def test_cli_ground_without_name_rejects_options_without_state(
+    isolated_store,
+    args,
+):
+    assert not isolated_store.exists()
+
+    result = runner.invoke(app, ["ground", *args])
+
+    assert result.exit_code == 1
+    assert "GROUND_NAME is required when using options" in result.output
+    assert "without options to start from a blank Ground" in result.output
+    assert not isolated_store.exists()
+
+
+def test_cli_ground_without_name_preserves_a_populated_store(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("existing-context")
+    ops.add(context, "Existing Memory.")
+    store.save(context)
+    store.set_current(context.name)
+    store.save_ground_session(
+        create_ground_session(
+            "existing-ground",
+            goal="Keep this Ground byte-identical.",
+        )
+    )
+    before = _store_bytes(isolated_store)
+
+    result = runner.invoke(app, ["ground"])
+
+    assert result.exit_code == 0, result.output
+    assert result.output == f"{render_ground_start()}\n"
+    assert _store_bytes(isolated_store) == before
+
+
+def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
+    isolated_store,
+    monkeypatch,
+):
+    shell_calls = []
+    continued = []
+
+    def fake_shell(*, interpret, apply):
+        shell_calls.append((interpret, apply))
+        proposal = ground_command.GroundShellProposal(
+            ground_name="task-1-report-coverage",
+            goal="Determine which Task 1 claims were represented.",
+            completion="Represented and unresolved claims are explicit.",
+            understanding="Compare report coverage.",
+            question="Approve this Ground?",
+        )
+        actual_output = apply(proposal)
+        return GroundShellResult(
+            status="APPLIED",
+            proposal=proposal,
+            actual_output=actual_output,
+            submitted_turns=("Inspect report coverage.",),
+        )
+
+    monkeypatch.setattr(
+        ground_command,
+        "_interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "run_ground_shell",
+        fake_shell,
+    )
+    def run_in_process(argv):
+        invoked = runner.invoke(app, list(argv[1:]))
+        return subprocess.CompletedProcess(
+            argv,
+            invoked.exit_code,
+            stdout=invoked.output,
+            stderr="",
+        )
+
+    monkeypatch.setattr(
+        ground_command,
+        "_run_approved_ground_command",
+        run_in_process,
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_existing_ground_shell",
+        lambda session, *, initial_receipt="": continued.append(
+            (session, initial_receipt)
+        ),
+    )
+
+    result = runner.invoke(app, ["ground"])
+
+    assert result.exit_code == 0, result.output
+    assert len(shell_calls) == 1
+    assert len(continued) == 1
+    assert continued[0][0].contract_name == "task-1-report-coverage"
+    assert "created" in continued[0][1]
+    session = MemoryStore(create=False).load_ground_session(
+        "task-1-report-coverage"
+    )
+    assert session is not None
+    assert session.goal == "Determine which Task 1 claims were represented."
+    assert (
+        session.completion_criterion
+        == "Represented and unresolved claims are explicit."
+    )
+    assert not (isolated_store / "contexts").exists()
+    assert not (isolated_store / "state.json").exists()
+
+
+def test_approved_ground_command_uses_argv_without_a_shell(monkeypatch):
+    calls = []
+
+    def fake_run(args, **kwargs):
+        calls.append((args, kwargs))
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout="created\n",
+            stderr="",
+        )
+
+    monkeypatch.setattr(ground_command.subprocess, "run", fake_run)
+    proposal = ground_command.GroundShellProposal(
+        ground_name="safe-ground",
+        goal="A goal containing ; $(unsafe) and spaces.",
+        completion="The user's intended boundary is explicit.",
+        understanding="Create one safe Ground.",
+        question="Approve?",
+    )
+
+    result = ground_command._run_approved_ground_command(
+        ground_command.proposal_argv(proposal)
+    )
+
+    assert result.stdout == "created\n"
+    assert len(calls) == 1
+    args, kwargs = calls[0]
+    assert args == [
+        ground_command.sys.executable,
+        "-m",
+        "memcommit.cli",
+        "ground",
+        "safe-ground",
+        "--goal",
+        "A goal containing ; $(unsafe) and spaces.",
+        "--completion",
+        "The user's intended boundary is explicit.",
+    ]
+    assert kwargs["capture_output"] is True
+    assert kwargs["check"] is False
+    assert "shell" not in kwargs
+
+
+def test_cli_ground_tui_cancel_creates_nothing(
+    isolated_store,
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        ground_command,
+        "_interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "run_ground_shell",
+        lambda **_kwargs: GroundShellResult(
+            status="CANCELLED"
+        ),
+    )
+
+    result = runner.invoke(app, ["ground"])
+
+    assert result.exit_code == 0, result.output
+    assert "cancelled. Nothing was created." in result.output
+    assert not isolated_store.exists()
+
+
+def test_plain_named_ground_in_a_tty_resumes_the_named_tui(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore(create=False)
+    session = create_ground_session(
+        "resume-dialogue",
+        goal="Continue this saved Goal.",
+    )
+    store.save_ground_session(session)
+    opened = []
+    monkeypatch.setattr(
+        ground_command,
+        "_interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_existing_ground_shell",
+        lambda value, *, initial_receipt="": opened.append(
+            (value, initial_receipt)
+        ),
+    )
+
+    result = runner.invoke(app, ["ground", "resume-dialogue"])
+
+    assert result.exit_code == 0, result.output
+    assert opened == [(session, "")]
+    assert result.output == ""
+
+
+def test_new_ground_name_collision_is_rejected_before_and_during_apply(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore(create=False)
+    existing = create_ground_session(
+        "already-there",
+        goal="Preserve this Ground.",
+    )
+    store.save_ground_session(existing)
+    path = (
+        isolated_store
+        / "ground-sessions"
+        / "already-there.json"
+    )
+    before = path.read_bytes()
+    dialogue_proposal = GroundDialogueProposal(
+        understanding="Create a colliding Ground.",
+        question="Approve?",
+        ground_name="already-there",
+        goal="Overwrite the existing Ground.",
+        completion="The overwrite is complete.",
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "interpret_ground_dialogue",
+        lambda *_args, **_kwargs: dialogue_proposal,
+    )
+
+    with pytest.raises(GroundDialogueError, match="already exists"):
+        ground_command._interpret_new_ground_turn("Create it.")
+
+    frozen = ground_command.GroundShellProposal(
+        ground_name="already-there",
+        goal=dialogue_proposal.goal,
+        completion=dialogue_proposal.completion,
+        understanding=dialogue_proposal.understanding,
+        question=dialogue_proposal.question,
+    )
+    with pytest.raises(GroundError, match="created before approval"):
+        ground_command._apply_new_ground_proposal(frozen)
+
+    assert path.read_bytes() == before
+
+
+def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    raw, derived, targets, candidate = _task_1_workbench(store)
+    session = create_ground_session(
+        "dialogue-cycle",
+        goal="Build reviewed Task 1 fixture content.",
+    )
+    store.save_ground_session(session)
+    non_ground_before = _non_ground_store_bytes(isolated_store)
+
+    def run_in_process(argv):
+        invoked = runner.invoke(app, list(argv[1:]))
+        return subprocess.CompletedProcess(
+            argv,
+            invoked.exit_code,
+            stdout=invoked.output,
+            stderr="",
+        )
+
+    monkeypatch.setattr(
+        ground_command,
+        "_run_approved_ground_command",
+        run_in_process,
+    )
+
+    bind = GroundTurnAction(
+        kind="BIND",
+        understanding="Bind the Task 1 evidence and target.",
+        question="Approve this explicit binding?",
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw.name,
+        derived_context=derived.name,
+        publication_target=targets[0].name,
+    )
+    bind_proposal = ground_command._ground_action_proposal(session, bind)
+    assert bind_proposal.review.argv[:3] == (
+        "mem",
+        "ground",
+        "dialogue-cycle",
+    )
+    assert bind_proposal.review.argv[3:5] == (
+        "--if-ground-version",
+        ground_command._ground_version_token(session),
+    )
+    assert [
+        bind_proposal.review.argv[index + 1]
+        for index, value in enumerate(bind_proposal.review.argv[:-1])
+        if value == "--if-context-version"
+    ] == [
+        ground_command._context_version_token(context)
+        for context in (raw, derived, targets[0])
+    ]
+    description_index = bind_proposal.review.argv.index("--description")
+    assert bind_proposal.review.argv[description_index:] == (
+        "--description",
+        TASK_1_DESCRIPTION,
+        "--raw-context",
+        raw.name,
+        "--derived-context",
+        derived.name,
+        "--publication-target",
+        targets[0].name,
+    )
+    bound, _output = ground_command._apply_named_ground_proposal(
+        session,
+        bind_proposal,
+    )
+    assert bound.schema_version == 2
+    assert bound.revision == 0
+
+    rule = GroundTurnAction(
+        kind="PROPOSE_RULE",
+        understanding="Record one source-evidence Rule.",
+        question="Approve recording this proposed Rule?",
+        content="Publish only facts supported by the bound candidate Context.",
+        rationale="This keeps publication traceable to the bound evidence.",
+        rule_provenance="DISTILLED_FROM_GOAL",
+    )
+    rule_proposal = ground_command._ground_action_proposal(bound, rule)
+    assert "--propose-rule" in rule_proposal.review.argv
+    with_rule, _output = ground_command._apply_named_ground_proposal(
+        bound,
+        rule_proposal,
+    )
+    assert with_rule.revision == 1
+    assert with_rule.items[0].kind == "RULE"
+    assert with_rule.items[0].status == "PROPOSED"
+
+    accept = GroundTurnAction(
+        kind="REVIEW_ITEM",
+        understanding="Accept the proposed Rule.",
+        question="Approve this separate acceptance command?",
+        selector="r1",
+        decision="ACCEPT",
+    )
+    accept_proposal = ground_command._ground_action_proposal(
+        with_rule,
+        accept,
+    )
+    assert accept_proposal.review.argv[-2:] == ("--action", "ACCEPT")
+    accepted, _output = ground_command._apply_named_ground_proposal(
+        with_rule,
+        accept_proposal,
+    )
+    assert accepted.revision == 2
+    assert accepted.items[0].status == "ACCEPTED"
+
+    case = GroundTurnAction(
+        kind="PROPOSE_CASE",
+        understanding="Use the selected candidate as one fitting Case.",
+        question="Approve recording this proposed Case?",
+        selector="r1",
+        source_selector=candidate.uid[:8],
+        targets=(targets[0].name,),
+        expected="Publish the supported rear-entrance closure.",
+        rationale="The candidate directly supports this target statement.",
+        case_role="FIT",
+        disposition="INCLUDE",
+    )
+    case_proposal = ground_command._ground_action_proposal(accepted, case)
+    assert candidate.uid in case_proposal.review.argv
+    assert candidate.content in "\n".join(case_proposal.review.effects)
+    with_case, _output = ground_command._apply_named_ground_proposal(
+        accepted,
+        case_proposal,
+    )
+    cases = [item for item in with_case.items if item.kind == "CASE"]
+    assert with_case.revision == 3
+    assert len(cases) == 1
+    assert cases[0].content == candidate.content
+    assert cases[0].status == "PROPOSED"
+
+    assert _non_ground_store_bytes(isolated_store) == non_ground_before
+    assert all(
+        store.list_checkpoints(context.name) == []
+        for context in (raw, derived, *targets)
+    )
+
+
+def test_named_ground_approval_rejects_a_stale_frozen_state(
+    isolated_store,
+):
+    store = MemoryStore(create=False)
+    session = create_ground_session(
+        "stale-dialogue",
+        goal="Original Goal.",
+    )
+    store.save_ground_session(session)
+    action = GroundTurnAction(
+        kind="BIND",
+        understanding="Bind explicit Contexts.",
+        question="Approve?",
+        description="A binding description.",
+        raw_context="missing-raw",
+        derived_context="missing-derived",
+        publication_target="missing-target",
+    )
+
+    # Build a valid frozen action against real Context names, then change only
+    # the Ground bytes without changing its revision.
+    for name in ("missing-raw", "missing-derived", "missing-target"):
+        store.save(ops.init(name))
+    proposal = ground_command._ground_action_proposal(session, action)
+    changed = replace(session, goal="Concurrently changed Goal.")
+    store.save_ground_session(changed)
+
+    with pytest.raises(GroundError, match="changed after this proposal"):
+        ground_command._apply_named_ground_proposal(session, proposal)
+
+
+def test_named_ground_child_save_rechecks_state_after_parent_preflight(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    session = create_ground_session(
+        "save-boundary-dialogue",
+        goal="Original Goal.",
+    )
+    store.save_ground_session(session)
+    for name in ("race-raw", "race-derived", "race-target"):
+        store.save(ops.init(name))
+    proposal = ground_command._ground_action_proposal(
+        session,
+        GroundTurnAction(
+            kind="BIND",
+            understanding="Bind the reviewed Contexts.",
+            question="Approve?",
+            description="A binding description.",
+            raw_context="race-raw",
+            derived_context="race-derived",
+            publication_target="race-target",
+        ),
+    )
+    competing = replace(session, goal="Concurrent Goal.")
+
+    def race_then_run(argv):
+        # This occurs after the parent-side freshness check but before the
+        # child command reaches its atomic save boundary.
+        store.save_ground_session(competing)
+        invoked = runner.invoke(app, list(argv[1:]))
+        return subprocess.CompletedProcess(
+            argv,
+            invoked.exit_code,
+            stdout=invoked.output,
+            stderr="",
+        )
+
+    monkeypatch.setattr(
+        ground_command,
+        "_run_approved_ground_command",
+        race_then_run,
+    )
+
+    with pytest.raises(GroundError, match="approved Ground command failed"):
+        ground_command._apply_named_ground_proposal(session, proposal)
+
+    assert store.load_ground_session(session.contract_name) == competing
+
+
+def test_named_ground_binding_rechecks_context_versions_in_child(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    session = create_ground_session(
+        "binding-context-race",
+        goal="Bind exact evidence.",
+    )
+    store.save_ground_session(session)
+    for name in ("bind-raw", "bind-derived", "bind-target"):
+        context = ops.init(name)
+        context.add(f"Initial content for {name}.")
+        store.save(context)
+    proposal = ground_command._ground_action_proposal(
+        session,
+        GroundTurnAction(
+            kind="BIND",
+            understanding="Bind the reviewed Context versions.",
+            question="Approve?",
+            description="A binding description.",
+            raw_context="bind-raw",
+            derived_context="bind-derived",
+            publication_target="bind-target",
+        ),
+    )
+
+    def change_context_then_run(argv):
+        changed = store.load_direct("bind-derived")
+        changed.add("Concurrent candidate.")
+        store.save(changed)
+        invoked = runner.invoke(app, list(argv[1:]))
+        return subprocess.CompletedProcess(
+            argv,
+            invoked.exit_code,
+            stdout=invoked.output,
+            stderr="",
+        )
+
+    monkeypatch.setattr(
+        ground_command,
+        "_run_approved_ground_command",
+        change_context_then_run,
+    )
+
+    with pytest.raises(GroundError, match="approved Ground command failed"):
+        ground_command._apply_named_ground_proposal(session, proposal)
+
+    assert store.load_ground_session(session.contract_name) == session
+    assert len(tuple(store.load_direct("bind-derived").iter_items())) == 2
+
+
+def test_named_ground_provider_receives_local_source_alias_not_memory_uid(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    raw, derived, targets, candidate = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    session = bind_ground_workbench(
+        create_ground_session(
+            "private-source-selector",
+            goal="Build source-supported fixture cases.",
+        ),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    session = propose_ground_rule(
+        session,
+        rule="Publish only source-supported facts.",
+        rationale="This preserves the evidence boundary.",
+        current_contexts=contexts,
+        rule_provenance="DISTILLED_FROM_GOAL",
+    )
+    store.save_ground_session(session)
+    seen: list[str] = []
+
+    def fake_interpret(current, text, _provider):
+        assert current == session
+        seen.append(text)
+        return GroundTurnAction(
+            kind="PROPOSE_CASE",
+            understanding="Use the locally aliased candidate.",
+            question="Approve this exact Case proposal?",
+            selector="r1",
+            source_selector="m1",
+            targets=(targets[0].name,),
+            expected="Publish the supported entrance closure.",
+            rationale="The selected candidate supports the target.",
+            case_role="FIT",
+            disposition="INCLUDE",
+        )
+
+    monkeypatch.setattr(
+        ground_command,
+        "interpret_ground_turn",
+        fake_interpret,
+    )
+
+    proposal = ground_command._interpret_named_ground_turn(
+        session,
+        (
+            f"On 2026-07-29, use Memory {candidate.uid[:8]} as the "
+            "fitting example."
+        ),
+    )
+
+    assert len(seen) == 1
+    assert candidate.uid[:8] not in seen[0]
+    assert "Memory m1" in seen[0]
+    assert "2026-07-29" in seen[0]
+    assert candidate.uid in proposal.review.argv
+    assert "m1" not in proposal.review.argv
+
+    with pytest.raises(
+        GroundError,
+        match="source Memory selector supplied in this visible turn",
+    ):
+        ground_command._interpret_named_ground_turn(
+            session,
+            "Use the first candidate without an explicit selector.",
+        )
+    assert len(seen) == 2
+
+    unknown_uid = "ffffffff-ffff-4fff-8fff-ffffffffffff"
+    redacted, aliases = ground_command._redact_ground_source_selectors(
+        session,
+        f"Do not use {unknown_uid} or deadbeef on 2026-07-29.",
+        store,
+    )
+    assert unknown_uid not in redacted
+    assert "deadbeef" not in redacted
+    assert redacted.count("<unrecognized-identifier>") == 2
+    assert "2026-07-29" in redacted
+    assert aliases == {}
+
+
+@pytest.mark.parametrize("tamper", ("ground", "context", "duplicate"))
+def test_named_ground_apply_rejects_tampered_frozen_version_guards(
+    isolated_store,
+    monkeypatch,
+    tamper,
+):
+    store = MemoryStore()
+    session = create_ground_session(
+        "tampered-review",
+        goal="Bind exact evidence.",
+    )
+    store.save_ground_session(session)
+    for name in ("tamper-raw", "tamper-derived", "tamper-target"):
+        store.save(ops.init(name))
+    proposal = ground_command._ground_action_proposal(
+        session,
+        GroundTurnAction(
+            kind="BIND",
+            understanding="Bind the reviewed Contexts.",
+            question="Approve?",
+            description="An exact binding.",
+            raw_context="tamper-raw",
+            derived_context="tamper-derived",
+            publication_target="tamper-target",
+        ),
+    )
+    argv = list(proposal.review.argv)
+    if tamper == "ground":
+        del argv[3:5]
+    elif tamper == "context":
+        index = argv.index("--if-context-version")
+        del argv[index : index + 2]
+    else:
+        argv.extend(
+            [
+                "--if-ground-version",
+                ground_command._ground_version_token(session),
+            ]
+        )
+    tampered = replace(
+        proposal,
+        review=ground_command.ExactCommandReview(
+            argv=tuple(argv),
+            effects=proposal.review.effects,
+        ),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_approved_ground_command",
+        lambda _argv: pytest.fail("tampered command must not run"),
+    )
+
+    with pytest.raises(GroundError, match="version guard|Context guards"):
+        ground_command._apply_named_ground_proposal(session, tampered)
+
+    assert store.load_ground_session(session.contract_name) == session
+
+
+def test_ordinary_ground_writer_cannot_overwrite_a_newer_guarded_state(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    original = create_ground_session(
+        "ordinary-writer-race",
+        goal="Original Goal.",
+    )
+    store.save_ground_session(original)
+    for name in ("ordinary-raw", "ordinary-derived", "ordinary-target"):
+        store.save(ops.init(name))
+    competing = replace(original, goal="Newer guarded Goal.")
+    original_save = MemoryStore.save_ground_session
+    captured: list[dict[str, object]] = []
+
+    def race_before_stale_save(self, value, **kwargs):
+        if (
+            value.contract_name == original.contract_name
+            and value.schema_version == 2
+            and not captured
+        ):
+            captured.append(dict(kwargs))
+            original_save(self, competing)
+        return original_save(self, value, **kwargs)
+
+    monkeypatch.setattr(
+        MemoryStore,
+        "save_ground_session",
+        race_before_stale_save,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "ground",
+            original.contract_name,
+            "--description",
+            "Bind the exact evidence.",
+            "--raw-context",
+            "ordinary-raw",
+            "--derived-context",
+            "ordinary-derived",
+            "--publication-target",
+            "ordinary-target",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "changed before it could be saved" in result.output
+    assert captured == [
+        {
+            "replace": False,
+            "verify_bound_frames": True,
+            "expected_uid": original.uid,
+            "expected_revision": original.revision,
+            "expected_digest": ground_session_record_digest(original),
+        }
+    ]
+    assert store.load_ground_session(original.contract_name) == competing
+
+
+def test_cli_ground_help_marks_name_as_optional():
+    result = runner.invoke(app, ["ground", "--help"])
+
+    assert result.exit_code == 0, result.output
+    assert "[GROUND_NAME]" in result.output
+    assert "omit to start from a blank" in result.output
+    assert "unsaved frame" in result.output
 
 
 def test_cli_keeps_named_sessions_independent_and_refuses_silent_redefinition(
@@ -514,6 +1316,438 @@ def test_task_1_workbench_binds_empty_target_contract_above_51_to_54_frame(
     assert _non_ground_store_bytes(isolated_store) == storage_before
 
 
+def test_target_focus_renders_one_compact_read_only_ground_screen(
+    isolated_store,
+):
+    store = MemoryStore()
+    raw, derived, targets, candidate = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    bound = bind_ground_workbench(
+        create_ground_session(
+            "task-1-focus",
+            goal=(
+                "Determine what campus-wiki must contain and how the "
+                "verified local changes relate to it."
+            ),
+        ),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    proposed = propose_ground_round(
+        bound,
+        rule=(
+            "Use verified construction changes only for supported target "
+            "entries."
+        ),
+        case=candidate.content,
+        source_context_uid=derived.uid,
+        source_memory_uid=candidate.uid,
+        target_context_names=("campus-wiki",),
+        expected="Record the supported entrance closure.",
+        rationale="The source supports one affected wiki entry.",
+        current_contexts=contexts,
+    )
+
+    rendered = render_ground_focus(
+        proposed,
+        "campus-wiki",
+        contexts,
+    )
+
+    assert (
+        "MEM GROUND · task-1-focus · OPEN · FRESH"
+        in rendered
+    )
+    assert "Revision: 1" in rendered
+    assert "FOCUS · campus-wiki" in rendered
+    assert "GOAL\n" in rendered
+    assert "BOUND MATERIAL" in rendered
+    assert "RAW         temp/task-1 · 51 Memories" in rendered
+    assert (
+        "CANDIDATES  temp/task-1-atomized · 54 Memories"
+        in rendered
+    )
+    assert "TARGET      campus-wiki · 0 Memories" in rendered
+    assert "MEM UNDERSTANDS" in rendered
+    assert "[BLOCKED]" in rendered
+    assert "SUPPORTED SLICE" in rendered
+    assert "COMPLETE TARGET" in rendered
+    assert "> 3  BOTH" in rendered
+    assert (
+        "RULES 1 (1 proposed) · CASES 1 (1 proposed) · ACCEPTED 0"
+        in rendered
+    )
+    assert "one exact mem command" in rendered
+    assert "requires its own approval" in rendered
+    assert "METHOD READINGS" not in rendered
+    assert "Derived Task 1 candidate 02." not in rendered
+
+
+def test_cli_focus_target_is_read_only_and_can_render_one_action_result(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    raw, derived, targets, _ = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    session = bind_ground_workbench(
+        create_ground_session(
+            "task-1-focus-cli",
+            goal="Design the affected campus-wiki material.",
+        ),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    store.save_ground_session(session)
+    ground_path = (
+        isolated_store
+        / "ground-sessions"
+        / "task-1-focus-cli.json"
+    )
+    ground_before = ground_path.read_bytes()
+    non_ground_before = _non_ground_store_bytes(isolated_store)
+
+    def refuse_save(*_args, **_kwargs):
+        raise AssertionError("focus-only rendering must not save")
+
+    with monkeypatch.context() as patch:
+        patch.setattr(
+            MemoryStore,
+            "save_ground_session",
+            refuse_save,
+        )
+        focused = runner.invoke(
+            app,
+            [
+                "ground",
+                "task-1-focus-cli",
+                "--focus-target",
+                "campus-wiki",
+            ],
+        )
+    assert focused.exit_code == 0, focused.output
+    assert "FOCUS · campus-wiki" in focused.output
+    assert ground_path.read_bytes() == ground_before
+    assert _non_ground_store_bytes(isolated_store) == non_ground_before
+
+    revised = runner.invoke(
+        app,
+        [
+            "ground",
+            "task-1-focus-cli",
+            "--revise-goal",
+            (
+                "Ground supported campus-wiki Cases first, then record "
+                "missing baseline requirements separately."
+            ),
+            "--change-reason",
+            "The bound evidence supports a slice, not a complete baseline.",
+            "--focus-target",
+            "campus-wiki",
+        ],
+    )
+
+    assert revised.exit_code == 0, revised.output
+    assert "Revision: 1" in revised.output
+    assert "FOCUS · campus-wiki" in revised.output
+    assert "Ground supported campus-wiki Cases first" in revised.output
+    restored = store.load_ground_session("task-1-focus-cli")
+    assert restored is not None
+    assert restored.revision == 1
+    assert len(restored.items) == 1
+    assert restored.items[0].content == "REFINE GOAL"
+    assert _non_ground_store_bytes(isolated_store) == non_ground_before
+    assert all(
+        store.list_checkpoints(context.name) == []
+        for context in contexts
+    )
+
+
+def test_cli_focus_target_rejects_missing_unbound_and_competing_views(
+    isolated_store,
+):
+    store = MemoryStore()
+    raw, derived, targets, _ = _task_1_workbench(store)
+    session = bind_ground_workbench(
+        create_ground_session("focus-errors"),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    store.save_ground_session(session)
+    path = isolated_store / "ground-sessions" / "focus-errors.json"
+    before = path.read_bytes()
+
+    unknown = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-errors",
+            "--focus-target",
+            "missing-target",
+        ],
+    )
+    unknown_after_action_request = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-errors",
+            "--revise-goal",
+            "This revision must not be saved.",
+            "--change-reason",
+            "The focused target is invalid.",
+            "--focus-target",
+            "missing-target",
+        ],
+    )
+    competing = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-errors",
+            "--focus-target",
+            "campus-wiki",
+            "--snapshot",
+        ],
+    )
+    absent = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-does-not-exist",
+            "--focus-target",
+            "campus-wiki",
+        ],
+    )
+    bind_and_focus = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-errors",
+            "--description",
+            "Do not rebind while focusing.",
+            "--focus-target",
+            "campus-wiki",
+        ],
+    )
+    unsupported_action = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-errors",
+            "--select",
+            "1",
+            "--focus-target",
+            "campus-wiki",
+        ],
+    )
+    hidden_target_revision = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-errors",
+            "--focus-target",
+            "campus-wiki",
+            "--revise-target",
+            "construction-updates/building-access",
+            "--requirement-text",
+            "This different target must not be changed.",
+            "--change-reason",
+            "The focused receipt would hide this effect.",
+        ],
+    )
+
+    assert unknown.exit_code == 1
+    assert "missing or ambiguous" in unknown.output
+    assert unknown_after_action_request.exit_code == 1
+    assert "missing or ambiguous" in unknown_after_action_request.output
+    assert competing.exit_code == 1
+    assert "either --snapshot or --focus-target" in competing.output
+    assert absent.exit_code == 1
+    assert "requires an existing bound Ground" in absent.output
+    assert bind_and_focus.exit_code == 1
+    assert "requires an already bound Ground" in bind_and_focus.output
+    assert unsupported_action.exit_code == 1
+    assert "combines only with one Goal" in unsupported_action.output
+    assert hidden_target_revision.exit_code == 1
+    assert "must identify the same target" in hidden_target_revision.output
+    assert not (
+        isolated_store
+        / "ground-sessions"
+        / "focus-does-not-exist.json"
+    ).exists()
+    assert path.read_bytes() == before
+
+
+def test_target_focus_reports_stale_frames_and_sanitizes_text(
+    isolated_store,
+):
+    store = MemoryStore()
+    raw, derived, targets, _ = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    session = bind_ground_workbench(
+        create_ground_session(
+            "focus-stale",
+            goal="Visible\x1b[31m Goal",
+        ),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    store.save_ground_session(session)
+    campus = next(
+        context for context in targets if context.name == "campus-wiki"
+    )
+    campus.add("A changed target Memory.")
+    store.save(campus)
+    ground_path = isolated_store / "ground-sessions" / "focus-stale.json"
+    context_path = store._context_file("campus-wiki")
+    ground_before = ground_path.read_bytes()
+    context_before = context_path.read_bytes()
+
+    rendered = render_ground_focus(
+        session,
+        "campus-wiki",
+        contexts,
+    )
+
+    assert "\x1b" not in rendered
+    assert "Visible�[31m Goal" in rendered
+    assert "OPEN · STALE" in rendered
+    assert "0 bound · 1 current Memories" in rendered
+    assert "STALE BOUND MATERIAL" in rendered
+    assert "campus-wiki" in rendered
+    assert "before changing Goal, Rules, or Cases" in rendered
+    assert "SUPPORTED SLICE" not in rendered
+
+    focused = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-stale",
+            "--focus-target",
+            "campus-wiki",
+        ],
+    )
+    revision = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-stale",
+            "--revise-goal",
+            "This stale revision must not be saved.",
+            "--change-reason",
+            "The bound target changed.",
+            "--focus-target",
+            "campus-wiki",
+        ],
+    )
+
+    assert focused.exit_code == 0, focused.output
+    assert "OPEN · STALE" in focused.output
+    assert revision.exit_code == 1
+    assert "workbench is stale" in revision.output
+    assert ground_path.read_bytes() == ground_before
+    assert context_path.read_bytes() == context_before
+
+
+def test_focus_requirement_uid_prefix_is_exact_or_unambiguous(
+    isolated_store,
+):
+    store = MemoryStore()
+    raw, derived, targets, _ = _task_1_workbench(store)
+    session = bind_ground_workbench(
+        create_ground_session("focus-prefix"),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    payload = session.to_dict()
+    payload["requirements"][0]["uid"] = (
+        "aaaaaaaa-0000-4000-8000-000000000001"
+    )
+    payload["requirements"][1]["uid"] = (
+        "aaaaaaaa-0000-4000-8000-000000000002"
+    )
+    session = GroundSession.from_dict(payload)
+    store.save_ground_session(session)
+    path = isolated_store / "ground-sessions" / "focus-prefix.json"
+    before = path.read_bytes()
+
+    ambiguous = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-prefix",
+            "--focus-target",
+            "aaaaaaaa",
+        ],
+    )
+    ambiguous_action = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-prefix",
+            "--revise-goal",
+            "This ambiguous revision must not be saved.",
+            "--change-reason",
+            "The selector is ambiguous.",
+            "--focus-target",
+            "aaaaaaaa",
+        ],
+    )
+    exact_name = runner.invoke(
+        app,
+        [
+            "ground",
+            "focus-prefix",
+            "--focus-target",
+            "campus-wiki",
+        ],
+    )
+
+    assert ambiguous.exit_code == 1
+    assert "missing or ambiguous" in ambiguous.output
+    assert ambiguous_action.exit_code == 1
+    assert "missing or ambiguous" in ambiguous_action.output
+    assert exact_name.exit_code == 0, exact_name.output
+    assert "FOCUS · campus-wiki" in exact_name.output
+    assert path.read_bytes() == before
+
+    overlap_payload = session.to_dict()
+    overlap_payload["requirements"][0]["uid"] = (
+        "aaaaaaaa-0000-4000-8000-000000000001"
+    )
+    overlap_payload["requirements"][1]["uid"] = (
+        "bbbbbbbb-0000-4000-8000-000000000002"
+    )
+    exact_target_uid = overlap_payload["requirements"][1][
+        "target_context_uid"
+    ]
+    for frame in overlap_payload["frames"]:
+        if frame["context_uid"] == exact_target_uid:
+            frame["context_name"] = "aaaaaaaa"
+            break
+    overlap = GroundSession.from_dict(overlap_payload)
+
+    assert (
+        resolve_ground_requirement(overlap, "aaaaaaaa").uid
+        == "bbbbbbbb-0000-4000-8000-000000000002"
+    )
+
+
 def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
     isolated_store,
 ):
@@ -585,7 +1819,7 @@ def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
         revised,
         (raw, derived, *targets),
     )
-    assert "2 · WORKING RULES" in round_snapshot
+    assert "2 · RULES" in round_snapshot
     assert "[PROPOSED · INDUCED_FROM_CASES]" in round_snapshot
     assert "3 · CASES · FIT / BOUNDARY / CONTRAST" in round_snapshot
     assert "[PROPOSED · FIT · INCLUDE]" in round_snapshot
@@ -891,8 +2125,8 @@ def test_cli_binds_proposes_accepts_and_revises_goal_in_named_workbench(
         ],
     )
     assert bound.exit_code == 0, bound.output
-    assert "1 · GOAL · EDITABLE CONTRACT" in bound.output
-    assert "2 · WORKING RULES" in bound.output
+    assert "1 · GOAL" in bound.output
+    assert "2 · RULES" in bound.output
     assert "3 · CASES · FIT / BOUNDARY / CONTRAST" in bound.output
 
     proposed = runner.invoke(

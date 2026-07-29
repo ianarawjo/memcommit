@@ -31,7 +31,7 @@ study fixture, it is kept separately:
 ```text
 ~/.mem/
 ├── contexts/
-│   └── campus-wiki/
+│   └── facilities-reference/
 │       ├── context.json
 │       └── checkpoints/
 └── query-sources/
@@ -56,6 +56,39 @@ A branch, merge, or revert carries only the `QueryContextRef` pointer.
 Removing or clearing that pointer does not delete the underlying study source,
 because another Context may still refer to it.
 
+## Task 1 organizational origin and local fork
+
+For the revised Task 1 authority model, the organizational wiki and the
+participant's working copy are deliberately different objects. Their
+canonical identifiers follow
+[`task-1-naming-contract.md`](task-1-naming-contract.md):
+
+```text
+campus-wiki                         query-only organizational origin
+participant/campus-wiki-fork        writable local fork of the participant's assigned scope
+participant/construction-updates    verified local change source
+```
+
+The local fork can contain direct, writable Memories for the assigned wiki
+sections and a `QueryContextRef` named `campus-wiki` for asking bounded
+questions of the opaque origin. Ordinary traversal, `impact`, and `update`
+must not open that pointer. They operate only on the fork's directly available
+local material. This avoids treating query access as either a full checkout or
+write permission.
+
+The current query-only prototype can preserve and query such a pointer, but it
+does not create a scoped fork from the concealed source, bind a fork to an
+upstream revision, refresh it, or publish changes. Task 1 must therefore seed
+the local fork as fixture data. Future `push` or PR support must treat
+publication as a separate authorized operation rather than allowing `update`
+to write through the pointer.
+
+The seeded fork is assumed to be the latest approved snapshot of the
+participant's assigned scope when Task 1 begins, with no concurrent remote
+change to that scope during the task. This is a study-scenario simplification,
+not a guarantee provided by `QueryContextRef`. A later publication adapter
+must replace it with explicit upstream revision and divergence checks.
+
 ## Commands
 
 The researcher installs a fixture with the hidden developer command:
@@ -63,7 +96,7 @@ The researcher installs a fixture with the hidden developer command:
 ```bash
 mem dev query-source install contractor-agreements \
   --from ./contractor-agreements.md \
-  --into campus-wiki
+  --into facilities-reference
 ```
 
 This does not change the active Context. Installation is rolled back if the
@@ -72,12 +105,12 @@ parent Context cannot be saved.
 Participant-facing inspection deliberately reveals metadata only:
 
 ```text
-$ mem ls campus-wiki
+$ mem ls facilities-reference
 [query   1234abcd] contractor-agreements (query-only)
 ```
 
 ```text
-$ mem show contractor-agreements --context campus-wiki
+$ mem show contractor-agreements --context facilities-reference
 Query-only Context: contractor-agreements
 Mode: query-only research prototype
 Content: concealed from mem ls and mem show

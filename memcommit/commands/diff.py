@@ -1,4 +1,4 @@
-"""Render the active staged semantic update without consulting a model."""
+"""Render the active staged or locally applied update without a model."""
 from __future__ import annotations
 
 import difflib
@@ -13,6 +13,7 @@ from memcommit.update import (
     AddOperation,
     EditOperation,
     UpdateSession,
+    applied_session_matches,
     count_operations,
     session_matches,
 )
@@ -63,22 +64,33 @@ def _summary(session: UpdateSession) -> str:
 
 
 def _render_header(session: UpdateSession, *, verbose: bool) -> None:
-    typer.secho("Update preview", fg=typer.colors.CYAN, bold=True)
+    heading = (
+        "Applied local update"
+        if session.status == "applied"
+        else "Update preview"
+    )
+    typer.secho(heading, fg=typer.colors.CYAN, bold=True)
     typer.secho(
         f"{session.source_name} → {session.target_name}",
         bold=True,
     )
     typer.echo(_summary(session))
     if verbose:
-        typer.secho(f"Stage   {session.uid}", dim=True)
+        typer.secho(f"Update  {session.uid}", dim=True)
         typer.secho(
             f"Source  {session.source_uid}  {session.source_digest}",
             dim=True,
         )
         typer.secho(
-            f"Target  {session.target_uid}  {session.target_digest}",
+            f"Base    {session.target_uid}  {session.target_digest}",
             dim=True,
         )
+        if session.application is not None:
+            typer.secho(
+                f"Result  {session.target_uid}  "
+                f"{session.application.target_digest}",
+                dim=True,
+            )
 
 
 def _word_tokens(text: str) -> list[str]:
@@ -330,12 +342,17 @@ def render_diff(
     stat: bool = False,
     verbose: bool = False,
 ) -> None:
-    """Render one validated staged session."""
+    """Render one validated staged or locally applied session."""
     _render_header(session, verbose=verbose)
     if stat:
         return
     if not session.operations:
-        typer.echo("\nNo staged changes.")
+        message = (
+            "No local changes were needed."
+            if session.status == "applied"
+            else "No staged changes."
+        )
+        typer.echo(f"\n{message}")
         return
 
     prefixes = _short_uid_map(session)
@@ -394,15 +411,15 @@ def cmd(
         raise typer.Exit(1)
     if session is None:
         typer.secho(
-            "Diff error: no staged update. Run 'mem update --to <context>' "
+            "Diff error: no local update. Run 'mem update --to <context>' "
             "first.",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
-    if session.status != "staged":
+    if session.status not in {"staged", "applied"}:
         typer.secho(
-            "Diff error: the saved update is not staged.",
+            "Diff error: the saved record is not an update result.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -412,13 +429,21 @@ def cmd(
     try:
         source = store.load(session.source_name)
         target = store.load(session.target_name)
-        fresh = session_matches(session, source, target)
+        if session.status == "applied":
+            fresh = applied_session_matches(session, source, target)
+        else:
+            fresh = session_matches(session, source, target)
     except (OSError, ValueError):
         fresh = False
 
     if not fresh:
+        timing = (
+            "after this update was applied"
+            if session.status == "applied"
+            else "after this update was staged"
+        )
         typer.secho(
-            "STALE — source or target changed after this update was staged",
+            f"STALE — source or target changed {timing}",
             fg=typer.colors.YELLOW,
             bold=True,
             err=True,
@@ -431,7 +456,8 @@ def cmd(
     )
     if not fresh:
         typer.secho(
-            "Re-run impact and update before pushing.",
+            "Review the local fork and re-run impact/update before "
+            "contributing.",
             fg=typer.colors.YELLOW,
             err=True,
         )

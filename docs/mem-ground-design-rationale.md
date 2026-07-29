@@ -24,46 +24,196 @@ mem ground task-1-fixture \
   --snapshot
 ```
 
-The bound workbench can select a candidate, propose a Working Rule by itself,
+The bound workbench can select a candidate, propose a Rule by itself,
 attach multiple fit, boundary, or contrast cases to one rule, retain the
 earlier combined rule/case shortcut, accept/refine/defer/reject a proposal, and
 revise its Goal or one target criterion. Refining an accepted rule or case
-reopens it as `PROPOSED`; it must be accepted again. The workbench does not yet
-run a semantic provider, open a TUI, perform semantic regression
-automatically, approve the whole contract, or edit any Context. The empty
+reopens it as `PROPOSED`; it must be accepted again. The bound workbench does
+run a provider-backed, one-command-at-a-time semantic dialogue for binding,
+Goal revision, Rule proposal, traceable Case proposal, and Rule/Case review.
+It does not yet perform semantic regression automatically, approve the whole
+Ground, or edit any Context. The blank-entry adapter creates only an initial
+named Goal after approval, then continues into the named workbench. The empty
 scaffold remains intentional: no rule or example is generated merely because
 a session was created.
 
-### Immediate next integration TODO
+### Blank entry before naming
 
-The atomize workbench now has the first implemented adapter for a structured,
-multi-turn conversational grounding loop. The immediate next task is to
-extract its reusable turn engine into `mem ground`. This integration is not
-implemented by the current deterministic named-ground workbench.
+Running `mem ground` without a name has two environment-sensitive
+presentations of the same unsaved state:
 
-The reusable portion should cover append-only turns, active and superseded
-user-supported propositions, agent implications, follow-up questions,
-corrections, explicit permission, and stale-frame checks. Atomize-specific
-issue identities, source arity, and edit proposals must remain in its adapter;
-named-ground Goals, Working Rules, Cases, Decisions, and regression checks
-remain in the `ground` adapter.
+- with interactive stdin and stdout (a TTY), it opens a full-screen terminal
+  UI (a TUI);
+- outside a TTY, it prints a stable `NEW` snapshot and exits without reading
+  stdin or contacting a provider.
 
-The reason for this ordering is methodological as well as architectural.
-Atomize provides a bounded concrete interaction in which a reviewer can say,
-in effect, "if that is true, this later statement must also change," correct
-the agent's extension, and then approve the resulting change set. That pattern
-resembles grounding in ordinary human communication. `mem ground` should
-generalize the proven pattern rather than begin with an abstract chat layer
-whose epistemic stages have not been exercised.
+The TUI keeps Goal, Rules, and Cases in a fixed upper panel while dialogue,
+the proposed command, its complete effect boundary, and the input area occupy
+the lower portion:
 
-No current atomize grounding session is a named ground, and no named ground
-automatically contributes evidence to atomization. Artifact migration,
+```text
+MEM GROUND · NEW · NOT SAVED
+
+GOAL
+  (not yet stated)
+
+RULES
+  (none yet)
+
+CASES
+  (none yet)
+
+OPEN QUESTION · GOAL
+  What are you trying to understand, decide, or make together?
+
+────────────────────────────────────────────────────────
+YOU / AGENT UNDERSTANDING / AGENT QUESTION
+PROPOSED COMMAND · NOT RUN
+────────────────────────────────────────────────────────
+DESCRIBE WHAT YOU HAVE SO FAR
+> ...
+```
+
+This is the normal entry point when the person has only a rough concern, such
+as wanting to work out which parts of some notes were reported. Early
+grounding should not require a session identifier, polished Goal, Rules, or
+Cases. The person can answer in ordinary language; the Codex-backed adapter
+then returns either one consequential `ASK` turn or a structured
+`PROPOSE(name, goal, completion)` turn. The provider never supplies a command.
+The host validates and freezes those three fields, constructs the exact
+creation argv locally, and presents it for explicit approval.
+
+The blank frame is not an unnamed persistent Ground. It does not construct a
+store, reserve a name, infer a Goal, inspect the current Context, or write
+dialogue text. Persisting an unnamed session would weaken identity and resume
+semantics, while silently generating a slug could collide with an existing
+Ground or make an unreviewed interpretation durable. Options therefore still
+require `GROUND_NAME`; `mem ground --goal ...`, `--snapshot`, or another
+option without a name fails without creating state. A provider-suggested name
+is checked for a collision before approval and checked again immediately
+before execution.
+
+The current provider is the existing one-shot Codex adapter authenticated by
+the local ChatGPT login. Each interpretation is ephemeral and receives only
+the submitted user turns. It does not receive the current Context, any
+Memory, query-only content, existing Grounds, filesystem state, or command
+authority. `ASK` turns accumulate the bounded user replies explicitly rather
+than relying on hidden provider conversation state. Claude, MCP, or an
+internal provider can later implement the same structured boundary.
+
+On a proposal, the TUI shows the locally rendered command and lists every
+effect: one Ground is created, its Goal and completion criterion are set, and
+Rules, Cases, Contexts, Memories, and checkpoints are unchanged. Only the
+dedicated `A` action approves that exact frozen proposal. `E` returns it for
+refinement, while `Q`, Escape, Ctrl-C, provider failure, malformed output, or
+name collision leave state unchanged. The approved argv is dispatched through
+the ordinary `memcommit.cli` entry point as an argument vector, never through
+a shell, and its actual output is reported after the TUI closes.
+
+The original blank-entry slice ended after creating or cancelling one initial
+Ground. The continuing vertical slice now enters the named-Ground TUI
+immediately after creation and also opens that TUI when an existing name is
+entered without options in a terminal. The fixed panel
+changes from `NEW · NOT SAVED` to `SAVED · UNBOUND`, then to `SAVED · BOUND`
+after an explicitly approved binding command.
+
+The continuing loop supports one exact command at a time for binding, Goal
+revision, Rule proposal, Rule/Case review, and traceable Case proposal.
+Proposal and acceptance remain separate approvals. After every success the
+Ground is reloaded and the fixed Goal–Rules–Cases panel is refreshed. The
+displayed command carries the reviewed Ground UID, revision, and serialized
+digest as a save-boundary version token. A binding command additionally
+freezes each selected Context's UID, digest, and direct-item counts because an
+unbound Ground has no saved frames yet. The normal CLI locks and rechecks the
+bound Context frames, then atomically compares the saved Ground under its own
+lock before replacing it. A concurrent Ground or evidence-frame change
+invalidates the pending command without applying it. Before a later semantic
+turn, and after any unconfirmed application, the TUI reloads the saved Ground
+instead of continuing from a stale panel or retrying an old approval.
+Ordinary non-replacement Ground mutations use the state they first loaded as
+an implicit compare-and-swap precondition too, so an older non-interactive
+writer cannot overwrite a newer TUI-approved mutation.
+
+The named provider payload contains the portable Ground name, Goal and
+completion text, Rule/Case text and rationale, their local `rN`/`cN` aliases
+and relations, state and revision, bound Context names, and the current visible
+dialogue cycle. It does not contain live Context projections, source
+references, or durable UIDs. A saved Case's text may be an earlier exact copy
+of source Memory content, but its source identity remains local. A source
+selector typed for a new Case is matched locally and replaced with a stable
+`mN` alias before inference; only an alias actually introduced by that
+redaction can be mapped back into the reviewed command.
+
+Natural-language transcript persistence and asynchronous provider progress
+remain follow-up work. Non-TTY output remains deterministic so remote
+captures, tests, and surrounding agents do not hang on a terminal prompt.
+The reusable presentation boundary and its rejected alternatives are recorded
+in
+[`shared-tui-command-review-design-rationale.md`](shared-tui-command-review-design-rationale.md).
+
+### Implemented target focus and agent-mediated command loop
+
+The first interactive vertical slice deliberately keeps semantic
+interpretation outside the Ground persistence engine. A target-focused,
+read-only view is available as:
+
+```bash
+mem ground task-1-fixture --focus-target campus-wiki
+```
+
+The screen focuses one bound target, restates the saved Goal and target
+requirement, shows the exact raw/candidate/target frames, exposes a recorded
+blocker, and ends with one consequential question. It omits the complete
+target ledger, candidate list, method readings, UUIDs, and digests that remain
+available in `--snapshot`. The view changes no Ground data. It may also be
+combined with one Goal or target-requirement revision so that the same command
+shows the post-action focused state. Other actions retain their existing
+output until focused Rule and Case receipts are designed; `--focus-target`
+currently rejects those combinations rather than hiding the affected item
+behind aggregate counts.
+
+In this prototype the person may answer in the blank-entry TUI, continue in
+the named-Ground TUI, or work through a surrounding agent conversation. The
+relevant adapter maps that answer to at most one existing state-changing
+`mem` command, displays the exact command and its Goal, Rules, or Cases effect,
+and waits for explicit approval. One approval authorizes only that command.
+The adapter may then run it through the ordinary CLI path and must obtain
+separate approval before a follow-up command. Commands proven to be read-only
+do not consume this approval. In particular, focus rendering of an existing
+Ground is read-only; the legacy `mem ground NAME --snapshot` form is
+creation-capable when `NAME` does not exist and must not be treated as
+inspection until existence has been confirmed.
+
+This split is intentional:
+
+- `ground` stores and validates the jointly revised Goal, Rules, and Cases;
+- the agent interprets natural-language turns and selects one deterministic
+  CLI action;
+- existing commands remain the mutation boundary; and
+- Context changes continue to use `add`, `edit`, `update`, or another
+  purpose-specific operation rather than direct JSON edits by `ground`.
+
+The current slice adds a semantic interpretation adapter, not a second
+persistence engine. It does not persist natural-language dialogue turns or
+batch multiple mutations into one approval. Starting with one real command per
+turn lets the design acquire missing Goal/Rule/Case primitives from observed
+interactions rather than speculating about a complete transition engine. If a
+later turn regularly requires several inseparable actions, an atomic round
+command can be designed from that evidence.
+
+The atomize workbench remains a concrete precedent for consequential
+follow-ups, corrections, and explicit permission. Atomize-specific issue
+identities, source arity, and edit proposals stay in its adapter. No current
+atomize grounding session is a named Ground, and no named Ground automatically
+contributes evidence to atomization.
+
+Artifact migration,
 cross-operation import/export, and a shared schema are deferred until their
 compatibility and provenance boundaries are designed. The focused rationale
 is recorded in
 [`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md).
 
-### Generalization target: Goal–Working Rules–Cases alignment
+### Generalization target: Goal–Rules–Cases alignment
 
 `mem ground` should generalize the conversational pattern proven by atomize:
 the person and agent use consequential follow-up questions to align three
@@ -71,17 +221,28 @@ revisable layers rather than treating the first request as a fixed form.
 
 | Layer | Grounding role |
 | --- | --- |
-| `GOAL` | The shared outcome and completion criterion: what the session is trying to make true. |
-| `WORKING RULES` | Inspectable, revisable rules for interpreting evidence, making judgments, proposing actions, and deciding what the current operation may apply. |
+| `GOAL` | The desired outcome and completion criterion: what the session is trying to make true. |
+| `RULES` | Inspectable, revisable rules for interpreting evidence, making judgments, proposing actions, and deciding what the current operation may apply. |
 | `CASES` | Concrete judgments about exact artifacts. Proposed Cases test the current Goal and rules; explicitly approved Cases become regression anchors. |
+
+These three layers are the Ground's result, jointly revised by the person and
+agent. `ground` does not produce a separate result artifact. A later
+purpose-specific operation may use the accepted Ground to propose changes to a
+Context, but that Context is not a fourth Ground layer.
+
+`Goal`, `Rules`, and `Cases` are stable type names. Whether they have become
+shared or remain provisional belongs in item and session status, not in names
+such as `Shared Goal` or `Working Rules`. The serialized field
+`contract_name` remains an internal version-1/version-2 compatibility name;
+new user-facing output calls the artifact a named Ground.
 
 The artifact and the Case are related but not identical. In atomize, Memories
 are the concrete artifacts being judged. A Case records the expected reading,
 judgment, or outcome for an exact Memory or group of Memories. Merely being
 inspected, affected, or edited does not make a Memory a golden Case; that
-contractual authority requires explicit approval.
+accepted status requires explicit approval.
 
-A difficult Case can reveal that a Working Rule or even the Goal is wrong.
+A difficult Case can reveal that a Rule or even the Goal is wrong.
 Grounding is therefore bidirectional rather than a one-way process of fitting
 examples to an immutable specification. Its reusable dialogue should be:
 
@@ -98,15 +259,15 @@ show a concrete mismatch or candidate
 Follow-ups must be consequential. A generic request for more detail is not
 enough; the interface should say which judgment or proposed action cannot be
 settled without the answer. The user may choose a suggested reading, enter a
-different reading, revise a Working Rule, add a closer Case, or revise the Goal
-when lower-level evidence exposes a bad contract.
+different reading, revise a Rule, add a closer Case, or revise the Goal
+when lower-level evidence exposes a bad Goal boundary.
 
 The first two representative applications are fixed as follows.
 
 1. **Atomize ambiguity resolution.** The Goal is to reduce actionable
    ambiguity until the selected reading and consequential Memory changes match
    the reviewer's intent, not to eliminate every imaginable linguistic
-   reading. Working Rules describe how the agent may judge readings, propagate
+   reading. Rules describe how the agent may judge readings, propagate
    supplied context, identify affected Memories, and propose or apply edits.
    The source and affected Memories are the concrete artifacts; reviewed
    readings and expected outcomes are the candidate Cases. A clarification
@@ -114,7 +275,7 @@ The first two representative applications are fixed as follows.
    reveal that the agent's scope extension is wrong.
 2. **Task fixture and wiki co-design.** The Goal is to agree on what the
    campus wiki and local construction-update fixture must represent and where
-   each Memory belongs. Working Rules describe evidence requirements,
+   each Memory belongs. Rules describe evidence requirements,
    categories, placement, coverage, non-invention, and audience or disclosure
    judgments within the fixed privacy boundary. Cases bind source examples to
    expected fixture content, placement, or disposition. A follow-up may add a
@@ -122,15 +283,16 @@ The first two representative applications are fixed as follows.
    incomplete; accepted Cases become regression anchors for later candidates.
 
 These two examples are the initial design targets, not an exhaustive operation
-list. The shared `ground` engine should own dialogue, revision, follow-up,
-approval, and regression semantics. Each adapter should continue to own its
-artifact types, judgments, and application rules.
+list. The current provider-backed adapter uses existing deterministic Ground
+commands for revision and approval. Any later asynchronous or cross-operation
+dialogue controller must preserve the same one-command permission and
+application boundaries.
 
-Working Rules are adjustable task knowledge, not a way to negotiate away
+Rules are adjustable task knowledge, not a way to negotiate away
 implementation invariants. Privacy restrictions, query-only opacity,
 provenance requirements, stale-frame validation, and explicit mutation
 authority remain hard system boundaries. Interpreting atomize through
-Goal–Working Rules–Cases also does not convert an atomize session into a named
+Goal–Rules–Cases also does not convert an atomize session into a named
 ground, promote an affected Memory into a golden Case, or synchronize the two
 schemas. Any transfer requires a separate explicit provenance and
 compatibility contract.
@@ -138,17 +300,17 @@ compatibility contract.
 ## Decision
 
 `ground` is the session-level operation for a person and an agent to establish
-and maintain a local judgment or data-design contract. The contract grows
-through concrete cases, readable rules, corrections, boundary examples, and
-explicit decisions.
+and maintain a local Goal–Rules–Cases Ground. The Ground itself is the jointly
+produced result. It grows through concrete cases, readable rules, corrections,
+boundary examples, and explicit decisions.
 
 The long-term loop is:
 
 ```text
 present one concrete case
-→ judge it against the currently accepted contract
+→ judge it against the currently accepted Ground
 → retrieve a supporting case and a materially close contrast
-→ apply the contract, curate a case, or induct a rule delta
+→ apply the Rules, curate a Case, or induct a Rule delta
 → show the rule and case diff
 → let the user accept, correct, supply context, or enter a closer case
 → regression-check previously accepted cases
@@ -156,11 +318,11 @@ present one concrete case
 ```
 
 Retrieval of supporting and contrast cases, semantic regression, and
-whole-contract approval are not yet automated.
+whole-Ground approval are not yet automated.
 
 The operation is complete only locally: reviewed cases in the named scope are
 adequately explained, unresolved boundaries remain explicit, regression checks
-pass, and the user explicitly approves the contract. Neither the model nor a
+pass, and the user explicitly approves the Ground. Neither the model nor a
 count threshold may infer approval.
 
 ## Operation hierarchy
@@ -170,12 +332,12 @@ hierarchy is:
 
 | Concept | Responsibility |
 | --- | --- |
-| `ground` | Persist and orchestrate the complete interactive common-grounding loop. |
-| contract check | Judge whether the current rules and accepted cases already explain a candidate. This is a stage, not a new public `fit` command. |
+| `ground` | Persist and validate Goal–Rules–Cases judgments through deterministic actions used by the conversational orchestrator. |
+| coverage check | Judge whether the current Rules and accepted Cases already explain a candidate. This is a stage, not a new public `fit` command. |
 | `induct` | Propose a reusable rule, exception, narrowing, or broadening from reviewed cases. |
 | case curation | Find, enter, or retain fit, boundary, and contrast cases. It is initially an internal grounding action rather than a public command. |
 | regression check | Show whether a proposed rule or case decision changes previously accepted judgments. |
-| `fill` | Use an established requirement/evidence contract to propose missing target content. |
+| `fill` | Use an established requirement/evidence Ground to propose missing target content. |
 | `dream` | Perform background discovery or consolidation; it may enqueue a grounding candidate but cannot approve it. |
 | `review` | Provide a reusable interaction surface for an already defined finding adapter; it is not the semantic grounding process. |
 
@@ -183,7 +345,7 @@ The earlier `fit` notes use `YES / MAY / NO` for whether Memories fit together
 inside a Context. Reusing the public name for case-to-rule coverage would make
 those polarities ambiguous. Grounding documentation may use the ordinary
 phrase "fit the current rule," but the first CLI should call that stage a
-contract or coverage check.
+coverage check.
 
 ## Why the name is `ground`
 
@@ -227,7 +389,7 @@ a source span. These meanings must remain explicit:
 - **evidence grounding** asks whether a stored claim is supported by its
   declared source;
 - **common grounding** asks whether the user and agent have established a
-  shared, inspectable local contract for interpreting and judging cases.
+  shared, inspectable local Ground for interpreting and judging Cases.
 
 One does not prove the other. A source-supported sentence can still be
 interpreted differently, and a mutually accepted rule can still lack adequate
@@ -261,14 +423,14 @@ reading_status = UNREAD
 ```
 
 This preserves who introduced the material and prevents an unread reference
-from silently becoming part of the accepted grounding contract.
+from silently becoming part of the accepted Ground.
 `UNREAD` specifically means that the user has not marked the saved reference
 as read in memcommit; it does not claim that no agent, author, or other person
 has read the source.
 
-## Named-session contract
+## Named-session identity
 
-Grounding is not bound to the global current Context. A Task 1 contract may
+Grounding is not bound to the global current Context. A Task 1 Ground may
 cover `campus-wiki` plus several local construction-update Contexts, while a
 different agent works on Task 2. Therefore sessions are named and independent:
 
@@ -279,7 +441,7 @@ different agent works on Task 2. Therefore sessions are named and independent:
 └── task-3-fixture.json
 ```
 
-The portable contract name is restricted to:
+The portable Ground name is restricted to:
 
 ```text
 [a-z0-9][a-z0-9._-]{0,127}
@@ -289,22 +451,22 @@ It is an identity label, not a path. `/`, `..`, uppercase letters, spaces,
 control characters, Windows device names such as `con` and `nul`, and
 symbolic-link storage are rejected. Running the same name again resumes the
 same UID without rewriting its bytes. Creation options cannot silently
-redefine an existing contract; `--replace-ground` is the explicit
+redefine an existing Ground; `--replace-ground` is the explicit
 destructive/recovery boundary.
 
-There is deliberately no active-ground pointer. Requiring the contract name
-avoids a global switch whose state could collide across terminals or agents.
-The command is intentionally create-or-resume, so `--snapshot` also creates an
-empty contract when the supplied name does not exist. A mistyped name can
-therefore create an extra empty file; listing, renaming, and archiving named
-grounds remain future CLI work.
+There is deliberately no active-Ground pointer. Requiring a name for every
+persisted Ground avoids a global switch whose state could collide across
+terminals or agents. The named form is intentionally create-or-resume, so
+`--snapshot` also creates an empty Ground when the supplied name does not
+exist. A mistyped name can therefore create an extra empty file; listing,
+renaming, and archiving named Grounds remain future CLI work.
 
 ## Schema
 
 Version 1 saves:
 
 - a canonical session UUID;
-- portable contract name;
+- portable Ground name;
 - goal and completion criterion;
 - descriptive scope labels;
 - `OPEN` status and revision zero;
@@ -339,15 +501,44 @@ The whole serialized object is strictly revalidated before atomic replacement.
 Load rejects duplicate JSON keys, unknown fields, malformed UUIDs, unknown
 references, invalid names, and symbolic links.
 
+## Task 1 runtime authority revision
+
+The runtime update design now separates the organizational wiki authority from
+the participant's writable materialization target:
+
+```text
+campus-wiki                         query-only organizational origin
+participant/campus-wiki-fork        provisioned writable local scope
+participant/construction-updates    verified change evidence
+```
+
+`impact` and `update` target the local fork. The organizational origin may be
+queried through an opaque pointer and is only a future publication target.
+Query access does not grant traversal or mutation authority.
+
+The existing Ground fixture below still uses the legacy ordinary
+`campus-wiki` target and records its missing baseline as `BLOCKED`; it has not
+yet been migrated to this split. Current Ground binding also accepts ordinary
+Context frames rather than binding a query-only upstream authority. Future
+fixture work must bind the writable local fork as the materialization target
+and record the upstream publication binding separately.
+
+The local fork is assumed to be a current, researcher-provisioned snapshot of
+the participant's complete authorized candidate scope, with no concurrent
+upstream change during Task 1. It must not contain only pages already known to
+change, because doing so would answer the impact-scope question during setup.
+These are scenario assumptions until origin revisions, refresh, remote
+divergence checks, and publication are implemented.
+
 ## Confirmed Task 1 frame
 
 The Task 1 grounding surface has two deliberately different regions. This is a
 data-model distinction, not merely a proposed screen layout.
 
-The **upper region is the editable contract**, expressed in three layers:
+The **upper region is the editable Ground**, expressed in three layers:
 
 1. `GOAL`: the top-level result the fixture and operation should achieve;
-2. `WORKING RULES — DISTILLED / INDUCED`: generalizations distilled
+2. `RULES — DISTILLED / INDUCED`: generalizations distilled
    top-down from the Goal, induced bottom-up from cases, stated by the user,
    or jointly revised; and
 3. `CASES — FIT / BOUNDARY / CONTRAST`: proposed or reviewed examples that
@@ -356,7 +547,7 @@ The **upper region is the editable contract**, expressed in three layers:
 
 The copied Task description is displayed above these layers as a fixed source
 brief. It is evidence about why the workbench exists, not the entire editable
-contract. Target-specific success criteria are displayed inside the Goal layer,
+Ground. Target-specific success criteria are displayed inside the Goal layer,
 not as a fourth semantic layer. The Goal and those criteria may change when
 lower cases expose a poor category, impossible requirement, or missing
 distinction. Such a change is a new revision with its reason recorded; it is
@@ -371,7 +562,7 @@ It contains:
 - the six required local destination slots;
 - each slot's ledger-derived `EMPTY`, `PARTIAL`, or `COVERED` state, or its
   explicitly recorded `BLOCKED` state;
-- working rules and accepted golden cases that justify coverage; and
+- Rules and accepted golden Cases that justify coverage; and
 - unresolved requirements that must not be filled by invention.
 
 The required local slots are:
@@ -393,13 +584,13 @@ for that target; it must not silently treat the construction notes as the
 pre-existing wiki or synthesize a baseline. `ground` displays this recorded
 judgment but does not infer it from the empty Context alone.
 
-The four target states are a derived display, not a fourth contract layer:
+The four target states are a derived display, not a fourth Ground layer:
 
 | State | Meaning |
 | --- | --- |
-| `EMPTY` | No accepted `INCLUDE` case backed by an accepted Working Rule satisfies the slot. |
+| `EMPTY` | No accepted `INCLUDE` Case backed by an accepted Rule satisfies the slot. |
 | `PARTIAL` | Some such distinct source cases satisfy the slot, but the recorded minimum is not met. |
-| `COVERED` | The recorded minimum is met by accepted `INCLUDE` cases backed by accepted Working Rules, counting each source Memory once per target. |
+| `COVERED` | The recorded minimum is met by accepted `INCLUDE` Cases backed by accepted Rules, counting each source Memory once per target. |
 | `BLOCKED` | The session records a judgment that continuing requires missing evidence. This is not inferred automatically. |
 
 These are grounding-ledger states, not a count of files in a directory.
@@ -423,14 +614,14 @@ content-addresses each case to exactly one Memory in the working-candidate
 Context. It does **not** yet persist the candidate-to-raw span mapping, so the
 snapshot does not claim to show a raw trace. The workbench can select a
 candidate, propose targets and expected wording, attach it to an existing
-Working Rule, and accept, refine, defer, or reject it. `REFINE` currently
+Rule, and accept, refine, defer, or reject it. `REFINE` currently
 changes rule wording or a case's expected output; changing a case's targets,
 role, disposition, rationale, or raw provenance remains follow-up work. A
 proposed placement may name `campus-wiki`, one of the six local slots, or both
 when their distinct source-of-change and publication roles justify the
 duplication.
 
-The upper contract must not be mixed into the lower candidate list. The top
+The upper Ground must not be mixed into the lower candidate list. The top
 answers “what are we trying to achieve, what rules currently express it, and
 which reviewed cases support those rules?” The bottom answers “what evidence
 and derived candidates can justify or revise a particular target decision?”
@@ -445,7 +636,7 @@ prior cases remains follow-up work.
 
 ## Proposed cases, golden cases, and the first review round
 
-An agent-produced case is `PROPOSED`. It has no contractual authority, does
+An agent-produced Case is `PROPOSED`. It has no accepted authority, does
 not count toward `COVERED`, and is not a regression anchor. A **golden case**
 is the user-approved form of a concrete judgment: its evidence trace, target
 slot, expected target content or disposition, and rationale have all been
@@ -457,7 +648,7 @@ The implemented deterministic slice supports the following recorded actions:
 ```text
 select one of the 54 bound working candidates
 → show its wording and candidate UID/digest
-→ propose a Working Rule alone, or attach a case to an existing rule
+→ propose a Rule alone, or attach a Case to an existing Rule
 → propose target Contexts, expected wording, disposition, and rationale
 → let the user accept, refine expected wording, defer, or reject
 → save that decision only in the named ground session
@@ -481,24 +672,27 @@ that an empty slot is explained by its name.
 ## Bound frames and stale work
 
 A semantic ground session must bind every frame it reads rather than repeatedly
-consulting mutable current Context state. The planned binding records the
+consulting mutable current Context state. The implemented binding records the
 Context UID, locator, canonical digest, and direct-Memory count for the raw,
 candidate, and target frames. The Task 1 description should be copied into or
-content-addressed by the contract so that moving an attachment does not change
+content-addressed by the Ground so that moving an attachment does not change
 the brief being reviewed.
 
-Before a provider call and again before saving a round, all bound digests must
-match. A change to any bound raw, candidate, or target Context marks the
+Named turns reload the saved Ground before inference. An `ASK` turn does not
+load live Context projections because none enter its provider payload. After
+an actionable turn, the adapter verifies the recorded frames before freezing
+the receipt, and the CLI verifies them again under Context locks before the
+Ground save. A change to any bound raw, candidate, or target Context marks the
 workbench `STALE`. Prior proposals and reasoning remain inspectable as history,
 but stale work cannot:
 
 - be promoted to a golden case;
 - change a slot to `COVERED`;
-- approve the contract; or
+- approve the Ground; or
 - be exported for later target application.
 
 There is no refresh/fork command in this slice. Today the reviewer must create
-a new named contract, or deliberately use `--replace-ground` and repeat the
+a new named Ground, or deliberately use `--replace-ground` and repeat the
 explicit binding. A future non-destructive refresh should create a new
 revision and require affected proposals to be checked against the new frame;
 it must not silently rebase an old judgment onto changed evidence.
@@ -507,7 +701,7 @@ The current binding hashes the Context projection returned by the store
 loader. A broken or unresolved `context_ref` can be omitted before that
 projection is digested, so version 2 does not prove that every serialized
 pointer was resolvable at binding time. The Task 1 frames use directly owned
-Memories, but a future reference-aware contract must hash the raw stored item
+Memories, but a future reference-aware Ground must hash the raw stored item
 ledger as well as the resolved projection and report unresolved references
 explicitly.
 
@@ -543,27 +737,30 @@ rendering a bound workbench do load its recorded direct Context projections
 to calculate and verify digests. Across both paths, `ground`:
 
 - does not require a current Context;
-- does not connect to a semantic provider;
+- keeps provider access in the explicit TTY dialogue adapters; deterministic
+  option-bearing CLI mutations and snapshots do not initiate inference;
 - never opens a query-only source; a bound snapshot may display the selected
   direct working-candidate Memory;
 - does not alter `state.json`, a Context, or a checkpoint;
-- does not claim that any rule or case has been approved.
+- never treats provider output as approval; only a separately approved exact
+  review command can mark a Rule or Case accepted.
 
 This non-mutation boundary remains in force for the implemented workbench.
 Reviewing a placement, promoting a proposal to a golden case, changing an
-upper-region status, or even marking the contract `GROUNDED` changes only the
-named grounding artifact. It must not add, edit, or delete a Memory in
+upper-region status, or even marking the Ground `GROUNDED` changes only the
+named Ground artifact. It must not add, edit, or delete a Memory in
 `campus-wiki`, `construction-updates`, or either temporary source Context, and
 must not create a target checkpoint. Materializing approved decisions into
 target Contexts is a separate, explicit future action with its own preview and
 checkpoint boundary.
 
-When semantic rounds are added, query-only content must remain opaque. Direct
-Context evidence must be fingerprinted before a provider call and checked
-again before a round is saved. A changed frame may leave prior reasoning
-inspectable, but it must block new promotion. The current recovery is a new
-named contract or explicit replacement/rebinding; refresh/fork remains future
-work.
+During semantic turns, query-only content remains opaque. Direct Context
+evidence is fingerprinted before a command proposal and checked again under
+locks before that round is saved. A changed frame may leave prior reasoning
+inspectable, but it blocks the pending mutation. The current recovery is a
+fresh interpretation against the reloaded Ground, or explicit
+replacement/rebinding when the bound frames themselves are stale;
+refresh/fork remains future work.
 
 `GROUNDED` will require explicit user approval, no unresolved required
 boundaries, at least one accepted rule or case, and a regression report for
@@ -571,17 +768,18 @@ the approved revision. A provider cannot set this status by itself.
 
 ## Task 1 use
 
-The first contract is `task-1-fixture`. Its goal is to establish which
+The first named Ground is `task-1-fixture`. Its Goal is to establish which
 Memories belong in the missing `campus-wiki` fixture and which belong in the
 six local Task 1 construction-update Contexts. The organizational wiki and
 local updates have different roles, so an explicitly justified fact may appear
 in both; identical content is not automatically an accidental duplicate.
 
-Within the eventual semantic review loop, the workbench should submit one
+Within a future retrieval- and regression-enhanced review loop, the workbench
+should submit one
 concrete placement or content case, show its raw trace plus the nearest
 supporting and contrast cases, then let the user:
 
-- apply the current contract;
+- apply the current Rules;
 - correct the proposed judgment;
 - refine or add a rule;
 - retain the case as fit, boundary, or contrast evidence;
@@ -590,7 +788,7 @@ supporting and contrast cases, then let the user:
 
 The current deterministic slice records rules, cases, candidate-level
 references, and explicit decisions. Raw trace retrieval, nearest-case
-retrieval, automatic batch generation, and whole-contract approval remain
+retrieval, automatic batch generation, and whole-Ground approval remain
 future work.
 
 ## Alternatives and intentional limitations
@@ -603,23 +801,24 @@ future work.
 - Automatically seeding rules from the external readings was rejected because
   methodological resemblance is not accepted domain knowledge.
 - Automatically binding the empty ground to current Context bytes was rejected.
-  Binding is now explicit because the Task 1 contract spans multiple Contexts
+  Binding is now explicit because the Task 1 Ground spans multiple Contexts
   and the source/target choices are part of the experiment.
-- Treating the 51 raw Memories and 54 candidates as the target contract was
+- Treating the 51 raw Memories and 54 candidates as the target Ground was
   rejected because evidence availability and fixture requirements answer
   different questions.
 - Inferring a plausible `campus-wiki` baseline was rejected because it would
   conceal the target fixture's current absence and make before/after update
   behavior impossible to audit.
 - Writing approved ground decisions directly into target Contexts was rejected
-  because review, contract approval, and data materialization need separate
+  because review, Ground approval, and data materialization need separate
   failure and consent boundaries.
 - Treating every provider proposal as a golden example was rejected because it
   would let generated judgments bootstrap their own apparent coverage.
-- A TUI with arrow-key navigation, chat-to-TUI remote control, provider round,
-  semantic regression evaluator, target materialization action, compare-and-
-  swap concurrency guard, whole-contract approval action, and archive/fork
-  workflow are not implemented in this slice.
+- Chat-to-TUI remote control, a semantic regression evaluator, target
+  materialization action, whole-Ground approval action, and archive/fork
+  workflow are not implemented in this slice. The implemented TUI does use
+  arrow keys to switch between command and effects, and exact interactive
+  mutations use a save-boundary compare-and-swap guard.
 - Importance ordering, creation-time ordering, affected-decision estimates,
   automatic batch generation, inherited or predecessor Context handling, and
   integrated ambiguity/conflict resolution remain deferred. The first

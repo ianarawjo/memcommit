@@ -2,7 +2,7 @@
 
 ## Decision
 
-Memcommit now has two implemented interactive review surfaces:
+The original shared review-shell design covers two implemented surfaces:
 
 ```text
 mem review ambiguities
@@ -16,6 +16,9 @@ Context-scoped workbench. It exposes proposed splits, atomize uncertainties,
 one-source ambiguities, and two-source conflicts from that same analysis.
 Both surfaces use the same list/detail/choice/response interaction pattern,
 but they deliberately retain different persistence and evidence contracts.
+The separately implemented symmetric `mem meld` workbench now reuses that
+interaction grammar with a Context relation ledger and explicit application
+boundary; it is not a third adapter over the same review-session artifact.
 The static ambiguity finder remains independently callable and read-only:
 
 ```text
@@ -58,9 +61,10 @@ precedence for backward compatibility.
 Standalone conflict and update have existing semantic producers but no
 dedicated adapter in this shell yet. Conflict issues produced inside an
 atomize analysis are reviewable in the atomize workbench, but their pairwise
-responses remain staged. `reconcile`, `distill`, `meld`, and `sever` are
-future or design-only operations whose semantic contracts are not created by
-this UI work.
+responses remain staged. `reconcile`, `distill`, and `sever` remain future or
+design-only operations. The separate `mem meld` workbench now reuses this
+list/detail/comment/accept interaction grammar while retaining its own
+Context-to-Context relation ledger and mutation contract.
 
 ## Implemented atomize grounding and next direction
 
@@ -89,10 +93,9 @@ mem atomize --keep-review-only
 This dialogue is an atomize grounding session, not an extension of the global
 ambiguity-review artifact. One resumable latest record is paired with
 immutable Context-scoped records for terminal `APPLIED` and
-`KEPT_REVIEW_ONLY` dialogues. The immediate next TODO is to extract the
-reusable turn, correction, implication, and permission machinery for the
-existing `mem ground` operation. That reuse is not implemented by the atomize
-slice.
+`KEPT_REVIEW_ONLY` dialogues. Its turn lineage now uses the common meld
+revision contract and exposes a lossless issue-scoped directional adapter;
+the atomize-specific issue, assessment, and persistence schema remains intact.
 
 The full motivation, state machine, evidence boundary, mutation contract,
 provenance requirements, and rejected alternatives are recorded in
@@ -353,7 +356,8 @@ locking and multi-revision storage are future work.
 
 ## Terminal and chat-controller boundary
 
-The shell accepts ordinary concrete terminal input through prompt-toolkit:
+The older standalone ambiguity shell accepts ordinary concrete terminal input
+through prompt-toolkit:
 
 - left/right: previous or next issue;
 - up/down or digits: select a proposed reading when the current ambiguity
@@ -365,15 +369,25 @@ The shell accepts ordinary concrete terminal input through prompt-toolkit:
 - `L`: toggle split/stacked layout;
 - `Q` or Ctrl-C: save and close.
 
+The atomize workbench now keeps the same list/detail/choice/response semantics
+but uses a visible drill-down interaction: up/down moves through issues, Enter
+expands the current issue, up/down then moves through its readings, and Enter
+toggles the focused reading. Escape or Backspace returns one level and Tab
+enters the response field. This intentionally replaces its numbered-choice
+shortcut; the exact atomize key contract and migration reason are recorded in
+`mem-atomize-workbench-design-rationale.md`.
+
 These keys are not a natural-language command grammar. In a Codex chat, the
 controlling agent observes the current frame, translates instructions such as
 “오른쪽,” `->`, “4번,” or `답 "..."` into the appropriate PTY events, performs
 the operation, and returns an actual snapshot. The PTY is transport and view;
 the saved ReviewSession is durable semantic state.
 
-Model-produced and stored strings are rendered as terminal data. C0 control
-characters other than newline and tab are replaced before entering the PTY so
-a proposed reading cannot inject terminal escape behavior.
+Model-produced and stored strings are rendered as terminal data. Newline and
+tab remain explicit layout, while all other Unicode `C*` categories and
+`Zl`/`Zp` line separators are replaced before entering the PTY so a proposed
+reading cannot inject terminal escapes, bidi reordering, or invisible format
+behavior.
 
 ## Shared shell, separate operation semantics
 
@@ -388,7 +402,9 @@ response contract:
 | update | future adapter over existing staged-update artifacts | target Memory/edit or addition |
 | reconcile | future semantic contract | ambiguity/conflict evidence and proposed resolution |
 | distill | design-only | summary claim and supporting Memories |
-| meld / sever | Task 2/3 design-only | policy combination or disclosure boundary |
+| meld | implemented separate workbench | two direct-Memory peer Contexts and one empty result target |
+| Context-directional meld | future | INCOMING and BASELINE Context frames |
+| sever | Task 3 design-only | disclosure boundary |
 
 An update adapter must consume the existing `impact-plan.json` and
 `staged-update.json` contracts rather than create a competing generic source
@@ -516,7 +532,8 @@ verbatim in whatever language was entered.
 
 ## Intentional non-goals
 
-The implemented review shell does not:
+The standalone ambiguity review and non-applying atomize impact/review
+workbench themselves do not:
 
 - resolve, edit, add, remove, or checkpoint a Memory;
 - synthesize the freeform response into an English replacement;
@@ -530,8 +547,19 @@ The implemented review shell does not:
 - infer true creation chronology;
 - archive multiple atomize analysis revisions or lock concurrent writers to one
   Context; or
-- implement standalone conflict, update, reconcile, distill, meld, or sever
-  adapters.
+- implement standalone conflict, update, reconcile, distill, or sever
+  adapters. Context meld is implemented in its own workbench rather than
+  pretending its peer relation ledger is an ambiguity-review artifact.
 
 These boundaries keep the first shell useful for the user study while making
 its evidence, mutations, and future claims inspectable.
+
+## Shared terminal chrome
+
+Review now imports terminal sanitization and slot-based frame composition from
+the neutral TUI layer also used by Ground and meld. This is presentation reuse
+only. Review retains its list/detail navigation, response autosave, finder
+evidence, and non-applying boundary. It does not acquire Ground's exact-command
+approval semantics merely because the frames share components. The boundary is
+specified in
+[`shared-tui-command-review-design-rationale.md`](shared-tui-command-review-design-rationale.md).

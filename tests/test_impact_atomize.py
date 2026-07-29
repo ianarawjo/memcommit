@@ -544,17 +544,23 @@ def test_cli_preview_is_direct_only_and_saves_only_analysis(
     result = runner.invoke(app, ["impact", "atomize"])
 
     assert result.exit_code == 0, result.output
-    assert "MEM IMPACT · ATOMIZE · root" in result.output
-    assert "2 source Memories → 2 projected" in result.output
-    assert "0 proposed splits → 0 children" in result.output
+    assert "RESULT · atomize · root" in result.output
+    assert "sources=2 · projected=2" in result.output
+    assert "splits=0 · children=0" in result.output
     assert "WHAT MEM UNDERSTOOD" in result.output
-    assert "WHAT CHANGED / REMAINS UNRESOLVED" in result.output
+    assert "WHAT HAPPENED" in result.output
+    assert "WHAT REMAINS UNRESOLVED" in result.output
+    assert "REPRESENTATIVE / BOUNDARY CASES" in result.output
     assert (
         "No Memory changes have been applied. No checkpoint was created."
         in result.output
     )
     assert "Analysis saved" in result.output
-    assert first.content not in result.output
+    # The compact result workbench shows direct representative/boundary cases
+    # so a person can assess the semantic pass without opening every record.
+    # Referenced and embedded Context contents remain outside this operation.
+    assert f"KEEP: {first.content}" in result.output
+    assert f"KEEP_CLASSIFIED: {second.content}" in result.output
     assert "secret reference target" not in result.output
     assert "nested content" not in result.output
     assert len(provider.calls) == 1
@@ -595,7 +601,7 @@ def test_cli_all_shows_atomic_items_and_explicit_context_does_not_switch(
     )
 
     assert result.exit_code == 0, result.output
-    assert "MEM IMPACT · ATOMIZE · target" in result.output
+    assert "RESULT · atomize · target" in result.output
     assert memory.content in result.output
     assert "ATOMIC" in result.output
     assert store.current_context_name() == active.name
@@ -657,7 +663,7 @@ def test_cli_empty_context_does_not_connect_provider(
     result = runner.invoke(app, ["impact", "atomize"])
 
     assert result.exit_code == 0, result.output
-    assert "0 source Memories → 0 projected" in result.output
+    assert "sources=0 · projected=0" in result.output
     assert (
         "No Memory changes have been applied. No checkpoint was created."
         in result.output
@@ -1274,7 +1280,7 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
     atomic = ops.add(source, "The entrance closes at 5 p.m.")
     composite = ops.add(source, "The store closes. The café remains open.")
     query_ref = ops.reference_query_context(
-        "campus/wiki",
+        "organization/wiki",
         "7a9f2582-86aa-4650-8d72-287e82cc7942",
         source,
     )

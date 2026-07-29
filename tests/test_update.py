@@ -1,4 +1,4 @@
-"""Directional semantic impact and staged update contracts."""
+"""Directional semantic impact and local update application contracts."""
 from __future__ import annotations
 
 import json
@@ -9,12 +9,13 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.store import MemoryStore
+from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.update import (
     AddOperation,
     EditOperation,
     UpdateError,
     UpdateSession,
+    applied_session_matches,
     collect_update_inputs,
     plan_update,
     session_matches,
@@ -23,6 +24,10 @@ from memcommit.update import (
 
 runner = CliRunner(mix_stderr=False)
 SECRET = "The concealed contractor budget is 4.2 million dollars."
+TASK1_SOURCE = "participant/construction-updates"
+TASK1_SOURCE_CHILD = f"{TASK1_SOURCE}/building-access"
+TASK1_TARGET = "participant/campus-wiki-fork"
+TASK1_TARGET_CHILD = f"{TASK1_TARGET}/buildings"
 
 
 class PlanProvider:
@@ -62,17 +67,45 @@ def _one_edit_response(prompt):
     }
 
 
+def _edit_and_root_add_response(prompt):
+    payload = json.loads(prompt.split("UPDATE PAYLOAD:\n", 1)[1])
+    source_id = payload["source"]["memories"][0]["source_id"]
+    target = payload["target"]["memories"][0]
+    root = payload["target"]["contexts"][0]
+    return {
+        "edits": [
+            {
+                "target_id": target["target_id"],
+                "new_content": (
+                    "The Main Building south entrance is open and provides "
+                    "step-free access."
+                ),
+                "source_ids": [source_id],
+                "reason": "The verified access update supersedes the old entrance.",
+            }
+        ],
+        "additions": [
+            {
+                "target_context_id": root["context_id"],
+                "new_content": "Construction visitor guidance is in effect.",
+                "source_ids": [source_id],
+                "reason": "The local fork needs an overview notice.",
+            }
+        ],
+    }
+
+
 def _make_nested_pair():
-    source = ops.init("construction-updates")
-    source_child = ops.init("construction-updates/building-access")
+    source = ops.init(TASK1_SOURCE)
+    source_child = ops.init(TASK1_SOURCE_CHILD)
     source_memory = ops.add(
         source_child,
         "Use the Main Building south entrance for step-free access.",
     )
     ops.embed(source_child, source)
 
-    target = ops.init("campus/wiki")
-    target_child = ops.init("campus/wiki/buildings")
+    target = ops.init(TASK1_TARGET)
+    target_child = ops.init(TASK1_TARGET_CHILD)
     target_memory = ops.add(
         target_child,
         "The Main Building north entrance provides public access.",
@@ -529,6 +562,69 @@ def test_update_session_round_trip_and_detects_input_changes():
     assert not session_matches(restored, source, target)
 
 
+def test_schema_one_update_session_remains_readable():
+    source, _, _, target, _, _ = _make_nested_pair()
+    session = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+    )
+    legacy = session.to_dict()
+    legacy["schema_version"] = 1
+    legacy.pop("application")
+
+    assert UpdateSession.from_dict(legacy) == session
+
+
+def test_planning_and_status_promotion_cannot_forge_applied_state():
+    source, _, _, target, _, _ = _make_nested_pair()
+    provider_calls = []
+
+    def provider_factory():
+        provider_calls.append("connected")
+        return PlanProvider(_one_edit_response)
+
+    with pytest.raises(ValueError, match="impact or staged"):
+        plan_update(
+            source,
+            target,
+            provider_factory,
+            status="applied",
+        )
+    session = plan_update(source, target, provider_factory)
+    with pytest.raises(ValueError, match="application receipt"):
+        session.with_status("applied")
+
+    assert provider_calls == ["connected"]
+
+
+def test_active_update_compare_and_swap_preserves_concurrent_record(
+    isolated_store,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    source = store.load(TASK1_SOURCE)
+    target = store.load(TASK1_TARGET)
+    staged = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    store.save_staged_update(staged, expected_current=None)
+
+    with pytest.raises(
+        ConcurrentContextUpdateError,
+        match="active update record changed",
+    ):
+        store.save_staged_update(
+            staged.with_status("impact"),
+            expected_current=None,
+        )
+
+    assert store.load_staged_update() == staged
+
+
 def test_resolved_source_ref_content_change_invalidates_session():
     origin = ops.init("origin")
     memory = ops.add(origin, "first version")
@@ -553,12 +649,12 @@ def test_resolved_source_ref_content_change_invalidates_session():
     assert not session_matches(session, source, target)
 
 
-def test_impact_then_update_reuses_plan_and_changes_no_context(
+def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
-    _persist_pair(store)
+    _, target_memory = _persist_pair(store)
     provider = PlanProvider(_one_edit_response)
     connections = []
 
@@ -574,22 +670,29 @@ def test_impact_then_update_reuses_plan_and_changes_no_context(
         "memcommit.commands.update.connect_codex_chatgpt_provider",
         factory,
     )
-    context_bytes_before = {
+    source_bytes_before = {
         path: path.read_bytes()
-        for path in (isolated_store / "contexts").rglob("*.json")
+        for path in (
+            isolated_store / "contexts" / "participant"
+            / "construction-updates"
+        ).rglob("context.json")
     }
     state_before = (isolated_store / "state.json").read_bytes()
 
-    impact = runner.invoke(app, ["impact", "--to", "campus/wiki"])
-    update = runner.invoke(app, ["update", "--to", "campus/wiki"])
+    impact = runner.invoke(app, ["impact", "--to", TASK1_TARGET])
+    update = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert impact.exit_code == 0, impact.output
-    assert "Impact: construction-updates -> campus/wiki" in impact.output
+    assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
     assert "1 edit, 0 additions" in impact.output
     assert "No changes applied." in impact.output
     assert update.exit_code == 0, update.output
-    assert "Staged update: construction-updates -> campus/wiki" in update.output
-    assert "Shared campus/wiki is unchanged." in update.output
+    assert (
+        f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}"
+        in update.output
+    )
+    assert f"Updated local working copy {TASK1_TARGET}." in update.output
+    assert "No shared origin was changed." in update.output
     assert connections == ["connected"]
     assert len(provider.calls) == 1
 
@@ -601,13 +704,40 @@ def test_impact_then_update_reuses_plan_and_changes_no_context(
     )
     assert impact_data["uid"] == staged_data["uid"]
     assert impact_data["status"] == "impact"
-    assert staged_data["status"] == "staged"
+    assert staged_data["status"] == "applied"
+    assert staged_data["application"] is not None
+    assert len(staged_data["application"]["checkpoints"]) == 1
+
+    updated_child = store.load_direct(TASK1_TARGET_CHILD)
+    assert updated_child.memories[target_memory.uid].content == (
+        "The Main Building south entrance is open and provides "
+        "step-free access."
+    )
+    checkpoints = store.list_checkpoints(TASK1_TARGET_CHILD)
+    assert len(checkpoints) == 1
+    checkpoint = checkpoints[0]
+    assert checkpoint["auto"] is True
+    assert checkpoint["command"] == "update"
+    assert checkpoint["args"]["update_session_uid"] == staged_data["uid"]
+    assert checkpoint["args"]["target_context_name"] == TASK1_TARGET
+    assert checkpoint["args"]["owner_context_uid"] == updated_child.uid
+    assert checkpoint["args"]["operation_memory_uids"] == [
+        target_memory.uid
+    ]
+    assert staged_data["application"]["checkpoints"][0] == {
+        "context_uid": updated_child.uid,
+        "context_name": TASK1_TARGET_CHILD,
+        "checkpoint_uid": checkpoint["uid"],
+    }
     assert {
         path: path.read_bytes()
-        for path in (isolated_store / "contexts").rglob("*.json")
-    } == context_bytes_before
+        for path in (
+            isolated_store / "contexts" / "participant"
+            / "construction-updates"
+        ).rglob("context.json")
+    } == source_bytes_before
     assert (isolated_store / "state.json").read_bytes() == state_before
-    assert store.current_context_name() == "construction-updates"
+    assert store.current_context_name() == TASK1_SOURCE
 
 
 def test_repeated_update_is_idempotent_and_does_not_reconnect(
@@ -622,18 +752,20 @@ def test_repeated_update_is_idempotent_and_does_not_reconnect(
         lambda: provider,
     )
 
-    first = runner.invoke(app, ["update", "--to", "campus/wiki"])
+    first = runner.invoke(app, ["update", "--to", TASK1_TARGET])
     first_bytes = (isolated_store / "staged-update.json").read_bytes()
-    second = runner.invoke(app, ["update", "--to", "campus/wiki"])
+    checkpoints_before = store.list_checkpoints(TASK1_TARGET_CHILD)
+    second = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert first.exit_code == 0
     assert second.exit_code == 0
-    assert "already staged" in second.output
+    assert "already applied locally" in second.output
     assert len(provider.calls) == 1
     assert (isolated_store / "staged-update.json").read_bytes() == first_bytes
+    assert store.list_checkpoints(TASK1_TARGET_CHILD) == checkpoints_before
 
 
-def test_stale_impact_replans_before_staging(
+def test_stale_impact_replans_before_applying(
     isolated_store,
     monkeypatch,
 ):
@@ -649,20 +781,175 @@ def test_stale_impact_replans_before_staging(
         lambda: provider,
     )
 
-    impact = runner.invoke(app, ["impact", "--to", "campus/wiki"])
+    impact = runner.invoke(app, ["impact", "--to", TASK1_TARGET])
     assert impact.exit_code == 0
-    source_child = store.load("construction-updates/building-access")
+    source_child = store.load(TASK1_SOURCE_CHILD)
     ops.add(source_child, "Construction now runs through October.")
     store.save(source_child)
 
-    update = runner.invoke(app, ["update", "--to", "campus/wiki"])
+    update = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert update.exit_code == 0, update.output
     assert len(provider.calls) == 2
     impact_session = store.load_impact_plan()
     staged_session = store.load_staged_update()
     assert impact_session.uid != staged_session.uid
-    assert staged_session.status == "staged"
+    assert staged_session.status == "applied"
+    assert staged_session.application is not None
+
+
+def test_update_applies_multiple_owners_with_one_checkpoint_each(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _, target_memory = _persist_pair(store)
+    provider = PlanProvider(_edit_and_root_add_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+
+    assert result.exit_code == 0, result.output
+    applied = store.load_staged_update()
+    assert applied.status == "applied"
+    assert applied.application is not None
+    assert applied_session_matches(
+        applied,
+        store.load(TASK1_SOURCE),
+        store.load(TASK1_TARGET),
+    )
+
+    root_addition = next(
+        operation
+        for operation in applied.operations
+        if isinstance(operation, AddOperation)
+    )
+    root = store.load_direct(TASK1_TARGET)
+    child = store.load_direct(TASK1_TARGET_CHILD)
+    assert root.memories[root_addition.memory_uid].content == (
+        "Construction visitor guidance is in effect."
+    )
+    assert child.memories[target_memory.uid].content.startswith(
+        "The Main Building south entrance is open"
+    )
+
+    receipts = applied.application.checkpoints
+    assert [receipt.context_name for receipt in receipts] == [
+        TASK1_TARGET,
+        TASK1_TARGET_CHILD,
+    ]
+    for receipt in receipts:
+        checkpoints = store.list_checkpoints(receipt.context_name)
+        assert len(checkpoints) == 1
+        checkpoint = checkpoints[0]
+        assert checkpoint["uid"] == receipt.checkpoint_uid
+        assert checkpoint["auto"] is True
+        assert checkpoint["command"] == "update"
+        assert checkpoint["args"]["update_session_uid"] == applied.uid
+        assert checkpoint["args"]["operation_digest"] == (
+            applied.application.operation_digest
+        )
+
+
+def test_empty_update_records_applied_receipt_without_context_checkpoint(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    provider = PlanProvider({"edits": [], "additions": []})
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    target_bytes_before = {
+        path: path.read_bytes()
+        for path in (
+            isolated_store / "contexts" / "participant"
+            / "campus-wiki-fork"
+        ).rglob("context.json")
+    }
+
+    result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+
+    assert result.exit_code == 0, result.output
+    assert "(no changes needed)" in result.output
+    applied = store.load_staged_update()
+    assert applied.status == "applied"
+    assert applied.operations == ()
+    assert applied.application is not None
+    assert applied.application.checkpoints == ()
+    assert {
+        path: path.read_bytes()
+        for path in (
+            isolated_store / "contexts" / "participant"
+            / "campus-wiki-fork"
+        ).rglob("context.json")
+    } == target_bytes_before
+    assert store.list_checkpoints(TASK1_TARGET) == []
+    assert store.list_checkpoints(TASK1_TARGET_CHILD) == []
+
+
+def test_multi_owner_write_failure_rolls_back_contexts_and_checkpoints(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    provider = PlanProvider(_edit_and_root_add_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    context_bytes_before = {
+        path: path.read_bytes()
+        for path in (isolated_store / "contexts").rglob("context.json")
+    }
+    original_save_locked = MemoryStore._save_locked
+    update_writes = []
+
+    def fail_second_update_write(
+        self,
+        context,
+        auto_checkpoint,
+        *,
+        expected_context_digest,
+        require_new=False,
+    ):
+        if (
+            auto_checkpoint is not None
+            and auto_checkpoint.command == "update"
+        ):
+            update_writes.append(context.name)
+            if len(update_writes) == 2:
+                raise OSError("simulated second owner write failure")
+        return original_save_locked(
+            self,
+            context,
+            auto_checkpoint,
+            expected_context_digest=expected_context_digest,
+            require_new=require_new,
+        )
+
+    monkeypatch.setattr(MemoryStore, "_save_locked", fail_second_update_write)
+
+    result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+
+    assert result.exit_code == 1
+    assert "simulated second owner write failure" in result.stderr
+    assert update_writes == [TASK1_TARGET, TASK1_TARGET_CHILD]
+    assert {
+        path: path.read_bytes()
+        for path in (isolated_store / "contexts").rglob("context.json")
+    } == context_bytes_before
+    assert store.list_checkpoints(TASK1_TARGET) == []
+    assert store.list_checkpoints(TASK1_TARGET_CHILD) == []
+    staged = store.load_staged_update()
+    assert staged.status == "staged"
+    assert staged.application is None
 
 
 def test_invalid_provider_output_leaves_contexts_and_sessions_unchanged(
@@ -680,7 +967,7 @@ def test_invalid_provider_output_leaves_contexts_and_sessions_unchanged(
         for path in (isolated_store / "contexts").rglob("*.json")
     }
 
-    result = runner.invoke(app, ["impact", "--to", "campus/wiki"])
+    result = runner.invoke(app, ["impact", "--to", TASK1_TARGET])
 
     assert result.exit_code == 1
     assert "invalid structured output" in result.stderr
@@ -703,7 +990,7 @@ def test_update_requires_explicit_replace_for_a_different_stage(
         "memcommit.commands.update.connect_codex_chatgpt_provider",
         lambda: provider,
     )
-    first = runner.invoke(app, ["update", "--to", "campus/wiki"])
+    first = runner.invoke(app, ["update", "--to", TASK1_TARGET])
     assert first.exit_code == 0
 
     other = ops.init("other-target")
@@ -714,6 +1001,16 @@ def test_update_requires_explicit_replace_for_a_different_stage(
     assert refused.exit_code == 1
     assert "--replace-stage" in refused.stderr
     assert len(provider.calls) == 1
+
+    replaced = runner.invoke(
+        app,
+        ["update", "--to", "other-target", "--replace-stage"],
+    )
+
+    assert replaced.exit_code == 0, replaced.output
+    assert "Applied update" in replaced.output
+    assert store.load_staged_update().target_name == "other-target"
+    assert len(provider.calls) == 2
 
 
 def test_missing_target_and_same_target_fail_without_traceback(

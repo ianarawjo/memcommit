@@ -20,6 +20,12 @@ from dataclasses import dataclass, replace
 from typing import Iterable, Literal
 
 from memcommit.context import Context
+from memcommit.meld import (
+    MeldError,
+    MeldProposalOperation as AtomizeGroundingProposalOperation,
+    MeldRevision as AtomizeGroundingRevision,
+    validate_meld_turn_lineage,
+)
 
 
 ATOMIZE_GROUNDING_SCHEMA_VERSION = 2
@@ -41,13 +47,6 @@ AtomizeGroundingState = Literal[
     "KEPT_REVIEW_ONLY",
     "APPLIED",
 ]
-AtomizeGroundingRevision = Literal[
-    "INITIAL",
-    "CONFIRM",
-    "EXTEND",
-    "CORRECT",
-    "RETRACT",
-]
 AtomizeGroundingResolution = Literal[
     "RESOLVED",
     "PARTIAL",
@@ -67,7 +66,6 @@ AtomizeGroundingQuestionKind = Literal[
     "CONSISTENCY_CHECK",
 ]
 AtomizeGroundingQuestionPriority = Literal["REQUIRED", "HELPFUL"]
-AtomizeGroundingProposalOperation = Literal["EDIT", "ADD"]
 AtomizeGroundingProposalNecessity = Literal["REQUIRED", "OPTIONAL"]
 AtomizeGroundingDecisionAction = Literal["ACCEPT", "REJECT", "DEFER"]
 
@@ -1586,25 +1584,39 @@ class AtomizeGroundingSession:
                 raise AtomizeGroundingError(
                     "Duplicate atomize grounding turn uid."
                 )
-            if expected_sequence == 0:
-                if turn.revision != "INITIAL" or turn.revises_turn_uids:
-                    raise AtomizeGroundingError(
+            try:
+                # Atomize disambiguation is an issue-scoped directional meld.
+                # Reuse the same conversational lineage contract while
+                # retaining atomize's stricter issue/question/proposal checks
+                # and its existing durable schema.
+                validate_meld_turn_lineage(
+                    sequence=expected_sequence,
+                    revision=turn.revision,
+                    revises_turn_uids=turn.revises_turn_uids,
+                    known_turn_uids=turn_by_uid,
+                )
+            except MeldError as error:
+                message = {
+                    "The first meld turn must be INITIAL.": (
                         "The first grounding turn must be INITIAL."
-                    )
-            elif turn.revision == "INITIAL":
-                raise AtomizeGroundingError(
-                    "Only the first grounding turn can be INITIAL."
-                )
-            if turn.revision in {"CORRECT", "RETRACT"} and not (
-                turn.revises_turn_uids
-            ):
-                raise AtomizeGroundingError(
-                    "CORRECT and RETRACT turns must identify revised turns."
-                )
-            if not set(turn.revises_turn_uids) <= set(turn_by_uid):
-                raise AtomizeGroundingError(
-                    "A grounding turn revises an unknown or future turn."
-                )
+                    ),
+                    "Only the first meld turn can be INITIAL.": (
+                        "Only the first grounding turn can be INITIAL."
+                    ),
+                    (
+                        "CORRECT and RETRACT meld turns must identify "
+                        "revised turns."
+                    ): (
+                        "CORRECT and RETRACT turns must identify revised "
+                        "turns."
+                    ),
+                    (
+                        "A meld turn revises an unknown or future turn."
+                    ): (
+                        "A grounding turn revises an unknown or future turn."
+                    ),
+                }.get(str(error), str(error))
+                raise AtomizeGroundingError(message) from error
             if not set(turn.answers_question_uids) <= set(question_turn):
                 raise AtomizeGroundingError(
                     "A grounding turn answers an unknown or future question."

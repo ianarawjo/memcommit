@@ -20,13 +20,14 @@
 
 | 영역 | 현재 상태 |
 | --- | --- |
-| Task 1 방향성 `impact → update` | 검증된 source를 전제로 계획을 preview하고 stage하는 경로만 구현 |
+| Task 1 방향성 `impact → update` | 검증된 source와 사용자 소유 local wiki fork를 전제로 계획을 preview하고 로컬 적용하는 경로 구현 |
 | update 중 ambiguity/conflict 해소 | **미구현 TODO** |
 | update와 named Ground의 UID/revision/digest binding | **미구현 TODO** |
 | Context-to-Context directional Meld | **미구현 TODO** |
 | 독립적인 `compare` 또는 `reconcile` 명령 | **미구현 TODO** |
 | atomize의 다회차 clarification | 별도 atomize grounding session으로 구현 |
-| local working-copy 적용과 `push`/PR | **미구현 TODO** |
+| local working-copy 적용 | **구현**; 다중 Context 예외 rollback은 제공하지만 crash journal은 없음 |
+| `push`/PR와 원격 publication | **미구현 TODO** |
 
 따라서 Task 1의 해소 없는 경로는 의도된 **시나리오 경계**지만,
 일반적인 update 해소 기능의 부재는 여전히 **프로토타입의 한계**다.
@@ -151,6 +152,36 @@ source의 권위와 범위, 변경 가능한 target의 소유권, provenance,
 승인 경계를 규정한다. 제안된 각각의 edit 또는 addition은 구체적인
 아티팩트에 연결된 candidate Case로 볼 수 있다.
 
+Task 1에서 B는 조직의 공유 원본 자체가 아니라 참가자에게 미리 제공된
+쓰기 가능한 local fork다. 표준 이름은
+[`task-1-naming-contract.md`](task-1-naming-contract.md)를 따른다. 조직
+원본 `campus-wiki`는 query-only이고, 참가자의 담당 범위는
+`participant/campus-wiki-fork`라는 local Context graph로 존재한다.
+`impact`와 `update`는 이 local fork만 대상으로 삼는다. 조직 원본에
+질문할 수 있다는 사실은 그 내용을 traverse하거나 수정할 권한을
+뜻하지 않으며, 실제 조직 원본으로의 기여는 향후 `push` 또는 PR라는
+별도의 승인 경계가 담당한다.
+
+현재 구현은 query-only origin pointer를 표현하고 이미 provision된
+fork에 update를 로컬 적용할 수 있지만, scoped fork 생성, origin
+revision binding, refresh, publication은 구현하지 않았다. 따라서 이
+구분은 Task 1 fixture와 향후 update/push가 따라야 할 권한 계약이며,
+현재 remote access-control 기능이 완성됐다는 주장이 아니다.
+
+현재 Task 1 fixture는 시작 시점에 `participant/campus-wiki-fork`가
+참가자 담당 범위의 최신 승인 snapshot이고, 과업 동안 그 원격 범위에
+동시 변경이 없다고 가정한다. query-only adapter는 이 조건을 검증할 수
+없다. 이는 연구 시나리오를 단순화하기 위한 가정이며, 향후 publication
+adapter의 upstream base revision과 remote divergence 검사로 대체해야
+한다.
+
+local fork의 범위는 impact 결과를 미리 알고 선택한 "바뀔 페이지 목록"이
+아니라 참가자의 책임과 권한으로 정한 candidate scope다. 따라서 관련될
+가능성이 있는 페이지와 실제로는 변경되지 않을 비교 항목도 포함해야
+하며, 그중 실제 변경 subset을 찾는 일은 여전히 `impact`의 책임이다.
+fixture 검토는 모든 잠재적 영향 페이지가 이 권한 범위에 들어 있는지
+별도로 확인해야 한다.
+
 일반적인 update에서는 다음과 같은 미해결 문제가 발생할 수 있다.
 
 - 하나의 source 또는 target에 여러 가능한 reading이 존재한다.
@@ -168,10 +199,10 @@ source의 권위와 범위, 변경 가능한 target의 소유권, provenance,
 > **현재 구현 주의**
 >
 > 지금의 `UpdateSession`은 source, target, fingerprints, edit/add
-> operations만 저장한다. Ground identity나 revision, Rules, Cases,
-> unresolved issues, Meld turns를 저장하지 않는다. 현재 planner는
-> 이러한 해소 루프를 수행하지 않으며 `update`는 validated plan을
-> stage할 뿐이다.
+> operations와 로컬 적용 receipt를 저장한다. Ground identity나
+> revision, Rules, Cases, unresolved issues, Meld turns를 저장하지
+> 않는다. 현재 planner는 이러한 해소 루프를 수행하지 않으며
+> `update`는 conflict-free validated plan을 로컬 fork에 적용한다.
 
 ## Task 1의 경계
 
@@ -183,11 +214,11 @@ Task 1 참가자에게 제공되는 local memory는 이미 수집과 검증이 �
 
 ```text
 검증된 local Context
-→ impact preview
+→ 쓰기 가능한 사용자 local wiki fork에 대한 impact preview
 → 선택적인 provenance 검토
-→ update stage
-→ diff
-→ 향후 local application과 contribution
+→ update가 local fork에 실제 적용
+→ fork baseline과 적용 결과의 diff
+→ 향후 query-only 조직 원본에 push 또는 PR
 ```
 
 Task 1에 인위적인 ambiguity나 conflict를 추가하면 참가자에게 결과가
@@ -220,6 +251,10 @@ atomize하고 ambiguity/conflict를 검토하며 wiki와 local destination의
   고정되어야 한다.
 - Ground 또는 Context가 바뀌면 기존 proposal은 stale 상태가 되어야
   한다.
+- query-only 조직 원본은 impact/update의 mutation target이 될 수 없고,
+  query 권한은 write 권한으로 승격되지 않는다.
+- update가 실제로 변경하는 B는 사용자 소유 local fork이며, 조직
+  publication은 별도의 push/PR 승인 경계다.
 - proposal, semantic acceptance, local materialization, publication은
   서로 다른 동의 경계로 유지한다.
 - 해결되지 않은 `REQUIRED` issue는 stage 또는 bulk acceptance로
@@ -250,7 +285,7 @@ atomize하고 ambiguity/conflict를 검토하며 wiki와 local destination의
     Task 1 외부의 golden scenarios를 추가한다.
 
 Task 1에는 검증되고 conflict-free인 update가 이 미래의 resolution
-branch에 들어가지 않고 staging까지 도달한다는 regression case를
+branch에 들어가지 않고 로컬 적용까지 도달한다는 regression case를
 유지한다.
 
 ## 현재 단계의 의도적인 비목표
@@ -263,7 +298,7 @@ branch에 들어가지 않고 staging까지 도달한다는 regression case를
 - update proposal에 대한 selective per-proposal acceptance
 - non-empty baseline을 수정하는 public directional Meld
 - Ground 변경에 따른 자동 semantic regression
-- staged update의 local working-copy 적용
+- 다중 Context local update를 위한 process-crash recovery journal
 - remote `push`, PR, access-control 또는 조직 publication
 
 이 항목들은 이 설계 방향의 후속 작업이다. Task 1의 제한된 경로가
@@ -281,4 +316,4 @@ branch에 들어가지 않고 staging까지 도달한다는 regression case를
 - [`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md):
   공통 interaction grammar와 operation-specific evidence 경계
 - [`mem-impact-update-design-rationale.md`](mem-impact-update-design-rationale.md):
-  현재 방향성 impact/update의 제한된 stage 계약
+  현재 방향성 impact/update의 제한된 local-application 계약

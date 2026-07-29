@@ -19,7 +19,7 @@ SECRET = "Contractors may enter Lab Seven only after 18:00."
 def _attach_query_source(
     store: MemoryStore,
     *,
-    parent_name: str = "campus-wiki",
+    parent_name: str = "facilities-reference",
     source_name: str = "contractor-agreements",
 ) -> tuple[QueryContextRef, str]:
     parent = ops.init(parent_name)
@@ -43,7 +43,7 @@ def test_query_ref_round_trip_is_pointer_only_in_context_and_checkpoints(
     store = MemoryStore()
     ref, source_uid = _attach_query_source(store)
 
-    parent_file = isolated_store / "contexts" / "campus-wiki" / "context.json"
+    parent_file = isolated_store / "contexts" / "facilities-reference" / "context.json"
     parent_data = json.loads(parent_file.read_text())
     assert parent_data["memories"][ref.uid] == {
         "type": "query_context_ref",
@@ -59,7 +59,7 @@ def test_query_ref_round_trip_is_pointer_only_in_context_and_checkpoints(
     )
     assert SECRET not in normal_store_text
 
-    loaded = store.load("campus-wiki").memories[ref.uid]
+    loaded = store.load("facilities-reference").memories[ref.uid]
     assert isinstance(loaded, QueryContextRef)
     assert loaded.target_source_uid == source_uid
 
@@ -73,7 +73,7 @@ def test_normal_load_never_opens_query_source(isolated_store, monkeypatch):
 
     monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
 
-    loaded = store.load("campus-wiki")
+    loaded = store.load("facilities-reference")
     assert isinstance(loaded.memories[ref.uid], QueryContextRef)
 
 
@@ -81,7 +81,7 @@ def test_query_source_is_not_a_switchable_or_listed_context(isolated_store):
     store = MemoryStore()
     _attach_query_source(store)
 
-    assert store.list_context_names() == ["campus-wiki"]
+    assert store.list_context_names() == ["facilities-reference"]
     assert not store.context_exists("contractor-agreements")
 
     switched = runner.invoke(app, ["switch", "contractor-agreements"])
@@ -146,7 +146,7 @@ def test_query_returns_provider_answer_without_checkpointing(
 ):
     store = MemoryStore()
     _attach_query_source(store)
-    checkpoints_before = store.list_checkpoints("campus-wiki")
+    checkpoints_before = store.list_checkpoints("facilities-reference")
     calls = []
 
     class FakeProvider:
@@ -168,7 +168,7 @@ def test_query_returns_provider_answer_without_checkpointing(
     assert result.exit_code == 0
     assert result.output == "They may enter only after 18:00.\n"
     assert calls == [("contractor-agreements", SECRET, question)]
-    assert store.list_checkpoints("campus-wiki") == checkpoints_before
+    assert store.list_checkpoints("facilities-reference") == checkpoints_before
     persisted_text = "\n".join(
         path.read_text()
         for path in (isolated_store / "contexts").rglob("*.json")
@@ -200,9 +200,9 @@ def test_query_rejects_an_ordinary_context_item(isolated_store, monkeypatch):
 def test_branch_merge_remove_and_revert_keep_only_the_pointer(isolated_store):
     store = MemoryStore()
     ref, source_uid = _attach_query_source(store)
-    source_checkpoint = store.list_checkpoints("campus-wiki")[0]["uid"]
+    source_checkpoint = store.list_checkpoints("facilities-reference")[0]["uid"]
 
-    branch = ops.branch(store.load("campus-wiki"), "study-copy")
+    branch = ops.branch(store.load("facilities-reference"), "study-copy")
     branch_ref = branch.memories[ref.uid]
     assert isinstance(branch_ref, QueryContextRef)
     assert branch_ref is not ref
@@ -210,11 +210,11 @@ def test_branch_merge_remove_and_revert_keep_only_the_pointer(isolated_store):
 
     target = ops.init("merge-target")
     first_added = ops.merge(branch, target)
-    second_added = ops.merge(store.load("campus-wiki"), target)
+    second_added = ops.merge(store.load("facilities-reference"), target)
     assert len(first_added) == 1
     assert second_added == []
 
-    parent = store.load("campus-wiki")
+    parent = store.load("facilities-reference")
     removed = ops.remove(parent, ref.uid)
     assert isinstance(removed, QueryContextRef)
     store.save(
@@ -230,8 +230,8 @@ def test_branch_merge_remove_and_revert_keep_only_the_pointer(isolated_store):
         expected_name="contractor-agreements",
     ).content == SECRET
 
-    store.revert("campus-wiki", source_checkpoint)
-    restored = store.load("campus-wiki").memories[ref.uid]
+    store.revert("facilities-reference", source_checkpoint)
+    restored = store.load("facilities-reference").memories[ref.uid]
     assert isinstance(restored, QueryContextRef)
     assert restored.target_source_uid == source_uid
 
@@ -262,7 +262,7 @@ def test_dev_install_adds_pointer_without_switching_or_storing_path(
     isolated_store,
     tmp_path,
 ):
-    assert runner.invoke(app, ["init", "campus-wiki"]).exit_code == 0
+    assert runner.invoke(app, ["init", "facilities-reference"]).exit_code == 0
     assert runner.invoke(app, ["init", "researcher-working"]).exit_code == 0
     source_path = tmp_path / "agreements.md"
     source_path.write_text(SECRET)
@@ -277,14 +277,14 @@ def test_dev_install_adds_pointer_without_switching_or_storing_path(
             "--from",
             str(source_path),
             "--into",
-            "campus-wiki",
+            "facilities-reference",
         ],
     )
 
     store = MemoryStore()
     assert result.exit_code == 0
     assert store.current_context_name() == "researcher-working"
-    ref = next(iter(store.load("campus-wiki").iter_items()))
+    ref = next(iter(store.load("facilities-reference").iter_items()))
     assert isinstance(ref, QueryContextRef)
     assert store.load_query_source(
         ref.target_source_uid,
@@ -304,7 +304,7 @@ def test_dev_install_rolls_back_source_if_parent_save_fails(
     tmp_path,
     monkeypatch,
 ):
-    assert runner.invoke(app, ["init", "campus-wiki"]).exit_code == 0
+    assert runner.invoke(app, ["init", "facilities-reference"]).exit_code == 0
     source_path = tmp_path / "source.md"
     source_path.write_text(SECRET)
     original_save = MemoryStore.save
@@ -326,13 +326,13 @@ def test_dev_install_rolls_back_source_if_parent_save_fails(
             "--from",
             str(source_path),
             "--into",
-            "campus-wiki",
+            "facilities-reference",
         ],
     )
 
     assert result.exit_code == 1
     assert list((isolated_store / "query-sources").iterdir()) == []
-    assert list(MemoryStore().load("campus-wiki").iter_items()) == []
+    assert list(MemoryStore().load("facilities-reference").iter_items()) == []
 
 
 def test_dev_install_rolls_back_parent_if_checkpoint_fails(
@@ -340,7 +340,7 @@ def test_dev_install_rolls_back_parent_if_checkpoint_fails(
     tmp_path,
     monkeypatch,
 ):
-    assert runner.invoke(app, ["init", "campus-wiki"]).exit_code == 0
+    assert runner.invoke(app, ["init", "facilities-reference"]).exit_code == 0
     source_path = tmp_path / "source.md"
     source_path.write_text(SECRET)
     original_checkpoint = MemoryStore.checkpoint
@@ -362,17 +362,17 @@ def test_dev_install_rolls_back_parent_if_checkpoint_fails(
             "--from",
             str(source_path),
             "--into",
-            "campus-wiki",
+            "facilities-reference",
         ],
     )
 
     store = MemoryStore()
     assert result.exit_code == 1
-    assert list(store.load("campus-wiki").iter_items()) == []
+    assert list(store.load("facilities-reference").iter_items()) == []
     assert list((isolated_store / "query-sources").iterdir()) == []
     assert [
         checkpoint["command"]
-        for checkpoint in store.list_checkpoints("campus-wiki")
+        for checkpoint in store.list_checkpoints("facilities-reference")
     ] == ["init"]
 
 
