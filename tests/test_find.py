@@ -1,16 +1,28 @@
 """Semantic find traversal, validation, privacy, and CLI contracts."""
 
 import json
+import subprocess
 
 import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.commands.find import (
+    _apply_show_result,
+    _initial_chat_state,
+    _run_read_only_find_command,
+    _show_result_proposal,
+)
+from memcommit.commands.find_chat_shell import (
+    FindChatSessionResult,
+)
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.find_turn_dialogue import FindTurnAction
 from memcommit.search import (
     FindError,
     SearchCandidate,
+    SearchMatch,
     collect_candidates,
     rank_candidates,
 )
@@ -321,6 +333,149 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     assert direct.exit_code == 0
     assert direct.output == "facilities-reference\n  (no matching items)\n"
     assert "Temporary parking" not in direct.output
+
+
+def test_find_cli_tty_opens_chat_with_stable_result_aliases(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("facilities-reference")
+    memory = ops.add(ctx, "The campus cafe will close.")
+    store.save(ctx)
+    store.set_current(ctx.name)
+    provider = KeywordProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find._interactive_terminal",
+        lambda: True,
+    )
+    captured = {}
+
+    def fake_session(state, *, handle_turn):
+        captured["state"] = state
+        captured["handle_turn"] = handle_turn
+        return FindChatSessionResult(status="CLOSED", state=state)
+
+    monkeypatch.setattr(
+        "memcommit.commands.find.run_find_chat_session",
+        fake_session,
+    )
+
+    result = runner.invoke(app, ["find", "cafe"])
+
+    assert result.exit_code == 0, result.output
+    state = captured["state"]
+    assert state.current_query == "cafe"
+    assert len(state.results) == 1
+    assert state.results[0].alias == "m1"
+    assert state.results[0].uid == memory.uid
+    assert state.results[0].context_name == ctx.name
+    assert state.results[0].content == memory.content
+    assert callable(captured["handle_turn"])
+    assert "Find dialogue closed with 1 visible result" in result.output
+
+
+def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("task-1")
+    memory = ops.add(ctx, "There is a coffee machine on the first floor.")
+    store.save(ctx)
+    candidate = SearchCandidate(
+        candidate_id="c000001",
+        kind="memory",
+        context_uid=ctx.uid,
+        context_names=(ctx.name,),
+        item=memory,
+        search_text=memory.content,
+    )
+    state = _initial_chat_state(
+        ctx.name,
+        "coffee",
+        [SearchMatch(candidate=candidate)],
+    )
+    action = FindTurnAction(
+        understanding="You want the first result in full.",
+        question="What would you like to inspect next?",
+        selector="m1",
+    )
+    proposal = _show_result_proposal(state, action, "show m1")
+
+    assert proposal.review.argv == (
+        "mem",
+        "show",
+        memory.uid,
+        "--context",
+        ctx.name,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find._run_read_only_find_command",
+        lambda argv: subprocess.CompletedProcess(
+            args=argv,
+            returncode=0,
+            stdout=(
+                f"Memory: {memory.uid}\n"
+                f"Context: {ctx.name}\n\n"
+                f"{memory.content}\n"
+            ),
+            stderr="",
+        ),
+    )
+    updated = _apply_show_result(state, proposal)
+
+    assert updated.results == state.results
+    assert updated.status == "SHOWED m1 · RESULTS UNCHANGED"
+    receipt = updated.messages[-1].text
+    assert "READ-ONLY ACTION · APPLIED" in receipt
+    assert "mem show" in receipt
+    assert memory.uid in receipt
+    assert "ACTUAL OUTPUT" in receipt
+    assert memory.content in receipt
+    assert store.list_checkpoints(ctx.name) == []
+
+
+def test_read_only_find_runner_rejects_every_non_show_shape():
+    with pytest.raises(FindError, match="non-show"):
+        _run_read_only_find_command(
+            ("mem", "delete", "memory-one", "--context", "task-1")
+        )
+
+
+def test_show_result_failure_does_not_claim_success(monkeypatch):
+    candidate = _candidate()
+    state = _initial_chat_state(
+        "owner",
+        "canonical",
+        [SearchMatch(candidate=candidate)],
+    )
+    proposal = _show_result_proposal(
+        state,
+        FindTurnAction(
+            understanding="Inspect it.",
+            question="Next?",
+            selector="m1",
+        ),
+        "show it",
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find._run_read_only_find_command",
+        lambda _argv: subprocess.CompletedProcess(
+            args=[],
+            returncode=1,
+            stdout="",
+            stderr="injected failure",
+        ),
+    )
+
+    with pytest.raises(FindError, match="injected failure"):
+        _apply_show_result(state, proposal)
+    assert state.status == "RESULTS READY"
 
 
 def test_find_cli_groups_contexts_and_aligns_multiline_content(

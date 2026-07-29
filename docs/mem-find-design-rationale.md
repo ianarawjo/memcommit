@@ -37,9 +37,18 @@ names. `--direct` searches only direct items in the selected Context.
 `--limit` accepts values from 1 through 20 and defaults to 5.
 
 Find is read-only. It does not save the query, matches, a Memory, or a
-checkpoint. Its ordinary stdout can be redirected or copied by the shell, but
-that output is a presentation format, not a durable or supported structured
-selection for another memcommit operation.
+checkpoint. In a TTY it opens the interactive Find view after ranking. The
+view assigns local result aliases, accepts repeated natural-language turns,
+and currently supports one typed follow-up action: inspect a visible result
+through an allowlisted, explicit-Context `mem show` command. That command is
+constructed and executed locally; the turn provider receives no durable UID
+or command authority.
+
+Outside a TTY, Find retains its ordinary grouped stdout so it can be redirected
+or copied by the shell. That output is a presentation format, not a durable or
+supported structured selection for another memcommit operation. The
+interactive transcript and aliases are likewise in-process presentation state,
+not a persisted selection or resumable Find session.
 
 The CLI groups results by their primary owning Context instead of repeating
 the Context name on every item. Context groups appear in the order of their
