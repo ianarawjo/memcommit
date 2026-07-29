@@ -70,11 +70,13 @@ def dev_query_source_install(
 
     source = None
     parent_saved = False
+    saved_parent_digest = None
     try:
         source = store.create_query_source(name, content)
         ref = ops.reference_query_context(name, source.uid, parent)
         store.save(parent)
         parent_saved = True
+        saved_parent_digest = parent._store_digest
         store.checkpoint(
             parent,
             message=f"Installed query-only Context '{name}' in '{into}'",
@@ -85,12 +87,18 @@ def dev_query_source_install(
             ),
             auto=True,
         )
-    except (OSError, ValueError) as e:
+    except (OSError, RuntimeError, ValueError) as e:
         rollback_error = None
         if parent_saved:
             try:
-                store.save(original_parent)
-            except (OSError, ValueError) as restore_error:
+                # Restore only the exact version this operation just saved.
+                # The explicit post-save digest preserves rollback without
+                # allowing a concurrent writer to be overwritten.
+                store.save(
+                    original_parent,
+                    expected_context_digest=saved_parent_digest,
+                )
+            except (OSError, RuntimeError, ValueError) as restore_error:
                 rollback_error = restore_error
         if source is not None and rollback_error is None:
             try:

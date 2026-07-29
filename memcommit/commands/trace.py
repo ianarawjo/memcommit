@@ -72,7 +72,7 @@ def _render_event(event: TraceEvent, *, verbose: bool) -> None:
             _render_content("-", state, verbose=verbose)
         for state in event.after:
             _render_content("+", state, verbose=verbose)
-    elif event.kind in {"SPLIT", "ABSORBED"}:
+    elif event.kind in {"SPLIT", "ABSORBED", "TRANSLATED"}:
         for state in event.before:
             _render_content("FROM", state, verbose=verbose)
         for state in event.after:

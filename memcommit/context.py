@@ -151,6 +151,9 @@ class Context:
         self.name = name
         self.memories: dict[str, Information] = {}
         self.order: list[str] = []
+        # Set by MemoryStore loads and deliberately excluded from JSON. It is
+        # the optimistic-concurrency base for a later save of this object.
+        self._store_digest: str | None = None
 
     def ordered_uids(self) -> list[str]:
         """

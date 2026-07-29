@@ -499,3 +499,52 @@ def test_revert_restores_earlier_state(isolated_store):
 
     restored = store.load("rev-ctx")
     assert restored.memories == {}
+
+
+def test_revert_carries_loaded_digest_into_locked_save(
+    isolated_store,
+    monkeypatch,
+):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    ctx = ops.init("revert-cas")
+    ops.add(ctx, "original")
+    store.save(
+        ctx,
+        AutoCheckpoint(command="first", args={}, description="first"),
+    )
+    first_uid = store.list_checkpoints(ctx.name)[0]["uid"]
+    ops.add(ctx, "later")
+    store.save(
+        ctx,
+        AutoCheckpoint(command="second", args={}, description="second"),
+    )
+    expected = store_module.context_record_digest(
+        store.load_direct(ctx.name)
+    )
+    observed = []
+    original_save_locked = store._save_locked
+
+    def record_expected(
+        candidate,
+        auto_checkpoint,
+        *,
+        expected_context_digest,
+    ):
+        observed.append(expected_context_digest)
+        return original_save_locked(
+            candidate,
+            auto_checkpoint,
+            expected_context_digest=expected_context_digest,
+        )
+
+    monkeypatch.setattr(store, "_save_locked", record_expected)
+
+    store.revert(ctx.name, first_uid, keep_history=True)
+
+    assert observed == [expected]
+    assert [
+        memory.content
+        for memory in store.load_direct(ctx.name).iter_items()
+    ] == ["original"]

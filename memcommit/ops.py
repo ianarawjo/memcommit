@@ -38,6 +38,11 @@ if TYPE_CHECKING:
     from memcommit.search import PromptProvider, SearchMatch
     from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
+    from memcommit.translate import (
+        TranslationApplyResult,
+        TranslationPlan,
+        TranslationProvider,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -736,6 +741,38 @@ def find(
         return []
     provider = provider_factory()
     return rank_candidates(query, candidates, provider, limit=limit)
+
+
+# ---------------------------------------------------------------------------
+# Semantic operation: translate
+# ---------------------------------------------------------------------------
+
+def translate(
+    ctx: Context,
+    target_language: str,
+    provider_factory: Callable[[], "TranslationProvider"],
+    *,
+    selector: str | None = None,
+) -> "TranslationPlan":
+    """Plan translated copies of directly owned Memories without mutating ctx."""
+    from memcommit.translate import plan_translation
+
+    return plan_translation(
+        ctx,
+        target_language,
+        provider_factory,
+        selector=selector,
+    )
+
+
+def apply_translation(
+    ctx: Context,
+    plan: "TranslationPlan",
+) -> "TranslationApplyResult":
+    """Apply one exact translation plan to its unchanged direct Context."""
+    from memcommit.translate import apply_translation as apply_plan
+
+    return apply_plan(ctx, plan)
 
 
 # ---------------------------------------------------------------------------

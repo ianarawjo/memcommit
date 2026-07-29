@@ -56,6 +56,7 @@ IMPLEMENTATION_LEVELS = {
     "status": "implemented",
     "switch": "implemented",
     "trace": "implemented",
+    "translate": "implemented",
     "update": "partial",
 }
 

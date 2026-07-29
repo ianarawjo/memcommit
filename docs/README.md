@@ -24,6 +24,13 @@ limitation, the relevant focused `*-design-rationale.md` document must state
 the reason and the remaining boundary. A conversation-only explanation is not
 considered sufficient design history.
 
+## Translation contract
+
+- [`mem-translate-design-rationale.md`](mem-translate-design-rationale.md)
+  defines direct-only candidate scope, same-Context sibling copies, strict
+  provider output, concurrency validation, checkpoint lineage, and the
+  query-only privacy boundary.
+
 ## Atomize contract notes
 
 - [`mem-atomize-design-rationale.md`](mem-atomize-design-rationale.md) defines

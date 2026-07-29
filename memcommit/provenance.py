@@ -15,7 +15,11 @@ import uuid
 
 from memcommit.chunking import chunk_content
 from memcommit.context import Context, Memory
-from memcommit.store import MemoryStore
+from memcommit.store import (
+    MemoryStore,
+    canonical_context_record,
+    context_record_digest,
+)
 
 
 Evidence = Literal["RECORDED", "RECONSTRUCTED", "INFERRED", "UNRECORDED"]
@@ -27,6 +31,7 @@ EventKind = Literal[
     "ABSORBED",
     "MERGED_IN",
     "RESTORED",
+    "TRANSLATED",
     "ATOMIZE_KEEP",
     "ATOMIZE_PRESERVED",
     "REORDERED",
@@ -248,14 +253,24 @@ class _Frame:
     context_name: str
     memories: dict[str, MemoryState]
     order: tuple[str, ...]
+    record: dict[str, Any]
+    record_digest: str
 
 
 def _empty_frame(context_uid: str, context_name: str) -> _Frame:
+    record: dict[str, Any] = {
+        "uid": context_uid,
+        "name": context_name,
+        "memories": {},
+        "order": [],
+    }
     return _Frame(
         context_uid=context_uid,
         context_name=context_name,
         memories={},
         order=(),
+        record=record,
+        record_digest=context_record_digest(record),
     )
 
 
@@ -310,15 +325,19 @@ def _frame_from_snapshot(value: object, *, label: str) -> _Frame:
         )
         memory_order.append(uid)
 
+    canonical_record = canonical_context_record(value)
     return _Frame(
         context_uid=context_uid,
         context_name=context_name,
         memories=memories,
         order=tuple(memory_order),
+        record=canonical_record,
+        record_digest=context_record_digest(canonical_record),
     )
 
 
 def _frame_from_context(ctx: Context) -> _Frame:
+    record = ctx.to_dict()
     memories: dict[str, MemoryState] = {}
     order: list[str] = []
     for item in ctx.iter_items():
@@ -335,6 +354,8 @@ def _frame_from_context(ctx: Context) -> _Frame:
         context_name=ctx.name,
         memories=memories,
         order=tuple(order),
+        record=record,
+        record_digest=context_record_digest(record),
     )
 
 
@@ -830,6 +851,200 @@ def _legacy_chunk_event(
         before=(before.memories[source_uid],),
         after=tuple(children),
         reason=f"Legacy structural split using method '{method}'.",
+    )
+
+
+def _translation_events(
+    *,
+    before: _Frame,
+    after: _Frame,
+    entry: dict,
+    removed: set[str],
+    added: set[str],
+    changed: set[str],
+) -> tuple[list[TraceEvent], set[str], list[str]]:
+    """Validate recorded source-to-copy mappings for one translate checkpoint."""
+    checkpoint_uid, timestamp, command, description, args = _checkpoint_fields(
+        entry
+    )
+    if command != "translate":
+        return [], set(), []
+
+    def valid_digest(value: object) -> bool:
+        return (
+            isinstance(value, str)
+            and len(value) == 64
+            and all(character in "0123456789abcdef" for character in value)
+        )
+
+    operation_uid = args.get("operation_uid")
+    target_language = args.get("target_language")
+    source_context = args.get("source_context")
+    scope = args.get("scope")
+    response_digest = args.get("provider_response_sha256")
+    records = args.get("translations")
+    valid = (
+        set(args)
+        == {
+            "schema_version",
+            "operation_uid",
+            "target_language",
+            "source_context",
+            "scope",
+            "provider_response_sha256",
+            "translations",
+        }
+        and args.get("schema_version") == 1
+        and isinstance(operation_uid, str)
+        and isinstance(target_language, str)
+        and bool(target_language.strip())
+        and len(target_language) <= 80
+        and all(character.isprintable() for character in target_language)
+        and isinstance(source_context, dict)
+        and set(source_context) == {"uid", "name", "digest"}
+        and source_context.get("uid") == before.context_uid
+        and source_context.get("name") == before.context_name
+        and valid_digest(source_context.get("digest"))
+        and source_context.get("digest") == before.record_digest
+        and isinstance(scope, dict)
+        and valid_digest(response_digest)
+        and isinstance(records, list)
+        and bool(records)
+        and not removed
+        and not changed
+    )
+    try:
+        uuid.UUID(operation_uid if isinstance(operation_uid, str) else "")
+    except ValueError:
+        valid = False
+
+    parsed: list[tuple[str, str]] = []
+    if valid:
+        for record in records:
+            if (
+                not isinstance(record, dict)
+                or set(record)
+                != {
+                    "source_uid",
+                    "result_uid",
+                    "source_sha256",
+                    "result_sha256",
+                }
+            ):
+                valid = False
+                break
+            source_uid = record.get("source_uid")
+            result_uid = record.get("result_uid")
+            source_digest = record.get("source_sha256")
+            result_digest = record.get("result_sha256")
+            if (
+                not isinstance(source_uid, str)
+                or not isinstance(result_uid, str)
+                or source_uid == result_uid
+                or source_uid not in before.memories
+                or source_uid not in after.memories
+                or result_uid in before.memories
+                or result_uid not in after.memories
+                or before.memories[source_uid].content
+                != after.memories[source_uid].content
+                or not valid_digest(source_digest)
+                or not valid_digest(result_digest)
+                or before.memories[source_uid].content_digest
+                != source_digest
+                or after.memories[result_uid].content_digest
+                != result_digest
+            ):
+                valid = False
+                break
+            parsed.append((source_uid, result_uid))
+
+    source_uids = [source_uid for source_uid, _ in parsed]
+    result_uids = [result_uid for _, result_uid in parsed]
+    if valid:
+        after_memories = after.record.get("memories")
+        after_order = after.record.get("order")
+        before_order = before.record.get("order")
+        after_without_results = (
+            {
+                **after.record,
+                "memories": {
+                    uid: item
+                    for uid, item in after_memories.items()
+                    if uid not in set(result_uids)
+                },
+                "order": [
+                    uid for uid in after_order if uid not in set(result_uids)
+                ],
+            }
+            if (
+                isinstance(after_memories, dict)
+                and isinstance(after_order, list)
+                and isinstance(before_order, list)
+            )
+            else None
+        )
+        valid = (
+            len(source_uids) == len(set(source_uids))
+            and len(result_uids) == len(set(result_uids))
+            and set(result_uids) == added
+            and after_without_results == before.record
+            and [
+                uid for uid in after.order if uid not in set(result_uids)
+            ]
+            == list(before.order)
+            and all(
+                after.order.index(result_uid)
+                == after.order.index(source_uid) + 1
+                for source_uid, result_uid in parsed
+            )
+        )
+    if (
+        valid
+        and scope == {"kind": "all"}
+        and source_uids == list(before.order)
+    ):
+        pass
+    elif (
+        valid
+        and isinstance(scope, dict)
+        and set(scope) == {"kind", "memory_uid"}
+        and scope.get("kind") == "memory"
+        and len(source_uids) == 1
+        and scope.get("memory_uid") == source_uids[0]
+    ):
+        pass
+    else:
+        valid = False
+
+    if not valid:
+        return (
+            [],
+            set(),
+            [
+                f"Checkpoint [{checkpoint_uid[:8]}] has invalid translation "
+                "lineage metadata; snapshot differences were used instead."
+            ],
+        )
+
+    return (
+        [
+            TraceEvent(
+                kind="TRANSLATED",
+                evidence="RECORDED",
+                timestamp=timestamp,
+                checkpoint_uid=checkpoint_uid,
+                command=command,
+                description=description,
+                before=(before.memories[source_uid],),
+                after=(after.memories[result_uid],),
+                reason=f"Created a translated copy in {target_language}.",
+                reason_codes=("TRANSLATION",),
+                operation_id=operation_uid,
+            )
+            for source_uid, result_uid in parsed
+        ],
+        set(result_uids),
+        [],
     )
 
 
@@ -1338,6 +1553,20 @@ def _transition_events(
                 "its changes were reconstructed from snapshots."
             )
 
+    translation_events, translation_results, translation_warnings = (
+        _translation_events(
+            before=before,
+            after=after,
+            entry=entry,
+            removed=removed,
+            added=added,
+            changed=changed,
+        )
+    )
+    events.extend(translation_events)
+    added -= translation_results
+    warnings.extend(translation_warnings)
+
     chunk_event = _legacy_chunk_event(
         before=before,
         after=after,
@@ -1738,7 +1967,7 @@ def _resolve_historical_uid(
 def _lineage_component(selected_uid: str, events: Iterable[TraceEvent]) -> set[str]:
     adjacency: dict[str, set[str]] = {}
     for event in events:
-        if event.kind not in {"SPLIT", "ABSORBED"}:
+        if event.kind not in {"SPLIT", "ABSORBED", "TRANSLATED"}:
             continue
         sources = {state.uid for state in event.before}
         results = {state.uid for state in event.after}
@@ -1766,7 +1995,7 @@ def _original_states(
     parented = {
         state.uid
         for event in events
-        if event.kind in {"SPLIT", "ABSORBED"}
+        if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED"}
         for state in event.after
         if state.uid not in {item.uid for item in event.before}
     }

@@ -38,6 +38,7 @@ from memcommit.commands import (
     status,
     switch,
     trace,
+    translate,
     update,
 )
 from memcommit.commands.clear import cmd as clear_cmd
@@ -97,6 +98,13 @@ app.command(
     "rationale",
     help="Show recorded evidence and optional labeled inference for a Memory.",
 )(rationale.cmd)
+app.command(
+    "translate",
+    help=(
+        "Create translated sibling copies of direct Memories; preserve the "
+        "originals."
+    ),
+)(translate.cmd)
 
 # --- Semantic (legacy configured LLM or isolated Codex provider) ---
 app.command("forget",         help="Forget memories matching a description (uses LLM).")(forget.cmd)

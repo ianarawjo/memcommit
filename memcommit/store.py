@@ -7,6 +7,9 @@
 """
 from __future__ import annotations
 
+from contextlib import contextmanager
+import fcntl
+import hashlib
 import json
 import os
 import shutil
@@ -14,7 +17,7 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Iterator, Optional
 
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
 
@@ -57,6 +60,33 @@ def _write_json_atomic(path: Path, data: object) -> None:
     finally:
         if temporary.exists() and not temporary.is_symlink():
             temporary.unlink()
+
+
+def canonical_context_record(
+    value: Context | dict[str, object],
+) -> dict[str, object]:
+    """Return the canonical logical direct record used for persistence CAS."""
+    if isinstance(value, Context):
+        return value.to_dict()
+    # Non-resolving deserialization preserves every pointer while normalizing
+    # supported legacy omissions such as a missing explicit order list.
+    return Context.from_dict(value).to_dict()
+
+
+def context_record_digest(value: Context | dict[str, object]) -> str:
+    """Hash one complete logical direct Context record canonically."""
+    record = canonical_context_record(value)
+    encoded = json.dumps(
+        record,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+class ConcurrentContextUpdateError(RuntimeError):
+    """A Context changed after a caller captured its expected record."""
 
 
 def _context_name_parts(name: str) -> tuple[str, ...]:
@@ -145,6 +175,39 @@ class MemoryStore:
             CONTEXTS_DIR.mkdir(parents=True, exist_ok=True)
             if not STATE_FILE.exists():
                 self._write_state({"current": None})
+
+    @contextmanager
+    def _context_write_lock(self, name: str) -> Iterator[None]:
+        """Serialize cooperative Context saves across local mem processes."""
+        _context_name_parts(name)
+        lock_dir = STORE_DIR / "context-write-locks"
+        if lock_dir.is_symlink():
+            raise ValueError(
+                "Refusing to use a symbolic-link Context lock directory."
+            )
+        lock_dir.mkdir(parents=True, exist_ok=True)
+        lock_path = lock_dir / (
+            hashlib.sha256(name.encode("utf-8")).hexdigest() + ".lock"
+        )
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            # os.fdopen owns the descriptor once it succeeds. If it fails
+            # before taking ownership, close the raw descriptor here.
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
 
     # --- Global state ---
 
@@ -909,11 +972,16 @@ class MemoryStore:
             return self.load(ref_name, _loading | {name})
 
         try:
-            return Context.from_dict(
+            ctx = Context.from_dict(
                 data,
                 loader=loader,
                 memory_loader=self._load_direct_memory,
             )
+            # A loaded Context carries the exact logical version it was based
+            # on. Every later ordinary save uses it for optimistic concurrency
+            # so a stale writer cannot erase a completed operation.
+            ctx._store_digest = context_record_digest(data)
+            return ctx
         except (KeyError, TypeError) as e:
             raise ValueError(
                 f"Context file for '{name}' has an invalid memory structure: {e}"
@@ -933,7 +1001,9 @@ class MemoryStore:
             data = json.load(f)
         data = _validate_context_header(data, name)
         try:
-            return Context.from_dict(data)
+            ctx = Context.from_dict(data)
+            ctx._store_digest = context_record_digest(data)
+            return ctx
         except (KeyError, TypeError) as e:
             raise ValueError(
                 f"Context file for '{name}' has an invalid memory structure: {e}"
@@ -987,8 +1057,29 @@ class MemoryStore:
         self,
         ctx: Context,
         auto_checkpoint: Optional[AutoCheckpoint] = None,
+        *,
+        expected_context_digest: str | None = None,
     ) -> Checkpoint | None:
-        """Persist a Context and return its automatic checkpoint, if requested."""
+        """Persist a Context, optionally only if its disk record is unchanged."""
+        if expected_context_digest is None:
+            expected_context_digest = getattr(ctx, "_store_digest", None)
+        with self._context_write_lock(ctx.name):
+            checkpoint = self._save_locked(
+                ctx,
+                auto_checkpoint,
+                expected_context_digest=expected_context_digest,
+            )
+        ctx._store_digest = context_record_digest(ctx)
+        return checkpoint
+
+    def _save_locked(
+        self,
+        ctx: Context,
+        auto_checkpoint: Optional[AutoCheckpoint],
+        *,
+        expected_context_digest: str | None,
+    ) -> Checkpoint | None:
+        """Save while holding this Context's cooperative process lock."""
         ctx_dir = self._context_dir(ctx.name)
         context_file = self._context_file(ctx.name)
         if context_file.is_symlink():
@@ -996,6 +1087,32 @@ class MemoryStore:
                 f"Refusing to write context '{ctx.name}' through a symbolic link."
             )
         context_preexisting = self.context_exists(ctx.name)
+        if expected_context_digest is not None:
+            if (
+                len(expected_context_digest) != 64
+                or any(
+                    character not in "0123456789abcdef"
+                    for character in expected_context_digest
+                )
+            ):
+                raise ValueError("Expected Context digest is invalid.")
+            if not context_preexisting:
+                raise ConcurrentContextUpdateError(
+                    f"Context '{ctx.name}' no longer exists."
+                )
+            with open(context_file, encoding="utf-8") as file:
+                current_record = json.load(
+                    file,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            current_record = _validate_context_header(
+                current_record,
+                ctx.name,
+            )
+            if context_record_digest(current_record) != expected_context_digest:
+                raise ConcurrentContextUpdateError(
+                    f"Context '{ctx.name}' changed before it could be saved."
+                )
         if not context_preexisting:
             self._assert_context_storage_available(ctx.name)
         ctx_dir.mkdir(parents=True, exist_ok=True)
@@ -1377,6 +1494,21 @@ class MemoryStore:
     def revert(
         self, ctx_name: str, uid_prefix: str, keep_history: bool = False
     ) -> tuple[Checkpoint, Checkpoint]:
+        """Revert one Context while holding its cooperative write lock."""
+        with self._context_write_lock(ctx_name):
+            return self._revert_locked(
+                ctx_name,
+                uid_prefix,
+                keep_history=keep_history,
+            )
+
+    def _revert_locked(
+        self,
+        ctx_name: str,
+        uid_prefix: str,
+        *,
+        keep_history: bool,
+    ) -> tuple[Checkpoint, Checkpoint]:
         """Revert context to a checkpoint. Returns (pre_revert_cp, target_cp).
 
         By default, checkpoints newer than the target are removed and the
@@ -1464,7 +1596,12 @@ class MemoryStore:
             loader=loader,
             memory_loader=self._load_direct_memory,
         )
-        self.save(restored)
+        self._save_locked(
+            restored,
+            None,
+            expected_context_digest=ctx._store_digest,
+        )
+        restored._store_digest = context_record_digest(restored)
 
         target_cp = Checkpoint(
             uid=target_data["uid"],
