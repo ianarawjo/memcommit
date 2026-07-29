@@ -63,6 +63,13 @@ deterministic instead of emitting a terminal-control interface.
 is a research prototype, and individual commands may still have documented
 permission, provider, concurrency, or remote-persistence boundaries.
 
+An implementation can expose two co-equal public spellings through one
+internal callback. `mem list` and `mem ls` deliberately have the same
+description and both appear as `implemented`: participants may learn and use
+either spelling without one inventory row redirecting them to the other.
+This differs from a compatibility alias such as `checkout`, whose inventory
+entry exists primarily to point at the canonical operation.
+
 ## Consistency boundary
 
 Descriptions are read from the same Click/Typer command registrations used by

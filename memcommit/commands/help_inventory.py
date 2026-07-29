@@ -43,7 +43,7 @@ IMPLEMENTATION_LEVELS = {
     "integrate": "legacy",
     "list": "implemented",
     "log": "implemented",
-    "ls": "alias",
+    "ls": "implemented",
     "merge": "partial",
     "query": "implemented",
     "rationale": "implemented",

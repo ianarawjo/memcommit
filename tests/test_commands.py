@@ -61,8 +61,13 @@ class TestHelp:
             and "target remains unchanged" in line
             for line in lines
         )
+        list_row = next(line for line in lines if line.startswith("list "))
+        ls_row = next(line for line in lines if line.startswith("ls "))
+        assert list_row.split(" - ", 1)[1] == ls_row.split(" - ", 1)[1]
+        assert "implemented" in list_row
+        assert "List direct items in the current (or given) context." in list_row
         assert any(
-            line.startswith("ls ")
+            line.startswith("checkout ")
             and " - alias " in line
             for line in lines
         )
@@ -221,7 +226,7 @@ class TestList:
         assert alpha_uid[:8] in result.output
         assert "alpha fact" in result.output
 
-    def test_ls_is_alias_for_list(self, isolated_store):
+    def test_ls_and_list_have_identical_output(self, isolated_store):
         invoke("init", "ctx")
         invoke("add", "listed through either command")
         result = invoke("list")

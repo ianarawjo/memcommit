@@ -1,7 +1,8 @@
 # `mem ls` Design Rationale
 
 - Status: Implemented
-- Scope: `mem list`, its `mem ls` alias, and recursive listing with `-R`
+- Scope: the co-equal `mem list` and `mem ls` spellings, plus recursive
+  listing with `-R`
 
 ## 1. Purpose
 
@@ -35,8 +36,11 @@ mem ls -R [context]
 mem ls --recursive [context]
 ```
 
-`mem list` is the canonical command and `mem ls` is its shorter alias. Both
-forms have identical behavior and options.
+`mem list` and `mem ls` are co-equal public spellings. Both forms have
+identical behavior, options, implementation level, and short help
+description. They share one callback internally so the two contracts cannot
+drift, but the implementation detail does not make either spelling
+subordinate in participant-facing documentation.
 
 When no Context is supplied, the current Context is used.
 
