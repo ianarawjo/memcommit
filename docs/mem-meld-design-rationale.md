@@ -3,8 +3,12 @@
 ## Status
 
 This note distills the shared semantic-meld contract and its two authority
-modes. The first public Context-to-Context symmetric path now exists as a
-bounded research prototype:
+modes. The canonical user-facing commands and terminology are maintained in
+[`mem-meld-usage.md`](mem-meld-usage.md). This rationale explains why those
+entry points differ; it is not a second command manual.
+
+The first public Context-to-Context symmetric path now exists as a bounded
+research prototype:
 
 ```text
 mem init RESULT
@@ -13,16 +17,16 @@ mem meld LEFT_PEER RIGHT_PEER
 
 It performs one aggregate analysis, saves a resumable relation ledger and
 workbench, accepts issue-scoped or whole-set comments, supports preserve-all
-and provider-free defer, and applies an exact ready proposal only through
-`--accept`.
+and provider-free defer, and applies an exact ready proposal only after
+explicit acceptance through the TUI's `A` action or the `--accept` option.
 
 The earlier local conversational change flow inside atomize grounding is also
 retained:
 
 ```text
-mem atomize --evaluate ISSUE --comment TEXT
-→ mem atomize --reply TEXT
-→ mem atomize --accept-grounding
+mem atomize --context CONTEXT --evaluate ISSUE --comment TEXT
+→ mem atomize --context CONTEXT --reply TEXT
+→ mem atomize --context CONTEXT --accept-grounding
 ```
 
 That flow remains under its existing atomize command and strict schema. It now
@@ -704,11 +708,15 @@ scope, and result creation without source mutation.
 
 ## Command contracts
 
+The executable recipes are centralized in
+[`mem-meld-usage.md`](mem-meld-usage.md). The summary below records the design
+boundary and must remain consistent with that guide and CLI help.
+
 ```text
 # Implemented issue-scoped directional adapter remains under atomize
-mem atomize --evaluate ISSUE --comment TEXT
-mem atomize --reply TEXT
-mem atomize --accept-grounding
+mem atomize --context CONTEXT --evaluate ISSUE --comment TEXT
+mem atomize --context CONTEXT --reply TEXT
+mem atomize --context CONTEXT --accept-grounding
 
 # Implemented Context-to-Context symmetric meld
 mem init RESULT_CONTEXT
@@ -721,7 +729,7 @@ mem meld PEER_A PEER_B --expand ISSUE
 mem meld PEER_A PEER_B --restart
 mem meld PEER_A PEER_B --accept
 
-# Future directional meld
+# Future directional meld — NOT IMPLEMENTED
 mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT
 ```
 

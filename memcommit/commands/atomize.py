@@ -306,8 +306,9 @@ def cmd(
             "--evaluate",
             metavar="ISSUE",
             help=(
-                "Start a grounding dialogue for a visible issue number or "
-                "unique issue/source uid prefix"
+                "Start the issue-scoped directional meld (informally, atomic "
+                "meld) for a visible issue number or unique issue/source uid "
+                "prefix"
             ),
         ),
     ] = None,

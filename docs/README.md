@@ -68,6 +68,11 @@ considered sufficient design history.
 
 ## Meld contract note
 
+- [`mem-meld-usage.md`](mem-meld-usage.md) is the canonical user-facing
+  command guide. It standardizes “atomic meld” as informal shorthand for the
+  implemented issue-scoped directional flow under
+  `mem atomize --evaluate`, distinguishes it from symmetric Context meld, and
+  explicitly marks public directional Context meld as future work.
 - [`mem-meld-design-rationale.md`](mem-meld-design-rationale.md) distills the
   directional and symmetric authority modes; explains issue/all/remaining
   turn scope; documents the implemented symmetric Context workbench and

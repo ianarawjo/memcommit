@@ -17,3 +17,16 @@ be completed or edited before execution.
 
 Add the same `eval` line to `.zshrc` to enable it in future shells. The command
 only prints shell code; it does not edit shell startup files itself.
+
+## Meld quick start
+
+The implemented meld workflows have different entry points:
+
+- one-issue directional grounding, informally called atomic meld:
+  `mem atomize --context CONTEXT --evaluate ISSUE`;
+- symmetric combination of two equal-authority Contexts:
+  create an empty result Context, then run `mem meld LEFT_PEER RIGHT_PEER`.
+
+See [`docs/mem-meld-usage.md`](docs/mem-meld-usage.md) for the canonical
+commands, interactive controls, acceptance boundaries, and currently
+unimplemented variants.

@@ -102,8 +102,8 @@ app.command("chunk",          help="Split a memory into chunks (markdown_headers
 app.command(
     "atomize",
     help=(
-        "Create or resume an atomize workbench or grounding dialogue; "
-        "apply only with explicit acceptance."
+        "Create or resume atomization; --evaluate runs its issue-scoped "
+        "directional meld, with changes only after explicit acceptance."
     ),
 )(atomize.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)

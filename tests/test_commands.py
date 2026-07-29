@@ -77,6 +77,28 @@ class TestHelp:
             and " - legacy " in line
             for line in lines
         )
+        assert any(
+            line.startswith("atomize ")
+            and "issue-scoped directional meld" in line
+            for line in lines
+        )
+
+    def test_meld_help_distinguishes_atomic_and_context_entry_points(self):
+        atomize = invoke("atomize", "--help")
+        meld = invoke("meld", "--help")
+
+        assert atomize.exit_code == 0
+        atomize_help = " ".join(atomize.output.split())
+        assert "--evaluate ISSUE" in atomize_help
+        assert "issue-scoped directional" in atomize_help
+        assert "informally, atomic" in atomize_help
+
+        assert meld.exit_code == 0
+        meld_help = " ".join(meld.output.split())
+        assert "two equal-authority Contexts" in meld_help
+        assert "current empty Context" in meld_help
+        assert "--atomic" not in meld_help
+        assert "--into" not in meld_help
 
     def test_selector_moves_down_and_returns_selected_command(self):
         with create_pipe_input() as pipe_input:
