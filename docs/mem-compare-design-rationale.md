@@ -7,6 +7,7 @@ The first bounded Compare slice is implemented as:
 ```text
 mem compare --to PEER
 mem compare --to PEER --refresh
+mem compare --to PEER --ledger
 ```
 
 The active Context is the display reference and `--to` names the compared
@@ -19,6 +20,8 @@ direct-Memory frames. It saves an immutable `ComparisonAnalysis` containing:
 - exact ordered source Context identities, names, digests, Memory order, and
   Memory snapshots;
 - one overview;
+- four short category reports for shared, differing, reference-only, and
+  compared-only material;
 - one exhaustive N:M primary relation ledger; and
 - visible issues that may later become grounding turns.
 
@@ -94,7 +97,39 @@ The provider receives call-local opaque frame and Memory IDs, full bounded
 direct Memory content, source order, and equal-authority instructions. Context
 names remain local presentation metadata: sending advisor names is unnecessary
 for comparison and could introduce identity or ordering bias. The provider may
-return only `overview`, `relations`, and `issues` under a strict JSON schema.
+return only `overview`, `reports`, `relations`, and `issues` under a strict
+JSON schema.
+
+The four reports are produced in the same one-shot call as the exhaustive
+ledger. They are not presentation-layer concatenations of relation summaries.
+Joining a few ledger rows would silently turn truncation into semantic
+synthesis and make a compact screen look more complete than it is. Local
+validation instead derives each report's supporting group from the ledger:
+
+- `both`: `EQUIVALENT` and `COMPATIBLE`;
+- `differences`: `SCOPED`, `CONFLICT`, and `UNCLEAR`;
+- `reference_only`: reference-side `DISTINCT`; and
+- `compared_only`: compared-side `DISTINCT`.
+
+A report must be non-empty exactly when its group has at least one relation.
+An absent group must have an empty provider field and is rendered locally as
+none reported. This prevents prose from being invented for an empty category
+without duplicating relation references in the report schema.
+
+Compare follows the shared result-workbench attention budget without
+multiplying it by the number of headings. The overview normally uses at most
+roughly 40-50 English words. The four category reports subdivide the remaining
+report layer and together target no more than roughly 100 words, keeping all
+top-level report prose near the shared 150-word first-frame envelope. These are
+soft generation targets, not truncation or validation rules. A material
+difference, exception, or unresolved relation must be retained even when doing
+so exceeds the target; exact relations remain complete in `--ledger`.
+
+Schema version 2 adds these reports. Schema-version-1 artifacts remain
+strictly readable and preserve their old serialization shape so they can
+participate in ordered-slot replacement CAS. Ruleset version 3 requires
+reports for newly created analyses, so an unchanged pair with a version-1/2
+analysis is refreshed rather than reused.
 
 The schema deliberately omits JSON Schema `uniqueItems` because the Codex
 structured-output subset rejects that keyword. Alias uniqueness remains an
@@ -131,31 +166,49 @@ Comparison artifacts copy source text and derived explanations. Deleting
 either bound source therefore removes both ordered orientations involving
 that Context. Compare never opens query-only sources.
 
-## First presentation
+## Compact report and exact ledger
 
-The non-interactive snapshot groups the complete ledger into:
+The default non-interactive snapshot is ordered by decision relevance:
 
 ```text
+METRICS
+WHAT MEM UNDERSTOOD
 WHAT BOTH CONTAIN
 WHAT DIFFERS
 ONLY IN REFERENCE
 ONLY IN COMPARED
-UNCLEAR
 GROUNDING CANDIDATES
 ```
 
-Every relation remains reachable, including resolved equivalent, compatible,
-scoped, and distinct relations. This differs from Atomize, where unchanged
-atomic Memories can be omitted from the issue list.
+Memory, relation, relation-kind, and grounding-candidate counts appear directly
+under the source identities. They orient the reader before prose and make the
+amount of remaining judgment work visible without forcing a scan of every
+relation.
+
+The four middle sections contain complete short semantic reports rather than
+one row per relation. The person already knows the source Contexts; the default
+view should communicate their overall overlap, difference, and one-sided
+contributions rather than repeat every source Memory. In contrast,
+`GROUNDING CANDIDATES` remains a complete final list because those are the
+places where human intervention can change later reconciliation. Each
+candidate includes the kind and summary of every linked relation, so a hidden
+ledger row never leaves an unexplained `R7`-style reference.
+
+`--ledger` renders every validated relation, its exact source snapshots, and
+its explanation without another provider call. The exhaustive ledger remains
+part of the durable analysis and is therefore available for audit and a future
+arrow/Enter relation browser; it is merely not the default reading burden.
+This differs from Atomize, where unchanged atomic Memories can be omitted from
+the issue list.
 
 Every source string and provider-authored explanation is rendered through an
 injective single-line escape boundary. Embedded newlines, tabs, bidi controls,
 or other terminal controls therefore cannot impersonate trusted section
 headings.
 
-The first slice is intentionally static. It establishes semantic quality,
-durable resume, and relation coverage before view-state persistence or a TUI
-is added.
+Both views remain intentionally static. They establish semantic quality,
+durable resume, report hierarchy, and relation coverage before view-state
+persistence or a TUI is added.
 
 ## Task 2 smoke-test observation
 
@@ -210,8 +263,9 @@ operation-specific identities, evidence, persistence, and mutation semantics.
 
 - Compare accepts two normal direct-Memory Contexts only. References, embedded
   Contexts, and query-only sources are rejected rather than silently omitted.
-- There is no interactive relation picker, category filter, expanded-detail
-  command, JSON output, history browser, or analysis diff yet.
+- There is no interactive relation picker, category filter, JSON output,
+  history browser, or analysis diff yet. `--ledger` is a complete static
+  detail view, not a persisted interactive cursor.
 - Automatic fresh analysis after a source change is intentional for Compare;
   it differs from an in-progress Atomize review, whose reviewed proposal fails
   stale rather than silently changing.

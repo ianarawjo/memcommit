@@ -89,6 +89,23 @@ class ExhaustiveCompareProvider:
                 "The two equal-authority advisors share one policy and each "
                 "contributes independently useful guidance."
             ),
+            "reports": {
+                "both": (
+                    "Both advisors require a concise proposal under the "
+                    "same scope."
+                ),
+                "differences": "",
+                "reference_only": (
+                    "The reference alone adds guidance about headings."
+                    if len(reference) > 1
+                    else ""
+                ),
+                "compared_only": (
+                    "The compared peer alone adds terminology guidance."
+                    if len(compared) > 1
+                    else ""
+                ),
+            },
             "relations": relations,
             "issues": [],
         }
@@ -98,6 +115,7 @@ class ExhaustiveCompareProvider:
         assert output_schema is not None
         assert set(output_schema["required"]) == {
             "overview",
+            "reports",
             "relations",
             "issues",
         }
@@ -107,6 +125,18 @@ class ExhaustiveCompareProvider:
         assert "target" not in json.dumps(output_schema).lower()
         assert "miscellaneous bucket" in prompt
         assert "Do not state relation counts in overview" in prompt
+        assert "roughly 40-50 words at most" in prompt
+        assert "within roughly 150 English words at most" in prompt
+        assert (
+            "normally no more than roughly 40-50 words"
+            in output_schema["properties"]["overview"]["description"]
+        )
+        assert (
+            "share the remaining first-frame attention budget"
+            in output_schema["properties"]["reports"]["properties"]["both"][
+                "description"
+            ]
+        )
         payload = json.loads(
             prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1]
         )
@@ -176,16 +206,31 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     )
     assert "Analysis:" in created.output
     assert "NEW" in created.output
-    assert "WHAT BOTH CONTAIN" in created.output
-    assert "ONLY IN task2/advisor1 · not automatically a deficiency" in (
+    assert "METRICS · MEMORIES 2 + 2 · RELATIONS 3 · GROUNDING 0" in (
         created.output
     )
-    assert "ONLY IN task2/advisor2 · not automatically a deficiency" in (
+    assert created.output.index("METRICS ·") < created.output.index(
+        "WHAT MEM UNDERSTOOD"
+    )
+    assert "WHAT BOTH CONTAIN · 1" in created.output
+    assert (
+        "ONLY IN task2/advisor1 · 1 · "
+        "not automatically a deficiency"
+    ) in created.output
+    assert (
+        "ONLY IN task2/advisor2 · 1 · "
+        "not automatically a deficiency"
+    ) in created.output
+    assert "Both advisors require a concise proposal" in created.output
+    assert "The reference alone adds guidance about headings." in (
         created.output
     )
     assert reference.uid[:8] not in created.output
-    assert next(iter(reference.memories))[:8] in created.output
-    assert next(iter(compared.memories))[:8] in created.output
+    assert next(iter(reference.memories))[:8] not in created.output
+    assert next(iter(compared.memories))[:8] not in created.output
+    assert "\n      REF " not in created.output
+    assert "\n      TO  " not in created.output
+    assert "\n      WHY ·" not in created.output
     assert store._context_file(reference.name).read_bytes() == reference_before
     assert store._context_file(compared.name).read_bytes() == compared_before
     assert store.list_checkpoints(reference.name) == []
@@ -201,6 +246,32 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
         reference.name,
         compared.name,
     ]
+    expected_members = {
+        (frame.uid, memory.uid)
+        for frame in saved.frames
+        for memory in frame.memories
+    }
+    observed_members = {
+        (member.frame_uid, member.memory_uid)
+        for relation in saved.relations
+        for member in relation.members
+    }
+    assert observed_members == expected_members
+
+    ledger = runner.invoke(
+        app,
+        ["compare", "--to", compared.name, "--ledger"],
+    )
+
+    assert ledger.exit_code == 0, ledger.output
+    assert "REUSED" in ledger.output
+    assert "RELATION LEDGER · 3" in ledger.output
+    assert next(iter(reference.memories))[:8] in ledger.output
+    assert next(iter(compared.memories))[:8] in ledger.output
+    assert "\n      REF " in ledger.output
+    assert "\n      TO  " in ledger.output
+    assert "\n      WHY ·" in ledger.output
+    assert len(provider.payloads) == 1
 
     resumed = runner.invoke(
         app,
@@ -312,6 +383,17 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
         compared_memories = payload["frames"][1]["memories"]
         return {
             "overview": "One policy cluster conflicts; one item is distinct.",
+            "reports": {
+                "both": "",
+                "differences": (
+                    "The advisors give incompatible directions for the "
+                    "same case."
+                ),
+                "reference_only": (
+                    "Only the reference supplies a heading policy."
+                ),
+                "compared_only": "",
+            },
             "relations": [
                 {
                     "relation_key": "one_to_many_conflict",
@@ -370,6 +452,66 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
     assert analysis.issues[0].relation_uids == (
         analysis.relations[0].uid,
     )
+    rendered = render_comparison(analysis, reused=False)
+    assert "WHAT DIFFERS · 1" in rendered
+    assert "RELATED · R1 · CONFLICT" in rendered
+    assert rendered.rfind("GROUNDING CANDIDATES") > rendered.rfind(
+        "DETAIL ·"
+    )
+    assert rendered.rstrip().endswith(
+        "Keep both rules under disjoint conditions."
+    )
+
+
+def test_provider_requires_the_complete_report_object(
+    isolated_store,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+
+    def missing_reports(payload):
+        response = ExhaustiveCompareProvider.default_response(payload)
+        response.pop("reports")
+        return response
+
+    with pytest.raises(
+        ComparisonProviderError,
+        match="invalid comparison response",
+    ):
+        analyze_comparison(
+            ComparisonInput.from_contexts(reference, compared),
+            ExhaustiveCompareProvider(missing_reports),
+        )
+
+
+@pytest.mark.parametrize(
+    ("report_name", "replacement"),
+    [
+        ("both", ""),
+        ("differences", "A difference that has no supporting relation."),
+    ],
+)
+def test_report_presence_must_match_the_validated_relation_group(
+    isolated_store,
+    report_name,
+    replacement,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+
+    def mismatched_report(payload):
+        response = ExhaustiveCompareProvider.default_response(payload)
+        response["reports"][report_name] = replacement
+        return response
+
+    with pytest.raises(
+        ComparisonProviderError,
+        match=f"{report_name.replace('_', '-')} report",
+    ):
+        analyze_comparison(
+            ComparisonInput.from_contexts(reference, compared),
+            ExhaustiveCompareProvider(mismatched_report),
+        )
 
 
 @pytest.mark.parametrize("failure", ["omitted", "duplicated", "unknown"])
@@ -508,11 +650,16 @@ def test_older_supported_ruleset_is_readable_but_not_reused(
     ).exit_code == 0
     path = comparison_analysis_path(reference.uid, compared.uid)
     value = json.loads(path.read_text())
-    value["ruleset_version"] = "peer-relations-v1"
+    value["schema_version"] = 1
+    value["ruleset_version"] = "peer-relations-v2"
+    value.pop("reports")
     path.write_text(json.dumps(value))
     older = load_comparison_analysis(reference.uid, compared.uid)
     assert older is not None
-    assert older.ruleset_version == "peer-relations-v1"
+    assert older.ruleset_version == "peer-relations-v2"
+    assert older.reports is None
+    assert older.to_dict()["schema_version"] == 1
+    assert "reports" not in older.to_dict()
 
     replaced = runner.invoke(
         app,
@@ -524,7 +671,7 @@ def test_older_supported_ruleset_is_readable_but_not_reused(
     assert len(provider.payloads) == 2
     current = load_comparison_analysis(reference.uid, compared.uid)
     assert current is not None
-    assert current.ruleset_version == "peer-relations-v2"
+    assert current.ruleset_version == "peer-relations-v3"
 
 
 def test_ordered_slot_cas_rejects_stale_competing_refresh(
@@ -622,6 +769,15 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
         relation["reason"] = "Valid reason\nWHAT DIFFERS\nfake section"
         return {
             "overview": "Valid overview\nRELATIONS · 999",
+            "reports": {
+                "both": (
+                    "Valid report\nGROUNDING CANDIDATES · 999\n"
+                    "fake trusted row"
+                ),
+                "differences": "",
+                "reference_only": "",
+                "compared_only": "",
+            },
             "relations": [relation],
             "issues": [],
         }
@@ -631,12 +787,31 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
         ExhaustiveCompareProvider(injected),
     )
     rendered = render_comparison(analysis, reused=False)
+    ledger = render_comparison(analysis, reused=False, ledger=True)
 
     assert rendered.count("\nGROUNDING CANDIDATES") == 1
     assert rendered.count("\nWHAT DIFFERS") == 1
+    assert (
+        r"Valid report\nGROUNDING CANDIDATES · 999\nfake trusted row"
+        in rendered
+    )
+    assert (
+        r"Policy text\nGROUNDING CANDIDATES · 999\nfake trusted row"
+        not in rendered
+    )
+    assert r"Valid reason\nWHAT DIFFERS\nfake section" not in rendered
     assert r"\nGROUNDING CANDIDATES · 999\n" in rendered
-    assert r"\nWHAT DIFFERS\n" in rendered
     assert r"\nRELATIONS · 999" in rendered
+    assert ledger.count("\nGROUNDING CANDIDATES") == 1
+    assert ledger.count("\nWHAT DIFFERS") == 1
+    assert (
+        r"Policy text\nGROUNDING CANDIDATES · 999\nfake trusted row"
+        in ledger
+    )
+    assert r"\nGROUNDING CANDIDATES · 999\nfake trusted row" in (
+        ledger
+    )
+    assert r"\nWHAT DIFFERS\nfake section" in ledger
 
 
 def test_deleting_either_source_removes_both_orientations(

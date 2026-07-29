@@ -17,10 +17,12 @@ from memcommit.context import Context, Memory
 from memcommit.store import context_record_digest
 
 
-COMPARISON_SCHEMA_VERSION = 1
-COMPARISON_RULESET_VERSION = "peer-relations-v2"
+COMPARISON_SCHEMA_VERSION = 2
+COMPARISON_LEGACY_SCHEMA_VERSION = 1
+COMPARISON_RULESET_VERSION = "peer-relations-v3"
 SUPPORTED_COMPARISON_RULESET_VERSIONS = {
     "peer-relations-v1",
+    "peer-relations-v2",
     COMPARISON_RULESET_VERSION,
 }
 COMPARISON_TEXT_LIMIT = 20_000
@@ -539,6 +541,59 @@ class ComparisonIssue:
 
 
 @dataclass(frozen=True)
+class ComparisonReports:
+    """Compact semantic reports backed by the exhaustive relation ledger."""
+
+    both: str
+    differences: str
+    reference_only: str
+    compared_only: str
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "both": self.both,
+            "differences": self.differences,
+            "reference_only": self.reference_only,
+            "compared_only": self.compared_only,
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> "ComparisonReports":
+        data = _exact_dict(
+            value,
+            {
+                "both",
+                "differences",
+                "reference_only",
+                "compared_only",
+            },
+            "comparison reports",
+        )
+        return cls(
+            both=_string(
+                data["both"],
+                "comparison both report",
+                empty=True,
+            ),
+            differences=_string(
+                data["differences"],
+                "comparison differences report",
+                empty=True,
+            ),
+            reference_only=_string(
+                data["reference_only"],
+                "comparison reference-only report",
+                empty=True,
+            ),
+            compared_only=_string(
+                data["compared_only"],
+                "comparison compared-only report",
+                empty=True,
+            ),
+        )
+
+
+@dataclass(frozen=True)
 class ComparisonInput:
     uid: str
     created_at: str
@@ -607,6 +662,7 @@ class ComparisonAnalysis:
     ruleset_version: str
     frames: tuple[ComparisonFrame, ComparisonFrame]
     overview: str
+    reports: ComparisonReports | None
     relations: tuple[ComparisonRelation, ...]
     issues: tuple[ComparisonIssue, ...]
 
@@ -616,6 +672,7 @@ class ComparisonAnalysis:
         comparison_input: ComparisonInput,
         *,
         overview: str,
+        reports: ComparisonReports,
         relations: Iterable[ComparisonRelation],
         issues: Iterable[ComparisonIssue],
     ) -> "ComparisonAnalysis":
@@ -625,14 +682,21 @@ class ComparisonAnalysis:
             ruleset_version=comparison_input.ruleset_version,
             frames=comparison_input.frames,
             overview=overview,
+            reports=reports,
             relations=tuple(relations),
             issues=tuple(issues),
         )
         return cls.from_dict(result.to_dict())
 
     def to_dict(self) -> dict[str, object]:
-        return {
-            "schema_version": COMPARISON_SCHEMA_VERSION,
+        # A legacy analysis remains serializable without fabricating prose
+        # that was never returned by its provider call.
+        result: dict[str, object] = {
+            "schema_version": (
+                COMPARISON_SCHEMA_VERSION
+                if self.reports is not None
+                else COMPARISON_LEGACY_SCHEMA_VERSION
+            ),
             "uid": self.uid,
             "created_at": self.created_at,
             "ruleset_version": self.ruleset_version,
@@ -643,30 +707,43 @@ class ComparisonAnalysis:
             ],
             "issues": [issue.to_dict() for issue in self.issues],
         }
+        if self.reports is not None:
+            result["reports"] = self.reports.to_dict()
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "ComparisonAnalysis":
-        data = _exact_dict(
-            value,
-            {
-                "schema_version",
-                "uid",
-                "created_at",
-                "ruleset_version",
-                "frames",
-                "overview",
-                "relations",
-                "issues",
-            },
-            "comparison analysis",
-        )
+        if not isinstance(value, dict):
+            raise ComparisonError("Invalid comparison analysis.")
+        schema_version = value.get("schema_version")
         if (
-            isinstance(data["schema_version"], bool)
-            or data["schema_version"] != COMPARISON_SCHEMA_VERSION
+            isinstance(schema_version, bool)
+            or schema_version
+            not in {
+                COMPARISON_LEGACY_SCHEMA_VERSION,
+                COMPARISON_SCHEMA_VERSION,
+            }
         ):
             raise ComparisonError(
                 "Unsupported comparison analysis schema version."
             )
+        keys = {
+            "schema_version",
+            "uid",
+            "created_at",
+            "ruleset_version",
+            "frames",
+            "overview",
+            "relations",
+            "issues",
+        }
+        if schema_version == COMPARISON_SCHEMA_VERSION:
+            keys.add("reports")
+        data = _exact_dict(
+            value,
+            keys,
+            "comparison analysis",
+        )
         frames = tuple(
             ComparisonFrame.from_dict(item)
             for item in _array(data["frames"], "comparison frames")
@@ -700,6 +777,11 @@ class ComparisonAnalysis:
             overview=_string(
                 data["overview"],
                 "comparison overview",
+            ),
+            reports=(
+                ComparisonReports.from_dict(data["reports"])
+                if schema_version == COMPARISON_SCHEMA_VERSION
+                else None
             ),
             relations=relations,
             issues=issues,
@@ -740,6 +822,13 @@ class ComparisonAnalysis:
         ):
             raise ComparisonError(
                 "Invalid comparison relation or issue collection."
+            )
+        if (
+            self.ruleset_version == COMPARISON_RULESET_VERSION
+            and self.reports is None
+        ):
+            raise ComparisonError(
+                "The current comparison ruleset requires semantic reports."
             )
 
         frame_by_uid = {frame.uid: frame for frame in self.frames}
@@ -786,6 +875,48 @@ class ComparisonAnalysis:
                 "Every source Memory must appear in exactly one primary "
                 "comparison relation."
             )
+
+        if self.reports is not None:
+            reference_uid, compared_uid = (
+                frame.uid for frame in self.frames
+            )
+            # The ledger, rather than provider-authored counts or labels, is
+            # authoritative for whether each compact report may exist.
+            report_groups = {
+                "both": any(
+                    relation.kind in {"EQUIVALENT", "COMPATIBLE"}
+                    for relation in self.relations
+                ),
+                "differences": any(
+                    relation.kind in {"SCOPED", "CONFLICT", "UNCLEAR"}
+                    for relation in self.relations
+                ),
+                "reference_only": any(
+                    relation.kind == "DISTINCT"
+                    and all(
+                        member.frame_uid == reference_uid
+                        for member in relation.members
+                    )
+                    for relation in self.relations
+                ),
+                "compared_only": any(
+                    relation.kind == "DISTINCT"
+                    and all(
+                        member.frame_uid == compared_uid
+                        for member in relation.members
+                    )
+                    for relation in self.relations
+                ),
+            }
+            for name, present in report_groups.items():
+                report = getattr(self.reports, name)
+                if (present and not report.strip()) or (
+                    not present and report != ""
+                ):
+                    raise ComparisonError(
+                        f"Comparison {name.replace('_', '-')} report does "
+                        "not match its relation group."
+                    )
 
         unresolved_uids = {
             relation.uid
