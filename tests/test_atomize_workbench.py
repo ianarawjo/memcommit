@@ -646,6 +646,17 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
     assert "[ALTERNATIVE]" in snapshot
     assert snapshot.count(RESPONSE_LABEL) == 1
     assert "WHY THIS IS UNCLEAR" in snapshot
+    issue_list = snapshot.split("\n\nAMBIGUITY 1/", 1)[0]
+    assert (
+        "↳ R1 [DOMINANT] "
+        "It uses the previously described NFC mechanism."
+    ) in issue_list
+    assert (
+        "↳ R2 [ALTERNATIVE] "
+        "It accepts the previously described credential."
+    ) in issue_list
+    assert issue_list.count("↳ R") == 2
+    assert "READING OPTIONS" not in issue_list
 
     saved: list[dict] = []
     with create_pipe_input() as pipe_input:
@@ -663,3 +674,47 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
     assert response.selected_choice_uid.endswith(":reading:2")
     assert response.text == "Needs the staff-only qualifier."
     assert saved
+
+
+def test_issue_list_caps_and_discloses_lossy_reading_previews():
+    ctx = ops.init("workbench/reading-preview")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    issue = report.quality_issues[0]
+    long_alternative = (
+        "This deliberately long alternative reading must be shortened in "
+        "the issue list while remaining complete and selectable in detail. "
+        "Its trailing qualification is intentionally important enough to "
+        "remain visible after the middle of the sentence is elided."
+    )
+    hidden_alternative = "A third full reading remains available in detail."
+    readings = (
+        issue.readings[0],
+        replace(issue.readings[1], text=long_alternative),
+        AtomizeReading(
+            uid=f"{issue.uid}:reading:3",
+            role="ALTERNATIVE",
+            text=hidden_alternative,
+        ),
+    )
+    analysis = create_atomize_analysis(
+        ctx,
+        replace(
+            report,
+            quality_issues=(
+                replace(issue, readings=readings),
+            ),
+        ),
+    )
+    snapshot = render_atomize_workbench_snapshot(
+        create_atomize_workbench(analysis),
+        analysis,
+    )
+    issue_list = snapshot.split("\n\nAMBIGUITY 1/", 1)[0]
+
+    assert "↳ R1 [DOMINANT]" in issue_list
+    assert "↳ R2 [ALTERNATIVE]" in issue_list
+    assert "…" in issue_list
+    assert "↳ +1 more reading (open detail)" in issue_list
+    assert hidden_alternative not in issue_list
+    assert hidden_alternative in snapshot

@@ -229,7 +229,11 @@ without guessing their referents.
 
 ISSUES · 0/4 answered                             ORDER: SOURCE
 > 1. AMBIGUITY · DOMINANT/REQUIRED  "the same NFC..."
+     ↳ R1 [DOMINANT] The previously described NFC mechanism applies.
+     ↳ R2 [ALTERNATIVE] The previous credential rule also applies.
   2. CONFLICT · MAY                  [...] <-> [...]
+     ↳ R1 [COMPETING] Both claims govern the same entrance.
+     ↳ R2 [COMPETING] The claims govern different entrances.
   3. ATOMIZE SPLIT                   "The store closes..."
   4. ATOMIZE UNCERTAINTY             "after that time..."
 ```
@@ -321,6 +325,24 @@ an explicit "show all" mode. This is information-density control, not deletion.
 
 Each issue has a durable answered/unanswered status. Returning to the
 workbench must restore that status and the current item.
+
+When an ambiguity or conflict already has saved ordinary readings, the issue
+list exposes their role and a short text preview beneath the source row. This
+lets a reviewer see the model's actual alternatives before opening the detail
+panel; a type and source label alone cannot show whether the distinction is
+useful. At most two readings are previewed in provider order, followed by an
+explicit remainder count when more exist. Each preview is independently
+shortened, so one long option cannot hide the next. Long previews retain both
+the opening claim and the trailing qualifier around an ellipsis; preserving
+only the beginning can hide the very condition that distinguishes two
+readings.
+
+These previews are deliberately lossy navigation hints. The full reading text,
+choice identity, and selection control remain authoritative in the detail
+panel. The list uses only persisted `AtomizeReading` values: it does not turn
+an uncertainty reason or proposed split child into a fabricated reading. This
+is a rendering change only and therefore does not alter the analysis,
+workbench digest, provider-call boundary, or saved review state.
 
 ## Ordering
 
@@ -733,7 +755,8 @@ The following decisions are stable enough to guide implementation and tests:
 - Reopening or taking a snapshot never silently reruns semantic analysis.
 - Reanalysis is explicit, and applying it must identify the exact analysis.
 - The first screen contains counts, `WHAT MEM UNDERSTOOD`,
-  `WHAT CHANGED / REMAINS UNRESOLVED`, and the complete actionable issue list.
+  `WHAT CHANGED / REMAINS UNRESOLVED`, and the complete actionable issue list;
+  reading-bearing issues include up to two typed, shortened reading previews.
 - The count line is a scale signal, not evidence of correctness.
 - Understanding and transformation summaries are concise and traceable.
 - Unknown referents are retained and reported rather than guessed.
@@ -803,6 +826,8 @@ These boxes describe the current implementation and its regression boundary.
       reanalysis boundaries that never replace a proposal silently.
 - [x] Render counts, both summary blocks, the complete issue list, and one
       typed detail from the same durable state.
+- [x] Preview up to two persisted readings per issue in the list, disclose
+      hidden alternatives, and retain full reading text in detail.
 - [x] Render atomize sources, proposed children, and cited evidence; retain
       source/frame evidence separately in the saved analysis and provenance.
 - [x] Render ambiguity and conflict details with their agreed labels and

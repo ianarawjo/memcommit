@@ -432,7 +432,9 @@ reanalysis boundary.
 
 The first frame combines compact counts, source-linked `WHAT MEM UNDERSTOOD`
 and `WHAT CHANGED / REMAINS UNRESOLVED` blocks, the full typed issue list, and
-one selected detail. `SOURCE` means `Context.order`, not chronology.
+one selected detail. Reading-bearing list entries preview up to two saved
+readings with their roles; the detail remains the unabridged authority.
+`SOURCE` means `Context.order`, not chronology.
 `PRIORITY` uses only grounded issue classifications; it does not invent
 affected-result counts. `SPLIT` and `STACKED` are layouts over the same durable
 cursor, choices, and responses.

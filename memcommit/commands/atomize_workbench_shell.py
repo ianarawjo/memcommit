@@ -34,6 +34,9 @@ from memcommit.commands.review_shell import (
     safe_terminal_text,
 )
 
+_LIST_READING_PREVIEW_LIMIT = 2
+_LIST_READING_TEXT_LIMIT = 160
+
 
 def _assert_matches(
     session: AtomizeWorkbenchSession,
@@ -84,6 +87,48 @@ def _issue_label(finding: AtomizeWorkbenchFinding) -> str:
         "ATOMIZE_SPLIT": "ATOMIZE SPLIT",
         "ATOMIZE_UNCERTAINTY": "ATOMIZE UNCERTAINTY",
     }[finding.kind]
+
+
+def _reading_preview_lines(
+    finding: AtomizeWorkbenchFinding,
+) -> list[str]:
+    """Expose saved readings as lossy list hints, never new semantics."""
+    visible = finding.readings[:_LIST_READING_PREVIEW_LIMIT]
+    lines = [
+        (
+            f"      ↳ R{index} [{safe_terminal_text(reading.role)}] "
+            f"{_reading_preview_text(reading.text)}"
+        )
+        for index, reading in enumerate(visible, start=1)
+    ]
+    hidden_count = len(finding.readings) - len(visible)
+    if hidden_count:
+        lines.append(
+            f"      ↳ +{hidden_count} more "
+            f"{'reading' if hidden_count == 1 else 'readings'} "
+            "(open detail)"
+        )
+    return lines
+
+
+def _reading_preview_text(value: str) -> str:
+    """Keep both a reading's opening claim and its trailing qualification."""
+    normalized = " ".join(safe_terminal_text(value).split())
+    if len(normalized) <= _LIST_READING_TEXT_LIMIT:
+        return normalized
+    marker = " … "
+    available = _LIST_READING_TEXT_LIMIT - len(marker)
+    head_limit = available * 11 // 20
+    tail_limit = available - head_limit
+    head = normalized[:head_limit].rstrip()
+    tail = normalized[-tail_limit:].lstrip()
+    if " " in head:
+        head = head.rsplit(" ", 1)[0]
+    if " " in tail:
+        tail = tail.split(" ", 1)[1]
+    if not head or not tail:
+        return _single_line(normalized, limit=_LIST_READING_TEXT_LIMIT)
+    return f"{head}{marker}{tail}"
 
 
 def _overview_text(
@@ -169,6 +214,7 @@ def _list_text(
             f"{pointer} {index:>2}. {status} {_issue_label(finding)} · "
             f"{finding.classification}  “{_single_line(source, limit=48)}”"
         )
+        lines.extend(_reading_preview_lines(finding))
     if not findings:
         lines.append("  (no actionable atomize, ambiguity, or conflict issues)")
     return "\n".join(lines)
