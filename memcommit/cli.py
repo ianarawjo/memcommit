@@ -5,6 +5,7 @@ import typer
 
 from memcommit.commands import (
     add,
+    atomize,
     branch,
     checkpoint,
     chunk,
@@ -26,12 +27,14 @@ from memcommit.commands import (
     show,
     merge,
     query,
+    rationale,
     reference,
     remove,
     review,
     revert,
     status,
     switch,
+    trace,
     update,
 )
 from memcommit.commands.clear import cmd as clear_cmd
@@ -64,9 +67,21 @@ app.command("query",          help="Ask a question of a query-only Context.")(qu
 app.command("edit",           help="Replace the content of one or more direct Memories by uid.")(edit.cmd)
 app.command("remove",         help="Remove a direct item from the current context by uid.")(remove.cmd)
 app.command("chunk",          help="Split a memory into chunks (markdown_headers, paragraphs, sentences).")(chunk.cmd)
+app.command(
+    "atomize",
+    help="Inspect or explicitly apply the latest saved atomize analysis.",
+)(atomize.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
 app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)
 app.command("log",            help="List checkpoints (history) for the current context.")(log.cmd)
+app.command(
+    "trace",
+    help="Trace one current or historical Memory from retained origin to current descendants.",
+)(trace.cmd)
+app.command(
+    "rationale",
+    help="Explain a Memory from recorded evidence and labeled inference within its current Context.",
+)(rationale.cmd)
 
 # --- Semantic (legacy configured LLM or isolated Codex provider) ---
 app.command("forget",         help="Forget memories matching a description (uses LLM).")(forget.cmd)

@@ -41,6 +41,10 @@ Added 12 Memories to 'temp/task-1'.
   Context change and creates no checkpoint.
 - One accepted paste creates all Memories in order and one automatic
   checkpoint for the operation.
+- That checkpoint retains the parser/mode, ordered created Memory UIDs, exact
+  raw intake text, and its SHA-256 value. `mem trace` can therefore recover a
+  Memory's item ordinal and physical source line without adding fields to the
+  minimal `{uid, content}` Memory record.
 - `INFO`, `--input`, and `--paste` are mutually exclusive input modes.
 
 The command remembers the selected Context identity when capture begins, then
@@ -52,6 +56,11 @@ operation rather than writing into a different workspace.
 `--paste` requires an interactive terminal. Scripts and pipelines should keep
 using `mem add --input FILE` or `... | mem add --input -`; those modes remain
 deterministic and do not gain a confirmation prompt.
+
+Trace labels a new source occurrence `RECORDED` only when the raw-text hash and
+ordered UID ledger verify. If either has been damaged, it reports reconstructed
+order instead of claiming exact raw provenance. Older checkpoints without this
+metadata remain readable but cannot retroactively prove the original bytes.
 
 ## Why this is a separate mode
 

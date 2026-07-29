@@ -1,9 +1,9 @@
 """
 Shared fixtures for memcommit tests.
 
-The most important fixture is `isolated_store`, which redirects the three
-module-level path constants in `memcommit.store` to a temporary directory so
-tests never touch the real ~/.mem store.
+The most important fixture is `isolated_store`, which redirects memcommit's
+module-level storage paths to a temporary directory so tests never touch the
+real ~/.mem store.
 """
 import pytest
 import memcommit.store as store_module
@@ -19,6 +19,7 @@ def isolated_store(tmp_path, monkeypatch):
     impact_plan_file = store_dir / "impact-plan.json"
     staged_update_file = store_dir / "staged-update.json"
     review_session_file = store_dir / "review-session.json"
+    atomize_analyses_dir = store_dir / "atomize-analyses"
 
     monkeypatch.setattr(store_module, "STORE_DIR", store_dir)
     monkeypatch.setattr(store_module, "CONTEXTS_DIR", contexts_dir)
@@ -34,6 +35,11 @@ def isolated_store(tmp_path, monkeypatch):
         store_module,
         "REVIEW_SESSION_FILE",
         review_session_file,
+    )
+    monkeypatch.setattr(
+        store_module,
+        "ATOMIZE_ANALYSES_DIR",
+        atomize_analyses_dir,
     )
 
     return store_dir

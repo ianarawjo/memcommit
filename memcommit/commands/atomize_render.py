@@ -4,6 +4,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.atomize import AtomizeImpactReport, AtomizeItem
+from memcommit.commands.review_shell import safe_terminal_text
 
 
 _CLASSIFICATION_COLORS = {
@@ -15,7 +16,7 @@ _CLASSIFICATION_COLORS = {
 
 
 def _render_source(item: AtomizeItem) -> None:
-    for line in item.memory.content.splitlines() or [""]:
+    for line in safe_terminal_text(item.memory.content).splitlines() or [""]:
         if item.classification == "COMPOSITE":
             typer.secho(f"       - {line}", fg=typer.colors.RED)
         else:
@@ -24,7 +25,7 @@ def _render_source(item: AtomizeItem) -> None:
 
 def _render_children(item: AtomizeItem) -> None:
     for index, child in enumerate(item.children, start=1):
-        lines = child.content.splitlines() or [""]
+        lines = safe_terminal_text(child.content).splitlines() or [""]
         typer.secho(
             f"       + {index}. {lines[0]}",
             fg=typer.colors.GREEN,
@@ -33,7 +34,10 @@ def _render_children(item: AtomizeItem) -> None:
             typer.secho(f"            {line}", fg=typer.colors.GREEN)
         typer.secho(
             "         Cited source spans: "
-            + " | ".join(child.source_spans),
+            + " | ".join(
+                safe_terminal_text(span)
+                for span in child.source_spans
+            ),
             dim=True,
         )
 
@@ -51,8 +55,9 @@ def _render_item(item: AtomizeItem) -> None:
     if item.children:
         _render_children(item)
         typer.secho(
-            "         Status: PROPOSED — independent validation is required "
-            "before application.",
+            "         Status: SAVED PREVIEW — explicit --save/--save-as "
+            "applies this locally validated proposal; no second semantic "
+            "judge runs in this prototype.",
             dim=True,
         )
     typer.secho(
@@ -64,7 +69,10 @@ def _render_item(item: AtomizeItem) -> None:
             f"         Lint: {', '.join(item.lint)}",
             dim=True,
         )
-    typer.secho(f"         Reason: {item.reason}", dim=True)
+    typer.secho(
+        f"         Reason: {safe_terminal_text(item.reason)}",
+        dim=True,
+    )
 
 
 def render_atomize_impact(
@@ -89,7 +97,7 @@ def render_atomize_impact(
     )
 
     typer.secho(
-        f"Atomize impact: {report.context_name}",
+        f"Atomize impact: {safe_terminal_text(report.context_name)}",
         bold=True,
     )
     typer.echo(
@@ -130,4 +138,4 @@ def render_atomize_impact(
         )
 
     typer.echo()
-    typer.echo("No changes applied. No checkpoint created.")
+    typer.echo("This inspection applied no changes and created no checkpoint.")

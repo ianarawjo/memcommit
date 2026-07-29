@@ -126,7 +126,11 @@ def test_add_paste_saves_in_order_with_one_checkpoint_and_no_echo(
     checkpoints = store.list_checkpoints("intake")
     assert len(checkpoints) == checkpoint_count + 1
     assert checkpoints[0]["command"] == "add"
-    assert checkpoints[0]["args"] == {
+    args = checkpoints[0]["args"]
+    assert {
+        key: args[key]
+        for key in ("mode", "count", "contents")
+    } == {
         "mode": "paste",
         "count": 3,
         "contents": [
@@ -135,6 +139,13 @@ def test_add_paste_saves_in_order_with_one_checkpoint_and_no_echo(
             "세 번째 사실",
         ],
     }
+    assert args["memory_uids"] == [memory.uid for memory in memories]
+    assert args["source"]["kind"] == "interactive-paste"
+    assert args["source"]["raw_text"] == payload
+    assert args["source"]["parser"] == (
+        "stripped-nonempty-physical-lines-v1"
+    )
+    assert len(args["source"]["sha256"]) == 64
 
 
 def test_add_paste_reloads_context_before_saving(

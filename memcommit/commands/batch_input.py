@@ -13,7 +13,10 @@ def read_text_input(source: str) -> str:
             raise ValueError(f"Could not read standard input: {error}") from error
 
     try:
-        return Path(source).read_text(encoding="utf-8")
+        # newline="" preserves the source's physical line endings in the
+        # provenance record while splitlines() still accepts all of them.
+        with open(Path(source), encoding="utf-8", newline="") as file:
+            return file.read()
     except (OSError, UnicodeError) as error:
         raise ValueError(f"Could not read input '{source}': {error}") from error
 

@@ -25,6 +25,7 @@ QUERY_SOURCES_DIR = STORE_DIR / "query-sources"
 IMPACT_PLAN_FILE = STORE_DIR / "impact-plan.json"
 STAGED_UPDATE_FILE = STORE_DIR / "staged-update.json"
 REVIEW_SESSION_FILE = STORE_DIR / "review-session.json"
+ATOMIZE_ANALYSES_DIR = STORE_DIR / "atomize-analyses"
 RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
 
 
@@ -148,8 +149,10 @@ class MemoryStore:
             return json.load(f)
 
     def _write_state(self, state: dict) -> None:
-        with open(STATE_FILE, "w") as f:
-            json.dump(state, f, indent=2)
+        # Context switching is the final phase of several multi-file
+        # operations.  Replacing an fsynced sibling keeps an interrupted write
+        # from leaving state.json truncated and making rollback impossible.
+        _write_json_atomic(STATE_FILE, state)
 
     def current_context_name(self) -> Optional[str]:
         return self._read_state().get("current")
@@ -256,6 +259,92 @@ class MemoryStore:
         except (ReviewError, TypeError) as error:
             raise ValueError("Semantic review session is invalid.") from error
         _write_json_atomic(REVIEW_SESSION_FILE, data)
+
+    # --- Saved semantic analyses ---
+
+    @staticmethod
+    def _atomize_analysis_path(context_uid: str) -> Path:
+        try:
+            canonical = str(uuid.UUID(context_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid atomize analysis Context uid.") from error
+        if canonical != context_uid:
+            raise ValueError("Invalid atomize analysis Context uid.")
+        if ATOMIZE_ANALYSES_DIR.is_symlink():
+            raise ValueError(
+                "Atomize analysis storage cannot be a symbolic link."
+            )
+        if (
+            ATOMIZE_ANALYSES_DIR.exists()
+            and not ATOMIZE_ANALYSES_DIR.is_dir()
+        ):
+            raise ValueError("Atomize analysis storage is invalid.")
+        return ATOMIZE_ANALYSES_DIR / f"{canonical}.json"
+
+    def load_atomize_analysis(self, context_uid: str):
+        """Return one Context's latest saved atomize preview, or None."""
+        from memcommit.atomize import (
+            AtomizeAnalysisSession,
+            AtomizeImpactError,
+        )
+
+        path = self._atomize_analysis_path(context_uid)
+        if not path.exists():
+            return None
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Atomize analysis storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(
+                    f,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            session = AtomizeAnalysisSession.from_dict(data)
+            if session.context_uid != context_uid:
+                raise ValueError(
+                    "Saved atomize analysis Context identity does not match "
+                    "its storage key."
+                )
+            return session
+        except (
+            json.JSONDecodeError,
+            ValueError,
+            AtomizeImpactError,
+        ) as error:
+            raise ValueError("Saved atomize analysis is invalid.") from error
+
+    def save_atomize_analysis(self, session) -> None:
+        """Atomically persist a validated, non-applying atomize preview."""
+        from memcommit.atomize import (
+            AtomizeAnalysisSession,
+            AtomizeImpactError,
+        )
+
+        if not isinstance(session, AtomizeAnalysisSession):
+            raise TypeError("Expected an AtomizeAnalysisSession.")
+        path = self._atomize_analysis_path(session.context_uid)
+        if ATOMIZE_ANALYSES_DIR.exists() and (
+            not ATOMIZE_ANALYSES_DIR.is_dir()
+            or ATOMIZE_ANALYSES_DIR.is_symlink()
+        ):
+            raise ValueError("Atomize analysis storage is invalid.")
+        ATOMIZE_ANALYSES_DIR.mkdir(parents=True, exist_ok=True)
+        if path.exists() and (not path.is_file() or path.is_symlink()):
+            raise ValueError("Atomize analysis storage is invalid.")
+        data = session.to_dict()
+        try:
+            AtomizeAnalysisSession.from_dict(data)
+        except AtomizeImpactError as error:
+            raise ValueError("Atomize analysis is invalid.") from error
+        _write_json_atomic(path, data)
+
+    def delete_atomize_analysis(self, context_uid: str) -> None:
+        """Remove one derived analysis artifact during failed save-as cleanup."""
+        path = self._atomize_analysis_path(context_uid)
+        if path.exists():
+            if not path.is_file() or path.is_symlink():
+                raise ValueError("Atomize analysis storage is invalid.")
+            path.unlink()
 
     # --- Context paths ---
 
@@ -445,6 +534,37 @@ class MemoryStore:
                 f"Context file for '{name}' has an invalid memory structure: {e}"
             ) from e
 
+    def load_for_update(self, name: str) -> Context:
+        """Load a Context without permitting unresolved direct Context refs.
+
+        Normal ``load`` intentionally tolerates a missing embedded Context for
+        read paths. A mutating command must be stricter: serializing that
+        partially resolved object would silently erase the unresolved pointer.
+        """
+        if not self.context_exists(name):
+            raise FileNotFoundError(f"Context '{name}' not found.")
+        with open(self._context_file(name)) as f:
+            data = json.load(f)
+        data = _validate_context_header(data, name)
+        direct_context_refs = {
+            uid: item.get("name")
+            for uid, item in data["memories"].items()
+            if isinstance(item, dict) and item.get("type") == "context_ref"
+        }
+        ctx = self.load(name)
+        for uid, expected_name in direct_context_refs.items():
+            item = ctx.memories.get(uid)
+            if (
+                not isinstance(item, Context)
+                or item.name != expected_name
+            ):
+                raise ValueError(
+                    f"Context '{name}' contains an unavailable embedded "
+                    f"Context reference '{expected_name}'. Refusing to save "
+                    "a partial load."
+                )
+        return ctx
+
     def load_current(self) -> Context:
         name = self.current_context_name()
         if not name:
@@ -466,21 +586,58 @@ class MemoryStore:
             raise ValueError(
                 f"Refusing to write context '{ctx.name}' through a symbolic link."
             )
-        if not self.context_exists(ctx.name):
+        context_preexisting = self.context_exists(ctx.name)
+        if not context_preexisting:
             self._assert_context_storage_available(ctx.name)
         ctx_dir.mkdir(parents=True, exist_ok=True)
-        self._checkpoints_dir(ctx.name).mkdir(parents=True, exist_ok=True)
-        if auto_checkpoint is not None:
-            self.checkpoint(
-                ctx,
-                message=auto_checkpoint.description,
-                command=auto_checkpoint.command,
-                args=auto_checkpoint.args,
-                description=auto_checkpoint.description,
-                auto=True,
-                _allow_unsaved=True,
-            )
-        _write_json_atomic(context_file, ctx.to_dict())
+        checkpoints_dir = self._checkpoints_dir(ctx.name)
+        checkpoints_dir.mkdir(parents=True, exist_ok=True)
+        created_checkpoint: Checkpoint | None = None
+        try:
+            if auto_checkpoint is not None:
+                created_checkpoint = self.checkpoint(
+                    ctx,
+                    message=auto_checkpoint.description,
+                    command=auto_checkpoint.command,
+                    args=auto_checkpoint.args,
+                    description=auto_checkpoint.description,
+                    auto=True,
+                    _allow_unsaved=True,
+                )
+            _write_json_atomic(context_file, ctx.to_dict())
+        except Exception as error:
+            cleanup_error: Exception | None = None
+            if created_checkpoint is not None:
+                try:
+                    matches = list(
+                        checkpoints_dir.glob(
+                            f"*-{created_checkpoint.uid[:8]}.json"
+                        )
+                    )
+                    for path in matches:
+                        if path.is_symlink() or not path.is_file():
+                            continue
+                        with open(path) as f:
+                            value = json.load(f)
+                        if value.get("uid") == created_checkpoint.uid:
+                            path.unlink()
+                            break
+                except Exception as candidate:
+                    cleanup_error = candidate
+            if not context_preexisting and not context_file.exists():
+                try:
+                    checkpoints_dir.rmdir()
+                    self._prune_empty_namespace_dirs(ctx_dir)
+                except OSError:
+                    # A pre-existing child namespace or an unexpected artifact
+                    # is never removed as part of rollback.
+                    pass
+            if cleanup_error is not None:
+                raise RuntimeError(
+                    "Context save failed and its automatic checkpoint could "
+                    "not be rolled back."
+                ) from cleanup_error
+            raise error
 
     # --- Query-only research sources ---
 
@@ -611,6 +768,23 @@ class MemoryStore:
         """Delete one Context while preserving descendant Context namespaces."""
         if not self.context_exists(name):
             raise FileNotFoundError(f"Context '{name}' not found.")
+        context_uid = self.load_direct(name).uid
+        # Validate the derived-artifact path before deleting the primary
+        # Context so a malformed analysis store cannot turn cleanup into a
+        # surprising partial operation.
+        try:
+            canonical_context_uid = str(uuid.UUID(context_uid))
+        except (AttributeError, TypeError, ValueError):
+            canonical_context_uid = None
+        analysis_path = (
+            self._atomize_analysis_path(context_uid)
+            if canonical_context_uid == context_uid
+            else None
+        )
+        if analysis_path is not None and analysis_path.exists() and (
+            not analysis_path.is_file() or analysis_path.is_symlink()
+        ):
+            raise ValueError("Atomize analysis storage is invalid.")
         ctx_dir = self._context_dir(name)
         context_file = self._context_file(name)
         checkpoints_dir = self._checkpoints_dir(name)
@@ -648,6 +822,8 @@ class MemoryStore:
             self._write_state({"current": None})
         if checkpoints_staged:
             shutil.rmtree(staged_checkpoints)
+        if analysis_path is not None and analysis_path.exists():
+            analysis_path.unlink()
         self._prune_empty_namespace_dirs(ctx_dir)
 
     # --- Checkpoints ---

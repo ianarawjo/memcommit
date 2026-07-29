@@ -50,12 +50,27 @@ def test_batch_add_file_preserves_line_order_and_uses_one_checkpoint(
     assert len(checkpoints) == checkpoint_count + 1
     checkpoint = checkpoints[0]
     assert checkpoint["command"] == "add"
-    assert checkpoint["args"] == {
+    args = checkpoint["args"]
+    assert {
+        key: args[key]
+        for key in ("input", "mode", "count", "contents")
+    } == {
         "input": str(source),
         "mode": "lines",
         "count": 3,
         "contents": ["first fact", "* second fact", "세 번째 사실"],
     }
+    assert args["memory_uids"] == [
+        memory.uid for memory in memories[1:]
+    ]
+    assert args["source"]["kind"] == "utf-8-file"
+    assert args["source"]["parser"] == (
+        "stripped-nonempty-physical-lines-v1"
+    )
+    assert args["source"]["raw_text"] == (
+        "  first fact  \n\n* second fact\r\n세 번째 사실\n"
+    )
+    assert len(args["source"]["sha256"]) == 64
 
 
 def test_batch_add_stdin_keeps_exact_duplicates(isolated_store):

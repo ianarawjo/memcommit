@@ -222,7 +222,7 @@ operations:
 | ambiguity | implemented | one Memory plus proposed readings |
 | conflict | future adapter over an implemented finder | two Memories plus conflict scope |
 | update | future adapter over existing staged-update artifacts | target Memory/edit or addition |
-| atomize uncertainty | future adapter over the implemented impact report | one composite or uncertain Memory |
+| atomize uncertainty | future adapter over the persisted atomize analysis | one composite or uncertain Memory |
 | reconcile | future semantic contract | ambiguity/conflict evidence and proposed resolution |
 | distill | design-only | summary claim and supporting Memories |
 | meld / sever | Task 2/3 design-only | policy combination or disclosure boundary |

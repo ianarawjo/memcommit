@@ -1,10 +1,10 @@
 # Memory refinement pipeline
 
 The detailed reasoning behind the three quality judgments—including why
-ambiguity is unary, conflict is pair-targeted, duplicate returns binary
-relation evidence from a whole-Context discovery pass, why ambiguity uses two
-independent axes, and why detection is separated from resolution—is
-preserved in
+ambiguity is unary, why conflict targets pairs, why duplicate discovery returns
+binary relation evidence from a whole-Context pass, why ambiguity uses two
+independent axes, and why detection is separated from resolution—is preserved
+in
 [`memory-quality-judgment-theory-and-decision-history.md`](memory-quality-judgment-theory-and-decision-history.md).
 The finder implementation contract is specified separately in
 [`memory-quality-finders-design-rationale.md`](memory-quality-finders-design-rationale.md).
@@ -13,78 +13,79 @@ The finder implementation contract is specified separately in
 
 ### Initial order
 
-처음에는 정리 전 원문 Memory를 다음 순서로 다듬기로 했다.
+The initial plan refined unorganized raw Memories in this order:
 
 ```text
-중복 제거
-→ 충돌·모호성 통합 검토
-→ 대상 분류
-→ 정규화
-→ 범주별 배치
+deduplicate
+→ review conflicts and ambiguities together
+→ classify audiences
+→ normalize
+→ place by category
 ```
 
-이 초기안에서는 `충돌`과 `모호성`을 하나의 operation으로 검토하려
-했다. 현실의 장면에서는 모순처럼 보이는 두 설명이 대상, 시간, 장소,
-접근 방법, 예외 조건에 따라 모두 참일 수 있기 때문이다. 따라서 이
-프로토타입에서는 현실적인 충돌을 곧바로 어느 한쪽이 거짓이라는 뜻으로
-보지 않고, 현재 지식만으로 두 설명을 함께 설명할 수 없다는 상태로
-먼저 다룬다. 이는 보편적 사실 주장이 아니라 이 refinement pipeline의
-open-world 설계 가정이다.
+This first design reviewed `conflict` and `ambiguity` in one operation.
+In real situations, two descriptions that appear contradictory can both be
+true when their audience, time, place, access method, or exception conditions
+differ. The prototype therefore does not immediately interpret a practical
+conflict as proof that one statement is false. It first treats the conflict as
+a state in which the current knowledge cannot explain both descriptions
+together. This is an open-world design assumption of the refinement pipeline,
+not a universal factual claim.
 
-여기서 open-world는 무제한의 possible world를 발명한다는 뜻이 아니다.
-선택된 Context와 통상적 독해가 실제로 지지하는 미기재 scope는 열어
-두되, 임의의 숨은 전제를 만들어 충돌을 억지로 만들거나 없애지 않는
-**bounded open-world**를 뜻한다.
+Here, open-world does not mean inventing unlimited possible worlds. It means a
+**bounded open world**: leave room for omitted scope that the selected Context
+and an ordinary reading genuinely support, but do not invent arbitrary hidden
+premises merely to create or dissolve a conflict.
 
-후속 설계에서는 이 결합을 **해결 단계에만** 유지하기로 했다. 모호성은
-Memory 하나를 판정하고 충돌은 Memory 쌍을 판정하므로 탐지 단위와
-결과가 다르다. 따라서 `find-ambiguities`와 `find-conflicts`는 별도의
-읽기 전용 탐지기이고, 이후 `reconcile`이 두 결과를 함께 설명하거나
-해결안을 제안한다.
+The later design retains this combination **only at the resolution stage**.
+Ambiguity judges one Memory, whereas conflict judges a pair of Memories, so
+their detection units and results differ. `find-ambiguities` and
+`find-conflicts` are therefore separate read-only detectors; a later
+`reconcile` operation can explain or resolve their findings together.
 
-또한 `비공개 분리`를 단순한 공개/비공개 이진 분류로 보지 않는다.
-학생, 교직원, 방문자, 시설 담당자처럼 정보를 전달받을 대상과 목적에
-따라 필요한 설명과 세부 수준을 정하는 `대상 분류`로 다룬다.
+The design also rejects a simple public/private binary for disclosure. It uses
+**audience classification** to decide the necessary explanation and level of
+detail according to recipients and purposes, such as students, staff,
+visitors, or facilities personnel.
 
 ### Revised order: atomize before deduplication
 
-Task 1 원문을 검토하면서, 하나의 Memory 안에 폐쇄 사실, 대체 위치,
-운영 시간, 이유가 함께 들어 있는 경우가 많다는 점을 확인했다. 이러한
-복합 Memory를 먼저 dedup하면 일부만 같은 두 Memory를 통째로 중복으로
-오판하거나, 내부에 숨어 있는 실제 중복을 찾지 못한다.
+Reviewing the Task 1 source showed that one Memory often combines a closure,
+alternative location, operating hours, and reason. Deduplicating such a
+composite first can incorrectly classify two partly overlapping Memories as
+duplicates, or fail to discover a duplicate claim hidden inside them.
 
-따라서 primary pipeline을 다음과 같이 수정한다.
+The primary pipeline was therefore revised to:
 
 ```text
-원문 intake
+raw intake
 → atomize
-→ 기계적 dedup
-→ 의미론적 dedup
+→ mechanical dedup
+→ semantic dedup
 → reconcile
 → audience
 → normalize
-→ dedup 재검증
+→ dedup verification
 → place
 ```
 
-초기 순서를 덮어 지우지 않고 decision history로 남기는 이유는, raw
-line을 Memory 하나로 보는 intake 관점에서 atomic claim을 정제하는
-관점으로 설계가 바뀐 근거를 이후 연구 기록에서 추적할 수 있게 하기
-위해서다.
+The initial order remains in this decision history so later research can trace
+why the design moved from treating one raw line as one Memory to refining
+atomic claims before comparing them.
 
 ### Revised quality analysis: detect before resolving
 
-`dedup`과 `reconcile`이라는 이름만으로 탐지와 변경을 함께 표현하면,
-사용자가 단순히 문제를 찾아보려는 시점에도 삭제나 수정이 일어날 수
-있는 것처럼 보인다. 또한 ambiguity는 unary이고 conflict는 pairwise이며,
-duplicate는 whole-Context discovery에서 binary relation evidence를
-반환하므로 하나의 opaque quality pass로 합치면 어떤 단위가 어떻게
-판정되었는지 검증하기 어렵다.
+If names such as `dedup` and `reconcile` combine detection with mutation, they
+can imply that merely inspecting a problem may delete or edit content.
+Ambiguity is unary, conflict is pairwise, and duplicate discovery returns
+binary relation evidence from a whole-Context pass. Combining them in one
+opaque quality pass would also make it difficult to verify which unit received
+which judgment.
 
-현재 working order는 탐지와 후속 mutation을 분리한다.
+The current working order separates detection from later mutation:
 
 ```text
-원문 intake
+raw intake
 → atomize
 → find-duplicates
 → confirmed dedup
@@ -97,13 +98,13 @@ duplicate는 whole-Context discovery에서 binary relation evidence를
 → place
 ```
 
-세 `find-*` 명령은 모두 읽기 전용이고 checkpoint를 만들지 않는다.
-`find-duplicates`는 여러 Memory 쌍을 보고하며 삭제 대상을 정하지
-않지만, 그 쌍을 검색 입력으로 미리 열거하지는 않는다.
-`find-ambiguities`는 Memory 하나씩, `find-conflicts`는 Memory 쌍씩
-판정한다. `dedup`은 확인된 duplicate 결과를 실제 survivor plan으로
-바꾸는 미래 mutation 단계이고, `reconcile`은 ambiguity와 conflict
-결과를 함께 해석하는 미래 후속 단계다.
+All three `find-*` commands are read-only and create no checkpoint.
+`find-duplicates` reports Memory-pair evidence without choosing a deletion
+target, but it does not pre-enumerate every pair as model input.
+`find-ambiguities` judges one Memory at a time, while `find-conflicts` judges
+Memory pairs. A future mutating `dedup` stage will turn confirmed duplicate
+results into a survivor plan, and a future `reconcile` stage will interpret
+ambiguity and conflict findings together.
 
 ## Intent
 
@@ -264,8 +265,10 @@ The first `atomize` contract should therefore:
   original position;
 - record `source_uid → ordered child UIDs and contents` in the staged plan and
   checkpoint metadata while keeping the base Memory schema at `uid + content`;
-- block v1 application when any Context contains an inbound reference to the
-  source, because a one-to-many split has no single safe retarget;
+- block v1 in-place application when any Context contains a `memory_ref` that
+  targets a source selected for one-to-many splitting, because there is no
+  single safe automatic retarget; save-as preserves that source and is not
+  blocked by its inbound references;
 - apply every approved split in one Context-level checkpoint;
 - perform no deduplication itself.
 
@@ -388,7 +391,7 @@ finder.
 
 ## Audience classification is not merely privacy separation
 
-The Korean design concept is `대상 분류`. The working command name is
+The design concept is **audience classification**. The working command name is
 `audience`, rather than `target`, because target already means several things
 in update and reference operations. Audience classification keeps four
 questions distinct:
@@ -475,7 +478,7 @@ important than final CLI spelling.
 | Stage | Working operation | Primary output | Mutation boundary |
 |---|---|---|---|
 | Envelope | `mem import` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
-| 1 | `mem impact atomize`; future `mem atomize` apply | exhaustive atomic/composite/uncertain/non-propositional classifications and ordered split proposals | current impact report is read-only and provisional; a future independently validated direct-item batch applies as one checkpoint |
+| 1 | `mem impact atomize`; `mem atomize --save`; `mem atomize --save-as NAME` | exhaustive classifications, ordered split proposals, and recorded source-to-child lineage | preview saves a Context-scoped analysis but no Context checkpoint; in-place apply creates one checkpoint; save-as creates an init-like baseline and atomize checkpoint in a fresh Context |
 | 2 | `mem find-duplicates` | positive pair evidence discovered from the whole direct Context | read-only; no checkpoint |
 | 2a | future `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed groups apply as one checkpoint |
 | 3 | `mem find-ambiguities` | unary interpretation and clarification findings | read-only; no checkpoint |
@@ -495,12 +498,18 @@ important than final CLI spelling.
 - Identifies clear composite Memories without resolving ambiguous modifier
   scope.
 - Proposes ordered child contents without normalizing their wording.
-- The impact report allocates no UID, writes no plan cache or checkpoint, and
-  explicitly requires independent semantic validation before application.
-- A future apply path gives every child a fresh UID, records the ordered
-  source-to-child mapping in plan and checkpoint provenance, replaces each
-  source at its original position, and blocks sources with inbound references
-  in v1.
+- The impact report allocates no child UID and writes no Context checkpoint or
+  directional `impact-plan.json`; it does persist one digest-bound analysis
+  artifact per Context UID.
+- Explicit apply gives every split child a fresh UID, records the ordered
+  source-to-child mapping in checkpoint provenance, replaces each source at its
+  original position, and preserves uncertain/non-propositional items in place.
+- In-place apply blocks a `memory_ref` whose target is one of the selected
+  Context's split sources; references to unchanged Memories do not block it.
+  Save-as preserves the source, creates an init-like Context identity and
+  baseline, applies there, and switches only after success.
+- Local validation is repeated on load and apply, but an independent second
+  semantic judge remains future work.
 - Does not perform deduplication, reconciliation, audience inference, or
   deletion of non-propositional notes.
 
@@ -614,10 +623,13 @@ Every refinement operation should:
   content until an explicit, provenance-preserving apply contract exists;
 - make no silent deletion, conflict resolution, audience inference, or move.
 
-The operations should be idempotent at their intended stage. Re-running a
-finder on unchanged input should be evaluated for stability under the same
-ruleset and resolved provider/model; re-running a mutation stage on already-processed input
-should report no work.
+The operations should eventually be idempotent at their intended stage.
+Re-running a finder on unchanged input should be evaluated for stability under
+the same ruleset and pinned provider/model; this is a research target, not a
+current guarantee for one-shot semantic completions. A mutation stage should
+report no work when it is given the same already-applied operation ID. Stronger
+semantic idempotency—independently deciding that newly created children need no
+further split—belongs to the future validator and regression contract.
 
 ## Initial graph scope
 
@@ -680,12 +692,12 @@ Immediate examples are:
   normalization;
 - the final facts belong in the six `construction-updates/*` Contexts.
 
-The `mem impact atomize` report and its golden regression harness now implement
-the preferred source boundary as a provisional preview before analysis.
+The saved `mem impact atomize` report, explicit apply paths, trace lineage, and
+golden regression harness now implement the preferred source boundary.
 `find-duplicates`, `find-ambiguities`, and `find-conflicts` remain separate
 read-only commands so that their whole-Context relation discovery, pair-target,
-and unary contracts stay observable. Independent atomize validation/application,
-a future `dedup` apply path and `reconcile`, followed by `audience`,
-`normalize`, duplicate verification, and `place`, can then be added one at a
-time. A later `mem import` may orchestrate those same tested operations without
-replacing their visible findings, plans, reasons, or checkpoints.
+and unary contracts stay observable. Stronger independent atomize validation,
+a future `dedup` apply path and `reconcile`, followed by `audience`, `normalize`,
+duplicate verification, and `place`, can then be added one at a time. A later
+`mem import` may orchestrate those same tested operations without replacing
+their visible findings, plans, reasons, or checkpoints.

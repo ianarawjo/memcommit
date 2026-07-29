@@ -1,10 +1,10 @@
-"""Preview semantic atomization for directly owned Memories.
+"""Preview and explicitly apply semantic atomization of direct Memories.
 
-The first atomize implementation is deliberately an impact report, not an
-applyable plan. One provider completion proposes classifications and split
-children; local validation makes the report safe to display, but independent
-semantic validation is still required before a future command may mutate a
-Context.
+One provider completion proposes classifications and split children. The
+preview is bound to the exact ordered direct-Memory frame and revalidated when
+loaded. Applying it remains an explicit prototype action: local structural and
+source-grounding checks run again, but no independent second semantic judge is
+claimed.
 """
 from __future__ import annotations
 
@@ -12,10 +12,13 @@ import hashlib
 import json
 import re
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from importlib import resources
 from typing import Callable, Literal, Protocol
+import uuid
 
 from memcommit.context import Context, Memory
+from memcommit.review import direct_context_digest
 
 
 ATOMIZE_INPUT_CHAR_LIMIT = 200_000
@@ -28,6 +31,7 @@ ATOMIZE_RULESET_VERSION = "atomize-v1-draft"
 ATOMIZE_SIZE_REVIEW_CHARS = 80
 ATOMIZE_SIZE_REVIEW_SEGMENTS = 2
 ATOMIZE_SEGMENTER_VERSION = "sentence-like-v1"
+ATOMIZE_ANALYSIS_SCHEMA_VERSION = 1
 
 ATOMIZE_RULES = {
     "A01_ONE_FOCUS": (
@@ -156,6 +160,447 @@ class AtomizeImpactReport:
         )
 
 
+@dataclass(frozen=True)
+class AtomizeAnalysisItem:
+    """One durable preview item; it is analysis, never applied lineage."""
+
+    memory_uid: str
+    content: str
+    position: int
+    classification: AtomizeClassification
+    reason_codes: tuple[str, ...]
+    children: tuple[AtomizeChild, ...]
+    reason: str
+    lint: tuple[str, ...]
+
+    @property
+    def action(self) -> str:
+        return {
+            "ATOMIC": "KEEP",
+            "COMPOSITE": "SPLIT",
+            "UNCERTAIN": "RECONCILE",
+            "NON_PROPOSITIONAL": "KEEP_CLASSIFIED",
+        }[self.classification]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "memory_uid": self.memory_uid,
+            "content": self.content,
+            "position": self.position,
+            "classification": self.classification,
+            "reason_codes": list(self.reason_codes),
+            "children": [
+                {
+                    "content": child.content,
+                    "source_spans": list(child.source_spans),
+                }
+                for child in self.children
+            ],
+            "reason": self.reason,
+            "lint": list(self.lint),
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> "AtomizeAnalysisItem":
+        if (
+            not isinstance(value, dict)
+            or set(value)
+            != {
+                "memory_uid",
+                "content",
+                "position",
+                "classification",
+                "reason_codes",
+                "children",
+                "reason",
+                "lint",
+            }
+        ):
+            raise AtomizeImpactError("Invalid saved atomize analysis item.")
+        memory_uid = value["memory_uid"]
+        content = value["content"]
+        position = value["position"]
+        classification = value["classification"]
+        reason_codes = value["reason_codes"]
+        children = value["children"]
+        reason = value["reason"]
+        lint = value["lint"]
+        if (
+            not isinstance(memory_uid, str)
+            or not memory_uid
+            or not isinstance(content, str)
+            or isinstance(position, bool)
+            or not isinstance(position, int)
+            or position < 0
+            or not isinstance(classification, str)
+            or classification not in ATOMIZE_CLASSIFICATIONS
+            or not isinstance(reason_codes, list)
+            or not reason_codes
+            or len(reason_codes) > len(ATOMIZE_RULE_CODES)
+            or any(
+                not isinstance(code, str)
+                or code not in ATOMIZE_RULE_CODES
+                for code in reason_codes
+            )
+            or len(set(reason_codes)) != len(reason_codes)
+            or not isinstance(children, list)
+            or not isinstance(reason, str)
+            or not reason.strip()
+            or len(reason) > ATOMIZE_REASON_CHAR_LIMIT
+            or not isinstance(lint, list)
+            or any(not isinstance(item, str) for item in lint)
+        ):
+            raise AtomizeImpactError("Invalid saved atomize analysis item.")
+
+        parsed_children: list[AtomizeChild] = []
+        for child in children:
+            if (
+                not isinstance(child, dict)
+                or set(child) != {"content", "source_spans"}
+                or not isinstance(child["content"], str)
+                or not child["content"].strip()
+                or len(child["content"]) > ATOMIZE_CHILD_CHAR_LIMIT
+                or not isinstance(child["source_spans"], list)
+                or not child["source_spans"]
+                or len(child["source_spans"]) > ATOMIZE_SOURCE_SPAN_LIMIT
+                or any(
+                    not isinstance(span, str)
+                    or not span.strip()
+                    or len(span) > ATOMIZE_CHILD_CHAR_LIMIT
+                    or span not in content
+                    for span in child["source_spans"]
+                )
+                or len(set(child["source_spans"]))
+                != len(child["source_spans"])
+            ):
+                raise AtomizeImpactError(
+                    "Invalid saved atomize analysis child."
+                )
+            parsed_children.append(
+                AtomizeChild(
+                    content=child["content"],
+                    source_spans=tuple(child["source_spans"]),
+                )
+            )
+        if (
+            classification == "COMPOSITE"
+            and not 2 <= len(parsed_children) <= ATOMIZE_CHILD_LIMIT
+        ) or (
+            classification != "COMPOSITE"
+            and parsed_children
+        ):
+            raise AtomizeImpactError("Invalid saved atomize analysis split.")
+        return cls(
+            memory_uid=memory_uid,
+            content=content,
+            position=position,
+            classification=classification,
+            reason_codes=tuple(reason_codes),
+            children=tuple(parsed_children),
+            reason=reason,
+            lint=tuple(lint),
+        )
+
+
+@dataclass(frozen=True)
+class AtomizeAnalysisSession:
+    """Latest saved, digest-bound atomize preview for one Context frame."""
+
+    uid: str
+    created_at: str
+    context_uid: str
+    context_name: str
+    context_digest: str
+    ruleset_version: str
+    memory_count: int
+    projected_memory_count: int
+    items: tuple[AtomizeAnalysisItem, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "schema_version": ATOMIZE_ANALYSIS_SCHEMA_VERSION,
+            "uid": self.uid,
+            "created_at": self.created_at,
+            "context": {
+                "uid": self.context_uid,
+                "name": self.context_name,
+                "digest": self.context_digest,
+            },
+            "ruleset_version": self.ruleset_version,
+            "memory_count": self.memory_count,
+            "projected_memory_count": self.projected_memory_count,
+            "items": [item.to_dict() for item in self.items],
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> "AtomizeAnalysisSession":
+        if (
+            not isinstance(value, dict)
+            or set(value)
+            != {
+                "schema_version",
+                "uid",
+                "created_at",
+                "context",
+                "ruleset_version",
+                "memory_count",
+                "projected_memory_count",
+                "items",
+            }
+            or value["schema_version"] != ATOMIZE_ANALYSIS_SCHEMA_VERSION
+        ):
+            raise AtomizeImpactError("Invalid saved atomize analysis.")
+        context = value["context"]
+        if (
+            not isinstance(context, dict)
+            or set(context) != {"uid", "name", "digest"}
+        ):
+            raise AtomizeImpactError("Invalid saved atomize analysis Context.")
+        items = value["items"]
+        if not isinstance(items, list):
+            raise AtomizeImpactError("Invalid saved atomize analysis items.")
+        parsed_items = tuple(
+            AtomizeAnalysisItem.from_dict(item)
+            for item in items
+        )
+        memory_count = value["memory_count"]
+        projected = value["projected_memory_count"]
+        digest = context["digest"]
+        if (
+            not isinstance(value["uid"], str)
+            or not isinstance(value["created_at"], str)
+            or not isinstance(context["uid"], str)
+            or not isinstance(context["name"], str)
+            or not isinstance(digest, str)
+            or len(digest) != 64
+            or any(character not in "0123456789abcdef" for character in digest)
+            or value["ruleset_version"] != ATOMIZE_RULESET_VERSION
+            or isinstance(memory_count, bool)
+            or not isinstance(memory_count, int)
+            or memory_count != len(parsed_items)
+            or isinstance(projected, bool)
+            or not isinstance(projected, int)
+            or projected < 0
+            or len({item.memory_uid for item in parsed_items})
+            != len(parsed_items)
+            or len({item.position for item in parsed_items})
+            != len(parsed_items)
+            or [item.position for item in parsed_items]
+            != sorted(item.position for item in parsed_items)
+            or projected
+            != sum(
+                len(item.children)
+                if item.classification == "COMPOSITE"
+                else 1
+                for item in parsed_items
+            )
+        ):
+            raise AtomizeImpactError("Invalid saved atomize analysis.")
+        try:
+            uuid.UUID(value["uid"])
+        except ValueError as error:
+            raise AtomizeImpactError(
+                "Invalid saved atomize analysis uid."
+            ) from error
+        return cls(
+            uid=value["uid"],
+            created_at=value["created_at"],
+            context_uid=context["uid"],
+            context_name=context["name"],
+            context_digest=digest,
+            ruleset_version=value["ruleset_version"],
+            memory_count=memory_count,
+            projected_memory_count=projected,
+            items=parsed_items,
+        )
+
+    def item_for(self, memory_uid: str) -> AtomizeAnalysisItem | None:
+        return next(
+            (item for item in self.items if item.memory_uid == memory_uid),
+            None,
+        )
+
+
+def create_atomize_analysis(
+    ctx: Context,
+    report: AtomizeImpactReport,
+) -> AtomizeAnalysisSession:
+    """Convert a validated report into a durable, non-applying analysis."""
+    if report.context_uid != ctx.uid or report.context_name != ctx.name:
+        raise AtomizeImpactError("Atomize report does not match its Context.")
+    return AtomizeAnalysisSession(
+        uid=str(uuid.uuid4()),
+        created_at=datetime.now(timezone.utc).isoformat(),
+        context_uid=ctx.uid,
+        context_name=ctx.name,
+        context_digest=direct_context_digest(ctx),
+        ruleset_version=ATOMIZE_RULESET_VERSION,
+        memory_count=report.memory_count,
+        projected_memory_count=report.projected_memory_count,
+        items=tuple(
+            AtomizeAnalysisItem(
+                memory_uid=item.memory.uid,
+                content=item.memory.content,
+                position=item.position,
+                classification=item.classification,
+                reason_codes=item.reason_codes,
+                children=item.children,
+                reason=item.reason,
+                lint=item.lint,
+            )
+            for item in report.items
+        ),
+    )
+
+
+def atomize_analysis_matches_context(
+    session: AtomizeAnalysisSession,
+    ctx: Context,
+) -> bool:
+    return (
+        session.context_uid == ctx.uid
+        and session.context_name == ctx.name
+        and session.context_digest == direct_context_digest(ctx)
+    )
+
+
+@dataclass(frozen=True)
+class AppliedAtomizeItem:
+    source_uid: str
+    classification: AtomizeClassification
+    result_uids: tuple[str, ...]
+    result_contents: tuple[str, ...]
+    reason: str
+    reason_codes: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class AtomizeApplyResult:
+    analysis_uid: str
+    split_count: int
+    child_count: int
+    preserved_count: int
+    items: tuple[AppliedAtomizeItem, ...]
+
+    def trace_metadata(self) -> dict[str, object]:
+        return {
+            "schema_version": 1,
+            # Reusing the analysis UID makes apply idempotency and later
+            # explanation a direct recorded join rather than a text match.
+            "operation_id": self.analysis_uid,
+            "changes": [
+                {
+                    "kind": (
+                        "SPLIT"
+                        if item.classification == "COMPOSITE"
+                        else (
+                            "KEEP"
+                            if item.classification == "ATOMIC"
+                            else "PRESERVE"
+                        )
+                    ),
+                    "classification": item.classification,
+                    "source_uids": [item.source_uid],
+                    "result_uids": list(item.result_uids),
+                    "reason": item.reason,
+                    "reason_codes": list(item.reason_codes),
+                }
+                for item in self.items
+            ],
+        }
+
+
+def apply_atomize_analysis(
+    ctx: Context,
+    session: AtomizeAnalysisSession,
+) -> AtomizeApplyResult:
+    """Apply one current saved preview as a single in-memory batch."""
+    if not atomize_analysis_matches_context(session, ctx):
+        raise AtomizeImpactError(
+            "Saved atomize analysis is stale for the current Context."
+        )
+
+    current_memories = {
+        item.uid: item
+        for item in ctx.iter_items()
+        if isinstance(item, Memory)
+    }
+    current_positions = {
+        item.uid: position
+        for position, item in enumerate(current_memories.values())
+    }
+    if set(current_memories) != {
+        item.memory_uid for item in session.items
+    }:
+        raise AtomizeImpactError(
+            "Saved atomize analysis does not cover the current direct Memories."
+        )
+    for item in session.items:
+        current = current_memories.get(item.memory_uid)
+        if (
+            current is None
+            or current.content != item.content
+            or current_positions.get(item.memory_uid) != item.position
+        ):
+            raise AtomizeImpactError(
+                "Saved atomize analysis no longer matches a source Memory."
+            )
+
+    prepared: list[tuple[AtomizeAnalysisItem, tuple[Memory, ...]]] = []
+    for item in session.items:
+        if item.classification == "COMPOSITE":
+            children = tuple(
+                Memory(uid=str(uuid.uuid4()), content=child.content)
+                for child in item.children
+            )
+        else:
+            current = current_memories[item.memory_uid]
+            children = (
+                Memory(uid=current.uid, content=current.content),
+            )
+        prepared.append((item, children))
+
+    # Validation and UID allocation complete before the first Context mutation.
+    # Every split is then applied at its source's live position, so earlier
+    # expansions cannot displace later sources incorrectly.
+    for item, results in prepared:
+        if item.classification != "COMPOSITE":
+            continue
+        position = ctx.ordered_uids().index(item.memory_uid)
+        ctx.remove(item.memory_uid)
+        for offset, child in enumerate(results):
+            ctx.add(child, position=position + offset)
+
+    applied_items = tuple(
+        AppliedAtomizeItem(
+            source_uid=item.memory_uid,
+            classification=item.classification,
+            result_uids=tuple(memory.uid for memory in results),
+            result_contents=tuple(memory.content for memory in results),
+            reason=item.reason,
+            reason_codes=item.reason_codes,
+        )
+        for item, results in prepared
+    )
+    return AtomizeApplyResult(
+        analysis_uid=session.uid,
+        split_count=sum(
+            item.classification == "COMPOSITE"
+            for item, _ in prepared
+        ),
+        child_count=sum(
+            len(results)
+            for item, results in prepared
+            if item.classification == "COMPOSITE"
+        ),
+        preserved_count=sum(
+            item.classification != "COMPOSITE"
+            for item, _ in prepared
+        ),
+        items=applied_items,
+    )
+
+
 def _reject_duplicate_json_keys(
     pairs: list[tuple[str, object]],
 ) -> dict[str, object]:
@@ -195,13 +640,17 @@ def atomize_lint(content: str) -> tuple[str, ...]:
 def collect_atomize_candidates(ctx: Context) -> list[AtomizeCandidate]:
     """Collect direct Memories in Context order without following references."""
     candidates: list[AtomizeCandidate] = []
-    for position, item in enumerate(ctx.iter_items()):
+    for item in ctx.iter_items():
         if not isinstance(item, Memory):
             continue
         candidates.append(
             AtomizeCandidate(
                 candidate_id=f"m{len(candidates) + 1:06d}",
-                position=position,
+                # The preview is direct-Memory-only.  A non-Memory pointer may
+                # be unresolved by load_direct() and restored by a mutating
+                # load, so binding to all-item slots would make an unchanged
+                # Memory appear stale merely because a pointer became visible.
+                position=len(candidates),
                 memory=item,
                 lint=atomize_lint(item.content),
             )

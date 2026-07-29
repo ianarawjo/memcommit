@@ -5,7 +5,11 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
-from memcommit.atomize import AtomizeImpactError
+from memcommit.atomize import (
+    AtomizeImpactError,
+    atomize_analysis_matches_context,
+    create_atomize_analysis,
+)
 from memcommit.commands.atomize_render import render_atomize_impact
 from memcommit.commands.update_render import render_plan
 from memcommit.query_provider import (
@@ -74,8 +78,17 @@ def _atomize_impact(
             ctx,
             connect_codex_chatgpt_provider,
         )
+        analysis = create_atomize_analysis(ctx, report)
+        latest = store.load_direct(ctx.name)
+        if not atomize_analysis_matches_context(analysis, latest):
+            raise AtomizeImpactError(
+                "Context changed while atomize analysis was running; "
+                "no preview was saved. Run 'mem impact atomize' again."
+            )
+        store.save_atomize_analysis(analysis)
     except (
         AtomizeImpactError,
+        OSError,
         QueryProviderError,
         ValueError,
     ) as error:
@@ -83,6 +96,10 @@ def _atomize_impact(
         raise typer.Exit(1)
 
     render_atomize_impact(report, show_all=show_all)
+    typer.secho(
+        f"Analysis saved [{analysis.uid[:8]}] for mem trace/rationale.",
+        fg=typer.colors.CYAN,
+    )
 
 
 def cmd(

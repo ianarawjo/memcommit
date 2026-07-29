@@ -1,3 +1,4 @@
+import hashlib
 from typing import Annotated, Optional
 
 import typer
@@ -7,6 +8,21 @@ from memcommit.commands.batch_input import parse_add_lines, read_text_input
 from memcommit.commands.paste_input import PasteCancelled, capture_paste
 from memcommit.context import AutoCheckpoint
 from memcommit.store import MemoryStore
+
+
+def _source_record(
+    *,
+    kind: str,
+    raw_text: str,
+    parser: str,
+) -> dict[str, str]:
+    """Retain exact normal-Context intake without changing Memory records."""
+    return {
+        "kind": kind,
+        "parser": parser,
+        "sha256": hashlib.sha256(raw_text.encode("utf-8")).hexdigest(),
+        "raw_text": raw_text,
+    }
 
 
 def cmd(
@@ -57,7 +73,15 @@ def cmd(
         mem = ops.add(ctx, info)
         store.save(ctx, AutoCheckpoint(
             command="add",
-            args={"content": info},
+            args={
+                "content": info,
+                "memory_uids": [mem.uid],
+                "source": _source_record(
+                    kind="argument",
+                    raw_text=info,
+                    parser="single-memory-v1",
+                ),
+            },
             description=f'Added: "{info[:80]}"',
         ))
         typer.secho(f"Added [{mem.uid[:8]}] {info}", fg=typer.colors.GREEN)
@@ -122,6 +146,14 @@ def cmd(
                     "contents": [
                         memory.content for memory in memories
                     ],
+                    "memory_uids": [
+                        memory.uid for memory in memories
+                    ],
+                    "source": _source_record(
+                        kind="interactive-paste",
+                        raw_text=pasted_text,
+                        parser="stripped-nonempty-physical-lines-v1",
+                    ),
                 },
                 description=(
                     f"Added {len(memories)} memories from interactive paste"
@@ -141,7 +173,8 @@ def cmd(
 
     assert input_source is not None
     try:
-        contents = parse_add_lines(read_text_input(input_source))
+        raw_text = read_text_input(input_source)
+        contents = parse_add_lines(raw_text)
     except ValueError as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
@@ -156,6 +189,14 @@ def cmd(
                 "mode": "lines",
                 "count": len(memories),
                 "contents": [memory.content for memory in memories],
+                "memory_uids": [
+                    memory.uid for memory in memories
+                ],
+                "source": _source_record(
+                    kind="stdin" if input_source == "-" else "utf-8-file",
+                    raw_text=raw_text,
+                    parser="stripped-nonempty-physical-lines-v1",
+                ),
             },
             description=(
                 f"Added {len(memories)} memories from "

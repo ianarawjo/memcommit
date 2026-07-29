@@ -115,7 +115,8 @@ splitting by headers, paragraphs, or sentence boundaries cannot decide whether
 a condition, exception, transition, or causal relation belongs with a focal
 commitment. The separate
 [`mem atomize` rationale](mem-atomize-design-rationale.md) records that
-contract; the command itself is still future work.
+contract. Its saved preview and explicit apply paths are now implemented; an
+independent second semantic validation pass remains future work.
 
 ### 1.3 Why detection was separated from resolution
 
@@ -1005,7 +1006,9 @@ the read-only boundary.
 
 The following work is not hidden inside the current finders:
 
-- implementing `mem atomize` and its preview/apply lineage;
+- strengthening `mem atomize` with an independent semantic validation pass and
+  repeated-run stability evaluation beyond its implemented preview/apply
+  lineage;
 - creating held-out semantic evaluations rather than calibration-only tests;
 - recording resolved model and ruleset metadata in reusable finding reports;
 - testing multilingual and repeated-run stability;

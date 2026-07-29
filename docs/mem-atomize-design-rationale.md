@@ -13,9 +13,11 @@ deduplication. The intended model combines:
 - the source-first question/answer regression style used by the local
   `clozemaking` project.
 
-This note fixes the semantic contract. The first implementation is the
-preview-only `mem impact atomize` command; independent semantic validation and
-application remain future work. The later quality-finding stages intentionally
+This note fixes the semantic contract. `mem impact atomize` produces and saves
+a Context-scoped preview; `mem atomize --save` and `--save-as` explicitly apply
+that locally validated preview. A second, independent semantic validator remains
+future work, so application is a deliberate research-prototype action rather
+than a claim of semantic proof. The later quality-finding stages intentionally
 use a different evidence boundary: atomization protects one source occurrence
 and does not borrow neighboring Memories as hidden source evidence, while
 quality finding reads all direct Memories in the selected Context as a local
@@ -202,10 +204,19 @@ relation. Several facet questions about the who, where, or when may support
 the same focal commitment, but they do not create additional atoms by
 themselves.
 
-### Validation pass
+### Target independent validation pass (future)
 
-Proposal generation and validation are separate passes. The same unexamined
-model response must not both propose and approve its own split.
+The checks in this subsection describe the intended second semantic pass, not
+the currently implemented apply gate. The implemented preview rejects malformed
+schemas, incomplete candidate coverage, invalid identities or positions,
+ungrounded literal source-span citations, and stale Context frames. Apply
+repeats those local checks, then deliberately consumes the same one-shot
+semantic proposal. It does not yet emit the `validation_status` or per-check
+`PASS`/`UNKNOWN` ledger below, and it does not make a second model or human
+approve the proposal.
+
+The target design separates proposal generation and semantic validation. The
+same unexamined model response must not both propose and approve its own split.
 
 Every proposed split must pass:
 
@@ -223,10 +234,11 @@ Every proposed split must pass:
 7. **Reconstruction** — the ordered child commitments jointly support the
    same ledger as the source, without strengthening or weakening it.
 
-Any `UNKNOWN` check blocks application. It does not automatically overwrite a
-known semantic class: the plan records `validation_status=UNKNOWN` and
-`action=BLOCKED`. The class is `UNCERTAIN` only when the unknown result
-actually concerns atomicity, antecedent identity, or qualifier scope.
+Under that future contract, any `UNKNOWN` check blocks application. It does not
+automatically overwrite a known semantic class: the validated plan records
+`validation_status=UNKNOWN` and `action=BLOCKED`. The class is `UNCERTAIN` only
+when the unknown result actually concerns atomicity, antecedent identity, or
+qualifier scope.
 
 Two children may answer the same semantic question when the source repeated
 the same claim. That is reported as `DUPLICATE_CANDIDATE`, not rejected and
@@ -271,9 +283,9 @@ counter:
 4. ignore empty results.
 
 It intentionally does not try to understand abbreviations. A false-positive
-lint only requests review and can never create a split. Korean and English
-terminators, Markdown bullet lines, abbreviations, decimals, and mixed
-newlines need pure-function tests before this profile is implemented.
+lint only requests review and can never create a split. The implemented profile
+covers Korean and English terminators, Markdown bullet lines, abbreviations,
+decimals, and mixed newlines with pure-function tests.
 
 Crossing this threshold adds a reason to inspect the source. It never changes
 `ATOMIC` to `COMPOSITE`. There is no hard minimum: a very short complete claim
@@ -332,9 +344,20 @@ and human-reviewed proposal property, not a mechanically proven invariant.
 
 All direct Memories are classified in one call. The default terminal view
 hides unchanged `ATOMIC` details for readability, while `--all` shows them;
-the summary always accounts for every input. No child UID is allocated.
-Context JSON, ordering, checkpoints, state, the directional
-`impact-plan.json`, and query-only sources are not written or opened.
+the summary always accounts for every input. No child UID is allocated during
+preview. Context JSON, ordering, checkpoints, active state, the directional
+`impact-plan.json`, and query-only sources are not written or opened. The
+latest digest-bound preview is written separately to
+`~/.mem/atomize-analyses/<context-uid>.json`.
+
+There is intentionally only one such slot per Context UID. A later preview
+atomically replaces the earlier artifact rather than building an analysis
+archive. If the earlier preview was applied, its checkpoint retains the
+operation/analysis UID, source-to-result relation, result contents, reason, and
+reason codes. Preview-only fields such as its creation time, lint, and literal
+source spans are not all copied into the checkpoint, so they can no longer be
+recovered after the slot is overwritten. Retaining a complete sequence of
+analyses is future work.
 
 This result is named `AtomizeImpactReport`, not `AtomizePlan`. It is a proposal
 with locally verified evidence-span citations that is safe to inspect, but
@@ -343,13 +366,14 @@ particular, the same one-shot model response cannot mark its own reconstruction
 or single-focus judgment `PASS`. The command therefore ends with:
 
 ```text
-No changes applied. No checkpoint created.
+This inspection applied no changes and created no checkpoint.
+Analysis saved [<uid>] for mem trace/rationale.
 ```
 
-The report is not cached because no current command can safely consume it.
-When an independent validation/apply path exists, it should introduce a
-separate atomize artifact rather than reuse the directional update
-`impact-plan.json`.
+The saved artifact is intentionally separate from directional update state.
+`mem atomize` consumes it, and `mem trace`/`mem rationale` attach it without
+mislabeling it as content history. Loading repeats local schema, count,
+source-span grounding, and Context-digest validation.
 
 The temporary provider follows the existing semantic-operation boundary: one
 ephemeral Codex session authenticated by the local ChatGPT login, with user
@@ -358,7 +382,58 @@ selection is currently owned by the Codex provider default. A study that
 requires exact model reproducibility must add an explicit allowlisted model
 setting and record it with the report before treating runs as comparable.
 
-### Future validated plan
+### Saved analysis and explicit prototype application
+
+The current commands separate destination choice from semantic analysis:
+
+```text
+mem atomize --save                 # modify the selected Context
+mem atomize --save-as NEW_CONTEXT  # preserve source; create and switch
+```
+
+Both require the latest preview to match the Context UID, name, ordered
+direct-Memory digest, and current source contents. `COMPOSITE` sources are
+replaced in place with fresh child UIDs. `ATOMIC`, `UNCERTAIN`, and
+`NON_PROPOSITIONAL` items preserve their existing UID and content. The apply
+checkpoint records the analysis UID and explicit `KEEP`, `PRESERVE`, and
+`SPLIT` relations for later trace.
+
+Saved source positions are ordinals within the direct-Memory frame, not slots
+among every pointer in the Context. A read-only direct load may intentionally
+leave an embedded `context_ref` unresolved while a mutating load restores it;
+the unchanged Memories on either side must retain the same atomize identity
+and order in both views.
+
+In-place save creates one checkpoint and blocks only an inbound `memory_ref`
+whose target Context UID is the selected Context and whose target Memory UID is
+one of the sources that would be split. References to unchanged Memories do not
+block it. Save-as does not remove those source Memories: it creates a fresh
+Context UID, first records an init-like source baseline, then records the
+atomized state, so references to the unchanged source Context remain valid.
+The new Context is selected only after both states and the copied analysis have
+been persisted. Ordinary failures remove the exact partial destination,
+although no lock or crash-safe transaction journal spans all files.
+
+Atomize also depends on two store-wide mutation invariants. A mutating load
+must resolve every directly embedded Context pointer; otherwise saving the
+partially loaded parent could silently erase an unavailable `context_ref`, so
+the operation fails before changing the parent. When a normal Context write
+raises after creating an automatic checkpoint, the store removes that exact
+checkpoint and prunes only the empty namespace directories created by the
+failed save. This is ordinary exception rollback, not a crash transaction: a
+process or machine failure between the checkpoint and Context replacement can
+still leave recovery work for a future transaction journal.
+
+Saved atomize previews use the canonical Context UUID as their derived-artifact
+key. Contexts created by current commands satisfy this requirement. A legacy
+Context with a noncanonical identity can still be inspected and deleted, but
+it cannot persist an atomize preview until its identity is migrated.
+
+The actual apply path trusts the same one-shot semantic proposal after strict
+local revalidation. It does not pretend that the proposal has passed an
+independent semantic judge.
+
+### Future independently validated plan
 
 The semantic provider returns opaque call-local IDs. Real Context and Memory
 UIDs remain in a local allowlist. Ruleset and profile identity are both part
@@ -424,10 +499,12 @@ separate digest when its rules move from this rationale into a loadable
 artifact.
 
 The stored child UIDs are allocated locally only after approval. Preview
-creates no checkpoint. Application reloads the Context, verifies every UID and
-fingerprint, checks all Contexts for inbound `memory_ref` values, then replaces
-each confirmed composite at its original position with contiguous fresh
-children.
+creates no checkpoint. For an in-place application, the target design reloads
+the Context, verifies every UID and fingerprint, checks all Contexts for an
+inbound `memory_ref` that targets a planned split source in this Context, then
+replaces each confirmed composite at its original position with contiguous
+fresh children. Save-as preserves the source Context and therefore does not
+need to retarget its inbound references.
 
 One approved direct-Context batch creates exactly one checkpoint. The
 checkpoint records the shared operation ID and:
@@ -440,13 +517,15 @@ source spans and copied qualifier spans
 ruleset version and reason codes
 ```
 
-Version 1 blocks the entire application if any split source has an inbound
-reference. A one-to-many replacement has no single safe automatic retarget.
-The first apply path is explicitly single-writer. The current store has no
-global compare-and-swap or lock spanning the inbound-reference scan,
-checkpoint, and Context replacement, so it cannot promise concurrent safety.
-Multi-writer support requires such a transaction boundary and a race test; it
-must not be inferred from the stale-plan check alone.
+Version 1 blocks an in-place application if any `memory_ref` targets a split
+source in the selected Context. A one-to-many replacement has no single safe
+automatic retarget. It does not block references to Memories that remain
+unchanged, and save-as leaves all source targets intact. The first apply path
+is explicitly single-writer. The current store has no global compare-and-swap
+or lock spanning the inbound-reference scan, checkpoint, and Context
+replacement, so it cannot promise concurrent safety. Multi-writer support
+requires such a transaction boundary and a race test; it must not be inferred
+from the stale-plan check alone.
 
 ## Golden regression contract
 
@@ -493,7 +572,7 @@ the canonical rendering or add a narrow allowed variant. Every curated case
 must pass; a percentage score does not make a known boundary failure
 acceptable.
 
-Required operation tests additionally cover:
+Implemented operation tests cover the current preview-and-apply boundary:
 
 - all direct items receive exactly one semantic class and none disappear;
 - for `n` inputs, `s` split sources, and child counts `c_i`, the result count is
@@ -501,12 +580,17 @@ Required operation tests additionally cover:
 - every child gets a fresh unique UID;
 - split children are contiguous at the source position;
 - unchanged UIDs, contents, and relative order remain stable;
-- source-to-child lineage and source occurrence coverage are complete;
-- preview creates zero checkpoints and apply creates exactly one;
-- stale source, Context, frame, or ruleset fingerprints cause zero mutation;
-- any inbound reference blocks version 1 application;
-- an `UNKNOWN` validation result causes zero mutation;
-- re-running the same ruleset on applied children proposes no new clear split;
+- source-to-child UID lineage is recorded;
+- preview creates zero Context checkpoints but updates one per-Context analysis
+  artifact;
+- in-place apply creates exactly one checkpoint;
+- save-as leaves the source unchanged and creates exactly two destination
+  checkpoints: source-based `init`, then `atomize`;
+- stale Context identity/digest, source UID/content/position, or saved ruleset
+  data causes zero mutation;
+- an in-place apply is blocked when an inbound `memory_ref` targets a split
+  source in the selected Context, while save-as leaves the source reference
+  valid;
 - embedded Contexts, `context_ref`, `memory_ref`, and query-only Context
   references are excluded from provider candidates in direct-only version 1;
 - a query-only source loader patched to fail is never called during atomize;
@@ -515,7 +599,17 @@ Required operation tests additionally cover:
 - provider responses with unknown IDs, missing fields, extra fields, duplicate
   keys, or ungrounded spans are rejected as a whole.
 
-Metamorphic tests should verify:
+Future independent-validator and semantic regression tests must additionally
+cover:
+
+- source occurrence coverage, reconstruction, single-focus, and scope
+  preservation as independently judged checks rather than properties asserted
+  by the proposal itself;
+- an independently produced `UNKNOWN` validation result causes zero mutation;
+- re-running the same ruleset on already applied children proposes no new clear
+  split under a pinned provider/model contract.
+
+Future metamorphic tests should verify:
 
 - whitespace-only surface changes preserve the classification;
 - swapping two independent conjuncts swaps child order but not membership;
@@ -604,7 +698,8 @@ occurrences, separated venue-booking closure from redirection, separated
 restroom closure from its alternative location, and marked many sources with
 `앞서`, `같은 NFC`, or missing antecedents `UNCERTAIN`.
 
-The same run also exposed why the report cannot be applied:
+The same run also exposed why that particular report should not be applied
+without human review:
 
 - the long Campus Store source was classified `COMPOSITE` even though one
   proposed child retained unresolved `해당기간`; under A06 the entire source
@@ -644,6 +739,37 @@ Prompt strengthening improves the sample but is not independent validation,
 and run-to-run count changes are themselves evidence against treating one
 completion as a deterministic golden result.
 
+The first run using the implemented saved-preview/apply contract, on
+2026-07-28, returned:
+
+```text
+51 direct Memories -> 54 projected
+13 atomic, 3 composite, 20 uncertain, 15 non-propositional
+3 proposed splits -> 6 children
+```
+
+It saved analysis `e2aceac3…` on `temp/task-1` and was explicitly applied with:
+
+```bash
+mem atomize --save-as temp/task-1-atomized
+```
+
+The original remained a 51-Memory Context with its two original checkpoints.
+The new Context has 54 Memories and exactly two checkpoints: its source-based
+baseline and the atomize application. The three applied splits were vehicle
+versus pedestrian parking access, restroom closure versus nearest alternative,
+and left-side accessible guidance versus the right-stair accessibility
+constraint. Twenty incomplete or deictic items were preserved as `UNCERTAIN`
+instead of being forced into children.
+
+Trace confirmed both directions of the contract. The parking source UID
+`42b4be11…` has a recorded init-from-source event followed by a recorded split
+to two fresh child UIDs. The malformed student-card/app Memory
+`f6fa696e…` has a recorded `ATOMIZE_PRESERVED` event, retains its UID and text,
+and carries the applied `UNCERTAIN / RECONCILE` reason. This observation is not
+a new golden count; it demonstrates that preview, source preservation,
+application, and explanation are now connected by recorded identifiers.
+
 ## Function boundaries
 
 The intended internal decomposition is:
@@ -660,11 +786,12 @@ build_claim_ledger(source, declared_frame)
 Candidate generation may use sentence boundaries, conjunctions, bullets, and
 size lint. None of those heuristics may bypass the ledger and validation pass.
 
-The first implementation is now the preview-only `mem impact atomize` report
-described above. It uses the golden corpus as calibration and keeps application
-outside its trust boundary. The existing `mem chunk` remains a deterministic
-text-splitting primitive; it is not renamed or treated as this semantic
-operation.
+The implementation now separates the saved `mem impact atomize` preview from
+the explicit `mem atomize --save` and `--save-as` transformations. It uses the
+golden corpus as calibration and labels the absence of a second independent
+semantic judge rather than silently implying one. The existing `mem chunk`
+remains a deterministic text-splitting primitive; it is not renamed or treated
+as this semantic operation.
 
 ## Intentional non-goals
 
@@ -674,7 +801,8 @@ Atomization does not:
 - resolve conflicting or missing scope;
 - improve wording beyond minimal stand-alone repair;
 - infer audiences or enforce access control;
-- choose a destination Context;
+- infer or choose a destination Context on the user's behalf (`--save-as`
+  accepts an explicit name);
 - read query-only source content;
 - turn questions or headings into asserted facts;
 - use neighboring Memory order as an implicit semantic graph.

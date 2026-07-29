@@ -125,6 +125,11 @@ service's server-side data handling.
 This is a user-interface and interaction prototype, not confidentiality
 enforcement:
 
+- `mem trace`, `mem rationale`, `mem impact atomize`, `mem atomize --save`,
+  and `mem atomize --save-as` never call the query-source loader. They may
+  preserve the public `QueryContextRef` pointer, but concealed source text is
+  not a candidate, provider input, trace source, or copied Memory. This is a
+  tested command-path invariant, not an operating-system security boundary;
 - the local operating-system user can still open `~/.mem/query-sources`;
 - the source is sent to the selected model provider;
 - a model can still produce an over-broad answer despite the prompt;
