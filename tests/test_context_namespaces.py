@@ -11,7 +11,7 @@ from memcommit.context import AutoCheckpoint, Context
 from memcommit.store import MemoryStore
 
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 
 
 def test_nested_context_can_be_created_in_a_fresh_store(isolated_store):

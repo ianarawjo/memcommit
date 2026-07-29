@@ -60,6 +60,8 @@ checkpoint, or resumable review state.
 - The global current Context remains the repository's existing single-state
   mechanism. The picker does not add multi-terminal locking or per-shell
   current state.
-- Atomize uncertainty is not an implemented review-shell adapter. Atomize
-  renders saved `UNCERTAIN / RECONCILE` findings statically; only the ambiguity
-  adapter currently provides semantic arrow-key review.
+- Atomize uncertainty now uses the shared semantic review shell, but it remains
+  unrelated to Context selection. `mem review atomize` navigates
+  `UNCERTAIN / RECONCILE` analysis items and stages per-Memory context or
+  comments; the switch picker only returns one Context name and has no durable
+  response state.

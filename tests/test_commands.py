@@ -5,19 +5,16 @@ the full user-facing path (argument parsing, error messages, exit codes).
 All tests use the `isolated_store` fixture from conftest.py to avoid touching
 the real ~/.mem directory.
 """
-import click
-import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.commands.help_inventory as help_inventory
 from memcommit.cli import app
-import memcommit.ops as ops
 from memcommit.commands.help_inventory import CommandEntry, run_help_selector
 from memcommit.store import MemoryStore
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 
 
 # ---------------------------------------------------------------------------
@@ -41,7 +38,7 @@ class TestHelp:
                 name=name,
                 level="implemented",
                 description=f"{name} description",
-                command=click.Command(name),
+                command=object(),
             )
             for name in ("alpha", "beta", "gamma")
         ]
@@ -465,7 +462,7 @@ class TestShow:
         result = invoke("show", "missing")
 
         assert result.exit_code == 1
-        assert "No direct item matching" in result.output
+        assert "No direct item matching" in result.stderr
 
     def test_fails_for_ambiguous_uid_prefix(self, isolated_store):
         from memcommit.context import Memory as Mem
@@ -480,7 +477,7 @@ class TestShow:
         result = invoke("show", "aaaa")
 
         assert result.exit_code == 1
-        assert "Ambiguous selector" in result.output
+        assert "Ambiguous selector" in result.stderr
 
 
 # ---------------------------------------------------------------------------

@@ -19,6 +19,7 @@ from memcommit.commands import (
     find_conflicts,
     find_duplicates,
     forget,
+    ground,
     help_inventory,
     impact,
     init,
@@ -80,7 +81,7 @@ app.command("remove",         help="Remove a direct item from the current contex
 app.command("chunk",          help="Split a memory into chunks (markdown_headers, paragraphs, sentences).")(chunk.cmd)
 app.command(
     "atomize",
-    help="Inspect or explicitly apply a saved atomize analysis.",
+    help="Create or resume an atomize workbench; apply only with an explicit save.",
 )(atomize.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
 app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)
@@ -102,8 +103,15 @@ app.command("find-ambiguities", help="Find ambiguous or underspecified direct Me
 app.command("find-conflicts", help="Find conflicting direct Memory pairs.")(find_conflicts.cmd)
 app.command(
     "review",
-    help="Save ambiguity-review annotations without editing Memories.",
+    help="Stage ambiguity or atomize-workbench responses without editing Memories.",
 )(review.cmd)
+app.command(
+    "ground",
+    help=(
+        "Build a revisable Goal–rules–cases contract over bound Context "
+        "frames without applying it."
+    ),
+)(ground.cmd)
 app.command(
     "impact",
     help="Preview a directional update or atomization; no Context changes.",

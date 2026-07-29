@@ -40,6 +40,15 @@ def _render_children(item: AtomizeItem) -> None:
             ),
             dim=True,
         )
+        if child.frame_spans:
+            typer.secho(
+                "         Cited declared-frame spans: "
+                + " | ".join(
+                    safe_terminal_text(span)
+                    for span in child.frame_spans
+                ),
+                dim=True,
+            )
 
 
 def _render_item(item: AtomizeItem) -> None:
@@ -135,6 +144,13 @@ def render_atomize_impact(
             f"{'Memory' if counts['ATOMIC'] == 1 else 'Memories'} hidden; "
             "use --all to show them)",
             dim=True,
+        )
+
+    if counts["UNCERTAIN"]:
+        typer.echo()
+        typer.secho(
+            "  Review uncertain items with: mem review atomize",
+            fg=typer.colors.CYAN,
         )
 
     typer.echo()

@@ -17,7 +17,7 @@ from memcommit.search import (
 from memcommit.store import MemoryStore
 
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 HIDDEN_SECRET = "The confidential contract ceiling is 4.2 million dollars."
 
 

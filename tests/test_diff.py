@@ -11,7 +11,7 @@ from memcommit.store import MemoryStore
 from memcommit.update import plan_update
 
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 
 
 class Provider:

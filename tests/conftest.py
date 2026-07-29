@@ -20,6 +20,8 @@ def isolated_store(tmp_path, monkeypatch):
     staged_update_file = store_dir / "staged-update.json"
     review_session_file = store_dir / "review-session.json"
     atomize_analyses_dir = store_dir / "atomize-analyses"
+    atomize_workbenches_dir = store_dir / "atomize-workbenches"
+    ground_sessions_dir = store_dir / "ground-sessions"
 
     monkeypatch.setattr(store_module, "STORE_DIR", store_dir)
     monkeypatch.setattr(store_module, "CONTEXTS_DIR", contexts_dir)
@@ -40,6 +42,16 @@ def isolated_store(tmp_path, monkeypatch):
         store_module,
         "ATOMIZE_ANALYSES_DIR",
         atomize_analyses_dir,
+    )
+    monkeypatch.setattr(
+        store_module,
+        "ATOMIZE_WORKBENCHES_DIR",
+        atomize_workbenches_dir,
+    )
+    monkeypatch.setattr(
+        store_module,
+        "GROUND_SESSIONS_DIR",
+        ground_sessions_dir,
     )
 
     return store_dir

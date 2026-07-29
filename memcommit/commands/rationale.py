@@ -107,6 +107,49 @@ def render_rationale(
                     "  Rules: " + ", ".join(event.reason_codes),
                     dim=True,
                 )
+            if event.declared_frame is not None:
+                review_uid = (
+                    _uid(event.source_review_uid, verbose)
+                    if event.source_review_uid is not None
+                    else "unrecorded"
+                )
+                typer.secho(
+                    "  Reviewed declared context/comment "
+                    f"(review {review_uid}):",
+                    fg=typer.colors.YELLOW,
+                )
+                for line in safe_terminal_text(
+                    event.declared_frame
+                ).splitlines() or [""]:
+                    typer.echo(f"      {line}")
+                if event.uncertainty_reason:
+                    typer.echo(
+                        "  Requested because: "
+                        + safe_terminal_text(event.uncertainty_reason)
+                    )
+            for evidence in event.child_evidence:
+                typer.secho(
+                    "  Applied citations for "
+                    f"[{_uid(evidence.result_uid, verbose)}]:",
+                    dim=True,
+                )
+                typer.secho(
+                    "      Source spans: "
+                    + " | ".join(
+                        safe_terminal_text(span)
+                        for span in evidence.source_spans
+                    ),
+                    dim=True,
+                )
+                if evidence.frame_spans:
+                    typer.secho(
+                        "      Declared-frame spans: "
+                        + " | ".join(
+                            safe_terminal_text(span)
+                            for span in evidence.frame_spans
+                        ),
+                        dim=True,
+                    )
 
     typer.secho("\nSAVED ANALYSIS — not a creation cause", bold=True)
     analysis = report.saved_analysis
@@ -167,6 +210,25 @@ def render_rationale(
             "  Rules: " + ", ".join(atomize.reason_codes),
             dim=True,
         )
+        if atomize.declared_frame is not None:
+            review_uid = (
+                _uid(atomize.source_review_uid, verbose)
+                if atomize.source_review_uid is not None
+                else "unrecorded"
+            )
+            typer.secho(
+                f"  Reviewed declared context/comment (review {review_uid}):",
+                fg=typer.colors.YELLOW,
+            )
+            for line in safe_terminal_text(
+                atomize.declared_frame
+            ).splitlines() or [""]:
+                typer.echo(f"      {line}")
+            if atomize.declared_frame_reason:
+                typer.echo(
+                    "  Requested because: "
+                    + safe_terminal_text(atomize.declared_frame_reason)
+                )
         for index, child in enumerate(atomize.children, 1):
             typer.echo(f"  Proposed child {index}:")
             for line in safe_terminal_text(child.content).splitlines() or [""]:
@@ -179,6 +241,15 @@ def render_rationale(
                 ),
                 dim=True,
             )
+            if child.frame_spans:
+                typer.secho(
+                    "      Declared-frame spans: "
+                    + " | ".join(
+                        safe_terminal_text(span)
+                        for span in child.frame_spans
+                    ),
+                    dim=True,
+                )
         if atomize.status != "APPLIED":
             typer.secho(
                 "  This analysis is not recorded as an applied content change.",

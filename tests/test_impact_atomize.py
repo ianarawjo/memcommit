@@ -27,8 +27,33 @@ from memcommit.context import (
 from memcommit.store import MemoryStore
 
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
+
+
+def _aggregate_response(payload: dict, response: dict) -> dict:
+    """Wrap legacy item-focused fakes in the current one-shot envelope."""
+    candidate_ids = [
+        memory["candidate_id"] for memory in payload["memories"]
+    ]
+    return {
+        "overview": {
+            "understood": {
+                "text": "The test response covers the supplied source Memories.",
+                "source_ids": candidate_ids,
+            },
+            "changed": {
+                "text": "The test response records the proposed atomization.",
+                "source_ids": candidate_ids,
+            },
+            "unresolved": {
+                "text": "",
+                "source_ids": [],
+            },
+        },
+        "items": response["items"],
+        "quality_issues": [],
+    }
 
 
 class AtomizeProvider:
@@ -40,6 +65,8 @@ class AtomizeProvider:
         payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
         self.calls.append((prompt, operation, output_schema, payload))
         response = self.responder(payload)
+        if isinstance(response, dict) and set(response) == {"items"}:
+            response = _aggregate_response(payload, response)
         return response if isinstance(response, str) else json.dumps(response)
 
 
@@ -132,13 +159,13 @@ def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
         third.content,
         fourth.content,
     ]
-    assert "Judge each candidate ONLY" in prompt
+    assert "For the ATOMIZE CLASSIFICATION AND CHILDREN" in prompt
     assert payload["context"]["declared_frame"] is None
     assert set(payload["context"]) == {
         "direct_memory_count",
         "declared_frame",
     }
-    assert payload["ruleset_version"] == "atomize-v1-draft"
+    assert payload["ruleset_version"] == "atomize-v2-reviewed-frame-draft"
     assert set(payload["rules"]) == atomize_module.ATOMIZE_RULE_CODES
     assert all(payload["rules"].values())
     assert payload["calibration_cases"]
@@ -460,18 +487,19 @@ def test_cli_preview_is_direct_only_and_saves_only_analysis(
     result = runner.invoke(app, ["impact", "atomize"])
 
     assert result.exit_code == 0, result.output
-    assert "Atomize impact: root" in result.output
-    assert "2 direct Memories -> 2 projected" in result.output
-    assert "1 atomic, 0 composite, 0 uncertain, 1 non-propositional" in (
-        result.output
-    )
+    assert "MEM IMPACT · ATOMIZE · root" in result.output
+    assert "2 source Memories → 2 projected" in result.output
+    assert "0 proposed splits → 0 children" in result.output
+    assert "WHAT MEM UNDERSTOOD" in result.output
+    assert "WHAT CHANGED / REMAINS UNRESOLVED" in result.output
     assert (
-        "This inspection applied no changes and created no checkpoint."
+        "No Memory changes have been applied. No checkpoint was created."
         in result.output
     )
     assert "Analysis saved" in result.output
     assert first.content not in result.output
-    assert second.content in result.output
+    assert "secret reference target" not in result.output
+    assert "nested content" not in result.output
     assert len(provider.calls) == 1
     assert context_path.read_bytes() == context_before
     assert (isolated_store / "state.json").read_bytes() == state_before
@@ -510,9 +538,9 @@ def test_cli_all_shows_atomic_items_and_explicit_context_does_not_switch(
     )
 
     assert result.exit_code == 0, result.output
-    assert "Atomize impact: target" in result.output
+    assert "MEM IMPACT · ATOMIZE · target" in result.output
     assert memory.content in result.output
-    assert "KEEP" in result.output
+    assert "ATOMIC" in result.output
     assert store.current_context_name() == active.name
 
 
@@ -572,9 +600,9 @@ def test_cli_empty_context_does_not_connect_provider(
     result = runner.invoke(app, ["impact", "atomize"])
 
     assert result.exit_code == 0, result.output
-    assert "0 direct Memories -> 0 projected" in result.output
+    assert "0 source Memories → 0 projected" in result.output
     assert (
-        "This inspection applied no changes and created no checkpoint."
+        "No Memory changes have been applied. No checkpoint was created."
         in result.output
     )
 
@@ -1075,7 +1103,7 @@ def test_saved_atomize_analysis_revalidates_grounding_and_projected_count(
         AtomizeAnalysisSession.from_dict(wrong_count)
 
 
-def test_atomize_save_rejects_tampered_saved_source_positions(
+def test_atomize_store_rejects_tampered_saved_source_positions(
     isolated_store,
     monkeypatch,
 ):
@@ -1092,6 +1120,7 @@ def test_atomize_save_rejects_tampered_saved_source_positions(
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
     analysis = store.load_atomize_analysis(ctx.uid)
     assert analysis is not None
+    analysis_before = store._atomize_analysis_path(ctx.uid).read_bytes()
     tampered = replace(
         analysis,
         items=tuple(
@@ -1099,12 +1128,10 @@ def test_atomize_save_rejects_tampered_saved_source_positions(
             for item in analysis.items
         ),
     )
-    store.save_atomize_analysis(tampered)
+    with pytest.raises(ValueError, match="analysis is invalid"):
+        store.save_atomize_analysis(tampered)
 
-    applied = runner.invoke(app, ["atomize", "--save"])
-
-    assert applied.exit_code == 1
-    assert "no longer matches a source Memory" in applied.stderr
+    assert store._atomize_analysis_path(ctx.uid).read_bytes() == analysis_before
     assert [
         item.content
         for item in store.load_direct(ctx.name).iter_items()

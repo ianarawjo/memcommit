@@ -16,7 +16,10 @@ from typing import Callable, Protocol
 from memcommit.context import Context, Memory
 from memcommit.provenance import MemoryState, TraceEvent, TraceReport
 from memcommit.query_provider import QueryProviderError
-from memcommit.review import review_matches_context
+from memcommit.review import (
+    atomize_review_matches_analysis,
+    review_matches_context,
+)
 from memcommit.store import MemoryStore
 
 
@@ -228,10 +231,28 @@ def _saved_analysis(
     )
     if item is None:
         return None, False, warnings
+    if session.kind == "atomize":
+        try:
+            atomize_analysis = store.load_atomize_analysis(ctx.uid)
+        except ValueError as error:
+            warnings.append(
+                f"Saved atomize analysis could not be read: {error}"
+            )
+            return None, True, warnings
+        matches_current = (
+            atomize_analysis is not None
+            and atomize_review_matches_analysis(
+                session,
+                ctx,
+                atomize_analysis,
+            )
+        )
+    else:
+        matches_current = review_matches_context(session, ctx)
     if (
         session.context_uid != ctx.uid
         or session.context_name != ctx.name
-        or not review_matches_context(session, ctx)
+        or not matches_current
     ):
         # Stale semantic text is not repeated because doing so can make an old
         # interpretation look current after any part of its local frame changed.

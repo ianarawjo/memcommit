@@ -301,6 +301,93 @@ def test_tampered_explicit_lineage_falls_back_to_snapshot_differences(
     )
 
 
+def test_tampered_v2_review_evidence_keeps_lineage_but_drops_evidence(
+    isolated_store,
+):
+    store = MemoryStore()
+    ctx = ops.init("tampered-reviewed-evidence")
+    source = ops.add(ctx, "Use the same credential for staff access.")
+    store.save(
+        ctx,
+        AutoCheckpoint(
+            command="add",
+            args={},
+            description="Added reviewed source",
+        ),
+    )
+    source_position = ctx.ordered_uids().index(source.uid)
+    ctx.remove(source.uid)
+    child = Memory(
+        uid="10000000-0000-4000-8000-000000000001",
+        content="Use the staff credential for staff access.",
+    )
+    ctx.add(child, position=source_position)
+    review_uid = "20000000-0000-4000-8000-000000000002"
+    review_digest = "a" * 64
+    declared_frame = "The same credential means the staff credential."
+    store.save(
+        ctx,
+        AutoCheckpoint(
+            command="atomize",
+            args={
+                "source_review_uid": review_uid,
+                "source_review_digest": review_digest,
+                "trace": {
+                    "schema_version": 2,
+                    "operation_id": (
+                        "30000000-0000-4000-8000-000000000003"
+                    ),
+                    "changes": [
+                        {
+                            "kind": "SPLIT",
+                            "classification": "COMPOSITE",
+                            "source_uids": [source.uid],
+                            "result_uids": [child.uid],
+                            "reason": "The reviewed referent permits a split.",
+                            "reason_codes": ["A04_SOURCE_GROUNDED"],
+                            "child_evidence": [
+                                {
+                                    "result_uid": child.uid,
+                                    "source_spans": ["staff access"],
+                                    "frame_spans": ["staff credential"],
+                                }
+                            ],
+                            "review_evidence": {
+                                "review_uid": review_uid,
+                                "response_digest": review_digest,
+                                "memory_uid": source.uid,
+                                "review_item_uid": source.uid,
+                                "source_analysis_uid": (
+                                    "40000000-0000-4000-8000-000000000004"
+                                ),
+                                "uncertainty_reason": (
+                                    "The credential antecedent was unresolved."
+                                ),
+                                "text": declared_frame,
+                                # The corrupt digest must not erase the valid
+                                # structural source-to-child lineage.
+                                "digest": "0" * 64,
+                            },
+                        }
+                    ],
+                },
+            },
+            description="Stored tampered reviewed evidence",
+        ),
+    )
+
+    report = build_trace(store, ctx, child.uid)
+    split = next(event for event in report.events if event.kind == "SPLIT")
+
+    assert split.evidence == "RECORDED"
+    assert split.declared_frame is None
+    assert split.child_evidence == ()
+    assert any(
+        "invalid reviewed atomize evidence" in warning
+        for warning in report.warnings
+    )
+
+
 def test_trace_reads_current_state_after_revert(isolated_store):
     assert invoke("init", "revertible").exit_code == 0
     assert invoke("add", "keep").exit_code == 0

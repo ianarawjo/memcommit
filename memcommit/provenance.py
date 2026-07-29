@@ -11,6 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 from typing import Any, Iterable, Literal
+import uuid
 
 from memcommit.chunking import chunk_content
 from memcommit.context import Context, Memory
@@ -32,7 +33,9 @@ EventKind = Literal[
     "HISTORY_GAP",
 ]
 
-TRACE_METADATA_SCHEMA_VERSION = 1
+TRACE_METADATA_SCHEMA_VERSION = 3
+TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION = 2
+TRACE_METADATA_LEGACY_SCHEMA_VERSION = 1
 
 
 class ProvenanceError(RuntimeError):
@@ -79,6 +82,22 @@ class SourceOccurrence:
 
 
 @dataclass(frozen=True)
+class TraceChildEvidence:
+    """Recorded source/frame citations for one applied result Memory."""
+
+    result_uid: str
+    source_spans: tuple[str, ...]
+    frame_spans: tuple[str, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "result_uid": self.result_uid,
+            "source_spans": list(self.source_spans),
+            "frame_spans": list(self.frame_spans),
+        }
+
+
+@dataclass(frozen=True)
 class TraceEvent:
     kind: EventKind
     evidence: Evidence
@@ -92,6 +111,13 @@ class TraceEvent:
     reason_codes: tuple[str, ...] = ()
     source_occurrence: SourceOccurrence | None = None
     operation_id: str | None = None
+    child_evidence: tuple[TraceChildEvidence, ...] = ()
+    declared_frame: str | None = None
+    declared_frame_digest: str | None = None
+    uncertainty_reason: str | None = None
+    source_review_uid: str | None = None
+    source_review_digest: str | None = None
+    source_analysis_uid: str | None = None
 
     @property
     def uids(self) -> set[str]:
@@ -118,6 +144,15 @@ class TraceEvent:
                 else None
             ),
             "operation_id": self.operation_id,
+            "child_evidence": [
+                evidence.to_dict() for evidence in self.child_evidence
+            ],
+            "declared_frame": self.declared_frame,
+            "declared_frame_digest": self.declared_frame_digest,
+            "uncertainty_reason": self.uncertainty_reason,
+            "source_review_uid": self.source_review_uid,
+            "source_review_digest": self.source_review_digest,
+            "source_analysis_uid": self.source_analysis_uid,
         }
 
 
@@ -125,11 +160,13 @@ class TraceEvent:
 class TraceAnalysisChild:
     content: str
     source_spans: tuple[str, ...]
+    frame_spans: tuple[str, ...] = ()
 
     def to_dict(self) -> dict[str, object]:
         return {
             "content": self.content,
             "source_spans": list(self.source_spans),
+            "frame_spans": list(self.frame_spans),
         }
 
 
@@ -148,6 +185,11 @@ class TraceAnalysis:
     reason_codes: tuple[str, ...]
     children: tuple[TraceAnalysisChild, ...]
     lint: tuple[str, ...]
+    declared_frame: str | None
+    declared_frame_reason: str | None
+    source_review_uid: str | None
+    source_review_digest: str | None
+    source_review_analysis_uid: str | None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -162,6 +204,11 @@ class TraceAnalysis:
             "reason_codes": list(self.reason_codes),
             "children": [child.to_dict() for child in self.children],
             "lint": list(self.lint),
+            "declared_frame": self.declared_frame,
+            "declared_frame_reason": self.declared_frame_reason,
+            "source_review_uid": self.source_review_uid,
+            "source_review_digest": self.source_review_digest,
+            "source_review_analysis_uid": self.source_review_analysis_uid,
         }
 
 
@@ -594,6 +641,189 @@ def _trace_change_matches_snapshot(
     return False
 
 
+def _atomize_evidence(
+    record: dict,
+    *,
+    schema_version: int,
+    kind: str,
+    source_uids: list[str],
+    result_uids: list[str],
+    before: _Frame,
+    args: dict,
+) -> tuple[tuple[TraceChildEvidence, ...], dict[str, str] | None] | None:
+    """Validate optional reviewed evidence without weakening lineage checks."""
+    if set(record) != {
+        "kind",
+        "classification",
+        "source_uids",
+        "result_uids",
+        "reason",
+        "reason_codes",
+        "child_evidence",
+        "review_evidence",
+    }:
+        return None
+    classification = record["classification"]
+    expected_kind = {
+        "ATOMIC": "KEEP",
+        "COMPOSITE": "SPLIT",
+        "UNCERTAIN": "PRESERVE",
+        "NON_PROPOSITIONAL": "PRESERVE",
+    }
+    if schema_version not in {
+        TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
+        TRACE_METADATA_SCHEMA_VERSION,
+    }:
+        return None
+    if (
+        not isinstance(classification, str)
+        or expected_kind.get(classification) != kind
+        or len(source_uids) != 1
+        or source_uids[0] not in before.memories
+    ):
+        return None
+
+    raw_children = record["child_evidence"]
+    if not isinstance(raw_children, list) or (
+        kind == "SPLIT"
+        and len(raw_children) != len(result_uids)
+    ) or (kind != "SPLIT" and raw_children):
+        return None
+    source_content = before.memories[source_uids[0]].content
+    parsed_children: list[TraceChildEvidence] = []
+    for index, value in enumerate(raw_children):
+        if (
+            not isinstance(value, dict)
+            or set(value) != {"result_uid", "source_spans", "frame_spans"}
+        ):
+            return None
+        result_uid = value["result_uid"]
+        source_spans = value["source_spans"]
+        frame_spans = value["frame_spans"]
+        if (
+            result_uid != result_uids[index]
+            or not isinstance(source_spans, list)
+            or not source_spans
+            or any(
+                not isinstance(span, str)
+                or not span
+                or span not in source_content
+                for span in source_spans
+            )
+            or len(set(source_spans)) != len(source_spans)
+            or not isinstance(frame_spans, list)
+            or any(not isinstance(span, str) or not span for span in frame_spans)
+            or len(set(frame_spans)) != len(frame_spans)
+        ):
+            return None
+        parsed_children.append(
+            TraceChildEvidence(
+                result_uid=result_uid,
+                source_spans=tuple(source_spans),
+                frame_spans=tuple(frame_spans),
+            )
+        )
+
+    raw_review = record["review_evidence"]
+    if raw_review is None:
+        if any(child.frame_spans for child in parsed_children):
+            return None
+        return tuple(parsed_children), None
+    if (
+        not isinstance(raw_review, dict)
+        or set(raw_review)
+        != {
+            "review_uid",
+            "response_digest",
+            "memory_uid",
+            "review_item_uid",
+            "source_analysis_uid",
+            "uncertainty_reason",
+            "text",
+            "digest",
+        }
+    ):
+        return None
+    review_uid = raw_review["review_uid"]
+    response_digest = raw_review["response_digest"]
+    memory_uid = raw_review["memory_uid"]
+    review_item_uid = raw_review["review_item_uid"]
+    source_analysis_uid = raw_review["source_analysis_uid"]
+    uncertainty_reason = raw_review["uncertainty_reason"]
+    text = raw_review["text"]
+    digest = raw_review["digest"]
+    if not all(
+        isinstance(value, str)
+        for value in (
+            memory_uid,
+            review_item_uid,
+            source_analysis_uid,
+            uncertainty_reason,
+            text,
+        )
+    ):
+        return None
+    if schema_version == TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION:
+        valid_review_item = review_item_uid == memory_uid
+        expected_digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    else:
+        from memcommit.atomize import atomize_declared_frame_digest
+
+        valid_review_item = review_item_uid in {
+            memory_uid,
+            f"ambiguity:{memory_uid}",
+            f"atomize:{memory_uid}",
+        }
+        expected_digest = atomize_declared_frame_digest(
+            memory_uid=memory_uid,
+            review_item_uid=review_item_uid,
+            source_analysis_uid=source_analysis_uid,
+            uncertainty_reason=uncertainty_reason,
+            text=text,
+        )
+    if (
+        not isinstance(review_uid, str)
+        or not isinstance(response_digest, str)
+        or memory_uid != source_uids[0]
+        or not valid_review_item
+        or not uncertainty_reason.strip()
+        or not text.strip()
+        or not isinstance(digest, str)
+        or digest != expected_digest
+        or len(response_digest) != 64
+        or any(
+            character not in "0123456789abcdef"
+            for character in response_digest
+        )
+        or args.get("source_review_uid") != review_uid
+        or args.get("source_review_digest") != response_digest
+        or not isinstance(args.get("analysis_uid"), str)
+        or args.get("analysis_uid") == source_analysis_uid
+        or any(
+            span not in text
+            for child in parsed_children
+            for span in child.frame_spans
+        )
+    ):
+        return None
+    try:
+        uuid.UUID(review_uid)
+        uuid.UUID(source_analysis_uid)
+    except ValueError:
+        return None
+    return (
+        tuple(parsed_children),
+        {
+            "review_uid": review_uid,
+            "response_digest": response_digest,
+            "source_analysis_uid": source_analysis_uid,
+            "uncertainty_reason": uncertainty_reason,
+            "text": text,
+            "digest": digest,
+        },
+    )
+
+
 def _explicit_trace_events(
     *,
     before: _Frame,
@@ -606,9 +836,19 @@ def _explicit_trace_events(
     metadata = args.get("trace")
     if metadata is None:
         return [], set(), set(), []
+    schema_version = metadata.get("schema_version") if isinstance(
+        metadata,
+        dict,
+    ) else None
     if (
         not isinstance(metadata, dict)
-        or metadata.get("schema_version") != TRACE_METADATA_SCHEMA_VERSION
+        or isinstance(schema_version, bool)
+        or schema_version
+        not in {
+            TRACE_METADATA_LEGACY_SCHEMA_VERSION,
+            TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
+            TRACE_METADATA_SCHEMA_VERSION,
+        }
         or not isinstance(metadata.get("changes"), list)
     ):
         return (
@@ -696,6 +936,29 @@ def _explicit_trace_events(
             "SPLIT": "SPLIT",
             "ABSORB": "ABSORBED",
         }[kind]
+        child_evidence: tuple[TraceChildEvidence, ...] = ()
+        review_evidence: dict[str, str] | None = None
+        if schema_version in {
+            TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
+            TRACE_METADATA_SCHEMA_VERSION,
+        }:
+            parsed_evidence = _atomize_evidence(
+                record,
+                schema_version=schema_version,
+                kind=kind,
+                source_uids=source_uids,
+                result_uids=result_uids,
+                before=before,
+                args=args,
+            )
+            if parsed_evidence is None:
+                warnings.append(
+                    f"Checkpoint [{checkpoint_uid[:8]}] has invalid reviewed "
+                    "atomize evidence; lineage was retained without that "
+                    "evidence."
+                )
+            else:
+                child_evidence, review_evidence = parsed_evidence
         events.append(
             TraceEvent(
                 kind=event_kind,
@@ -709,6 +972,37 @@ def _explicit_trace_events(
                 reason=reason,
                 reason_codes=tuple(reason_codes),
                 operation_id=operation_id,
+                child_evidence=child_evidence,
+                declared_frame=(
+                    review_evidence["text"]
+                    if review_evidence is not None
+                    else None
+                ),
+                declared_frame_digest=(
+                    review_evidence["digest"]
+                    if review_evidence is not None
+                    else None
+                ),
+                uncertainty_reason=(
+                    review_evidence["uncertainty_reason"]
+                    if review_evidence is not None
+                    else None
+                ),
+                source_review_uid=(
+                    review_evidence["review_uid"]
+                    if review_evidence is not None
+                    else None
+                ),
+                source_review_digest=(
+                    review_evidence["response_digest"]
+                    if review_evidence is not None
+                    else None
+                ),
+                source_analysis_uid=(
+                    review_evidence["source_analysis_uid"]
+                    if review_evidence is not None
+                    else None
+                ),
             )
         )
         consumed_before.update(source_uids)
@@ -1159,6 +1453,10 @@ def _analysis_attachments(
         status = "CURRENT"
     else:
         status = "STALE"
+    declared_frame_by_memory_uid = {
+        frame.memory_uid: frame
+        for frame in session.declared_frames
+    }
     analyses = tuple(
         TraceAnalysis(
             kind="ATOMIZE_PREVIEW",
@@ -1174,10 +1472,32 @@ def _analysis_attachments(
                 TraceAnalysisChild(
                     content=child.content,
                     source_spans=child.source_spans,
+                    frame_spans=child.frame_spans,
                 )
                 for child in item.children
             ),
             lint=item.lint,
+            declared_frame=(
+                declared_frame_by_memory_uid[item.memory_uid].text
+                if item.memory_uid in declared_frame_by_memory_uid
+                else None
+            ),
+            declared_frame_reason=(
+                declared_frame_by_memory_uid[
+                    item.memory_uid
+                ].uncertainty_reason
+                if item.memory_uid in declared_frame_by_memory_uid
+                else None
+            ),
+            source_review_uid=session.source_review_uid,
+            source_review_digest=session.source_review_digest,
+            source_review_analysis_uid=(
+                declared_frame_by_memory_uid[
+                    item.memory_uid
+                ].source_analysis_uid
+                if item.memory_uid in declared_frame_by_memory_uid
+                else None
+            ),
         )
         for item in session.items
         if item.memory_uid in component

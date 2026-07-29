@@ -79,7 +79,7 @@ def test_atomize_fixture_has_a_consistent_reviewable_schema() -> None:
     }
     assert fixture["command"] == "atomize"
     assert fixture["schema_version"] == 1
-    assert fixture["ruleset_version"] == "atomize-v1-draft"
+    assert fixture["ruleset_version"] == "atomize-v2-reviewed-frame-draft"
     assert fixture["cases"]
 
     profile = fixture["profile"]

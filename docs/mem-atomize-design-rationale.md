@@ -13,9 +13,11 @@ deduplication. The intended model combines:
 - the source-first question/answer regression style used by the local
   `clozemaking` project.
 
-This note fixes the semantic contract. `mem impact atomize` produces and saves
-a Context-scoped preview; `mem atomize --save` and `--save-as` explicitly apply
-that locally validated preview. A second, independent semantic validator remains
+This note fixes the semantic contract. `mem impact atomize` creates or resumes
+a Context-scoped analysis and workbench; bare `mem atomize` and
+`mem review atomize` resume that same compatible result without another
+provider call. `mem atomize --save` and `--save-as` explicitly apply the
+locally validated proposal. A second, independent semantic validator remains
 future work, so application is a deliberate research-prototype action rather
 than a claim of semantic proof. The later quality-finding stages intentionally
 use a different evidence boundary: atomization protects one source occurrence
@@ -96,7 +98,7 @@ case, and checkpoint can say why a boundary was chosen.
 | `A01_ONE_FOCUS` | One child owns one focal-commitment occurrence. | Independent `P` and `Q`, and repeated source occurrences, receive separate child occurrence mappings. |
 | `A02_SCOPE_ATTACHED` | Subject, audience, place, time, modality, negation, condition, and exception stay with the commitment they scope. | Do not create qualifier fragments. |
 | `A03_RELATION_PRESERVED` | Conditional, exception, alternative, transition, comparison, and causal relations are commitments in their own right when they are focal. | Do not split a relation into claims that change its meaning. |
-| `A04_SOURCE_GROUNDED` | Every child assertion must be supported by an explicit source occurrence or declared frame. | No invented facts or silent resolution. |
+| `A04_SOURCE_GROUNDED` | Every child must cite an explicit original-source occurrence; a declared frame may additionally support a qualifier or resolved referent. | No frame-only child, invented fact, or silent resolution. |
 | `A05_MINIMAL_EXPANSION` | Repeating an explicit subject or qualifier and repairing grammar are allowed only as needed to make a child stand alone. | No stylistic normalization during atomization. |
 | `A06_NO_HIDDEN_CONTEXT` | Neighboring Memories and undeclared Context assumptions are not evidence. | Deictic content without an explicit frame becomes `UNCERTAIN`. |
 | `A07_RETAIN_NON_CLAIMS` | Headings, questions, and process notes remain addressable. | Classify and retain; do not fabricate propositions. |
@@ -222,8 +224,9 @@ Every proposed split must pass:
 
 1. **Occurrence coverage** — every source claim occurrence maps to at least
    one child, including a repeated occurrence.
-2. **No invention** — every child commitment and qualifier maps to a source
-   span or a fingerprinted declared frame.
+2. **No invention** — every child commitment cites an original-source
+   occurrence, and every additional qualifier maps to that source or a
+   fingerprinted declared frame.
 3. **Single focus** — each child owns one focal commitment group.
 4. **Self-contained answer** — the child and declared frame answer its focal
    question without unresolved deixis.
@@ -303,8 +306,8 @@ regressions.
 
 ### Implemented impact report
 
-The implemented first slice is intentionally smaller than the validated plan
-described below:
+The implemented research-prototype slice remains narrower than the independent
+validation plan described below:
 
 ```bash
 mem impact atomize
@@ -316,11 +319,14 @@ It loads the selected Context without resolving embedded Contexts or
 `memory_ref` targets, then sends every directly owned Memory once under opaque
 call-local IDs. The local Context name is omitted from the provider payload
 because it is neither source evidence nor necessary routing information. One
-provider completion must return exactly one
+aggregate provider completion must return exactly one
 `ATOMIC`/`COMPOSITE`/`UNCERTAIN`/`NON_PROPOSITIONAL` classification for every
-candidate. Context name, item order, neighboring Memories, and calibration
-examples are explicitly not evidence frames. Version 1 supplies no declared
-external frame.
+candidate, three source-linked overview sections, and every actionable
+ambiguity and conflict issue found in the direct Context frame. Context name,
+item order, neighboring Memories, and calibration examples are explicitly not
+atomize evidence frames. The default preview supplies no declared external
+frame. A reviewed reanalysis may supply one untrusted per-Memory frame through
+the explicit workflow described below.
 
 The provider receives the definitions of A01-A10, not just their names. The
 provisional response contains the candidate ID, classification, selected
@@ -328,11 +334,14 @@ reason codes, concise reason, and—in the `COMPOSITE` case only—ordered child
 contents with literal source spans. Local code rejects missing, duplicate, or
 unknown candidates; extra or duplicate JSON fields; invalid classes or reason
 codes; a composite with fewer than two children; children on any other class;
-and source spans absent from that same Memory. This check establishes that
-each child cites literal evidence; it does not prove that every word in a
-model-generated child is entailed by that evidence. That stronger semantic
-grounding remains part of independent validation. Size lint and its profile
-fingerprint are checked locally and lint never decides the semantic class.
+and evidence spans absent from that same Memory or its declared frame. For
+every child, at least one cited span must still occur literally in the
+original Memory. Frame-only children are rejected. This check establishes that
+each child cites original evidence and that any reviewed-frame citation is
+literal; it does not prove that every word in a model-generated child is
+entailed by those spans. That stronger semantic grounding remains part of
+independent validation. Size lint and its profile fingerprint are checked
+locally and lint never decides the semantic class.
 
 The preview's source spans are strings rather than occurrence-addressed
 offsets. This permits an explicit shared qualifier to support several children,
@@ -342,33 +351,54 @@ ledger must distinguish occurrence IDs or offsets and separately identify
 copied scope spans. Until then, repeated-occurrence preservation is a prompted
 and human-reviewed proposal property, not a mechanically proven invariant.
 
-All direct Memories are classified in one call. The default terminal view
-hides unchanged `ATOMIC` details for readability, while `--all` shows them;
-the summary always accounts for every input. No child UID is allocated during
-preview. Context JSON, ordering, checkpoints, active state, the directional
-`impact-plan.json`, and query-only sources are not written or opened. The
-latest digest-bound preview is written separately to
-`~/.mem/atomize-analyses/<context-uid>.json`.
+All direct Memories, overview sections, and local quality findings are
+analyzed in that one call. The default terminal workbench hides unchanged
+`ATOMIC` details for readability, while `--all` shows them; the summary always
+accounts for every input. No child UID is allocated during preview. Context
+JSON, ordering, checkpoints, active state, the directional `impact-plan.json`,
+and query-only sources are not written or opened. The latest digest-bound
+analysis and mutable workbench are written separately to:
 
-There is intentionally only one such slot per Context UID. A later preview
-atomically replaces the earlier artifact rather than building an analysis
-archive. If the earlier preview was applied, its checkpoint retains the
+```text
+~/.mem/atomize-analyses/<context-uid>.json
+~/.mem/atomize-workbenches/<context-uid>.json
+```
+
+There is intentionally only one analysis slot per Context UID. An explicit
+`--refresh` or `--with-review` reanalysis replaces the earlier artifact and
+creates a fresh workbench rather than building an analysis archive. Each JSON
+file uses atomic replacement, and an ordinary workbench-save failure restores
+the preceding analysis/workbench pair. No crash-safe transaction journal spans
+the two files. If the earlier analysis was applied, its checkpoint retains the
 operation/analysis UID, source-to-result relation, result contents, reason, and
-reason codes. Preview-only fields such as its creation time, lint, and literal
-source spans are not all copied into the checkpoint, so they can no longer be
-recovered after the slot is overwritten. Retaining a complete sequence of
-analyses is future work.
+reason codes. For a reviewed application, trace metadata also retains the
+review UID and response digest, the prior uncertainty-analysis UID and reason,
+the full declared context/comment plus its digest, and each child's separate
+original-source and declared-frame citations. This makes an applied result
+explainable after the latest-analysis slot is overwritten. It is also a
+privacy boundary: an applied reviewer comment becomes part of that Context's
+checkpoint history. Preview creation time, lint, and unapplied analyses are
+still not archived. Retaining a complete sequence of previews is future work.
+
+Deleting a Context removes its checkpoint history, its per-Context latest
+atomize analysis, and its per-Context atomize workbench. The older global
+semantic review is also removed when it is bound to the deleted Context;
+reviews bound to another Context are not removed.
 
 This result is named `AtomizeImpactReport`, not `AtomizePlan`. It is a proposal
 with locally verified evidence-span citations that is safe to inspect, but
 local structural validation is not independent semantic approval. In
 particular, the same one-shot model response cannot mark its own reconstruction
-or single-focus judgment `PASS`. The command therefore ends with:
+or single-focus judgment `PASS`. The snapshot and command status therefore
+state:
 
 ```text
-This inspection applied no changes and created no checkpoint.
+No Memory changes have been applied. No checkpoint was created.
 Analysis saved [<uid>] for mem trace/rationale.
 ```
+
+On ordinary resume, the status instead identifies the same analysis and says
+that the provider was not called.
 
 The saved artifact is intentionally separate from directional update state.
 `mem atomize` consumes it, and `mem trace`/`mem rationale` attach it without
@@ -381,6 +411,79 @@ configuration ignored. The atomize command does not pin a model name; model
 selection is currently owned by the Codex provider default. A study that
 requires exact model reproducibility must add an explicit allowlisted model
 setting and record it with the report before treating runs as comparable.
+
+### Implemented atomize workbench and declared frames
+
+The workbench exposes every actionable boundary returned with the same saved
+analysis:
+
+- a proposed `COMPOSITE` split, with its children and evidence;
+- an `UNCERTAIN` source that needs local context;
+- one-source ambiguity with `SINGLE`/`DOMINANT`/`COMPETING` and
+  `NONE`/`HELPFUL`/`REQUIRED`; and
+- two-source conflict with `YES` or `MAY`.
+
+`mem impact atomize` is the primary entry. Bare `mem atomize` creates the first
+analysis only when none exists; otherwise it and `mem review atomize` load the
+exact same analysis/workbench while it matches the Context. Opening another
+entry point therefore does not produce a different model proposal. A stale
+analysis fails closed. `mem impact atomize --refresh` is the explicit unframed
+reanalysis boundary.
+
+The first frame combines compact counts, source-linked `WHAT MEM UNDERSTOOD`
+and `WHAT CHANGED / REMAINS UNRESOLVED` blocks, the full typed issue list, and
+one selected detail. `SOURCE` means `Context.order`, not chronology.
+`PRIORITY` uses only grounded issue classifications; it does not invent
+affected-result counts. `SPLIT` and `STACKED` are layouts over the same durable
+cursor, choices, and responses.
+
+Every issue uses one freeform field:
+
+```text
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> ____________________________________________
+```
+
+When an issue offers readings, the workbench stores the selected reading
+identity separately from the response text preserved verbatim. The workbench
+is bound to the exact Context identity and digest, analysis UID, issue
+projection, and choice identities. Resume, sorting, layout changes, and
+snapshots do not call the provider, modify a Memory, or create a checkpoint.
+
+Eligible unary responses enter semantic analysis only through:
+
+```text
+mem impact atomize --with-review
+```
+
+That explicit reanalysis sends each eligible response only as the
+`declared_frame` of its own source Memory. If any answered conflict issue is
+present, reviewed reanalysis fails before calling the provider so replacing
+the sole saved workbench cannot discard its pair-shaped response. A future
+reconcile operation may consume that evidence. Reviewed reanalysis also
+rejects two answered unary issues for the same Memory: the current provenance
+format records one issue origin per declared frame, so silently concatenating
+two answers would misattribute one of them. The reviewer must consolidate the
+context into one response and clear the other. `--with-review` and `--refresh`
+are mutually exclusive.
+
+The provider may cite a literal frame span to resolve or repeat a
+user-declared referent or scope, but every proposed child must still cite at
+least one literal span from the original Memory. Local parsing partitions the
+provider's evidence into `source_spans` and `frame_spans`. The saved analysis
+records the declared frame and fingerprint, source workbench UID and response
+digest, preceding analysis identity and reason, and both citation kinds.
+`mem trace` and `mem rationale` preserve that distinction, so reviewed context
+is not misrepresented as original text. Application copies the evidence into
+checkpoint trace metadata.
+
+Reanalysis creates a new analysis identity and fresh workbench; responses are
+not silently retargeted. The current prototype stores only the latest analysis
+per Context rather than a revision archive. `mem atomize --save` and
+`--save-as` refuse to apply when eligible unary responses have not been
+incorporated into the selected analysis. Pairwise conflict responses remain
+staged and block reviewed reanalysis rather than being treated as unary
+application frames or silently dropped.
 
 ### Saved analysis and explicit prototype application
 
@@ -396,7 +499,12 @@ direct-Memory digest, and current source contents. `COMPOSITE` sources are
 replaced in place with fresh child UIDs. `ATOMIC`, `UNCERTAIN`, and
 `NON_PROPOSITIONAL` items preserve their existing UID and content. The apply
 checkpoint records the analysis UID and explicit `KEEP`, `PRESERVE`, and
-`SPLIT` relations for later trace.
+`SPLIT` relations for later trace. When the active atomize workbench contains
+eligible unary responses, application additionally requires the analysis's
+recorded workbench UID and response digest to match; unincorporated responses
+block application. Pair-shaped conflict responses remain staged for future
+reconciliation instead of becoming unary declared frames; their presence also
+prevents `--with-review` from replacing the only saved workbench.
 
 Saved source positions are ordinals within the direct-Memory frame, not slots
 among every pointer in the Context. A read-only direct load may intentionally
@@ -443,7 +551,7 @@ records:
 
 ```json
 {
-  "ruleset_version": "atomize-v1-draft",
+  "ruleset_version": "atomize-v2-reviewed-frame-draft",
   "profile": {
     "id": "task1-campus",
     "version": "1",
@@ -582,7 +690,7 @@ Implemented operation tests cover the current preview-and-apply boundary:
 - unchanged UIDs, contents, and relative order remain stable;
 - source-to-child UID lineage is recorded;
 - preview creates zero Context checkpoints but updates one per-Context analysis
-  artifact;
+  artifact and one per-Context workbench artifact;
 - in-place apply creates exactly one checkpoint;
 - save-as leaves the source unchanged and creates exactly two destination
   checkpoints: source-based `init`, then `atomize`;
@@ -598,6 +706,26 @@ Implemented operation tests cover the current preview-and-apply boundary:
   reference view;
 - provider responses with unknown IDs, missing fields, extra fields, duplicate
   keys, or ungrounded spans are rejected as a whole.
+- `mem impact atomize`, bare `mem atomize`, and `mem review atomize` resume the
+  same exact analysis/workbench without duplicate provider calls;
+- the aggregate completion supplies source-linked overview sections and typed
+  one-source ambiguity and two-source conflict issues alongside atomization;
+- `SOURCE`/`PRIORITY`, `SPLIT`/`STACKED`, cursor, choices, and responses survive
+  resume without mutating the Context;
+- `--refresh` is the explicit unframed reanalysis boundary, while stale
+  analysis fails closed without a provider call;
+- reviewed context is incorporated only by
+  `mem impact atomize --with-review`, remains per-Memory, and receives separate
+  frame citations;
+- pairwise conflict responses remain staged and cannot become a one-Memory
+  declared frame;
+- unreviewed previews omit framed calibration cases, while reviewed reanalysis
+  includes the fingerprint-validated declared-frame golden case;
+- a proposed child with only declared-frame evidence is rejected;
+- application refuses while an eligible saved atomize response is not recorded
+  in the selected analysis provenance;
+- applied reviewed context and citations remain traceable after a later
+  explicit reanalysis replaces the latest analysis artifact.
 
 Future independent-validator and semantic regression tests must additionally
 cover:
@@ -798,7 +926,8 @@ as this semantic operation.
 Atomization does not:
 
 - decide which duplicate should survive;
-- resolve conflicting or missing scope;
+- invent or autonomously resolve conflicting or missing scope; only an
+  explicitly reviewed per-Memory declared frame may supply it for reanalysis;
 - improve wording beyond minimal stand-alone repair;
 - infer audiences or enforce access control;
 - infer or choose a destination Context on the user's behalf (`--save-as`

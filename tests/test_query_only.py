@@ -12,7 +12,7 @@ from memcommit.query_provider import QueryProviderError
 from memcommit.store import MemoryStore
 
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 SECRET = "Contractors may enter Lab Seven only after 18:00."
 
 

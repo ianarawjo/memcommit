@@ -104,6 +104,45 @@ def _render_event(event: TraceEvent, *, verbose: bool) -> None:
             "  Rules: " + ", ".join(event.reason_codes),
             dim=True,
         )
+    if event.declared_frame is not None:
+        review_uid = (
+            _uid(event.source_review_uid, verbose)
+            if event.source_review_uid is not None
+            else "unrecorded"
+        )
+        typer.secho(
+            f"  Reviewed declared context/comment (review {review_uid}):",
+            fg=typer.colors.YELLOW,
+        )
+        for line in safe_terminal_text(event.declared_frame).splitlines() or [""]:
+            typer.echo(f"      {line}")
+        if event.uncertainty_reason:
+            typer.echo(
+                "  Requested because: "
+                + safe_terminal_text(event.uncertainty_reason)
+            )
+    for evidence in event.child_evidence:
+        typer.secho(
+            f"  Applied citations for [{_uid(evidence.result_uid, verbose)}]:",
+            dim=True,
+        )
+        typer.secho(
+            "      Source spans: "
+            + " | ".join(
+                safe_terminal_text(span)
+                for span in evidence.source_spans
+            ),
+            dim=True,
+        )
+        if evidence.frame_spans:
+            typer.secho(
+                "      Declared-frame spans: "
+                + " | ".join(
+                    safe_terminal_text(span)
+                    for span in evidence.frame_spans
+                ),
+                dim=True,
+            )
 
 
 def render_trace(report: TraceReport, *, verbose: bool = False) -> None:
@@ -159,6 +198,25 @@ def render_trace(report: TraceReport, *, verbose: bool = False) -> None:
             "  Rules: " + ", ".join(analysis.reason_codes),
             dim=True,
         )
+        if analysis.declared_frame is not None:
+            review_uid = (
+                _uid(analysis.source_review_uid, verbose)
+                if analysis.source_review_uid is not None
+                else "unrecorded"
+            )
+            typer.secho(
+                f"  Reviewed declared context/comment (review {review_uid}):",
+                fg=typer.colors.YELLOW,
+            )
+            for line in safe_terminal_text(
+                analysis.declared_frame
+            ).splitlines() or [""]:
+                typer.echo(f"      {line}")
+            if analysis.declared_frame_reason:
+                typer.echo(
+                    "  Requested because: "
+                    + safe_terminal_text(analysis.declared_frame_reason)
+                )
         for index, child in enumerate(analysis.children, 1):
             typer.secho(f"  Proposed child {index}:", fg=typer.colors.GREEN)
             for line in safe_terminal_text(child.content).splitlines() or [""]:
@@ -171,6 +229,15 @@ def render_trace(report: TraceReport, *, verbose: bool = False) -> None:
                 ),
                 dim=True,
             )
+            if child.frame_spans:
+                typer.secho(
+                    "      Declared-frame spans: "
+                    + " | ".join(
+                        safe_terminal_text(span)
+                        for span in child.frame_spans
+                    ),
+                    dim=True,
+                )
 
     typer.secho("\nCURRENT", bold=True)
     if not report.current:

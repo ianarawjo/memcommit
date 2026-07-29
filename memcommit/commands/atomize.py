@@ -1,6 +1,7 @@
 """Inspect or explicitly apply the latest saved atomize analysis."""
 from __future__ import annotations
 
+import sys
 from dataclasses import replace
 from typing import Annotated, Optional
 
@@ -10,36 +11,33 @@ import memcommit.ops as ops
 from memcommit.atomize import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
-    AtomizeImpactReport,
-    AtomizeItem,
     apply_atomize_analysis,
     atomize_analysis_matches_context,
 )
-from memcommit.commands.atomize_render import render_atomize_impact
+from memcommit.atomize_workbench import (
+    AtomizeWorkbenchError,
+    atomize_workbench_declared_frames,
+    atomize_workbench_response_digest,
+    create_atomize_workbench,
+)
+from memcommit.atomize_workflow import open_or_create_atomize_workbench
+from memcommit.commands.atomize_workbench_shell import (
+    render_atomize_workbench_snapshot,
+    run_atomize_workbench_shell,
+)
+from memcommit.commands.review_shell import ReviewCancelled
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.review import direct_context_digest
+from memcommit.review import (
+    atomize_review_declared_frames,
+    atomize_review_matches_analysis,
+    direct_context_digest,
+    review_response_digest,
+)
 from memcommit.store import MemoryStore
-
-
-def _as_report(session: AtomizeAnalysisSession) -> AtomizeImpactReport:
-    return AtomizeImpactReport(
-        context_uid=session.context_uid,
-        context_name=session.context_name,
-        memory_count=session.memory_count,
-        projected_memory_count=session.projected_memory_count,
-        items=tuple(
-            AtomizeItem(
-                memory=Memory(uid=item.memory_uid, content=item.content),
-                position=item.position,
-                classification=item.classification,
-                reason_codes=item.reason_codes,
-                children=item.children,
-                reason=item.reason,
-                lint=item.lint,
-            )
-            for item in session.items
-        ),
-    )
+from memcommit.query_provider import (
+    QueryProviderError,
+    connect_codex_chatgpt_provider,
+)
 
 
 def _analysis_was_applied(
@@ -135,6 +133,32 @@ def _render_apply_result(
         )
 
 
+def _present_workbench(
+    *,
+    store: MemoryStore,
+    analysis: AtomizeAnalysisSession,
+    workbench,
+    show_all: bool,
+) -> None:
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        typer.echo(
+            render_atomize_workbench_snapshot(
+                workbench,
+                analysis,
+                show_all=show_all,
+            )
+        )
+        return
+    try:
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=store.save_atomize_workbench,
+        )
+    except ReviewCancelled:
+        typer.echo("Atomize workbench saved. No Memory changes applied.")
+
+
 def _apply_to_new_context(
     *,
     store: MemoryStore,
@@ -199,6 +223,15 @@ def _apply_to_new_context(
                 args={
                     "analysis_uid": destination_session.uid,
                     "ruleset_version": destination_session.ruleset_version,
+                    "source_review_uid": (
+                        destination_session.source_review_uid
+                    ),
+                    "source_review_digest": (
+                        destination_session.source_review_digest
+                    ),
+                    "declared_frame_count": len(
+                        destination_session.declared_frames
+                    ),
                     "split_count": result.split_count,
                     "child_count": result.child_count,
                     "preserved_count": result.preserved_count,
@@ -277,10 +310,63 @@ def cmd(
             )
         direct_ctx = store.load_direct(name)
         session = store.load_atomize_analysis(direct_ctx.uid)
+        applying = save or save_as is not None
+        if not applying:
+            if session is not None and _analysis_was_applied(
+                store,
+                direct_ctx,
+                session.uid,
+            ):
+                workbench = store.load_atomize_workbench(session)
+                if workbench is None:
+                    workbench = create_atomize_workbench(session)
+                    store.save_atomize_workbench(workbench)
+                _present_workbench(
+                    store=store,
+                    analysis=session,
+                    workbench=workbench,
+                    show_all=show_all,
+                )
+                typer.secho(
+                    f"Saved analysis [{session.uid[:8]}]: APPLIED.",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+                return
+            opened = open_or_create_atomize_workbench(
+                store=store,
+                ctx=direct_ctx,
+                provider_factory=connect_codex_chatgpt_provider,
+            )
+            session = opened.analysis
+            _present_workbench(
+                store=store,
+                analysis=session,
+                workbench=opened.workbench,
+                show_all=show_all,
+            )
+            typer.secho(
+                (
+                    f"Saved analysis [{session.uid[:8]}]: CURRENT."
+                    if opened.created_analysis
+                    else (
+                        f"Saved analysis [{session.uid[:8]}]: CURRENT. "
+                        "Resumed; the provider was not called."
+                    )
+                ),
+                fg=typer.colors.CYAN,
+            )
+            typer.echo(
+                "Apply in place with: mem atomize --save\n"
+                "Or preserve the source with: "
+                "mem atomize --save-as NEW_CONTEXT"
+            )
+            return
+
         if session is None:
             raise AtomizeImpactError(
                 f"No saved atomize analysis exists for '{name}'. "
-                "Run 'mem impact atomize' first."
+                "Run 'mem impact atomize' or 'mem atomize' first."
             )
         if (
             session.context_uid != direct_ctx.uid
@@ -295,39 +381,6 @@ def cmd(
             direct_ctx,
             session.uid,
         )
-        applying = save or save_as is not None
-        if not applying:
-            render_atomize_impact(_as_report(session), show_all=show_all)
-            state = (
-                "APPLIED"
-                if already_applied
-                else (
-                    "CURRENT"
-                    if atomize_analysis_matches_context(session, direct_ctx)
-                    else "STALE"
-                )
-            )
-            typer.secho(
-                f"Saved analysis [{session.uid[:8]}]: {state}.",
-                fg=(
-                    typer.colors.GREEN
-                    if state == "APPLIED"
-                    else (
-                        typer.colors.CYAN
-                        if state == "CURRENT"
-                        else typer.colors.YELLOW
-                    )
-                ),
-                bold=True,
-            )
-            if state == "CURRENT":
-                typer.echo(
-                    "Apply in place with: mem atomize --save\n"
-                    "Or preserve the source with: "
-                    "mem atomize --save-as NEW_CONTEXT"
-                )
-            return
-
         if save and already_applied:
             typer.secho(
                 f"Atomize analysis [{session.uid[:8]}] is already applied; "
@@ -338,7 +391,56 @@ def cmd(
         if not atomize_analysis_matches_context(session, direct_ctx):
             raise AtomizeImpactError(
                 "Saved atomize analysis is stale. "
-                "Run 'mem impact atomize' again before saving."
+                "Run 'mem impact atomize --refresh' before saving."
+            )
+        workbench = store.load_atomize_workbench(session)
+        workbench_frames = {}
+        if workbench is not None and workbench.answered_count:
+            (
+                workbench_frames,
+                _workbench_origins,
+            ) = atomize_workbench_declared_frames(
+                workbench,
+                session,
+            )
+        if workbench_frames and (
+            session.source_review_uid != workbench.uid
+            or session.source_review_digest
+            != atomize_workbench_response_digest(workbench)
+        ):
+            raise AtomizeImpactError(
+                "Saved atomize workbench responses have not been "
+                "incorporated into this analysis. Run "
+                "'mem impact atomize --with-review' before saving."
+            )
+        review = store.load_review_session()
+        review_has_comments = (
+            review is not None
+            and review.kind == "atomize"
+            and review.context_uid == direct_ctx.uid
+            and atomize_review_declared_frames(review)
+        )
+        if review_has_comments and (
+                session.source_review_uid != review.uid
+                or session.source_review_digest
+                != review_response_digest(review)
+        ):
+            if atomize_review_matches_analysis(
+                review,
+                direct_ctx,
+                session,
+            ):
+                raise AtomizeImpactError(
+                    "Saved atomize comments have not been incorporated into "
+                    "this analysis. Run 'mem impact atomize --with-review' "
+                    "before saving."
+                )
+            raise AtomizeImpactError(
+                "Saved atomize comments belong to a stale or different "
+                "analysis and cannot be incorporated into this preview. "
+                "Start a new review with "
+                "'mem review atomize --replace-review' to explicitly "
+                "replace them before saving."
             )
 
         if save_as is not None:
@@ -372,6 +474,11 @@ def cmd(
                     args={
                         "analysis_uid": session.uid,
                         "ruleset_version": session.ruleset_version,
+                        "source_review_uid": session.source_review_uid,
+                        "source_review_digest": session.source_review_digest,
+                        "declared_frame_count": len(
+                            session.declared_frames
+                        ),
                         "split_count": result.split_count,
                         "child_count": result.child_count,
                         "preserved_count": result.preserved_count,
@@ -394,6 +501,8 @@ def cmd(
         TypeError,
         ValueError,
         AtomizeImpactError,
+        AtomizeWorkbenchError,
+        QueryProviderError,
     ) as error:
         typer.secho(f"Atomize error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

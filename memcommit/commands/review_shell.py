@@ -30,6 +30,7 @@ from memcommit.review import (
 
 
 RESPONSE_LABEL = "REFINE, COMMENT, OR ENTER A DIFFERENT READING"
+ATOMIZE_RESPONSE_LABEL = RESPONSE_LABEL
 
 
 class ReviewCancelled(Exception):
@@ -70,6 +71,22 @@ def _status_marker(session: ReviewSession, item: ReviewItem) -> str:
     return "✓" if response is not None and response.answered else "·"
 
 
+def _response_label(session: ReviewSession) -> str:
+    return (
+        ATOMIZE_RESPONSE_LABEL
+        if session.kind == "atomize"
+        else RESPONSE_LABEL
+    )
+
+
+def _empty_finding_label(session: ReviewSession) -> str:
+    return (
+        "no uncertain atomize items"
+        if session.kind == "atomize"
+        else "no actionable ambiguity findings"
+    )
+
+
 def _render_list_text(session: ReviewSession) -> str:
     current = session.current_item()
     lines = ["ISSUES"]
@@ -81,7 +98,7 @@ def _render_list_text(session: ReviewSession) -> str:
             f"[{safe_terminal_text(item.uid[:8])}]"
         )
     if len(lines) == 1:
-        lines.append("  (no actionable ambiguity findings)")
+        lines.append(f"  ({_empty_finding_label(session)})")
     return "\n".join(lines)
 
 
@@ -92,7 +109,7 @@ def _render_detail_text(
     item = session.current_item()
     if item is None:
         return (
-            "No actionable ambiguity findings.\n\n"
+            f"{_empty_finding_label(session).capitalize()}.\n\n"
             "The review session is still saved as a read-only record."
         )
     source = memories.get(item.source_uids[0])
@@ -102,8 +119,13 @@ def _render_detail_text(
         else "[source Memory unavailable]"
     )
     selected_index = session.selected_choice_index(item)
+    issue_label = (
+        "ATOMIZE UNCERTAINTY"
+        if session.kind == "atomize"
+        else "AMBIGUITY"
+    )
     lines = [
-        f"AMBIGUITY {_item_number(session, item)}/{len(session.items)}",
+        f"{issue_label} {_item_number(session, item)}/{len(session.items)}",
         "",
         f"SOURCE [{safe_terminal_text(item.source_uids[0][:8])}]",
         source_text,
@@ -111,7 +133,11 @@ def _render_detail_text(
         "CLASSIFICATION",
         f"{item.interpretation} · {item.clarification}",
         "",
-        "WHY THIS IS UNCLEAR",
+        (
+            "WHY ATOMIZE IS BLOCKED"
+            if session.kind == "atomize"
+            else "WHY THIS IS UNCLEAR"
+        ),
         safe_terminal_text(item.reason),
     ]
     if item.question:
@@ -122,13 +148,14 @@ def _render_detail_text(
                 safe_terminal_text(item.question),
             ]
         )
-    lines.extend(["", "READING OPTIONS"])
-    for index, choice in enumerate(item.choices, start=1):
-        pointer = "›" if selected_index == index - 1 else " "
-        lines.append(
-            f"{pointer} {index}. [{safe_terminal_text(choice.label)}] "
-            f"{safe_terminal_text(choice.text)}"
-        )
+    if item.choices:
+        lines.extend(["", "READING OPTIONS"])
+        for index, choice in enumerate(item.choices, start=1):
+            pointer = "›" if selected_index == index - 1 else " "
+            lines.append(
+                f"{pointer} {index}. [{safe_terminal_text(choice.label)}] "
+                f"{safe_terminal_text(choice.text)}"
+            )
     return "\n".join(lines)
 
 
@@ -159,7 +186,7 @@ def render_review_snapshot(session: ReviewSession, ctx: Context) -> str:
             "",
             _render_detail_text(session, memories),
             "",
-            RESPONSE_LABEL,
+            _response_label(session),
             f"> {response_text}",
             "",
             (
@@ -180,7 +207,7 @@ def run_review_shell(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> ReviewSession:
-    """Run the resumable ambiguity adapter and return its staged state."""
+    """Run one resumable semantic-review adapter and return its staged state."""
     if require_tty and (
         not sys.stdin.isatty() or not sys.stdout.isatty()
     ):
@@ -223,7 +250,7 @@ def run_review_shell(
         wrap_lines=True,
     )
     response_label = Window(
-        FormattedTextControl(RESPONSE_LABEL),
+        FormattedTextControl(_response_label(session)),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -289,7 +316,13 @@ def run_review_shell(
                 f" {status_message['value']}"
                 if status_message["value"]
                 else (
-                    " ←/→ issue  ↑/↓ reading  1-5 choose  Enter input  "
+                    " ←/→ issue  "
+                    + (
+                        "↑/↓ reading  1-5 choose  "
+                        if session.kind == "ambiguities"
+                        else ""
+                    )
+                    + "Enter input  "
                     "Esc review  F2/Ctrl-S save+next  S sort  L layout  Q quit "
                 )
             )
@@ -338,7 +371,7 @@ def run_review_shell(
 
     def move_choice(delta: int) -> None:
         item = session.current_item()
-        if item is None:
+        if item is None or not item.choices:
             return
         current = session.selected_choice_index(item)
         next_index = 0 if current is None else current + delta

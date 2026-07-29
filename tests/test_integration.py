@@ -15,7 +15,7 @@ from typer.testing import CliRunner
 from memcommit.cli import app
 from memcommit.store import MemoryStore
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 
 
 def mem(*args, input: str | None = None):

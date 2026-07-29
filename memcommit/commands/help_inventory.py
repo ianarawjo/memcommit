@@ -5,7 +5,6 @@ import sys
 from dataclasses import dataclass
 from typing import Annotated
 
-import click
 import typer
 from prompt_toolkit.application import Application
 from prompt_toolkit.input import Input
@@ -37,6 +36,7 @@ IMPLEMENTATION_LEVELS = {
     "find-conflicts": "implemented",
     "find-duplicates": "implemented",
     "forget": "legacy",
+    "ground": "partial",
     "help": "implemented",
     "impact": "partial",
     "init": "implemented",
@@ -74,24 +74,28 @@ class CommandEntry:
     name: str
     level: str
     description: str
-    command: click.Command
+    command: object
 
 
-def _visible_commands(ctx: click.Context) -> list[tuple[str, click.Command]]:
+def _visible_commands(ctx: typer.Context) -> list[tuple[str, object]]:
     """Return visible root commands in the same canonical order as Click."""
-    if not isinstance(ctx.command, click.Group):
+    group = ctx.command
+    if not (
+        callable(getattr(group, "list_commands", None))
+        and callable(getattr(group, "get_command", None))
+    ):
         raise RuntimeError("The root CLI is not a command group.")
 
-    commands: list[tuple[str, click.Command]] = []
-    for name in ctx.command.list_commands(ctx):
-        command = ctx.command.get_command(ctx, name)
-        if command is None or command.hidden:
+    commands: list[tuple[str, object]] = []
+    for name in group.list_commands(ctx):
+        command = group.get_command(ctx, name)
+        if command is None or getattr(command, "hidden", False):
             continue
         commands.append((name, command))
     return commands
 
 
-def _command_entries(root: click.Context) -> list[CommandEntry]:
+def _command_entries(root: typer.Context) -> list[CommandEntry]:
     commands = _visible_commands(root)
     visible_names = {name for name, _ in commands}
     missing = sorted(visible_names - IMPLEMENTATION_LEVELS.keys())
@@ -114,7 +118,7 @@ def _command_entries(root: click.Context) -> list[CommandEntry]:
             name=name,
             level=IMPLEMENTATION_LEVELS[name],
             description=" ".join(
-                (command.help or "No description.").split()
+                (getattr(command, "help", None) or "No description.").split()
             ),
             command=command,
         )
@@ -294,7 +298,7 @@ def run_help_selector(
 
 
 def _show_selected_command_help(
-    root: click.Context,
+    root: typer.Context,
     entry: CommandEntry,
 ) -> None:
     """Render syntax help without invoking the selected command callback."""
@@ -303,14 +307,19 @@ def _show_selected_command_help(
 
     # Use a display-only root so Usage always names the installed `mem`
     # executable, including when this is exercised through CliRunner.
-    display_root = click.Context(
+    # New Typer releases use their own Click-compatible Context, while older
+    # releases expose Click's class directly. Reusing the active Context class
+    # keeps help rendering compatible across both without a second, mismatched
+    # runtime Click dependency.
+    context_type = type(root)
+    display_root = context_type(
         root.command,
         info_name="mem",
         color=root.color,
         terminal_width=root.terminal_width,
         max_content_width=root.max_content_width,
     )
-    command_context = click.Context(
+    command_context = context_type(
         entry.command,
         info_name=entry.name,
         parent=display_root,

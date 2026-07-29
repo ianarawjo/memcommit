@@ -171,38 +171,97 @@ def test_delete_supports_legacy_non_uuid_context_identity(isolated_store):
     assert not store.context_exists(ctx.name)
 
 
-def test_delete_removes_only_its_context_scoped_atomize_analysis(
+def test_delete_removes_context_scoped_analysis_and_matching_review(
     isolated_store,
 ):
     from memcommit.atomize import (
         AtomizeImpactReport,
+        AtomizeItem,
         create_atomize_analysis,
     )
+    from memcommit.atomize_workbench import create_atomize_workbench
+    from memcommit.review import create_atomize_review
 
     store = MemoryStore()
     first = ops.init("first")
     second = ops.init("second")
+    first_memory = ops.add(first, "Use the same credential.")
     store.save(first)
     store.save(second)
-    for ctx in (first, second):
-        store.save_atomize_analysis(
-            create_atomize_analysis(
-                ctx,
-                AtomizeImpactReport(
-                    context_uid=ctx.uid,
-                    context_name=ctx.name,
-                    memory_count=0,
-                    projected_memory_count=0,
-                    items=(),
+    first_analysis = create_atomize_analysis(
+        first,
+        AtomizeImpactReport(
+            context_uid=first.uid,
+            context_name=first.name,
+            memory_count=1,
+            projected_memory_count=1,
+            items=(
+                AtomizeItem(
+                    memory=first_memory,
+                    position=0,
+                    classification="UNCERTAIN",
+                    reason_codes=("A06_NO_HIDDEN_CONTEXT",),
+                    children=(),
+                    reason="The credential antecedent is unresolved.",
+                    lint=(),
                 ),
-            )
+            ),
+        ),
+    )
+    store.save_atomize_analysis(first_analysis)
+    first_workbench = create_atomize_workbench(first_analysis)
+    first_workbench.response_for(
+        f"atomize:{first_memory.uid}"
+    ).text = "Private workbench context."
+    store.save_atomize_workbench(first_workbench)
+    store.save_atomize_analysis(
+        create_atomize_analysis(
+            second,
+            AtomizeImpactReport(
+                context_uid=second.uid,
+                context_name=second.name,
+                memory_count=0,
+                projected_memory_count=0,
+                items=(),
+            ),
         )
+    )
+    review = create_atomize_review(first, first_analysis)
+    review.response_for(first_memory.uid).text = "Private local context."
+    store.save_review_session(review)
 
     store.delete(first.name)
 
     assert store.load_atomize_analysis(first.uid) is None
+    assert not store._atomize_workbench_path(first.uid).exists()
     assert store.load_atomize_analysis(second.uid) is not None
+    assert store.load_review_session() is None
     assert store.context_exists(second.name)
+
+
+def test_delete_preserves_review_bound_to_another_context(isolated_store):
+    from memcommit.findings import AmbiguityReport
+    from memcommit.review import create_ambiguity_review
+
+    store = MemoryStore()
+    deleted = ops.init("deleted")
+    retained = ops.init("retained")
+    store.save(deleted)
+    store.save(retained)
+    review = create_ambiguity_review(
+        retained,
+        AmbiguityReport(
+            memory_count=0,
+            findings=(),
+        ),
+    )
+    store.save_review_session(review)
+
+    store.delete(deleted.name)
+
+    restored = store.load_review_session()
+    assert restored is not None
+    assert restored.uid == review.uid
 
 
 def test_delete_preflights_invalid_exact_atomize_artifact(

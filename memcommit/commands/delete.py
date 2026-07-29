@@ -18,7 +18,8 @@ def cmd(
     if not force:
         typer.echo(
             f"This will permanently delete context '{context_name}' and its "
-            "checkpoint history. Descendant contexts will be preserved."
+            "checkpoint history, plus its matching atomize analysis and "
+            "semantic review artifacts. Descendant contexts will be preserved."
         )
         typer.confirm("Continue?", abort=True)
 

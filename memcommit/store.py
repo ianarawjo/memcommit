@@ -26,6 +26,8 @@ IMPACT_PLAN_FILE = STORE_DIR / "impact-plan.json"
 STAGED_UPDATE_FILE = STORE_DIR / "staged-update.json"
 REVIEW_SESSION_FILE = STORE_DIR / "review-session.json"
 ATOMIZE_ANALYSES_DIR = STORE_DIR / "atomize-analyses"
+ATOMIZE_WORKBENCHES_DIR = STORE_DIR / "atomize-workbenches"
+GROUND_SESSIONS_DIR = STORE_DIR / "ground-sessions"
 RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
 
 
@@ -260,6 +262,84 @@ class MemoryStore:
             raise ValueError("Semantic review session is invalid.") from error
         _write_json_atomic(REVIEW_SESSION_FILE, data)
 
+    # --- Common-grounding sessions ---
+
+    @staticmethod
+    def _ground_session_path(contract_name: str) -> Path:
+        """Resolve one portable contract ID without creating active state."""
+        from memcommit.ground import validate_ground_contract_name
+
+        canonical = validate_ground_contract_name(contract_name)
+        if GROUND_SESSIONS_DIR.is_symlink():
+            raise ValueError(
+                "Grounding session storage cannot be a symbolic link."
+            )
+        if (
+            GROUND_SESSIONS_DIR.exists()
+            and not GROUND_SESSIONS_DIR.is_dir()
+        ):
+            raise ValueError("Grounding session storage is invalid.")
+        return GROUND_SESSIONS_DIR / f"{canonical}.json"
+
+    def load_ground_session(self, contract_name: str):
+        """Return one named grounding session, or None when it does not exist."""
+        from memcommit.ground import GroundError, GroundSession
+
+        path = self._ground_session_path(contract_name)
+        if not path.exists():
+            return None
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Grounding session storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(
+                    f,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            session = GroundSession.from_dict(data)
+            if session.contract_name != contract_name:
+                raise ValueError(
+                    "Saved grounding contract does not match its storage key."
+                )
+            return session
+        except (
+            json.JSONDecodeError,
+            GroundError,
+            ValueError,
+        ) as error:
+            raise ValueError("Saved grounding session is invalid.") from error
+
+    def save_ground_session(self, session, *, replace: bool = False) -> None:
+        """Atomically persist one strictly validated grounding session."""
+        from memcommit.ground import GroundError, GroundSession
+
+        if not isinstance(session, GroundSession):
+            raise TypeError("Expected a GroundSession.")
+        path = self._ground_session_path(session.contract_name)
+        if GROUND_SESSIONS_DIR.exists() and (
+            not GROUND_SESSIONS_DIR.is_dir()
+            or GROUND_SESSIONS_DIR.is_symlink()
+        ):
+            raise ValueError("Grounding session storage is invalid.")
+        GROUND_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+        if path.exists() and (not path.is_file() or path.is_symlink()):
+            raise ValueError("Grounding session storage is invalid.")
+        if path.exists() and not replace:
+            existing = self.load_ground_session(session.contract_name)
+            if existing is not None and existing.uid != session.uid:
+                raise ValueError(
+                    "A different grounding session already uses this "
+                    "contract name."
+                )
+        data = session.to_dict()
+        try:
+            restored = GroundSession.from_dict(data)
+        except GroundError as error:
+            raise ValueError("Grounding session is invalid.") from error
+        if restored.contract_name != session.contract_name:
+            raise ValueError("Grounding session identity changed during save.")
+        _write_json_atomic(path, data)
+
     # --- Saved semantic analyses ---
 
     @staticmethod
@@ -344,6 +424,119 @@ class MemoryStore:
         if path.exists():
             if not path.is_file() or path.is_symlink():
                 raise ValueError("Atomize analysis storage is invalid.")
+            path.unlink()
+
+    # --- Context-bound atomize workbenches ---
+
+    @staticmethod
+    def _atomize_workbench_path(context_uid: str) -> Path:
+        try:
+            canonical = str(uuid.UUID(context_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError(
+                "Invalid atomize workbench Context uid."
+            ) from error
+        if canonical != context_uid:
+            raise ValueError("Invalid atomize workbench Context uid.")
+        if ATOMIZE_WORKBENCHES_DIR.is_symlink():
+            raise ValueError(
+                "Atomize workbench storage cannot be a symbolic link."
+            )
+        if (
+            ATOMIZE_WORKBENCHES_DIR.exists()
+            and not ATOMIZE_WORKBENCHES_DIR.is_dir()
+        ):
+            raise ValueError("Atomize workbench storage is invalid.")
+        return ATOMIZE_WORKBENCHES_DIR / f"{canonical}.json"
+
+    def load_atomize_workbench(self, analysis):
+        """Load mutable state only against one exact saved analysis."""
+        from memcommit.atomize import AtomizeAnalysisSession
+        from memcommit.atomize_workbench import (
+            AtomizeWorkbenchError,
+            AtomizeWorkbenchSession,
+            atomize_workbench_issue_projection,
+        )
+
+        if not isinstance(analysis, AtomizeAnalysisSession):
+            raise TypeError("Expected an AtomizeAnalysisSession.")
+        path = self._atomize_workbench_path(analysis.context_uid)
+        if not path.exists():
+            return None
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Atomize workbench storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(
+                    f,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            session = AtomizeWorkbenchSession.from_dict(
+                data,
+                issues=atomize_workbench_issue_projection(analysis),
+            )
+            if (
+                session.analysis_uid != analysis.uid
+                or session.context_uid != analysis.context_uid
+            ):
+                raise ValueError(
+                    "Saved atomize workbench identity does not match its "
+                    "analysis or storage key."
+                )
+            return session
+        except (
+            json.JSONDecodeError,
+            AtomizeWorkbenchError,
+            ValueError,
+        ) as error:
+            raise ValueError("Saved atomize workbench is invalid.") from error
+
+    def save_atomize_workbench(self, session) -> None:
+        """Atomically persist one Context-bound mutable workbench."""
+        from memcommit.atomize_workbench import (
+            AtomizeWorkbenchError,
+            AtomizeWorkbenchSession,
+            atomize_workbench_issue_projection,
+        )
+
+        if not isinstance(session, AtomizeWorkbenchSession):
+            raise TypeError("Expected an AtomizeWorkbenchSession.")
+        path = self._atomize_workbench_path(session.context_uid)
+        if ATOMIZE_WORKBENCHES_DIR.exists() and (
+            not ATOMIZE_WORKBENCHES_DIR.is_dir()
+            or ATOMIZE_WORKBENCHES_DIR.is_symlink()
+        ):
+            raise ValueError("Atomize workbench storage is invalid.")
+        ATOMIZE_WORKBENCHES_DIR.mkdir(parents=True, exist_ok=True)
+        if path.exists() and (not path.is_file() or path.is_symlink()):
+            raise ValueError("Atomize workbench storage is invalid.")
+        data = session.to_dict()
+        try:
+            AtomizeWorkbenchSession.from_dict(
+                data,
+                issues=session.issues,
+            )
+        except AtomizeWorkbenchError as error:
+            raise ValueError("Atomize workbench is invalid.") from error
+        analysis = self.load_atomize_analysis(session.context_uid)
+        if analysis is None or not session.matches_analysis(
+            analysis_uid=analysis.uid,
+            context_uid=analysis.context_uid,
+            context_name=analysis.context_name,
+            context_digest=analysis.context_digest,
+            issues=atomize_workbench_issue_projection(analysis),
+        ):
+            raise ValueError(
+                "Atomize workbench does not match the saved analysis."
+            )
+        _write_json_atomic(path, data)
+
+    def delete_atomize_workbench(self, context_uid: str) -> None:
+        """Remove derived UI state during failed save-as cleanup."""
+        path = self._atomize_workbench_path(context_uid)
+        if path.exists():
+            if not path.is_file() or path.is_symlink():
+                raise ValueError("Atomize workbench storage is invalid.")
             path.unlink()
 
     # --- Context paths ---
@@ -781,10 +974,25 @@ class MemoryStore:
             if canonical_context_uid == context_uid
             else None
         )
-        if analysis_path is not None and analysis_path.exists() and (
-            not analysis_path.is_file() or analysis_path.is_symlink()
+        workbench_path = (
+            self._atomize_workbench_path(context_uid)
+            if canonical_context_uid == context_uid
+            else None
+        )
+        for artifact, label in (
+            (analysis_path, "analysis"),
+            (workbench_path, "workbench"),
         ):
-            raise ValueError("Atomize analysis storage is invalid.")
+            if artifact is not None and artifact.exists() and (
+                not artifact.is_file() or artifact.is_symlink()
+            ):
+                raise ValueError(f"Atomize {label} storage is invalid.")
+        review_session = self.load_review_session()
+        delete_review_session = (
+            review_session is not None
+            and review_session.context_uid == context_uid
+            and review_session.context_name == name
+        )
         ctx_dir = self._context_dir(name)
         context_file = self._context_file(name)
         checkpoints_dir = self._checkpoints_dir(name)
@@ -824,6 +1032,15 @@ class MemoryStore:
             shutil.rmtree(staged_checkpoints)
         if analysis_path is not None and analysis_path.exists():
             analysis_path.unlink()
+        if workbench_path is not None and workbench_path.exists():
+            # Workbench responses may contain free-form user context. They are
+            # scoped to the deleted Context and must not survive it.
+            workbench_path.unlink()
+        if delete_review_session and REVIEW_SESSION_FILE.exists():
+            # Review answers may contain user-supplied local context. Once
+            # their exact Context is deleted, retaining that global artifact
+            # would be both misleading state and an avoidable privacy leak.
+            REVIEW_SESSION_FILE.unlink()
         self._prune_empty_namespace_dirs(ctx_dir)
 
     # --- Checkpoints ---

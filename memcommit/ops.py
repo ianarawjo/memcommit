@@ -575,11 +575,17 @@ def _run_integrate_batch(
 def impact_atomize(
     ctx: Context,
     provider_factory: Callable[[], "AtomizeProvider"],
+    *,
+    declared_frames: dict[str, str] | None = None,
 ) -> "AtomizeImpactReport":
     """Preview direct-Memory atomization without mutating *ctx*."""
     from memcommit.atomize import impact_atomize as _impact_atomize
 
-    return _impact_atomize(ctx, provider_factory)
+    return _impact_atomize(
+        ctx,
+        provider_factory,
+        declared_frames=declared_frames,
+    )
 
 
 def find_duplicates(

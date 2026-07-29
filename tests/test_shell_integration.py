@@ -16,7 +16,7 @@ from memcommit.cli import app
 from memcommit.commands.shell_init import render_zsh_init
 
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 
 
 def test_shell_init_prints_valid_zsh_without_editing_files():
@@ -43,7 +43,7 @@ def test_shell_init_rejects_unsupported_shell():
     result = runner.invoke(app, ["shell-init", "bash"])
 
     assert result.exit_code == 1
-    assert "unsupported shell 'bash'" in result.output
+    assert "unsupported shell 'bash'" in result.stderr
 
 
 def test_emit_selection_reserves_stdout_for_one_command(monkeypatch):
@@ -96,7 +96,7 @@ def test_emit_selection_requires_a_terminal():
     result = runner.invoke(app, ["help", "--emit-selection"])
 
     assert result.exit_code == 1
-    assert "requires an interactive terminal" in result.output
+    assert "requires an interactive terminal" in result.stderr
 
 
 @pytest.mark.skipif(shutil.which("zsh") is None, reason="zsh is unavailable")

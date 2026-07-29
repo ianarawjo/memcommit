@@ -1,7 +1,7 @@
 {
   "command": "atomize",
   "schema_version": 1,
-  "ruleset_version": "atomize-v1-draft",
+  "ruleset_version": "atomize-v2-reviewed-frame-draft",
   "profile": {
     "id": "task1-campus",
     "version": "1",

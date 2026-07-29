@@ -2,24 +2,38 @@
 
 ## Decision
 
-Memcommit now has one implemented interactive review adapter:
+Memcommit now has two implemented interactive review surfaces:
 
 ```text
 mem review ambiguities
+mem review atomize
 ```
 
-It consumes the existing read-only `find-ambiguities` result, saves a durable
-review session, and opens a prompt-toolkit terminal interface. The static
-finder remains independently callable and read-only:
+The ambiguity adapter consumes the existing read-only `find-ambiguities`
+result and uses the older global review-session artifact. The atomize command
+family consumes one Context-scoped aggregate analysis and uses a separate
+Context-scoped workbench. It exposes proposed splits, atomize uncertainties,
+one-source ambiguities, and two-source conflicts from that same analysis.
+Both surfaces use the same list/detail/choice/response interaction pattern,
+but they deliberately retain different persistence and evidence contracts.
+The static ambiguity finder remains independently callable and read-only:
 
 ```text
 mem find-ambiguities
 ```
 
-This separation preserves the difference between discovery and response.
-`find-ambiguities` reports a judgment; `review ambiguities` lets a person
-select a proposed reading and/or add clarification evidence. Neither command
-edits a Memory or creates a checkpoint.
+This separation preserves the difference between discovery, response,
+reanalysis, and application. `find-ambiguities` reports a judgment;
+`review ambiguities` lets a person select a proposed reading and/or add
+clarification evidence. `mem impact atomize` is the primary atomize workbench
+entry; bare `mem atomize` and `mem review atomize` resume its exact saved
+analysis/workbench without another provider call. When no analysis exists,
+bare `mem atomize` may create that first analysis once; `mem review atomize`
+does not. Eligible unary responses
+influence a new proposal only after explicit
+`mem impact atomize --with-review`; that reanalysis still edits no Memory and
+creates no checkpoint. `mem atomize --save` or `--save-as` remains the only
+atomize mutation boundary.
 
 The finder-wide prompt contract is strengthened to request English candidate
 readings and English operational explanations for this shared output. Its
@@ -29,15 +43,24 @@ for non-English Contexts is therefore intentionally different.
 The current implementation also supports:
 
 ```text
-mem review                 # resume the one saved review
+mem review                 # resume global review, or atomize as fallback
 mem review --snapshot      # print one stable, non-interactive frame
 mem review ambiguities --replace-review  # explicitly discard and rescan
+mem review atomize --replace-review      # reset mutable workbench state
+mem review atomize --respond-to UID --response TEXT  # save without a TUI
+mem impact atomize --refresh             # explicit unframed reanalysis
 ```
 
-Only the ambiguity adapter is implemented. Conflict and update have existing
-semantic producers but no adapter in this shell yet. `reconcile`, `distill`,
-`meld`, and `sever` are future or design-only operations whose semantic
-contracts are not created by this UI work.
+Bare `mem review` resumes the Context's atomize workbench only when the older
+global review slot is empty; an existing global ambiguity review keeps
+precedence for backward compatibility.
+
+Standalone conflict and update have existing semantic producers but no
+dedicated adapter in this shell yet. Conflict issues produced inside an
+atomize analysis are reviewable in the atomize workbench, but their pairwise
+responses remain staged. `reconcile`, `distill`, `meld`, and `sever` are
+future or design-only operations whose semantic contracts are not created by
+this UI work.
 
 ## Motivating interaction
 
@@ -84,6 +107,80 @@ The raw response is clarification evidence. It is not automatically treated as
 canonical Memory content, translated, or merged into the source. A future
 reconciliation/apply contract must show a proposed edit and preserve
 provenance before it can mutate the Context.
+
+## Atomize workbench responses
+
+The atomize workbench is broader than its earlier uncertainty-only adapter. A
+single aggregate analysis provides:
+
+- atomize classifications and proposed children for every direct Memory;
+- source-linked understanding, change, and unresolved overview sections;
+- one-source ambiguity findings with reading choices; and
+- two-source `YES`/`MAY` conflict findings.
+
+All issue kinds use the same freeform control:
+
+```text
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> ____________________________________________
+```
+
+Where a finding offers readings, the selected reading identity and verbatim
+response are stored independently. A source, proposed child, reason, and
+reading are terminal data; none is rewritten just to fit the shell.
+
+The ordinary workflow is:
+
+```text
+mem impact atomize                    # create once, then resume
+mem atomize                           # resume the same analysis/workbench
+mem review atomize                    # compatibility resume
+mem impact atomize --with-review      # explicit reviewed reanalysis
+mem atomize --save                    # or --save-as NEW_CONTEXT
+```
+
+`mem impact atomize --refresh` is the separate explicit unframed reanalysis
+boundary. Ordinary entry, resume, snapshot, sorting, and layout changes never
+call the provider. A Context change makes the saved analysis stale and fails
+closed rather than silently replacing what the user reviewed.
+
+An eligible response on a one-source issue can become an untrusted,
+per-Memory **declared frame** during `--with-review`. It is not concatenated to
+the Memory, treated as a globally true Context fact, or accepted as a child
+assertion. Local validation still requires every proposed child to cite at
+least one literal span from the original Memory. A declared frame can support
+an additional qualifier, but it cannot create a frame-only child. Original
+source spans and declared-frame spans are stored separately and remain
+distinguishable through `mem trace` and `mem rationale`.
+
+A response on a conflict stays attached to the exact two-source issue. It is
+not converted into a declared frame for one side merely so atomize can consume
+it; `--with-review` rejects a workbench with any answered pairwise issue before
+the provider is called. This includes a workbench containing both unary and
+pairwise answers: the prototype has no review archive, so creating a fresh
+workbench while skipping only the pairwise answer would erase it. Those
+responses remain staged for a future reconcile contract.
+
+If two answered unary issues point to the same Memory, `--with-review` also
+fails closed. The current trace schema can bind a declared frame to one issue
+UID, not an ordered set of origins. The user must consolidate the exact context
+into one response and clear the other instead of accepting misleading
+provenance.
+
+The workbench is bound to the exact Context UID, ordered direct-Memory digest,
+analysis UID, issue projection digest, and selectable reading identities.
+Explicit reanalysis creates a new analysis UID and a fresh workbench; comments
+are never migrated implicitly. Only the latest analysis/workbench pair is
+retained per Context, so a full revision archive and analysis-to-analysis diff
+remain future work.
+
+An eligible saved response is also a save gate. `mem atomize --save` and
+`--save-as` refuse if the selected analysis does not record the same workbench
+UID and semantic response digest. Applying a reviewed analysis copies the
+declared frame, digests, reason, and per-child source/frame citations into
+checkpoint trace metadata. This durability is also a privacy boundary: an
+applied comment is retained in Context checkpoint history, not only in the
+replaceable workbench file.
 
 ## Ambiguity explanation and reading roles
 
@@ -139,11 +236,21 @@ encounter-order convention. A future timestamp design must add
 times, and specify branch/merge semantics. Checkpoint times, UUID values, and
 JSON dictionary order must not be presented as Memory creation time.
 
-The shell also offers `PRIORITY`, which currently orders the overall
-clarification label as:
+The shell also offers `PRIORITY`. For the standalone ambiguity adapter it
+orders the clarification label as:
 
 ```text
 REQUIRED → HELPFUL → NONE → canonical source order
+```
+
+The atomize workbench also has conflicts, atomize uncertainties, and proposed
+splits. Its grounded priority tiers are:
+
+```text
+conflict / atomize uncertainty / REQUIRED ambiguity
+-> HELPFUL ambiguity
+-> NONE ambiguity / proposed split
+-> canonical source order within a tier
 ```
 
 It does not claim to rank by the number of downstream proposals changed.
@@ -152,48 +259,69 @@ counterfactual recheck for each reading. That remains a separate extension.
 
 ## Durable state and stale detection
 
-The full-screen terminal is not the source of truth. One active prototype
-session is stored atomically in:
+The full-screen terminal is not the source of truth. The older ambiguity
+adapter stores one global prototype session atomically in:
 
 ```text
 ~/.mem/review-session.json
 ```
 
-The session records:
+The atomize workflow instead stores one latest analysis and workbench per
+Context UID:
+
+```text
+~/.mem/atomize-analyses/<context-uid>.json
+~/.mem/atomize-workbenches/<context-uid>.json
+```
+
+The relevant records include:
 
 - schema version and session UID;
 - adapter kind;
 - Context UID and name;
 - a digest of every directly owned Memory UID and content in canonical order;
-- finding labels, reasons, questions, and proposed readings;
+- the exact atomize analysis UID and immutable issue-projection digest;
+- finding labels, arity, source order, priority, reasons, questions, and
+  proposed readings when an issue has choices;
 - current cursor and sort mode;
+- atomize workbench layout; and
 - selected readings and verbatim freeform responses.
 
-The one-shot semantic report is saved before terminal control begins so a PTY
-disconnect does not lose the expensive result. On resume, any change to the
-Context identity, direct-Memory content, or canonical direct-Memory order makes
-the session stale. The shell refuses to reinterpret an old answer against a
-new local frame.
+State is saved before terminal control begins so a PTY disconnect does not
+lose the expensive semantic report or its binding. On resume, any change to
+the Context identity, direct-Memory content, or canonical direct-Memory order
+makes the relevant session stale. The shell refuses to reinterpret an old
+answer against a new local frame.
 
-Starting another adapter never silently overwrites that artifact. When a saved
-review already exists, `mem review ambiguities` refuses before opening the
-provider; `--replace-review` is the explicit destructive boundary.
+Starting another global ambiguity adapter never silently overwrites
+`review-session.json`; `--replace-review` is its explicit destructive
+boundary. `mem review atomize --replace-review` resets only the mutable
+workbench for the current saved analysis. It neither reruns the provider nor
+replaces the analysis. Reanalysis requires `mem impact atomize --refresh` or
+`--with-review`.
+
+Deleting a Context removes its analysis and workbench. It also deletes the
+global review when that artifact names the deleted Context, while preserving a
+global review for another Context. This avoids retaining a freeform comment
+after its interpretation frame has been removed.
 
 References, embedded Contexts, and query-only sources remain outside the
 direct-Memory review boundary. In particular, review never opens
 `~/.mem/query-sources/`.
 
-The single active session matches the existing prototype style of one staged
-update, but it is a deliberate concurrency limitation: another review process
-can replace or last-write the same file. Multi-session storage and locking are
-future work.
+The global ambiguity adapter remains a one-session concurrency limitation.
+Atomize workbenches are isolated by Context UID but still have one latest slot
+per Context and no cross-process locking or revision archive. Concurrent
+writers to the same Context can still last-write mutable workbench state;
+locking and multi-revision storage are future work.
 
 ## Terminal and chat-controller boundary
 
 The shell accepts ordinary concrete terminal input through prompt-toolkit:
 
 - left/right: previous or next issue;
-- up/down or digits: select a proposed reading;
+- up/down or digits: select a proposed reading when the current ambiguity
+  finding offers choices;
 - Enter or Tab: focus the freeform response;
 - Escape: return to issue navigation;
 - F2 or Ctrl-S: save and move to the next issue;
@@ -213,24 +341,25 @@ a proposed reading cannot inject terminal escape behavior.
 
 ## Shared shell, separate operation semantics
 
-The visual shell is intended to be generalized and reused, but the implemented
-controller is currently ambiguity-specific. Future reuse does not merge the
-operations:
+The visual shell is shared, but each adapter retains its own evidence and
+response contract:
 
 | Adapter | Status | Primary source unit |
 |---|---|---|
 | ambiguity | implemented | one Memory plus proposed readings |
-| conflict | future adapter over an implemented finder | two Memories plus conflict scope |
+| atomize workbench | implemented | typed split, uncertainty, one-source ambiguity, and two-source conflict issues from one exact analysis |
+| standalone conflict | future adapter over an implemented finder | two Memories plus conflict scope |
 | update | future adapter over existing staged-update artifacts | target Memory/edit or addition |
-| atomize uncertainty | future adapter over the persisted atomize analysis | one composite or uncertain Memory |
 | reconcile | future semantic contract | ambiguity/conflict evidence and proposed resolution |
 | distill | design-only | summary claim and supporting Memories |
 | meld / sever | Task 2/3 design-only | policy combination or disclosure boundary |
 
 An update adapter must consume the existing `impact-plan.json` and
 `staged-update.json` contracts rather than create a competing generic source
-of truth. Similarly, a future conflict adapter must retain its pair-shaped
-semantics even if it uses the same list, detail, choice, and response controls.
+of truth. Similarly, an atomize conflict response retains its pair-shaped
+semantics even though it uses the same list, detail, choice, and response
+controls: it stays staged for reconcile rather than becoming a unary declared
+frame.
 
 ## Alternatives considered and why they were not selected
 
@@ -310,21 +439,36 @@ from becoming silent reuse of stale findings.
 ### Apply clarification immediately
 
 Immediately rewriting a Memory after a selection would make the interaction
-look complete, but the freeform response has not yet been classified,
-normalized, or provenance-linked. It may be a comment rather than replacement
-content. Responses therefore remain staged evidence until a future
-reconciliation/apply step can show an explicit diff and checkpoint one
-confirmed mutation.
+look complete, but the freeform response has not yet been classified or
+normalized. It may be a comment rather than replacement content. Ambiguity
+responses therefore remain staged evidence for a future reconciliation/apply
+contract. Eligible unary atomize responses have a narrower implemented
+consumer: `mem impact atomize --with-review` treats them as per-Memory declared
+frames and produces another non-mutating analysis. Pairwise conflict responses
+remain staged and block that reanalysis rather than being dropped when the
+single workbench is replaced. Only a later explicit `mem atomize --save` or
+`--save-as` can apply the reviewed atomize proposal.
 
 ### Build a fully generic operation framework first
 
-Conflict, update, atomize uncertainty, reconcile, distill, meld, and sever can
-share list/detail/response interaction patterns, but their source arity,
-evidence, and mutation boundaries differ. A generic schema invented before
-those contracts exist would either be vague or encode ambiguity-specific
-assumptions under generic names. The implementation therefore proves the
-ambiguity adapter first and records visual reuse as intent rather than claiming
-that a generic framework already exists.
+Conflict, update, atomize, reconcile, distill, meld, and sever can share
+list/detail/response interaction patterns, but their source arity, evidence,
+and mutation boundaries differ. A generic schema invented before those
+contracts exist would either be vague or encode ambiguity-specific assumptions
+under generic names. The implementation first proved the global ambiguity
+adapter, then built a Context-scoped atomize workbench with the same interaction
+language but an analysis-bound issue digest, multiple typed issue shapes, and
+an explicit reanalysis gate.
+
+### Keep atomize review uncertainty-only
+
+The first atomize adapter exposed only `UNCERTAIN / RECONCILE` records. That
+made comments possible but hid proposed split children, the source-level
+content overview, ambiguities, and pairwise conflicts returned by the aggregate
+analysis. The implemented workbench therefore starts conceptually at
+`mem impact atomize` and presents all actionable typed issues. The older global
+review format remains readable only as a compatibility input to reviewed
+reanalysis; it is not the final atomize interface.
 
 ### Translate or rewrite the source for display
 
@@ -336,15 +480,22 @@ verbatim in whatever language was entered.
 
 ## Intentional non-goals
 
-The implemented ambiguity review does not:
+The implemented review shell does not:
 
 - resolve, edit, add, remove, or checkpoint a Memory;
 - synthesize the freeform response into an English replacement;
-- decide whether the response is a refinement, comment, or different reading;
+- decide whether an ambiguity response is a refinement, comment, or different
+  reading;
+- treat an atomize comment as trusted source text or let it create a child
+  without an original-source citation;
+- move comments to a later atomize analysis automatically;
+- turn a pairwise conflict response into one source's declared frame;
 - calculate unsupported affected-Memory or changed-proposal counts;
 - infer true creation chronology;
-- persist multiple concurrent review sessions;
-- implement conflict, update, reconcile, distill, meld, or sever adapters.
+- archive multiple atomize analysis revisions or lock concurrent writers to one
+  Context; or
+- implement standalone conflict, update, reconcile, distill, meld, or sever
+  adapters.
 
 These boundaries keep the first shell useful for the user study while making
 its evidence, mutations, and future claims inspectable.

@@ -21,7 +21,7 @@ from memcommit.update import (
 )
 
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 SECRET = "The concealed contractor budget is 4.2 million dollars."
 
 

@@ -23,3 +23,14 @@ When a design decision excludes a behavior, defers it, or accepts a prototype
 limitation, the relevant focused `*-design-rationale.md` document must state
 the reason and the remaining boundary. A conversation-only explanation is not
 considered sufficient design history.
+
+## Atomize contract notes
+
+- [`mem-atomize-design-rationale.md`](mem-atomize-design-rationale.md) defines
+  atomicity, source grounding, preview/application boundaries, and lineage.
+- [`mem-atomize-workbench-design-rationale.md`](mem-atomize-workbench-design-rationale.md)
+  defines the aggregate analysis, typed issue workbench, stable resume, and
+  explicit reanalysis contract.
+- [`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md)
+  records the interaction language shared with ambiguity review while keeping
+  each operation's persistence, source arity, and mutation boundaries distinct.
