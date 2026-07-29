@@ -28,6 +28,7 @@ from memcommit.commands import (
     query,
     reference,
     remove,
+    review,
     revert,
     status,
     switch,
@@ -73,6 +74,10 @@ app.command("find",           help="Find relevant items with temporary Codex ran
 app.command("find-duplicates", help="Find duplicate direct Memories.")(find_duplicates.cmd)
 app.command("find-ambiguities", help="Find ambiguous or underspecified direct Memories.")(find_ambiguities.cmd)
 app.command("find-conflicts", help="Find conflicting direct Memory pairs.")(find_conflicts.cmd)
+app.command(
+    "review",
+    help="Create or resume a staged terminal review of semantic findings.",
+)(review.cmd)
 app.command(
     "impact",
     help="Preview a directional update or unary semantic operation.",

@@ -18,6 +18,7 @@ def isolated_store(tmp_path, monkeypatch):
     state_file = store_dir / "state.json"
     impact_plan_file = store_dir / "impact-plan.json"
     staged_update_file = store_dir / "staged-update.json"
+    review_session_file = store_dir / "review-session.json"
 
     monkeypatch.setattr(store_module, "STORE_DIR", store_dir)
     monkeypatch.setattr(store_module, "CONTEXTS_DIR", contexts_dir)
@@ -28,6 +29,11 @@ def isolated_store(tmp_path, monkeypatch):
         store_module,
         "STAGED_UPDATE_FILE",
         staged_update_file,
+    )
+    monkeypatch.setattr(
+        store_module,
+        "REVIEW_SESSION_FILE",
+        review_session_file,
     )
 
     return store_dir

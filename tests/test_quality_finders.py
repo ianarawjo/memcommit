@@ -305,6 +305,13 @@ def test_find_ambiguities_calls_provider_once_and_restores_context_order():
     assert len(provider.calls) == 1
     assert provider.calls[0][1] == "find_ambiguities"
     assert len(provider.calls[0][3]["memories"]) == 3
+    prompt = provider.calls[0][0]
+    assert (
+        "Write every ordinary reading, reason, and question in English"
+        in prompt
+    )
+    assert "what cannot be determined reliably" in prompt
+    assert "what remains possible" in prompt
 
 
 def test_find_conflicts_sends_every_pair_once_and_sorts_findings():

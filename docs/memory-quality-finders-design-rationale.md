@@ -30,6 +30,11 @@ These three commands are the smallest useful analysis layer. `reconcile`,
 finder never chooses a winner, rewrites a Memory, removes a UID, or claims that
 an identified problem has been resolved.
 
+The implemented [`mem review ambiguities`](memory-review-shell-design-rationale.md)
+is a separate consumer of an ambiguity report. It persists selected readings
+and one freeform reviewer annotation, but it does not change the finder's
+read-only/mutation contract or apply those annotations to Memories.
+
 ## Units of judgment
 
 The judgments and their public evidence deliberately have different arities:
@@ -174,6 +179,15 @@ All three commands:
 - make no Context write and create no checkpoint;
 - fail closed on malformed, duplicated, or out-of-scope provider output.
 
+For ambiguity results, proposed readings, reasons, and questions are requested
+in English so the review surface has one comparison language while still
+showing the original Memory unchanged. The reason connects the two ambiguity
+axes to a concrete outcome: what cannot be determined for `REQUIRED`, what
+would become more precise for `HELPFUL`, or why resolution is operationally
+unnecessary for `NONE`. It may use multiple sentences when one uncertainty
+affects several decisions. These are explanations, not structured affected
+result IDs or verified counterfactual counts.
+
 The structured result contains findings only:
 
 - ambiguity omits `SINGLE/NONE`;
@@ -218,6 +232,8 @@ questions. A later `reconcile` operation may consume both result sets,
 identify a shared missing scope dimension, and propose the smallest
 clarification or edit. Reconciliation is combined reasoning over findings; it
 does not replace their detection and does not silently apply a resolution.
+The shared review-shell design may later render both finding types, but visual
+reuse does not merge their semantic units.
 
 ## Calibration fixtures and evaluation boundary
 
@@ -255,5 +271,7 @@ Version 1 does not:
   explicit pair boundary;
 - turn duplicate evidence into mutation-ready survivor groups, resolve
   conflicts, answer clarifying questions, or mutate Memories;
+- apply or canonically interpret responses collected by the separate ambiguity
+  review shell;
 - treat `MAY` or `UNKNOWN` as provider-confidence scores;
 - use calibration cases as evidence of held-out performance.

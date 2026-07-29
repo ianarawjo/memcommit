@@ -535,6 +535,25 @@ important than final CLI spelling.
 - Both operations are read-only, create no checkpoints, and do not propose
   rewritten contents.
 
+### Implemented ambiguity review shell
+
+- `mem review ambiguities` consumes the unary ambiguity report without
+  changing the detector's semantics.
+- It saves one selected proposed reading plus one untyped freeform response per
+  finding; the response can refine, comment on, or replace a proposed reading.
+- The session is bound to the Context UID and the complete ordered
+  direct-Memory frame, and resume fails when that frame is stale.
+- Source order means canonical `Context.order` for the user-study prototype;
+  true Memory creation time is unavailable and remains a schema TODO.
+- The ambiguity controller establishes a visual shell intended for later
+  reuse; it is not yet a code-generic adapter framework, a pipeline stage, or
+  a hidden reconciliation operation. Conflict and update adapters are future
+  work; `reconcile`, `distill`, `meld`, and `sever` remain future or
+  design-only contracts.
+
+The focused rationale is
+[`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md).
+
 ### Future `reconcile`
 
 - Consumes the separate ambiguity and conflict findings instead of replacing
@@ -591,6 +610,8 @@ Every refinement operation should:
   operation ID;
 - preserve the raw intake through history or an explicit working branch;
 - avoid opening query-only sources or treating model output as trusted IDs;
+- preserve staged human clarification separately from canonical Memory
+  content until an explicit, provenance-preserving apply contract exists;
 - make no silent deletion, conflict resolution, audience inference, or move.
 
 The operations should be idempotent at their intended stage. Re-running a

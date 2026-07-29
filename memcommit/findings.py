@@ -689,9 +689,18 @@ def find_ambiguities(
             "Memory except the clean SINGLE/NONE combination. Intentional "
             "ambiguity may therefore be COMPETING/NONE. Return exactly one "
             "ordinary reading for SINGLE and at least two for DOMINANT or "
-            "COMPETING; list the dominant reading first. Supply the smallest "
-            "useful question for HELPFUL or REQUIRED; use an empty question "
-            "for NONE."
+            "COMPETING; list the dominant reading first. Write every ordinary "
+            "reading, reason, and question in English even when the source "
+            "Memory uses another language. The reason must name the ambiguous "
+            "expression or missing information and connect both labels to a "
+            "concrete operational consequence. For REQUIRED, state what "
+            "cannot be determined reliably; for HELPFUL, state what remains "
+            "possible and what clarification would make more precise; for "
+            "NONE, state why no operational result depends on resolving the "
+            "readings. If the same uncertainty blocks additional decisions, "
+            "name them in additional concise sentences rather than generic "
+            "topic labels. Supply the smallest useful question for HELPFUL or "
+            "REQUIRED; use an empty question for NONE."
         ),
         payload={
             "operation": "find_ambiguities",

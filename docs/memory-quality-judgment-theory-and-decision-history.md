@@ -353,6 +353,35 @@ every sentence can be made more explicit. The criterion is whether the
 clarification changes the reliability or usability of the Memory for the
 declared task.
 
+### 3.3.1 Turning the two axes into an actionable explanation
+
+The later review-shell discussion rejected a bare `REQUIRED` or `HELPFUL`
+badge followed by generic affected topics. The explanation should combine the
+reading structure and clarification need in ordinary language:
+
+- `REQUIRED`: identify the competing, dominant, or missing reading and say
+  what cannot be determined reliably;
+- `HELPFUL`: identify the reading distinction, state that the current action
+  remains possible, and say what would become more precise;
+- `NONE`: identify the readings and say why no operational decision depends
+  on resolving them.
+
+For example, “same NFC” can mean the same authentication mechanism or the same
+credential/permission rule. A `COMPETING / REQUIRED` explanation should state
+that distinction and then name the concrete unresolved decision, such as which
+credential a door accepts. If the same uncertainty prevents several decisions,
+the reason may add a sentence for each. This does not make `REQUIRED` a
+numeric severity score, and `HELPFUL` or `NONE` must not be rewritten as
+“cannot determine” when action remains possible or no action depends on the
+distinction.
+
+The implemented ambiguity review displays English proposed readings and one
+combined freeform field. A selected reading plus reviewer text is stored as
+clarification evidence; the shell does not decide whether the text is a
+refinement, comment, or replacement, and it does not silently turn that
+evidence into Memory content. See
+[`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md).
+
 ### 3.4 Why all nine combinations are possible
 
 The two axes form a real cross-product:
@@ -986,6 +1015,9 @@ The following work is not hidden inside the current finders:
 - composing ambiguity and conflict findings in `reconcile`;
 - deciding how clarification answers update Memory without erasing source
   provenance;
+- adding structured downstream-result identities if review priority is later
+  meant to count changed required/helpful decisions rather than sort only by
+  the finding's overall clarification label;
 - representing audience and disclosure differences;
 - replacing the temporary Codex provider with MCP or an internal-network
   provider.

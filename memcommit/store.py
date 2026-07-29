@@ -24,6 +24,7 @@ STATE_FILE = STORE_DIR / "state.json"
 QUERY_SOURCES_DIR = STORE_DIR / "query-sources"
 IMPACT_PLAN_FILE = STORE_DIR / "impact-plan.json"
 STAGED_UPDATE_FILE = STORE_DIR / "staged-update.json"
+REVIEW_SESSION_FILE = STORE_DIR / "review-session.json"
 RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
 
 
@@ -205,6 +206,56 @@ class MemoryStore:
     def save_staged_update(self, session) -> None:
         """Atomically save the active staged update."""
         self._save_update_session(STAGED_UPDATE_FILE, session)
+
+    # --- Semantic review sessions ---
+
+    @staticmethod
+    def _load_review_session(path: Path):
+        """Load and strictly validate the active semantic review."""
+        from memcommit.review import ReviewError, ReviewSession
+
+        if not path.exists():
+            return None
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Semantic review session storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(
+                    f,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+        except (json.JSONDecodeError, ValueError) as error:
+            raise ValueError(
+                "Semantic review session is invalid JSON."
+            ) from error
+        try:
+            return ReviewSession.from_dict(data)
+        except (ReviewError, TypeError) as error:
+            raise ValueError("Semantic review session is invalid.") from error
+
+    def load_review_session(self):
+        """Return the active semantic review, or None when none exists."""
+        return self._load_review_session(REVIEW_SESSION_FILE)
+
+    def save_review_session(self, session) -> None:
+        """Atomically save one validated semantic review session."""
+        from memcommit.review import ReviewError, ReviewSession
+
+        if not isinstance(session, ReviewSession):
+            raise TypeError("Expected a ReviewSession.")
+        if REVIEW_SESSION_FILE.exists() and (
+            not REVIEW_SESSION_FILE.is_file()
+            or REVIEW_SESSION_FILE.is_symlink()
+        ):
+            raise ValueError("Semantic review session storage is invalid.")
+        data = session.to_dict()
+        # Validate the exact persisted shape before replacing a recoverable
+        # review. In-memory dataclasses are mutable by the TUI controller.
+        try:
+            ReviewSession.from_dict(data)
+        except (ReviewError, TypeError) as error:
+            raise ValueError("Semantic review session is invalid.") from error
+        _write_json_atomic(REVIEW_SESSION_FILE, data)
 
     # --- Context paths ---
 
