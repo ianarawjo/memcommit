@@ -107,6 +107,51 @@ Counts should be computed locally from validated operation artifacts whenever
 possible. A provider must not invent cardinalities that the result model can
 derive.
 
+### The three overview sections are natural-language reports
+
+Each non-empty `WHAT MEM UNDERSTOOD`, `WHAT HAPPENED`, and
+`WHAT REMAINS UNRESOLVED` section is concise natural-language report prose in
+complete sentences. It synthesizes the bounded result for a person who has not
+read every record. It must not emit:
+
+- bullets or a numbered list;
+- another heading;
+- key-value records or raw internal identifiers;
+- a telegraphic keyword enumeration; or
+- counts that belong in the compact metadata line.
+
+This is a semantic generation obligation, not something the renderer can
+repair after the fact. The common model rejects explicit bulleted and numbered
+lists, while each operation prompt and adapter remains responsible for
+coherent, grounded prose.
+
+Each standard overview section should normally fit within roughly 40-50
+English words, so the three-section report normally remains within roughly
+120-150 words. This is a ballpark **attention budget**, not a minimum, a
+semantic invariant, or a truncation rule. The first frame is meant to be read
+in full before drill-down; a materially longer report is likely to be skimmed
+or skipped and recreates the burden of reviewing the underlying records.
+A section may be shorter or empty. Preserving a material commitment,
+exception, or unresolved condition takes precedence over meeting the target.
+
+An operation does not receive another 40-50 words merely by subdividing one
+standard section into several category-specific paragraphs. Those paragraphs
+share that section's attention budget, and all top-level natural-language
+report prose in the first frame should normally remain within the same
+roughly 120-150-word envelope. Any operation-specific exception must be
+documented and tested rather than emerging accidentally from the number of
+headings.
+
+The budget is applied during semantic generation. The parser must not cut off
+or reject an otherwise grounded result solely because a provider exceeded a
+word count: automatic truncation could remove the exact exception or
+qualification the report exists to surface. A longer result is instead a
+quality signal for prompt or adapter refinement.
+
+The distinction is intentional: representative/boundary cases and actionable
+issues are navigable lists below the report. They provide exact inspection and
+next actions; they do not replace the natural-language account.
+
 ### `WHAT MEM UNDERSTOOD`
 
 This section answers:

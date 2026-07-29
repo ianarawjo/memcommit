@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
@@ -20,7 +21,11 @@ from memcommit.atomize_meld_adapter import (
 from memcommit.cli import app
 from memcommit.context import MemoryRef
 from memcommit.commands.meld import render_meld_session
-from memcommit.commands.meld_shell import run_meld_shell
+from memcommit.commands.meld_shell import (
+    _line,
+    _screen_text,
+    run_meld_shell,
+)
 from memcommit.meld import (
     MeldError,
     MeldSession,
@@ -52,6 +57,11 @@ class Task2Provider:
             "results",
             "ready_to_apply",
         }
+        assert "roughly 40-50 words at most" in prompt
+        assert (
+            "normally no more than roughly 40-50 words"
+            in output_schema["properties"]["overview"]["description"]
+        )
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
         left_id = payload["frames"][0]["memories"][0]["memory_id"]
@@ -1029,6 +1039,88 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     assert action.choice_index == 0
     assert action.comment == "Keep all supported details."
     assert action.issue_uid == session.current_assessment.issues[0].uid
+
+
+def test_meld_framed_composer_matches_ground_send_and_newline_contract():
+    left = ops.init("left/dialogue-input")
+    ops.add(left, "Cash compensation includes travel time.")
+    right = ops.init("right/dialogue-input")
+    ops.add(right, "Use e-transfer or a gift card.")
+    target = ops.init("target/dialogue-input")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, Task2Provider()),
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\r1\tKeep the rate.\x1b\rKeep every payment method.\r"
+        )
+        action = run_meld_shell(
+            session,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action is not None
+    assert action.kind == "COMMENT_ISSUE"
+    assert action.choice_index == 0
+    assert action.comment == (
+        "Keep the rate.\nKeep every payment method."
+    )
+
+
+def test_meld_screen_sanitizes_option_labels_and_truncates_by_cell_width():
+    left = ops.init("left/safe-screen")
+    ops.add(left, "Cash compensation includes travel time.")
+    right = ops.init("right/safe-screen")
+    ops.add(right, "Use e-transfer or a gift card.")
+    target = ops.init("target/safe-screen")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, Task2Provider()),
+    )
+    assessment = session.current_assessment
+    assert assessment is not None
+    issue = assessment.issues[0]
+    unsafe_option = replace(
+        issue.options[0],
+        label="Keep\x1b[31m\u202edetails",
+    )
+    safe_issue = replace(
+        issue,
+        options=(unsafe_option, *issue.options[1:]),
+    )
+    safe_assessment = replace(
+        assessment,
+        issues=(safe_issue, *assessment.issues[1:]),
+    )
+    current_turn = session.current_turn
+    assert current_turn is not None
+    session.turns = (
+        *session.turns[:-1],
+        replace(current_turn, assessment=safe_assessment),
+    )
+
+    rendered = "".join(
+        text
+        for _style, text in _screen_text(
+            session,
+            selected_index=0,
+            expanded=True,
+            choice_index=None,
+        )
+    )
+
+    assert "\x1b" not in rendered
+    assert "\u202e" not in rendered
+    assert "Keep�[31m�details" in rendered
+    assert _line("가" * 20, limit=11) == "가" * 5 + "…"
 
 
 def test_expanded_meld_issue_shows_exact_sources_and_relation_reason():

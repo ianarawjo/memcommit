@@ -101,6 +101,48 @@ def _all_atomic(payload: dict) -> dict[str, object]:
     }
 
 
+def test_atomize_overview_prompt_requires_short_report_paragraphs() -> None:
+    ctx = ops.init("overview/report-contract")
+    ops.add(ctx, "The main entrance closes at 5 p.m.")
+    provider = AtomizeProvider(_all_atomic)
+
+    impact_atomize(ctx, lambda: provider)
+
+    prompt, _, output_schema, _ = provider.calls[0]
+    assert "one short natural-language report paragraph" in prompt
+    assert "Do not use bullets, numbered lists, headings" in prompt
+    assert "roughly 40-50 English words at most" in prompt
+    assert (
+        "Do not use bullets, numbered lists, headings, key-value records"
+        in output_schema["properties"]["overview"]["properties"][
+            "understood"
+        ]["properties"]["text"]["description"]
+    )
+
+
+def test_atomize_overview_rejects_a_multiline_navigation_list() -> None:
+    ctx = ops.init("overview/reject-list")
+    ops.add(ctx, "The main entrance closes at 5 p.m.")
+
+    def respond(payload: dict) -> dict[str, object]:
+        response = _aggregate_response(
+            payload,
+            {
+                "items": [
+                    _item(payload["memories"][0]["candidate_id"]),
+                ]
+            },
+        )
+        response["overview"]["understood"]["text"] = (
+            "- The entrance closes.\n"
+            "- Staff access remains available."
+        )
+        return response
+
+    with pytest.raises(AtomizeImpactError, match="report paragraph"):
+        impact_atomize(ctx, lambda: AtomizeProvider(respond))
+
+
 def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
     ctx = ops.init("intake")
     first = ops.add(ctx, "The main entrance closes at 5 p.m.")

@@ -461,6 +461,22 @@ request for “more context” is insufficient.
 One semantic provider call may analyze a complete bounded turn. Rendering,
 resuming, and accepting an already exact proposal must be provider-free.
 
+## Overview attention budget
+
+The current Meld artifact has one top-level semantic overview. It should be
+one short English natural-language report paragraph, normally roughly 40-50
+words at most. This is the same ballpark attention budget used by the shared
+result workbench: the first explanation should be short enough to read in full
+before the user enters the relation, issue, and proposal detail.
+
+The target is deliberately soft. It is not a parser limit and must never
+truncate a material exception, unresolved condition, or user-supported
+distinction. Relations, issues, proposed Memories, source evidence, and
+grounding dialogue are complete records and do not inherit the overview's word
+budget. If Meld later adopts the full three-section result workbench, each
+standard section receives the shared 40-50-word target while the complete
+first-frame report remains near the shared 120-150-word envelope.
+
 ## Interactive workbench
 
 Task 2 should not force the user to decide every cross-Context relationship
@@ -750,11 +766,17 @@ embedding a second semantic implementation.
    frame, turn, relation-group, proposal, session-CAS, and acceptance machinery
    while introducing explicit `INCOMING` and `BASELINE` authority and exact
    `EDIT` validation.
-6. **Next: extract more shared presentation only after both adapters need it.**
-   The atomize schema remains independent; common controller views must not
-   pretend its issue artifact is a Context-to-Context relation ledger.
-7. **Later: connect import.** Let a resumable import run invoke atomize and directional
-   meld while preserving each stage's preview, approval, and provenance.
+6. **Completed: share the state-free message composer with Ground.** Ground
+   and meld now use the same bordered multiline editor with an independently
+   named buffer and the same focused-input convention (`Enter` sends;
+   `Ctrl-J` or `Alt-Enter` inserts a newline).
+   Focus, issue navigation, semantic actions, provider calls, and persistence
+   remain adapter-owned. The atomize schema remains independent; future
+   controller views must not pretend its issue artifact is a
+   Context-to-Context relation ledger.
+7. **Later: connect import.** Let a resumable import run invoke atomize and
+   directional meld while preserving each stage's preview, approval, and
+   provenance.
 
 Symmetric v1 deliberately excludes raw input atomization, non-empty targets,
 automatic reference traversal, query-only sources, source deletion, source
@@ -764,9 +786,15 @@ be inferred from the word “meld.”
 ## Shared terminal chrome
 
 Meld now uses the same neutral terminal sanitization and slot-based vertical
-frame composition as Ground and review. Its issue navigation, reading choices,
+frame composition as Ground and review. It also uses Ground's extracted
+state-free framed message composer. Meld may relabel the trusted frame as a
+whole-set comment while keeping the same editor instance. Inside that editor,
+`Enter` submits and `Ctrl-J` or `Alt-Enter` inserts a newline; `Ctrl-S` remains
+a compatibility submission alias. Its issue navigation, reading choices,
 provider-owned outer loop, saved relation ledger, and acceptance behavior
-remain meld-specific. In particular, meld's `A` action does not become a
-Ground-style exact-argv approval unless a future adapter explicitly constructs
-and displays such a receipt. See
+remain meld-specific. Sharing the component therefore does not turn Ground's
+Goal–Rules–Cases controller into meld state. In particular, meld's `A` action
+does not become a Ground-style exact-argv approval unless a future adapter
+explicitly constructs and displays a receipt whose target, session, and
+change-set preconditions are enforced at the save boundary. See
 [`shared-tui-command-review-design-rationale.md`](shared-tui-command-review-design-rationale.md).

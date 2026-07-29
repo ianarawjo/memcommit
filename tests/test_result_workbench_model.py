@@ -3,6 +3,9 @@ from dataclasses import FrozenInstanceError
 import pytest
 
 from memcommit.result_workbench import (
+    RESULT_REPORT_FRAME_SOFT_MAX_WORDS,
+    RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
+    RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
     ResultCase,
     ResultCaseDetail,
     ResultDetailBlock,
@@ -133,6 +136,42 @@ def test_present_section_requires_traceable_references() -> None:
         ResultSection(
             state="PRESENT",
             text="The operation understood the input.",
+        )
+
+
+def test_report_word_budget_is_guidance_not_a_parser_truncation_rule() -> None:
+    assert (
+        RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
+        RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
+        RESULT_REPORT_FRAME_SOFT_MAX_WORDS,
+    ) == (40, 50, 150)
+    text = " ".join(["grounded"] * 51)
+
+    section = ResultSection(
+        state="PRESENT",
+        text=text,
+        refs=(SOURCE_REF,),
+    )
+
+    assert section.text == text
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "- The entrance closes.\n- The staff entrance remains open.",
+        "1. The entrance closes.\n2. The staff entrance remains open.",
+        "• The entrance closes.",
+    ],
+)
+def test_overview_sections_reject_navigation_lists_instead_of_report_prose(
+    text: str,
+) -> None:
+    with pytest.raises(ResultWorkbenchError, match="report prose"):
+        ResultSection(
+            state="PRESENT",
+            text=text,
+            refs=(SOURCE_REF,),
         )
 
 

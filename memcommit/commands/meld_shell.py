@@ -11,10 +11,11 @@ from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.widgets import TextArea
+from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.tui_primitives import (
     TuiRegion,
+    build_framed_multiline_input,
     build_tui_frame,
     require_interactive_terminal,
     safe_terminal_text,
@@ -32,11 +33,17 @@ class MeldShellAction:
 
 def _line(value: str, limit: int = 100) -> str:
     normalized = " ".join(safe_terminal_text(value).split())
-    return (
-        normalized
-        if len(normalized) <= limit
-        else normalized[: limit - 1].rstrip() + "…"
-    )
+    if sum(get_cwidth(character) for character in normalized) <= limit:
+        return normalized
+    kept: list[str] = []
+    width = 0
+    for character in normalized:
+        character_width = get_cwidth(character)
+        if width + character_width > limit - 1:
+            break
+        kept.append(character)
+        width += character_width
+    return "".join(kept).rstrip() + "…"
 
 
 def _screen_text(
@@ -121,7 +128,8 @@ def _screen_text(
                         "class:choice" if chosen else "",
                         (
                             f"       {'●' if chosen else '○'} "
-                            f"{option_index + 1}. {option.label}\n"
+                            f"{option_index + 1}. "
+                            f"{safe_terminal_text(option.label)}\n"
                         ),
                     )
                 )
@@ -217,7 +225,13 @@ def run_meld_shell(
 ) -> MeldShellAction | None:
     """Collect one semantic or terminal action; never call a provider."""
     if require_tty:
-        require_interactive_terminal("Interactive meld")
+        require_interactive_terminal(
+            "Interactive meld",
+            snapshot_hint=(
+                "Run the same 'mem meld LEFT RIGHT' command outside a TTY "
+                "to render its saved snapshot."
+            ),
+        )
     assessment = session.current_assessment
     if assessment is None:
         return None
@@ -228,12 +242,12 @@ def run_meld_shell(
     status = {"value": ""}
     bindings = KeyBindings()
 
-    input_area = TextArea(
-        multiline=True,
-        height=Dimension(min=3, preferred=4, max=8),
-        prompt="> ",
-        scrollbar=True,
+    composer = build_framed_multiline_input(
+        "MESSAGE",
+        prompt="› ",
+        buffer_name="meld-message",
     )
+    input_area = composer.text_area
     body_control = FormattedTextControl(
         lambda: _screen_text(
             session,
@@ -260,6 +274,7 @@ def run_meld_shell(
         expanded["value"] = False
         choice["index"] = None
         global_comment["value"] = False
+        composer.frame.title = "MESSAGE"
 
     def submit(event) -> None:
         text = input_area.text.strip()
@@ -322,18 +337,31 @@ def run_meld_shell(
     @bindings.add("tab")
     def _focus_input(event) -> None:
         global_comment["value"] = False
+        composer.frame.title = "MESSAGE"
         event.app.layout.focus(input_area)
 
     @bindings.add("g", filter=~has_focus(input_area))
     def _global_comment(event) -> None:
         global_comment["value"] = True
+        composer.frame.title = "WHOLE-SET COMMENT"
         input_area.text = ""
         event.app.layout.focus(input_area)
 
-    @bindings.add("c-s", filter=has_focus(input_area))
-    @bindings.add("escape", filter=has_focus(input_area))
+    @bindings.add("enter", filter=has_focus(input_area), eager=True)
+    @bindings.add("c-s", filter=has_focus(input_area), eager=True)
     def _submit_input(event) -> None:
         submit(event)
+
+    @bindings.add("c-j", filter=has_focus(input_area), eager=True)
+    @bindings.add(
+        "escape",
+        "enter",
+        filter=has_focus(input_area),
+        eager=True,
+    )
+    def _insert_newline(event) -> None:
+        input_area.buffer.insert_text("\n")
+        event.app.invalidate()
 
     @bindings.add("p", filter=~has_focus(input_area))
     def _preserve(event) -> None:
@@ -363,7 +391,8 @@ def run_meld_shell(
                 if status["value"]
                 else (
                     " ↑/↓ issue  Enter detail  1-5 reading  Tab comment  "
-                    "G comment all  P preserve all  D defer  A accept  Q quit "
+                    "G comment all  Enter send  Ctrl-J/Alt-Enter newline  "
+                    "P preserve all  D defer  A accept  Q quit "
                 )
             )
         ),
@@ -372,20 +401,7 @@ def run_meld_shell(
     )
     root = build_tui_frame(
         TuiRegion(body),
-        TuiRegion(
-            Window(
-                FormattedTextControl(
-                    lambda: (
-                        " WHOLE-SET COMMENT"
-                        if global_comment["value"]
-                        else " REFINE, COMMENT, OR ENTER A DIFFERENT READING"
-                    )
-                ),
-                height=Dimension.exact(1),
-                dont_extend_height=True,
-            )
-        ),
-        TuiRegion(input_area),
+        TuiRegion(composer.container),
         TuiRegion(footer),
     )
     application: Application[MeldShellAction | None] = Application(

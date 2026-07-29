@@ -362,17 +362,16 @@ class AtomizeResultWorkbenchAdapter:
                 item.classification == "UNCERTAIN"
                 for item in self._analysis.items
             )
-            recorded = (
-                f"Saved records contain {quality_count} actionable quality "
-                f"{'finding' if quality_count == 1 else 'findings'} and "
-                f"{uncertain_count} uncertain atomization "
-                f"{'item' if uncertain_count == 1 else 'items'}."
-            )
             text = section.text.strip()
-            if self._overview_was_recorded and text:
-                text = text + "\n\n" + recorded
-            else:
-                text = recorded
+            if not self._overview_was_recorded or not text:
+                text = (
+                    "The saved analysis retains "
+                    f"{quality_count} actionable quality "
+                    f"{'finding' if quality_count == 1 else 'findings'} and "
+                    f"{uncertain_count} uncertain atomization "
+                    f"{'item' if uncertain_count == 1 else 'items'} for "
+                    "review rather than resolving them by inference."
+                )
             refs = _unique_refs(self._source_refs(section) + actual_refs)
             return ResultSection(state="PRESENT", text=text, refs=refs)
 

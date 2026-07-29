@@ -18,6 +18,10 @@ from typing import Callable, Literal, Protocol
 import uuid
 
 from memcommit.context import Context, Memory
+from memcommit.result_workbench import (
+    RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
+    RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
+)
 from memcommit.review import direct_context_digest
 
 
@@ -1771,6 +1775,13 @@ def _output_schema(
             "text": {
                 "type": "string",
                 "maxLength": ATOMIZE_OVERVIEW_CHAR_LIMIT,
+                "description": (
+                    "One short English natural-language report paragraph "
+                    "using complete sentences, or an empty string when the "
+                    "bounded analysis has honestly nothing to report. Do not "
+                    "use bullets, numbered lists, headings, key-value records, "
+                    "or telegraphic keyword sequences."
+                ),
             },
             "source_ids": {
                 "type": "array",
@@ -2020,10 +2031,16 @@ def _prompt(payload: dict[str, object]) -> str:
         "rather than the classification counts. WHAT CHANGED should explain "
         "the material splits or preservation decisions. UNRESOLVED should "
         "name expressions or scopes that the supplied local frame cannot "
-        "settle. Keep each section concise (roughly 40-50 English words at "
-        "most), cite only candidate IDs that support it, and never introduce "
-        "a fact absent from those candidates. An empty section is allowed "
-        "when there is honestly nothing to report.\n\n"
+        "settle. Write each of these three section texts as one short "
+        "natural-language report paragraph in English using complete "
+        "sentences. Do not use bullets, numbered lists, headings, "
+        "colon-delimited key-value records, or telegraphic keyword sequences "
+        "inside a section. Keep each paragraph concise (roughly "
+        f"{RESULT_REPORT_SECTION_TARGET_MIN_WORDS}-"
+        f"{RESULT_REPORT_SECTION_SOFT_MAX_WORDS} English words at most), "
+        "cite only candidate IDs that support it, and never introduce a fact "
+        "absent from those candidates. An empty section is allowed when there "
+        "is honestly nothing to report.\n\n"
         "For the separate AMBIGUITY AND CONFLICT QUALITY SCAN, the complete "
         "selected Context is the bounded local frame. Neighboring Memories may "
         "therefore resolve an expression for this scan even though they cannot "
@@ -2122,11 +2139,11 @@ def _parse_overview(
 
     def parse_section(raw: object) -> AtomizeOverviewSection:
         section = _exact_dict(raw, {"text", "source_ids"})
-        text = section["text"]
+        raw_text = section["text"]
         source_ids = section["source_ids"]
         if (
-            not isinstance(text, str)
-            or len(text) > ATOMIZE_OVERVIEW_CHAR_LIMIT
+            not isinstance(raw_text, str)
+            or len(raw_text) > ATOMIZE_OVERVIEW_CHAR_LIMIT
             or not isinstance(source_ids, list)
             or any(
                 not isinstance(candidate_id, str)
@@ -2134,14 +2151,28 @@ def _parse_overview(
                 for candidate_id in source_ids
             )
             or len(set(source_ids)) != len(source_ids)
-            or (text.strip() and not source_ids and candidate_by_id)
         ):
             raise AtomizeImpactError(
                 "Codex atomize impact returned an invalid source-linked "
                 "overview."
             )
+        text = raw_text.strip()
+        if text and (
+            len(text.splitlines()) != 1
+            or re.match(r"(?:[-*•]\s+|\d+[.)]\s+)", text) is not None
+        ):
+            raise AtomizeImpactError(
+                "Codex atomize impact returned an invalid natural-language "
+                "report paragraph."
+            )
+        text = " ".join(text.split())
+        if text and not source_ids and candidate_by_id:
+            raise AtomizeImpactError(
+                "Codex atomize impact returned an invalid source-linked "
+                "overview."
+            )
         return AtomizeOverviewSection(
-            text=text.strip(),
+            text=text,
             source_uids=tuple(
                 candidate_by_id[candidate_id].memory.uid
                 for candidate_id in source_ids

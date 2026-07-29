@@ -14,6 +14,14 @@ from typing import Literal, Protocol
 RESULT_TEXT_LIMIT = 20_000
 RESULT_LABEL_LIMIT = 500
 RESULT_KEY_LIMIT = 500
+# These are generation budgets, not parser limits.  A longer paragraph can be
+# necessary to preserve a material exception, while truncating a validated
+# report would make the common renderer silently lose meaning.  Operation
+# prompts use the shared numbers so the first frame stays readable; exact
+# evidence remains available through cases and operation-owned issue ledgers.
+RESULT_REPORT_SECTION_TARGET_MIN_WORDS = 40
+RESULT_REPORT_SECTION_SOFT_MAX_WORDS = 50
+RESULT_REPORT_FRAME_SOFT_MAX_WORDS = 150
 
 ResultSectionState = Literal[
     "PRESENT",
@@ -25,6 +33,7 @@ ResultCaseRole = Literal["REPRESENTATIVE", "BOUNDARY"]
 _SECTION_STATES = {"PRESENT", "NONE_REPORTED", "NOT_RECORDED"}
 _CASE_ROLES = {"REPRESENTATIVE", "BOUNDARY"}
 _METRIC_KEY = re.compile(r"[a-z][a-z0-9_]*\Z")
+_LIST_LINE = re.compile(r"\s*(?:[-*•]\s+|\d+[.)]\s+)")
 
 
 class ResultWorkbenchError(ValueError):
@@ -123,7 +132,7 @@ def _refs(value: object, label: str) -> tuple[ResultRef, ...]:
 
 @dataclass(frozen=True)
 class ResultSection:
-    """One source-linked overview claim with an explicit evidence state."""
+    """One source-linked narrative report with an explicit evidence state."""
 
     state: ResultSectionState
     text: str
@@ -137,6 +146,19 @@ class ResultSection:
             "result section text",
             empty=self.state != "PRESENT",
         )
+        # The common overview explains a bounded result in report prose.
+        # Navigable records belong in cases or the operation-owned issue
+        # ledger; accepting bullets here would silently collapse those two
+        # deliberately different layers back into one list.
+        if any(
+            _LIST_LINE.match(line)
+            for line in self.text.splitlines()
+            if line.strip()
+        ):
+            raise ResultWorkbenchError(
+                "A result section must use natural-language report prose, "
+                "not a bulleted or numbered list."
+            )
         refs = _refs(self.refs, "result section references")
         if self.state == "PRESENT" and not refs:
             raise ResultWorkbenchError(

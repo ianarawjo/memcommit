@@ -246,9 +246,8 @@ def test_adapter_projects_local_counts_and_three_separate_sections() -> None:
     assert view.happened.state == "PRESENT"
     assert view.happened.text == _overview().changed.text
     assert view.unresolved.state == "PRESENT"
-    assert _overview().unresolved.text in view.unresolved.text
-    assert "2 actionable quality findings" in view.unresolved.text
-    assert "1 uncertain atomization item" in view.unresolved.text
+    assert view.unresolved.text == _overview().unresolved.text
+    assert "\n" not in view.unresolved.text
 
 
 def test_representatives_are_first_validated_outcomes_not_typicality_claims() -> None:

@@ -10,8 +10,6 @@
  WHAT REMAINS UNRESOLVED
  The accepted NFC method remains unclear.
 
-Saved records contain 2 actionable quality findings and 2 uncertain atomization items.
-
  REPRESENTATIVE / BOUNDARY CASES
  ›  1. [BOUNDARY] AMBIGUITY · COMPETING / REQUIRED
        The note permits physical-card or app guidance, but the accepted Main Building method is unclear.

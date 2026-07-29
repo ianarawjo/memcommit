@@ -276,10 +276,18 @@ It exists because transformation rules and example splits can look reasonable
 even when a whole subject area was omitted. A concise content account lets the
 user detect that omission without reading every result.
 
-The provider is instructed to target a short paragraph, roughly 40-50 English words for
-the Task 1-sized fixture, rather than treating a word count as a semantic
-invariant. Each overview section cites one or more source Memory identities.
+The provider is instructed to target one short paragraph per section, normally
+roughly 40-50 English words at most, under the shared result-workbench
+attention budget. This is a readability target rather than a semantic
+invariant or truncation rule. Each overview section cites one or more source
+Memory identities.
 The snapshot keeps those citations collapsed; the saved analysis retains them.
+All three overview sections follow the natural-language report contract in
+[`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md):
+one short English paragraph in complete sentences, with no bullets, numbered
+list, embedded heading, key-value record, raw ID, or telegraphic enumeration.
+Counts remain in the metadata line, and the complete issue records remain in
+the separate actionable list.
 
 The block must not:
 
@@ -316,8 +324,10 @@ detects or cannot rule out a material omission under its validation contract,
 application must be blocked or the source retained; the UI must not normalize
 loss as an acceptable outcome.
 
-As with the understanding block, this paragraph should be concise and
-traceable. The exact hard word limit is deferred.
+As with the understanding block, each of these two sections is its own concise,
+traceable natural-language report paragraph. The shared 40-50-word soft target
+applies; exact hard enforcement remains intentionally deferred because
+preserving a material qualification takes priority over word-count compliance.
 
 ### `ISSUES`
 
