@@ -63,6 +63,78 @@ compatibility and provenance boundaries are designed. The focused rationale
 is recorded in
 [`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md).
 
+### Generalization target: Goal–Working Rules–Cases alignment
+
+`mem ground` should generalize the conversational pattern proven by atomize:
+the person and agent use consequential follow-up questions to align three
+revisable layers rather than treating the first request as a fixed form.
+
+| Layer | Grounding role |
+| --- | --- |
+| `GOAL` | The shared outcome and completion criterion: what the session is trying to make true. |
+| `WORKING RULES` | Inspectable, revisable rules for interpreting evidence, making judgments, proposing actions, and deciding what the current operation may apply. |
+| `CASES` | Concrete judgments about exact artifacts. Proposed Cases test the current Goal and rules; explicitly approved Cases become regression anchors. |
+
+The artifact and the Case are related but not identical. In atomize, Memories
+are the concrete artifacts being judged. A Case records the expected reading,
+judgment, or outcome for an exact Memory or group of Memories. Merely being
+inspected, affected, or edited does not make a Memory a golden Case; that
+contractual authority requires explicit approval.
+
+A difficult Case can reveal that a Working Rule or even the Goal is wrong.
+Grounding is therefore bidirectional rather than a one-way process of fitting
+examples to an immutable specification. Its reusable dialogue should be:
+
+```text
+show a concrete mismatch or candidate
+→ ask a follow-up whose answer could change a Goal, rule, Case judgment,
+  or downstream action
+→ restate the agent's provisional understanding and its consequences
+→ let the user confirm, extend, correct, retract, defer, or add exact context
+→ revise the affected layer and recheck dependent Cases
+→ request explicit approval before canonicalization or mutation
+```
+
+Follow-ups must be consequential. A generic request for more detail is not
+enough; the interface should say which judgment or proposed action cannot be
+settled without the answer. The user may choose a suggested reading, enter a
+different reading, revise a Working Rule, add a closer Case, or revise the Goal
+when lower-level evidence exposes a bad contract.
+
+The first two representative applications are fixed as follows.
+
+1. **Atomize ambiguity resolution.** The Goal is to reduce actionable
+   ambiguity until the selected reading and consequential Memory changes match
+   the reviewer's intent, not to eliminate every imaginable linguistic
+   reading. Working Rules describe how the agent may judge readings, propagate
+   supplied context, identify affected Memories, and propose or apply edits.
+   The source and affected Memories are the concrete artifacts; reviewed
+   readings and expected outcomes are the candidate Cases. A clarification
+   may resolve one Memory, expose a downstream Memory that must change, or
+   reveal that the agent's scope extension is wrong.
+2. **Task fixture and wiki co-design.** The Goal is to agree on what the
+   campus wiki and local construction-update fixture must represent and where
+   each Memory belongs. Working Rules describe evidence requirements,
+   categories, placement, coverage, non-invention, and audience or disclosure
+   judgments within the fixed privacy boundary. Cases bind source examples to
+   expected fixture content, placement, or disposition. A follow-up may add a
+   missing Case, refine a rule, or reveal that the original Goal was
+   incomplete; accepted Cases become regression anchors for later candidates.
+
+These two examples are the initial design targets, not an exhaustive operation
+list. The shared `ground` engine should own dialogue, revision, follow-up,
+approval, and regression semantics. Each adapter should continue to own its
+artifact types, judgments, and application rules.
+
+Working Rules are adjustable task knowledge, not a way to negotiate away
+implementation invariants. Privacy restrictions, query-only opacity,
+provenance requirements, stale-frame validation, and explicit mutation
+authority remain hard system boundaries. Interpreting atomize through
+Goal–Working Rules–Cases also does not convert an atomize session into a named
+ground, promote an affected Memory into a golden Case, or synchronize the two
+schemas. Any transfer requires a separate explicit provenance and
+compatibility contract.
+
 ## Decision
 
 `ground` is the session-level operation for a person and an agent to establish

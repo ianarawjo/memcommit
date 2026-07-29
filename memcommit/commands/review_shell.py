@@ -37,6 +37,22 @@ class ReviewCancelled(Exception):
     """The interactive review closed normally without applying Memories."""
 
 
+def visible_ordinal_index(selector: str, item_count: int) -> int | None:
+    """Resolve only the canonical spelling of a visible 1-based ordinal.
+
+    A UUID prefix can legally contain digits only. Treating every decimal
+    string as an ordinal makes an eight-character prefix such as ``12345678``
+    unreachable, so out-of-range and zero-padded decimals must remain
+    available to the ordinary UID-prefix resolver.
+    """
+    if not selector.isdecimal():
+        return None
+    ordinal = int(selector)
+    if selector != str(ordinal) or not 1 <= ordinal <= item_count:
+        return None
+    return ordinal - 1
+
+
 def safe_terminal_text(value: str) -> str:
     """Replace terminal control characters while retaining textual layout."""
     result: list[str] = []

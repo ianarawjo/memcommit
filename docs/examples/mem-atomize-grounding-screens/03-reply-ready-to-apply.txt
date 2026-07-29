@@ -1,0 +1,37 @@
+MEM ATOMIZE · GROUNDING · temp/grounding
+Session [<SESSION>] · READY_TO_APPLY · AMBIGUITY · UNARY
+
+ANCHOR
+The note permits physical-card or app guidance, but the accepted Main Building method is unclear.
+Sources: [<STUDENT>]
+
+YOU SAID · TURN 1 · INITIAL
+The Main Building entrance accepts only a physical NFC card; the app does not work there.
+
+YOU SAID · TURN 2 · CORRECT
+Correct: do not tell students to use the app. The staff-only entrance uses the same physical-card-only method.
+
+MEM UNDERSTANDS
+- The Main Building accepts only a physical NFC card.
+- Students must not be guided to use the app there.
+- The staff-only entrance uses the same physical-card-only method.
+
+CURRENT · RESOLVED
+The selected student-authentication issue remains resolved under the corrected shared understanding.
+
+THEN
+[REQUIRED CHANGE] ambiguity:staff-same-nfc · The staff Memory must name the inherited physical-card-only rule explicitly.
+
+READY TO CHANGE
+1. REQUIRED EDIT [<STUDENT>]
+   Students must be guided to use a physical NFC card at the Main Building entrance; app authentication is not accepted there.
+   Why: Remove the contradicted app guidance under the confirmed Main Building exception.
+2. REQUIRED EDIT [<STAFF>]
+   The staff-only entrance requires the same physical NFC card and does not accept app authentication.
+   Why: Make the user's confirmed scope extension source-locally explicit.
+
+Apply the exact complete proposal with:
+  mem atomize --accept-grounding
+Or continue discussing with: mem atomize --reply "..."
+Keep without changing Memories: mem atomize --keep-review-only
+No Memory changes have been applied and no checkpoint has been created by this dialogue.

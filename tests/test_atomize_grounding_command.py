@@ -5,6 +5,7 @@ import json
 import uuid
 from dataclasses import replace
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pytest
 from typer.testing import CliRunner
@@ -33,6 +34,29 @@ from memcommit.store import MemoryStore
 
 
 runner = CliRunner()
+GROUNDING_SCREEN_CAPTURE_DIR = (
+    Path(__file__).resolve().parents[1]
+    / "docs"
+    / "examples"
+    / "mem-atomize-grounding-screens"
+)
+
+
+def _assert_grounding_screen_capture(
+    filename: str,
+    output: str,
+    replacements: dict[str, str],
+) -> None:
+    normalized = output.replace("\r\n", "\n")
+    normalized = "\n".join(
+        line.rstrip() for line in normalized.splitlines()
+    ) + ("\n" if normalized.endswith("\n") else "")
+    for actual, stable in replacements.items():
+        normalized = normalized.replace(actual, stable)
+    expected = (GROUNDING_SCREEN_CAPTURE_DIR / filename).read_text(
+        encoding="utf-8"
+    )
+    assert normalized == expected
 
 
 def _saved_analysis(store: MemoryStore):
@@ -343,7 +367,7 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     monkeypatch,
 ):
     store = MemoryStore()
-    ctx, student, staff, _analysis = _saved_analysis(store)
+    ctx, student, staff, analysis = _saved_analysis(store)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
         "memcommit.commands.atomize.connect_codex_chatgpt_provider",
@@ -351,6 +375,21 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     )
     context_before = store._context_file(ctx.name).read_bytes()
     checkpoints_before = len(store.list_checkpoints(ctx.name))
+    frame_replacements = {
+        analysis.uid[:8]: "<ANALYSIS>",
+        student.uid[:8]: "<STUDENT>",
+        staff.uid[:8]: "<STAFF>",
+    }
+
+    workbench_screen = runner.invoke(app, ["atomize"])
+
+    assert workbench_screen.exit_code == 0, workbench_screen.output
+    assert provider.calls == 0
+    _assert_grounding_screen_capture(
+        "00-workbench.txt",
+        workbench_screen.output,
+        frame_replacements,
+    )
 
     evaluated = runner.invoke(
         app,
@@ -375,11 +414,27 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     assert provider.calls == 1
     assert store._context_file(ctx.name).read_bytes() == context_before
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before
+    opened_grounding = store.load_atomize_grounding_session(ctx.uid)
+    assert opened_grounding is not None
+    screen_replacements = {
+        **frame_replacements,
+        opened_grounding.uid[:8]: "<SESSION>",
+    }
+    _assert_grounding_screen_capture(
+        "01-evaluate-awaiting-reply.txt",
+        evaluated.output,
+        screen_replacements,
+    )
 
     resumed = runner.invoke(app, ["atomize"])
     assert resumed.exit_code == 0, resumed.output
     assert "Resumed without calling the semantic provider." in resumed.output
     assert provider.calls == 1
+    _assert_grounding_screen_capture(
+        "02-provider-free-resume.txt",
+        resumed.output,
+        screen_replacements,
+    )
 
     replied = runner.invoke(
         app,
@@ -407,6 +462,20 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     assert second_turn.revises_turn_uids == (first_turn.uid,)
     assert store._context_file(ctx.name).read_bytes() == context_before
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before
+    _assert_grounding_screen_capture(
+        "03-reply-ready-to-apply.txt",
+        replied.output,
+        screen_replacements,
+    )
+
+    ready_resumed = runner.invoke(app, ["atomize"])
+    assert ready_resumed.exit_code == 0, ready_resumed.output
+    assert provider.calls == 2
+    _assert_grounding_screen_capture(
+        "04-provider-free-ready-resume.txt",
+        ready_resumed.output,
+        screen_replacements,
+    )
 
     applied = runner.invoke(app, ["atomize", "--accept-grounding"])
     assert applied.exit_code == 0, applied.output
@@ -437,6 +506,18 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     )
     assert isinstance(updated.memories[staff.uid], Memory)
     assert "same physical NFC card" in updated.memories[staff.uid].content
+    applied_grounding = store.load_atomize_grounding_session(ctx.uid)
+    assert applied_grounding is not None
+    assert applied_grounding.application is not None
+    applied_replacements = {
+        **screen_replacements,
+        applied_grounding.application.checkpoint_uid[:8]: "<CHECKPOINT>",
+    }
+    _assert_grounding_screen_capture(
+        "05-applied.txt",
+        applied.output,
+        applied_replacements,
+    )
 
     repeated = runner.invoke(app, ["atomize", "--accept-grounding"])
     assert repeated.exit_code == 0, repeated.output
@@ -605,6 +686,8 @@ def test_cli_keep_review_only_creates_no_checkpoint(
     assert opened.exit_code == 0, opened.output
     assert kept.exit_code == 0, kept.output
     assert "KEPT_REVIEW_ONLY" in kept.output
+    assert "REVIEW-ONLY PROPOSALS — not applied" in kept.output
+    assert "PROVISIONAL CHANGES" not in kept.output
     assert "No Memory changes or checkpoint" in kept.output
     assert len(store.list_checkpoints(ctx.name)) == checkpoint_count
     kept_session = store.load_atomize_grounding_session(ctx.uid)

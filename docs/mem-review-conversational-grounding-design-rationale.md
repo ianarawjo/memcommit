@@ -247,6 +247,14 @@ The stable presentation roles for the first slice are `YOU SAID`,
 labels expose the dialogue's epistemic function; they are not decorative chat
 headings.
 
+Terminal proposal headings must reflect the lifecycle truth. `READY TO CHANGE`
+means an exact proposal still awaits permission, `APPLIED CHANGES` means that
+proposal was recorded in its checkpoint, and `REVIEW-ONLY PROPOSALS` means it
+was retained without mutation. An applied screen must never reuse wording such
+as "provisional" or "blocked"; that would contradict the durable receipt.
+Exact normalized captures for the main state transition are indexed in
+[`mem-atomize-grounding-screen-captures.md`](mem-atomize-grounding-screen-captures.md).
+
 ### Why each interaction element exists
 
 | Element | Human-grounding purpose |
@@ -561,6 +569,12 @@ should continue to own issue UIDs, source arity, source-local atomicity,
 quality findings, and atomize edit/add validation. A future `mem ground`
 adapter should own its named Goal, Working Rules, Cases, Decisions, and
 regression contract.
+
+The first `mem ground` generalization will preserve this interaction as one of
+two representative adapters: atomize ambiguity resolution and joint
+construction of a new task or fixture contract. Both are interpreted through
+an editable Goal, Working Rules, and artifact-bound Cases. Atomize-specific
+identities and mutation validation remain in the atomize adapter.
 
 This is generalization by extracting a tested interaction invariant, not by
 renaming the atomize session or storing atomize issues in the named-ground

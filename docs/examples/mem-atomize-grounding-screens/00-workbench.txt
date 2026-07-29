@@ -1,0 +1,52 @@
+MEM IMPACT · ATOMIZE · temp/grounding
+2 source Memories → 2 projected
+0 proposed splits → 0 children
+Analysis [<ANALYSIS>] · ORDER: SOURCE · 0/4 answered
+
+WHAT MEM UNDERSTOOD
+The notes describe student and staff NFC access.
+
+WHAT CHANGED / REMAINS UNRESOLVED
+No source has yet been rewritten.
+The accepted NFC method remains unclear.
+
+ISSUES
+›  1. · AMBIGUITY · COMPETING · REQUIRED  “Students should be guided to use a physical car…”
+      WHY · The note permits physical-card or app guidance, but the accepted Main Building method is unclear.
+      ↳ R1 · Physical card only
+      ↳ R2 · Physical card or app
+   2. · ATOMIZE UNCERTAINTY · UNCERTAIN · REQUIRES CONTEXT  “Students should be guided to use a physical car…”
+   3. · AMBIGUITY · DOMINANT · REQUIRED  “The staff-only entrance uses the same NFC.”
+      WHY · The phrase 'same NFC' does not say whether the staff-only entrance inherits the physical-card-only exception.
+      ↳ R1 · Same physical card
+      ↳ R2 · Same generic NFC
+   4. · ATOMIZE UNCERTAINTY · UNCERTAIN · REQUIRES CONTEXT  “The staff-only entrance uses the same NFC.”
+
+AMBIGUITY 1/4
+
+SOURCE [<STUDENT>]
+Students should be guided to use a physical card or the app.
+
+CLASSIFICATION
+COMPETING · REQUIRED
+
+WHY THIS IS UNCLEAR
+The note permits physical-card or app guidance, but the accepted Main Building method is unclear.
+
+CLARIFICATION PROMPT
+Does the Main Building accept the app?
+
+READING OPTIONS
+  1. [COMPETING] Physical card only
+   Students must use a physical NFC card.
+  2. [COMPETING] Physical card or app
+   Students may use a physical card or the app.
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+>
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Saved analysis [<ANALYSIS>]: CURRENT. Resumed; the provider was not called.
+Apply in place with: mem atomize --save
+Or preserve the source with: mem atomize --save-as NEW_CONTEXT

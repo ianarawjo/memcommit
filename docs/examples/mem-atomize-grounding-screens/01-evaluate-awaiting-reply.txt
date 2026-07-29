@@ -1,0 +1,30 @@
+MEM ATOMIZE · GROUNDING · temp/grounding
+Session [<SESSION>] · AWAITING_REPLY · AMBIGUITY · UNARY
+
+ANCHOR
+The note permits physical-card or app guidance, but the accepted Main Building method is unclear.
+Sources: [<STUDENT>]
+
+YOU SAID · TURN 1 · INITIAL
+The Main Building entrance accepts only a physical NFC card; the app does not work there.
+
+MEM UNDERSTANDS
+- The Main Building accepts only a physical NFC card.
+- Students must not be guided to use the app there.
+
+CURRENT · RESOLVED
+The selected student-authentication reading appears resolved as physical-card-only.
+
+THEN
+[FOLLOW-UP] ambiguity:staff-same-nfc · The phrase 'same NFC' may extend the physical card rule to the staff-only entrance.
+[FOLLOW-UP · SCOPE CHECK] Does the staff-only entrance also reject the app and require the physical NFC card?
+  Why: Without this answer, 'same NFC' cannot be rewritten as a stand-alone staff rule.
+
+PROVISIONAL CHANGES — blocked by required follow-up
+1. REQUIRED EDIT [<STUDENT>]
+   Students must be guided to use a physical NFC card at the Main Building entrance; app authentication is not accepted there.
+   Why: Remove app guidance under the user's physical-card-only clarification.
+
+Continue with: mem atomize --reply "CONFIRM, CORRECT, OR EXTEND"
+Keep without changing Memories: mem atomize --keep-review-only
+No Memory changes have been applied and no checkpoint has been created by this dialogue.

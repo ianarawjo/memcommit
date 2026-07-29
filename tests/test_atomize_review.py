@@ -655,7 +655,13 @@ def test_multiple_atomize_comments_share_one_source_analysis_and_stay_per_memory
 ):
     store = MemoryStore()
     ctx = ops.init("atomize/multiple-comments")
-    first = ops.add(ctx, "Use that door for staff.")
+    # A valid UUID prefix may contain only decimal digits. It must still be
+    # resolved as a source prefix rather than an out-of-range issue ordinal.
+    first = Memory(
+        uid="12345678-1234-4234-8234-123456789abc",
+        content="Use that door for staff.",
+    )
+    ctx.add(first)
     second = ops.add(ctx, "Use that entrance after hours.")
     store.save(
         ctx,

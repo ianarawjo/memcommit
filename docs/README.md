@@ -39,3 +39,6 @@ considered sufficient design history.
   comment–implication–confirmation loops modeled on grounding in ordinary
   human communication, plus the explicit next TODO to generalize that turn
   model through `mem ground`.
+- [`mem-atomize-grounding-screen-captures.md`](mem-atomize-grounding-screen-captures.md)
+  indexes exact tested CLI captures for the workbench, awaiting, resumed,
+  corrected ready, and applied states.

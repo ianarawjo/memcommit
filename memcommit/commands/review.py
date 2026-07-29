@@ -25,6 +25,7 @@ from memcommit.commands.review_shell import (
     ReviewCancelled,
     render_review_snapshot,
     run_review_shell,
+    visible_ordinal_index,
 )
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
@@ -97,14 +98,10 @@ def _run_atomize_workbench(
         selector = respond_to.strip()
         findings = project_atomize_workbench_findings(analysis)
         finding_by_uid = {finding.uid: finding for finding in findings}
-        if selector.isdecimal():
-            ordered = workbench.ordered_issues()
-            selected_index = int(selector) - 1
-            matches = (
-                [finding_by_uid[ordered[selected_index].uid]]
-                if 0 <= selected_index < len(ordered)
-                else []
-            )
+        ordered = workbench.ordered_issues()
+        selected_index = visible_ordinal_index(selector, len(ordered))
+        if selected_index is not None:
+            matches = [finding_by_uid[ordered[selected_index].uid]]
         else:
             matches = [
                 finding
@@ -332,14 +329,10 @@ def cmd(
         raise typer.Exit(1)
     if respond_to is not None:
         selector = respond_to.strip()
-        if selector.isdecimal():
-            ordered = session.ordered_items()
-            selected_index = int(selector) - 1
-            matches = (
-                [ordered[selected_index]]
-                if 0 <= selected_index < len(ordered)
-                else []
-            )
+        ordered = session.ordered_items()
+        selected_index = visible_ordinal_index(selector, len(ordered))
+        if selected_index is not None:
+            matches = [ordered[selected_index]]
         else:
             matches = [
                 item for item in session.items if item.uid.startswith(selector)

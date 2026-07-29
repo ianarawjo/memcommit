@@ -24,7 +24,10 @@ from memcommit.atomize_workbench import (
     atomize_workbench_response_digest,
     project_atomize_workbench_findings,
 )
-from memcommit.commands.review_shell import safe_terminal_text
+from memcommit.commands.review_shell import (
+    safe_terminal_text,
+    visible_ordinal_index,
+)
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.store import MemoryStore
@@ -198,14 +201,10 @@ def _select_finding(
     normalized = selector.strip()
     findings = project_atomize_workbench_findings(analysis)
     finding_by_uid = {finding.uid: finding for finding in findings}
-    if normalized.isdecimal():
-        ordered = workbench.ordered_issues()
-        index = int(normalized) - 1
-        matches = (
-            [finding_by_uid[ordered[index].uid]]
-            if 0 <= index < len(ordered)
-            else []
-        )
+    ordered = workbench.ordered_issues()
+    index = visible_ordinal_index(normalized, len(ordered))
+    if index is not None:
+        matches = [finding_by_uid[ordered[index].uid]]
     else:
         matches = [
             finding
@@ -846,17 +845,25 @@ def render_grounding_session(
             )
 
         if assessment.proposals:
+            if session.state == "READY_TO_APPLY":
+                proposal_heading = "READY TO CHANGE"
+            elif session.state == "APPLIED":
+                proposal_heading = "APPLIED CHANGES"
+            elif session.state == "KEPT_REVIEW_ONLY":
+                proposal_heading = "REVIEW-ONLY PROPOSALS — not applied"
+            elif assessment.has_required_follow_up:
+                proposal_heading = (
+                    "PROVISIONAL CHANGES — blocked by required follow-up"
+                )
+            else:
+                proposal_heading = (
+                    "PROVISIONAL CHANGES — continue grounding before "
+                    "application"
+                )
             lines.extend(
                 [
                     "",
-                    (
-                        "READY TO CHANGE"
-                        if session.state == "READY_TO_APPLY"
-                        else (
-                            "PROVISIONAL CHANGES — blocked by required "
-                            "follow-up"
-                        )
-                    ),
+                    proposal_heading,
                 ]
             )
             for index, proposal in enumerate(
@@ -905,5 +912,8 @@ def render_grounding_session(
             "Keep without changing Memories: "
             "mem atomize --keep-review-only"
         )
-        lines.append("No Memory changes have been applied by this dialogue.")
+        lines.append(
+            "No Memory changes have been applied and no checkpoint has been "
+            "created by this dialogue."
+        )
     return "\n".join(lines)

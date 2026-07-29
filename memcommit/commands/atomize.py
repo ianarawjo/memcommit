@@ -534,9 +534,6 @@ def cmd(
                     provider_factory=connect_codex_chatgpt_provider,
                 )
                 typer.echo(render_grounding_session(grounding, session))
-                typer.echo(
-                    "No Memory changes were made. No checkpoint was created."
-                )
                 return
 
             if reply is not None:
@@ -550,9 +547,6 @@ def cmd(
                     provider_factory=connect_codex_chatgpt_provider,
                 )
                 typer.echo(render_grounding_session(grounding, session))
-                typer.echo(
-                    "No Memory changes were made. No checkpoint was created."
-                )
                 return
 
         applying = save or save_as is not None
