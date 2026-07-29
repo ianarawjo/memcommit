@@ -232,6 +232,108 @@ An update adapter must consume the existing `impact-plan.json` and
 of truth. Similarly, a future conflict adapter must retain its pair-shaped
 semantics even if it uses the same list, detail, choice, and response controls.
 
+## Alternatives considered and why they were not selected
+
+The shell design emerged through several narrower alternatives. Recording them
+matters because some remain plausible future modes, while others would erase
+evidence or overstate what the prototype knows.
+
+### Static report only
+
+The existing `find-ambiguities` output could have remained the only interface.
+It is suitable for logs and scripts but cannot preserve which proposed reading
+a reviewer accepted or what additional context they supplied. The static
+finder therefore remains available, while review is a separate consumer
+rather than a replacement.
+
+### Review one issue at a time without an overview
+
+A sequence of isolated yes/no prompts was considered. It hides the size and
+shape of the review, makes prioritization difficult, and gives a remote
+controller no stable overview to return as a snapshot. The selected design
+uses a vertical issue list plus one expanded detail. Split and stacked layouts
+are two presentations of the same state, not different review models.
+
+### Separate refinement and replacement inputs
+
+An earlier screen had both `REFINE THE SELECTED READING` and
+`ENTER A DIFFERENT READING`. Real answers can do both at once: a reviewer can
+accept a candidate, correct one clause, and add a missing scope condition.
+Forcing a subtype before later reconciliation would manufacture metadata.
+The shell therefore stores a selected candidate and one raw response under:
+
+```text
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+```
+
+### Generic `AFFECTED` topics or one opaque score
+
+Showing `AFFECTED 5` followed by topics such as `access` or `parking` was
+rejected because it does not explain why clarification is needed. It can also
+make an unsupported model estimate look like a measured dependency. The
+current screen instead says what cannot be determined for `REQUIRED`, what
+would become more precise for `HELPFUL`, or why no decision depends on
+resolution for `NONE`.
+
+The more ambitious alternative—ranking by the number of concrete required and
+helpful downstream results changed—remains useful, but it requires structured
+result identities and per-reading counterfactual rechecks. Until that contract
+exists, `PRIORITY` uses only the finding's declared clarification class and
+does not present a fabricated count.
+
+### True time order, Context order, or importance order
+
+True creation-time ordering was considered first, but the current Memory
+schema has no timestamp. Inferring time from UUIDs, checkpoints, or JSON order
+would be false. Canonical Context order is therefore the reproducible
+user-study default, and clarification-class priority is an optional alternate
+view. A real chronological mode remains tied to the explicit
+`Memory.created_at` TODO.
+
+### A natural-language command parser inside `mem`
+
+The CLI could have implemented literal rules for Korean and English commands
+such as “오른쪽,” `->`, or “4번.” That would duplicate chat interpretation,
+be brittle across languages, and confuse issue numbers with reading numbers.
+Instead, the TUI exposes ordinary keys. A controlling agent interprets the
+user's current instruction against the visible frame, sends the necessary PTY
+events, and returns the resulting snapshot.
+
+### PTY state as the only session
+
+Keeping all state inside one full-screen process is smaller, but a disconnect,
+app restart, or context compaction would lose both the semantic report and the
+reviewer's progress. The selected design treats the PTY as transport and saves
+semantic state atomically. A Context fingerprint prevents convenient resume
+from becoming silent reuse of stale findings.
+
+### Apply clarification immediately
+
+Immediately rewriting a Memory after a selection would make the interaction
+look complete, but the freeform response has not yet been classified,
+normalized, or provenance-linked. It may be a comment rather than replacement
+content. Responses therefore remain staged evidence until a future
+reconciliation/apply step can show an explicit diff and checkpoint one
+confirmed mutation.
+
+### Build a fully generic operation framework first
+
+Conflict, update, atomize uncertainty, reconcile, distill, meld, and sever can
+share list/detail/response interaction patterns, but their source arity,
+evidence, and mutation boundaries differ. A generic schema invented before
+those contracts exist would either be vague or encode ambiguity-specific
+assumptions under generic names. The implementation therefore proves the
+ambiguity adapter first and records visual reuse as intent rather than claiming
+that a generic framework already exists.
+
+### Translate or rewrite the source for display
+
+Normalizing every source Memory into English would make the screen uniform but
+would hide whether the model misunderstood the original wording. The source is
+therefore displayed verbatim, while proposed readings and operational
+explanations use English as the comparison language. Reviewer input remains
+verbatim in whatever language was entered.
+
 ## Intentional non-goals
 
 The implemented ambiguity review does not:
