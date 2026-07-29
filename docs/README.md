@@ -34,3 +34,8 @@ considered sufficient design history.
 - [`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md)
   records the interaction language shared with ambiguity review while keeping
   each operation's persistence, source arity, and mutation boundaries distinct.
+- [`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md)
+  records the atomize grounding-session contract for multi-turn
+  comment–implication–confirmation loops modeled on grounding in ordinary
+  human communication, plus the explicit next TODO to generalize that turn
+  model through `mem ground`.

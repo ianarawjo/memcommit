@@ -34,6 +34,35 @@ automatically, approve the whole contract, or edit any Context. The empty
 scaffold remains intentional: no rule or example is generated merely because
 a session was created.
 
+### Immediate next integration TODO
+
+The atomize workbench now has the first implemented adapter for a structured,
+multi-turn conversational grounding loop. The immediate next task is to
+extract its reusable turn engine into `mem ground`. This integration is not
+implemented by the current deterministic named-ground workbench.
+
+The reusable portion should cover append-only turns, active and superseded
+user-supported propositions, agent implications, follow-up questions,
+corrections, explicit permission, and stale-frame checks. Atomize-specific
+issue identities, source arity, and edit proposals must remain in its adapter;
+named-ground Goals, Working Rules, Cases, Decisions, and regression checks
+remain in the `ground` adapter.
+
+The reason for this ordering is methodological as well as architectural.
+Atomize provides a bounded concrete interaction in which a reviewer can say,
+in effect, "if that is true, this later statement must also change," correct
+the agent's extension, and then approve the resulting change set. That pattern
+resembles grounding in ordinary human communication. `mem ground` should
+generalize the proven pattern rather than begin with an abstract chat layer
+whose epistemic stages have not been exercised.
+
+No current atomize grounding session is a named ground, and no named ground
+automatically contributes evidence to atomization. Artifact migration,
+cross-operation import/export, and a shared schema are deferred until their
+compatibility and provenance boundaries are designed. The focused rationale
+is recorded in
+[`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md).
+
 ## Decision
 
 `ground` is the session-level operation for a person and an agent to establish

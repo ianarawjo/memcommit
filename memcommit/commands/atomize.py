@@ -25,6 +25,15 @@ from memcommit.commands.atomize_workbench_shell import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
+from memcommit.commands.atomize_grounding import (
+    AtomizeGroundingCommandError,
+    accept_grounding,
+    assert_current_grounding_bindings,
+    keep_grounding_review_only,
+    render_grounding_session,
+    reply_to_grounding,
+    start_grounding,
+)
 from memcommit.commands.review_shell import ReviewCancelled
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.review import (
@@ -291,11 +300,100 @@ def cmd(
             help="Show saved ATOMIC items as well as split/review items",
         ),
     ] = False,
+    evaluate: Annotated[
+        Optional[str],
+        typer.Option(
+            "--evaluate",
+            metavar="ISSUE",
+            help=(
+                "Start a grounding dialogue for a visible issue number or "
+                "unique issue/source uid prefix"
+            ),
+        ),
+    ] = None,
+    comment: Annotated[
+        Optional[str],
+        typer.Option(
+            "--comment",
+            help=(
+                "Initial context/comment for --evaluate; prompted in a TTY "
+                "when omitted"
+            ),
+        ),
+    ] = None,
+    reply: Annotated[
+        Optional[str],
+        typer.Option(
+            "--reply",
+            help="Confirm, correct, retract, or extend the open dialogue",
+        ),
+    ] = None,
+    revision: Annotated[
+        Optional[str],
+        typer.Option(
+            "--revision",
+            help=(
+                "How --reply relates to the prior turn: confirm, extend, "
+                "correct, or retract"
+            ),
+        ),
+    ] = None,
+    accept_grounding_flag: Annotated[
+        bool,
+        typer.Option(
+            "--accept-grounding",
+            help="Apply the exact ready grounding proposal as one checkpoint",
+        ),
+    ] = False,
+    keep_review_only: Annotated[
+        bool,
+        typer.Option(
+            "--keep-review-only",
+            help="Close the dialogue as evidence without changing Memories",
+        ),
+    ] = False,
 ) -> None:
     """Inspect a preview, mutate in place, or save an atomized new Context."""
+    grounding_action_count = sum(
+        (
+            evaluate is not None,
+            reply is not None,
+            accept_grounding_flag,
+            keep_review_only,
+        )
+    )
     if save and save_as is not None:
         typer.secho(
             "Atomize error: use either --save or --save-as, not both.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if grounding_action_count > 1:
+        typer.secho(
+            "Atomize error: use only one grounding action at a time.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if grounding_action_count and (save or save_as is not None):
+        typer.secho(
+            "Atomize error: grounding actions cannot be combined with "
+            "--save or --save-as.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if comment is not None and evaluate is None:
+        typer.secho(
+            "Atomize error: --comment requires --evaluate.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if revision is not None and reply is None:
+        typer.secho(
+            "Atomize error: --revision requires --reply.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -310,6 +408,153 @@ def cmd(
             )
         direct_ctx = store.load_direct(name)
         session = store.load_atomize_analysis(direct_ctx.uid)
+
+        grounding = store.load_atomize_grounding_session(direct_ctx.uid)
+        if keep_review_only:
+            grounding = keep_grounding_review_only(
+                store=store,
+                context_uid=direct_ctx.uid,
+            )
+            typer.echo(render_grounding_session(grounding, session))
+            return
+
+        if (
+            grounding_action_count == 0
+            and grounding is not None
+            and grounding.state in {"AWAITING_REPLY", "READY_TO_APPLY"}
+        ):
+            if save or save_as is not None:
+                raise AtomizeGroundingCommandError(
+                    "An atomize grounding dialogue is still open. Reply to "
+                    "it, apply its exact proposal, or keep it as review-only "
+                    "before using --save or --save-as."
+                )
+            if session is None:
+                raise AtomizeGroundingCommandError(
+                    "The saved atomize grounding dialogue is stale because "
+                    "its source analysis is unavailable."
+                )
+            workbench = store.load_atomize_workbench(session)
+            if workbench is None:
+                raise AtomizeGroundingCommandError(
+                    "The saved atomize grounding dialogue is stale because "
+                    "its source workbench is unavailable."
+                )
+            # A provider-free resume is still a claim that this screen
+            # describes the current Context. Refuse that claim when any bound
+            # input changed rather than combining an old assessment with a new
+            # issue projection.
+            assert_current_grounding_bindings(
+                grounding,
+                direct_ctx,
+                session,
+                workbench,
+            )
+            typer.echo(render_grounding_session(grounding, session))
+            typer.secho(
+                "Resumed without calling the semantic provider.",
+                fg=typer.colors.CYAN,
+            )
+            return
+
+        if accept_grounding_flag:
+            if session is None:
+                raise AtomizeImpactError(
+                    f"No saved atomize analysis exists for '{name}'."
+                )
+            workbench = store.load_atomize_workbench(session)
+            if workbench is None:
+                raise AtomizeGroundingCommandError(
+                    "The atomize workbench bound to this grounding dialogue "
+                    "is unavailable."
+                )
+            result = accept_grounding(
+                store=store,
+                ctx=direct_ctx,
+                analysis=session,
+                workbench=workbench,
+            )
+            grounding = store.load_atomize_grounding_session(direct_ctx.uid)
+            assert grounding is not None
+            typer.echo(render_grounding_session(grounding, session))
+            if result.recovered:
+                typer.secho(
+                    "The prior application was recovered; no duplicate "
+                    "checkpoint was created.",
+                    fg=typer.colors.YELLOW,
+                )
+            else:
+                typer.secho(
+                    f"Applied {result.change_count} grounded "
+                    f"{'change' if result.change_count == 1 else 'changes'} "
+                    f"in checkpoint [{result.checkpoint_uid[:8]}].",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+                typer.echo(
+                    "The saved atomize analysis is now stale; refresh it "
+                    "explicitly before further review."
+                )
+            return
+
+        if grounding_action_count:
+            if session is None:
+                raise AtomizeImpactError(
+                    f"No saved atomize analysis exists for '{name}'. "
+                    "Run 'mem impact atomize' or 'mem atomize' first."
+                )
+            if not atomize_analysis_matches_context(session, direct_ctx):
+                raise AtomizeImpactError(
+                    "Saved atomize analysis is stale. Run "
+                    "'mem impact atomize --refresh' before grounding it."
+                )
+            workbench = store.load_atomize_workbench(session)
+            if workbench is None:
+                workbench = create_atomize_workbench(session)
+                store.save_atomize_workbench(workbench)
+
+            if evaluate is not None:
+                initial_comment = comment
+                if initial_comment is None:
+                    if not sys.stdin.isatty() or not sys.stdout.isatty():
+                        raise AtomizeGroundingCommandError(
+                            "--comment is required with --evaluate outside "
+                            "an interactive terminal."
+                        )
+                    initial_comment = typer.prompt(
+                        "Refine, comment, or enter a different reading"
+                    )
+                grounding = start_grounding(
+                    store=store,
+                    ctx=direct_ctx,
+                    analysis=session,
+                    workbench=workbench,
+                    selector=evaluate,
+                    comment=initial_comment,
+                    provider_factory=connect_codex_chatgpt_provider,
+                )
+                typer.echo(render_grounding_session(grounding, session))
+                typer.echo(
+                    "No Memory changes were made. No checkpoint was created."
+                )
+                return
+
+            if reply is not None:
+                grounding = reply_to_grounding(
+                    store=store,
+                    ctx=direct_ctx,
+                    analysis=session,
+                    workbench=workbench,
+                    reply=reply,
+                    revision=revision or "extend",
+                    provider_factory=connect_codex_chatgpt_provider,
+                )
+                typer.echo(render_grounding_session(grounding, session))
+                typer.echo(
+                    "No Memory changes were made. No checkpoint was created."
+                )
+                return
+
         applying = save or save_as is not None
         if not applying:
             if session is not None and _analysis_was_applied(
@@ -502,6 +747,7 @@ def cmd(
         ValueError,
         AtomizeImpactError,
         AtomizeWorkbenchError,
+        AtomizeGroundingCommandError,
         QueryProviderError,
     ) as error:
         typer.secho(f"Atomize error: {error}", fg=typer.colors.RED, err=True)

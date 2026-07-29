@@ -62,6 +62,42 @@ responses remain staged. `reconcile`, `distill`, `meld`, and `sever` are
 future or design-only operations whose semantic contracts are not created by
 this UI work.
 
+## Implemented atomize grounding and next direction
+
+One selected atomize issue can now start a multi-turn grounding dialogue: the
+agent
+states its provisional understanding, surfaces a concrete required
+consequence, asks whether a plausible downstream scope extension is intended,
+accepts correction or confirmation, and only then proposes exact Memory
+changes.
+
+This direction is modeled on grounding in ordinary human communication rather
+than on one-shot form submission. A later reviewer turn may supersede an
+earlier interpretation, so comments cannot simply be concatenated into one
+declared frame. Agent inference must remain distinct from user confirmation,
+and no proposed implication may mutate Memory before explicit permission.
+
+The implemented atomize-specific entry points are:
+
+```text
+mem atomize --evaluate ISSUE [--comment TEXT]
+mem atomize --reply TEXT
+mem atomize --accept-grounding
+mem atomize --keep-review-only
+```
+
+This dialogue is an atomize grounding session, not an extension of the global
+ambiguity-review artifact. One resumable latest record is paired with
+immutable Context-scoped records for terminal `APPLIED` and
+`KEPT_REVIEW_ONLY` dialogues. The immediate next TODO is to extract the
+reusable turn, correction, implication, and permission machinery for the
+existing `mem ground` operation. That reuse is not implemented by the atomize
+slice.
+
+The full motivation, state machine, evidence boundary, mutation contract,
+provenance requirements, and rejected alternatives are recorded in
+[`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md).
+
 ## Motivating interaction
 
 An ambiguity finding can offer useful readings without fully containing the

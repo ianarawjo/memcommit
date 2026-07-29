@@ -812,6 +812,50 @@ The following decisions are stable enough to guide implementation and tests:
 - Query-only and referenced content stays outside the direct atomize evidence
   frame.
 
+## Implemented conversational-grounding slice
+
+Multi-turn resolution of one selected workbench issue is now implemented as an
+atomize-specific interaction contract. The goal is to make semantic review
+resemble grounding in ordinary human communication:
+
+```text
+comment
+→ provisional understanding
+→ concrete consequence or follow-up question
+→ correction or confirmation
+→ revised understanding
+→ explicit change proposal
+→ permission
+```
+
+The command contract is:
+
+```text
+mem atomize --evaluate ISSUE [--comment TEXT]
+mem atomize --reply TEXT
+mem atomize --accept-grounding
+mem atomize --keep-review-only
+```
+
+Evaluation and reply build a durable atomize grounding session and may call
+the provider; rendering or resuming it does not. Acceptance is the only path
+that may apply its exact confirmed edit/add proposal. Keeping review evidence
+does not mutate a Context.
+
+This is not permission to make every response a global declared frame.
+The implementation preserves source arity, distinguishes agent inference
+from user assertion, retains corrections rather than concatenating conflicting
+turns, and preserves A06's separation between Context-wide quality judgment and
+source-local atomization. Exact downstream issue identities may be shown only
+when a structured assessment records them; promotion or mutation remains
+optional and explicitly confirmed.
+
+The complete design rationale is
+[`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md).
+The immediate follow-up is to extract the human-grounding turn invariant for
+the existing `mem ground` workbench. That generalization, artifact migration,
+and cross-operation sharing are not part of the atomize slice.
+
 ## Deferred decisions
 
 The following must not be accidentally encoded as settled behavior:
@@ -821,7 +865,9 @@ The following must not be accidentally encoded as settled behavior:
 - the exact action vocabulary for accepting, refining, keeping, or deferring
   an atomize split;
 - a hard word limit for overview paragraphs;
-- structured downstream affected-result counts and dependency graphs;
+- generalization of the atomize grounding-session turn engine into
+  `mem ground`, including artifact compatibility and cross-operation
+  provenance;
 - true creation-time ordering and timestamp migration;
 - a relationship-map secondary view;
 - the exact read-only interaction offered after an analysis has been applied;
@@ -865,7 +911,22 @@ These boxes describe the current implementation and its regression boundary.
 - [x] Keep analysis, review, snapshot, and reanalysis non-mutating.
 - [x] Bind `--save` and `--save-as` to the exact reviewed analysis and record
       trace/rationale provenance.
-- [x] Reject stale Contexts before provider calls, and reject malformed or
+- [x] Persist one Context-bound, multi-turn atomize grounding session with
+      unary/pair anchor arity, reviewer turns, provisional understanding,
+      downstream effects, and required/helpful follow-ups.
+- [x] Preserve terminal grounding dialogues in immutable Context-scoped
+      history so `--keep-review-only` evidence is not overwritten by the next
+      evaluation; history listing/diff UI remains deferred.
+- [x] Implement `--evaluate`, provider-free bare resume, `--reply` with
+      confirm/extend/correct/retract revision labels, and
+      `--keep-review-only`.
+- [x] Validate opaque provider identifiers, generate ADD UUIDs locally, and
+      reject stale or malformed semantic proposals before persistence.
+- [x] Apply the complete ready EDIT/ADD proposal only through
+      `--accept-grounding`, with one Context save, one checkpoint,
+      idempotent receipt recovery, and trace/rationale evidence.
+- [x] Bind the full direct-item order, including reference slots, reject stale
+      inputs before and after provider calls, and reject malformed or
       unsupported provider evidence without partial mutation.
 - [x] Add tests for stable provider-call counts across all resume entry points.
 - [x] Add snapshot tests for information hierarchy, issue order, typed arity,

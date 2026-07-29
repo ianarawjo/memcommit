@@ -174,7 +174,7 @@ def _overview_text(
         (
             f"Analysis [{analysis.uid[:8]}] · "
             f"ORDER: {session.sort_mode} · "
-            f"{session.answered_count}/{len(findings)} resolved"
+            f"{session.answered_count}/{len(findings)} answered"
         ),
         "",
         "WHAT MEM UNDERSTOOD",
@@ -479,7 +479,7 @@ def run_atomize_workbench_shell(
                 f"{safe_terminal_text(analysis.context_name)} · "
                 f"analysis={analysis.uid[:8]} "
                 f"sort={session.sort_mode} layout={session.layout} "
-                f"resolved={session.answered_count}/{len(findings)}"
+                f"answered={session.answered_count}/{len(findings)}"
             )
         ),
         height=Dimension.exact(1),

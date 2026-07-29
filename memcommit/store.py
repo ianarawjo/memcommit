@@ -27,6 +27,8 @@ STAGED_UPDATE_FILE = STORE_DIR / "staged-update.json"
 REVIEW_SESSION_FILE = STORE_DIR / "review-session.json"
 ATOMIZE_ANALYSES_DIR = STORE_DIR / "atomize-analyses"
 ATOMIZE_WORKBENCHES_DIR = STORE_DIR / "atomize-workbenches"
+ATOMIZE_GROUNDING_SESSIONS_DIR = STORE_DIR / "atomize-groundings"
+ATOMIZE_GROUNDING_HISTORY_DIR = STORE_DIR / "atomize-grounding-history"
 GROUND_SESSIONS_DIR = STORE_DIR / "ground-sessions"
 RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
 
@@ -539,6 +541,216 @@ class MemoryStore:
                 raise ValueError("Atomize workbench storage is invalid.")
             path.unlink()
 
+    # --- Conversational atomize grounding sessions ---
+
+    @staticmethod
+    def _atomize_grounding_session_path(context_uid: str) -> Path:
+        """Resolve one Context-bound dialogue without trusting path text."""
+        try:
+            canonical = str(uuid.UUID(context_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError(
+                "Invalid atomize grounding Context uid."
+            ) from error
+        if canonical != context_uid:
+            raise ValueError("Invalid atomize grounding Context uid.")
+        if ATOMIZE_GROUNDING_SESSIONS_DIR.is_symlink():
+            raise ValueError(
+                "Atomize grounding storage cannot be a symbolic link."
+            )
+        if (
+            ATOMIZE_GROUNDING_SESSIONS_DIR.exists()
+            and not ATOMIZE_GROUNDING_SESSIONS_DIR.is_dir()
+        ):
+            raise ValueError("Atomize grounding storage is invalid.")
+        return ATOMIZE_GROUNDING_SESSIONS_DIR / f"{canonical}.json"
+
+    @staticmethod
+    def _atomize_grounding_history_dir(context_uid: str) -> Path:
+        """Resolve one Context's immutable terminal-dialogue archive."""
+        try:
+            canonical = str(uuid.UUID(context_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError(
+                "Invalid atomize grounding Context uid."
+            ) from error
+        if canonical != context_uid:
+            raise ValueError("Invalid atomize grounding Context uid.")
+        if ATOMIZE_GROUNDING_HISTORY_DIR.is_symlink():
+            raise ValueError(
+                "Atomize grounding history cannot be a symbolic link."
+            )
+        if (
+            ATOMIZE_GROUNDING_HISTORY_DIR.exists()
+            and not ATOMIZE_GROUNDING_HISTORY_DIR.is_dir()
+        ):
+            raise ValueError("Atomize grounding history is invalid.")
+        directory = ATOMIZE_GROUNDING_HISTORY_DIR / canonical
+        if directory.is_symlink() or (
+            directory.exists() and not directory.is_dir()
+        ):
+            raise ValueError("Atomize grounding history is invalid.")
+        return directory
+
+    @classmethod
+    def _atomize_grounding_history_path(
+        cls,
+        context_uid: str,
+        session_uid: str,
+    ) -> Path:
+        try:
+            canonical_session = str(uuid.UUID(session_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError(
+                "Invalid atomize grounding session uid."
+            ) from error
+        if canonical_session != session_uid:
+            raise ValueError("Invalid atomize grounding session uid.")
+        return (
+            cls._atomize_grounding_history_dir(context_uid)
+            / f"{canonical_session}.json"
+        )
+
+    def load_atomize_grounding_session(self, context_uid: str):
+        """Return one Context's latest atomize grounding dialogue, if any."""
+        from memcommit.atomize_grounding import (
+            AtomizeGroundingError,
+            AtomizeGroundingSession,
+        )
+
+        path = self._atomize_grounding_session_path(context_uid)
+        if not path.exists():
+            return None
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Atomize grounding storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(
+                    f,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            session = AtomizeGroundingSession.from_dict(data)
+            if session.bindings.context_uid != context_uid:
+                raise ValueError(
+                    "Saved atomize grounding Context identity does not match "
+                    "its storage key."
+                )
+            return session
+        except (
+            json.JSONDecodeError,
+            AtomizeGroundingError,
+            ValueError,
+        ) as error:
+            raise ValueError(
+                "Saved atomize grounding session is invalid."
+            ) from error
+
+    def save_atomize_grounding_session(self, session) -> None:
+        """Atomically persist one strict Context-bound grounding dialogue."""
+        from memcommit.atomize_grounding import (
+            AtomizeGroundingError,
+            AtomizeGroundingSession,
+        )
+
+        if not isinstance(session, AtomizeGroundingSession):
+            raise TypeError("Expected an AtomizeGroundingSession.")
+        path = self._atomize_grounding_session_path(
+            session.bindings.context_uid
+        )
+        if ATOMIZE_GROUNDING_SESSIONS_DIR.exists() and (
+            not ATOMIZE_GROUNDING_SESSIONS_DIR.is_dir()
+            or ATOMIZE_GROUNDING_SESSIONS_DIR.is_symlink()
+        ):
+            raise ValueError("Atomize grounding storage is invalid.")
+        ATOMIZE_GROUNDING_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+        if path.exists() and (not path.is_file() or path.is_symlink()):
+            raise ValueError("Atomize grounding storage is invalid.")
+        data = session.to_dict()
+        try:
+            restored = AtomizeGroundingSession.from_dict(data)
+        except AtomizeGroundingError as error:
+            raise ValueError(
+                "Atomize grounding session is invalid."
+            ) from error
+        if (
+            restored.uid != session.uid
+            or restored.bindings.context_uid
+            != session.bindings.context_uid
+        ):
+            raise ValueError(
+                "Atomize grounding identity changed during save."
+            )
+        if session.state in {"APPLIED", "KEPT_REVIEW_ONLY"}:
+            # Terminal conversations are evidence, not disposable UI state.
+            # Archive them before replacing the latest slot so a subsequent
+            # grounding round cannot silently erase reviewer comments.
+            history_path = self._atomize_grounding_history_path(
+                session.bindings.context_uid,
+                session.uid,
+            )
+            history_dir = history_path.parent
+            ATOMIZE_GROUNDING_HISTORY_DIR.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+            history_dir.mkdir(exist_ok=True)
+            if history_path.exists() or history_path.is_symlink():
+                if not history_path.is_file() or history_path.is_symlink():
+                    raise ValueError("Atomize grounding history is invalid.")
+                with open(history_path, encoding="utf-8") as f:
+                    archived = json.load(
+                        f,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+                if archived != data:
+                    raise ValueError(
+                        "Atomize grounding history is immutable."
+                    )
+            else:
+                _write_json_atomic(history_path, data)
+        _write_json_atomic(path, data)
+
+    def load_atomize_grounding_history(
+        self,
+        context_uid: str,
+    ) -> list:
+        """Load immutable terminal dialogues for one exact Context."""
+        from memcommit.atomize_grounding import (
+            AtomizeGroundingError,
+            AtomizeGroundingSession,
+        )
+
+        directory = self._atomize_grounding_history_dir(context_uid)
+        if not directory.exists():
+            return []
+        sessions = []
+        for path in sorted(directory.glob("*.json")):
+            if path.is_symlink() or not path.is_file():
+                raise ValueError("Atomize grounding history is invalid.")
+            try:
+                with open(path, encoding="utf-8") as f:
+                    value = json.load(
+                        f,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+                session = AtomizeGroundingSession.from_dict(value)
+            except (
+                json.JSONDecodeError,
+                AtomizeGroundingError,
+                ValueError,
+            ) as error:
+                raise ValueError(
+                    "Atomize grounding history is invalid."
+                ) from error
+            if (
+                session.bindings.context_uid != context_uid
+                or session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}
+                or path.stem != session.uid
+            ):
+                raise ValueError("Atomize grounding history is invalid.")
+            sessions.append(session)
+        return sessions
+
     # --- Context paths ---
 
     def _context_dir(self, name: str) -> Path:
@@ -771,8 +983,12 @@ class MemoryStore:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
         return self.load_direct(name)
 
-    def save(self, ctx: Context, auto_checkpoint: Optional[AutoCheckpoint] = None) -> None:
-        """Persist a context to disk. Caller is responsible for calling this after mutations."""
+    def save(
+        self,
+        ctx: Context,
+        auto_checkpoint: Optional[AutoCheckpoint] = None,
+    ) -> Checkpoint | None:
+        """Persist a Context and return its automatic checkpoint, if requested."""
         ctx_dir = self._context_dir(ctx.name)
         context_file = self._context_file(ctx.name)
         if context_file.is_symlink():
@@ -831,6 +1047,7 @@ class MemoryStore:
                     "not be rolled back."
                 ) from cleanup_error
             raise error
+        return created_checkpoint
 
     # --- Query-only research sources ---
 
@@ -979,14 +1196,38 @@ class MemoryStore:
             if canonical_context_uid == context_uid
             else None
         )
+        grounding_path = (
+            self._atomize_grounding_session_path(context_uid)
+            if canonical_context_uid == context_uid
+            else None
+        )
+        grounding_history_dir = (
+            self._atomize_grounding_history_dir(context_uid)
+            if canonical_context_uid == context_uid
+            else None
+        )
         for artifact, label in (
             (analysis_path, "analysis"),
             (workbench_path, "workbench"),
+            (grounding_path, "grounding"),
         ):
-            if artifact is not None and artifact.exists() and (
-                not artifact.is_file() or artifact.is_symlink()
+            if (
+                artifact is not None
+                and (artifact.exists() or artifact.is_symlink())
+                and (not artifact.is_file() or artifact.is_symlink())
             ):
                 raise ValueError(f"Atomize {label} storage is invalid.")
+        if (
+            grounding_history_dir is not None
+            and grounding_history_dir.exists()
+            and any(
+                child.is_symlink()
+                or not child.is_file()
+                or child.suffix != ".json"
+                for child in grounding_history_dir.iterdir()
+            )
+        ):
+            raise ValueError("Atomize grounding history is invalid.")
         review_session = self.load_review_session()
         delete_review_session = (
             review_session is not None
@@ -1036,6 +1277,22 @@ class MemoryStore:
             # Workbench responses may contain free-form user context. They are
             # scoped to the deleted Context and must not survive it.
             workbench_path.unlink()
+        if grounding_path is not None and grounding_path.exists():
+            # Grounding turns retain the reviewer's words verbatim. Keeping
+            # them after their exact Context is gone would be both misleading
+            # state and an avoidable privacy leak.
+            grounding_path.unlink()
+        if (
+            grounding_history_dir is not None
+            and grounding_history_dir.exists()
+        ):
+            # Terminal dialogues contain the same verbatim local evidence as
+            # the latest slot and share the deleted Context's privacy lifetime.
+            shutil.rmtree(grounding_history_dir)
+            try:
+                ATOMIZE_GROUNDING_HISTORY_DIR.rmdir()
+            except OSError:
+                pass
         if delete_review_session and REVIEW_SESSION_FILE.exists():
             # Review answers may contain user-supplied local context. Once
             # their exact Context is deleted, retaining that global artifact

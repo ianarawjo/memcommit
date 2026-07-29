@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Callable, Iterator, Optional, Protocol, TypeAlias, runtime_checkable
 
@@ -260,8 +260,10 @@ class Context:
     ) -> Context:
         """
         Deserialize from a dict produced by to_dict().
-        loader(name) is called to resolve context_refs; if absent or returning None,
-        the ref is silently skipped.
+        loader(name) is called to resolve context_refs. If no loader is
+        supplied, the pointer is retained as an empty Context carrying only
+        its serialized uid and name; referenced content is not opened. If a
+        supplied loader returns None, the unresolved ref is skipped.
 
         memory_loader(context_name, context_uid, memory_uid) resolves memory_refs.
         A memory_ref is retained with target=None when it cannot be resolved.
@@ -299,8 +301,15 @@ class Context:
                 ctx.add(MemoryRef.from_dict(item, target=target))
             elif item["type"] == "query_context_ref":
                 ctx.add(QueryContextRef.from_dict(item))
-            elif item["type"] == "context_ref" and loader is not None:
-                nested = loader(item["name"])
+            elif item["type"] == "context_ref":
+                # Direct, non-resolving reads still need the pointer's slot in
+                # canonical order. Dropping it can shift a later insertion and
+                # makes a read-only Context impossible to serialize faithfully.
+                nested = (
+                    Context(uid=item["uid"], name=item["name"])
+                    if loader is None
+                    else loader(item["name"])
+                )
                 if nested is not None:
                     ctx.add(nested)
         return ctx

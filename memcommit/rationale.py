@@ -203,7 +203,11 @@ def _recorded_reason_events(trace: TraceReport) -> tuple[TraceEvent, ...]:
     return tuple(
         event
         for event in trace.events
-        if event.reason and event.kind not in {"CREATED", "MERGED_IN"}
+        if event.reason
+        and (
+            event.kind not in {"CREATED", "MERGED_IN"}
+            or event.command == "atomize-grounding"
+        )
     )
 
 

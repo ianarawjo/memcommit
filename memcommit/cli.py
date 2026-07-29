@@ -81,7 +81,10 @@ app.command("remove",         help="Remove a direct item from the current contex
 app.command("chunk",          help="Split a memory into chunks (markdown_headers, paragraphs, sentences).")(chunk.cmd)
 app.command(
     "atomize",
-    help="Create or resume an atomize workbench; apply only with an explicit save.",
+    help=(
+        "Create or resume an atomize workbench or grounding dialogue; "
+        "apply only with explicit acceptance."
+    ),
 )(atomize.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
 app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)

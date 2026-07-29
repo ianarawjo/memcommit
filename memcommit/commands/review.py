@@ -143,7 +143,7 @@ def _run_atomize_workbench(
         return
     typer.secho(
         f"Atomize workbench saved: {workbench.answered_count}/"
-        f"{workbench.issue_count} issues resolved.",
+        f"{workbench.issue_count} issues answered.",
         fg=typer.colors.GREEN,
         bold=True,
     )
