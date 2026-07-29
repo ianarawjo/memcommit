@@ -25,6 +25,10 @@ from typing import TYPE_CHECKING, Callable
 from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
 
 if TYPE_CHECKING:
+    from memcommit.atomize import (
+        AtomizeImpactReport,
+        AtomizeProvider,
+    )
     from memcommit.findings import (
         AmbiguityReport,
         ConflictReport,
@@ -567,6 +571,16 @@ def _run_integrate_batch(
 # ---------------------------------------------------------------------------
 # Read-only semantic quality finders
 # ---------------------------------------------------------------------------
+
+def impact_atomize(
+    ctx: Context,
+    provider_factory: Callable[[], "AtomizeProvider"],
+) -> "AtomizeImpactReport":
+    """Preview direct-Memory atomization without mutating *ctx*."""
+    from memcommit.atomize import impact_atomize as _impact_atomize
+
+    return _impact_atomize(ctx, provider_factory)
+
 
 def find_duplicates(
     ctx: Context,

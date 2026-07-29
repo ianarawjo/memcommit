@@ -73,7 +73,10 @@ app.command("find",           help="Find relevant items with temporary Codex ran
 app.command("find-duplicates", help="Find duplicate direct Memories.")(find_duplicates.cmd)
 app.command("find-ambiguities", help="Find ambiguous or underspecified direct Memories.")(find_ambiguities.cmd)
 app.command("find-conflicts", help="Find conflicting direct Memory pairs.")(find_conflicts.cmd)
-app.command("impact",         help="Preview changes from the current Context to a target.")(impact.cmd)
+app.command(
+    "impact",
+    help="Preview a directional update or unary semantic operation.",
+)(impact.cmd)
 app.command("integrate",      help="Intelligently integrate info into the current context (uses LLM).")(integrate.cmd)
 app.command("update",         help="Stage changes from the current Context to a target.")(update.cmd)
 

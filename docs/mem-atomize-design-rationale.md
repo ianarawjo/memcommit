@@ -13,12 +13,13 @@ deduplication. The intended model combines:
 - the source-first question/answer regression style used by the local
   `clozemaking` project.
 
-This note fixes the first semantic contract. It does not implement the command.
-The later quality-finding stages intentionally use a different evidence
-boundary: atomization protects one source occurrence and does not borrow
-neighboring Memories as hidden source evidence, while quality finding reads
-all direct Memories in the selected Context as a local interpretation frame.
-The reason for that asymmetry is documented in
+This note fixes the semantic contract. The first implementation is the
+preview-only `mem impact atomize` command; independent semantic validation and
+application remain future work. The later quality-finding stages intentionally
+use a different evidence boundary: atomization protects one source occurrence
+and does not borrow neighboring Memories as hidden source evidence, while
+quality finding reads all direct Memories in the selected Context as a local
+interpretation frame. The reason for that asymmetry is documented in
 [`memory-quality-judgment-theory-and-decision-history.md`](memory-quality-judgment-theory-and-decision-history.md).
 
 ## Decision
@@ -288,6 +289,77 @@ regressions.
 
 ## Plan contract
 
+### Implemented impact report
+
+The implemented first slice is intentionally smaller than the validated plan
+described below:
+
+```bash
+mem impact atomize
+mem impact atomize --context temp/task-1
+mem impact atomize --all
+```
+
+It loads the selected Context without resolving embedded Contexts or
+`memory_ref` targets, then sends every directly owned Memory once under opaque
+call-local IDs. The local Context name is omitted from the provider payload
+because it is neither source evidence nor necessary routing information. One
+provider completion must return exactly one
+`ATOMIC`/`COMPOSITE`/`UNCERTAIN`/`NON_PROPOSITIONAL` classification for every
+candidate. Context name, item order, neighboring Memories, and calibration
+examples are explicitly not evidence frames. Version 1 supplies no declared
+external frame.
+
+The provider receives the definitions of A01-A10, not just their names. The
+provisional response contains the candidate ID, classification, selected
+reason codes, concise reason, and—in the `COMPOSITE` case only—ordered child
+contents with literal source spans. Local code rejects missing, duplicate, or
+unknown candidates; extra or duplicate JSON fields; invalid classes or reason
+codes; a composite with fewer than two children; children on any other class;
+and source spans absent from that same Memory. This check establishes that
+each child cites literal evidence; it does not prove that every word in a
+model-generated child is entailed by that evidence. That stronger semantic
+grounding remains part of independent validation. Size lint and its profile
+fingerprint are checked locally and lint never decides the semantic class.
+
+The preview's source spans are strings rather than occurrence-addressed
+offsets. This permits an explicit shared qualifier to support several children,
+but it also means local parsing cannot prove A08 occurrence coverage: two
+children can structurally cite the same single occurrence. A future validated
+ledger must distinguish occurrence IDs or offsets and separately identify
+copied scope spans. Until then, repeated-occurrence preservation is a prompted
+and human-reviewed proposal property, not a mechanically proven invariant.
+
+All direct Memories are classified in one call. The default terminal view
+hides unchanged `ATOMIC` details for readability, while `--all` shows them;
+the summary always accounts for every input. No child UID is allocated.
+Context JSON, ordering, checkpoints, state, the directional
+`impact-plan.json`, and query-only sources are not written or opened.
+
+This result is named `AtomizeImpactReport`, not `AtomizePlan`. It is a proposal
+with locally verified evidence-span citations that is safe to inspect, but
+local structural validation is not independent semantic approval. In
+particular, the same one-shot model response cannot mark its own reconstruction
+or single-focus judgment `PASS`. The command therefore ends with:
+
+```text
+No changes applied. No checkpoint created.
+```
+
+The report is not cached because no current command can safely consume it.
+When an independent validation/apply path exists, it should introduce a
+separate atomize artifact rather than reuse the directional update
+`impact-plan.json`.
+
+The temporary provider follows the existing semantic-operation boundary: one
+ephemeral Codex session authenticated by the local ChatGPT login, with user
+configuration ignored. The atomize command does not pin a model name; model
+selection is currently owned by the Codex provider default. A study that
+requires exact model reproducibility must add an explicit allowlisted model
+setting and record it with the report before treating runs as comparable.
+
+### Future validated plan
+
 The semantic provider returns opaque call-local IDs. Real Context and Memory
 UIDs remain in a local allowlist. Ruleset and profile identity are both part
 of staleness: the plan fingerprints the named rules, locale profile, lint
@@ -507,6 +579,71 @@ obviously composite to a human but are not safe to apply without a declared
 frame. The preview can show the candidate commitments while the final class
 remains `UNCERTAIN`.
 
+### First live Task 1 preview observation
+
+The first completed local run of:
+
+```bash
+mem impact atomize
+```
+
+against the 51 direct Memories in `temp/task-1` returned:
+
+```text
+51 direct Memories -> 68 projected
+13 atomic, 10 composite, 13 uncertain, 15 non-propositional
+10 proposed splits -> 27 children
+```
+
+These counts are an observation, not a golden expectation. The provider model
+is not pinned and semantic results may vary between runs.
+
+Several useful boundaries worked: the run proposed separate vehicle and
+pedestrian-access claims, separated item-removal/request/confirmation/lost-item
+occurrences, separated venue-booking closure from redirection, separated
+restroom closure from its alternative location, and marked many sources with
+`앞서`, `같은 NFC`, or missing antecedents `UNCERTAIN`.
+
+The same run also exposed why the report cannot be applied:
+
+- the long Campus Store source was classified `COMPOSITE` even though one
+  proposed child retained unresolved `해당기간`; under A06 the entire source
+  should remain `UNCERTAIN` until that scope is declared;
+- the source about a possible brief air-conditioning interruption and expected
+  recovery within 5–10 minutes was split into outage, recovery, and
+  `괜찮다`; this over-splits one focal outage/recovery commitment and turns an
+  informal evaluation into a weak stand-alone Memory;
+- a route source containing unresolved `이쪽 빌딩` was split instead of being
+  blocked for local antecedent resolution.
+
+These are semantic false approvals that pass the current structural parser.
+They must become contrastive regression cases or validation checks only after
+human review fixes their canonical outcomes. They are not justification for a
+Korean keyword blacklist: A06 concerns whether a referent is locally resolved,
+not whether a particular surface word appears. The observation instead
+reinforces three existing decisions—unresolved scope takes precedence over a
+visible split, focal relations must be preserved, and a separate semantic
+validation pass is required before mutation.
+
+The prompt was then strengthened with those two general precedence rules and
+run again. The second observation was:
+
+```text
+51 direct Memories -> 61 projected
+14 atomic, 7 composite, 15 uncertain, 15 non-propositional
+7 proposed splits -> 17 children
+```
+
+This moved the Campus Store source and an incomplete ATM-guidance source to
+`UNCERTAIN`, and the air-conditioning outage no longer appeared as a proposed
+split. It did not solve every semantic boundary. The route source containing
+`이쪽 빌딩` was omitted from the non-atomic output, indicating that unresolved
+deixis can still be missed, and one item-removal split proposed the fragment
+`확인했다` as a child even though it is not independently self-contained.
+Prompt strengthening improves the sample but is not independent validation,
+and run-to-run count changes are themselves evidence against treating one
+completion as a deterministic golden result.
+
 ## Function boundaries
 
 The intended internal decomposition is:
@@ -523,10 +660,11 @@ build_claim_ledger(source, declared_frame)
 Candidate generation may use sentence boundaries, conjunctions, bullets, and
 size lint. None of those heuristics may bypass the ledger and validation pass.
 
-The first implementation should be preview-only and run against the golden
-corpus before it gains an apply path. The existing `mem chunk` remains a
-deterministic text-splitting primitive; it is not renamed or treated as this
-semantic operation.
+The first implementation is now the preview-only `mem impact atomize` report
+described above. It uses the golden corpus as calibration and keeps application
+outside its trust boundary. The existing `mem chunk` remains a deterministic
+text-splitting primitive; it is not renamed or treated as this semantic
+operation.
 
 ## Intentional non-goals
 

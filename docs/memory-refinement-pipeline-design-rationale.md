@@ -475,7 +475,7 @@ important than final CLI spelling.
 | Stage | Working operation | Primary output | Mutation boundary |
 |---|---|---|---|
 | Envelope | `mem import` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
-| 1 | `mem atomize` | atomic/composite classifications and ordered split proposals with lineage | preview first; confirmed direct-item batch applies as one checkpoint |
+| 1 | `mem impact atomize`; future `mem atomize` apply | exhaustive atomic/composite/uncertain/non-propositional classifications and ordered split proposals | current impact report is read-only and provisional; a future independently validated direct-item batch applies as one checkpoint |
 | 2 | `mem find-duplicates` | positive pair evidence discovered from the whole direct Context | read-only; no checkpoint |
 | 2a | future `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed groups apply as one checkpoint |
 | 3 | `mem find-ambiguities` | unary interpretation and clarification findings | read-only; no checkpoint |
@@ -488,13 +488,19 @@ important than final CLI spelling.
 
 ### `atomize`
 
+- The implemented `mem impact atomize` inspects every directly owned Memory in
+  one provider completion and returns a provisional, Context-ordered report.
+- It never follows `context_ref`, `memory_ref`, or query-only sources, and it
+  never uses neighboring Memories as hidden evidence for one source.
 - Identifies clear composite Memories without resolving ambiguous modifier
   scope.
 - Proposes ordered child contents without normalizing their wording.
-- Gives every child a fresh UID and records the ordered source-to-child mapping
-  in plan and checkpoint provenance.
-- Replaces each source at its original position and blocks sources with inbound
-  references in v1.
+- The impact report allocates no UID, writes no plan cache or checkpoint, and
+  explicitly requires independent semantic validation before application.
+- A future apply path gives every child a fresh UID, records the ordered
+  source-to-child mapping in plan and checkpoint provenance, replaces each
+  source at its original position, and blocks sources with inbound references
+  in v1.
 - Does not perform deduplication, reconciliation, audience inference, or
   deletion of non-propositional notes.
 
@@ -653,12 +659,12 @@ Immediate examples are:
   normalization;
 - the final facts belong in the six `construction-updates/*` Contexts.
 
-The `mem atomize` contract and its golden regression harness define the
-preferred source boundary before analysis. The current quality-analysis
-implementation tranche adds `find-duplicates`, `find-ambiguities`, and
-`find-conflicts` as separate read-only commands so that their binary-relation,
-pair-target, and unary contracts remain observable. A future `dedup` apply path and
-`reconcile`, followed by `audience`, `normalize`, duplicate verification, and
-`place`, can then be added one at a time. A later `mem import` may orchestrate
-those same tested operations without replacing their visible findings, plans,
-reasons, or checkpoints.
+The `mem impact atomize` report and its golden regression harness now implement
+the preferred source boundary as a provisional preview before analysis.
+`find-duplicates`, `find-ambiguities`, and `find-conflicts` remain separate
+read-only commands so that their whole-Context relation discovery, pair-target,
+and unary contracts stay observable. Independent atomize validation/application,
+a future `dedup` apply path and `reconcile`, followed by `audience`,
+`normalize`, duplicate verification, and `place`, can then be added one at a
+time. A later `mem import` may orchestrate those same tested operations without
+replacing their visible findings, plans, reasons, or checkpoints.

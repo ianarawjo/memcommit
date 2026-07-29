@@ -1,4 +1,12 @@
-# `mem impact` and `mem update`
+# Directional `mem impact --to` and `mem update`
+
+`mem impact` now also exposes the unary preview
+`mem impact atomize`. That form classifies and proposes splits inside one
+Context; it does not target another Context, create an `UpdateSession`, or
+write `impact-plan.json`. Its separate evidence and trust boundary is
+documented in
+[`mem-atomize-design-rationale.md`](mem-atomize-design-rationale.md).
+This document specifies only the directional A-to-B form.
 
 ## Intent
 
@@ -19,6 +27,16 @@ mem switch construction-updates
 mem impact --to campus-wiki
 mem update --to campus-wiki
 ```
+
+The two impact forms are mutually exclusive:
+
+```text
+mem impact --to B       directional update preview
+mem impact atomize      unary atomization preview
+```
+
+Supplying both `atomize` and `--to`, or supplying neither, is a usage error.
+`--context` and `--all` belong only to the unary atomize form.
 
 `impact` plans and previews the edits and additions that would make B reflect
 A. It does not change either Context. The validated plan is cached locally so
@@ -93,6 +111,10 @@ These files contain canonical operation records, owner Context identities,
 old and new content, provenance hashes, and source/target fingerprints. They
 are written atomically. Context JSON and checkpoints are not modified by
 either command.
+
+`mem impact atomize` deliberately neither reads nor overwrites these files.
+Its one-shot result is provisional and has no safe apply consumer yet, so the
+first implementation does not cache a second plan artifact.
 
 This is a research-prototype trust boundary, not remote collaboration or an
 access-control system. A later push implementation must reload every owner
