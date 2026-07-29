@@ -55,6 +55,41 @@ instead of promoting stale operations. Running `update` repeatedly with the
 same A and B is idempotent. A different staged update is preserved unless the
 participant explicitly supplies `--replace-stage`.
 
+## Task 1 resolution boundary and incomplete general path
+
+Task 1 stipulates that Context A contains already verified local memory. Its
+directional impact is expected to be reasonable and conflict-free, so the
+participant path does not open a clarification or reconciliation dialogue:
+
+```text
+verified A
+→ impact preview
+→ optional provenance review
+→ update stage
+→ diff
+→ future local application and contribution
+```
+
+This is an intentional **Task 1 scenario boundary**, not a general invariant
+of semantic updates. Introducing an artificial ambiguity or conflict into this
+study path could change participant trust independently of the intended
+questions about provenance, responsibility, and review behavior.
+
+The absence of a general update-resolution adapter is nevertheless an
+**incomplete prototype boundary and explicit TODO**. The current
+`UpdateSession` has no named-Ground binding, Goal–Rules–Cases ledger,
+unresolved-issue state, or directional-Meld turns. It cannot suspend staging
+for a human grounding round, promote an accepted clarification explicitly, or
+recompute a complete proposal from that turn.
+
+A future adapter should stop on a required ambiguity, conflict, placement
+question, or missing scope; bind the update to an exact Ground revision; use an
+issue-scoped directional Meld to incorporate the person's resolution; and
+recompute the complete bounded plan before staging. That future contract is
+recorded in
+[`cross-operation-grounding-design-rationale.md`](cross-operation-grounding-design-rationale.md).
+It is documented design work, not behavior advertised by the current command.
+
 ## Method
 
 Both commands use one planner:
