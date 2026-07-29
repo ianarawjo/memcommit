@@ -11,8 +11,12 @@ from memcommit.commands.exact_command_review import ExactCommandReview
 from memcommit.commands.ground_named_shell import (
     GroundCommandProposal,
     _line,
+    render_named_ground_cases_pane,
+    render_named_ground_goal_pane,
+    render_named_ground_header,
     render_named_ground_top_panel,
     render_named_ground_proposal_blocks,
+    render_named_ground_rules_pane,
     run_named_ground_shell,
 )
 from memcommit.ground import GroundItem, create_ground_session
@@ -149,6 +153,44 @@ def test_named_top_panel_exposes_stable_rule_and_case_aliases():
         "c1 [PROPOSED] The rear entrance closes during construction."
         in rendered
     )
+
+
+def test_named_ground_components_render_all_items_without_summary_truncation():
+    original = session_with_rule_and_case()
+    first_rule, first_case = original.items
+    second_rule = replace(
+        first_rule,
+        uid="33333333-3333-4333-8333-333333333333",
+        content="Preserve exceptions and continued service.",
+        rationale="Otherwise the fixture overstates closures.",
+    )
+    second_case = replace(
+        first_case,
+        uid="44444444-4444-4444-8444-444444444444",
+        content="The east elevator remains in service.",
+        expected="Publish the continued elevator service.",
+        related_uids=(second_rule.uid,),
+    )
+    session = replace(
+        original,
+        items=(first_rule, first_case, second_rule, second_case),
+    )
+
+    assert "MEM GROUND · fixture-ground" in render_named_ground_header(session)
+    assert render_named_ground_goal_pane(session) == (
+        "Build one verified fixture.\n\nCOMPLETION\n"
+        "Every required target has reviewed support."
+    )
+    rules = render_named_ground_rules_pane(session)
+    cases = render_named_ground_cases_pane(session)
+    assert "r1 [PROPOSED]" in rules
+    assert "r2 [PROPOSED]" in rules
+    assert "Preserve exceptions and continued service." in rules
+    assert "Otherwise the fixture overstates closures." in rules
+    assert "c1 [PROPOSED] · FIT / INCLUDE" in cases
+    assert "c2 [PROPOSED] · FIT / INCLUDE" in cases
+    assert "Publish the continued elevator service." in cases
+    assert "LINKED RULES · r2" in cases
 
 
 def test_review_effects_identify_item_and_explain_rule_acceptance():
@@ -319,6 +361,69 @@ def test_two_separate_approvals_apply_two_commands_and_refresh_state():
     assert result.session.revision == 2
     assert result.session.goal == "Goal after command 2."
     assert result.applied_argvs == tuple(applied)
+
+
+def test_named_approval_is_modal_and_tab_cannot_detach_exact_apply():
+    session = create_ground_session("fixture-ground")
+    applied = []
+
+    def apply(current, frozen):
+        applied.append(frozen.review.argv)
+        return replace(current, revision=1), "applied"
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("one rule\r\ta\x03")
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda current, text: proposal(current, text),
+            apply=apply,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert len(applied) == 1
+    assert result.applied_argvs == tuple(applied)
+
+
+def test_named_tab_cycles_four_components_without_starting_a_turn():
+    session = create_ground_session("fixture-ground")
+    interpreted = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\t\t\r\x03")
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda current, text: interpreted.append((current, text)),
+            apply=lambda *_args: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert interpreted == []
+    assert result.applied_argvs == ()
+
+
+def test_named_escape_closes_with_unsent_text_in_the_message_box():
+    session = create_ground_session("fixture-ground")
+    interpreted = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("an unfinished Ground turn\x1b")
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda current, text: interpreted.append((current, text)),
+            apply=lambda *_args: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.session == session
+    assert result.submitted_turns == ()
+    assert result.applied_argvs == ()
+    assert interpreted == []
 
 
 def test_failed_apply_cannot_repeat_the_same_approval():

@@ -12,10 +12,11 @@ not share one semantic or persistence model:
 - `atomize` has typed source findings and its own drill-down navigation.
 
 They nevertheless repeat presentation mechanics: terminal-safe text,
-interactive-terminal checks, fixed and scrollable regions, viewport anchors,
-input panels, footers, and full-screen application setup. Ground also needs a
-stronger mutation boundary: one exact locally constructed command must remain
-visible and may run at most once after a dedicated approval.
+interactive-terminal checks, independently scrollable regions, viewport
+anchors, framed input panels, focus traversal, footers, and full-screen
+application setup. Ground also needs a stronger mutation boundary: one exact
+locally constructed command must remain visible and may run at most once after
+a dedicated approval.
 
 ## Decision
 
@@ -26,10 +27,22 @@ The neutral layer contains:
 
 1. `safe_terminal_text`, interactive-terminal validation, viewport anchoring,
    and slot-based vertical TUI composition;
-2. an immutable `ExactCommandReview` holding only an argv tuple and effect
+2. state-free framed read panes and a framed multiline message composer with
+   independently named `TextArea` buffers;
+3. an immutable `ExactCommandReview` holding only an argv tuple and effect
    lines; and
-3. deterministic rendering of injectively display-escaped arguments with
+4. deterministic rendering of injectively display-escaped arguments with
    `shlex.join`.
+
+The shared message composer does not bind keys or interpret text. Blank
+Ground, named Ground, and meld instantiate the same bordered editor component,
+while their adapters still decide when it receives focus, what Enter means in
+each surrounding view, which provider is called, and what is persisted. In the
+focused Ground editor, `Enter` sends, `Ctrl-J` inserts a newline, and `Escape`
+closes without submitting the draft. Ground does not bind `Alt-Enter` because
+many terminals encode it as an Escape-prefixed Enter sequence. Meld may retain
+its own `Alt-Enter` newline and `Ctrl-S` compatibility submission aliases; the
+shared composer itself binds none of these keys.
 
 The display escape is part of the approval contract. Newlines, tabs,
 backslashes, terminal controls, bidi controls, zero-width format characters,
@@ -77,10 +90,21 @@ create named Ground
 → separately review that proposed Case
 ```
 
-The fixed upper panel always shows the current Goal, most recent Rule and Case,
-their stable local `rN`/`cN` aliases, counts and proposal states, the binding
-state, and the Ground revision. The lower panel owns conversation,
-clarification questions, the frozen command receipt, errors, and input.
+The first implementation used a seven-row upper summary for Goal, Rules, and
+Cases and gave the remaining body to Dialogue. The first realistic run showed
+that this made three editable Ground layers look subordinate and prevented a
+long item from being inspected in place. Ground now composes four peer
+components—Goal, Rules, Cases, and Dialogue—with approximately equal vertical
+weight. Each owns a focusable scroll viewport, so one growing component does
+not consume or truncate the others. The message composer is a separately
+bordered action region below them; it is not a fifth Ground layer.
+
+`Tab` and `Shift-Tab` traverse the four panes and composer. Navigation keys
+scroll the focused read-only pane, while editing keys stay local when the
+composer has focus. During exact-command review, the receipt and its dedicated
+approval/refinement/cancellation actions temporarily own the consequential
+key boundary. Pane focus may change for inspection, but it cannot mutate or
+implicitly approve the frozen argv.
 
 An exact UUID in a review command is not enough for informed approval. The
 Ground adapter therefore augments the neutral effect block with the selected
@@ -95,9 +119,9 @@ and expected output.
 Each approval applies exactly one normal CLI argv through
 `python -m memcommit.cli`; it never invokes a shell and never writes Ground
 JSON directly. After success, the controller reloads the named Ground and
-updates the fixed panel. Proposal and semantic acceptance are deliberately
-different commands. Pressing `A` on a Rule proposal permits recording a
-`PROPOSED` Rule; it does not mean the Rule is accepted.
+updates all affected component panes. Proposal and semantic acceptance are
+deliberately different commands. Pressing `A` on a Rule proposal permits
+recording a `PROPOSED` Rule; it does not mean the Rule is accepted.
 
 The reviewed argv contains an opaque `--if-ground-version` token that freezes
 the Ground UID, revision, and canonical serialized-state digest. Revision
@@ -169,7 +193,8 @@ Ground.
 The same key cannot be given one global meaning:
 
 - Enter sends a Ground turn;
-- Enter expands a meld issue;
+- Enter expands a meld issue when its list is focused, but sends text when its
+  shared dialogue editor is focused;
 - Enter focuses the response editor in review; and
 - atomize uses it for issue drill-down and choice behavior.
 
@@ -179,8 +204,20 @@ owns provider calls and staged application. A generic keymap or `GenericSession`
 would hide these differences and weaken the state boundary.
 
 The shared frame is therefore slot-based. Each operation supplies its own
-header/state panel, body, action/input region, and footer. Ground, meld, and
-review now use that frame composition without sharing semantic state.
+header/state panes, body panes, action region, keymap, and footer. A neutral
+pane primitive may provide a title, viewport, scroll margin, focus style, and
+relative height without knowing whether its content is a Goal, a meld issue,
+or a finder result. Ground composes four such panes because its Goal, Rules,
+Cases, and Dialogue must remain simultaneously inspectable.
+
+Ground and meld also use the same state-free framed message composer; review
+and atomize retain their operation-specific editors. Meld, review, or a future
+interactive finder may reuse the pane and composer presentation primitives
+where their own design calls for several visible components. That reuse does
+not grant them Ground's four-pane layout, aliases, key meanings, provider
+payload, approval semantics, or persistence model. Sharing component chrome
+while keeping operation adapters semantic is the boundary that permits later
+reuse without inventing a generic workbench state.
 
 ## Alternatives rejected
 
@@ -208,6 +245,14 @@ Rejected because it would make terminal location an implicit evidence
 decision, conflict with multi-Context Ground work, and transmit or persist
 state the person did not approve.
 
+### One compact Ground summary above a dominant Dialogue panel
+
+Rejected after the realistic Ground run. It conserved rows, but it made Goal,
+Rules, and Cases appear to be passive status while Dialogue occupied most of
+the screen. Truncating those layers also made “always visible” mean “not
+actually inspectable.” Equal-weight independent viewports preserve the
+four-part mental model and move overflow handling to scrolling.
+
 ## Current limitations
 
 - Provider calls are synchronous inside the prompt-toolkit handler, so a slow
@@ -220,12 +265,15 @@ state the person did not approve.
   which is converted to a provider-safe local alias.
   The TUI has no local read-only candidate picker yet; provider access remains
   deliberately insufficient to invent or inspect that selector.
-- Arbitrary Goal and completion fields may be much taller than a small
-  terminal. The seven-row state panel uses display-cell-aware truncation so
-  Goal, Rules, and Cases remain present, while the command/effect viewport can
-  be switched with the arrow keys. A hard guarantee for a maximum-length argv
-  still requires a dedicated scrollable command-only panel or tighter field
-  limits.
+- Equal pane weight is approximate because the composer, footer, borders, and
+  minimum title rows consume fixed height. On a very small terminal, all four
+  panes remain distinct but may show only one or two content rows at a time;
+  independent scrolling preserves access, not simultaneous visibility of all
+  content. Responsive pane collapsing and a user-controlled pane maximizer
+  remain follow-up work.
+- A hard display guarantee for a maximum-length argv still requires a
+  dedicated scrollable command-only panel or tighter field limits. The
+  approval receipt must never be silently truncated into apparent completeness.
 - Static `mem find-*` output does not become interactive merely by sharing
   chrome. Its interactive route remains `mem review`; each finder needs an
   explicit adapter before it can adopt additional dialogue behavior.

@@ -14,21 +14,19 @@ from dataclasses import dataclass
 from typing import Literal, Protocol
 
 from prompt_toolkit.application import Application
-from prompt_toolkit.filters import has_focus
+from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.layout import (
     DynamicContainer,
     FormattedTextControl,
-    HSplit,
     Layout,
     Window,
 )
 from prompt_toolkit.layout.dimension import Dimension
-from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.widgets import TextArea
+from prompt_toolkit.widgets import Frame
 
 from memcommit.commands.exact_command_review import (
     ExactCommandReview,
@@ -39,7 +37,10 @@ from memcommit.commands.exact_command_review import (
 from memcommit.commands.tui_primitives import (
     TuiRegion,
     anchored_fragments,
+    build_framed_multiline_input,
+    build_scrollable_text_pane,
     build_tui_frame,
+    equal_pane_height,
     require_interactive_terminal,
     safe_terminal_text,
 )
@@ -122,6 +123,48 @@ def render_ground_top_panel(
             "  (none yet)",
             "CASES",
             "  (none yet)",
+        ]
+    )
+
+
+def render_ground_goal_pane(
+    proposal: GroundShellProposal | None = None,
+) -> str:
+    """Render the complete blank-Ground Goal state for its own viewport."""
+    goal = proposal.goal if proposal is not None else "(not yet stated)"
+    completion = (
+        proposal.completion
+        if proposal is not None
+        else "(not yet stated)"
+    )
+    return "\n".join(
+        [
+            safe_terminal_text(goal),
+            "",
+            "COMPLETION",
+            safe_terminal_text(completion),
+        ]
+    )
+
+
+def render_ground_rules_pane() -> str:
+    """Render the initial slice's intentionally empty Rules component."""
+    return "\n".join(
+        [
+            "(none yet)",
+            "",
+            "Rules can be proposed after this Ground is created.",
+        ]
+    )
+
+
+def render_ground_cases_pane() -> str:
+    """Render the initial slice's intentionally empty Cases component."""
+    return "\n".join(
+        [
+            "(none yet)",
+            "",
+            "Cases can be added after the Goal and working Rules exist.",
         ]
     )
 
@@ -285,104 +328,96 @@ def run_ground_shell(
     ]
 
     bindings = KeyBindings()
-    input_area = TextArea(
-        multiline=True,
-        wrap_lines=True,
-        scrollbar=True,
-        height=Dimension(min=3, preferred=4, max=7),
-        prompt="> ",
+    pane_height = equal_pane_height()
+    action_height = Dimension(min=5, preferred=6, max=8)
+    goal_pane = build_scrollable_text_pane(
+        "GOAL",
+        render_ground_goal_pane(),
+        buffer_name="ground-new-goal",
+        height=pane_height,
+    )
+    rules_pane = build_scrollable_text_pane(
+        "RULES",
+        render_ground_rules_pane(),
+        buffer_name="ground-new-rules",
+        height=pane_height,
+    )
+    cases_pane = build_scrollable_text_pane(
+        "CASES",
+        render_ground_cases_pane(),
+        buffer_name="ground-new-cases",
+        height=pane_height,
     )
 
-    def top_text() -> str:
-        return render_ground_top_panel(pending["value"])
-
-    top_panel = Window(
-        FormattedTextControl(top_text),
-        height=Dimension(min=8, preferred=10, max=14),
-        dont_extend_height=True,
-        wrap_lines=True,
-    )
-
-    def conversation_fragments() -> list[tuple[str, str]]:
+    def conversation_text() -> str:
         blocks = list(conversation)
-        anchor_index: int | None = None
-        anchor_at_end = False
         proposal = pending["value"]
         if proposal is not None:
-            command_index = len(blocks)
-            blocks.extend(
-                [
+            if review_view["value"] == "EFFECTS":
+                blocks.append(_render_proposal_effects_block(proposal))
+            else:
+                blocks.append(
                     _render_proposal_command_block(proposal),
-                    _render_proposal_effects_block(proposal),
-                ]
-            )
-            if mode["value"] == "APPROVAL":
-                if review_view["value"] == "EFFECTS":
-                    anchor_index = command_index + 1
-                    anchor_at_end = False
-                else:
-                    anchor_index = command_index
-                    anchor_at_end = True
+                )
         if error_message["value"]:
-            anchor_index = len(blocks)
             blocks.append(
                 "INTERPRETATION FAILED · NOTHING APPLIED\n"
                 f"  {safe_terminal_text(error_message['value'])}"
             )
-        elif mode["value"] == "APPLY_ERROR" and conversation:
-            # The failed command is the newest conversation block. Keep that
-            # failure visible instead of snapping back to the proposal.
-            anchor_index = len(conversation) - 1
-        return _anchored_conversation_fragments(
-            blocks,
-            anchor_index=anchor_index,
-            anchor_at_end=anchor_at_end,
-        )
+        return "\n\n".join(blocks)
 
-    conversation_control = FormattedTextControl(
-        conversation_fragments,
-        focusable=True,
-        show_cursor=False,
+    dialogue_pane = build_scrollable_text_pane(
+        "DIALOGUE",
+        conversation_text(),
+        buffer_name="ground-new-dialogue",
+        height=pane_height,
     )
-    conversation_panel = Window(
-        conversation_control,
-        wrap_lines=True,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
+    composer = build_framed_multiline_input(
+        "MESSAGE",
+        prompt="› ",
+        buffer_name="ground-new-message",
+        height=action_height,
     )
-    input_label = Window(
-        FormattedTextControl(
-            lambda: (
-                " REFINE YOUR DESCRIPTION"
-                if last_submission["value"]
-                else " DESCRIBE WHAT YOU HAVE SO FAR"
-            )
-        ),
+    input_area = composer.text_area
+
+    header = Window(
+        FormattedTextControl(" MEM GROUND · NEW · NOT SAVED"),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    input_panel = HSplit([input_label, input_area])
-    approval_panel = Window(
-        FormattedTextControl(
-            " ↑ command  ↓ effects    A · approve    E · refine    "
-            "Q / Esc / Ctrl-C · cancel"
+    approval_panel = Frame(
+        Window(
+            FormattedTextControl(
+                " ↑ / ← · exact command    ↓ / → · effects\n"
+                " A · approve once          E · refine\n"
+                " Q / Esc / Ctrl-C · cancel"
+            ),
+            wrap_lines=True,
         ),
-        height=Dimension.exact(1),
-        dont_extend_height=True,
+        title="ACTION",
+        height=action_height,
     )
-    error_panel = Window(
-        FormattedTextControl(
-            " R · retry interpretation    E · refine    "
-            "Q / Esc / Ctrl-C · quit"
+    error_panel = Frame(
+        Window(
+            FormattedTextControl(
+                " R · retry interpretation    E · refine\n"
+                " Q / Esc / Ctrl-C · quit"
+            ),
+            wrap_lines=True,
         ),
-        height=Dimension.exact(1),
-        dont_extend_height=True,
+        title="ACTION",
+        height=action_height,
     )
-    apply_error_panel = Window(
-        FormattedTextControl(
-            " E · refine as a new proposal    Q / Esc / Ctrl-C · quit"
+    apply_error_panel = Frame(
+        Window(
+            FormattedTextControl(
+                " E · refine as a new proposal\n"
+                " Q / Esc / Ctrl-C · quit"
+            ),
+            wrap_lines=True,
         ),
-        height=Dimension.exact(1),
-        dont_extend_height=True,
+        title="ACTION",
+        height=action_height,
     )
     action_panel = DynamicContainer(
         lambda: (
@@ -392,7 +427,7 @@ def run_ground_shell(
             if mode["value"] == "APPLY_ERROR"
             else error_panel
             if mode["value"] == "ERROR"
-            else input_panel
+            else composer.container
         )
     )
     footer = Window(
@@ -400,7 +435,7 @@ def run_ground_shell(
             lambda: (
                 f" {status_message['value']}"
                 if status_message["value"]
-                else " Enter · send    Ctrl-J / Alt-Enter · newline"
+                else " Enter · send / return    Ctrl-J · newline    Tab · pane"
                 if mode["value"] == "INPUT"
                 else " No command runs without A · exact approval"
                 if mode["value"] == "APPROVAL"
@@ -414,9 +449,12 @@ def run_ground_shell(
     )
 
     root = build_tui_frame(
-        TuiRegion(top_panel),
-        TuiRegion(conversation_panel, separator_before=True),
-        TuiRegion(action_panel, separator_before=True),
+        TuiRegion(header),
+        TuiRegion(goal_pane.container),
+        TuiRegion(rules_pane.container),
+        TuiRegion(cases_pane.container),
+        TuiRegion(dialogue_pane.container),
+        TuiRegion(action_panel),
         TuiRegion(footer),
     )
     application: Application[GroundShellResult] = Application(
@@ -429,8 +467,18 @@ def run_ground_shell(
         mouse_support=False,
     )
 
+    def sync_panes(*, dialogue_anchor: str = "end") -> None:
+        goal_pane.set_text(
+            render_ground_goal_pane(pending["value"]),
+            anchor="preserve",
+        )
+        dialogue_pane.set_text(
+            conversation_text(),
+            anchor=dialogue_anchor,
+        )
+
     def focus_conversation() -> None:
-        application.layout.focus(conversation_control)
+        application.layout.focus(dialogue_pane.text_area)
 
     def focus_input(*, restore: bool) -> None:
         mode["value"] = "INPUT"
@@ -443,6 +491,7 @@ def run_ground_shell(
             input_area.buffer.cursor_position = len(input_area.text)
         else:
             input_area.text = ""
+        sync_panes(dialogue_anchor="end")
         application.layout.focus(input_area)
         application.invalidate()
 
@@ -502,6 +551,7 @@ def run_ground_shell(
             review_view["value"] = "COMMAND"
             mode["value"] = "APPROVAL"
             input_area.text = ""
+            sync_panes(dialogue_anchor="end")
             focus_conversation()
             application.invalidate()
         except Exception as error:
@@ -511,8 +561,65 @@ def run_ground_shell(
             )
             status_message["value"] = ""
             mode["value"] = "ERROR"
+            sync_panes(dialogue_anchor="end")
             focus_conversation()
             application.invalidate()
+
+    input_mode = Condition(lambda: mode["value"] == "INPUT")
+    approval_mode = Condition(lambda: mode["value"] == "APPROVAL")
+    error_mode = Condition(lambda: mode["value"] == "ERROR")
+    action_mode = Condition(
+        lambda: mode["value"] in {"APPROVAL", "ERROR", "APPLY_ERROR"}
+    )
+    read_panes = (
+        goal_pane.text_area,
+        rules_pane.text_area,
+        cases_pane.text_area,
+        dialogue_pane.text_area,
+    )
+    read_pane_focus = (
+        has_focus(goal_pane.text_area)
+        | has_focus(rules_pane.text_area)
+        | has_focus(cases_pane.text_area)
+        | has_focus(dialogue_pane.text_area)
+    )
+    focus_order = (input_area, *read_panes)
+
+    def cycle_focus(step: int) -> None:
+        current_index = next(
+            (
+                index
+                for index, element in enumerate(focus_order)
+                if application.layout.has_focus(element)
+            ),
+            0,
+        )
+        application.layout.focus(
+            focus_order[(current_index + step) % len(focus_order)]
+        )
+        application.invalidate()
+
+    @bindings.add("tab", filter=input_mode, eager=True)
+    def _focus_next(_event) -> None:
+        cycle_focus(1)
+
+    @bindings.add(Keys.BackTab, filter=input_mode, eager=True)
+    def _focus_previous(_event) -> None:
+        cycle_focus(-1)
+
+    @bindings.add("tab", filter=~input_mode, eager=True)
+    @bindings.add(Keys.BackTab, filter=~input_mode, eager=True)
+    def _keep_modal_focus(_event) -> None:
+        """Approval and failure controls remain attached to Dialogue."""
+
+    @bindings.add(
+        "enter",
+        filter=input_mode & read_pane_focus,
+        eager=True,
+    )
+    def _return_to_message(event) -> None:
+        event.app.layout.focus(input_area)
+        event.app.invalidate()
 
     @bindings.add("enter", filter=has_focus(input_area), eager=True)
     def _submit(event) -> None:
@@ -527,17 +634,11 @@ def run_ground_shell(
         interpret_submission(text, append_user=True)
 
     @bindings.add("c-j", filter=has_focus(input_area), eager=True)
-    @bindings.add(
-        "escape",
-        "enter",
-        filter=has_focus(input_area),
-        eager=True,
-    )
     def _insert_newline(event) -> None:
         input_area.buffer.insert_text("\n")
         event.app.invalidate()
 
-    @bindings.add("a", filter=has_focus(conversation_control), eager=True)
+    @bindings.add("a", filter=approval_mode, eager=True)
     def _approve(event) -> None:
         if mode["value"] != "APPROVAL" or pending["value"] is None:
             return
@@ -562,6 +663,7 @@ def run_ground_shell(
             )
             error_message["value"] = ""
             mode["value"] = "APPLY_ERROR"
+            sync_panes(dialogue_anchor="end")
             focus_conversation()
             event.app.invalidate()
             return
@@ -574,23 +676,25 @@ def run_ground_shell(
             )
         )
 
-    @bindings.add("up", filter=has_focus(conversation_control), eager=True)
-    @bindings.add("left", filter=has_focus(conversation_control), eager=True)
+    @bindings.add("up", filter=approval_mode, eager=True)
+    @bindings.add("left", filter=approval_mode, eager=True)
     def _show_command(event) -> None:
         if mode["value"] != "APPROVAL":
             return
         review_view["value"] = "COMMAND"
+        sync_panes(dialogue_anchor="end")
         event.app.invalidate()
 
-    @bindings.add("down", filter=has_focus(conversation_control), eager=True)
-    @bindings.add("right", filter=has_focus(conversation_control), eager=True)
+    @bindings.add("down", filter=approval_mode, eager=True)
+    @bindings.add("right", filter=approval_mode, eager=True)
     def _show_effects(event) -> None:
         if mode["value"] != "APPROVAL":
             return
         review_view["value"] = "EFFECTS"
+        sync_panes(dialogue_anchor="end")
         event.app.invalidate()
 
-    @bindings.add("e", filter=has_focus(conversation_control), eager=True)
+    @bindings.add("e", filter=action_mode, eager=True)
     def _refine(event) -> None:
         if mode["value"] not in {"APPROVAL", "ERROR", "APPLY_ERROR"}:
             return
@@ -600,7 +704,7 @@ def run_ground_shell(
         )
         focus_input(restore=True)
 
-    @bindings.add("r", filter=has_focus(conversation_control), eager=True)
+    @bindings.add("r", filter=error_mode, eager=True)
     def _retry(event) -> None:
         if mode["value"] != "ERROR":
             return
@@ -617,9 +721,12 @@ def run_ground_shell(
             )
         )
 
-    @bindings.add("q", filter=has_focus(conversation_control), eager=True)
-    @bindings.add("escape", filter=has_focus(conversation_control), eager=True)
+    @bindings.add("q", filter=action_mode, eager=True)
     def _cancel_from_action(event) -> None:
+        cancel(event)
+
+    @bindings.add("escape", eager=True)
+    def _cancel_on_escape(event) -> None:
         cancel(event)
 
     @bindings.add("c-c", eager=True)

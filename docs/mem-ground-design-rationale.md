@@ -9,18 +9,18 @@ scaffold to a version-2 workbench:
 ```bash
 mem ground task-1-fixture \
   --goal "Agree on the wiki and local Task 1 Memory contents." \
-  --scope campus-wiki \
-  --scope construction-updates \
+  --scope participant/campus-wiki-fork \
+  --scope participant/construction-updates \
   --snapshot
 
 mem ground task-1-fixture --snapshot
 
 mem ground task-1-fixture \
-  --description "Use verified Main Building changes to update the wiki." \
+  --description "Use verified Main Building changes to update the local wiki fork." \
   --raw-context temp/task-1 \
   --derived-context temp/task-1-atomized \
-  --publication-target campus-wiki \
-  --placement-target construction-updates/building-access \
+  --publication-target participant/campus-wiki-fork \
+  --placement-target participant/construction-updates/building-access \
   --snapshot
 ```
 
@@ -47,32 +47,60 @@ presentations of the same unsaved state:
 - outside a TTY, it prints a stable `NEW` snapshot and exits without reading
   stdin or contacting a provider.
 
-The TUI keeps Goal, Rules, and Cases in a fixed upper panel while dialogue,
-the proposed command, its complete effect boundary, and the input area occupy
-the lower portion:
+The first full-screen implementation kept Goal, Rules, and Cases in a short
+fixed summary while Dialogue consumed most of the available height. An actual
+use run showed that this hierarchy was misleading: the three editable Ground
+layers looked like passive status labels, while the transcript looked like the
+primary artifact. It also made a long Goal, Rule, or Case inaccessible rather
+than merely compact.
+
+The revised layout treats Goal, Rules, Cases, and Dialogue as four peer
+components. They receive approximately equal vertical weight after the
+composer and footer have been allocated space, and each component has its own
+focusable, independently scrollable viewport:
 
 ```text
-MEM GROUND · NEW · NOT SAVED
-
-GOAL
-  (not yet stated)
-
-RULES
-  (none yet)
-
-CASES
-  (none yet)
-
-OPEN QUESTION · GOAL
-  What are you trying to understand, decide, or make together?
-
-────────────────────────────────────────────────────────
-YOU / AGENT UNDERSTANDING / AGENT QUESTION
-PROPOSED COMMAND · NOT RUN
-────────────────────────────────────────────────────────
-DESCRIBE WHAT YOU HAVE SO FAR
-> ...
+┌─ GOAL ────────────────────────────────────────────────┐
+│ (not yet stated)                                  ▐   │
+└───────────────────────────────────────────────────────┘
+┌─ RULES ───────────────────────────────────────────────┐
+│ (none yet)                                        ▐   │
+└───────────────────────────────────────────────────────┘
+┌─ CASES ───────────────────────────────────────────────┐
+│ (none yet)                                        ▐   │
+└───────────────────────────────────────────────────────┘
+┌─ DIALOGUE ────────────────────────────────────────────┐
+│ What are you trying to understand, decide, or make?▐  │
+└───────────────────────────────────────────────────────┘
+┌─ MESSAGE ─────────────────────────────────────────────┐
+│ >                                                     │
+└───────────────────────────────────────────────────────┘
 ```
+
+Equal weight does not mean equal semantic importance or an exact pixel
+guarantee. It prevents one layer from permanently taking the screen while
+letting all four regions expand or contract with terminal height. `Tab` and
+`Shift-Tab` move focus among the four viewports and the message composer.
+Arrow and page-navigation keys scroll the focused read-only viewport; when the
+composer has focus, its normal editing keys remain local to the editor. The
+bordered composer is a distinct action region, not a fifth Ground layer. Its
+box makes the typing boundary recognizable to users familiar with
+conversation-first terminal agents and prevents a blank prompt from looking
+like ordinary shell output.
+
+Within Ground, `Enter` sends, `Ctrl-J` inserts a newline, and `Escape`
+immediately cancels or closes the TUI even when the composer contains an
+unsent draft. That draft is not interpreted or persisted. Ground deliberately
+does not also bind `Alt-Enter`: terminal applications commonly encode it as an
+Escape-prefixed Enter sequence, which would make a lone Escape wait or fail to
+provide the predictable exit requested by the user.
+
+When an exact command is awaiting approval, the command/effect receipt and
+its operation-specific approval keys take precedence over message entry. The
+four Ground components remain inspectable, but changing focus or scrolling
+must not edit, replace, or implicitly approve the frozen command. Returning
+to dialogue requires an explicit refine/cancel action; approval remains bound
+to the exact displayed argv.
 
 This is the normal entry point when the person has only a rough concern, such
 as wanting to work out which parts of some notes were reported. Early
@@ -92,6 +120,60 @@ require `GROUND_NAME`; `mem ground --goal ...`, `--snapshot`, or another
 option without a name fails without creating state. A provider-suggested name
 is checked for a collision before approval and checked again immediately
 before execution.
+
+### Future design: discovering Contexts from no Ground
+
+The blank entry currently establishes only a Goal and portable Ground name.
+It intentionally does not discover or bind Contexts. The next design slice
+should help a person who starts with an outcome such as “build the Task 1
+campus wiki fixture” without making terminal location into hidden evidence.
+
+The proposed guidance sequence is:
+
+```text
+describe the desired outcome
+→ restate and approve a provisional Goal
+→ explicitly open a local Context picker
+→ show metadata-only candidates
+→ assign each selected Context an explicit role
+→ review one exact binding command and its effects
+→ bind only after approval
+```
+
+Context discovery must be a local host operation, not an unrestricted provider
+search. Before selection it may expose public Context names, access class
+(ordinary writable, local fork, or query-only), and non-content locator
+metadata needed to distinguish ordinary local candidates. Direct-item counts
+may be shown for those ordinary local Contexts. A query-only candidate exposes
+only its already-public name and access class; even its count is not inferred
+by opening the source. Discovery must not load Memory content, traverse a
+`context_ref`, open query-only sources, or send the store-wide candidate list
+to the blank-entry provider. A candidate name is a suggestion, not permission
+to inspect or bind it.
+
+The picker should ask the person to assign roles rather than merely check a
+set of Contexts:
+
+- raw evidence;
+- derived or atomized candidates;
+- writable publication/materialization target; and
+- one or more placement targets.
+
+For Task 1, this would let the person select the raw notes and atomized
+candidates, distinguish the participant's writable campus-wiki fork from the
+opaque organizational wiki, and select the six construction-update placement
+Contexts. The organizational wiki may be shown as a query-only authority, but
+it cannot be opened by the picker or silently substituted for a writable local
+target.
+
+After role assignment the host constructs one exact `mem ground` binding argv
+locally, states which frames will be fingerprinted and saved, and waits for
+the existing dedicated approval action. No Context is inferred from the
+current directory, current active Context, name similarity, recency, or the
+provisional Goal. This keeps a helpful “start from nothing” path compatible
+with the existing privacy, multi-Context, and one-command approval
+boundaries. Search ranking, metadata fields, and the picker interaction itself
+remain future work.
 
 The current provider is the existing one-shot Codex adapter authenticated by
 the local ChatGPT login. Each interpretation is ephemeral and receives only
@@ -113,15 +195,16 @@ a shell, and its actual output is reported after the TUI closes.
 The original blank-entry slice ended after creating or cancelling one initial
 Ground. The continuing vertical slice now enters the named-Ground TUI
 immediately after creation and also opens that TUI when an existing name is
-entered without options in a terminal. The fixed panel
+entered without options in a terminal. The four-component view
 changes from `NEW · NOT SAVED` to `SAVED · UNBOUND`, then to `SAVED · BOUND`
 after an explicitly approved binding command.
 
 The continuing loop supports one exact command at a time for binding, Goal
 revision, Rule proposal, Rule/Case review, and traceable Case proposal.
 Proposal and acceptance remain separate approvals. After every success the
-Ground is reloaded and the fixed Goal–Rules–Cases panel is refreshed. The
-displayed command carries the reviewed Ground UID, revision, and serialized
+Ground is reloaded and the Goal, Rules, Cases, and Dialogue components are
+refreshed. The displayed command carries the reviewed Ground UID, revision,
+and serialized
 digest as a save-boundary version token. A binding command additionally
 freezes each selected Context's UID, digest, and direct-item counts because an
 unbound Ground has no saved frames yet. The normal CLI locks and rechecks the
@@ -147,6 +230,10 @@ redaction can be mapped back into the reviewed command.
 Natural-language transcript persistence and asynchronous provider progress
 remain follow-up work. Non-TTY output remains deterministic so remote
 captures, tests, and surrounding agents do not hang on a terminal prompt.
+The bordered multiline message composer has been extracted as state-free
+terminal chrome and is also used by meld. Ground still owns its ASK/PROPOSE
+controller, exact-command receipt, reload/CAS guards, and one-command approval
+lifecycle; sharing the editor does not make those semantics generic.
 The reusable presentation boundary and its rejected alternatives are recorded
 in
 [`shared-tui-command-review-design-rationale.md`](shared-tui-command-review-design-rationale.md).
@@ -158,7 +245,7 @@ interpretation outside the Ground persistence engine. A target-focused,
 read-only view is available as:
 
 ```bash
-mem ground task-1-fixture --focus-target campus-wiki
+mem ground task-1-fixture --focus-target participant/campus-wiki-fork
 ```
 
 The screen focuses one bound target, restates the saved Goal and target
@@ -431,7 +518,7 @@ has read the source.
 ## Named-session identity
 
 Grounding is not bound to the global current Context. A Task 1 Ground may
-cover `campus-wiki` plus several local construction-update Contexts, while a
+cover `participant/campus-wiki-fork` plus several local construction-update Contexts, while a
 different agent works on Task 2. Therefore sessions are named and independent:
 
 ```text
@@ -516,12 +603,21 @@ participant/construction-updates    verified change evidence
 queried through an opaque pointer and is only a future publication target.
 Query access does not grant traversal or mutation authority.
 
-The existing Ground fixture below still uses the legacy ordinary
-`campus-wiki` target and records its missing baseline as `BLOCKED`; it has not
-yet been migrated to this split. Current Ground binding also accepts ordinary
-Context frames rather than binding a query-only upstream authority. Future
-fixture work must bind the writable local fork as the materialization target
-and record the upstream publication binding separately.
+The Ground fixture follows that authority split: it binds the writable
+`participant/campus-wiki-fork` and the
+`participant/construction-updates/*` hierarchy as ordinary Context frames.
+It never binds `campus-wiki`, loads its query-only contents, or presents it as
+a Case destination.
+
+One adapter name remains intentionally behind the runtime model. Ground's
+version-2 schema and CLI still call the fork frame `PUBLICATION_TARGET` and
+`--publication-target`. For Task 1 those labels mean “the local
+materialization target from which a later contribution may be prepared”; they
+do not mean that the shared origin is bound or that publication occurs.
+Renaming that generic role in the persisted schema would require an explicit
+schema migration. A future Ground version should represent the writable
+materialization target and query-only upstream publication authority as
+separate fields.
 
 The local fork is assumed to be a current, researcher-provisioned snapshot of
 the participant's complete authorized candidate scope, with no concurrent
@@ -529,6 +625,12 @@ upstream change during Task 1. It must not contain only pages already known to
 change, because doing so would answer the impact-scope question during setup.
 These are scenario assumptions until origin revisions, refresh, remote
 divergence checks, and publication are implemented.
+
+The small Ground regression fixture still initializes that bound fork with
+zero Memories so it can exercise an explicit `BLOCKED` criterion. That
+synthetic absence tests Ground behavior; it is not the participant-facing
+Task 1 dataset and must not be read as permission to invent an upstream
+baseline.
 
 ## Confirmed Task 1 frame
 
@@ -558,7 +660,8 @@ currently missing, which decisions have been approved, and which gaps remain.
 It contains:
 
 - the fixed Task 1 source brief and editable Goal;
-- the expected `campus-wiki` organizational baseline and publication role;
+- the expected `participant/campus-wiki-fork` baseline and local
+  materialization role;
 - the six required local destination slots;
 - each slot's ledger-derived `EMPTY`, `PARTIAL`, or `COVERED` state, or its
   explicitly recorded `BLOCKED` state;
@@ -568,21 +671,22 @@ It contains:
 The required local slots are:
 
 ```text
-construction-updates/building-access
-construction-updates/event-relocations
-construction-updates/temporary-parking
-construction-updates/shop-updates
-construction-updates/facility-updates
-construction-updates/route-changes
+participant/construction-updates/building-access
+participant/construction-updates/event-relocations
+participant/construction-updates/temporary-parking
+participant/construction-updates/shop-updates
+participant/construction-updates/facility-updates
+participant/construction-updates/route-changes
 ```
 
-The initial `campus-wiki` Context and all six local Contexts currently contain
-zero direct Memories. In particular, the scenario describes `campus-wiki` as
-an extensive organizational source, but that baseline fixture has not been
-provided. The Task 1 session therefore records an explicit `BLOCKED` reason
-for that target; it must not silently treat the construction notes as the
-pre-existing wiki or synthesize a baseline. `ground` displays this recorded
-judgment but does not infer it from the empty Context alone.
+The synthetic Ground regression fixture initializes
+`participant/campus-wiki-fork` and all six local Contexts with zero direct
+Memories. The participant-facing scenario instead assumes a provisioned local
+fork of the extensive organizational source. The regression session records
+an explicit `BLOCKED` reason for its deliberately absent local-fork baseline;
+it must not silently treat the construction notes as the pre-existing wiki or
+synthesize a baseline. `ground` displays this recorded judgment but does not
+infer it from the empty Context alone.
 
 The four target states are a derived display, not a fourth Ground layer:
 
@@ -605,7 +709,7 @@ The **lower region is the evidence-to-target workbench**. Its bound frames are:
 ```text
 raw evidence       temp/task-1                    51 Memories
 working candidates temp/task-1-atomized           54 Memories
-targets            campus-wiki + six child Contexts
+targets            local fork + six construction-update child Contexts
 ```
 
 The 51-to-54 change identifies the inspected input and derived candidate set;
@@ -617,9 +721,10 @@ candidate, propose targets and expected wording, attach it to an existing
 Rule, and accept, refine, defer, or reject it. `REFINE` currently
 changes rule wording or a case's expected output; changing a case's targets,
 role, disposition, rationale, or raw provenance remains follow-up work. A
-proposed placement may name `campus-wiki`, one of the six local slots, or both
-when their distinct source-of-change and publication roles justify the
-duplication.
+proposed placement may name `participant/campus-wiki-fork`, one of the six
+local slots, or both when their distinct source-of-change and materialization
+roles justify the duplication. It may not name the query-only `campus-wiki`
+origin.
 
 The upper Ground must not be mixed into the lower candidate list. The top
 answers “what are we trying to achieve, what rules currently express it, and
@@ -720,7 +825,7 @@ GOAL
 COMPLETION
   The reviewed cases in the current scope are adequately explained ...
 
-SCOPE  campus-wiki, construction-updates
+SCOPE  participant/campus-wiki-fork, participant/construction-updates
 RULES 0 · CASES 0 · UNRESOLVED 0 · DECISIONS 0
 
 No grounding material has been recorded.
@@ -749,10 +854,11 @@ This non-mutation boundary remains in force for the implemented workbench.
 Reviewing a placement, promoting a proposal to a golden case, changing an
 upper-region status, or even marking the Ground `GROUNDED` changes only the
 named Ground artifact. It must not add, edit, or delete a Memory in
-`campus-wiki`, `construction-updates`, or either temporary source Context, and
-must not create a target checkpoint. Materializing approved decisions into
-target Contexts is a separate, explicit future action with its own preview and
-checkpoint boundary.
+`participant/campus-wiki-fork`, `participant/construction-updates`, or either
+temporary source Context, and must not create a target checkpoint.
+Materializing approved decisions into target Contexts is a separate, explicit
+future action with its own preview and checkpoint boundary. The query-only
+`campus-wiki` origin is outside these bound frames altogether.
 
 During semantic turns, query-only content remains opaque. Direct Context
 evidence is fingerprinted before a command proposal and checked again under
@@ -769,10 +875,13 @@ the approved revision. A provider cannot set this status by itself.
 ## Task 1 use
 
 The first named Ground is `task-1-fixture`. Its Goal is to establish which
-Memories belong in the missing `campus-wiki` fixture and which belong in the
-six local Task 1 construction-update Contexts. The organizational wiki and
-local updates have different roles, so an explicitly justified fact may appear
-in both; identical content is not automatically an accidental duplicate.
+Memories belong in the local `participant/campus-wiki-fork` fixture and which
+belong in the six `participant/construction-updates/*` Contexts. The local
+fork and verified change hierarchy have different materialization and
+source-placement roles, so an explicitly justified fact may appear in both;
+identical content is not automatically an accidental duplicate. The
+query-only `campus-wiki` origin remains outside this Ground and becomes
+relevant only at a later contribution boundary.
 
 Within a future retrieval- and regression-enhanced review loop, the workbench
 should submit one
@@ -806,7 +915,7 @@ future work.
 - Treating the 51 raw Memories and 54 candidates as the target Ground was
   rejected because evidence availability and fixture requirements answer
   different questions.
-- Inferring a plausible `campus-wiki` baseline was rejected because it would
+- Inferring a plausible `participant/campus-wiki-fork` baseline was rejected because it would
   conceal the target fixture's current absence and make before/after update
   behavior impossible to audit.
 - Writing approved ground decisions directly into target Contexts was rejected

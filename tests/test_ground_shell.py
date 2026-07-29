@@ -12,6 +12,9 @@ from memcommit.commands.ground_shell import (
     GroundShellProposal,
     _anchored_conversation_fragments,
     format_proposal_command,
+    render_ground_cases_pane,
+    render_ground_goal_pane,
+    render_ground_rules_pane,
     render_ground_top_panel,
     render_proposal_review,
     run_ground_shell,
@@ -75,6 +78,25 @@ def test_fixed_top_panel_and_effect_review_show_all_boundaries():
     assert "Contexts: unchanged" in review
     assert "Memories: unchanged" in review
     assert "Checkpoints: unchanged" in review
+
+
+def test_blank_ground_layers_render_as_complete_independent_components():
+    frozen = GroundShellProposal(
+        ground_name="task-1-report-coverage",
+        goal="Find what was reported.",
+        completion="Coverage is explicit.",
+        understanding="Review coverage.",
+        question="Approve?",
+    )
+
+    assert render_ground_goal_pane() == (
+        "(not yet stated)\n\nCOMPLETION\n(not yet stated)"
+    )
+    assert render_ground_goal_pane(frozen) == (
+        "Find what was reported.\n\nCOMPLETION\nCoverage is explicit."
+    )
+    assert "Rules can be proposed after" in render_ground_rules_pane()
+    assert "Cases can be added after" in render_ground_cases_pane()
 
 
 def test_approval_viewport_anchor_tracks_end_of_exact_proposed_command():
@@ -166,6 +188,43 @@ def test_approval_applies_the_frozen_proposal_exactly_once():
     assert not hasattr(applied[0], "command")
 
 
+def test_approval_is_modal_and_tab_cannot_detach_exact_apply():
+    applied: list[GroundShellProposal] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("Review the Task 1 report.\r\ta")
+        result = run_ground_shell(
+            interpret=proposal,
+            apply=lambda value: applied.append(value) or "created",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "APPLIED"
+    assert applied == [result.proposal]
+
+
+def test_tab_cycles_four_read_only_components_without_submitting():
+    interpreted: list[str] = []
+    applied: list[GroundShellProposal] = []
+
+    with create_pipe_input() as pipe_input:
+        # MESSAGE → GOAL → RULES → CASES → DIALOGUE; Enter returns to MESSAGE.
+        pipe_input.send_text("\t\t\t\t\r\x03")
+        result = run_ground_shell(
+            interpret=lambda text: interpreted.append(text),
+            apply=lambda value: applied.append(value),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CANCELLED"
+    assert interpreted == []
+    assert applied == []
+
+
 def test_refine_requires_a_new_proposal_and_approval():
     seen: list[str] = []
     applied: list[GroundShellProposal] = []
@@ -212,6 +271,26 @@ def test_cancel_and_ctrl_c_never_apply(cancel_key: str):
         )
 
     assert result.status == "CANCELLED"
+    assert applied == []
+
+
+def test_escape_cancels_with_unsent_text_in_the_message_box():
+    interpreted: list[str] = []
+    applied: list[GroundShellProposal] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("an unfinished Ground description\x1b")
+        result = run_ground_shell(
+            interpret=lambda text: interpreted.append(text),
+            apply=lambda value: applied.append(value),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CANCELLED"
+    assert result.submitted_turns == ()
+    assert interpreted == []
     assert applied == []
 
 

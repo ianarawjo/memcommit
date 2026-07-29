@@ -13,9 +13,13 @@ from memcommit.commands.exact_command_review import (
 from memcommit.commands.tui_primitives import (
     TuiRegion,
     anchored_fragments,
+    build_framed_multiline_input,
+    build_scrollable_text_pane,
     build_tui_frame,
     display_escape_text,
+    equal_pane_height,
     safe_terminal_text,
+    set_scrollable_pane_text,
 )
 
 
@@ -92,6 +96,64 @@ def test_shared_chrome_composes_regions_without_owning_their_semantics():
     assert frame.children[0] is header
     assert frame.children[2] is body
     assert frame.children[3] is footer
+
+
+def test_scrollable_panes_have_distinct_read_only_buffers_and_equal_heights():
+    height = equal_pane_height(minimum=5)
+    goal = build_scrollable_text_pane("GOAL", "first", height=height)
+    rules = build_scrollable_text_pane("RULES", "second", height=height)
+
+    assert goal.text_area.buffer is not rules.text_area.buffer
+    assert goal.text_area.buffer.name != rules.text_area.buffer.name
+    assert goal.text_area.buffer.read_only()
+    assert rules.text_area.buffer.read_only()
+    assert goal.text_area.window.right_margins
+    assert goal.frame.__pt_container__().height is height
+    assert rules.frame.__pt_container__().height is height
+
+    goal.text_area.window.vertical_scroll = 2
+    assert rules.text_area.window.vertical_scroll == 0
+
+
+def test_scrollable_pane_updates_safely_preserve_or_anchor_viewport():
+    pane = build_scrollable_text_pane("DIALOGUE", "0123456789\nold")
+    pane.text_area.buffer.cursor_position = 6
+    pane.text_area.window.vertical_scroll = 3
+    pane.text_area.window.vertical_scroll_2 = 2
+    pane.text_area.window.horizontal_scroll = 1
+
+    pane.set_text("abcdefghij\nnew\x1b", anchor="preserve")
+
+    assert pane.text_area.text == "abcdefghij\nnew�"
+    assert pane.text_area.buffer.cursor_position == 6
+    assert pane.text_area.window.vertical_scroll == 3
+    assert pane.text_area.window.vertical_scroll_2 == 2
+    assert pane.text_area.window.horizontal_scroll == 1
+
+    set_scrollable_pane_text(pane, "top\nbottom", anchor="start")
+    assert pane.text_area.buffer.cursor_position == 0
+    assert pane.text_area.window.vertical_scroll == 0
+
+    pane.set_text("top\nbottom", anchor="end")
+    assert pane.text_area.buffer.cursor_position == len("top\nbottom")
+    assert pane.text_area.window.vertical_scroll == 1
+
+    with pytest.raises(ValueError, match="anchor"):
+        pane.set_text("unchanged", anchor="middle")  # type: ignore[arg-type]
+
+
+def test_framed_multiline_input_is_bounded_writable_and_independently_named():
+    first = build_framed_multiline_input("DESCRIBE THE NEXT TURN")
+    second = build_framed_multiline_input("REFINE")
+
+    assert first.container is first.frame
+    assert not first.text_area.buffer.read_only()
+    assert first.text_area.buffer.name != second.text_area.buffer.name
+    height = first.frame.__pt_container__().height
+    assert (height.min, height.preferred, height.max) == (5, 6, 9)
+
+    first.text_area.text = "one\n two"
+    assert first.text_area.text == "one\n two"
 
 
 def test_shared_terminal_sanitizer_preserves_layout_but_neutralizes_control():
