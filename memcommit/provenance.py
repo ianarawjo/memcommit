@@ -862,13 +862,13 @@ def _translation_events(
     removed: set[str],
     added: set[str],
     changed: set[str],
-) -> tuple[list[TraceEvent], set[str], list[str]]:
-    """Validate recorded source-to-copy mappings for one translate checkpoint."""
+) -> tuple[list[TraceEvent], set[str], set[str], list[str]]:
+    """Validate legacy sibling copies or derived-Context replacements."""
     checkpoint_uid, timestamp, command, description, args = _checkpoint_fields(
         entry
     )
     if command != "translate":
-        return [], set(), []
+        return [], set(), set(), []
 
     def valid_digest(value: object) -> bool:
         return (
@@ -880,21 +880,25 @@ def _translation_events(
     operation_uid = args.get("operation_uid")
     target_language = args.get("target_language")
     source_context = args.get("source_context")
+    destination_context = args.get("destination_context")
     scope = args.get("scope")
     response_digest = args.get("provider_response_sha256")
     records = args.get("translations")
+    schema_version = args.get("schema_version")
+    required_keys = {
+        "schema_version",
+        "operation_uid",
+        "target_language",
+        "source_context",
+        "scope",
+        "provider_response_sha256",
+        "translations",
+    }
+    if schema_version == 2:
+        required_keys.add("destination_context")
     valid = (
-        set(args)
-        == {
-            "schema_version",
-            "operation_uid",
-            "target_language",
-            "source_context",
-            "scope",
-            "provider_response_sha256",
-            "translations",
-        }
-        and args.get("schema_version") == 1
+        set(args) == required_keys
+        and schema_version in {1, 2}
         and isinstance(operation_uid, str)
         and isinstance(target_language, str)
         and bool(target_language.strip())
@@ -902,17 +906,46 @@ def _translation_events(
         and all(character.isprintable() for character in target_language)
         and isinstance(source_context, dict)
         and set(source_context) == {"uid", "name", "digest"}
-        and source_context.get("uid") == before.context_uid
-        and source_context.get("name") == before.context_name
+        and isinstance(source_context.get("uid"), str)
+        and bool(source_context.get("uid"))
+        and isinstance(source_context.get("name"), str)
+        and bool(source_context.get("name"))
         and valid_digest(source_context.get("digest"))
-        and source_context.get("digest") == before.record_digest
         and isinstance(scope, dict)
         and valid_digest(response_digest)
         and isinstance(records, list)
         and bool(records)
-        and not removed
         and not changed
     )
+    if valid and schema_version == 1:
+        valid = (
+            source_context.get("uid") == before.context_uid
+            and source_context.get("name") == before.context_name
+            and source_context.get("digest") == before.record_digest
+            and not removed
+        )
+    elif valid and schema_version == 2:
+        normalized_source_record = {
+            **before.record,
+            "uid": source_context.get("uid"),
+            "name": source_context.get("name"),
+        }
+        valid = (
+            isinstance(destination_context, dict)
+            and set(destination_context)
+            == {"uid", "name", "baseline_digest"}
+            and destination_context.get("uid") == before.context_uid
+            and destination_context.get("name") == before.context_name
+            and valid_digest(
+                destination_context.get("baseline_digest")
+            )
+            and destination_context.get("baseline_digest")
+            == before.record_digest
+            and source_context.get("uid") != before.context_uid
+            and source_context.get("name") != before.context_name
+            and source_context.get("digest")
+            == context_record_digest(normalized_source_record)
+        )
     try:
         uuid.UUID(operation_uid if isinstance(operation_uid, str) else "")
     except ValueError:
@@ -937,30 +970,43 @@ def _translation_events(
             result_uid = record.get("result_uid")
             source_digest = record.get("source_sha256")
             result_digest = record.get("result_sha256")
-            if (
+            common_invalid = (
                 not isinstance(source_uid, str)
                 or not isinstance(result_uid, str)
                 or source_uid == result_uid
                 or source_uid not in before.memories
-                or source_uid not in after.memories
                 or result_uid in before.memories
                 or result_uid not in after.memories
-                or before.memories[source_uid].content
-                != after.memories[source_uid].content
                 or not valid_digest(source_digest)
                 or not valid_digest(result_digest)
                 or before.memories[source_uid].content_digest
                 != source_digest
                 or after.memories[result_uid].content_digest
                 != result_digest
-            ):
+            )
+            version_invalid = (
+                (
+                    source_uid not in after.memories
+                    or before.memories[source_uid].content
+                    != after.memories[source_uid].content
+                )
+                if schema_version == 1
+                else source_uid in after.memories
+            )
+            if common_invalid or version_invalid:
                 valid = False
                 break
             parsed.append((source_uid, result_uid))
 
     source_uids = [source_uid for source_uid, _ in parsed]
     result_uids = [result_uid for _, result_uid in parsed]
-    if valid:
+    if valid and (
+        len(source_uids) != len(set(source_uids))
+        or len(result_uids) != len(set(result_uids))
+        or set(source_uids) & set(result_uids)
+    ):
+        valid = False
+    if valid and schema_version == 1:
         after_memories = after.record.get("memories")
         after_order = after.record.get("order")
         before_order = before.record.get("order")
@@ -984,9 +1030,7 @@ def _translation_events(
             else None
         )
         valid = (
-            len(source_uids) == len(set(source_uids))
-            and len(result_uids) == len(set(result_uids))
-            and set(result_uids) == added
+            set(result_uids) == added
             and after_without_results == before.record
             and [
                 uid for uid in after.order if uid not in set(result_uids)
@@ -997,6 +1041,44 @@ def _translation_events(
                 == after.order.index(source_uid) + 1
                 for source_uid, result_uid in parsed
             )
+        )
+    elif valid and schema_version == 2:
+        before_memories = before.record.get("memories")
+        before_order = before.record.get("order")
+        after_memories = after.record.get("memories")
+        source_to_result = dict(parsed)
+        expected_memories = (
+            {
+                source_to_result.get(uid, uid): (
+                    after_memories[source_to_result[uid]]
+                    if uid in source_to_result
+                    else item
+                )
+                for uid, item in before_memories.items()
+            }
+            if (
+                isinstance(before_memories, dict)
+                and isinstance(before_order, list)
+                and isinstance(after_memories, dict)
+            )
+            else None
+        )
+        expected_after = (
+            {
+                **before.record,
+                "memories": expected_memories,
+                "order": [
+                    source_to_result.get(uid, uid)
+                    for uid in before_order
+                ],
+            }
+            if expected_memories is not None
+            else None
+        )
+        valid = (
+            set(source_uids) == removed
+            and set(result_uids) == added
+            and expected_after == after.record
         )
     if (
         valid
@@ -1020,6 +1102,7 @@ def _translation_events(
         return (
             [],
             set(),
+            set(),
             [
                 f"Checkpoint [{checkpoint_uid[:8]}] has invalid translation "
                 "lineage metadata; snapshot differences were used instead."
@@ -1037,12 +1120,20 @@ def _translation_events(
                 description=description,
                 before=(before.memories[source_uid],),
                 after=(after.memories[result_uid],),
-                reason=f"Created a translated copy in {target_language}.",
+                reason=(
+                    f"Created a translated copy in {target_language}."
+                    if schema_version == 1
+                    else (
+                        "Replaced the source occurrence in this derived "
+                        f"Context with a translation in {target_language}."
+                    )
+                ),
                 reason_codes=("TRANSLATION",),
                 operation_id=operation_uid,
             )
             for source_uid, result_uid in parsed
         ],
+        set(source_uids) if schema_version == 2 else set(),
         set(result_uids),
         [],
     )
@@ -1553,17 +1644,21 @@ def _transition_events(
                 "its changes were reconstructed from snapshots."
             )
 
-    translation_events, translation_results, translation_warnings = (
-        _translation_events(
-            before=before,
-            after=after,
-            entry=entry,
-            removed=removed,
-            added=added,
-            changed=changed,
-        )
+    (
+        translation_events,
+        translation_sources,
+        translation_results,
+        translation_warnings,
+    ) = _translation_events(
+        before=before,
+        after=after,
+        entry=entry,
+        removed=removed,
+        added=added,
+        changed=changed,
     )
     events.extend(translation_events)
+    removed -= translation_sources
     added -= translation_results
     warnings.extend(translation_warnings)
 

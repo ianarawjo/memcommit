@@ -22,6 +22,8 @@ from memcommit.translate import (
     TRANSLATE_CORPUS_CHAR_LIMIT,
     TranslateError,
     apply_translation,
+    default_translation_context_name,
+    derive_translation_context,
     plan_translation,
 )
 
@@ -181,6 +183,62 @@ def test_exactly_unchanged_translation_still_creates_a_distinct_occurrence():
     assert translated.uid != source.uid
     assert translated.content == source.content
     assert ctx.ordered_uids() == [source.uid, translated.uid]
+
+
+def test_derived_context_replaces_sources_at_their_exact_direct_slots():
+    source = ops.init("source")
+    first = ops.add(source, "첫 번째")
+    reference = MemoryRef(
+        uid="reference-item",
+        target_context_uid="reference-context",
+        target_context_name="reference",
+        target_memory_uid="reference-memory",
+    )
+    source.add(reference)
+    second = ops.add(source, "두 번째")
+    plan = plan_translation(source, "English", PayloadProvider)
+
+    result = derive_translation_context(source, plan, "source-en")
+    translated_uids = [
+        translation.result.uid for translation in result.translations
+    ]
+
+    assert source.ordered_uids() == [first.uid, reference.uid, second.uid]
+    assert result.baseline.ordered_uids() == [
+        first.uid,
+        reference.uid,
+        second.uid,
+    ]
+    assert result.context.ordered_uids() == [
+        translated_uids[0],
+        reference.uid,
+        translated_uids[1],
+    ]
+    assert [
+        result.context.memories[uid].content
+        for uid in translated_uids
+    ] == ["EN: 첫 번째", "EN: 두 번째"]
+    assert isinstance(
+        result.context.memories[reference.uid],
+        MemoryRef,
+    )
+    assert result.checkpoint_args()["schema_version"] == 2
+    assert source.to_dict()["memories"][first.uid]["content"] == "첫 번째"
+
+
+def test_default_derived_context_name_uses_en_and_safe_transparent_slugs():
+    assert (
+        default_translation_context_name("task-123", "English")
+        == "task-123-en"
+    )
+    assert (
+        default_translation_context_name("task-123", "Canadian French")
+        == "task-123-canadian-french"
+    )
+    assert (
+        default_translation_context_name("task-123", "en/CA")
+        == "task-123-en-ca"
+    )
 
 
 def test_selector_accepts_one_unique_memory_and_rejects_other_item_types():
@@ -385,7 +443,7 @@ def test_apply_rejects_a_stale_complete_direct_frame_without_partial_change():
     assert ctx.memories[source.uid].content == "source"
 
 
-def test_cli_happy_path_is_one_checkpoint_with_recorded_translation_lineage(
+def test_cli_default_creates_derived_context_with_recorded_translation_lineage(
     isolated_store,
     monkeypatch,
 ):
@@ -394,7 +452,8 @@ def test_cli_happy_path_is_one_checkpoint_with_recorded_translation_lineage(
     source_uids = original.ordered_uids()
     provider = PayloadProvider()
     _patch_provider(monkeypatch, provider)
-    before_checkpoints = len(store.list_checkpoints(original.name))
+    source_before = original.to_dict()
+    source_checkpoints = len(store.list_checkpoints(original.name))
 
     result = runner.invoke(
         app,
@@ -402,23 +461,24 @@ def test_cli_happy_path_is_one_checkpoint_with_recorded_translation_lineage(
     )
 
     assert result.exit_code == 0
-    assert "Added 2 translated Memories" in result.output
+    assert "Created translated Context 'translation-test-en'" in result.output
+    assert "switched to it" in result.output
     assert len(provider.calls) == 1
-    loaded = store.load_direct(original.name)
-    translated_uids = [
-        uid for uid in loaded.ordered_uids() if uid not in source_uids
-    ]
-    assert loaded.ordered_uids() == [
-        source_uids[0],
-        translated_uids[0],
-        source_uids[1],
-        translated_uids[1],
-    ]
-    assert loaded.memories[source_uids[0]].content == "후문은 닫힌다."
-    assert loaded.memories[source_uids[1]].content == "정문은 열린다."
-    assert len(store.list_checkpoints(original.name)) == before_checkpoints + 1
-    checkpoint = store.list_checkpoints(original.name)[0]
+    assert store.current_context_name() == "translation-test-en"
+    assert store.load_direct(original.name).to_dict() == source_before
+    assert len(store.list_checkpoints(original.name)) == source_checkpoints
+
+    loaded = store.load_direct("translation-test-en")
+    translated_uids = loaded.ordered_uids()
+    assert not set(translated_uids) & set(source_uids)
+    assert [
+        loaded.memories[uid].content for uid in translated_uids
+    ] == ["EN: 후문은 닫힌다.", "EN: 정문은 열린다."]
+    checkpoints = store.list_checkpoints(loaded.name)
+    assert len(checkpoints) == 2
+    checkpoint = checkpoints[0]
     assert checkpoint["command"] == "translate"
+    assert checkpoint["args"]["schema_version"] == 2
     assert checkpoint["args"]["target_language"] == "English"
     assert [
         record["source_uid"]
@@ -440,7 +500,6 @@ def test_cli_happy_path_is_one_checkpoint_with_recorded_translation_lineage(
     assert translated_events[0].reason_codes == ("TRANSLATION",)
     assert trace.originals[0].uid == source_uids[0]
     assert [state.uid for state in trace.current] == [
-        source_uids[0],
         translated_uids[0],
     ]
     assert set(trace.component_uids) == {
@@ -448,6 +507,120 @@ def test_cli_happy_path_is_one_checkpoint_with_recorded_translation_lineage(
         translated_uids[0],
     }
     assert not trace.warnings
+
+
+def test_cli_in_place_is_an_explicit_legacy_sibling_mode(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("원문",))
+    source_uid = source.ordered_uids()[0]
+    _patch_provider(monkeypatch, PayloadProvider())
+
+    result = runner.invoke(app, ["translate", "--in-place", "--yes"])
+
+    assert result.exit_code == 0
+    assert "Added 1 translated Memory" in result.output
+    assert store.current_context_name() == source.name
+    loaded = store.load_direct(source.name)
+    assert [
+        item.content
+        for item in loaded.iter_items()
+        if isinstance(item, Memory)
+    ] == ["원문", "EN: 원문"]
+    checkpoint = store.list_checkpoints(source.name)[0]
+    assert checkpoint["args"]["schema_version"] == 1
+    assert checkpoint["args"]["translations"][0]["source_uid"] == source_uid
+
+
+def test_cli_save_as_overrides_the_derived_context_name(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("원문",))
+    _patch_provider(monkeypatch, PayloadProvider())
+
+    result = runner.invoke(
+        app,
+        [
+            "translate",
+            "--save-as",
+            "study/english-version",
+            "--yes",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert store.current_context_name() == "study/english-version"
+    assert store.load_direct(source.name).memories
+    translated = store.load_direct("study/english-version")
+    assert [
+        item.content
+        for item in translated.iter_items()
+        if isinstance(item, Memory)
+    ] == ["EN: 원문"]
+
+
+def test_cli_partial_derived_context_replaces_only_the_selected_memory(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("첫 번째", "두 번째"))
+    selected_uid, other_uid = source.ordered_uids()
+    _patch_provider(monkeypatch, PayloadProvider())
+
+    result = runner.invoke(
+        app,
+        ["translate", selected_uid[:8], "--yes"],
+    )
+
+    assert result.exit_code == 0
+    translated = store.load_direct("translation-test-en")
+    assert selected_uid not in translated.memories
+    assert other_uid in translated.memories
+    assert [
+        item.content
+        for item in translated.iter_items()
+        if isinstance(item, Memory)
+    ] == ["EN: 첫 번째", "두 번째"]
+
+
+def test_cli_rejects_destination_collision_and_conflicting_modes_pre_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("원문",))
+    store.create_context(ops.init("translation-test-en"))
+    store.set_current(source.name)
+
+    def forbidden():
+        raise AssertionError("provider must not be connected")
+
+    monkeypatch.setattr(
+        "memcommit.commands.translate.connect_codex_chatgpt_provider",
+        forbidden,
+    )
+    collision = runner.invoke(app, ["translate", "--yes"])
+    conflicting = runner.invoke(
+        app,
+        [
+            "translate",
+            "--save-as",
+            "another",
+            "--in-place",
+            "--yes",
+        ],
+    )
+
+    assert collision.exit_code == 1
+    assert "already exists" in collision.stderr
+    assert conflicting.exit_code == 1
+    assert "cannot be used together" in conflicting.stderr
+    assert store.current_context_name() == source.name
 
 
 def test_cli_default_target_is_english_and_confirmation_no_is_non_mutating(
@@ -468,6 +641,7 @@ def test_cli_default_target_is_english_and_confirmation_no_is_non_mutating(
     assert "Aborted" in result.output
     assert store.load_direct(ctx.name).to_dict() == before
     assert len(store.list_checkpoints(ctx.name)) == checkpoint_count
+    assert not store.context_exists("translation-test-en")
 
 
 def test_cli_empty_context_is_provider_free(
@@ -488,6 +662,7 @@ def test_cli_empty_context_is_provider_free(
 
     assert result.exit_code == 0
     assert "no directly owned Memories" in result.output
+    assert not store.context_exists("translation-test-en")
 
 
 def test_cli_provider_failure_leaves_context_and_history_unchanged(
@@ -510,6 +685,7 @@ def test_cli_provider_failure_leaves_context_and_history_unchanged(
     assert "provider unavailable" in result.stderr
     assert store.load_direct(ctx.name).to_dict() == before
     assert len(store.list_checkpoints(ctx.name)) == checkpoint_count
+    assert not store.context_exists("translation-test-en")
 
 
 def test_cli_without_current_context_is_provider_free(
@@ -559,8 +735,17 @@ def test_cli_save_failure_leaves_persisted_context_and_history_unchanged(
 
     assert result.exit_code == 1
     assert "simulated save failure" in result.stderr
+    assert "preserved for manual inspection" in result.stderr
     assert store.load_direct(ctx.name).to_dict() == before
     assert len(store.list_checkpoints(ctx.name)) == checkpoint_count
+    preserved = store.load_direct("translation-test-en")
+    assert [
+        item.content
+        for item in preserved.iter_items()
+        if isinstance(item, Memory)
+    ] == ["원문"]
+    assert len(store.list_checkpoints(preserved.name)) == 1
+    assert store.current_context_name() == ctx.name
 
 
 def test_cli_detects_concurrent_context_change_after_provider_call(
@@ -597,9 +782,10 @@ def test_cli_detects_concurrent_context_change_after_provider_call(
     ] == ["원문", "concurrent"]
     assert len(store.list_checkpoints(ctx.name)) == checkpoint_count + 1
     assert store.list_checkpoints(ctx.name)[0]["command"] == "add"
+    assert not store.context_exists("translation-test-en")
 
 
-def test_cli_cas_preserves_update_saved_after_reload_before_translation_save(
+def test_cli_preserves_complete_destination_if_source_changes_during_creation(
     isolated_store,
     monkeypatch,
 ):
@@ -607,41 +793,99 @@ def test_cli_cas_preserves_update_saved_after_reload_before_translation_save(
     ctx = _saved_context(store, contents=("원문",))
     provider = PayloadProvider()
     _patch_provider(monkeypatch, provider)
-    original_apply = ops.apply_translation
+    original_derive = ops.derive_translation_context
 
-    def apply_then_save_concurrently(candidate, plan):
-        result = original_apply(candidate, plan)
+    def derive_then_save_concurrently(candidate, plan, destination_name):
+        result = original_derive(candidate, plan, destination_name)
         concurrent = store.load_direct(ctx.name)
-        ops.add(concurrent, "saved between reload and translate save")
+        ops.add(concurrent, "saved while translated Context was created")
         store.save(
             concurrent,
             AutoCheckpoint(
                 command="add",
                 args={},
-                description="Concurrent save in CAS window",
+                description="Concurrent source save",
             ),
         )
         return result
 
     monkeypatch.setattr(
-        "memcommit.commands.translate.ops.apply_translation",
-        apply_then_save_concurrently,
+        "memcommit.commands.translate.ops.derive_translation_context",
+        derive_then_save_concurrently,
     )
     result = runner.invoke(app, ["translate", "--yes"])
 
     assert result.exit_code == 1
-    assert "changed before it could be saved" in result.stderr
+    assert "source Context changed" in result.stderr
+    assert "preserved for manual inspection" in result.stderr
     loaded = store.load_direct(ctx.name)
     assert [
         item.content
         for item in loaded.iter_items()
         if isinstance(item, Memory)
-    ] == ["원문", "saved between reload and translate save"]
+    ] == ["원문", "saved while translated Context was created"]
     assert store.list_checkpoints(ctx.name)[0]["command"] == "add"
-    assert not any(
-        checkpoint["command"] == "translate"
-        for checkpoint in store.list_checkpoints(ctx.name)
+    preserved = store.load_direct("translation-test-en")
+    assert [
+        item.content
+        for item in preserved.iter_items()
+        if isinstance(item, Memory)
+    ] == ["EN: 원문"]
+    assert len(store.list_checkpoints(preserved.name)) == 2
+    assert store.current_context_name() == ctx.name
+
+
+def test_cli_preserves_destination_referenced_during_final_switch_race(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("원문",))
+    store.save(ops.init("other"))
+    store.save(ops.init("consumer"))
+    store.set_current(source.name)
+    _patch_provider(monkeypatch, PayloadProvider())
+    original_set_current_if = MemoryStore.set_current_context_if
+
+    def reference_then_switch(
+        self,
+        expected,
+        destination_name,
+        *,
+        expected_context_uid,
+        expected_context_digest,
+    ):
+        destination = self.load(destination_name)
+        consumer = self.load_for_update("consumer")
+        ops.embed(destination, consumer)
+        self.save(consumer)
+        self.set_current("other")
+        return original_set_current_if(
+            self,
+            expected,
+            destination_name,
+            expected_context_uid=expected_context_uid,
+            expected_context_digest=expected_context_digest,
+        )
+
+    monkeypatch.setattr(
+        MemoryStore,
+        "set_current_context_if",
+        reference_then_switch,
     )
+
+    result = runner.invoke(app, ["translate", "--yes"])
+
+    assert result.exit_code == 1
+    assert "preserved for manual inspection" in result.stderr
+    assert store.current_context_name() == "other"
+    assert store.context_exists("translation-test-en")
+    consumer = store.load_direct("consumer")
+    embedded = consumer.memories[
+        next(iter(consumer.memories))
+    ]
+    assert isinstance(embedded, Context)
+    assert embedded.name == "translation-test-en"
 
 
 def test_stale_ordinary_writer_cannot_erase_a_completed_translation(
@@ -707,13 +951,19 @@ def test_cli_translates_supported_legacy_context_without_explicit_order(
     result = runner.invoke(app, ["translate", "--yes"])
 
     assert result.exit_code == 0
-    loaded = store.load_direct(ctx.name)
+    source = store.load_direct(ctx.name)
+    assert [
+        item.content
+        for item in source.iter_items()
+        if isinstance(item, Memory)
+    ] == ["원문"]
+    loaded = store.load_direct("translation-test-en")
     assert [
         item.content
         for item in loaded.iter_items()
         if isinstance(item, Memory)
-    ] == ["원문", "EN: 원문"]
-    assert store.list_checkpoints(ctx.name)[0]["command"] == "translate"
+    ] == ["EN: 원문"]
+    assert store.list_checkpoints(loaded.name)[0]["command"] == "translate"
 
 
 def test_direct_only_cli_preserves_refs_query_only_and_embedded_context(
@@ -767,11 +1017,18 @@ def test_direct_only_cli_preserves_refs_query_only_and_embedded_context(
     assert "referenced secret" not in prompt
     assert "nested secret" not in prompt
     assert HIDDEN_QUERY_CONTENT not in prompt
-    loaded = store.load_direct(parent.name)
+    assert store.load_direct(parent.name).ordered_uids() == [
+        owned.uid,
+        memory_ref.uid,
+        query_ref.uid,
+        child.uid,
+    ]
+    loaded = store.load_direct("parent-en")
     ordered = loaded.ordered_uids()
-    assert ordered[0] == owned.uid
-    assert isinstance(loaded.memories[ordered[1]], Memory)
-    assert ordered[2:] == [memory_ref.uid, query_ref.uid, child.uid]
+    assert ordered[0] != owned.uid
+    assert isinstance(loaded.memories[ordered[0]], Memory)
+    assert loaded.memories[ordered[0]].content == "EN: 직접 소유"
+    assert ordered[1:] == [memory_ref.uid, query_ref.uid, child.uid]
     assert isinstance(loaded.memories[memory_ref.uid], MemoryRef)
     assert isinstance(loaded.memories[query_ref.uid], QueryContextRef)
     assert isinstance(loaded.memories[child.uid], Context)
@@ -800,6 +1057,127 @@ def test_trace_rejects_forged_translation_mapping_and_falls_back_to_snapshot(
 
     assert not any(event.kind == "TRANSLATED" for event in trace.events)
     assert any(event.kind == "CREATED" for event in trace.events)
+    assert any(
+        "invalid translation lineage metadata" in warning
+        for warning in trace.warnings
+    )
+
+
+def test_trace_rejects_forged_derived_baseline_digest(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("원문",))
+    derived = derive_translation_context(
+        source,
+        plan_translation(source, "English", PayloadProvider),
+        "translation-test-en",
+    )
+    store.create_context(
+        derived.baseline,
+        AutoCheckpoint(
+            command="init",
+            args={
+                "name": derived.baseline.name,
+                "source_context": {
+                    "uid": source.uid,
+                    "name": source.name,
+                },
+                "memory_uids": source.ordered_uids(),
+            },
+            description="Derived translation baseline",
+        ),
+    )
+    derived.context._store_digest = derived.baseline._store_digest
+    args = derived.checkpoint_args()
+    args["destination_context"]["baseline_digest"] = "0" * 64
+    store.save(
+        derived.context,
+        AutoCheckpoint(
+            command="translate",
+            args=args,
+            description="Forged derived translation evidence",
+        ),
+    )
+
+    result_uid = derived.translations[0].result.uid
+    trace = build_trace(
+        store,
+        store.load_direct(derived.context.name),
+        result_uid,
+    )
+
+    assert not any(event.kind == "TRANSLATED" for event in trace.events)
+    assert any(event.kind == "CREATED" for event in trace.events)
+    assert any(
+        "invalid translation lineage metadata" in warning
+        for warning in trace.warnings
+    )
+
+
+def test_trace_rejects_pointer_reordering_hidden_in_derived_translation(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("mixed-source")
+    first = ops.add(source, "첫 번째")
+    pointer = QueryContextRef(
+        uid="query-pointer",
+        name="opaque",
+        target_source_uid="opaque-source",
+        provider="codex",
+    )
+    source.add(pointer)
+    second = ops.add(source, "두 번째")
+    store.save(
+        source,
+        AutoCheckpoint(command="init", args={}, description="source"),
+    )
+    derived = derive_translation_context(
+        source,
+        plan_translation(source, "English", PayloadProvider),
+        "mixed-source-en",
+    )
+    store.create_context(
+        derived.baseline,
+        AutoCheckpoint(
+            command="init",
+            args={
+                "name": derived.baseline.name,
+                "source_context": {
+                    "uid": source.uid,
+                    "name": source.name,
+                },
+                "memory_uids": [first.uid, second.uid],
+            },
+            description="Derived translation baseline",
+        ),
+    )
+    derived.context._store_digest = derived.baseline._store_digest
+    translated_uids = [
+        translation.result.uid for translation in derived.translations
+    ]
+    derived.context.order = [
+        pointer.uid,
+        translated_uids[0],
+        translated_uids[1],
+    ]
+    store.save(
+        derived.context,
+        AutoCheckpoint(
+            command="translate",
+            args=derived.checkpoint_args(),
+            description="Translation with hidden pointer reorder",
+        ),
+    )
+
+    trace = build_trace(
+        store,
+        store.load_direct(derived.context.name),
+        translated_uids[0],
+    )
+
+    assert not any(event.kind == "TRANSLATED" for event in trace.events)
     assert any(
         "invalid translation lineage metadata" in warning
         for warning in trace.warnings

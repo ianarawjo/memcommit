@@ -39,6 +39,7 @@ if TYPE_CHECKING:
     from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
     from memcommit.translate import (
+        DerivedTranslationApplyResult,
         TranslationApplyResult,
         TranslationPlan,
         TranslationProvider,
@@ -754,7 +755,7 @@ def translate(
     *,
     selector: str | None = None,
 ) -> "TranslationPlan":
-    """Plan translated copies of directly owned Memories without mutating ctx."""
+    """Plan translations of directly owned Memories without mutating ctx."""
     from memcommit.translate import plan_translation
 
     return plan_translation(
@@ -773,6 +774,17 @@ def apply_translation(
     from memcommit.translate import apply_translation as apply_plan
 
     return apply_plan(ctx, plan)
+
+
+def derive_translation_context(
+    source: Context,
+    plan: "TranslationPlan",
+    destination_name: str,
+) -> "DerivedTranslationApplyResult":
+    """Apply one exact plan as replacements in a new derived Context."""
+    from memcommit.translate import derive_translation_context as derive
+
+    return derive(source, plan, destination_name)
 
 
 # ---------------------------------------------------------------------------

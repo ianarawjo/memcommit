@@ -5,7 +5,7 @@ import pytest
 
 import memcommit.ops as ops
 import memcommit.store as store_module
-from memcommit.store import MemoryStore
+from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
 # ---------------------------------------------------------------------------
@@ -38,6 +38,37 @@ def test_set_and_get_current(isolated_store):
     store.save(ctx)
     store.set_current("alpha")
     assert store.current_context_name() == "alpha"
+
+
+def test_set_current_context_if_rejects_deleted_and_recreated_target(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("source")
+    target = ops.init("target")
+    ops.add(target, "translated")
+    store.save(source)
+    store.save(target)
+    store.set_current(source.name)
+    target_digest = store_module.context_record_digest(target)
+
+    store.delete(target.name)
+    replacement = ops.init("target")
+    ops.add(replacement, "different owner")
+    store.create_context(replacement)
+
+    with pytest.raises(
+        ConcurrentContextUpdateError,
+        match="changed before it could be selected",
+    ):
+        store.set_current_context_if(
+            source.name,
+            target.name,
+            expected_context_uid=target.uid,
+            expected_context_digest=target_digest,
+        )
+
+    assert store.current_context_name() == source.name
 
 
 def test_failed_state_replace_preserves_previous_current(
@@ -79,6 +110,22 @@ def test_failed_state_replace_preserves_previous_current(
 def test_context_does_not_exist_before_save(isolated_store):
     store = MemoryStore()
     assert not store.context_exists("ghost")
+
+
+def test_create_context_never_overwrites_an_existing_context(isolated_store):
+    store = MemoryStore()
+    existing = ops.init("owned")
+    ops.add(existing, "keep")
+    store.save(existing)
+    candidate = ops.init("owned")
+    ops.add(candidate, "overwrite")
+
+    with pytest.raises(FileExistsError, match="already exists"):
+        store.create_context(candidate)
+
+    loaded = store.load_direct("owned")
+    assert loaded.uid == existing.uid
+    assert [item.content for item in loaded.iter_items()] == ["keep"]
 
 
 def test_save_and_load_round_trip(isolated_store):

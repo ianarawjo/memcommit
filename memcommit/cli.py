@@ -101,8 +101,8 @@ app.command(
 app.command(
     "translate",
     help=(
-        "Create translated sibling copies of direct Memories; preserve the "
-        "originals."
+        "Create and switch to a derived Context whose direct Memories are "
+        "translated."
     ),
 )(translate.cmd)
 

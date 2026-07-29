@@ -1,107 +1,154 @@
 # `mem translate` design rationale
 
-## Status and decision
+## Status and current decision
 
-`mem translate` creates new translated `Memory` occurrences inside the current
-Context while retaining every source `Memory` byte-for-byte. The default scope
-is every directly owned Memory; one UID or unique UID prefix narrows the
-operation to one directly owned Memory.
+`mem translate` creates a new derived Context by default. Each selected,
+directly owned source `Memory` is replaced at the same logical slot in the
+derived Context by one fresh-UID translated `Memory`. The source Context,
+source Memories, and source checkpoint history are not changed.
 
 ```bash
 mem translate
 mem translate --to French
+mem translate --to English --save-as task-123-en
 mem translate ac827aaa --to en-CA
 mem translate --to English --yes
 ```
 
-`--to` defaults to `English`. Version 1 accepts a short printable language name
-or tag as provider data; it does not claim to validate or canonicalize BCP 47
-tags. `--yes` skips the apply confirmation, but not validation or stale-state
-checks.
+`--to` defaults to `English`. `--yes` skips confirmation, but not provider
+validation, source revalidation, collision checks, or persistence checks.
+One UID or unique UID prefix narrows the operation to one directly owned
+Memory; the other direct items remain unchanged in the derived Context.
 
-The motivating study scenario is a Context containing 54 Korean Memories that
-also needs English occurrences. On 2026-07-29,
-`mem translate --to English --yes` completed one live plumbing pilot on
-`temp/task-1-atomized`: it created 54 paired results, increased the Context
-from 54 to 108 Memories, and added one `translate` checkpoint. A sampled result
-was then verified with both `mem show` and a `TRANSLATED / RECORDED`
-`mem trace`.
+The initial implementation inserted translated siblings into the current
+Context. A live 54-Memory Korean-to-English pilot proved the provider,
+persistence, and lineage plumbing, but it also made the usability problem
+concrete: the resulting 108-item bilingual list was difficult to navigate,
+and another whole-Context run could translate both originals and earlier
+translations. The default therefore changed to a derived Context after the
+pilot. The earlier checkpoint schema remains readable, and the old behavior
+is available only through the explicit `--in-place` option.
 
-That run establishes end-to-end execution, not automated translation quality.
-The implemented tests validate operation, privacy, persistence, concurrency,
-provenance, and response-contract behavior with controlled fixtures; human
-assessment of terminology and translation quality remains separate.
+The live run establishes end-to-end execution, not automated translation
+quality. Human assessment of terminology, dialect, and semantic equivalence
+remains separate.
 
-## Same-Context sibling copies
+## Derived Context contract
 
-Each result receives a fresh Memory UID and is inserted immediately after its
-source:
+For a current Context named `task-123`, the default English destination is:
 
 ```text
-source A
-translated A
-source B
-translated B
+task-123-en
 ```
 
-Sources are never edited or removed. Equal source contents remain distinct
-occurrences and are translated separately. A valid translation that is
-byte-identical to its source, such as a proper name or technical identifier,
-still becomes a new occurrence because the operation records that a
-translation was requested and accepted.
+`English` deliberately uses the study-facing `en` suffix. Other target labels
+are NFKC-normalized, case-folded, and reduced to a hyphenated alphanumeric
+slug for naming only. This does not claim language detection or BCP 47
+canonicalization. `--save-as CONTEXT` supplies an exact destination name.
+A collision is an error; the command never silently invents `-2` because that
+would make duplicate translated versions easy to create accidentally.
 
-This same-Context design follows the motivating requirement to add an English
-version to the existing memory collection. A required `--save-as` destination
-was rejected for this version because it would create a separate version of
-the complete Context instead of adding translations “within” the selected
-Context. In-place replacement was also rejected because it would destroy the
-source-language evidence.
+Given:
+
+```text
+source
+├── Memory A
+├── MemoryRef P
+└── Memory B
+```
+
+a whole-Context translation produces:
+
+```text
+source-en
+├── translated Memory A'
+├── unchanged MemoryRef P
+└── translated Memory B'
+```
+
+The source still contains only A, P, and B. The destination contains A', P,
+and B, so its ordinary `mem ls` output does not show source/translation pairs.
+Fresh result UIDs preserve an explicit derivation rather than treating
+different text as the same live occurrence.
+
+A selector creates a partially translated derived Context: only the selected
+slot is replaced, while other directly owned Memories stay in their source
+language. This is intentional branch-like editing, but a user wanting a
+complete language version should omit the selector.
+
+After both destination checkpoints are durable, the command atomically checks
+that the global current Context is still the source and switches to the
+destination. A concurrent switch is never overwritten.
+
+## Baseline and translation checkpoints
+
+The destination has two checkpoints and does not copy the source's checkpoint
+files:
+
+1. an `init` baseline containing the exact source direct frame under a fresh
+   destination Context UID and name;
+2. a `translate` checkpoint replacing each selected source UID with its fresh
+   result UID.
+
+The baseline records the source Context identity and digest. Its purpose is
+not to duplicate unrelated source history, but to give destination-local
+trace reconstruction a real before-state. The translation checkpoint records:
+
+- operation UID and target-language label;
+- exact source Context UID, name, and direct-record digest;
+- destination Context UID, name, and baseline digest;
+- whole-Context or selected-Memory scope;
+- provider-response digest;
+- source/result UIDs and both content digests.
+
+Checkpoint schema version 1 means the earlier same-Context sibling insertion.
+Schema version 2 means derived-Context replacement. `mem trace` validates both.
+For version 2 it additionally proves that:
+
+- the baseline becomes the recorded source frame when only its root Context
+  identity is changed back;
+- removed UIDs are exactly the recorded sources;
+- added UIDs are exactly the recorded results;
+- every result occupies its source's raw direct slot;
+- every unselected Memory and every pointer record is unchanged.
+
+A valid mapping renders `TRANSLATED / RECORDED`. Invalid metadata falls back
+to snapshot reconstruction with a warning rather than suppressing ordinary
+created, removed, edited, or reordered events.
 
 ## Data and graph boundary
 
 Only directly owned `Memory` records are translation candidates.
 
-- `MemoryRef` targets are not opened, sent, copied, or translated.
-- `QueryContextRef` source content remains opaque and is never opened. Its
-  public pointer record is preserved.
-- Embedded Contexts are not traversed. Their pointer records are preserved.
-- Selecting a reference, query-only Context, or embedded Context as the
-  positional selector is an error.
+- `MemoryRef` targets are not opened, sent, copied as content, or translated.
+- `QueryContextRef` source content remains opaque and is never opened.
+- Embedded Contexts are not traversed.
+- All three pointer record types are copied unchanged into the destination.
+- Selecting a pointer or embedded Context as the positional selector is an
+  error.
 
-The operation therefore adds sibling nodes to one Context; it does not
-recursively produce a translated Context graph or hierarchy.
+The operation derives one direct Context frame; it does not translate a
+recursive Context graph. A copied `MemoryRef` can still display content in a
+different language because it remains a live pointer to its existing source.
 
-The base `Memory` schema intentionally remains `uid + content`. Adding
-operation-specific `language` or `translation_of` fields would silently make a
-generic atomic Memory type aware of one semantic operation. Instead, the
-automatic checkpoint stores a validated mapping from each source UID to each
-new result UID, the target language, content digests, operation UID, source
-Context fingerprint, scope, and provider-response digest.
-
-`mem trace` validates that mapping against adjacent snapshots, including the
-recorded full-Context digest, every source/result content digest, result
-placement, and preservation of all non-result pointer metadata. A valid
-mapping produces a `TRANSLATED / RECORDED` event connecting the unchanged
-source and new result. This records the derivation without asserting that the
-model's translation is linguistically correct. If the metadata does not match
-the snapshots, trace falls back to ordinary snapshot reconstruction and
-reports a warning.
+The base `Memory` schema remains `uid + content`. Language and derivation
+metadata live in validated checkpoint evidence rather than adding
+operation-specific fields to every generic Memory.
 
 ## Provider contract
 
 Translation uses the temporary, ChatGPT-authenticated Codex provider used by
-newer semantic operations, not the legacy configured `LLMClient`. One
-invocation receives:
+newer semantic operations. One invocation receives:
 
 - a printable target-language label;
 - opaque per-call candidate IDs such as `m000001`;
-- the exact content of selected directly owned Memories.
+- exact content from the selected directly owned Memories.
 
-Real Context and Memory UIDs are not sent. The prompt treats all payload fields
-as data and asks for translation only: no answering, summarization,
-normalization, correction, ambiguity resolution, or fact addition. Names,
-numbers, dates, negation, modality, uncertainty, relationships, Markdown, and
-line breaks should be preserved as far as the target language permits.
+Real Context and Memory UIDs are not sent. The prompt requests translation
+only: no answering, summarization, normalization, correction, ambiguity
+resolution, or fact addition. Names, numbers, dates, negation, modality,
+uncertainty, relationships, Markdown, and line breaks should be preserved as
+far as the target language permits.
 
 The model must return exactly:
 
@@ -117,74 +164,71 @@ The model must return exactly:
 ```
 
 The output schema fixes the item count and candidate-ID allowlist. Local
-validation additionally rejects duplicate JSON keys, extra fields, missing,
-duplicate, or unknown candidates, blank or non-string content, oversized
-input/output, and terminal control characters. Provider order is ignored;
-results are rebound to sources in canonical Context order. Any failure occurs
-before a result UID is created.
+validation rejects duplicate JSON keys, extra fields, missing, duplicate, or
+unknown candidates, blank or non-string content, oversized input/output, and
+terminal control characters. Provider order is ignored; results are rebound
+to sources in canonical source order. Any validation failure occurs before a
+result UID or destination Context is created.
 
-The one-call prototype caps its serialized input at 200,000 characters. A
-Task-sized aggregate can contain dozens of Memories, so only this operation's
-Codex timeout is raised to 300 seconds. It does not silently batch or retry:
-doing so would require a separately specified consistency and partial-failure
-contract.
+The one-call prototype caps serialized input at 200,000 characters and uses a
+300-second Codex timeout. It does not silently batch or retry because doing so
+would require a separate partial-failure contract.
 
-## Preview, application, and concurrency
+## Preview, application, publication, and concurrency
 
-The validated source and translated text are displayed before mutation.
-Confirmation defaults to No. A rejected preview creates no Memory and no
-checkpoint. `--yes` is the explicit non-interactive apply path.
+The complete validated mapping and destination name are displayed before any
+write. Confirmation defaults to No. Rejection, provider failure, invalid
+output, or an empty candidate set creates no destination and no checkpoint.
 
-The provider call and review can take minutes. The command initially loads the
-Context through the non-resolving direct path, then reloads a save-safe Context
-immediately before mutation. It requires:
+Before contacting the provider, the destination name and current storage
+availability are checked. Creation later rechecks absence while holding the
+destination's cooperative write lock, so a concurrently created Context is
+never overwritten. The baseline save and its checkpoint are one atomic store
+operation. The final destination save uses the baseline digest as an
+optimistic-concurrency compare-and-swap.
 
-- the same current Context name and Context UID;
-- an exact match of the complete ordered direct serialized record, including
-  pointer metadata;
-- an exact source UID and content match for every proposal.
+The source is reloaded and compared with the provider plan before derivation
+and again before switching. Any direct edit, addition, removal, reorder,
+pointer change, delete/recreate, or current-Context change prevents the final
+switch and leaves the source untouched. The final switch uses a locked
+compare-and-set on global state while holding the destination Context lock and
+revalidating its exact UID and digest. Cooperative Context deletion uses the
+same lock, so the destination cannot be deleted or replaced between that
+validation and the state update.
 
-Any concurrent direct edit, addition, removal, reorder, pointer change, or
-delete-and-recreate observed at revalidation makes the plan stale and aborts
-the whole operation. The final save also acquires the Context's cooperative
-process lock, rereads the disk record under that lock, and compares it with the
-plan's expected digest before writing a checkpoint or Context file. Ordinary
-Contexts loaded by `MemoryStore` retain a non-serialized base digest, and
-ordinary `MemoryStore.save` calls enforce that digest under the same lock.
-This also prevents an older ordinary writer from erasing a translation after
-the translation has completed. Digests use the canonical logical direct
-record, so supported legacy files without an explicit `order` field compare
-equal to their normalized in-memory form.
+Once the baseline Context is published, it is never deleted automatically as
+error cleanup. Another process could already have switched to, embedded, or
+referenced that Context without changing the destination's own digest, so
+deletion could create a dangling external pointer. A failure after baseline
+publication instead preserves either the baseline or completed destination
+and reports it for manual inspection. This is a visible recoverable partial
+outcome, while failures before publication still leave no destination.
 
-All result UIDs are generated locally only after stale validation. The Context
-and one automatic `translate` checkpoint are then persisted through the
-store's atomic save path. Provider failure, invalid output, refusal, or stale
-state changes nothing.
+`--in-place` retains the earlier version-1 sibling behavior for an intentional
+bilingual Context. It cannot be combined with `--save-as`.
 
 ## Privacy and trust boundary
 
 Ordinary selected Memory content is sent to OpenAI and consumes the user's
-ChatGPT Codex allowance. Query-only source material is neither loaded nor sent.
-As with other subscription-backed prototype operations, a prompt and read-only
-sandbox are not a production security boundary: the isolated Codex process
-still has a tool-capable runtime. Use only study data approved for that
-provider. A production version should use a tool-less translation endpoint
-with explicit access control and retention policy.
+ChatGPT Codex allowance. Query-only source material is neither loaded nor
+sent. This research provider is not a production security boundary; use only
+study data approved for that provider. A production implementation should use
+a tool-less translation endpoint with explicit access and retention policy.
 
 ## Intentional limitations
 
-- A translated result is an ordinary Memory in the live Context. `mem ls`
-  cannot display its language or source relation without consulting history.
-- Re-running whole-Context translation can translate earlier translation
-  results and create additional copies. Automatic deduplication was rejected:
-  the generic Memory schema has no stable live translation identity, and text
-  equality is not proof of occurrence equivalence.
 - Translation quality, dialect choice, terminology consistency, and semantic
   equivalence are not mechanically proven by strict JSON validation.
 - Source-language detection is delegated to the provider.
-- Recursive Context-graph translation, cross-Context reverse lineage, cached
-  previews, provider retries, and automatic destination Contexts are outside
-  version 1.
-- The save lock coordinates `MemoryStore.save` callers. Direct external edits
-  to Context JSON and deletion code paths do not participate in that lock and
-  remain unsupported concurrent mutations.
+- Recursive graph translation, automatic provider retries, and cached
+  previews remain outside this version.
+- A partially translated derived Context intentionally contains more than one
+  language.
+- `mem merge` is a structural fresh-UID union. Merging a translated Context
+  into its source would deliberately recreate a bilingual Context and is not
+  the intended translated-version workflow.
+- Context names are language hints, not stored language metadata.
+- Translate's Context creation, Context save, final state-switch, and Context
+  deletion paths use cooperative locks. Other store paths do not all share one
+  cross-operation transaction, and unsupported direct JSON edits do not
+  participate.

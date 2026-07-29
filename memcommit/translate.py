@@ -108,6 +108,55 @@ class TranslationApplyResult:
         }
 
 
+@dataclass(frozen=True)
+class DerivedTranslationApplyResult:
+    """A source baseline and its translated replacement Context."""
+
+    plan: TranslationPlan
+    baseline: Context
+    context: Context
+    translations: tuple[AppliedTranslation, ...]
+
+    def checkpoint_args(self) -> dict[str, object]:
+        return {
+            "schema_version": 2,
+            "operation_uid": self.plan.operation_uid,
+            "target_language": self.plan.target_language,
+            "source_context": {
+                "uid": self.plan.context_uid,
+                "name": self.plan.context_name,
+                "digest": self.plan.context_digest,
+            },
+            "destination_context": {
+                "uid": self.baseline.uid,
+                "name": self.baseline.name,
+                "baseline_digest": context_digest(self.baseline),
+            },
+            "scope": (
+                {"kind": "all"}
+                if self.plan.selected_memory_uid is None
+                else {
+                    "kind": "memory",
+                    "memory_uid": self.plan.selected_memory_uid,
+                }
+            ),
+            "provider_response_sha256": self.plan.provider_response_sha256,
+            "translations": [
+                {
+                    "source_uid": translation.source_uid,
+                    "result_uid": translation.result.uid,
+                    "source_sha256": _content_digest(
+                        translation.source_content
+                    ),
+                    "result_sha256": _content_digest(
+                        translation.result.content
+                    ),
+                }
+                for translation in self.translations
+            ],
+        }
+
+
 def _content_digest(content: str) -> str:
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
 
@@ -139,6 +188,38 @@ def _validate_target_language(value: str) -> str:
     if any(not character.isprintable() for character in language):
         raise TranslateError("Target language must be one printable line.")
     return language
+
+
+def default_translation_context_name(
+    source_name: str,
+    target_language: str,
+) -> str:
+    """Derive a stable new-Context name without claiming language detection."""
+    language = _validate_target_language(target_language)
+    normalized = unicodedata.normalize("NFKC", language).casefold()
+    if normalized == "english":
+        # English is the command default and the study-facing convention uses
+        # the familiar `-en` suffix. Other labels remain transparent slugs
+        # rather than pretending that this prototype canonicalizes languages.
+        suffix = "en"
+    else:
+        pieces: list[str] = []
+        pending_separator = False
+        for character in normalized:
+            if character.isalnum():
+                if pending_separator and pieces:
+                    pieces.append("-")
+                pieces.append(character)
+                pending_separator = False
+            else:
+                pending_separator = True
+        suffix = "".join(pieces).strip("-")
+        if not suffix:
+            suffix = (
+                "translated-"
+                + hashlib.sha256(language.encode("utf-8")).hexdigest()[:8]
+            )
+    return f"{source_name}-{suffix}"
 
 
 def _selected_memories(
@@ -458,5 +539,76 @@ def apply_translation(
         )
     return TranslationApplyResult(
         plan=plan,
+        translations=tuple(applied),
+    )
+
+
+def derive_translation_context(
+    source: Context,
+    plan: TranslationPlan,
+    destination_name: str,
+) -> DerivedTranslationApplyResult:
+    """Replace selected sources with translations in a fresh derived Context."""
+    if not isinstance(destination_name, str) or not destination_name:
+        raise TranslateError("Destination Context name must be non-empty.")
+    if destination_name == source.name:
+        raise TranslateError(
+            "Destination Context must differ from the source Context."
+        )
+    if not translation_plan_matches_context(plan, source):
+        raise TranslateError(
+            "The translation plan is stale because the source Context "
+            "changed; no translated Context was created."
+        )
+
+    for proposal in plan.proposals:
+        source_memory = source.memories.get(proposal.source_uid)
+        if (
+            not isinstance(source_memory, Memory)
+            or source_memory.content != proposal.source_content
+        ):
+            raise TranslateError(
+                "The translation plan no longer matches its source Memories."
+            )
+
+    destination_uid = str(uuid.uuid4())
+    while destination_uid == source.uid:
+        destination_uid = str(uuid.uuid4())
+    baseline_record = {
+        **source.to_dict(),
+        "uid": destination_uid,
+        "name": destination_name,
+    }
+    baseline = Context.from_dict(baseline_record)
+    translated = Context.from_dict(baseline.to_dict())
+
+    reserved_uids = set(source.memories)
+    applied: list[AppliedTranslation] = []
+    for proposal in plan.proposals:
+        result_uid = str(uuid.uuid4())
+        while result_uid in reserved_uids:
+            result_uid = str(uuid.uuid4())
+        reserved_uids.add(result_uid)
+        result = Memory(
+            uid=result_uid,
+            content=proposal.translated_content,
+        )
+        source_position = translated.ordered_uids().index(
+            proposal.source_uid
+        )
+        translated.remove(proposal.source_uid)
+        translated.add(result, position=source_position)
+        applied.append(
+            AppliedTranslation(
+                source_uid=proposal.source_uid,
+                source_content=proposal.source_content,
+                result=result,
+            )
+        )
+
+    return DerivedTranslationApplyResult(
+        plan=plan,
+        baseline=baseline,
+        context=translated,
         translations=tuple(applied),
     )

@@ -209,6 +209,30 @@ class MemoryStore:
                 pass
             raise
 
+    @contextmanager
+    def _state_write_lock(self) -> Iterator[None]:
+        """Serialize cooperative changes to the global current Context."""
+        lock_path = STORE_DIR / "state-write.lock"
+        if lock_path.is_symlink():
+            raise ValueError("Refusing to use a symbolic-link state lock.")
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
     # --- Global state ---
 
     def _read_state(self) -> dict:
@@ -225,9 +249,55 @@ class MemoryStore:
         return self._read_state().get("current")
 
     def set_current(self, name: str) -> None:
-        state = self._read_state()
-        state["current"] = name
-        self._write_state(state)
+        with self._context_write_lock(name):
+            if not self.context_exists(name):
+                raise FileNotFoundError(f"Context '{name}' not found.")
+            with self._state_write_lock():
+                state = self._read_state()
+                state["current"] = name
+                self._write_state(state)
+
+    def set_current_context_if(
+        self,
+        expected_current: str,
+        name: str,
+        *,
+        expected_context_uid: str,
+        expected_context_digest: str,
+    ) -> None:
+        """CAS-switch to one exact Context while blocking save/delete/recreate."""
+        if (
+            not isinstance(expected_context_digest, str)
+            or len(expected_context_digest) != 64
+            or any(
+                character not in "0123456789abcdef"
+                for character in expected_context_digest
+            )
+        ):
+            raise ValueError("Expected Context digest is invalid.")
+        with self._context_write_lock(name):
+            if not self.context_exists(name):
+                raise ConcurrentContextUpdateError(
+                    f"Context '{name}' no longer exists."
+                )
+            target = self.load_direct(name)
+            if (
+                target.uid != expected_context_uid
+                or context_record_digest(target)
+                != expected_context_digest
+            ):
+                raise ConcurrentContextUpdateError(
+                    f"Context '{name}' changed before it could be selected."
+                )
+            with self._state_write_lock():
+                state = self._read_state()
+                if state.get("current") != expected_current:
+                    raise ConcurrentContextUpdateError(
+                        "The current Context changed before it could be "
+                        "switched."
+                    )
+                state["current"] = name
+                self._write_state(state)
 
     # --- Semantic update sessions ---
 
@@ -1053,6 +1123,13 @@ class MemoryStore:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
         return self.load_direct(name)
 
+    def assert_context_creatable(self, name: str) -> None:
+        """Fail before expensive work when a new Context cannot use this name."""
+        _context_name_parts(name)
+        if self.context_exists(name):
+            raise FileExistsError(f"Context '{name}' already exists.")
+        self._assert_context_storage_available(name)
+
     def save(
         self,
         ctx: Context,
@@ -1072,12 +1149,29 @@ class MemoryStore:
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
+    def create_context(
+        self,
+        ctx: Context,
+        auto_checkpoint: Optional[AutoCheckpoint] = None,
+    ) -> Checkpoint | None:
+        """Create one new Context without overwriting a concurrent owner."""
+        with self._context_write_lock(ctx.name):
+            checkpoint = self._save_locked(
+                ctx,
+                auto_checkpoint,
+                expected_context_digest=None,
+                require_new=True,
+            )
+        ctx._store_digest = context_record_digest(ctx)
+        return checkpoint
+
     def _save_locked(
         self,
         ctx: Context,
         auto_checkpoint: Optional[AutoCheckpoint],
         *,
         expected_context_digest: str | None,
+        require_new: bool = False,
     ) -> Checkpoint | None:
         """Save while holding this Context's cooperative process lock."""
         ctx_dir = self._context_dir(ctx.name)
@@ -1087,6 +1181,8 @@ class MemoryStore:
                 f"Refusing to write context '{ctx.name}' through a symbolic link."
             )
         context_preexisting = self.context_exists(ctx.name)
+        if require_new and context_preexisting:
+            raise FileExistsError(f"Context '{ctx.name}' already exists.")
         if expected_context_digest is not None:
             if (
                 len(expected_context_digest) != 64
@@ -1293,6 +1389,11 @@ class MemoryStore:
 
     def delete(self, name: str) -> None:
         """Delete one Context while preserving descendant Context namespaces."""
+        with self._context_write_lock(name):
+            self._delete_locked(name)
+
+    def _delete_locked(self, name: str) -> None:
+        """Delete one Context while its cooperative write lock is held."""
         if not self.context_exists(name):
             raise FileNotFoundError(f"Context '{name}' not found.")
         context_uid = self.load_direct(name).uid
@@ -1384,8 +1485,11 @@ class MemoryStore:
             staged_context.rename(context_file)
             raise
 
-        if self.current_context_name() == name:
-            self._write_state({"current": None})
+        with self._state_write_lock():
+            state = self._read_state()
+            if state.get("current") == name:
+                state["current"] = None
+                self._write_state(state)
         if checkpoints_staged:
             shutil.rmtree(staged_checkpoints)
         if analysis_path is not None and analysis_path.exists():
