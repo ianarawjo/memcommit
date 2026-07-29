@@ -12,6 +12,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.atomize import (
+    AtomizeAnalysisSession,
     AtomizeImpactError,
     AtomizeQualityIssue,
     AtomizeReading,
@@ -19,6 +20,7 @@ from memcommit.atomize import (
     impact_atomize,
 )
 from memcommit.atomize_workbench import (
+    atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
     create_atomize_workbench,
 )
@@ -117,8 +119,20 @@ class AggregateProvider:
                     "clarification": "REQUIRED",
                     "conflict": "NONE",
                     "ordinary_readings": [
-                        "It uses the previously described NFC mechanism.",
-                        "It accepts the previously described credential.",
+                        {
+                            "label": "Use the prior NFC mechanism",
+                            "text": (
+                                "It uses the previously described NFC "
+                                "mechanism."
+                            ),
+                        },
+                        {
+                            "label": "Use the prior NFC credential",
+                            "text": (
+                                "It accepts the previously described "
+                                "credential."
+                            ),
+                        },
                     ],
                     "scope_dimensions": [],
                     "reason": (
@@ -225,8 +239,14 @@ def test_aggregate_analysis_preserves_overview_and_typed_issue_arity():
                             "clarification": "REQUIRED",
                             "conflict": "NONE",
                             "ordinary_readings": [
-                                "The same NFC mechanism.",
-                                "The same NFC credential.",
+                                {
+                                    "label": "Same NFC mechanism",
+                                    "text": "The same NFC mechanism.",
+                                },
+                                {
+                                    "label": "Same NFC credential",
+                                    "text": "The same NFC credential.",
+                                },
                             ],
                             "scope_dimensions": [],
                             "reason": (
@@ -242,8 +262,19 @@ def test_aggregate_analysis_preserves_overview_and_typed_issue_arity():
                             "clarification": "REQUIRED",
                             "conflict": "MAY",
                             "ordinary_readings": [
-                                "The NFC rule concerns this entrance.",
-                                "The NFC rule concerns another entrance.",
+                                {
+                                    "label": "This entrance",
+                                    "text": (
+                                        "The NFC rule concerns this entrance."
+                                    ),
+                                },
+                                {
+                                    "label": "Another entrance",
+                                    "text": (
+                                        "The NFC rule concerns another "
+                                        "entrance."
+                                    ),
+                                },
                             ],
                             "scope_dimensions": ["PLACE"],
                             "reason": (
@@ -525,11 +556,13 @@ def test_reviewed_reanalysis_preserves_mixed_pairwise_responses_by_failing_close
             AtomizeReading(
                 uid=f"conflict:{first.uid}:{second.uid}:reading:1",
                 role="COMPETING",
+                label="This entrance",
                 text="The NFC rule concerns this entrance.",
             ),
             AtomizeReading(
                 uid=f"conflict:{first.uid}:{second.uid}:reading:2",
                 role="COMPETING",
+                label="Another entrance",
                 text="The NFC rule concerns another entrance.",
             ),
         ),
@@ -648,13 +681,13 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
     assert "WHY THIS IS UNCLEAR" in snapshot
     issue_list = snapshot.split("\n\nAMBIGUITY 1/", 1)[0]
     assert (
-        "↳ R1 [DOMINANT] "
-        "It uses the previously described NFC mechanism."
-    ) in issue_list
-    assert (
-        "↳ R2 [ALTERNATIVE] "
-        "It accepts the previously described credential."
-    ) in issue_list
+        "WHY · “same NFC” can denote a mechanism or credential"
+        in issue_list
+    )
+    assert "↳ R1 · Use the prior NFC mechanism" in issue_list
+    assert "↳ R2 · Use the prior NFC credential" in issue_list
+    assert "It uses the previously described NFC mechanism." not in issue_list
+    assert "It uses the previously described NFC mechanism." in snapshot
     assert issue_list.count("↳ R") == 2
     assert "READING OPTIONS" not in issue_list
 
@@ -673,27 +706,38 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
     response = workbench.response_for(first_issue.uid)
     assert response.selected_choice_uid.endswith(":reading:2")
     assert response.text == "Needs the staff-only qualifier."
+    frames, _ = atomize_workbench_declared_frames(workbench, analysis)
+    assert (
+        "Selected ordinary reading: "
+        "It accepts the previously described credential."
+    ) in frames[next(iter(frames))]
+    assert "Selected ordinary reading: Use the prior NFC credential" not in (
+        frames[next(iter(frames))]
+    )
     assert saved
 
 
-def test_issue_list_caps_and_discloses_lossy_reading_previews():
+def test_issue_list_uses_labels_and_discloses_additional_readings():
     ctx = ops.init("workbench/reading-preview")
     ops.add(ctx, "Use the same NFC.")
     report = impact_atomize(ctx, lambda: AggregateProvider())
     issue = report.quality_issues[0]
-    long_alternative = (
-        "This deliberately long alternative reading must be shortened in "
-        "the issue list while remaining complete and selectable in detail. "
-        "Its trailing qualification is intentionally important enough to "
-        "remain visible after the middle of the sentence is elided."
+    full_alternative = (
+        "This complete alternative remains available and selectable in "
+        "the detail panel."
     )
     hidden_alternative = "A third full reading remains available in detail."
     readings = (
         issue.readings[0],
-        replace(issue.readings[1], text=long_alternative),
+        replace(
+            issue.readings[1],
+            label="Short alternative label",
+            text=full_alternative,
+        ),
         AtomizeReading(
             uid=f"{issue.uid}:reading:3",
             role="ALTERNATIVE",
+            label="A third reading",
             text=hidden_alternative,
         ),
     )
@@ -712,9 +756,34 @@ def test_issue_list_caps_and_discloses_lossy_reading_previews():
     )
     issue_list = snapshot.split("\n\nAMBIGUITY 1/", 1)[0]
 
-    assert "↳ R1 [DOMINANT]" in issue_list
-    assert "↳ R2 [ALTERNATIVE]" in issue_list
-    assert "…" in issue_list
+    assert "↳ R1 · Use the prior NFC mechanism" in issue_list
+    assert "↳ R2 · Short alternative label" in issue_list
+    assert full_alternative not in issue_list
+    assert full_alternative in snapshot
     assert "↳ +1 more reading (open detail)" in issue_list
     assert hidden_alternative not in issue_list
     assert hidden_alternative in snapshot
+
+
+def test_schema_v3_readings_resume_with_full_text_as_legacy_label():
+    ctx = ops.init("workbench/legacy-reading-label")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+    legacy = analysis.to_dict()
+    legacy["schema_version"] = 3
+    for issue in legacy["quality_issues"]:
+        for reading in issue["readings"]:
+            reading.pop("label")
+
+    restored = AtomizeAnalysisSession.from_dict(legacy)
+    snapshot = render_atomize_workbench_snapshot(workbench, restored)
+
+    restored_reading = restored.quality_issues[0].readings[0]
+    assert restored_reading.label == restored_reading.text
+    assert restored.to_dict()["schema_version"] == 4
+    assert (
+        "↳ R1 · It uses the previously described NFC mechanism."
+        in snapshot
+    )

@@ -432,8 +432,10 @@ reanalysis boundary.
 
 The first frame combines compact counts, source-linked `WHAT MEM UNDERSTOOD`
 and `WHAT CHANGED / REMAINS UNRESOLVED` blocks, the full typed issue list, and
-one selected detail. Reading-bearing list entries preview up to two saved
-readings with their roles; the detail remains the unabridged authority.
+one selected detail. A reading-bearing list entry shows its explanatory reason
+once, then up to two provider-generated labels that aim for 2-10 words. The
+saved reading text remains complete and is the authority for detail, choice
+semantics, and reviewed reanalysis; the label is only a navigation aid.
 `SOURCE` means `Context.order`, not chronology.
 `PRIORITY` uses only grounded issue classifications; it does not invent
 affected-result counts. `SPLIT` and `STACKED` are layouts over the same durable

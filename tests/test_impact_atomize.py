@@ -166,6 +166,8 @@ def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
     )
     assert "clean SINGLE/NONE and MUST be omitted" in prompt
     assert "after that time a card is required" in prompt
+    assert "normally 2-10 English words and never more than 20" in prompt
+    assert "Give students a physical card" in prompt
     assert "Never expose candidate IDs such as m000007" in prompt
     assert payload["context"]["declared_frame"] is None
     assert set(payload["context"]) == {
@@ -182,6 +184,13 @@ def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
     )
     assert schema["properties"]["items"]["minItems"] == 4
     assert "uniqueItems" not in json.dumps(schema)
+    reading_schema = (
+        schema["properties"]["quality_issues"]["items"]["properties"][
+            "ordinary_readings"
+        ]["items"]
+    )
+    assert reading_schema["required"] == ["label", "text"]
+    assert reading_schema["additionalProperties"] is False
 
     assert [item.memory for item in report.items] == [
         first,
@@ -203,6 +212,47 @@ def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
     ]
     assert report.memory_count == 4
     assert report.projected_memory_count == 5
+
+
+def test_quality_reading_labels_over_twenty_words_fail_closed():
+    ctx = ops.init("quality-reading-length")
+    memory = ops.add(ctx, "Ask the coordinator.")
+
+    def respond(payload):
+        candidate_id = payload["memories"][0]["candidate_id"]
+        response = _aggregate_response(
+            payload,
+            {"items": [_item(candidate_id)]},
+        )
+        response["quality_issues"] = [
+            {
+                "kind": "AMBIGUITY",
+                "source_ids": [candidate_id],
+                "interpretation": "SINGLE",
+                "clarification": "REQUIRED",
+                "conflict": "NONE",
+                "ordinary_readings": [
+                    {
+                        "label": " ".join(
+                            f"word{index}" for index in range(21)
+                        ),
+                        "text": "Contact the responsible coordinator.",
+                    }
+                ],
+                "scope_dimensions": [],
+                "reason": "The responsible contact route is absent.",
+                "question": "How should the coordinator be contacted?",
+            }
+        ]
+        return response
+
+    with pytest.raises(
+        AtomizeImpactError,
+        match="invalid ordinary reading label",
+    ):
+        impact_atomize(ctx, lambda: AtomizeProvider(respond))
+
+    assert memory.content == "Ask the coordinator."
 
 
 def test_atomize_preview_neutralizes_terminal_control_characters(

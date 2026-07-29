@@ -402,7 +402,7 @@ def test_legacy_atomize_analysis_loads_with_empty_review_provenance(
     assert restored.declared_frames == ()
     assert restored.source_review_uid is None
     assert restored.source_review_digest is None
-    assert restored.to_dict()["schema_version"] == 3
+    assert restored.to_dict()["schema_version"] == 4
 
 
 def test_atomize_with_review_requires_a_nonempty_comment_without_provider_call(

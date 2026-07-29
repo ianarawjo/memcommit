@@ -30,13 +30,16 @@ ATOMIZE_SOURCE_SPAN_LIMIT = 20
 ATOMIZE_DECLARED_FRAME_CHAR_LIMIT = 20_000
 ATOMIZE_OVERVIEW_CHAR_LIMIT = 1_500
 ATOMIZE_QUALITY_READING_LIMIT = 5
+ATOMIZE_READING_LABEL_CHAR_LIMIT = 160
+ATOMIZE_READING_LABEL_WORD_LIMIT = 20
 ATOMIZE_QUALITY_ISSUE_LIMIT = 5_000
 ATOMIZE_RULESET_VERSION = "atomize-v2-reviewed-frame-draft"
 ATOMIZE_LEGACY_RULESET_VERSION = "atomize-v1-draft"
 ATOMIZE_SIZE_REVIEW_CHARS = 80
 ATOMIZE_SIZE_REVIEW_SEGMENTS = 2
 ATOMIZE_SEGMENTER_VERSION = "sentence-like-v1"
-ATOMIZE_ANALYSIS_SCHEMA_VERSION = 3
+ATOMIZE_ANALYSIS_SCHEMA_VERSION = 4
+ATOMIZE_QUALITY_ANALYSIS_SCHEMA_VERSION = 3
 ATOMIZE_REVIEWED_ANALYSIS_SCHEMA_VERSION = 2
 ATOMIZE_LEGACY_ANALYSIS_SCHEMA_VERSION = 1
 
@@ -261,32 +264,63 @@ class AtomizeReading:
 
     uid: str
     role: AtomizeReadingRole
+    label: str
     text: str
 
     def to_dict(self) -> dict[str, str]:
-        return {"uid": self.uid, "role": self.role, "text": self.text}
+        return {
+            "uid": self.uid,
+            "role": self.role,
+            "label": self.label,
+            "text": self.text,
+        }
 
     @classmethod
-    def from_dict(cls, value: object) -> "AtomizeReading":
+    def from_dict(
+        cls,
+        value: object,
+        *,
+        legacy_label: bool = False,
+    ) -> "AtomizeReading":
+        keys = (
+            {"uid", "role", "text"}
+            if legacy_label
+            else {"uid", "role", "label", "text"}
+        )
         if (
             not isinstance(value, dict)
-            or set(value) != {"uid", "role", "text"}
+            or set(value) != keys
         ):
             raise AtomizeImpactError("Invalid saved atomize issue reading.")
         uid = value["uid"]
         role = value["role"]
+        label = value["text"] if legacy_label else value["label"]
         text = value["text"]
         if (
             not isinstance(uid, str)
             or not uid
             or not isinstance(role, str)
             or role not in ATOMIZE_READING_ROLES
+            or not isinstance(label, str)
+            or not label.strip()
+            or len(label) > (
+                ATOMIZE_REASON_CHAR_LIMIT
+                if legacy_label
+                else ATOMIZE_READING_LABEL_CHAR_LIMIT
+            )
+            or (
+                not legacy_label
+                and (
+                    len(label.splitlines()) != 1
+                    or len(label.split()) > ATOMIZE_READING_LABEL_WORD_LIMIT
+                )
+            )
             or not isinstance(text, str)
             or not text.strip()
             or len(text) > ATOMIZE_REASON_CHAR_LIMIT
         ):
             raise AtomizeImpactError("Invalid saved atomize issue reading.")
-        return cls(uid=uid, role=role, text=text)
+        return cls(uid=uid, role=role, label=label, text=text)
 
 
 @dataclass(frozen=True)
@@ -319,7 +353,12 @@ class AtomizeQualityIssue:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "AtomizeQualityIssue":
+    def from_dict(
+        cls,
+        value: object,
+        *,
+        schema_version: int = ATOMIZE_ANALYSIS_SCHEMA_VERSION,
+    ) -> "AtomizeQualityIssue":
         if (
             not isinstance(value, dict)
             or set(value)
@@ -375,11 +414,22 @@ class AtomizeQualityIssue:
         ):
             raise AtomizeImpactError("Invalid saved atomize quality issue.")
         parsed_readings = tuple(
-            AtomizeReading.from_dict(reading) for reading in readings
+            AtomizeReading.from_dict(
+                reading,
+                legacy_label=(
+                    schema_version <= ATOMIZE_QUALITY_ANALYSIS_SCHEMA_VERSION
+                ),
+            )
+            for reading in readings
         )
         if (
             len({reading.uid for reading in parsed_readings})
             != len(parsed_readings)
+            or (
+                schema_version > ATOMIZE_QUALITY_ANALYSIS_SCHEMA_VERSION
+                and len({reading.label for reading in parsed_readings})
+                != len(parsed_readings)
+            )
         ):
             raise AtomizeImpactError("Invalid saved atomize quality issue.")
 
@@ -934,7 +984,11 @@ class AtomizeAnalysisSession:
             raw_quality_issues = []
         elif (
             not isinstance(schema_version, bool)
-            and schema_version == ATOMIZE_ANALYSIS_SCHEMA_VERSION
+            and schema_version
+            in {
+                ATOMIZE_QUALITY_ANALYSIS_SCHEMA_VERSION,
+                ATOMIZE_ANALYSIS_SCHEMA_VERSION,
+            }
         ):
             if set(value) != common_keys | {
                 "overview",
@@ -1013,7 +1067,10 @@ class AtomizeAnalysisSession:
                 "Invalid saved atomize quality issues."
             )
         quality_issues = tuple(
-            AtomizeQualityIssue.from_dict(issue)
+            AtomizeQualityIssue.from_dict(
+                issue,
+                schema_version=schema_version,
+            )
             for issue in raw_quality_issues
         )
         memory_count = value["memory_count"]
@@ -1762,9 +1819,21 @@ def _output_schema(
                 "type": "array",
                 "maxItems": ATOMIZE_QUALITY_READING_LIMIT,
                 "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": ATOMIZE_REASON_CHAR_LIMIT,
+                    "type": "object",
+                    "properties": {
+                        "label": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": ATOMIZE_READING_LABEL_CHAR_LIMIT,
+                        },
+                        "text": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": ATOMIZE_REASON_CHAR_LIMIT,
+                        },
+                    },
+                    "required": ["label", "text"],
+                    "additionalProperties": False,
                 },
             },
             "scope_dimensions": {
@@ -1982,6 +2051,16 @@ def _prompt(payload: dict[str, object]) -> str:
         "dimensions, and list the ordinary readings. A non-NONE issue must "
         "include a minimal clarification question. Its reason must say both "
         "what is unclear and which concrete judgment cannot be made.\n\n"
+        "Each ordinary_readings entry has two deliberately different fields. "
+        "text is the complete ordinary reading used in detail and reviewed "
+        "reanalysis. label is only its compact list choice: use a parallel "
+        "action or claim phrase, normally 2-10 English words and never more "
+        "than 20, on one line. A label must not add meaning absent from text. "
+        "Put evidence, cross-reading comparison, and operational consequences "
+        "in the issue reason rather than repeating them in every label. For "
+        "example, use labels 'Give students a physical card' and 'Tell "
+        "students to use a card or app', while retaining complete readings "
+        "in their text fields.\n\n"
         "For CONFLICT, inspect exactly the supplied unordered pair space. "
         "Return YES when all materially ordinary, scope-aligned readings "
         "conflict and MAY when ordinary readings include both conflicting and "
@@ -2148,19 +2227,37 @@ def _parse_quality_issues(
             raise AtomizeImpactError(
                 "Codex atomize impact returned an invalid quality issue."
             )
-        readings_text: list[str] = []
+        reading_records: list[tuple[str, str]] = []
+        seen_labels: set[str] = set()
+        seen_texts: set[str] = set()
         for reading in raw_readings:
-            parsed = _short_string(
-                reading,
-                label="ordinary reading",
+            reading_record = _exact_dict(reading, {"label", "text"})
+            label = _short_string(
+                reading_record["label"],
+                label="ordinary reading label",
+                limit=ATOMIZE_READING_LABEL_CHAR_LIMIT,
+            )
+            text = _short_string(
+                reading_record["text"],
+                label="ordinary reading text",
                 limit=ATOMIZE_REASON_CHAR_LIMIT,
             )
-            if parsed in readings_text:
+            if (
+                len(label.splitlines()) != 1
+                or len(label.split()) > ATOMIZE_READING_LABEL_WORD_LIMIT
+            ):
+                raise AtomizeImpactError(
+                    "Codex atomize impact returned an invalid ordinary "
+                    "reading label."
+                )
+            if label in seen_labels or text in seen_texts:
                 raise AtomizeImpactError(
                     "Codex atomize impact returned duplicate ordinary "
-                    "readings."
+                    "readings or labels."
                 )
-            readings_text.append(parsed)
+            seen_labels.add(label)
+            seen_texts.add(text)
+            reading_records.append((label, text))
         reason = _short_string(
             record["reason"],
             label="quality issue reason",
@@ -2194,11 +2291,11 @@ def _parse_quality_issues(
                 or scope_dimensions
                 or (
                     interpretation == "SINGLE"
-                    and len(readings_text) != 1
+                    and len(reading_records) != 1
                 )
                 or (
                     interpretation != "SINGLE"
-                    and len(readings_text) < 2
+                    and len(reading_records) < 2
                 )
                 or (
                     interpretation == "SINGLE"
@@ -2219,16 +2316,17 @@ def _parse_quality_issues(
             uid = f"ambiguity:{source_uids[0]}"
             roles = _reading_roles(
                 interpretation,
-                len(readings_text),
+                len(reading_records),
             )
             readings = tuple(
                 AtomizeReading(
                     uid=f"{uid}:reading:{index}",
                     role=role,
+                    label=label,
                     text=text,
                 )
-                for index, (role, text) in enumerate(
-                    zip(roles, readings_text, strict=True),
+                for index, (role, (label, text)) in enumerate(
+                    zip(roles, reading_records, strict=True),
                     start=1,
                 )
             )
@@ -2254,7 +2352,7 @@ def _parse_quality_issues(
                     conflict == "MAY"
                     and (
                         not scope_dimensions
-                        or len(readings_text) < 2
+                        or len(reading_records) < 2
                         or not question.strip()
                     )
                 )
@@ -2267,9 +2365,13 @@ def _parse_quality_issues(
                 AtomizeReading(
                     uid=f"{uid}:reading:{index}",
                     role="COMPETING",
+                    label=label,
                     text=text,
                 )
-                for index, text in enumerate(readings_text, start=1)
+                for index, (label, text) in enumerate(
+                    reading_records,
+                    start=1,
+                )
             )
             issue = AtomizeQualityIssue(
                 uid=uid,

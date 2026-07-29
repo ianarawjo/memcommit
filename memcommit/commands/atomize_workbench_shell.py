@@ -35,7 +35,8 @@ from memcommit.commands.review_shell import (
 )
 
 _LIST_READING_PREVIEW_LIMIT = 2
-_LIST_READING_TEXT_LIMIT = 160
+_LIST_READING_LABEL_LIMIT = 160
+_LIST_REASON_TEXT_LIMIT = 220
 
 
 def _assert_matches(
@@ -93,14 +94,22 @@ def _reading_preview_lines(
     finding: AtomizeWorkbenchFinding,
 ) -> list[str]:
     """Expose saved readings as lossy list hints, never new semantics."""
+    if not finding.readings:
+        return []
     visible = finding.readings[:_LIST_READING_PREVIEW_LIMIT]
     lines = [
         (
-            f"      ↳ R{index} [{safe_terminal_text(reading.role)}] "
-            f"{_reading_preview_text(reading.text)}"
+            "      WHY · "
+            f"{_compact_preview_text(finding.reason, _LIST_REASON_TEXT_LIMIT)}"
+        )
+    ]
+    lines.extend(
+        (
+            f"      ↳ R{index} · "
+            f"{_compact_preview_text(reading.label, _LIST_READING_LABEL_LIMIT)}"
         )
         for index, reading in enumerate(visible, start=1)
-    ]
+    )
     hidden_count = len(finding.readings) - len(visible)
     if hidden_count:
         lines.append(
@@ -111,13 +120,13 @@ def _reading_preview_lines(
     return lines
 
 
-def _reading_preview_text(value: str) -> str:
-    """Keep both a reading's opening claim and its trailing qualification."""
+def _compact_preview_text(value: str, limit: int) -> str:
+    """Keep both a preview's opening claim and trailing qualification."""
     normalized = " ".join(safe_terminal_text(value).split())
-    if len(normalized) <= _LIST_READING_TEXT_LIMIT:
+    if len(normalized) <= limit:
         return normalized
     marker = " … "
-    available = _LIST_READING_TEXT_LIMIT - len(marker)
+    available = limit - len(marker)
     head_limit = available * 11 // 20
     tail_limit = available - head_limit
     head = normalized[:head_limit].rstrip()
@@ -127,7 +136,7 @@ def _reading_preview_text(value: str) -> str:
     if " " in tail:
         tail = tail.split(" ", 1)[1]
     if not head or not tail:
-        return _single_line(normalized, limit=_LIST_READING_TEXT_LIMIT)
+        return _single_line(normalized, limit=limit)
     return f"{head}{marker}{tail}"
 
 
@@ -312,8 +321,10 @@ def _detail_text(
             pointer = "›" if selected == index - 1 else " "
             lines.append(
                 f"{pointer} {index}. [{safe_terminal_text(reading.role)}] "
-                f"{safe_terminal_text(reading.text)}"
+                f"{safe_terminal_text(reading.label)}"
             )
+            if reading.label != reading.text:
+                lines.append(f"   {safe_terminal_text(reading.text)}")
     if finding.children:
         lines.extend(["", "PROPOSED CHILDREN"])
         for index, child in enumerate(finding.children, start=1):
