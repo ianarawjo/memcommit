@@ -25,6 +25,7 @@ IMPLEMENTATION_LEVELS = {
     "checkpoint": "implemented",
     "chunk": "implemented",
     "clear": "implemented",
+    "compare": "implemented",
     "config": "legacy",
     "contexts": "implemented",
     "delete": "implemented",

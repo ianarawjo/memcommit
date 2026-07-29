@@ -1404,6 +1404,19 @@ class MemoryStore:
             canonical_context_uid = str(uuid.UUID(context_uid))
         except (AttributeError, TypeError, ValueError):
             canonical_context_uid = None
+        from memcommit.comparison_store import (
+            comparison_paths_for_context,
+            delete_comparison_paths,
+        )
+
+        # Compare artifacts snapshot both sources and derived explanations.
+        # Their privacy lifetime therefore ends when either bound source is
+        # deleted, regardless of which side was the display reference.
+        comparison_paths = (
+            comparison_paths_for_context(context_uid)
+            if canonical_context_uid == context_uid
+            else ()
+        )
         analysis_path = (
             self._atomize_analysis_path(context_uid)
             if canonical_context_uid == context_uid
@@ -1503,6 +1516,7 @@ class MemoryStore:
             # them after their exact Context is gone would be both misleading
             # state and an avoidable privacy leak.
             grounding_path.unlink()
+        delete_comparison_paths(comparison_paths)
         if (
             grounding_history_dir is not None
             and grounding_history_dir.exists()

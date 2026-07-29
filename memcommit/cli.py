@@ -9,6 +9,7 @@ from memcommit.commands import (
     branch,
     checkpoint,
     chunk,
+    compare,
     contexts,
     delete,
     diff,
@@ -61,6 +62,13 @@ app.command(
     "diff",
     help="Render the active staged update; not an arbitrary Context diff.",
 )(diff.cmd)
+app.command(
+    "compare",
+    help=(
+        "Compare the active Context with an equal-authority PEER; save no "
+        "target changes."
+    ),
+)(compare.cmd)
 
 # --- Navigation ---
 app.command("switch",         help="Switch to a different context.")(switch.cmd)

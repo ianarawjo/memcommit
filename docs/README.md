@@ -49,3 +49,10 @@ considered sufficient design history.
 - [`mem-atomize-grounding-screen-captures.md`](mem-atomize-grounding-screen-captures.md)
   indexes exact tested CLI captures for the workbench, awaiting, resumed,
   corrected ready, and applied states.
+
+## Compare contract note
+
+- [`mem-compare-design-rationale.md`](mem-compare-design-rationale.md) defines
+  targetless ordered peer comparison, durable source-bound analysis,
+  exhaustive N:M relations, automatic reanalysis after source changes, and
+  the boundary between a static Compare view and later grounding/Meld turns.
