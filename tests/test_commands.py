@@ -24,6 +24,41 @@ def invoke(*args):
     return runner.invoke(app, list(args))
 
 
+# ---------------------------------------------------------------------------
+# help
+# ---------------------------------------------------------------------------
+
+class TestHelp:
+    def test_lists_commands_with_levels_and_descriptions(self):
+        result = invoke("help")
+
+        assert result.exit_code == 0
+        assert "mem command inventory" in result.output
+        lines = result.output.splitlines()
+        assert any(
+            line.startswith("impact ")
+            and " - partial " in line
+            and "no Context changes" in line
+            for line in lines
+        )
+        assert any(
+            line.startswith("update ")
+            and " - partial " in line
+            and "target remains unchanged" in line
+            for line in lines
+        )
+        assert any(
+            line.startswith("ls ")
+            and " - alias " in line
+            for line in lines
+        )
+        assert any(
+            line.startswith("integrate ")
+            and " - legacy " in line
+            for line in lines
+        )
+
+
 
 # ---------------------------------------------------------------------------
 # init

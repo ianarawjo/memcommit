@@ -19,6 +19,7 @@ from memcommit.commands import (
     find_conflicts,
     find_duplicates,
     forget,
+    help_inventory,
     impact,
     init,
     integrate,
@@ -53,15 +54,24 @@ app.command("show",           help="Show a memory, embedded context, or the curr
 app.command("contexts",       help="List all available contexts.")(contexts.cmd)
 app.command("clear",          help="Clear all memories from the current (or given) context.")(clear_cmd)
 app.command("delete",         help="Delete a context and its history; preserve descendants.")(delete.cmd)
-app.command("diff",           help="Show the active staged update.")(diff.cmd)
+app.command(
+    "diff",
+    help="Render the active staged update; not an arbitrary Context diff.",
+)(diff.cmd)
 
 # --- Navigation ---
 app.command("switch",         help="Switch to a different context.")(switch.cmd)
 app.command("branch",         help="Create a new context branched from the current one.")(branch.cmd)
-app.command("merge",          help="Merge another context into the current one.")(merge.cmd)
+app.command(
+    "merge",
+    help="Add UID-new direct items from another Context; no semantic reconciliation.",
+)(merge.cmd)
 app.command("embed",          help="Embed one context inside another.")(embed.cmd)
 app.command("reference",      help="Add a read-only live reference to a memory.")(reference.cmd)
-app.command("query",          help="Ask a question of a query-only Context.")(query.cmd)
+app.command(
+    "query",
+    help="Ask a query-only Context; the question and answer are not saved.",
+)(query.cmd)
 
 # --- Editing ---
 app.command("edit",           help="Replace the content of one or more direct Memories by uid.")(edit.cmd)
@@ -69,7 +79,7 @@ app.command("remove",         help="Remove a direct item from the current contex
 app.command("chunk",          help="Split a memory into chunks (markdown_headers, paragraphs, sentences).")(chunk.cmd)
 app.command(
     "atomize",
-    help="Inspect or explicitly apply the latest saved atomize analysis.",
+    help="Inspect or explicitly apply a saved atomize analysis.",
 )(atomize.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
 app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)
@@ -80,7 +90,7 @@ app.command(
 )(trace.cmd)
 app.command(
     "rationale",
-    help="Explain a Memory from recorded evidence and labeled inference within its current Context.",
+    help="Show recorded evidence and optional labeled inference for a Memory.",
 )(rationale.cmd)
 
 # --- Semantic (legacy configured LLM or isolated Codex provider) ---
@@ -91,18 +101,27 @@ app.command("find-ambiguities", help="Find ambiguous or underspecified direct Me
 app.command("find-conflicts", help="Find conflicting direct Memory pairs.")(find_conflicts.cmd)
 app.command(
     "review",
-    help="Create or resume a staged terminal review of semantic findings.",
+    help="Save ambiguity-review annotations without editing Memories.",
 )(review.cmd)
 app.command(
     "impact",
-    help="Preview a directional update or unary semantic operation.",
+    help="Preview a directional update or atomization; no Context changes.",
 )(impact.cmd)
 app.command("integrate",      help="Intelligently integrate info into the current context (uses LLM).")(integrate.cmd)
-app.command("update",         help="Stage changes from the current Context to a target.")(update.cmd)
+app.command(
+    "update",
+    help="Stage a directional update plan; the target remains unchanged.",
+)(update.cmd)
 
 # --- Sub-apps ---
 app.add_typer(config_app, name="config", help="Read and write global configuration.")
 app.add_typer(dev_app,    name="dev",    help="Developer tools (eval, diagnostics).", hidden=True)
+
+
+app.command(
+    "help",
+    help="List commands with implementation levels and descriptions.",
+)(help_inventory.cmd)
 
 
 # checkout: alias for switch, with -b to branch instead
