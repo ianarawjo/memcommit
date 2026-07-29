@@ -33,6 +33,7 @@ from memcommit.commands import (
     remove,
     review,
     revert,
+    shell_init,
     status,
     switch,
     trace,
@@ -122,6 +123,10 @@ app.command(
     "help",
     help="Browse commands with implementation levels and syntax help.",
 )(help_inventory.cmd)
+app.command(
+    "shell-init",
+    help="Print opt-in shell integration for interactive command prefill.",
+)(shell_init.cmd)
 
 
 # checkout: alias for switch, with -b to branch instead

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import sys
 from dataclasses import dataclass
+from typing import Annotated
 
 import click
 import typer
@@ -13,6 +14,7 @@ from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
+from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style
 
 
@@ -49,6 +51,7 @@ IMPLEMENTATION_LEVELS = {
     "remove": "implemented",
     "revert": "implemented",
     "review": "partial",
+    "shell-init": "implemented",
     "show": "implemented",
     "status": "implemented",
     "switch": "implemented",
@@ -330,7 +333,27 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def cmd(ctx: typer.Context) -> None:
+def _selection_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stderr.isatty()
+
+
+def _selection_output() -> Output:
+    # stdout is reserved for the one-line selection consumed by shell
+    # integration, so the full-screen interface must stay on the TTY stream.
+    return create_output(stdout=sys.stderr)
+
+
+def cmd(
+    ctx: typer.Context,
+    emit_selection: Annotated[
+        bool,
+        typer.Option(
+            "--emit-selection",
+            hidden=True,
+            help="Emit one selected command for shell integration.",
+        ),
+    ] = False,
+) -> None:
     """Browse command levels and open syntax help for a selection."""
     root = ctx.parent
     if root is None:
@@ -342,6 +365,23 @@ def cmd(ctx: typer.Context) -> None:
         raise typer.Exit(1)
 
     entries = _command_entries(root)
+    if emit_selection:
+        if not _selection_terminal():
+            typer.secho(
+                "Error: shell selection requires an interactive terminal.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        selected_name = run_help_selector(
+            entries,
+            app_output=_selection_output(),
+            require_tty=False,
+        )
+        if selected_name is not None:
+            typer.echo(selected_name)
+        return
+
     if not _interactive_terminal():
         _render_plain_inventory(entries)
         return

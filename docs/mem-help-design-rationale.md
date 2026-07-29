@@ -25,7 +25,7 @@ prompt-toolkit selector:
 - Up and Down move one command at a time.
 - Page Up, Page Down, Home, and End move through the longer list.
 - Enter closes the selector, prints `Command: mem <name>`, and renders that
-  registered command's syntax help.
+  registered command's syntax help in the ordinary CLI path.
 - `q`, Escape, and Ctrl-C cancel without selecting or invoking anything.
 
 The selected command's callback is deliberately never invoked. Some commands
@@ -34,11 +34,14 @@ require operands or provider work. Treating a single Enter in a help browser
 as execution would therefore make inspection unexpectedly mutate state or
 produce an avoidable usage error.
 
-The child `mem help` process also cannot portably prefill its parent shell's
-next editable command line. That would require separate integration for zsh
-ZLE, Bash Readline, Fish, and other shells. Unsafe terminal input injection is
-not used. The printed `mem <name>` line and syntax screen are the portable
-boundary: they expose the real command while keeping execution explicit.
+The child `mem help` process cannot itself prefill its parent shell's next
+editable command line. The opt-in output of `mem shell-init zsh` now supplies
+a parent-shell wrapper for zsh: its private selection mode keeps the TUI on
+the terminal, returns one validated command name to the wrapper, and uses
+zsh's `print -z` to prefill without executing. Bash Readline and Fish still
+need their own integrations. Unsafe terminal input injection is not used.
+See [`mem-zsh-prefill-design-rationale.md`](mem-zsh-prefill-design-rationale.md)
+for that shell-owned boundary.
 
 When stdin or stdout is not a TTY, `mem help` retains the stable plain-text
 inventory. This keeps pipes, captured study records, and automated tests
