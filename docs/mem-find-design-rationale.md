@@ -37,7 +37,17 @@ names. `--direct` searches only direct items in the selected Context.
 `--limit` accepts values from 1 through 20 and defaults to 5.
 
 Find is read-only. It does not save the query, matches, a Memory, or a
-checkpoint.
+checkpoint. Its ordinary stdout can be redirected or copied by the shell, but
+that output is a presentation format, not a durable or supported structured
+selection for another memcommit operation.
+
+The CLI groups results by their primary owning Context instead of repeating
+the Context name on every item. Context groups appear in the order of their
+first ranked result, and results within a group retain their relative model
+order. This presentation deliberately gathers interleaved results from the
+same Context, so the rendered order across different Contexts is group-oriented
+rather than one flat global ranking. Memory content begins on the same line as
+its type and UID; later content lines align beneath the first.
 
 ## Searchable item types
 
@@ -104,9 +114,10 @@ validation additionally requires:
 - records containing only one string `candidate_id`;
 - exact membership in the local candidate allowlist.
 
-Duplicate valid IDs are collapsed while preserving model order. Unknown,
-partial, malformed, or content-bearing records fail the command instead of
-being displayed.
+Duplicate valid IDs are collapsed while preserving model order in the validated
+match sequence. The CLI then applies the Context grouping described above.
+Unknown, partial, malformed, or content-bearing records fail the command
+instead of being displayed.
 
 ## Provider and privacy
 

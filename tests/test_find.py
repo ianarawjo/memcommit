@@ -309,15 +309,104 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     result = runner.invoke(app, ["find", "parking"])
 
     assert result.exit_code == 0
-    assert "1 match" in result.output
-    assert f"[memory  {memory.uid[:8]}] campus/parking" in result.output
-    assert "Temporary parking is available in Lot C." in result.output
+    assert "1 match" not in result.output
+    assert "campus/parking\n" in result.output
+    assert (
+        f"[memory  {memory.uid[:8]}] "
+        "Temporary parking is available in Lot C."
+    ) in result.output
     assert store.list_checkpoints("campus-wiki") == checkpoints_before
 
     direct = runner.invoke(app, ["find", "parking", "--direct"])
     assert direct.exit_code == 0
-    assert "0 matches" in direct.output
+    assert direct.output == "campus-wiki\n  (no matching items)\n"
     assert "Temporary parking" not in direct.output
+
+
+def test_find_cli_groups_contexts_and_aligns_multiline_content(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    child = ops.init("campus/parking")
+    first_child = ops.add(child, "First child line\ncontinued detail")
+    second_child = ops.add(child, "Second child result")
+    store.save(child)
+    root = ops.init("campus-wiki")
+    root_memory = ops.add(root, "Root result")
+    ops.embed(child, root)
+    store.save(root)
+    store.set_current(root.name)
+
+    class InterleavedProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            by_content = {
+                candidate["content"]: candidate["candidate_id"]
+                for candidate in payload["candidates"]
+            }
+            return json.dumps(
+                {
+                    "matches": [
+                        {"candidate_id": by_content[first_child.content]},
+                        {"candidate_id": by_content[root_memory.content]},
+                        {"candidate_id": by_content[second_child.content]},
+                    ]
+                }
+            )
+
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: InterleavedProvider(),
+    )
+
+    result = runner.invoke(app, ["find", "anything"])
+
+    assert result.exit_code == 0
+    first_label = f"[memory  {first_child.uid[:8]}]"
+    first_row = f"{first_label} First child line"
+    continuation = " " * (len(first_label) + 1) + "continued detail"
+    second_row = (
+        f"[memory  {second_child.uid[:8]}] Second child result"
+    )
+    root_row = f"[memory  {root_memory.uid[:8]}] Root result"
+    assert result.output.count("campus/parking\n") == 1
+    assert result.output.count("campus-wiki\n") == 1
+    assert (
+        result.output.index("campus/parking\n")
+        < result.output.index(first_row)
+        < result.output.index(continuation)
+        < result.output.index(second_row)
+        < result.output.index("campus-wiki\n")
+        < result.output.index(root_row)
+    )
+
+
+def test_find_cli_groups_memory_ref_and_renders_target_inline(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "Referenced parking detail")
+    store.save(source)
+    parent = ops.init("parent")
+    ref = ops.reference_memory(memory, source, parent)
+    store.save(parent)
+    store.set_current(parent.name)
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: KeywordProvider(),
+    )
+
+    result = runner.invoke(app, ["find", "parking"])
+
+    assert result.exit_code == 0
+    assert result.output == (
+        "parent\n"
+        f"[ref     {ref.uid[:8]}] "
+        f"-> source#{memory.uid[:8]} Referenced parking detail\n"
+    )
 
 
 def test_find_cli_explicit_context_does_not_switch_current(
@@ -356,7 +445,7 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
         HIDDEN_SECRET,
     )
     parent = ops.init("campus-wiki")
-    ops.reference_query_context(
+    ref = ops.reference_query_context(
         "contractor-agreements",
         source.uid,
         parent,
@@ -371,8 +460,11 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
     result = runner.invoke(app, ["find", "contractor"])
 
     assert result.exit_code == 0
-    assert "[query   " in result.output
-    assert "contractor-agreements (query-only)" in result.output
+    assert "campus-wiki\n" in result.output
+    assert (
+        f"[query   {ref.uid[:8]}] "
+        "contractor-agreements (query-only)"
+    ) in result.output
     assert "mem query" in result.output
     assert HIDDEN_SECRET not in result.output
 

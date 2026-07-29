@@ -13,31 +13,35 @@ from memcommit.search import FindError, SearchMatch
 from memcommit.store import MemoryStore
 
 
-def _render_content(content: str) -> None:
-    for line in content.splitlines() or [""]:
-        typer.echo(f"  {line}")
+def _render_labeled_content(label: str, content: str) -> None:
+    """Render the first content line beside its item and align continuations."""
+    lines = content.splitlines() or [""]
+    typer.echo(f"{label} {lines[0]}")
+    continuation = " " * (len(label) + 1)
+    for line in lines[1:]:
+        typer.echo(f"{continuation}{line}")
 
 
 def _render_match(match: SearchMatch) -> None:
     candidate = match.candidate
     item = candidate.item
     if isinstance(item, Memory):
-        typer.echo(
-            f"[memory  {item.uid[:8]}] {candidate.context_name}"
+        _render_labeled_content(
+            f"[memory  {item.uid[:8]}]",
+            item.content,
         )
-        _render_content(item.content)
     elif isinstance(item, MemoryRef):
-        typer.echo(
-            f"[ref     {item.uid[:8]}] {candidate.context_name} "
+        label = (
+            f"[ref     {item.uid[:8]}] "
             f"-> {item.target_context_name}#{item.target_memory_uid[:8]}"
         )
         if item.target is not None:
-            _render_content(item.target.content)
+            _render_labeled_content(label, item.target.content)
+        else:
+            typer.echo(label)
     elif isinstance(item, QueryContextRef):
-        typer.echo(
-            f"[query   {item.uid[:8]}] {candidate.context_name}"
-        )
-        typer.echo(f"  {item.name} (query-only)")
+        label = f"[query   {item.uid[:8]}]"
+        typer.echo(f"{label} {item.name} (query-only)")
         command = shlex.join(
             [
                 "mem",
@@ -49,7 +53,7 @@ def _render_match(match: SearchMatch) -> None:
             ]
         )
         typer.echo(
-            f"  Ask with: {command}"
+            f"{' ' * (len(label) + 1)}Ask with: {command}"
         )
 
 
@@ -105,14 +109,27 @@ def cmd(
         typer.secho(f"Find error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    typer.secho(f"Context: {ctx.name}", bold=True)
-    typer.echo(
-        f"  {len(matches)} match{'es' if len(matches) != 1 else ''}"
-    )
     if not matches:
-        typer.echo("\n  (no matching items)")
+        typer.secho(ctx.name, bold=True)
+        typer.echo("  (no matching items)")
         return
-    for index, match in enumerate(matches):
-        if index:
+
+    # Grouping makes the owning Context legible without repeating it on every
+    # row. Dict insertion order keeps the model's first Context appearance,
+    # while each group's rows retain their relative ranking.
+    grouped: dict[tuple[str, str], list[SearchMatch]] = {}
+    for match in matches:
+        owner = (
+            match.candidate.context_uid,
+            match.candidate.context_name,
+        )
+        grouped.setdefault(owner, []).append(match)
+
+    for group_index, ((_, owner_name), owner_matches) in enumerate(
+        grouped.items()
+    ):
+        if group_index:
             typer.echo()
-        _render_match(match)
+        typer.secho(owner_name, bold=True)
+        for match in owner_matches:
+            _render_match(match)
