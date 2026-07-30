@@ -209,10 +209,18 @@ those are the places where human intervention can change later
 reconciliation. Each candidate includes the kind and summary of every linked
 relation, so a hidden ledger row never leaves an unexplained `R7`-style
 reference. After the last non-empty semantic section, one plain footer sentence
-points to the provider-free `--ledger` view. Omitting another label keeps this
-small navigation hint subordinate to the report. The footer separates the
-final report text from the next shell prompt without relying on arbitrary
-extra blank lines; it is not another semantic result section.
+introduces a complete shell-quoted command for the provider-free `--ledger`
+view on the next line. Omitting another label keeps this small navigation hint
+subordinate to the report and makes the command easy to select without copying
+explanatory prose. The footer separates the final report text from the next
+shell prompt without relying on arbitrary extra blank lines; it is not another
+semantic result section.
+
+The footer uses the canonical compared Context name, not the raw relative
+locator, and display-escapes terminal controls after POSIX shell quoting.
+Running it immediately reuses the current Reference. If current state later
+changes, the person must first switch back to the Reference named in the
+header; Compare has no stateless `--from` operand.
 
 `--ledger` renders every validated relation, its exact source snapshots, and
 its explanation without another provider call. The exhaustive ledger remains

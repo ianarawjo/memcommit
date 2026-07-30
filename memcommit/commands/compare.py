@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from collections import Counter
+import shlex
 from typing import Annotated
 import unicodedata
 
@@ -305,13 +306,22 @@ def render_comparison(
             )
         if analysis.issues:
             lines.extend(_grounding_candidate_lines(analysis, numbered))
+        ledger_command = display_escape_text(
+            shlex.join(
+                [
+                    "mem",
+                    "compare",
+                    "--to",
+                    compared.context_name,
+                    "--ledger",
+                ]
+            )
+        )
         lines.extend(
             [
                 "",
-                (
-                    "The complete source-linked relation ledger is saved; "
-                    "inspect it with --ledger."
-                ),
+                "The complete source-linked relation ledger is saved:",
+                f"  {ledger_command}",
             ]
         )
         return "\n".join(lines)
