@@ -309,8 +309,8 @@ def render_comparison(
             [
                 "",
                 (
-                    "DETAIL · The complete source-linked relation ledger "
-                    "is saved; inspect it with --ledger."
+                    "The complete source-linked relation ledger is saved; "
+                    "inspect it with --ledger."
                 ),
             ]
         )

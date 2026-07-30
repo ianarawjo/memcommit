@@ -208,11 +208,11 @@ When non-empty, `GROUNDING CANDIDATES` remains a complete final list because
 those are the places where human intervention can change later
 reconciliation. Each candidate includes the kind and summary of every linked
 relation, so a hidden ledger row never leaves an unexplained `R7`-style
-reference. After the last non-empty semantic section, one `DETAIL` footer
-points to the provider-free `--ledger` view. This meaningful footer separates
-the final report text from the next shell prompt without relying on arbitrary
-extra blank lines. It is navigation chrome rather than another semantic
-result section.
+reference. After the last non-empty semantic section, one plain footer sentence
+points to the provider-free `--ledger` view. Omitting another label keeps this
+small navigation hint subordinate to the report. The footer separates the
+final report text from the next shell prompt without relying on arbitrary
+extra blank lines; it is not another semantic result section.
 
 `--ledger` renders every validated relation, its exact source snapshots, and
 its explanation without another provider call. The exhaustive ledger remains

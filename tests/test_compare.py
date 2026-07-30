@@ -226,7 +226,7 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
         created.output
     )
     assert (
-        "DETAIL · The complete source-linked relation ledger is saved; "
+        "The complete source-linked relation ledger is saved; "
         "inspect it with --ledger."
     ) in (
         created.output
@@ -282,7 +282,9 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     assert "\n      WHY ·" in ledger.output
     assert "\nWHAT DIFFERS\n  (none)" in ledger.output
     assert "\nGROUNDING CANDIDATES · 0\n  (none)" in ledger.output
-    assert "\nDETAIL ·" not in ledger.output
+    assert "complete source-linked relation ledger is saved" not in (
+        ledger.output
+    )
     assert len(provider.payloads) == 1
 
     resumed = runner.invoke(
@@ -539,7 +541,7 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
     assert "WHAT DIFFERS · 1" in rendered
     assert "RELATED · R1 · CONFLICT" in rendered
     assert rendered.rfind("GROUNDING CANDIDATES") < rendered.rfind(
-        "DETAIL ·"
+        "The complete source-linked relation ledger"
     )
     assert rendered.rstrip().endswith("--ledger.")
 
