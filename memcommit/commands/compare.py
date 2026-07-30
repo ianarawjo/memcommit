@@ -247,6 +247,16 @@ def render_comparison(
         for index, relation in enumerate(analysis.relations, start=1)
     }
     lines = _header_lines(analysis, reused=reused)
+    if not ledger:
+        relation_label = (
+            "relation"
+            if len(analysis.relations) == 1
+            else "relations"
+        )
+        lines.append(
+            f"VIEW · --ledger expands all {len(analysis.relations)} "
+            f"source-linked {relation_label}."
+        )
     lines.extend(
         [
             "",
@@ -294,27 +304,17 @@ def render_comparison(
             ),
         ]
         for title, report, present in report_sections:
+            if not present:
+                continue
             lines.extend(
                 [
                     "",
                     title,
-                    (
-                        display_escape_text(report)
-                        if present
-                        else "  (none reported under this comparison)"
-                    ),
+                    display_escape_text(report),
                 ]
             )
-        lines.extend(
-            [
-                "",
-                (
-                    "DETAIL · The complete source-linked relation ledger "
-                    "is saved; inspect it with --ledger."
-                ),
-            ]
-        )
-        lines.extend(_grounding_candidate_lines(analysis, numbered))
+        if analysis.issues:
+            lines.extend(_grounding_candidate_lines(analysis, numbered))
         return "\n".join(lines)
 
     lines.extend(

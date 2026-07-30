@@ -225,6 +225,11 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     assert "The reference alone adds guidance about headings." in (
         created.output
     )
+    assert "VIEW · --ledger expands all 3 source-linked relations." in (
+        created.output
+    )
+    assert "\nWHAT DIFFERS" not in created.output
+    assert "\nGROUNDING CANDIDATES" not in created.output
     assert reference.uid[:8] not in created.output
     assert next(iter(reference.memories))[:8] not in created.output
     assert next(iter(compared.memories))[:8] not in created.output
@@ -271,6 +276,9 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     assert "\n      REF " in ledger.output
     assert "\n      TO  " in ledger.output
     assert "\n      WHY ·" in ledger.output
+    assert "\nWHAT DIFFERS\n  (none)" in ledger.output
+    assert "\nGROUNDING CANDIDATES · 0\n  (none)" in ledger.output
+    assert "VIEW · --ledger" not in ledger.output
     assert len(provider.payloads) == 1
 
     resumed = runner.invoke(
@@ -526,8 +534,8 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
     rendered = render_comparison(analysis, reused=False)
     assert "WHAT DIFFERS · 1" in rendered
     assert "RELATED · R1 · CONFLICT" in rendered
-    assert rendered.rfind("GROUNDING CANDIDATES") > rendered.rfind(
-        "DETAIL ·"
+    assert rendered.index("VIEW · --ledger") < rendered.index(
+        "WHAT MEM UNDERSTOOD"
     )
     assert rendered.rstrip().endswith(
         "Keep both rules under disjoint conditions."
@@ -860,8 +868,11 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     rendered = render_comparison(analysis, reused=False)
     ledger = render_comparison(analysis, reused=False, ledger=True)
 
-    assert rendered.count("\nGROUNDING CANDIDATES") == 1
-    assert rendered.count("\nWHAT DIFFERS") == 1
+    assert rendered.count("\nGROUNDING CANDIDATES") == 0
+    assert rendered.count("\nWHAT DIFFERS") == 0
+    assert "WHAT BOTH CONTAIN · 1" in rendered
+    assert "ONLY IN " not in rendered
+    assert "VIEW · --ledger expands all 1 source-linked relation." in rendered
     assert (
         r"Valid report\nGROUNDING CANDIDATES · 999\nfake trusted row"
         in rendered

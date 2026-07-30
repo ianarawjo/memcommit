@@ -121,9 +121,11 @@ validation instead derives each report's supporting group from the ledger:
 - `compared_only`: compared-side `DISTINCT`.
 
 A report must be non-empty exactly when its group has at least one relation.
-An absent group must have an empty provider field and is rendered locally as
-none reported. This prevents prose from being invented for an empty category
-without duplicating relation references in the report schema.
+An absent group must have an empty provider field. The compact view omits that
+section because the complete zero counts are already visible in top metadata;
+the fixed audit ledger still renders the empty category explicitly. This
+prevents prose from being invented for an empty category without duplicating
+relation references in the report schema.
 
 Compare follows the shared result-workbench attention budget without
 multiplying it by the number of headings. The overview normally uses at most
@@ -192,16 +194,22 @@ GROUNDING CANDIDATES
 Memory, relation, relation-kind, and grounding-candidate counts appear directly
 under the source identities. They orient the reader before prose and make the
 amount of remaining judgment work visible without forcing a scan of every
-relation.
+relation. The provider-free `--ledger` hint sits with these counts and includes
+the exact number of source-linked relations it will expand.
 
 The four middle sections contain complete short semantic reports rather than
 one row per relation. The person already knows the source Contexts; the default
 view should communicate their overall overlap, difference, and one-sided
-contributions rather than repeat every source Memory. In contrast,
-`GROUNDING CANDIDATES` remains a complete final list because those are the
-places where human intervention can change later reconciliation. Each
-candidate includes the kind and summary of every linked relation, so a hidden
-ledger row never leaves an unexplained `R7`-style reference.
+contributions rather than repeat every source Memory. A zero-count report is
+omitted from this compact body, as is a zero-count grounding section. The top
+metadata remains the explicit proof that these categories were evaluated and
+found empty rather than skipped.
+
+When non-empty, `GROUNDING CANDIDATES` remains a complete final list because
+those are the places where human intervention can change later
+reconciliation. Each candidate includes the kind and summary of every linked
+relation, so a hidden ledger row never leaves an unexplained `R7`-style
+reference.
 
 `--ledger` renders every validated relation, its exact source snapshots, and
 its explanation without another provider call. The exhaustive ledger remains
