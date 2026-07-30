@@ -51,9 +51,11 @@ boundary and the agent as the conversational orchestrator.
 
 - In a TTY, `mem ground` without arguments opens the provider-backed blank
   Ground TUI. Outside a TTY it prints the same stable unsaved frame and exits.
-  The TUI may propose a Goal, completion criterion, and portable name, but it
-  must not create the named Ground until the user presses the dedicated
-  approval key for the exact displayed command.
+  The TUI may propose a Goal and portable name, but it must not create the
+  named Ground until the user presses the dedicated approval key for the exact
+  displayed command. Ground has no separate completion criterion: closing a
+  view is not agreement, and any future whole-Ground agreement must require
+  explicit approval of one reviewed Goal–Rules–Cases revision.
 - The blank TUI sends only the person's submitted dialogue text to the
   provider. It must not infer, load, or transmit the current Context,
   query-only sources, or existing Ground data.

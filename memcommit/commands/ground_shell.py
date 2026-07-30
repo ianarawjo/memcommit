@@ -1,9 +1,9 @@
 """Interactive, fail-closed shell for starting one Ground from a blank page.
 
 The dialogue provider may explain or propose, but it cannot supply a shell
-command.  This module freezes the three structured creation fields, renders
-their argv locally, and calls the supplied ``apply`` adapter only after one
-explicit approval.
+command.  This module freezes the Ground name and Goal, renders their argv
+locally, and calls the supplied ``apply`` adapter only after one explicit
+approval.
 """
 
 from __future__ import annotations
@@ -64,7 +64,6 @@ class GroundShellProposal:
 
     ground_name: str
     goal: str
-    completion: str
     understanding: str
     question: str
 
@@ -93,8 +92,6 @@ def proposal_argv(proposal: GroundShellProposal) -> tuple[str, ...]:
         proposal.ground_name,
         "--goal",
         proposal.goal,
-        "--completion",
-        proposal.completion,
     )
 
 
@@ -114,17 +111,11 @@ def render_ground_top_panel(
         if proposal is not None
         else working_goal or "(not yet stated)"
     )
-    completion = (
-        proposal.completion
-        if proposal is not None
-        else "(not yet stated)"
-    )
     return "\n".join(
         [
             "MEM GROUND · NEW · NOT SAVED",
             "GOAL",
             f"  {safe_terminal_text(goal)}",
-            f"  completion: {safe_terminal_text(completion)}",
             "CONTEXTS",
             "  (not bound; not inferred)",
             "RULES",
@@ -144,22 +135,18 @@ def render_ground_goal_pane(
     if proposal is None:
         lines = [
             (
-                "WORKING · NOT SAVED"
+                "WORKING"
                 if working_goal
                 else "(not yet stated)"
             ),
         ]
         if working_goal:
             lines.append(safe_terminal_text(working_goal))
-        lines.extend(["", "COMPLETION", "(not yet stated)"])
         return "\n".join(lines)
 
     lines = [
-        "PROPOSED · NOT SAVED",
+        "PROPOSED",
         safe_terminal_text(proposal.goal),
-        "",
-        "COMPLETION",
-        safe_terminal_text(proposal.completion),
     ]
     if working_goal and working_goal != proposal.goal:
         lines.extend(
@@ -307,10 +294,6 @@ def _freeze_proposal(response: object) -> GroundShellProposal:
     return GroundShellProposal(
         ground_name=ground_name,
         goal=_command_text(_field(source, "goal"), "Goal"),
-        completion=_command_text(
-            _field(source, "completion"),
-            "completion criterion",
-        ),
         understanding=_required_text(understanding, "understanding"),
         question=_required_text(question, "question"),
     )

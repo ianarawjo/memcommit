@@ -155,10 +155,7 @@ def render_named_ground_top_panel(session: GroundSession) -> str:
                 f"MEM GROUND · {safe_terminal_text(session.contract_name)} · "
                 f"SAVED · {state} · REV {session.revision}"
             ),
-            (
-                "GOAL · completion: "
-                f"{_line(session.completion_criterion, 80)}"
-            ),
+            "GOAL",
             f"  {_line(session.goal or '(not yet stated)')}",
             (
                 f"RULES {len(rules)} · "
@@ -190,17 +187,8 @@ def render_named_ground_header(session: GroundSession) -> str:
 
 
 def render_named_ground_goal_pane(session: GroundSession) -> str:
-    """Render the complete Goal and completion criterion without truncation."""
-    return "\n".join(
-        [
-            safe_terminal_text(session.goal or "(not yet stated)"),
-            "",
-            "COMPLETION",
-            safe_terminal_text(
-                session.completion_criterion or "(not yet stated)"
-            ),
-        ]
-    )
+    """Render the complete Goal without truncation."""
+    return safe_terminal_text(session.goal or "(not yet stated)")
 
 
 def render_named_ground_contexts_pane(session: GroundSession) -> str:

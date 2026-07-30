@@ -84,11 +84,13 @@ _WINDOWS_RESERVED_NAMES = {
     *(f"lpt{number}" for number in range(1, 10)),
 }
 
-DEFAULT_COMPLETION_CRITERION = (
-    "The reviewed cases in the current scope are adequately explained by "
-    "the rules, unresolved boundaries are explicit, and the user has "
-    "approved the Ground."
+LEGACY_COMPLETION_MARKER = (
+    "Reserved for schema compatibility; Ground agreement is not determined "
+    "by a separate completion criterion."
 )
+# Keep the earlier import name available to code that reads version 1/2 data.
+# New CLI and provider contracts do not expose a completion criterion.
+DEFAULT_COMPLETION_CRITERION = LEGACY_COMPLETION_MARKER
 
 
 class GroundError(ValueError):
@@ -780,6 +782,9 @@ class GroundSession:
     uid: str
     contract_name: str
     goal: str
+    # Version 1/2 records require this serialized key and include it in their
+    # CAS digest. New behavior neither displays nor reasons over it; removing
+    # it awaits a schema migration that can preserve old record identity.
     completion_criterion: str
     scope: tuple[str, ...]
     status: GroundStatus
@@ -1205,7 +1210,7 @@ def create_ground_session(
     contract_name: str,
     *,
     goal: str = "",
-    completion_criterion: str = DEFAULT_COMPLETION_CRITERION,
+    completion_criterion: str = LEGACY_COMPLETION_MARKER,
     scope: tuple[str, ...] = (),
 ) -> GroundSession:
     """Create a validated empty scaffold without inferring rules or cases."""

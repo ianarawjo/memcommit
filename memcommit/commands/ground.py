@@ -22,7 +22,6 @@ from memcommit.commands.ground_named_shell import (
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import Context, Memory
 from memcommit.ground import (
-    DEFAULT_COMPLETION_CRITERION,
     GROUND_SCHEMA_VERSION,
     GroundError,
     GroundFrame,
@@ -86,7 +85,7 @@ def render_ground_start(initial_request: str = "") -> str:
         ["  (not yet stated)"]
         if not safe_goal
         else [
-            "  WORKING · FROM STARTING REQUEST · NOT SAVED",
+            "  WORKING · FROM STARTING REQUEST",
             f"  {safe_goal}",
         ]
     )
@@ -563,7 +562,6 @@ def _ground_action_proposal(
         )
         effects = (
             "Goal: REVISE",
-            "Completion criterion: unchanged",
             "Rules and Cases: unchanged",
             "Contexts and Memories: unchanged",
             "Checkpoints: unchanged",
@@ -922,9 +920,6 @@ def _render_unbound_snapshot(session: GroundSession) -> str:
         "GOAL",
         f"  {safe_terminal_text(goal)}",
         "",
-        "COMPLETION",
-        f"  {safe_terminal_text(session.completion_criterion)}",
-        "",
         f"SCOPE  {safe_terminal_text(scope)}",
         (
             f"RULES {_count_items(session, 'RULE')} · "
@@ -1080,14 +1075,10 @@ def render_ground_snapshot(
         "",
         "1 · GOAL",
         f"  {safe_terminal_text(session.goal or '(not yet stated)')}",
-        (
-            "  completion: "
-            f"{safe_terminal_text(session.completion_criterion)}"
-        ),
         "",
-        "  GOAL SUCCESS CRITERIA · TARGETS",
+        "  TARGET REQUIREMENTS",
         (
-            "    The Goal and criteria may be revised when cases expose "
+            "    The Goal and requirements may be revised when cases expose "
             "a bad boundary."
         ),
     ]
@@ -1288,10 +1279,6 @@ def render_ground_focus(
         "",
         "GOAL",
         f"  {safe_terminal_text(session.goal or '(not yet stated)')}",
-        (
-            "  completion: "
-            f"{safe_terminal_text(session.completion_criterion)}"
-        ),
         "",
         "BOUND MATERIAL",
         material_line("RAW", raw),
@@ -1359,8 +1346,8 @@ def render_ground_focus(
                 "",
                 "    2  COMPLETE TARGET",
                 (
-                    "       Keep the complete target as the completion "
-                    "boundary and remain blocked until evidence is supplied."
+                    "       Keep the full target as the scope boundary and "
+                    "remain blocked until evidence is supplied."
                 ),
                 "",
                 "  > 3  BOTH",
@@ -1371,7 +1358,7 @@ def render_ground_focus(
                 "",
                 "WHY THIS MATTERS",
                 (
-                    "  The answer changes what counts as complete and may "
+                    "  The answer changes the agreed scope and may "
                     "require one Goal or target-requirement command."
                 ),
             ]
@@ -1482,13 +1469,6 @@ def cmd(
     goal: Annotated[
         Optional[str],
         typer.Option("--goal", help="Goal for a new named Ground"),
-    ] = None,
-    completion: Annotated[
-        Optional[str],
-        typer.Option(
-            "--completion",
-            help="Explicit completion criterion for a new Ground",
-        ),
     ] = None,
     scope: Annotated[
         Optional[list[str]],
@@ -1769,7 +1749,6 @@ def cmd(
             value is not None
             for value in (
                 goal,
-                completion,
                 scope,
                 focus_target,
                 select,
@@ -1837,7 +1816,6 @@ def cmd(
         and _interactive_terminal()
         and action_count == 0
         and goal is None
-        and completion is None
         and scope is None
         and focus_target is None
         and not snapshot
@@ -1851,7 +1829,6 @@ def cmd(
                 value is not None
                 for value in (
                     goal,
-                    completion,
                     scope,
                     focus_target,
                     select,
@@ -1971,7 +1948,7 @@ def cmd(
         loaded_session = session
         created = session is None
         if session is not None and any(
-            value is not None for value in (goal, completion, scope)
+            value is not None for value in (goal, scope)
         ):
             raise GroundError(
                 "The grounding session already exists. Start it without "
@@ -1981,11 +1958,6 @@ def cmd(
             session = create_ground_session(
                 contract_name,
                 goal=goal or "",
-                completion_criterion=(
-                    completion
-                    if completion is not None
-                    else DEFAULT_COMPLETION_CRITERION
-                ),
                 scope=tuple(scope or ()),
             )
         if focus_target is not None:

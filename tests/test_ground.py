@@ -451,7 +451,6 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
         proposal = ground_command.GroundShellProposal(
             ground_name="task-1-report-coverage",
             goal="Determine which Task 1 claims were represented.",
-            completion="Represented and unresolved claims are explicit.",
             understanding="Compare report coverage.",
             question="Approve this Ground?",
         )
@@ -507,10 +506,6 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
     )
     assert session is not None
     assert session.goal == "Determine which Task 1 claims were represented."
-    assert (
-        session.completion_criterion
-        == "Represented and unresolved claims are explicit."
-    )
     assert not (isolated_store / "contexts").exists()
     assert not (isolated_store / "state.json").exists()
 
@@ -531,7 +526,6 @@ def test_approved_ground_command_uses_argv_without_a_shell(monkeypatch):
     proposal = ground_command.GroundShellProposal(
         ground_name="safe-ground",
         goal="A goal containing ; $(unsafe) and spaces.",
-        completion="The user's intended boundary is explicit.",
         understanding="Create one safe Ground.",
         question="Approve?",
     )
@@ -551,8 +545,6 @@ def test_approved_ground_command_uses_argv_without_a_shell(monkeypatch):
         "safe-ground",
         "--goal",
         "A goal containing ; $(unsafe) and spaces.",
-        "--completion",
-        "The user's intended boundary is explicit.",
     ]
     assert kwargs["capture_output"] is True
     assert kwargs["check"] is False
@@ -635,7 +627,6 @@ def test_new_ground_name_collision_is_rejected_before_and_during_apply(
         question="Approve?",
         ground_name="already-there",
         goal="Overwrite the existing Ground.",
-        completion="The overwrite is complete.",
     )
     monkeypatch.setattr(
         ground_command,
@@ -649,7 +640,6 @@ def test_new_ground_name_collision_is_rejected_before_and_during_apply(
     frozen = ground_command.GroundShellProposal(
         ground_name="already-there",
         goal=dialogue_proposal.goal,
-        completion=dialogue_proposal.completion,
         understanding=dialogue_proposal.understanding,
         question=dialogue_proposal.question,
     )
@@ -1295,7 +1285,7 @@ def test_task_1_workbench_binds_empty_target_contract_above_51_to_54_frame(
     )
 
     snapshot = render_ground_snapshot(bound, (raw, derived, *targets))
-    assert "GOAL SUCCESS CRITERIA" in snapshot
+    assert "TARGET REQUIREMENTS" in snapshot
     assert "WORKBENCH" in snapshot
     assert "RAW" in snapshot
     assert "temp/task-1" in snapshot

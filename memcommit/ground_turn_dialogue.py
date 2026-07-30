@@ -320,7 +320,6 @@ def ground_turn_aliases(
         "state": "BOUND" if bound else "UNBOUND",
         "revision": session.revision,
         "goal": session.goal,
-        "completion": session.completion_criterion,
         "rules": rules,
         "cases": cases,
         "candidate_context": candidate_context,

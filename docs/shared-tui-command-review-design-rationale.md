@@ -160,7 +160,7 @@ The blank TUI still sends only submitted text to the provider. Once the Ground
 has a name, the named-turn provider receives only:
 
 - the portable Ground name;
-- saved Goal and completion text;
+- saved Goal;
 - saved Rule and Case text with local aliases such as `r1` and `c1`;
 - Rule rationale, provenance, and linked Case aliases, plus each Case's
   rationale, linked Rule alias, role, disposition, target Context names, and
@@ -262,7 +262,9 @@ five-component workbench view and move overflow handling to scrolling.
   should later move provider work into an outer controller or async task.
 - Dialogue transcripts are ephemeral. Saved Ground items and decisions
   persist, but the natural-language exchange does not.
-- Completion-criterion revision has no existing CLI action.
+- Whole-Ground agreement is not yet durable. Closing the TUI only closes the
+  view; a future agreement action must bind approval to one reviewed revision
+  rather than to a separate completion sentence.
 - A Case still requires the person to supply a candidate Memory selector,
   which is converted to a provider-safe local alias.
   The TUI has no local read-only candidate picker yet; provider access remains

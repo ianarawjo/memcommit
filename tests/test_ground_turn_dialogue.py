@@ -174,6 +174,7 @@ def test_unbound_turn_can_ask_or_propose_one_explicit_binding():
     payload = json.loads(prompt.split("GROUND TURN PAYLOAD:\n", 1)[1])
     assert payload["ground"]["state"] == "UNBOUND"
     assert payload["ground"]["target_contexts"] == []
+    assert "completion" not in payload["ground"]
     assert "command" not in schema["properties"]
 
 
@@ -198,6 +199,7 @@ def test_bound_turn_exposes_aliases_not_item_uids_and_proposes_rule():
     assert payload["ground"]["state"] == "BOUND"
     assert payload["ground"]["candidate_context"] == "derived"
     assert payload["ground"]["target_contexts"] == ["wiki"]
+    assert "completion" not in payload["ground"]
 
 
 def test_ask_requires_every_action_field_to_be_empty():

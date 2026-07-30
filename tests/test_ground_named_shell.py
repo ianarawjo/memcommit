@@ -135,7 +135,8 @@ def test_named_top_panel_keeps_goal_rules_and_cases_visible():
     rendered = render_named_ground_top_panel(session)
 
     assert "MEM GROUND · fixture-ground · SAVED · UNBOUND · REV 0" in rendered
-    assert "GOAL · completion:" in rendered
+    assert "\nGOAL\n  Build one verified fixture." in rendered
+    assert "Every required target has reviewed support." not in rendered
     assert "Build one verified fixture." in rendered
     assert "RULES 0 · 0 proposed\n  (none yet)" in rendered
     assert "CASES 0 · 0 proposed\n  (none yet)" in rendered
@@ -184,8 +185,11 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
 
     assert "MEM GROUND · fixture-ground" in render_named_ground_header(session)
     assert render_named_ground_goal_pane(session) == (
-        "Build one verified fixture.\n\nCOMPLETION\n"
+        "Build one verified fixture."
+    )
+    assert (
         "Every required target has reviewed support."
+        not in render_named_ground_goal_pane(session)
     )
     rules = render_named_ground_rules_pane(session)
     cases = render_named_ground_cases_pane(session)

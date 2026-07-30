@@ -36,7 +36,6 @@ class Propose:
     question: str
     ground_name: str
     goal: str
-    completion: str
     command: str = "rm -rf ignored-raw-command"
 
 
@@ -47,7 +46,6 @@ def proposal(text: str = "Compare report coverage.") -> Propose:
         question="Approve this initial Ground?",
         ground_name="task-1-report-coverage",
         goal="Find what was reported and what remains unclear.",
-        completion="The reviewed coverage and gaps are explicit.",
     )
 
 
@@ -55,7 +53,6 @@ def test_fixed_top_panel_and_effect_review_show_all_boundaries():
     frozen = GroundShellProposal(
         ground_name="task-1-report-coverage",
         goal="Find what was reported.",
-        completion="Coverage is explicit.",
         understanding="Review coverage.",
         question="Approve?",
     )
@@ -66,12 +63,12 @@ def test_fixed_top_panel_and_effect_review_show_all_boundaries():
 
     assert blank.startswith("MEM GROUND · NEW · NOT SAVED")
     assert "GOAL\n  (not yet stated)" in blank
-    assert "completion: (not yet stated)" in blank
+    assert "COMPLETION" not in blank
     assert "CONTEXTS\n  (not bound; not inferred)" in blank
     assert "RULES\n  (none yet)" in blank
     assert "CASES\n  (none yet)" in blank
     assert "Find what was reported." in proposed
-    assert "completion: Coverage is explicit." in proposed
+    assert "COMPLETION" not in proposed
     assert "PROPOSED COMMAND · NOT RUN" in review
     assert "Ground: CREATE task-1-report-coverage" in review
     assert "Goal: SET" in review
@@ -86,30 +83,22 @@ def test_blank_ground_layers_render_as_complete_independent_components():
     frozen = GroundShellProposal(
         ground_name="task-1-report-coverage",
         goal="Find what was reported.",
-        completion="Coverage is explicit.",
         understanding="Review coverage.",
         question="Approve?",
     )
 
-    assert render_ground_goal_pane() == (
-        "(not yet stated)\n\nCOMPLETION\n(not yet stated)"
-    )
+    assert render_ground_goal_pane() == "(not yet stated)"
     assert render_ground_goal_pane(
         working_goal="Split Task 1 into audience-facing fixtures."
-    ) == (
-        "WORKING · NOT SAVED\n"
-        "Split Task 1 into audience-facing fixtures.\n\n"
-        "COMPLETION\n(not yet stated)"
-    )
+    ) == "WORKING\nSplit Task 1 into audience-facing fixtures."
     assert render_ground_goal_pane(frozen) == (
-        "PROPOSED · NOT SAVED\n"
-        "Find what was reported.\n\nCOMPLETION\nCoverage is explicit."
+        "PROPOSED\nFind what was reported."
     )
     proposed_from_request = render_ground_goal_pane(
         frozen,
         working_goal="Check the report.",
     )
-    assert "PROPOSED · NOT SAVED" in proposed_from_request
+    assert "PROPOSED" in proposed_from_request
     assert "STARTING REQUEST\nCheck the report." in proposed_from_request
     assert "Rules can be proposed after" in render_ground_rules_pane()
     assert "Cases can be added after" in render_ground_cases_pane()
@@ -430,7 +419,6 @@ def test_exact_command_is_quoted_from_structured_fields_not_raw_command():
     frozen = GroundShellProposal(
         ground_name="report-review",
         goal="Find what's missing; echo unsafe",
-        completion="The user's questions are answered.",
         understanding="Review the report.",
         question="Approve?",
     )
@@ -443,8 +431,6 @@ def test_exact_command_is_quoted_from_structured_fields_not_raw_command():
         "report-review",
         "--goal",
         "Find what's missing; echo unsafe",
-        "--completion",
-        "The user's questions are answered.",
     ]
     assert command == shlex.join(shlex.split(command))
 

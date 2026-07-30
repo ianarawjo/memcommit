@@ -22,7 +22,8 @@ def test_sentence_positional_prints_seeded_unsaved_frame_without_writing(
 
     assert result.exit_code == 0, result.output
     assert "MEM GROUND · NEW · NOT SAVED" in result.output
-    assert "WORKING · FROM STARTING REQUEST · NOT SAVED" in result.output
+    assert "WORKING · FROM STARTING REQUEST" in result.output
+    assert result.output.count("NOT SAVED") == 1
     assert request in result.output
     assert "CONTEXTS\n  (not bound; not inferred)" in result.output
     assert "starting request was not sent to a provider" in result.output

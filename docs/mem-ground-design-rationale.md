@@ -70,12 +70,42 @@ starting Goal inside the TUI.
 
 The starting sentence is a provisional orientation, not an automatically
 approved or durable Goal. The raw wording remains visible through
-clarification turns; a provider may propose a refined Goal, completion
-criterion, and portable name, but only the exact locally constructed creation
-command can save them. This is **Goal-first in structure, entry-anywhere in
+clarification turns; a provider may propose a refined Goal and portable name,
+but only the exact locally constructed creation command can save them. This is
+**Goal-first in structure, entry-anywhere in
 conversation**: a person may begin with an outcome, example, or uncertainty,
 while the workbench obtains a revisable Working Goal before it binds evidence
 or proposes Rules and Cases.
+
+### Goal, agreement, and the unsaved draft
+
+Ground deliberately has no separate user-facing completion criterion. A
+completion sentence duplicated the Goal while behaving like an unacknowledged
+fourth normative layer: both fields tried to say what state the work should
+make true. Grounding instead ends when the agent proposes that the current
+Goal, Rules, and Cases express the common ground and the person explicitly
+agrees with that exact state. Closing the TUI, reaching an item count, or
+satisfying a model-generated predicate is not that agreement.
+
+The current prototype does not yet persist a whole-Ground agreement event.
+Saved Grounds therefore remain `OPEN`; `Escape` and `Q` close only the view.
+A future durable agreement command must bind approval to the reviewed Ground
+revision and digest. It must not infer agreement from coverage or reuse the
+legacy completion field.
+
+The blank TUI is already the appropriate temporary session: its Working Goal,
+dialogue blocks, and pending proposal live only in process memory. Before the
+exact creation command is approved, no Ground JSON, temporary name, Context
+state, or checkpoint exists. Persisting an unnamed draft was rejected because
+it would introduce resume identity, name collision, expiry, cleanup, and
+privacy decisions without helping the immediate dialogue. A distinct
+named-draft feature can be designed later if interrupted-session recovery
+becomes necessary.
+
+Persistence state belongs to the overall artifact header. The header says
+`NEW · NOT SAVED`; the Goal pane says only `WORKING` or `PROPOSED`. Repeating
+`NOT SAVED` inside one component made it look like Goal had a different save
+state from Contexts, Rules, Cases, or Dialogue.
 
 The first full-screen implementation kept Goal, Rules, and Cases in a short
 fixed summary while Dialogue consumed most of the available height. An actual
@@ -157,8 +187,8 @@ as wanting to work out which parts of some notes were reported. Early
 grounding should not require a session identifier, polished Goal, Rules, or
 Cases. The person can answer in ordinary language; the Codex-backed adapter
 then returns either one consequential `ASK` turn or a structured
-`PROPOSE(name, goal, completion)` turn. The provider never supplies a command.
-The host validates and freezes those three fields, constructs the exact
+`PROPOSE(name, goal)` turn. The provider never supplies a command.
+The host validates and freezes those two fields, constructs the exact
 creation argv locally, and presents it for explicit approval.
 
 The blank frame is not an unnamed persistent Ground. It does not construct a
@@ -236,7 +266,7 @@ than relying on hidden provider conversation state. Claude, MCP, or an
 internal provider can later implement the same structured boundary.
 
 On a proposal, the TUI shows the locally rendered command and lists every
-effect: one Ground is created, its Goal and completion criterion are set, and
+effect: one Ground is created, its Goal is set, and
 Rules, Cases, Contexts, Memories, and checkpoints are unchanged. Only the
 dedicated `A` action approves that exact frozen proposal. `E` returns it for
 refinement, while `Q`, Escape, Ctrl-C, provider failure, malformed output, or
@@ -269,8 +299,8 @@ Ordinary non-replacement Ground mutations use the state they first loaded as
 an implicit compare-and-swap precondition too, so an older non-interactive
 writer cannot overwrite a newer TUI-approved mutation.
 
-The named provider payload contains the portable Ground name, Goal and
-completion text, Rule/Case text and rationale, their local `rN`/`cN` aliases
+The named provider payload contains the portable Ground name, Goal,
+Rule/Case text and rationale, their local `rN`/`cN` aliases
 and relations, state and revision, bound Context names, and the current visible
 dialogue cycle. It does not contain live Context projections, source
 references, or durable UIDs. A saved Case's text may be an earlier exact copy
@@ -360,7 +390,7 @@ revisable layers rather than treating the first request as a fixed form.
 
 | Layer | Grounding role |
 | --- | --- |
-| `GOAL` | The desired outcome and completion criterion: what the session is trying to make true. |
+| `GOAL` | The desired outcome: what the session is trying to make true. |
 | `RULES` | Inspectable, revisable rules for interpreting evidence, making judgments, proposing actions, and deciding what the current operation may apply. |
 | `CASES` | Concrete judgments about exact artifacts. Proposed Cases test the current Goal and rules; explicitly approved Cases become regression anchors. |
 
@@ -606,7 +636,9 @@ Version 1 saves:
 
 - a canonical session UUID;
 - portable Ground name;
-- goal and completion criterion;
+- Goal;
+- a required `completion_criterion` compatibility key inherited from the
+  prototype's earlier model;
 - descriptive scope labels;
 - `OPEN` status and revision zero;
 - an empty item list reserved for future `RULE`, `CASE`, `ISSUE`, and
@@ -620,6 +652,14 @@ also rejects `GROUNDED`, nonzero revisions, substituted references, and even a
 boolean masquerading as schema version `1`. This fail-closed boundary prevents
 hand-edited JSON from impersonating user approval before decision and
 regression invariants exist.
+
+The version 1 and version 2 `completion_criterion` key remains serialized,
+validated, and included in record digests solely so existing Ground JSON and
+compare-and-swap checks continue to round-trip exactly. New commands cannot
+set it, renderers do not display it, and neither initial nor named semantic
+providers receive it. Removing the key requires an explicit schema migration;
+silently changing the v1/v2 record shape would break old files and their
+digests.
 
 Version 2 is introduced only by explicit frame binding. It additionally saves:
 
@@ -845,7 +885,7 @@ but stale work cannot:
 
 - be promoted to a golden case;
 - change a slot to `COVERED`;
-- approve the Ground; or
+- support a future whole-Ground agreement record; or
 - be exported for later target application.
 
 There is no refresh/fork command in this slice. Today the reviewer must create
@@ -873,9 +913,6 @@ Revision: 0
 
 GOAL
   Agree on the wiki and local Task 1 Memory contents.
-
-COMPLETION
-  The reviewed cases in the current scope are adequately explained ...
 
 SCOPE  participant/campus-wiki-fork, participant/construction-updates
 RULES 0 · CASES 0 · UNRESOLVED 0 · DECISIONS 0

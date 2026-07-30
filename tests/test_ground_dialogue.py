@@ -46,10 +46,6 @@ def _proposal(**overrides):
             "Determine which Task 1 claims are represented, missing, or "
             "ambiguous."
         ),
-        "completion": (
-            "Each source claim is classified as represented, missing, or "
-            "ambiguous and the user approves the judgment."
-        ),
     }
     value.update(overrides)
     return value
@@ -65,7 +61,6 @@ def _ask(**overrides):
         ),
         "ground_name": "",
         "goal": "",
-        "completion": "",
     }
     value.update(overrides)
     return value
@@ -89,10 +84,6 @@ def test_proposal_uses_one_strict_provider_call_and_returns_typed_turn():
             "Determine which Task 1 claims are represented, missing, or "
             "ambiguous."
         ),
-        completion=(
-            "Each source claim is classified as represented, missing, or "
-            "ambiguous and the user approves the judgment."
-        ),
     )
     assert turn.kind == "PROPOSE"
     assert len(provider.calls) == 1
@@ -104,7 +95,6 @@ def test_proposal_uses_one_strict_provider_call_and_returns_typed_turn():
         "question",
         "ground_name",
         "goal",
-        "completion",
     }
     assert set(schema["required"]) == set(schema["properties"])
     assert schema["additionalProperties"] is False
@@ -133,7 +123,7 @@ def test_ask_uses_empty_proposal_fields_and_factory_is_called_once():
         ),
     )
     assert turn.kind == "ASK"
-    assert turn.ground_name == turn.goal == turn.completion == ""
+    assert turn.ground_name == turn.goal == ""
     assert len(factory_calls) == 1
     assert len(provider.calls) == 1
 
@@ -159,10 +149,6 @@ def test_ask_uses_empty_proposal_fields_and_factory_is_called_once():
             "invalid Goal",
         ),
         (
-            _proposal(completion=""),
-            "invalid completion criterion",
-        ),
-        (
             _proposal(question=""),
             "invalid question",
         ),
@@ -172,10 +158,6 @@ def test_ask_uses_empty_proposal_fields_and_factory_is_called_once():
         ),
         (
             _ask(ground_name="not-empty"),
-            "invalid ASK turn",
-        ),
-        (
-            _ask(completion="not-empty"),
             "invalid ASK turn",
         ),
         (
@@ -222,7 +204,7 @@ def test_duplicate_json_keys_fail_closed():
     response = (
         '{"kind":"ASK","kind":"PROPOSE",'
         '"understanding":"I understand.","question":"Proceed?",'
-        '"ground_name":"","goal":"","completion":""}'
+        '"ground_name":"","goal":""}'
     )
     provider = FakeProvider(response)
 

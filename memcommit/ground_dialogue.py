@@ -32,7 +32,6 @@ _OUTPUT_KEYS = {
     "question",
     "ground_name",
     "goal",
-    "completion",
 }
 
 
@@ -62,7 +61,6 @@ class GroundDialogueAsk:
     kind: Literal["ASK"] = field(default="ASK", init=False)
     ground_name: str = field(default="", init=False)
     goal: str = field(default="", init=False)
-    completion: str = field(default="", init=False)
 
 
 @dataclass(frozen=True)
@@ -73,7 +71,6 @@ class GroundDialogueProposal:
     question: str
     ground_name: str
     goal: str
-    completion: str
     kind: Literal["PROPOSE"] = field(default="PROPOSE", init=False)
 
 
@@ -110,10 +107,6 @@ def ground_dialogue_output_schema() -> dict[str, object]:
                 "type": "string",
                 "maxLength": GROUND_TEXT_LIMIT,
             },
-            "completion": {
-                "type": "string",
-                "maxLength": GROUND_TEXT_LIMIT,
-            },
         },
         "required": [
             "kind",
@@ -121,7 +114,6 @@ def ground_dialogue_output_schema() -> dict[str, object]:
             "question",
             "ground_name",
             "goal",
-            "completion",
         ],
         "additionalProperties": False,
     }
@@ -166,15 +158,17 @@ def _build_prompt(user_text: str) -> str:
         "Restate the user's intended outcome faithfully in understanding. "
         "Do not add facts that the user did not supply.\n"
         "Use ASK only when missing information would consequentially change "
-        "the Goal, completion criterion, or portable Ground name. Ask one "
+        "the Goal or portable Ground name. Ask one "
         "focused question, not a checklist and not a request for details that "
-        "can safely be refined later. For ASK, set ground_name, goal, and "
-        "completion to exactly empty strings.\n"
+        "can safely be refined later. For ASK, set ground_name and goal to "
+        "exactly empty strings.\n"
         "Otherwise use PROPOSE. Supply a concise portable lowercase "
         "ground_name, a Goal describing what will be understood, decided, or "
-        "made together, and an observable completion criterion. Ask one short "
+        "made together. Ask one short "
         "question inviting approval or refinement. For PROPOSE, ground_name, "
-        "goal, and completion must all be non-empty.\n"
+        "and goal must both be non-empty.\n"
+        "Do not invent a separate completion condition. Grounding ends only "
+        "through explicit agreement on the current Goal, Rules, and Cases.\n"
         "Never claim that a Ground was created or that any state changed.\n\n"
         "GROUND DIALOGUE PAYLOAD:\n"
         + payload
@@ -240,10 +234,9 @@ def _parse_turn(raw: object) -> GroundDialogueTurn:
     )
     ground_name = value["ground_name"]
     goal = value["goal"]
-    completion = value["completion"]
 
     if kind == "ASK":
-        if ground_name != "" or goal != "" or completion != "":
+        if ground_name != "" or goal != "":
             raise GroundDialogueError(
                 "Codex ground dialogue returned an invalid ASK turn."
             )
@@ -267,17 +260,11 @@ def _parse_turn(raw: object) -> GroundDialogueTurn:
         "Goal",
         GROUND_TEXT_LIMIT,
     )
-    validated_completion = _bounded_nonblank(
-        completion,
-        "completion criterion",
-        GROUND_TEXT_LIMIT,
-    )
     return GroundDialogueProposal(
         understanding=understanding,
         question=question,
         ground_name=validated_name,
         goal=validated_goal,
-        completion=validated_completion,
     )
 
 
