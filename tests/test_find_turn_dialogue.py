@@ -13,6 +13,7 @@ from memcommit.commands.find_chat_shell import (
 from memcommit.find_turn_dialogue import (
     FIND_TURN_OPERATION,
     FindTurnAction,
+    FindTurnAnswer,
     FindTurnAsk,
     FindTurnError,
     find_turn_output_schema,
@@ -60,6 +61,7 @@ def test_schema_and_prompt_expose_aliases_but_not_durable_uids():
             "understanding": "You want to inspect the store result.",
             "question": "What would you like to inspect next?",
             "selector": "m1",
+            "scope": "NONE",
         }
     )
 
@@ -77,7 +79,17 @@ def test_schema_and_prompt_expose_aliases_but_not_durable_uids():
     assert len(provider.calls) == 1
     prompt, operation, schema = provider.calls[0]
     assert operation == FIND_TURN_OPERATION
+    assert schema["properties"]["kind"]["enum"] == [
+        "ASK",
+        "ANSWER",
+        "SHOW_RESULT",
+    ]
     assert schema["properties"]["selector"]["enum"] == ["", "m1", "m2"]
+    assert schema["properties"]["scope"]["enum"] == [
+        "NONE",
+        "CONTEXT",
+        "ALL_CONTEXTS",
+    ]
     assert "durable-secret-uid-one" not in prompt
     assert "concealed-query-ref-uid" not in prompt
     assert "public-policy-name (query-only)" in prompt
@@ -91,6 +103,7 @@ def test_ask_requires_an_empty_selector():
             "understanding": "You want to inspect a result.",
             "question": "Which visible result should I show?",
             "selector": "",
+            "scope": "NONE",
         }
     )
 
@@ -99,6 +112,55 @@ def test_ask_requires_an_empty_selector():
     assert turn == FindTurnAsk(
         understanding="You want to inspect a result.",
         question="Which visible result should I show?",
+    )
+
+
+def test_answer_plans_same_context_research_without_answering():
+    provider = Provider(
+        {
+            "kind": "ANSWER",
+            "understanding": "You are asking when the campus store reopens.",
+            "question": "",
+            "selector": "",
+            "scope": "CONTEXT",
+        }
+    )
+
+    turn = interpret_find_turn(
+        _state(),
+        "When will the campus store reopen?",
+        provider,
+    )
+
+    assert turn == FindTurnAnswer(
+        understanding="You are asking when the campus store reopens.",
+        scope="CONTEXT",
+    )
+    prompt = provider.calls[0][0]
+    assert "Do not turn a clear ordinary question" in prompt
+    assert "do not answer it in this turn" in prompt
+
+
+def test_answer_uses_all_contexts_only_for_an_explicit_request():
+    provider = Provider(
+        {
+            "kind": "ANSWER",
+            "understanding": "You want other Contexts checked too.",
+            "question": "",
+            "selector": "",
+            "scope": "ALL_CONTEXTS",
+        }
+    )
+
+    turn = interpret_find_turn(
+        _state(),
+        "Check other contexts too.",
+        provider,
+    )
+
+    assert turn == FindTurnAnswer(
+        understanding="You want other Contexts checked too.",
+        scope="ALL_CONTEXTS",
     )
 
 
@@ -132,6 +194,7 @@ def test_short_reply_receives_only_the_pending_visible_clarification():
             "understanding": "By the latter, you mean m2.",
             "question": "What would you like to inspect next?",
             "selector": "m2",
+            "scope": "NONE",
         }
     )
 
@@ -152,25 +215,50 @@ def test_short_reply_receives_only_the_pending_visible_clarification():
             "understanding": "Inspect a result.",
             "question": "Next?",
             "selector": "m99",
+            "scope": "NONE",
         },
         {
             "kind": "ASK",
             "understanding": "Inspect a result.",
             "question": "Which one?",
             "selector": "m1",
+            "scope": "NONE",
         },
         {
             "kind": "RUN_COMMAND",
             "understanding": "Run something.",
             "question": "Done?",
             "selector": "m1",
+            "scope": "NONE",
         },
         {
             "kind": "SHOW_RESULT",
             "understanding": "Inspect a result.",
             "question": "Next?",
             "selector": "m1",
+            "scope": "NONE",
             "command": "mem delete unsafe",
+        },
+        {
+            "kind": "ANSWER",
+            "understanding": "Answer from a result.",
+            "question": "",
+            "selector": "",
+            "scope": "EVERYWHERE",
+        },
+        {
+            "kind": "ANSWER",
+            "understanding": "Answer from a result.",
+            "question": "This must be empty.",
+            "selector": "m1",
+            "scope": "CONTEXT",
+        },
+        {
+            "kind": "SHOW_RESULT",
+            "understanding": "Inspect a result.",
+            "question": "Next?",
+            "selector": "",
+            "scope": "CONTEXT",
         },
     ],
 )
@@ -188,6 +276,7 @@ def test_empty_results_allow_only_ask():
             "understanding": "There are no visible results.",
             "question": "What should the next search look for?",
             "selector": "",
+            "scope": "NONE",
         }
     )
 
@@ -195,6 +284,18 @@ def test_empty_results_allow_only_ask():
 
     assert schema["properties"]["kind"]["enum"] == ["ASK"]
     assert isinstance(turn, FindTurnAsk)
+
+    unsupported = Provider(
+        {
+            "kind": "ANSWER",
+            "understanding": "There are no visible results.",
+            "question": "",
+            "selector": "",
+            "scope": "CONTEXT",
+        }
+    )
+    with pytest.raises(FindTurnError):
+        interpret_find_turn(state, "answer anyway", unsupported)
 
 
 def test_provider_factory_connects_once():
@@ -204,6 +305,7 @@ def test_provider_factory_connects_once():
             "understanding": "The referent is ambiguous.",
             "question": "Which result?",
             "selector": "",
+            "scope": "NONE",
         }
     )
     calls: list[str] = []

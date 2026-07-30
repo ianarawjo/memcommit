@@ -1,5 +1,5 @@
-import subprocess
 import shlex
+import subprocess
 import sys
 from dataclasses import dataclass, replace
 from typing import Annotated, Optional
@@ -16,11 +16,28 @@ from memcommit.commands.find_chat_shell import (
     FindChatResult,
     FindChatSessionResult,
     FindChatState,
+    FindPendingAnswerRequest,
     run_find_chat_session,
 )
-from memcommit.context import Memory, MemoryRef, QueryContextRef
+from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.find_answer_dialogue import (
+    FindAnswerCorpusTooLarge,
+    FindAnswerProvider,
+    FindOutsideStatus,
+    synthesize_find_answer,
+)
+from memcommit.find_answer_references import (
+    render_find_answer_references,
+)
+from memcommit.find_scope_evidence import (
+    collect_outside_context_evidence,
+    context_remainder_evidence,
+    frame_context_uids,
+    visible_result_evidence,
+)
 from memcommit.find_turn_dialogue import (
     FindTurnAction,
+    FindTurnAnswer,
     FindTurnAsk,
     interpret_find_turn,
 )
@@ -28,8 +45,47 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.search import FindError, SearchMatch
+from memcommit.search import (
+    FindError,
+    SearchCandidate,
+    SearchMatch,
+    collect_candidates,
+)
 from memcommit.store import MemoryStore
+
+
+FIND_OUTSIDE_CONFIRMATION = "confirm other contexts"
+FIND_OUTSIDE_CANCELLATION = "cancel other contexts"
+
+
+def _outside_confirmation_message(user_text: str) -> str:
+    korean = any("\uac00" <= character <= "\ud7a3" for character in user_text)
+    if korean:
+        return (
+            "다른 저장 Context를 확인하면 그 안의 일반 Memory 내용도 "
+            "이 답변을 만드는 provider에 전송됩니다.\n\n"
+            f"계속하려면 정확히 `{FIND_OUTSIDE_CONFIRMATION}`를, "
+            f"취소하려면 `{FIND_OUTSIDE_CANCELLATION}`를 입력하세요."
+        )
+    return (
+        "Checking other stored Contexts will also send their ordinary Memory "
+        "contents to the answer provider.\n\n"
+        f"Type exactly `{FIND_OUTSIDE_CONFIRMATION}` to continue, or "
+        f"`{FIND_OUTSIDE_CANCELLATION}` to cancel."
+    )
+
+
+def _pending_find_clarification(state: FindChatState) -> str | None:
+    if state.status != "WAITING FOR CLARIFICATION · RESULTS UNCHANGED":
+        return None
+    return next(
+        (
+            message.text
+            for message in reversed(state.messages)
+            if message.role == "MEM"
+        ),
+        None,
+    )
 
 
 @dataclass(frozen=True)
@@ -40,6 +96,224 @@ class FindShowProposal:
     result: FindChatResult
     review: ExactCommandReview
     submitted_text: str
+
+
+def _find_answer_status(outside_status: FindOutsideStatus) -> str:
+    """Describe the scopes actually checked, not merely the requested scope."""
+    return {
+        "NOT_REQUESTED": (
+            "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED"
+        ),
+        "SEARCHED": (
+            "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS CHECKED"
+        ),
+        "PARTIAL": (
+            "ANSWERED · CONTEXT CHECKED · "
+            "OTHER CONTEXTS PARTIALLY CHECKED"
+        ),
+        "UNAVAILABLE": (
+            "ANSWERED · CONTEXT CHECKED · "
+            "OTHER CONTEXTS NOT FULLY CHECKED"
+        ),
+    }[outside_status]
+
+
+@dataclass(frozen=True)
+class FindTurnController:
+    """Frozen local evidence frame and provider orchestration for one Find."""
+
+    store: MemoryStore
+    root_context: Context
+    recursive: bool
+    frame_candidates: tuple[SearchCandidate, ...]
+    visible_candidates: tuple[SearchCandidate, ...]
+
+    def __call__(
+        self,
+        state: FindChatState,
+        text: str,
+    ) -> FindChatState:
+        if state.pending_answer is not None:
+            return self._handle_scope_confirmation(state, text)
+        provider = connect_codex_chatgpt_provider()
+        turn = interpret_find_turn(state, text, provider)
+        if isinstance(turn, FindTurnAnswer):
+            pending_clarification = _pending_find_clarification(state)
+            if turn.scope == "ALL_CONTEXTS":
+                return replace(
+                    state,
+                    messages=(
+                        *state.messages,
+                        FindChatMessage(role="USER", text=text),
+                        FindChatMessage(
+                            role="MEM",
+                            text=_outside_confirmation_message(text),
+                        ),
+                    ),
+                    status="WAITING FOR OTHER CONTEXTS CONFIRMATION",
+                    pending_answer=FindPendingAnswerRequest(
+                        user_text=text,
+                        interpreted_request=turn.understanding,
+                        pending_clarification=pending_clarification,
+                    ),
+                )
+            return self._answer(
+                state,
+                submitted_text=text,
+                answer_question=text,
+                interpreted_request=turn.understanding,
+                pending_clarification=pending_clarification,
+                include_outside=False,
+                provider=provider,
+            )
+        if isinstance(turn, FindTurnAsk):
+            return replace(
+                state,
+                messages=(
+                    *state.messages,
+                    FindChatMessage(role="USER", text=text),
+                    FindChatMessage(
+                        role="MEM",
+                        text=f"{turn.understanding}\n\n{turn.question}",
+                    ),
+                ),
+                status="WAITING FOR CLARIFICATION · RESULTS UNCHANGED",
+            )
+        proposal = _show_result_proposal(state, turn, text)
+        # The submitted natural-language turn is the authority for this proven
+        # read-only action. Mutating actions will require a separate
+        # exact-command approval rather than sharing this execution path.
+        return _apply_show_result(state, proposal)
+
+    def _handle_scope_confirmation(
+        self,
+        state: FindChatState,
+        text: str,
+    ) -> FindChatState:
+        pending = state.pending_answer
+        if pending is None:  # pragma: no cover - guarded by the caller
+            raise FindError("Find has no pending wider-scope answer.")
+        token = text.strip().casefold()
+        if token == FIND_OUTSIDE_CANCELLATION:
+            return replace(
+                state,
+                messages=(
+                    *state.messages,
+                    FindChatMessage(role="USER", text=text),
+                    FindChatMessage(
+                        role="MEM",
+                        text="The other-Context answer request was cancelled.",
+                    ),
+                ),
+                status="OTHER CONTEXTS CANCELLED · RESULTS UNCHANGED",
+                pending_answer=None,
+            )
+        if token != FIND_OUTSIDE_CONFIRMATION:
+            return replace(
+                state,
+                messages=(
+                    *state.messages,
+                    FindChatMessage(role="USER", text=text),
+                    FindChatMessage(
+                        role="MEM",
+                        text=(
+                            "The wider scope was not confirmed. Type exactly "
+                            f"`{FIND_OUTSIDE_CONFIRMATION}` to continue, or "
+                            f"`{FIND_OUTSIDE_CANCELLATION}` to cancel."
+                        ),
+                    ),
+                ),
+                status="WAITING FOR OTHER CONTEXTS CONFIRMATION",
+            )
+        provider = connect_codex_chatgpt_provider()
+        return self._answer(
+            state,
+            submitted_text=text,
+            answer_question=pending.user_text,
+            interpreted_request=pending.interpreted_request,
+            pending_clarification=pending.pending_clarification,
+            include_outside=True,
+            provider=provider,
+        )
+
+    def _answer(
+        self,
+        state: FindChatState,
+        *,
+        submitted_text: str,
+        answer_question: str,
+        interpreted_request: str,
+        pending_clarification: str | None,
+        include_outside: bool,
+        provider: FindAnswerProvider,
+    ) -> FindChatState:
+        # The provider object has already passed the same runtime interface
+        # check used by the dialogue adapters; keeping this method provider-
+        # agnostic makes the two-turn confirmation path share one boundary.
+        complete = getattr(provider, "complete", None)
+        if not callable(complete):
+            raise FindError("Find answer provider is not available.")
+        visible = visible_result_evidence(self.visible_candidates)
+        context = context_remainder_evidence(
+            self.frame_candidates,
+            self.visible_candidates,
+        )
+        outside = ()
+        outside_status: FindOutsideStatus = "NOT_REQUESTED"
+        if include_outside:
+            collected = collect_outside_context_evidence(
+                self.store,
+                excluded_context_uids=frame_context_uids(
+                    self.root_context,
+                    recursive=self.recursive,
+                ),
+                excluded_candidates=self.frame_candidates,
+            )
+            outside = collected.evidence
+            outside_status = collected.status
+        try:
+            answer = synthesize_find_answer(
+                answer_question,
+                visible,
+                context,
+                outside,
+                outside_status,
+                provider,
+                interpreted_request=interpreted_request,
+                pending_clarification=pending_clarification,
+            )
+        except FindAnswerCorpusTooLarge:
+            if not include_outside:
+                raise
+            # A confirmed global scan can exceed the prototype corpus ceiling.
+            # Preserve the same-Context answer and state that the outside scope
+            # could not be completed instead of silently sampling a subset.
+            outside = ()
+            outside_status = "UNAVAILABLE"
+            answer = synthesize_find_answer(
+                answer_question,
+                visible,
+                context,
+                outside,
+                outside_status,
+                provider,
+                interpreted_request=interpreted_request,
+                pending_clarification=pending_clarification,
+            )
+        rendered = render_find_answer_references(
+            (*visible, *context, *outside),
+            answer.sentences,
+        )
+        return replace(
+            state,
+            messages=(
+                *state.messages,
+                FindChatMessage(role="USER", text=submitted_text),
+                FindChatMessage(role="MEM", text=rendered),
+            ),
+            status=_find_answer_status(outside_status),
+            pending_answer=None,
+        )
 
 
 def _interactive_terminal() -> bool:
@@ -268,39 +542,55 @@ def _handle_find_turn(
     state: FindChatState,
     text: str,
 ) -> FindChatState:
-    turn = interpret_find_turn(
-        state,
-        text,
-        connect_codex_chatgpt_provider,
-    )
-    if isinstance(turn, FindTurnAsk):
-        return replace(
-            state,
-            messages=(
-                *state.messages,
-                FindChatMessage(role="USER", text=text),
-                FindChatMessage(
-                    role="MEM",
-                    text=f"{turn.understanding}\n\n{turn.question}",
-                ),
-            ),
-            status="WAITING FOR CLARIFICATION · RESULTS UNCHANGED",
-        )
-    proposal = _show_result_proposal(state, turn, text)
-    # The submitted natural-language turn is the authority for this proven
-    # read-only action. Mutating actions will require a separate exact-command
-    # approval rather than sharing this immediate execution path.
-    return _apply_show_result(state, proposal)
+    store = MemoryStore()
+    root = store.load(state.context_name)
+    frame_candidates = tuple(collect_candidates(root, recursive=True))
+    visible_candidates: list[SearchCandidate] = []
+    for result in state.results:
+        candidates = [
+            candidate
+            for candidate in frame_candidates
+            if candidate.context_name == result.context_name
+            and candidate.item.uid == result.uid
+        ]
+        if len(candidates) != 1:
+            raise FindError(
+                "The visible Find result no longer matches its evidence frame."
+            )
+        visible_candidates.append(candidates[0])
+    return FindTurnController(
+        store=store,
+        root_context=root,
+        recursive=True,
+        frame_candidates=frame_candidates,
+        visible_candidates=tuple(visible_candidates),
+    )(state, text)
 
 
 def _run_interactive_find(
-    context_name: str,
+    store: MemoryStore,
+    root_context: Context,
     query: str,
     matches: list[SearchMatch],
+    *,
+    recursive: bool,
 ) -> FindChatSessionResult:
+    frame_candidates = tuple(
+        collect_candidates(root_context, recursive=recursive)
+    )
+    controller = FindTurnController(
+        store=store,
+        root_context=root_context,
+        recursive=recursive,
+        frame_candidates=frame_candidates,
+        visible_candidates=tuple(
+            match.candidate
+            for match in matches
+        ),
+    )
     result = run_find_chat_session(
-        _initial_chat_state(context_name, query, matches),
-        handle_turn=_handle_find_turn,
+        _initial_chat_state(root_context.name, query, matches),
+        handle_turn=controller,
     )
     typer.echo(
         f"Find dialogue closed with {len(result.state.results)} visible "
@@ -362,7 +652,13 @@ def cmd(
         raise typer.Exit(1)
 
     if _interactive_terminal():
-        _run_interactive_find(ctx.name, query, matches)
+        _run_interactive_find(
+            store,
+            ctx,
+            query,
+            matches,
+            recursive=not direct,
+        )
         return
 
     if not matches:

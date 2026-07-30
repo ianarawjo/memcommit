@@ -9,12 +9,16 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.commands.find import (
+    FIND_OUTSIDE_CANCELLATION,
+    FIND_OUTSIDE_CONFIRMATION,
     _apply_show_result,
+    _handle_find_turn,
     _initial_chat_state,
     _run_read_only_find_command,
     _show_result_proposal,
 )
 from memcommit.commands.find_chat_shell import (
+    FindChatMessage,
     FindChatSessionResult,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
@@ -438,6 +442,267 @@ def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
     assert "ACTUAL OUTPUT" in receipt
     assert memory.content in receipt
     assert store.list_checkpoints(ctx.name) == []
+
+
+def test_general_parking_question_gets_a_grounded_answer_without_a_command(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("temp/task-1-atomized-en")
+    visible = ops.add(
+        ctx,
+        "The parking area will reopen immediately after construction ends.",
+    )
+    supplemental = ops.add(
+        ctx,
+        "Construction runs from June xx through August xx.",
+    )
+    store.save(ctx)
+    candidates = collect_candidates(ctx)
+    state = _initial_chat_state(
+        ctx.name,
+        "related to parking",
+        [SearchMatch(candidate=candidates[0])],
+    )
+
+    class AnswerProvider:
+        def __init__(self):
+            self.operations = []
+
+        def complete(self, _prompt, *, operation, output_schema=None):
+            self.operations.append(operation)
+            if operation == "find turn":
+                return json.dumps(
+                    {
+                        "kind": "ANSWER",
+                        "understanding": (
+                            "You are asking how long the garage will be closed."
+                        ),
+                        "question": "",
+                        "selector": "",
+                        "scope": "CONTEXT",
+                    }
+                )
+            assert operation == "find answer"
+            return json.dumps(
+                {
+                    "visible_text": (
+                        "The current results say it reopens after construction."
+                    ),
+                    "visible_sources": ["m1"],
+                    "context_text": (
+                        "Another Memory places construction between June and "
+                        "August."
+                    ),
+                    "context_sources": ["c1"],
+                    "outside_text": "Other Contexts were not checked.",
+                    "outside_sources": [],
+                }
+            )
+
+    provider = AnswerProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    def refuse_command(_argv):
+        raise AssertionError("An ANSWER turn must not execute a command.")
+
+    monkeypatch.setattr(
+        "memcommit.commands.find._run_read_only_find_command",
+        refuse_command,
+    )
+
+    updated = _handle_find_turn(
+        state,
+        "garage will 언제까지 closed?",
+    )
+
+    assert updated.results == state.results
+    assert updated.status == (
+        "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED"
+    )
+    assert updated.messages[-2] == FindChatMessage(
+        role="USER",
+        text="garage will 언제까지 closed?",
+    )
+    answer_text = updated.messages[-1].text
+    assert "after construction. [1]" in answer_text
+    assert "between June and August. [2]" in answer_text
+    assert "다른 Context는 확인하지 않았습니다." in answer_text
+    assert "References" in answer_text
+    assert visible.content in answer_text
+    assert supplemental.content in answer_text
+    assert f"[1] m1 · memory · {visible.uid[:8]}" in answer_text
+    assert f"[2] c1 · memory · {supplemental.uid[:8]}" in answer_text
+    assert provider.operations == ["find turn", "find answer"]
+
+
+def test_explicit_other_context_answer_collects_and_references_outside_memory(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("task-1")
+    visible = ops.add(root, "The garage is closed during construction.")
+    store.save(root)
+    other = ops.init("facilities-calendar")
+    outside = ops.add(
+        other,
+        "The construction completion review is scheduled for August 28.",
+    )
+    store.save(other)
+    candidates = collect_candidates(root)
+    state = _initial_chat_state(
+        root.name,
+        "garage closure",
+        [SearchMatch(candidate=candidates[0])],
+    )
+
+    class AnswerProvider:
+        def __init__(self):
+            self.operations = []
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            self.operations.append(operation)
+            if operation == "find turn":
+                return json.dumps(
+                    {
+                        "kind": "ANSWER",
+                        "understanding": (
+                            "You want the other Contexts checked as well."
+                        ),
+                        "question": "",
+                        "selector": "",
+                        "scope": "ALL_CONTEXTS",
+                    }
+                )
+            assert "facilities-calendar" in prompt
+            assert outside.content in prompt
+            return json.dumps(
+                {
+                    "visible_text": (
+                        "The visible result confirms a construction closure."
+                    ),
+                    "visible_sources": ["m1"],
+                    "context_text": (
+                        "No additional evidence was found in the same Context."
+                    ),
+                    "context_sources": [],
+                    "outside_text": (
+                        "Another Context schedules a completion review for "
+                        "August 28."
+                    ),
+                    "outside_sources": ["x1"],
+                }
+            )
+
+    provider = AnswerProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    pending = _handle_find_turn(
+        state,
+        "Check the other contexts too: when does it end?",
+    )
+
+    assert pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
+    assert pending.pending_answer is not None
+    assert FIND_OUTSIDE_CONFIRMATION in pending.messages[-1].text
+    assert outside.content not in pending.messages[-1].text
+    assert provider.operations == ["find turn"]
+
+    updated = _handle_find_turn(
+        pending,
+        FIND_OUTSIDE_CONFIRMATION,
+    )
+
+    assert updated.status == (
+        "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS CHECKED"
+    )
+    assert updated.pending_answer is None
+    answer_text = updated.messages[-1].text
+    assert "closure. [1]" in answer_text
+    assert "August 28. [2]" in answer_text
+    assert (
+        f"[1] m1 · memory · {visible.uid[:8]} · Context: task-1"
+        in answer_text
+    )
+    assert (
+        f"[2] x1 · memory · {outside.uid[:8]} · "
+        "Context: facilities-calendar"
+    ) in answer_text
+    assert outside.content in answer_text
+    assert provider.operations == ["find turn", "find answer"]
+
+
+def test_provider_cannot_expand_to_other_contexts_without_user_request(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("task-1")
+    ops.add(root, "The garage is closed.")
+    store.save(root)
+    candidates = collect_candidates(root)
+    state = _initial_chat_state(
+        root.name,
+        "garage",
+        [SearchMatch(candidate=candidates[0])],
+    )
+
+    class OverbroadProvider:
+        def __init__(self):
+            self.operations = []
+
+        def complete(self, _prompt, *, operation, output_schema=None):
+            self.operations.append(operation)
+            return json.dumps(
+                {
+                    "kind": "ANSWER",
+                    "understanding": "Check every stored Context.",
+                    "question": "",
+                    "selector": "",
+                    "scope": "ALL_CONTEXTS",
+                }
+            )
+
+    provider = OverbroadProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find.collect_outside_context_evidence",
+        lambda *_args, **_kwargs: pytest.fail(
+            "outside Contexts must not be collected"
+        ),
+    )
+
+    pending = _handle_find_turn(state, "When does it reopen?")
+
+    assert pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
+    assert pending.pending_answer is not None
+    assert provider.operations == ["find turn"]
+
+    still_pending = _handle_find_turn(pending, "yes")
+    assert still_pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
+    assert still_pending.pending_answer == pending.pending_answer
+    assert "not confirmed" in still_pending.messages[-1].text
+    assert provider.operations == ["find turn"]
+
+    cancelled = _handle_find_turn(
+        still_pending,
+        FIND_OUTSIDE_CANCELLATION,
+    )
+    assert cancelled.pending_answer is None
+    assert cancelled.status == "OTHER CONTEXTS CANCELLED · RESULTS UNCHANGED"
+
+    assert provider.operations == ["find turn"]
 
 
 def test_read_only_find_runner_rejects_every_non_show_shape():

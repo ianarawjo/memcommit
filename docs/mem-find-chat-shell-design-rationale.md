@@ -18,13 +18,16 @@ interpretation into command authority.
 - terminal-safe text; and
 - viewport anchoring.
 
-It presents a controller-supplied header, transcript, and locally validated
-result rows grouped by their owning Context. Result text comes from typed
+It presents a controller-supplied header, locally validated result rows grouped
+by their owning Context, the transcript, and the input in that visual order.
+Result text comes from typed
 `FindChatResult` values supplied by the local controller, not from generated
 provider prose. Dialogue and results use separate scrollable panels so a
 growing transcript cannot hide the ranked result set after a follow-up turn.
-The shell collects one nonblank user turn, returns a typed
-`SUBMIT` or `CLOSE` action, and exits. It does not:
+The production session keeps one full-screen `Application` alive from initial
+results through repeated follow-up turns. A focused one-turn wrapper can still
+return a typed `SUBMIT` or `CLOSE` action for input-only callers and tests. The
+presentation layer does not itself:
 
 - call the semantic provider;
 - search a Context;
@@ -34,26 +37,36 @@ The shell collects one nonblank user turn, returns a typed
 - create a Context or checkpoint; or
 - own kept-item identity.
 
-The command controller owns those effects outside prompt-toolkit's key
-handler. In a TTY, ordinary `mem find QUERY` performs the validated initial
+The injected command controller owns those effects outside prompt-toolkit's
+key handler. In a TTY, ordinary `mem find QUERY` performs the validated initial
 search and opens the workbench. Outside a TTY, its established grouped text
 output remains unchanged for scripts, redirection, and tests.
 
-The `run_find_chat_session` controller loop exercises the shell boundary:
-it receives `SUBMIT`, calls an injected turn handler only after the full-screen
-application has exited, and reopens the shell with the returned complete view.
-A failed turn preserves the previous results, displays the failure as a new
-visible status block, and waits for another explicit input. Provider latency
-therefore cannot block a prompt-toolkit key handler.
+On submit, `run_find_chat_session` freezes the committed `FindChatState` and
+input, clears and disables the composer, renders the submitted turn with
+`THINKING · RESULTS UNCHANGED`, and schedules one managed background task. The
+task runs the synchronous controller in an executor thread. Only after awaiting
+that work does the event-loop thread replace the committed state and update the
+read-only result and dialogue `Document` values. The `Application`, widgets,
+alternate screen, and result scroll position therefore remain alive throughout
+the turn.
+
+Only one controller turn may be in flight. A failed turn preserves the
+previous committed results, appends a visible failure receipt in the same
+screen, and re-enables input. Provider latency does not block a prompt-toolkit
+key handler or make the terminal appear to leave Find.
 
 The result panel uses a read-only text buffer rather than a cursorless
 formatted-text control. Its hidden cursor moves with the result-panel arrow
 keys, giving prompt-toolkit a real scroll anchor while keeping result content
-immutable.
+immutable. The dialogue panel uses the same kind of read-only buffer, opens at
+the latest line, and supports arrow and page scrolling. Long numbered
+references therefore remain inspectable instead of disappearing above a
+cursorless eight-line viewport.
 
-## Agent-mediated `SHOW_RESULT`
+## Agent-mediated answers and `SHOW_RESULT`
 
-The first complete follow-up action is deliberately narrow:
+The first command-backed follow-up action is deliberately narrow:
 
 ```text
 “show the third result”
@@ -61,7 +74,7 @@ The first complete follow-up action is deliberately narrow:
 → host resolves m3 to the visible Context and full item UID
 → host constructs mem show FULL_UID --context OWNER
 → normal CLI path runs once without a shell
-→ actual stdout is appended and the Find view reopens
+→ actual stdout is appended to the same live Find view
 ```
 
 Every displayed result receives a stable local alias such as `m1`. The
@@ -73,10 +86,77 @@ replayed. The provider does not receive durable Memory UIDs or command
 authority. Query-only results expose only their already-public name and
 `query-only` label, never their concealed source.
 
-The strict response union contains only `ASK` and `SHOW_RESULT`. `ASK` requires
-an empty selector; `SHOW_RESULT` requires exactly one alias enumerated in the
-current schema. Unknown aliases, extra command fields, malformed output, and
-unsupported action kinds fail closed.
+The strict first response is a plan union containing `ASK`, `ANSWER`, and
+`SHOW_RESULT`. `ANSWER` does not contain answer prose. It requests a separate
+host-controlled evidence turn and selects either `CONTEXT` or `ALL_CONTEXTS`.
+The latter is valid only when the person explicitly asks to inspect other
+Contexts. `ASK` is reserved for an ambiguous request. `SHOW_RESULT` requires
+exactly one alias enumerated in the current schema. Unknown aliases, extra
+fields, incompatible scope values, malformed output, and unsupported action
+kinds fail closed. An `ALL_CONTEXTS` plan does not open other Contexts. It
+creates a visible pending request that explains the additional provider
+disclosure and requires the exact host-owned token `confirm other contexts` in
+a separate submitted turn. `cancel other contexts` clears the pending request;
+any other reply leaves it pending. Thus an over-broad or injected provider plan
+cannot expand disclosure, and natural-language classification is not treated
+as an authority boundary.
+
+For `ANSWER`, the controller constructs three evidence scopes:
+
+1. the visible ranked results, projected as `mN`;
+2. the remainder of the frozen initial search frame, projected as `cN`; and
+3. deduplicated direct items in other stored Contexts, projected as `xN`.
+
+The second scope is checked automatically because it remains inside the
+selected search frame. The third is collected only after an `ALL_CONTEXTS`
+plan and the separate exact confirmation turn. A recursive Find treats
+embedded descendants as part of the frame; with `--direct`, an embedded child
+is outside that frame. Slash characters in a Context name do not imply either
+relationship.
+
+A second strict provider completion receives those temporary aliases and their
+local projections, but no durable UIDs. It returns exactly one bounded text
+field and a scope-local alias list for each of the three scopes. The prompt
+requires three natural sentences, in scope order, and distinguishes:
+
+- a scope that was not requested;
+- a completed scan with no additional evidence found; and
+- a partial or unavailable scan.
+
+The wording deliberately avoids claiming that a semantic scan proves
+non-existence. The local parser proves schema shape, alias membership,
+scope membership, and visible-result provenance. It cannot mechanically prove
+that each natural-language claim is entailed by its cited contents or that
+each text field contains grammatically one sentence in every language; those
+remain prompt-level prototype constraints.
+
+When a same-frame or searched other-Context sentence cites no evidence, the
+host replaces its prose with a factual localized scope-status sentence. The
+host also owns the `NOT_REQUESTED` and `UNAVAILABLE` sentences regardless of
+provider prose. This prevents a source-free generated sentence from claiming
+facts about a scope that was never checked. A `PARTIAL` response with cited
+evidence may still summarize that evidence, while the prompt requires it to
+state that the wider check was incomplete.
+
+The provider never writes citation numbers. After validation, the host assigns
+`[1]`, `[2]`, and later numbers by first citation occurrence, appends them to
+the three sentences, and renders a `References` section below. Each used
+reference includes its temporary alias, local type, UID prefix, owning Context,
+and the complete locally projected content. Repeated citations reuse one
+number, uncited candidates are omitted, and an unknown alias fails closed.
+Generated sentences may not contain host-style numeric markers or line breaks.
+Stored content is indented beneath reference metadata so text such as
+`References` or `[77]` inside a Memory cannot imitate host structure. Terminal
+escaping remains at the shell display boundary.
+
+Query-only items contribute only their displayed public name and `query-only`
+label in every scope and reference. Their concealed source is neither loaded
+nor transmitted. An `ANSWER` turn executes no command and changes no Context,
+checkpoint, result, or current-Context state.
+`ASK` and `SHOW_RESULT` use one provider completion. A same-frame `ANSWER` uses
+the intent completion and then the separate synthesis completion. An
+other-Context answer pauses between those completions for the exact
+confirmation turn.
 
 The host creates an immutable `ExactCommandReview` only after resolving the
 alias locally. Here it is used as an injectively escaped command/effect receipt,
@@ -98,12 +178,39 @@ recheck frozen source versions before execution.
 The current in-process view supplies:
 
 1. locally validated ranked results with stable local aliases;
-2. repeated ASK or read-only SHOW turns;
-3. actual command output and failure receipts; and
-4. separate dialogue, result, and input panes.
+2. repeated ASK, three-scope grounded ANSWER, or read-only SHOW turns;
+3. actual command output and failure receipts;
+4. result, dialogue, and input panes in reading order; and
+5. stable widget identity and scroll state across completed follow-up turns.
+
+The committed `FindChatState` changes only after a controller turn completes
+or is converted into a visible failure receipt. `THINKING` and a requested
+close are transient view states. While a turn is in flight, the composer is
+read-only and a second turn cannot be queued against stale state.
 
 It intentionally does not yet provide durable resume, semantic re-ranking,
-keep/unkeep, clipboard export, or materialization. Those actions require a
-persisted `FindSession` with source versions and, for mutation, a separate
-exact-command approval. This first vertical slice establishes the agent-to-CLI
-orchestration pattern without pretending those later contracts already exist.
+keep/unkeep, clipboard export, or materialization. The original search frame is
+frozen in process, but an explicitly requested other-Context collection reads
+multiple current Context records without one store-wide atomic snapshot. Its
+answer must therefore describe what this scan found rather than assert a
+timeless global absence. Durable selections and later mutations require a
+persisted `FindSession` with source versions and a separate exact-command
+approval. This vertical slice establishes the agent-to-CLI orchestration
+pattern without pretending those later contracts already exist.
+
+The current answer path also requires at least one visible initial result.
+When ranking returns no results, the first-turn schema permits only `ASK`; it
+does not use the broader evidence scopes to manufacture an answer.
+The pending other-Context request and its confirmation exist only in this
+in-process view; they are not a durable or resumable approval.
+
+The controller and its provider subprocess are currently synchronous. The
+executor boundary keeps the terminal responsive but cannot forcibly cancel
+that work. If the person requests close while a turn is running, the view
+therefore shows that it is closing and waits for the bounded turn to finish
+before leaving the alternate screen. Ctrl-D follows that same visible close
+path. If the input stream itself disappears, prompt-toolkit must tear down the
+screen immediately; the managed task still waits for the non-cancellable
+worker and preserves its completed state in the returned session result.
+Immediate cancellation remains a deliberate non-goal until the provider
+boundary can own, terminate, and reap a cancellable child process.

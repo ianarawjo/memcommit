@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import threading
+import time
 from dataclasses import replace
 
 import pytest
@@ -120,6 +122,8 @@ def test_snapshot_exposes_chat_state_without_searching_or_mutating():
     assert snapshot.index("6a53b8ae") < snapshot.index("cad72ae2")
     assert snapshot.index("cad72ae2") < snapshot.index("bb377c00")
     assert snapshot.index("bb377c00") < snapshot.index("9a336349")
+    assert snapshot.index("SEARCH RESULTS") < snapshot.index("YOU")
+    assert snapshot.index("YOU") < snapshot.index("I found five")
     assert "interactive input not shown" in snapshot
 
 
@@ -141,12 +145,18 @@ def test_interactive_view_opens_at_the_first_ranked_result():
 
 def test_result_arrow_keys_move_the_read_only_scroll_cursor(monkeypatch):
     original_text_area = find_chat_shell_module.TextArea
+    original_build_tui_frame = find_chat_shell_module.build_tui_frame
     captured = {}
 
     def capturing_text_area(*args, **kwargs):
         text_area = original_text_area(*args, **kwargs)
-        if kwargs.get("read_only"):
-            captured["results"] = text_area
+        if kwargs.get("read_only") is True:
+            key = (
+                "results"
+                if kwargs.get("text", "").startswith("SEARCH RESULTS")
+                else "dialogue"
+            )
+            captured[key] = text_area
         return text_area
 
     monkeypatch.setattr(
@@ -154,9 +164,19 @@ def test_result_arrow_keys_move_the_read_only_scroll_cursor(monkeypatch):
         "TextArea",
         capturing_text_area,
     )
+
+    def capturing_frame(*regions):
+        captured["regions"] = regions
+        return original_build_tui_frame(*regions)
+
+    monkeypatch.setattr(
+        find_chat_shell_module,
+        "build_tui_frame",
+        capturing_frame,
+    )
     with create_pipe_input() as pipe_input:
-        # Input → dialogue → results, then move down and close from results.
-        pipe_input.send_text("\t\t\x1b[Bq")
+        # Input → results, then move down and close from results.
+        pipe_input.send_text("\t\x1b[Bq")
         action = run_find_chat_shell(
             _state(),
             app_input=pipe_input,
@@ -166,8 +186,52 @@ def test_result_arrow_keys_move_the_read_only_scroll_cursor(monkeypatch):
 
     results_area = captured["results"]
     assert action == FindChatAction(kind="CLOSE")
+    assert captured["regions"][1].container is results_area.window
     assert results_area.buffer.document.cursor_position_row == 1
     assert results_area.buffer.read_only()
+
+
+def test_dialogue_arrow_keys_scroll_long_references(monkeypatch):
+    original_text_area = find_chat_shell_module.TextArea
+    captured = {}
+
+    def capturing_text_area(*args, **kwargs):
+        text_area = original_text_area(*args, **kwargs)
+        text = kwargs.get("text", "")
+        if (
+            kwargs.get("read_only") is True
+            and not text.startswith("SEARCH RESULTS")
+        ):
+            captured["dialogue"] = text_area
+        return text_area
+
+    monkeypatch.setattr(
+        find_chat_shell_module,
+        "TextArea",
+        capturing_text_area,
+    )
+    state = _state(
+        messages=(
+            FindChatMessage(
+                role="MEM",
+                text="\n".join(f"Reference line {index}" for index in range(20)),
+            ),
+        )
+    )
+    with create_pipe_input() as pipe_input:
+        # Input → results → dialogue, move one logical line up, then close.
+        pipe_input.send_text("\t\t\x1b[Aq")
+        action = run_find_chat_shell(
+            state,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    dialogue_area = captured["dialogue"]
+    assert action == FindChatAction(kind="CLOSE")
+    assert dialogue_area.buffer.document.cursor_position_row == 19
+    assert dialogue_area.buffer.read_only()
 
 
 def test_empty_state_starts_with_an_open_find_question():
@@ -243,23 +307,42 @@ def test_blank_submission_waits_for_a_real_turn():
     assert action.text == "coffee machine"
 
 
-def test_session_reopens_with_controller_refined_results(monkeypatch):
-    actions = iter(
-        [
-            FindChatAction(
-                kind="SUBMIT",
-                text="only the first-floor coffee-machine result",
-            ),
-            FindChatAction(kind="CLOSE"),
-        ]
+def test_session_keeps_one_application_for_repeated_controller_turns(
+    monkeypatch,
+):
+    original_application = find_chat_shell_module.Application
+    original_header = find_chat_shell_module.render_find_chat_header
+    application_count = 0
+    first_applied = threading.Event()
+    second_applied = threading.Event()
+    feeder_errors = []
+
+    def capturing_application(*args, **kwargs):
+        nonlocal application_count
+        application_count += 1
+        return original_application(*args, **kwargs)
+
+    def capturing_header(state):
+        if state.status == "TURN 1 READY":
+            first_applied.set()
+        elif state.status == "TURN 2 READY":
+            second_applied.set()
+        return original_header(state)
+
+    monkeypatch.setattr(
+        find_chat_shell_module,
+        "Application",
+        capturing_application,
     )
     monkeypatch.setattr(
         find_chat_shell_module,
-        "run_find_chat_shell",
-        lambda *_args, **_kwargs: next(actions),
+        "render_find_chat_header",
+        capturing_header,
     )
+    calls = []
 
     def handle_turn(state: FindChatState, text: str) -> FindChatState:
+        calls.append(text)
         narrowed = tuple(
             result
             for result in state.results
@@ -267,61 +350,73 @@ def test_session_reopens_with_controller_refined_results(monkeypatch):
         )
         return replace(
             state,
-            current_query=text,
+            current_query=f"turn {len(calls)}",
             messages=(
                 *state.messages,
                 FindChatMessage(role="USER", text=text),
                 FindChatMessage(
                     role="MEM",
-                    text="I narrowed the current results to one Memory.",
+                    text=f"Completed turn {len(calls)}.",
                 ),
             ),
             results=narrowed,
             kept_count=0,
-            status="REFINED RESULTS READY",
+            status=f"TURN {len(calls)} READY",
         )
 
-    result = run_find_chat_session(
-        _state(kept_count=0),
-        handle_turn=handle_turn,
-        require_tty=False,
-    )
+    with create_pipe_input() as pipe_input:
+        def feed_turns() -> None:
+            try:
+                pipe_input.send_text("first refinement\r")
+                if not first_applied.wait(2):
+                    raise AssertionError("first turn was not rendered")
+                pipe_input.send_text("second refinement\r")
+                if not second_applied.wait(2):
+                    raise AssertionError("second turn was not rendered")
+                pipe_input.send_text("\x03")
+            except Exception as error:  # pragma: no cover - assertion relay
+                feeder_errors.append(error)
 
+        feeder = threading.Thread(target=feed_turns)
+        feeder.start()
+        result = run_find_chat_session(
+            _state(kept_count=0),
+            handle_turn=handle_turn,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert feeder_errors == []
+    assert not feeder.is_alive()
+    assert application_count == 1
     assert result == FindChatSessionResult(
         status="CLOSED",
         state=result.state,
-        submitted_turns=("only the first-floor coffee-machine result",),
+        submitted_turns=("first refinement", "second refinement"),
     )
-    assert result.state.current_query == (
-        "only the first-floor coffee-machine result"
-    )
+    assert calls == ["first refinement", "second refinement"]
+    assert result.state.current_query == "turn 2"
     assert [item.uid for item in result.state.results] == ["cad72ae2"]
-    assert result.state.status == "REFINED RESULTS READY"
-    assert "narrowed" in result.state.messages[-1].text
+    assert result.state.status == "TURN 2 READY"
+    assert result.state.messages[-1].text == "Completed turn 2."
 
 
-def test_failed_controller_turn_preserves_results_and_reopens(monkeypatch):
-    actions = iter(
-        [
-            FindChatAction(kind="SUBMIT", text="try another search"),
-            FindChatAction(kind="CLOSE"),
-        ]
-    )
-    monkeypatch.setattr(
-        find_chat_shell_module,
-        "run_find_chat_shell",
-        lambda *_args, **_kwargs: next(actions),
-    )
-
+def test_failed_controller_turn_preserves_results_in_same_application():
     def fail(_state: FindChatState, _text: str) -> FindChatState:
         raise RuntimeError("provider unavailable")
 
     initial = _state()
-    result = run_find_chat_session(
-        initial,
-        handle_turn=fail,
-        require_tty=False,
-    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("try another search\r\x03")
+        result = run_find_chat_session(
+            initial,
+            handle_turn=fail,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
 
     assert result.state.results == initial.results
     assert result.state.status == "TURN FAILED · RESULTS UNCHANGED"
@@ -329,7 +424,160 @@ def test_failed_controller_turn_preserves_results_and_reopens(monkeypatch):
     assert "provider unavailable" in result.state.messages[-1].text
 
 
-@pytest.mark.parametrize("keys", ["\x03", "\tq"])
+def test_busy_turn_stays_visible_and_blocks_parallel_submission(monkeypatch):
+    original_header = find_chat_shell_module.render_find_chat_header
+    thinking_rendered = threading.Event()
+    handler_started = threading.Event()
+    release_handler = threading.Event()
+    feeder_errors = []
+    calls = []
+
+    def capturing_header(state):
+        if state.status == "THINKING · RESULTS UNCHANGED":
+            thinking_rendered.set()
+        return original_header(state)
+
+    monkeypatch.setattr(
+        find_chat_shell_module,
+        "render_find_chat_header",
+        capturing_header,
+    )
+
+    def handle_turn(state: FindChatState, text: str) -> FindChatState:
+        calls.append(text)
+        handler_started.set()
+        if not release_handler.wait(2):
+            raise RuntimeError("test did not release handler")
+        return replace(
+            state,
+            messages=(
+                *state.messages,
+                FindChatMessage(role="USER", text=text),
+                FindChatMessage(role="MEM", text="Finished."),
+            ),
+            status="ANSWER READY",
+        )
+
+    with create_pipe_input() as pipe_input:
+        def feed_while_busy() -> None:
+            try:
+                pipe_input.send_text("first turn\r")
+                if not handler_started.wait(2):
+                    raise AssertionError("handler did not start")
+                if not thinking_rendered.wait(2):
+                    raise AssertionError("thinking state was not rendered")
+                pipe_input.send_text("parallel turn\r")
+                pipe_input.send_text("\x03")
+                release_handler.set()
+            except Exception as error:  # pragma: no cover - assertion relay
+                feeder_errors.append(error)
+                release_handler.set()
+
+        feeder = threading.Thread(target=feed_while_busy)
+        feeder.start()
+        result = run_find_chat_session(
+            _state(),
+            handle_turn=handle_turn,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert feeder_errors == []
+    assert not feeder.is_alive()
+    assert calls == ["first turn"]
+    assert result.submitted_turns == ("first turn",)
+    assert result.state.status == "ANSWER READY"
+
+
+def test_busy_control_d_waits_for_the_current_turn():
+    handler_started = threading.Event()
+    release_handler = threading.Event()
+
+    def handle_turn(state: FindChatState, text: str) -> FindChatState:
+        handler_started.set()
+        if not release_handler.wait(2):
+            raise RuntimeError("test did not release handler")
+        return replace(
+            state,
+            messages=(
+                *state.messages,
+                FindChatMessage(role="USER", text=text),
+                FindChatMessage(role="MEM", text="Finished before EOF close."),
+            ),
+            status="ANSWER READY",
+        )
+
+    with create_pipe_input() as pipe_input:
+        def close_while_busy() -> None:
+            pipe_input.send_text("first turn\r")
+            assert handler_started.wait(2)
+            pipe_input.send_text("\x04")
+            release_handler.set()
+
+        feeder = threading.Thread(target=close_while_busy)
+        feeder.start()
+        result = run_find_chat_session(
+            _state(),
+            handle_turn=handle_turn,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert not feeder.is_alive()
+    assert result.submitted_turns == ("first turn",)
+    assert result.state.status == "ANSWER READY"
+
+
+def test_input_stream_eof_during_busy_turn_preserves_completed_state():
+    handler_started = threading.Event()
+    release_handler = threading.Event()
+
+    def handle_turn(state: FindChatState, text: str) -> FindChatState:
+        handler_started.set()
+        if not release_handler.wait(2):
+            raise RuntimeError("test did not release handler")
+        return replace(
+            state,
+            messages=(
+                *state.messages,
+                FindChatMessage(role="USER", text=text),
+                FindChatMessage(role="MEM", text="Finished after stream EOF."),
+            ),
+            status="ANSWER READY",
+        )
+
+    with create_pipe_input() as pipe_input:
+        def end_input_while_busy() -> None:
+            pipe_input.send_text("first turn\r")
+            assert handler_started.wait(2)
+            pipe_input.close()
+            # Give prompt-toolkit's input callback time to begin teardown
+            # before the non-cancellable executor worker returns.
+            time.sleep(0.05)
+            release_handler.set()
+
+        feeder = threading.Thread(target=end_input_while_busy)
+        feeder.start()
+        result = run_find_chat_session(
+            _state(),
+            handle_turn=handle_turn,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert not feeder.is_alive()
+    assert result.submitted_turns == ("first turn",)
+    assert result.state.status == "ANSWER READY"
+    assert result.state.messages[-1].text == "Finished after stream EOF."
+
+
+@pytest.mark.parametrize("keys", ["\x03", "\x04", "\tq", "\t\tq"])
 def test_close_returns_without_controller_or_provider_work(keys: str):
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(keys)

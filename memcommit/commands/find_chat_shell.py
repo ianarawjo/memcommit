@@ -1,18 +1,24 @@
-"""Operation-neutral chat surface for interactive ``mem find``.
+"""Operation-neutral, long-lived chat surface for interactive ``mem find``.
 
-The shell deliberately returns one user action and exits.  The Find controller
-interprets that turn, updates the in-process view, and reopens the shell without
-putting provider calls or command execution inside prompt-toolkit handlers.
+The production session keeps one prompt-toolkit application alive while a
+controller handles submitted turns in a worker thread. A one-turn wrapper
+remains for focused shell tests and callers that need only input collection.
 """
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass, replace
 from typing import Literal, Protocol
 
 from prompt_toolkit.application import Application
-from prompt_toolkit.filters import has_focus
+from prompt_toolkit.document import Document
+from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
+from prompt_toolkit.key_binding.bindings.scroll import (
+    scroll_page_down,
+    scroll_page_up,
+)
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.layout import (
     FormattedTextControl,
@@ -21,13 +27,11 @@ from prompt_toolkit.layout import (
     Window,
 )
 from prompt_toolkit.layout.dimension import Dimension
-from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.commands.tui_primitives import (
     TuiRegion,
-    anchored_fragments,
     build_tui_frame,
     require_interactive_terminal,
     safe_terminal_text,
@@ -82,8 +86,35 @@ class FindChatResult:
 
 
 @dataclass(frozen=True)
+class FindPendingAnswerRequest:
+    """One wider-scope answer waiting for a host-owned confirmation token."""
+
+    user_text: str
+    interpreted_request: str
+    pending_clarification: str | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.user_text, str) or not self.user_text.strip():
+            raise ValueError("Pending Find answers require user text.")
+        if (
+            not isinstance(self.interpreted_request, str)
+            or not self.interpreted_request.strip()
+        ):
+            raise ValueError(
+                "Pending Find answers require an interpreted request."
+            )
+        if self.pending_clarification is not None and (
+            not isinstance(self.pending_clarification, str)
+            or not self.pending_clarification.strip()
+        ):
+            raise ValueError(
+                "Pending Find clarification must be nonblank text."
+            )
+
+
+@dataclass(frozen=True)
 class FindChatState:
-    """Read-only presentation state for one invocation of the chat shell."""
+    """One immutable committed or transient view of the Find chat."""
 
     context_name: str
     current_query: str = ""
@@ -91,6 +122,7 @@ class FindChatState:
     results: tuple[FindChatResult, ...] = ()
     kept_count: int = 0
     status: str = "READY"
+    pending_answer: FindPendingAnswerRequest | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.context_name, str) or not self.context_name.strip():
@@ -127,6 +159,14 @@ class FindChatState:
             )
         if not isinstance(self.status, str) or not self.status.strip():
             raise ValueError("Find chat requires a nonblank status.")
+        if (
+            self.pending_answer is not None
+            and not isinstance(
+                self.pending_answer,
+                FindPendingAnswerRequest,
+            )
+        ):
+            raise ValueError("Invalid pending Find answer.")
 
 
 @dataclass(frozen=True)
@@ -160,7 +200,7 @@ class FindChatTurnHandler(Protocol):
 
 @dataclass(frozen=True)
 class FindChatSessionResult:
-    """Final state after the person closes a repeatedly reopened chat."""
+    """Final committed state after the person closes one continuous chat."""
 
     status: Literal["CLOSED"]
     state: FindChatState
@@ -229,25 +269,20 @@ def _dialogue_blocks(state: FindChatState) -> tuple[str, ...]:
                     "OPEN QUESTION · FIND",
                     "  What are you trying to locate in this Context?",
                     "",
-                    "Describe it in your own words. This shell only returns",
-                    "the turn; the Find controller will own search and saving.",
+                    "Describe it in your own words. The Find controller handles",
+                    "the turn while this view remains open.",
                 ]
             )
         )
     return tuple(blocks)
 
 
-def _conversation_blocks(state: FindChatState) -> tuple[str, ...]:
-    return (*_dialogue_blocks(state), *_result_blocks(state))
+def _body_blocks(state: FindChatState) -> tuple[str, ...]:
+    return (*_result_blocks(state), *_dialogue_blocks(state))
 
 
-def _dialogue_fragments(state: FindChatState) -> list[tuple[str, str]]:
-    blocks = _dialogue_blocks(state)
-    return anchored_fragments(
-        blocks,
-        anchor_index=len(blocks) - 1,
-        anchor_at_end=True,
-    )
+def _dialogue_text(state: FindChatState) -> str:
+    return "\n\n".join(_dialogue_blocks(state))
 
 
 def _result_text(state: FindChatState) -> str:
@@ -264,26 +299,55 @@ def render_find_chat_snapshot(state: FindChatState) -> str:
     return "\n\n".join(
         [
             render_find_chat_header(state),
-            "\n\n".join(_conversation_blocks(state)),
+            "\n\n".join(_body_blocks(state)),
             "ASK OR REFINE THE FIND\n  (interactive input not shown)",
         ]
     )
 
 
-def run_find_chat_shell(
+def _failed_turn_state(
     state: FindChatState,
+    text: str,
+    error: Exception,
+) -> FindChatState:
+    """Preserve the committed view and append one visible failure receipt."""
+    return replace(
+        state,
+        messages=(
+            *state.messages,
+            FindChatMessage(role="USER", text=text),
+            FindChatMessage(
+                role="STATUS",
+                text=(
+                    f"Turn failed: {type(error).__name__}: {error}. "
+                    "The existing results were not changed."
+                ),
+            ),
+        ),
+        status="TURN FAILED · RESULTS UNCHANGED",
+    )
+
+
+def _run_find_chat_application(
+    initial_state: FindChatState,
     *,
-    app_input: Input | None = None,
-    app_output: Output | None = None,
-    require_tty: bool = True,
-) -> FindChatAction:
-    """Collect one Find dialogue turn without searching or changing state."""
+    handle_turn: FindChatTurnHandler | None,
+    app_input: Input | None,
+    app_output: Output | None,
+    require_tty: bool,
+) -> FindChatAction | FindChatSessionResult:
+    """Run one shell action or one long-lived controller-backed session."""
     if require_tty:
         require_interactive_terminal(
             "Interactive Find chat",
             snapshot_hint="Use ordinary 'mem find' output outside a terminal.",
         )
 
+    committed_state = initial_state
+    display_state = initial_state
+    submitted_turns: list[str] = []
+    busy = False
+    close_requested = False
     status_message = {"value": ""}
     bindings = KeyBindings()
     input_area = TextArea(
@@ -292,29 +356,33 @@ def run_find_chat_shell(
         scrollbar=True,
         height=Dimension(min=3, preferred=4, max=7),
         prompt="> ",
+        # While a turn is in flight, keystrokes must not accumulate into a
+        # hidden second submission that would race the frozen controller view.
+        read_only=Condition(lambda: busy),
     )
     top_panel = Window(
-        FormattedTextControl(lambda: render_find_chat_header(state)),
+        FormattedTextControl(lambda: render_find_chat_header(display_state)),
         height=Dimension.exact(4),
         dont_extend_height=True,
         wrap_lines=False,
     )
-    conversation_control = FormattedTextControl(
-        lambda: _dialogue_fragments(state),
+    conversation_area = TextArea(
+        text=_dialogue_text(display_state),
+        multiline=True,
+        read_only=True,
         focusable=True,
-        show_cursor=False,
-    )
-    conversation_panel = Window(
-        conversation_control,
         wrap_lines=True,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
-        height=Dimension(min=3, preferred=6, max=8),
+        scrollbar=True,
     )
-    # A read-only BufferControl carries a real movable cursor. Window scroll
-    # is cursor-relative, so mutating ``vertical_scroll`` on a cursorless
-    # FormattedTextControl would be clamped back to its implicit first line.
+    conversation_area.buffer.cursor_position = len(conversation_area.text)
+    conversation_control = conversation_area.control
+    conversation_panel = conversation_area.window
+    conversation_panel.height = Dimension(min=3, preferred=6, max=8)
+    # Read-only buffers carry real cursors. Window scrolling is cursor-relative,
+    # so this keeps long results and References inspectable without allowing
+    # the user to edit their locally validated content.
     results_area = TextArea(
-        text=_result_text(state),
+        text=_result_text(display_state),
         multiline=True,
         read_only=True,
         focusable=True,
@@ -326,7 +394,13 @@ def run_find_chat_shell(
     input_panel = HSplit(
         [
             Window(
-                FormattedTextControl(" ASK OR REFINE THE FIND"),
+                FormattedTextControl(
+                    lambda: (
+                        " PROCESSING FIND TURN"
+                        if busy
+                        else " ASK OR REFINE THE FIND"
+                    )
+                ),
                 height=Dimension.exact(1),
                 dont_extend_height=True,
             ),
@@ -339,10 +413,14 @@ def run_find_chat_shell(
                 f" {status_message['value']}"
                 if status_message["value"]
                 else (
-                    " Enter · hand turn to Find controller    "
-                    "Ctrl-J / Alt-Enter · newline    "
-                    "Tab · dialogue/results/input    "
-                    "↑/↓ · scroll results    Ctrl-C · close"
+                    " Working · current results remain visible    "
+                    "Ctrl-C · close after this turn"
+                    if busy
+                    else (
+                        " Enter · submit    Ctrl-J / Alt-Enter · newline    "
+                        "Tab · results/dialogue/input    "
+                        "↑/↓ or PgUp/PgDn · scroll    Ctrl-C · close"
+                    )
                 )
             )
         ),
@@ -351,29 +429,126 @@ def run_find_chat_shell(
     )
     root = build_tui_frame(
         TuiRegion(top_panel),
-        TuiRegion(conversation_panel, separator_before=True),
         TuiRegion(results_panel, separator_before=True),
+        TuiRegion(conversation_panel, separator_before=True),
         TuiRegion(input_panel, separator_before=True),
         TuiRegion(footer),
     )
-    application: Application[FindChatAction] = Application(
-        layout=Layout(root, focused_element=input_area),
-        key_bindings=bindings,
-        full_screen=True,
-        erase_when_done=True,
-        input=app_input,
-        output=app_output,
-        mouse_support=False,
+    application: Application[FindChatAction | FindChatSessionResult] = (
+        Application(
+            layout=Layout(root, focused_element=input_area),
+            key_bindings=bindings,
+            full_screen=True,
+            # The alternate screen is left only when the person closes the
+            # whole session, never between controller turns.
+            erase_when_done=True,
+            input=app_input,
+            output=app_output,
+            mouse_support=False,
+        )
     )
+
+    def refresh(next_state: FindChatState) -> None:
+        """Replace display buffers from the event-loop thread."""
+        nonlocal display_state
+        display_state = next_state
+        next_results = _result_text(next_state)
+        if results_area.buffer.text != next_results:
+            results_area.buffer.set_document(
+                Document(next_results, cursor_position=0),
+                bypass_readonly=True,
+            )
+        next_dialogue = _dialogue_text(next_state)
+        conversation_area.buffer.set_document(
+            Document(next_dialogue, cursor_position=len(next_dialogue)),
+            bypass_readonly=True,
+        )
+        application.invalidate()
+
+    def session_result() -> FindChatSessionResult:
+        return FindChatSessionResult(
+            status="CLOSED",
+            state=committed_state,
+            submitted_turns=tuple(submitted_turns),
+        )
+
+    async def process_turn(base_state: FindChatState, text: str) -> None:
+        nonlocal busy, close_requested, committed_state
+        if handle_turn is None:  # pragma: no cover - submit path prevents this
+            return
+        cancelled_during_shutdown = False
+        try:
+            loop = asyncio.get_running_loop()
+            worker = loop.run_in_executor(
+                None,
+                handle_turn,
+                base_state,
+                text,
+            )
+            try:
+                # Shield the executor Future so an input-stream EOF cannot
+                # discard a read-only turn whose worker cannot be cancelled.
+                updated = await asyncio.shield(worker)
+            except asyncio.CancelledError:
+                cancelled_during_shutdown = True
+                updated = await worker
+            if not isinstance(updated, FindChatState):
+                raise ValueError(
+                    "Find chat controller returned an invalid next state."
+                )
+        except Exception as error:
+            updated = _failed_turn_state(base_state, text, error)
+
+        committed_state = updated
+        busy = False
+        if cancelled_during_shutdown:
+            # prompt-toolkit is already tearing down after EOF or an external
+            # interrupt. Preserve the completed state for the session result,
+            # but do not repaint a renderer that is leaving raw/full-screen
+            # mode. Re-propagating cancellation completes managed task cleanup.
+            raise asyncio.CancelledError()
+        refresh(updated)
+        if close_requested:
+            application.exit(result=session_result())
+            return
+        status_message["value"] = ""
+        application.layout.focus(input_area)
+        application.invalidate()
 
     @bindings.add("enter", filter=has_focus(input_area), eager=True)
     def _submit(event) -> None:
+        nonlocal busy
+        if busy:
+            status_message["value"] = "A Find turn is already running."
+            event.app.invalidate()
+            return
         text = input_area.text.strip()
         if not text:
             status_message["value"] = "Enter a nonblank Find turn first."
             event.app.invalidate()
             return
-        event.app.exit(result=FindChatAction(kind="SUBMIT", text=text))
+        if handle_turn is None:
+            event.app.exit(result=FindChatAction(kind="SUBMIT", text=text))
+            return
+
+        base_state = committed_state
+        submitted_turns.append(text)
+        input_area.buffer.set_document(Document("", cursor_position=0))
+        busy = True
+        status_message["value"] = ""
+        refresh(
+            replace(
+                base_state,
+                messages=(
+                    *base_state.messages,
+                    FindChatMessage(role="USER", text=text),
+                ),
+                status="THINKING · RESULTS UNCHANGED",
+            )
+        )
+        event.app.layout.focus(conversation_control)
+        event.app.create_background_task(process_turn(base_state, text))
+        event.app.invalidate()
 
     @bindings.add("c-j", filter=has_focus(input_area), eager=True)
     @bindings.add(
@@ -383,14 +558,19 @@ def run_find_chat_shell(
         eager=True,
     )
     def _insert_newline(event) -> None:
-        input_area.buffer.insert_text("\n")
+        if busy:
+            status_message["value"] = "Wait for the current Find turn."
+        else:
+            input_area.buffer.insert_text("\n")
         event.app.invalidate()
 
     @bindings.add("tab", eager=True)
     def _toggle_focus(event) -> None:
         if event.app.layout.has_focus(input_area):
+            event.app.layout.focus(results_control)
+        elif event.app.layout.has_focus(results_control):
             event.app.layout.focus(conversation_control)
-        elif event.app.layout.has_focus(conversation_control):
+        elif busy:
             event.app.layout.focus(results_control)
         else:
             event.app.layout.focus(input_area)
@@ -406,12 +586,46 @@ def run_find_chat_shell(
         results_area.buffer.cursor_up()
         event.app.invalidate()
 
+    @bindings.add("down", filter=has_focus(conversation_control), eager=True)
+    def _scroll_dialogue_down(event) -> None:
+        conversation_area.buffer.cursor_down()
+        event.app.invalidate()
+
+    @bindings.add("up", filter=has_focus(conversation_control), eager=True)
+    def _scroll_dialogue_up(event) -> None:
+        conversation_area.buffer.cursor_up()
+        event.app.invalidate()
+
     def close(event) -> None:
-        event.app.exit(result=FindChatAction(kind="CLOSE"))
+        nonlocal close_requested
+        if busy and handle_turn is not None:
+            # The synchronous controller may own a child process. A cancelled
+            # executor future cannot terminate that process safely, so finish
+            # the reviewed turn before leaving the alternate screen.
+            close_requested = True
+            status_message["value"] = "Closing after the current turn finishes."
+            event.app.invalidate()
+            return
+        result: FindChatAction | FindChatSessionResult = (
+            FindChatAction(kind="CLOSE")
+            if handle_turn is None
+            else session_result()
+        )
+        event.app.exit(result=result)
 
     navigation_focus = (
         has_focus(conversation_control) | has_focus(results_control)
     )
+
+    @bindings.add("pageup", filter=navigation_focus, eager=True)
+    def _scroll_page_up(event) -> None:
+        scroll_page_up(event)
+        event.app.invalidate()
+
+    @bindings.add("pagedown", filter=navigation_focus, eager=True)
+    def _scroll_page_down(event) -> None:
+        scroll_page_down(event)
+        event.app.invalidate()
 
     @bindings.add("q", filter=navigation_focus, eager=True)
     @bindings.add("escape", filter=navigation_focus, eager=True)
@@ -420,13 +634,41 @@ def run_find_chat_shell(
 
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)
+    @bindings.add("c-d", eager=True)
     def _close_anywhere(event) -> None:
         close(event)
 
     try:
-        return application.run()
+        result = application.run()
     except (EOFError, KeyboardInterrupt):
-        return FindChatAction(kind="CLOSE")
+        return (
+            FindChatAction(kind="CLOSE")
+            if handle_turn is None
+            else session_result()
+        )
+    if not isinstance(result, (FindChatAction, FindChatSessionResult)):
+        raise ValueError("Find chat application returned an invalid result.")
+    return result
+
+
+def run_find_chat_shell(
+    state: FindChatState,
+    *,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> FindChatAction:
+    """Collect one Find dialogue turn without controller work."""
+    result = _run_find_chat_application(
+        state,
+        handle_turn=None,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    if not isinstance(result, FindChatAction):  # pragma: no cover - invariant
+        raise ValueError("Find shell returned an invalid result.")
+    return result
 
 
 def run_find_chat_session(
@@ -437,47 +679,17 @@ def run_find_chat_session(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> FindChatSessionResult:
-    """Reopen the shell after each controller-owned follow-up Find turn."""
-    current = initial_state
-    submitted_turns: list[str] = []
-    while True:
-        action = run_find_chat_shell(
-            current,
-            app_input=app_input,
-            app_output=app_output,
-            require_tty=require_tty,
-        )
-        if action.kind == "CLOSE":
-            return FindChatSessionResult(
-                status="CLOSED",
-                state=current,
-                submitted_turns=tuple(submitted_turns),
-            )
-
-        submitted_turns.append(action.text)
-        try:
-            updated = handle_turn(current, action.text)
-            if not isinstance(updated, FindChatState):
-                raise ValueError(
-                    "Find chat controller returned an invalid next state."
-                )
-            current = updated
-        except Exception as error:
-            # A failed provider or controller turn must leave the current
-            # results intact and return control to the person. Retrying is a
-            # new visible turn rather than a hidden automatic action.
-            current = replace(
-                current,
-                messages=(
-                    *current.messages,
-                    FindChatMessage(role="USER", text=action.text),
-                    FindChatMessage(
-                        role="STATUS",
-                        text=(
-                            f"Turn failed: {type(error).__name__}: {error}. "
-                            "The existing results were not changed."
-                        ),
-                    ),
-                ),
-                status="TURN FAILED · RESULTS UNCHANGED",
-            )
+    """Run repeated controller turns without recreating the full-screen UI."""
+    result = _run_find_chat_application(
+        initial_state,
+        handle_turn=handle_turn,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    if not isinstance(
+        result,
+        FindChatSessionResult,
+    ):  # pragma: no cover - invariant
+        raise ValueError("Find session returned an invalid result.")
+    return result
