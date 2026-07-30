@@ -320,7 +320,10 @@ def render_comparison(
         lines.extend(
             [
                 "",
-                "The complete source-linked relation ledger is saved:",
+                (
+                    "The complete source-linked relation ledger is saved. "
+                    "Inspect it with:"
+                ),
                 f"  {ledger_command}",
             ]
         )

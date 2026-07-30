@@ -226,7 +226,8 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
         created.output
     )
     assert (
-        "The complete source-linked relation ledger is saved:\n"
+        "The complete source-linked relation ledger is saved. "
+        "Inspect it with:\n"
         "  mem compare --to task2/advisor2 --ledger"
     ) in (
         created.output

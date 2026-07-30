@@ -209,8 +209,9 @@ those are the places where human intervention can change later
 reconciliation. Each candidate includes the kind and summary of every linked
 relation, so a hidden ledger row never leaves an unexplained `R7`-style
 reference. After the last non-empty semantic section, one plain footer sentence
-introduces a complete shell-quoted command for the provider-free `--ledger`
-view on the next line. Omitting another label keeps this small navigation hint
+states that the relation ledger is saved and ends with `Inspect it with:`.
+The next line contains the complete shell-quoted command for the provider-free
+`--ledger` view. Omitting another label keeps this small navigation hint
 subordinate to the report and makes the command easy to select without copying
 explanatory prose. The footer separates the final report text from the next
 shell prompt without relying on arbitrary extra blank lines; it is not another
