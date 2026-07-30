@@ -1,0 +1,444 @@
+"""Dual text/structured clipboard tests for `mem list` and `mem ls`."""
+
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+import subprocess
+import threading
+from types import SimpleNamespace
+
+import pytest
+from typer.testing import CliRunner
+
+import memcommit.clipboard as clipboard
+from memcommit.cli import app
+from memcommit.clipboard import ClipboardError, ClipboardPayload
+from memcommit.context import QueryContextRef
+from memcommit.store import MemoryStore
+
+
+runner = CliRunner(mix_stderr=False)
+
+
+def invoke(*args: str):
+    return runner.invoke(app, list(args))
+
+
+@pytest.fixture()
+def fake_system_clipboard(monkeypatch):
+    state = {"text": ""}
+
+    def write(text: str) -> None:
+        state["text"] = text
+
+    def read() -> str:
+        return state["text"]
+
+    monkeypatch.setattr(clipboard, "write_system_clipboard", write)
+    monkeypatch.setattr(clipboard, "read_system_clipboard", read)
+    return state
+
+
+def test_ls_copy_preserves_normal_output_and_stages_full_objects(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "source")
+    invoke("add", "Café north entrance.\nClosed through Friday.")
+    store = MemoryStore()
+    context = store.load_current()
+    memory = next(iter(context.memories.values()))
+    checkpoint_count = len(store.list_checkpoints("source"))
+    expected = invoke("ls")
+
+    result = invoke("ls", "--copy")
+
+    assert result.exit_code == 0
+    assert result.stdout == expected.stdout
+    assert fake_system_clipboard["text"] == expected.stdout
+    assert "Copied 1 item" in result.stderr
+    assert "Copied 1 item" not in fake_system_clipboard["text"]
+    assert store.current_context_name() == "source"
+    assert len(store.list_checkpoints("source")) == checkpoint_count
+
+    stage_path = Path(isolated_store) / "clipboard.json"
+    record = json.loads(stage_path.read_text(encoding="utf-8"))
+    assert record["producer"] == "list"
+    assert record["plain_text"] == expected.stdout
+    assert record["selection"]["context"] == {
+        "uid": context.uid,
+        "name": "source",
+    }
+    assert record["selection"]["items"] == [
+        {
+            "kind": "memory",
+            "uid": memory.uid,
+            "content": "Café north entrance.\nClosed through Friday.",
+        }
+    ]
+    assert os.stat(stage_path).st_mode & 0o777 == 0o600
+
+
+def test_list_copy_and_ls_paste_are_coequal_and_snapshot_based(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "source")
+    invoke("add", "Original source fact.")
+    expected = invoke("list")
+    copied = invoke("list", "--copy")
+    assert copied.exit_code == 0
+
+    store = MemoryStore()
+    source = store.load("source")
+    memory = next(iter(source.memories.values()))
+    memory.content = "Changed after copy."
+    store.save(source)
+    store.delete("source")
+    assert store.current_context_name() is None
+
+    pasted = invoke("ls", "--paste")
+
+    assert pasted.exit_code == 0
+    assert pasted.stdout == expected.stdout
+    assert "Original source fact." in pasted.stdout
+    assert "Changed after copy." not in pasted.stdout
+    assert "no Context changes" in pasted.stderr
+    assert not store.context_exists("source")
+
+
+def test_recursive_copy_freezes_visible_tree_and_paste_replays_it(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "child")
+    invoke("add", "Nested fact.")
+    invoke("init", "parent")
+    invoke("add", "Parent fact.")
+    invoke("embed", "child", "--into", "parent")
+    expected = invoke("ls", "-R", "parent")
+
+    copied = invoke("ls", "-R", "parent", "--copy")
+    assert copied.exit_code == 0
+    MemoryStore().delete("parent")
+    MemoryStore().delete("child")
+
+    pasted = invoke("list", "--paste")
+
+    assert pasted.exit_code == 0
+    assert pasted.stdout == expected.stdout
+    assert "Nested fact." in pasted.stdout
+    assert "Copied 3 items" in copied.stderr
+
+
+def test_copy_stages_query_pointer_without_hidden_source_content(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "wiki")
+    store = MemoryStore()
+    source = store.create_query_source(
+        "contracts/private",
+        "SECRET QUERY-ONLY CONTRACT TEXT",
+    )
+    context = store.load_current()
+    context.add(
+        QueryContextRef(
+            uid="query-ref-uid",
+            name="contracts/private",
+            target_source_uid=source.uid,
+            provider="test-provider",
+        )
+    )
+    store.save(context)
+
+    result = invoke("ls", "--copy")
+
+    assert result.exit_code == 0
+    stage_text = (
+        Path(isolated_store) / "clipboard.json"
+    ).read_text(encoding="utf-8")
+    assert "contracts/private" in stage_text
+    assert source.uid in stage_text
+    assert "SECRET QUERY-ONLY CONTRACT TEXT" not in stage_text
+    assert "SECRET QUERY-ONLY CONTRACT TEXT" not in fake_system_clipboard["text"]
+
+
+def test_ls_paste_rejects_overwritten_system_clipboard(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "source")
+    invoke("add", "Copied fact.")
+    assert invoke("ls", "--copy").exit_code == 0
+    fake_system_clipboard["text"] = "Text copied in another application."
+
+    result = invoke("ls", "--paste")
+
+    assert result.exit_code == 1
+    assert result.stdout == ""
+    assert "system clipboard changed" in result.stderr
+
+
+def test_ls_paste_without_stage_fails_without_creating_store(
+    isolated_store,
+    fake_system_clipboard,
+):
+    fake_system_clipboard["text"] = "arbitrary external text"
+
+    result = invoke("ls", "--paste")
+
+    assert result.exit_code == 1
+    assert "run 'mem ls --copy' first" in result.stderr
+    assert not Path(isolated_store).exists()
+
+
+def test_missing_store_race_never_accepts_an_unlocked_payload(
+    isolated_store,
+    fake_system_clipboard,
+    monkeypatch,
+):
+    raced_payload = ClipboardPayload.create(
+        producer="wrong-producer",
+        plain_text="raced text",
+        selection={"source": "raced"},
+    )
+    monkeypatch.setattr(clipboard, "_read_stage", lambda: raced_payload)
+    fake_system_clipboard["text"] = raced_payload.plain_text
+
+    with pytest.raises(ClipboardError, match="run 'mem ls --copy' first"):
+        clipboard.load_payload(expected_producer="list")
+
+    assert not Path(isolated_store).exists()
+
+
+@pytest.mark.parametrize(
+    "arguments",
+    [
+        ("ls", "--copy", "--paste"),
+        ("ls", "source", "--paste"),
+        ("list", "-R", "--paste"),
+    ],
+)
+def test_list_clipboard_rejects_ambiguous_inputs(
+    isolated_store,
+    fake_system_clipboard,
+    arguments,
+):
+    result = invoke(*arguments)
+
+    assert result.exit_code == 1
+    assert result.stdout == ""
+
+
+def test_failed_copy_invalidates_previous_structured_stage(
+    isolated_store,
+    fake_system_clipboard,
+    monkeypatch,
+):
+    invoke("init", "source")
+    invoke("add", "Same visible text.")
+    assert invoke("ls", "--copy").exit_code == 0
+    stage_path = Path(isolated_store) / "clipboard.json"
+    assert stage_path.exists()
+
+    def fail_write(_text: str) -> None:
+        raise ClipboardError("simulated clipboard failure")
+
+    monkeypatch.setattr(clipboard, "write_system_clipboard", fail_write)
+    result = invoke("ls", "--copy")
+
+    assert result.exit_code == 1
+    assert "simulated clipboard failure" in result.stderr
+    assert not stage_path.exists()
+
+
+def test_concurrent_copies_keep_one_coherent_text_and_stage_pair(
+    isolated_store,
+    monkeypatch,
+):
+    state = {"text": ""}
+    first_read_started = threading.Event()
+    release_first_read = threading.Event()
+    second_started = threading.Event()
+    second_write_started = threading.Event()
+    failures: list[BaseException] = []
+
+    first = ClipboardPayload.create(
+        producer="list",
+        plain_text="first text",
+        selection={"source": "first"},
+    )
+    second = ClipboardPayload.create(
+        producer="list",
+        plain_text="second text",
+        selection={"source": "second"},
+    )
+
+    def write(text: str) -> None:
+        if text == second.plain_text:
+            second_write_started.set()
+        state["text"] = text
+
+    def read() -> str:
+        text = state["text"]
+        if text == first.plain_text:
+            first_read_started.set()
+            assert release_first_read.wait(timeout=2)
+        return state["text"]
+
+    def run_copy(payload: ClipboardPayload, *, mark_second: bool = False) -> None:
+        if mark_second:
+            second_started.set()
+        try:
+            clipboard.copy_payload(payload)
+        except BaseException as error:
+            failures.append(error)
+
+    monkeypatch.setattr(clipboard, "write_system_clipboard", write)
+    monkeypatch.setattr(clipboard, "read_system_clipboard", read)
+
+    first_thread = threading.Thread(target=run_copy, args=(first,))
+    second_thread = threading.Thread(
+        target=run_copy,
+        args=(second,),
+        kwargs={"mark_second": True},
+    )
+    first_thread.start()
+    assert first_read_started.wait(timeout=2)
+    second_thread.start()
+    assert second_started.wait(timeout=2)
+    assert not second_write_started.wait(timeout=0.2)
+
+    release_first_read.set()
+    first_thread.join(timeout=2)
+    second_thread.join(timeout=2)
+
+    assert not first_thread.is_alive()
+    assert not second_thread.is_alive()
+    assert failures == []
+    assert state["text"] == second.plain_text
+    record = json.loads(
+        (Path(isolated_store) / "clipboard.json").read_text(encoding="utf-8")
+    )
+    assert record["plain_text"] == second.plain_text
+    assert record["selection"] == second.selection
+
+
+def test_corrupt_structured_stage_fails_closed(
+    isolated_store,
+    fake_system_clipboard,
+):
+    store_dir = Path(isolated_store)
+    store_dir.mkdir(parents=True)
+    (store_dir / "clipboard.json").write_text(
+        '{"schema_version": 999}',
+        encoding="utf-8",
+    )
+
+    result = invoke("ls", "--paste")
+
+    assert result.exit_code == 1
+    assert "structured clipboard" in result.stderr
+
+
+def test_system_clipboard_adapter_uses_fixed_macos_commands():
+    calls = []
+
+    def fake_runner(command, **kwargs):
+        calls.append((command, kwargs))
+        if command == ["/usr/bin/pbpaste"]:
+            return SimpleNamespace(
+                returncode=0,
+                stdout="안녕\n".encode(),
+                stderr=b"",
+            )
+        return SimpleNamespace(returncode=0, stdout=b"", stderr=b"")
+
+    clipboard.write_system_clipboard(
+        "안녕\n",
+        runner=fake_runner,
+        platform_name="darwin",
+    )
+    text = clipboard.read_system_clipboard(
+        runner=fake_runner,
+        platform_name="darwin",
+    )
+
+    assert text == "안녕\n"
+    assert calls[0][0] == ["/usr/bin/pbcopy"]
+    assert calls[0][1]["input"] == "안녕\n".encode()
+    assert calls[1][0] == ["/usr/bin/pbpaste"]
+
+
+def test_system_clipboard_adapter_rejects_unsupported_platform():
+    calls = []
+
+    with pytest.raises(ClipboardError, match="only on macOS"):
+        clipboard.write_system_clipboard(
+            "text",
+            runner=lambda *args, **kwargs: calls.append((args, kwargs)),
+            platform_name="linux",
+        )
+
+    assert calls == []
+
+
+@pytest.mark.parametrize(
+    "operation",
+    ["write", "read"],
+)
+def test_system_clipboard_adapter_wraps_process_failures(operation):
+    def failed_runner(*_args, **_kwargs):
+        return subprocess.CompletedProcess(
+            args=[],
+            returncode=1,
+            stdout=b"",
+            stderr=b"failed",
+        )
+
+    with pytest.raises(ClipboardError):
+        if operation == "write":
+            clipboard.write_system_clipboard(
+                "text",
+                runner=failed_runner,
+                platform_name="darwin",
+            )
+        else:
+            clipboard.read_system_clipboard(
+                runner=failed_runner,
+                platform_name="darwin",
+            )
+
+
+def test_payload_rejects_mismatched_text_digest():
+    payload = ClipboardPayload.create(
+        producer="list",
+        plain_text="visible",
+        selection={"items": []},
+    ).to_dict()
+    payload["plain_text"] = "tampered"
+
+    with pytest.raises(ClipboardError, match="invalid"):
+        ClipboardPayload.from_dict(payload)
+
+
+def test_payload_rejects_mismatched_structured_selection_digest():
+    payload = ClipboardPayload.create(
+        producer="list",
+        plain_text="same visible text",
+        selection={
+            "items": [
+                {
+                    "uid": "visible12-hidden-identity",
+                    "provider": "original-provider",
+                }
+            ]
+        },
+    ).to_dict()
+    payload["selection"]["items"][0]["provider"] = "tampered-provider"
+
+    with pytest.raises(ClipboardError, match="invalid"):
+        ClipboardPayload.from_dict(payload)

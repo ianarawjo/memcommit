@@ -1,8 +1,8 @@
 # `mem ls` Design Rationale
 
 - Status: Implemented
-- Scope: the co-equal `mem list` and `mem ls` spellings, plus recursive
-  listing with `-R`
+- Scope: the co-equal `mem list` and `mem ls` spellings, recursive listing
+  with `-R`, and dual text/structured `--copy` and `--paste`
 
 ## 1. Purpose
 
@@ -34,6 +34,8 @@ mem ls [context]
 mem list -R [context]
 mem ls -R [context]
 mem ls --recursive [context]
+mem ls [context] [-R] --copy
+mem ls --paste
 ```
 
 `mem list` and `mem ls` are co-equal public spellings. Both forms have
@@ -262,7 +264,67 @@ overlaps with the compact listing use case. Raw storage JSON is not the normal
 output of either command; a future export or developer command would be a
 better place for raw JSON.
 
-## 11. Deliberate Non-Goals
+## 11. Copy and paste as a frozen result boundary
+
+`mem ls --copy` creates two synchronized representations of the same list
+result:
+
+1. the exact unstyled text printed by `mem ls` is written to the macOS system
+   clipboard; and
+2. a versioned structured snapshot is written to the private mem store.
+
+The success receipt is not part of the copied text. Copy does not save a
+Context, change the current Context, or create a checkpoint. This makes it an
+output action rather than an early target mutation.
+
+The structured half preserves full UIDs, full Memory text, MemoryRef pointer
+metadata and its frozen resolved display content, embedded Context pointer
+identity, QueryContextRef routing metadata, and canonical object order.
+Rendering reapplies the Context-first presentation rule. A non-recursive copy
+does not include the contents of an embedded Context. A recursive copy stores
+only the traversed occurrence tree, including repeated diamond paths and
+finite cycle markers.
+
+Query-only source content is never opened or copied. A QueryContextRef's public
+name and local routing metadata can be staged because they are already part of
+the parent Context record, but the concealed source text is outside this
+clipboard contract.
+
+`mem ls --paste` is a read-only consumer of a structured list snapshot. It
+replays the frozen list even if its source Context has since changed or been
+deleted, and it can therefore run without a current Context. A positional
+Context and `-R` are rejected with `--paste`: the source and traversal depth
+were fixed by the producing copy. `--copy --paste` is also rejected rather than
+silently overwriting its own input.
+
+The structured record stores SHA-256 digests of both the exact
+system-clipboard text and a canonical serialization of the structured
+selection. Paste rereads the clipboard and accepts the object snapshot only
+when its text, text digest, selection digest, and rendered snapshot agree.
+This detects corruption of non-rendered identity and routing fields as well as
+visible content.
+
+A dedicated inter-process lock spans each complete copy transaction and each
+stage-plus-clipboard validation. Copy invalidates the previous structured
+record before writing either new half; a failed replacement therefore cannot
+reactivate an older object selection that happens to render the same text or
+delete another concurrent copy's newer stage. Arbitrary external clipboard
+text is not guessed into Memory objects.
+
+This content-equivalence check cannot distinguish an external overwrite whose
+bytes are exactly identical to the copied text. A platform-specific clipboard
+change token or custom MIME type could tighten that boundary later, but the
+prototype intentionally uses dependency-free `/usr/bin/pbcopy` and
+`/usr/bin/pbpaste` on macOS.
+
+The word `--paste` remains command-local. Existing `mem add --paste` is the
+interactive bracketed-paste intake flow described in
+[`mem-add-paste-design-rationale.md`](mem-add-paste-design-rationale.md); it
+does not silently switch to structured clipboard consumption. General
+`show/find/add --paste` inputs and actual materialization of staged objects
+need their own command contracts.
+
+## 12. Deliberate Non-Goals
 
 This change does not:
 
@@ -272,9 +334,12 @@ This change does not:
 - recursively expand children without `-R`;
 - expose raw `context.json` data;
 - change the behavior of `mem show`;
-- automatically embed a path descendant into a Root Context.
+- automatically embed a path descendant into a Root Context;
+- paste staged objects into a Context or choose new UIDs;
+- add structured `--copy` or `--paste` to `show`, `find`, or other commands;
+- support non-macOS system clipboards.
 
-## 12. Validation Scenarios
+## 13. Validation Scenarios
 
 The implementation is covered by tests for:
 
@@ -288,11 +353,19 @@ The implementation is covered by tests for:
 - finite output for an indirect persisted cycle;
 - repeated traversal of a shared Context along both sides of a diamond;
 - resolved MemoryRef content and provenance;
-- existing non-recursive list and embed behavior.
+- existing non-recursive list and embed behavior;
+- exact text/structured dual copy for both `list` and `ls`;
+- frozen direct and recursive snapshot replay after source mutation/deletion;
+- query-only source non-disclosure;
+- stale, missing, corrupt, and failed clipboard states;
+- argument conflicts and operation without a current Context;
+- macOS adapter command, UTF-8, and failure boundaries.
 
 Implementation:
 
 - [`memcommit/commands/list_memories.py`](../memcommit/commands/list_memories.py)
+- [`memcommit/clipboard.py`](../memcommit/clipboard.py)
 - [`memcommit/store.py`](../memcommit/store.py)
 - [`tests/test_commands.py`](../tests/test_commands.py)
+- [`tests/test_list_clipboard.py`](../tests/test_list_clipboard.py)
 - [`Root Context design rationale`](root-context-design-rationale.md)

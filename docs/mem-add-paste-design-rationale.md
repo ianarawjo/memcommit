@@ -75,6 +75,20 @@ to `prompt_toolkit`. Memcommit owns only the small state machine around it:
 capture, count, confirm, parse, and save. This avoids maintaining
 platform-specific terminal mode and escape-sequence code in the repository.
 
+### Relationship to `mem ls --paste`
+
+`--paste` is intentionally command-local rather than one hidden global input
+mode. `mem add --paste` continues to mean interactive bracketed-paste capture:
+the person enters text in a concealed TTY surface and confirms a Context
+mutation. By contrast, `mem ls --paste` reads and displays the frozen
+structured list snapshot previously created by `mem ls --copy`; it does not
+capture terminal input or mutate a Context.
+
+These forms share the user-level idea of consuming pasted material, but not
+the same source contract. A future generic clipboard protocol must reconcile
+that distinction explicitly instead of silently changing the established Add
+intake behavior.
+
 ## Downstream refinement
 
 Paste intake intentionally does not deduplicate, resolve apparent conflicts,

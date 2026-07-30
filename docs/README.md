@@ -24,6 +24,16 @@ limitation, the relevant focused `*-design-rationale.md` document must state
 the reason and the remaining boundary. A conversation-only explanation is not
 considered sufficient design history.
 
+## Clipboard result contract
+
+- [`mem-ls-design-rationale.md`](mem-ls-design-rationale.md) defines
+  `ls/list --copy` as synchronized plain-text and typed-result output,
+  `ls/list --paste` as frozen read-only replay, clipboard-overwrite
+  invalidation, and the query-only non-disclosure boundary.
+- [`mem-add-paste-design-rationale.md`](mem-add-paste-design-rationale.md)
+  preserves the distinct interactive bracketed-paste intake contract for
+  `mem add --paste`.
+
 ## Directional update contract notes
 
 - [`task-1-naming-contract.md`](task-1-naming-contract.md) fixes the distinct
