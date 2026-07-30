@@ -6,6 +6,7 @@ The first bounded Compare slice is implemented as:
 
 ```text
 mem compare --to PEER
+mem compare --to ../PEER
 mem compare --to PEER --refresh
 mem compare --to PEER --ledger
 ```
@@ -13,6 +14,14 @@ mem compare --to PEER --ledger
 The active Context is the display reference and `--to` names the compared
 Context. Both sources have equal authority. `REFERENCE` controls layout and
 navigation only; it is not a baseline and does not win a disagreement.
+
+`--to` is an existing-Context locator. A canonical name remains global, while
+an explicit `.` or `..` spelling is resolved lexically against the active
+reference Context captured at command start. The resolved canonical name is
+used for loading, frames, cache identity, and output, so relative and canonical
+spellings reuse the same durable analysis. The shared contract and its
+non-goals are recorded in
+[`context-locator-design-rationale.md`](context-locator-design-rationale.md).
 
 Compare performs one aggregate semantic call over the two complete bounded
 direct-Memory frames. It saves an immutable `ComparisonAnalysis` containing:

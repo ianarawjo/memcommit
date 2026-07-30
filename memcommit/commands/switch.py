@@ -3,48 +3,11 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.context_picker import choose_context
+from memcommit.context_locator import (
+    is_relative_context_locator,
+    resolve_context_locator,
+)
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
-
-
-def _is_relative_selector(name: str) -> bool:
-    """Return whether ``name`` opts into current-Context-relative lookup."""
-    return name in {".", ".."} or name.startswith(("./", "../"))
-
-
-def _resolve_relative_selector(name: str, current: str) -> str:
-    """Resolve an explicit lexical selector against one canonical name."""
-    parts = current.split("/")
-    selector_parts = name.split("/")
-    # Match familiar shell spelling: a single trailing slash does not change
-    # the destination (`../` is the same node as `..`). Repeated or interior
-    # empty segments remain invalid rather than being silently normalized.
-    if selector_parts[-1] == "":
-        selector_parts.pop()
-
-    if not selector_parts or any(part == "" for part in selector_parts):
-        raise ValueError(
-            f"relative Context selector '{name}' contains an empty segment."
-        )
-
-    for part in selector_parts:
-        if part == ".":
-            continue
-        if part == "..":
-            if not parts:
-                raise ValueError(
-                    f"relative Context selector '{name}' escapes above the "
-                    "namespace root."
-                )
-            parts.pop()
-            continue
-        parts.append(part)
-
-    if not parts:
-        raise ValueError(
-            f"relative Context selector '{name}' resolves to the namespace "
-            "root, which is not a Context."
-        )
-    return "/".join(parts)
 
 
 def cmd(
@@ -87,7 +50,7 @@ def cmd(
             return
 
     selector = name
-    if _is_relative_selector(selector):
+    if is_relative_context_locator(selector):
         if expected_current is None:
             typer.secho(
                 f"Error: cannot switch to '{selector}': no current context is "
@@ -104,7 +67,10 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
-            name = _resolve_relative_selector(selector, expected_current)
+            name = resolve_context_locator(
+                selector,
+                current=expected_current,
+            )
         except ValueError as error:
             typer.secho(
                 f"Error: {error}",

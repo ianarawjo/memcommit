@@ -371,6 +371,77 @@ def test_reverse_orientation_has_an_independent_cache_slot(
     assert len(provider.payloads) == 2
 
 
+def test_relative_peer_locator_uses_active_namespace_and_reuses_cache(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    relative = runner.invoke(
+        app,
+        ["compare", "--to", "../advisor2"],
+    )
+
+    assert relative.exit_code == 0, relative.output
+    assert "Reference: task2/advisor1" in relative.output
+    assert "Compared:  task2/advisor2" in relative.output
+    assert "NEW" in relative.output
+    assert len(provider.payloads) == 1
+    saved = load_comparison_analysis(reference.uid, compared.uid)
+    assert saved is not None
+    assert [frame.context_name for frame in saved.frames] == [
+        "task2/advisor1",
+        "task2/advisor2",
+    ]
+
+    canonical = runner.invoke(
+        app,
+        ["compare", "--to", compared.name],
+    )
+
+    assert canonical.exit_code == 0, canonical.output
+    assert "REUSED" in canonical.output
+    assert len(provider.payloads) == 1
+
+
+def test_relative_peer_locator_errors_before_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference, _ = _task2_contexts(store)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    missing = runner.invoke(
+        app,
+        ["compare", "--to", "../missing"],
+    )
+    same = runner.invoke(
+        app,
+        ["compare", "--to", "."],
+    )
+    malformed = runner.invoke(
+        app,
+        ["compare", "--to", "..//advisor2"],
+    )
+
+    assert missing.exit_code == 1
+    assert (
+        "Compared Context '../missing' "
+        "(resolved to 'task2/missing') does not exist"
+    ) in missing.output
+    assert same.exit_code == 1
+    assert "two distinct Contexts" in same.output
+    assert malformed.exit_code == 1
+    assert "contains an empty segment" in malformed.output
+    assert provider.payloads == []
+    assert store.current_context_name() == reference.name
+
+
 def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
     isolated_store,
 ):

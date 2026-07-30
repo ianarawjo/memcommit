@@ -53,6 +53,13 @@ replacement, or modification of the selected record, and rejects a concurrent
 current-Context change. This prevents a slow picker or relative resolution
 from silently overwriting another terminal's later switch.
 
+The lexical resolver itself is operation-neutral and lives in
+`memcommit.context_locator`; Switch owns only picker behavior, existence and
+load validation, and the final state compare-and-set. Compare uses the same
+resolver without inheriting Switch's mutation semantics. The reuse boundary is
+documented in
+[`context-locator-design-rationale.md`](context-locator-design-rationale.md).
+
 ## Terminal and automation boundary
 
 A bare `mem switch` requires an interactive stdin and stdout. In a pipe, test
@@ -102,7 +109,7 @@ command reports the error and leaves current state unchanged.
 ## Limitations and non-goals
 
 - `mem checkout` still requires a name; this change is scoped to the explicit
-  `switch` operation requested for the study workflow.
+  argument form and delegates non-branch selection to Switch.
 - Relative selectors walk only a name namespace. They do not represent an
   embedded-Context relationship, and there is no implicit search for an
   embedding parent.

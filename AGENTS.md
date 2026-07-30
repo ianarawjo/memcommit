@@ -43,6 +43,29 @@ conversation.
   this solve? What behavior was intended? Why was this design selected? What
   boundary or limitation remains?
 
+## Existing Context locators
+
+- When adding or updating a CLI operand whose semantic role is to locate an
+  existing ordinary Context, use
+  `memcommit.context_locator.resolve_context_locator` instead of adding
+  command-local `.` or `..` parsing.
+- Capture the active Context name once at command start and resolve every
+  relative operand against that same snapshot. Bare names remain canonical
+  global names; only `.`, `..`, `./...`, and `../...` opt into relative
+  lookup.
+- Use the resolved canonical name for existence checks, loading, equality,
+  cache/session identity, persistence, and user-visible target confirmation.
+  Keep operation-specific load modes, locks, UID/digest checks, and CAS
+  boundaries in the calling command.
+- Do not apply the existing-Context resolver to new Context identifiers such
+  as `init`, `branch`, `checkout -b`, or `--save-as`, or to Memory selectors,
+  query-only selectors, provider output, or already persisted names.
+- Treat mutating commands and Ground exact-command receipts as a separate
+  rollout: display and freeze the canonical target before approval so a raw
+  relative locator cannot change meaning with global current state.
+- Keep the implementation and rollout list consistent with
+  `docs/context-locator-design-rationale.md`.
+
 ## Agent-mediated Ground turns
 
 When the user is working from a target-focused screen such as

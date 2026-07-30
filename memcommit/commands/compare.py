@@ -23,6 +23,7 @@ from memcommit.comparison_store import (
     load_comparison_analysis,
     save_comparison_analysis,
 )
+from memcommit.context_locator import resolve_context_locator
 from memcommit.query_provider import (
     CodexChatGPTProvider,
     QueryProviderError,
@@ -390,7 +391,10 @@ def cmd(
         str,
         typer.Option(
             "--to",
-            help="PEER Context to align against the active reference Context",
+            help=(
+                "Existing PEER Context locator; canonical or explicitly "
+                "relative to the active reference Context"
+            ),
         ),
     ],
     refresh: Annotated[
@@ -416,12 +420,21 @@ def cmd(
             raise CompareCommandError(
                 "No current reference Context. Run 'mem switch NAME' first."
             )
-        if not store.context_exists(to):
+        compared_name = resolve_context_locator(
+            to,
+            current=reference_name,
+        )
+        if not store.context_exists(compared_name):
+            resolution = (
+                ""
+                if compared_name == to
+                else f" (resolved to '{compared_name}')"
+            )
             raise CompareCommandError(
-                f"Compared Context '{to}' does not exist."
+                f"Compared Context '{to}'{resolution} does not exist."
             )
         reference = store.load_direct(reference_name)
-        compared = store.load_direct(to)
+        compared = store.load_direct(compared_name)
         if (
             reference.uid == compared.uid
             or reference.name == compared.name
