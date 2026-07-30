@@ -194,8 +194,7 @@ GROUNDING CANDIDATES
 Memory, relation, relation-kind, and grounding-candidate counts appear directly
 under the source identities. They orient the reader before prose and make the
 amount of remaining judgment work visible without forcing a scan of every
-relation. The provider-free `--ledger` hint sits with these counts and includes
-the exact number of source-linked relations it will expand.
+relation.
 
 The four middle sections contain complete short semantic reports rather than
 one row per relation. The person already knows the source Contexts; the default
@@ -209,7 +208,11 @@ When non-empty, `GROUNDING CANDIDATES` remains a complete final list because
 those are the places where human intervention can change later
 reconciliation. Each candidate includes the kind and summary of every linked
 relation, so a hidden ledger row never leaves an unexplained `R7`-style
-reference.
+reference. After the last non-empty semantic section, one `DETAIL` footer
+points to the provider-free `--ledger` view. This meaningful footer separates
+the final report text from the next shell prompt without relying on arbitrary
+extra blank lines. It is navigation chrome rather than another semantic
+result section.
 
 `--ledger` renders every validated relation, its exact source snapshots, and
 its explanation without another provider call. The exhaustive ledger remains

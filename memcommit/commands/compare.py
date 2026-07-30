@@ -247,16 +247,6 @@ def render_comparison(
         for index, relation in enumerate(analysis.relations, start=1)
     }
     lines = _header_lines(analysis, reused=reused)
-    if not ledger:
-        relation_label = (
-            "relation"
-            if len(analysis.relations) == 1
-            else "relations"
-        )
-        lines.append(
-            f"VIEW · --ledger expands all {len(analysis.relations)} "
-            f"source-linked {relation_label}."
-        )
     lines.extend(
         [
             "",
@@ -315,6 +305,15 @@ def render_comparison(
             )
         if analysis.issues:
             lines.extend(_grounding_candidate_lines(analysis, numbered))
+        lines.extend(
+            [
+                "",
+                (
+                    "DETAIL · The complete source-linked relation ledger "
+                    "is saved; inspect it with --ledger."
+                ),
+            ]
+        )
         return "\n".join(lines)
 
     lines.extend(
