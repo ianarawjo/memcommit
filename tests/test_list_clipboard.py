@@ -41,7 +41,7 @@ def fake_system_clipboard(monkeypatch):
     return state
 
 
-def test_ls_copy_preserves_normal_output_and_stages_full_objects(
+def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
     isolated_store,
     fake_system_clipboard,
 ):
@@ -57,8 +57,16 @@ def test_ls_copy_preserves_normal_output_and_stages_full_objects(
 
     assert result.exit_code == 0
     assert result.stdout == expected.stdout
-    assert fake_system_clipboard["text"] == expected.stdout
+    assert fake_system_clipboard["text"] == (
+        "Context: source\n"
+        "  1 item\n"
+        "\n"
+        "  Café north entrance. Closed through Friday.\n"
+    )
+    assert "[memory " in result.stdout
+    assert "[memory " not in fake_system_clipboard["text"]
     assert "Copied 1 item" in result.stderr
+    assert "clean text" in result.stderr
     assert "Copied 1 item" not in fake_system_clipboard["text"]
     assert store.current_context_name() == "source"
     assert len(store.list_checkpoints("source")) == checkpoint_count
@@ -66,7 +74,7 @@ def test_ls_copy_preserves_normal_output_and_stages_full_objects(
     stage_path = Path(isolated_store) / "clipboard.json"
     record = json.loads(stage_path.read_text(encoding="utf-8"))
     assert record["producer"] == "list"
-    assert record["plain_text"] == expected.stdout
+    assert record["plain_text"] == fake_system_clipboard["text"]
     assert record["selection"]["context"] == {
         "uid": context.uid,
         "name": "source",
@@ -81,15 +89,45 @@ def test_ls_copy_preserves_normal_output_and_stages_full_objects(
     assert os.stat(stage_path).st_mode & 0o777 == 0o600
 
 
+def test_list_copy_with_ids_copies_and_replays_annotated_output(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "source")
+    invoke("add", "Keep this object's visible identifier.")
+    expected = invoke("ls")
+
+    copied = invoke("list", "--copy", "--with-ids")
+
+    assert copied.exit_code == 0
+    assert copied.stdout == expected.stdout
+    assert fake_system_clipboard["text"] == expected.stdout
+    assert "[memory " in fake_system_clipboard["text"]
+    assert "text with IDs" in copied.stderr
+    record = json.loads(
+        (Path(isolated_store) / "clipboard.json").read_text(encoding="utf-8")
+    )
+    assert record["plain_text"] == expected.stdout
+
+    pasted = invoke("ls", "--paste")
+
+    assert pasted.exit_code == 0
+    assert pasted.stdout == expected.stdout
+
+
 def test_list_copy_and_ls_paste_are_coequal_and_snapshot_based(
     isolated_store,
     fake_system_clipboard,
 ):
     invoke("init", "source")
     invoke("add", "Original source fact.")
-    expected = invoke("list")
+    annotated = invoke("list")
     copied = invoke("list", "--copy")
     assert copied.exit_code == 0
+    copied_text = fake_system_clipboard["text"]
+    assert copied.stdout == annotated.stdout
+    assert "[memory " in copied.stdout
+    assert "[memory " not in copied_text
 
     store = MemoryStore()
     source = store.load("source")
@@ -102,7 +140,7 @@ def test_list_copy_and_ls_paste_are_coequal_and_snapshot_based(
     pasted = invoke("ls", "--paste")
 
     assert pasted.exit_code == 0
-    assert pasted.stdout == expected.stdout
+    assert pasted.stdout == copied_text
     assert "Original source fact." in pasted.stdout
     assert "Changed after copy." not in pasted.stdout
     assert "no Context changes" in pasted.stderr
@@ -118,17 +156,27 @@ def test_recursive_copy_freezes_visible_tree_and_paste_replays_it(
     invoke("init", "parent")
     invoke("add", "Parent fact.")
     invoke("embed", "child", "--into", "parent")
-    expected = invoke("ls", "-R", "parent")
+    annotated = invoke("ls", "-R", "parent")
 
     copied = invoke("ls", "-R", "parent", "--copy")
     assert copied.exit_code == 0
+    copied_text = fake_system_clipboard["text"]
+    assert copied.stdout == annotated.stdout
+    assert copied_text == (
+        "Context: parent\n"
+        "  2 items\n"
+        "\n"
+        "  child/\n"
+        "    Nested fact.\n"
+        "  Parent fact.\n"
+    )
     MemoryStore().delete("parent")
     MemoryStore().delete("child")
 
     pasted = invoke("list", "--paste")
 
     assert pasted.exit_code == 0
-    assert pasted.stdout == expected.stdout
+    assert pasted.stdout == copied_text
     assert "Nested fact." in pasted.stdout
     assert "Copied 3 items" in copied.stderr
 
@@ -164,6 +212,73 @@ def test_copy_stages_query_pointer_without_hidden_source_content(
     assert source.uid in stage_text
     assert "SECRET QUERY-ONLY CONTRACT TEXT" not in stage_text
     assert "SECRET QUERY-ONLY CONTRACT TEXT" not in fake_system_clipboard["text"]
+    assert "contracts/private/ (query-only)" in fake_system_clipboard["text"]
+    assert "[query " not in fake_system_clipboard["text"]
+
+
+def test_clean_copy_keeps_reference_meaning_without_object_ids(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "source")
+    invoke("add", "Referenced atomic name.")
+    source = MemoryStore().load_current()
+    source_memory_uid = next(iter(source.memories))
+    invoke("init", "target")
+    invoke("reference", source_memory_uid[:8], "--from", "source")
+
+    result = invoke("ls", "--copy")
+
+    assert result.exit_code == 0
+    assert "[ref     " in result.stdout
+    assert (
+        "Referenced atomic name. -> source"
+        in fake_system_clipboard["text"]
+    )
+    assert "[ref " not in fake_system_clipboard["text"]
+    assert f"#{source_memory_uid[:8]}" not in fake_system_clipboard["text"]
+    record = json.loads(
+        (Path(isolated_store) / "clipboard.json").read_text(encoding="utf-8")
+    )
+    assert record["selection"]["items"][0]["target_memory_uid"] == (
+        source_memory_uid
+    )
+
+
+def test_clean_copy_keeps_user_authored_bracket_text_literal(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "source")
+    invoke("add", "[memory literal] This is user-authored text.")
+
+    result = invoke("ls", "--copy")
+
+    assert result.exit_code == 0
+    assert "[memory  " in result.stdout
+    assert (
+        "  [memory literal] This is user-authored text.\n"
+        in fake_system_clipboard["text"]
+    )
+    assert fake_system_clipboard["text"].count("[memory") == 1
+
+
+def test_clean_copy_describes_a_dangling_reference_without_ids(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "source")
+    invoke("add", "Fact that will become unavailable.")
+    source_memory_uid = next(iter(MemoryStore().load_current().memories))
+    invoke("init", "target")
+    invoke("reference", source_memory_uid[:8], "--from", "source")
+    MemoryStore().delete("source")
+
+    result = invoke("ls", "target", "--copy")
+
+    assert result.exit_code == 0
+    assert "(dangling reference) source" in fake_system_clipboard["text"]
+    assert source_memory_uid[:8] not in fake_system_clipboard["text"]
 
 
 def test_ls_paste_rejects_overwritten_system_clipboard(
@@ -220,6 +335,8 @@ def test_missing_store_race_never_accepts_an_unlocked_payload(
         ("ls", "--copy", "--paste"),
         ("ls", "source", "--paste"),
         ("list", "-R", "--paste"),
+        ("ls", "--with-ids"),
+        ("ls", "--paste", "--with-ids"),
     ],
 )
 def test_list_clipboard_rejects_ambiguous_inputs(
@@ -342,6 +459,33 @@ def test_corrupt_structured_stage_fails_closed(
 
     assert result.exit_code == 1
     assert "structured clipboard" in result.stderr
+
+
+def test_paste_rejects_validly_hashed_text_that_matches_neither_renderer(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "source")
+    invoke("add", "Canonical source fact.")
+    assert invoke("ls", "--copy").exit_code == 0
+    stage_path = Path(isolated_store) / "clipboard.json"
+    record = json.loads(stage_path.read_text(encoding="utf-8"))
+    arbitrary_text = "Validly hashed but not a list rendering.\n"
+    replacement = ClipboardPayload.create(
+        producer="list",
+        plain_text=arbitrary_text,
+        selection=record["selection"],
+    )
+    stage_path.write_text(
+        json.dumps(replacement.to_dict()),
+        encoding="utf-8",
+    )
+    fake_system_clipboard["text"] = arbitrary_text
+
+    result = invoke("ls", "--paste")
+
+    assert result.exit_code == 1
+    assert "object snapshot disagree" in result.stderr
 
 
 def test_system_clipboard_adapter_uses_fixed_macos_commands():

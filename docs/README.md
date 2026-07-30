@@ -27,7 +27,8 @@ considered sufficient design history.
 ## Clipboard result contract
 
 - [`mem-ls-design-rationale.md`](mem-ls-design-rationale.md) defines
-  `ls/list --copy` as synchronized plain-text and typed-result output,
+  `ls/list --copy` as synchronized clean-or-annotated text and typed-result
+  output,
   `ls/list --paste` as frozen read-only replay, clipboard-overwrite
   invalidation, and the query-only non-disclosure boundary.
 - [`mem-add-paste-design-rationale.md`](mem-add-paste-design-rationale.md)

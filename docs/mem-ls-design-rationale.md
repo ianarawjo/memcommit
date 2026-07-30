@@ -34,7 +34,7 @@ mem ls [context]
 mem list -R [context]
 mem ls -R [context]
 mem ls --recursive [context]
-mem ls [context] [-R] --copy
+mem ls [context] [-R] --copy [--with-ids]
 mem ls --paste
 ```
 
@@ -269,13 +269,24 @@ better place for raw JSON.
 `mem ls --copy` creates two synchronized representations of the same list
 result:
 
-1. the exact unstyled text printed by `mem ls` is written to the macOS system
-   clipboard; and
+1. a human-oriented text rendering is written to the macOS system clipboard;
+   and
 2. a versioned structured snapshot is written to the private mem store.
 
-The success receipt is not part of the copied text. Copy does not save a
-Context, change the current Context, or create a checkpoint. This makes it an
-output action rather than an early target mutation.
+The default clipboard rendering omits `[kind uid]` annotations. Context names
+end in `/`, query-only names end in `/ (query-only)`, and MemoryRef lines retain
+their content-to-Context arrow without object UIDs. This keeps the text useful
+when pasted into prose, chat, or another tool. `--copy --with-ids` instead puts
+the exact unstyled indexed rendering in the clipboard, including the same
+annotations shown by the normal terminal list. Ordinary command stdout remains
+indexed in both modes so a copy operation does not remove the local selection
+cues.
+
+`--with-ids` is a modifier of `--copy`, not an independent list mode. Using it
+without `--copy`, including with `--paste`, is rejected. The success receipt is
+not part of either copied representation. Copy does not save a Context, change
+the current Context, or create a checkpoint. This makes it an output action
+rather than an early target mutation.
 
 The structured half preserves full UIDs, full Memory text, MemoryRef pointer
 metadata and its frozen resolved display content, embedded Context pointer
@@ -285,24 +296,32 @@ does not include the contents of an embedded Context. A recursive copy stores
 only the traversed occurrence tree, including repeated diamond paths and
 finite cycle markers.
 
+The clean rendering is intentionally human-readable rather than parseable.
+A Memory whose text resembles a Context name or reference can therefore be
+textually ambiguous after annotations are omitted. No object reconstruction
+depends on that text: the structured stage remains authoritative, while normal
+stdout and `--with-ids` retain visible selectors when a person needs them.
+
 Query-only source content is never opened or copied. A QueryContextRef's public
 name and local routing metadata can be staged because they are already part of
 the parent Context record, but the concealed source text is outside this
 clipboard contract.
 
 `mem ls --paste` is a read-only consumer of a structured list snapshot. It
-replays the frozen list even if its source Context has since changed or been
-deleted, and it can therefore run without a current Context. A positional
-Context and `-R` are rejected with `--paste`: the source and traversal depth
-were fixed by the producing copy. `--copy --paste` is also rejected rather than
-silently overwriting its own input.
+replays the frozen list in the clean or annotated form selected by the
+producing copy, even if its source Context has since changed or been deleted.
+It can therefore run without a current Context. A positional Context and `-R`
+are rejected with `--paste`: the source and traversal depth were fixed by the
+producing copy. `--copy --paste` is also rejected rather than silently
+overwriting its own input.
 
 The structured record stores SHA-256 digests of both the exact
 system-clipboard text and a canonical serialization of the structured
 selection. Paste rereads the clipboard and accepts the object snapshot only
-when its text, text digest, selection digest, and rendered snapshot agree.
-This detects corruption of non-rendered identity and routing fields as well as
-visible content.
+when its text, text digest, selection digest, and one of the two permitted
+renderings of the snapshot agree. This detects corruption of non-rendered
+identity and routing fields as well as visible content without storing a
+second presentation flag.
 
 A dedicated inter-process lock spans each complete copy transaction and each
 stage-plus-clipboard validation. Copy invalidates the previous structured
@@ -354,7 +373,10 @@ The implementation is covered by tests for:
 - repeated traversal of a shared Context along both sides of a diamond;
 - resolved MemoryRef content and provenance;
 - existing non-recursive list and embed behavior;
-- exact text/structured dual copy for both `list` and `ls`;
+- clean-by-default and `--with-ids` text/structured dual copy for both
+  `list` and `ls`;
+- Context, query-only, MemoryRef, and recursive clean rendering;
+- rejection of `--with-ids` outside `--copy`;
 - frozen direct and recursive snapshot replay after source mutation/deletion;
 - query-only source non-disclosure;
 - stale, missing, corrupt, and failed clipboard states;

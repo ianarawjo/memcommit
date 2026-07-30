@@ -154,6 +154,7 @@ def _render_snapshot_item(
     *,
     indent: int,
     lines: list[str],
+    with_ids: bool,
 ) -> None:
     prefix = " " * indent
     kind = _require_string(item, "kind")
@@ -171,7 +172,10 @@ def _render_snapshot_item(
             children = _require_items(children_value)
         if cycle and children is not None:
             raise _snapshot_error()
-        lines.append(f"{prefix}[context {uid[:8]}] {name}")
+        if with_ids:
+            lines.append(f"{prefix}[context {uid[:8]}] {name}")
+        else:
+            lines.append(f"{prefix}{name}/")
         if cycle:
             lines.append(f"{' ' * (indent + 2)}(cycle)")
         elif children is not None:
@@ -182,6 +186,7 @@ def _render_snapshot_item(
                     children,
                     indent=indent + 2,
                     lines=lines,
+                    with_ids=with_ids,
                 )
         return
     if kind == "query_context_ref":
@@ -197,7 +202,12 @@ def _render_snapshot_item(
         name = _require_string(item, "name")
         _require_string(item, "target_source_uid")
         _require_string(item, "provider")
-        lines.append(f"{prefix}[query   {uid[:8]}] {name} (query-only)")
+        if with_ids:
+            lines.append(
+                f"{prefix}[query   {uid[:8]}] {name} (query-only)"
+            )
+        else:
+            lines.append(f"{prefix}{name}/ (query-only)")
         return
     if kind == "memory_ref":
         expected = {
@@ -215,15 +225,25 @@ def _render_snapshot_item(
         target_memory_uid = _require_string(item, "target_memory_uid")
         content = item.get("resolved_content")
         if content is None:
-            lines.append(
-                f"{prefix}[ref     {uid[:8]}] (dangling) "
-                f"{target_context_name}#{target_memory_uid[:8]}"
-            )
+            if with_ids:
+                lines.append(
+                    f"{prefix}[ref     {uid[:8]}] (dangling) "
+                    f"{target_context_name}#{target_memory_uid[:8]}"
+                )
+            else:
+                lines.append(
+                    f"{prefix}(dangling reference) {target_context_name}"
+                )
         elif isinstance(content, str):
-            lines.append(
-                f"{prefix}[ref     {uid[:8]}] {_one_line(content)} "
-                f"-> {target_context_name}#{target_memory_uid[:8]}"
-            )
+            if with_ids:
+                lines.append(
+                    f"{prefix}[ref     {uid[:8]}] {_one_line(content)} "
+                    f"-> {target_context_name}#{target_memory_uid[:8]}"
+                )
+            else:
+                lines.append(
+                    f"{prefix}{_one_line(content)} -> {target_context_name}"
+                )
         else:
             raise _snapshot_error()
         return
@@ -231,7 +251,12 @@ def _render_snapshot_item(
         if set(item) != {"kind", "uid", "content"}:
             raise _snapshot_error()
         content = _require_string(item, "content")
-        lines.append(f"{prefix}[memory  {uid[:8]}] {_one_line(content)}")
+        if with_ids:
+            lines.append(
+                f"{prefix}[memory  {uid[:8]}] {_one_line(content)}"
+            )
+        else:
+            lines.append(f"{prefix}{_one_line(content)}")
         return
     raise _snapshot_error()
 
@@ -241,13 +266,23 @@ def _render_snapshot_items(
     *,
     indent: int,
     lines: list[str],
+    with_ids: bool,
 ) -> None:
     contexts, memories = _group_snapshot_items(items)
     for item in [*contexts, *memories]:
-        _render_snapshot_item(item, indent=indent, lines=lines)
+        _render_snapshot_item(
+            item,
+            indent=indent,
+            lines=lines,
+            with_ids=with_ids,
+        )
 
 
-def _render_snapshot(snapshot: dict[str, object]) -> str:
+def _render_snapshot(
+    snapshot: dict[str, object],
+    *,
+    with_ids: bool = True,
+) -> str:
     expected = {"schema_version", "context", "recursive", "items"}
     if set(snapshot) != expected:
         raise _snapshot_error()
@@ -269,7 +304,12 @@ def _render_snapshot(snapshot: dict[str, object]) -> str:
         lines.extend(["", "  (no items)"])
     else:
         lines.append("")
-        _render_snapshot_items(items, indent=2, lines=lines)
+        _render_snapshot_items(
+            items,
+            indent=2,
+            lines=lines,
+            with_ids=with_ids,
+        )
     return "\n".join(lines) + "\n"
 
 
@@ -318,8 +358,17 @@ def cmd(
         typer.Option(
             "--copy",
             help=(
-                "Copy the rendered list to the system clipboard and stage its "
-                "structured result."
+                "Copy a clean list to the system clipboard and stage its "
+                "structured result; add --with-ids for annotations."
+            ),
+        ),
+    ] = False,
+    with_ids: Annotated[
+        bool,
+        typer.Option(
+            "--with-ids",
+            help=(
+                "Include [kind uid] annotations in text copied by --copy."
             ),
         ),
     ] = False,
@@ -341,6 +390,13 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
+    if with_ids and not copy_result:
+        typer.secho(
+            "Error: --with-ids can only be used with --copy.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
     if paste_result:
         if context_name is not None or recursive:
             typer.secho(
@@ -352,15 +408,22 @@ def cmd(
             raise typer.Exit(1)
         try:
             payload = load_payload(expected_producer="list")
-            text = _render_snapshot(payload.selection)
-            if text != payload.plain_text:
+            annotated_text = _render_snapshot(
+                payload.selection,
+                with_ids=True,
+            )
+            clean_text = _render_snapshot(
+                payload.selection,
+                with_ids=False,
+            )
+            if payload.plain_text not in {annotated_text, clean_text}:
                 raise ClipboardError(
                     "The structured clipboard text and object snapshot disagree."
                 )
         except (ClipboardError, ValueError) as error:
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
-        _emit_snapshot_text(text)
+        _emit_snapshot_text(payload.plain_text)
         count = _snapshot_occurrence_count(payload.selection)
         source_context = _require_record(payload.selection.get("context"))
         source_name = _require_string(source_context, "name")
@@ -387,13 +450,17 @@ def cmd(
 
     ctx = store.load(context_name)
     snapshot = _snapshot_context(ctx, recursive=recursive)
-    text = _render_snapshot(snapshot)
-    _emit_snapshot_text(text)
+    annotated_text = _render_snapshot(snapshot, with_ids=True)
+    _emit_snapshot_text(annotated_text)
 
     if copy_result:
+        clipboard_text = _render_snapshot(
+            snapshot,
+            with_ids=with_ids,
+        )
         payload = ClipboardPayload.create(
             producer="list",
-            plain_text=text,
+            plain_text=clipboard_text,
             selection=snapshot,
         )
         try:
@@ -402,9 +469,11 @@ def cmd(
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
         count = _snapshot_occurrence_count(snapshot)
+        copied_style = "text with IDs" if with_ids else "clean text"
         typer.secho(
             f"Copied {count} item{'s' if count != 1 else ''}: "
-            "text to the system clipboard; structured list staged.",
+            f"{copied_style} to the system clipboard; "
+            "structured list staged.",
             fg=typer.colors.GREEN,
             err=True,
         )
