@@ -55,12 +55,33 @@ INITIAL_QUESTION = (
     "What are you trying to understand, decide, or make together?"
 )
 GROUND_GOAL_FRAME_HEIGHT = Dimension(min=3, preferred=5, max=5)
+_CONTEXT_SUGGESTION_ROLES = {
+    "LIKELY_SOURCE",
+    "LIKELY_DERIVED",
+    "LIKELY_TARGET",
+    "RELATED",
+}
+_CONTEXT_ROLE_LABELS = {
+    "LIKELY_SOURCE": "SOURCE?",
+    "LIKELY_DERIVED": "DERIVED?",
+    "LIKELY_TARGET": "TARGET?",
+    "RELATED": "RELATED?",
+}
 
 
 class GroundInterpreter(Protocol):
     """A semantic adapter that returns an ASK or PROPOSE object."""
 
     def __call__(self, text: str) -> object: ...
+
+
+@dataclass(frozen=True)
+class GroundShellContextSuggestion:
+    """One display-only Context hypothesis returned by the interpreter."""
+
+    context_name: str
+    role: str
+    reason: str
 
 
 @dataclass(frozen=True)
@@ -71,6 +92,7 @@ class GroundShellProposal:
     goal: str
     understanding: str
     question: str
+    context_suggestions: tuple[GroundShellContextSuggestion, ...] = ()
 
 
 class GroundApplier(Protocol):
@@ -109,6 +131,8 @@ def render_ground_top_panel(
     proposal: GroundShellProposal | None = None,
     *,
     working_goal: str = "",
+    context_catalog_count: int = 0,
+    context_discovery_complete: bool = False,
 ) -> str:
     """Render the compact unsaved Goal–Contexts–Rules–Cases state."""
     goal = (
@@ -116,13 +140,18 @@ def render_ground_top_panel(
         if proposal is not None
         else working_goal or "(not yet stated)"
     )
+    context_lines = render_ground_contexts_pane(
+        proposal.context_suggestions if proposal is not None else (),
+        catalog_count=context_catalog_count,
+        discovery_complete=context_discovery_complete,
+    ).splitlines()
     return "\n".join(
         [
             "MEM GROUND · WORKING · NOT SAVED",
             "GOAL",
             f"  {safe_terminal_text(goal)}",
             "CONTEXTS",
-            "  (not bound; not inferred)",
+            *(f"  {line}" for line in context_lines),
             "RULES",
             "  (none yet)",
             "CASES",
@@ -155,14 +184,65 @@ def render_ground_goal_pane(
     return "\n".join(lines)
 
 
-def render_ground_contexts_pane() -> str:
-    """Render the blank Ground's explicit absence of a Context frame."""
+def render_ground_contexts_pane(
+    suggestions: Sequence[GroundShellContextSuggestion] = (),
+    *,
+    catalog_count: int = 0,
+    discovery_complete: bool = False,
+) -> str:
+    """Render name-only hypotheses without presenting them as a binding."""
+    if suggestions:
+        lines = [
+            "SUGGESTED · NOT BOUND",
+            (
+                f"{len(suggestions)} of {catalog_count} ordinary Context "
+                "locators"
+                if catalog_count
+                else f"{len(suggestions)} ordinary Context locators"
+            ),
+            "",
+        ]
+        for suggestion in suggestions:
+            role = _CONTEXT_ROLE_LABELS[suggestion.role]
+            reason = safe_terminal_text(suggestion.reason).replace("\n", " ")
+            lines.extend(
+                [
+                    f"{role}  {safe_terminal_text(suggestion.context_name)}",
+                    f"  {reason}",
+                ]
+            )
+        lines.extend(
+            [
+                "",
+                "Names only; no Memory content was read.",
+                "Confirm roles before a separate binding command.",
+            ]
+        )
+        return "\n".join(lines)
+
+    if discovery_complete:
+        return "\n".join(
+            [
+                "CATALOG CHECKED · NOT BOUND",
+                "No plausible Context was suggested from names alone.",
+                "",
+                "No Memory content was read.",
+            ]
+        )
+    if catalog_count:
+        return "\n".join(
+            [
+                "AVAILABLE · NOT YET RANKED",
+                f"{catalog_count} ordinary Context locators",
+                "",
+                "The current Context is not assumed.",
+            ]
+        )
     return "\n".join(
         [
-            "(not bound; not inferred)",
+            "(no ordinary Context locators found)",
             "",
-            "Contexts are bound only after this Ground is created.",
-            "The current Context is not read or inferred.",
+            "No current Context was assumed or opened.",
         ]
     )
 
@@ -299,7 +379,48 @@ def _freeze_proposal(response: object) -> GroundShellProposal:
         goal=goal,
         understanding=_required_text(understanding, "understanding"),
         question=_required_text(question, "question"),
+        context_suggestions=_freeze_context_suggestions(response),
     )
+
+
+def _freeze_context_suggestions(
+    response: object,
+) -> tuple[GroundShellContextSuggestion, ...]:
+    raw = _field(response, "context_suggestions", ())
+    if (
+        not isinstance(raw, Sequence)
+        or isinstance(raw, (str, bytes))
+        or len(raw) > 8
+    ):
+        raise ValueError("Dialogue response has invalid Context suggestions.")
+    result: list[GroundShellContextSuggestion] = []
+    seen: set[str] = set()
+    for candidate in raw:
+        context_name = _command_text(
+            _field(candidate, "context_name"),
+            "Context suggestion name",
+        )
+        role = _required_text(
+            _field(candidate, "role"),
+            "Context suggestion role",
+        )
+        reason = _required_text(
+            _field(candidate, "reason"),
+            "Context suggestion reason",
+        )
+        if role not in _CONTEXT_SUGGESTION_ROLES or context_name in seen:
+            raise ValueError(
+                "Dialogue response has invalid Context suggestions."
+            )
+        seen.add(context_name)
+        result.append(
+            GroundShellContextSuggestion(
+                context_name=context_name,
+                role=role,
+                reason=reason,
+            )
+        )
+    return tuple(result)
 
 
 def _agent_block(*, understanding: str, question: str) -> str:
@@ -319,6 +440,7 @@ def run_ground_shell(
     interpret: GroundInterpreter,
     apply: GroundApplier,
     initial_request: str = "",
+    context_catalog_count: int = 0,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -336,6 +458,10 @@ def run_ground_shell(
     mode = {"value": "INPUT"}
     review_view = {"value": "COMMAND"}
     pending: dict[str, GroundShellProposal | None] = {"value": None}
+    context_suggestions: dict[
+        str, tuple[GroundShellContextSuggestion, ...]
+    ] = {"value": ()}
+    context_discovery_complete = {"value": False}
     error_message = {"value": ""}
     status_message = {"value": ""}
     last_submission = {"value": working_goal}
@@ -344,11 +470,17 @@ def run_ground_shell(
         [
             "\n".join(
                 [
-                    "STARTING REQUEST · WORKING GOAL",
+                    "YOU · STARTING REQUEST",
                     f"  {safe_terminal_text(working_goal)}",
                     "",
-                    "Press Enter to begin the dialogue, or edit the",
-                    "prefilled Message first.",
+                    "AGENT · CONTEXT DISCOVERY",
+                    (
+                        f"  Checking {context_catalog_count} ordinary Context "
+                        "locator names."
+                        if context_catalog_count
+                        else "  No ordinary Context locator names were found."
+                    ),
+                    "  No Memory content will be opened.",
                 ]
             )
         ]
@@ -382,7 +514,9 @@ def run_ground_shell(
     )
     contexts_pane = build_scrollable_text_pane(
         "CONTEXTS",
-        render_ground_contexts_pane(),
+        render_ground_contexts_pane(
+            catalog_count=context_catalog_count,
+        ),
         buffer_name="ground-new-contexts",
         height=pane_height,
     )
@@ -429,12 +563,6 @@ def run_ground_shell(
         height=message_height,
     )
     input_area = composer.text_area
-    if working_goal:
-        # The command-line request is visible and editable before any provider
-        # call. This preserves an immediate Escape path and makes sending it
-        # an explicit dialogue action rather than hidden startup work.
-        input_area.text = working_goal
-        input_area.buffer.cursor_position = len(working_goal)
 
     header = Window(
         FormattedTextControl(" MEM GROUND · WORKING · NOT SAVED"),
@@ -532,6 +660,14 @@ def run_ground_shell(
             ),
             anchor="preserve",
         )
+        contexts_pane.set_text(
+            render_ground_contexts_pane(
+                context_suggestions["value"],
+                catalog_count=context_catalog_count,
+                discovery_complete=context_discovery_complete["value"],
+            ),
+            anchor="preserve",
+        )
         dialogue_pane.set_text(
             conversation_text(),
             anchor=dialogue_anchor,
@@ -555,7 +691,12 @@ def run_ground_shell(
         application.layout.focus(input_area)
         application.invalidate()
 
-    def interpret_submission(text: str, *, append_user: bool) -> None:
+    def interpret_submission(
+        text: str,
+        *,
+        append_user: bool,
+        initial: bool = False,
+    ) -> None:
         if append_user:
             submitted_turns.append(text)
             conversation.append(
@@ -583,7 +724,11 @@ def run_ground_shell(
                 _field(response, "question"),
                 "question",
             )
-            if append_user:
+            context_suggestions["value"] = _freeze_context_suggestions(
+                response
+            )
+            context_discovery_complete["value"] = True
+            if append_user or initial:
                 conversation.append(
                     _agent_block(
                         understanding=understanding,
@@ -797,6 +942,16 @@ def run_ground_shell(
         cancel(event)
 
     try:
+        if working_goal:
+            # The positional request is already USER TURN 1. Running the first
+            # read-only interpretation here avoids asking the person to submit
+            # the same words again; the composer is reserved for their reply.
+            submitted_turns.append(working_goal)
+            interpret_submission(
+                working_goal,
+                append_user=False,
+                initial=True,
+            )
         return application.run()
     except (EOFError, KeyboardInterrupt):
         return GroundShellResult(

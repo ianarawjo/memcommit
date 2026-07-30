@@ -51,17 +51,23 @@ boundary and the agent as the conversational orchestrator.
 
 - In a TTY, `mem ground` without arguments opens the provider-backed blank
   Ground TUI. Outside a TTY it prints the same stable unsaved frame and exits.
-  The TUI may propose a Goal and portable name, but it must not create the
-  named Ground until the user presses the dedicated approval key for the exact
-  displayed command. Ground has no separate completion criterion: closing a
-  view is not agreement, and any future whole-Ground agreement must require
-  explicit approval of one reviewed Goal–Rules–Cases revision.
+  A natural-language starting request is already the person's first submitted
+  turn: do not copy it into the Message composer or wait for a redundant
+  Enter. The TUI may propose a Goal and portable name, but it must not create
+  the named Ground until the user presses the dedicated approval key for the
+  exact displayed command. Ground has no separate completion criterion:
+  closing a view is not agreement, and any future whole-Ground agreement must
+  require explicit approval of one reviewed Goal–Rules–Cases revision.
 - Keep every newly created or revised durable Goal to 40 whitespace-delimited
   words or fewer. A raw starting request may be longer because it is dialogue,
   not yet a saved Goal; distill it before proposing the exact creation command.
-- The blank TUI sends only the person's submitted dialogue text to the
-  provider. It must not infer, load, or transmit the current Context,
-  query-only sources, or existing Ground data.
+- Before its first provider response, the blank TUI may discover ordinary
+  Context locator names from storage paths without opening `context.json`.
+  It may send a bounded alias/name catalog with the submitted dialogue so the
+  provider can return name-based role hypotheses. Display these as
+  `SUGGESTED · NOT BOUND`; they are neither validated Contexts nor selections.
+  Do not transmit Context UIDs, Memory content, the active/current Context
+  marker, query-only aliases or routing data, or existing Ground contents.
 - After an approved creation, continue in the named-Ground TUI. An unbound
   Ground must obtain a separately approved explicit frame-binding command
   before proposing Rules or Cases; never infer binding from the current

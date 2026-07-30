@@ -58,15 +58,16 @@ mem ground "I want to separate Task 1 into wiki and user-facing material."
 ```
 
 In a TTY, the request is immediately visible as the Working Goal and is
-prefilled into the Message composer. The person may press `Enter` to submit
-that exact first dialogue turn, edit it first, or press `Escape` before any
-provider call. Outside a TTY, it is only rendered in the deterministic
-unsaved snapshot; no provider is called and nothing is written. A valid
-portable positional value such as `task-1` retains the established
-named-Ground create/resume behavior. The explicit `--request` form
-disambiguates a short request that itself looks like a portable name. This
-grammar preserves existing saved names while removing the need to retype the
-starting Goal inside the TUI.
+already `USER TURN 1`. It is not copied into the Message composer and does not
+wait for a redundant `Enter`: the host performs content-free Context locator
+discovery and starts one provider interpretation. The composer is empty when
+the agent's proposal or question makes it the person's turn again. Outside a
+TTY, the request is only rendered in the deterministic unsaved snapshot; no
+provider is called and nothing is written. A valid portable positional value
+such as `task-1` retains the established named-Ground create/resume behavior.
+The explicit `--request` form disambiguates a short request that itself looks
+like a portable name. This grammar preserves existing saved names while
+making terminal turn-taking match ordinary conversation.
 
 The starting sentence is a provisional orientation, not an automatically
 approved or durable Goal. The raw wording remains visible through
@@ -130,7 +131,8 @@ viewport:
 │ (not yet stated)                                  ▐   │
 └───────────────────────────────────────────────────────┘
 ┌─ CONTEXTS ────────────────────────────────────────────┐
-│ (not bound; not inferred)                         ▐   │
+│ SUGGESTED · NOT BOUND                             ▐   │
+│ SOURCE?  temp/task-1                                  │
 └───────────────────────────────────────────────────────┘
 ┌─ RULES ───────────────────────────────────────────────┐
 │ (none yet)                                        ▐   │
@@ -217,71 +219,71 @@ action options therefore still require `GROUND_NAME`; `mem ground --goal ...`,
 state. A provider-suggested name is checked for a collision before approval
 and checked again immediately before execution.
 
-### Future design: discovering Contexts from no Ground
+### Content-free Context discovery before naming
 
-The blank entry currently establishes only a Goal and portable Ground name.
-Its `CONTEXTS` pane intentionally does not discover or bind Contexts. The next
-design slice
-should help a person who starts with an outcome such as “build the Task 1
-campus wiki fixture” without making terminal location into hidden evidence.
-
-The proposed guidance sequence is:
+A sentence-form invocation is already a submitted request, so the next
+conversational turn belongs to the agent. The blank TUI now performs one
+bounded discovery-and-interpretation turn before waiting for another message:
 
 ```text
-describe the desired outcome
-→ restate and approve a provisional Goal
-→ explicitly open a local Context picker
-→ show metadata-only candidates
-→ assign each selected Context an explicit role
-→ review one exact binding command and its effects
-→ bind only after approval
+submit the desired outcome
+→ discover ordinary Context storage locators without opening their files
+→ give aliases and bounded local path names to the first provider interpretation
+→ show name-based role hypotheses as SUGGESTED · NOT BOUND
+→ ask for confirmation or propose the initial named Goal
+→ create only after exact-command approval
+→ bind Context roles later through a second exact command
 ```
 
-Context discovery must be a local host operation, not an unrestricted provider
-search. Before selection it may expose public Context names, access class
-(ordinary writable, local fork, or query-only), and non-content locator
-metadata needed to distinguish ordinary local candidates. Direct-item counts
-may be shown for those ordinary local Contexts. A query-only candidate exposes
-only its already-public name and access class; even its count is not inferred
-by opening the source. Discovery must not load Memory content, traverse a
-`context_ref`, open query-only sources, or send the store-wide candidate list
-to the blank-entry provider. A candidate name is a suggestion, not permission
-to inspect or bind it.
+`MemoryStore.list_context_names()` could not satisfy this contract because it
+`json.load()`s every complete `context.json` in order to validate its header.
+Since Memory text is inline in that same object, even a name-only return value
+would materialize content. Ground therefore uses a separate locator scanner.
+It derives ordinary Context names from regular, non-symlink
+`contexts/**/context.json` paths and calls only path validation; it never opens
+the record. A corrupt or path/header-mismatched record can consequently appear
+as `LOCATOR_ONLY`. That is honest rather than unsafe: discovery is not
+validation, and the normal load plus version/digest boundary must still reject
+an invalid Context before binding.
 
-The implementation audit found that the needed strict catalog does not exist
-yet. `MemoryStore.list_context_names()` returns canonical ordinary Context
-names, but it currently `json.load()`s each complete `context.json` to validate
-the header, thereby materializing direct Memory text even though it returns
-only names. It does not dereference `context_ref` or open a query-only source,
-but it is still too broad for a blank-Ground metadata-only promise. The future
-slice therefore needs a directory/header-only locator catalog or a separate
-atomically maintained metadata index before wiring discovery into this pane.
-The existing arrow-key Context picker can contribute navigation conventions,
-not its single-select switching semantics.
+Discovery, inference, and binding remain three different states:
 
-Discovery, inference, and binding are three different states:
+- **discovered** means an unverified ordinary storage locator exists;
+- **suggested** means its public name makes one role plausible;
+- **bound** means the person approved an exact versioned frame command after
+  normal Context validation.
 
-- **discovered** means a public locator exists;
-- **suggested** means weak evidence makes one role plausible;
-- **bound** means the person approved an exact versioned frame command.
+The first semantic call receives the submitted dialogue and at most 64
+locators as ephemeral aliases such as `c0001`. For a larger store, a
+deterministic local name-token ranking bounds the candidate set. The provider
+may return at most eight aliases with one of `LIKELY_SOURCE`,
+`LIKELY_DERIVED`, `LIKELY_TARGET`, or `RELATED` and a short reason. The host
+maps only aliases it introduced back to their names. These roles deliberately
+contain question marks in the UI because they do not establish raw/derived
+authority, ownership, write access, or binding:
 
-The Contexts pane should label ephemeral results `SUGGESTED · NOT BOUND`.
-Local ranking may use an exact Goal mention, normalized name tokens, lexical
-namespace proximity, and a `CURRENT` badge. These are weak hints only. Slash
-namespaces do not prove parentage or ownership, and the active Context is a
-global mutable pointer that may differ across concurrent terminal or agent
-work, so neither can establish evidence or a target role. With the present
-metadata, name-only ranking also cannot reliably distinguish raw evidence,
-atomized output, organizational authority, or a writable local fork.
+```text
+SUGGESTED · NOT BOUND
 
-If name-only ranking is insufficient, semantic role suggestions require a
-separate explicit action. The person first narrows the local candidate set;
-only the Goal plus local aliases, selected public names, and recorded access
-classes may then be sent to a dedicated provider call. The full catalog,
-durable UIDs, Memory text, query-only routing metadata, and query source
-content remain local. The provider may return alias-to-role hypotheses and
-short reasons, never selection or argv. The person still edits or confirms
-those roles before the existing binding receipt appears.
+SOURCE?   temp/task-1
+DERIVED?  temp/task-1-atomized
+TARGET?   campus-wiki
+```
+
+The locator scan and payload omit the active/current Context marker, durable
+UIDs, Memory text, item counts, `context_ref` and `memory_ref` contents,
+query-only aliases and routing data, query-source files, and existing Ground
+contents. The active Context is a global mutable pointer and is especially
+poor evidence in parallel terminal or agent work. Query-only public aliases
+are embedded inside a parent `context.json`; safely cataloguing them later
+requires a content-free sidecar or metadata index rather than opening that
+record during blank Ground startup.
+
+Context names themselves can still be sensitive metadata. Passing the
+sentence-form request explicitly starts this bounded provider turn; bare
+`mem ground` continues to wait for a first user message, and non-TTY rendering
+remains provider-free. A future UI may add an opt-out or local-only discovery
+mode if the research deployment needs a stricter name-disclosure boundary.
 
 The picker should ask the person to assign roles rather than merely check a
 set of Contexts:
@@ -304,17 +306,25 @@ the existing dedicated approval action. Candidate ranking may use the weak
 signals above, but no Context is selected or bound from terminal location,
 the active Context, name similarity, recency, or the provisional Goal. This
 keeps a helpful “start from nothing” path compatible with the privacy,
-multi-Context, and one-command approval boundaries. The metadata catalog,
-ranking, role picker, and provider-consent interaction remain future work;
-this change intentionally implements none of them.
+multi-Context, and one-command approval boundaries. Role editing and the
+binding picker remain future work.
+
+Existing Rules and Cases are also intentionally not copied into this first
+turn. Ground-session filenames can eventually be discovered without opening
+their records and shown as `RELATED GROUND · NOT INSPECTED`; inspecting one
+would be a separate user-visible action. Reusing its accepted Rules or Cases
+also needs provenance that records which Ground revision supplied them.
+Without that contract, automatic reuse would turn an opaque old artifact into
+hidden authority.
 
 The current provider is the existing one-shot Codex adapter authenticated by
-the local ChatGPT login. Each interpretation is ephemeral and receives only
-the submitted user turns. It does not receive the current Context, any
-Memory, query-only content, existing Grounds, filesystem state, or command
-authority. `ASK` turns accumulate the bounded user replies explicitly rather
-than relying on hidden provider conversation state. Claude, MCP, or an
-internal provider can later implement the same structured boundary.
+the local ChatGPT login. Each blank interpretation is ephemeral and receives
+the submitted user turns plus the bounded alias/name locator catalog. It does
+not receive the current Context marker, any Memory, query-only content,
+existing Grounds, durable identities, or command authority. `ASK` turns
+accumulate the bounded user replies explicitly rather than relying on hidden
+provider conversation state. Claude, MCP, or an internal provider can later
+implement the same structured boundary.
 
 On a proposal, the TUI shows the locally rendered command and lists every
 effect: one Ground is created, its Goal is set, and

@@ -1,6 +1,7 @@
 """Create, bind, and revise a named common-grounding workbench."""
 from __future__ import annotations
 
+from collections.abc import Sequence
 import re
 import sys
 import subprocess
@@ -49,6 +50,10 @@ from memcommit.ground_dialogue import (
     GroundDialogueError,
     GroundDialogueProposal,
     interpret_ground_dialogue,
+)
+from memcommit.ground_context_catalog import (
+    discover_ground_context_locators,
+    select_ground_context_locators,
 )
 from memcommit.ground_turn_dialogue import (
     GroundTurnAction,
@@ -132,7 +137,10 @@ def render_ground_start(initial_request: str = "") -> str:
             (
                 "  Reply to the agent; this snapshot does not read stdin."
                 if not safe_goal
-                else "  The starting request was not sent to a provider."
+                else (
+                    "  In a TTY, this submitted request starts the agent's "
+                    "Context discovery turn."
+                )
             ),
             "",
             "NEXT",
@@ -151,10 +159,23 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def _interpret_new_ground_turn(text: str):
+def _interpret_new_ground_turn(
+    text: str,
+    *,
+    context_names: Sequence[str] | None = None,
+):
+    if context_names is None:
+        locators = discover_ground_context_locators(
+            MemoryStore(create=False)
+        )
+        context_names = tuple(
+            locator.name
+            for locator in select_ground_context_locators(text, locators)
+        )
     turn = interpret_ground_dialogue(
         text,
         connect_codex_chatgpt_provider,
+        context_names=context_names,
     )
     if isinstance(turn, GroundDialogueProposal):
         existing = MemoryStore(create=False).load_ground_session(
@@ -214,10 +235,26 @@ def _run_approved_ground_command(
 
 
 def _run_new_ground_shell(initial_request: str = "") -> None:
+    locators = discover_ground_context_locators(
+        MemoryStore(create=False)
+    )
+
+    def interpret(text: str):
+        context_names = tuple(
+            locator.name
+            for locator in select_ground_context_locators(text, locators)
+        )
+        return _interpret_new_ground_turn(
+            text,
+            context_names=context_names,
+        )
+
     shell_kwargs = {
-        "interpret": _interpret_new_ground_turn,
+        "interpret": interpret,
         "apply": _apply_new_ground_proposal,
     }
+    if locators:
+        shell_kwargs["context_catalog_count"] = len(locators)
     if initial_request:
         shell_kwargs["initial_request"] = initial_request
     result = run_ground_shell(**shell_kwargs)

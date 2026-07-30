@@ -10,6 +10,7 @@ from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.ground_shell import (
     GROUND_GOAL_FRAME_HEIGHT,
+    GroundShellContextSuggestion,
     GroundShellProposal,
     _anchored_conversation_fragments,
     format_proposal_command,
@@ -38,6 +39,7 @@ class Propose:
     ground_name: str
     goal: str
     command: str = "rm -rf ignored-raw-command"
+    context_suggestions: tuple[GroundShellContextSuggestion, ...] = ()
 
 
 def proposal(text: str = "Compare report coverage.") -> Propose:
@@ -65,7 +67,7 @@ def test_fixed_top_panel_and_effect_review_show_all_boundaries():
     assert blank.startswith("MEM GROUND · WORKING · NOT SAVED")
     assert "GOAL\n  (not yet stated)" in blank
     assert "COMPLETION" not in blank
-    assert "CONTEXTS\n  (not bound; not inferred)" in blank
+    assert "CONTEXTS\n  (no ordinary Context locators found)" in blank
     assert "RULES\n  (none yet)" in blank
     assert "CASES\n  (none yet)" in blank
     assert "Find what was reported." in proposed
@@ -104,8 +106,23 @@ def test_blank_ground_layers_render_as_complete_independent_components():
     assert "Rules can be proposed after" in render_ground_rules_pane()
     assert "Cases can be added after" in render_ground_cases_pane()
     contexts = render_ground_contexts_pane()
-    assert "(not bound; not inferred)" in contexts
-    assert "current Context is not read or inferred" in contexts
+    assert "(no ordinary Context locators found)" in contexts
+    assert "current Context was assumed or opened" in contexts
+    suggested = render_ground_contexts_pane(
+        (
+            GroundShellContextSuggestion(
+                context_name="temp/task-1",
+                role="LIKELY_SOURCE",
+                reason="The name matches Task 1.",
+            ),
+        ),
+        catalog_count=4,
+        discovery_complete=True,
+    )
+    assert "SUGGESTED · NOT BOUND" in suggested
+    assert "1 of 4 ordinary Context locators" in suggested
+    assert "SOURCE?  temp/task-1" in suggested
+    assert "no Memory content was read" in suggested
     assert GROUND_GOAL_FRAME_HEIGHT.preferred == 5
     assert GROUND_GOAL_FRAME_HEIGHT.max == 5
 
@@ -236,7 +253,7 @@ def test_tab_cycles_five_read_only_components_without_submitting():
     assert applied == []
 
 
-def test_starting_request_is_prefilled_and_submits_exactly_once_on_enter():
+def test_starting_request_is_already_submitted_before_tui_input():
     seen: list[str] = []
 
     def interpret(text: str):
@@ -244,7 +261,7 @@ def test_starting_request_is_prefilled_and_submits_exactly_once_on_enter():
         return proposal(text)
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\rq")
+        pipe_input.send_text("q")
         result = run_ground_shell(
             interpret=interpret,
             apply=lambda _value: pytest.fail("must not apply"),
@@ -263,7 +280,7 @@ def test_starting_request_is_prefilled_and_submits_exactly_once_on_enter():
     assert result.submitted_turns == tuple(seen)
 
 
-def test_starting_request_can_escape_before_any_provider_call():
+def test_starting_request_escape_closes_after_one_read_only_agent_turn():
     seen: list[str] = []
 
     with create_pipe_input() as pipe_input:
@@ -278,8 +295,49 @@ def test_starting_request_can_escape_before_any_provider_call():
         )
 
     assert result.status == "CANCELLED"
-    assert result.submitted_turns == ()
-    assert seen == []
+    assert result.submitted_turns == (
+        "A Working Goal that is not sent yet.",
+    )
+    assert seen == ["A Working Goal that is not sent yet."]
+
+
+def test_initial_agent_question_leaves_message_empty_for_user_turn_two():
+    seen: list[str] = []
+
+    def interpret(text: str):
+        seen.append(text)
+        if len(seen) == 1:
+            return Ask(
+                kind="ASK",
+                understanding="You want to separate Task 1 outputs.",
+                question="Should the wiki be a target or a reference?",
+            )
+        return proposal(text)
+
+    with create_pipe_input() as pipe_input:
+        # There is no Ctrl-U here: the follow-up starts in an empty composer.
+        pipe_input.send_text("Use it as the target.\rq")
+        result = run_ground_shell(
+            interpret=interpret,
+            apply=lambda _value: pytest.fail("must not apply"),
+            initial_request="Split Task 1 into wiki and user-facing outputs.",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert seen == [
+        "Split Task 1 into wiki and user-facing outputs.",
+        (
+            "USER TURN 1\n"
+            "Split Task 1 into wiki and user-facing outputs.\n\n"
+            "USER TURN 2\nUse it as the target."
+        ),
+    ]
+    assert result.submitted_turns == (
+        "Split Task 1 into wiki and user-facing outputs.",
+        "Use it as the target.",
+    )
 
 
 def test_refine_requires_a_new_proposal_and_approval():
