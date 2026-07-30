@@ -12,6 +12,7 @@ from memcommit.commands.ground_named_shell import (
     GroundCommandProposal,
     _line,
     render_named_ground_cases_pane,
+    render_named_ground_contexts_pane,
     render_named_ground_goal_pane,
     render_named_ground_header,
     render_named_ground_top_panel,
@@ -19,7 +20,12 @@ from memcommit.commands.ground_named_shell import (
     render_named_ground_rules_pane,
     run_named_ground_shell,
 )
-from memcommit.ground import GroundItem, create_ground_session
+from memcommit.ground import (
+    GROUND_SCHEMA_VERSION,
+    GroundFrame,
+    GroundItem,
+    create_ground_session,
+)
 
 
 @dataclass(frozen=True)
@@ -191,6 +197,64 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
     assert "c2 [PROPOSED] · FIT / INCLUDE" in cases
     assert "Publish the continued elevator service." in cases
     assert "LINKED RULES · r2" in cases
+
+
+def test_named_contexts_pane_distinguishes_unbound_and_recorded_frames():
+    unbound = create_ground_session(
+        "fixture-ground",
+        goal="Build one verified fixture.",
+    )
+    assert render_named_ground_contexts_pane(unbound) == (
+        "UNBOUND\n\n"
+        "Name the raw evidence, working candidates,\n"
+        "publication target, and placement targets.\n"
+        "No current Context is inferred."
+    )
+
+    frames = (
+        GroundFrame(
+            role="RAW_EVIDENCE",
+            context_uid="11111111-1111-4111-8111-111111111111",
+            context_name="temp/task-1",
+            context_digest="1" * 64,
+            direct_memory_count=51,
+            direct_item_count=51,
+        ),
+        GroundFrame(
+            role="WORKING_CANDIDATES",
+            context_uid="22222222-2222-4222-8222-222222222222",
+            context_name="temp/task-1-atomized",
+            context_digest="2" * 64,
+            direct_memory_count=61,
+            direct_item_count=62,
+        ),
+        GroundFrame(
+            role="PUBLICATION_TARGET",
+            context_uid="33333333-3333-4333-8333-333333333333",
+            context_name="participant/campus-wiki-fork",
+            context_digest="3" * 64,
+            direct_memory_count=0,
+            direct_item_count=0,
+        ),
+    )
+    bound = replace(
+        unbound,
+        schema_version=GROUND_SCHEMA_VERSION,
+        frames=frames,
+    )
+
+    rendered = render_named_ground_contexts_pane(bound)
+
+    assert "RAW EVIDENCE\ntemp/task-1 · 51 direct Memories" in rendered
+    assert (
+        "WORKING CANDIDATES\n"
+        "temp/task-1-atomized · 61 direct Memories · 62 direct items"
+        in rendered
+    )
+    assert "PUBLICATION TARGET\nparticipant/campus-wiki-fork" in rendered
+    assert "freshness is rechecked before mutation" in rendered
+    assert frames[0].context_uid not in rendered
+    assert frames[0].context_digest not in rendered
 
 
 def test_review_effects_identify_item_and_explain_rule_acceptance():
@@ -386,12 +450,12 @@ def test_named_approval_is_modal_and_tab_cannot_detach_exact_apply():
     assert result.applied_argvs == tuple(applied)
 
 
-def test_named_tab_cycles_four_components_without_starting_a_turn():
+def test_named_tab_cycles_five_components_without_starting_a_turn():
     session = create_ground_session("fixture-ground")
     interpreted = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\t\t\r\x03")
+        pipe_input.send_text("\t\t\t\t\t\r\x03")
         result = run_named_ground_shell(
             session,
             interpret=lambda current, text: interpreted.append((current, text)),

@@ -7,6 +7,9 @@ named empty version-1 scaffold, then an explicit binding action upgrades that
 scaffold to a version-2 workbench:
 
 ```bash
+mem ground \
+  "I want to separate Task 1 into wiki and user-facing material."
+
 mem ground task-1-fixture \
   --goal "Agree on the wiki and local Task 1 Memory contents." \
   --scope participant/campus-wiki-fork \
@@ -47,6 +50,33 @@ presentations of the same unsaved state:
 - outside a TTY, it prints a stable `NEW` snapshot and exits without reading
   stdin or contacting a provider.
 
+A natural-language positional value that cannot be a portable Ground name
+starts the same unsaved flow with that exact value shown as a `WORKING` Goal:
+
+```bash
+mem ground "I want to separate Task 1 into wiki and user-facing material."
+```
+
+In a TTY, the request is immediately visible as the Working Goal and is
+prefilled into the Message composer. The person may press `Enter` to submit
+that exact first dialogue turn, edit it first, or press `Escape` before any
+provider call. Outside a TTY, it is only rendered in the deterministic
+unsaved snapshot; no provider is called and nothing is written. A valid
+portable positional value such as `task-1` retains the established
+named-Ground create/resume behavior. The explicit `--request` form
+disambiguates a short request that itself looks like a portable name. This
+grammar preserves existing saved names while removing the need to retype the
+starting Goal inside the TUI.
+
+The starting sentence is a provisional orientation, not an automatically
+approved or durable Goal. The raw wording remains visible through
+clarification turns; a provider may propose a refined Goal, completion
+criterion, and portable name, but only the exact locally constructed creation
+command can save them. This is **Goal-first in structure, entry-anywhere in
+conversation**: a person may begin with an outcome, example, or uncertainty,
+while the workbench obtains a revisable Working Goal before it binds evidence
+or proposes Rules and Cases.
+
 The first full-screen implementation kept Goal, Rules, and Cases in a short
 fixed summary while Dialogue consumed most of the available height. An actual
 use run showed that this hierarchy was misleading: the three editable Ground
@@ -54,14 +84,17 @@ layers looked like passive status labels, while the transcript looked like the
 primary artifact. It also made a long Goal, Rule, or Case inaccessible rather
 than merely compact.
 
-The revised layout treats Goal, Rules, Cases, and Dialogue as four peer
-components. They receive approximately equal vertical weight after the
-composer and footer have been allocated space, and each component has its own
-focusable, independently scrollable viewport:
+The revised layout presents Goal, Contexts, Rules, Cases, and Dialogue as five
+peer workbench components. They receive approximately equal vertical weight
+after the composer and footer have been allocated space, and each component
+has its own focusable, independently scrollable viewport:
 
 ```text
 ┌─ GOAL ────────────────────────────────────────────────┐
 │ (not yet stated)                                  ▐   │
+└───────────────────────────────────────────────────────┘
+┌─ CONTEXTS ────────────────────────────────────────────┐
+│ (not bound; not inferred)                         ▐   │
 └───────────────────────────────────────────────────────┘
 ┌─ RULES ───────────────────────────────────────────────┐
 │ (none yet)                                        ▐   │
@@ -79,14 +112,25 @@ focusable, independently scrollable viewport:
 
 Equal weight does not mean equal semantic importance or an exact pixel
 guarantee. It prevents one layer from permanently taking the screen while
-letting all four regions expand or contract with terminal height. `Tab` and
-`Shift-Tab` move focus among the four viewports and the message composer.
-Arrow and page-navigation keys scroll the focused read-only viewport; when the
+letting all five regions expand or contract with terminal height. Ground uses
+a three-row pane minimum so the five panes and composer still fit a
+conventional 24-row terminal; the shared primitive's default remains
+unchanged for other commands. `Tab` and `Shift-Tab` move focus among the five
+viewports and the message composer. Arrow and page-navigation keys scroll the
+focused read-only viewport; when the
 composer has focus, its normal editing keys remain local to the editor. The
-bordered composer is a distinct action region, not a fifth Ground layer. Its
-box makes the typing boundary recognizable to users familiar with
-conversation-first terminal agents and prevents a blank prompt from looking
-like ordinary shell output.
+bordered composer is a distinct action region, not a sixth workbench
+component. Its box makes the typing boundary recognizable to users familiar
+with conversation-first terminal agents and prevents a blank prompt from
+looking like ordinary shell output.
+
+`CONTEXTS` is a visible workbench frame, not a fourth semantic result layer
+beside Goal–Rules–Cases. Blank and unbound Grounds state that no Context was
+bound or inferred. A bound Ground renders only recorded role, name, and
+binding-time direct-item counts for raw evidence, working candidates,
+publication target, and placement targets. It does not load live Context
+content, expose UIDs or digests, or claim current freshness; the normal
+mutation boundary rechecks freshness later.
 
 Within Ground, `Enter` sends, `Ctrl-J` inserts a newline, and `Escape`
 immediately cancels or closes the TUI even when the composer contains an
@@ -97,7 +141,7 @@ provide the predictable exit requested by the user.
 
 When an exact command is awaiting approval, the command/effect receipt and
 its operation-specific approval keys take precedence over message entry. The
-four Ground components remain inspectable, but changing focus or scrolling
+five workbench components remain inspectable, but changing focus or scrolling
 must not edit, replace, or implicitly approve the frozen command. Returning
 to dialogue requires an explicit refine/cancel action; approval remains bound
 to the exact displayed argv.
@@ -112,19 +156,21 @@ The host validates and freezes those three fields, constructs the exact
 creation argv locally, and presents it for explicit approval.
 
 The blank frame is not an unnamed persistent Ground. It does not construct a
-store, reserve a name, infer a Goal, inspect the current Context, or write
-dialogue text. Persisting an unnamed session would weaken identity and resume
-semantics, while silently generating a slug could collide with an existing
-Ground or make an unreviewed interpretation durable. Options therefore still
-require `GROUND_NAME`; `mem ground --goal ...`, `--snapshot`, or another
-option without a name fails without creating state. A provider-suggested name
-is checked for a collision before approval and checked again immediately
-before execution.
+store, reserve a name, inspect the current Context, or write dialogue text.
+Its optional Working Goal is an unsaved copy of the person's starting request,
+not an inferred durable field. Persisting an unnamed session would weaken
+identity and resume semantics, while silently generating a slug could collide
+with an existing Ground or make an unreviewed interpretation durable. Named
+action options therefore still require `GROUND_NAME`; `mem ground --goal ...`,
+`--snapshot`, or another action option without a name fails without creating
+state. A provider-suggested name is checked for a collision before approval
+and checked again immediately before execution.
 
 ### Future design: discovering Contexts from no Ground
 
 The blank entry currently establishes only a Goal and portable Ground name.
-It intentionally does not discover or bind Contexts. The next design slice
+Its `CONTEXTS` pane intentionally does not discover or bind Contexts. The next
+design slice
 should help a person who starts with an outcome such as “build the Task 1
 campus wiki fixture” without making terminal location into hidden evidence.
 
@@ -195,16 +241,16 @@ a shell, and its actual output is reported after the TUI closes.
 The original blank-entry slice ended after creating or cancelling one initial
 Ground. The continuing vertical slice now enters the named-Ground TUI
 immediately after creation and also opens that TUI when an existing name is
-entered without options in a terminal. The four-component view
+entered without options in a terminal. The five-component view
 changes from `NEW · NOT SAVED` to `SAVED · UNBOUND`, then to `SAVED · BOUND`
 after an explicitly approved binding command.
 
 The continuing loop supports one exact command at a time for binding, Goal
 revision, Rule proposal, Rule/Case review, and traceable Case proposal.
 Proposal and acceptance remain separate approvals. After every success the
-Ground is reloaded and the Goal, Rules, Cases, and Dialogue components are
-refreshed. The displayed command carries the reviewed Ground UID, revision,
-and serialized
+Ground is reloaded and the Goal, Contexts, Rules, Cases, and Dialogue
+components are refreshed. The displayed command carries the reviewed Ground
+UID, revision, and serialized
 digest as a save-boundary version token. A binding command additionally
 freezes each selected Context's UID, digest, and direct-item counts because an
 unbound Ground has no saved frames yet. The normal CLI locks and rechecks the

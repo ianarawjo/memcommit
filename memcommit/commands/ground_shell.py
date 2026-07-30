@@ -105,9 +105,15 @@ def format_proposal_command(proposal: GroundShellProposal) -> str:
 
 def render_ground_top_panel(
     proposal: GroundShellProposal | None = None,
+    *,
+    working_goal: str = "",
 ) -> str:
-    """Render the fixed Goal–Rules–Cases panel."""
-    goal = proposal.goal if proposal is not None else "(not yet stated)"
+    """Render the compact unsaved Goal–Contexts–Rules–Cases state."""
+    goal = (
+        proposal.goal
+        if proposal is not None
+        else working_goal or "(not yet stated)"
+    )
     completion = (
         proposal.completion
         if proposal is not None
@@ -119,6 +125,8 @@ def render_ground_top_panel(
             "GOAL",
             f"  {safe_terminal_text(goal)}",
             f"  completion: {safe_terminal_text(completion)}",
+            "CONTEXTS",
+            "  (not bound; not inferred)",
             "RULES",
             "  (none yet)",
             "CASES",
@@ -129,20 +137,49 @@ def render_ground_top_panel(
 
 def render_ground_goal_pane(
     proposal: GroundShellProposal | None = None,
+    *,
+    working_goal: str = "",
 ) -> str:
     """Render the complete blank-Ground Goal state for its own viewport."""
-    goal = proposal.goal if proposal is not None else "(not yet stated)"
-    completion = (
-        proposal.completion
-        if proposal is not None
-        else "(not yet stated)"
-    )
+    if proposal is None:
+        lines = [
+            (
+                "WORKING · NOT SAVED"
+                if working_goal
+                else "(not yet stated)"
+            ),
+        ]
+        if working_goal:
+            lines.append(safe_terminal_text(working_goal))
+        lines.extend(["", "COMPLETION", "(not yet stated)"])
+        return "\n".join(lines)
+
+    lines = [
+        "PROPOSED · NOT SAVED",
+        safe_terminal_text(proposal.goal),
+        "",
+        "COMPLETION",
+        safe_terminal_text(proposal.completion),
+    ]
+    if working_goal and working_goal != proposal.goal:
+        lines.extend(
+            [
+                "",
+                "STARTING REQUEST",
+                safe_terminal_text(working_goal),
+            ]
+        )
+    return "\n".join(lines)
+
+
+def render_ground_contexts_pane() -> str:
+    """Render the blank Ground's explicit absence of a Context frame."""
     return "\n".join(
         [
-            safe_terminal_text(goal),
+            "(not bound; not inferred)",
             "",
-            "COMPLETION",
-            safe_terminal_text(completion),
+            "Contexts are bound only after this Ground is created.",
+            "The current Context is not read or inferred.",
         ]
     )
 
@@ -295,6 +332,7 @@ def run_ground_shell(
     *,
     interpret: GroundInterpreter,
     apply: GroundApplier,
+    initial_request: str = "",
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -308,32 +346,55 @@ def run_ground_shell(
             ),
         )
 
+    working_goal = initial_request.strip()
     mode = {"value": "INPUT"}
     review_view = {"value": "COMMAND"}
     pending: dict[str, GroundShellProposal | None] = {"value": None}
     error_message = {"value": ""}
     status_message = {"value": ""}
-    last_submission = {"value": ""}
+    last_submission = {"value": working_goal}
     submitted_turns: list[str] = []
-    conversation: list[str] = [
-        "\n".join(
-            [
-                "OPEN QUESTION · GOAL",
-                f"  {INITIAL_QUESTION}",
-                "",
-                "Start in your own words; a rough outcome, case, or",
-                "uncertainty is enough.",
-            ]
-        )
-    ]
+    conversation: list[str] = (
+        [
+            "\n".join(
+                [
+                    "STARTING REQUEST · WORKING GOAL",
+                    f"  {safe_terminal_text(working_goal)}",
+                    "",
+                    "Press Enter to begin the dialogue, or edit the",
+                    "prefilled Message first.",
+                ]
+            )
+        ]
+        if working_goal
+        else [
+            "\n".join(
+                [
+                    "OPEN QUESTION · GOAL",
+                    f"  {INITIAL_QUESTION}",
+                    "",
+                    "Start in your own words; a rough outcome, case, or",
+                    "uncertainty is enough.",
+                ]
+            )
+        ]
+    )
 
     bindings = KeyBindings()
-    pane_height = equal_pane_height()
+    # Five independent workbench panes must still fit a conventional 24-row
+    # terminal. Other TUI users retain the shared four-row default.
+    pane_height = equal_pane_height(minimum=3)
     action_height = Dimension(min=5, preferred=6, max=8)
     goal_pane = build_scrollable_text_pane(
         "GOAL",
-        render_ground_goal_pane(),
+        render_ground_goal_pane(working_goal=working_goal),
         buffer_name="ground-new-goal",
+        height=pane_height,
+    )
+    contexts_pane = build_scrollable_text_pane(
+        "CONTEXTS",
+        render_ground_contexts_pane(),
+        buffer_name="ground-new-contexts",
         height=pane_height,
     )
     rules_pane = build_scrollable_text_pane(
@@ -379,6 +440,12 @@ def run_ground_shell(
         height=action_height,
     )
     input_area = composer.text_area
+    if working_goal:
+        # The command-line request is visible and editable before any provider
+        # call. This preserves an immediate Escape path and makes sending it
+        # an explicit dialogue action rather than hidden startup work.
+        input_area.text = working_goal
+        input_area.buffer.cursor_position = len(working_goal)
 
     header = Window(
         FormattedTextControl(" MEM GROUND · NEW · NOT SAVED"),
@@ -451,6 +518,7 @@ def run_ground_shell(
     root = build_tui_frame(
         TuiRegion(header),
         TuiRegion(goal_pane.container),
+        TuiRegion(contexts_pane.container),
         TuiRegion(rules_pane.container),
         TuiRegion(cases_pane.container),
         TuiRegion(dialogue_pane.container),
@@ -469,7 +537,10 @@ def run_ground_shell(
 
     def sync_panes(*, dialogue_anchor: str = "end") -> None:
         goal_pane.set_text(
-            render_ground_goal_pane(pending["value"]),
+            render_ground_goal_pane(
+                pending["value"],
+                working_goal=working_goal,
+            ),
             anchor="preserve",
         )
         dialogue_pane.set_text(
@@ -573,12 +644,14 @@ def run_ground_shell(
     )
     read_panes = (
         goal_pane.text_area,
+        contexts_pane.text_area,
         rules_pane.text_area,
         cases_pane.text_area,
         dialogue_pane.text_area,
     )
     read_pane_focus = (
         has_focus(goal_pane.text_area)
+        | has_focus(contexts_pane.text_area)
         | has_focus(rules_pane.text_area)
         | has_focus(cases_pane.text_area)
         | has_focus(dialogue_pane.text_area)

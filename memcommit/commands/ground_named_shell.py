@@ -177,7 +177,7 @@ def render_named_ground_top_panel(session: GroundSession) -> str:
 
 
 def render_named_ground_header(session: GroundSession) -> str:
-    """Render the one-line identity/status row above the four work areas."""
+    """Render the one-line identity/status row above the five work areas."""
     state = (
         "BOUND"
         if session.schema_version == GROUND_SCHEMA_VERSION
@@ -201,6 +201,43 @@ def render_named_ground_goal_pane(session: GroundSession) -> str:
             ),
         ]
     )
+
+
+def render_named_ground_contexts_pane(session: GroundSession) -> str:
+    """Render saved frame metadata without reading live Context contents."""
+    if session.schema_version != GROUND_SCHEMA_VERSION or not session.frames:
+        return "\n".join(
+            [
+                "UNBOUND",
+                "",
+                "Name the raw evidence, working candidates,",
+                "publication target, and placement targets.",
+                "No current Context is inferred.",
+            ]
+        )
+    role_labels = {
+        "RAW_EVIDENCE": "RAW EVIDENCE",
+        "WORKING_CANDIDATES": "WORKING CANDIDATES",
+        "PUBLICATION_TARGET": "PUBLICATION TARGET",
+        "PLACEMENT_TARGET": "PLACEMENT TARGET",
+    }
+    blocks: list[str] = []
+    for frame in session.frames:
+        counts = f"{frame.direct_memory_count} direct Memories"
+        if frame.direct_item_count != frame.direct_memory_count:
+            counts += f" · {frame.direct_item_count} direct items"
+        blocks.append(
+            "\n".join(
+                [
+                    role_labels[frame.role],
+                    f"{safe_terminal_text(frame.context_name)} · {counts}",
+                ]
+            )
+        )
+    blocks.append(
+        "Recorded binding; freshness is rechecked before mutation."
+    )
+    return "\n\n".join(blocks)
 
 
 def render_named_ground_rules_pane(session: GroundSession) -> str:
@@ -542,12 +579,20 @@ def run_named_ground_shell(
         )
 
     bindings = KeyBindings()
-    pane_height = equal_pane_height()
+    # Ground has five peer workbench panes; a three-row minimum keeps them
+    # usable in the conventional 24-row terminal without changing other TUIs.
+    pane_height = equal_pane_height(minimum=3)
     action_height = Dimension(min=5, preferred=6, max=8)
     goal_pane = build_scrollable_text_pane(
         "GOAL",
         render_named_ground_goal_pane(session),
         buffer_name="ground-named-goal",
+        height=pane_height,
+    )
+    contexts_pane = build_scrollable_text_pane(
+        "CONTEXTS",
+        render_named_ground_contexts_pane(session),
+        buffer_name="ground-named-contexts",
         height=pane_height,
     )
     rules_pane = build_scrollable_text_pane(
@@ -668,6 +713,7 @@ def run_named_ground_shell(
     root = build_tui_frame(
         TuiRegion(header),
         TuiRegion(goal_pane.container),
+        TuiRegion(contexts_pane.container),
         TuiRegion(rules_pane.container),
         TuiRegion(cases_pane.container),
         TuiRegion(dialogue_pane.container),
@@ -688,6 +734,10 @@ def run_named_ground_shell(
         active = current["value"]
         goal_pane.set_text(
             render_named_ground_goal_pane(active),
+            anchor="preserve",
+        )
+        contexts_pane.set_text(
+            render_named_ground_contexts_pane(active),
             anchor="preserve",
         )
         rules_pane.set_text(
@@ -744,7 +794,7 @@ def run_named_ground_shell(
                         "GROUND REFRESHED",
                         "  Another saved change was found before this turn.",
                         (
-                            "  The four Ground panes and semantic turn now use "
+                            "  The five workbench panes and semantic turn now use "
                             "the "
                             "latest Ground."
                         ),
@@ -840,12 +890,14 @@ def run_named_ground_shell(
     )
     read_panes = (
         goal_pane.text_area,
+        contexts_pane.text_area,
         rules_pane.text_area,
         cases_pane.text_area,
         dialogue_pane.text_area,
     )
     read_pane_focus = (
         has_focus(goal_pane.text_area)
+        | has_focus(contexts_pane.text_area)
         | has_focus(rules_pane.text_area)
         | has_focus(cases_pane.text_area)
         | has_focus(dialogue_pane.text_area)
@@ -921,13 +973,13 @@ def run_named_ground_shell(
             try:
                 if refresh_current(announce=False):
                     refresh_note = (
-                        "The four Ground panes were refreshed from the latest "
+                        "The five workbench panes were refreshed from the latest "
                         "saved "
                         "Ground before further input."
                     )
                 else:
                     refresh_note = (
-                        "The four Ground panes already match the latest saved "
+                        "The five workbench panes already match the latest saved "
                         "Ground."
                     )
             except Exception as refresh_error:
@@ -963,9 +1015,8 @@ def run_named_ground_shell(
                     f"  {safe_terminal_text(actual_output)}",
                     "",
                     (
-                        "The Goal, Rules, Cases, and Dialogue panes now reflect "
-                        "the "
-                        "saved Ground."
+                        "The Goal, Contexts, Rules, Cases, and Dialogue panes "
+                        "now reflect the saved Ground."
                     ),
                 ]
             )

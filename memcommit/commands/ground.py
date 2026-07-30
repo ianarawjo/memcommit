@@ -42,8 +42,10 @@ from memcommit.ground import (
     select_ground_candidate,
     stale_ground_frames,
     target_requirement_status,
+    validate_ground_contract_name,
 )
 from memcommit.ground_dialogue import (
+    GROUND_DIALOGUE_USER_TEXT_LIMIT,
     GroundDialogueError,
     GroundDialogueProposal,
     interpret_ground_dialogue,
@@ -61,21 +63,35 @@ from memcommit.store import (
 )
 
 
-def render_ground_start() -> str:
+def _validated_start_request(value: str) -> str:
+    """Validate one unsaved natural-language Ground entry."""
+    text = value.strip()
+    if not text or len(text) > GROUND_DIALOGUE_USER_TEXT_LIMIT:
+        raise GroundDialogueError(
+            "Ground dialogue input must be non-empty and no longer than "
+            f"{GROUND_DIALOGUE_USER_TEXT_LIMIT} characters."
+        )
+    return text
+
+
+def render_ground_start(initial_request: str = "") -> str:
     """Render the unsaved entry frame for a blank grounding conversation."""
-    return "\n".join(
+    working_goal = (
+        _validated_start_request(initial_request)
+        if initial_request
+        else ""
+    )
+    safe_goal = safe_terminal_text(working_goal).replace("\n", "\n  ")
+    goal_lines = (
+        ["  (not yet stated)"]
+        if not safe_goal
+        else [
+            "  WORKING · FROM STARTING REQUEST · NOT SAVED",
+            f"  {safe_goal}",
+        ]
+    )
+    dialogue_lines = (
         [
-            "MEM GROUND · NEW · NOT SAVED",
-            "",
-            "GOAL",
-            "  (not yet stated)",
-            "",
-            "RULES",
-            "  (none yet)",
-            "",
-            "CASES",
-            "  (none yet)",
-            "",
             "OPEN QUESTION · GOAL",
             "  What are you trying to understand, decide, or make together?",
             "",
@@ -83,11 +99,44 @@ def render_ground_start() -> str:
             "  Rules, Cases, or final wording yet.",
             "",
             "  A rough outcome, concrete case, or uncertainty is enough.",
+        ]
+        if not safe_goal
+        else [
+            "DIALOGUE",
+            "  YOU · STARTING REQUEST",
+            f"  {safe_goal}",
+            "",
+            "  Run this command in an interactive terminal to interpret",
+            "  the Working Goal and continue the dialogue.",
+        ]
+    )
+    return "\n".join(
+        [
+            "MEM GROUND · NEW · NOT SAVED",
+            "",
+            "GOAL",
+            *goal_lines,
+            "",
+            "CONTEXTS",
+            "  (not bound; not inferred)",
+            "  No current Context was read.",
+            "",
+            "RULES",
+            "  (none yet)",
+            "",
+            "CASES",
+            "  (none yet)",
+            "",
+            *dialogue_lines,
             "",
             "DESCRIBE WHAT YOU HAVE SO FAR",
             "",
             "> ________________________________________________________________",
-            "  Reply to the agent; this snapshot does not read stdin.",
+            (
+                "  Reply to the agent; this snapshot does not read stdin."
+                if not safe_goal
+                else "  The starting request was not sent to a provider."
+            ),
             "",
             "NEXT",
             "  The agent will restate a candidate Goal, suggest a portable",
@@ -167,11 +216,14 @@ def _run_approved_ground_command(
     )
 
 
-def _run_new_ground_shell() -> None:
-    result = run_ground_shell(
-        interpret=_interpret_new_ground_turn,
-        apply=_apply_new_ground_proposal,
-    )
+def _run_new_ground_shell(initial_request: str = "") -> None:
+    shell_kwargs = {
+        "interpret": _interpret_new_ground_turn,
+        "apply": _apply_new_ground_proposal,
+    }
+    if initial_request:
+        shell_kwargs["initial_request"] = initial_request
+    result = run_ground_shell(**shell_kwargs)
     if result.status == "APPLIED":
         proposal = result.proposal
         if proposal is None:
@@ -1411,9 +1463,20 @@ def cmd(
             metavar="[GROUND_NAME]",
             show_default=False,
             help=(
-                "Portable name of the Ground to create or resume; "
-                "omit to start from a blank, unsaved frame"
+                "Portable Ground name to create or resume, or a natural-"
+                "language starting request when the value cannot be a "
+                "portable name; omit to start from a blank, unsaved frame"
             )
+        ),
+    ] = None,
+    request: Annotated[
+        Optional[str],
+        typer.Option(
+            "--request",
+            help=(
+                "Explicit unsaved starting request; useful when its text "
+                "also looks like a portable Ground name"
+            ),
         ),
     ] = None,
     goal: Annotated[
@@ -1700,6 +1763,75 @@ def cmd(
             requirement_requested,
         )
     )
+
+    seed_conflict_requested = (
+        any(
+            value is not None
+            for value in (
+                goal,
+                completion,
+                scope,
+                focus_target,
+                select,
+            )
+        )
+        or action_count > 0
+        or snapshot
+        or replace_ground
+        or if_ground_version is not None
+        or bool(if_context_version)
+    )
+    initial_request: str | None = request
+    if request is not None and ground_name is not None:
+        typer.secho(
+            "Ground error: choose either GROUND_NAME_OR_REQUEST or "
+            "--request, not both.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if request is not None and seed_conflict_requested:
+        typer.secho(
+            "Ground error: --request starts an unsaved dialogue and cannot "
+            "be combined with Ground options.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if ground_name is not None:
+        try:
+            validate_ground_contract_name(ground_name)
+        except GroundError:
+            if seed_conflict_requested:
+                typer.secho(
+                    "Ground error: a natural-language starting request "
+                    "cannot be combined with Ground options. Use a portable "
+                    "GROUND_NAME for named actions.",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
+            # A value that cannot ever identify a saved Ground is safe to
+            # reinterpret as the user's first unsaved turn. Valid names keep
+            # their historical create/resume behavior.
+            initial_request = ground_name
+            ground_name = None
+    if initial_request is not None:
+        try:
+            initial_request = _validated_start_request(initial_request)
+        except GroundDialogueError as error:
+            typer.secho(
+                f"Ground error: {error}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if _interactive_terminal():
+            _run_new_ground_shell(initial_request)
+        else:
+            typer.echo(render_ground_start(initial_request))
+        return
+
     plain_named_tui_requested = (
         ground_name is not None
         and _interactive_terminal()

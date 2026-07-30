@@ -13,6 +13,7 @@ from memcommit.commands.ground_shell import (
     _anchored_conversation_fragments,
     format_proposal_command,
     render_ground_cases_pane,
+    render_ground_contexts_pane,
     render_ground_goal_pane,
     render_ground_rules_pane,
     render_ground_top_panel,
@@ -66,6 +67,7 @@ def test_fixed_top_panel_and_effect_review_show_all_boundaries():
     assert blank.startswith("MEM GROUND · NEW · NOT SAVED")
     assert "GOAL\n  (not yet stated)" in blank
     assert "completion: (not yet stated)" in blank
+    assert "CONTEXTS\n  (not bound; not inferred)" in blank
     assert "RULES\n  (none yet)" in blank
     assert "CASES\n  (none yet)" in blank
     assert "Find what was reported." in proposed
@@ -92,11 +94,28 @@ def test_blank_ground_layers_render_as_complete_independent_components():
     assert render_ground_goal_pane() == (
         "(not yet stated)\n\nCOMPLETION\n(not yet stated)"
     )
+    assert render_ground_goal_pane(
+        working_goal="Split Task 1 into audience-facing fixtures."
+    ) == (
+        "WORKING · NOT SAVED\n"
+        "Split Task 1 into audience-facing fixtures.\n\n"
+        "COMPLETION\n(not yet stated)"
+    )
     assert render_ground_goal_pane(frozen) == (
+        "PROPOSED · NOT SAVED\n"
         "Find what was reported.\n\nCOMPLETION\nCoverage is explicit."
     )
+    proposed_from_request = render_ground_goal_pane(
+        frozen,
+        working_goal="Check the report.",
+    )
+    assert "PROPOSED · NOT SAVED" in proposed_from_request
+    assert "STARTING REQUEST\nCheck the report." in proposed_from_request
     assert "Rules can be proposed after" in render_ground_rules_pane()
     assert "Cases can be added after" in render_ground_cases_pane()
+    contexts = render_ground_contexts_pane()
+    assert "(not bound; not inferred)" in contexts
+    assert "current Context is not read or inferred" in contexts
 
 
 def test_approval_viewport_anchor_tracks_end_of_exact_proposed_command():
@@ -205,13 +224,13 @@ def test_approval_is_modal_and_tab_cannot_detach_exact_apply():
     assert applied == [result.proposal]
 
 
-def test_tab_cycles_four_read_only_components_without_submitting():
+def test_tab_cycles_five_read_only_components_without_submitting():
     interpreted: list[str] = []
     applied: list[GroundShellProposal] = []
 
     with create_pipe_input() as pipe_input:
-        # MESSAGE → GOAL → RULES → CASES → DIALOGUE; Enter returns to MESSAGE.
-        pipe_input.send_text("\t\t\t\t\r\x03")
+        # MESSAGE → GOAL → CONTEXTS → RULES → CASES → DIALOGUE.
+        pipe_input.send_text("\t\t\t\t\t\r\x03")
         result = run_ground_shell(
             interpret=lambda text: interpreted.append(text),
             apply=lambda value: applied.append(value),
@@ -223,6 +242,52 @@ def test_tab_cycles_four_read_only_components_without_submitting():
     assert result.status == "CANCELLED"
     assert interpreted == []
     assert applied == []
+
+
+def test_starting_request_is_prefilled_and_submits_exactly_once_on_enter():
+    seen: list[str] = []
+
+    def interpret(text: str):
+        seen.append(text)
+        return proposal(text)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\rq")
+        result = run_ground_shell(
+            interpret=interpret,
+            apply=lambda _value: pytest.fail("must not apply"),
+            initial_request=(
+                "Split Task 1 into wiki and user-facing Contexts."
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert seen == [
+        "Split Task 1 into wiki and user-facing Contexts."
+    ]
+    assert result.status == "CANCELLED"
+    assert result.submitted_turns == tuple(seen)
+
+
+def test_starting_request_can_escape_before_any_provider_call():
+    seen: list[str] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        result = run_ground_shell(
+            interpret=lambda text: seen.append(text),
+            apply=lambda _value: pytest.fail("must not apply"),
+            initial_request="A Working Goal that is not sent yet.",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CANCELLED"
+    assert result.submitted_turns == ()
+    assert seen == []
 
 
 def test_refine_requires_a_new_proposal_and_approval():

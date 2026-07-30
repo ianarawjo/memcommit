@@ -93,13 +93,15 @@ create named Ground
 The first implementation used a seven-row upper summary for Goal, Rules, and
 Cases and gave the remaining body to Dialogue. The first realistic run showed
 that this made three editable Ground layers look subordinate and prevented a
-long item from being inspected in place. Ground now composes four peer
-components—Goal, Rules, Cases, and Dialogue—with approximately equal vertical
-weight. Each owns a focusable scroll viewport, so one growing component does
-not consume or truncate the others. The message composer is a separately
-bordered action region below them; it is not a fifth Ground layer.
+long item from being inspected in place. Ground now composes five peer
+workbench components—Goal, Contexts, Rules, Cases, and Dialogue—with
+approximately equal vertical weight. Each owns a focusable scroll viewport,
+so one growing component does not consume or truncate the others. Contexts is
+the visible evidence-and-target frame, not another semantic result layer
+beside Goal–Rules–Cases. The message composer is a separately bordered action
+region below them; it is not a sixth workbench component.
 
-`Tab` and `Shift-Tab` traverse the four panes and composer. Navigation keys
+`Tab` and `Shift-Tab` traverse the five panes and composer. Navigation keys
 scroll the focused read-only pane, while editing keys stay local when the
 composer has focus. During exact-command review, the receipt and its dedicated
 approval/refinement/cancellation actions temporarily own the consequential
@@ -207,14 +209,14 @@ The shared frame is therefore slot-based. Each operation supplies its own
 header/state panes, body panes, action region, keymap, and footer. A neutral
 pane primitive may provide a title, viewport, scroll margin, focus style, and
 relative height without knowing whether its content is a Goal, a meld issue,
-or a finder result. Ground composes four such panes because its Goal, Rules,
-Cases, and Dialogue must remain simultaneously inspectable.
+or a finder result. Ground composes five such panes because its Goal, Contexts,
+Rules, Cases, and Dialogue must remain simultaneously inspectable.
 
 Ground and meld also use the same state-free framed message composer; review
 and atomize retain their operation-specific editors. Meld, review, or a future
 interactive finder may reuse the pane and composer presentation primitives
 where their own design calls for several visible components. That reuse does
-not grant them Ground's four-pane layout, aliases, key meanings, provider
+not grant them Ground's five-pane layout, aliases, key meanings, provider
 payload, approval semantics, or persistence model. Sharing component chrome
 while keeping operation adapters semantic is the boundary that permits later
 reuse without inventing a generic workbench state.
@@ -251,7 +253,7 @@ Rejected after the realistic Ground run. It conserved rows, but it made Goal,
 Rules, and Cases appear to be passive status while Dialogue occupied most of
 the screen. Truncating those layers also made “always visible” mean “not
 actually inspectable.” Equal-weight independent viewports preserve the
-four-part mental model and move overflow handling to scrolling.
+five-component workbench view and move overflow handling to scrolling.
 
 ## Current limitations
 
@@ -266,7 +268,7 @@ four-part mental model and move overflow handling to scrolling.
   The TUI has no local read-only candidate picker yet; provider access remains
   deliberately insufficient to invent or inspect that selector.
 - Equal pane weight is approximate because the composer, footer, borders, and
-  minimum title rows consume fixed height. On a very small terminal, all four
+  minimum title rows consume fixed height. On a very small terminal, all five
   panes remain distinct but may show only one or two content rows at a time;
   independent scrolling preserves access, not simultaneous visibility of all
   content. Responsive pane collapsing and a user-controlled pane maximizer
