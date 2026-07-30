@@ -2,11 +2,17 @@
 from __future__ import annotations
 
 import hashlib
+import shlex
 import sys
 from typing import Annotated, Optional
 
 import typer
 
+from memcommit.comparison import (
+    COMPARISON_RULESET_VERSION,
+    ComparisonAnalysis,
+)
+from memcommit.comparison_store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.meld import (
     MeldError,
@@ -37,6 +43,73 @@ MELD_AGGREGATE_TIMEOUT_SECONDS = 300
 
 class MeldCommandError(RuntimeError):
     """Safe user-facing orchestration failure."""
+
+
+def _comparison_prerequisite_error(
+    *,
+    left: Context,
+    right: Context,
+    target: Context,
+    refresh: bool,
+    reason: str,
+) -> MeldCommandError:
+    compare_argv = ["mem", "compare", "--to", right.name]
+    if refresh:
+        compare_argv.append("--refresh")
+    return MeldCommandError(
+        f"{reason}\n"
+        "Create the exact ordered Compare basis first:\n"
+        f"  {shlex.join(['mem', 'switch', left.name])}\n"
+        f"  {shlex.join(compare_argv)}\n"
+        f"  {shlex.join(['mem', 'switch', target.name])}\n"
+        "Then rerun:\n"
+        f"  {shlex.join(['mem', 'meld', left.name, right.name])}"
+    )
+
+
+def _load_symmetric_comparison(
+    *,
+    left: Context,
+    right: Context,
+    target: Context,
+) -> ComparisonAnalysis:
+    """Load the exact reviewed LEFT→RIGHT basis; never use a reverse slot."""
+    try:
+        analysis = load_comparison_analysis(left.uid, right.uid)
+    except ValueError as error:
+        raise _comparison_prerequisite_error(
+            left=left,
+            right=right,
+            target=target,
+            refresh=True,
+            reason="The saved ordered Compare analysis is invalid.",
+        ) from error
+    if analysis is None:
+        raise _comparison_prerequisite_error(
+            left=left,
+            right=right,
+            target=target,
+            refresh=False,
+            reason=(
+                f"Meld requires a saved Compare analysis for "
+                f"'{left.name}' → '{right.name}'."
+            ),
+        )
+    if (
+        not analysis.matches(left, right)
+        or analysis.ruleset_version != COMPARISON_RULESET_VERSION
+    ):
+        raise _comparison_prerequisite_error(
+            left=left,
+            right=right,
+            target=target,
+            refresh=True,
+            reason=(
+                f"The saved Compare analysis for '{left.name}' → "
+                f"'{right.name}' is stale."
+            ),
+        )
+    return analysis
 
 
 def _connect_meld_provider(provider_factory):
@@ -96,11 +169,16 @@ def render_meld_session(
             f"{session.frames[1].context_name} → "
             f"{session.target.context_name}"
         ),
-        (
-            f"State: {session.state} · "
-            f"Round: {len(session.turns)}"
-        ),
     ]
+    if session.comparison_seed is not None:
+        lines.append(
+            "Compare: "
+            f"{session.comparison_seed.analysis.uid[:8]} · IMPORTED"
+        )
+    lines.append(
+        f"State: {session.state} · "
+        f"Round: {len(session.turns)}"
+    )
     assessment = session.current_assessment
     if assessment is None:
         lines.extend(["", "Analysis is pending."])
@@ -740,16 +818,22 @@ def cmd(
                 )
             left_ctx = store.load_direct(left)
             right_ctx = store.load_direct(right)
-            session = MeldSession.create_symmetric(
-                left_ctx,
-                right_ctx,
+            comparison = _load_symmetric_comparison(
+                left=left_ctx,
+                right=right_ctx,
+                target=target,
+            )
+            session = MeldSession.create_symmetric_from_comparison(
+                comparison,
                 target,
             )
-            session.start_initial_analysis()
-            session = _assess_and_save(
-                store=store,
-                session=session,
-                provider_factory=connect_codex_chatgpt_provider,
+            # Importing Compare is provider-free, but the exact source and
+            # empty-target bindings still need one last local recheck before
+            # the target-scoped session is made durable.
+            _assert_source_bindings(session, left_ctx, right_ctx)
+            _assert_unapplied_target(session, target)
+            store.save_meld_session(
+                session,
                 expected_session_digest=None,
             )
             if sys.stdin.isatty() and sys.stdout.isatty():
@@ -765,18 +849,22 @@ def cmd(
             prior_digest = meld_canonical_digest(session.to_dict())
             left_ctx = store.load_direct(left)
             right_ctx = store.load_direct(right)
-            replacement = MeldSession.create_symmetric(
-                left_ctx,
-                right_ctx,
+            comparison = _load_symmetric_comparison(
+                left=left_ctx,
+                right=right_ctx,
+                target=target,
+            )
+            replacement = MeldSession.create_symmetric_from_comparison(
+                comparison,
                 target,
             )
-            replacement.start_initial_analysis()
-            session = _assess_and_save(
-                store=store,
-                session=replacement,
-                provider_factory=connect_codex_chatgpt_provider,
+            _assert_source_bindings(replacement, left_ctx, right_ctx)
+            _assert_unapplied_target(replacement, target)
+            store.save_meld_session(
+                replacement,
                 expected_session_digest=prior_digest,
             )
+            session = replacement
             if sys.stdin.isatty() and sys.stdout.isatty():
                 session = _run_interactive(
                     store=store,

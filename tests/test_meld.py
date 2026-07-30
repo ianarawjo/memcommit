@@ -19,7 +19,20 @@ from memcommit.atomize_meld_adapter import (
     project_atomize_grounding_as_meld,
 )
 from memcommit.cli import app
-from memcommit.context import MemoryRef
+from memcommit.comparison import (
+    ComparisonInput,
+    comparison_canonical_digest,
+)
+from memcommit.comparison_provider import (
+    COMPARISON_PAYLOAD_MARKER,
+    analyze_comparison,
+)
+from memcommit.comparison_store import (
+    comparison_analysis_path,
+    load_comparison_analysis,
+    save_comparison_analysis,
+)
+from memcommit.context import Context, MemoryRef
 from memcommit.commands.meld import render_meld_session
 from memcommit.commands.meld_shell import (
     _line,
@@ -194,7 +207,105 @@ class Task2Provider:
         )
 
 
-def _task2_contexts(store: MemoryStore):
+class Task2CompareProvider:
+    """Deterministic read-only basis for the Task 2 Meld tests."""
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "compare_contexts"
+        payload = json.loads(
+            prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1]
+        )
+        reference_id = payload["frames"][0]["memories"][0]["memory_id"]
+        compared_id = payload["frames"][1]["memories"][0]["memory_id"]
+        return json.dumps(
+            {
+                "overview": (
+                    "Both advisors specify participant compensation, but "
+                    "the rate, covered time, and payment method have "
+                    "different study scopes."
+                ),
+                "reports": {
+                    "both": "",
+                    "differences": (
+                        "The compensation policies differ in rate, covered "
+                        "time, and supported payment methods."
+                    ),
+                    "reference_only": "",
+                    "compared_only": "",
+                },
+                "relations": [
+                    {
+                        "relation_key": "payment_relation",
+                        "reference_memory_ids": [reference_id],
+                        "compared_memory_ids": [compared_id],
+                        "kind": "CONFLICT",
+                        "status": "UNRESOLVED",
+                        "summary": "Participant compensation differs.",
+                        "reason": (
+                            "The sources can be retained together only after "
+                            "their scope and allowed methods are settled."
+                        ),
+                    }
+                ],
+                "issues": [
+                    {
+                        "issue_key": "payment_issue",
+                        "relation_keys": ["payment_relation"],
+                        "priority": "REQUIRED",
+                        "title": "Participant compensation policy",
+                        "question": (
+                            "Should the result retain the rate, travel time, "
+                            "and every supported payment method?"
+                        ),
+                        "why_it_matters": (
+                            "Choosing one advisor by order would discard "
+                            "supported compensation guidance."
+                        ),
+                        "options": [
+                            {
+                                "label": "Keep all supported options",
+                                "text": (
+                                    "Retain the hourly rate, travel-time "
+                                    "condition, cash, e-transfer, and an "
+                                    "equivalent-value gift card."
+                                ),
+                            },
+                            {
+                                "label": "Preserve scoped alternatives",
+                                "text": (
+                                    "Keep the in-person and online "
+                                    "policies as separately scoped rules."
+                                ),
+                            },
+                        ],
+                    }
+                ],
+            }
+        )
+
+
+def _save_task2_comparison(
+    store: MemoryStore,
+    left: Context,
+    right: Context,
+):
+    analysis = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    save_comparison_analysis(
+        store,
+        analysis,
+        expected_analysis_uid=None,
+    )
+    return analysis
+
+
+def _task2_contexts(
+    store: MemoryStore,
+    *,
+    with_comparison: bool = True,
+):
     left = ops.init("ian/proposal-writing-policy")
     ops.add(
         left,
@@ -215,6 +326,8 @@ def _task2_contexts(store: MemoryStore):
     store.save(left)
     store.save(right)
     store.save(target)
+    if with_comparison:
+        _save_task2_comparison(store, left, right)
     store.set_current(target.name)
     return left, right, target
 
@@ -243,15 +356,35 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
         ["meld", left.name, right.name],
     )
     assert initial.exit_code == 0, initial.output
-    assert len(provider.payloads) == 1
+    assert len(provider.payloads) == 0
     assert "MEM MELD · SYMMETRIC" in initial.output
+    assert "Compare:" in initial.output
+    assert "· IMPORTED" in initial.output
     assert "Participant compensation policy" in initial.output
     assert store._context_file(target.name).read_bytes() == target_before
     assert store.list_checkpoints(target.name) == []
+    comparison = load_comparison_analysis(left.uid, right.uid)
+    session = store.load_meld_session(target.uid)
+    assert comparison is not None
+    assert session is not None
+    assert session.comparison_seed is not None
+    assert session.comparison_seed.analysis.uid == comparison.uid
+    assert session.comparison_seed.analysis_digest == (
+        comparison_canonical_digest(comparison.to_dict())
+    )
+    assert [frame.uid for frame in session.frames] == [
+        frame.uid for frame in comparison.frames
+    ]
+    assert [
+        relation.uid for relation in session.current_assessment.relations
+    ] == [relation.uid for relation in comparison.relations]
+    assert [issue.uid for issue in session.current_assessment.issues] == [
+        issue.uid for issue in comparison.issues
+    ]
 
     resumed = runner.invoke(app, ["meld", left.name, right.name])
     assert resumed.exit_code == 0, resumed.output
-    assert len(provider.payloads) == 1
+    assert len(provider.payloads) == 0
     assert "Resumed without calling the semantic provider" in resumed.output
 
     grounded = runner.invoke(
@@ -269,7 +402,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
         ],
     )
     assert grounded.exit_code == 0, grounded.output
-    assert len(provider.payloads) == 2
+    assert len(provider.payloads) == 1
     assert "State: READY_TO_APPLY" in grounded.output
     assert "CAD 20–30" in grounded.output
     assert "cash" in grounded.output
@@ -282,7 +415,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
         ["meld", left.name, right.name, "--accept"],
     )
     assert applied.exit_code == 0, applied.output
-    assert len(provider.payloads) == 2
+    assert len(provider.payloads) == 1
     assert "Applied 2 meld results" in applied.output
     current = store.load_direct(target.name)
     assert [memory.content for memory in current.iter_items()] == [
@@ -320,7 +453,116 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     assert second_accept.exit_code == 0
     assert "no duplicate checkpoint" in second_accept.output
     assert len(store.list_checkpoints(target.name)) == 1
-    assert len(provider.payloads) == 2
+    assert len(provider.payloads) == 1
+
+
+def test_symmetric_meld_requires_saved_compare_before_provider_connection(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(
+        store,
+        with_comparison=False,
+    )
+
+    def unexpected_provider_factory():
+        raise AssertionError("Meld connected a provider before Compare.")
+
+    monkeypatch.setattr(
+        "memcommit.commands.meld.connect_codex_chatgpt_provider",
+        unexpected_provider_factory,
+    )
+    target_before = store._context_file(target.name).read_bytes()
+
+    result = runner.invoke(app, ["meld", left.name, right.name])
+
+    assert result.exit_code == 1
+    assert "requires a saved Compare analysis" in result.output
+    assert f"mem switch {left.name}" in result.output
+    assert f"mem compare --to {right.name}" in result.output
+    assert f"mem switch {target.name}" in result.output
+    assert store.load_meld_session(target.uid) is None
+    assert store._context_file(target.name).read_bytes() == target_before
+
+
+def test_symmetric_meld_rejects_stale_or_reverse_only_compare(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+
+    def unexpected_provider_factory():
+        raise AssertionError("Meld connected a provider for an invalid basis.")
+
+    monkeypatch.setattr(
+        "memcommit.commands.meld.connect_codex_chatgpt_provider",
+        unexpected_provider_factory,
+    )
+    changed = store.load_direct(left.name)
+    memory = next(iter(changed.iter_items()))
+    changed.replace(
+        type(memory)(
+            uid=memory.uid,
+            content="The compensation policy changed after Compare.",
+        )
+    )
+    store.save(changed)
+
+    stale = runner.invoke(app, ["meld", left.name, right.name])
+
+    assert stale.exit_code == 1
+    assert "is stale" in stale.output
+    assert "--refresh" in stale.output
+    assert store.load_meld_session(target.uid) is None
+
+    fresh_left = store.load_direct(left.name)
+    comparison_analysis_path(left.uid, right.uid).unlink()
+    _save_task2_comparison(store, right, fresh_left)
+    reverse_only = runner.invoke(
+        app,
+        ["meld", left.name, right.name],
+    )
+
+    assert reverse_only.exit_code == 1
+    assert "requires a saved Compare analysis" in reverse_only.output
+    assert store.load_meld_session(target.uid) is None
+
+
+def test_seeded_meld_schema_round_trips_and_rejects_tampering(
+    isolated_store,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+    comparison = load_comparison_analysis(left.uid, right.uid)
+    assert comparison is not None
+    session = MeldSession.create_symmetric_from_comparison(
+        comparison,
+        target,
+    )
+
+    value = session.to_dict()
+    restored = MeldSession.from_dict(value)
+
+    assert value["schema_version"] == 2
+    assert restored.to_dict() == value
+    legacy = MeldSession.create_symmetric(left, right, target).to_dict()
+    assert legacy["schema_version"] == 1
+    assert "comparison_seed" not in legacy
+    assert MeldSession.from_dict(legacy).to_dict() == legacy
+
+    bad_digest = json.loads(json.dumps(value))
+    bad_digest["comparison_seed"]["analysis_digest"] = "0" * 64
+    with pytest.raises(MeldError, match="digest does not match"):
+        MeldSession.from_dict(bad_digest)
+
+    bad_import = json.loads(json.dumps(value))
+    bad_import["turns"][0]["assessment"]["relations"][0][
+        "summary"
+    ] = "A forged imported relation."
+    with pytest.raises(MeldError, match="turn zero does not match"):
+        MeldSession.from_dict(bad_import)
 
 
 def test_defer_all_is_provider_free_and_does_not_mutate_target(
@@ -344,12 +586,12 @@ def test_defer_all_is_provider_free_and_does_not_mutate_target(
 
     assert deferred.exit_code == 0
     assert "KEPT_REVIEW_ONLY" in deferred.output
-    assert len(provider.payloads) == 1
+    assert len(provider.payloads) == 0
     assert store._context_file(target.name).read_bytes() == before
     assert store.list_checkpoints(target.name) == []
 
 
-def test_deferred_session_can_be_restarted_without_losing_it_on_provider_error(
+def test_deferred_session_restart_requires_exact_ordered_compare_basis(
     isolated_store,
     monkeypatch,
 ):
@@ -365,32 +607,30 @@ def test_deferred_session_can_be_restarted_without_losing_it_on_provider_error(
     deferred = store.load_meld_session(target.uid)
     assert deferred is not None
 
-    class FailingProvider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            raise RuntimeError("injected restart analysis failure")
-
-    _patch_provider(monkeypatch, FailingProvider())
     failed = runner.invoke(
         app,
         ["meld", right.name, left.name, "--restart"],
     )
     assert failed.exit_code == 1
+    assert "requires a saved Compare analysis" in failed.output
     still_deferred = store.load_meld_session(target.uid)
     assert still_deferred is not None
     assert still_deferred.uid == deferred.uid
 
-    _patch_provider(monkeypatch, provider)
+    reverse = _save_task2_comparison(store, right, left)
     restarted = runner.invoke(
         app,
         ["meld", right.name, left.name, "--restart"],
     )
 
     assert restarted.exit_code == 0, restarted.output
-    assert len(provider.payloads) == 2
+    assert len(provider.payloads) == 0
     replacement = store.load_meld_session(target.uid)
     assert replacement is not None
     assert replacement.uid != deferred.uid
     assert replacement.state == "AWAITING_REPLY"
+    assert replacement.comparison_seed is not None
+    assert replacement.comparison_seed.analysis.uid == reverse.uid
     assert [frame.context_name for frame in replacement.frames] == [
         right.name,
         left.name,
@@ -411,7 +651,7 @@ def test_symmetric_session_resumes_with_peer_arguments_reversed(
 
     assert resumed.exit_code == 0, resumed.output
     assert "Resumed without calling the semantic provider" in resumed.output
-    assert len(provider.payloads) == 1
+    assert len(provider.payloads) == 0
 
 
 def test_revision_flags_require_a_semantic_comment_or_choice(
@@ -518,7 +758,7 @@ def test_preserve_all_is_one_semantic_round_and_remains_non_applying(
     )
 
     assert result.exit_code == 0, result.output
-    assert len(provider.payloads) == 2
+    assert len(provider.payloads) == 1
     assert provider.payloads[-1]["current_turn"]["scope"] == "REMAINING"
     assert "READY_TO_APPLY" in result.output
     assert result.output.count("[PRESERVE]") == 2
@@ -653,11 +893,32 @@ def test_source_change_during_provider_call_is_rejected_before_session_save(
 
     provider = MutatingProvider()
     _patch_provider(monkeypatch, provider)
-    result = runner.invoke(app, ["meld", left.name, right.name])
+    initial = runner.invoke(app, ["meld", left.name, right.name])
+    assert initial.exit_code == 0, initial.output
+    saved_before = store.load_meld_session(target.uid)
+    assert saved_before is not None
+    saved_before_digest = meld_canonical_digest(saved_before.to_dict())
+
+    result = runner.invoke(
+        app,
+        [
+            "meld",
+            left.name,
+            right.name,
+            "--issue",
+            "1",
+            "--choice",
+            "1",
+            "--comment",
+            "Keep all supported payment details.",
+        ],
+    )
 
     assert result.exit_code == 1
     assert "changed after this meld was analyzed" in result.output
-    assert store.load_meld_session(target.uid) is None
+    persisted = store.load_meld_session(target.uid)
+    assert persisted is not None
+    assert meld_canonical_digest(persisted.to_dict()) == saved_before_digest
     assert store._context_file(target.name).read_bytes() == target_before
     assert store.list_checkpoints(target.name) == []
 

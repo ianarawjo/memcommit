@@ -8,6 +8,7 @@ proposals, readiness flag, or application authority.
 from __future__ import annotations
 
 import hashlib
+import json
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -56,6 +57,20 @@ _PRIORITIES = {"REQUIRED", "HELPFUL"}
 
 class ComparisonError(ValueError):
     """Invalid, unsupported, or internally inconsistent comparison state."""
+
+
+def comparison_canonical_digest(value: object) -> str:
+    """Return one deterministic digest for an exact comparison artifact."""
+    try:
+        encoded = json.dumps(
+            value,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    except (TypeError, ValueError) as error:
+        raise ComparisonError("Invalid comparison digest payload.") from error
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _exact_dict(

@@ -16,11 +16,17 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Iterable, Literal
 
+from memcommit.comparison import (
+    COMPARISON_RULESET_VERSION,
+    ComparisonAnalysis,
+    comparison_canonical_digest,
+)
 from memcommit.context import Context, Memory
 from memcommit.store import context_record_digest
 
 
-MELD_SCHEMA_VERSION = 1
+MELD_SCHEMA_VERSION = 2
+MELD_LEGACY_SCHEMA_VERSION = 1
 MELD_TEXT_LIMIT = 20_000
 MELD_NAME_LIMIT = 500
 MELD_ID_LIMIT = 240
@@ -1124,12 +1130,117 @@ class MeldApplication:
         )
 
 
+@dataclass(frozen=True)
+class MeldComparisonSeed:
+    """Exact ordered Compare snapshot that supplied turn zero."""
+
+    analysis_digest: str
+    analysis: ComparisonAnalysis
+
+    @classmethod
+    def create(
+        cls,
+        analysis: ComparisonAnalysis,
+    ) -> "MeldComparisonSeed":
+        if not isinstance(analysis, ComparisonAnalysis):
+            raise MeldError("Meld comparison seed must be a comparison.")
+        restored = ComparisonAnalysis.from_dict(analysis.to_dict())
+        if restored.ruleset_version != COMPARISON_RULESET_VERSION:
+            raise MeldError(
+                "Meld requires a comparison from the current relation "
+                "ruleset."
+            )
+        return cls.from_dict(
+            {
+                "analysis_digest": comparison_canonical_digest(
+                    restored.to_dict()
+                ),
+                "analysis": restored.to_dict(),
+            }
+        )
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "analysis_digest": self.analysis_digest,
+            "analysis": self.analysis.to_dict(),
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> "MeldComparisonSeed":
+        data = _exact_dict(
+            value,
+            {"analysis_digest", "analysis"},
+            "meld comparison seed",
+        )
+        try:
+            analysis = ComparisonAnalysis.from_dict(data["analysis"])
+        except (TypeError, ValueError) as error:
+            raise MeldError("Invalid meld comparison seed analysis.") from error
+        result = cls(
+            analysis_digest=_digest(
+                data["analysis_digest"],
+                "meld comparison seed analysis digest",
+            ),
+            analysis=analysis,
+        )
+        if result.analysis_digest != comparison_canonical_digest(
+            result.analysis.to_dict()
+        ):
+            raise MeldError(
+                "Meld comparison seed digest does not match its analysis."
+            )
+        return result
+
+
+def _comparison_meld_frames(
+    analysis: ComparisonAnalysis,
+) -> tuple[MeldFrame, MeldFrame]:
+    """Project ordered Compare frames without changing durable identities."""
+    frames = tuple(
+        MeldFrame.from_dict(
+            {
+                "uid": frame.uid,
+                "context_uid": frame.context_uid,
+                "context_name": frame.context_name,
+                "context_digest": frame.context_digest,
+                "role": "PEER",
+                "memories": [
+                    memory.to_dict() for memory in frame.memories
+                ],
+            }
+        )
+        for frame in analysis.frames
+    )
+    return frames[0], frames[1]
+
+
+def _comparison_meld_assessment(
+    analysis: ComparisonAnalysis,
+) -> MeldAssessment:
+    """Import read-only Compare semantics without inventing target results."""
+    return MeldAssessment.from_dict(
+        {
+            "overview": analysis.overview,
+            "relations": [
+                relation.to_dict() for relation in analysis.relations
+            ],
+            "issues": [issue.to_dict() for issue in analysis.issues],
+            "proposals": [],
+            # Compare has no mutation authority. Even an entirely resolved
+            # ledger needs a later explicit Meld materialization turn.
+            "ready_to_apply": False,
+        }
+    )
+
+
 @dataclass
 class MeldSession:
     uid: str
     mode: MeldMode
     frames: tuple[MeldFrame, ...]
     target: MeldTarget
+    schema_version: int = MELD_LEGACY_SCHEMA_VERSION
+    comparison_seed: MeldComparisonSeed | None = None
     state: MeldState = "PENDING_ANALYSIS"
     turns: tuple[MeldTurn, ...] = ()
     application: MeldApplication | None = None
@@ -1161,9 +1272,40 @@ class MeldSession:
         )
         return cls.from_dict(session.to_dict())
 
+    @classmethod
+    def create_symmetric_from_comparison(
+        cls,
+        analysis: ComparisonAnalysis,
+        target: Context,
+    ) -> "MeldSession":
+        """Start one target-bound Meld from an exact reviewed comparison."""
+        seed = MeldComparisonSeed.create(analysis)
+        frames = _comparison_meld_frames(seed.analysis)
+        if target.uid in {frame.context_uid for frame in frames} or (
+            target.name in {frame.context_name for frame in frames}
+        ):
+            raise MeldError(
+                "Symmetric meld target must differ from both sources."
+            )
+        session = cls(
+            uid=str(uuid.uuid4()),
+            mode="SYMMETRIC",
+            frames=frames,
+            target=MeldTarget.from_context(target),
+            schema_version=MELD_SCHEMA_VERSION,
+            comparison_seed=seed,
+        )
+        session = cls.from_dict(session.to_dict())
+        turn = session.start_initial_analysis()
+        session.record_assessment(
+            turn.uid,
+            _comparison_meld_assessment(seed.analysis),
+        )
+        return session
+
     def to_dict(self) -> dict[str, object]:
-        return {
-            "schema_version": MELD_SCHEMA_VERSION,
+        result: dict[str, object] = {
+            "schema_version": self.schema_version,
             "uid": self.uid,
             "mode": self.mode,
             "frames": [frame.to_dict() for frame in self.frames],
@@ -1176,28 +1318,42 @@ class MeldSession:
                 else None
             ),
         }
+        if self.schema_version == MELD_SCHEMA_VERSION:
+            result["comparison_seed"] = (
+                self.comparison_seed.to_dict()
+                if self.comparison_seed is not None
+                else None
+            )
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "MeldSession":
-        data = _exact_dict(
-            value,
-            {
-                "schema_version",
-                "uid",
-                "mode",
-                "frames",
-                "target",
-                "state",
-                "turns",
-                "application",
-            },
-            "meld session",
-        )
+        if not isinstance(value, dict):
+            raise MeldError("Invalid meld session.")
+        schema_version = value.get("schema_version")
         if (
-            isinstance(data["schema_version"], bool)
-            or data["schema_version"] != MELD_SCHEMA_VERSION
+            isinstance(schema_version, bool)
+            or schema_version
+            not in {MELD_LEGACY_SCHEMA_VERSION, MELD_SCHEMA_VERSION}
         ):
             raise MeldError("Unsupported meld session schema version.")
+        keys = {
+            "schema_version",
+            "uid",
+            "mode",
+            "frames",
+            "target",
+            "state",
+            "turns",
+            "application",
+        }
+        if schema_version == MELD_SCHEMA_VERSION:
+            keys.add("comparison_seed")
+        data = _exact_dict(
+            value,
+            keys,
+            "meld session",
+        )
         frames = tuple(
             MeldFrame.from_dict(item)
             for item in _array(data["frames"], "meld session frames")
@@ -1207,6 +1363,11 @@ class MeldSession:
             for item in _array(data["turns"], "meld session turns")
         )
         raw_application = data["application"]
+        raw_comparison_seed = (
+            data["comparison_seed"]
+            if schema_version == MELD_SCHEMA_VERSION
+            else None
+        )
         session = cls(
             uid=_canonical_uuid(data["uid"], "meld session uid"),
             mode=_literal(
@@ -1216,6 +1377,12 @@ class MeldSession:
             ),  # type: ignore[arg-type]
             frames=frames,
             target=MeldTarget.from_dict(data["target"]),
+            schema_version=schema_version,
+            comparison_seed=(
+                None
+                if raw_comparison_seed is None
+                else MeldComparisonSeed.from_dict(raw_comparison_seed)
+            ),
             state=_literal(
                 data["state"],
                 _STATES,
@@ -1386,6 +1553,20 @@ class MeldSession:
         self._validate()
 
     def _validate(self) -> None:
+        if self.schema_version not in {
+            MELD_LEGACY_SCHEMA_VERSION,
+            MELD_SCHEMA_VERSION,
+        }:
+            raise MeldError("Unsupported meld session schema version.")
+        if self.schema_version == MELD_LEGACY_SCHEMA_VERSION:
+            if self.comparison_seed is not None:
+                raise MeldError(
+                    "A legacy meld session cannot contain a comparison seed."
+                )
+        elif self.comparison_seed is None:
+            raise MeldError(
+                "A current meld session requires a comparison seed."
+            )
         if len(self.frames) != 2:
             raise MeldError("Context meld requires exactly two source frames.")
         if len({frame.uid for frame in self.frames}) != len(self.frames):
@@ -1413,6 +1594,21 @@ class MeldSession:
             raise MeldError(
                 "Directional meld requires INCOMING and BASELINE frames."
             )
+
+        if self.comparison_seed is not None:
+            analysis = self.comparison_seed.analysis
+            if analysis.ruleset_version != COMPARISON_RULESET_VERSION:
+                raise MeldError(
+                    "Meld comparison seed uses an unsupported relation "
+                    "ruleset."
+                )
+            expected_frames = _comparison_meld_frames(analysis)
+            if tuple(
+                frame.to_dict() for frame in self.frames
+            ) != tuple(frame.to_dict() for frame in expected_frames):
+                raise MeldError(
+                    "Meld source frames do not match their comparison seed."
+                )
 
         known_turn_uids: list[str] = []
         seen_turn_uids: set[str] = set()
@@ -1448,6 +1644,19 @@ class MeldSession:
                 self._validate_assessment(turn)
             known_turn_uids.append(turn.uid)
             seen_turn_uids.add(turn.uid)
+
+        if (
+            self.comparison_seed is not None
+            and self.turns
+            and self.turns[0].assessment is not None
+            and self.turns[0].assessment.to_dict()
+            != _comparison_meld_assessment(
+                self.comparison_seed.analysis
+            ).to_dict()
+        ):
+            raise MeldError(
+                "Meld turn zero does not match its imported comparison."
+            )
 
         if not self.turns:
             if (

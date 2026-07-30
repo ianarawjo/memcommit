@@ -100,6 +100,36 @@ The schema deliberately omits Meld dispositions and target Memories. Compare
 describes what exists in both, what differs, and what exists on only one side;
 Meld later decides what an accepted target should contain.
 
+## Compare-to-Meld handoff
+
+A new symmetric Meld now requires the exact current ordered Compare slot for
+its two sources. `mem meld LEFT RIGHT` loads only `LEFT → RIGHT`; it never
+silently substitutes `RIGHT → LEFT`, because the two saved slots deliberately
+retain observable presentation-order effects. A missing, stale, invalid, or
+older-ruleset analysis fails before a Meld provider is connected or a session
+is created and prints the commands needed to refresh the exact basis.
+
+The handoff is provider-free. The new Meld session embeds the complete
+`ComparisonAnalysis`, its canonical digest, and the same frame, relation,
+issue, and option identities. Its initial assessment is the inspected Compare
+overview, ledger, and grounding candidates with no target proposals and no
+readiness authority. The first issue or whole-set response becomes the first
+Meld semantic call; that grounded turn may then revise relationships and
+produce exact target Memories.
+
+Embedding the full basis instead of storing only a pointer is intentional.
+Compare retains only the latest ordered analysis and deletes pair artifacts
+when a source Context is deleted. A target-bound Meld must remain
+self-describing after a later Compare refresh while continuing to reject live
+source changes through its own Context-digest checks.
+
+Existing unseeded Meld sessions remain readable under their legacy schema.
+Directional Meld does not consume peer Compare output because its
+`INCOMING → BASELINE` authority contract is different. The first handoff slice
+also leaves target materialization for a later Meld turn when Compare reports
+no grounding candidates; it does not infer that a resolved relation ledger is
+itself permission to write a target.
+
 ## Provider and trust boundary
 
 The provider receives call-local opaque frame and Memory IDs, full bounded
@@ -298,12 +328,13 @@ operation-specific identities, evidence, persistence, and mutation semantics.
 - Automatic fresh analysis after a source change is intentional for Compare;
   it differs from an in-progress Atomize review, whose reviewed proposal fails
   stale rather than silently changing.
-- Compare and the current target-bound Meld implementation use the same
-  relation vocabulary but still have separate persisted schemas and provider
-  parsers. A later shared relation-ledger core should be extracted only after
-  the first real Compare result shows which fields both operations genuinely
-  need.
-- Meld does not yet import a `ComparisonAnalysis`. That future adapter must
-  bind the exact comparison UID and digest, create target-specific result
-  proposals, and retain the distinction between inspected candidate issues
-  and accepted grounding turns.
+- Symmetric Meld imports the exact `ComparisonAnalysis`, but the two operations
+  still retain separate persisted schemas after the handoff: Compare has no
+  target or turns, while Meld owns target proposals, dialogue, acceptance, and
+  application receipts.
+- The initial handoff imports no target proposal. If Compare has no grounding
+  candidates, the user currently needs a whole-set comment or preserve-all
+  turn to materialize a reviewable target proposal.
+- The Meld checkpoint records the complete source and turn evidence but does
+  not yet expose the originating Compare UID as a separate trace field; the
+  exact basis remains embedded and digest-bound in the saved Meld session.
