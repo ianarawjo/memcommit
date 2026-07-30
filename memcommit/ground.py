@@ -20,6 +20,7 @@ from memcommit.context import Context, Memory
 GROUND_SCHEMA_VERSION = 2
 GROUND_LEGACY_SCHEMA_VERSION = 1
 GROUND_TEXT_LIMIT = 20_000
+GROUND_GOAL_WORD_LIMIT = 40
 GroundStatus = Literal["OPEN", "GROUNDED", "DEFERRED"]
 GroundItemKind = Literal["RULE", "CASE", "ISSUE", "DECISION"]
 GroundItemStatus = Literal[
@@ -133,6 +134,27 @@ def _string(
     ):
         raise GroundError(f"Invalid {label}.")
     return value
+
+
+def validate_ground_goal(
+    value: object,
+    *,
+    empty: bool = False,
+    label: str = "grounding goal",
+) -> str:
+    """Validate one newly authored Goal without rewriting legacy records.
+
+    The word limit is a semantic authoring boundary. Existing version 1/2
+    records remain loadable even if an older Goal exceeded it; any new or
+    revised Goal must be compact enough to remain an orienting statement.
+    """
+    goal = _string(value, label, empty=empty)
+    if len(goal.split()) > GROUND_GOAL_WORD_LIMIT:
+        raise GroundError(
+            f"{label.capitalize()} must be "
+            f"{GROUND_GOAL_WORD_LIMIT} words or fewer."
+        )
+    return goal
 
 
 def _integer(value: object, label: str) -> int:
@@ -1214,6 +1236,7 @@ def create_ground_session(
     scope: tuple[str, ...] = (),
 ) -> GroundSession:
     """Create a validated empty scaffold without inferring rules or cases."""
+    goal = validate_ground_goal(goal, empty=True)
     session = GroundSession(
         uid=str(uuid.uuid4()),
         contract_name=validate_ground_contract_name(contract_name),
@@ -1993,7 +2016,7 @@ def revise_ground_goal(
             "Grounding workbench is stale. Create a new named Ground, or "
             "explicitly replace and rebind this one before revising its goal."
         )
-    goal = _string(goal, "revised grounding goal")
+    goal = validate_ground_goal(goal, label="revised grounding goal")
     if goal == session.goal:
         raise GroundError("Grounding goal revision is a no-op.")
     iteration = session.revision + 1

@@ -24,6 +24,7 @@ from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     render_exact_command_blocks,
 )
+from memcommit.commands.ground_shell import GROUND_GOAL_FRAME_HEIGHT
 from memcommit.commands.tui_primitives import (
     TuiRegion,
     build_framed_multiline_input,
@@ -153,7 +154,7 @@ def render_named_ground_top_panel(session: GroundSession) -> str:
         [
             (
                 f"MEM GROUND · {safe_terminal_text(session.contract_name)} · "
-                f"SAVED · {state} · REV {session.revision}"
+                f"WORKING · SAVED · {state} · REV {session.revision}"
             ),
             "GOAL",
             f"  {_line(session.goal or '(not yet stated)')}",
@@ -182,7 +183,7 @@ def render_named_ground_header(session: GroundSession) -> str:
     )
     return (
         f" MEM GROUND · {safe_terminal_text(session.contract_name)} · "
-        f"SAVED · {state} · REV {session.revision}"
+        f"WORKING · SAVED · {state} · REV {session.revision}"
     )
 
 
@@ -567,8 +568,9 @@ def run_named_ground_shell(
         )
 
     bindings = KeyBindings()
-    # Ground has five peer workbench panes; a three-row minimum keeps them
-    # usable in the conventional 24-row terminal without changing other TUIs.
+    # Goal stays compact because new/revised Goals are limited to 40 words.
+    # The scrollbar preserves access to older records that predate that limit.
+    # Contexts, Rules, Cases, and Dialogue share the flexible reading space.
     pane_height = equal_pane_height(minimum=3)
     message_height = Dimension(min=4, preferred=5, max=7)
     action_height = Dimension(min=5, preferred=6, max=8)
@@ -576,7 +578,7 @@ def run_named_ground_shell(
         "GOAL",
         render_named_ground_goal_pane(session),
         buffer_name="ground-named-goal",
-        height=pane_height,
+        height=GROUND_GOAL_FRAME_HEIGHT,
     )
     contexts_pane = build_scrollable_text_pane(
         "CONTEXTS",

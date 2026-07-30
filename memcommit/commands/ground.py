@@ -42,6 +42,7 @@ from memcommit.ground import (
     stale_ground_frames,
     target_requirement_status,
     validate_ground_contract_name,
+    validate_ground_goal,
 )
 from memcommit.ground_dialogue import (
     GROUND_DIALOGUE_USER_TEXT_LIMIT,
@@ -84,10 +85,7 @@ def render_ground_start(initial_request: str = "") -> str:
     goal_lines = (
         ["  (not yet stated)"]
         if not safe_goal
-        else [
-            "  WORKING · FROM STARTING REQUEST",
-            f"  {safe_goal}",
-        ]
+        else [f"  {safe_goal}"]
     )
     dialogue_lines = (
         [
@@ -111,7 +109,7 @@ def render_ground_start(initial_request: str = "") -> str:
     )
     return "\n".join(
         [
-            "MEM GROUND · NEW · NOT SAVED",
+            "MEM GROUND · WORKING · NOT SAVED",
             "",
             "GOAL",
             *goal_lines,
@@ -551,12 +549,16 @@ def _ground_action_proposal(
             "Checkpoints: unchanged",
         )
     elif kind == "REVISE_GOAL":
+        revised_goal = validate_ground_goal(
+            action.content,
+            label="revised Ground goal",
+        )
         argv = (
             "mem",
             "ground",
             session.contract_name,
             "--revise-goal",
-            action.content,
+            revised_goal,
             "--change-reason",
             action.rationale,
         )

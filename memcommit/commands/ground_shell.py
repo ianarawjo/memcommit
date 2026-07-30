@@ -44,12 +44,17 @@ from memcommit.commands.tui_primitives import (
     require_interactive_terminal,
     safe_terminal_text,
 )
-from memcommit.ground import validate_ground_contract_name
+from memcommit.ground import (
+    GroundError,
+    validate_ground_contract_name,
+    validate_ground_goal,
+)
 
 
 INITIAL_QUESTION = (
     "What are you trying to understand, decide, or make together?"
 )
+GROUND_GOAL_FRAME_HEIGHT = Dimension(min=3, preferred=5, max=5)
 
 
 class GroundInterpreter(Protocol):
@@ -113,7 +118,7 @@ def render_ground_top_panel(
     )
     return "\n".join(
         [
-            "MEM GROUND · NEW · NOT SAVED",
+            "MEM GROUND · WORKING · NOT SAVED",
             "GOAL",
             f"  {safe_terminal_text(goal)}",
             "CONTEXTS",
@@ -133,16 +138,7 @@ def render_ground_goal_pane(
 ) -> str:
     """Render the complete blank-Ground Goal state for its own viewport."""
     if proposal is None:
-        lines = [
-            (
-                "WORKING"
-                if working_goal
-                else "(not yet stated)"
-            ),
-        ]
-        if working_goal:
-            lines.append(safe_terminal_text(working_goal))
-        return "\n".join(lines)
+        return safe_terminal_text(working_goal or "(not yet stated)")
 
     lines = [
         "PROPOSED",
@@ -291,9 +287,16 @@ def _freeze_proposal(response: object) -> GroundShellProposal:
     ground_name = validate_ground_contract_name(
         _command_text(_field(source, "ground_name"), "Ground name")
     )
+    try:
+        goal = validate_ground_goal(
+            _command_text(_field(source, "goal"), "Goal"),
+            label="Ground goal",
+        )
+    except GroundError as error:
+        raise ValueError(str(error)) from error
     return GroundShellProposal(
         ground_name=ground_name,
-        goal=_command_text(_field(source, "goal"), "Goal"),
+        goal=goal,
         understanding=_required_text(understanding, "understanding"),
         question=_required_text(question, "question"),
     )
@@ -364,8 +367,10 @@ def run_ground_shell(
     )
 
     bindings = KeyBindings()
-    # Five independent workbench panes must still fit a conventional 24-row
-    # terminal. Other TUI users retain the shared four-row default.
+    # Goal is an orientation statement, not a document surface. Three body
+    # rows are enough for the 40-word authoring contract; longer legacy or
+    # provisional text remains inspectable through this pane's scrollbar.
+    # The remaining four workbench panes share the flexible reading space.
     pane_height = equal_pane_height(minimum=3)
     message_height = Dimension(min=4, preferred=5, max=7)
     action_height = Dimension(min=5, preferred=6, max=8)
@@ -373,7 +378,7 @@ def run_ground_shell(
         "GOAL",
         render_ground_goal_pane(working_goal=working_goal),
         buffer_name="ground-new-goal",
-        height=pane_height,
+        height=GROUND_GOAL_FRAME_HEIGHT,
     )
     contexts_pane = build_scrollable_text_pane(
         "CONTEXTS",
@@ -432,7 +437,7 @@ def run_ground_shell(
         input_area.buffer.cursor_position = len(working_goal)
 
     header = Window(
-        FormattedTextControl(" MEM GROUND · NEW · NOT SAVED"),
+        FormattedTextControl(" MEM GROUND · WORKING · NOT SAVED"),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )

@@ -12,8 +12,10 @@ import json
 from typing import Callable, Literal, Protocol, TypeAlias, cast
 
 from memcommit.ground import (
+    GROUND_GOAL_WORD_LIMIT,
     GROUND_TEXT_LIMIT,
     GroundError,
+    validate_ground_goal,
     validate_ground_contract_name,
 )
 from memcommit.query_provider import QueryProviderError
@@ -164,7 +166,8 @@ def _build_prompt(user_text: str) -> str:
         "exactly empty strings.\n"
         "Otherwise use PROPOSE. Supply a concise portable lowercase "
         "ground_name, a Goal describing what will be understood, decided, or "
-        "made together. Ask one short "
+        f"made together in no more than {GROUND_GOAL_WORD_LIMIT} words. "
+        "Ask one short "
         "question inviting approval or refinement. For PROPOSE, ground_name, "
         "and goal must both be non-empty.\n"
         "Do not invent a separate completion condition. Grounding ends only "
@@ -255,11 +258,12 @@ def _parse_turn(raw: object) -> GroundDialogueTurn:
         raise GroundDialogueError(
             "Codex ground dialogue returned an invalid Ground name."
         ) from error
-    validated_goal = _bounded_nonblank(
-        goal,
-        "Goal",
-        GROUND_TEXT_LIMIT,
-    )
+    try:
+        validated_goal = validate_ground_goal(goal, label="Goal")
+    except GroundError as error:
+        raise GroundDialogueError(
+            "Codex ground dialogue returned an invalid Goal."
+        ) from error
     return GroundDialogueProposal(
         understanding=understanding,
         question=question,

@@ -99,6 +99,7 @@ def test_proposal_uses_one_strict_provider_call_and_returns_typed_turn():
     assert set(schema["required"]) == set(schema["properties"])
     assert schema["additionalProperties"] is False
     assert "Do not construct, quote, or run a mem command." in prompt
+    assert "no more than 40 words" in prompt
     assert "Never claim that a Ground was created" in prompt
 
 
@@ -184,6 +185,10 @@ def test_ask_uses_empty_proposal_fields_and_factory_is_called_once():
         ),
         (
             _proposal(goal="x" * (GROUND_TEXT_LIMIT + 1)),
+            "invalid Goal",
+        ),
+        (
+            _proposal(goal=" ".join(f"word{index}" for index in range(41))),
             "invalid Goal",
         ),
     ],

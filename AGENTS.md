@@ -56,6 +56,9 @@ boundary and the agent as the conversational orchestrator.
   displayed command. Ground has no separate completion criterion: closing a
   view is not agreement, and any future whole-Ground agreement must require
   explicit approval of one reviewed Goal–Rules–Cases revision.
+- Keep every newly created or revised durable Goal to 40 whitespace-delimited
+  words or fewer. A raw starting request may be longer because it is dialogue,
+  not yet a saved Goal; distill it before proposing the exact creation command.
 - The blank TUI sends only the person's submitted dialogue text to the
   provider. It must not infer, load, or transmit the current Context,
   query-only sources, or existing Ground data.

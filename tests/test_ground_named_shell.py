@@ -134,7 +134,10 @@ def test_named_top_panel_keeps_goal_rules_and_cases_visible():
 
     rendered = render_named_ground_top_panel(session)
 
-    assert "MEM GROUND · fixture-ground · SAVED · UNBOUND · REV 0" in rendered
+    assert (
+        "MEM GROUND · fixture-ground · WORKING · SAVED · UNBOUND · REV 0"
+        in rendered
+    )
     assert "\nGOAL\n  Build one verified fixture." in rendered
     assert "Every required target has reviewed support." not in rendered
     assert "Build one verified fixture." in rendered

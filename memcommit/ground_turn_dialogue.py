@@ -12,10 +12,13 @@ from dataclasses import dataclass, field
 from typing import Callable, Literal, Protocol, TypeAlias, cast
 
 from memcommit.ground import (
+    GROUND_GOAL_WORD_LIMIT,
     GROUND_SCHEMA_VERSION,
     GROUND_TEXT_LIMIT,
+    GroundError,
     GroundItem,
     GroundSession,
+    validate_ground_goal,
 )
 from memcommit.query_provider import QueryProviderError
 
@@ -564,9 +567,19 @@ def _parse_turn(
             value,
             except_fields={"content", "rationale"},
         )
+        bounded_goal = _bounded_text(value["content"], "revised Goal")
+        try:
+            revised_goal = validate_ground_goal(
+                bounded_goal,
+                label="revised Ground goal",
+            )
+        except GroundError as error:
+            raise GroundTurnError(
+                "Ground turn returned an invalid revised Goal."
+            ) from error
         return GroundTurnAction(
             **common,
-            content=_bounded_text(value["content"], "revised Goal"),
+            content=revised_goal,
             rationale=_bounded_text(
                 value["rationale"],
                 "Goal revision reason",
@@ -697,7 +710,8 @@ def _build_prompt(session: GroundSession, user_text: str) -> str:
         "BIND requires an explicit Task description and explicit raw, "
         "derived, publication-target Context names. Placement and blocked "
         "targets are optional; never infer them from a current directory.\n"
-        "REVISE_GOAL requires replacement content and a reason. "
+        "REVISE_GOAL requires replacement content no longer than "
+        f"{GROUND_GOAL_WORD_LIMIT} words and a reason. "
         "PROPOSE_RULE requires Rule content, rationale, and provenance. "
         "PROPOSE_CASE requires a listed Rule id, a locally supplied source "
         "alias from the visible turn, listed target names, rationale, role, "

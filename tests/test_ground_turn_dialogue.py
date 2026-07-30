@@ -171,6 +171,7 @@ def test_unbound_turn_can_ask_or_propose_one_explicit_binding():
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
     assert "Do not construct, quote, or run a mem command." in prompt
+    assert "no longer than 40 words" in prompt
     payload = json.loads(prompt.split("GROUND TURN PAYLOAD:\n", 1)[1])
     assert payload["ground"]["state"] == "UNBOUND"
     assert payload["ground"]["target_contexts"] == []
@@ -260,6 +261,15 @@ def test_ask_requires_every_action_field_to_be_empty():
             _bound_ground,
             _turn("REVIEW_ITEM", selector="r1", decision=""),
             "invalid review decision",
+        ),
+        (
+            _bound_ground,
+            _turn(
+                "REVISE_GOAL",
+                content=" ".join(f"word{index}" for index in range(41)),
+                rationale="The proposed replacement is too broad.",
+            ),
+            "invalid revised Goal",
         ),
         (
             lambda: create_ground_session("named-ground"),

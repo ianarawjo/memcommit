@@ -47,11 +47,11 @@ presentations of the same unsaved state:
 
 - with interactive stdin and stdout (a TTY), it opens a full-screen terminal
   UI (a TUI);
-- outside a TTY, it prints a stable `NEW` snapshot and exits without reading
-  stdin or contacting a provider.
+- outside a TTY, it prints a stable `WORKING · NOT SAVED` snapshot and exits
+  without reading stdin or contacting a provider.
 
 A natural-language positional value that cannot be a portable Ground name
-starts the same unsaved flow with that exact value shown as a `WORKING` Goal:
+starts the same unsaved flow with that exact value shown in the Goal pane:
 
 ```bash
 mem ground "I want to separate Task 1 into wiki and user-facing material."
@@ -102,10 +102,13 @@ privacy decisions without helping the immediate dialogue. A distinct
 named-draft feature can be designed later if interrupted-session recovery
 becomes necessary.
 
-Persistence state belongs to the overall artifact header. The header says
-`NEW · NOT SAVED`; the Goal pane says only `WORKING` or `PROPOSED`. Repeating
-`NOT SAVED` inside one component made it look like Goal had a different save
-state from Contexts, Rules, Cases, or Dialogue.
+Lifecycle and persistence state belong to the overall artifact header. An
+unsaved Ground says `MEM GROUND · WORKING · NOT SAVED`; a named one says
+`WORKING · SAVED`. The initial Goal pane therefore contains only the Goal
+text, while `PROPOSED` remains available to distinguish an unapproved
+replacement candidate. Repeating `WORKING` or `NOT SAVED` inside one
+component made it look like Goal had a different state from Contexts, Rules,
+Cases, or Dialogue.
 
 The first full-screen implementation kept Goal, Rules, and Cases in a short
 fixed summary while Dialogue consumed most of the available height. An actual
@@ -115,9 +118,12 @@ primary artifact. It also made a long Goal, Rule, or Case inaccessible rather
 than merely compact.
 
 The revised layout presents Goal, Contexts, Rules, Cases, and Dialogue as five
-peer workbench components. They receive approximately equal vertical weight
-after the composer and footer have been allocated space, and each component
-has its own focusable, independently scrollable viewport:
+peer workbench components, but peers do not need identical height. Goal is an
+orientation statement: every newly created or revised durable Goal is limited
+to 40 whitespace-delimited words, and its frame is capped at three visible
+body rows. Contexts, Rules, Cases, and Dialogue share the remaining flexible
+height. Every component keeps its own focusable, independently scrollable
+viewport:
 
 ```text
 ┌─ GOAL ────────────────────────────────────────────────┐
@@ -140,10 +146,19 @@ has its own focusable, independently scrollable viewport:
 └───────────────────────────────────────────────────────┘
 ```
 
-Equal weight does not mean equal semantic importance or an exact pixel
-guarantee. It prevents one layer from permanently taking the screen while
-letting all five regions expand or contract with terminal height. Ground uses
-a three-row pane minimum so the five panes and composer still fit a
+The cap prevents an almost-always-short Goal from reserving empty rows while
+the evidence and dialogue panels need space. The raw starting request is
+exempt because it is provisional dialogue, not yet a saved Goal; if it is
+long, the three-row viewport scrolls until the provider distills a proposed
+Goal. Existing version 1/2 Grounds with longer Goals also remain loadable and
+scrollable. New initial proposals, CLI creation, and Goal revisions reject a
+41st word before approval or persistence. Counting by whitespace is
+deliberately deterministic but imperfect for languages normally written
+without spaces; a later tokenizer-aware rule must preserve the same
+cross-provider predictability.
+
+The flexible panes use a three-row frame minimum so the five panes and
+composer still fit a
 conventional 24-row terminal; the shared primitive's default remains
 unchanged for other commands. `Tab` and `Shift-Tab` move focus among the five
 viewports and the message composer. Arrow and page-navigation keys scroll the
@@ -233,6 +248,41 @@ by opening the source. Discovery must not load Memory content, traverse a
 to the blank-entry provider. A candidate name is a suggestion, not permission
 to inspect or bind it.
 
+The implementation audit found that the needed strict catalog does not exist
+yet. `MemoryStore.list_context_names()` returns canonical ordinary Context
+names, but it currently `json.load()`s each complete `context.json` to validate
+the header, thereby materializing direct Memory text even though it returns
+only names. It does not dereference `context_ref` or open a query-only source,
+but it is still too broad for a blank-Ground metadata-only promise. The future
+slice therefore needs a directory/header-only locator catalog or a separate
+atomically maintained metadata index before wiring discovery into this pane.
+The existing arrow-key Context picker can contribute navigation conventions,
+not its single-select switching semantics.
+
+Discovery, inference, and binding are three different states:
+
+- **discovered** means a public locator exists;
+- **suggested** means weak evidence makes one role plausible;
+- **bound** means the person approved an exact versioned frame command.
+
+The Contexts pane should label ephemeral results `SUGGESTED · NOT BOUND`.
+Local ranking may use an exact Goal mention, normalized name tokens, lexical
+namespace proximity, and a `CURRENT` badge. These are weak hints only. Slash
+namespaces do not prove parentage or ownership, and the active Context is a
+global mutable pointer that may differ across concurrent terminal or agent
+work, so neither can establish evidence or a target role. With the present
+metadata, name-only ranking also cannot reliably distinguish raw evidence,
+atomized output, organizational authority, or a writable local fork.
+
+If name-only ranking is insufficient, semantic role suggestions require a
+separate explicit action. The person first narrows the local candidate set;
+only the Goal plus local aliases, selected public names, and recorded access
+classes may then be sent to a dedicated provider call. The full catalog,
+durable UIDs, Memory text, query-only routing metadata, and query source
+content remain local. The provider may return alias-to-role hypotheses and
+short reasons, never selection or argv. The person still edits or confirms
+those roles before the existing binding receipt appears.
+
 The picker should ask the person to assign roles rather than merely check a
 set of Contexts:
 
@@ -250,12 +300,13 @@ target.
 
 After role assignment the host constructs one exact `mem ground` binding argv
 locally, states which frames will be fingerprinted and saved, and waits for
-the existing dedicated approval action. No Context is inferred from the
-current directory, current active Context, name similarity, recency, or the
-provisional Goal. This keeps a helpful “start from nothing” path compatible
-with the existing privacy, multi-Context, and one-command approval
-boundaries. Search ranking, metadata fields, and the picker interaction itself
-remain future work.
+the existing dedicated approval action. Candidate ranking may use the weak
+signals above, but no Context is selected or bound from terminal location,
+the active Context, name similarity, recency, or the provisional Goal. This
+keeps a helpful “start from nothing” path compatible with the privacy,
+multi-Context, and one-command approval boundaries. The metadata catalog,
+ranking, role picker, and provider-consent interaction remain future work;
+this change intentionally implements none of them.
 
 The current provider is the existing one-shot Codex adapter authenticated by
 the local ChatGPT login. Each interpretation is ephemeral and receives only
@@ -278,8 +329,8 @@ The original blank-entry slice ended after creating or cancelling one initial
 Ground. The continuing vertical slice now enters the named-Ground TUI
 immediately after creation and also opens that TUI when an existing name is
 entered without options in a terminal. The five-component view
-changes from `NEW · NOT SAVED` to `SAVED · UNBOUND`, then to `SAVED · BOUND`
-after an explicitly approved binding command.
+changes from `WORKING · NOT SAVED` to `WORKING · SAVED · UNBOUND`, then to
+`WORKING · SAVED · BOUND` after an explicitly approved binding command.
 
 The continuing loop supports one exact command at a time for binding, Goal
 revision, Rule proposal, Rule/Case review, and traceable Case proposal.

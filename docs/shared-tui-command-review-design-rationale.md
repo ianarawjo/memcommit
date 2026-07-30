@@ -80,10 +80,10 @@ sequence:
 
 ```text
 create named Ground
-→ show SAVED · UNBOUND
+→ show WORKING · SAVED · UNBOUND
 → ask for explicit Task/raw/derived/publication-target names
 → approve one exact binding command
-→ show SAVED · BOUND
+→ show WORKING · SAVED · BOUND
 → propose one Rule
 → separately review that proposed Rule
 → propose one traceable Case from a bound candidate Memory
@@ -94,9 +94,11 @@ The first implementation used a seven-row upper summary for Goal, Rules, and
 Cases and gave the remaining body to Dialogue. The first realistic run showed
 that this made three editable Ground layers look subordinate and prevented a
 long item from being inspected in place. Ground now composes five peer
-workbench components—Goal, Contexts, Rules, Cases, and Dialogue—with
-approximately equal vertical weight. Each owns a focusable scroll viewport,
-so one growing component does not consume or truncate the others. Contexts is
+workbench components—Goal, Contexts, Rules, Cases, and Dialogue. Each owns a
+focusable scroll viewport, so growth never makes content inaccessible.
+Semantic peers are not forced to reserve equal blank space: newly authored
+Goals are capped at 40 words and their frame at three visible body rows, while
+Contexts, Rules, Cases, and Dialogue share the flexible height. Contexts is
 the visible evidence-and-target frame, not another semantic result layer
 beside Goal–Rules–Cases. The message composer is a separately bordered action
 region below them; it is not a sixth workbench component.
@@ -252,8 +254,9 @@ state the person did not approve.
 Rejected after the realistic Ground run. It conserved rows, but it made Goal,
 Rules, and Cases appear to be passive status while Dialogue occupied most of
 the screen. Truncating those layers also made “always visible” mean “not
-actually inspectable.” Equal-weight independent viewports preserve the
-five-component workbench view and move overflow handling to scrolling.
+actually inspectable.” Independent viewports preserve the five-component
+workbench; the later three-line Goal cap is a content-specific allocation,
+not a return to one dominant transcript.
 
 ## Current limitations
 

@@ -9,6 +9,7 @@ from prompt_toolkit.layout import FormattedTextControl
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.ground_shell import (
+    GROUND_GOAL_FRAME_HEIGHT,
     GroundShellProposal,
     _anchored_conversation_fragments,
     format_proposal_command,
@@ -61,7 +62,7 @@ def test_fixed_top_panel_and_effect_review_show_all_boundaries():
     proposed = render_ground_top_panel(frozen)
     review = render_proposal_review(frozen)
 
-    assert blank.startswith("MEM GROUND · NEW · NOT SAVED")
+    assert blank.startswith("MEM GROUND · WORKING · NOT SAVED")
     assert "GOAL\n  (not yet stated)" in blank
     assert "COMPLETION" not in blank
     assert "CONTEXTS\n  (not bound; not inferred)" in blank
@@ -90,7 +91,7 @@ def test_blank_ground_layers_render_as_complete_independent_components():
     assert render_ground_goal_pane() == "(not yet stated)"
     assert render_ground_goal_pane(
         working_goal="Split Task 1 into audience-facing fixtures."
-    ) == "WORKING\nSplit Task 1 into audience-facing fixtures."
+    ) == "Split Task 1 into audience-facing fixtures."
     assert render_ground_goal_pane(frozen) == (
         "PROPOSED\nFind what was reported."
     )
@@ -105,6 +106,8 @@ def test_blank_ground_layers_render_as_complete_independent_components():
     contexts = render_ground_contexts_pane()
     assert "(not bound; not inferred)" in contexts
     assert "current Context is not read or inferred" in contexts
+    assert GROUND_GOAL_FRAME_HEIGHT.preferred == 5
+    assert GROUND_GOAL_FRAME_HEIGHT.max == 5
 
 
 def test_approval_viewport_anchor_tracks_end_of_exact_proposed_command():
@@ -450,6 +453,30 @@ def test_malformed_proposal_never_reaches_apply():
         pipe_input.send_text("Create it.\rq")
         result = run_ground_shell(
             interpret=raw_only,
+            apply=lambda value: applied.append(value),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CANCELLED"
+    assert applied == []
+
+
+def test_overlong_goal_from_custom_interpreter_never_reaches_apply():
+    applied: list[GroundShellProposal] = []
+    overlong = Propose(
+        kind="PROPOSE",
+        understanding="The requested Goal is too broad.",
+        question="Approve?",
+        ground_name="too-broad",
+        goal=" ".join(f"word{index}" for index in range(41)),
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("Create it.\rq")
+        result = run_ground_shell(
+            interpret=lambda _text: overlong,
             apply=lambda value: applied.append(value),
             app_input=pipe_input,
             app_output=DummyOutput(),
