@@ -582,6 +582,7 @@ def run_named_ground_shell(
     # Ground has five peer workbench panes; a three-row minimum keeps them
     # usable in the conventional 24-row terminal without changing other TUIs.
     pane_height = equal_pane_height(minimum=3)
+    message_height = Dimension(min=4, preferred=5, max=7)
     action_height = Dimension(min=5, preferred=6, max=8)
     goal_pane = build_scrollable_text_pane(
         "GOAL",
@@ -638,7 +639,7 @@ def run_named_ground_shell(
         "MESSAGE",
         prompt="› ",
         buffer_name="ground-named-message",
-        height=action_height,
+        height=message_height,
     )
     input_area = composer.text_area
     header = Window(

@@ -384,6 +384,7 @@ def run_ground_shell(
     # Five independent workbench panes must still fit a conventional 24-row
     # terminal. Other TUI users retain the shared four-row default.
     pane_height = equal_pane_height(minimum=3)
+    message_height = Dimension(min=4, preferred=5, max=7)
     action_height = Dimension(min=5, preferred=6, max=8)
     goal_pane = build_scrollable_text_pane(
         "GOAL",
@@ -437,7 +438,7 @@ def run_ground_shell(
         "MESSAGE",
         prompt="› ",
         buffer_name="ground-new-message",
-        height=action_height,
+        height=message_height,
     )
     input_area = composer.text_area
     if working_goal:

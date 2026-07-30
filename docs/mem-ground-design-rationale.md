@@ -124,6 +124,12 @@ component. Its box makes the typing boundary recognizable to users familiar
 with conversation-first terminal agents and prevents a blank prompt from
 looking like ordinary shell output.
 
+The Message composer is intentionally one row shorter than the command-review
+Action panel. A routine conversational turn needs enough room for a short
+multiline correction but should return one row to the five reading panes. The
+Action panel retains its height because its command/effect navigation,
+approval, refinement, and cancellation controls must remain visible together.
+
 `CONTEXTS` is a visible workbench frame, not a fourth semantic result layer
 beside Goal–Rules–Cases. Blank and unbound Grounds state that no Context was
 bound or inferred. A bound Ground renders only recorded role, name, and
