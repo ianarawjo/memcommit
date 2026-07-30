@@ -101,6 +101,41 @@ when its direct entries are real namespace directories. Unexpected files,
 reserved storage artifacts, and symbolic links cause initialization to fail
 without overwriting them.
 
+### Opt-in parent materialization
+
+Plain `mem init NAME` retains the one-name contract above. A participant who
+wants shell-like upward navigation may instead ask initialization to ensure
+every lexical prefix:
+
+```bash
+mem init --parents test/update/from
+mem init -p test/update/to
+```
+
+The first command creates the missing Contexts `test`, `test/update`, and
+`test/update/from`. The second reuses the first two unchanged and creates only
+`test/update/to`. Re-running either command is idempotent: existing Context
+UIDs, direct contents, and checkpoint histories are preserved, and the
+requested leaf becomes current.
+
+Every newly materialized prefix is an ordinary empty Context with its own
+initial checkpoint. Creation holds all prefix write locks from preflight
+through the final current-Context state write. If any Context, checkpoint, or
+state write fails, only the Contexts created by that invocation are rolled
+back; reused prefixes and descendants are preserved.
+
+This is an in-process exception transaction, not a durable multi-file journal.
+A process or machine crash between prefix writes can leave a partial
+hierarchy. Re-running the same idempotent `mem init --parents NAME` repairs the
+missing prefixes without replacing Contexts that were already persisted.
+
+`--parents` is opt-in because automatically changing every slash-delimited
+creation into several visible, UID-bearing Contexts would silently alter
+existing scripts and picker contents. It is a creation convenience, not a
+permanent “all ancestors exist” invariant: exact parent deletion may still
+leave a descendant addressable. Missing parents can be materialized again by
+re-running `mem init --parents` for that descendant.
+
 ## 5. Path Hierarchy Is Not Logical Membership
 
 Path prefixes are addresses and physical organization:
@@ -270,6 +305,7 @@ unchanged.
 The implementation is tested for:
 
 - root-first and descendant-first creation;
+- opt-in, idempotent parent materialization and all-or-nothing rollback;
 - independent UIDs, memories, and checkpoint histories;
 - root and descendants appearing in `mem contexts`;
 - no implicit embed from a slash prefix;

@@ -3,7 +3,48 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.context_picker import choose_context
-from memcommit.store import MemoryStore
+from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+
+
+def _is_relative_selector(name: str) -> bool:
+    """Return whether ``name`` opts into current-Context-relative lookup."""
+    return name in {".", ".."} or name.startswith(("./", "../"))
+
+
+def _resolve_relative_selector(name: str, current: str) -> str:
+    """Resolve an explicit lexical selector against one canonical name."""
+    parts = current.split("/")
+    selector_parts = name.split("/")
+    # Match familiar shell spelling: a single trailing slash does not change
+    # the destination (`../` is the same node as `..`). Repeated or interior
+    # empty segments remain invalid rather than being silently normalized.
+    if selector_parts[-1] == "":
+        selector_parts.pop()
+
+    if not selector_parts or any(part == "" for part in selector_parts):
+        raise ValueError(
+            f"relative Context selector '{name}' contains an empty segment."
+        )
+
+    for part in selector_parts:
+        if part == ".":
+            continue
+        if part == "..":
+            if not parts:
+                raise ValueError(
+                    f"relative Context selector '{name}' escapes above the "
+                    "namespace root."
+                )
+            parts.pop()
+            continue
+        parts.append(part)
+
+    if not parts:
+        raise ValueError(
+            f"relative Context selector '{name}' resolves to the namespace "
+            "root, which is not a Context."
+        )
+    return "/".join(parts)
 
 
 def cmd(
@@ -11,13 +52,15 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Context name to switch to; use '..' for an existing "
-                "namespace parent, or omit to choose interactively"
+                "Canonical Context name, or an explicit lexical relative "
+                "selector such as '.', '..', './child', or '../sibling'; "
+                "omit to choose interactively"
             )
         ),
     ] = None,
 ) -> None:
     store = MemoryStore()
+    expected_current = store.current_context_name()
     if name is None:
         names = store.list_context_names()
         if not names:
@@ -30,7 +73,7 @@ def cmd(
         try:
             name = choose_context(
                 names,
-                current=store.current_context_name(),
+                current=expected_current,
             )
         except ValueError as error:
             typer.secho(
@@ -43,33 +86,41 @@ def cmd(
             typer.echo("Switch cancelled.")
             return
 
-    if name == "..":
-        current = store.current_context_name()
-        if current is None:
+    selector = name
+    if _is_relative_selector(selector):
+        if expected_current is None:
             typer.secho(
-                "Error: cannot switch to '..': no current context is set.",
+                f"Error: cannot switch to '{selector}': no current context is "
+                "set.",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(1)
-        if "/" not in current:
+        if selector == ".." and "/" not in expected_current:
             typer.secho(
-                f"Error: context '{current}' has no namespace parent.",
+                f"Error: context '{expected_current}' has no namespace parent.",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(1)
-        parent = current.rsplit("/", 1)[0]
-        # Slash namespaces are lexical only. An explicit Context embedding is
-        # not a unique filesystem-style parent and must not affect `..`.
-        if not store.context_exists(parent):
+        try:
+            name = _resolve_relative_selector(selector, expected_current)
+        except ValueError as error:
             typer.secho(
-                f"Error: namespace parent context '{parent}' does not exist.",
+                f"Error: {error}",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(1)
-        name = parent
+        # Slash namespaces are lexical only. Explicit Context embeddings are
+        # not unique filesystem-style parents and never affect relative paths.
+        if selector == ".." and not store.context_exists(name):
+            typer.secho(
+                f"Error: namespace parent context '{name}' does not exist.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
 
     # Revalidate after the picker closes: another process may have changed or
     # deleted the selected Context while the terminal UI was open.
@@ -81,7 +132,7 @@ def cmd(
         )
         raise typer.Exit(1)
     try:
-        store.load(name)
+        target = store.load(name)
     except (OSError, ValueError) as e:
         typer.secho(
             f"Error: cannot switch to context '{name}': {e}",
@@ -89,8 +140,26 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    if store.current_context_name() == name:
+
+    try:
+        # Bind both the target record and the current-state snapshot. Without
+        # this CAS, a concurrent switch could be silently overwritten after a
+        # relative selector or picker result was resolved.
+        store.set_current_context_if(
+            expected_current,
+            name,
+            expected_context_uid=target.uid,
+            expected_context_digest=target._store_digest or "",
+        )
+    except (ConcurrentContextUpdateError, OSError, ValueError) as error:
+        typer.secho(
+            f"Error: cannot switch to context '{name}': {error}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    if expected_current == name:
         typer.echo(f"Already on '{name}'.")
         return
-    store.set_current(name)
     typer.secho(f"Switched to context '{name}'.", fg=typer.colors.GREEN)

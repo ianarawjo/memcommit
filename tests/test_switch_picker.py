@@ -17,12 +17,13 @@ def invoke(*args: str):
     return runner.invoke(app, list(args))
 
 
-def test_switch_help_documents_namespace_parent_navigation():
+def test_switch_help_documents_explicit_relative_navigation():
     result = invoke("switch", "--help")
 
     assert result.exit_code == 0
-    assert "use '..' for an existing" in result.output
-    assert "namespace parent" in result.output
+    assert "explicit lexical relative" in result.output
+    assert "./child" in result.output
+    assert "../sibling" in result.output
 
 
 def test_picker_preselects_current_and_accepts_enter():
@@ -237,3 +238,234 @@ def test_switch_dot_dot_does_not_infer_an_embedding_parent(
     assert result.exit_code == 1
     assert "namespace parent context 'topic' does not exist" in result.output
     assert MemoryStore().current_context_name() == "topic/leaf"
+
+
+def test_switch_dot_keeps_the_current_context(isolated_store):
+    invoke("init", "organization/wiki")
+
+    result = invoke("switch", ".")
+
+    assert result.exit_code == 0
+    assert "Already on 'organization/wiki'." in result.output
+    assert MemoryStore().current_context_name() == "organization/wiki"
+
+
+def test_switch_dot_child_resolves_below_current_context(isolated_store):
+    invoke("init", "organization/wiki")
+    invoke("init", "organization/wiki/facilities")
+    invoke("switch", "organization/wiki")
+
+    result = invoke("switch", "./facilities")
+
+    assert result.exit_code == 0
+    assert "Switched to context 'organization/wiki/facilities'." in result.output
+    assert MemoryStore().current_context_name() == (
+        "organization/wiki/facilities"
+    )
+
+
+def test_switch_dot_dot_sibling_resolves_from_current_parent(
+    isolated_store,
+):
+    invoke("init", "test/update/from")
+    invoke("init", "test/update/to")
+    invoke("switch", "test/update/from")
+
+    result = invoke("switch", "../to")
+
+    assert result.exit_code == 0
+    assert "Switched to context 'test/update/to'." in result.output
+    assert MemoryStore().current_context_name() == "test/update/to"
+
+
+def test_switch_relative_trailing_slash_names_the_same_node(
+    isolated_store,
+):
+    invoke("init", "test/update")
+    invoke("init", "test/update/from")
+
+    parent = invoke("switch", "../")
+    current = invoke("switch", "./")
+
+    assert parent.exit_code == 0
+    assert "Switched to context 'test/update'." in parent.output
+    assert current.exit_code == 0
+    assert "Already on 'test/update'." in current.output
+    assert MemoryStore().current_context_name() == "test/update"
+
+
+def test_switch_relative_rejects_repeated_slash(isolated_store):
+    invoke("init", "test/update/from")
+
+    result = invoke("switch", "..//to")
+
+    assert result.exit_code == 1
+    assert "contains an empty segment" in result.output
+    assert MemoryStore().current_context_name() == "test/update/from"
+
+
+def test_switch_chained_relative_parent_segments(isolated_store):
+    invoke("init", "test/update/from")
+    invoke("init", "test/archive")
+    invoke("switch", "test/update/from")
+
+    result = invoke("switch", "../../archive")
+
+    assert result.exit_code == 0
+    assert "Switched to context 'test/archive'." in result.output
+    assert MemoryStore().current_context_name() == "test/archive"
+
+
+def test_switch_relative_selector_rejects_escape_above_namespace_root(
+    isolated_store,
+):
+    invoke("init", "test/update")
+
+    result = invoke("switch", "../../../outside")
+
+    assert result.exit_code == 1
+    assert "escapes above the namespace root" in result.output
+    assert MemoryStore().current_context_name() == "test/update"
+
+
+def test_switch_relative_selector_requires_current_context(isolated_store):
+    result = invoke("switch", "./child")
+
+    assert result.exit_code == 1
+    assert "cannot switch to './child': no current context is set" in result.output
+    assert MemoryStore().current_context_name() is None
+
+
+def test_switch_missing_relative_target_preserves_current(isolated_store):
+    invoke("init", "test/update/from")
+
+    result = invoke("switch", "../missing")
+
+    assert result.exit_code == 1
+    assert "context 'test/update/missing' does not exist" in result.output
+    assert MemoryStore().current_context_name() == "test/update/from"
+
+
+def test_switch_unloadable_relative_target_preserves_current(isolated_store):
+    invoke("init", "test/update")
+    invoke("init", "test/update/to")
+    invoke("switch", "test/update")
+    target_file = (
+        isolated_store
+        / "contexts"
+        / "test"
+        / "update"
+        / "to"
+        / "context.json"
+    )
+    target_file.write_text("{not-json", encoding="utf-8")
+
+    result = invoke("switch", "./to")
+
+    assert result.exit_code == 1
+    assert "cannot switch to context 'test/update/to'" in result.output
+    assert MemoryStore().current_context_name() == "test/update"
+
+
+def test_switch_malformed_relative_selector_preserves_current(isolated_store):
+    invoke("init", "test/update")
+
+    result = invoke("switch", "./child//leaf")
+
+    assert result.exit_code == 1
+    assert "contains an empty segment" in result.output
+    assert MemoryStore().current_context_name() == "test/update"
+
+
+def test_bare_name_remains_canonical_global_not_relative(isolated_store):
+    invoke("init", "child")
+    invoke("init", "organization/wiki")
+    invoke("init", "organization/wiki/child")
+    invoke("switch", "organization/wiki")
+
+    result = invoke("switch", "child")
+
+    assert result.exit_code == 0
+    assert "Switched to context 'child'." in result.output
+    assert MemoryStore().current_context_name() == "child"
+
+
+def test_switch_does_not_overwrite_a_concurrent_current_change(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "test/update/from")
+    invoke("init", "test/update/to")
+    invoke("init", "other")
+    invoke("switch", "test/update/from")
+    original_switch = MemoryStore.set_current_context_if
+
+    def switch_elsewhere_then_compare_and_set(
+        self,
+        expected_current,
+        name,
+        *,
+        expected_context_uid,
+        expected_context_digest,
+    ):
+        self.set_current("other")
+        return original_switch(
+            self,
+            expected_current,
+            name,
+            expected_context_uid=expected_context_uid,
+            expected_context_digest=expected_context_digest,
+        )
+
+    monkeypatch.setattr(
+        MemoryStore,
+        "set_current_context_if",
+        switch_elsewhere_then_compare_and_set,
+    )
+
+    result = invoke("switch", "../to")
+
+    assert result.exit_code == 1
+    assert "current Context changed" in result.output
+    assert MemoryStore().current_context_name() == "other"
+
+
+def test_switch_rejects_a_target_changed_before_final_selection(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "test/update/from")
+    invoke("init", "test/update/to")
+    invoke("switch", "test/update/from")
+    original_switch = MemoryStore.set_current_context_if
+
+    def change_target_then_compare_and_set(
+        self,
+        expected_current,
+        name,
+        *,
+        expected_context_uid,
+        expected_context_digest,
+    ):
+        changed = self.load_direct(name)
+        changed.add("concurrent change")
+        self.save(changed)
+        return original_switch(
+            self,
+            expected_current,
+            name,
+            expected_context_uid=expected_context_uid,
+            expected_context_digest=expected_context_digest,
+        )
+
+    monkeypatch.setattr(
+        MemoryStore,
+        "set_current_context_if",
+        change_target_then_compare_and_set,
+    )
+
+    result = invoke("switch", "../to")
+
+    assert result.exit_code == 1
+    assert "changed before it could be selected" in result.output
+    assert MemoryStore().current_context_name() == "test/update/from"

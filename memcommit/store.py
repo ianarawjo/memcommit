@@ -367,7 +367,7 @@ class MemoryStore:
 
     def set_current_context_if(
         self,
-        expected_current: str,
+        expected_current: str | None,
         name: str,
         *,
         expected_context_uid: str,
@@ -1811,6 +1811,83 @@ class MemoryStore:
             )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
+
+    def create_missing_contexts(
+        self,
+        entries: Iterable[
+            tuple[Context, Optional[AutoCheckpoint]]
+        ],
+        *,
+        make_current: str | None = None,
+    ) -> tuple[Context, ...]:
+        """Create a validated batch and optionally select one batch Context.
+
+        All names stay locked from preflight through rollback. This matters
+        for namespace-parent creation: releasing an earlier parent lock before
+        a later child fails could let another process modify that new parent,
+        which a command-level rollback might then wrongly delete. Selection
+        stays inside the same boundary so a new leaf cannot be deleted or
+        replaced between its creation and the state write.
+        """
+        records = tuple(entries)
+        if not records:
+            raise ValueError("At least one Context is required.")
+        if any(not isinstance(context, Context) for context, _ in records):
+            raise TypeError("Expected Context records.")
+        names = tuple(context.name for context, _ in records)
+        for name in names:
+            _context_name_parts(name)
+        if len(names) != len(set(names)):
+            raise ValueError("Context batch contains duplicate names.")
+        if make_current is not None and make_current not in names:
+            raise ValueError(
+                "Selected Context must be part of the creation batch."
+            )
+
+        with self._context_write_locks(names):
+            existing: set[str] = set()
+            for name in names:
+                if self.context_exists(name):
+                    # A present file is not reusable until its stored identity
+                    # and path-bound header have passed normal validation.
+                    self.load_direct(name)
+                    existing.add(name)
+                else:
+                    self._assert_context_storage_available(name)
+
+            created: list[Context] = []
+            try:
+                for context, auto_checkpoint in records:
+                    if context.name in existing:
+                        continue
+                    self._save_locked(
+                        context,
+                        auto_checkpoint,
+                        expected_context_digest=None,
+                        require_new=True,
+                    )
+                    context._store_digest = context_record_digest(context)
+                    created.append(context)
+                if make_current is not None:
+                    with self._state_write_lock():
+                        state = self._read_state()
+                        state["current"] = make_current
+                        self._write_state(state)
+            except Exception as error:
+                rollback_error: Exception | None = None
+                for context in reversed(created):
+                    try:
+                        self._delete_locked(context.name)
+                    except Exception as candidate:
+                        rollback_error = candidate
+                        break
+                if rollback_error is not None:
+                    raise RuntimeError(
+                        "Context hierarchy creation failed and its newly "
+                        "created Contexts could not be rolled back."
+                    ) from rollback_error
+                raise error
+        return tuple(created)
 
     def _save_locked(
         self,
