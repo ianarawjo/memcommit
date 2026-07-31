@@ -105,17 +105,46 @@ mem impact atomize      unary atomization preview
 Supplying both `atomize` and `--to`, or supplying neither, is a usage error.
 `--context` and `--all` belong only to the unary atomize form.
 
-`impact` plans and previews the edits and additions that would make B reflect
-A. It does not change either Context. The validated plan is cached locally so
-an immediately following `update` can reuse exactly what the participant
-reviewed.
+`impact` plans and previews the edits, additions, and explicitly supported
+whole-Memory removals that would make B reflect A. It does not change either
+Context. The validated plan is cached locally so an immediately following
+`update` can reuse exactly what the participant reviewed.
+
+In a terminal, directional `impact` presents the saved plan through the shared
+Resolution Workbench: arrows select a planned change and Enter expands its
+exact owner, before/after content, reason, and source-reference digests.
+Outside a terminal it prints the deterministic projection. These rows are
+labelled `PLANNED CHANGES`, expose no comment or acceptance capability, and do
+not claim that the current operations-only provider assessed an exhaustive
+unresolved-issue list. `update` uses the same projection for its applied
+result while preserving its existing application contract.
+
+The `--to` operand locates an existing Context through the shared Context
+locator contract. Bare names remain canonical global names; `.`, `..`,
+`./...`, and `../...` resolve lexically against one current-Context snapshot
+captured at command start.
 
 The **current implementation** of `update` promotes a matching impact plan to
-a staged intent and then materializes its validated edits and additions in B.
-It changes only directly owned `Memory` values in the writable local fork.
-`MemoryRef`, `QueryContextRef`, embedded-Context pointers, the verified source,
-and the query-only organizational origin remain unchanged. Deletion is not an
-update operation.
+a staged intent and then materializes its validated edits, additions, and
+constrained removals in B. It changes only directly owned `Memory` values in
+the writable local fork. `MemoryRef`, `QueryContextRef`, embedded-Context
+pointers, the verified source, and the query-only organizational origin remain
+unchanged. Repository terminology reserves `delete` for a whole Context, so
+removing one target Memory is represented as `RemoveOperation`.
+
+A removal is permitted only when readable, verified source evidence explicitly
+states that the entire standalone target Memory is obsolete and should no
+longer be represented. Absence from the source never authorizes removal. If a
+target Memory mixes obsolete and still-valid facts, the planner must emit an
+edit that preserves the valid facts instead. Every removal carries source
+references, a reason, and the target's locally captured `old_content`; the
+provider selects a supplied target ID but cannot author that old-content
+snapshot. The same target cannot be both edited and removed.
+
+This deliberately narrow contract supports the compact Task 1 case without
+turning update into general-purpose semantic deletion. A real ambiguity such
+as “remove this listing or retain it as a cancellation notice” must block the
+plan and enter the future issue-scoped directional Meld path described below.
 
 Before the first write, application reloads the complete recorded A/B graph,
 checks its identities and fingerprints, validates every operation and old
@@ -180,15 +209,19 @@ recorded in
 [`cross-operation-grounding-design-rationale.md`](cross-operation-grounding-design-rationale.md).
 It is documented design work, not behavior advertised by the current command.
 
-The same missing state currently prevents Update from adopting the common
-semantic-result workbench defined in
+The same missing state currently prevents Update from adopting the exhaustive
+common semantic-result workbench defined in
 [`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md).
-An edits/additions-only plan can explain exact proposed changes, but it cannot
+An edits/additions/removals plan can explain exact proposed changes, but it cannot
 say whether an omitted source was already present, irrelevant, overlooked, or
 unresolved. Update must first record exhaustive source disposition,
 source-linked understanding and outcome sections, unresolved findings, and
 traceable inspection cases. Until then, displaying “no unresolved finding”
 would fabricate evidence rather than reuse a presentation asset honestly.
+The separate Resolution Workbench may still display exact planned operations
+read-only because it makes no unresolved-completeness claim. That boundary is
+defined in
+[`semantic-resolution-workbench-design-rationale.md`](semantic-resolution-workbench-design-rationale.md).
 
 ## Method
 
@@ -202,9 +235,10 @@ Both commands use one planner:
 3. Treat resolved `MemoryRef` values in A as readable evidence.
 4. Never open `QueryContextRef` sources and never edit `MemoryRef` values.
 5. Give a temporary Codex process only per-run candidate IDs and visible text.
-6. Require strict JSON containing full-content edits and additions.
+6. Require strict JSON containing full-content edits, additions, and
+   source-backed whole-Memory removals.
 7. Map every returned ID back to canonical local objects and reject unknown,
-   duplicate, empty, or unsupported operations.
+   duplicate, empty, conflicting, or unsupported operations.
 8. Generate new Memory UUIDs locally and record source provenance plus source
    and target fingerprints.
 
@@ -228,8 +262,9 @@ low-level Git headers and terminal-newline markers. `--verbose` shows complete
 UIDs and the source/target fingerprints.
 
 `--raw` renders the exact Git-style `---`, `+++`, and `@@` representation,
-including additions from `/dev/null` and terminal-newline markers. `--stat`
-shows only the edit/addition counts. Raw and stat modes are mutually exclusive.
+including additions from `/dev/null`, removals to `/dev/null`, and
+terminal-newline markers. `--stat` shows only the edit/addition/removal counts.
+Raw and stat modes are mutually exclusive.
 
 Every detailed mode prints each operation's source provenance and reason. The
 command does not depend on the currently selected Context and it does not write
@@ -249,14 +284,23 @@ push must refuse a stale applied result.
 ~/.mem/staged-update.json
 ```
 
-These files contain canonical operation records, owner Context identities, old
-and new content, provenance hashes, and source/target base fingerprints. The
+These files contain canonical operation records, owner Context identities,
+applicable old and new content, provenance hashes, and source/target base
+fingerprints. The
 impact file remains read-only planning evidence. During `update`, the active
 file first records the staged intent and, after successful local application,
 records status `applied`, the operation digest, applied target fingerprints,
 the application time, and one checkpoint receipt per affected owner. An empty
 plan has no affected owners or checkpoints but still records an applied result.
 Each individual JSON file replacement is atomic.
+
+The automatic checkpoint recorded by the current application transaction is a
+post-update checkpoint. It supports audit and repeatability but is not, by
+itself, a pre-update restore point for a completed removal. Task 1 provisioning
+must retain its local-fork baseline, and a general publication-ready removal
+workflow still needs an explicit pre-update recovery contract. Ordinary
+in-process application failure already restores the saved owner records,
+including a removed Memory and its order.
 
 `mem impact atomize` deliberately neither reads nor overwrites these files.
 Its one-shot result is provisional but is cached separately at

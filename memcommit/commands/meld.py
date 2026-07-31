@@ -31,6 +31,7 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
+from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
@@ -586,8 +587,9 @@ def _run_interactive(
     provider_factory,
 ) -> MeldSession:
     """Run issue and whole-set turns through one shared interactive shell."""
+    navigation = ResolutionNavigation()
     while session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}:
-        action = run_meld_shell(session)
+        action = run_meld_shell(session, navigation=navigation)
         if action is None:
             break
         expected = meld_canonical_digest(session.to_dict())

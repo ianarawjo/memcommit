@@ -56,6 +56,7 @@ class UpdatePlanProvider:
                     }
                 ],
                 "additions": [],
+                "removals": [],
             }
         )
 

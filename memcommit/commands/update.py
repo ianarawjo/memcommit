@@ -4,6 +4,7 @@ from typing import Annotated
 import typer
 
 from memcommit.commands.update_render import render_plan
+from memcommit.context_locator import resolve_context_locator
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -35,8 +36,15 @@ def cmd(
 ) -> None:
     store = MemoryStore()
     try:
-        source = store.load_current()
-        target = store.load(target_name)
+        current_name = store.current_context_name()
+        if not current_name:
+            raise RuntimeError("No current Context.")
+        resolved_target_name = resolve_context_locator(
+            target_name,
+            current=current_name,
+        )
+        source = store.load(current_name)
+        target = store.load(resolved_target_name)
     except (FileNotFoundError, RuntimeError, ValueError) as error:
         typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

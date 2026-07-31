@@ -12,6 +12,7 @@ from memcommit.store import MemoryStore
 from memcommit.update import (
     AddOperation,
     EditOperation,
+    RemoveOperation,
     UpdateSession,
     applied_session_matches,
     count_operations,
@@ -55,11 +56,11 @@ def _shown_uid(
 
 
 def _summary(session: UpdateSession) -> str:
-    edits, additions = count_operations(session)
-    total = edits + additions
+    edits, additions, removals = count_operations(session)
+    total = edits + additions + removals
     return (
         f"{total} change{'s' if total != 1 else ''} · "
-        f"{edits} edited · {additions} added"
+        f"{edits} edited · {additions} added · {removals} removed"
     )
 
 
@@ -174,7 +175,7 @@ def _render_semantic_edit(operation: EditOperation) -> None:
 
 
 def _render_metadata(
-    operation: EditOperation | AddOperation,
+    operation: EditOperation | AddOperation | RemoveOperation,
     prefixes: dict[str, str],
     *,
     verbose: bool,
@@ -189,7 +190,7 @@ def _render_metadata(
 
 
 def _render_semantic_operation(
-    operation: EditOperation | AddOperation,
+    operation: EditOperation | AddOperation | RemoveOperation,
     prefixes: dict[str, str],
     *,
     verbose: bool,
@@ -206,7 +207,7 @@ def _render_semantic_operation(
             bold=True,
         )
         _render_semantic_edit(operation)
-    else:
+    elif isinstance(operation, AddOperation):
         typer.secho(
             f"ADD   {operation.owner_context_name}  [new:{shown_uid}]",
             fg=typer.colors.GREEN,
@@ -214,6 +215,14 @@ def _render_semantic_operation(
         )
         for line in operation.new_content.splitlines() or [""]:
             typer.secho(f"  + {line}", fg=typer.colors.GREEN)
+    else:
+        typer.secho(
+            f"REMOVE {operation.owner_context_name}  [{shown_uid}]",
+            fg=typer.colors.RED,
+            bold=True,
+        )
+        for line in operation.old_content.splitlines() or [""]:
+            typer.secho(f"  - {line}", fg=typer.colors.RED)
     typer.echo()
     _render_metadata(operation, prefixes, verbose=verbose)
 
@@ -246,7 +255,7 @@ def _encoded_lines(content: str) -> list[str]:
 
 
 def _unified_lines(
-    operation: EditOperation | AddOperation,
+    operation: EditOperation | AddOperation | RemoveOperation,
 ) -> list[str]:
     label = _memory_label(
         operation.owner_context_name,
@@ -254,16 +263,25 @@ def _unified_lines(
     )
     if isinstance(operation, EditOperation):
         old_lines = _encoded_lines(operation.old_content)
+        new_lines = _encoded_lines(operation.new_content)
         from_file = f"a/{label}"
-    else:
+        to_file = f"b/{label}"
+    elif isinstance(operation, AddOperation):
         old_lines = []
+        new_lines = _encoded_lines(operation.new_content)
         from_file = "/dev/null"
+        to_file = f"b/{label}"
+    else:
+        old_lines = _encoded_lines(operation.old_content)
+        new_lines = []
+        from_file = f"a/{label}"
+        to_file = "/dev/null"
     return list(
         difflib.unified_diff(
             old_lines,
-            _encoded_lines(operation.new_content),
+            new_lines,
             fromfile=from_file,
-            tofile=f"b/{label}",
+            tofile=to_file,
             lineterm="",
         )
     )
@@ -310,7 +328,9 @@ def _render_encoded_raw_line(line: str) -> None:
         typer.echo("\\ No newline at end of file")
 
 
-def _render_raw_operation(operation: EditOperation | AddOperation) -> None:
+def _render_raw_operation(
+    operation: EditOperation | AddOperation | RemoveOperation,
+) -> None:
     label = _memory_label(
         operation.owner_context_name,
         operation.memory_uid,
@@ -318,6 +338,8 @@ def _render_raw_operation(operation: EditOperation | AddOperation) -> None:
     typer.secho(f"diff --mem {label}", bold=True)
     if isinstance(operation, AddOperation):
         typer.secho("new memory", dim=True)
+    elif isinstance(operation, RemoveOperation):
+        typer.secho("removed memory", dim=True)
     for line in _unified_lines(operation):
         if (
             line.startswith("--- ")

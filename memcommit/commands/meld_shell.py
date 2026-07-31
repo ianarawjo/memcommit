@@ -21,6 +21,7 @@ from memcommit.commands.tui_primitives import (
     safe_terminal_text,
 )
 from memcommit.meld import MeldSession
+from memcommit.resolution_workbench import ResolutionNavigation
 
 
 @dataclass(frozen=True)
@@ -417,3 +418,79 @@ def run_meld_shell(
         return application.run()
     except (EOFError, KeyboardInterrupt):
         return None
+
+
+# Keep the operation-specific renderer above as a compatibility snapshot while
+# routing the live interaction through the shared resolution grammar.  The
+# wrapper translates only the UID-bound action envelope; Meld still owns every
+# semantic turn, provider call, saved assessment, and acceptance boundary.
+_run_legacy_meld_shell = run_meld_shell
+
+
+def run_meld_shell(
+    session: MeldSession,
+    *,
+    navigation: ResolutionNavigation | None = None,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> MeldShellAction | None:
+    """Collect one action through the shared dynamic resolution workbench."""
+    from memcommit.commands.resolution_workbench_shell import (
+        run_resolution_workbench_shell,
+    )
+    from memcommit.meld_resolution_adapter import (
+        MeldResolutionWorkbenchAdapter,
+    )
+
+    snapshot_hint = (
+        "Run the same 'mem meld' command outside a TTY to render its saved "
+        "snapshot."
+    )
+    if require_tty:
+        require_interactive_terminal(
+            "Interactive meld",
+            snapshot_hint=snapshot_hint,
+        )
+    if session.current_assessment is None:
+        return None
+    adapter = MeldResolutionWorkbenchAdapter(session)
+    action = run_resolution_workbench_shell(
+        adapter.view,
+        navigation=navigation,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=False,
+        terminal_label="Interactive meld",
+        snapshot_hint=snapshot_hint,
+    )
+    if action.kind == "CLOSE":
+        return None
+    if action.kind == "SUBMIT_ALL":
+        return MeldShellAction(kind="COMMENT_ALL", comment=action.comment)
+    if action.kind == "PRESERVE_ALL":
+        return MeldShellAction(kind="PRESERVE_ALL")
+    if action.kind == "DEFER":
+        return MeldShellAction(kind="DEFER_ALL")
+    if action.kind == "ACCEPT":
+        return MeldShellAction(kind="ACCEPT")
+    if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
+        raise ValueError(
+            f"Unsupported resolution action '{action.kind}' for Meld."
+        )
+    issue = adapter.view().item(action.item_uid)
+    choice_index = (
+        next(
+            index
+            for index, option in enumerate(issue.options)
+            if option.uid == action.option_uid
+        )
+        if action.option_uid is not None
+        else None
+    )
+    return MeldShellAction(
+        kind="COMMENT_ISSUE",
+        issue_uid=action.item_uid,
+        choice_index=choice_index,
+        comment=action.comment,
+    )

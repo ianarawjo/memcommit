@@ -60,6 +60,12 @@ considered sufficient design history.
   unresolved, and traceable representative or boundary cases. It also records
   why that shared presentation must not flatten operation-specific semantics
   or mutation authority.
+- [`semantic-resolution-workbench-design-rationale.md`](semantic-resolution-workbench-design-rationale.md)
+  defines the shared dynamic list/detail/comment frontend used by Meld and
+  Atomize and the read-only planned-change projection used by Update. It keeps
+  provider, persistence, readiness, and application semantics in
+  operation-owned controllers, leaves Ground separate, and reserves only the
+  adapter boundary for future Reconcile.
 - [`mem-atomize-design-rationale.md`](mem-atomize-design-rationale.md) defines
   atomicity, source grounding, preview/application boundaries, and lineage.
 - [`mem-atomize-workbench-design-rationale.md`](mem-atomize-workbench-design-rationale.md)

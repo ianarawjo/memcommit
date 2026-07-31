@@ -945,6 +945,28 @@ def test_tui_up_and_down_follow_the_vertical_issue_list():
     assert saved
 
 
+def test_shared_atomize_shell_preserves_durable_sort_toggle():
+    ctx = ops.init("workbench/shared-sort")
+    ops.add(ctx, "Use the same NFC.")
+    report = impact_atomize(ctx, lambda: AggregateProvider())
+    analysis = create_atomize_analysis(ctx, report)
+    workbench = create_atomize_workbench(analysis)
+    assert workbench.sort_mode == "SOURCE"
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("sq")
+        run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda session: None,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert workbench.sort_mode == "PRIORITY"
+
+
 def test_issue_list_uses_labels_and_discloses_additional_readings():
     ctx = ops.init("workbench/reading-preview")
     ops.add(ctx, "Use the same NFC.")

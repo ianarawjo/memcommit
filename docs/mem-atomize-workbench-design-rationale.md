@@ -211,8 +211,10 @@ Its information hierarchy is the first concrete adapter for the
 operation-neutral contract in
 [`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md).
 Atomize still owns its classifications, complete issue list, response state,
-reanalysis, and application boundary; only the result explanation and case
-inspection grammar are shared.
+reanalysis, and application boundary. Result explanation and case inspection
+use `ResultWorkbench`; the actionable list/detail/reading/comment interaction
+now uses the separate shared `ResolutionWorkbench`. Neither asset owns the
+Atomize provider, issue digest, durable response, or application.
 
 A representative shape is:
 
@@ -866,7 +868,9 @@ The following decisions are stable enough to guide implementation and tests:
 - Up/down navigate the current list level; Enter expands an issue or toggles
   its focused reading, while Escape/Backspace returns one presentation level.
 - Left/right remain issue-navigation compatibility aliases.
-- Split and stacked terminal layouts present the same durable state.
+- The shared live shell uses one consistent inline drill-down layout. Legacy
+  split/stacked values remain serialized for compatibility but no longer
+  define separate semantic states.
 - A stable snapshot supports remote control and non-TTY inspection.
 - Natural-language chat instructions are translated by the controlling agent,
   not parsed as a new `mem` command language.
@@ -939,8 +943,9 @@ The following must not be accidentally encoded as settled behavior:
 - the exact read-only interaction offered after an analysis has been applied;
 - automatic use of predecessor, parent, or neighboring Contexts as declared
   evidence;
-- conflict, update, reconcile, distill, public directional Context meld, and
-  sever application adapters; and
+- semantic Update resolution, Reconcile, Distill, and Sever application
+  adapters; Update currently has only a read-only planned-change projection;
+  and
 - provider/model pinning and reproducible semantic rerun policy for formal
   evaluation.
 

@@ -22,7 +22,10 @@ class Provider:
     def complete(self, prompt, *, operation, output_schema=None):
         self.calls += 1
         payload = json.loads(prompt.split("UPDATE PAYLOAD:\n", 1)[1])
-        return json.dumps(self.response(payload))
+        response = self.response(payload)
+        if set(response) == {"edits", "additions"}:
+            response = {**response, "removals": []}
+        return json.dumps(response)
 
 
 def _stage(store: MemoryStore, *, changes: bool = True):

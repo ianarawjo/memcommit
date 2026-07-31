@@ -7,9 +7,11 @@ The first shared rollout is implemented in:
 ```text
 mem switch LOCATOR
 mem compare --to LOCATOR
+mem impact --to LOCATOR
+mem update --to LOCATOR
 ```
 
-Both commands use `memcommit.context_locator.resolve_context_locator`.
+These commands use `memcommit.context_locator.resolve_context_locator`.
 Additional commands should adopt the same boundary when they are next changed,
 subject to the mutation and approval constraints below.
 
@@ -119,6 +121,6 @@ to contain a Context name depend on mutable current state.
 
 ## Current limitation
 
-Only Switch, non-branch Checkout through its Switch delegation, and Compare
-use the common locator today. Other existing-Context operands still require
-canonical names until migrated under the boundary above.
+Switch, non-branch Checkout through its Switch delegation, Compare, and
+directional Impact/Update use the common locator today. Other existing-Context
+operands still require canonical names until migrated under the boundary above.

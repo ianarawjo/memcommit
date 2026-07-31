@@ -419,8 +419,15 @@ mark missing understanding and unresolved scans as `NOT_RECORDED`. This is an
 explicit compatibility heuristic; a future artifact revision should persist
 overview provenance directly.
 
-Update has not been adapted. Its current saved plan records edits and
-additions but cannot distinguish an omitted source as already present,
+Update has not been adapted to this exhaustive semantic-result hierarchy. Its
+current saved plan records edits, additions, and removals but cannot
+distinguish an omitted source as already present,
 irrelevant, overlooked, or unresolved. Rendering a clean unresolved section
 from that data would be a false claim. Update must first record exhaustive
 source disposition, unresolved findings, and source-linked overview evidence.
+
+Update does project those exact operation records into the separate
+`ResolutionWorkbench` as read-only `PLANNED CHANGES`. That frontend adoption
+does not populate `WHAT REMAINS UNRESOLVED` and does not claim semantic-result
+completeness. See
+[`semantic-resolution-workbench-design-rationale.md`](semantic-resolution-workbench-design-rationale.md).

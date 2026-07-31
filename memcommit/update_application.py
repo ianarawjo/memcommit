@@ -7,6 +7,7 @@ from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.update import (
     AddOperation,
     EditOperation,
+    RemoveOperation,
     UpdateError,
     UpdateSession,
 )
@@ -112,7 +113,7 @@ def prepare_update_application(
     context_by_uid = {context.uid: context for context in target_contexts}
     operations_by_owner: dict[
         str,
-        list[EditOperation | AddOperation],
+        list[EditOperation | AddOperation | RemoveOperation],
     ] = {}
     operation_targets: set[tuple[str, str]] = set()
 
@@ -120,7 +121,10 @@ def prepare_update_application(
     # particular, a later invalid operation must not leave an earlier owner
     # partially updated.
     for operation in session.operations:
-        if not isinstance(operation, (EditOperation, AddOperation)):
+        if not isinstance(
+            operation,
+            (EditOperation, AddOperation, RemoveOperation),
+        ):
             raise UpdateApplicationError(
                 "The staged update contains an unsupported operation."
             )
@@ -161,6 +165,22 @@ def prepare_update_application(
                     f"Edit target '{operation.memory_uid}' no longer matches "
                     "the staged old content."
                 )
+        elif isinstance(operation, RemoveOperation):
+            if current is None:
+                raise UpdateApplicationError(
+                    f"Removal target '{operation.memory_uid}' does not exist "
+                    f"in Context '{owner.name}'."
+                )
+            if not isinstance(current, Memory):
+                raise UpdateApplicationError(
+                    f"Removal target '{operation.memory_uid}' is a "
+                    f"{_read_only_type(current)} and cannot be removed."
+                )
+            if current.content != operation.old_content:
+                raise UpdateApplicationError(
+                    f"Removal target '{operation.memory_uid}' no longer "
+                    "matches the staged old content."
+                )
         elif current is not None:
             # Context.add replaces an existing direct uid, so every collision
             # must fail instead of silently converting an ADD into an edit.
@@ -185,6 +205,8 @@ def prepare_update_application(
                         content=operation.new_content,
                     )
                 )
+            elif isinstance(operation, RemoveOperation):
+                post_image.remove(operation.memory_uid)
             else:
                 post_image.add(
                     Memory(

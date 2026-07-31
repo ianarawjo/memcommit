@@ -22,6 +22,9 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.atomize import AtomizeAnalysisSession
+from memcommit.atomize_resolution_adapter import (
+    AtomizeResolutionWorkbenchAdapter,
+)
 from memcommit.atomize_result_adapter import AtomizeResultWorkbenchAdapter
 from memcommit.atomize_workbench import (
     ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
@@ -41,6 +44,7 @@ from memcommit.commands.result_workbench_shell import (
 from memcommit.commands.tui_primitives import (
     safe_terminal_text,
 )
+from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.result_workbench import (
     ResultCase,
     ResultCaseDetail,
@@ -876,3 +880,102 @@ def run_atomize_workbench_shell(
         if not persist():
             raise ValueError(status_message["value"]) from error
         raise ReviewCancelled from error
+
+
+# Preserve the operation-specific snapshot helpers above, but use the common
+# list/detail/comment grammar for live review.  Atomize continues to own its
+# immutable issue digest, durable cursor and responses, explicit reanalysis,
+# and later Context application.
+_run_legacy_atomize_workbench_shell = run_atomize_workbench_shell
+
+
+def run_atomize_workbench_shell(
+    session: AtomizeWorkbenchSession,
+    analysis: AtomizeAnalysisSession,
+    *,
+    save: Callable[[AtomizeWorkbenchSession], None],
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> AtomizeWorkbenchSession:
+    """Review Atomize findings through the shared resolution workbench."""
+    from memcommit.commands.resolution_workbench_shell import (
+        run_resolution_workbench_shell,
+    )
+
+    _assert_matches(session, analysis)
+    navigation = ResolutionNavigation(
+        selected_item_uid=session.cursor_uid,
+    )
+
+    def view():
+        return AtomizeResolutionWorkbenchAdapter(analysis, session).view()
+
+    def load_draft(issue_uid: str) -> tuple[str | None, str]:
+        response = session.responses.get(issue_uid)
+        if response is None:
+            return None, ""
+        return response.selected_choice_uid, response.text
+
+    saved_in_round = {"value": False}
+
+    def save_draft(
+        issue_uid: str,
+        option_uid: str | None,
+        comment: str,
+    ) -> None:
+        if len(comment) > ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:
+            raise ValueError(
+                "Response is too long to save "
+                f"({len(comment):,}/"
+                f"{ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:,} characters)."
+            )
+        response = session.response_for(issue_uid)
+        response.selected_choice_uid = option_uid
+        response.text = comment
+        session.cursor_uid = issue_uid
+        save(session)
+        saved_in_round["value"] = True
+
+    def toggle_sort() -> None:
+        session.toggle_sort()
+        save(session)
+        saved_in_round["value"] = True
+
+    first_round = True
+    while True:
+        saved_in_round["value"] = False
+        action = run_resolution_workbench_shell(
+            view,
+            navigation=navigation,
+            app_input=app_input,
+            app_output=app_output,
+            require_tty=require_tty and first_round,
+            terminal_label="Interactive atomize workbench",
+            snapshot_hint=(
+                "Run 'mem impact atomize' outside a TTY to render the saved "
+                "snapshot."
+            ),
+            draft_loader=load_draft,
+            draft_saver=save_draft,
+            save_draft_on_close=True,
+            toggle_sort=toggle_sort,
+        )
+        first_round = False
+        session.cursor_uid = navigation.selected_item_uid
+        if action.kind == "CLOSE":
+            if not saved_in_round["value"]:
+                save(session)
+            return session
+        if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
+            raise ValueError(
+                f"Unsupported resolution action '{action.kind}' for Atomize."
+            )
+        save_draft(
+            action.item_uid,
+            action.option_uid,
+            action.comment,
+        )
+        session.move(1)
+        navigation.selected_item_uid = session.cursor_uid
+        navigation.close_detail()

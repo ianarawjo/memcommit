@@ -40,6 +40,11 @@ class PlanProvider:
         response = self.response
         if callable(response):
             response = response(prompt)
+        # Most tests predate the v3 removal contract. Normalize their
+        # otherwise-valid fixture objects while leaving raw malformed JSON
+        # untouched so strict parser tests still exercise the real boundary.
+        if isinstance(response, dict) and set(response) == {"edits", "additions"}:
+            response = {**response, "removals": []}
         return (
             response
             if isinstance(response, str)
@@ -394,6 +399,7 @@ def test_noop_edits_and_exact_duplicate_additions_are_dropped():
         None,
         "not json",
         '{"edits": [], "edits": [], "additions": []}',
+        '{"edits": [], "additions": []}',
         [],
         {"edits": []},
         {"edits": [], "additions": [], "extra": []},
@@ -738,6 +744,38 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     } == source_bytes_before
     assert (isolated_store / "state.json").read_bytes() == state_before
     assert store.current_context_name() == TASK1_SOURCE
+
+
+def test_impact_then_update_resolve_relative_existing_target(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    impact = runner.invoke(
+        app,
+        ["impact", "--to", "../campus-wiki-fork"],
+    )
+    update = runner.invoke(
+        app,
+        ["update", "--to", "../campus-wiki-fork"],
+    )
+
+    assert impact.exit_code == 0, impact.output
+    assert update.exit_code == 0, update.output
+    assert TASK1_TARGET in impact.output
+    assert TASK1_TARGET in update.output
+    assert len(provider.calls) == 1
 
 
 def test_repeated_update_is_idempotent_and_does_not_reconnect(

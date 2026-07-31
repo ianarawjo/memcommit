@@ -21,7 +21,11 @@ from memcommit.commands.atomize_workbench_shell import (
     run_atomize_workbench_shell,
 )
 from memcommit.commands.review_shell import ReviewCancelled
-from memcommit.commands.update_render import render_plan
+from memcommit.commands.update_render import (
+    render_plan,
+    run_update_workbench,
+)
+from memcommit.context_locator import resolve_context_locator
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -51,8 +55,15 @@ def _directional_impact(target_name: str) -> None:
     """Preserve the existing current-A to target-B impact behavior."""
     store = MemoryStore()
     try:
-        source = store.load_current()
-        target = store.load(target_name)
+        current_name = store.current_context_name()
+        if not current_name:
+            raise RuntimeError("No current Context.")
+        resolved_target_name = resolve_context_locator(
+            target_name,
+            current=current_name,
+        )
+        source = store.load(current_name)
+        target = store.load(resolved_target_name)
     except (FileNotFoundError, RuntimeError, ValueError) as error:
         typer.secho(f"Impact error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
@@ -69,7 +80,10 @@ def _directional_impact(target_name: str) -> None:
         typer.secho(f"Impact error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    render_plan(session, staged=False)
+    if sys.stdin.isatty() and sys.stdout.isatty():
+        run_update_workbench(session)
+    else:
+        render_plan(session, staged=False)
 
 
 def _atomize_impact(
