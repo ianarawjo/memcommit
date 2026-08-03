@@ -72,7 +72,7 @@ Managed profiles are editable copies under an external control plane:
 ├── registry.lock
 └── stores/
     ├── <stable-profile-uid>/         # study-baseline
-    └── <run-profile-uid>/...         # initialized Study members
+    └── <run-profile-uid>/            # one complete initialized Profile
 ```
 
 `mem profile import-study` validates the three generated packages once and
@@ -90,11 +90,11 @@ study-baseline
     └── task-3/...
 ```
 
-The first three branches contain participant-owned starting state. The
-`granted-memory` branches contain editable source material that becomes
-permissioned authority views only when a Study is initialized. Keeping the
-authoring source in one Profile makes incomplete Memory sets easy to inspect,
-import, and revise without coordinating six live Profile identities.
+The first three branches contain participant starting state. The
+`granted-memory` branches contain the associated source material as ordinary
+Contexts. Keeping all six branches in one Profile makes incomplete Memory sets
+easy to inspect, import, revise, and copy without coordinating identities that
+are not yet stable.
 
 Every slash-delimited branch is completed with real empty ordinary Contexts
 for lexical prefixes absent from an older fixture package. For example,
@@ -102,68 +102,66 @@ for lexical prefixes absent from an older fixture package. For example,
 `participant/construction-updates`. These navigation Contexts neither create
 embed edges nor copy Memory. They ensure `mem switch ..` reaches every parent
 and `mem ls -R task-1` cannot lose a valid deeper subtree behind a missing
-intermediate name. The same clean-store write boundary is used when the live
-baseline is split, so initialized task and authority Profiles retain the
-completed lineage.
+intermediate name. `init-study` copies those real structural parents together
+with every descendant, so upward navigation and recursive listing have the
+same topology in the initialized Profile as in the baseline.
 
-## Timestamped Study groups
+## Single-Profile Study snapshots
 
 `mem init-study [NAME]` is the repeatable run-oriented entry point. It snapshots
 the currently registered `study-baseline` Profile, not the generated bundle,
-then publishes fresh namespaced copies under one timestamped heading:
+and publishes exactly one ordinary managed Profile:
 
 ```text
-pilot-001  STUDY   created=2026-08-03T20:34:05+00:00
-  ├─ Task 1  profile=pilot-001-task-1
-  ├─ Authority 1  profile=pilot-001-task-1-campus-authority
-  ├─ Task 2  profile=pilot-001-task-2
-  ├─ Authority 2  profile=pilot-001-task-2-proposal-authority
-  ├─ Task 3  profile=pilot-001-task-3
-  └─ Authority 3  profile=pilot-001-task-3-healthcare-authority
+pilot-001  USE  Contexts 130 owned + 0 granted · Memories 1278 owned + 0 granted
 ```
 
-Omitting `NAME` generates `study-YYYYMMDDTHHMMSSZ-<uid-prefix>`, so two
-initializations in the same second remain distinct. The timezone-aware UTC
-`created_at`, Study UUID, task number, source-manifest digest, and canonical
-language, exact branch digest, and source baseline Profile UID/name are frozen
-into each child Profile's provenance. This is a display group, not a parent
-MemoryStore: every Task retains its own `state.json`, Context graph,
-translations, and query boundary, while operational history begins empty at
-Study creation.
+The target is named exactly `NAME`; no `-task-N` or authority suffix is added
+and no synthetic STUDY heading is created. Omitting `NAME` generates
+`study-YYYYMMDDTHHMMSSZ-<uid-prefix>`, so two initializations in the same second
+remain distinct. `--from-profile` selects another registered self-contained
+source while the default remains the stable `study-baseline` name rather than
+the globally active Profile.
 
-The baseline's `granted-memory/task-N` branches create namespaced authority
-Profiles and run-specific grant UIDs in the same transaction. Those authority
-Profiles remain explicit,
-switchable registry owners and appear beneath the same Study heading beside
-the three participant-facing Task Profiles. Keeping them visible lets a
-researcher inspect or revise source data without bypassing Profile isolation;
-participants still work in the Task Profiles.
+The snapshot preserves the complete canonical Context names, every
+Context/Memory/reference identity, declared query sources and translation
+views, and `state.json.current`. In particular, `task-1`, `task-2`, `task-3`,
+and `granted-memory/task-{1,2,3}` remain branches of the same Profile. It does
+not split, rename, remap, synthesize, or grant those branches. Registry grants
+are relationships outside a MemoryStore; because silently dropping them would
+change the source's capabilities, `init-study` rejects a source Profile that
+participates in an incoming or outgoing grant.
 
-Initialization locks one registry generation and one complete baseline Context
-snapshot, splits the six logical branches into clean staged stores, resolves
-grants, publishes the stores, and atomically replaces the registry. A duplicate
-Study name or any topology, copy, grant, or registry failure publishes none of
-the new Profiles.
-The previously active Profile intentionally remains active, so creating a
-Study never silently redirects an unrelated terminal's next `mem` command.
+Initialization uses the clean Profile-import allowlist. Checkpoints, command
+receipts, workflow and query sessions, caches, locks, lifecycle events,
+clipboard state, and write-protection state do not cross into the run. The
+admitted source files are digested before and after the staged copy and at the
+destination. Profile-name collisions are case-insensitive. A duplicate name,
+invalid/changing source, or registry failure before atomic replacement
+publishes nothing. If replacement is already visible but the following
+directory `fsync` cannot confirm durability, deleting the store would corrupt
+the visible registry; the command instead reports the uncertain durability and
+leaves the new Profile registered with its store intact.
+The previously active Profile intentionally remains active, so initialization
+never silently redirects an unrelated terminal's next `mem` command.
 
-## Why the source is merged but initialized runs are split
+## Why initialized topology now remains merged
 
-The study needs two kinds of navigation with different meanings:
+Profile selection changes the complete experimental memory environment;
+Context switching navigates within that environment. The current Study corpus
+is still being revised, so Task 1--3 and the `granted-memory` material do not
+yet justify six independently managed run identities. Copying the whole
+baseline keeps the unit being reviewed identical to the unit being initialized
+and makes the source/clone relationship verifiable with one baseline digest.
 
-- Profile selection changes the entire experimental memory environment.
-- Context switching navigates within one selected environment.
-
-The baseline is an authoring template, not a participant execution boundary.
-Merging it keeps Task 1--3 and their granted source material in one selectable,
-copyable unit while the corpus is still changing. Its prefixes are part of a
-validated template contract and are stripped only during initialization.
-
-Initialized Task Profiles remain separate because their `state.json`, history,
-query sessions, write policy, and granted capabilities are experimental state.
-Authority branches are also split into ordinary source-owner Profiles so a
-grant remains a real cross-Profile permission view. Thus one baseline snapshot
-is convenient to edit without weakening isolation in a run.
+This deliberately does not provide per-task permission isolation in a newly
+initialized Profile: a user of that Profile can navigate all of its ordinary
+branches. If a later stabilized experiment needs participant/authority
+separation, that is a separate explicit grant workflow rather than an implicit
+side effect of `init-study`. Registries containing older
+`STUDY_RUN_TASK`/`STUDY_RUN_AUTHORITY` Profiles remain readable and selectable;
+the legacy grouping UI is retained only for those persisted records and new
+initializations do not add to it.
 
 ## Process snapshot and concurrency
 
@@ -195,10 +193,12 @@ agreement, current-Context state, query-reference/source identity, and
 translation-catalog ownership, and stage on the destination filesystem. Study
 bootstrap additionally validates Profile roles, grant permissions, exclusions,
 frozen scopes, and attachment identities before composing the single baseline
-Profile. Initialization later snapshots only allowlisted baseline data and
-publishes all required staged roots before atomically publishing one registry
-generation. A failure leaves the authoring store, package sources,
-and prior registry unchanged.
+Profile. Initialization later copies that complete baseline through the same
+allowlist and publishes one new Profile in one registry generation. A
+pre-publication failure leaves the authoring store, source Profile, package
+sources, and prior registry unchanged; a post-replacement durability error
+preserves the already-visible Profile/store pair rather than creating a dangling
+registry entry.
 
 Profile names are portable single segments. Managed storage uses stable UUID
 directories so a future display-name rename need not move the data. The fixed
@@ -206,13 +206,13 @@ directories so a future display-name rename need not move the data. The fixed
 
 ## Authority, query-only, and translation boundaries
 
-New study query-only data is an ordinary Context tree in its task-specific
-authority Profile. A task receives only `QUERY`, so `mem ls` and `mem show`
-render public view metadata without opening the tree. Selecting the authority
-Profile gives the owner normal CRUD. Legacy concealed `query-sources/` remain
-supported but are no longer the study bundle's source model. Korean
-representations remain same-UID translation catalogs rather than additional
-Contexts or Memories.
+Generated study packages still model query-only data in separate authority
+stores and grant templates, and `profile import-study` validates that package
+contract before composing the baseline. A new single-Profile snapshot does not
+activate those grants: its merged `granted-memory` branches are ordinary owned
+Contexts. Legacy split Study Profiles keep their existing grant behavior.
+Korean representations remain same-UID translation catalogs rather than
+additional Contexts or Memories.
 
 See `profile-authority-grant-design-rationale.md` and
 `query-session-design-rationale.md` for permission, precedence, and optional
@@ -223,6 +223,10 @@ The local account can still read its files.
 
 ## Alternatives considered
 
+- **Split each initialization into Task and Authority Profiles:** retained only
+  for legacy registry compatibility, not new creation. It changed the baseline
+  topology during copy and required six identities plus grants before the
+  underlying Memory sets and boundaries were stable.
 - **Merge all task stores into `~/.mem`:** rejected because it collapses study
   isolation and creates mixed state and routing semantics.
 - **Physically rename or swap `~/.mem`:** rejected because an already running
@@ -242,10 +246,11 @@ The local account can still read its files.
   generated package. Re-import refuses to overwrite the edited profile.
 - Profile removal, replacement, rename, backup, and reset are intentionally
   deferred until they have explicit recoverable workflows.
-- Study creation records provenance and a creation timestamp. Whole-session
-  command/event logging and Study completion/archive state remain a separate
-  lifecycle boundary; ordinary checkpoint and opt-in query-session history
-  retain their existing narrower contracts.
+- Study Profile creation records source Profile identity, a baseline digest,
+  and an import timestamp. Whole-session command/event logging and Study
+  completion/archive state remain a separate lifecycle boundary; ordinary
+  checkpoint and opt-in query-session history retain their existing narrower
+  contracts.
 - `mem profile import-study` is a checkout-oriented research convenience; a
   packaged installation must pass `--from` when generated bundles are not
   shipped with the Python package.

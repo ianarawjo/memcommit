@@ -553,4 +553,4 @@ def import_study_cmd(
         "Edit it with: mem profile use "
         + display_escape_text(STUDY_BASELINE_PROFILE_NAME)
     )
-    typer.echo("Create an isolated run with: mem init-study NAME")
+    typer.echo("Clone it as one complete run Profile with: mem init-study NAME")

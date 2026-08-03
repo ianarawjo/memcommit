@@ -11,7 +11,6 @@ import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.profile_config import load_profile_registry, profile_store_dir
-from memcommit.profiles import study_profile_groups
 
 
 runner = CliRunner(mix_stderr=False)
@@ -69,7 +68,7 @@ def test_mem_import_preserves_content_identity_but_not_history(
     assert not (imported / "query-sessions").exists()
 
 
-def test_init_study_imports_each_profile_with_empty_history(
+def test_init_study_imports_one_complete_profile_with_empty_history(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -88,10 +87,11 @@ def test_init_study_imports_each_profile_with_empty_history(
 
     assert result.exit_code == 0, result.stderr or result.output
     registry = load_profile_registry()
-    group = study_profile_groups(registry.profiles)[0]
-    assert group.name == "clean-study"
-    assert len(group.profiles) == 3
-    assert all(
-        not any(profile_store_dir(profile).rglob("checkpoints/*.json"))
-        for profile in (*group.profiles, *group.support_profiles)
-    )
+    profile = registry.by_name("clean-study")
+    assert profile is not None
+    assert [item.name for item in registry.profiles] == [
+        "authoring",
+        "study-baseline",
+        "clean-study",
+    ]
+    assert not any(profile_store_dir(profile).rglob("checkpoints/*.json"))

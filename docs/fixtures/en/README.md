@@ -334,6 +334,8 @@ limiting is implemented.
    omissions, and expected outcomes by task.
 3. Review the approved Korean source and English translation for semantic
    preservation.
-4. Import the generated packages with `mem profile import-study`, which copies
-   Contexts, query-only sources, histories, and translation catalogs into
-   separate editable profiles without changing the authoring store.
+4. Import the generated packages with `mem profile import-study`, which composes
+   task and authority Context baselines, translation catalogs, and grant
+   templates into one editable `study-baseline` without changing `authoring`.
+   Use `mem init-study NAME` to make one complete clean Profile copy after
+   reviewing that merged topology.

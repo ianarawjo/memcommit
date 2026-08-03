@@ -1,4 +1,4 @@
-"""Initialize one Study as task Profiles plus switchable authority Profiles."""
+"""Initialize one Study as a complete copy of an editable baseline Profile."""
 
 from __future__ import annotations
 
@@ -11,32 +11,27 @@ from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
-    init_study_profiles,
+    init_study_profile,
 )
 
 
 def cmd(
     name: Annotated[
         Optional[str],
-        typer.Argument(
-            help=("Portable Study name; omit for a timestamped unique name")
-        ),
+        typer.Argument(help=("New Profile name; omit for a timestamped unique name")),
     ] = None,
     baseline_profile: Annotated[
         str,
         typer.Option(
             "--from-profile",
-            help=(
-                "Editable source Profile containing task-1, task-2, task-3, "
-                "and granted-memory branches"
-            ),
+            help=("Editable source Profile whose complete topology will be copied"),
         ),
     ] = STUDY_BASELINE_PROFILE_NAME,
 ) -> None:
-    """Clone one live Study baseline into isolated task and authority Profiles."""
+    """Clone one live Study baseline into one ordinary Profile."""
 
     try:
-        result = init_study_profiles(baseline_profile, name=name)
+        result = init_study_profile(baseline_profile, name=name)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
@@ -46,55 +41,25 @@ def cmd(
         raise typer.Exit(1)
 
     typer.secho(
-        f"Initialized Study '{display_escape_text(result.name)}'.",
+        f"Initialized Study Profile '{display_escape_text(result.profile.name)}'.",
         fg=typer.colors.GREEN,
     )
-    typer.echo(f"Created: {display_escape_text(result.created_at)}")
-    typer.echo(f"Study UID: {result.uid}")
-    typer.echo("Baseline Profile: " + display_escape_text(baseline_profile))
-    typer.echo("Profiles:")
-    for task, profile, inspection in zip(
-        (1, 2, 3),
-        result.profiles,
-        result.inspections,
-        strict=True,
-    ):
-        current = (
-            display_escape_text(inspection.current_context)
-            if inspection.current_context
-            else "(none)"
-        )
-        typer.echo(
-            f"  Task {task} · {display_escape_text(profile.name)} · "
-            f"{len(inspection.context_names)} Contexts · "
-            f"{inspection.ordinary_memory_count} Memories · current={current}"
-        )
-    if result.support_profiles:
-        typer.echo("Authority Profiles:")
-        for task, profile, inspection in zip(
-            (1, 2, 3),
-            result.support_profiles,
-            result.support_inspections,
-            strict=True,
-        ):
-            current = (
-                display_escape_text(inspection.current_context)
-                if inspection.current_context
-                else "(none)"
-            )
-            typer.echo(
-                f"  Authority {task} · {display_escape_text(profile.name)} · "
-                f"{len(inspection.context_names)} Contexts · "
-                f"{inspection.ordinary_memory_count} Memories · current={current}"
-            )
-        typer.echo("All task and authority Profiles are available to normal selection.")
+    typer.echo("Baseline Profile: " + display_escape_text(result.baseline_profile_name))
+    current = (
+        display_escape_text(result.inspection.current_context)
+        if result.inspection.current_context
+        else "(none)"
+    )
     typer.echo(
-        "Operational history starts empty; bundle checkpoints and sessions "
-        "were not imported."
+        f"Contexts {len(result.inspection.context_names)} · "
+        f"Memories {result.inspection.ordinary_memory_count} · current={current}"
+    )
+    typer.echo("The complete baseline Context topology was copied without splitting.")
+    typer.echo(
+        "Operational history starts empty; checkpoints, sessions, caches, locks, "
+        "and run logs were not imported."
     )
     typer.echo(
         "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )
-    typer.echo(
-        "Use Task 1 with: mem profile " + display_escape_text(result.profiles[0].name)
-    )
+    typer.echo("Use it with: mem profile " + display_escape_text(result.profile.name))

@@ -87,9 +87,10 @@ instead of writing through stale authority.
 The generated study package for each task contains a task store, a separate
 authority store, and grant templates. `mem profile import-study` validates all
 six package stores and composes one editable `study-baseline` Profile. `mem
-init-study` later snapshots that live source, allocates run-local Profile UIDs,
-splits the task and `granted-memory` branches, binds grants, and publishes the
-registry atomically.
+init-study` now copies that merged source into one ordinary Profile without
+materializing the templates as live registry grants. The table below therefore
+describes the generated package contract and legacy split Studies, not the
+capabilities of a newly initialized single Profile.
 
 | Task | Task-owned data | Authority Profile and ordinary data | Granted views |
 | --- | --- | --- | --- |
@@ -100,6 +101,11 @@ registry atomically.
 `task-1-campus-authority` is intentionally task-specific. A future shared
 campus authority may be appropriate for a different experiment, but this
 fixture's exact contents and permissions are part of Task 1's condition.
+
+In the current single-Profile run model, the corresponding material remains
+under `granted-memory/task-N` as ordinary owned Contexts. Reintroducing the
+table's participant/authority enforcement requires an explicit later workflow;
+it is not an implicit effect of `init-study` while the topology is unstable.
 
 ## Why registry grants
 

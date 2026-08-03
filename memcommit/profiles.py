@@ -2,11 +2,12 @@
 
 Profiles are a control-plane selector around complete MemoryStore roots.  A
 single editable Study baseline deliberately namespaces all three task inputs
-inside one root; initialized runs split those branches back into independent
-task and authority stores.  A process resolves its selected root once when
-:mod:`memcommit.store` is imported, so a profile selection affects the next
-CLI invocation while an already running operation finishes against the store
-it opened.
+inside one root, and ``mem init-study`` snapshots that complete topology into
+one new ordinary Profile.  Older split Study groups remain readable registry
+records, but new initialization does not create task/authority subprofiles.
+A process resolves its selected root once when :mod:`memcommit.store` is
+imported, so a profile selection affects the next CLI invocation while an
+already running operation finishes against the store it opened.
 """
 
 from __future__ import annotations
@@ -121,15 +122,11 @@ class StudyProfileGroup:
 
 @dataclass(frozen=True)
 class StudyInitializationResult:
-    """Published identity and task Profiles for one new Study."""
+    """One ordinary Profile copied from an editable Study baseline."""
 
-    uid: str
-    name: str
-    created_at: str
-    profiles: tuple[ProfileEntry, ...]
-    inspections: tuple[StoreInspection, ...]
-    support_profiles: tuple[ProfileEntry, ...]
-    support_inspections: tuple[StoreInspection, ...]
+    profile: ProfileEntry
+    inspection: StoreInspection
+    baseline_profile_name: str
     active_profile_name: str
 
 
@@ -212,11 +209,12 @@ def _timezone_timestamp(value: object) -> str:
 def study_profile_groups(
     profiles: tuple[ProfileEntry, ...],
 ) -> tuple[StudyProfileGroup, ...]:
-    """Validate and group Profiles created together by ``mem init-study``.
+    """Validate and group legacy split Study Profiles.
 
-    The grouping is immutable source provenance rather than a Context
-    hierarchy. This keeps every Task a complete independent MemoryStore while
-    allowing Profile UIs to present the three stores under one Study heading.
+    Older ``mem init-study`` versions persisted immutable grouping provenance
+    rather than a Context hierarchy.  The reader remains so those Profiles and
+    grants stay selectable, while current initialization creates an ordinary
+    single Profile that never enters this grouping path.
     """
 
     grouped: dict[str, list[tuple[int, str, ProfileEntry, str, str]]] = {}
@@ -1087,11 +1085,11 @@ def _copy_store(source: Path, destination: Path) -> StoreInspection:
 def _baseline_store_files(root: Path) -> tuple[Path, ...]:
     """Return the explicit durable baseline allowlist for one MemoryStore.
 
-    A Study run needs stable Context/Memory identities and declared content
-    views, but it must not inherit checkpoints, command receipts, sessions,
-    caches, locks, lifecycle events, or write-protection state.  Selecting
-    files rather than deleting known runtime names makes future operational
-    artifacts fail safely closed outside the imported baseline.
+    A clean Profile copy needs stable Context/Memory identities and declared
+    content views, but it must not inherit checkpoints, command receipts,
+    sessions, caches, locks, lifecycle events, or write-protection state.
+    Selecting files rather than deleting known runtime names makes future
+    operational artifacts fail safely closed outside the imported baseline.
     """
 
     source = Path(root).absolute()
@@ -1204,6 +1202,96 @@ def import_profile(
                 shutil.rmtree(candidate)
 
 
+def _baseline_import_provenance(
+    source_root: Path,
+    *,
+    source_profile: ProfileEntry | None,
+) -> tuple[str, dict[str, object]]:
+    """Freeze the digest and path-free provenance for one clean copy."""
+
+    digest = baseline_store_digest(source_root)
+    source_record: dict[str, object] = {
+        "kind": "BASELINE_IMPORT",
+        "imported_at": datetime.now(timezone.utc).isoformat(),
+        "baseline_sha256": digest,
+    }
+    if source_profile is not None:
+        # Record the registry identity rather than an internal store path;
+        # paths are implementation details and can disclose host layout.
+        source_record.update(
+            {
+                "kind": "PROFILE_IMPORT",
+                "source_profile_uid": source_profile.uid,
+                "source_profile_name": source_profile.name,
+            }
+        )
+    return digest, source_record
+
+
+def _publish_baseline_profile_locked(
+    registry: ProfileRegistry,
+    *,
+    name: str,
+    source_root: Path,
+    digest: str,
+    source_record: dict[str, object],
+) -> tuple[ProfileEntry, StoreInspection]:
+    """Publish one clean copy while the caller holds the registry lock."""
+
+    if any(
+        profile.name.casefold() == name.casefold()
+        for profile in registry.profiles
+    ):
+        raise ProfileError(f"Profile {name!r} already exists.")
+    profile = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name=name,
+        kind="MANAGED",
+        source=source_record,
+    )
+    staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
+    published = False
+    try:
+        inspection = _copy_store_baseline(
+            source_root,
+            staging,
+            expected_digest=digest,
+        )
+        destination = profile_store_dir(profile)
+        if destination.exists() or destination.is_symlink():
+            raise ProfileError("Managed profile destination is occupied.")
+        os.replace(staging, destination)
+        published = True
+        updated = replace(
+            registry,
+            generation=max(1, registry.generation + 1),
+            profiles=(*registry.profiles, profile),
+        )
+        try:
+            _write_registry(updated)
+        except Exception as error:
+            try:
+                replacement_is_visible = load_profile_registry() == updated
+            except (OSError, ProfileConfigError, ValueError):
+                replacement_is_visible = False
+            if replacement_is_visible:
+                # os.replace() may have committed the registry before its
+                # directory fsync reported failure. Removing the store then
+                # would leave a durable registry pointing at missing data.
+                raise ProfileError(
+                    f"Profile {name!r} was published, but registry durability "
+                    "could not be confirmed; it remains registered."
+                ) from error
+            os.replace(destination, staging)
+            published = False
+            raise
+        return profile, replace(inspection, root=destination)
+    finally:
+        candidate = profile_store_dir(profile) if published else staging
+        if not published and candidate.exists() and not candidate.is_symlink():
+            shutil.rmtree(candidate)
+
+
 def import_baseline_profile(
     name: str,
     source: Path,
@@ -1216,62 +1304,18 @@ def import_baseline_profile(
     if canonical == AUTHORING_PROFILE_NAME:
         raise ProfileError("The fixed authoring profile cannot be imported.")
     source_root = _source_store(source)
-    digest = baseline_store_digest(source_root)
-    imported_at = datetime.now(timezone.utc).isoformat()
+    digest, source_record = _baseline_import_provenance(
+        source_root,
+        source_profile=source_profile,
+    )
     with _registry_lock():
-        registry = load_profile_registry()
-        if registry.by_name(canonical) is not None:
-            raise ProfileError(f"Profile {canonical!r} already exists.")
-        source_record: dict[str, object] = {
-            "kind": "BASELINE_IMPORT",
-            "imported_at": imported_at,
-            "baseline_sha256": digest,
-        }
-        if source_profile is not None:
-            # Record the registry identity rather than an internal store path;
-            # paths are implementation details and can disclose host layout.
-            source_record.update(
-                {
-                    "kind": "PROFILE_IMPORT",
-                    "source_profile_uid": source_profile.uid,
-                    "source_profile_name": source_profile.name,
-                }
-            )
-        profile = ProfileEntry(
-            uid=str(uuid.uuid4()),
+        return _publish_baseline_profile_locked(
+            load_profile_registry(),
             name=canonical,
-            kind="MANAGED",
-            source=source_record,
+            source_root=source_root,
+            digest=digest,
+            source_record=source_record,
         )
-        staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
-        published = False
-        try:
-            inspection = _copy_store_baseline(
-                source_root,
-                staging,
-                expected_digest=digest,
-            )
-            destination = profile_store_dir(profile)
-            if destination.exists() or destination.is_symlink():
-                raise ProfileError("Managed profile destination is occupied.")
-            os.replace(staging, destination)
-            published = True
-            updated = replace(
-                registry,
-                generation=max(1, registry.generation + 1),
-                profiles=(*registry.profiles, profile),
-            )
-            try:
-                _write_registry(updated)
-            except Exception:
-                os.replace(destination, staging)
-                published = False
-                raise
-            return profile, replace(inspection, root=destination)
-        finally:
-            candidate = profile_store_dir(profile) if published else staging
-            if not published and candidate.exists() and not candidate.is_symlink():
-                shutil.rmtree(candidate)
 
 
 _STUDY_BUNDLE_NAMESPACE = uuid.UUID("50b72d54-cfbe-4f89-8f7f-1e6c785d8552")
@@ -2624,162 +2668,85 @@ def _snapshot_study_baseline(
     return packages
 
 
-def init_study_profiles(
+def init_study_profile(
     baseline_profile_name: str = STUDY_BASELINE_PROFILE_NAME,
     *,
     name: str | None = None,
 ) -> StudyInitializationResult:
-    """Clone the current editable baseline into one isolated Study."""
+    """Copy one complete editable baseline into an ordinary Profile.
 
-    baseline_name = validate_profile_name(baseline_profile_name)
-    study_uid = str(uuid.uuid4())
+    The baseline's namespaced task and granted-memory branches are the Study
+    topology.  Keeping that topology intact avoids treating a still-changing
+    corpus as six independently stable stores.  The clean-import boundary also
+    prevents authoring history from becoming participant-run state.
+    """
+
+    try:
+        baseline_name = validate_profile_name(baseline_profile_name)
+    except (ProfileConfigError, ValueError) as error:
+        raise ProfileError("Study baseline Profile name is invalid.") from error
+
+    generated_uid = uuid.uuid4()
     created = datetime.now(timezone.utc)
-    created_at = created.isoformat()
     if name is None:
-        study_name = f"study-{created.strftime('%Y%m%dT%H%M%SZ')}-{study_uid[:8]}"
+        profile_name = (
+            f"study-{created.strftime('%Y%m%dT%H%M%SZ')}-{str(generated_uid)[:8]}"
+        )
     else:
         try:
-            study_name = validate_profile_name(name)
+            profile_name = validate_profile_name(name)
         except (ProfileConfigError, ValueError) as error:
-            raise ProfileError("Study name is invalid.") from error
-    if study_name == AUTHORING_PROFILE_NAME:
-        raise ProfileError("The fixed authoring name cannot identify a Study.")
+            raise ProfileError("Study Profile name is invalid.") from error
+    if profile_name == AUTHORING_PROFILE_NAME:
+        raise ProfileError("The fixed authoring name cannot identify a Study Profile.")
+
     with _registry_lock():
         registry = load_profile_registry()
         baseline = registry.by_name(baseline_name)
         if baseline is None:
+            bootstrap = (
+                "; bootstrap it with 'mem profile import-study'"
+                if baseline_name == STUDY_BASELINE_PROFILE_NAME
+                else ""
+            )
             raise ProfileError(
-                f"Study baseline Profile {baseline_name!r} does not exist; "
-                "bootstrap it with 'mem profile import-study'."
+                f"Study baseline Profile {baseline_name!r} does not exist{bootstrap}."
             )
-        task_records = _study_baseline_tasks(baseline)
-        snapshot_root = profile_stores_dir() / (
-            f".study-baseline-snapshot-{uuid.uuid4().hex}"
+        if any(
+            group.name.casefold() == profile_name.casefold()
+            for group in study_profile_groups(registry.profiles)
+        ):
+            raise ProfileError(
+                f"Profile name {profile_name!r} conflicts with an existing legacy "
+                "Study group."
+            )
+        if any(
+            baseline.uid in {grant.authority_profile_uid, grant.grantee_profile_uid}
+            for grant in registry.grants
+        ):
+            # Grants are registry relationships, not owned baseline content.
+            # Holding the same lock through publication makes the self-contained
+            # source check part of the exact registry generation being copied.
+            raise ProfileError(
+                f"Study baseline Profile {baseline.name!r} participates in registry "
+                "grants and cannot be copied as one self-contained Profile."
+            )
+
+        source_root = profile_store_dir(baseline)
+        digest, source_record = _baseline_import_provenance(
+            source_root,
+            source_profile=baseline,
         )
-        snapshot_root.mkdir()
-        try:
-            from memcommit.store import MemoryStore
-
-            baseline_store = MemoryStore(root=profile_store_dir(baseline), create=False)
-            with baseline_store._command_write_lock():
-                with baseline_store._context_graph_lock(exclusive=True):
-                    context_names = tuple(baseline_store.list_context_names())
-                    with baseline_store._context_write_locks(context_names):
-                        digest_before = baseline_store_digest(
-                            profile_store_dir(baseline)
-                        )
-                        packages = _snapshot_study_baseline(
-                            baseline,
-                            task_records,
-                            snapshot_root,
-                        )
-                        digest_after = baseline_store_digest(
-                            profile_store_dir(baseline)
-                        )
-                        if digest_before != digest_after:
-                            raise ProfileError("Study baseline changed during snapshot.")
-
-            sources = tuple(
-                source for task in _STUDY_TASKS for source in packages[task].profiles
-            )
-            allocated_names = {
-                source.name: (
-                    _study_task_profile_name(study_name, source.task)
-                    if source.role == "TASK"
-                    else _study_authority_profile_name(study_name, source.name)
-                )
-                for source in sources
-            }
-            existing_names = {
-                profile.name.casefold() for profile in registry.profiles
-            }
-            conflicts = [
-                item
-                for item in allocated_names.values()
-                if item.casefold() in existing_names
-            ]
-            existing_studies = study_profile_groups(registry.profiles)
-            if any(
-                item.name.casefold() == study_name.casefold()
-                for item in existing_studies
-            ):
-                conflicts.append(study_name)
-            if conflicts:
-                raise ProfileError(
-                    "Study name is already in use: " + ", ".join(conflicts)
-                )
-            profiles_by_source_name = {
-                source.name: ProfileEntry(
-                    uid=str(uuid.uuid4()),
-                    name=allocated_names[source.name],
-                    kind="MANAGED",
-                    source={
-                        "kind": (
-                            _STUDY_PROFILE_SOURCE_KIND
-                            if source.role == "TASK"
-                            else _STUDY_AUTHORITY_SOURCE_KIND
-                        ),
-                        "study_uid": study_uid,
-                        "study_name": study_name,
-                        "created_at": created_at,
-                        "task": source.task,
-                        "manifest_sha256": packages[source.task].manifest_digest,
-                        "baseline_sha256": baseline_store_digest(source.store),
-                        "baseline_profile_uid": baseline.uid,
-                        "baseline_profile_name": baseline.name,
-                        "canonical_language": packages[
-                            source.task
-                        ].manifest.get("canonical_language"),
-                    },
-                )
-                for source in sources
-            }
-            profiles = tuple(
-                profiles_by_source_name[source.name] for source in sources
-            )
-            prepared_groups = study_profile_groups((*registry.profiles, *profiles))
-            if not prepared_groups or prepared_groups[-1].uid != study_uid:
-                raise ProfileError("Initialized Study grouping could not be verified.")
-            published = _publish_study_profile_batch(
-                registry,
-                packages,
-                profiles_by_source_name,
-                batch_label="study-init",
-                grant_uid_namespace=study_uid,
-            )
-            inspections_by_uid = {
-                profile.uid: inspection
-                for profile, inspection in zip(
-                    published.profiles,
-                    published.inspections,
-                    strict=True,
-                )
-            }
-            task_profiles = tuple(
-                profiles_by_source_name[source.name]
-                for source in sources
-                if source.role == "TASK"
-            )
-            support_profiles = tuple(
-                profiles_by_source_name[source.name]
-                for source in sources
-                if source.role == "AUTHORITY"
-            )
-            return StudyInitializationResult(
-                uid=study_uid,
-                name=study_name,
-                created_at=created_at,
-                profiles=task_profiles,
-                inspections=tuple(
-                    inspections_by_uid[profile.uid] for profile in task_profiles
-                ),
-                support_profiles=support_profiles,
-                support_inspections=tuple(
-                    inspections_by_uid[profile.uid]
-                    for profile in support_profiles
-                ),
-                active_profile_name=registry.active.name,
-            )
-        finally:
-            if snapshot_root.exists() and not snapshot_root.is_symlink():
-                shutil.rmtree(snapshot_root)
+        profile, inspection = _publish_baseline_profile_locked(
+            registry,
+            name=profile_name,
+            source_root=source_root,
+            digest=digest,
+            source_record=source_record,
+        )
+        return StudyInitializationResult(
+            profile=profile,
+            inspection=inspection,
+            baseline_profile_name=baseline.name,
+            active_profile_name=registry.active.name,
+        )

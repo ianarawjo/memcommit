@@ -31,15 +31,12 @@ contracts. The live authoring boundary is merged because the still-changing
 Study Memory must be selectable, importable, and copyable as one unit.
 
 `mem init-study [NAME]` never rereads these generated packages. It snapshots
-the current registered baseline Profile and namespaces the resulting identities
-as one repeatable Study run. Its three Task Profiles and task-specific authority Profiles appear beneath the same Study heading;
-the authority entries remain switchable source owners rather than participant
-workspaces. Each run rekeys deterministic fixture grant identities under its
-new Study UUID so multiple Studies can coexist without grant-UID collisions
-while preserving identical topology. Context and Memory identities, translation
-views, and the template-selected current Context cross the snapshot boundary;
-checkpoints and all other operational artifacts do not. Later baseline changes
-apply only to later initialized Studies.
+the current registered baseline Profile into one ordinary run Profile without
+splitting or renaming its `task-N` and `granted-memory/task-N` branches. Context
+and Memory identities, structural parents, translation views, and the selected
+current Context cross the snapshot boundary; checkpoints and all other
+operational artifacts do not. Registry grants are not synthesized or copied.
+Later baseline changes apply only to later initialized Profiles.
 
 ## Source and generated artifacts
 
@@ -81,12 +78,13 @@ gain a navigable year level. Only the newly introduced year Contexts receive
 new structural identities; they are organization, not personal Memory claims.
 
 The package may omit a namespace-only prefix that owns no fixture Memory. At
-Study import and live-baseline snapshot boundaries, the Profile composer fills
+Study import, the Profile composer fills
 each such gap with a fresh empty ordinary Context. Existing fixture Context
 and Memory identities remain unchanged, while recursive listing and upward
 navigation obtain a continuous lexical chain. These structural parents are a
-Profile topology guarantee; they are not fixture claims and are not embedded
-into their children or parents.
+Profile topology guarantee; `init-study` copies them unchanged with the rest of
+the baseline. They are not fixture claims and are not embedded into their
+children or parents.
 
 Task 1's task Profile owns only `participant/construction-updates`.
 `task-1-campus-authority` owns ordinary `campus-wiki` and its

@@ -20,6 +20,6 @@ Run `mem profile import-study` once to compose a clean editable
 `task-N` branches contain participant starting state and its
 `granted-memory/task-N` branches contain authority source material. Refine that
 single live Profile, then use `mem init-study NAME` to snapshot its current
-state into isolated Task and authority Profiles with bound grants. The legacy
-`~/.mem` remains the `authoring` profile and package sources are never edited
-in place.
+state into one ordinary Profile with the complete topology unchanged. The
+legacy `~/.mem` remains the `authoring` profile and package sources are never
+edited in place.

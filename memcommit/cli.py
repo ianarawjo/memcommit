@@ -68,7 +68,7 @@ app.command(
 )(import_profile.cmd)
 app.command(
     "init-study",
-    help="Create one timestamped Study with isolated Task 1, 2, and 3 Profiles.",
+    help="Copy one Study baseline into a complete ordinary Profile.",
 )(init_study.cmd)
 app.command("add",            help="Add one or more memories to the current context.")(add.cmd)
 app.command("status",         help="Show current context and recent memories.")(status.cmd)

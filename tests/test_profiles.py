@@ -14,6 +14,7 @@ import sys
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.profiles as profiles_module
 from memcommit.cli import app
 from memcommit.context import AutoCheckpoint
 from memcommit.eval.study_bundle import build_all_study_bundles
@@ -24,6 +25,7 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import (
     STUDY_BASELINE_PROFILE_NAME,
+    baseline_store_digest,
     create_authority_grant,
     study_profile_groups,
 )
@@ -330,7 +332,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert "task-1/participant'" in second_parent.stdout
 
 
-def test_profile_use_changes_the_next_process_and_keeps_query_only_hidden(
+def test_profile_use_selects_the_initialized_complete_profile(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -343,25 +345,24 @@ def test_profile_use_changes_the_next_process_and_keeps_query_only_hidden(
     initialized = runner.invoke(app, ["init-study", "profile-view"])
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
 
-    selected = runner.invoke(app, ["profile", "use", "profile-view-task-1"])
+    selected = runner.invoke(app, ["profile", "use", "profile-view"])
 
     assert selected.exit_code == 0, selected.output
-    assert "Selected profile 'profile-view-task-1'." in selected.output
-    assert "Contexts 8 owned + 7 granted" in selected.output
-    assert "Memories 75 owned + 300 granted" in selected.output
+    assert "Selected profile 'profile-view'." in selected.output
+    assert "Contexts 130 owned + 0 granted" in selected.output
+    assert "Memories 1278 owned + 0 granted" in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
-    assert "* participant/construction-updates" in contexts.stdout
-    assert "campus-wiki  [view create,read,update" in contexts.stdout
-    assert (
-        "campus-wiki/construction-details  [view query,session_log" in contexts.stdout
-    )
+    assert "* task-1" in contexts.stdout
+    assert "task-1/participant/construction-updates" in contexts.stdout
+    assert "granted-memory/task-1/campus-wiki" in contexts.stdout
+    assert "[view " not in contexts.stdout
     assert "authoring-notes" not in contexts.stdout
 
     profile_list = runner.invoke(app, ["profile", "list"])
     assert profile_list.exit_code == 0
-    assert "* Task 1  CURRENT" in profile_list.output
-    assert "views=campus-wiki,campus-wiki/construction-details" in profile_list.output
+    assert "* profile-view" in profile_list.output
+    assert "STUDY profile-view" not in profile_list.output
     assert "authoring" in profile_list.output
 
 
@@ -446,10 +447,7 @@ def test_live_baseline_edits_are_copied_into_the_next_initialized_study(
     assert added.returncode == 0, added.stderr
     initialized = runner.invoke(app, ["init-study", "edited-baseline"])
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
-    assert (
-        runner.invoke(app, ["profile", "use", "edited-baseline-task-1"]).exit_code
-        == 0
-    )
+    assert runner.invoke(app, ["profile", "use", "edited-baseline"]).exit_code == 0
     listing = _subprocess_mem(tmp_path, "ls")
 
     assert listing.returncode == 0, listing.stderr
@@ -712,7 +710,7 @@ def test_profile_import_remains_an_explicit_archival_copy_with_history(
     assert len(imported_store.list_checkpoints("archived")) == 1
 
 
-def test_init_study_creates_timestamped_group_of_three_isolated_profiles(
+def test_init_study_creates_one_complete_ordinary_profile(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -731,17 +729,17 @@ def test_init_study_creates_timestamped_group_of_three_isolated_profiles(
     )
 
     assert result.exit_code == 0, result.stderr or result.output
-    assert "Initialized Study 'pilot-001'." in result.output
+    assert "Initialized Study Profile 'pilot-001'." in result.output
     assert "Baseline Profile: study-baseline" in result.output
-    assert "Profiles:" in result.output
-    assert "Task 1 · pilot-001-task-1" in result.output
-    assert "Task 2 · pilot-001-task-2" in result.output
-    assert "Task 3 · pilot-001-task-3" in result.output
-    assert "Authority 1 · pilot-001-task-1-campus-authority" in result.output
-    assert "Authority 2 · pilot-001-task-2-proposal-authority" in result.output
-    assert "Authority 3 · pilot-001-task-3-healthcare-authority" in result.output
-    assert "available to normal selection" in result.output
+    assert "Contexts 130 · Memories 1278 · current=task-1" in result.output
+    assert (
+        "complete baseline Context topology was copied without splitting"
+        in result.output
+    )
+    assert "Task 1 ·" not in result.output
+    assert "Authority Profiles:" not in result.output
     assert "Active Profile unchanged: authoring" in result.output
+    assert "Use it with: mem profile pilot-001" in result.output
     assert _tree_digest(bundle_root) == source_digest
 
     registry = load_profile_registry()
@@ -749,54 +747,31 @@ def test_init_study_creates_timestamped_group_of_three_isolated_profiles(
     assert [profile.name for profile in registry.profiles] == [
         "authoring",
         "study-baseline",
-        "pilot-001-task-1",
-        "pilot-001-task-1-campus-authority",
-        "pilot-001-task-2",
-        "pilot-001-task-2-proposal-authority",
-        "pilot-001-task-3",
-        "pilot-001-task-3-healthcare-authority",
+        "pilot-001",
     ]
-    assert len(registry.grants) == 7
-    groups = study_profile_groups(registry.profiles)
-    assert len(groups) == 1
-    group = groups[0]
-    assert group.name == "pilot-001"
-    assert datetime.fromisoformat(group.created_at).utcoffset() is not None
-    assert tuple(profile.name for profile in group.profiles) == (
-        "pilot-001-task-1",
-        "pilot-001-task-2",
-        "pilot-001-task-3",
-    )
-    roots = tuple(profile_store_dir(profile) for profile in group.profiles)
-    assert len(set(roots)) == 3
-    assert all(root.is_dir() for root in roots)
-    assert [
-        json.loads((root / "state.json").read_text(encoding="utf-8"))["current"]
-        for root in roots
-    ] == [
-        "participant/construction-updates",
-        "participant/proposal-workspace",
-        "personal-memory",
-    ]
-    authority_profiles = [
-        profile
-        for profile in registry.profiles
-        if profile.source and profile.source.get("kind") == "STUDY_RUN_AUTHORITY"
-    ]
-    assert len(authority_profiles) == 3
-    assert {profile.source["study_uid"] for profile in authority_profiles} == {
-        group.uid
-    }
-    imported_profiles = registry.profiles[2:]
-    assert all(
-        re.fullmatch(r"[0-9a-f]{64}", profile.source["baseline_sha256"])
-        for profile in imported_profiles
-        if profile.source is not None
-    )
-    assert all(
-        not any(profile_store_dir(profile).rglob("checkpoints/*.json"))
-        for profile in imported_profiles
-    )
+    assert registry.grants == ()
+    assert study_profile_groups(registry.profiles) == ()
+    baseline = registry.by_name("study-baseline")
+    copied = registry.by_name("pilot-001")
+    assert baseline is not None and copied is not None and copied.source is not None
+    assert copied.source["kind"] == "PROFILE_IMPORT"
+    assert copied.source["source_profile_uid"] == baseline.uid
+    assert copied.source["source_profile_name"] == baseline.name
+    assert re.fullmatch(r"[0-9a-f]{64}", copied.source["baseline_sha256"])
+    baseline_root = profile_store_dir(baseline)
+    copied_root = profile_store_dir(copied)
+    assert copied_root != baseline_root
+    assert baseline_store_digest(copied_root) == baseline_store_digest(baseline_root)
+    baseline_store = MemoryStore(root=baseline_root, create=False)
+    copied_store = MemoryStore(root=copied_root, create=False)
+    assert copied_store.list_context_names() == baseline_store.list_context_names()
+    assert copied_store.current_context_name() == baseline_store.current_context_name()
+    for context_name in baseline_store.list_context_names():
+        assert (
+            copied_store.load_direct(context_name).to_dict()
+            == baseline_store.load_direct(context_name).to_dict()
+        )
+    assert not any(copied_root.rglob("checkpoints/*.json"))
 
 
 def test_init_study_without_name_generates_unique_timestamped_name(
@@ -816,14 +791,17 @@ def test_init_study_without_name_generates_unique_timestamped_name(
     assert first.exit_code == 0, first.stderr or first.output
     assert second.exit_code == 0, second.stderr or second.output
     names = [
-        group.name for group in study_profile_groups(load_profile_registry().profiles)
+        profile.name
+        for profile in load_profile_registry().profiles
+        if profile.name not in {"authoring", "study-baseline"}
     ]
     assert len(names) == 2
     assert names[0] != names[1]
     assert all(re.fullmatch(r"study-\d{8}T\d{6}Z-[0-9a-f]{8}", name) for name in names)
+    assert study_profile_groups(load_profile_registry().profiles) == ()
 
 
-def test_profile_inventory_nests_initialized_study_tasks_under_one_heading(
+def test_profile_inventory_shows_initialized_study_as_one_ordinary_profile(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -844,19 +822,17 @@ def test_profile_inventory_nests_initialized_study_tasks_under_one_heading(
     result = runner.invoke(app, ["profile", "list"])
 
     assert result.exit_code == 0, result.output
-    assert "pilot-002  STUDY   created=" in result.output
-    assert "├─   Task 1  USE     profile=pilot-002-task-1" in result.output
-    assert "├─   Task 2  USE     profile=pilot-002-task-2" in result.output
-    assert "├─   Task 3  USE     profile=pilot-002-task-3" in result.output
-    assert (
-        "├─   Authority 1  USE     profile=pilot-002-task-1-campus-authority"
-    ) in result.output
-    assert (
-        "└─   Authority 3  USE     profile=pilot-002-task-3-healthcare-authority"
-    ) in result.output
+    profile_line = next(
+        line for line in result.output.splitlines() if "pilot-002" in line
+    )
+    assert "Contexts 130 owned + 0 granted" in profile_line
+    assert "Memories 1278 owned + 0 granted" in profile_line
+    assert "STUDY pilot-002" not in result.output
+    assert "pilot-002-task-" not in result.output
+    assert "Authority 1" not in result.output
 
 
-def test_initialized_study_picker_preserves_task_and_authority_roles(
+def test_initialized_study_picker_shows_one_ordinary_profile(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -876,7 +852,7 @@ def test_initialized_study_picker_preserves_task_and_authority_roles(
     def select(entries, *, current):
         assert current == "authoring"
         observed.extend((entry.name, entry.study_role) for entry in entries)
-        return "pilot-picker-task-1"
+        return "pilot-picker"
 
     monkeypatch.setattr(
         "memcommit.commands.profile._interactive_terminal",
@@ -893,16 +869,12 @@ def test_initialized_study_picker_preserves_task_and_authority_roles(
     assert observed == [
         ("authoring", None),
         ("study-baseline", None),
-        ("pilot-picker-task-1", "TASK"),
-        ("pilot-picker-task-1-campus-authority", "AUTHORITY"),
-        ("pilot-picker-task-2", "TASK"),
-        ("pilot-picker-task-2-proposal-authority", "AUTHORITY"),
-        ("pilot-picker-task-3", "TASK"),
-        ("pilot-picker-task-3-healthcare-authority", "AUTHORITY"),
+        ("pilot-picker", None),
     ]
+    assert load_profile_registry().active.name == "pilot-picker"
 
 
-def test_init_study_name_collision_preserves_existing_group(
+def test_init_study_name_collision_preserves_existing_profile(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -928,7 +900,7 @@ def test_init_study_name_collision_preserves_existing_group(
     )
 
     assert result.exit_code == 1
-    assert "Study name is already in use" in result.stderr
+    assert "Profile 'pilot-003' already exists" in result.stderr
     after = load_profile_registry()
     assert after == before
     assert (
@@ -937,8 +909,60 @@ def test_init_study_name_collision_preserves_existing_group(
     )
     assert all(root.is_dir() for root in before_roots)
 
+    case_collision = runner.invoke(
+        app,
+        [
+            "import",
+            "profile",
+            "PILOT-003",
+            "--from-profile",
+            "study-baseline",
+        ],
+    )
+    assert case_collision.exit_code == 1
+    assert "Profile 'PILOT-003' already exists" in case_collision.stderr
+    assert load_profile_registry() == before
 
-def test_init_study_is_all_or_nothing_when_live_baseline_is_invalid(
+
+def test_init_study_preserves_a_store_after_visible_registry_replacement(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    real_write_registry = profiles_module._write_registry
+
+    def fail_after_visible_replace(updated):
+        real_write_registry(updated)
+        raise OSError("simulated directory fsync failure")
+
+    monkeypatch.setattr(
+        profiles_module,
+        "_write_registry",
+        fail_after_visible_replace,
+    )
+
+    result = runner.invoke(app, ["init-study", "durability-visible"])
+
+    assert result.exit_code == 1
+    assert "was published" in result.stderr
+    assert "remains registered" in result.stderr
+    registry = load_profile_registry()
+    baseline = registry.by_name("study-baseline")
+    published = registry.by_name("durability-visible")
+    assert baseline is not None and published is not None
+    assert profile_store_dir(published).is_dir()
+    assert baseline_store_digest(profile_store_dir(published)) == baseline_store_digest(
+        profile_store_dir(baseline)
+    )
+    assert registry.active.name == "authoring"
+
+
+def test_init_study_is_all_or_nothing_when_source_store_is_invalid(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -959,12 +983,14 @@ def test_init_study_is_all_or_nothing_when_live_baseline_is_invalid(
         / "advisor1"
         / "context.json"
     )
-    broken.unlink()
+    broken.write_text("{not-json\n", encoding="utf-8")
 
     result = runner.invoke(app, ["init-study", "pilot-invalid"])
 
     assert result.exit_code == 1
-    assert "grant authority Context identity does not match" in result.stderr
+    assert "pilot-invalid" not in {
+        profile.name for profile in load_profile_registry().profiles
+    }
     assert load_profile_registry() == registry_before
     stores = [
         item
@@ -974,7 +1000,7 @@ def test_init_study_is_all_or_nothing_when_live_baseline_is_invalid(
     assert stores == [profile_store_dir(baseline)]
 
 
-def test_init_study_rekeys_grants_and_keeps_authorities_switchable(
+def test_repeated_init_study_profiles_are_independent_complete_copies(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -996,27 +1022,142 @@ def test_init_study_rekeys_grants_and_keeps_authorities_switchable(
 
     assert first.exit_code == 0, first.stderr or first.output
     assert second.exit_code == 0, second.stderr or second.output
-    assert "Authority Profiles:" in first.output
-    assert "available to normal selection" in first.output
     registry = load_profile_registry()
-    groups = study_profile_groups(registry.profiles)
-    assert [group.name for group in groups] == ["pilot-v2-a", "pilot-v2-b"]
-    assert all(len(group.profiles) == 3 for group in groups)
-    assert all(len(group.support_profiles) == 3 for group in groups)
-    assert len(registry.grants) == 14
-    assert len({grant.uid for grant in registry.grants}) == 14
+    baseline = registry.by_name("study-baseline")
+    first_profile = registry.by_name("pilot-v2-a")
+    second_profile = registry.by_name("pilot-v2-b")
+    assert (
+        baseline is not None
+        and first_profile is not None
+        and second_profile is not None
+    )
+    assert len({baseline.uid, first_profile.uid, second_profile.uid}) == 3
+    assert registry.grants == ()
+    assert study_profile_groups(registry.profiles) == ()
+
+    baseline_root = profile_store_dir(baseline)
+    first_root = profile_store_dir(first_profile)
+    second_root = profile_store_dir(second_profile)
+    assert baseline_store_digest(first_root) == baseline_store_digest(baseline_root)
+    assert baseline_store_digest(second_root) == baseline_store_digest(baseline_root)
+
+    first_store = MemoryStore(root=first_root, create=False)
+    first_context = first_store.load_direct("task-1")
+    ops.add(first_context, "Only the first initialized Profile changes.")
+    first_store.save(first_context)
+    assert baseline_store_digest(first_root) != baseline_store_digest(baseline_root)
+    assert baseline_store_digest(second_root) == baseline_store_digest(baseline_root)
 
     inventory = runner.invoke(app, ["profile", "list"])
     assert inventory.exit_code == 0, inventory.output
-    assert "profile=pilot-v2-a-task-1" in inventory.output
-    assert "profile=pilot-v2-b-task-3" in inventory.output
-    assert "profile=pilot-v2-a-task-1-campus-authority" in inventory.output
-    assert "profile=pilot-v2-b-task-3-healthcare-authority" in inventory.output
+    assert "pilot-v2-a" in inventory.output
+    assert "pilot-v2-b" in inventory.output
+    assert "pilot-v2-a-task-" not in inventory.output
 
-    authority_name = groups[0].support_profiles[0].name
-    selected = runner.invoke(app, ["profile", "use", authority_name])
+    selected = runner.invoke(app, ["profile", "use", "pilot-v2-a"])
     assert selected.exit_code == 0, selected.output
     current_inventory = runner.invoke(app, ["profile", "list"])
     assert current_inventory.exit_code == 0, current_inventory.output
-    assert "* Authority 1  CURRENT" in current_inventory.output
-    assert f"profile={authority_name}" in current_inventory.output
+    assert any(
+        line.startswith("* pilot-v2-a")
+        for line in current_inventory.output.splitlines()
+    )
+
+
+def test_init_study_can_copy_an_explicit_self_contained_profile(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    source_root = tmp_path / "custom-source"
+    source_store = MemoryStore(root=source_root)
+    context = ops.init("custom/topology/leaf")
+    memory = ops.add(context, "Custom Study Memory.")
+    source_store.save(context)
+    source_store.set_current(context.name)
+    imported = runner.invoke(
+        app,
+        ["profile", "import", "custom-baseline", "--from", str(source_root)],
+    )
+    assert imported.exit_code == 0, imported.stderr or imported.output
+
+    result = runner.invoke(
+        app,
+        [
+            "init-study",
+            "custom-run",
+            "--from-profile",
+            "custom-baseline",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    registry = load_profile_registry()
+    source = registry.by_name("custom-baseline")
+    copied = registry.by_name("custom-run")
+    assert source is not None and copied is not None and copied.source is not None
+    assert copied.source["source_profile_uid"] == source.uid
+    copied_store = MemoryStore(root=profile_store_dir(copied), create=False)
+    copied_context = copied_store.load_direct(context.name)
+    assert copied_context.uid == context.uid
+    assert [item.uid for item in copied_context.iter_items()] == [memory.uid]
+    assert copied_store.current_context_name() == context.name
+    assert registry.active.name == "authoring"
+
+
+def test_init_study_missing_source_publishes_nothing(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    before = load_profile_registry()
+
+    result = runner.invoke(
+        app,
+        ["init-study", "missing-run", "--from-profile", "missing-source"],
+    )
+
+    assert result.exit_code == 1
+    assert "does not exist" in result.stderr
+    assert "profile import-study" not in result.stderr
+    assert load_profile_registry() == before
+    stores = tmp_path / ".mem-profiles" / "stores"
+    assert not stores.exists() or not list(stores.iterdir())
+
+    default_result = runner.invoke(app, ["init-study", "default-missing-run"])
+    assert default_result.exit_code == 1
+    assert "bootstrap it with 'mem profile import-study'" in default_result.stderr
+    assert load_profile_registry() == before
+
+
+def test_init_study_rejects_a_source_with_registry_grants(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    create_authority_grant(
+        authority_name="study-baseline",
+        grantee_name="authoring",
+        resource_name="task-1",
+        attachment_name="authoring-notes",
+        permissions=["READ"],
+        public_name="baseline-view",
+        recursive=True,
+    )
+    before = load_profile_registry()
+
+    result = runner.invoke(app, ["init-study", "grant-bearing-run"])
+
+    assert result.exit_code == 1
+    assert "participates in registry grants" in result.stderr
+    assert load_profile_registry() == before
+    assert before.by_name("grant-bearing-run") is None

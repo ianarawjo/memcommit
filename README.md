@@ -35,29 +35,39 @@ run logs. `mem profile import` remains the explicit whole-store archival copy.
 ```zsh
 mem profile import-study --from outputs/study-fixtures
 mem profile list
-mem profile task-1
-mem switch
+mem profile study-baseline
+mem switch task-1
+mem switch granted-memory/task-1
 mem profile authoring
 ```
 
-For a fresh repeatable rehearsal or participant run, initialize a named Study:
+`profile import-study` creates one editable `study-baseline` containing the
+`task-1`, `task-2`, `task-3`, and `granted-memory/task-{1,2,3}` branches.
+Continue refining that Profile while the Study Memory is unstable.
+
+For a fresh repeatable rehearsal or participant run, snapshot the complete
+baseline into one ordinary Profile:
 
 ```zsh
 mem init-study pilot-001
-mem profile pilot-001-task-1
+mem profile pilot-001
 ```
 
-With no name, `mem init-study` generates a timestamped unique name. It creates
-three isolated Task Profiles atomically and groups them under the Study label
-in Profile inventory. Every task starts with empty operational history even if
-the fixture bundle contains authoring checkpoints.
+With no name, `mem init-study` generates a timestamped unique name. It reads
+`study-baseline` by default (`--from-profile` selects another self-contained
+Profile) and atomically publishes one clean copy. The complete Context
+topology, Context/Memory identity, and current Context are preserved without
+Task/Authority splitting; checkpoints, sessions, caches, locks, and run logs
+are not copied. Later baseline edits affect only later initializations.
 
 `mem profile use NAME` remains the equivalent explicit form for scripts.
 
-The existing `~/.mem` is the fixed `authoring` profile. Imported profiles are
-editable local copies; selecting another profile does not modify or move the
-authoring store or the generated package source. Query-only sources travel
-with a profile but remain absent from `mem switch`.
+The existing `~/.mem` is the fixed `authoring` Profile. Each initialization is
+one independent complete Profile, and its `granted-memory` branch is ordinary
+owned Context data rather than a generated grant. `init-study` rejects a
+source that participates in registry grants because those relationships cannot
+be represented faithfully by a self-contained copy. Existing legacy split
+Study groups remain readable and selectable but are not created by new runs.
 
 ## Write protection
 

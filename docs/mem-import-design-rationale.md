@@ -65,8 +65,8 @@ runtime artifact cannot silently enter a participant baseline.
 `mem profile import` remains the explicit archival whole-store copy, including
 history. `mem profile import-study` first composes the generated task packages
 into one editable `study-baseline`; `mem init-study` then snapshots that live
-Profile and uses the clean Profile-level primitive inside one all-or-nothing
-multi-Profile registry transaction.
+Profile through the same clean Profile-level primitive, publishing one ordinary
+Profile with the complete baseline topology in one atomic registry update.
 
 ## Context import
 
