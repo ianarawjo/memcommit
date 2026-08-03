@@ -6,7 +6,10 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 from memcommit.cli import app
-from memcommit.commands.context_picker import choose_context
+from memcommit.commands.context_picker import (
+    _render_context_options,
+    choose_context,
+)
 from memcommit.store import MemoryStore
 
 
@@ -53,6 +56,44 @@ def test_picker_moves_with_arrows_and_clamps_at_boundaries():
         )
 
     assert selected == "alpha"
+
+
+def test_picker_renders_every_context_instead_of_a_fixed_height_slice():
+    options = tuple(f"namespace/context-{index:02}" for index in range(25))
+
+    fragments = _render_context_options(
+        options,
+        selected=19,
+        current=options[3],
+    )
+    rendered_lines = "".join(
+        text for style, text in fragments if style != "[SetCursorPosition]"
+    ).splitlines()
+
+    assert len(rendered_lines) == len(options)
+    for option in options:
+        assert sum(option in line for line in rendered_lines) == 1
+
+
+def test_picker_anchors_the_viewport_at_exactly_the_selected_context():
+    options = tuple(f"namespace/context-{index:02}" for index in range(25))
+
+    fragments = _render_context_options(
+        options,
+        selected=19,
+        current=options[3],
+    )
+    cursor_markers = [
+        index
+        for index, fragment in enumerate(fragments)
+        if fragment[0] == "[SetCursorPosition]"
+    ]
+
+    assert len(cursor_markers) == 1
+    selected_fragment = fragments[cursor_markers[0] + 1]
+    assert selected_fragment[0] == "class:selected"
+    assert selected_fragment[1].endswith(options[19])
+    assert selected_fragment[1].startswith("›")
 
 
 def test_picker_cancels_without_a_selection():

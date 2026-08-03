@@ -41,8 +41,14 @@ The current Context is marked with `*` and preselected.
 - Up and Down move the selection and stop at the first or last item.
 - Enter accepts the selected Context.
 - Escape, `q`, or Ctrl-C cancel without changing current state.
-- At most twelve names are rendered at once; the viewport follows the
-  selection.
+- The list body expands to the terminal's available height. All names are
+  visible when they fit; on a shorter terminal, prompt-toolkit scrolls the
+  viewport around the selected row and displays a scrollbar.
+
+The picker renders the complete name list into one flexible Window and marks
+the selected row as the viewport cursor anchor. It deliberately does not slice
+the list to a fixed row count: that earlier design left unused space below a
+twelve-row picker even when a taller terminal could show the complete set.
 
 The picker returns a name but never writes store state. The common switch path
 reloads and validates that name after the picker closes and only then updates
@@ -115,10 +121,10 @@ command reports the error and leaves current state unchanged.
   embedding parent.
 - Relative switching does not create a namespace ancestor or target. Parent
   creation, if offered by `mem init`, is a separate operation and policy.
-- The picker does not yet filter or fuzzy-search names. Rendering is bounded,
-  but `list_context_names()` still enumerates and validates every Context.
-  A store with very many Contexts needs an indexed name search rather than a
-  larger terminal widget.
+- The picker does not yet filter or fuzzy-search names. Rendering is bounded
+  by the terminal viewport, but `list_context_names()` and the formatted-text
+  control still enumerate every Context. A store with very many Contexts needs
+  an indexed name search rather than only a larger terminal widget.
 - The global current Context remains the repository's existing single-state
   mechanism. Compare-and-set prevents this command from overwriting a
   concurrent change, but it does not add per-shell current state.

@@ -9,19 +9,34 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
+from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
 
 
-_VISIBLE_ROWS = 12
-
-
-def _visible_bounds(selected: int, count: int) -> tuple[int, int]:
-    """Keep a bounded window around the selected item."""
-    visible = min(count, _VISIBLE_ROWS)
-    start = max(0, selected - visible // 2)
-    start = min(start, count - visible)
-    return start, start + visible
+def _render_context_options(
+    options: Sequence[str],
+    *,
+    selected: int,
+    current: str | None,
+) -> list[tuple[str, str]]:
+    """Render every option and anchor prompt-toolkit at the selected row."""
+    fragments: list[tuple[str, str]] = []
+    for index, name in enumerate(options):
+        is_selected = index == selected
+        if is_selected:
+            # A real cursor anchor lets Window own terminal-height-dependent
+            # scrolling. Slicing to a fixed row count wastes tall terminals
+            # and duplicates viewport logic already provided by prompt-toolkit.
+            fragments.append(("[SetCursorPosition]", ""))
+        is_current = name == current
+        style = "class:selected" if is_selected else ""
+        pointer = "›" if is_selected else " "
+        active = "*" if is_current else " "
+        fragments.append((style, f"{pointer} {active} {name}"))
+        if index < len(options) - 1:
+            fragments.append(("", "\n"))
+    return fragments
 
 
 def choose_context(
@@ -55,20 +70,11 @@ def choose_context(
     bindings = KeyBindings()
 
     def render_options():
-        start, end = _visible_bounds(selected["index"], len(options))
-        fragments: list[tuple[str, str]] = []
-        for index in range(start, end):
-            is_selected = index == selected["index"]
-            is_current = options[index] == current
-            style = "class:selected" if is_selected else ""
-            pointer = "›" if is_selected else " "
-            active = "*" if is_current else " "
-            fragments.append(
-                (style, f"{pointer} {active} {options[index]}")
-            )
-            if index < end - 1:
-                fragments.append(("", "\n"))
-        return fragments
+        return _render_context_options(
+            options,
+            selected=selected["index"],
+            current=current,
+        )
 
     control = FormattedTextControl(
         text=render_options,
@@ -109,12 +115,8 @@ def choose_context(
     )
     options_window = Window(
         control,
-        height=Dimension(
-            min=1,
-            preferred=min(len(options), _VISIBLE_ROWS),
-            max=_VISIBLE_ROWS,
-        ),
         wrap_lines=False,
+        right_margins=[ScrollbarMargin(display_arrows=True)],
     )
     footer = Window(
         FormattedTextControl(
