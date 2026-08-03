@@ -70,7 +70,8 @@ Context: parent
   2 items
 
   [context 12345678] parent/child
-  [memory  abcdef12] Parent fact.
+  [memory  abcdef12]
+    Parent fact.
 ```
 
 `Child fact.` is intentionally absent. This follows the normal directory
@@ -151,15 +152,30 @@ more complex.
 Therefore, `mem ls` uses the Memory's content as its human-readable name:
 
 ```text
-[memory  abcdef12] The north entrance is closed until Friday.
+[memory  abcdef12]
+  The north entrance is closed until Friday.
 ```
 
 The short UID remains visible because it is the selector used by commands such
 as `mem show`, `mem remove`, and `mem reference`.
 
-For compact terminal output, whitespace is normalized to one line. This
+Normal terminal output gives the selector and Memory content separate rows.
+This keeps terminal soft-wrap from beginning beside the selector or visually
+occupying its label row. The content row is indented two spaces beyond its
+selector at every recursive depth.
+
+Whitespace inside the content is still normalized to one logical line. This
 normalization affects display only; the stored content is not changed.
-Whitespace-only content is displayed as `(empty)`.
+Whitespace-only content is displayed as `(empty)`. The compact annotated
+clipboard rendering remains one physical line per Memory:
+
+```text
+[memory  abcdef12] The north entrance is closed until Friday.
+```
+
+A mouse selection of normal terminal output includes the structural newline;
+`mem ls --copy --with-ids` is the supported route when the annotation and
+content must be copied as one line.
 
 ## 6. Root Context Paths and Memory Content Are Separate
 
@@ -174,7 +190,8 @@ They are different logical types, so the listing is unambiguous:
 
 ```text
 [context 12345678] aaa/ab
-[memory  abcdef12] aaa
+[memory  abcdef12]
+  aaa
 ```
 
 A stored Root Context named `aaa` and a stored descendant Context named
@@ -222,9 +239,12 @@ Context: parent
 
   [context 11111111] child
     [context 22222222] grandchild
-      [memory  33333333] Grandchild fact.
-    [memory  44444444] Child fact.
-  [memory  55555555] Parent fact.
+      [memory  33333333]
+        Grandchild fact.
+    [memory  44444444]
+      Child fact.
+  [memory  55555555]
+    Parent fact.
 ```
 
 An empty embedded Context is explicit:
@@ -284,8 +304,8 @@ second path.
 
 The intended conceptual split is:
 
-- `mem ls`: compact immediate namespace navigation and one-line names for
-  direct logical items;
+- `mem ls`: compact immediate namespace navigation and stacked selector/content
+  rows for direct Memories;
 - `mem ls -R`: recursive navigation through namespace children and embedded
   Contexts;
 - `mem show <selector>`: full detail for one selected Memory, MemoryRef, or
@@ -310,10 +330,11 @@ The default clipboard rendering omits `[kind uid]` annotations. Context names
 end in `/`, query-only names end in `/ (query-only)`, and MemoryRef lines retain
 their content-to-Context arrow without object UIDs. This keeps the text useful
 when pasted into prose, chat, or another tool. `--copy --with-ids` instead puts
-the exact unstyled indexed rendering in the clipboard, including the same
-annotations shown by the normal terminal list. Ordinary command stdout remains
-indexed in both modes so a copy operation does not remove the local selection
-cues.
+the compact inline indexed rendering in the clipboard. It contains the same
+annotations shown by the normal terminal list, but keeps each Memory selector
+and its normalized content on one physical line. Ordinary command stdout uses
+the stacked indexed layout in both copy modes so a copy operation does not
+remove the local selection cues.
 
 `--with-ids` is a modifier of `--copy`, not an independent list mode. Using it
 without `--copy`, including with `--paste`, is rejected. The success receipt is
@@ -339,7 +360,9 @@ The clean rendering is intentionally human-readable rather than parseable.
 A Memory whose text resembles a Context name or reference can therefore be
 textually ambiguous after annotations are omitted. No object reconstruction
 depends on that text: the structured stage remains authoritative, while normal
-stdout and `--with-ids` retain visible selectors when a person needs them.
+stdout and `--with-ids` retain visible selectors when a person needs them. The
+two surfaces intentionally use different line layouts, so exact clipboard
+replay is inline rather than a reproduction of normal stacked stdout.
 
 Query-only source content is never opened or copied. A QueryContextRef's public
 name and local routing metadata can be staged because they are already part of
@@ -409,6 +432,7 @@ large-store performance without changing the visible contract.
 The implementation is covered by tests for:
 
 - content-as-name for direct Memory entries;
+- stacked Memory selector/content rows at direct and recursive depths;
 - Context-first rendering when a Memory was inserted first;
 - `aaa/ab` Context and `aaa` Memory content coexisting without ambiguity;
 - relative ordering of Memory and MemoryRef entries;
@@ -425,6 +449,7 @@ The implementation is covered by tests for:
 - existing non-recursive list and embed behavior;
 - clean-by-default and `--with-ids` text/structured dual copy for both
   `list` and `ls`;
+- inline annotated clipboard replay distinct from stacked terminal stdout;
 - embedded Context, namespace Context, query-only, MemoryRef, and recursive
   clean rendering;
 - rejection of `--with-ids` outside `--copy`;

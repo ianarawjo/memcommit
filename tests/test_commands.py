@@ -304,8 +304,8 @@ class TestList:
         )
         first_memory_index = next(
             index
-            for index, line in enumerate(lines)
-            if "[memory  " in line and line.endswith("] aaa")
+            for index, line in enumerate(lines[:-1])
+            if "[memory  " in line and lines[index + 1].strip() == "aaa"
         )
         reference_index = next(
             index
@@ -314,9 +314,11 @@ class TestList:
         )
         last_memory_index = next(
             index
-            for index, line in enumerate(lines)
-            if "[memory  " in line and line.endswith("] Last atomic name.")
+            for index, line in enumerate(lines[:-1])
+            if "[memory  " in line
+            and lines[index + 1].strip() == "Last atomic name."
         )
+        assert lines[first_memory_index + 1] == "    aaa"
         assert context_index < first_memory_index < reference_index < last_memory_index
 
     def test_recursive_list_descends_contexts_before_listing_memories(
@@ -348,19 +350,25 @@ class TestList:
         )
         grandchild_memory_index = next(
             index
-            for index, line in enumerate(lines)
-            if "[memory  " in line and line.endswith("] Grandchild memory.")
+            for index, line in enumerate(lines[:-1])
+            if "[memory  " in line
+            and lines[index + 1].strip() == "Grandchild memory."
         )
         child_memory_index = next(
             index
-            for index, line in enumerate(lines)
-            if "[memory  " in line and line.endswith("] Child memory.")
+            for index, line in enumerate(lines[:-1])
+            if "[memory  " in line
+            and lines[index + 1].strip() == "Child memory."
         )
         parent_memory_index = next(
             index
-            for index, line in enumerate(lines)
-            if "[memory  " in line and line.endswith("] Parent memory.")
+            for index, line in enumerate(lines[:-1])
+            if "[memory  " in line
+            and lines[index + 1].strip() == "Parent memory."
         )
+        assert lines[grandchild_memory_index + 1] == "        Grandchild memory."
+        assert lines[child_memory_index + 1] == "      Child memory."
+        assert lines[parent_memory_index + 1] == "    Parent memory."
         assert (
             child_index
             < grandchild_index

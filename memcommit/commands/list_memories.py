@@ -27,6 +27,7 @@ from memcommit.store import MemoryStore
 
 
 _LIST_SNAPSHOT_VERSION = 2
+_MemoryLayout = Literal["stacked", "inline"]
 
 
 def _one_line(content: str) -> str:
@@ -290,6 +291,7 @@ def _render_snapshot_item(
     indent: int,
     lines: list[str],
     with_ids: bool,
+    memory_layout: _MemoryLayout,
 ) -> None:
     prefix = " " * indent
     kind = _require_string(item, "kind")
@@ -328,6 +330,7 @@ def _render_snapshot_item(
                     indent=indent + 2,
                     lines=lines,
                     with_ids=with_ids,
+                    memory_layout=memory_layout,
                 )
         return
     if kind == "query_context_ref":
@@ -393,9 +396,19 @@ def _render_snapshot_item(
             raise _snapshot_error()
         content = _require_string(item, "content")
         if with_ids:
-            lines.append(
-                f"{prefix}[memory  {uid[:8]}] {_one_line(content)}"
-            )
+            label = f"{prefix}[memory  {uid[:8]}]"
+            if memory_layout == "stacked":
+                # The selector owns its own visual row, so content never starts
+                # beside it. Clipboard output deliberately uses the separate
+                # inline renderer.
+                lines.extend(
+                    [
+                        label,
+                        f"{' ' * (indent + 2)}{_one_line(content)}",
+                    ]
+                )
+            else:
+                lines.append(f"{label} {_one_line(content)}")
         else:
             lines.append(f"{prefix}{_one_line(content)}")
         return
@@ -409,6 +422,7 @@ def _render_snapshot_items(
     indent: int,
     lines: list[str],
     with_ids: bool,
+    memory_layout: _MemoryLayout,
 ) -> None:
     contexts, memories = _group_snapshot_items(items)
     for item in [*contexts, *memories]:
@@ -418,6 +432,7 @@ def _render_snapshot_items(
             indent=indent,
             lines=lines,
             with_ids=with_ids,
+            memory_layout=memory_layout,
         )
 
 
@@ -425,7 +440,10 @@ def _render_snapshot(
     snapshot: dict[str, object],
     *,
     with_ids: bool = True,
+    memory_layout: _MemoryLayout,
 ) -> str:
+    if memory_layout not in {"stacked", "inline"}:
+        raise _snapshot_error()
     expected = {"schema_version", "context", "recursive", "items"}
     if set(snapshot) != expected:
         raise _snapshot_error()
@@ -453,6 +471,7 @@ def _render_snapshot(
             indent=2,
             lines=lines,
             with_ids=with_ids,
+            memory_layout=memory_layout,
         )
     return "\n".join(lines) + "\n"
 
@@ -510,7 +529,8 @@ def render_index(ctx: Context, *, recursive: bool = False) -> None:
                 store=store,
                 context_names=tuple(store.list_context_names()),
                 recursive=recursive,
-            )
+            ),
+            memory_layout="stacked",
         )
     )
 
@@ -594,10 +614,12 @@ def cmd(
             annotated_text = _render_snapshot(
                 payload.selection,
                 with_ids=True,
+                memory_layout="inline",
             )
             clean_text = _render_snapshot(
                 payload.selection,
                 with_ids=False,
+                memory_layout="inline",
             )
             if payload.plain_text not in {annotated_text, clean_text}:
                 raise ClipboardError(
@@ -661,7 +683,11 @@ def cmd(
         context_names=context_names,
         recursive=recursive,
     )
-    annotated_text = _render_snapshot(snapshot, with_ids=True)
+    annotated_text = _render_snapshot(
+        snapshot,
+        with_ids=True,
+        memory_layout="stacked",
+    )
     _emit_snapshot_text(annotated_text)
     if not access.is_granted:
         _emit_grant_notes(access.context_name)
@@ -670,6 +696,7 @@ def cmd(
         clipboard_text = _render_snapshot(
             snapshot,
             with_ids=with_ids,
+            memory_layout="inline",
         )
         payload = ClipboardPayload.create(
             producer="list",

@@ -63,6 +63,10 @@ def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
         "\n"
         "  Café north entrance. Closed through Friday.\n"
     )
+    assert (
+        f"  [memory  {memory.uid[:8]}]\n"
+        "    Café north entrance. Closed through Friday.\n"
+    ) in result.stdout
     assert "[memory " in result.stdout
     assert "[memory " not in fake_system_clipboard["text"]
     assert "Copied 1 item" in result.stderr
@@ -89,30 +93,46 @@ def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
     assert os.stat(stage_path).st_mode & 0o777 == 0o600
 
 
-def test_list_copy_with_ids_copies_and_replays_annotated_output(
+def test_list_copy_with_ids_uses_inline_clipboard_but_stacked_stdout(
     isolated_store,
     fake_system_clipboard,
 ):
     invoke("init", "source")
     invoke("add", "Keep this object's visible identifier.")
+    memory = next(iter(MemoryStore().load_current().memories.values()))
     expected = invoke("ls")
+    inline = (
+        "Context: source\n"
+        "  1 item\n"
+        "\n"
+        f"  [memory  {memory.uid[:8]}] "
+        "Keep this object's visible identifier.\n"
+    )
 
     copied = invoke("list", "--copy", "--with-ids")
 
     assert copied.exit_code == 0
     assert copied.stdout == expected.stdout
-    assert fake_system_clipboard["text"] == expected.stdout
+    assert expected.stdout == (
+        "Context: source\n"
+        "  1 item\n"
+        "\n"
+        f"  [memory  {memory.uid[:8]}]\n"
+        "    Keep this object's visible identifier.\n"
+    )
+    assert fake_system_clipboard["text"] == inline
+    assert fake_system_clipboard["text"] != expected.stdout
     assert "[memory " in fake_system_clipboard["text"]
     assert "text with IDs" in copied.stderr
     record = json.loads(
         (Path(isolated_store) / "clipboard.json").read_text(encoding="utf-8")
     )
-    assert record["plain_text"] == expected.stdout
+    assert record["plain_text"] == inline
 
     pasted = invoke("ls", "--paste")
 
     assert pasted.exit_code == 0
-    assert pasted.stdout == expected.stdout
+    assert pasted.stdout == inline
 
 
 def test_list_copy_and_ls_paste_are_coequal_and_snapshot_based(
