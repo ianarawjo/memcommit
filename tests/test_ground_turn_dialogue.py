@@ -17,6 +17,7 @@ from memcommit.ground_turn_dialogue import (
     GROUND_TURN_OPERATION,
     GroundTurnAction,
     GroundTurnAsk,
+    GroundTurnDraftBatch,
     GroundTurnError,
     ground_turn_aliases,
     interpret_ground_turn,
@@ -59,6 +60,7 @@ def _turn(kind="ASK", **overrides):
         "rule_provenance": "",
         "decision": "",
         "response": "",
+        "drafts": [],
     }
     value.update(overrides)
     return value
@@ -171,6 +173,13 @@ def test_unbound_turn_can_ask_or_propose_one_explicit_binding():
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
     assert "Do not construct, quote, or run a mem command." in prompt
+    assert "Goal–Rules–Memories Ground" in prompt
+    assert (
+        "wire tokens CASE and PROPOSE_CASE are retained compatibility "
+        "spellings for Ground Memories"
+    ) in prompt
+    assert "FOCUS marker is an attentional anchor" in prompt
+    assert "consider consequences across Goal, Contexts, Rules" in prompt
     assert "no longer than 40 words" in prompt
     payload = json.loads(prompt.split("GROUND TURN PAYLOAD:\n", 1)[1])
     assert payload["ground"]["state"] == "UNBOUND"
@@ -201,6 +210,213 @@ def test_bound_turn_exposes_aliases_not_item_uids_and_proposes_rule():
     assert payload["ground"]["candidate_context"] == "derived"
     assert payload["ground"]["target_contexts"] == ["wiki"]
     assert "completion" not in payload["ground"]
+
+
+def test_long_comment_is_atomized_and_classified_in_one_unsaved_batch():
+    session = _bound_ground()
+    text = (
+        "Use exactly six corresponding domains.\n"
+        "The rear entrance opens on the third floor."
+    )
+    provider = FakeProvider(
+        _turn(
+            "DRAFTS",
+            drafts=[
+                {
+                    "kind": "RULE",
+                    "status": "READY",
+                    "content": "Use exactly six corresponding domains.",
+                    "classification_reason": (
+                        "This is an independently reviewable constraint."
+                    ),
+                    "proposal_rationale": (
+                        "The user directly specified the six-domain structure."
+                    ),
+                    "rule_provenance": "USER_STATED",
+                    "source_spans": [
+                        "Use exactly six corresponding domains."
+                    ],
+                },
+                {
+                    "kind": "FACT",
+                    "status": "READY",
+                    "content": (
+                        "The rear entrance opens on the third floor."
+                    ),
+                    "classification_reason": (
+                        "This describes the fictional building."
+                    ),
+                    "proposal_rationale": "",
+                    "rule_provenance": "",
+                    "source_spans": [
+                        "The rear entrance opens on the third floor."
+                    ],
+                },
+            ],
+        )
+    )
+
+    result = interpret_ground_turn(session, text, provider)
+
+    assert isinstance(result, GroundTurnDraftBatch)
+    assert result.raw_source == text
+    assert [draft.kind for draft in result.drafts] == ["RULE", "FACT"]
+    assert result.drafts[0].rule_provenance == "USER_STATED"
+    assert len(provider.calls) == 1
+
+
+def test_unbound_ground_can_preview_drafts_without_proposing_a_rule():
+    session = create_ground_session("named-ground", goal="Build a fixture.")
+    text = "Use six corresponding sections."
+    provider = FakeProvider(
+        _turn(
+            "DRAFTS",
+            drafts=[
+                {
+                    "kind": "RULE",
+                    "status": "READY",
+                    "content": "Use six corresponding sections.",
+                    "classification_reason": "This is a structural Rule.",
+                    "proposal_rationale": "The user stated the structure.",
+                    "rule_provenance": "USER_STATED",
+                    "source_spans": [text],
+                }
+            ],
+        )
+    )
+
+    result = interpret_ground_turn(session, text, provider)
+
+    assert isinstance(result, GroundTurnDraftBatch)
+    assert result.drafts[0].status == "READY"
+    assert "DRAFTS is read-only" in provider.calls[0][0]
+
+
+def test_draft_source_span_preserves_multiline_comment_text_exactly():
+    session = create_ground_session("named-ground", goal="Build a fixture.")
+    source_span = "Keep six areas separate.\nDo not merge their Rules."
+    provider = FakeProvider(
+        _turn(
+            "DRAFTS",
+            drafts=[
+                {
+                    "kind": "RULE",
+                    "status": "READY",
+                    "content": "Keep the six areas independently reviewable.",
+                    "classification_reason": "Both lines state one boundary.",
+                    "proposal_rationale": "Preserve the exact user constraint.",
+                    "rule_provenance": "USER_STATED",
+                    "source_spans": [source_span],
+                }
+            ],
+        )
+    )
+
+    result = interpret_ground_turn(session, source_span, provider)
+
+    assert isinstance(result, GroundTurnDraftBatch)
+    assert result.drafts[0].source_spans == (source_span,)
+
+
+def test_draft_span_cannot_quote_prior_agent_text_as_user_evidence():
+    session = create_ground_session("named-ground", goal="Build a fixture.")
+    agent_text = "All six areas must remain separate."
+    final_user_text = "Yes, but the wiki also needs every area."
+    dialogue = (
+        "USER TURN 1\nPlease help with the structure.\n\n"
+        f"AGENT TURN 1\nUNDERSTANDING\n{agent_text}\n"
+        "QUESTION\nShould that be a Rule?\n\n"
+        f"USER TURN 2\n{final_user_text}"
+    )
+    provider = FakeProvider(
+        _turn(
+            "DRAFTS",
+            drafts=[
+                {
+                    "kind": "RULE",
+                    "status": "READY",
+                    "content": agent_text,
+                    "classification_reason": "Invalid prior-agent quote.",
+                    "proposal_rationale": "Must fail source validation.",
+                    "rule_provenance": "USER_STATED",
+                    "source_spans": [agent_text],
+                }
+            ],
+        )
+    )
+
+    with pytest.raises(GroundTurnError, match="untraceable"):
+        interpret_ground_turn(
+            session,
+            dialogue,
+            provider,
+            draft_source_text=final_user_text,
+        )
+
+
+def test_draft_source_spans_and_rule_only_fields_fail_closed():
+    session = _bound_ground()
+    text = "Use six sections."
+    untraceable = FakeProvider(
+        _turn(
+            "DRAFTS",
+            drafts=[
+                {
+                    "kind": "RULE",
+                    "status": "READY",
+                    "content": "Use six sections.",
+                    "classification_reason": "A structural constraint.",
+                    "proposal_rationale": "Directly stated.",
+                    "rule_provenance": "USER_STATED",
+                    "source_spans": ["Words that were never submitted."],
+                }
+            ],
+        )
+    )
+    fact_with_rule_fields = FakeProvider(
+        _turn(
+            "DRAFTS",
+            drafts=[
+                {
+                    "kind": "FACT",
+                    "status": "READY",
+                    "content": "Use six sections.",
+                    "classification_reason": "Misclassified for this test.",
+                    "proposal_rationale": "Must not be present.",
+                    "rule_provenance": "USER_STATED",
+                    "source_spans": [text],
+                }
+            ],
+        )
+    )
+
+    with pytest.raises(GroundTurnError, match="untraceable"):
+        interpret_ground_turn(session, text, untraceable)
+    with pytest.raises(GroundTurnError, match="Only a Rule draft"):
+        interpret_ground_turn(session, text, fact_with_rule_fields)
+
+
+def test_non_draft_turn_rejects_hidden_draft_payload():
+    session = _bound_ground()
+    provider = FakeProvider(
+        _turn(
+            "ASK",
+            drafts=[
+                {
+                    "kind": "QUESTION",
+                    "status": "NEEDS_CLARIFICATION",
+                    "content": "Which sections?",
+                    "classification_reason": "A hidden draft.",
+                    "proposal_rationale": "",
+                    "rule_provenance": "",
+                    "source_spans": ["Which sections?"],
+                }
+            ],
+        )
+    )
+
+    with pytest.raises(GroundTurnError, match="unexpected drafts"):
+        interpret_ground_turn(session, "Which sections?", provider)
 
 
 def test_ask_requires_every_action_field_to_be_empty():
@@ -255,7 +471,7 @@ def test_ask_requires_every_action_field_to_be_empty():
                 case_role="",
                 disposition="INCLUDE",
             ),
-            "invalid Case classification",
+            "invalid Ground Memory classification",
         ),
         (
             _bound_ground,
@@ -307,13 +523,15 @@ def test_aliases_are_stable_visible_ids_without_exposing_uids():
     assert all(frame.context_uid not in serialized for frame in session.frames)
 
 
-def test_case_payload_exposes_review_context_through_aliases_not_uids():
+def test_ground_memory_payload_keeps_case_wire_aliases_without_uids():
     session, candidate = _bound_ground_with_case()
     mapping, payload = ground_turn_aliases(session)
     rule = session.items_of_kind("RULE")[0]
     case = session.items_of_kind("CASE")[0]
 
     assert mapping == {"r1": rule.uid, "c1": case.uid}
+    # `cases` and cN remain the compatibility wire contract even though the
+    # user-facing concept is now called a Ground Memory.
     assert payload["rules"] == [
         {
             "id": "r1",
@@ -354,6 +572,7 @@ def test_prompt_injection_remains_json_data_without_command_authority():
 
     prompt, _operation, schema = provider.calls[0]
     payload = json.loads(prompt.split("GROUND TURN PAYLOAD:\n", 1)[1])
-    assert payload["user_text"] == text
+    assert payload["dialogue_text"] == text
+    assert payload["draft_source_text"] == text
     assert "untrusted data" in prompt
     assert "command" not in schema["properties"]

@@ -85,8 +85,8 @@ both rejected.
 
 `EQUIVALENT`, `COMPATIBLE`, `SCOPED`, and `DISTINCT` are resolved comparison
 descriptions. `CONFLICT` and `UNCLEAR` are unresolved and must be linked to a
-visible `REQUIRED` issue. These issues are candidate grounding Cases, not user
-judgments, golden Cases, or permission to reconcile anything.
+visible `REQUIRED` issue. These issues are candidate Ground Memories, not user
+judgments, golden Ground Memories, or permission to reconcile anything.
 
 `COMPATIBLE` requires a shared operational decision or policy dimension;
 mere coexistence or broad topical similarity would arbitrarily pair unrelated

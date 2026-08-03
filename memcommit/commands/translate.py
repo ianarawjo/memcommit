@@ -1,11 +1,17 @@
-"""CLI boundary for derived-Context and explicit in-place translation."""
+"""CLI boundary for saved translation views and explicit materialization."""
 from typing import Annotated, Optional
 
 import typer
 
 import memcommit.ops as ops
 from memcommit.commands.tui_primitives import safe_terminal_text
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.context import (
+    AutoCheckpoint,
+    Context,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -14,8 +20,19 @@ from memcommit.store import MemoryStore
 from memcommit.translate import (
     TranslateError,
     TranslationPlan,
-    default_translation_context_name,
+    resolve_translation_selector,
     translation_plan_matches_context,
+    validate_translation_target,
+)
+from memcommit.translation_view import (
+    TranslationView,
+    TranslationViewError,
+    translation_view_record_digest,
+)
+from memcommit.translation_view_store import (
+    ConcurrentTranslationViewUpdateError,
+    load_translation_view,
+    save_translation_view,
 )
 
 
@@ -57,13 +74,132 @@ def _render_preview(
     typer.echo("─" * 64)
 
 
+def _render_view(
+    ctx: Context,
+    view: TranslationView,
+    *,
+    reused: bool,
+) -> None:
+    """Render one saved language lens without inventing result identities."""
+    by_source_uid = {
+        entry.source_uid: entry
+        for entry in view.entries
+    }
+    typer.echo()
+    typer.secho(
+        f"Translation view: '{view.context_name}' → "
+        f"{view.target_language}",
+        bold=True,
+    )
+    typer.echo(
+        f"  {len(view.entries)} translated "
+        f"{'Memory' if len(view.entries) == 1 else 'Memories'}"
+    )
+    typer.echo("─" * 64)
+    for item in ctx.iter_items():
+        entry = by_source_uid.get(item.uid)
+        if isinstance(item, Memory):
+            if entry is None:
+                continue
+            typer.secho(
+                f"[{item.uid[:8]}] {view.target_language} view",
+                fg=typer.colors.CYAN,
+            )
+            for line in (
+                safe_terminal_text(entry.translated_content).splitlines()
+                or [""]
+            ):
+                typer.echo(f"  {line}")
+            continue
+        if view.selected_memory_uid is not None:
+            continue
+        if isinstance(item, Context):
+            typer.echo(
+                f"[context {item.uid[:8]}] "
+                f"{safe_terminal_text(item.name)} (not translated)"
+            )
+        elif isinstance(item, QueryContextRef):
+            typer.echo(
+                f"[query   {item.uid[:8]}] "
+                f"{safe_terminal_text(item.name)} "
+                "(query-only; not translated)"
+            )
+        elif isinstance(item, MemoryRef):
+            typer.echo(
+                f"[ref     {item.uid[:8]}] "
+                f"{safe_terminal_text(item.target_context_name)}"
+                f"#{item.target_memory_uid[:8]} (not translated)"
+            )
+    typer.echo("─" * 64)
+    if reused:
+        typer.secho(
+            "Reused saved translation view; the provider was not called.",
+            fg=typer.colors.CYAN,
+        )
+    else:
+        typer.secho(
+            "Saved translation view.",
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+    typer.echo(
+        "No Context or Memory changes; source Memory UIDs remain the anchors."
+    )
+
+
+def _open_or_create_view(
+    *,
+    store: MemoryStore,
+    ctx: Context,
+    target_language: str,
+    selected_memory_uid: str | None,
+    refresh: bool,
+) -> tuple[TranslationView | None, bool]:
+    """Reuse one exact saved view or atomically replace its deterministic slot."""
+    existing = load_translation_view(
+        ctx.uid,
+        target_language,
+        selected_memory_uid,
+    )
+    if (
+        existing is not None
+        and existing.matches(ctx)
+        and not refresh
+    ):
+        return existing, True
+
+    plan = ops.translate(
+        ctx,
+        target_language,
+        connect_codex_chatgpt_provider,
+        selector=selected_memory_uid,
+        allocate_operation_uid=False,
+    )
+    if not plan.proposals:
+        return None, False
+    view = TranslationView.from_plan(plan, ctx)
+    save_translation_view(
+        store,
+        view,
+        expected_record_digest=(
+            translation_view_record_digest(existing)
+            if existing is not None
+            else None
+        ),
+    )
+    return view, False
+
+
 def cmd(
     target_language: Annotated[
         str,
         typer.Option(
             "--to",
             "-t",
-            help="Target language name or language tag",
+            help=(
+                "Semantic translation target (quote multi-word specs): "
+                "language, locale, register, audience, or terminology"
+            ),
             show_default=True,
         ),
     ] = "English",
@@ -82,7 +218,8 @@ def cmd(
             "--save-as",
             metavar="CONTEXT",
             help=(
-                "Override the automatically derived destination Context name"
+                "Materialize the translation view as a new Context and "
+                "switch to it"
             ),
         ),
     ] = None,
@@ -91,8 +228,17 @@ def cmd(
         typer.Option(
             "--in-place",
             help=(
-                "Keep the source Context current and add translated siblings "
-                "there instead of creating a derived Context"
+                "Materialize translated siblings in the source Context"
+            ),
+        ),
+    ] = False,
+    refresh: Annotated[
+        bool,
+        typer.Option(
+            "--refresh",
+            help=(
+                "Generate and replace the saved view even when an exact one "
+                "can be reused"
             ),
         ),
     ] = False,
@@ -101,7 +247,10 @@ def cmd(
         typer.Option(
             "--yes",
             "-y",
-            help="Apply the validated translations without confirmation",
+            help=(
+                "Apply an explicit --save-as or --in-place materialization "
+                "without confirmation"
+            ),
         ),
     ] = False,
 ) -> None:
@@ -111,29 +260,32 @@ def cmd(
             raise TranslateError(
                 "--save-as and --in-place cannot be used together."
             )
-        direct_ctx = store.load_current_direct()
-        destination_name = (
-            None
-            if in_place
-            else (
-                save_as
-                or default_translation_context_name(
-                    direct_ctx.name,
-                    target_language,
-                )
+        if yes and save_as is None and not in_place:
+            raise TranslateError(
+                "--yes applies only with --save-as CONTEXT or --in-place. "
+                "Bare 'mem translate' saves a view without changing a Context."
             )
+        direct_ctx = store.load_current_direct()
+        language = validate_translation_target(target_language)
+        selected_memory_uid = resolve_translation_selector(
+            direct_ctx,
+            selector,
         )
+        destination_name = save_as
         if destination_name is not None:
             store.assert_context_creatable(destination_name)
-        plan = ops.translate(
-            direct_ctx,
-            target_language,
-            connect_codex_chatgpt_provider,
-            selector=selector,
+        view, reused = _open_or_create_view(
+            store=store,
+            ctx=direct_ctx,
+            target_language=language,
+            selected_memory_uid=selected_memory_uid,
+            refresh=refresh,
         )
     except (
+        ConcurrentTranslationViewUpdateError,
         OSError,
         RuntimeError,
+        TranslationViewError,
         ValueError,
         QueryProviderError,
         TranslateError,
@@ -145,13 +297,45 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    if not plan.proposals:
+    if view is None:
         typer.echo(
-            f"Context '{plan.context_name}' has no directly owned Memories "
+            f"Context '{direct_ctx.name}' has no directly owned Memories "
             "to translate."
         )
         return
 
+    if destination_name is None and not in_place:
+        _render_view(direct_ctx, view, reused=reused)
+        return
+
+    try:
+        plan = view.to_translation_plan(direct_ctx)
+    except TranslationViewError as error:
+        typer.secho(
+            f"Translate error: {error}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    operation_uid = plan.operation_uid
+    if not isinstance(operation_uid, str):
+        typer.secho(
+            "Translate error: materialization identity was not allocated.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    if reused:
+        typer.secho(
+            "Reusing the saved translation view; the provider was not called.",
+            fg=typer.colors.CYAN,
+        )
+    else:
+        typer.secho(
+            "Saved the translation view before materialization review.",
+            fg=typer.colors.CYAN,
+        )
     _render_preview(plan, destination_name=destination_name)
     if destination_name is None:
         confirmation = (
@@ -163,7 +347,10 @@ def cmd(
             f"Create translated Context '{destination_name}' and switch to it?"
         )
     if not yes and not typer.confirm(confirmation, default=False):
-        typer.echo("Aborted — no changes made.")
+        typer.echo(
+            "Aborted — the translation view remains saved; "
+            "no Context changes made."
+        )
         return
 
     try:
@@ -182,7 +369,12 @@ def cmd(
                     args=result.checkpoint_args(),
                     description=(
                         f"Added {len(result.translations)} "
-                        f"{'translation' if len(result.translations) == 1 else 'translations'} "
+                        + (
+                            "translation"
+                            if len(result.translations) == 1
+                            else "translations"
+                        )
+                        + " "
                         f"to {plan.target_language}"
                     ),
                 ),
@@ -208,7 +400,7 @@ def cmd(
                                 "name": plan.context_name,
                                 "digest": plan.context_digest,
                             },
-                            "operation_uid": plan.operation_uid,
+                            "operation_uid": operation_uid,
                             "target_language": plan.target_language,
                             "memory_uids": [
                                 item.uid
@@ -219,7 +411,7 @@ def cmd(
                         description=(
                             f"Initialized '{destination_name}' from "
                             f"'{plan.context_name}' before translation "
-                            f"[{plan.operation_uid[:8]}]"
+                            f"[{operation_uid[:8]}]"
                         ),
                     ),
                 )
@@ -237,7 +429,12 @@ def cmd(
                         args=result.checkpoint_args(),
                         description=(
                             f"Replaced {len(result.translations)} source "
-                            f"{'Memory' if len(result.translations) == 1 else 'Memories'} "
+                            + (
+                                "Memory"
+                                if len(result.translations) == 1
+                                else "Memories"
+                            )
+                            + " "
                             f"with translations to {plan.target_language}"
                         ),
                     ),

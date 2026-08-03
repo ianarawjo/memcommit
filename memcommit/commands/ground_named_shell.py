@@ -1,4 +1,4 @@
-"""Persistent Goal–Rules–Cases TUI for one already named Ground."""
+"""Persistent Goal–Rules–Memories TUI for one already named Ground."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -24,20 +24,58 @@ from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     render_exact_command_blocks,
 )
-from memcommit.commands.ground_shell import GROUND_GOAL_FRAME_HEIGHT
+from memcommit.commands.ground_shell import (
+    GROUND_CONTEXTS_FRAME_HEIGHT,
+    GROUND_GOAL_FRAME_HEIGHT,
+)
 from memcommit.commands.tui_primitives import (
+    InFrameInputManager,
+    InFrameInputSection,
+    INLINE_AGENT_COMMENT_TITLE,
+    MEMCOMMIT_TUI_STYLE,
     TuiRegion,
+    bind_focused_frame_style,
     build_framed_multiline_input,
+    build_inline_direct_edit_input,
     build_scrollable_text_pane,
     build_tui_frame,
+    classify_inline_edit_submission,
+    dispatch_tui_back,
     equal_pane_height,
     require_interactive_terminal,
     safe_terminal_text,
+    scroll_wrapped_page,
+)
+from memcommit.commands.tui_table import (
+    RenderedTuiTable,
+    SelectedTableCellProcessor,
+    TuiTableColumn,
+    TuiTableRow,
+    clamp_table_position,
+    render_tui_table,
 )
 from memcommit.ground import (
     GROUND_SCHEMA_VERSION,
     GroundItem,
     GroundSession,
+)
+from memcommit.ground_turn_dialogue import (
+    GroundTurnDraft,
+    GroundTurnDraftBatch,
+)
+
+
+_NAMED_MEMORY_TABLE_COLUMNS = (
+    TuiTableColumn("id", "ID", 6),
+    TuiTableColumn("status", "STATUS", 12),
+    TuiTableColumn("role", "ROLE", 12),
+    TuiTableColumn("decision", "DECISION", 14),
+    TuiTableColumn("input", "INPUT", 24),
+    TuiTableColumn("expected", "EXPECTED", 24),
+    TuiTableColumn("notes", "NOTES", 24),
+    TuiTableColumn("rules", "RULES", 14),
+    TuiTableColumn("sources", "SOURCES", 10),
+    TuiTableColumn("targets", "TARGETS", 10),
 )
 
 
@@ -45,7 +83,8 @@ class NamedGroundInterpreter(Protocol):
     def __call__(
         self,
         session: GroundSession,
-        text: str,
+        dialogue_text: str,
+        draft_source_text: str,
     ) -> object:
         """Return an ASK object or one frozen command proposal."""
 
@@ -78,6 +117,27 @@ class NamedGroundReloader(Protocol):
         """Reload one required named Ground from durable storage."""
 
 
+class NamedGroundDraftPreparer(Protocol):
+    def __call__(
+        self,
+        session: GroundSession,
+        draft: GroundTurnDraft,
+    ) -> GroundCommandProposal:
+        """Reduce one selected READY Rule draft to a frozen command."""
+
+
+class NamedGroundDirectEditPreparer(Protocol):
+    def __call__(
+        self,
+        session: GroundSession,
+        target: Literal["GOAL", "RULE", "MEMORY"],
+        selector: str,
+        edited: str,
+        comment: str,
+    ) -> GroundCommandProposal:
+        """Freeze one exact pane-local replacement as one reviewed command."""
+
+
 @dataclass(frozen=True)
 class NamedGroundShellResult:
     status: Literal["CLOSED"]
@@ -99,6 +159,16 @@ def _line(value: str, limit: int = 110) -> str:
         kept.append(character)
         width += character_width
     return "".join(kept).rstrip() + "…"
+
+
+def _case_card_value(value: str) -> str:
+    """Fold stored multiline Case text into one visible card row."""
+    normalized = value.replace("\r\n", "\n").replace("\r", "\n")
+    return (
+        safe_terminal_text(normalized)
+        .replace("\n", " ↵ ")
+        .replace("\t", " ⇥ ")
+    )
 
 
 def _aliased_items(
@@ -125,8 +195,15 @@ def _alias_range(
     return f" · IDs {items[0][0]}–{items[-1][0]}"
 
 
+def _display_ground_compatibility_token(value: str) -> str:
+    """Translate persisted Case-era tokens only at the presentation boundary."""
+    if value == "INDUCED_FROM_CASES":
+        return "INDUCED_FROM_MEMORIES"
+    return value
+
+
 def render_named_ground_top_panel(session: GroundSession) -> str:
-    """Render a compact fixed Goal–Rules–Cases state panel."""
+    """Render a compact fixed Goal–Rules–Memories state panel."""
     state = (
         "BOUND"
         if session.schema_version == GROUND_SCHEMA_VERSION
@@ -165,7 +242,7 @@ def render_named_ground_top_panel(session: GroundSession) -> str:
             ),
             f"  {rule_summary}",
             (
-                f"CASES {len(cases)} · "
+                f"MEMORIES {len(cases)} · "
                 f"{sum(item.status == 'PROPOSED' for _, item in cases)} "
                 f"proposed{_alias_range(cases)}"
             ),
@@ -192,9 +269,38 @@ def render_named_ground_goal_pane(session: GroundSession) -> str:
     return safe_terminal_text(session.goal or "(not yet stated)")
 
 
-def render_named_ground_contexts_pane(session: GroundSession) -> str:
+def render_named_ground_contexts_pane(
+    session: GroundSession,
+    *,
+    context_hints: tuple[str, ...] = (),
+    new_context_hint: str | None = None,
+) -> str:
     """Render saved frame metadata without reading live Context contents."""
     if session.schema_version != GROUND_SCHEMA_VERSION or not session.frames:
+        if context_hints or new_context_hint:
+            hint_lines = [
+                *(
+                    f"{'MAIN' if index == 0 else 'ADDITIONAL'} · "
+                    f"{safe_terminal_text(name)} · NOT BOUND"
+                    for index, name in enumerate(context_hints)
+                )
+            ]
+            if new_context_hint:
+                hint_lines.append(
+                    "NEW CONTEXT · "
+                    f"{safe_terminal_text(new_context_hint)} · "
+                    "LOCAL ONLY · NOT CREATED"
+                )
+            return "\n".join(
+                [
+                    "UNBOUND · LOCAL CONTEXT PLAN",
+                    *hint_lines,
+                    "",
+                    "Create any NEW Context and assign frame roles through",
+                    "separately reviewed commands.",
+                    "No Context content was loaded or inferred.",
+                ]
+            )
         return "\n".join(
             [
                 "UNBOUND",
@@ -229,68 +335,216 @@ def render_named_ground_contexts_pane(session: GroundSession) -> str:
     return "\n\n".join(blocks)
 
 
-def render_named_ground_rules_pane(session: GroundSession) -> str:
-    """Render every Rule so the Rules component can scroll independently."""
+def render_named_ground_rules_pane(
+    session: GroundSession,
+    *,
+    drafts: tuple[GroundTurnDraft, ...] = (),
+    selected_draft_index: int = 0,
+    drafts_stale: bool = False,
+    selected_rule_index: int | None = None,
+) -> str:
+    """Render saved Rules and the current unsaved classified draft queue."""
     rules = _aliased_items(session, "RULE")
-    if not rules:
-        return "(none yet)"
     blocks: list[str] = []
-    for alias, item in rules:
-        provenance = item.rule_provenance or item.origin
-        lines = [
-            f"{alias} [{item.status}] · {safe_terminal_text(provenance)}",
-            safe_terminal_text(item.content),
-        ]
-        if item.rationale:
-            lines.extend(
+    if rules:
+        blocks.append("SAVED RULES")
+        for index, (alias, item) in enumerate(rules):
+            provenance = _display_ground_compatibility_token(
+                item.rule_provenance or item.origin
+            )
+            marker = "› " if index == selected_rule_index else ""
+            lines = [
+                f"{marker}{alias} [{item.status}] · "
+                f"{safe_terminal_text(provenance)}",
+                safe_terminal_text(item.content),
+            ]
+            if item.rationale:
+                lines.extend(
+                    [
+                        "WHY",
+                        safe_terminal_text(item.rationale),
+                    ]
+                )
+            blocks.append("\n".join(lines))
+    else:
+        blocks.append("SAVED RULES\n(none yet)")
+
+    if drafts:
+        draft_heading = f"DRAFTS · NOT SAVED · {len(drafts)}"
+        if drafts_stale:
+            draft_heading += " · RECLASSIFY REQUIRED"
+        blocks.append(
+            "\n".join(
                 [
-                    "WHY",
-                    safe_terminal_text(item.rationale),
+                    draft_heading,
+                    (
+                        "Press R to reclassify against the saved Ground."
+                        if drafts_stale
+                        else (
+                            "Select a READY Rule and press R to review "
+                            "one exact proposal."
+                        )
+                    ),
                 ]
             )
-        blocks.append("\n".join(lines))
+        )
+        for index, draft in enumerate(drafts):
+            marker = "›" if index == selected_draft_index else " "
+            alias = f"d{index + 1}"
+            displayed_kind = (
+                "MEMORY" if draft.kind == "CASE" else draft.kind
+            )
+            displayed_status = (
+                "STALE" if drafts_stale else draft.status
+            )
+            lines = [
+                (
+                    f"{marker} {alias} [{displayed_kind} · "
+                    f"{displayed_status}] "
+                    f"{safe_terminal_text(draft.content)}"
+                )
+            ]
+            if index == selected_draft_index:
+                lines.extend(
+                    [
+                        "WHY",
+                        safe_terminal_text(draft.classification_reason),
+                        "SOURCE",
+                        " | ".join(
+                            safe_terminal_text(span)
+                            for span in draft.source_spans
+                        ),
+                    ]
+                )
+            blocks.append("\n".join(lines))
     return "\n\n".join(blocks)
 
 
-def render_named_ground_cases_pane(session: GroundSession) -> str:
-    """Render every Case and its outcome boundary in a separate viewport."""
+def render_named_ground_memories_pane(
+    session: GroundSession,
+    *,
+    selected_memory_index: int | None = None,
+    view: Literal["LIST", "TABLE"] = "LIST",
+    selected_memory_column: int = 0,
+) -> str:
+    """Render reviewed Ground Memories as cards or a navigable table."""
+    if view == "TABLE":
+        return _render_named_ground_memory_table(
+            session,
+            selected_memory_index=selected_memory_index or 0,
+            selected_memory_column=selected_memory_column,
+        ).text
+    if view != "LIST":
+        raise ValueError("Memory view must be LIST or TABLE.")
     cases = _aliased_items(session, "CASE")
     if not cases:
         return "(none yet)"
     aliases = _item_aliases_by_uid(session)
     blocks: list[str] = []
-    for alias, item in cases:
+    for index, (alias, item) in enumerate(cases):
         classification = " / ".join(
             value
             for value in (item.case_role, item.disposition)
             if value
         )
-        heading = f"{alias} [{item.status}]"
+        marker = "› " if index == selected_memory_index else ""
+        heading_labels = [item.status]
         if classification:
-            heading += f" · {safe_terminal_text(classification)}"
-        lines = [heading, safe_terminal_text(item.content)]
-        if item.expected:
-            lines.extend(["EXPECTED", safe_terminal_text(item.expected)])
+            heading_labels.append(safe_terminal_text(classification))
+        heading = f"{marker}{alias} [{' · '.join(heading_labels)}]"
+        # A Ground Memory is the durable case used to teach or check a Rule.
+        # Keep its list card compact: only the right side of the arrow is
+        # candidate material for a later Context operation, while NOTES stay
+        # Ground-local. Folding newlines is presentation-only and preserves
+        # the exact stored source and output text.
+        expected = (
+            _case_card_value(item.expected)
+            if item.expected
+            else "(no output)"
+        )
+        notes = (
+            _case_card_value(item.rationale)
+            if item.rationale
+            else "(none)"
+        )
+        lines = [
+            heading,
+            f"{_case_card_value(item.content)} → {expected}",
+            f"NOTES · {notes}",
+        ]
         linked = [
             aliases[uid]
             for uid in item.related_uids
             if uid in aliases and aliases[uid].startswith("r")
         ]
-        if linked:
-            lines.append("LINKED RULES · " + ", ".join(linked))
-        if item.rationale:
-            lines.extend(["WHY", safe_terminal_text(item.rationale)])
-        if item.source_refs:
-            lines.append(
-                f"SOURCES · {len(item.source_refs)} bound Memory reference(s)"
-            )
-        if item.target_context_uids:
-            lines.append(
-                "TARGETS · "
-                f"{len(item.target_context_uids)} bound Context(s)"
-            )
+        if index == selected_memory_index:
+            details: list[str] = []
+            if linked:
+                details.append("LINKED RULES · " + ", ".join(linked))
+            if item.source_refs:
+                details.append(
+                    "SOURCES · "
+                    f"{len(item.source_refs)} bound Context Memory "
+                    "reference(s)"
+                )
+            if item.target_context_uids:
+                details.append(
+                    "TARGETS · "
+                    f"{len(item.target_context_uids)} bound Context(s)"
+                )
+            if details:
+                lines.extend(["DETAILS", *details])
         blocks.append("\n".join(lines))
     return "\n\n".join(blocks)
+
+
+def _render_named_ground_memory_table(
+    session: GroundSession,
+    *,
+    selected_memory_index: int,
+    selected_memory_column: int,
+) -> RenderedTuiTable:
+    aliases = _item_aliases_by_uid(session)
+    rows: list[TuiTableRow] = []
+    for alias, item in _aliased_items(session, "CASE"):
+        linked_rules = [
+            aliases[uid]
+            for uid in item.related_uids
+            if uid in aliases and aliases[uid].startswith("r")
+        ]
+        rows.append(
+            TuiTableRow(
+                row_id=alias,
+                cells=(
+                    alias,
+                    item.status,
+                    item.case_role or "—",
+                    item.disposition or "—",
+                    item.content,
+                    item.expected or "(no output)",
+                    item.rationale or "(none)",
+                    ", ".join(linked_rules) or "—",
+                    str(len(item.source_refs)) if item.source_refs else "—",
+                    (
+                        str(len(item.target_context_uids))
+                        if item.target_context_uids
+                        else "—"
+                    ),
+                ),
+            )
+        )
+    return render_tui_table(
+        columns=_NAMED_MEMORY_TABLE_COLUMNS,
+        rows=rows,
+        selected_row=selected_memory_index,
+        selected_column=selected_memory_column,
+        noun="MEMORIES",
+    )
+
+
+def render_named_ground_cases_pane(session: GroundSession) -> str:
+    """Compatibility alias for the former user-facing Cases renderer."""
+    return render_named_ground_memories_pane(session)
 
 
 def _option_values(argv: tuple[str, ...], option: str) -> tuple[str, ...]:
@@ -328,7 +582,9 @@ def _review_item_effects(
     if target is None or target.kind not in {"RULE", "CASE"}:
         return ()
     alias = _item_aliases_by_uid(session).get(target.uid, target.uid[:8])
-    item_name = target.kind.title()
+    item_name = (
+        "Ground Memory" if target.kind == "CASE" else target.kind.title()
+    )
     details = [
         (
             f"Selected item: {alias} · {item_name} · {target.status} · "
@@ -418,7 +674,7 @@ def _proposal_item_effects(
             ),
             (
                 "Provenance: "
-                f"{_option_value(argv, '--rule-provenance')}"
+                f"{_display_ground_compatibility_token(_option_value(argv, '--rule-provenance'))}"
             ),
             f"Rationale: {_line(_option_value(argv, '--rationale'))}",
         )
@@ -435,7 +691,7 @@ def _proposal_item_effects(
             (
                 f"New {alias} · PROPOSED "
                 f"{_option_value(argv, '--case-role')}/"
-                f"{_option_value(argv, '--disposition')} Case"
+                f"{_option_value(argv, '--disposition')} Ground Memory"
             ),
             (
                 f"Linked Rule: {rule_alias}"
@@ -452,7 +708,10 @@ def _proposal_item_effects(
                     or "(none for this disposition)"
                 )
             ),
-            "Source: exact Memory selected from the bound candidate Context",
+            (
+                "Source: exact Context Memory selected from the bound "
+                "candidate Context"
+            ),
         ]
         return tuple(details)
     if proposal.kind == "REVIEW_ITEM":
@@ -471,7 +730,7 @@ def render_named_ground_proposal_blocks(
         base_effects = tuple(
             effect
             for effect in base_effects
-            if not effect.startswith("Selected Rule/Case:")
+            if not effect.startswith("Selected Rule/Ground Memory:")
             and not effect.startswith("One review Decision:")
         )
     informed_review = ExactCommandReview(
@@ -502,7 +761,7 @@ def _initial_question(session: GroundSession) -> str:
         return "\n".join(
             [
                 "OPEN QUESTION · REVIEW OR CONTINUE",
-                "  Should the latest proposed Rule or Case be accepted,",
+                "  Should the latest proposed Rule or Ground Memory be accepted,",
                 "  refined, deferred, or rejected?",
             ]
         )
@@ -510,7 +769,7 @@ def _initial_question(session: GroundSession) -> str:
         [
             "OPEN QUESTION · NEXT",
             "  Which one Ground layer should the next command change:",
-            "  Goal, Rules, or Cases?",
+            "  Goal, Rules, or Memories?",
         ]
     )
 
@@ -534,8 +793,12 @@ def run_named_ground_shell(
     *,
     interpret: NamedGroundInterpreter,
     apply: NamedGroundApplier,
+    prepare_rule_draft: NamedGroundDraftPreparer | None = None,
+    prepare_direct_edit: NamedGroundDirectEditPreparer | None = None,
     reload_session: NamedGroundReloader | None = None,
     initial_receipt: str = "",
+    context_hints: tuple[str, ...] = (),
+    new_context_hint: str | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -552,11 +815,46 @@ def run_named_ground_shell(
 
     current = {"value": session}
     pending: dict[str, GroundCommandProposal | None] = {"value": None}
+    draft_queue: dict[str, tuple[GroundTurnDraft, ...]] = {"value": ()}
+    draft_index = {"value": 0}
+    draft_queue_stale = {"value": False}
+    draft_source_submission = {"value": ""}
+    pending_draft_index: dict[str, int | None] = {"value": None}
     mode = {"value": "INPUT"}
     review_view = {"value": "COMMAND"}
     error_message = {"value": ""}
     status_message = {"value": ""}
     last_submission = {"value": ""}
+    inline_target: dict[
+        str, Literal["GOAL", "RULE", "MEMORY"] | None
+    ] = {"value": None}
+    inline_selector = {"value": ""}
+    inline_original = {"value": ""}
+    inline_direct_locked = {"value": False}
+    panel_comment_target: dict[
+        str,
+        Literal["GOAL", "CONTEXTS", "RULES", "MEMORIES", "CHAT"] | None,
+    ] = {"value": None}
+    panel_comment_focus = {"value": ""}
+    pending_inline_edit: dict[
+        str,
+        tuple[
+            Literal["GOAL", "RULE", "MEMORY"],
+            str,
+            str,
+            str,
+            str,
+        ]
+        | None,
+    ] = {"value": None}
+    suspended_message = {"value": ""}
+    selected_rule_index = {"value": 0}
+    selected_memory_index = {"value": 0}
+    selected_memory_column = {"value": 0}
+    memory_view: dict[str, Literal["LIST", "TABLE"]] = {"value": "LIST"}
+    memory_table_render: dict[str, RenderedTuiTable | None] = {
+        "value": None
+    }
     cycle_dialogue: list[str] = []
     all_submitted_turns: list[str] = []
     applied_argvs: list[tuple[str, ...]] = []
@@ -570,10 +868,20 @@ def run_named_ground_shell(
     bindings = KeyBindings()
     # Goal stays compact because new/revised Goals are limited to 40 words.
     # The scrollbar preserves access to older records that predate that limit.
-    # Contexts, Rules, Cases, and Dialogue share the flexible reading space.
-    pane_height = equal_pane_height(minimum=3)
-    message_height = Dimension(min=4, preferred=5, max=7)
-    action_height = Dimension(min=5, preferred=6, max=8)
+    # Rules, Memories, and Chat absorb the remaining reading space after
+    # the compact Goal and bounded Contexts panel. Their independent
+    # scrollbars still bound content growth, while leaving max unset avoids a
+    # dead band below ACTION on taller terminals.
+    pane_height = equal_pane_height(
+        minimum=3,
+        preferred=4,
+    )
+    message_height = Dimension(min=3, preferred=4, max=5)
+    embedded_field_height = Dimension(min=1, preferred=2, max=3)
+    conversation_pane_height = Dimension(min=5, preferred=7)
+    direct_edit_pane_height = Dimension(min=7, preferred=9)
+    approval_action_height = Dimension.exact(4)
+    compact_action_height = Dimension.exact(3)
     goal_pane = build_scrollable_text_pane(
         "GOAL",
         render_named_ground_goal_pane(session),
@@ -582,21 +890,41 @@ def run_named_ground_shell(
     )
     contexts_pane = build_scrollable_text_pane(
         "CONTEXTS",
-        render_named_ground_contexts_pane(session),
+        render_named_ground_contexts_pane(
+            session,
+            context_hints=context_hints,
+            new_context_hint=new_context_hint,
+        ),
         buffer_name="ground-named-contexts",
-        height=pane_height,
+        height=GROUND_CONTEXTS_FRAME_HEIGHT,
     )
     rules_pane = build_scrollable_text_pane(
         "RULES",
-        render_named_ground_rules_pane(session),
+        render_named_ground_rules_pane(session, selected_rule_index=0),
         buffer_name="ground-named-rules",
         height=pane_height,
     )
     cases_pane = build_scrollable_text_pane(
-        "CASES",
-        render_named_ground_cases_pane(session),
+        "MEMORIES",
+        render_named_ground_memories_pane(
+            session,
+            selected_memory_index=0,
+        ),
         buffer_name="ground-named-cases",
         height=pane_height,
+    )
+    cases_pane.text_area.window.wrap_lines = Condition(
+        lambda: memory_view["value"] == "LIST"
+    )
+    cases_pane.text_area.control.input_processors.append(
+        SelectedTableCellProcessor(
+            lambda: (
+                memory_table_render["value"].selected_span
+                if memory_view["value"] == "TABLE"
+                and memory_table_render["value"] is not None
+                else None
+            )
+        )
     )
 
     def conversation_text() -> str:
@@ -620,7 +948,7 @@ def run_named_ground_shell(
         return "\n\n".join(blocks)
 
     dialogue_pane = build_scrollable_text_pane(
-        "DIALOGUE",
+        "CHAT",
         conversation_text(),
         buffer_name="ground-named-dialogue",
         height=pane_height,
@@ -632,6 +960,13 @@ def run_named_ground_shell(
         height=message_height,
     )
     input_area = composer.text_area
+    direct_editor = build_inline_direct_edit_input(
+        buffer_name="ground-named-direct-edit",
+    )
+    direct_edit_area = direct_editor.text_area
+    direct_edit_area.buffer.read_only = Condition(
+        lambda: inline_direct_locked["value"]
+    )
     header = Window(
         FormattedTextControl(
             lambda: render_named_ground_header(current["value"])
@@ -642,37 +977,35 @@ def run_named_ground_shell(
     approval_panel = Frame(
         Window(
             FormattedTextControl(
-                " ↑ / ← · exact command    ↓ / → · effects\n"
-                " A · approve once          E · refine\n"
-                " Q / Esc / Ctrl-C · close"
+                "CHAT: ←/↑ cmd · →/↓ fx\n"
+                "A approve · E refine · Q/Esc"
             ),
             wrap_lines=True,
         ),
         title="ACTION",
-        height=action_height,
+        height=approval_action_height,
     )
     error_panel = Frame(
         Window(
             FormattedTextControl(
-                " R · retry interpretation    E · refine\n"
-                " Q / Esc / Ctrl-C · close"
+                "R retry · E refine · Q/Esc"
             ),
             wrap_lines=True,
         ),
         title="ACTION",
-        height=action_height,
+        height=compact_action_height,
     )
     apply_error_panel = Frame(
         Window(
             FormattedTextControl(
-                " E · refine as a new proposal\n"
-                " Q / Esc / Ctrl-C · close"
+                "E refine · Q/Esc"
             ),
             wrap_lines=True,
         ),
         title="ACTION",
-        height=action_height,
+        height=compact_action_height,
     )
+    empty_action_panel = Window(height=Dimension.exact(0))
     action_panel = DynamicContainer(
         lambda: (
             approval_panel
@@ -681,27 +1014,97 @@ def run_named_ground_shell(
             if mode["value"] == "APPLY_ERROR"
             else error_panel
             if mode["value"] == "ERROR"
-            else composer.container
+            else empty_action_panel
         )
     )
-    footer = Window(
-        FormattedTextControl(
-            lambda: (
-                f" {status_message['value']}"
-                if status_message["value"]
-                else " Enter · send / return    Ctrl-J · newline    Tab · pane"
-                if mode["value"] == "INPUT"
-                else " One approval applies one exact command"
-                if mode["value"] == "APPROVAL"
-                else " An unconfirmed command is never retried automatically"
-                if mode["value"] == "APPLY_ERROR"
-                else " No Ground state changed from the failed turn"
+    def footer_text() -> str:
+        if panel_comment_target["value"] is not None:
+            return (
+                " Enter · send focused comment    Ctrl-J · newline    "
+                "Esc · collapse"
             )
-        ),
+        if inline_target["value"] is not None:
+            if inline_direct_locked["value"]:
+                return (
+                    " Unbound saved Goal · comment only    "
+                    "bind before direct edit    Esc · collapse"
+                )
+            return (
+                " Enter · review edit/comment    Ctrl-J · newline    "
+                "Tab/Shift-Tab · field    Esc · collapse"
+            )
+        if status_message["value"]:
+            return f" {status_message['value']}"
+        active_mode = mode["value"]
+        if (
+            active_mode in {"INPUT", "APPROVAL"}
+            and application.layout.has_focus(cases_pane.text_area)
+            and _aliased_items(current["value"], "CASE")
+        ):
+            tail = (
+                "Enter · talk here    E · edit selected"
+                if active_mode == "INPUT"
+                else "A · exact approval"
+            )
+            if memory_view["value"] == "TABLE":
+                return (
+                    " MEMORIES · TABLE: ↑/↓ row · ←/→ column · "
+                    f"V · list    C · same action    {tail}"
+                )
+            return (
+                " MEMORIES · LIST: ↑/↓ Memory · V · table    "
+                f"C · same action    {tail}"
+            )
+        if active_mode == "INPUT" and application.layout.has_focus(
+            rules_pane.text_area
+        ):
+            if draft_queue["value"]:
+                if draft_queue_stale["value"]:
+                    return (
+                        " Enter · talk here    R · reclassify drafts    "
+                        "Tab/Shift-Tab · pane"
+                    )
+                return (
+                    " ↑/↓ · draft    Enter · talk here    "
+                    "R · review READY Rule    Tab/Shift-Tab · pane"
+                )
+            return (
+                " ↑/↓ · saved Rule    Enter · talk here    "
+                "E · edit selected    Tab/Shift-Tab · pane"
+            )
+        if active_mode == "INPUT" and application.layout.has_focus(
+            goal_pane.text_area
+        ):
+            return (
+                " Enter · talk here    E · edit Goal    "
+                "Tab/Shift-Tab · pane    "
+                "PgUp/PgDn · scroll"
+            )
+        if active_mode == "INPUT":
+            if application.layout.has_focus(input_area):
+                return (
+                    " Enter · send    Ctrl-J · newline    "
+                    "Tab/Shift-Tab · pane"
+                )
+            return (
+                " Enter · talk in this pane    C · same action    "
+                "Tab/Shift-Tab · pane"
+            )
+        if active_mode == "APPROVAL":
+            return (
+                " One approval applies one exact command · "
+                "Tab/Shift-Tab browses panes"
+            )
+        if active_mode == "APPLY_ERROR":
+            return " An unconfirmed command is never retried automatically"
+        return " No Ground state changed from the failed turn"
+
+    footer = Window(
+        FormattedTextControl(footer_text),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    root = build_tui_frame(
+    normal_root = build_tui_frame(
         TuiRegion(header),
         TuiRegion(goal_pane.container),
         TuiRegion(contexts_pane.container),
@@ -711,15 +1114,180 @@ def run_named_ground_shell(
         TuiRegion(action_panel),
         TuiRegion(footer),
     )
+    # One writable buffer moves into the semantic pane that owns the current
+    # exchange. Keeping a single outer Frame makes the interaction read as a
+    # conversation *within* Goal, Contexts, Rules, Memories, or Chat rather
+    # than as a detached sixth workbench component.
+    input_manager = InFrameInputManager(
+        goal_pane,
+        contexts_pane,
+        rules_pane,
+        cases_pane,
+        dialogue_pane,
+    )
+
+    def pane_for_layer(
+        layer: str,
+    ):
+        return {
+            "GOAL": goal_pane,
+            "CONTEXTS": contexts_pane,
+            "RULE": rules_pane,
+            "RULES": rules_pane,
+            "MEMORY": cases_pane,
+            "MEMORIES": cases_pane,
+            "CHAT": dialogue_pane,
+        }.get(layer, dialogue_pane)
+
+    def sync_input_host() -> None:
+        input_manager.clear()
+        if inline_target["value"] is not None:
+            sections = [
+                InFrameInputSection(
+                    "EDIT (DIRECTLY)",
+                    direct_edit_area,
+                    height=embedded_field_height,
+                    allow_read_only=inline_direct_locked["value"],
+                )
+            ]
+            sections.append(
+                InFrameInputSection(
+                    INLINE_AGENT_COMMENT_TITLE,
+                    input_area,
+                    height=embedded_field_height,
+                )
+            )
+            input_manager.show(
+                pane_for_layer(inline_target["value"]),
+                *sections,
+                height=direct_edit_pane_height,
+            )
+            return
+        if panel_comment_target["value"] is not None:
+            input_manager.show(
+                pane_for_layer(panel_comment_target["value"]),
+                InFrameInputSection(
+                    INLINE_AGENT_COMMENT_TITLE,
+                    input_area,
+                    height=embedded_field_height,
+                ),
+                height=conversation_pane_height,
+            )
+            return
+        if mode["value"] == "INPUT":
+            input_manager.show(
+                dialogue_pane,
+                InFrameInputSection(
+                    "MESSAGE",
+                    input_area,
+                    height=embedded_field_height,
+                ),
+                height=conversation_pane_height,
+            )
+
+    sync_input_host()
     application: Application[NamedGroundShellResult] = Application(
-        layout=Layout(root, focused_element=input_area),
+        layout=Layout(
+            normal_root,
+            focused_element=(
+                input_area
+                if input_manager.active_pane is not None
+                else dialogue_pane.text_area
+            ),
+        ),
         key_bindings=bindings,
         full_screen=True,
+        # Every focused read-only component is a real viewport. Keep page
+        # navigation explicit so a prompt-toolkit default change cannot turn
+        # Tab into focus-without-scroll.
+        enable_page_navigation_bindings=True,
         erase_when_done=True,
         input=app_input,
         output=app_output,
         mouse_support=False,
+        style=MEMCOMMIT_TUI_STYLE,
     )
+    # Ground has no Alt-prefixed actions. A short timeout lets a literal
+    # Escape collapse the pane editor before the next navigation key arrives.
+    application.ttimeoutlen = 0.05
+
+    for pane in (
+        goal_pane,
+        contexts_pane,
+        rules_pane,
+        cases_pane,
+        dialogue_pane,
+    ):
+        bind_focused_frame_style(
+            pane.frame,
+            is_focused=lambda pane=pane: application.layout.has_focus(
+                pane.frame
+            ),
+        )
+
+    def sync_rules_pane(
+        *,
+        align_draft: bool = False,
+        align_saved: bool = False,
+    ) -> None:
+        rendered = render_named_ground_rules_pane(
+            current["value"],
+            drafts=draft_queue["value"],
+            selected_draft_index=draft_index["value"],
+            drafts_stale=draft_queue_stale["value"],
+            selected_rule_index=(
+                None
+                if draft_queue["value"]
+                else selected_rule_index["value"]
+            ),
+        )
+        rules_pane.set_text(rendered, anchor="preserve")
+        if align_draft and draft_queue["value"]:
+            marker = rendered.find(f"› d{draft_index['value'] + 1} ")
+            if marker >= 0:
+                # Cursor motion is only a viewport anchor; drafts remain
+                # immutable until one exact proposal receives approval.
+                rules_pane.text_area.buffer.cursor_position = marker
+        elif align_saved and not draft_queue["value"]:
+            marker = rendered.find(
+                f"› r{selected_rule_index['value'] + 1} "
+            )
+            if marker >= 0:
+                rules_pane.text_area.buffer.cursor_position = marker
+
+    def sync_memories_pane(*, align_selection: bool = False) -> None:
+        cases = _aliased_items(current["value"], "CASE")
+        row, column = clamp_table_position(
+            row_count=len(cases),
+            column_count=len(_NAMED_MEMORY_TABLE_COLUMNS),
+            row=selected_memory_index["value"],
+            column=selected_memory_column["value"],
+        )
+        selected_memory_index["value"] = row
+        selected_memory_column["value"] = column
+        if memory_view["value"] == "TABLE":
+            rendered = _render_named_ground_memory_table(
+                current["value"],
+                selected_memory_index=row,
+                selected_memory_column=column,
+            )
+            memory_table_render["value"] = rendered
+            cases_pane.set_text(rendered.text, anchor="preserve")
+            if align_selection and rendered.selected_span is not None:
+                cases_pane.text_area.buffer.cursor_position = (
+                    rendered.cursor_position
+                )
+            return
+        memory_table_render["value"] = None
+        rendered_text = render_named_ground_memories_pane(
+            current["value"],
+            selected_memory_index=row,
+        )
+        cases_pane.set_text(rendered_text, anchor="preserve")
+        if align_selection and cases:
+            marker = rendered_text.find(f"› c{row + 1} ")
+            if marker >= 0:
+                cases_pane.text_area.buffer.cursor_position = marker
 
     def sync_panes(*, dialogue_anchor: str = "end") -> None:
         active = current["value"]
@@ -728,16 +1296,16 @@ def run_named_ground_shell(
             anchor="preserve",
         )
         contexts_pane.set_text(
-            render_named_ground_contexts_pane(active),
+            render_named_ground_contexts_pane(
+                active,
+                context_hints=context_hints,
+                new_context_hint=new_context_hint,
+            ),
             anchor="preserve",
         )
-        rules_pane.set_text(
-            render_named_ground_rules_pane(active),
-            anchor="preserve",
-        )
-        cases_pane.set_text(
-            render_named_ground_cases_pane(active),
-            anchor="preserve",
+        sync_rules_pane()
+        sync_memories_pane(
+            align_selection=memory_view["value"] == "TABLE"
         )
         dialogue_pane.set_text(
             conversation_text(),
@@ -750,6 +1318,8 @@ def run_named_ground_shell(
     def focus_input(*, restore: bool) -> None:
         mode["value"] = "INPUT"
         pending["value"] = None
+        pending_inline_edit["value"] = None
+        pending_draft_index["value"] = None
         review_view["value"] = "COMMAND"
         error_message["value"] = ""
         status_message["value"] = ""
@@ -758,6 +1328,7 @@ def run_named_ground_shell(
             input_area.buffer.cursor_position = len(input_area.text)
         else:
             input_area.text = ""
+        sync_input_host()
         sync_panes(dialogue_anchor="end")
         application.layout.focus(input_area)
         application.invalidate()
@@ -777,7 +1348,20 @@ def run_named_ground_shell(
         if refreshed == previous:
             return False
         current["value"] = refreshed
+        selected_rule_index["value"] = min(
+            selected_rule_index["value"],
+            max(0, len(_aliased_items(refreshed, "RULE")) - 1),
+        )
+        selected_memory_index["value"] = min(
+            selected_memory_index["value"],
+            max(0, len(_aliased_items(refreshed, "CASE")) - 1),
+        )
         cycle_dialogue.clear()
+        draft_queue["value"] = ()
+        draft_index["value"] = 0
+        draft_queue_stale["value"] = False
+        draft_source_submission["value"] = ""
+        pending_draft_index["value"] = None
         if announce:
             conversation.append(
                 "\n".join(
@@ -796,7 +1380,15 @@ def run_named_ground_shell(
         application.invalidate()
         return True
 
-    def interpret_current(*, append_user: bool, text: str) -> None:
+    def interpret_current(
+        *,
+        append_user: bool,
+        text: str,
+        focus: str = "",
+    ) -> None:
+        # Provider work and exact review are read-only presentation states;
+        # no writable field remains mounted while either is active.
+        input_manager.clear()
         try:
             refresh_current(announce=True)
             if append_user or not cycle_dialogue:
@@ -807,13 +1399,30 @@ def run_named_ground_shell(
                     )
                     + 1
                 )
+                focus_line = f"\nFOCUS · {focus}" if focus else ""
                 cycle_dialogue.append(
-                    f"USER TURN {user_turn_number}\n{text}"
+                    f"USER TURN {user_turn_number}{focus_line}\n{text}"
                 )
             if append_user:
                 all_submitted_turns.append(text)
-                conversation.append(f"YOU\n  {safe_terminal_text(text)}")
-            response = interpret(current["value"], dialogue_text())
+                conversation.append(
+                    (
+                        f"YOU · COMMENT FOR {safe_terminal_text(focus)}\n"
+                        if focus
+                        else "YOU\n"
+                    )
+                    + f"  {safe_terminal_text(text)}"
+                )
+                if draft_queue["value"]:
+                    # A correction or retraction can invalidate an earlier
+                    # READY judgment before the provider answers. Only a
+                    # successful replacement DRAFTS batch may clear this.
+                    draft_queue_stale["value"] = True
+            response = interpret(
+                current["value"],
+                dialogue_text(),
+                text,
+            )
             kind = _response_kind(response)
             understanding = _response_text(response, "understanding")
             question = _response_text(response, "question")
@@ -853,14 +1462,59 @@ def run_named_ground_shell(
             if kind == "ASK":
                 focus_input(restore=False)
                 return
+            if isinstance(response, GroundTurnDraftBatch):
+                draft_queue["value"] = response.drafts
+                draft_queue_stale["value"] = False
+                draft_source_submission["value"] = response.raw_source
+                draft_index["value"] = next(
+                    (
+                        index
+                        for index, draft in enumerate(response.drafts)
+                        if draft.kind == "RULE"
+                        and draft.status == "READY"
+                    ),
+                    0,
+                )
+                pending["value"] = None
+                pending_draft_index["value"] = None
+                review_view["value"] = "COMMAND"
+                mode["value"] = "INPUT"
+                input_area.text = ""
+                sync_input_host()
+                status_message["value"] = (
+                    f"{len(response.drafts)} unsaved draft(s) classified. "
+                    "Review them in Rules."
+                )
+                conversation.append(
+                    "\n".join(
+                        [
+                            "DRAFTS · NOT SAVED",
+                            (
+                                f"  {len(response.drafts)} independent "
+                                "unit(s) classified from this turn."
+                            ),
+                            (
+                                "  No Rule, Ground Memory, Context Memory, or "
+                                "checkpoint changed."
+                            ),
+                        ]
+                    )
+                )
+                sync_panes(dialogue_anchor="end")
+                sync_rules_pane(align_draft=True)
+                application.layout.focus(rules_pane.text_area)
+                application.invalidate()
+                return
             if not isinstance(response, GroundCommandProposal):
                 raise ValueError(
                     "Ground action was not reduced to an exact command."
                 )
             pending["value"] = response
+            pending_inline_edit["value"] = None
             review_view["value"] = "COMMAND"
             mode["value"] = "APPROVAL"
             input_area.text = ""
+            sync_input_host()
             sync_panes(dialogue_anchor="end")
             focus_conversation()
             application.invalidate()
@@ -869,12 +1523,276 @@ def run_named_ground_shell(
             error_message["value"] = f"{type(error).__name__}: {error}"
             status_message["value"] = ""
             mode["value"] = "ERROR"
+            sync_input_host()
             sync_panes(dialogue_anchor="end")
             focus_conversation()
             application.invalidate()
 
+    def inline_owner_area():
+        return {
+            "GOAL": goal_pane.text_area,
+            "RULE": rules_pane.text_area,
+            "MEMORY": cases_pane.text_area,
+        }.get(inline_target["value"], goal_pane.text_area)
+
+    def collapse_inline_editor(
+        event: object | None = None,
+        *,
+        focus_owner: bool = True,
+    ) -> bool:
+        if inline_target["value"] is None:
+            return False
+        owner = inline_owner_area()
+        inline_target["value"] = None
+        inline_selector["value"] = ""
+        inline_original["value"] = ""
+        inline_direct_locked["value"] = False
+        direct_edit_area.text = ""
+        composer.frame.title = "MESSAGE"
+        input_area.text = suspended_message["value"]
+        suspended_message["value"] = ""
+        sync_input_host()
+        if focus_owner:
+            application.layout.focus(owner)
+        if event is not None:
+            getattr(event, "app").invalidate()
+        else:
+            application.invalidate()
+        return True
+
+    def panel_comment_owner_area():
+        return {
+            "GOAL": goal_pane.text_area,
+            "CONTEXTS": contexts_pane.text_area,
+            "RULES": rules_pane.text_area,
+            "MEMORIES": cases_pane.text_area,
+            "CHAT": dialogue_pane.text_area,
+        }.get(panel_comment_target["value"], dialogue_pane.text_area)
+
+    def collapse_panel_comment(
+        event: object | None = None,
+        *,
+        focus_owner: bool = True,
+    ) -> bool:
+        if panel_comment_target["value"] is None:
+            return False
+        owner = panel_comment_owner_area()
+        panel_comment_target["value"] = None
+        panel_comment_focus["value"] = ""
+        composer.frame.title = "MESSAGE"
+        input_area.text = suspended_message["value"]
+        suspended_message["value"] = ""
+        sync_input_host()
+        if focus_owner:
+            application.layout.focus(owner)
+        if event is not None:
+            getattr(event, "app").invalidate()
+        else:
+            application.invalidate()
+        return True
+
+    def open_panel_comment(
+        *,
+        target: Literal["GOAL", "CONTEXTS", "RULES", "MEMORIES", "CHAT"],
+        focus: str,
+    ) -> None:
+        if mode["value"] != "INPUT":
+            return
+        if target == "CHAT":
+            # Chat owns the ordinary whole-Ground Message composer already;
+            # entering it only transfers focus and does not manufacture a
+            # pane-scoped FOCUS marker.
+            application.layout.focus(input_area)
+            application.invalidate()
+            return
+        suspended_message["value"] = input_area.text
+        input_area.text = ""
+        panel_comment_target["value"] = target
+        panel_comment_focus["value"] = focus
+        composer.frame.title = INLINE_AGENT_COMMENT_TITLE
+        status_message["value"] = ""
+        sync_input_host()
+        application.layout.focus(input_area)
+        application.invalidate()
+
+    def finish_panel_comment() -> None:
+        target = panel_comment_target["value"]
+        if target is None:
+            return
+        comment = input_area.text.strip()
+        if not comment:
+            status_message["value"] = "Enter a nonblank agent comment first."
+            application.invalidate()
+            return
+        focus = panel_comment_focus["value"] or target
+        suspended_message["value"] = ""
+        collapse_panel_comment(focus_owner=False)
+        last_submission["value"] = comment
+        interpret_current(
+            append_user=True,
+            text=comment,
+            focus=focus,
+        )
+
+    def open_inline_editor(
+        *,
+        target: Literal["GOAL", "RULE", "MEMORY"],
+        selector: str,
+        original: str,
+    ) -> None:
+        if mode["value"] != "INPUT":
+            return
+        suspended_message["value"] = input_area.text
+        input_area.text = ""
+        inline_target["value"] = target
+        inline_selector["value"] = selector
+        inline_original["value"] = original
+        inline_direct_locked["value"] = (
+            current["value"].schema_version != GROUND_SCHEMA_VERSION
+        )
+        direct_edit_area.text = original
+        direct_edit_area.buffer.cursor_position = len(original)
+        composer.frame.title = INLINE_AGENT_COMMENT_TITLE
+        status_message["value"] = ""
+        sync_input_host()
+        application.layout.focus(
+            input_area
+            if inline_direct_locked["value"]
+            else direct_edit_area
+        )
+        application.invalidate()
+
+    def selected_saved_item(
+        kind: Literal["RULE", "CASE"],
+        index: int,
+    ) -> tuple[str, GroundItem] | None:
+        items = _aliased_items(current["value"], kind)
+        if not items:
+            return None
+        return items[min(max(index, 0), len(items) - 1)]
+
+    def finish_inline_submission() -> None:
+        target = inline_target["value"]
+        if target is None:
+            return
+        selector = inline_selector["value"]
+        original = inline_original["value"]
+        edited = direct_edit_area.text
+        comment = input_area.text.strip()
+        submission_kind = classify_inline_edit_submission(
+            original=original,
+            edited=edited,
+            comment=comment,
+        )
+        focus_label = target if not selector else f"{target} {selector}"
+        if submission_kind == "NOOP":
+            collapse_inline_editor(focus_owner=True)
+            status_message["value"] = "No edit or agent comment was submitted."
+            application.invalidate()
+            return
+        if refresh_current(announce=True):
+            collapse_inline_editor(focus_owner=False)
+            input_area.text = comment
+            status_message["value"] = (
+                "The saved Ground changed. Reopen the pane before editing; "
+                "your comment remains in Message."
+            )
+            application.layout.focus(input_area)
+            application.invalidate()
+            return
+        if submission_kind == "COMMENT":
+            # Restore the ordinary composer boundary before inference. The
+            # focus marker is visible provider context; it is not a durable
+            # selector or hidden provider session state.
+            suspended_message["value"] = ""
+            collapse_inline_editor(focus_owner=False)
+            last_submission["value"] = comment
+            interpret_current(
+                append_user=True,
+                text=comment,
+                focus=focus_label,
+            )
+            return
+        if prepare_direct_edit is None:
+            status_message["value"] = (
+                "This shell cannot prepare a direct Ground edit."
+            )
+            application.invalidate()
+            return
+        try:
+            proposal = prepare_direct_edit(
+                current["value"],
+                target,
+                selector,
+                edited,
+                comment,
+            )
+        except Exception as error:
+            status_message["value"] = (
+                f"{type(error).__name__}: "
+                f"{safe_terminal_text(str(error))}"
+            )
+            application.invalidate()
+            return
+
+        turn_lines = [
+            f"DIRECT EDIT · {focus_label}",
+            safe_terminal_text(edited),
+        ]
+        if comment:
+            turn_lines.extend(
+                [
+                    "",
+                    INLINE_AGENT_COMMENT_TITLE,
+                    safe_terminal_text(comment),
+                ]
+            )
+        submitted_text = "\n".join(turn_lines)
+        all_submitted_turns.append(submitted_text)
+        last_submission["value"] = comment or edited
+        if draft_queue["value"]:
+            # A direct correction is a new user turn even though no provider
+            # rewrites it. Earlier READY semantic classifications no longer
+            # retain authority if this exact proposal is refined or declined.
+            draft_queue_stale["value"] = True
+        conversation.append("YOU · " + submitted_text)
+        conversation.append(
+            "DIRECT WORDING FROZEN\n"
+            "  The edited text was not rewritten by the provider.\n"
+            "  It remains NOT SAVED until the exact command receives A."
+        )
+        suspended_message["value"] = ""
+        pending_inline_edit["value"] = (
+            target,
+            selector,
+            original,
+            edited,
+            comment,
+        )
+        collapse_inline_editor(focus_owner=False)
+        pending["value"] = proposal
+        review_view["value"] = "COMMAND"
+        mode["value"] = "APPROVAL"
+        status_message["value"] = ""
+        sync_input_host()
+        sync_panes(dialogue_anchor="end")
+        focus_conversation()
+        application.invalidate()
+
     input_mode = Condition(lambda: mode["value"] == "INPUT")
+    inline_editor_mode = Condition(
+        lambda: mode["value"] == "INPUT"
+        and inline_target["value"] is not None
+    )
+    panel_comment_mode = Condition(
+        lambda: mode["value"] == "INPUT"
+        and panel_comment_target["value"] is not None
+    )
+    normal_input_mode = input_mode & ~inline_editor_mode & ~panel_comment_mode
     approval_mode = Condition(lambda: mode["value"] == "APPROVAL")
+    approval_dialogue_focus = approval_mode & has_focus(
+        dialogue_pane.text_area
+    )
     error_mode = Condition(lambda: mode["value"] == "ERROR")
     action_mode = Condition(
         lambda: mode["value"] in {"APPROVAL", "ERROR", "APPLY_ERROR"}
@@ -893,6 +1811,40 @@ def run_named_ground_shell(
         | has_focus(cases_pane.text_area)
         | has_focus(dialogue_pane.text_area)
     )
+    memory_pane_focus = (
+        has_focus(cases_pane.text_area)
+        & ~inline_editor_mode
+        & Condition(
+            lambda: bool(_aliased_items(current["value"], "CASE"))
+        )
+    )
+    memory_table_focus = memory_pane_focus & Condition(
+        lambda: memory_view["value"] == "TABLE"
+    )
+    rule_draft_focus = (
+        input_mode
+        & has_focus(rules_pane.text_area)
+        & Condition(lambda: bool(draft_queue["value"]))
+    )
+    stale_rule_draft_focus = (
+        rule_draft_focus
+        & Condition(lambda: draft_queue_stale["value"])
+    )
+    saved_rule_focus = (
+        normal_input_mode
+        & has_focus(rules_pane.text_area)
+        & Condition(lambda: not draft_queue["value"])
+    )
+    saved_memory_focus = (
+        normal_input_mode
+        & has_focus(cases_pane.text_area)
+    )
+    saved_memory_list_focus = saved_memory_focus & Condition(
+        lambda: memory_view["value"] == "LIST"
+    )
+    inline_field_focus = inline_editor_mode & (
+        has_focus(direct_edit_area) | has_focus(input_area)
+    )
     focus_order = (input_area, *read_panes)
 
     def cycle_focus(step: int) -> None:
@@ -909,29 +1861,375 @@ def run_named_ground_shell(
         )
         application.invalidate()
 
-    @bindings.add("tab", filter=input_mode, eager=True)
+    def cycle_read_focus(step: int) -> None:
+        current_index = next(
+            (
+                index
+                for index, element in enumerate(read_panes)
+                if application.layout.has_focus(element)
+            ),
+            len(read_panes) - 1,
+        )
+        application.layout.focus(
+            read_panes[(current_index + step) % len(read_panes)]
+        )
+        application.invalidate()
+
+    @bindings.add("tab", filter=normal_input_mode, eager=True)
     def _focus_next(_event) -> None:
         cycle_focus(1)
 
-    @bindings.add(Keys.BackTab, filter=input_mode, eager=True)
+    @bindings.add(Keys.BackTab, filter=normal_input_mode, eager=True)
     def _focus_previous(_event) -> None:
         cycle_focus(-1)
 
+    @bindings.add("tab", filter=inline_editor_mode, eager=True)
+    @bindings.add(Keys.BackTab, filter=inline_editor_mode, eager=True)
+    def _cycle_inline_fields(event) -> None:
+        target = (
+            input_area
+            if event.app.layout.has_focus(direct_edit_area)
+            else direct_edit_area
+        )
+        event.app.layout.focus(target)
+        event.app.invalidate()
+
     @bindings.add("tab", filter=~input_mode, eager=True)
+    def _focus_next_modal_pane(_event) -> None:
+        cycle_read_focus(1)
+
     @bindings.add(Keys.BackTab, filter=~input_mode, eager=True)
-    def _keep_modal_focus(_event) -> None:
-        """Approval and failure controls remain attached to Dialogue."""
+    def _focus_previous_modal_pane(_event) -> None:
+        cycle_read_focus(-1)
+
+    @bindings.add(Keys.PageDown, filter=read_pane_focus, eager=True)
+    def _page_down(event) -> None:
+        scroll_wrapped_page(event, direction=1)
+
+    @bindings.add(Keys.PageUp, filter=read_pane_focus, eager=True)
+    def _page_up(event) -> None:
+        scroll_wrapped_page(event, direction=-1)
+
+    def focused_comment_target() -> tuple[str, str] | None:
+        if application.layout.has_focus(goal_pane.text_area):
+            return "GOAL", "GOAL"
+        if application.layout.has_focus(contexts_pane.text_area):
+            return "CONTEXTS", "CONTEXTS"
+        if application.layout.has_focus(rules_pane.text_area):
+            if not draft_queue["value"]:
+                selected = selected_saved_item(
+                    "RULE",
+                    selected_rule_index["value"],
+                )
+                if selected is not None:
+                    return "RULES", f"RULE {selected[0]}"
+            # Draft text is provider-authored and is not resent as user
+            # evidence; a draft-queue comment therefore anchors the pane only.
+            return "RULES", "RULES"
+        if application.layout.has_focus(cases_pane.text_area):
+            selected = selected_saved_item(
+                "CASE",
+                selected_memory_index["value"],
+            )
+            if selected is not None:
+                return "MEMORIES", f"MEMORY {selected[0]}"
+            return "MEMORIES", "MEMORIES"
+        if application.layout.has_focus(dialogue_pane.text_area):
+            return "CHAT", "CHAT"
+        return None
+
+    @bindings.add(
+        "c",
+        filter=normal_input_mode & read_pane_focus,
+        eager=True,
+    )
+    def _open_focused_comment(_event) -> None:
+        selected = focused_comment_target()
+        if selected is None:
+            return
+        target, focus = selected
+        open_panel_comment(target=target, focus=focus)
+
+    def toggle_memory_view() -> None:
+        if not _aliased_items(current["value"], "CASE"):
+            return
+        memory_view["value"] = (
+            "TABLE" if memory_view["value"] == "LIST" else "LIST"
+        )
+        sync_memories_pane(align_selection=True)
+        application.invalidate()
+
+    def move_memory_table_cell(
+        *,
+        row_step: int = 0,
+        column_step: int = 0,
+    ) -> None:
+        row, column = clamp_table_position(
+            row_count=len(_aliased_items(current["value"], "CASE")),
+            column_count=len(_NAMED_MEMORY_TABLE_COLUMNS),
+            row=selected_memory_index["value"] + row_step,
+            column=selected_memory_column["value"] + column_step,
+        )
+        selected_memory_index["value"] = row
+        selected_memory_column["value"] = column
+        sync_memories_pane(align_selection=True)
+        application.invalidate()
+
+    @bindings.add("v", filter=memory_pane_focus, eager=True)
+    def _toggle_memory_view(_event) -> None:
+        toggle_memory_view()
+
+    @bindings.add("down", filter=memory_table_focus, eager=True)
+    def _next_memory_table_row(_event) -> None:
+        move_memory_table_cell(row_step=1)
+
+    @bindings.add("up", filter=memory_table_focus, eager=True)
+    def _previous_memory_table_row(_event) -> None:
+        move_memory_table_cell(row_step=-1)
+
+    @bindings.add("right", filter=memory_table_focus, eager=True)
+    def _next_memory_table_column(_event) -> None:
+        move_memory_table_cell(column_step=1)
+
+    @bindings.add("left", filter=memory_table_focus, eager=True)
+    def _previous_memory_table_column(_event) -> None:
+        move_memory_table_cell(column_step=-1)
+
+    def move_saved_item(
+        *,
+        kind: Literal["RULE", "CASE"],
+        step: int,
+    ) -> None:
+        items = _aliased_items(current["value"], kind)
+        if not items:
+            return
+        state = (
+            selected_rule_index
+            if kind == "RULE"
+            else selected_memory_index
+        )
+        state["value"] = max(
+            0,
+            min(state["value"] + step, len(items) - 1),
+        )
+        if kind == "RULE":
+            sync_rules_pane(align_saved=True)
+        else:
+            sync_memories_pane(align_selection=True)
+        application.invalidate()
+
+    @bindings.add("down", filter=saved_rule_focus, eager=True)
+    def _next_saved_rule(_event) -> None:
+        move_saved_item(kind="RULE", step=1)
+
+    @bindings.add("up", filter=saved_rule_focus, eager=True)
+    def _previous_saved_rule(_event) -> None:
+        move_saved_item(kind="RULE", step=-1)
+
+    @bindings.add("down", filter=saved_memory_list_focus, eager=True)
+    def _next_saved_memory(_event) -> None:
+        move_saved_item(kind="CASE", step=1)
+
+    @bindings.add("up", filter=saved_memory_list_focus, eager=True)
+    def _previous_saved_memory(_event) -> None:
+        move_saved_item(kind="CASE", step=-1)
+
+    def move_rule_draft(step: int) -> None:
+        drafts = draft_queue["value"]
+        if not drafts:
+            return
+        draft_index["value"] = max(
+            0,
+            min(draft_index["value"] + step, len(drafts) - 1),
+        )
+        status_message["value"] = ""
+        sync_rules_pane(align_draft=True)
+        application.invalidate()
+
+    @bindings.add("down", filter=rule_draft_focus, eager=True)
+    def _next_rule_draft(_event) -> None:
+        move_rule_draft(1)
+
+    @bindings.add("up", filter=rule_draft_focus, eager=True)
+    def _previous_rule_draft(_event) -> None:
+        move_rule_draft(-1)
+
+    @bindings.add(
+        "r",
+        filter=rule_draft_focus & ~stale_rule_draft_focus,
+        eager=True,
+    )
+    def _review_rule_draft(event) -> None:
+        drafts = draft_queue["value"]
+        if not drafts:
+            return
+        if draft_queue_stale["value"]:
+            status_message["value"] = (
+                "The saved Ground changed. Press R to reclassify every "
+                "remaining draft before command review."
+            )
+            event.app.invalidate()
+            return
+        selected_index = draft_index["value"]
+        draft = drafts[selected_index]
+        if draft.kind != "RULE" or draft.status != "READY":
+            status_message["value"] = (
+                f"d{selected_index + 1} is {draft.kind} · {draft.status}; "
+                "add clarification in Message or choose a READY Rule."
+            )
+            event.app.layout.focus(input_area)
+            event.app.invalidate()
+            return
+        if prepare_rule_draft is None:
+            status_message["value"] = (
+                "This shell has no Rule-draft command preparer."
+            )
+            event.app.invalidate()
+            return
+        try:
+            if refresh_current(announce=True):
+                status_message["value"] = (
+                    "The saved Ground changed; submit the comment again so "
+                    "its drafts can be reclassified."
+                )
+                sync_panes(dialogue_anchor="end")
+                event.app.layout.focus(input_area)
+                event.app.invalidate()
+                return
+            proposal = prepare_rule_draft(current["value"], draft)
+        except Exception as error:
+            status_message["value"] = (
+                f"{type(error).__name__}: {safe_terminal_text(str(error))}"
+            )
+            event.app.layout.focus(input_area)
+            event.app.invalidate()
+            return
+        pending["value"] = proposal
+        pending_draft_index["value"] = selected_index
+        review_view["value"] = "COMMAND"
+        mode["value"] = "APPROVAL"
+        # READY-draft review reaches approval without passing through the
+        # ordinary provider-turn branch. Detach the shared composer here too:
+        # an exact command receipt must never coexist with writable input.
+        sync_input_host()
+        status_message["value"] = ""
+        conversation.append(
+            "\n".join(
+                [
+                    f"DRAFT SELECTED · d{selected_index + 1}",
+                    (
+                        "  One READY Rule was reduced to the exact command "
+                        "shown below."
+                    ),
+                    "  It is still NOT SAVED until A approves it.",
+                ]
+            )
+        )
+        sync_panes(dialogue_anchor="end")
+        focus_conversation()
+        event.app.invalidate()
+
+    @bindings.add("r", filter=stale_rule_draft_focus, eager=True)
+    def _reclassify_rule_drafts(event) -> None:
+        if not draft_source_submission["value"]:
+            status_message["value"] = (
+                "The original submitted comment is no longer available."
+            )
+            event.app.invalidate()
+            return
+        status_message["value"] = "Reclassifying drafts against saved Ground…"
+        last_submission["value"] = draft_source_submission["value"]
+        interpret_current(
+            append_user=False,
+            text=draft_source_submission["value"],
+        )
+
+    @bindings.add(
+        "e",
+        filter=normal_input_mode & has_focus(goal_pane.text_area),
+        eager=True,
+    )
+    def _edit_goal(_event) -> None:
+        open_inline_editor(
+            target="GOAL",
+            selector="",
+            original=current["value"].goal,
+        )
+
+    @bindings.add("e", filter=saved_rule_focus, eager=True)
+    def _edit_saved_rule(event) -> None:
+        selected = selected_saved_item(
+            "RULE",
+            selected_rule_index["value"],
+        )
+        if selected is None:
+            status_message["value"] = (
+                "No saved Rule is available; describe a new one in Message."
+            )
+            event.app.invalidate()
+            return
+        alias, item = selected
+        open_inline_editor(
+            target="RULE",
+            selector=alias,
+            original=item.content,
+        )
+
+    @bindings.add("e", filter=saved_memory_focus, eager=True)
+    def _edit_saved_memory(event) -> None:
+        selected = selected_saved_item(
+            "CASE",
+            selected_memory_index["value"],
+        )
+        if selected is None:
+            status_message["value"] = (
+                "No saved Ground Memory is available; describe one in "
+                "Message."
+            )
+            event.app.invalidate()
+            return
+        alias, item = selected
+        open_inline_editor(
+            target="MEMORY",
+            selector=alias,
+            # Source text is immutable trace evidence. REFINE edits only the
+            # expected output while the source remains visible above it.
+            original=item.expected,
+        )
 
     @bindings.add(
         "enter",
-        filter=input_mode & read_pane_focus,
+        filter=normal_input_mode & read_pane_focus,
         eager=True,
     )
-    def _return_to_message(event) -> None:
-        event.app.layout.focus(input_area)
-        event.app.invalidate()
+    def _talk_in_focused_pane(_event) -> None:
+        selected = focused_comment_target()
+        if selected is None:
+            return
+        target, focus = selected
+        open_panel_comment(target=target, focus=focus)
 
-    @bindings.add("enter", filter=has_focus(input_area), eager=True)
+    @bindings.add("enter", filter=inline_field_focus, eager=True)
+    def _submit_inline(_event) -> None:
+        finish_inline_submission()
+
+    @bindings.add(
+        "enter",
+        filter=panel_comment_mode & has_focus(input_area),
+        eager=True,
+    )
+    def _submit_panel_comment(_event) -> None:
+        finish_panel_comment()
+
+    @bindings.add(
+        "enter",
+        filter=(
+            has_focus(input_area)
+            & ~inline_editor_mode
+            & ~panel_comment_mode
+        ),
+        eager=True,
+    )
     def _submit(event) -> None:
         text = input_area.text.strip()
         if not text:
@@ -942,9 +2240,16 @@ def run_named_ground_shell(
         input_area.text = ""
         interpret_current(append_user=True, text=text)
 
-    @bindings.add("c-j", filter=has_focus(input_area), eager=True)
+    @bindings.add(
+        "c-j",
+        filter=(
+            (has_focus(input_area) & ~inline_editor_mode)
+            | inline_field_focus
+        ),
+        eager=True,
+    )
     def _insert_newline(event) -> None:
-        input_area.buffer.insert_text("\n")
+        event.app.current_buffer.insert_text("\n")
         event.app.invalidate()
 
     @bindings.add("a", filter=approval_mode, eager=True)
@@ -999,6 +2304,19 @@ def run_named_ground_shell(
             return
         current["value"] = updated
         applied_argvs.append(proposal.review.argv)
+        applied_draft_index = pending_draft_index["value"]
+        if (
+            applied_draft_index is not None
+            and 0 <= applied_draft_index < len(draft_queue["value"])
+        ):
+            remaining = list(draft_queue["value"])
+            del remaining[applied_draft_index]
+            draft_queue["value"] = tuple(remaining)
+            draft_index["value"] = min(
+                applied_draft_index,
+                max(0, len(remaining) - 1),
+            )
+        pending_draft_index["value"] = None
         conversation.append(
             "\n".join(
                 [
@@ -1006,7 +2324,8 @@ def run_named_ground_shell(
                     f"  {safe_terminal_text(actual_output)}",
                     "",
                     (
-                        "The Goal, Contexts, Rules, Cases, and Dialogue panes "
+                        "The Goal, Contexts, Rules, Memories, and Chat "
+                        "panes "
                         "now reflect the saved Ground."
                     ),
                 ]
@@ -1014,11 +2333,27 @@ def run_named_ground_shell(
         )
         conversation.append(_initial_question(updated))
         cycle_dialogue.clear()
-        last_submission["value"] = ""
+        if draft_queue["value"]:
+            # Any Ground mutation can change semantic duplicate/conflict
+            # judgments. Keep the visible text, but never retain READY
+            # authority across revisions.
+            draft_queue_stale["value"] = True
+        else:
+            draft_queue_stale["value"] = False
+            draft_source_submission["value"] = ""
+            last_submission["value"] = ""
         focus_input(restore=False)
+        if draft_queue["value"]:
+            status_message["value"] = (
+                "Ground changed; remaining drafts are NOT SAVED and require "
+                "R reclassification."
+            )
+            sync_rules_pane(align_draft=True)
+            application.layout.focus(rules_pane.text_area)
+            event.app.invalidate()
 
-    @bindings.add("up", filter=approval_mode, eager=True)
-    @bindings.add("left", filter=approval_mode, eager=True)
+    @bindings.add("up", filter=approval_dialogue_focus, eager=True)
+    @bindings.add("left", filter=approval_dialogue_focus, eager=True)
     def _show_command(event) -> None:
         if mode["value"] != "APPROVAL":
             return
@@ -1026,8 +2361,8 @@ def run_named_ground_shell(
         sync_panes(dialogue_anchor="end")
         event.app.invalidate()
 
-    @bindings.add("down", filter=approval_mode, eager=True)
-    @bindings.add("right", filter=approval_mode, eager=True)
+    @bindings.add("down", filter=approval_dialogue_focus, eager=True)
+    @bindings.add("right", filter=approval_dialogue_focus, eager=True)
     def _show_effects(event) -> None:
         if mode["value"] != "APPROVAL":
             return
@@ -1039,9 +2374,33 @@ def run_named_ground_shell(
     def _refine(event) -> None:
         if mode["value"] not in {"APPROVAL", "ERROR", "APPLY_ERROR"}:
             return
+        previous_mode = mode["value"]
+        inline_draft = pending_inline_edit["value"]
         conversation.append(
             "REFINEMENT\n  The pending action returned for revision."
         )
+        if inline_draft is not None and previous_mode == "APPROVAL":
+            target, selector, original, edited, comment = inline_draft
+            focus_input(restore=False)
+            open_inline_editor(
+                target=target,
+                selector=selector,
+                original=original,
+            )
+            direct_edit_area.text = edited
+            direct_edit_area.buffer.cursor_position = len(edited)
+            input_area.text = comment
+            input_area.buffer.cursor_position = len(comment)
+            event.app.invalidate()
+            return
+        if inline_draft is not None and previous_mode == "APPLY_ERROR":
+            focus_input(restore=False)
+            status_message["value"] = (
+                "The direct edit was discarded after an unconfirmed apply; "
+                "reopen the current pane before proposing it again."
+            )
+            event.app.invalidate()
+            return
         focus_input(restore=True)
 
     @bindings.add("r", filter=error_mode, eager=True)
@@ -1068,7 +2427,12 @@ def run_named_ground_shell(
 
     @bindings.add("escape", eager=True)
     def _close_on_escape(event) -> None:
-        close(event)
+        dispatch_tui_back(
+            event,
+            collapse_panel_comment,
+            collapse_inline_editor,
+            close=close,
+        )
 
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)

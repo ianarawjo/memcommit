@@ -41,6 +41,7 @@ from memcommit.commands import (
     switch,
     trace,
     translate,
+    undo,
     update,
 )
 from memcommit.commands.clear import cmd as clear_cmd
@@ -85,7 +86,8 @@ app.command(
     "meld",
     help=(
         "Interactively combine two equal-authority Contexts into the current "
-        "empty Context."
+        "empty Context, or meld INCOMING into an existing BASELINE with "
+        "--into."
     ),
 )(meld.cmd)
 app.command("embed",          help="Embed one context inside another.")(embed.cmd)
@@ -107,8 +109,15 @@ app.command(
     ),
 )(atomize.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
-app.command("revert",         help="Revert the current context to a previous checkpoint.")(revert.cmd)
-app.command("log",            help="List checkpoints (history) for the current context.")(log.cmd)
+app.command(
+    "revert",
+    help="Restore an exact, interactively chosen, or semantically found checkpoint.",
+)(revert.cmd)
+app.command(
+    "log",
+    help="Inspect or semantically search checkpoint history for the current Context.",
+)(log.cmd)
+app.command("undo",           help="Restore the previous distinct Context state.")(undo.cmd)
 app.command(
     "trace",
     help="Trace one current or historical Memory from retained origin to current descendants.",
@@ -120,14 +129,17 @@ app.command(
 app.command(
     "translate",
     help=(
-        "Create and switch to a derived Context whose direct Memories are "
-        "translated."
+        "Show and save a reusable translation view; materialize only when "
+        "explicitly requested."
     ),
 )(translate.cmd)
 
 # --- Semantic (legacy configured LLM or isolated Codex provider) ---
 app.command("forget",         help="Forget memories matching a description (uses LLM).")(forget.cmd)
-app.command("find",           help="Find relevant items with temporary Codex ranking.")(find.cmd)
+app.command(
+    "find",
+    help="Find current items or explicitly temporal Memory history.",
+)(find.cmd)
 app.command("find-duplicates", help="Find duplicate direct Memories.")(find_duplicates.cmd)
 app.command("find-ambiguities", help="Find ambiguous or underspecified direct Memories.")(find_ambiguities.cmd)
 app.command("find-conflicts", help="Find conflicting direct Memory pairs.")(find_conflicts.cmd)
@@ -138,8 +150,8 @@ app.command(
 app.command(
     "ground",
     help=(
-        "Open or revise a Goal–Rules–Cases Ground; blank or plain named "
-        "TTY use starts a provider-backed dialogue."
+        "Open or revise a Goal–Rules–Memories Ground; blank or plain named "
+        "TTY use starts a provider-backed chat."
     ),
 )(ground.cmd)
 app.command(

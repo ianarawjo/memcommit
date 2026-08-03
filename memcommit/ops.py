@@ -754,6 +754,7 @@ def translate(
     provider_factory: Callable[[], "TranslationProvider"],
     *,
     selector: str | None = None,
+    allocate_operation_uid: bool = True,
 ) -> "TranslationPlan":
     """Plan translations of directly owned Memories without mutating ctx."""
     from memcommit.translate import plan_translation
@@ -763,6 +764,7 @@ def translate(
         target_language,
         provider_factory,
         selector=selector,
+        allocate_operation_uid=allocate_operation_uid,
     )
 
 

@@ -19,6 +19,12 @@ from memcommit.commands.find_chat_shell import (
     FindPendingAnswerRequest,
     run_find_chat_session,
 )
+from memcommit.commands.history_picker import choose_history
+from memcommit.commands.history_present import (
+    history_result_recovery_label,
+    history_result_picker_entries,
+)
+from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.find_answer_dialogue import (
     FindAnswerCorpusTooLarge,
@@ -40,6 +46,13 @@ from memcommit.find_turn_dialogue import (
     FindTurnAnswer,
     FindTurnAsk,
     interpret_find_turn,
+)
+from memcommit.history import HistoryError, build_history
+from memcommit.history_search import (
+    HistorySearchError,
+    HistorySearchResult,
+    is_temporal_query,
+    search_history,
 )
 from memcommit.query_provider import (
     QueryProviderError,
@@ -318,6 +331,101 @@ class FindTurnController:
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _history_context_names(
+    store: MemoryStore,
+    root: Context,
+    *,
+    recursive: bool,
+) -> tuple[str, ...]:
+    """Collect only the currently visible embedded Context graph."""
+    names: list[str] = []
+    visited: set[str] = set()
+
+    def visit(context: Context) -> None:
+        if context.uid in visited:
+            return
+        visited.add(context.uid)
+        names.append(context.name)
+        if not recursive:
+            return
+        for item in context.iter_items():
+            if (
+                isinstance(item, Context)
+                and store.context_exists(item.name)
+            ):
+                # Historical traversal follows only explicit embedded
+                # Context pointers and uses non-resolving direct loads.
+                # MemoryRef targets and query-only sources stay unopened.
+                visit(store.load_direct(item.name))
+
+    visit(root)
+    return tuple(names)
+
+
+def _temporal_find_results(
+    store: MemoryStore,
+    root: Context,
+    query: str,
+    *,
+    recursive: bool,
+    limit: int,
+) -> list[HistorySearchResult]:
+    timelines = [
+        build_history(store, name)
+        for name in _history_context_names(
+            store,
+            root,
+            recursive=recursive,
+        )
+    ]
+    return search_history(
+        timelines,
+        query,
+        connect_codex_chatgpt_provider(),
+        result_kinds=(
+            "memory_version",
+            "memory_transition",
+            "checkpoint",
+        ),
+        limit=limit,
+    )
+
+
+def _render_temporal_find(
+    root_name: str,
+    results: list[HistorySearchResult],
+) -> None:
+    if not results:
+        typer.secho(root_name, bold=True)
+        typer.echo("  (no matching historical items)")
+        return
+    grouped: dict[tuple[str, str], list[HistorySearchResult]] = {}
+    for result in results:
+        grouped.setdefault(
+            (result.context_uid, result.context_name),
+            [],
+        ).append(result)
+    for group_index, ((_, context_name), matches) in enumerate(
+        grouped.items()
+    ):
+        if group_index:
+            typer.echo()
+        typer.secho(context_name, bold=True)
+        for result in matches:
+            timestamp = (
+                result.timestamp[:16].replace("T", " ")
+                if result.timestamp
+                else "current"
+            )
+            checkpoint = result.checkpoint_uid or result.candidate_id
+            typer.echo(
+                f"  [{result.kind:<17} {checkpoint[:8]}] "
+                f"{display_escape_text(timestamp)}  "
+                f"{display_escape_text(result.description)}  "
+                f"({display_escape_text(history_result_recovery_label(result))})"
+            )
 
 
 def _render_labeled_content(label: str, content: str) -> None:
@@ -629,15 +737,65 @@ def cmd(
     ] = False,
 ) -> None:
     store = MemoryStore()
+    temporal = is_temporal_query(query)
     try:
-        ctx = (
-            store.load_current()
-            if context_name is None
-            else store.load(context_name)
-        )
+        if temporal:
+            selected_name = context_name or store.current_context_name()
+            if selected_name is None:
+                raise RuntimeError(
+                    "No current context. Run 'mem init <name>' first."
+                )
+            ctx = store.load_direct(selected_name)
+        else:
+            ctx = (
+                store.load_current()
+                if context_name is None
+                else store.load(context_name)
+            )
     except (FileNotFoundError, RuntimeError, ValueError) as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
+
+    if temporal:
+        try:
+            history_results = _temporal_find_results(
+                store,
+                ctx,
+                query,
+                recursive=not direct,
+                limit=limit,
+            )
+        except (
+            HistoryError,
+            HistorySearchError,
+            QueryProviderError,
+            OSError,
+            RuntimeError,
+            ValueError,
+        ) as error:
+            typer.secho(
+                f"Find history error: {error}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if _interactive_terminal() and history_results:
+            try:
+                choose_history(
+                    history_result_picker_entries(history_results),
+                    context_name=ctx.name,
+                    mode="log",
+                )
+            except ValueError as error:
+                typer.secho(
+                    f"Find history error: {error}",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
+            return
+        _render_temporal_find(ctx.name, history_results)
+        return
 
     try:
         matches = ops.find(

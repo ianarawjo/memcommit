@@ -5,12 +5,48 @@ import pytest
 
 import memcommit.ops as ops
 import memcommit.store as store_module
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.store import (
+    ConcurrentContextUpdateError,
+    MemoryStore,
+    checkpoint_history_digest,
+    context_record_digest,
+    validate_context_name,
+)
 
 
 # ---------------------------------------------------------------------------
 # Initialisation
 # ---------------------------------------------------------------------------
+
+
+def test_validate_context_name_accepts_namespace_without_creating_store_state(
+    isolated_store,
+):
+    name = "test/ground/ticker-rule-examples"
+
+    assert validate_context_name(name) == name
+    assert not isolated_store.exists()
+
+
+@pytest.mark.parametrize(
+    "name",
+    (
+        "../escape",
+        "/absolute",
+        "repeated//separator",
+        r"windows\separator",
+        "parent/context.json",
+    ),
+)
+def test_validate_context_name_rejects_invalid_names_without_creating_store_state(
+    isolated_store,
+    name,
+):
+    with pytest.raises(ValueError, match="Context name|Invalid context name"):
+        validate_context_name(name)
+
+    assert not isolated_store.exists()
+
 
 def test_store_init_creates_directories(isolated_store):
     MemoryStore()
@@ -410,6 +446,52 @@ def test_checkpoint_is_created_on_auto_save(isolated_store):
     assert cps[0]["command"] == "init"
 
 
+def test_checkpoint_rejects_stale_loaded_context_without_appending_history(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("checkpoint-race")
+    store.save(context)
+    stale = store.load_direct(context.name)
+
+    concurrent = store.load_direct(context.name)
+    ops.add(concurrent, "concurrent state")
+    store.save(concurrent)
+    context_after_concurrent_save = store.load_direct(context.name).to_dict()
+    history_after_concurrent_save = store.list_checkpoints(context.name)
+
+    with pytest.raises(
+        ConcurrentContextUpdateError,
+        match="changed before it could be checkpointed",
+    ):
+        store.checkpoint(stale, message="stale snapshot")
+
+    assert (
+        store.load_direct(context.name).to_dict()
+        == context_after_concurrent_save
+    )
+    assert (
+        store.list_checkpoints(context.name)
+        == history_after_concurrent_save
+    )
+
+
+def test_checkpoint_rejects_unsaved_context_state(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("checkpoint-unsaved")
+    store.save(context)
+    history_before = store.list_checkpoints(context.name)
+    ops.add(context, "not persisted")
+
+    with pytest.raises(ValueError, match="has unsaved changes"):
+        store.checkpoint(context, message="must not record")
+
+    assert not store.load_direct(context.name).memories
+    assert store.list_checkpoints(context.name) == history_before
+
+
 def test_auto_checkpoint_is_rolled_back_when_context_write_fails(
     isolated_store,
     monkeypatch,
@@ -595,3 +677,75 @@ def test_revert_carries_loaded_digest_into_locked_save(
         memory.content
         for memory in store.load_direct(ctx.name).iter_items()
     ] == ["original"]
+
+
+@pytest.mark.parametrize(
+    ("stale_field", "stale_value", "message"),
+    [
+        (
+            "expected_context_uid",
+            "stale-context-uid",
+            "Context identity changed",
+        ),
+        (
+            "expected_context_digest",
+            "0" * 64,
+            "Context content changed",
+        ),
+        (
+            "expected_history_digest",
+            "0" * 64,
+            "Checkpoint history changed",
+        ),
+    ],
+)
+def test_revert_rejects_stale_reviewed_frame_before_any_mutation(
+    isolated_store,
+    stale_field,
+    stale_value,
+    message,
+):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    context = ops.init("revert-reviewed-frame")
+    ops.add(context, "earlier")
+    store.save(
+        context,
+        AutoCheckpoint(
+            command="first",
+            args={},
+            description="first",
+        ),
+    )
+    target_uid = store.list_checkpoints(context.name)[0]["uid"]
+    ops.add(context, "current")
+    store.save(
+        context,
+        AutoCheckpoint(
+            command="second",
+            args={},
+            description="second",
+        ),
+    )
+    reviewed_context = store.load_direct(context.name)
+    reviewed_history = store.list_checkpoints(context.name)
+    expectations = {
+        "expected_context_uid": reviewed_context.uid,
+        "expected_context_digest": context_record_digest(reviewed_context),
+        "expected_history_digest": checkpoint_history_digest(
+            reviewed_history
+        ),
+    }
+    expectations[stale_field] = stale_value
+    context_before_revert = reviewed_context.to_dict()
+
+    with pytest.raises(ConcurrentContextUpdateError, match=message):
+        store.revert(
+            context.name,
+            target_uid,
+            **expectations,
+        )
+
+    assert store.load_direct(context.name).to_dict() == context_before_revert
+    assert store.list_checkpoints(context.name) == reviewed_history

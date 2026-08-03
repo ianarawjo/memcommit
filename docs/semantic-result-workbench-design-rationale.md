@@ -12,6 +12,13 @@ The atomize workbench is the first implemented adapter. Other operations may
 adopt the common result view only when they can supply the required evidence
 without inventing an explanation or silently omitting unresolved findings.
 
+The current demo renders the shared headings and Mem-authored semantic prose
+in English while preserving source evidence verbatim. English is a bounded
+demo convention, not a claim of cross-language semantic neutrality. The
+deferred authoring-, analysis-, explanation-, and interface-language problem
+is recorded in
+[`multilingual-memory-and-explanation-language-design-rationale.md`](multilingual-memory-and-explanation-language-design-rationale.md).
+
 ## Decision summary
 
 A table, diff, relation ledger, or count can expose exact result records, but
@@ -262,8 +269,8 @@ therefore supplement, rather than replace:
 - the complete actionable unresolved list; and
 - operation-specific structural validation.
 
-A result-review case is also not automatically a named Ground Case or golden
-Case. Promotion into a Ground requires its own explicit curation and approval
+A result-review case is also not automatically a named Ground Memory or golden
+Ground Memory. Promotion into a Ground requires its own explicit curation and approval
 boundary.
 
 ## Shared asset boundary
@@ -331,10 +338,10 @@ layout composition, viewport anchoring, and exact-command review. The semantic
 result workbench builds on those primitives but owns a different information
 contract.
 
-Ground provides a durable Goal--Rules--Cases process for jointly refining
+Ground provides a durable Goal--Rules--Memories process for jointly refining
 judgment criteria. It may be used to develop or evaluate a result explanation
 profile, but ordinary result rendering does not run `mem ground`, and
-inspection cases are not silently promoted into Ground Cases.
+inspection cases are not silently promoted into Ground Memories.
 
 The reusable relationship is:
 

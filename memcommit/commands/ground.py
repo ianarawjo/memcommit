@@ -24,6 +24,7 @@ from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import Context, Memory
 from memcommit.ground import (
     GROUND_SCHEMA_VERSION,
+    GROUND_TEXT_LIMIT,
     GroundError,
     GroundFrame,
     GroundSession,
@@ -57,6 +58,8 @@ from memcommit.ground_context_catalog import (
 )
 from memcommit.ground_turn_dialogue import (
     GroundTurnAction,
+    GroundTurnDraft,
+    GroundTurnDraftBatch,
     ground_turn_aliases,
     interpret_ground_turn,
 )
@@ -73,7 +76,7 @@ def _validated_start_request(value: str) -> str:
     text = value.strip()
     if not text or len(text) > GROUND_DIALOGUE_USER_TEXT_LIMIT:
         raise GroundDialogueError(
-            "Ground dialogue input must be non-empty and no longer than "
+            "Ground chat input must be non-empty and no longer than "
             f"{GROUND_DIALOGUE_USER_TEXT_LIMIT} characters."
         )
     return text
@@ -98,18 +101,18 @@ def render_ground_start(initial_request: str = "") -> str:
             "  What are you trying to understand, decide, or make together?",
             "",
             "  Start in your own words. You do not need a Ground name,",
-            "  Rules, Cases, or final wording yet.",
+            "  Rules, Memories, or final wording yet.",
             "",
-            "  A rough outcome, concrete case, or uncertainty is enough.",
+            "  A rough outcome, concrete example, or uncertainty is enough.",
         ]
         if not safe_goal
         else [
-            "DIALOGUE",
+            "CHAT",
             "  YOU · STARTING REQUEST",
             f"  {safe_goal}",
             "",
             "  Run this command in an interactive terminal to interpret",
-            "  the Working Goal and continue the dialogue.",
+            "  the Working Goal and continue the chat.",
         ]
     )
     return "\n".join(
@@ -126,7 +129,7 @@ def render_ground_start(initial_request: str = "") -> str:
             "RULES",
             "  (none yet)",
             "",
-            "CASES",
+            "MEMORIES",
             "  (none yet)",
             "",
             *dialogue_lines,
@@ -144,12 +147,14 @@ def render_ground_start(initial_request: str = "") -> str:
             ),
             "",
             "NEXT",
-            "  The agent will restate a candidate Goal, suggest a portable",
-            "  GROUND_NAME, and propose one exact mem ground command.",
+            "  The agent will confirm the Goal and portable GROUND_NAME,",
+            "  compare name-only Contexts, and may show one NEW? Context",
+            "  plus unsaved Rule and Memory drafts.",
+            "  Only the exact mem ground creation command can be approved.",
             "  Nothing is created until you approve that command.",
             "",
             "No Ground has been created.",
-            "No Context or Memory changes have been applied.",
+            "No Context or Context Memory changes have been applied.",
             "No checkpoint has been created.",
         ]
     )
@@ -157,6 +162,15 @@ def render_ground_start(initial_request: str = "") -> str:
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _current_context_name_for_ground(store: MemoryStore) -> str | None:
+    """Snapshot the local current pointer without opening its Context record."""
+    try:
+        value = store.current_context_name()
+    except (OSError, TypeError, ValueError):
+        return None
+    return value if isinstance(value, str) and value else None
 
 
 def _interpret_new_ground_turn(
@@ -177,8 +191,20 @@ def _interpret_new_ground_turn(
         connect_codex_chatgpt_provider,
         context_names=context_names,
     )
+    store = MemoryStore(create=False)
+    for suggestion in turn.new_context_suggestions:
+        try:
+            # This is a read-only early check. A future approved `mem init`
+            # must repeat it at its own locked save boundary because the
+            # display-only suggestion conveys no creation authority.
+            store.assert_context_creatable(suggestion.context_name)
+        except (FileExistsError, OSError, ValueError) as error:
+            raise GroundDialogueError(
+                "The suggested new Context name is not currently "
+                "creatable."
+            ) from error
     if isinstance(turn, GroundDialogueProposal):
-        existing = MemoryStore(create=False).load_ground_session(
+        existing = store.load_ground_session(
             turn.ground_name
         )
         if existing is not None:
@@ -235,9 +261,12 @@ def _run_approved_ground_command(
 
 
 def _run_new_ground_shell(initial_request: str = "") -> None:
-    locators = discover_ground_context_locators(
-        MemoryStore(create=False)
-    )
+    store = MemoryStore(create=False)
+    locators = discover_ground_context_locators(store)
+    # Current is only an at-launch orientation snapshot. It remains local to
+    # the shell: the provider sees the same bounded name catalog as before,
+    # without a mutable "this one is current" marker or any Context content.
+    current_context_name = _current_context_name_for_ground(store)
 
     def interpret(text: str):
         context_names = tuple(
@@ -249,9 +278,17 @@ def _run_new_ground_shell(initial_request: str = "") -> None:
             context_names=context_names,
         )
 
+    def validate_new_context(name: str) -> str:
+        # This is only a read-only early check for the local editor. The
+        # separately approved `mem init` must repeat it under its own lock.
+        store.assert_context_creatable(name)
+        return name
+
     shell_kwargs = {
         "interpret": interpret,
         "apply": _apply_new_ground_proposal,
+        "current_context_name": current_context_name,
+        "validate_new_context": validate_new_context,
     }
     if locators:
         shell_kwargs["context_catalog_count"] = len(locators)
@@ -271,12 +308,20 @@ def _run_new_ground_shell(initial_request: str = "") -> None:
             raise GroundError(
                 "The approved Ground could not be reloaded."
             )
+        continuation_kwargs = {
+            "initial_receipt": result.actual_output or "Ground created.",
+            "context_hints": result.selected_context_names,
+        }
+        if result.new_context_name_hint:
+            continuation_kwargs["new_context_hint"] = (
+                result.new_context_name_hint
+            )
         _run_existing_ground_shell(
             session,
-            initial_receipt=result.actual_output or "Ground created.",
+            **continuation_kwargs,
         )
         return
-    typer.echo("Ground dialogue cancelled. Nothing was created.")
+    typer.echo("Ground chat cancelled. Nothing was created.")
 
 
 def _ground_digest(session: GroundSession) -> str:
@@ -499,7 +544,7 @@ def _case_argv(
     ]
     if len(matches) != 1:
         raise GroundError(
-            "The proposed Case source is missing or ambiguous."
+            "The proposed Ground Memory source is missing or ambiguous."
         )
     allowed_targets = {
         frame.context_name
@@ -509,7 +554,7 @@ def _case_argv(
     if not action.targets or any(
         target not in allowed_targets for target in action.targets
     ):
-        raise GroundError("The proposed Case names an invalid target.")
+        raise GroundError("The proposed Ground Memory names an invalid target.")
     argv = [
         "mem",
         "ground",
@@ -581,8 +626,8 @@ def _ground_action_proposal(
             ),
             "Goal: unchanged",
             "Rules: unchanged",
-            "Cases: unchanged",
-            "Contexts and Memories: unchanged",
+            "Ground Memories: unchanged",
+            "Contexts and Context Memories: unchanged",
             "Checkpoints: unchanged",
         )
     elif kind == "REVISE_GOAL":
@@ -601,8 +646,8 @@ def _ground_action_proposal(
         )
         effects = (
             "Goal: REVISE",
-            "Rules and Cases: unchanged",
-            "Contexts and Memories: unchanged",
+            "Rules and Ground Memories: unchanged",
+            "Contexts and Context Memories: unchanged",
             "Checkpoints: unchanged",
         )
     elif kind == "PROPOSE_RULE":
@@ -620,21 +665,21 @@ def _ground_action_proposal(
         effects = (
             "Rules: ADD one PROPOSED Rule",
             "Acceptance: unchanged; proposal is not approval",
-            "Goal and Cases: unchanged",
-            "Contexts and Memories: unchanged",
+            "Goal and Ground Memories: unchanged",
+            "Contexts and Context Memories: unchanged",
             "Checkpoints: unchanged",
         )
     elif kind == "PROPOSE_CASE":
         argv, source_memory = _case_argv(session, action, store)
         effects = (
-            "Cases: ADD one traceable PROPOSED Case",
+            "Ground Memories: ADD one traceable PROPOSED Ground Memory",
             (
-                f"Source Memory [{source_memory.uid[:8]}]: "
+                f"Source Context Memory [{source_memory.uid[:8]}]: "
                 f"{source_memory.content}"
             ),
             "Linked Rule: relation only; acceptance unchanged",
             "Goal: unchanged",
-            "Contexts and Memories: unchanged",
+            "Contexts and Context Memories: unchanged",
             "Checkpoints: unchanged",
         )
     elif kind == "REVIEW_ITEM":
@@ -652,10 +697,10 @@ def _ground_action_proposal(
             argv_list.extend(["--response", action.response])
         argv = tuple(argv_list)
         effects = (
-            f"Selected Rule/Case: {action.decision}",
+            f"Selected Rule/Ground Memory: {action.decision}",
             "One review Decision: RECORD",
-            "Other Goal–Rules–Cases items: unchanged",
-            "Contexts and Memories: unchanged",
+            "Other Goal–Rules–Memories items: unchanged",
+            "Contexts and Context Memories: unchanged",
             "Checkpoints: unchanged",
         )
     else:  # pragma: no cover - validated semantic union
@@ -682,6 +727,107 @@ def _ground_action_proposal(
             expected_context_versions if kind == "BIND" else ()
         ),
     )
+
+
+def _ground_rule_draft_proposal(
+    session: GroundSession,
+    draft: GroundTurnDraft,
+) -> GroundCommandProposal:
+    """Reduce one reviewed unsaved Rule draft through the normal save path."""
+    if draft.kind != "RULE" or draft.status != "READY":
+        raise GroundError("Only a READY Rule draft can be proposed.")
+    if session.schema_version != GROUND_SCHEMA_VERSION:
+        raise GroundError(
+            "Bind this Ground to explicit Context frames before proposing "
+            "a Rule."
+        )
+    return _ground_action_proposal(
+        session,
+        GroundTurnAction(
+            kind="PROPOSE_RULE",
+            understanding=(
+                "The selected comment unit is a READY Rule candidate: "
+                f"{draft.classification_reason}"
+            ),
+            question=(
+                "Approve adding this extracted Rule as PROPOSED?"
+            ),
+            content=draft.content,
+            rationale=draft.proposal_rationale,
+            rule_provenance=draft.rule_provenance,
+        ),
+    )
+
+
+def _ground_direct_edit_proposal(
+    session: GroundSession,
+    target: str,
+    selector: str,
+    edited: str,
+    comment: str,
+) -> GroundCommandProposal:
+    """Freeze one pane-local replacement without model rewriting.
+
+    The comment may explain the edit, but the direct field is authoritative:
+    it is copied verbatim into the one reviewed mutation. Context binding and
+    source Ground Memory text deliberately have no equivalent free-text path.
+    """
+    if not isinstance(edited, str) or not edited.strip():
+        raise GroundError("A direct Ground edit cannot be blank.")
+    if len(edited) > GROUND_TEXT_LIMIT:
+        raise GroundError("A direct Ground edit is too long.")
+    explanation = comment.strip()
+    if len(explanation) > GROUND_DIALOGUE_USER_TEXT_LIMIT:
+        raise GroundError("A Ground agent comment is too long.")
+    if session.schema_version != GROUND_SCHEMA_VERSION:
+        raise GroundError(
+            "This saved Ground is still an empty unbound scaffold. Edit its "
+            "Goal before creation, or bind it before revising saved items."
+        )
+    if target == "GOAL":
+        action = GroundTurnAction(
+            kind="REVISE_GOAL",
+            understanding=(
+                "The Goal pane contains an exact direct replacement."
+                + (f" Agent comment: {explanation}" if explanation else "")
+            ),
+            question="Approve replacing the Goal with this exact wording?",
+            content=edited,
+            rationale=(
+                explanation or "Direct edit submitted in the Goal pane."
+            ),
+        )
+    elif target in {"RULE", "MEMORY"}:
+        expected_kind = "RULE" if target == "RULE" else "CASE"
+        item_uid = _resolve_ground_alias(
+            session,
+            selector,
+            kind=expected_kind,
+        )
+        item = next(
+            candidate for candidate in session.items
+            if candidate.uid == item_uid
+        )
+        if item.status not in {"PROPOSED", "ACCEPTED"}:
+            raise GroundError(
+                f"{target.title()} {selector} is {item.status}; only a "
+                "PROPOSED or ACCEPTED item can be directly refined."
+            )
+        layer = "Rule" if target == "RULE" else "Ground Memory expected output"
+        action = GroundTurnAction(
+            kind="REVIEW_ITEM",
+            understanding=(
+                f"The selected {layer} contains an exact direct replacement."
+                + (f" Agent comment: {explanation}" if explanation else "")
+            ),
+            question=f"Approve replacing this {layer} with the exact edit?",
+            selector=selector,
+            decision="REFINE",
+            response=edited,
+        )
+    else:
+        raise GroundError("This Ground pane does not support direct editing.")
+    return _ground_action_proposal(session, action)
 
 
 _MEMORY_SELECTOR_TOKEN = re.compile(
@@ -750,17 +896,38 @@ def _redact_ground_source_selectors(
 
 def _interpret_named_ground_turn(
     session: GroundSession,
-    text: str,
+    dialogue_text: str,
+    draft_source_text: str,
 ):
     store = MemoryStore(create=False)
     provider_text, source_selector_by_alias = (
-        _redact_ground_source_selectors(session, text, store)
+        _redact_ground_source_selectors(session, dialogue_text, store)
+    )
+    provider_source_text, _source_aliases = (
+        _redact_ground_source_selectors(
+            session,
+            draft_source_text,
+            store,
+        )
     )
     turn = interpret_ground_turn(
         session,
         provider_text,
         connect_codex_chatgpt_provider,
+        draft_source_text=provider_source_text,
     )
+    if (
+        isinstance(turn, GroundTurnDraftBatch)
+        and provider_source_text != draft_source_text
+    ):
+        # An mN alias is intentionally ephemeral and cannot be represented as
+        # an exact quote from the person's comment or saved as Rule wording.
+        raise GroundError(
+            "Ground comment classification cannot preserve exact source "
+            "spans when the submitted turn contains Memory selectors. "
+            "Remove those selectors or handle the referenced Ground Memory "
+            "separately."
+        )
     if isinstance(turn, GroundTurnAction):
         if turn.kind == "PROPOSE_CASE":
             source_uid = source_selector_by_alias.get(
@@ -768,7 +935,8 @@ def _interpret_named_ground_turn(
             )
             if source_uid is None:
                 raise GroundError(
-                    "A Case proposal must use a source Memory selector "
+                    "A Ground Memory proposal must use a source Context "
+                    "Memory selector "
                     "supplied in this visible turn."
                 )
             turn = replace(turn, source_selector=source_uid)
@@ -902,6 +1070,8 @@ def _run_existing_ground_shell(
     session: GroundSession,
     *,
     initial_receipt: str = "",
+    context_hints: tuple[str, ...] = (),
+    new_context_hint: str | None = None,
 ) -> None:
     def reload_session(contract_name: str) -> GroundSession:
         refreshed = MemoryStore(create=False).load_ground_session(contract_name)
@@ -915,11 +1085,15 @@ def _run_existing_ground_shell(
         session,
         interpret=_interpret_named_ground_turn,
         apply=_apply_named_ground_proposal,
+        prepare_rule_draft=_ground_rule_draft_proposal,
+        prepare_direct_edit=_ground_direct_edit_proposal,
         reload_session=reload_session,
         initial_receipt=initial_receipt,
+        context_hints=context_hints,
+        new_context_hint=new_context_hint,
     )
     typer.echo(
-        f"Ground dialogue closed. {len(result.applied_argvs)} approved "
+        f"Ground chat closed. {len(result.applied_argvs)} approved "
         "command(s) applied in this named-Ground view."
     )
     typer.echo(
@@ -930,6 +1104,16 @@ def _run_existing_ground_shell(
 
 def _count_items(session: GroundSession, kind: str) -> int:
     return sum(item.kind == kind for item in session.items)
+
+
+def _display_ground_compatibility_token(value: str) -> str:
+    """Translate persisted Case-era tokens only for user-facing output."""
+    if value == "INDUCED_FROM_CASES":
+        return "INDUCED_FROM_MEMORIES"
+    for action in ("ACCEPT", "DEFER", "REJECT", "REFINE"):
+        if value == f"{action} CASE":
+            return f"{action} MEMORY"
+    return value
 
 
 def _frame_contexts_by_uid(
@@ -962,7 +1146,7 @@ def _render_unbound_snapshot(session: GroundSession) -> str:
         f"SCOPE  {safe_terminal_text(scope)}",
         (
             f"RULES {_count_items(session, 'RULE')} · "
-            f"CASES {_count_items(session, 'CASE')} · "
+            f"MEMORIES {_count_items(session, 'CASE')} · "
             f"UNRESOLVED {open_issues} · "
             f"DECISIONS {_count_items(session, 'DECISION')}"
         ),
@@ -982,10 +1166,15 @@ def _render_contract_layers(
     decisions = [item for item in session.items if item.kind == "DECISION"]
     lines = ["2 · RULES · DISTILLED / INDUCED"]
     if not rules:
-        lines.append("  (none yet; distill from the Goal or induct from cases)")
-    for item in rules:
         lines.append(
-            f"  [{item.status} · {item.rule_provenance}] "
+            "  (none yet; distill from the Goal or induct from Ground Memories)"
+        )
+    for item in rules:
+        provenance = _display_ground_compatibility_token(
+            item.rule_provenance
+        )
+        lines.append(
+            f"  [{item.status} · {provenance}] "
             f"[{item.uid[:8]}] "
             f"{safe_terminal_text(item.content)}"
         )
@@ -993,9 +1182,11 @@ def _render_contract_layers(
             lines.append(
                 f"    why: {safe_terminal_text(item.rationale)}"
             )
-    lines.extend(["", "3 · CASES · FIT / BOUNDARY / CONTRAST"])
+    lines.extend(["", "3 · MEMORIES · FIT / BOUNDARY / CONTRAST"])
     if not cases:
-        lines.append("  (none yet; proposed cases do not count as golden)")
+        lines.append(
+            "  (none yet; proposed Ground Memories do not count as golden)"
+        )
     for item in cases:
         targets = ", ".join(
             frame_name_by_uid.get(uid, uid[:8])
@@ -1012,9 +1203,9 @@ def _render_contract_layers(
                 (
                     f"  [{item.status} · {item.case_role} · "
                     f"{item.disposition}] "
-                    f"[{item.uid[:8]}] "
-                    f"{safe_terminal_text(item.content)}"
+                    f"[{item.uid[:8]}]"
                 ),
+                f"    input: {safe_terminal_text(item.content)}",
                 f"    rule: {related_rules or '(none)'}",
                 (
                     f"    source: [{source.memory_uid[:8]}] in "
@@ -1023,11 +1214,11 @@ def _render_contract_layers(
                 ),
                 f"    target: {safe_terminal_text(targets)}",
                 (
-                    f"    expected: {safe_terminal_text(item.expected)}"
+                    f"    output: {safe_terminal_text(item.expected)}"
                     if item.expected
-                    else "    expected: (none)"
+                    else "    output: (none)"
                 ),
-                f"    why: {safe_terminal_text(item.rationale)}",
+                f"    notes: {safe_terminal_text(item.rationale)}",
             ]
         )
     if decisions:
@@ -1038,8 +1229,9 @@ def _render_contract_layers(
             ]
         )
         for item in decisions[-5:]:
+            decision = _display_ground_compatibility_token(item.content)
             lines.append(
-                f"  [{item.iteration}] {safe_terminal_text(item.content)} "
+                f"  [{item.iteration}] {safe_terminal_text(decision)} "
                 f"— {safe_terminal_text(item.rationale)}"
             )
     return lines
@@ -1066,7 +1258,7 @@ def render_ground_snapshot(
         lines.extend(
             [
                 "",
-                "No Context or Memory changes have been applied.",
+                "No Context or Context Memory changes have been applied.",
                 "No checkpoint has been created.",
             ]
         )
@@ -1117,8 +1309,8 @@ def render_ground_snapshot(
         "",
         "  TARGET REQUIREMENTS",
         (
-            "    The Goal and requirements may be revised when cases expose "
-            "a bad boundary."
+            "    The Goal and requirements may be revised when Ground "
+            "Memories expose a bad boundary."
         ),
     ]
     for requirement in session.requirements:
@@ -1212,7 +1404,7 @@ def render_ground_snapshot(
                     f"  {safe_terminal_text(name)}"
                     for name in sorted(stale_names)
                 ],
-                "  Ground changes and Case decisions are blocked.",
+                "  Ground changes and Ground Memory decisions are blocked.",
             ]
         )
 
@@ -1226,7 +1418,7 @@ def render_ground_snapshot(
         [
             "",
             "Grounding changed only this named Ground.",
-            "No Context or Memory changes have been applied.",
+            "No Context or Context Memory changes have been applied.",
             "No checkpoint has been created.",
         ]
     )
@@ -1260,7 +1452,7 @@ def render_ground_focus(
     target_selector: str,
     contexts: Iterable[Context],
 ) -> str:
-    """Render one compact, read-only Goal–Rules–Cases target frame."""
+    """Render one compact, read-only Goal–Rules–Memories target frame."""
     if session.schema_version != GROUND_SCHEMA_VERSION:
         raise GroundError(
             "Bind the named Ground before focusing one of its targets."
@@ -1346,7 +1538,7 @@ def render_ground_focus(
     else:
         lines.append(
             f"  Accepted support: {accepted}/"
-            f"{requirement.minimum_accepted_cases} Cases."
+            f"{requirement.minimum_accepted_cases} Ground Memories."
         )
 
     if stale_names:
@@ -1357,7 +1549,7 @@ def render_ground_focus(
                 (
                     "  The bound material changed. Create a fresh named "
                     "Ground or explicitly replace and rebind this one "
-                    "before changing Goal, Rules, or Cases."
+                    "before changing Goal, Rules, or Memories."
                 ),
                 "",
                 "STALE BOUND MATERIAL",
@@ -1379,7 +1571,7 @@ def render_ground_focus(
                 "",
                 "    1  SUPPORTED SLICE",
                 (
-                    "       Ground only Cases supported by the bound "
+                    "       Ground only Memories supported by the bound "
                     "evidence and keep the missing material explicit."
                 ),
                 "",
@@ -1391,7 +1583,7 @@ def render_ground_focus(
                 "",
                 "  > 3  BOTH",
                 (
-                    "       Ground the supported Cases first, then record "
+                    "       Ground the supported Memories first, then record "
                     "the missing target requirements separately."
                 ),
                 "",
@@ -1411,7 +1603,7 @@ def render_ground_focus(
                 "",
                 "    1  GOAL",
                 "    2  RULES",
-                "    3  CASES",
+                "    3  MEMORIES",
             ]
         )
 
@@ -1427,7 +1619,7 @@ def render_ground_focus(
                 f"  RULES {len(rules)} "
                 f"({sum(item.status == 'PROPOSED' for item in rules)} "
                 f"proposed) · "
-                f"CASES {len(cases)} "
+                f"MEMORIES {len(cases)} "
                 f"({sum(item.status == 'PROPOSED' for item in cases)} "
                 f"proposed) · "
                 f"ACCEPTED {accepted_items}"
@@ -1443,7 +1635,7 @@ def render_ground_focus(
                 "runs it."
             ),
             "",
-            "No Context or Memory changes have been applied.",
+            "No Context or Context Memory changes have been applied.",
             "No checkpoint has been created.",
         ]
     )
@@ -1588,28 +1780,31 @@ def cmd(
         Optional[str],
         typer.Option(
             "--propose-rule",
-            help="New Rule; may be proposed before any Case",
+            help="New Rule; may be proposed before any Ground Memory",
         ),
     ] = None,
     fit_rule: Annotated[
         Optional[str],
         typer.Option(
             "--fit-rule",
-            help="Existing Rule uid/prefix for a new Case",
+            help="Existing Rule uid/prefix for a new Ground Memory",
         ),
     ] = None,
     propose_target: Annotated[
         Optional[list[str]],
         typer.Option(
             "--propose-target",
-            help="Target Context for this case; repeatable",
+            help="Target Context for this Ground Memory; repeatable",
         ),
     ] = None,
     expected: Annotated[
         Optional[str],
         typer.Option(
             "--expected",
-            help="Expected target wording or result for a proposed case",
+            help=(
+                "Expected target wording or result for a proposed "
+                "Ground Memory"
+            ),
         ),
     ] = None,
     rationale: Annotated[
@@ -1636,7 +1831,8 @@ def cmd(
             "--rule-provenance",
             help=(
                 "USER_STATED, DISTILLED_FROM_GOAL, "
-                "or INDUCED_FROM_CASES; review creates JOINTLY_REVISED"
+                "or legacy INDUCED_FROM_CASES (displayed as "
+                "INDUCED_FROM_MEMORIES); review creates JOINTLY_REVISED"
             ),
         ),
     ] = None,
@@ -1644,7 +1840,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--decide",
-            help="Proposed rule/case uid or prefix to review",
+            help="Proposed Rule/Ground Memory uid or prefix to review",
         ),
     ] = None,
     action: Annotated[
@@ -1687,7 +1883,7 @@ def cmd(
         typer.Option(
             "--minimum-cases",
             min=1,
-            help="Replacement accepted-case minimum",
+            help="Replacement accepted-Ground-Memory minimum",
         ),
     ] = None,
     blocked_reason: Annotated[
@@ -1810,7 +2006,7 @@ def cmd(
         raise typer.Exit(1)
     if request is not None and seed_conflict_requested:
         typer.secho(
-            "Ground error: --request starts an unsaved dialogue and cannot "
+            "Ground error: --request starts an unsaved chat and cannot "
             "be combined with Ground options.",
             fg=typer.colors.RED,
             err=True,
@@ -2068,7 +2264,7 @@ def cmd(
                         role="PLACEMENT_TARGET",
                         description=(
                             "Establish at least one approved, traceable "
-                            "placement case for this local category."
+                            "placement Ground Memory for this local category."
                         ),
                         blocked_reason=blocked.get(name, ""),
                     )
@@ -2106,8 +2302,8 @@ def cmd(
             contexts = _load_bound_contexts(store, session)
             if session.schema_version != GROUND_SCHEMA_VERSION:
                 raise GroundError(
-                    "Bind the grounding session before proposing rules or "
-                    "cases."
+                    "Bind the grounding session before proposing Rules or "
+                    "Ground Memories."
                 )
             if stale_ground_frames(session, contexts):
                 raise GroundError(
@@ -2116,8 +2312,8 @@ def cmd(
                 )
             if propose_rule is not None and fit_rule is not None:
                 raise GroundError(
-                    "Propose a new rule or fit a case to an existing rule, "
-                    "not both."
+                    "Propose a new Rule or fit a Ground Memory to an existing "
+                    "Rule, not both."
                 )
             case_requested = any(
                 value is not None
@@ -2156,7 +2352,7 @@ def cmd(
                     )
                 ):
                     raise GroundError(
-                        "A case proposal requires --propose-source, "
+                        "A Ground Memory proposal requires --propose-source, "
                         "--propose-target, --rationale, and --expected for "
                         "INCLUDE."
                     )
@@ -2221,7 +2417,7 @@ def cmd(
                     )
                 else:
                     raise GroundError(
-                        "A case proposal requires --fit-rule, or "
+                        "A Ground Memory proposal requires --fit-rule, or "
                         "--propose-rule to create and link a new rule."
                     )
             save_ground(session)
@@ -2362,10 +2558,13 @@ def cmd(
     typer.echo(
         f"Revision {session.revision}: "
         f"{_count_items(session, 'RULE')} rules, "
-        f"{_count_items(session, 'CASE')} cases, "
+        f"{_count_items(session, 'CASE')} Ground Memories, "
         f"{_count_items(session, 'DECISION')} decisions."
     )
     typer.echo(
         f"Inspect it with 'mem ground {session.contract_name} --snapshot'."
     )
-    typer.echo("No Context or Memory changes applied. No checkpoint created.")
+    typer.echo(
+        "No Context or Context Memory changes applied. "
+        "No checkpoint created."
+    )

@@ -544,53 +544,35 @@ and immediately before application, so detected concurrent changes fail
 closed; a writer racing in the remaining check-to-write interval is a known
 prototype limitation.
 
-## Immediate next TODO: generalize through `mem ground`
+## Superseded generalization TODO and retained boundary
 
-Atomize is the first concrete setting because it already supplies stable issue
-identities, source arity, proposed readings, and a bounded selected Context.
-Those details make it possible to test the human grounding pattern before
-claiming a universal interaction abstraction.
+An earlier design expected Atomize and named Ground to become the first two
+adapters of one shared dialogue controller. Implementation showed that this
+would conflate two different artifacts. Named Ground maintains a reviewable
+Goal–Contexts–Rules–Memories–Chat frame and freezes exact commands for
+separate approval. Atomize and Meld instead work through replaceable,
+operation-bounded issue assessments. Ground therefore remains a distinct
+controller rather than an adapter of the shared Resolution Workbench.
 
-Immediately after that slice, extract the reusable dialogue mechanism for
-`mem ground`:
+The reusable pieces are narrower:
 
 ```text
-operation-specific anchor and evidence adapter
-→ shared append-only conversational turn engine
-→ operation-specific judgment and effect adapter
-→ shared correction, confirmation, and permission boundary
-→ operation-specific application adapter
+shared turn-lineage and correction vocabulary where semantically valid
++ shared Resolution Workbench view/action/navigation for Meld and Atomize
++ operation-specific provider, persistence, readiness, and application
 ```
 
-The reusable core should own turn history, active-versus-superseded
-propositions, reviewer attribution, lifecycle transitions, stale-frame checks,
-and the distinction between proposal and permission. The atomize adapter
-should continue to own issue UIDs, source arity, source-local atomicity,
-quality findings, and atomize edit/add validation. A future `mem ground`
-adapter should own its named Goal, Working Rules, Cases, Decisions, and
-regression contract.
+Update uses the same workbench only for read-only planned-change inspection
+until a durable Update resolution artifact exists. Future Reconcile may adopt
+the view/action contract, but not by inheriting Atomize storage or Ground's
+exact-command lifecycle. The current separation remains explicit:
 
-The first `mem ground` generalization will preserve this interaction as one of
-two representative adapters: atomize ambiguity resolution and joint
-construction of a new task or fixture contract. Both are interpreted through
-an editable Goal, Working Rules, and artifact-bound Cases. Atomize-specific
-identities and mutation validation remain in the atomize adapter.
+- an atomize grounding session does not make a named Ground complete;
+- an accepted atomize clarification is not automatically a Ground Memory or
+  Rule;
+- an existing named Ground does not become declared Atomize evidence;
+- no automatic import, export, or bidirectional synchronization exists; and
+- sharing a terminal form never turns a comment into permission to mutate.
 
-This is generalization by extracting a tested interaction invariant, not by
-renaming the atomize session or storing atomize issues in the named-ground
-schema. The two current artifacts remain separate until a migration and
-compatibility contract is designed. In particular:
-
-- an atomize grounding session does not make a named ground `GROUNDED`;
-- an accepted atomize clarification is not automatically a golden case or
-  Working Rule;
-- an existing named ground does not become declared evidence for atomization;
-  and
-- no automatic import, export, or bidirectional synchronization exists.
-
-The purpose of this TODO is the project's top-level interaction objective:
-agent communication should establish and revise common ground in the same
-observable way that people clarify implications, repair misunderstandings,
-ask consequential follow-ups, and request permission before acting. The
-shared engine is successful only if it preserves those epistemic stages, not
-merely if several commands render a similar chat layout.
+The common frontend decision and its dynamic-list rules are recorded in
+[`semantic-resolution-workbench-design-rationale.md`](semantic-resolution-workbench-design-rationale.md).

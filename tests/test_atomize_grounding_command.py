@@ -374,6 +374,7 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
         lambda: provider,
     )
     context_before = store._context_file(ctx.name).read_bytes()
+    context_names_before = store.list_context_names()
     checkpoints_before = len(store.list_checkpoints(ctx.name))
     frame_replacements = {
         analysis.uid[:8]: "<ANALYSIS>",
@@ -412,6 +413,7 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     assert "PROVISIONAL CHANGES" in evaluated.output
     assert "READY TO CHANGE" not in evaluated.output
     assert provider.calls == 1
+    assert store.list_context_names() == context_names_before
     assert store._context_file(ctx.name).read_bytes() == context_before
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before
     opened_grounding = store.load_atomize_grounding_session(ctx.uid)
@@ -430,6 +432,7 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     assert resumed.exit_code == 0, resumed.output
     assert "Resumed without calling the semantic provider." in resumed.output
     assert provider.calls == 1
+    assert store.list_context_names() == context_names_before
     _assert_grounding_screen_capture(
         "02-provider-free-resume.txt",
         resumed.output,
@@ -460,6 +463,7 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
         first_turn.assessment.follow_ups[0].uid,
     )
     assert second_turn.revises_turn_uids == (first_turn.uid,)
+    assert store.list_context_names() == context_names_before
     assert store._context_file(ctx.name).read_bytes() == context_before
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before
     _assert_grounding_screen_capture(
@@ -480,6 +484,7 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     applied = runner.invoke(app, ["atomize", "--accept-grounding"])
     assert applied.exit_code == 0, applied.output
     assert "Applied 2 grounded changes" in applied.output
+    assert store.list_context_names() == context_names_before
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before + 1
     checkpoint_grounding = next(
         checkpoint["args"]["grounding"]
@@ -670,6 +675,8 @@ def test_cli_keep_review_only_creates_no_checkpoint(
         lambda: provider,
     )
     checkpoint_count = len(store.list_checkpoints(ctx.name))
+    context_names_before = store.list_context_names()
+    context_before = store._context_file(ctx.name).read_bytes()
 
     opened = runner.invoke(
         app,
@@ -689,6 +696,8 @@ def test_cli_keep_review_only_creates_no_checkpoint(
     assert "REVIEW-ONLY PROPOSALS — not applied" in kept.output
     assert "PROVISIONAL CHANGES" not in kept.output
     assert "No Memory changes or checkpoint" in kept.output
+    assert store.list_context_names() == context_names_before
+    assert store._context_file(ctx.name).read_bytes() == context_before
     assert len(store.list_checkpoints(ctx.name)) == checkpoint_count
     kept_session = store.load_atomize_grounding_session(ctx.uid)
     assert kept_session is not None

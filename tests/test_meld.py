@@ -14,6 +14,7 @@ from memcommit.atomize_grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
     AtomizeGroundingSession,
+    atomize_grounding_context_digest,
 )
 from memcommit.atomize_meld_adapter import (
     project_atomize_grounding_as_meld,
@@ -32,7 +33,7 @@ from memcommit.comparison_store import (
     load_comparison_analysis,
     save_comparison_analysis,
 )
-from memcommit.context import Context, MemoryRef
+from memcommit.context import Context, Memory, MemoryRef
 from memcommit.commands.meld import render_meld_session
 from memcommit.commands.meld_shell import (
     _line,
@@ -44,7 +45,11 @@ from memcommit.meld import (
     MeldSession,
     meld_canonical_digest,
 )
-from memcommit.meld_provider import MELD_PAYLOAD_MARKER, assess_meld_turn
+from memcommit.meld_provider import (
+    MELD_PAYLOAD_MARKER,
+    assess_meld_turn,
+    meld_output_schema,
+)
 from memcommit.provenance import build_trace
 from memcommit.store import (
     ConcurrentContextUpdateError,
@@ -273,8 +278,8 @@ class Task2CompareProvider:
                             {
                                 "label": "Preserve scoped alternatives",
                                 "text": (
-                                    "Keep the in-person and online "
-                                    "policies as separately scoped rules."
+                                    "Keep the in-person and online policies "
+                                    "as separately scoped rules."
                                 ),
                             },
                         ],
@@ -339,6 +344,193 @@ def _patch_provider(monkeypatch, provider):
     )
 
 
+class DirectionalProvider:
+    """One ready directional plan containing an in-place edit and an add."""
+
+    def __init__(self):
+        self.payloads: list[dict] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "meld_contexts"
+        result_schema = output_schema["properties"]["results"]["items"]
+        assert {"operation", "target_memory_ids"} <= set(
+            result_schema["required"]
+        )
+        payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+        self.payloads.append(payload)
+        assert payload["mode"] == "DIRECTIONAL"
+        assert [frame["role"] for frame in payload["frames"]] == [
+            "INCOMING",
+            "BASELINE",
+        ]
+        assert payload["target"] == {
+            "context_name": "test/update/to",
+            "must_remain_empty_until_acceptance": False,
+            "must_remain_unchanged_until_acceptance": True,
+        }
+        incoming = payload["frames"][0]["memories"]
+        baseline = payload["frames"][1]["memories"]
+        incoming_edit = incoming[0]["memory_id"]
+        incoming_add = incoming[1]["memory_id"]
+        baseline_edit = baseline[0]["memory_id"]
+        baseline_untouched = baseline[1]["memory_id"]
+        return json.dumps(
+            {
+                "overview": (
+                    "The incoming parking correction replaces one baseline "
+                    "claim, one ATM direction is added, and the unrelated "
+                    "store policy remains unchanged."
+                ),
+                "relations": [
+                    {
+                        "relation_key": "parking",
+                        "left_memory_ids": [incoming_edit],
+                        "right_memory_ids": [baseline_edit],
+                        "kind": "CONFLICT",
+                        "status": "RESOLVED",
+                        "summary": "The parking access claims conflict.",
+                        "reason": (
+                            "Incoming evidence limits closure to the vehicle "
+                            "entrance and exit."
+                        ),
+                    },
+                    {
+                        "relation_key": "atm",
+                        "left_memory_ids": [incoming_add],
+                        "right_memory_ids": [],
+                        "kind": "DISTINCT",
+                        "status": "RESOLVED",
+                        "summary": "The incoming ATM direction is novel.",
+                        "reason": "No baseline Memory contains this direction.",
+                    },
+                    {
+                        "relation_key": "store",
+                        "left_memory_ids": [],
+                        "right_memory_ids": [baseline_untouched],
+                        "kind": "DISTINCT",
+                        "status": "RESOLVED",
+                        "summary": "The store policy is baseline-only.",
+                        "reason": "Incoming evidence does not affect it.",
+                    },
+                ],
+                "issues": [],
+                "results": [
+                    {
+                        "result_key": "parking_edit",
+                        "operation": "EDIT",
+                        "target_memory_ids": [baseline_edit],
+                        "disposition": "SYNTHESIZE",
+                        "content": (
+                            "The underground-parking stairwell remains open; "
+                            "only the vehicle entrance and exit are closed."
+                        ),
+                        "reason": (
+                            "The incoming correction narrows the closure while "
+                            "retaining the baseline subject."
+                        ),
+                        "relation_keys": ["parking"],
+                        "source_memory_ids": [
+                            incoming_edit,
+                            baseline_edit,
+                        ],
+                        "grounded_turn_ids": [],
+                    },
+                    {
+                        "result_key": "atm_add",
+                        "operation": "ADD",
+                        "target_memory_ids": [],
+                        "disposition": "PRESERVE",
+                        "content": (
+                            "Students needing an ATM should use the nearby "
+                            "Bank Annex ATM."
+                        ),
+                        "reason": "The incoming Context supplies a novel route.",
+                        "relation_keys": ["atm"],
+                        "source_memory_ids": [incoming_add],
+                        "grounded_turn_ids": [],
+                    },
+                ],
+                "ready_to_apply": True,
+            }
+        )
+
+
+class ZeroChangeDirectionalProvider:
+    """A fully equivalent directional meld with no material operations."""
+
+    def __init__(self):
+        self.payloads: list[dict] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "meld_contexts"
+        payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+        self.payloads.append(payload)
+        incoming = payload["frames"][0]["memories"][0]["memory_id"]
+        baseline = payload["frames"][1]["memories"][0]["memory_id"]
+        return json.dumps(
+            {
+                "overview": (
+                    "The incoming Memory is already represented exactly by "
+                    "the baseline, so no material baseline change is needed."
+                ),
+                "relations": [
+                    {
+                        "relation_key": "same",
+                        "left_memory_ids": [incoming],
+                        "right_memory_ids": [baseline],
+                        "kind": "EQUIVALENT",
+                        "status": "RESOLVED",
+                        "summary": "The two Memories express the same policy.",
+                        "reason": "Their operational content is identical.",
+                    }
+                ],
+                "issues": [],
+                "results": [],
+                "ready_to_apply": True,
+            }
+        )
+
+
+def _directional_contexts(store: MemoryStore):
+    incoming = ops.init("test/update/from")
+    ops.add(
+        incoming,
+        (
+            "The parking stairwell remains open; only the vehicle entrance "
+            "and exit are closed."
+        ),
+    )
+    ops.add(
+        incoming,
+        "Students needing an ATM should use the nearby Bank Annex ATM.",
+    )
+    baseline = ops.init("test/update/to")
+    edited = ops.add(
+        baseline,
+        "The underground-parking stairwell is closed.",
+    )
+    untouched = ops.add(
+        baseline,
+        "The Campus Store remains open during construction.",
+    )
+    store.save(incoming)
+    store.save(baseline)
+    store.set_current(incoming.name)
+    return incoming, baseline, edited, untouched
+
+
+def _zero_change_directional_contexts(store: MemoryStore):
+    content = "The Campus Store remains open during construction."
+    incoming = ops.init("test/same/from")
+    ops.add(incoming, content)
+    baseline = ops.init("test/same/to")
+    memory = ops.add(baseline, content)
+    store.save(incoming)
+    store.save(baseline)
+    store.set_current(incoming.name)
+    return incoming, baseline, memory
+
+
 def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     isolated_store,
     monkeypatch,
@@ -380,6 +572,15 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     ] == [relation.uid for relation in comparison.relations]
     assert [issue.uid for issue in session.current_assessment.issues] == [
         issue.uid for issue in comparison.issues
+    ]
+    assert [
+        option.uid
+        for issue in session.current_assessment.issues
+        for option in issue.options
+    ] == [
+        option.uid
+        for issue in comparison.issues
+        for option in issue.options
     ]
 
     resumed = runner.invoke(app, ["meld", left.name, right.name])
@@ -478,7 +679,10 @@ def test_symmetric_meld_requires_saved_compare_before_provider_connection(
     result = runner.invoke(app, ["meld", left.name, right.name])
 
     assert result.exit_code == 1
-    assert "requires a saved Compare analysis" in result.output
+    assert (
+        "requires a saved Compare analysis"
+        in result.output
+    )
     assert f"mem switch {left.name}" in result.output
     assert f"mem compare --to {right.name}" in result.output
     assert f"mem switch {target.name}" in result.output
@@ -565,6 +769,311 @@ def test_seeded_meld_schema_round_trips_and_rejects_tampering(
         MeldSession.from_dict(bad_import)
 
 
+def test_directional_meld_uses_current_incoming_and_relative_baseline(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, _, _ = _directional_contexts(store)
+    provider = DirectionalProvider()
+    _patch_provider(monkeypatch, provider)
+    incoming_before = store._context_file(incoming.name).read_bytes()
+    baseline_before = store._context_file(baseline.name).read_bytes()
+
+    result = runner.invoke(app, ["meld", "--into", "../to"])
+
+    assert result.exit_code == 0, result.output
+    assert "MEM MELD · DIRECTIONAL" in result.output
+    assert (
+        "INCOMING test/update/from → "
+        "BASELINE / TARGET test/update/to"
+    ) in result.output
+    assert "State: READY_TO_APPLY" in result.output
+    assert len(provider.payloads) == 1
+    assert [
+        frame["context_name"]
+        for frame in provider.payloads[0]["frames"]
+    ] == [incoming.name, baseline.name]
+    assert store._context_file(incoming.name).read_bytes() == incoming_before
+    assert store._context_file(baseline.name).read_bytes() == baseline_before
+    assert store.list_checkpoints(baseline.name) == []
+    session = store.load_meld_session(baseline.uid)
+    assert session is not None
+    assert session.mode == "DIRECTIONAL"
+    assert [frame.role for frame in session.frames] == [
+        "INCOMING",
+        "BASELINE",
+    ]
+
+
+def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, edited, untouched = _directional_contexts(store)
+    provider = DirectionalProvider()
+    _patch_provider(monkeypatch, provider)
+    incoming_before = store._context_file(incoming.name).read_bytes()
+
+    initial = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name],
+    )
+    assert initial.exit_code == 0, initial.output
+    assert "~  1. [EDIT · SYNTHESIZE]" in initial.output
+    assert "+  2. [ADD · PRESERVE]" in initial.output
+    assert store.list_checkpoints(baseline.name) == []
+
+    applied = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name, "--accept"],
+    )
+
+    assert applied.exit_code == 0, applied.output
+    assert "Applied 2 meld changes" in applied.output
+    current = store.load_direct(baseline.name)
+    memories = tuple(current.iter_items())
+    assert [memory.uid for memory in memories[:2]] == [
+        edited.uid,
+        untouched.uid,
+    ]
+    assert [memory.content for memory in memories] == [
+        (
+            "The underground-parking stairwell remains open; only the "
+            "vehicle entrance and exit are closed."
+        ),
+        "The Campus Store remains open during construction.",
+        "Students needing an ATM should use the nearby Bank Annex ATM.",
+    ]
+    assert store._context_file(incoming.name).read_bytes() == incoming_before
+    checkpoints = store.list_checkpoints(baseline.name)
+    assert len(checkpoints) == 1
+    record = checkpoints[0]["args"]["meld"]
+    assert record["schema_version"] == 2
+    assert record["mode"] == "DIRECTIONAL"
+    assert [source["role"] for source in record["sources"]] == [
+        "INCOMING",
+        "BASELINE",
+    ]
+    assert [result["operation"] for result in record["results"]] == [
+        "EDIT",
+        "ADD",
+    ]
+
+    repeated = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name, "--accept"],
+    )
+
+    assert repeated.exit_code == 0, repeated.output
+    assert "no duplicate checkpoint" in repeated.output
+    assert len(store.list_checkpoints(baseline.name)) == 1
+    assert len(provider.payloads) == 1
+
+
+def test_directional_accept_recovers_after_receipt_save_failure(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, _, _ = _directional_contexts(store)
+    provider = DirectionalProvider()
+    _patch_provider(monkeypatch, provider)
+    initial = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name],
+    )
+    assert initial.exit_code == 0, initial.output
+    original = MemoryStore.save_meld_session
+    fail_once = {"value": True}
+
+    def fail_receipt_once(self, session, **kwargs):
+        if session.state == "APPLIED" and fail_once["value"]:
+            fail_once["value"] = False
+            raise OSError("injected directional receipt write failure")
+        return original(self, session, **kwargs)
+
+    monkeypatch.setattr(
+        MemoryStore,
+        "save_meld_session",
+        fail_receipt_once,
+    )
+    interrupted = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name, "--accept"],
+    )
+
+    assert interrupted.exit_code == 1
+    assert "injected directional receipt write failure" in interrupted.output
+    assert len(store.list_checkpoints(baseline.name)) == 1
+    persisted = store.load_meld_session(baseline.uid)
+    assert persisted is not None
+    assert persisted.state == "READY_TO_APPLY"
+
+    recovered = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name, "--accept"],
+    )
+
+    assert recovered.exit_code == 0, recovered.output
+    assert "Recovered the prior meld application" in recovered.output
+    assert len(store.list_checkpoints(baseline.name)) == 1
+    assert store.load_meld_session(baseline.uid).state == "APPLIED"
+    assert len(provider.payloads) == 1
+
+
+def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, baseline_memory = (
+        _zero_change_directional_contexts(store)
+    )
+    provider = ZeroChangeDirectionalProvider()
+    _patch_provider(monkeypatch, provider)
+    incoming_before = store._context_file(incoming.name).read_bytes()
+    baseline_before = store._context_file(baseline.name).read_bytes()
+
+    initial = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name],
+    )
+    assert initial.exit_code == 0, initial.output
+    assert "State: READY_TO_APPLY" in initial.output
+    assert "no material baseline changes" in initial.output
+
+    applied = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name, "--accept"],
+    )
+
+    assert applied.exit_code == 0, applied.output
+    assert "Applied 0 meld changes" in applied.output
+    current = store.load_direct(baseline.name)
+    assert [
+        (memory.uid, memory.content)
+        for memory in current.iter_items()
+    ] == [
+        (
+            baseline_memory.uid,
+            "The Campus Store remains open during construction.",
+        )
+    ]
+    assert store._context_file(incoming.name).read_bytes() == incoming_before
+    assert store._context_file(baseline.name).read_bytes() == baseline_before
+    checkpoints = store.list_checkpoints(baseline.name)
+    assert len(checkpoints) == 1
+    assert checkpoints[0]["args"]["meld"]["results"] == []
+    session = store.load_meld_session(baseline.uid)
+    assert session is not None
+    assert session.state == "APPLIED"
+    assert session.application.result_memory_uids == ()
+
+    repeated = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name, "--accept"],
+    )
+    assert repeated.exit_code == 0, repeated.output
+    assert "no duplicate checkpoint" in repeated.output
+    assert len(store.list_checkpoints(baseline.name)) == 1
+    assert len(provider.payloads) == 1
+
+
+def test_zero_change_directional_meld_recovers_checkpoint_after_receipt_failure(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, _ = _zero_change_directional_contexts(store)
+    provider = ZeroChangeDirectionalProvider()
+    _patch_provider(monkeypatch, provider)
+    assert runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name],
+    ).exit_code == 0
+    original = MemoryStore.save_meld_session
+    fail_once = {"value": True}
+
+    def fail_receipt_once(self, session, **kwargs):
+        if session.state == "APPLIED" and fail_once["value"]:
+            fail_once["value"] = False
+            raise OSError("injected zero-change receipt write failure")
+        return original(self, session, **kwargs)
+
+    monkeypatch.setattr(
+        MemoryStore,
+        "save_meld_session",
+        fail_receipt_once,
+    )
+    interrupted = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name, "--accept"],
+    )
+    assert interrupted.exit_code == 1
+    assert len(store.list_checkpoints(baseline.name)) == 1
+
+    recovered = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name, "--accept"],
+    )
+
+    assert recovered.exit_code == 0, recovered.output
+    assert "Recovered the prior meld application" in recovered.output
+    assert len(store.list_checkpoints(baseline.name)) == 1
+    assert store.load_meld_session(baseline.uid).state == "APPLIED"
+    assert len(provider.payloads) == 1
+
+
+def test_directional_meld_grammar_help_and_to_boundary(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, _, _ = _directional_contexts(store)
+
+    class UnexpectedProvider:
+        def complete(self, *args, **kwargs):
+            raise AssertionError("Invalid meld grammar called the provider.")
+
+    _patch_provider(monkeypatch, UnexpectedProvider())
+
+    help_result = runner.invoke(app, ["meld", "--help"])
+    assert help_result.exit_code == 0, help_result.output
+    assert "--into" in help_result.output
+    assert "authoritative BASELINE" in help_result.output
+    assert "--to" not in help_result.output
+
+    unsupported_to = runner.invoke(
+        app,
+        ["meld", "--to", baseline.name],
+    )
+    assert unsupported_to.exit_code == 2
+    assert "No such option" in unsupported_to.output
+    assert "--to" in unsupported_to.output
+
+    too_many = runner.invoke(
+        app,
+        ["meld", incoming.name, baseline.name, "--into", baseline.name],
+    )
+    assert too_many.exit_code == 1
+    assert "accepts at most one positional INCOMING" in too_many.output
+
+    missing_peer = runner.invoke(app, ["meld", incoming.name])
+    assert missing_peer.exit_code == 1
+    assert "requires LEFT and RIGHT Contexts" in missing_peer.output
+
+    same_context = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", incoming.name],
+    )
+    assert same_context.exit_code == 1
+    assert "distinct" in same_context.output
+    assert "INCOMING" in same_context.output
+    assert "BASELINE" in same_context.output
+
+
 def test_defer_all_is_provider_free_and_does_not_mutate_target(
     isolated_store,
     monkeypatch,
@@ -612,7 +1121,10 @@ def test_deferred_session_restart_requires_exact_ordered_compare_basis(
         ["meld", right.name, left.name, "--restart"],
     )
     assert failed.exit_code == 1
-    assert "requires a saved Compare analysis" in failed.output
+    assert (
+        "requires a saved Compare analysis"
+        in failed.output
+    )
     still_deferred = store.load_meld_session(target.uid)
     assert still_deferred is not None
     assert still_deferred.uid == deferred.uid
@@ -1174,6 +1686,174 @@ def test_provider_rejects_incomplete_primary_source_coverage():
         assess_meld_turn(session, Incomplete())
 
 
+@pytest.mark.parametrize("mode", ["SYMMETRIC", "DIRECTIONAL"])
+def test_meld_output_schema_uses_the_codex_supported_subset(mode):
+    schema = meld_output_schema(4, mode=mode)
+    allowed_keywords = {
+        "type",
+        "properties",
+        "required",
+        "additionalProperties",
+        "items",
+        "enum",
+        "description",
+        "minLength",
+        "maxLength",
+        "minItems",
+        "maxItems",
+    }
+
+    def assert_supported(node):
+        assert set(node) <= allowed_keywords
+        properties = node.get("properties", {})
+        assert isinstance(properties, dict)
+        for child in properties.values():
+            assert_supported(child)
+        items = node.get("items")
+        if items is not None:
+            assert_supported(items)
+
+    assert_supported(schema)
+
+
+def test_provider_parser_rejects_duplicate_aliases_without_unique_items():
+    left = ops.init("left/duplicate-alias")
+    ops.add(left, "Left policy.")
+    right = ops.init("right/duplicate-alias")
+    ops.add(right, "Right policy.")
+    target = ops.init("target/duplicate-alias")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+
+    class DuplicateAlias(Task2Provider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            value = json.loads(
+                super().complete(
+                    prompt,
+                    operation=operation,
+                    output_schema=output_schema,
+                )
+            )
+            left_ids = value["relations"][0]["left_memory_ids"]
+            left_ids.append(left_ids[0])
+            return json.dumps(value)
+
+    with pytest.raises(MeldError, match="duplicate left Memory ids"):
+        assess_meld_turn(session, DuplicateAlias())
+
+
+def test_directional_edit_target_field_supplies_baseline_provenance():
+    incoming = ops.init("incoming/target-field")
+    incoming_memory = ops.add(
+        incoming,
+        "Only the vehicle entrance is closed.",
+    )
+    baseline = ops.init("baseline/target-field")
+    baseline_memory = ops.add(
+        baseline,
+        "The parking area is fully closed.",
+    )
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+
+    class TargetFieldOnly:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            incoming_id = payload["frames"][0]["memories"][0]["memory_id"]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": (
+                        "The incoming rule narrows one baseline closure."
+                    ),
+                    "relations": [
+                        {
+                            "relation_key": "parking",
+                            "left_memory_ids": [incoming_id],
+                            "right_memory_ids": [baseline_id],
+                            "kind": "CONFLICT",
+                            "status": "RESOLVED",
+                            "summary": "The closure scopes differ.",
+                            "reason": "Incoming evidence is more specific.",
+                        }
+                    ],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": "parking_edit",
+                            "operation": "EDIT",
+                            "target_memory_ids": [baseline_id],
+                            "disposition": "SYNTHESIZE",
+                            "content": "Only the vehicle entrance is closed.",
+                            "reason": "Applies the supported narrower scope.",
+                            "relation_keys": ["parking"],
+                            # The target has its own dedicated citation field.
+                            "source_memory_ids": [incoming_id],
+                            "grounded_turn_ids": [],
+                        }
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    assessment = assess_meld_turn(session, TargetFieldOnly())
+
+    proposal = assessment.proposals[0]
+    assert proposal.memory_uid == baseline_memory.uid
+    assert {
+        member.memory_uid for member in proposal.source_members
+    } == {incoming_memory.uid, baseline_memory.uid}
+
+
+def test_directional_edit_target_must_belong_to_baseline():
+    incoming = ops.init("incoming/invalid-edit-target")
+    ops.add(incoming, "Incoming policy.")
+    baseline = ops.init("baseline/invalid-edit-target")
+    ops.add(baseline, "Baseline policy.")
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+
+    class IncomingTarget:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            incoming_id = payload["frames"][0]["memories"][0]["memory_id"]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "The response targets the wrong frame.",
+                    "relations": [
+                        {
+                            "relation_key": "policy",
+                            "left_memory_ids": [incoming_id],
+                            "right_memory_ids": [baseline_id],
+                            "kind": "CONFLICT",
+                            "status": "RESOLVED",
+                            "summary": "The policies differ.",
+                            "reason": "Their instructions are incompatible.",
+                        }
+                    ],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": "invalid_edit",
+                            "operation": "EDIT",
+                            "target_memory_ids": [incoming_id],
+                            "disposition": "SYNTHESIZE",
+                            "content": "Invalid replacement.",
+                            "reason": "This target is not authoritative.",
+                            "relation_keys": ["policy"],
+                            "source_memory_ids": [incoming_id],
+                            "grounded_turn_ids": [],
+                        }
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    with pytest.raises(MeldError, match="outside the BASELINE"):
+        assess_meld_turn(session, IncomingTarget())
+
+
 def test_provider_parser_enforces_option_limit_without_schema_help():
     left = ops.init("left/options")
     ops.add(left, "Left policy.")
@@ -1277,11 +1957,13 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     right = ops.init("right/shell")
     ops.add(right, "Use e-transfer or a gift card.")
     target = ops.init("target/shell")
-    session = MeldSession.create_symmetric(left, right, target)
-    session.start_initial_analysis()
-    session.record_assessment(
-        session.current_turn.uid,
-        assess_meld_turn(session, Task2Provider()),
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(
+        comparison,
+        target,
     )
 
     with create_pipe_input() as pipe_input:
@@ -1300,6 +1982,7 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     assert action.choice_index == 0
     assert action.comment == "Keep all supported details."
     assert action.issue_uid == session.current_assessment.issues[0].uid
+    assert action.issue_uid == comparison.issues[0].uid
 
 
 def test_meld_framed_composer_matches_ground_send_and_newline_contract():
@@ -1332,6 +2015,124 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
     assert action.comment == (
         "Keep the rate.\nKeep every payment method."
     )
+
+
+def test_meld_escape_collapses_detail_before_leaving_the_workbench():
+    left = ops.init("left/escape-detail")
+    ops.add(left, "Cash compensation includes travel time.")
+    right = ops.init("right/escape-detail")
+    ops.add(right, "Use e-transfer or a gift card.")
+    target = ops.init("target/escape-detail")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, Task2Provider()),
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Enter opens detail. Escape consumes only that presentation layer, so
+        # the following comment can still be submitted from the same shell.
+        # The extra Enter is a non-Alt sequence now: it reopens the detail
+        # after Escape collapsed it, proving the application did not close.
+        pipe_input.send_text("\r\x1b\r\tStill reviewing.\x13")
+        action = run_meld_shell(
+            session,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action is not None
+    assert action.kind == "COMMENT_ISSUE"
+    assert action.choice_index is None
+    assert action.comment == "Still reviewing."
+
+
+def test_meld_escape_from_overview_closes_without_changing_session():
+    left = ops.init("left/escape-overview")
+    ops.add(left, "Cash compensation includes travel time.")
+    right = ops.init("right/escape-overview")
+    ops.add(right, "Use e-transfer or a gift card.")
+    target = ops.init("target/escape-overview")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, Task2Provider()),
+    )
+    before = session.to_dict()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        action = run_meld_shell(
+            session,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action is None
+    assert session.to_dict() == before
+
+
+def test_meld_escape_never_implicitly_accepts_a_ready_session():
+    incoming = ops.init("incoming/escape-ready")
+    ops.add(incoming, "The Campus Store remains open during construction.")
+    baseline = ops.init("baseline/escape-ready")
+    ops.add(baseline, "The Campus Store remains open during construction.")
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, ZeroChangeDirectionalProvider()),
+    )
+    assert session.state == "READY_TO_APPLY"
+    before = session.to_dict()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        action = run_meld_shell(
+            session,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action is None
+    assert session.to_dict() == before
+    assert session.state == "READY_TO_APPLY"
+
+
+@pytest.mark.parametrize(
+    "prefix",
+    ["\tUnsent issue comment", "gUnsent whole-set comment"],
+)
+def test_meld_escape_from_composer_discards_unsent_text(prefix):
+    left = ops.init("left/escape-composer")
+    ops.add(left, "Cash compensation includes travel time.")
+    right = ops.init("right/escape-composer")
+    ops.add(right, "Use e-transfer or a gift card.")
+    target = ops.init("target/escape-composer")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, Task2Provider()),
+    )
+    before = session.to_dict()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(prefix + "\x1b")
+        action = run_meld_shell(
+            session,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action is None
+    assert session.to_dict() == before
 
 
 def test_meld_screen_sanitizes_option_labels_and_truncates_by_cell_width():
@@ -1412,10 +2213,24 @@ def test_expanded_meld_issue_shows_exact_sources_and_relation_reason():
 
 def test_atomize_disambiguation_projects_as_directional_issue_meld():
     digest = "0" * 64
+    ctx = Context(
+        uid="11111111-1111-4111-8111-111111111111",
+        name="task/access",
+    )
+    source = Memory(
+        uid="44444444-4444-4444-8444-444444444444",
+        content="Students should use a physical card or the app.",
+    )
+    related = Memory(
+        uid="55555555-5555-4555-8555-555555555555",
+        content="The staff entrance uses the same NFC.",
+    )
+    ctx.add(source)
+    ctx.add(related)
     bindings = AtomizeGroundingBindings(
-        context_uid="11111111-1111-4111-8111-111111111111",
-        context_name="task/access",
-        context_digest=digest,
+        context_uid=ctx.uid,
+        context_name=ctx.name,
+        context_digest=atomize_grounding_context_digest(ctx),
         analysis_uid="22222222-2222-4222-8222-222222222222",
         analysis_digest=digest,
         workbench_uid="33333333-3333-4333-8333-333333333333",
@@ -1433,15 +2248,149 @@ def test_atomize_disambiguation_projects_as_directional_issue_meld():
         bindings=bindings,
         anchor=anchor,
     )
+    context_before = ctx.to_dict()
     before = session.to_dict()
     session.start_turn("The entrance accepts only the physical NFC card.")
-    view = project_atomize_grounding_as_meld(session)
+    view = project_atomize_grounding_as_meld(session, ctx)
+    repeated = project_atomize_grounding_as_meld(session, ctx)
 
     assert view.authority_mode == "DIRECTIONAL"
     assert view.scope == "ISSUE"
-    assert view.input_roles == ("CLARIFICATION", "BASELINE")
+    assert view.input_roles == ("INCOMING", "BASELINE")
+    incoming, baseline = view.frames
+    assert incoming.role == "INCOMING"
+    assert incoming.kind == "ISSUE_CONTEXT"
+    assert incoming.persistence == "EPHEMERAL"
+    assert incoming.source_context_uid is None
+    assert incoming.source_context_name is None
+    assert incoming.source_context_digest is None
+    assert [memory.uid for memory in incoming.memories] == [source.uid]
+    assert incoming.memories[0].content == source.content
+    assert incoming.memories[0].frame_position == 0
+    assert incoming.memories[0].source_position == 0
+    assert baseline.role == "BASELINE"
+    assert baseline.kind == "CONTAINING_CONTEXT"
+    assert baseline.persistence == "BOUND"
+    assert baseline.source_context_uid == ctx.uid
+    assert baseline.source_context_name == ctx.name
+    assert baseline.source_context_digest == bindings.context_digest
+    assert [memory.uid for memory in baseline.memories] == [
+        source.uid,
+        related.uid,
+    ]
+    assert repeated.frames == view.frames
     assert view.turns[0].revision == "INITIAL"
     assert view.anchor_source_uids == anchor.source_uids
-    # The adapter is lossless metadata over the existing strict schema.
+    # The temporary Context is only a projection: neither source artifact is
+    # mutated or given a serialized meld field.
+    assert ctx.to_dict() == context_before
     assert set(session.to_dict()) == set(before)
     assert "meld" not in session.to_dict()
+
+
+def test_atomize_pair_issue_preserves_two_memories_in_one_ephemeral_frame():
+    digest = "0" * 64
+    ctx = Context(
+        uid="11111111-1111-4111-8111-111111111111",
+        name="task/access",
+    )
+    first = Memory(
+        uid="44444444-4444-4444-8444-444444444444",
+        content="The staff entrance uses the same NFC.",
+    )
+    second = Memory(
+        uid="55555555-5555-4555-8555-555555555555",
+        content="Only a physical NFC card works at the main entrance.",
+    )
+    ctx.add(first)
+    ctx.add(second)
+    session = AtomizeGroundingSession.create(
+        bindings=AtomizeGroundingBindings(
+            context_uid=ctx.uid,
+            context_name=ctx.name,
+            context_digest=atomize_grounding_context_digest(ctx),
+            analysis_uid="22222222-2222-4222-8222-222222222222",
+            analysis_digest=digest,
+            workbench_uid="33333333-3333-4333-8333-333333333333",
+            workbench_digest=digest,
+            response_digest=digest,
+        ),
+        anchor=AtomizeGroundingAnchor(
+            issue_uid="conflict:nfc",
+            kind="CONFLICT",
+            arity="PAIR",
+            source_uids=(first.uid, second.uid),
+            issue_digest=digest,
+        ),
+    )
+
+    view = project_atomize_grounding_as_meld(session, ctx)
+
+    incoming = view.frames[0]
+    assert incoming.persistence == "EPHEMERAL"
+    assert [memory.uid for memory in incoming.memories] == [
+        first.uid,
+        second.uid,
+    ]
+    assert [memory.frame_position for memory in incoming.memories] == [0, 1]
+
+
+def test_atomize_ephemeral_frame_preserves_slots_without_opening_references():
+    digest = "0" * 64
+    ctx = Context(
+        uid="11111111-1111-4111-8111-111111111111",
+        name="task/access",
+    )
+    first = Memory(
+        uid="44444444-4444-4444-8444-444444444444",
+        content="The main entrance closes at 5 p.m.",
+    )
+    secret = Memory(
+        uid="66666666-6666-4666-8666-666666666666",
+        content="Query-only or referenced content must not enter the frame.",
+    )
+    reference = MemoryRef(
+        uid="77777777-7777-4777-8777-777777777777",
+        target_context_uid="88888888-8888-4888-8888-888888888888",
+        target_context_name="campus/private",
+        target_memory_uid=secret.uid,
+        target=secret,
+    )
+    second = Memory(
+        uid="55555555-5555-4555-8555-555555555555",
+        content="The rear entrance is closed.",
+    )
+    ctx.add(first)
+    ctx.add(reference)
+    ctx.add(second)
+    session = AtomizeGroundingSession.create(
+        bindings=AtomizeGroundingBindings(
+            context_uid=ctx.uid,
+            context_name=ctx.name,
+            context_digest=atomize_grounding_context_digest(ctx),
+            analysis_uid="22222222-2222-4222-8222-222222222222",
+            analysis_digest=digest,
+            workbench_uid="33333333-3333-4333-8333-333333333333",
+            workbench_digest=digest,
+            response_digest=digest,
+        ),
+        anchor=AtomizeGroundingAnchor(
+            issue_uid="ambiguity:rear",
+            kind="AMBIGUITY",
+            arity="UNARY",
+            source_uids=(second.uid,),
+            issue_digest=digest,
+        ),
+    )
+
+    view = project_atomize_grounding_as_meld(session, ctx)
+
+    incoming, baseline = view.frames
+    assert incoming.memories[0].source_position == 2
+    assert [memory.frame_position for memory in baseline.memories] == [0, 1]
+    assert [memory.source_position for memory in baseline.memories] == [0, 2]
+    assert secret.content not in {
+        memory.content
+        for frame in view.frames
+        for memory in frame.memories
+    }

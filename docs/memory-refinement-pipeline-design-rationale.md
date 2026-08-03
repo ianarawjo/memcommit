@@ -452,8 +452,15 @@ changing those identities.
 
 ## Category placement
 
-The working operation name is `place`. It assigns a normalized Memory to its
-organizational Context. The Task 1 destination categories are:
+The semantic stage name is `place`. It assigns a normalized Memory to its
+organizational Context. Later Task 1 fixture work introduced `sort` as a
+possible user-facing name for bulk initial classification: `mem impact sort`
+would preview the complete partition, while a separately confirmed
+`mem sort` would apply structural moves. This vocabulary is not implemented
+yet. Help must say “classify and place” if `sort` is adopted, because ordinary
+CLI users may otherwise expect lexical ordering.
+
+The Task 1 destination categories are:
 
 ```text
 construction-updates/building-access
@@ -469,6 +476,12 @@ likely be required beneath the semantic placement operation. Moving should
 preserve the Memory UID, provenance, and relative order where possible. If one
 Memory legitimately belongs in several categories, prefer one owning Context
 plus `memory_ref` values over copied Memories that can drift apart.
+
+The preview must account for every input exactly once through one destination
+or an explicit hold disposition. It should also judge each proposed placement
+against the active Goal and applicable Rules rather than treating plausible
+category names as sufficient evidence. Whole-Context counts cannot reveal one
+misplaced, protected, or irrelevant Memory.
 
 ## Proposed operation contracts
 
@@ -487,7 +500,7 @@ important than final CLI spelling.
 | 6 | `mem audience` | applicability, recipient, purpose, and disclosure assignments | preview first; storage representation must be explicit |
 | 7 | `mem normalize` | named rule violations and full replacement proposals | confirmed batch applies as one checkpoint |
 | 8 | `mem find-duplicates` verification | post-normalization mechanical and semantic reclassification | read-only; any removal requires a new `dedup` plan |
-| 9 | `mem place` | destination Context plan and multi-category references | staged plan in v1; apply requires a recoverable multi-Context boundary |
+| 9 | semantic `place`; proposed `mem impact sort` / `mem sort` surface | exhaustive destination-or-hold plan, Goal/Rule fit, and multi-category references | read-only preview first; staged apply requires a recoverable multi-Context boundary |
 
 ### `atomize`
 
@@ -554,12 +567,14 @@ important than final CLI spelling.
   direct-Memory frame, and resume fails when that frame is stale.
 - Source order means canonical `Context.order` for the user-study prototype;
   true Memory creation time is unavailable and remains a schema TODO.
-- The ambiguity controller establishes a visual shell intended for later
-  reuse; it is not yet a code-generic adapter framework, a pipeline stage, or
-  a hidden reconciliation operation. Conflict and update adapters are future
-  work; `reconcile`, `distill`, and `sever` remain future or design-only
-  contracts. Symmetric `mem meld` is now implemented as a separate bounded
-  Context workbench, while public Context-directional meld remains future.
+- The ambiguity and Atomize controllers established the list/detail/response
+  grammar now extracted as the operation-neutral `ResolutionWorkbench` view,
+  UID action, and navigation layer. Meld uses its dynamic interactive adapter;
+  Update exposes exact planned changes read-only. This is not a shared
+  provider, persistence, or mutation engine, and Update semantic issue turns
+  remain future work. `reconcile`, `distill`, and `sever` remain future or
+  design-only contracts. Symmetric and public Context-directional `mem meld`
+  are implemented through the bounded Context workbench.
 
 The focused rationale is
 [`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md).

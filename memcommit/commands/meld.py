@@ -1,4 +1,4 @@
-"""Create, ground, resume, and explicitly apply a symmetric Context meld."""
+"""Create, ground, resume, and explicitly apply bounded Context melds."""
 from __future__ import annotations
 
 import hashlib
@@ -14,6 +14,7 @@ from memcommit.comparison import (
 )
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.context_locator import resolve_context_locator
 from memcommit.meld import (
     MeldError,
     MeldIssue,
@@ -113,6 +114,46 @@ def _load_symmetric_comparison(
     return analysis
 
 
+def _session_command(session: MeldSession) -> str:
+    """Return one explicit, portable command prefix for this saved meld."""
+    if session.mode == "DIRECTIONAL":
+        return (
+            f"mem meld {session.frames[0].context_name} "
+            f"--into {session.frames[1].context_name}"
+        )
+    return (
+        f"mem meld {session.frames[0].context_name} "
+        f"{session.frames[1].context_name}"
+    )
+
+
+def _session_route(session: MeldSession) -> str:
+    if session.mode == "DIRECTIONAL":
+        return (
+            f"INCOMING {session.frames[0].context_name} → "
+            f"BASELINE / TARGET {session.frames[1].context_name}"
+        )
+    return (
+        f"{session.frames[0].context_name} + "
+        f"{session.frames[1].context_name} → "
+        f"{session.target.context_name}"
+    )
+
+
+def _preserve_all_guidance(session: MeldSession) -> str:
+    if session.mode == "DIRECTIONAL":
+        return (
+            "Preserve the BASELINE except where supported INCOMING evidence "
+            "explicitly corrects it. Retain supported incoming distinctions "
+            "with explicit scope and provenance."
+        )
+    return (
+        "Preserve every remaining supported source distinction with explicit "
+        "scope and provenance. Do not present unresolved alternatives as one "
+        "consistent rule."
+    )
+
+
 def _connect_meld_provider(provider_factory):
     provider = provider_factory()
     if isinstance(provider, CodexChatGPTProvider):
@@ -165,11 +206,7 @@ def render_meld_session(
     """Render one provider-free snapshot over a saved meld session."""
     lines = [
         f"MEM MELD · {session.mode}",
-        (
-            f"{session.frames[0].context_name} + "
-            f"{session.frames[1].context_name} → "
-            f"{session.target.context_name}"
-        ),
+        _session_route(session),
     ]
     if session.comparison_seed is not None:
         lines.append(
@@ -255,6 +292,7 @@ def render_meld_session(
                     memory = memory_by_key[key]
                     lines.append(
                         "        - "
+                        f"[{frame.role}] "
                         f"{safe_terminal_text(frame.context_name)} "
                         f"#{memory.position + 1} [{memory.uid[:8]}] · "
                         f"{safe_terminal_text(memory.content)}"
@@ -282,32 +320,60 @@ def render_meld_session(
                     f"        - [{proposal.disposition}] "
                     f"{safe_terminal_text(proposal.content)}"
                 )
-    lines.extend(["", "PROPOSED TARGET MEMORIES"])
+    lines.extend(
+        [
+            "",
+            (
+                "PROPOSED BASELINE CHANGES"
+                if session.mode == "DIRECTIONAL"
+                else "PROPOSED TARGET MEMORIES"
+            ),
+        ]
+    )
     if not assessment.proposals:
-        lines.append("  (none until required issues are grounded)")
-    for index, proposal in enumerate(assessment.proposals, start=1):
         lines.append(
-            f"  + {index:>2}. [{proposal.disposition}] "
+            (
+                "  (no material baseline changes; acceptance records the "
+                "resolved zero-change meld)"
+                if session.mode == "DIRECTIONAL"
+                and assessment.ready_to_apply
+                else "  (none until required issues are grounded)"
+            )
+        )
+    for index, proposal in enumerate(assessment.proposals, start=1):
+        marker = "~" if proposal.operation == "EDIT" else "+"
+        label = (
+            f"{proposal.operation} · {proposal.disposition}"
+            if session.mode == "DIRECTIONAL"
+            else proposal.disposition
+        )
+        lines.append(
+            f"  {marker} {index:>2}. "
+            f"[{label}] "
             f"{safe_terminal_text(proposal.content)}"
         )
         lines.append(
             f"       WHY · {safe_terminal_text(proposal.reason)}"
         )
     if session.state == "AWAITING_REPLY":
+        command = _session_command(session)
         lines.extend(
             [
                 "",
-                "Resolve one: mem meld LEFT RIGHT --issue N --comment TEXT",
-                "Guide all:  mem meld LEFT RIGHT --comment TEXT",
-                "Preserve:   mem meld LEFT RIGHT --preserve-all",
-                "Defer:      mem meld LEFT RIGHT --defer-all",
+                f"Resolve one: {command} --issue N --comment TEXT",
+                f"Guide all:  {command} --comment TEXT",
+                f"Preserve:   {command} --preserve-all",
+                f"Defer:      {command} --defer-all",
             ]
         )
     elif session.state == "READY_TO_APPLY":
         lines.extend(
             [
                 "",
-                "Apply exactly this proposal: mem meld LEFT RIGHT --accept",
+                (
+                    "Apply exactly this proposal: "
+                    f"{_session_command(session)} --accept"
+                ),
             ]
         )
     return "\n".join(lines)
@@ -333,6 +399,33 @@ def _assert_source_bindings(
         (left, right),
         strict=True,
     ):
+        if (
+            context.uid != frame.context_uid
+            or context.name != frame.context_name
+            or context_record_digest(context) != frame.context_digest
+        ):
+            raise MeldCommandError(
+                f"Source Context '{frame.context_name}' changed after this "
+                "meld was analyzed."
+            )
+
+
+def _assert_non_target_source_bindings(
+    session: MeldSession,
+    left: Context,
+    right: Context,
+) -> None:
+    """Recheck read-only inputs while allowing an applied baseline to differ."""
+    for frame, context in zip(
+        session.frames,
+        (left, right),
+        strict=True,
+    ):
+        if (
+            frame.context_uid == session.target.context_uid
+            and frame.context_name == session.target.context_name
+        ):
+            continue
         if (
             context.uid != frame.context_uid
             or context.name != frame.context_name
@@ -387,7 +480,7 @@ def _meld_checkpoint_record(
     change_set,
 ) -> dict[str, object]:
     return {
-        "schema_version": 1,
+        "schema_version": 2 if session.mode == "DIRECTIONAL" else 1,
         "session_uid": session.uid,
         "turn_uid": change_set.turn_uid,
         "mode": session.mode,
@@ -396,6 +489,11 @@ def _meld_checkpoint_record(
         "sources": [
             {
                 "frame_uid": frame.uid,
+                **(
+                    {"role": frame.role}
+                    if session.mode == "DIRECTIONAL"
+                    else {}
+                ),
                 "context_uid": frame.context_uid,
                 "context_name": frame.context_name,
                 "context_digest": frame.context_digest,
@@ -424,6 +522,11 @@ def _meld_checkpoint_record(
         "results": [
             {
                 "proposal_uid": proposal.uid,
+                **(
+                    {"operation": proposal.operation}
+                    if session.mode == "DIRECTIONAL"
+                    else {}
+                ),
                 "memory_uid": proposal.memory_uid,
                 "disposition": proposal.disposition,
                 "content_sha256": hashlib.sha256(
@@ -443,6 +546,38 @@ def _meld_checkpoint_record(
     }
 
 
+def _expected_target_memories(
+    session: MeldSession,
+    change_set,
+) -> tuple[Memory, ...]:
+    """Build the exact post-image without mutating a loaded Context."""
+    if session.mode == "SYMMETRIC":
+        return tuple(
+            Memory(uid=proposal.memory_uid, content=proposal.content)
+            for proposal in change_set.proposals
+        )
+    baseline = session.frames[1]
+    expected = [
+        Memory(uid=memory.uid, content=memory.content)
+        for memory in baseline.memories
+    ]
+    position_by_uid = {
+        memory.uid: position
+        for position, memory in enumerate(expected)
+    }
+    for proposal in change_set.proposals:
+        candidate = Memory(
+            uid=proposal.memory_uid,
+            content=proposal.content,
+        )
+        if proposal.operation == "EDIT":
+            expected[position_by_uid[proposal.memory_uid]] = candidate
+        else:
+            position_by_uid[proposal.memory_uid] = len(expected)
+            expected.append(candidate)
+    return tuple(expected)
+
+
 def _recover_application(
     *,
     store: MemoryStore,
@@ -450,17 +585,25 @@ def _recover_application(
     target: Context,
     change_set,
 ) -> tuple[str, tuple[str, ...]] | None:
-    expected_uids = tuple(
+    if (
+        target.uid != session.target.context_uid
+        or target.name != session.target.context_name
+    ):
+        return None
+    result_uids = tuple(
         proposal.memory_uid for proposal in change_set.proposals
     )
+    expected_memories = _expected_target_memories(session, change_set)
     current_items = tuple(target.iter_items())
     if any(not isinstance(item, Memory) for item in current_items):
         return None
     current_memories = tuple(current_items)
-    if tuple(memory.uid for memory in current_memories) != expected_uids:
+    if tuple(memory.uid for memory in current_memories) != tuple(
+        memory.uid for memory in expected_memories
+    ):
         return None
     if tuple(memory.content for memory in current_memories) != tuple(
-        proposal.content for proposal in change_set.proposals
+        memory.content for memory in expected_memories
     ):
         return None
     for checkpoint in reversed(store.list_checkpoints(target.name)):
@@ -474,7 +617,7 @@ def _recover_application(
             and record.get("change_set_digest") == change_set.digest
             and isinstance(checkpoint.get("uid"), str)
         ):
-            return checkpoint["uid"], expected_uids
+            return checkpoint["uid"], result_uids
     return None
 
 
@@ -486,7 +629,10 @@ def _accept(
 ) -> tuple[bool, str, int]:
     change_set = session.prepare_changes()
     left, right, direct_target = _load_bound_contexts(store, session)
-    _assert_source_bindings(session, left, right)
+    # After a directional application the BASELINE frame intentionally differs
+    # from its original snapshot. The target post-image and receipt validate
+    # that overlap; every non-target input must remain byte-identical.
+    _assert_non_target_source_bindings(session, left, right)
     if session.state == "APPLIED":
         assert session.application is not None
         recovered = _recover_application(
@@ -509,18 +655,17 @@ def _accept(
             session.application.checkpoint_uid,
             len(session.application.result_memory_uids),
         )
-    if context_record_digest(direct_target) != session.target.context_digest:
-        recovered = _recover_application(
-            store=store,
-            session=session,
-            target=direct_target,
-            change_set=change_set,
-        )
-        if recovered is None:
-            raise MeldCommandError(
-                "The meld target changed and does not match a recoverable "
-                "prior application."
-            )
+    # A zero-change directional meld has the same pre- and post-image. Check
+    # for its durable checkpoint even when the Context digest did not change,
+    # otherwise a crash between checkpoint and receipt persistence could make
+    # a retry create a duplicate checkpoint.
+    recovered = _recover_application(
+        store=store,
+        session=session,
+        target=direct_target,
+        change_set=change_set,
+    )
+    if recovered is not None:
         checkpoint_uid, result_uids = recovered
         session.record_application(
             change_set_digest=change_set.digest,
@@ -532,26 +677,41 @@ def _accept(
             expected_session_digest=expected_session_digest,
         )
         return True, checkpoint_uid, len(result_uids)
+    if context_record_digest(direct_target) != session.target.context_digest:
+        raise MeldCommandError(
+            "The meld target changed and does not match a recoverable prior "
+            "application."
+        )
 
     target = store.load_for_update(session.target.context_name)
     _assert_unapplied_target(session, target)
     for proposal in change_set.proposals:
-        target.add(
-            Memory(
-                uid=proposal.memory_uid,
-                content=proposal.content,
-            )
+        memory = Memory(
+            uid=proposal.memory_uid,
+            content=proposal.content,
         )
+        if proposal.operation == "EDIT":
+            target.replace(memory)
+        else:
+            target.add(memory)
+    description = (
+        (
+            f"Melded INCOMING '{session.frames[0].context_name}' into "
+            f"BASELINE '{target.name}': {len(change_set.proposals)} changes"
+        )
+        if session.mode == "DIRECTIONAL"
+        else (
+            f"Melded '{session.frames[0].context_name}' and "
+            f"'{session.frames[1].context_name}' into "
+            f"'{target.name}': {len(change_set.proposals)} results"
+        )
+    )
     checkpoint = store.save_meld_target(
         target,
         AutoCheckpoint(
             command="meld",
             args={"meld": _meld_checkpoint_record(session, change_set)},
-            description=(
-                f"Melded '{session.frames[0].context_name}' and "
-                f"'{session.frames[1].context_name}' into "
-                f"'{target.name}': {len(change_set.proposals)} results"
-            ),
+            description=description,
         ),
         expected_context_digest=session.target.context_digest,
         source_bindings=(
@@ -561,6 +721,10 @@ def _accept(
                 frame.context_digest,
             )
             for frame in session.frames
+            if (
+                frame.context_uid != session.target.context_uid
+                or frame.context_name != session.target.context_name
+            )
         ),
     )
     if checkpoint is None:
@@ -609,11 +773,7 @@ def _run_interactive(
             break
         if action.kind == "PRESERVE_ALL":
             session.start_turn(
-                (
-                    "Preserve every remaining supported source distinction "
-                    "with explicit scope and provenance. Do not present "
-                    "unresolved alternatives as one consistent rule."
-                ),
+                _preserve_all_guidance(session),
                 scope="REMAINING",
             )
         elif action.kind == "COMMENT_ALL":
@@ -652,13 +812,30 @@ def _run_interactive(
 
 def cmd(
     left: Annotated[
-        str,
-        typer.Argument(help="First PEER source Context"),
-    ],
+        Optional[str],
+        typer.Argument(
+            help=(
+                "First PEER source, or INCOMING source; omit with --into to "
+                "use the current Context"
+            )
+        ),
+    ] = None,
     right: Annotated[
-        str,
-        typer.Argument(help="Second PEER source Context"),
-    ],
+        Optional[str],
+        typer.Argument(
+            help="Second PEER source; omit for a directional --into meld"
+        ),
+    ] = None,
+    into: Annotated[
+        Optional[str],
+        typer.Option(
+            "--into",
+            help=(
+                "Meld INCOMING into this existing authoritative BASELINE "
+                "Context"
+            ),
+        ),
+    ] = None,
     issue: Annotated[
         Optional[str],
         typer.Option(
@@ -707,8 +884,8 @@ def cmd(
         typer.Option(
             "--restart",
             help=(
-                "Replace the saved review session after rechecking an empty "
-                "target"
+                "Replace the saved review session after rechecking its bound "
+                "Contexts"
             ),
         ),
     ] = False,
@@ -734,7 +911,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Meld two equal-authority Contexts into the current empty Context."""
+    """Meld peer Contexts symmetrically or INCOMING into a BASELINE."""
     action_count = sum(
         (
             comment is not None or choice is not None,
@@ -789,18 +966,76 @@ def cmd(
 
     store = MemoryStore(create=False)
     try:
-        target_name = store.current_context_name()
-        if not target_name:
-            raise MeldCommandError(
-                "No current target Context. Run 'mem init TARGET' "
-                "first."
+        current_name = store.current_context_name()
+        if into is None:
+            if left is None or right is None:
+                raise MeldCommandError(
+                    "Symmetric meld requires LEFT and RIGHT Contexts. For a "
+                    "directional meld, use 'mem meld --into BASELINE' or "
+                    "'mem meld INCOMING --into BASELINE'."
+                )
+            if not current_name:
+                raise MeldCommandError(
+                    "No current target Context. Run 'mem init TARGET' first."
+                )
+            requested_mode = "SYMMETRIC"
+            left_name = resolve_context_locator(left, current=current_name)
+            right_name = resolve_context_locator(right, current=current_name)
+            target_name = current_name
+            start_command = "mem meld LEFT RIGHT"
+        else:
+            if right is not None:
+                raise MeldCommandError(
+                    "Directional meld accepts at most one positional INCOMING "
+                    "Context. Use 'mem meld INCOMING --into BASELINE', or omit "
+                    "INCOMING to use the current Context."
+                )
+            requested_mode = "DIRECTIONAL"
+            if left is None:
+                if not current_name:
+                    raise MeldCommandError(
+                        "No current INCOMING Context. Supply one explicitly or "
+                        "switch to it before using --into."
+                    )
+                left_name = current_name
+            else:
+                left_name = resolve_context_locator(
+                    left,
+                    current=current_name,
+                )
+            right_name = resolve_context_locator(
+                into,
+                current=current_name,
             )
-        if left == right or target_name in {left, right}:
+            target_name = right_name
+            start_command = "mem meld [INCOMING] --into BASELINE"
+
+        if left_name == right_name:
+            if requested_mode == "DIRECTIONAL":
+                raise MeldCommandError(
+                    "INCOMING and BASELINE must be distinct Contexts."
+                )
             raise MeldCommandError(
-                "The two sources and active target must be distinct Contexts."
+                "The two PEER source Contexts must be distinct."
             )
-        if not store.context_exists(left) or not store.context_exists(right):
-            raise MeldCommandError("One or both source Contexts do not exist.")
+        if requested_mode == "SYMMETRIC" and target_name in {
+            left_name,
+            right_name,
+        }:
+            raise MeldCommandError(
+                "The two PEER sources and active target must be distinct "
+                "Contexts."
+            )
+        if not store.context_exists(left_name):
+            role = "INCOMING" if requested_mode == "DIRECTIONAL" else "source"
+            raise MeldCommandError(
+                f"{role} Context '{left_name}' does not exist."
+            )
+        if not store.context_exists(right_name):
+            role = "BASELINE" if requested_mode == "DIRECTIONAL" else "source"
+            raise MeldCommandError(
+                f"{role} Context '{right_name}' does not exist."
+            )
         target = store.load_direct(target_name)
         session = store.load_meld_session(target.uid)
 
@@ -816,28 +1051,41 @@ def cmd(
                 )
             ):
                 raise MeldCommandError(
-                    "Start the meld with a plain 'mem meld LEFT RIGHT' first."
+                    f"Start the meld with a plain '{start_command}' first."
                 )
-            left_ctx = store.load_direct(left)
-            right_ctx = store.load_direct(right)
-            comparison = _load_symmetric_comparison(
-                left=left_ctx,
-                right=right_ctx,
-                target=target,
-            )
-            session = MeldSession.create_symmetric_from_comparison(
-                comparison,
-                target,
-            )
-            # Importing Compare is provider-free, but the exact source and
-            # empty-target bindings still need one last local recheck before
-            # the target-scoped session is made durable.
-            _assert_source_bindings(session, left_ctx, right_ctx)
-            _assert_unapplied_target(session, target)
-            store.save_meld_session(
-                session,
-                expected_session_digest=None,
-            )
+            left_ctx = store.load_direct(left_name)
+            right_ctx = store.load_direct(right_name)
+            if requested_mode == "DIRECTIONAL":
+                session = MeldSession.create_directional(
+                    left_ctx,
+                    right_ctx,
+                )
+                session.start_initial_analysis()
+                session = _assess_and_save(
+                    store=store,
+                    session=session,
+                    provider_factory=connect_codex_chatgpt_provider,
+                    expected_session_digest=None,
+                )
+            else:
+                comparison = _load_symmetric_comparison(
+                    left=left_ctx,
+                    right=right_ctx,
+                    target=target,
+                )
+                session = MeldSession.create_symmetric_from_comparison(
+                    comparison,
+                    target,
+                )
+                # Importing Compare is provider-free, but the exact source and
+                # empty-target bindings still need one last local recheck
+                # before the target-scoped session is made durable.
+                _assert_source_bindings(session, left_ctx, right_ctx)
+                _assert_unapplied_target(session, target)
+                store.save_meld_session(
+                    session,
+                    expected_session_digest=None,
+                )
             if sys.stdin.isatty() and sys.stdout.isatty():
                 session = _run_interactive(
                     store=store,
@@ -849,24 +1097,43 @@ def cmd(
 
         if restart:
             prior_digest = meld_canonical_digest(session.to_dict())
-            left_ctx = store.load_direct(left)
-            right_ctx = store.load_direct(right)
-            comparison = _load_symmetric_comparison(
-                left=left_ctx,
-                right=right_ctx,
-                target=target,
-            )
-            replacement = MeldSession.create_symmetric_from_comparison(
-                comparison,
-                target,
-            )
-            _assert_source_bindings(replacement, left_ctx, right_ctx)
-            _assert_unapplied_target(replacement, target)
-            store.save_meld_session(
-                replacement,
-                expected_session_digest=prior_digest,
-            )
-            session = replacement
+            left_ctx = store.load_direct(left_name)
+            right_ctx = store.load_direct(right_name)
+            if requested_mode == "DIRECTIONAL":
+                replacement = MeldSession.create_directional(
+                    left_ctx,
+                    right_ctx,
+                )
+                replacement.start_initial_analysis()
+                session = _assess_and_save(
+                    store=store,
+                    session=replacement,
+                    provider_factory=connect_codex_chatgpt_provider,
+                    expected_session_digest=prior_digest,
+                )
+            else:
+                comparison = _load_symmetric_comparison(
+                    left=left_ctx,
+                    right=right_ctx,
+                    target=target,
+                )
+                replacement = (
+                    MeldSession.create_symmetric_from_comparison(
+                        comparison,
+                        target,
+                    )
+                )
+                _assert_source_bindings(
+                    replacement,
+                    left_ctx,
+                    right_ctx,
+                )
+                _assert_unapplied_target(replacement, target)
+                store.save_meld_session(
+                    replacement,
+                    expected_session_digest=prior_digest,
+                )
+                session = replacement
             if sys.stdin.isatty() and sys.stdout.isatty():
                 session = _run_interactive(
                     store=store,
@@ -876,14 +1143,29 @@ def cmd(
             typer.echo(render_meld_session(session))
             return
 
-        if {frame.context_name for frame in session.frames} != {left, right}:
+        if session.mode != requested_mode:
             raise MeldCommandError(
-                "The active target already has a meld from different sources."
+                "The target already has a saved meld with a different "
+                "authority mode. Use --restart to replace it."
+            )
+        saved_names = tuple(
+            frame.context_name for frame in session.frames
+        )
+        sources_match = (
+            saved_names == (left_name, right_name)
+            if requested_mode == "DIRECTIONAL"
+            else set(saved_names) == {left_name, right_name}
+        )
+        if not sources_match:
+            raise MeldCommandError(
+                "The target already has a meld from different sources. Use "
+                "--restart to replace it."
             )
         expected_session_digest = meld_canonical_digest(session.to_dict())
         left_ctx, right_ctx, target = _load_bound_contexts(store, session)
-        _assert_source_bindings(session, left_ctx, right_ctx)
-        if not accept and session.state != "APPLIED":
+        _assert_non_target_source_bindings(session, left_ctx, right_ctx)
+        if session.state != "APPLIED" and not accept:
+            _assert_source_bindings(session, left_ctx, right_ctx)
             _assert_unapplied_target(session, target)
 
         if accept:
@@ -900,8 +1182,13 @@ def cmd(
                     fg=typer.colors.YELLOW,
                 )
             else:
+                noun = (
+                    "meld changes"
+                    if session.mode == "DIRECTIONAL"
+                    else "meld results"
+                )
                 typer.secho(
-                    f"Applied {result_count} meld results in checkpoint "
+                    f"Applied {result_count} {noun} in checkpoint "
                     f"[{checkpoint_uid[:8]}].",
                     fg=typer.colors.GREEN,
                     bold=True,
@@ -923,11 +1210,7 @@ def cmd(
 
         if preserve_all:
             session.start_turn(
-                (
-                    "Preserve every remaining supported source distinction "
-                    "with explicit scope and provenance. Do not present "
-                    "unresolved alternatives as one consistent rule."
-                ),
+                _preserve_all_guidance(session),
                 scope="REMAINING",
             )
             session = _assess_and_save(

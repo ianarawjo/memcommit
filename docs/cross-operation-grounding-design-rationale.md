@@ -23,8 +23,9 @@
 | Task 1 방향성 `impact → update` | 검증된 source와 사용자 소유 local wiki fork를 전제로 계획을 preview하고 로컬 적용하는 경로 구현 |
 | update 중 ambiguity/conflict 해소 | **미구현 TODO** |
 | update와 named Ground의 UID/revision/digest binding | **미구현 TODO** |
-| Context-to-Context directional Meld | **미구현 TODO** |
-| 독립적인 `compare` 또는 `reconcile` 명령 | **미구현 TODO** |
+| Context-to-Context directional Meld | direct `INCOMING → BASELINE`의 `EDIT`/`ADD` 및 zero-change acceptance 구현 |
+| 독립적인 `compare` 명령 | 읽기 전용 peer comparison으로 구현 |
+| 독립적인 `reconcile` 명령 | **미구현 TODO** |
 | atomize의 다회차 clarification | 별도 atomize grounding session으로 구현 |
 | local working-copy 적용 | **구현**; 다중 Context 예외 rollback은 제공하지만 crash journal은 없음 |
 | `push`/PR와 원격 publication | **미구현 TODO** |
@@ -42,12 +43,13 @@
 | --- | --- |
 | `GOAL` | 현재 오퍼레이션이 실현하려는 결과와 완료 여부를 판단하는 기준 |
 | `RULES` | 근거를 해석하고 관계와 결과를 판단하며 무엇을 적용할 수 있는지 결정하는 검토 가능한 제약 |
-| `CASES` | 현재 Goal과 Rules를 시험하는 구체적인 Memories, findings, readings, 관계 묶음 또는 변경 제안 |
+| `MEMORIES` | 현재 Goal과 Rules를 시험하는 구체적인 Memories, findings, readings, 관계 묶음 또는 변경 제안 |
 
 오퍼레이션은 네 번째 Ground 계층이 아니다. 각 오퍼레이션은 위 세
 계층을 자신의 source arity, evidence, target, mutation 경계에 맞게
 해석하는 어댑터를 제공한다. 또한 어떤 아티팩트를 검토하거나
-변경했다는 사실만으로 그 아티팩트가 승인된 Case나 golden Case가
+변경했다는 사실만으로 그 아티팩트가 승인된 Ground Memory나 golden
+Ground Memory가
 되는 것은 아니다.
 
 반복되는 정당화 흐름은 다음과 같다.
@@ -58,8 +60,8 @@
 → 제안된 reading, 관계 또는 변경과 그 영향을 표시
 → 근거가 부족하면 실제 판단을 바꿀 수 있는 후속 질문을 제시
 → 사용자가 확인·확장·수정·철회·보류하거나 추가 맥락을 제공
-→ 관련된 Case, Rule 또는 Goal을 수정
-→ 영향을 받는 findings와 기존에 승인된 Cases를 다시 검토
+→ 관련된 Ground Memory, Rule 또는 Goal을 수정
+→ 영향을 받는 findings와 기존에 승인된 Ground Memories를 다시 검토
 → 실제 변경 전 명시적인 허가를 요청
 ```
 
@@ -73,7 +75,7 @@
 
 Ground와 Meld는 동일한 장기적 상호작용의 서로 다른 측면을 설명한다.
 
-- **Ground**는 행동을 정당화하는 공통 Goal, Rules, Cases, 수정 사항과
+- **Ground**는 행동을 정당화하는 공통 Goal, Rules, Memories, 수정 사항과
   명시적인 결정을 유지한다.
 - **Meld**는 승인된 하나의 memory-bearing contribution이 명시적인
   source, authority, target, provenance 제약 아래 경계가 정해진 대상에
@@ -115,7 +117,7 @@ Memories를 드러낼 수 있다. 기존 atomicity Rule이나 적용 범위가
 다회차 대화를 별도의 atomize grounding session으로 제공한다.
 
 그러나 이 세션은 named Ground가 아니다. 승인된 atomize clarification은
-자동으로 named Ground의 Rule이나 golden Case가 되지 않으며, named
+자동으로 named Ground의 Rule이나 golden Ground Memory가 되지 않으며, named
 Ground 역시 자동으로 atomize evidence가 되지 않는다. 이 분리는 현재의
 의도적인 provenance 경계다.
 
@@ -136,12 +138,12 @@ Reconcile은 이러한 findings를 함께 검토하여 다음과 같은 질문�
 Grounding은 이 과정에서 필요한 사람–에이전트 clarification protocol을
 제공한다. 승인된 해소 결과는 현재 Case에만 적용되는 국소적인 판단일
 수도 있고 여러 Cases에 재사용할 Rule을 정당화할 수도 있다. 국소적인
-clarification을 재사용 가능한 Rule이나 golden Case로 승격하는 과정은
+clarification을 재사용 가능한 Rule이나 golden Ground Memory로 승격하는 과정은
 별도로 명시되고 승인되어야 한다.
 
-현재 `compare`는 독립적인 public command가 아니라 finder나 Meld 내부의
-비교 단계에 가깝고, `reconcile`은 향후 계약이다. 이 절은 현재 사용
-가능한 완성 기능을 설명하지 않는다.
+현재 `compare`는 독립적인 읽기 전용 public command이며 Meld가 그 저장된
+분석을 seed로 사용할 수 있다. `reconcile`은 여전히 향후 계약이다. 이
+절의 Reconcile 설명은 현재 사용 가능한 완성 기능을 뜻하지 않는다.
 
 ### Update
 
@@ -149,8 +151,8 @@ clarification을 재사용 가능한 Rule이나 golden Case로 승격하는 과�
 반영하면서 B의 관련 없는 기존 지식을 보존하는 것이다. Update Rules는
 source의 권위와 범위, 변경 가능한 target의 소유권, provenance,
 근거 없는 정보 생성 금지, 관련 없는 target 정보 보존, stale input과
-승인 경계를 규정한다. 제안된 각각의 edit 또는 addition은 구체적인
-아티팩트에 연결된 candidate Case로 볼 수 있다.
+승인 경계를 규정한다. 제안된 각각의 edit, addition, 또는 removal은
+구체적인 아티팩트에 연결된 candidate Case로 볼 수 있다.
 
 Task 1에서 B는 조직의 공유 원본 자체가 아니라 참가자에게 미리 제공된
 쓰기 가능한 local fork다. 표준 이름은
@@ -198,9 +200,9 @@ fixture 검토는 모든 잠재적 영향 페이지가 이 권한 범위에 들�
 
 > **현재 구현 주의**
 >
-> 지금의 `UpdateSession`은 source, target, fingerprints, edit/add
+> 지금의 `UpdateSession`은 source, target, fingerprints, edit/add/remove
 > operations와 로컬 적용 receipt를 저장한다. Ground identity나
-> revision, Rules, Cases, unresolved issues, Meld turns를 저장하지
+> revision, Rules, Ground Memories, unresolved issues, Meld turns를 저장하지
 > 않는다. 현재 planner는 이러한 해소 루프를 수행하지 않으며
 > `update`는 conflict-free validated plan을 로컬 fork에 적용한다.
 
@@ -240,7 +242,7 @@ atomize하고 ambiguity/conflict를 검토하며 wiki와 local destination의
 
 ## 불변 조건
 
-- 모든 대화 turn이 Memory, Rule 또는 golden Case가 되는 것은 아니다.
+- 모든 대화 turn이 Memory, Rule 또는 golden Ground Memory가 되는 것은 아니다.
 - 하나의 Case에만 적용되는 clarification은 자동으로 전역 Rule이 되지
   않는다.
 - 오퍼레이션별 source arity, evidence, target, mutation 계약은 계속
@@ -274,10 +276,10 @@ atomize하고 ambiguity/conflict를 검토하며 wiki와 local destination의
 4. 모든 dialogue turn에서 source와 target fingerprints를 유지한다.
 5. 사용자의 해소 답변을 directional Meld turn으로 기록한다.
 6. 각 turn 이후 경계가 정해진 전체 update proposal을 다시 계산한다.
-7. 국소적인 clarification이 재사용 가능한 Rule이나 golden Case가
+7. 국소적인 clarification이 재사용 가능한 Rule이나 golden Ground Memory가
    되기 전에 별도의 명시적 승격과 승인을 요구한다.
 8. 해결되지 않은 `REQUIRED` issue가 있으면 staging을 차단한다.
-9. Ground 변경 이후 기존 update proposal과 관련 Cases를 다시
+9. Ground 변경 이후 기존 update proposal과 관련 Ground Memories를 다시
    검사한다.
 10. local working-copy 적용과 publication을 서로 별도로 승인되는
     오퍼레이션으로 유지한다.
@@ -293,10 +295,10 @@ branch에 들어가지 않고 로컬 적용까지 도달한다는 regression cas
 이 문서는 현재 단계에서 다음 기능이 존재한다고 주장하지 않는다.
 
 - 하나의 named Ground가 모든 semantic operation을 자동 조율하는 기능
-- atomize clarification을 Ground Rule이나 Case로 자동 승격하는 기능
-- update issue를 대화로 해소하는 TUI
+- atomize clarification을 Ground Rule이나 Ground Memory로 자동 승격하는 기능
+- update issue를 실제 semantic turn으로 해소하고 전체 계획을 재분석하는
+  durable resolution session
 - update proposal에 대한 selective per-proposal acceptance
-- non-empty baseline을 수정하는 public directional Meld
 - Ground 변경에 따른 자동 semantic regression
 - 다중 Context local update를 위한 process-crash recovery journal
 - remote `push`, PR, access-control 또는 조직 publication
@@ -308,12 +310,15 @@ branch에 들어가지 않고 로컬 적용까지 도달한다는 regression cas
 ## 관련 문서
 
 - [`mem-ground-design-rationale.md`](mem-ground-design-rationale.md):
-  named Goal–Rules–Cases Ground와 Task 1 fixture co-design
+  named Goal–Rules–Memories Ground와 Task 1 fixture co-design
 - [`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md):
   atomize에서 시작된 다회차 human grounding과 일반화 경계
 - [`memory-refinement-pipeline-design-rationale.md`](memory-refinement-pipeline-design-rationale.md):
   atomize, finder, reconcile, audience, normalize, place의 분리
 - [`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md):
   공통 interaction grammar와 operation-specific evidence 경계
+- [`semantic-resolution-workbench-design-rationale.md`](semantic-resolution-workbench-design-rationale.md):
+  Meld·Atomize·Update·향후 Reconcile의 공통 동적 list/detail/comment
+  presentation과 operation-owned semantic 경계
 - [`mem-impact-update-design-rationale.md`](mem-impact-update-design-rationale.md):
   현재 방향성 impact/update의 제한된 local-application 계약

@@ -4,7 +4,7 @@
 
 `mem find` needs a conversational surface because a person often cannot know
 the useful result set or next operation before seeing semantic matches.
-Directly copying Ground's Goal--Rules--Cases shell would couple Find to
+Directly copying Ground's Goal--Rules--Memories shell would couple Find to
 Ground-specific provider responses, approval semantics, and persistence.
 Allowing a provider to return arbitrary command text would instead turn result
 interpretation into command authority.

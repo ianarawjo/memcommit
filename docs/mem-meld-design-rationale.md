@@ -7,18 +7,30 @@ modes. The canonical user-facing commands and terminology are maintained in
 [`mem-meld-usage.md`](mem-meld-usage.md). This rationale explains why those
 entry points differ; it is not a second command manual.
 
-The first public Context-to-Context symmetric path now exists as a bounded
-research prototype:
+Two public Context-to-Context paths now exist as bounded research prototypes:
 
 ```text
+# Symmetric: two peers produce the current empty result
 mem init RESULT
 mem meld LEFT_PEER RIGHT_PEER
+
+# Directional: current or explicit incoming enters an existing baseline
+mem meld --into BASELINE
+mem meld INCOMING --into BASELINE
 ```
 
-It performs one aggregate analysis, saves a resumable relation ledger and
-workbench, accepts issue-scoped or whole-set comments, supports preserve-all
-and provider-free defer, and applies an exact ready proposal only after
-explicit acceptance through the TUI's `A` action or the `--accept` option.
+Both save a resumable relation ledger and workbench, accept issue-scoped or
+whole-set comments, support preserve-all and provider-free defer, and apply an
+exact ready proposal only after explicit acceptance through the TUI's `A`
+action or the `--accept` option. Symmetric Meld imports its initial ordered
+ledger and candidate issues provider-free from an exact fresh
+`ComparisonAnalysis`; the first user grounding turn is its first semantic
+Meld call. Directional Meld performs its own aggregate analysis because
+`INCOMING → BASELINE` has a different authority contract. Symmetric meld adds
+a complete result to an empty third Context. Directional meld leaves the
+incoming Context read-only and applies only exact material `EDIT` and `ADD`
+changes to its baseline; a fully represented input may instead produce an
+accepted zero-change checkpoint.
 
 The earlier local conversational change flow inside atomize grounding is also
 retained:
@@ -32,7 +44,9 @@ mem atomize --context CONTEXT --evaluate ISSUE --comment TEXT
 That flow remains under its existing atomize command and strict schema. It now
 reuses the common meld turn-lineage contract and has a lossless
 issue-scoped directional adapter view; it is not silently renamed or migrated.
-A public Context-to-Context directional command remains unimplemented.
+The public Context-wide directional command reuses the common session,
+relation, turn, proposal, checkpoint, and provenance machinery without taking
+ownership of atomize's issue-specific artifact.
 
 ## Why meld is needed
 
@@ -140,15 +154,17 @@ that follows it.
 - **Atomization** transforms a raw source Memory into source-grounded atomic
   candidates while preserving anything it cannot justify splitting or
   interpreting.
-- **Atomize grounding** takes a selected ambiguity, one proposed reading or a
-  new user explanation, and the current local analysis frame, then decides how
-  that explanation changes the existing proposal and Context.
+- **Atomize grounding** projects the selected source-grounded candidate as an
+  ephemeral `INCOMING` Context frame, binds the containing Context as the
+  `BASELINE`, and uses selected readings and user explanations as turn
+  evidence for deciding how the proposal and Context should change.
 
 The second operation has the complete meld shape:
 
 ```text
 select one ambiguity
-→ treat the selected reading or free-form explanation as incoming evidence
+→ project its source-grounded candidate as an ephemeral incoming Context frame
+→ attach the selected reading and free-form clarification as turn evidence
 → relate it to the source Memory, current proposal, and affected local Memories
 → confirm, extend, correct, retract, or leave the interpretation unresolved
 → produce exact EDIT / ADD consequences
@@ -160,12 +176,13 @@ Choosing an offered reading is not merely setting a UI flag. It confirms one
 semantic relationship and may invalidate an existing proposal. Entering a new
 reading may add a missing distinction or correct both the selected Memory and
 other Memories that depended on the same assumption. The explanation is
-therefore a small memory-bearing input, and the current Context is its
-directional baseline. This is an **issue-scoped directional meld embedded in
-the atomize workflow**. The engine remains batch-shaped: its bounded frame can
-contain the selected issue, a pair-shaped conflict, and several downstream
-issues. “Atomic” describes the initially selected scope, not another execution
-mode.
+therefore clarification evidence attached to the meld rather than a third
+Context. The selected issue projection is the incoming frame, and the current
+Context is its directional baseline. This is an **issue-scoped directional
+meld embedded in the atomize workflow**. The engine remains batch-shaped: its
+bounded frame can contain the selected issue, a pair-shaped conflict, and
+several downstream issues. “Atomic” describes the initially selected scope,
+not another execution mode.
 
 This interpretation does not mean that `mem atomize` should be renamed.
 Atomize remains the user-facing operation because it owns source decomposition,
@@ -174,6 +191,44 @@ shared semantic change protocol used once an interpretation must be combined
 with that artifact. Keeping the entry point while extracting the common
 protocol preserves a coherent task narrative and avoids two commands claiming
 the same saved atomize session.
+
+### A unit Memory is an ephemeral Context frame
+
+The common meld boundary accepts Context-shaped frames, even when the selected
+input is only one atomized Memory. For a unary issue, atomize grounding
+therefore projects that Memory as a one-Memory, `EPHEMERAL` `INCOMING` frame
+and projects its containing Context as a `BOUND` `BASELINE` frame. The
+incoming Memory keeps its original source identity, content digest, and source
+position. Its appearance in both the focus projection and baseline is one
+piece of evidence viewed at two scopes, not independent corroboration.
+
+“Temporary Context” is a semantic and type-level description here, not a
+request to create a normal mutable `Context`. The implementation uses an
+immutable frame view with a deterministic session-local frame UID and digest.
+It has no durable Context UID or locator, is never passed to `MemoryStore`, is
+never current or listed by `mem ls`, and creates no `context.json` or
+checkpoint. It is reconstructed from the digest-bound atomize session on each
+turn. Only explicit acceptance may checkpoint the exact `EDIT` / `ADD`
+consequences in the bound baseline Context.
+
+The baseline projection reads direct owned Memories only. Reference and
+query-only slots remain part of the complete Context digest and source
+positions, but their targets are never opened or copied into the frame. This
+preserves the atomize provider's existing privacy and compare-and-swap
+boundary.
+
+The issue's original arity is preserved. A unary candidate produces a
+one-Memory frame; a pair-shaped conflict produces one issue-bounded incoming
+frame containing both source Memories rather than flattening them into a
+synthetic proposition. Composite split children do not yet have durable
+Memory identities, so this adapter retains their source Memory and existing
+proposed-child metadata instead of pretending that proposed children are
+already stored Memories.
+
+This internal normalization does not add `mem meld --atomic`, expose a
+Memory-UID command, or create a second public workflow. `mem atomize
+--evaluate` remains the owner of analysis identity, dialogue persistence,
+approval, and source-local provenance.
 
 ## Conversation as repeated grounding and meld
 
@@ -243,7 +298,7 @@ Meld has two actual modes. They describe authority and target direction:
 
 | Mode | Inputs | Authority contract | Target | Representative case | Current status |
 | --- | --- | --- | --- | --- | --- |
-| **Directional** | Prepared incoming evidence plus an existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Atomize grounding shares turn-lineage validation and a lossless `DIRECTIONAL` / `ISSUE` adapter projection; public Context-to-Context form remains future |
+| **Directional** | Prepared incoming evidence plus an existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE` |
 | **Symmetric** | Two independent Context frames treated as peers | Neither source wins by default; source-specific scope and unresolved differences remain visible | A distinct new result Context | Two co-advisors' proposal-writing policies | Implemented for two direct-Memory Contexts |
 
 `atomic` and `batch` are not additional modes. The semantic call always
@@ -260,11 +315,13 @@ An “atomic” case is therefore the special case in which the selected scope h
 one primary issue or proposition. It may still affect several downstream
 Memories. Unary ambiguity and pair-shaped conflict are both valid issue scopes.
 
-Task 2 begins with one batch symmetric analysis. Opening the compensation issue
-does not launch a different atomic engine; it creates an `ISSUE`-scoped turn
-within the saved batch. The result returns to the complete relation ledger,
-where it may resolve or alter other pending issues. A whole-set comment or
-preserve-all action uses `ALL` or `REMAINING` over the same session.
+Task 2 begins with one saved batch Compare analysis. Starting symmetric Meld
+copies that exact ordered analysis and its identities into the target-bound
+session without another provider call. Opening the compensation issue does not
+launch a different atomic engine; it creates an `ISSUE`-scoped turn within the
+saved batch. The result returns to the complete relation ledger, where it may
+resolve or alter other pending issues. A whole-set comment or preserve-all
+action uses `ALL` or `REMAINING` over the same session.
 
 This makes meld compositional rather than merely UI-reusable. The user changes
 the turn's **scope**, not the semantic machinery, when moving between overview
@@ -272,14 +329,29 @@ and detail.
 
 ### Context-to-Context v1 boundary
 
-The first public `mem meld` deliberately supports only two named source
-Contexts. For Task 2, both sources have the `PEER` role and the active empty
-Context is the result target:
+Public `mem meld` accepts two bounded direct-Memory Context frames under one of
+two explicit authority contracts. For Task 2, both sources have the `PEER`
+role and the active empty Context is the result target:
 
 ```text
 mem init jingyue/proposal-writing-policy
 mem meld ian/proposal-writing-policy damien/proposal-writing-policy
 ```
+
+For recurring intake, the first frame is read-only `INCOMING`, the second is
+the authoritative `BASELINE`, and that same baseline is the mutation target:
+
+```text
+# current Context supplies INCOMING
+mem meld --into campus/wiki
+
+# or name both roles explicitly
+mem meld construction-updates --into campus/wiki
+```
+
+The baseline may already contain Memories. Its exact bound snapshot is
+preserved unless an accepted proposal contains a material `EDIT` or `ADD`.
+The incoming Context is never mutated.
 
 This is a useful product boundary, but `Context` should not be the lowest-level
 semantic type in the implementation. The core should consume bound
@@ -287,7 +359,7 @@ semantic type in the implementation. The core should consume bound
 role, digest, and declared authority. The public command deterministically
 converts each named Context into one frame. The atomize adapter can construct a
 smaller frame from one issue and its demonstrated local dependencies without
-creating a fake persistent Context.
+materializing a persistent Context record.
 
 That separation permits genuine generalization:
 
@@ -295,26 +367,63 @@ That separation permits genuine generalization:
   target.
 - Context + Context directional meld uses `INCOMING` and `BASELINE` frames and
   may propose a next state for the baseline.
-- Atomize grounding uses one `CLARIFICATION` frame and one issue-bounded
-  `BASELINE` frame through the same turn and proposal contract.
+- Atomize grounding uses one ephemeral issue-bounded `INCOMING` frame and one
+  bound containing-Context `BASELINE` frame through the same turn and proposal
+  contract. `CLARIFICATION` is dialogue evidence attached to the turn, not a
+  third frame.
 
-The v1 command need not expose every adapter. Supporting Task 2's symmetric
-Context-to-Context path first does not require pretending that the
-issue-scoped atomize adapter has the same CLI syntax.
+The v1 commands need not expose every adapter. Supporting both Context-wide
+authority modes does not require pretending that the issue-scoped atomize
+adapter has the same CLI syntax or persistence artifact.
 
 Initial Context-to-Context analysis is intentionally bounded:
 
 - read direct owned Memories only;
-- keep both source Contexts read-only;
+- keep both peer sources read-only in symmetric mode and keep `INCOMING`
+  read-only in directional mode;
 - require the active target to differ from both sources and be empty for the
   first symmetric implementation;
+- require directional `INCOMING` and `BASELINE` to be distinct while binding
+  the baseline as both source frame and target;
 - bind source and target Context UIDs, names, complete direct-record digests,
   and Memory order;
+- permit directional `EDIT` and `ADD`, but not `DELETE` or a no-op `EDIT`;
 - reject an over-limit source rather than silently truncate it;
 - never dereference query-only Contexts or use hidden query content;
 - reject Memory references, query-only references, and embedded Contexts
   explicitly in version 1 rather than silently omitting them or treating their
   targets as direct evidence.
+
+### Why directional uses `--into`, not `--to`
+
+The option names reserve different semantic shapes:
+
+```text
+mem meld [INCOMING] --into BASELINE
+mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT  # future
+```
+
+`--into` says that one existing Context is both the authoritative baseline and
+the only possible mutation target. It therefore communicates an asymmetric
+authority relation, not merely a destination path. When `INCOMING` is omitted,
+the current Context supplies that role; spelling it explicitly does not change
+the contract.
+
+`--to` is deliberately left unused for now. Its future symmetric meaning is a
+distinct result Context selected explicitly rather than through the current
+Context. Neither peer would become authoritative or mutable. Making `--to` an
+alias for `--into` would collapse the difference between “revise this
+baseline” and “write a peer result there,” leaving no unambiguous syntax for
+the latter.
+
+Context operands follow the shared existing-Context locator contract. Bare
+names are canonical global names. Only `.`, `..`, `./...`, and `../...` opt
+into lexical lookup relative to the slash-delimited current Context name; they
+do not inspect shell directories or embedding relations. The command captures
+the current name once and resolves all relative operands against that same
+snapshot before it binds identities, checks equality, or opens a session.
+The shared safety and compatibility rationale is recorded in
+[`context-locator-design-rationale.md`](context-locator-design-rationale.md).
 
 Relations should be represented as groups of source aliases, not as a
 pre-enumerated Cartesian product of Memory pairs. One policy on one side may
@@ -340,7 +449,7 @@ The surrounding operations have separate responsibilities:
 | `atomize` | Turn explicit source content into source-grounded atomic candidates without resolving unsupported ambiguity. |
 | `meld` | Decide how prepared inputs combine with a target under an explicit authority contract. |
 | `reconcile` | Handle ambiguity, conflict, or missing scope that blocks a meld decision. |
-| `ground` / grounding engine | Persist approved Goal, Rules, Cases, and decisions; the current natural-language turn cycle remains ephemeral. |
+| `ground` / grounding engine | Persist approved Goal, Rules, Ground Memories, and decisions; the current natural-language turn cycle remains ephemeral. |
 
 The complete recurring-intake flow is:
 
@@ -371,7 +480,7 @@ authority.
 
 | Role | Meaning |
 | --- | --- |
-| `CLARIFICATION` | User-supplied context for one selected issue. It may resolve or revise demonstrated local consequences but is not automatically a global rule. |
+| `CLARIFICATION` | User-supplied turn evidence for one selected issue. In atomize grounding it is attached to the directional meld rather than modeled as a Context frame, and is not automatically a global rule. |
 | `INCOMING` | New evidence or prepared candidate content entering a baseline Context. |
 | `BASELINE` | Existing knowledge preserved unless an accepted incoming claim explicitly extends or corrects it. |
 | `PEER` | A source with equal authority to the other peer inputs; no default winner is allowed. |
@@ -406,9 +515,13 @@ uses:
 | `DISTINCT` | One peer contributes an independently useful claim. |
 | `UNCLEAR` | Referent, qualifier scope, or evidence is insufficient for safe placement. |
 
-Future directional Context melding may additionally need `SAME`, `EXTENDS`,
-and `CORRECTS`. Those labels must not be imposed on equal peers because they
-would manufacture an authority direction.
+Directional Context v1 reuses this neutral relation vocabulary while the frame
+roles and exact proposal operation carry the authority direction. For example,
+an `EQUIVALENT` incoming–baseline relation can justify a resolved zero-change
+result, while a materially different supported relation can justify an
+`EDIT`. Future evaluation may show that more specific `SAME`, `EXTENDS`, or
+`CORRECTS` labels improve explanation, but those labels are not required for
+the implemented mutation contract and must never be imposed on equal peers.
 
 ### Proposed outcomes
 
@@ -423,9 +536,33 @@ but its semantic disposition remains explicit:
 | `USER_ADD` | The user's turn contributes a new standalone result; it must cite that user turn and is not attributed to either peer. |
 
 `DEFER` is a session decision rather than a result Memory. It retains the
-analysis without changing the target. A future public Context-directional
-adapter will additionally need exact `EDIT` proposals, but a `CORRECTS`
-relation will never authorize an edit by itself.
+analysis without changing the target.
+
+Directional Context meld uses the same semantic dispositions but adds an
+orthogonal physical operation:
+
+| Operation | Directional contract |
+| --- | --- |
+| `EDIT` | Materially replace one baseline Memory's content while preserving its UID and position. It names that Memory in the dedicated target field and separately cites incoming evidence. |
+| `ADD` | Append a new Memory with a fresh UID, supported by incoming evidence or an explicit user turn. |
+
+There is no directional `DELETE`. Unchanged baseline Memories are absent from
+the change list rather than represented as no-op edits. A complete
+`EQUIVALENT` analysis may therefore be ready with zero operations. Explicit
+acceptance still records one checkpoint and receipt for that semantic
+decision, while leaving the baseline's Memory post-image unchanged. A relation
+classification alone never authorizes an edit; the exact target UID, content,
+source evidence, current baseline digest, and accepted change-set digest must
+all validate locally.
+
+The provider-facing JSON Schema deliberately stays within Codex's supported
+structured-output subset. In particular, it does not use `uniqueItems`, which
+the provider rejects. Duplicate opaque aliases are still rejected by the local
+parser. For `EDIT`, the validated baseline target field is authoritative
+provenance evidence; the parser folds that target into the saved source-member
+set, so the model need not repeat the same alias in both the target and source
+arrays. This removes redundant output syntax without relaxing the requirement
+for at least one incoming source or the local baseline-role check.
 
 ## Shared conversational frame
 
@@ -498,9 +635,10 @@ overview and pending-issue list
 → review the resulting edits, additions, preserved distinctions, and questions
 ```
 
-The initial one-shot analysis produces the complete relation ledger and a list
-of the unresolved or consequential decisions. The user may then work in either
-of two ways:
+For symmetric Meld, the initial screen imports the complete relation ledger
+and unresolved or consequential decisions from the exact saved Compare
+analysis. For directional Meld, its initial one-shot analysis produces that
+state directly. The user may then work in either of two ways:
 
 - **Issue-by-issue.** Move through the list, open one issue, inspect both
   sources and rationale, choose a proposed resolution, or refine, comment on,
@@ -535,11 +673,12 @@ affected Memory.
 
 The workbench should therefore share atomize's interaction grammar: list,
 detail, free-form comment, impact, resume, and explicit acceptance. It should
-not reuse atomize-specific issue types, controllers, or storage by pretending
-that two peer Contexts are one atomization problem. Neutral sanitization and
-frame composition sit below mode-specific adapters and persisted session
-schemas; additional controller components should be extracted only after two
-operations demonstrate the same state semantics.
+not reuse atomize-specific issue types or storage by pretending that two peer
+Contexts are one atomization problem. Meld and Atomize have now demonstrated
+the same list/detail/comment grammar, so immutable projection, UID-addressed
+actions, nested navigation, terminal sanitization, and composer behavior are
+extracted into `ResolutionWorkbench`. Their provider schemas, durable sessions,
+reanalysis, readiness, and application remain operation-specific.
 
 ## Provider-call strategy: bounded one-shot analysis
 
@@ -565,7 +704,7 @@ The representative adapters use this rule differently:
 | Adapter | Initial bounded one-shot | Later calls |
 | --- | --- | --- |
 | Atomize directional (`ISSUE`) | One selected issue, user clarification, current local frame, and known affected findings | One call for each corrective, extending, confirming, or retracting user turn |
-| Context directional (future) | Every incoming candidate admitted by the bounded run plus the complete bounded baseline frame | Only unresolved conversational turns; resume and apply remain provider-free |
+| Context directional | Every direct incoming Memory plus the complete bounded baseline frame, returning relations and exact material `EDIT` / `ADD` changes | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
 | Context symmetric | Two bounded peer Context frames and their authority contract, returning a relation ledger and unresolved issues | One call per user resolution turn; final materialization remains provider-free |
 
 This strategy was selected because relations are Context-dependent. Independent
@@ -614,9 +753,11 @@ independent semantic regression remain separate trust layers.
    support. Existing Context may resolve a referent or supply a declared frame,
    but it cannot become hidden evidence for an invented incoming fact.
 4. A directional meld may edit only the explicitly authorized target Context.
-   A symmetric meld never mutates either peer source.
+   Its incoming Context remains read-only; a symmetric meld never mutates
+   either peer source.
 5. No source Memory is silently removed. Duplicate handling either links
-   provenance to an existing representation or coalesces only in a new target.
+   provenance to an existing representation, records a directional no-change
+   result, or coalesces only in a new symmetric target.
 6. Required follow-ups block acceptance. Helpful follow-ups remain visible but
    do not automatically block when the operation contract permits proceeding.
 7. The complete exact proposal is accepted or retained as review-only. Partial
@@ -624,10 +765,14 @@ independent semantic regression remain separate trust layers.
 8. Acceptance rechecks every bound digest immediately before mutation.
    Symmetric version 1 holds the two source locks and target lock in stable
    order across the final source recheck and target checkpoint/write.
-9. Each accepted single-target meld, including symmetric version 1, creates one
-   operation checkpoint in its authorized target. A future operation that
-   mutates several targets will require a recoverable linked boundary rather
-   than pretending several saves are atomic.
+   Directional version 1 similarly locks the read-only incoming source and
+   uses target compare-and-swap for the baseline snapshot.
+9. Each accepted single-target meld creates one operation checkpoint in its
+   authorized target. This includes a resolved directional proposal with zero
+   material changes: the checkpoint records the accepted semantic decision
+   without inventing a no-op `EDIT`. A future operation that mutates several
+   targets will require a recoverable linked boundary rather than pretending
+   several saves are atomic.
 10. Query-only source content remains opaque. A meld may use only the public
     name and the authorized query interface, never the raw hidden store.
 11. The checkpoint records input roles, relations, accepted outcomes, exact
@@ -673,10 +818,10 @@ Incoming:
   closed.
 
 Expected progression:
-  classify CORRECTS
+  record the scoped incoming–baseline relation
   → identify the exact baseline target
   → inspect affected route or access Memories
-  → propose the full replacement and any required downstream changes
+  → propose a material EDIT and any required ADD changes
   → preserve unrelated baseline knowledge
 ```
 
@@ -729,24 +874,42 @@ mem meld PEER_A PEER_B --expand ISSUE
 mem meld PEER_A PEER_B --restart
 mem meld PEER_A PEER_B --accept
 
-# Future directional meld — NOT IMPLEMENTED
+# Implemented Context-to-Context directional meld
+mem meld --into BASELINE_CONTEXT
 mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT
+mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --issue N --choice N --comment TEXT
+mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --comment WHOLE_SET_GUIDANCE
+mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --preserve-all
+mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --defer-all
+mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --expand ISSUE
+mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --restart
+mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --accept
 ```
 
-The plain symmetric command opens the arrow-key workbench in a terminal and
-prints a complete snapshot outside a TTY. Repeating it resumes without a
-provider call. An issue choice/comment, an unscoped `--comment`, and
+The plain symmetric or directional command opens the arrow-key workbench in a
+terminal and prints a complete snapshot outside a TTY. Omitting the
+directional incoming operand uses the current Context; naming it explicitly
+creates the same role binding. Repeating the same resolved command resumes
+without a provider call. An issue choice/comment, an unscoped `--comment`, and
 `--preserve-all` each cause one new aggregate semantic call. `--expand`,
-`--defer-all`, resume, and `--accept` are provider-free.
+`--defer-all`, resume, and `--accept` are provider-free in both modes.
 
 `--revision {confirm|extend|correct|retract}` records how a semantic comment
 relates to earlier dialogue; corrections and retractions identify the affected
 prior turn with `--revises-turn UID`. Because symmetric sources have equal
 authority, later commands may supply the two source names in either order; the
-saved frame order remains stable internally. `--defer-all` closes the current
-session as review-only. An explicit `--restart` replaces that saved analysis
-only after the current target is revalidated as empty; a failed replacement
+saved frame order remains stable internally. Directional source order is
+authoritative and cannot be reversed on resume. `--defer-all` closes the
+current session as review-only. An explicit `--restart` replaces that saved
+analysis only after its bound Contexts are revalidated; a failed replacement
 analysis leaves the previous session intact.
+
+Directional acceptance applies only material `EDIT` and `ADD` operations to
+the baseline and creates one checkpoint. A ready zero-operation assessment
+also creates one checkpoint that records the resolved no-change decision.
+Neither case mutates the incoming Context. `--to` remains deliberately absent:
+it is reserved for a future explicit destination of a symmetric meld rather
+than accepted as an alias for the authority-bearing `--into`.
 
 An eventual `mem import --paste` may orchestrate raw intake, atomization, and a
 directional meld. Import owns the run manifest and resumability; it must call
@@ -760,36 +923,41 @@ embedding a second semantic implementation.
    validation, exposing a lossless directional/issue adapter view, and
    declaring that adapter contract in each semantic-turn payload.
 2. **Completed: implement bounded symmetric Context melding.** Two direct-
-   Memory PEER Contexts produce one complete primary relation ledger, saved
-   issues, and exact non-applying result proposals.
+   Memory PEER Contexts import one exact ordered Compare ledger and its saved
+   issues provider-free. A subsequent grounding or whole-set turn may produce
+   exact non-applying target proposals without favoring either peer.
 3. **Completed: add shared issue and whole-set interaction.** The terminal
    shell supports issue selection, reading plus free-form refinement,
    whole-set comments, preserve-all, defer-all, provider-free resume, and
    provider-free acceptance.
-4. **Completed: apply with recorded evidence.** Source and target digests are
-   rechecked, results enter an empty target in one checkpoint, source Contexts
-   remain unchanged, retry can recover from the checkpoint, and trace reports
-   recorded `MELDED` evidence.
-5. **Next: implement Context-to-Context directional meld.** Reuse the batch
-   frame, turn, relation-group, proposal, session-CAS, and acceptance machinery
-   while introducing explicit `INCOMING` and `BASELINE` authority and exact
-   `EDIT` validation.
+4. **Completed: apply symmetric results with recorded evidence.** Source and
+   target digests are rechecked, results enter an empty target in one
+   checkpoint, both peer Contexts remain unchanged, retry can recover from the
+   checkpoint, and trace reports recorded `MELDED` evidence.
+5. **Completed: implement Context-to-Context directional meld.** The public
+   `--into` path reuses the batch frame, turn, relation-group, proposal,
+   session-CAS, and acceptance machinery while enforcing ordered `INCOMING`
+   and `BASELINE` authority, exact material `EDIT` / fresh-UID `ADD`
+   validation, provider-free acceptance, and zero-change receipts.
 6. **Completed: share the state-free message composer with Ground.** Ground
    and meld now use the same bordered multiline editor with an independently
    named buffer and the same focused-input convention (`Enter` sends;
-   `Ctrl-J` or `Alt-Enter` inserts a newline).
-   Focus, issue navigation, semantic actions, provider calls, and persistence
-   remain adapter-owned. The atomize schema remains independent; future
-   controller views must not pretend its issue artifact is a
-   Context-to-Context relation ledger.
-7. **Later: connect import.** Let a resumable import run invoke atomize and
+   `Ctrl-J` inserts a newline).
+   Ground focus and exact-command behavior remain Ground-owned.
+7. **Completed: share the Resolution Workbench with Atomize and Update.**
+   Nested list/detail/option navigation and UID-bound actions are common;
+   Meld's provider loop, relation ledger, readiness, persistence, and
+   acceptance remain Meld-owned. Update contributes a read-only planned-change
+   projection until its own issue-resolution artifact exists.
+8. **Later: connect import.** Let a resumable import run invoke atomize and
    directional meld while preserving each stage's preview, approval, and
    provenance.
 
-Symmetric v1 deliberately excludes raw input atomization, non-empty targets,
-automatic reference traversal, query-only sources, source deletion, source
-mutation, unbounded retrieval, and hidden truncation. Those behaviors must not
-be inferred from the word “meld.”
+Context-to-Context v1 deliberately excludes raw input atomization, automatic
+reference traversal, query-only sources, deletion, incoming or peer mutation,
+unbounded retrieval, and hidden truncation. Symmetric targets must still be
+distinct and empty; only directional baselines may be non-empty. Those
+behaviors must not be inferred from the word “meld.”
 
 ## Shared terminal chrome
 
@@ -797,12 +965,21 @@ Meld now uses the same neutral terminal sanitization and slot-based vertical
 frame composition as Ground and review. It also uses Ground's extracted
 state-free framed message composer. Meld may relabel the trusted frame as a
 whole-set comment while keeping the same editor instance. Inside that editor,
-`Enter` submits and `Ctrl-J` or `Alt-Enter` inserts a newline; `Ctrl-S` remains
-a compatibility submission alias. Its issue navigation, reading choices,
-provider-owned outer loop, saved relation ledger, and acceptance behavior
-remain meld-specific. Sharing the component therefore does not turn Ground's
-Goal–Rules–Cases controller into meld state. In particular, meld's `A` action
+`Enter` submits and `Ctrl-J` inserts a newline; `Ctrl-S` remains a compatibility
+submission alias. A lone `Escape` closes one expanded issue first and closes
+the Meld on the next press; from the overview or message composer it closes
+immediately without submitting or applying anything. `Alt-Enter` is not an
+alias because terminals encode it as the same Escape-prefixed sequence needed
+for reliable cancellation. The shared state-free back dispatcher routes only
+the presentation step; the Meld adapter still owns the final `None` result.
+Its issue navigation and reading-choice presentation now use the shared
+Resolution Workbench, while the provider-owned outer loop, saved relation
+ledger, readiness, and acceptance behavior remain Meld-specific. Sharing the
+component therefore does not turn Ground's
+Goal–Rules–Memories controller into meld state. In particular, meld's `A` action
 does not become a Ground-style exact-argv approval unless a future adapter
 explicitly constructs and displays a receipt whose target, session, and
 change-set preconditions are enforced at the save boundary. See
 [`shared-tui-command-review-design-rationale.md`](shared-tui-command-review-design-rationale.md).
+The higher-level boundary is recorded in
+[`semantic-resolution-workbench-design-rationale.md`](semantic-resolution-workbench-design-rationale.md).

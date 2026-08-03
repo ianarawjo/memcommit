@@ -5,7 +5,7 @@
 Meld, Atomize, and Update now project their operation-owned artifacts into one
 interactive Resolution Workbench presentation contract.  A future Reconcile
 implementation is expected to use the same contract.  Ground deliberately does
-not: its Goal–Contexts–Rules–Memories–Dialogue frame, draft lifecycle, and exact
+not: its Goal–Contexts–Rules–Memories–Chat frame, draft lifecycle, and exact
 command approval are a different interaction.
 
 The shared workbench is not a shared semantic session.  It owns only an

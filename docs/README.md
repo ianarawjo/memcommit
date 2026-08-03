@@ -24,6 +24,16 @@ limitation, the relevant focused `*-design-rationale.md` document must state
 the reason and the remaining boundary. A conversation-only explanation is not
 considered sufficient design history.
 
+## Multilingual Memory and explanation-language research TODO
+
+- [`multilingual-memory-and-explanation-language-design-rationale.md`](multilingual-memory-and-explanation-language-design-rationale.md)
+  records why Memory authoring language, semantic analysis language,
+  explanation language, interface language, and translation target are
+  distinct roles. The current shared result-workbench demo deliberately
+  retains English explanatory output while preserving source evidence
+  verbatim; global and per-command language selection remains deferred
+  research rather than partial localization.
+
 ## Clipboard result contract
 
 - [`mem-ls-design-rationale.md`](mem-ls-design-rationale.md) defines
@@ -48,9 +58,10 @@ considered sufficient design history.
 ## Translation contract
 
 - [`mem-translate-design-rationale.md`](mem-translate-design-rationale.md)
-  defines direct-only candidate scope, derived-Context replacement by default,
-  explicit in-place compatibility, strict provider output, concurrency
-  validation, checkpoint lineage, and the query-only privacy boundary.
+  defines direct-only candidate scope, persisted UID-less views, exact
+  semantic targets, explicit materialization, strict provider output,
+  concurrency validation, checkpoint lineage, and the query-only privacy
+  boundary.
 
 ## Atomize contract notes
 
@@ -77,8 +88,8 @@ considered sufficient design history.
 - [`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md)
   records the atomize grounding-session contract for multi-turn
   comment–implication–confirmation loops modeled on grounding in ordinary
-  human communication, plus the explicit next TODO to generalize that turn
-  model through `mem ground`.
+  human communication. Shared turn-lineage may be reused, but named Ground's
+  Goal–Rules–Memories frame remains separate from Resolution Workbench.
 - [`mem-atomize-grounding-screen-captures.md`](mem-atomize-grounding-screen-captures.md)
   indexes exact tested CLI captures for the workbench, awaiting, resumed,
   corrected ready, and applied states.
@@ -88,13 +99,16 @@ considered sufficient design history.
 - [`mem-meld-usage.md`](mem-meld-usage.md) is the canonical user-facing
   command guide. It standardizes “atomic meld” as informal shorthand for the
   implemented issue-scoped directional flow under
-  `mem atomize --evaluate`, distinguishes it from symmetric Context meld, and
-  explicitly marks public directional Context meld as future work.
+  `mem atomize --evaluate`; documents Context-wide directional
+  `mem meld [INCOMING] --into BASELINE`; distinguishes both from symmetric
+  `mem meld LEFT_PEER RIGHT_PEER`; and reserves `--to` for a future explicit
+  symmetric result destination.
 - [`mem-meld-design-rationale.md`](mem-meld-design-rationale.md) distills the
   directional and symmetric authority modes; explains issue/all/remaining
-  turn scope; documents the implemented symmetric Context workbench and
-  the atomize flow's lossless directional/issue projection with shared
-  turn-lineage validation; and records their relation, provenance, approval,
+  turn scope; documents both implemented Context workbenches and the atomize
+  flow's lossless directional/issue projection, where a unary source candidate
+  becomes an ephemeral one-Memory `INCOMING` Context frame against its bound
+  `BASELINE`; and records shared turn-lineage, relation, provenance, approval,
   and mutation contracts.
 
 ## Compare contract note

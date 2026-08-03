@@ -17,6 +17,7 @@ from memcommit.commands.tui_primitives import (
     TuiRegion,
     build_framed_multiline_input,
     build_tui_frame,
+    dispatch_tui_back,
     require_interactive_terminal,
     safe_terminal_text,
 )
@@ -47,6 +48,41 @@ def _line(value: str, limit: int = 100) -> str:
     return "".join(kept).rstrip() + "…"
 
 
+def _route_line(session: MeldSession) -> str:
+    """Render authority direction without making a baseline look like a peer."""
+    if session.mode == "DIRECTIONAL":
+        frame_by_role = {frame.role: frame for frame in session.frames}
+        incoming = frame_by_role["INCOMING"]
+        return (
+            " INCOMING "
+            f"{safe_terminal_text(incoming.context_name)} → "
+            "BASELINE / TARGET "
+            f"{safe_terminal_text(session.target.context_name)}\n"
+        )
+    return (
+        f" {safe_terminal_text(session.frames[0].context_name)} + "
+        f"{safe_terminal_text(session.frames[1].context_name)} → "
+        f"{safe_terminal_text(session.target.context_name)}\n"
+    )
+
+
+def _proposal_marker(session: MeldSession, operation: str) -> str:
+    if session.mode == "DIRECTIONAL" and operation == "EDIT":
+        return "~"
+    return "+"
+
+
+def _proposal_label(
+    session: MeldSession,
+    *,
+    operation: str,
+    disposition: str,
+) -> str:
+    if session.mode == "DIRECTIONAL":
+        return f"{operation} · {disposition}"
+    return disposition
+
+
 def _screen_text(
     session: MeldSession,
     *,
@@ -57,21 +93,16 @@ def _screen_text(
     assessment = session.current_assessment
     fragments: list[tuple[str, str]] = [
         ("class:title", f" MEM MELD · {session.mode}\n"),
-        (
-            "",
-            (
-                f" {session.frames[0].context_name} + "
-                f"{session.frames[1].context_name} → "
-                f"{session.target.context_name}\n"
-            ),
-        ),
+        ("", _route_line(session)),
         (
             "",
             (
                 f" {session.state} · "
                 f"{len(assessment.relations) if assessment else 0} relations · "
                 f"{len(assessment.issues) if assessment else 0} issues · "
-                f"{len(assessment.proposals) if assessment else 0} results\n\n"
+                f"{len(assessment.proposals) if assessment else 0} "
+                f"{'changes' if session.mode == 'DIRECTIONAL' else 'results'}"
+                "\n\n"
             ),
         ),
     ]
@@ -148,11 +179,17 @@ def _screen_text(
                     seen_members.add(key)
                     frame = frame_by_uid[member.frame_uid]
                     memory = memory_by_key[key]
+                    role = (
+                        f"[{frame.role}] "
+                        if session.mode == "DIRECTIONAL"
+                        else ""
+                    )
                     fragments.append(
                         (
                             "",
                             (
                                 "       - "
+                                f"{role}"
                                 f"{safe_terminal_text(frame.context_name)} "
                                 f"#{memory.position + 1} "
                                 f"[{memory.uid[:8]}] · "
@@ -187,29 +224,57 @@ def _screen_text(
                     )
                 )
             for proposal in affected:
+                marker = _proposal_marker(session, proposal.operation)
+                label = _proposal_label(
+                    session,
+                    operation=proposal.operation,
+                    disposition=proposal.disposition,
+                )
                 fragments.append(
                     (
                         "",
                         (
-                            f"       - [{proposal.disposition}] "
+                            f"       {marker} [{label}] "
                             f"{safe_terminal_text(proposal.content)}\n"
                         ),
                     )
                 )
+    proposal_heading = (
+        " PROPOSED BASELINE CHANGES\n"
+        if session.mode == "DIRECTIONAL"
+        else " PROPOSED TARGET MEMORIES\n"
+    )
     fragments.extend(
         [
             ("", "\n"),
-            ("class:section", " PROPOSED TARGET MEMORIES\n"),
+            ("class:section", proposal_heading),
         ]
     )
     if not assessment.proposals:
-        fragments.append(("", "  (none yet)\n"))
+        if session.mode == "DIRECTIONAL" and session.state == "READY_TO_APPLY":
+            fragments.append(
+                (
+                    "",
+                    (
+                        "  (no baseline changes proposed; ready to accept "
+                        "this no-change result)\n"
+                    ),
+                )
+            )
+        else:
+            fragments.append(("", "  (none yet)\n"))
     for index, proposal in enumerate(assessment.proposals, start=1):
+        marker = _proposal_marker(session, proposal.operation)
+        label = _proposal_label(
+            session,
+            operation=proposal.operation,
+            disposition=proposal.disposition,
+        )
         fragments.append(
             (
                 "",
                 (
-                    f"  + {index:>2}. [{proposal.disposition}] "
+                    f"  {marker} {index:>2}. [{label}] "
                     f"{_line(proposal.content, 120)}\n"
                 ),
             )
@@ -229,7 +294,7 @@ def run_meld_shell(
         require_interactive_terminal(
             "Interactive meld",
             snapshot_hint=(
-                "Run the same 'mem meld LEFT RIGHT' command outside a TTY "
+                "Run the same 'mem meld' command outside a TTY "
                 "to render its saved snapshot."
             ),
         )
@@ -354,12 +419,6 @@ def run_meld_shell(
         submit(event)
 
     @bindings.add("c-j", filter=has_focus(input_area), eager=True)
-    @bindings.add(
-        "escape",
-        "enter",
-        filter=has_focus(input_area),
-        eager=True,
-    )
     def _insert_newline(event) -> None:
         input_area.buffer.insert_text("\n")
         event.app.invalidate()
@@ -380,10 +439,25 @@ def run_meld_shell(
             return
         event.app.exit(result=MeldShellAction(kind="ACCEPT"))
 
+    def _collapse_detail(event) -> bool:
+        # Escape in the composer cancels Meld instead of submitting a draft.
+        # Only the visible issue drill-down forms a back-navigation layer.
+        if event.app.layout.has_focus(input_area) or not expanded["value"]:
+            return False
+        expanded["value"] = False
+        return True
+
+    def _close(event) -> None:
+        event.app.exit(result=None)
+
+    @bindings.add("escape", eager=True)
+    def _back_or_close(event) -> None:
+        dispatch_tui_back(event, _collapse_detail, close=_close)
+
     @bindings.add("q", filter=~has_focus(input_area), eager=True)
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
-        event.app.exit(result=None)
+        _close(event)
 
     footer = Window(
         FormattedTextControl(
@@ -391,9 +465,9 @@ def run_meld_shell(
                 f" {status['value']}"
                 if status["value"]
                 else (
-                    " ↑/↓ issue  Enter detail  1-5 reading  Tab comment  "
-                    "G comment all  Enter send  Ctrl-J/Alt-Enter newline  "
-                    "P preserve all  D defer  A accept  Q quit "
+                    " ↑/↓ issue  Enter detail  Esc back/close  1-5 reading  "
+                    "Tab/G comment  Enter send  Ctrl-J newline  "
+                    "P preserve all  D defer  A accept  Q close "
                 )
             )
         ),

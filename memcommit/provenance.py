@@ -795,7 +795,14 @@ def _meld_change_evidence(
     before: _Frame,
     after: _Frame,
 ) -> tuple[dict[str, dict[str, Any]], str | None]:
-    """Validate one symmetric meld receipt against its target snapshots."""
+    """Validate one applied meld receipt against its target snapshots.
+
+    Schema version 1 is the original symmetric, empty-target contract.
+    Directional meld uses version 2 because its BASELINE source is also the
+    non-empty target and each result is an explicit EDIT or ADD.  Keeping the
+    formats separate prevents a v1 receipt from acquiring mutation authority
+    merely because a newer reader understands directional meld.
+    """
     record = args.get("meld")
     required = {
         "schema_version",
@@ -811,9 +818,15 @@ def _meld_change_evidence(
     }
     if not isinstance(record, dict) or set(record) != required:
         return {}, "has no valid meld record"
+    schema_version = record.get("schema_version")
+    mode = record.get("mode")
     if (
-        record.get("schema_version") != 1
-        or record.get("mode") != "SYMMETRIC"
+        type(schema_version) is not int
+        or (schema_version, mode)
+        not in {
+            (1, "SYMMETRIC"),
+            (2, "DIRECTIONAL"),
+        }
     ):
         return {}, "has an unsupported meld record"
     try:
@@ -826,6 +839,7 @@ def _meld_change_evidence(
         record.get("session_uid") != change_set.session_uid
         or record.get("turn_uid") != change_set.turn_uid
         or record.get("change_set_digest") != change_set.digest
+        or change_set.mode != mode
         or change_set.target_uid != before.context_uid
         or change_set.target_digest != before.record_digest
     ):
@@ -851,17 +865,21 @@ def _meld_change_evidence(
     expected_frame_digests = dict(change_set.source_frame_digests)
     source_labels: dict[str, str] = {}
     source_memory_text: dict[tuple[str, str], str] = {}
+    source_role_by_frame: dict[str, str] = {}
+    source_binding_by_role: dict[str, tuple[str, str, str]] = {}
     for source in sources:
+        expected_source_keys = {
+            "frame_uid",
+            "context_uid",
+            "context_name",
+            "context_digest",
+            "memories",
+        }
+        if schema_version == 2:
+            expected_source_keys.add("role")
         if (
             not isinstance(source, dict)
-            or set(source)
-            != {
-                "frame_uid",
-                "context_uid",
-                "context_name",
-                "context_digest",
-                "memories",
-            }
+            or set(source) != expected_source_keys
             or source.get("frame_uid") not in expected_frame_digests
             or source.get("context_digest")
             != expected_frame_digests[source["frame_uid"]]
@@ -869,6 +887,19 @@ def _meld_change_evidence(
             or not isinstance(source.get("context_name"), str)
         ):
             return {}, "has invalid meld source bindings"
+        role = source.get("role")
+        if schema_version == 2:
+            if (
+                role not in {"INCOMING", "BASELINE"}
+                or role in source_binding_by_role
+            ):
+                return {}, "has invalid directional meld source roles"
+            source_role_by_frame[source["frame_uid"]] = role
+            source_binding_by_role[role] = (
+                source["context_uid"],
+                source["context_name"],
+                source["context_digest"],
+            )
         raw_memories = source.get("memories")
         if not isinstance(raw_memories, list) or not raw_memories:
             return {}, "has invalid meld source snapshots"
@@ -919,11 +950,28 @@ def _meld_change_evidence(
             != source["context_digest"]
         ):
             return {}, "has source snapshots that do not match their digest"
+        label = f"{source['context_name']}#{source['context_uid'][:8]}"
         source_labels[source["frame_uid"]] = (
-            f"{source['context_name']}#{source['context_uid'][:8]}"
+            f"{role} {label}" if schema_version == 2 else label
         )
     if set(source_labels) != set(expected_frame_digests):
         return {}, "has incomplete meld source bindings"
+    if schema_version == 2:
+        if set(source_binding_by_role) != {"INCOMING", "BASELINE"}:
+            return {}, "has incomplete directional meld source roles"
+        baseline_binding = source_binding_by_role["BASELINE"]
+        incoming_binding = source_binding_by_role["INCOMING"]
+        if (
+            baseline_binding
+            != (
+                before.context_uid,
+                before.context_name,
+                before.record_digest,
+            )
+            or incoming_binding[0] == before.context_uid
+            or incoming_binding[1] == before.context_name
+        ):
+            return {}, "has a mismatched directional BASELINE binding"
 
     turns = record.get("turns")
     expected_turn_digests = dict(change_set.turn_digests)
@@ -987,31 +1035,47 @@ def _meld_change_evidence(
     proposal_by_uid = {
         proposal.uid: proposal for proposal in change_set.proposals
     }
+    if (
+        schema_version == 2
+        and len(proposal_by_uid) != len(change_set.proposals)
+    ):
+        return {}, "has duplicate directional meld proposals"
     by_uid: dict[str, dict[str, Any]] = {}
+    seen_proposal_uids: set[str] = set()
+    expected_add_uids: list[str] = []
+    expected_edit_uids: list[str] = []
     for result in results:
+        expected_result_keys = {
+            "proposal_uid",
+            "memory_uid",
+            "disposition",
+            "content_sha256",
+            "source_members",
+            "grounded_by_turn_uids",
+            "relation_uids",
+            "reason",
+        }
+        if schema_version == 2:
+            expected_result_keys.add("operation")
         if (
             not isinstance(result, dict)
-            or set(result)
-            != {
-                "proposal_uid",
-                "memory_uid",
-                "disposition",
-                "content_sha256",
-                "source_members",
-                "grounded_by_turn_uids",
-                "relation_uids",
-                "reason",
-            }
+            or set(result) != expected_result_keys
         ):
             return {}, "has invalid meld result records"
-        proposal = proposal_by_uid.get(result.get("proposal_uid"))
+        proposal_uid = result.get("proposal_uid")
+        proposal = proposal_by_uid.get(proposal_uid)
         memory_uid = result.get("memory_uid")
+        operation = proposal.operation if proposal is not None else None
         if (
             proposal is None
+            or proposal_uid in seen_proposal_uids
             or memory_uid != proposal.memory_uid
-            or memory_uid in before.memories
             or memory_uid not in after.memories
             or after.memories[memory_uid].content != proposal.content
+            or (
+                schema_version == 2
+                and result.get("operation") != operation
+            )
             or result.get("disposition") != proposal.disposition
             or result.get("content_sha256")
             != hashlib.sha256(
@@ -1033,6 +1097,47 @@ def _meld_change_evidence(
             )
         ):
             return {}, "does not match its recorded meld result"
+        assert isinstance(proposal_uid, str)
+        assert isinstance(memory_uid, str)
+        seen_proposal_uids.add(proposal_uid)
+        if schema_version == 1:
+            if memory_uid in before.memories:
+                return {}, "does not match its recorded meld result"
+        else:
+            member_roles = {
+                source_role_by_frame[member.frame_uid]
+                for member in proposal.source_members
+            }
+            if proposal.disposition == "USER_ADD":
+                if operation != "ADD":
+                    return {}, "has an invalid directional USER_ADD operation"
+            elif "INCOMING" not in member_roles:
+                return {}, "has a directional result without INCOMING evidence"
+            if operation == "EDIT":
+                baseline_frame_uid = next(
+                    frame_uid
+                    for frame_uid, role in source_role_by_frame.items()
+                    if role == "BASELINE"
+                )
+                if (
+                    memory_uid not in before.memories
+                    or before.memories[memory_uid].content == proposal.content
+                    or (baseline_frame_uid, memory_uid)
+                    not in {
+                        (member.frame_uid, member.memory_uid)
+                        for member in proposal.source_members
+                    }
+                ):
+                    return {}, "has an invalid directional EDIT result"
+                expected_edit_uids.append(memory_uid)
+            elif operation == "ADD":
+                if memory_uid in before.memories:
+                    return {}, "has an invalid directional ADD result"
+                expected_add_uids.append(memory_uid)
+            else:
+                return {}, "has an unknown directional meld operation"
+            if memory_uid in by_uid:
+                return {}, "has duplicate directional meld result targets"
         source_lines = [
             (
                 f"Source {source_labels[member.frame_uid]} "
@@ -1050,23 +1155,45 @@ def _meld_change_evidence(
         by_uid[memory_uid] = {
             "session_uid": change_set.session_uid,
             "change_set_digest": change_set.digest,
+            "mode": mode,
+            "operation": operation,
             "disposition": proposal.disposition,
             "reason": proposal.reason,
             "declared_frame": "\n".join([*source_lines, *turn_lines]),
         }
-    if set(by_uid) != {
-        proposal.memory_uid for proposal in change_set.proposals
-    }:
-        return {}, "has incomplete meld result evidence"
     if (
-        set(after.memories) - set(before.memories) != set(by_uid)
-        or set(before.memories) - set(after.memories)
-        or any(
-            before.memories[uid].content != after.memories[uid].content
-            for uid in set(before.memories) & set(after.memories)
-        )
+        seen_proposal_uids != set(proposal_by_uid)
+        or set(by_uid)
+        != {proposal.memory_uid for proposal in change_set.proposals}
     ):
-        return {}, "does not match the meld target snapshot transition"
+        return {}, "has incomplete meld result evidence"
+    added_uids = set(after.memories) - set(before.memories)
+    removed_uids = set(before.memories) - set(after.memories)
+    changed_uids = {
+        uid
+        for uid in set(before.memories) & set(after.memories)
+        if before.memories[uid].content != after.memories[uid].content
+    }
+    if schema_version == 1:
+        if (
+            added_uids != set(by_uid)
+            or removed_uids
+            or changed_uids
+        ):
+            return {}, "does not match the meld target snapshot transition"
+    elif (
+        added_uids != set(expected_add_uids)
+        or changed_uids != set(expected_edit_uids)
+        or removed_uids
+        # Context.replace retains order and directional ADD appends in exact
+        # proposal order.  Accepting a reorder here would let a receipt attest
+        # to a different post-image than the operation actually authorizes.
+        or after.order
+        != (*before.order, *expected_add_uids)
+        or len(expected_add_uids) != len(set(expected_add_uids))
+        or len(expected_edit_uids) != len(set(expected_edit_uids))
+    ):
+        return {}, "does not match the directional meld target transition"
     return by_uid, None
 
 
@@ -1975,12 +2102,17 @@ def _transition_events(
 
     for uid in sorted(changed, key=lambda item: after.memories[item].position):
         grounding = grounding_changes.get(uid)
+        meld = meld_changes.get(uid)
         events.append(
             TraceEvent(
                 kind="EDITED",
                 evidence=(
                     "RECORDED"
-                    if command == "edit" or grounding is not None
+                    if (
+                        command == "edit"
+                        or grounding is not None
+                        or meld is not None
+                    )
                     else "RECONSTRUCTED"
                 ),
                 timestamp=timestamp,
@@ -1992,44 +2124,82 @@ def _transition_events(
                 reason=(
                     grounding["reason"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["reason"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 reason_codes=(
                     ("ATOMIZE_GROUNDING",)
                     if grounding is not None
-                    else ()
+                    else (
+                        (
+                            "MELD",
+                            "EDIT",
+                            meld["disposition"],
+                        )
+                        if meld is not None
+                        else ()
+                    )
                 ),
                 operation_id=(
                     grounding["session_uid"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["session_uid"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 declared_frame=(
                     grounding["declared_frame"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["declared_frame"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 declared_frame_digest=(
                     hashlib.sha256(
                         grounding["declared_frame"].encode("utf-8")
                     ).hexdigest()
                     if grounding is not None
-                    else None
+                    else (
+                        hashlib.sha256(
+                            meld["declared_frame"].encode("utf-8")
+                        ).hexdigest()
+                        if meld is not None
+                        else None
+                    )
                 ),
                 uncertainty_reason=(
                     "Applied after a multi-turn atomize grounding dialogue."
                     if grounding is not None
-                    else None
+                    else (
+                        "Edited by an accepted directional Context meld."
+                        if meld is not None
+                        else None
+                    )
                 ),
                 source_review_uid=(
                     grounding["session_uid"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["session_uid"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 source_review_digest=(
                     grounding["change_set_digest"]
                     if grounding is not None
-                    else None
+                    else (
+                        meld["change_set_digest"]
+                        if meld is not None
+                        else None
+                    )
                 ),
                 source_analysis_uid=(
                     grounding["source_analysis_uid"]
@@ -2136,7 +2306,14 @@ def _transition_events(
                     ("ATOMIZE_GROUNDING",)
                     if grounding is not None
                     else (
-                        ("MELD", meld["disposition"])
+                        (
+                            "MELD",
+                            "ADD",
+                            meld["disposition"],
+                        )
+                        if meld is not None
+                        and meld["mode"] == "DIRECTIONAL"
+                        else ("MELD", meld["disposition"])
                         if meld is not None
                         else ()
                     )
@@ -2177,7 +2354,14 @@ def _transition_events(
                     "Created after a multi-turn atomize grounding dialogue."
                     if grounding is not None
                     else (
-                        "Created by an accepted symmetric Context meld."
+                        (
+                            "Added by an accepted directional Context meld."
+                            if meld["mode"] == "DIRECTIONAL"
+                            else (
+                                "Created by an accepted symmetric Context "
+                                "meld."
+                            )
+                        )
                         if meld is not None
                         else None
                     )

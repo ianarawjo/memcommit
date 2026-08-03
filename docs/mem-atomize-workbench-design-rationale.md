@@ -921,10 +921,13 @@ optional and explicitly confirmed.
 The complete design rationale is
 [`mem-review-conversational-grounding-design-rationale.md`](mem-review-conversational-grounding-design-rationale.md).
 The atomize dialogue now reuses the common meld turn-lineage invariant and
-declares itself as `DIRECTIONAL` / `ISSUE` with `CLARIFICATION` and `BASELINE`
-roles in each semantic-turn payload. This is a lossless adapter: artifact
-migration and a generic cross-operation persistence schema remain outside the
-atomize slice.
+declares itself as `DIRECTIONAL` / `ISSUE`. It projects the selected
+source-grounded issue as an ephemeral `INCOMING` Context frame, the containing
+Context as the bound `BASELINE`, and `CLARIFICATION` as turn evidence rather
+than a third frame. Unary issues therefore use a one-Memory temporary Context
+projection; pair issues retain both source Memories. The projection is never
+stored or checkpointed. This remains a lossless adapter: artifact migration
+and a generic cross-operation persistence schema are outside the atomize slice.
 
 ## Deferred decisions
 

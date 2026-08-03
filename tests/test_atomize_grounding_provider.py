@@ -291,12 +291,36 @@ def test_one_call_uses_opaque_ids_preserves_pair_and_never_mutates():
         source_uid not in prompt
         for source_uid in source_uids
     )
+    assert ctx.uid not in prompt
+    assert session.uid not in prompt
     assert len(payload["context"]["memories"]) == 3
-    assert payload["meld_contract"] == {
-        "authority_mode": "DIRECTIONAL",
-        "turn_scope": "ISSUE",
-        "input_roles": ["CLARIFICATION", "BASELINE"],
-    }
+    meld_contract = payload["meld_contract"]
+    assert meld_contract["authority_mode"] == "DIRECTIONAL"
+    assert meld_contract["turn_scope"] == "ISSUE"
+    assert meld_contract["input_roles"] == ["INCOMING", "BASELINE"]
+    assert meld_contract["turn_evidence_role"] == "CLARIFICATION"
+    incoming, baseline = meld_contract["frames"]
+    assert incoming["frame_id"] == "incoming"
+    assert incoming["role"] == "INCOMING"
+    assert incoming["kind"] == "ISSUE_CONTEXT"
+    assert incoming["persistence"] == "EPHEMERAL"
+    assert incoming["context_name"] is None
+    assert [
+        memory["memory_id"] for memory in incoming["memories"]
+    ] == payload["anchor"]["source_memory_ids"]
+    assert baseline["frame_id"] == "baseline"
+    assert baseline["role"] == "BASELINE"
+    assert baseline["kind"] == "CONTAINING_CONTEXT"
+    assert baseline["persistence"] == "BOUND"
+    assert baseline["context_name"] == ctx.name
+    assert [
+        memory["memory_id"] for memory in baseline["memories"]
+    ] == [
+        memory["memory_id"] for memory in payload["context"]["memories"]
+    ]
+    # Clarification remains one dialogue turn, not a synthetic third frame.
+    assert len(meld_contract["frames"]) == 2
+    assert payload["turns"][0]["comment"] == session.turns[0].comment
     assert payload["anchor"]["arity"] == "UNARY"
     assert len(payload["turns"]) == 1
     assert payload["previous_assessment"] is None

@@ -390,7 +390,7 @@ def _build_provider_view(
         raise AtomizeGroundingProviderError(
             "The grounding session does not match this Context and analysis."
         )
-    meld_view = project_atomize_grounding_as_meld(session)
+    meld_view = project_atomize_grounding_as_meld(session, ctx)
 
     direct = [
         (position, item)
@@ -494,12 +494,34 @@ def _build_provider_view(
     }
     payload = {
         "meld_contract": {
-            # The adapter is operational input to the semantic turn, not only
-            # documentation: clarification has directional authority over one
-            # selected issue while the complete bounded baseline is rechecked.
+            # The issue sources are a non-persistent incoming Context
+            # projection.  Reuse each baseline alias so the model cannot count
+            # that projection as independent corroborating evidence.
             "authority_mode": meld_view.authority_mode,
             "turn_scope": meld_view.scope,
             "input_roles": list(meld_view.input_roles),
+            "turn_evidence_role": "CLARIFICATION",
+            "frames": [
+                {
+                    "frame_id": (
+                        "incoming" if frame.role == "INCOMING" else "baseline"
+                    ),
+                    "role": frame.role,
+                    "kind": frame.kind,
+                    "persistence": frame.persistence,
+                    "context_name": frame.source_context_name,
+                    "memories": [
+                        {
+                            "memory_id": memory_id_by_uid[memory.uid],
+                            "frame_position": memory.frame_position,
+                            "source_position": memory.source_position,
+                            "content_digest": memory.content_digest,
+                        }
+                        for memory in frame.memories
+                    ],
+                }
+                for frame in meld_view.frames
+            ],
         },
         "context": {
             # Context identity is irrelevant to interpretation and remains
@@ -832,9 +854,13 @@ def _prompt(payload: dict[str, object]) -> str:
         )
     return (
         "Assess the latest turn as an issue-scoped DIRECTIONAL meld inside a "
-        "multi-turn human grounding dialogue. The user's CLARIFICATION is "
-        "incoming evidence and the supplied local frame is the BASELINE; do "
-        "not silently generalize that evidence beyond demonstrated effects. "
+        "multi-turn human grounding dialogue. Atomize has projected the "
+        "selected source-grounded issue as an ephemeral INCOMING Context "
+        "frame, and the supplied containing Context is the bounded BASELINE. "
+        "The incoming frame is a focus projection of baseline Memory aliases, "
+        "not independent corroborating evidence. The user's CLARIFICATION is "
+        "turn evidence attached to this meld, not a third Context; do not "
+        "silently generalize it beyond demonstrated effects. "
         "Recompute a cumulative active "
         "understanding: a correction, retraction, or qualification replaces "
         "the affected earlier understanding instead of being concatenated "

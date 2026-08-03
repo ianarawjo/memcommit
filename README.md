@@ -24,9 +24,13 @@ The implemented meld workflows have different entry points:
 
 - one-issue directional grounding, informally called atomic meld:
   `mem atomize --context CONTEXT --evaluate ISSUE`;
+- directional Context intake into an authoritative baseline:
+  `mem meld --into BASELINE` when the current Context is incoming, or
+  `mem meld INCOMING --into BASELINE` when it is explicit;
 - symmetric combination of two equal-authority Contexts:
   create an empty result Context, then run `mem meld LEFT_PEER RIGHT_PEER`.
 
 See [`docs/mem-meld-usage.md`](docs/mem-meld-usage.md) for the canonical
-commands, interactive controls, acceptance boundaries, and currently
-unimplemented variants.
+commands, interactive controls, acceptance boundaries, and the deliberate
+distinction between directional `--into` and the reserved future symmetric
+`--to` destination.

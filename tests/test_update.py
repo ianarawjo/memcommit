@@ -110,6 +110,14 @@ def _make_nested_pair():
     ops.embed(source_child, source)
 
     target = ops.init(TASK1_TARGET)
+    target.add(
+        QueryContextRef(
+            uid="11111111-1111-4111-8111-111111111111",
+            name="campus-wiki",
+            target_source_uid="22222222-2222-4222-8222-222222222222",
+            provider="codex_chatgpt",
+        )
+    )
     target_child = ops.init(TASK1_TARGET_CHILD)
     target_memory = ops.add(
         target_child,
@@ -735,6 +743,13 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
         "context_name": TASK1_TARGET_CHILD,
         "checkpoint_uid": checkpoint["uid"],
     }
+    fork_root = store.load_direct(TASK1_TARGET)
+    origin_pointer = fork_root.memories[
+        "11111111-1111-4111-8111-111111111111"
+    ]
+    assert isinstance(origin_pointer, QueryContextRef)
+    assert origin_pointer.name == "campus-wiki"
+    assert not store.context_exists("campus-wiki")
     assert {
         path: path.read_bytes()
         for path in (
@@ -776,6 +791,25 @@ def test_impact_then_update_resolve_relative_existing_target(
     assert TASK1_TARGET in impact.output
     assert TASK1_TARGET in update.output
     assert len(provider.calls) == 1
+
+
+def test_task1_query_only_origin_cannot_be_an_update_target(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("provider should not connect"),
+    )
+
+    result = runner.invoke(app, ["update", "--to", "campus-wiki"])
+
+    assert result.exit_code == 1
+    assert "Context 'campus-wiki' not found" in result.stderr
+    assert not (isolated_store / "staged-update.json").exists()
+    assert not store.context_exists("campus-wiki")
 
 
 def test_repeated_update_is_idempotent_and_does_not_reconnect(

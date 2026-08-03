@@ -1,9 +1,11 @@
-"""Durable common-grounding sessions for rules and reviewed cases.
+"""Durable common-grounding sessions for Rules and reviewed Ground Memories.
 
 Schema version 1 is the original empty scaffold.  Schema version 2 binds that
 scaffold to an immutable task brief and exact Context frames, then permits
-small, explicitly reviewed rule/case rounds.  Grounding changes only this
-artifact; applying accepted cases to Contexts remains a separate operation.
+small, explicitly reviewed Rule/Memory rounds.  Grounding changes only this
+artifact; applying accepted Ground Memories to Contexts remains separate.
+
+The persisted ``CASE`` vocabulary remains a schema-compatibility boundary.
 """
 from __future__ import annotations
 
@@ -385,7 +387,7 @@ class GroundTargetRequirement:
 
 @dataclass(frozen=True)
 class GroundSourceRef:
-    """Content-addressed link from a case to one bound Memory."""
+    """Content-addressed link from a Ground Memory to one Context Memory."""
 
     context_uid: str
     memory_uid: str
@@ -529,7 +531,7 @@ METHOD_REFERENCES = (
 
 @dataclass(frozen=True)
 class GroundItem:
-    """One rule, traceable case, issue, or review decision."""
+    """One Rule, traceable Ground Memory, issue, or review decision."""
 
     uid: str
     kind: GroundItemKind
@@ -617,7 +619,7 @@ class GroundItem:
         target_context_uids = data["target_context_uids"]
         case_role = _string(
             data["case_role"],
-            "grounding case role",
+            "Ground Memory role",
             empty=True,
             limit=30,
         )
@@ -627,7 +629,7 @@ class GroundItem:
         case_role = _LEGACY_CASE_ROLE.get(case_role, case_role)
         disposition = _string(
             data["disposition"],
-            "grounding case disposition",
+            "Ground Memory disposition",
             empty=True,
             limit=30,
         )
@@ -773,7 +775,7 @@ class GroundItem:
                     and not self.expected.strip()
                 )
             ):
-                raise GroundError("Invalid grounding case shape.")
+                raise GroundError("Invalid Ground Memory shape.")
         elif self.kind == "DECISION":
             if (
                 (
@@ -963,7 +965,7 @@ class GroundSession:
                 for related_uid in item.related_uids
             ):
                 raise GroundError(
-                    "Grounding rules may relate only to grounding cases."
+                    "Grounding Rules may relate only to Ground Memories."
                 )
             if item.kind == "CASE":
                 if (
@@ -974,7 +976,7 @@ class GroundSession:
                     not in item_by_uid[item.related_uids[0]].related_uids
                 ):
                     raise GroundError(
-                        "Each grounding case must link back to one rule."
+                        "Each Ground Memory must link back to one Rule."
                     )
             if item.kind == "RULE" and any(
                 related_uid not in item_by_uid
@@ -982,7 +984,7 @@ class GroundSession:
                 for related_uid in item.related_uids
             ):
                 raise GroundError(
-                    "Grounding rule/case links must be reciprocal."
+                    "Grounding Rule/Memory links must be reciprocal."
                 )
             if item.kind == "DECISION" and item.status != "RESOLVED":
                 raise GroundError("Grounding decisions must be resolved.")
@@ -1048,7 +1050,7 @@ class GroundSession:
                 for source_ref in item.source_refs
             ):
                 raise GroundError(
-                    "Grounding cases must reference the bound "
+                    "Ground Memories must reference the bound "
                     "working-candidate Context."
                 )
             if any(
@@ -1056,7 +1058,7 @@ class GroundSession:
                 for target_uid in item.target_context_uids
             ):
                 raise GroundError(
-                    "Grounding case references an unbound target Context."
+                    "Ground Memory references an unbound target Context."
                 )
         if (
             len({reference.uid for reference in parsed_references})
@@ -1235,7 +1237,7 @@ def create_ground_session(
     completion_criterion: str = LEGACY_COMPLETION_MARKER,
     scope: tuple[str, ...] = (),
 ) -> GroundSession:
-    """Create a validated empty scaffold without inferring rules or cases."""
+    """Create a validated scaffold without inferring Rules or Memories."""
     goal = validate_ground_goal(goal, empty=True)
     session = GroundSession(
         uid=str(uuid.uuid4()),
@@ -1492,7 +1494,7 @@ def propose_ground_rule(
     current_contexts: Iterable[Context],
     rule_provenance: GroundRuleProvenance = "DISTILLED_FROM_GOAL",
 ) -> GroundSession:
-    """Propose one reusable Rule without manufacturing a Case."""
+    """Propose one reusable Rule without manufacturing a Ground Memory."""
     _proposal_contexts(session, current_contexts)
     rule = _string(rule, "grounding proposed rule")
     rationale = _string(rationale, "grounding proposal rationale")
@@ -1502,7 +1504,8 @@ def propose_ground_rule(
     ):
         raise GroundError(
             "A new rule must be USER_STATED, DISTILLED_FROM_GOAL, or "
-            "INDUCED_FROM_CASES; JOINTLY_REVISED is created by review."
+            "legacy INDUCED_FROM_CASES (the persisted token for Memories); "
+            "JOINTLY_REVISED is created by review."
         )
     iteration = session.revision + 1
     proposed_rule = GroundItem(
@@ -1539,14 +1542,14 @@ def propose_ground_case(
     case_role: GroundCaseRole = "FIT",
     disposition: GroundDisposition = "INCLUDE",
 ) -> GroundSession:
-    """Attach one traceable fit, boundary, or contrast case to a rule."""
+    """Attach one traceable fit, boundary, or contrast Memory to a Rule."""
     contexts = _proposal_contexts(session, current_contexts)
     rule = _find_rule(session, rule_selector)
     if rule.status in {"REJECTED", "DEFERRED"}:
         raise GroundError(
-            "A case cannot be attached to a rejected or deferred rule."
+            "A Ground Memory cannot attach to a rejected or deferred Rule."
         )
-    case = _string(case, "grounding proposed case")
+    case = _string(case, "proposed Ground Memory")
     rationale = _string(rationale, "grounding proposal rationale")
     expected = _string(
         expected,
@@ -1554,7 +1557,7 @@ def propose_ground_case(
         empty=disposition != "INCLUDE",
     )
     if case_role not in _CASE_ROLES or disposition not in _DISPOSITIONS:
-        raise GroundError("Invalid grounding case classification.")
+        raise GroundError("Invalid Ground Memory classification.")
 
     source_frame = next(
         (
@@ -1568,7 +1571,7 @@ def propose_ground_case(
     contexts_by_uid = _contexts_by_uid(contexts)
     if source_frame is None or source_context_uid not in contexts_by_uid:
         raise GroundError(
-            "Grounding cases must use the bound working-candidate Context."
+            "Ground Memories must use the bound working-candidate Context."
         )
     memory = _find_memory(
         contexts_by_uid[source_context_uid],
@@ -1576,8 +1579,8 @@ def propose_ground_case(
     )
     if case != memory.content:
         raise GroundError(
-            "Grounding case content must exactly match its bound source "
-            "Memory; put rewritten output in expected."
+            "Ground Memory content must exactly match its bound source "
+            "Context Memory; put rewritten output in expected."
         )
 
     target_frame_by_name = {
@@ -1671,10 +1674,10 @@ def propose_ground_round(
     disposition: GroundDisposition = "INCLUDE",
     rule_provenance: GroundRuleProvenance = "INDUCED_FROM_CASES",
 ) -> GroundSession:
-    """Record one related rule/case proposal as a single revision."""
+    """Record one related Rule/Memory proposal as a single revision."""
     contexts = _proposal_contexts(session, current_contexts)
     rule = _string(rule, "grounding proposed rule")
-    case = _string(case, "grounding proposed case")
+    case = _string(case, "proposed Ground Memory")
     rationale = _string(rationale, "grounding proposal rationale")
     expected = _string(
         expected,
@@ -1687,7 +1690,7 @@ def propose_ground_round(
         or rule_provenance not in _RULE_PROVENANCE
         or rule_provenance == "JOINTLY_REVISED"
     ):
-        raise GroundError("Invalid grounding case classification.")
+        raise GroundError("Invalid Ground Memory classification.")
 
     source_frame = next(
         (
@@ -1701,7 +1704,7 @@ def propose_ground_round(
     contexts_by_uid = _contexts_by_uid(contexts)
     if source_frame is None or source_context_uid not in contexts_by_uid:
         raise GroundError(
-            "Grounding cases must use the bound working-candidate Context."
+            "Ground Memories must use the bound working-candidate Context."
         )
     memory = _find_memory(
         contexts_by_uid[source_context_uid],
@@ -1709,8 +1712,8 @@ def propose_ground_round(
     )
     if case != memory.content:
         raise GroundError(
-            "Grounding case content must exactly match its bound source "
-            "Memory; put rewritten output in expected."
+            "Ground Memory content must exactly match its bound source "
+            "Context Memory; put rewritten output in expected."
         )
 
     target_frame_by_name = {
@@ -1802,8 +1805,8 @@ def review_ground_item(
         and not (action == "REFINE" and target.status == "ACCEPTED")
     ):
         raise GroundError(
-            "Only a proposed rule/case, or an accepted item being reopened "
-            "with REFINE, can be reviewed."
+            "Only a proposed Rule/Ground Memory, or an accepted item being "
+            "reopened with REFINE, can be reviewed."
         )
     if action == "REFINE" and not response.strip():
         raise GroundError("REFINE requires replacement text.")
@@ -1833,7 +1836,7 @@ def review_ground_item(
     else:
         replacement = replace(
             target,
-            expected=_string(response, "refined grounding case output"),
+            expected=_string(response, "refined Ground Memory output"),
             status="PROPOSED",
             origin="JOINT",
             iteration=iteration,
@@ -2044,7 +2047,7 @@ def accepted_ground_case_count(
     session: GroundSession,
     target_context_uid: str,
 ) -> int:
-    """Count accepted INCLUDE Cases backed by an accepted Rule."""
+    """Count accepted INCLUDE Ground Memories backed by an accepted Rule."""
     accepted_rule_uids = {
         item.uid
         for item in session.items
@@ -2069,7 +2072,7 @@ def target_requirement_status(
     session: GroundSession,
     requirement: GroundTargetRequirement,
 ) -> GroundTargetStatus:
-    """Derive one top-panel slot state from accepted reviewed cases."""
+    """Derive one target state from accepted reviewed Ground Memories."""
     if requirement.blocked_reason:
         return "BLOCKED"
     accepted = accepted_ground_case_count(

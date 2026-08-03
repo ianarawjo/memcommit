@@ -44,8 +44,9 @@ requirement and the source Memories that support it.
 - `place` is the proposed operation for assigning an existing Memory to an
   organizational Context.
 - `fill` is requirement-driven coverage and evidence-backed completion.
-- `ground` is the separate interactive process for jointly establishing rules,
-  reviewed cases, and decisions. `induct` is its narrower rule-proposal step.
+- `ground` is the separate interactive process for jointly establishing
+  Rules, reviewed Ground Memories, and decisions. `induct` is its narrower
+  rule-proposal step.
 
 The first safe implementation should preview before mutation, bind a plan to
 the requirement, source, and target fingerprints, keep query-only sources

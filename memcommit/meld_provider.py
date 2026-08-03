@@ -176,7 +176,11 @@ def _provider_view(session: MeldSession) -> _ProviderView:
 
     memory_by_id: dict[str, MeldMember] = {}
     memory_id_by_key: dict[tuple[str, str], str] = {}
-    frame_ids = ("left", "right")
+    frame_ids = (
+        ("left", "right")
+        if session.mode == "SYMMETRIC"
+        else ("incoming", "baseline")
+    )
     frame_payloads: list[dict[str, object]] = []
     for frame_index, (frame, frame_id) in enumerate(
         zip(session.frames, frame_ids, strict=True),
@@ -234,6 +238,47 @@ def _provider_view(session: MeldSession) -> _ProviderView:
     prior_issue_by_id: dict[str, str] = {}
     prior_proposal_by_id: dict[str, str] = {}
     previous: dict[str, object] | None = None
+
+    def prior_result_payload(
+        proposal: MeldProposal,
+        *,
+        result_key: str,
+        relation_id_by_uid: dict[str, str],
+    ) -> dict[str, object]:
+        payload: dict[str, object] = {
+            "result_key": result_key,
+            "disposition": proposal.disposition,
+            "content": proposal.content,
+            "reason": proposal.reason,
+            "relation_keys": [
+                relation_id_by_uid[uid]
+                for uid in proposal.relation_uids
+            ],
+            "source_memory_ids": [
+                memory_id_by_key[
+                    (member.frame_uid, member.memory_uid)
+                ]
+                for member in proposal.source_members
+            ],
+            "grounded_turn_ids": [
+                turn_id_by_uid[uid]
+                for uid in proposal.grounded_by_turn_uids
+            ],
+        }
+        if session.mode == "DIRECTIONAL":
+            baseline = session.frames[1]
+            payload["operation"] = proposal.operation
+            payload["target_memory_ids"] = (
+                [
+                    memory_id_by_key[
+                        (baseline.uid, proposal.memory_uid)
+                    ]
+                ]
+                if proposal.operation == "EDIT"
+                else []
+            )
+        return payload
+
     if len(session.turns) > 1:
         prior_assessment = session.turns[-2].assessment
         assert prior_assessment is not None
@@ -306,26 +351,11 @@ def _provider_view(session: MeldSession) -> _ProviderView:
                 for issue in prior_assessment.issues
             ],
             "results": [
-                {
-                    "result_key": proposal_id_by_uid[proposal.uid],
-                    "disposition": proposal.disposition,
-                    "content": proposal.content,
-                    "reason": proposal.reason,
-                    "relation_keys": [
-                        relation_id_by_uid[uid]
-                        for uid in proposal.relation_uids
-                    ],
-                    "source_memory_ids": [
-                        memory_id_by_key[
-                            (member.frame_uid, member.memory_uid)
-                        ]
-                        for member in proposal.source_members
-                    ],
-                    "grounded_turn_ids": [
-                        turn_id_by_uid[uid]
-                        for uid in proposal.grounded_by_turn_uids
-                    ],
-                }
+                prior_result_payload(
+                    proposal,
+                    result_key=proposal_id_by_uid[proposal.uid],
+                    relation_id_by_uid=relation_id_by_uid,
+                )
                 for proposal in prior_assessment.proposals
             ],
         }
@@ -355,12 +385,23 @@ def _provider_view(session: MeldSession) -> _ProviderView:
     payload = {
         "mode": session.mode,
         "authority": (
-            "Both PEER sources have equal authority. Neither source wins by "
-            "default."
+            (
+                "Both PEER sources have equal authority. Neither source wins "
+                "by default."
+            )
+            if session.mode == "SYMMETRIC"
+            else (
+                "INCOMING may extend or correct the BASELINE only where the "
+                "supplied evidence supports an exact change. Preserve every "
+                "other BASELINE Memory."
+            )
         ),
         "target": {
             "context_name": session.target.context_name,
-            "must_remain_empty_until_acceptance": True,
+            "must_remain_empty_until_acceptance": (
+                session.mode == "SYMMETRIC"
+            ),
+            "must_remain_unchanged_until_acceptance": True,
         },
         "frames": frame_payloads,
         "history": history,
@@ -380,7 +421,11 @@ def _provider_view(session: MeldSession) -> _ProviderView:
     )
 
 
-def meld_output_schema(source_count: int) -> dict[str, object]:
+def meld_output_schema(
+    source_count: int,
+    *,
+    mode: str = "SYMMETRIC",
+) -> dict[str, object]:
     key = {"type": "string", "minLength": 1, "maxLength": MELD_KEY_LIMIT}
     text = {"type": "string", "minLength": 1, "maxLength": MELD_TEXT_LIMIT}
     overview_text = {
@@ -397,14 +442,16 @@ def meld_output_schema(source_count: int) -> dict[str, object]:
         "type": "array",
         "maxItems": source_count,
         "items": key,
-        "uniqueItems": True,
     }
     key_refs = {
         "type": "array",
         "maxItems": MELD_ITEM_LIMIT,
         "items": key,
-        "uniqueItems": True,
     }
+    # Codex structured output accepts only a JSON Schema subset and rejects
+    # `uniqueItems`. Duplicate aliases are still rejected after generation by
+    # `_keys`, so removing that provider-side hint does not weaken authority or
+    # provenance validation.
     relation = {
         "type": "object",
         "properties": {
@@ -493,6 +540,21 @@ def meld_output_schema(source_count: int) -> dict[str, object]:
         ],
         "additionalProperties": False,
     }
+    if mode == "DIRECTIONAL":
+        result["properties"]["operation"] = {
+            "type": "string",
+            "enum": ["ADD", "EDIT"],
+        }
+        result["properties"]["target_memory_ids"] = {
+            "type": "array",
+            "maxItems": 1,
+            "items": key,
+        }
+        result["required"] = [
+            *result["required"],
+            "operation",
+            "target_memory_ids",
+        ]
     return {
         "type": "object",
         "properties": {
@@ -539,11 +601,44 @@ def _prompt(payload: dict[str, object]) -> str:
             f"of {MELD_INPUT_CHAR_LIMIT} characters. Input is never "
             "truncated or split into hidden calls."
         )
+    directional = payload.get("mode") == "DIRECTIONAL"
+    authority_contract = (
+        (
+            "Perform one bounded DIRECTIONAL semantic meld analysis. The "
+            "first frame is INCOMING evidence and the second frame is the "
+            "authoritative BASELINE and mutation target. Preserve every "
+            "BASELINE Memory unless supported INCOMING or user-turn evidence "
+            "justifies an exact EDIT; supported novel evidence may produce "
+            "an ADD. Return the complete cumulative relation ledger and only "
+            "the exact material BASELINE changes. A fully equivalent meld may "
+            "be ready with zero results; never manufacture a no-op EDIT. "
+        )
+        if directional
+        else (
+            "Perform one bounded SYMMETRIC semantic meld analysis. The two "
+            "PEER frames have equal authority: do not make left or right win "
+            "merely because of order. Return a complete cumulative relation "
+            "ledger and exact standalone result Memories for the empty "
+            "target. "
+        )
+    )
+    result_contract = (
+        (
+            "For every directional result, return operation EDIT with exactly "
+            "one target_memory_ids entry from the BASELINE frame, or ADD with "
+            "an empty target_memory_ids array. An EDIT must cite at least one "
+            "INCOMING Memory in source_memory_ids; the dedicated target field "
+            "already cites its BASELINE Memory. A source-derived ADD must cite "
+            "at least one INCOMING Memory. Do not target an INCOMING Memory. "
+            "DELETE is not supported: surface a REQUIRED issue instead of "
+            "silently removing knowledge. "
+        )
+        if directional
+        else ""
+    )
     return (
-        "Perform one bounded SYMMETRIC semantic meld analysis. The two PEER "
-        "frames have equal authority: do not make left or right win merely "
-        "because of order. Return a complete cumulative relation ledger and "
-        "exact standalone result Memories for the empty target.\n"
+        authority_contract
+        + "\n"
         "Every supplied source Memory must appear in exactly one primary "
         "relation. A relation may contain one-to-many or many-to-one members; "
         "do not enumerate a Cartesian product. EQUIVALENT means the same "
@@ -559,8 +654,10 @@ def _prompt(payload: dict[str, object]) -> str:
         "comments are asserted dialogue evidence. They may confirm, extend, "
         "correct, preserve, or add knowledge. A USER_ADD result must cite at "
         "least one supplied grounded_turn_id and must not be attributed to "
-        "either PEER source. Recompute the complete ledger after every turn; "
+        "a source frame. Recompute the complete ledger after every turn; "
         "do not append a local answer to a stale result.\n"
+        + result_contract
+        +
         "A result is a complete standalone Memory. Preserve rate, condition, "
         "audience, modality, exceptions, and source-specific scope. Do not "
         "invent facts or resolve a difference from outside knowledge. Write "
@@ -870,17 +967,20 @@ def _parse_assessment(
         )
     result_records: list[tuple[str, dict[str, object]]] = []
     for item in raw_results:
+        result_keys = {
+            "result_key",
+            "disposition",
+            "content",
+            "reason",
+            "relation_keys",
+            "source_memory_ids",
+            "grounded_turn_ids",
+        }
+        if session.mode == "DIRECTIONAL":
+            result_keys.update({"operation", "target_memory_ids"})
         record = _exact_dict(
             item,
-            {
-                "result_key",
-                "disposition",
-                "content",
-                "reason",
-                "relation_keys",
-                "source_memory_ids",
-                "grounded_turn_ids",
-            },
+            result_keys,
             "meld result",
         )
         result_records.append(
@@ -938,18 +1038,62 @@ def _parse_assessment(
             if key in view.prior_proposal_by_id
             else _stable_uid(session.uid, current.uid, "proposal", key)
         )
+        operation = "ADD"
+        proposal_source_ids = source_ids
+        memory_uid = str(
+            uuid.uuid5(
+                uuid.UUID(session.uid),
+                f"memory:{proposal_uid}",
+            )
+        )
+        if session.mode == "DIRECTIONAL":
+            operation = _literal(
+                record["operation"],
+                {"ADD", "EDIT"},
+                "meld result operation",
+            )
+            target_ids = _keys(
+                record["target_memory_ids"],
+                "meld result target Memory ids",
+                empty=True,
+            )
+            if operation == "ADD":
+                if target_ids:
+                    raise MeldProviderError(
+                        "Codex meld returned an ADD with an edit target."
+                    )
+            else:
+                if len(target_ids) != 1:
+                    raise MeldProviderError(
+                        "Codex meld returned an EDIT without one target."
+                    )
+                target_id = target_ids[0]
+                target_member = view.memory_by_id.get(target_id)
+                if target_member is None:
+                    raise MeldProviderError(
+                        "Codex meld returned an EDIT with an unknown target."
+                    )
+                if target_member.frame_uid != session.frames[1].uid:
+                    raise MeldProviderError(
+                        "Codex meld returned an EDIT outside the BASELINE."
+                    )
+                memory_uid = target_member.memory_uid
+                # `target_memory_ids` is already an explicit, validated
+                # BASELINE citation. Store it once in the proposal evidence
+                # even when the model sensibly omits that duplicate alias from
+                # `source_memory_ids`.
+                proposal_source_ids = (
+                    source_ids
+                    if target_id in source_ids
+                    else (*source_ids, target_id)
+                )
         proposals.append(
             MeldProposal.from_dict(
                 {
                     "uid": proposal_uid,
-                    "operation": "ADD",
+                    "operation": operation,
                     "disposition": disposition,
-                    "memory_uid": str(
-                        uuid.uuid5(
-                            uuid.UUID(session.uid),
-                            f"memory:{proposal_uid}",
-                        )
-                    ),
+                    "memory_uid": memory_uid,
                     "content": _string(
                         record["content"],
                         "meld result content",
@@ -961,7 +1105,7 @@ def _parse_assessment(
                     "relation_uids": list(relation_uids),
                     "source_members": [
                         view.memory_by_id[source_id].to_dict()
-                        for source_id in source_ids
+                        for source_id in proposal_source_ids
                     ],
                     "grounded_by_turn_uids": list(turn_uids),
                 }
@@ -1001,6 +1145,9 @@ def assess_meld_turn(
     response = provider.complete(
         _prompt(view.payload),
         operation="meld_contexts",
-        output_schema=meld_output_schema(source_count),
+        output_schema=meld_output_schema(
+            source_count,
+            mode=session.mode,
+        ),
     )
     return _parse_assessment(response, session=session, view=view)

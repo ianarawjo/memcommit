@@ -98,7 +98,8 @@ class TestHelp:
         assert "two equal-authority Contexts" in meld_help
         assert "current empty Context" in meld_help
         assert "--atomic" not in meld_help
-        assert "--into" not in meld_help
+        assert "--into" in meld_help
+        assert "authoritative BASELINE" in meld_help
 
     def test_selector_moves_down_and_returns_selected_command(self):
         with create_pipe_input() as pipe_input:

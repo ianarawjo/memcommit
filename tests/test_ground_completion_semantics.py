@@ -20,7 +20,7 @@ def test_legacy_completion_round_trips_but_is_never_presented_or_inferred():
     legacy_text = "LEGACY COMPLETION MUST REMAIN OPAQUE"
     session = create_ground_session(
         "legacy-ground",
-        goal="Agree on the current Goal, Rules, and Cases.",
+        goal="Agree on the current Goal, Rules, and Memories.",
         completion_criterion=legacy_text,
     )
 

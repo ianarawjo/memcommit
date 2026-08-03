@@ -399,16 +399,17 @@ response contract:
 | ambiguity | implemented | one Memory plus proposed readings |
 | atomize workbench | implemented | typed split, uncertainty, one-source ambiguity, and two-source conflict issues from one exact analysis |
 | standalone conflict | future adapter over an implemented finder | two Memories plus conflict scope |
-| update | future adapter over existing staged-update artifacts | target Memory/edit or addition |
+| update | implemented read-only Resolution Workbench projection over exact Update artifacts; semantic issue turns remain future | target Memory/edit, addition, or removal |
 | reconcile | future semantic contract | ambiguity/conflict evidence and proposed resolution |
 | distill | design-only | summary claim and supporting Memories |
-| meld | implemented separate workbench | two direct-Memory peer Contexts and one empty result target |
-| Context-directional meld | future | INCOMING and BASELINE Context frames |
+| meld | implemented shared Resolution Workbench adapter | two direct-Memory peer Contexts and one empty result target |
+| Context-directional meld | implemented shared Resolution Workbench adapter | INCOMING and BASELINE Context frames |
 | sever | Task 3 design-only | disclosure boundary |
 
-An update adapter must consume the existing `impact-plan.json` and
-`staged-update.json` contracts rather than create a competing generic source
-of truth. Similarly, an atomize conflict response retains its pair-shaped
+The Update projection consumes the existing `impact-plan.json` and
+`staged-update.json` contracts rather than creating a competing generic source
+of truth. A future Update resolution session must remain separate and export a
+ready exact plan into that existing application contract. Similarly, an atomize conflict response retains its pair-shaped
 semantics even though it uses the same list, detail, choice, and response
 controls: it stays staged for reconcile rather than becoming a unary declared
 frame.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import shlex
+from types import SimpleNamespace
 
 import pytest
 from prompt_toolkit.layout import FormattedTextControl, Window
@@ -11,16 +12,33 @@ from memcommit.commands.exact_command_review import (
     render_exact_command_review,
 )
 from memcommit.commands.tui_primitives import (
+    InFrameInputManager,
+    InFrameInputSection,
+    INLINE_AGENT_COMMENT_TITLE,
+    INLINE_DIRECT_EDIT_TITLE,
+    MEMCOMMIT_TUI_STYLE,
     TuiRegion,
     anchored_fragments,
+    bind_focused_frame_style,
     build_framed_multiline_input,
+    build_inline_direct_edit_input,
     build_scrollable_text_pane,
     build_tui_frame,
+    classify_inline_edit_submission,
+    dispatch_tui_back,
     display_escape_text,
     equal_pane_height,
     safe_terminal_text,
     set_scrollable_pane_text,
 )
+
+
+class _RecordingApp:
+    def __init__(self) -> None:
+        self.invalidations = 0
+
+    def invalidate(self) -> None:
+        self.invalidations += 1
 
 
 def test_shared_exact_command_review_preserves_argv_and_effect_boundary():
@@ -98,6 +116,37 @@ def test_shared_chrome_composes_regions_without_owning_their_semantics():
     assert frame.children[3] is footer
 
 
+def test_shared_back_dispatcher_unwinds_only_the_deepest_active_layer():
+    app = _RecordingApp()
+    event = SimpleNamespace(app=app)
+    calls: list[str] = []
+
+    dispatch_tui_back(
+        event,
+        lambda _event: calls.append("inner") or True,
+        lambda _event: calls.append("outer") or True,
+        close=lambda _event: calls.append("close"),
+    )
+
+    assert calls == ["inner"]
+    assert app.invalidations == 1
+
+
+def test_shared_back_dispatcher_delegates_terminal_close_to_operation():
+    app = _RecordingApp()
+    event = SimpleNamespace(app=app)
+    calls: list[str] = []
+
+    dispatch_tui_back(
+        event,
+        lambda _event: calls.append("inner") or False,
+        close=lambda _event: calls.append("close"),
+    )
+
+    assert calls == ["inner", "close"]
+    assert app.invalidations == 0
+
+
 def test_scrollable_panes_have_distinct_read_only_buffers_and_equal_heights():
     height = equal_pane_height(minimum=5)
     goal = build_scrollable_text_pane("GOAL", "first", height=height)
@@ -113,6 +162,43 @@ def test_scrollable_panes_have_distinct_read_only_buffers_and_equal_heights():
 
     goal.text_area.window.vertical_scroll = 2
     assert rules.text_area.window.vertical_scroll == 0
+
+
+def test_focus_style_highlights_only_frame_chrome_and_keeps_base_style():
+    pane = build_scrollable_text_pane(
+        "RULES",
+        "one Rule",
+        frame_style="class:custom-frame",
+    )
+    focused = {"value": False}
+    bind_focused_frame_style(
+        pane.frame,
+        is_focused=lambda: focused["value"],
+    )
+
+    assert pane.frame.container.style() == (
+        "class:frame class:custom-frame"
+    )
+    focused["value"] = True
+    assert pane.frame.container.style() == (
+        "class:frame class:custom-frame class:memcommit.focused"
+    )
+
+    border = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
+        "class:memcommit.focused class:frame.border"
+    )
+    label = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
+        "class:memcommit.focused class:frame.label"
+    )
+    body = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
+        "class:memcommit.focused class:text-area"
+    )
+    assert border.color == "8bd5ff"
+    assert border.bold
+    assert label.color == "8bd5ff"
+    assert label.bold
+    assert body.color == ""
+    assert not body.bold
 
 
 def test_scrollable_pane_updates_safely_preserve_or_anchor_viewport():
@@ -154,6 +240,168 @@ def test_framed_multiline_input_is_bounded_writable_and_independently_named():
 
     first.text_area.text = "one\n two"
     assert first.text_area.text == "one\n two"
+
+
+def test_in_frame_inputs_share_the_pane_frame_and_restore_base_layout():
+    base_height = equal_pane_height(minimum=4, preferred=5, maximum=8)
+    expanded_height = equal_pane_height(
+        minimum=8,
+        preferred=10,
+        maximum=12,
+    )
+    pane = build_scrollable_text_pane(
+        "RULES",
+        "read-only Rules",
+        height=base_height,
+    )
+    original_body = pane.frame.body
+    message = build_framed_multiline_input("MESSAGE")
+    editor = build_framed_multiline_input("EDIT")
+    manager = InFrameInputManager(pane)
+
+    manager.show(
+        pane,
+        InFrameInputSection(
+            "EDIT (DIRECTLY)",
+            editor.text_area,
+            height=2,
+        ),
+        InFrameInputSection(
+            "COMMENT (FOR THE AGENT)",
+            message.text_area,
+            height=3,
+        ),
+        height=expanded_height,
+    )
+
+    assert manager.active_pane is pane
+    assert [section.text_area for section in manager.active_sections] == [
+        editor.text_area,
+        message.text_area,
+    ]
+    assert pane.frame.body is not original_body
+    assert pane.frame.body.children[0] is pane.text_area.window
+    assert pane.frame.body.children[2].children[0] is editor.text_area.window
+    assert pane.frame.body.children[4].children[0] is message.text_area.window
+    assert pane.frame.container.height is expanded_height
+
+    manager.clear()
+
+    assert manager.active_pane is None
+    assert manager.active_sections == ()
+    assert pane.frame.body is original_body
+    assert pane.frame.container.height is base_height
+
+
+def test_in_frame_input_moves_one_shared_composer_between_live_panes():
+    goal_height = equal_pane_height(minimum=3)
+    rules_height = equal_pane_height(minimum=5)
+    goal = build_scrollable_text_pane("GOAL", "goal", height=goal_height)
+    rules = build_scrollable_text_pane(
+        "RULES",
+        "rules",
+        height=rules_height,
+    )
+    goal_body = goal.frame.body
+    rules_body = rules.frame.body
+    composer = build_framed_multiline_input("MESSAGE")
+    manager = InFrameInputManager(goal, rules)
+    section = InFrameInputSection("MESSAGE", composer.text_area, height=2)
+
+    manager.show(goal, section, height=9)
+    goal_embedded_body = goal.frame.body
+    assert (
+        goal_embedded_body.children[2].children[0]
+        is composer.text_area.window
+    )
+
+    manager.show(rules, section, height=11)
+
+    assert goal.frame.body is goal_body
+    assert goal.frame.container.height is goal_height
+    assert rules.frame.body is not rules_body
+    assert (
+        rules.frame.body.children[2].children[0]
+        is composer.text_area.window
+    )
+    assert rules.frame.container.height == 11
+    assert manager.active_pane is rules
+
+    manager.show(rules)
+    assert rules.frame.body is rules_body
+    assert rules.frame.container.height is rules_height
+
+
+def test_in_frame_input_allows_an_explicitly_locked_direct_field_only():
+    pane = build_scrollable_text_pane("GOAL", "saved Goal")
+    locked = build_framed_multiline_input("EDIT")
+    locked.text_area.buffer.read_only = lambda: True
+    manager = InFrameInputManager(pane)
+
+    with pytest.raises(ValueError, match="must be writable"):
+        manager.show(pane, InFrameInputSection("EDIT", locked.text_area))
+
+    manager.show(
+        pane,
+        InFrameInputSection(
+            "EDIT (DIRECTLY)",
+            locked.text_area,
+            allow_read_only=True,
+        ),
+    )
+
+    assert manager.active_sections[0].allow_read_only
+
+
+def test_in_frame_input_rejects_invalid_or_duplicate_layout_members():
+    pane = build_scrollable_text_pane("CHAT", "history")
+    other = build_scrollable_text_pane("RULES", "rules")
+    composer = build_framed_multiline_input("MESSAGE")
+    manager = InFrameInputManager(pane)
+    section = InFrameInputSection("MESSAGE", composer.text_area)
+
+    with pytest.raises(ValueError, match="not registered"):
+        manager.show(other, section)
+    with pytest.raises(ValueError, match="distinct"):
+        manager.show(pane, section, section)
+    with pytest.raises(ValueError, match="writable"):
+        manager.show(
+            pane,
+            InFrameInputSection("READ ONLY", other.text_area),
+        )
+
+    assert pane.frame.body is pane.text_area
+
+
+def test_inline_edit_uses_exact_labels_and_distinguishes_comment_from_change():
+    editor = build_inline_direct_edit_input()
+
+    assert editor.frame.title == INLINE_DIRECT_EDIT_TITLE
+    assert INLINE_DIRECT_EDIT_TITLE == "EDIT (DIRECTLY)"
+    assert INLINE_AGENT_COMMENT_TITLE == "COMMENT (FOR THE AGENT)"
+    assert "OPTIONAL" not in editor.frame.title.upper()
+    height = editor.frame.__pt_container__().height
+    assert (height.min, height.preferred, height.max) == (3, 3, 4)
+    assert classify_inline_edit_submission(
+        original="Goal",
+        edited="Goal",
+        comment="",
+    ) == "NOOP"
+    assert classify_inline_edit_submission(
+        original="Goal",
+        edited="Revised Goal",
+        comment="",
+    ) == "DIRECT"
+    assert classify_inline_edit_submission(
+        original="Goal",
+        edited="Goal",
+        comment="Explain this",
+    ) == "COMMENT"
+    assert classify_inline_edit_submission(
+        original="Goal",
+        edited="Revised Goal",
+        comment="This is why",
+    ) == "BOTH"
 
 
 def test_shared_terminal_sanitizer_preserves_layout_but_neutralizes_control():

@@ -194,9 +194,46 @@ of semantic updates. Introducing an artificial ambiguity or conflict into this
 study path could change participant trust independently of the intended
 questions about provenance, responsibility, and review behavior.
 
-The absence of a general update-resolution adapter is nevertheless an
+### Audience intent in a future update preview
+
+Task 1 fixture design requires every proposed wiki operation to display both
+its semantic subject and its intended disclosure audiences. The initial
+review matrix is:
+
+```text
+EVERYONE | VISITOR | STUDENT | STAFF | CONSTRUCTION_OR_BUILDING_PERSONNEL
+```
+
+The update workbench should show the target page, `EDIT`/`ADD`/`NOOP`/
+`BLOCKED` outcome, old and proposed content, and the complete audience matrix
+on the same review row. Public closure information and restricted access
+mechanics must be separate rows: everyone may read that an entrance is
+closed, while only an authorized operator should receive the exception or
+credential detail. A change to content and a change to intended disclosure
+are independently reviewable effects.
+
+This is a display and future-policy requirement, not current behavior.
+`Memory` has only `uid` and `content`; `EditOperation`, `AddOperation`, and
+`RemoveOperation` have no audience policy; and ordinary `ls`, `show`,
+provider planning, and apply paths do not establish a principal or filter by
+role. Manually adding unrecognized JSON fields is not a safe prototype
+because canonical serialization will discard them. Query-only hides one
+complete source from ordinary traversal but neither authenticates campus
+roles nor filters individual Memories.
+
+The safe current fixture representation is therefore a designer-only
+sidecar, exemplified by
+[`examples/task-1-wiki-update-access-preview-ko.md`](examples/task-1-wiki-update-access-preview-ko.md).
+An enforced version requires a versioned policy schema, an authenticated
+principal at a trusted service boundary, fail-closed filtering across every
+read and provider path, policy-preserving update operations, and
+non-interference tests. Until those exist, the UI must label the matrix
+`INTENDED DISCLOSURE · NOT ENFORCED` and must not imply that a content prefix
+or audience-specific ordinary Context provides confidentiality.
+
+The absence of a general semantic Update-resolution adapter is nevertheless an
 **incomplete prototype boundary and explicit TODO**. The current
-`UpdateSession` has no named-Ground binding, Goal–Rules–Cases ledger,
+`UpdateSession` has no named-Ground binding, Goal–Rules–Memories ledger,
 unresolved-issue state, or directional-Meld turns. It cannot suspend staging
 for a human grounding round, promote an accepted clarification explicitly, or
 recompute a complete proposal from that turn.
@@ -244,7 +281,31 @@ Both commands use one planner:
 
 An edit preserves the target Memory UID and replaces its string content with a
 complete revised version. The planner must preserve unrelated target facts. An
-addition receives a new local UUID and names its owning target Context.
+addition receives a new local UUID and names its owning target Context. A
+removal preserves the selected target's old-content snapshot and provenance in
+the update session while removing only that directly owned Memory from the
+local fork.
+
+## Compact executable Task 1 fixture
+
+[`../memcommit/eval/fixtures/update.json`](../memcommit/eval/fixtures/update.json)
+contains a small regression/example set rather than the complete
+participant-facing study corpus. It provisions five verified source Memories
+and five target-baseline Memories. The expected result is:
+
+```text
+2 edits + 1 addition + 1 removal
+2 target Memories unchanged
+5 final target Memories
+```
+
+The source includes one already-present fact to test no-op recognition, while
+an unrelated health-hours Memory tests impact scoping. Its removal source
+explicitly instructs removal of a standalone expired detour notice; this keeps
+the case conflict-free and therefore outside the future Meld resolution
+branch. The fixture also retains all six canonical construction-update child
+Context slots, with one empty slot, so Context structure is not confused with
+Memory count.
 
 ## Diff
 

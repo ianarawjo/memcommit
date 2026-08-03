@@ -105,6 +105,22 @@ def ground_session_record_digest(value: object) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def checkpoint_history_digest(entries: list[dict]) -> str:
+    """Hash one newest-first physical checkpoint frame canonically."""
+    try:
+        encoded = json.dumps(
+            entries,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    except (TypeError, ValueError) as error:
+        raise ValueError(
+            "Checkpoint history contains invalid data."
+        ) from error
+    return hashlib.sha256(encoded).hexdigest()
+
+
 class ConcurrentContextUpdateError(RuntimeError):
     """A Context changed after a caller captured its expected record."""
 
@@ -151,6 +167,18 @@ def _context_name_parts(name: str) -> tuple[str, ...]:
             f"Invalid context name '{name}': control characters are not allowed."
         )
     return parts
+
+
+def validate_context_name(name: str) -> str:
+    """Return one valid canonical Context name without touching storage.
+
+    Context identity is a slash-delimited namespace, so this deliberately
+    shares the storage layer's lexical validation instead of the flatter
+    naming rules used by Ground sessions.  Availability and filesystem safety
+    remain separate checks performed by ``assert_context_creatable``.
+    """
+    _context_name_parts(name)
+    return name
 
 
 def _validate_context_header(data: object, expected_name: str) -> dict:
@@ -517,6 +545,14 @@ class MemoryStore:
                 session.source_name,
                 session.target_name,
             }
+        )
+        # A source MemoryRef is readable evidence owned outside the embedded
+        # source graph. Lock every cited owner too so its supporting text
+        # cannot change between freshness validation and the final receipt.
+        lock_names.update(
+            source.context_name
+            for operation in session.operations
+            for source in operation.source_refs
         )
 
         with self._update_session_write_lock():
@@ -1760,9 +1796,11 @@ class MemoryStore:
         """Save one meld target while its exact source snapshots stay locked.
 
         Ordinary Context CAS protects only the target. A meld result also
-        depends on two read-only source snapshots, so all participating
-        Context locks must remain held from the final source recheck through
-        the target checkpoint and write.
+        depends on read-only source snapshots, so all participating Context
+        locks must remain held from the final source recheck through the
+        target checkpoint and write. In a directional meld the BASELINE frame
+        is the target itself and is protected by target CAS rather than being
+        repeated in ``source_bindings``.
         """
         bindings = tuple(source_bindings)
         source_names = tuple(name for name, _, _ in bindings)
@@ -1941,14 +1979,17 @@ class MemoryStore:
         created_checkpoint: Checkpoint | None = None
         try:
             if auto_checkpoint is not None:
-                created_checkpoint = self.checkpoint(
+                # _save_locked already owns the Context lock. Calling the
+                # public locking wrapper here would deadlock on flock, while
+                # writing without this shared lock would let checkpoint
+                # history race reviewed revert/undo selections.
+                created_checkpoint = self._checkpoint_locked(
                     ctx,
                     message=auto_checkpoint.description,
                     command=auto_checkpoint.command,
                     args=auto_checkpoint.args,
                     description=auto_checkpoint.description,
                     auto=True,
-                    _allow_unsaved=True,
                 )
             _write_json_atomic(context_file, ctx.to_dict())
         except Exception as error:
@@ -2095,21 +2136,30 @@ class MemoryStore:
         source_dir.rmdir()
 
     def copy_checkpoints(self, source_name: str, target_name: str) -> None:
-        """Copy all checkpoint files from source into target's checkpoints directory."""
-        src_dir = self._checkpoints_dir(source_name)
-        tgt_dir = self._checkpoints_dir(target_name)
-        tgt_dir.mkdir(parents=True, exist_ok=True)
-        if src_dir.exists():
-            for path in sorted(src_dir.glob("*.json")):
-                if path.is_symlink() or not path.is_file():
-                    continue
-                destination = tgt_dir / path.name
-                if destination.is_symlink():
-                    raise ValueError(
-                        f"Refusing to copy checkpoint to '{target_name}' through "
-                        "a symbolic link."
-                    )
-                shutil.copy2(path, destination)
+        """Copy one stable source history into a serial target history."""
+        with self._context_write_locks((source_name, target_name)):
+            if not self.context_exists(source_name):
+                raise FileNotFoundError(
+                    f"Context '{source_name}' not found."
+                )
+            if not self.context_exists(target_name):
+                raise FileNotFoundError(
+                    f"Context '{target_name}' not found."
+                )
+            src_dir = self._checkpoints_dir(source_name)
+            tgt_dir = self._checkpoints_dir(target_name)
+            tgt_dir.mkdir(parents=True, exist_ok=True)
+            if src_dir.exists():
+                for path in sorted(src_dir.glob("*.json")):
+                    if path.is_symlink() or not path.is_file():
+                        continue
+                    destination = tgt_dir / path.name
+                    if destination.is_symlink():
+                        raise ValueError(
+                            f"Refusing to copy checkpoint to '{target_name}' "
+                            "through a symbolic link."
+                        )
+                    shutil.copy2(path, destination)
 
     def delete(self, name: str) -> None:
         """Delete one Context while preserving descendant Context namespaces."""
@@ -2132,12 +2182,21 @@ class MemoryStore:
             comparison_paths_for_context,
             delete_comparison_paths,
         )
+        from memcommit.translation_view_store import (
+            delete_translation_view_paths,
+            translation_view_paths_for_context,
+        )
 
         # Compare artifacts snapshot both sources and derived explanations.
         # Their privacy lifetime therefore ends when either bound source is
         # deleted, regardless of which side was the display reference.
         comparison_paths = (
             comparison_paths_for_context(context_uid)
+            if canonical_context_uid == context_uid
+            else ()
+        )
+        translation_view_paths = (
+            translation_view_paths_for_context(context_uid)
             if canonical_context_uid == context_uid
             else ()
         )
@@ -2251,6 +2310,9 @@ class MemoryStore:
             # comments. Its privacy and validity lifetime is the target.
             meld_path.unlink()
         delete_comparison_paths(comparison_paths)
+        # Translation views retain provider-derived copies of source content.
+        # Their privacy and validity lifetime therefore ends with the source.
+        delete_translation_view_paths(translation_view_paths)
         if (
             grounding_history_dir is not None
             and grounding_history_dir.exists()
@@ -2288,13 +2350,51 @@ class MemoryStore:
         args: Optional[dict] = None,
         description: Optional[str] = None,
         auto: bool = False,
-        _allow_unsaved: bool = False,
     ) -> Checkpoint:
-        """Save a point-in-time snapshot of ctx's current state."""
-        if not _allow_unsaved and not self.context_exists(ctx.name):
-            raise FileNotFoundError(
-                f"Context '{ctx.name}' must be saved before checkpointing."
+        """Save a persisted Context snapshot under its cooperative write lock."""
+        with self._context_write_lock(ctx.name):
+            if not self.context_exists(ctx.name):
+                raise FileNotFoundError(
+                    f"Context '{ctx.name}' must be saved before checkpointing."
+                )
+            current = self.load_direct(ctx.name)
+            expected_digest = getattr(ctx, "_store_digest", None)
+            current_digest = context_record_digest(current)
+            if current.uid != ctx.uid or (
+                expected_digest is not None
+                and current_digest != expected_digest
+            ):
+                # A checkpoint is part of the same serial history as saves and
+                # reverts. Never append a stale caller's snapshot after a
+                # concurrent state change.
+                raise ConcurrentContextUpdateError(
+                    f"Context '{ctx.name}' changed before it could be "
+                    "checkpointed."
+                )
+            if context_record_digest(ctx) != current_digest:
+                raise ValueError(
+                    f"Context '{ctx.name}' has unsaved changes; save it "
+                    "before checkpointing."
+                )
+            return self._checkpoint_locked(
+                ctx,
+                message=message,
+                command=command,
+                args=args,
+                description=description,
+                auto=auto,
             )
+
+    def _checkpoint_locked(
+        self,
+        ctx: Context,
+        message: str = "",
+        command: Optional[str] = None,
+        args: Optional[dict] = None,
+        description: Optional[str] = None,
+        auto: bool = False,
+    ) -> Checkpoint:
+        """Write one checkpoint while the caller holds the Context lock."""
         cp = Checkpoint(
             uid=str(uuid.uuid4()),
             message=message,
@@ -2344,7 +2444,14 @@ class MemoryStore:
         return sorted(entries, key=lambda x: x["timestamp"], reverse=True)
 
     def revert(
-        self, ctx_name: str, uid_prefix: str, keep_history: bool = False
+        self,
+        ctx_name: str,
+        uid_prefix: str,
+        keep_history: bool = False,
+        *,
+        expected_context_uid: str | None = None,
+        expected_context_digest: str | None = None,
+        expected_history_digest: str | None = None,
     ) -> tuple[Checkpoint, Checkpoint]:
         """Revert one Context while holding its cooperative write lock."""
         with self._context_write_lock(ctx_name):
@@ -2352,6 +2459,9 @@ class MemoryStore:
                 ctx_name,
                 uid_prefix,
                 keep_history=keep_history,
+                expected_context_uid=expected_context_uid,
+                expected_context_digest=expected_context_digest,
+                expected_history_digest=expected_history_digest,
             )
 
     def _revert_locked(
@@ -2360,6 +2470,9 @@ class MemoryStore:
         uid_prefix: str,
         *,
         keep_history: bool,
+        expected_context_uid: str | None,
+        expected_context_digest: str | None,
+        expected_history_digest: str | None,
     ) -> tuple[Checkpoint, Checkpoint]:
         """Revert context to a checkpoint. Returns (pre_revert_cp, target_cp).
 
@@ -2371,6 +2484,32 @@ class MemoryStore:
         Pass keep_history=True to leave all checkpoint files untouched.
         """
         entries = self.list_checkpoints(ctx_name)  # captured before any mutations
+        # Preconditions and the recovery snapshot concern the directly owned
+        # Context record. Do not resolve MemoryRef targets or embedded
+        # Contexts merely to decide whether a reviewed frame is still fresh.
+        ctx = self.load_direct(ctx_name)
+        if (
+            expected_context_uid is not None
+            and ctx.uid != expected_context_uid
+        ):
+            raise ConcurrentContextUpdateError(
+                "Context identity changed before the reviewed revert."
+            )
+        if (
+            expected_context_digest is not None
+            and context_record_digest(ctx) != expected_context_digest
+        ):
+            raise ConcurrentContextUpdateError(
+                "Context content changed before the reviewed revert."
+            )
+        if (
+            expected_history_digest is not None
+            and checkpoint_history_digest(entries)
+            != expected_history_digest
+        ):
+            raise ConcurrentContextUpdateError(
+                "Checkpoint history changed before the reviewed revert."
+            )
         matches = [e for e in entries if e["uid"].startswith(uid_prefix)]
         if not matches:
             raise KeyError(f"No checkpoint with uid prefix '{uid_prefix}'.")
@@ -2381,7 +2520,6 @@ class MemoryStore:
 
         target_data = matches[0]
         target_ts = target_data["timestamp"]
-        ctx = self.load(ctx_name)
         cp_dir = self._checkpoints_dir(ctx_name)
 
         if not keep_history:
@@ -2421,7 +2559,9 @@ class MemoryStore:
                 e = {**e, "args": {k: v for k, v in args.items() if k != "log_snapshot"}}
             thin_entries.append(e)
 
-        pre_cp = self.checkpoint(
+        # Revert already owns the same Context lock; append its recovery
+        # checkpoint inside that serial history without reacquiring the lock.
+        pre_cp = self._checkpoint_locked(
             ctx,
             message=f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo",
             command="revert",

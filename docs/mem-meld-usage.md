@@ -9,18 +9,31 @@ associated tests together whenever hands-on testing changes the workflow.
 | User-facing term | Technical contract | Command | Status |
 |---|---|---|---|
 | **Atomic meld** *(informal shorthand)* | An issue-scoped directional meld embedded in atomize grounding | `mem atomize --evaluate ISSUE` | Implemented |
-| **Context meld** | A symmetric meld between two equal-authority Contexts | `mem meld LEFT_PEER RIGHT_PEER` | Implemented |
-| **Directional Context meld** | An incoming Context melded into an authoritative baseline Context | No public command | Future |
+| **Symmetric Context meld** | Two equal-authority Contexts combined into the current empty result Context | `mem meld LEFT_PEER RIGHT_PEER` | Implemented |
+| **Directional Context meld** | A read-only incoming Context melded into an authoritative baseline Context | `mem meld [INCOMING] --into BASELINE` | Implemented |
 
 “Atomic” identifies the issue where review begins. It does **not** promise
 that only one Memory can change. A clarification may require several
 traceable edits or additions when other local Memories depend on the same
 interpretation.
 
-There is no `mem meld --atomic` command and no public command that accepts two
-arbitrary strings or two individual Memory UIDs. The implemented atomic entry
-point remains under `mem atomize` because atomize owns the saved analysis,
-issue identity, and source evidence.
+Internally, a unary source-grounded candidate is treated as a temporary
+one-Memory Context: atomize projects it as an immutable, ephemeral `INCOMING`
+frame and projects its containing Context as the bound `BASELINE` frame. The
+reviewer's selected reading and comments are turn evidence attached to that
+meld, not another Context. A pair-shaped conflict keeps both source Memories
+in one incoming issue frame instead of flattening them.
+
+“Temporary” does not mean that another named Context is created. The incoming
+frame has no durable Context UID or locator and is never saved, switched to,
+listed, or checkpointed. It is reconstructed from the bound atomize session;
+only an explicitly accepted result can change and checkpoint the baseline
+Context.
+
+There is no `mem meld --atomic` command and no public command that accepts raw
+text strings or individual Memory UIDs as its two frames. The implemented
+atomic entry point remains under `mem atomize` because atomize owns the saved
+analysis, issue identity, and source evidence.
 
 ## Atomic meld (informal shorthand): resolve one atomize issue
 
@@ -105,9 +118,130 @@ One invocation may contain only one grounding action. Do not combine
 `--evaluate`, `--reply`, `--accept-grounding`, or `--keep-review-only` with
 `--save` or `--save-as`.
 
-## Context meld: combine two equal-authority Contexts
+## Directional Context meld: update an existing baseline
 
-### 1. Create and enter an empty result Context
+Directional meld gives the two Contexts different roles:
+
+- `INCOMING` supplies new, corrective, or already-represented evidence and
+  remains read-only;
+- `BASELINE` is the authoritative existing Context and the only mutation
+  target.
+
+When the current Context is the incoming source, it can be omitted:
+
+```bash
+mem switch test/update/from
+mem meld --into ../to
+```
+
+Here `../to` is resolved lexically from the current Context name
+`test/update/from`, so the exact operation is:
+
+```bash
+mem meld test/update/from --into test/update/to
+```
+
+The explicit form is useful when the incoming Context is not current:
+
+```bash
+mem meld INCOMING --into BASELINE
+```
+
+Bare names such as `campus/wiki` remain global Context names. Only `.`, `..`,
+`./...`, and `../...` opt into current-relative lookup. They describe the
+slash-delimited Context namespace, not shell directories or filesystem paths.
+The command snapshots the current Context once and resolves every relative
+operand against that same name.
+
+The first invocation performs one bounded semantic analysis, saves a
+non-applying relation ledger and proposal, and opens the interactive
+workbench in a terminal. Repeating the same resolved incoming–baseline command
+resumes without another provider call. Directional roles are ordered:
+reversing the two Contexts is a different operation.
+
+The shared issue and whole-set actions use the directional command prefix:
+
+```bash
+mem meld INCOMING --into BASELINE \
+  --issue 1 \
+  --choice 2 \
+  --comment "Only vehicle access is closed; keep the stairwell open."
+
+mem meld INCOMING --into BASELINE \
+  --comment "Apply this scope to every related parking-access rule."
+
+mem meld INCOMING --into BASELINE --expand 1
+mem meld INCOMING --into BASELINE --preserve-all
+mem meld INCOMING --into BASELINE --defer-all
+mem meld INCOMING --into BASELINE --accept
+```
+
+`--preserve-all` respects the authority direction: it keeps the baseline
+unless incoming evidence explicitly supports a correction and retains
+supported incoming distinctions with their scope. `--defer-all` keeps the
+analysis as review-only. Neither action changes either Context.
+
+A ready directional proposal contains only material baseline changes:
+
+- `EDIT` replaces the content of one cited baseline Memory while preserving
+  its UID and position;
+- `ADD` appends one new Memory with a fresh UID;
+- unchanged baseline Memories remain untouched and in order;
+- `DELETE` is not supported, so knowledge is never silently removed.
+
+An equivalent incoming Context can therefore produce a ready proposal with
+zero changes. Acceptance does not manufacture a no-op `EDIT`: it records the
+resolved zero-change meld and its evidence in one baseline checkpoint. For
+non-empty proposals, all accepted `EDIT` and `ADD` operations are applied in
+that same single checkpoint. Acceptance is provider-free, rechecks both bound
+Context snapshots, never mutates the incoming Context, and is the only point
+at which the baseline may change.
+
+Use `--restart` only when intentionally replacing the baseline's saved meld
+session after its bound Contexts have been rechecked:
+
+```bash
+mem meld INCOMING --into BASELINE --restart
+```
+
+Both Context-to-Context modes currently accept bounded Contexts containing
+direct owned Memories only. Memory references, embedded Contexts, and
+query-only references are rejected rather than dereferenced or silently
+omitted.
+
+### Why `--into` is not `--to`
+
+`--into` communicates authority and mutation: incoming evidence is considered
+against an existing baseline, and explicit acceptance may create that
+baseline's next state. It is intentionally not an alias for `--to`.
+
+`--to` is reserved for a different future shape:
+
+```text
+mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
+```
+
+That form would name a distinct result for a symmetric meld and would not make
+either peer authoritative. Reusing `--to` for directional mutation now would
+make those two contracts indistinguishable. Until explicit symmetric result
+selection is implemented, symmetric meld continues to use the current empty
+Context as its target.
+
+## Symmetric Context meld: combine two equal-authority Contexts
+
+### 1. Compare the peers in the intended display order
+
+```bash
+mem switch LEFT_PEER
+mem compare --to RIGHT_PEER
+```
+
+This saved `LEFT_PEER → RIGHT_PEER` analysis is the exact read-only basis for
+the Meld. The reverse Compare slot is deliberately different and is not used
+as a fallback. If either source changes, rerun the command with `--refresh`
+before starting or restarting the Meld.
+
+### 2. Create and enter an empty result Context
 
 ```bash
 mem init RESULT_CONTEXT
@@ -116,13 +250,17 @@ mem init RESULT_CONTEXT
 The current Context is the target. It must be empty. Neither peer source is
 mutated.
 
-### 2. Start or resume the symmetric meld
+### 3. Start or resume the symmetric meld
 
 ```bash
 mem meld LEFT_PEER RIGHT_PEER
 ```
 
-In a terminal this opens the interactive workbench. Repeating the same command
+The first invocation imports the exact Compare overview, relation ledger, and
+grounding candidates without another provider call. It preserves their frame,
+relation, issue, and option identities in the target-bound Meld session but
+does not treat inspection as permission to create target Memories. In a
+terminal this opens the interactive workbench. Repeating the same command
 resumes the saved session. Outside a terminal it prints the saved snapshot.
 
 The primary controls are:
@@ -130,11 +268,13 @@ The primary controls are:
 ```text
 Up / Down               move between issues
 Enter                   expand the selected issue
-1–5                     select a proposed reading
+Up / Down in detail     move between proposed readings
+Enter in detail         select or clear the highlighted reading
 Tab                     comment on the selected issue
 G                       comment on the whole set
 Enter in MESSAGE        send
-Ctrl-J / Alt-Enter      insert a newline
+Ctrl-J                  insert a newline
+Escape                  collapse one detail, then close without applying
 P                       preserve all remaining supported distinctions
 D                       keep the result as review-only
 A                       accept a ready proposal
@@ -161,6 +301,9 @@ mem meld LEFT_PEER RIGHT_PEER --accept
 `--expand`, resume, defer, and acceptance are provider-free. Issue comments,
 whole-set comments, and preserve-all create semantic turns. `--accept` applies
 the ready result to the current empty target without mutating either peer.
+When Compare reports no grounding candidates, use a whole-set comment or
+`--preserve-all` to request the first reviewable target materialization; a
+resolved Compare ledger alone is not write authority.
 
 Use `--restart` only when intentionally replacing the saved review session
 after rechecking that the target is still empty:
@@ -171,19 +314,23 @@ mem meld LEFT_PEER RIGHT_PEER --restart
 
 ## Deliberate boundary
 
-The two implemented entry points share a meld reasoning contract but not one
-CLI shape:
+The three implemented entry points share a meld reasoning contract but retain
+distinct CLI shapes and authority:
 
 ```text
 one saved atomize issue + clarification
 → mem atomize --evaluate
 → issue-scoped directional meld ("atomic meld" shorthand)
 
+one read-only incoming Context + one authoritative baseline
+→ mem meld [INCOMING] --into BASELINE
+→ Context-wide directional meld
+
 two equal-authority Contexts + empty result Context
-→ mem meld
+→ mem meld LEFT_PEER RIGHT_PEER
 → Context-wide symmetric meld
 ```
 
-A future directional Context command must make incoming and baseline authority
-explicit. Until that contract is implemented, this guide must not advertise
-`mem meld INCOMING --into BASELINE` as an available command.
+“Atomic” remains a scope shorthand, not `mem meld --atomic`; `--into` remains
+directional; and the unimplemented `--to` remains reserved for a distinct
+symmetric result Context.

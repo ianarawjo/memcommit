@@ -384,11 +384,19 @@ class MeldTarget:
 
     @classmethod
     def from_context(cls, ctx: Context) -> "MeldTarget":
+        """Bind the empty result Context required by a symmetric meld."""
         if tuple(ctx.iter_items()):
             raise MeldError(
                 "Symmetric Context meld version 1 requires an empty active "
                 "target Context."
             )
+        return cls.from_baseline_context(ctx)
+
+    @classmethod
+    def from_baseline_context(cls, ctx: Context) -> "MeldTarget":
+        """Bind an existing Context as a directional meld baseline/target."""
+        if not isinstance(ctx, Context):
+            raise MeldError("Meld target must be a Context.")
         return cls.from_dict(
             {
                 "context_uid": ctx.uid,
@@ -757,15 +765,14 @@ class MeldAssessment:
                 "Meld issue or proposal references an unknown relation."
             )
         if data["ready_to_apply"] and (
-            not proposals
-            or any(issue.priority == "REQUIRED" for issue in issues)
+            any(issue.priority == "REQUIRED" for issue in issues)
             or any(
                 relation.status == "UNRESOLVED" for relation in relations
             )
         ):
             raise MeldError(
                 "A ready meld assessment cannot retain required or unresolved "
-                "work and must contain an exact proposal."
+                "work."
             )
         return cls(
             overview=_string(data["overview"], "meld assessment overview"),
@@ -1019,6 +1026,11 @@ class MeldChangeSet:
                 "meld change-set proposals",
             )
         )
+        mode = _literal(
+            data["mode"],
+            _MODES,
+            "meld change-set mode",
+        )
         if (
             not source_frame_digests
             or len({uid for uid, _ in source_frame_digests})
@@ -1026,8 +1038,16 @@ class MeldChangeSet:
             or not turn_digests
             or len({uid for uid, _ in turn_digests})
             != len(turn_digests)
-            or not proposals
-            or any(proposal.operation != "ADD" for proposal in proposals)
+            or (
+                mode == "SYMMETRIC"
+                and (
+                    not proposals
+                    or any(
+                        proposal.operation != "ADD"
+                        for proposal in proposals
+                    )
+                )
+            )
         ):
             raise MeldError("Invalid meld change set.")
         result = cls(
@@ -1039,11 +1059,7 @@ class MeldChangeSet:
                 data["turn_uid"],
                 "meld change-set turn uid",
             ),
-            mode=_literal(
-                data["mode"],
-                _MODES,
-                "meld change-set mode",
-            ),  # type: ignore[arg-type]
+            mode=mode,  # type: ignore[arg-type]
             target_uid=_canonical_uuid(
                 data["target_uid"],
                 "meld change-set target uid",
@@ -1125,6 +1141,7 @@ class MeldApplication:
             result_memory_uids=_unique_identifiers(
                 data["result_memory_uids"],
                 "meld application result Memory uids",
+                empty=True,
                 uuids=True,
             ),
         )
@@ -1302,6 +1319,32 @@ class MeldSession:
             _comparison_meld_assessment(seed.analysis),
         )
         return session
+
+    @classmethod
+    def create_directional(
+        cls,
+        incoming: Context,
+        baseline: Context,
+    ) -> "MeldSession":
+        """Bind one incoming Context to an authoritative mutable baseline."""
+        if (
+            incoming.uid == baseline.uid
+            or incoming.name == baseline.name
+        ):
+            raise MeldError(
+                "Directional meld requires distinct INCOMING and BASELINE "
+                "Contexts."
+            )
+        session = cls(
+            uid=str(uuid.uuid4()),
+            mode="DIRECTIONAL",
+            frames=(
+                MeldFrame.from_context(incoming, role="INCOMING"),
+                MeldFrame.from_context(baseline, role="BASELINE"),
+            ),
+            target=MeldTarget.from_baseline_context(baseline),
+        )
+        return cls.from_dict(session.to_dict())
 
     def to_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
@@ -1578,22 +1621,47 @@ class MeldSession:
             != len(self.frames)
         ):
             raise MeldError("Duplicate meld source Context.")
-        if self.target.context_uid in {
-            frame.context_uid for frame in self.frames
-        } or self.target.context_name in {
-            frame.context_name for frame in self.frames
-        }:
-            raise MeldError("Meld target overlaps a source Context.")
-        if self.mode == "SYMMETRIC" and any(
-            frame.role != "PEER" for frame in self.frames
-        ):
-            raise MeldError("Symmetric meld requires two PEER frames.")
-        if self.mode == "DIRECTIONAL" and {
-            frame.role for frame in self.frames
-        } != {"INCOMING", "BASELINE"}:
-            raise MeldError(
-                "Directional meld requires INCOMING and BASELINE frames."
-            )
+        if self.mode == "SYMMETRIC":
+            if self.target.context_uid in {
+                frame.context_uid for frame in self.frames
+            } or self.target.context_name in {
+                frame.context_name for frame in self.frames
+            }:
+                raise MeldError(
+                    "Symmetric meld target overlaps a source Context."
+                )
+            if any(frame.role != "PEER" for frame in self.frames):
+                raise MeldError("Symmetric meld requires two PEER frames.")
+        else:
+            if self.comparison_seed is not None:
+                raise MeldError(
+                    "Directional meld cannot use a peer comparison seed."
+                )
+            incoming, baseline = self.frames
+            if (
+                incoming.role != "INCOMING"
+                or baseline.role != "BASELINE"
+            ):
+                raise MeldError(
+                    "Directional meld requires ordered INCOMING and BASELINE "
+                    "frames."
+                )
+            if (
+                self.target.context_uid != baseline.context_uid
+                or self.target.context_name != baseline.context_name
+                or self.target.context_digest != baseline.context_digest
+            ):
+                raise MeldError(
+                    "Directional meld target must exactly match its BASELINE "
+                    "frame."
+                )
+            if (
+                self.target.context_uid == incoming.context_uid
+                or self.target.context_name == incoming.context_name
+            ):
+                raise MeldError(
+                    "Directional meld target overlaps its INCOMING Context."
+                )
 
         if self.comparison_seed is not None:
             analysis = self.comparison_seed.analysis
@@ -1716,6 +1784,25 @@ class MeldSession:
     def _validate_assessment(self, turn: MeldTurn) -> None:
         assessment = turn.assessment
         assert assessment is not None
+        incoming_frame = (
+            self.frames[0] if self.mode == "DIRECTIONAL" else None
+        )
+        baseline_frame = (
+            self.frames[1] if self.mode == "DIRECTIONAL" else None
+        )
+        baseline_memory_by_uid = (
+            {
+                memory.uid: memory
+                for memory in baseline_frame.memories
+            }
+            if baseline_frame is not None
+            else {}
+        )
+        source_memory_uids = {
+            memory.uid
+            for frame in self.frames
+            for memory in frame.memories
+        }
         memory_keys = {
             (frame.uid, memory.uid)
             for frame in self.frames
@@ -1737,11 +1824,11 @@ class MeldSession:
             }
             if relation.kind == "DISTINCT" and len(member_frame_uids) != 1:
                 raise MeldError(
-                    "A DISTINCT meld relation must belong to one PEER frame."
+                    "A DISTINCT meld relation must belong to one source frame."
                 )
             if relation.kind != "DISTINCT" and len(member_frame_uids) < 2:
                 raise MeldError(
-                    "A cross-source meld relation requires both PEER frames."
+                    "A cross-source meld relation requires both source frames."
                 )
             relation_member_keys.extend(members)
             relation_members_by_uid[relation.uid] = members
@@ -1830,14 +1917,62 @@ class MeldSession:
             if proposal.disposition != "USER_ADD":
                 proposed_source_keys.update(source_keys)
                 proposed_relation_uids.update(proposal.relation_uids)
-            if self.mode == "SYMMETRIC" and proposal.operation != "ADD":
+            if self.mode == "SYMMETRIC":
+                if proposal.operation != "ADD":
+                    raise MeldError(
+                        "Symmetric Context meld may only ADD to its empty "
+                        "target."
+                    )
+                continue
+
+            assert incoming_frame is not None and baseline_frame is not None
+            incoming_evidence = any(
+                frame_uid == incoming_frame.uid
+                for frame_uid, _ in source_keys
+            )
+            if proposal.disposition == "USER_ADD":
+                if proposal.operation != "ADD":
+                    raise MeldError(
+                        "A user-added directional meld result must use ADD."
+                    )
+            elif not incoming_evidence:
                 raise MeldError(
-                    "Symmetric Context meld may only ADD to its empty target."
+                    "A directional meld change must cite INCOMING Memory "
+                    "evidence."
                 )
-        if assessment.ready_to_apply and (
-            proposed_source_keys != memory_keys
-            or proposed_relation_uids
-            != {relation.uid for relation in assessment.relations}
+            if proposal.operation == "EDIT":
+                target_memory = baseline_memory_by_uid.get(
+                    proposal.memory_uid
+                )
+                if (
+                    target_memory is None
+                    or (
+                        baseline_frame.uid,
+                        proposal.memory_uid,
+                    )
+                    not in source_keys
+                ):
+                    raise MeldError(
+                        "A directional EDIT must target and cite one BASELINE "
+                        "Memory."
+                    )
+                if proposal.content == target_memory.content:
+                    raise MeldError(
+                        "A directional EDIT must materially change its "
+                        "BASELINE Memory."
+                    )
+            elif proposal.memory_uid in source_memory_uids:
+                raise MeldError(
+                    "A directional ADD must use a fresh Memory uid."
+                )
+        if (
+            self.mode == "SYMMETRIC"
+            and assessment.ready_to_apply
+            and (
+                proposed_source_keys != memory_keys
+                or proposed_relation_uids
+                != {relation.uid for relation in assessment.relations}
+            )
         ):
             raise MeldError(
                 "A ready symmetric meld must represent every source Memory "
