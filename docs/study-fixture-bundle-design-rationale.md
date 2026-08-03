@@ -2,11 +2,11 @@
 
 ## Decision
 
-The three user-study tasks are built as three independent, swappable `.mem`
-stores. English is the canonical `Memory.content`; the reviewed Korean source
-text is installed as a `ko` same-UID translation catalog. Query-only material
-uses concealed bilingual QuerySource entries rather than an ordinary
-translation catalog.
+The three user-study tasks are built as three independent `.mem` stores and
+imported as editable local MemoryStore profiles. English is the canonical
+`Memory.content`; the reviewed Korean source text is installed as a `ko`
+same-UID translation catalog. Query-only material uses concealed bilingual
+QuerySource entries rather than an ordinary translation catalog.
 
 ```text
 outputs/study-fixtures/
@@ -15,11 +15,13 @@ outputs/study-fixtures/
 └── task-3/.mem
 ```
 
-This follows the study's reset-and-swap procedure. The installed application
-still uses one `~/.mem`; the study harness can replace that complete directory
-between tasks. The prototype does not reinterpret `mem switch` as a cross-task
-operation and does not change the global storage architecture solely for the
-fixture.
+This follows the study's task-isolation procedure without moving the legacy
+`~/.mem` directory. `mem profile import-study` copies the packages into local
+managed roots, and `mem profile use task-N` selects one complete store for the
+next CLI process. The prototype does not reinterpret `mem switch` as a
+cross-task operation: it still changes Context only inside the selected
+profile. See `mem-profile-design-rationale.md` for the selector and atomic
+import boundary.
 
 ## Source and generated artifacts
 
@@ -120,5 +122,7 @@ remains a future refactor.
 - Audience metadata describes intended disclosure and is not enforced as an
   ACL by the current Memory schema.
 - Translation status is review workflow state, not proof of equivalence.
-- The generated `.mem` stores are task inputs. Study reset automation and
-  preservation of participant outputs are separate operational concerns.
+- The generated `.mem` stores are immutable import inputs. Edits belong to the
+  managed profile copy and do not flow back to the fixture source or package.
+- Profile replacement, reset, and export of participant outputs remain
+  separate recoverable workflow decisions.

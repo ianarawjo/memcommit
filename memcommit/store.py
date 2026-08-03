@@ -22,8 +22,9 @@ from pathlib import Path
 from typing import Iterable, Iterator, Optional
 
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
+from memcommit.profile_config import resolve_active_store_dir
 
-STORE_DIR = Path.home() / ".mem"
+STORE_DIR = resolve_active_store_dir()
 CONTEXTS_DIR = STORE_DIR / "contexts"
 STATE_FILE = STORE_DIR / "state.json"
 QUERY_SOURCES_DIR = STORE_DIR / "query-sources"

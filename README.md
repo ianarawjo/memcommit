@@ -18,6 +18,24 @@ be completed or edited before execution.
 Add the same `eval` line to `.zshrc` to enable it in future shells. The command
 only prints shell code; it does not edit shell startup files itself.
 
+## Whole-store profiles
+
+`mem switch` changes Context inside one MemoryStore. Use `mem profile` when a
+complete local store should change instead:
+
+```zsh
+mem profile import-study --from outputs/study-fixtures
+mem profile list
+mem profile use task-1
+mem switch
+mem profile use authoring
+```
+
+The existing `~/.mem` is the fixed `authoring` profile. Imported profiles are
+editable local copies; selecting another profile does not modify or move the
+authoring store or the generated package source. Query-only sources travel
+with a profile but remain absent from `mem switch`.
+
 ## Meld quick start
 
 The implemented meld workflows have different entry points:

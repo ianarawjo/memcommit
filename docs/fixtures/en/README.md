@@ -330,5 +330,6 @@ limiting is implemented.
    omissions, and expected outcomes by task.
 3. Review the approved Korean source and English translation for semantic
    preservation.
-4. Finally, design a separate command or manifest boundary for installing
-   Contexts and query-only sources.
+4. Import the generated packages with `mem profile import-study`, which copies
+   Contexts, query-only sources, histories, and translation catalogs into
+   separate editable profiles without changing the authoring store.

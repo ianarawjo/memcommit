@@ -48,6 +48,7 @@ from memcommit.commands import (
 from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
 from memcommit.commands.dev import app as dev_app
+from memcommit.commands.profile import app as profile_app
 
 app = typer.Typer(no_args_is_help=True, help="mem — a git-like memory store")
 
@@ -171,6 +172,11 @@ app.command(
 
 # --- Sub-apps ---
 app.add_typer(config_app, name="config", help="Read and write global configuration.")
+app.add_typer(
+    profile_app,
+    name="profile",
+    help="Register and select complete local MemoryStore profiles.",
+)
 app.add_typer(dev_app,    name="dev",    help="Developer tools (eval, diagnostics).", hidden=True)
 
 
