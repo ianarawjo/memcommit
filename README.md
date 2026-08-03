@@ -38,6 +38,29 @@ editable local copies; selecting another profile does not modify or move the
 authoring store or the generated package source. Query-only sources travel
 with a profile but remain absent from `mem switch`.
 
+## Write protection
+
+Protect the current Context, a recursive Context snapshot, one directly owned
+Memory, or the active Profile from later writes:
+
+```zsh
+mem lock
+mem unlock
+mem lock --recursive
+mem lock context CONTEXT [--recursive]
+mem unlock context CONTEXT [--recursive]
+mem lock memory MEMORY_UID [--context CONTEXT]
+mem unlock memory MEMORY_UID [--context CONTEXT]
+mem lock profile
+mem unlock profile
+```
+
+Bare `lock` and `unlock` target the current Context. `--recursive` atomically
+applies the Context policy to the root and its existing lexical descendants;
+future descendants do not inherit it. A Profile lock blocks durable writes
+inside that Profile while allowing reads and Context/Profile switching.
+Unlocking a Profile preserves narrower Context and Memory locks.
+
 ## Meld quick start
 
 The implemented meld workflows have different entry points:

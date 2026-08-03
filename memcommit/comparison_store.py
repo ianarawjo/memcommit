@@ -153,6 +153,7 @@ def save_comparison_analysis(
             }
         ):
             locks.enter_context(store._context_write_lock(name))
+        locks.enter_context(store.profile_write_guard())
 
         try:
             reference = store.load_direct(reference_frame.context_name)

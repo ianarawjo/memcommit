@@ -43,6 +43,7 @@ IMPLEMENTATION_LEVELS = {
     "init": "implemented",
     "integrate": "legacy",
     "list": "implemented",
+    "lock": "implemented",
     "log": "implemented",
     "ls": "implemented",
     "meld": "partial",
@@ -62,6 +63,7 @@ IMPLEMENTATION_LEVELS = {
     "trace": "implemented",
     "translate": "implemented",
     "undo": "implemented",
+    "unlock": "implemented",
     "update": "partial",
 }
 

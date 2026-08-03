@@ -18,8 +18,9 @@ import unicodedata
 import uuid
 from dataclasses import dataclass
 from datetime import datetime
+from functools import wraps
 from pathlib import Path
-from typing import Iterable, Iterator, Optional
+from typing import Callable, Iterable, Iterator, Optional
 
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
 from memcommit.context_catalog import (
@@ -28,6 +29,12 @@ from memcommit.context_catalog import (
     ContextCatalogScan,
 )
 from memcommit.profile_config import resolve_active_store_dir
+from memcommit.write_protection import (
+    WriteProtectionError,
+    WriteProtectionRegistry,
+    WriteProtectionRegistryError,
+    WriteProtectionState,
+)
 
 STORE_DIR = resolve_active_store_dir()
 CONTEXTS_DIR = STORE_DIR / "contexts"
@@ -648,6 +655,17 @@ def _query_source_entry_from_record(
     )
 
 
+def _profile_write_guarded(method: Callable):
+    """Hold Profile policy stable through one non-Context artifact write."""
+
+    @wraps(method)
+    def guarded(self, *args, **kwargs):
+        with self.profile_write_guard():
+            return method(self, *args, **kwargs)
+
+    return guarded
+
+
 class MemoryStore:
 
     def __init__(self, *, create: bool = True):
@@ -663,6 +681,240 @@ class MemoryStore:
             CONTEXTS_DIR.mkdir(parents=True, exist_ok=True)
             if not STATE_FILE.exists():
                 self._write_state({"current": None})
+
+    @property
+    def write_protection_registry(self) -> WriteProtectionRegistry:
+        """Return the persistent registry scoped to the active Profile."""
+        return WriteProtectionRegistry(STORE_DIR)
+
+    def write_protection_state(self) -> WriteProtectionState:
+        """Read the active Profile's protection state."""
+        return self.write_protection_registry.snapshot()
+
+    @contextmanager
+    def profile_write_guard(self) -> Iterator[WriteProtectionState]:
+        """Keep Profile-level permission stable through one durable write."""
+        with self.write_protection_registry.profile_write_guard() as state:
+            yield state
+
+    @staticmethod
+    def _protected_context_message(name: str) -> str:
+        return (
+            f"Context '{name}' is locked against changes. Unlock that Context "
+            "first."
+        )
+
+    @staticmethod
+    def _protected_memory_message(name: str, memory_uid: str) -> str:
+        return (
+            f"Memory [{memory_uid[:8]}] in Context '{name}' is locked against "
+            "changes. Unlock that Memory first."
+        )
+
+    def _assert_context_record_change_allowed(
+        self,
+        before: Context | dict[str, object],
+        after: Context | dict[str, object],
+        *,
+        state: WriteProtectionState | None = None,
+    ) -> None:
+        """Reject a persisted record change crossing a protection boundary."""
+        before_record = canonical_context_record(before)
+        after_record = canonical_context_record(after)
+        if before_record == after_record:
+            return
+        context_uid = str(before_record["uid"])
+        context_name = str(before_record["name"])
+        if str(after_record["uid"]) != context_uid:
+            raise ValueError("A Context save cannot replace its stable identity.")
+        protection = state if state is not None else self.write_protection_state()
+        if protection.context_is_protected(context_uid):
+            raise WriteProtectionError(
+                self._protected_context_message(context_name)
+            )
+
+        before_memories = before_record["memories"]
+        after_memories = after_record["memories"]
+        assert isinstance(before_memories, dict)
+        assert isinstance(after_memories, dict)
+        for memory_uid in sorted(
+            protection.protected_memory_uids(context_uid)
+        ):
+            before_memory = before_memories.get(memory_uid)
+            if (
+                not isinstance(before_memory, dict)
+                or before_memory.get("type") != "memory"
+                or before_memory.get("uid") != memory_uid
+            ):
+                raise WriteProtectionRegistryError(
+                    f"Protected Memory [{memory_uid[:8]}] no longer identifies "
+                    f"a direct Memory in Context '{context_name}'."
+                )
+            if after_memories.get(memory_uid) != before_memory:
+                raise WriteProtectionError(
+                    self._protected_memory_message(context_name, memory_uid)
+                )
+
+    def _assert_context_deletion_allowed(self, context: Context) -> None:
+        protection = self.write_protection_state()
+        if protection.context_is_protected(context.uid):
+            raise WriteProtectionError(
+                self._protected_context_message(context.name)
+            )
+        locked_memories = sorted(
+            protection.protected_memory_uids(context.uid)
+        )
+        if locked_memories:
+            memory_uid = locked_memories[0]
+            item = context.memories.get(memory_uid)
+            if not isinstance(item, Memory):
+                raise WriteProtectionRegistryError(
+                    f"Protected Memory [{memory_uid[:8]}] no longer identifies "
+                    f"a direct Memory in Context '{context.name}'."
+                )
+            raise WriteProtectionError(
+                self._protected_memory_message(context.name, memory_uid)
+            )
+
+    def _revalidate_protection_target(
+        self,
+        name: str,
+        *,
+        expected_context_uid: str,
+        expected_context_digest: str,
+    ) -> Context:
+        try:
+            current = self.load_direct(name)
+        except FileNotFoundError as error:
+            raise ConcurrentContextUpdateError(
+                f"Context '{name}' no longer exists."
+            ) from error
+        if (
+            current.uid != expected_context_uid
+            or context_record_digest(current) != expected_context_digest
+        ):
+            raise ConcurrentContextUpdateError(
+                f"Context '{name}' changed before its lock state could be saved."
+            )
+        return current
+
+    def set_context_write_protection(
+        self,
+        name: str,
+        *,
+        protected: bool,
+        expected_context_uid: str,
+        expected_context_digest: str,
+    ) -> bool:
+        """Lock or unlock one exact existing Context identity."""
+        validate_context_name(name)
+        with self._context_write_lock(name):
+            current = self._revalidate_protection_target(
+                name,
+                expected_context_uid=expected_context_uid,
+                expected_context_digest=expected_context_digest,
+            )
+            before, after = self.write_protection_registry.update(
+                lambda state: state.with_context(
+                    current.uid,
+                    protected=protected,
+                )
+            )
+            return before != after
+
+    def set_context_namespace_write_protection(
+        self,
+        root_name: str,
+        expected_contexts: Iterable[tuple[str, str, str]],
+        *,
+        protected: bool,
+    ) -> tuple[int, int]:
+        """Atomically change current members of one lexical Context subtree."""
+        validate_context_name(root_name)
+        expected = tuple(sorted(expected_contexts))
+        if not expected or len({name for name, _, _ in expected}) != len(
+            expected
+        ):
+            raise ValueError("Invalid recursive Context protection target set.")
+        prefix = root_name + "/"
+        if any(
+            name != root_name and not name.startswith(prefix)
+            for name, _, _ in expected
+        ):
+            raise ValueError("Invalid recursive Context protection target set.")
+
+        with self._context_graph_lock(exclusive=True):
+            with self._context_write_locks(name for name, _, _ in expected):
+                graph = self.load_direct_context_graph_strict()
+                current = tuple(
+                    sorted(
+                        (
+                            context.name,
+                            context.uid,
+                            context_record_digest(context),
+                        )
+                        for context in graph
+                        if context.name == root_name
+                        or context.name.startswith(prefix)
+                    )
+                )
+                if current != expected:
+                    raise ConcurrentContextUpdateError(
+                        f"Context namespace '{root_name}' changed before its "
+                        "lock state could be saved."
+                    )
+                context_uids = tuple(uid for _, uid, _ in current)
+                before, after = self.write_protection_registry.update(
+                    lambda state: state.with_contexts(
+                        context_uids,
+                        protected=protected,
+                    )
+                )
+                changed = len(
+                    before.context_uids.symmetric_difference(
+                        after.context_uids
+                    )
+                )
+                return len(current), changed
+
+    def set_profile_write_protection(self, *, protected: bool) -> bool:
+        """Change the active Profile's upper write barrier."""
+        before, after = self.write_protection_registry.update(
+            lambda state: state.with_profile(protected=protected)
+        )
+        return before != after
+
+    def set_memory_write_protection(
+        self,
+        name: str,
+        memory_uid: str,
+        *,
+        protected: bool,
+        expected_context_uid: str,
+        expected_context_digest: str,
+    ) -> bool:
+        """Lock or unlock one direct Memory occurrence in one exact Context."""
+        validate_context_name(name)
+        with self._context_write_lock(name):
+            current = self._revalidate_protection_target(
+                name,
+                expected_context_uid=expected_context_uid,
+                expected_context_digest=expected_context_digest,
+            )
+            item = current.memories.get(memory_uid)
+            if not isinstance(item, Memory):
+                raise ValueError(
+                    f"'{memory_uid}' is not a directly owned Memory in "
+                    f"Context '{name}'."
+                )
+            before, after = self.write_protection_registry.update(
+                lambda state: state.with_memory(
+                    current.uid,
+                    memory_uid,
+                    protected=protected,
+                )
+            )
+            return before != after
 
     @contextmanager
     def _context_graph_lock(self, *, exclusive: bool) -> Iterator[None]:
@@ -952,6 +1204,7 @@ class MemoryStore:
         """Return the cached impact plan, or None when no plan exists."""
         return self._load_update_session(IMPACT_PLAN_FILE)
 
+    @_profile_write_guarded
     def save_impact_plan(self, session) -> None:
         """Atomically cache a non-mutating impact plan."""
         self._save_update_session(IMPACT_PLAN_FILE, session)
@@ -960,6 +1213,7 @@ class MemoryStore:
         """Return the active staged/applied update record, if one exists."""
         return self._load_update_session(STAGED_UPDATE_FILE)
 
+    @_profile_write_guarded
     def save_staged_update(
         self,
         session,
@@ -1034,7 +1288,10 @@ class MemoryStore:
                     "The active staged update changed before application."
                 )
 
-            with self._context_write_locks(lock_names):
+            with (
+                self._context_write_locks(lock_names),
+                self.profile_write_guard(),
+            ):
                 source = self.load(session.source_name)
                 target = self.load(session.target_name)
                 if not session_matches(session, source, target):
@@ -1252,6 +1509,7 @@ class MemoryStore:
         """Return the active semantic review, or None when none exists."""
         return self._load_review_session(REVIEW_SESSION_FILE)
 
+    @_profile_write_guarded
     def save_review_session(self, session) -> None:
         """Atomically save one validated semantic review session."""
         from memcommit.review import ReviewError, ReviewSession
@@ -1345,6 +1603,12 @@ class MemoryStore:
             raise TypeError("Expected a GroundSession.")
         if not isinstance(verify_bound_frames, bool):
             raise ValueError("Ground frame verification flag is invalid.")
+        # Avoid creating Ground lock storage when the Profile is already
+        # read-only. The later shared guard closes the concurrent-lock race.
+        if self.write_protection_state().profile_is_protected():
+            raise WriteProtectionError(
+                "Profile is locked against writes. Unlock that Profile first."
+            )
         path = self._ground_session_path(session.contract_name)
         expected_values = (
             expected_uid,
@@ -1414,6 +1678,7 @@ class MemoryStore:
             locks.enter_context(
                 self._ground_session_write_lock(session.contract_name)
             )
+            locks.enter_context(self.profile_write_guard())
             if GROUND_SESSIONS_DIR.exists() and (
                 not GROUND_SESSIONS_DIR.is_dir()
                 or GROUND_SESSIONS_DIR.is_symlink()
@@ -1555,35 +1820,37 @@ class MemoryStore:
         # transaction.  The session digest separately prevents two semantic
         # replies from silently replacing one another.
         with self._context_write_lock(session.target.context_name):
-            if MELD_SESSIONS_DIR.exists() and (
-                not MELD_SESSIONS_DIR.is_dir()
-                or MELD_SESSIONS_DIR.is_symlink()
-            ):
-                raise ValueError("Meld session storage is invalid.")
-            MELD_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
-            if path.exists() and (not path.is_file() or path.is_symlink()):
-                raise ValueError("Meld session storage is invalid.")
-            if path.exists():
-                with open(path, encoding="utf-8") as file:
-                    current = json.load(
-                        file,
-                        object_pairs_hook=_reject_duplicate_json_keys,
-                    )
-                current_digest = meld_canonical_digest(current)
-                if expected_session_digest is None:
+            with self.profile_write_guard():
+                if MELD_SESSIONS_DIR.exists() and (
+                    not MELD_SESSIONS_DIR.is_dir()
+                    or MELD_SESSIONS_DIR.is_symlink()
+                ):
+                    raise ValueError("Meld session storage is invalid.")
+                MELD_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+                if path.exists() and (not path.is_file() or path.is_symlink()):
+                    raise ValueError("Meld session storage is invalid.")
+                if path.exists():
+                    with open(path, encoding="utf-8") as file:
+                        current = json.load(
+                            file,
+                            object_pairs_hook=_reject_duplicate_json_keys,
+                        )
+                    current_digest = meld_canonical_digest(current)
+                    if expected_session_digest is None:
+                        raise ConcurrentContextUpdateError(
+                            "A meld session already exists for this target."
+                        )
+                    if current_digest != expected_session_digest:
+                        raise ConcurrentContextUpdateError(
+                            "The meld session changed before it could be saved."
+                        )
+                elif expected_session_digest is not None:
                     raise ConcurrentContextUpdateError(
-                        "A meld session already exists for this target."
+                        "The meld session no longer exists."
                     )
-                if current_digest != expected_session_digest:
-                    raise ConcurrentContextUpdateError(
-                        "The meld session changed before it could be saved."
-                    )
-            elif expected_session_digest is not None:
-                raise ConcurrentContextUpdateError(
-                    "The meld session no longer exists."
-                )
-            _write_json_atomic(path, data)
+                _write_json_atomic(path, data)
 
+    @_profile_write_guarded
     def delete_meld_session(self, target_context_uid: str) -> None:
         """Remove one exact target-bound meld artifact."""
         path = self._meld_session_path(target_context_uid)
@@ -1646,6 +1913,7 @@ class MemoryStore:
         ) as error:
             raise ValueError("Saved atomize analysis is invalid.") from error
 
+    @_profile_write_guarded
     def save_atomize_analysis(self, session) -> None:
         """Atomically persist a validated, non-applying atomize preview."""
         from memcommit.atomize import (
@@ -1671,6 +1939,7 @@ class MemoryStore:
             raise ValueError("Atomize analysis is invalid.") from error
         _write_json_atomic(path, data)
 
+    @_profile_write_guarded
     def delete_atomize_analysis(self, context_uid: str) -> None:
         """Remove one derived analysis artifact during failed save-as cleanup."""
         path = self._atomize_analysis_path(context_uid)
@@ -1744,6 +2013,7 @@ class MemoryStore:
         ) as error:
             raise ValueError("Saved atomize workbench is invalid.") from error
 
+    @_profile_write_guarded
     def save_atomize_workbench(self, session) -> None:
         """Atomically persist one Context-bound mutable workbench."""
         from memcommit.atomize_workbench import (
@@ -1784,6 +2054,7 @@ class MemoryStore:
             )
         _write_json_atomic(path, data)
 
+    @_profile_write_guarded
     def delete_atomize_workbench(self, context_uid: str) -> None:
         """Remove derived UI state during failed save-as cleanup."""
         path = self._atomize_workbench_path(context_uid)
@@ -1896,6 +2167,7 @@ class MemoryStore:
                 "Saved atomize grounding session is invalid."
             ) from error
 
+    @_profile_write_guarded
     def save_atomize_grounding_session(self, session) -> None:
         """Atomically persist one strict Context-bound grounding dialogue."""
         from memcommit.atomize_grounding import (
@@ -2932,6 +3204,16 @@ class MemoryStore:
             str(records[name]["uid"])
             for name in changed_owner_names
         }
+        # Rename rewrites moved headers and inbound-reference owners. Validate
+        # every changed record against one policy generation while the graph
+        # and complete Context lock set remain held.
+        protection = self.write_protection_state()
+        for owner_name in changed_owner_names:
+            self._assert_context_record_change_allowed(
+                records[owner_name],
+                post_records[owner_name],
+                state=protection,
+            )
 
         ground_records = self._read_ground_records_for_rename(
             ground_contract_names
@@ -3314,6 +3596,7 @@ class MemoryStore:
                             grounds.enter_context(
                                 self._ground_session_write_lock(contract_name)
                             )
+                        grounds.enter_context(self.profile_write_guard())
                         prepared = self._prepare_context_rename_locked(
                             plan.old_name,
                             plan.new_name,
@@ -3672,6 +3955,7 @@ class MemoryStore:
                     raise error
         return tuple(created)
 
+    @_profile_write_guarded
     def _save_locked(
         self,
         ctx: Context,
@@ -3690,6 +3974,17 @@ class MemoryStore:
         context_preexisting = self.context_exists(ctx.name)
         if require_new and context_preexisting:
             raise FileExistsError(f"Context '{ctx.name}' already exists.")
+        current_record: dict[str, object] | None = None
+        if context_preexisting:
+            with open(context_file, encoding="utf-8") as file:
+                loaded_record = json.load(
+                    file,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            current_record = _validate_context_header(
+                loaded_record,
+                ctx.name,
+            )
         if expected_context_digest is not None:
             if (
                 len(expected_context_digest) != 64
@@ -3703,19 +3998,13 @@ class MemoryStore:
                 raise ConcurrentContextUpdateError(
                     f"Context '{ctx.name}' no longer exists."
                 )
-            with open(context_file, encoding="utf-8") as file:
-                current_record = json.load(
-                    file,
-                    object_pairs_hook=_reject_duplicate_json_keys,
-                )
-            current_record = _validate_context_header(
-                current_record,
-                ctx.name,
-            )
+            assert current_record is not None
             if context_record_digest(current_record) != expected_context_digest:
                 raise ConcurrentContextUpdateError(
                     f"Context '{ctx.name}' changed before it could be saved."
                 )
+        if current_record is not None:
+            self._assert_context_record_change_allowed(current_record, ctx)
         if not context_preexisting:
             self._assert_context_storage_available(ctx.name)
         ctx_dir.mkdir(parents=True, exist_ok=True)
@@ -3823,6 +4112,7 @@ class MemoryStore:
             ),
         )
 
+    @_profile_write_guarded
     def create_bilingual_query_source(
         self,
         name: str,
@@ -4017,6 +4307,7 @@ class MemoryStore:
             fallback_to_canonical=fallback_to_canonical,
         )
 
+    @_profile_write_guarded
     def delete_query_source(self, source_uid: str) -> None:
         """Delete one exact hidden source, used to roll back failed setup."""
         source_dir = self._query_source_dir(source_uid)
@@ -4056,11 +4347,14 @@ class MemoryStore:
                     )
                 self._delete_locked(name)
 
+    @_profile_write_guarded
     def _delete_locked(self, name: str) -> None:
         """Delete one Context while its cooperative write lock is held."""
         if not self.context_exists(name):
             raise FileNotFoundError(f"Context '{name}' not found.")
-        context_uid = self.load_direct(name).uid
+        current_context = self.load_direct(name)
+        self._assert_context_deletion_allowed(current_context)
+        context_uid = current_context.uid
         # Validate the derived-artifact path before deleting the primary
         # Context so a malformed analysis store cannot turn cleanup into a
         # surprising partial operation.
@@ -4275,6 +4569,7 @@ class MemoryStore:
                 auto=auto,
             )
 
+    @_profile_write_guarded
     def _checkpoint_locked(
         self,
         ctx: Context,
@@ -4344,7 +4639,10 @@ class MemoryStore:
         expected_history_digest: str | None = None,
     ) -> tuple[Checkpoint, Checkpoint]:
         """Revert one Context while holding its cooperative write lock."""
-        with self._context_write_lock(ctx_name):
+        with (
+            self._context_write_lock(ctx_name),
+            self.profile_write_guard(),
+        ):
             return self._revert_locked(
                 ctx_name,
                 uid_prefix,

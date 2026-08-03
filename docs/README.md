@@ -57,6 +57,10 @@ considered sufficient design history.
 
 ## Context namespace migration
 
+- [`mem-write-protection-design-rationale.md`](mem-write-protection-design-rationale.md)
+  defines bare current-Context lock/unlock, frozen recursive Context sets,
+  direct-Memory locks, the active Profile's upper read-only policy, shared
+  store-level enforcement, and branch and rename identity behavior.
 - [`mem-command-dependency-design-rationale.md`](mem-command-dependency-design-rationale.md)
   records the shared locator, loader, source-binding, creation/deletion,
   catalog, display, and revert boundaries used across `mem` commands, plus the

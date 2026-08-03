@@ -44,13 +44,19 @@ from memcommit.commands import (
     translate,
     undo,
     update,
+    write_protection,
 )
 from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
 from memcommit.commands.dev import app as dev_app
 from memcommit.commands.profile import app as profile_app
+from memcommit.commands.root_group import MemCommandGroup
 
-app = typer.Typer(no_args_is_help=True, help="mem — a git-like memory store")
+app = typer.Typer(
+    cls=MemCommandGroup,
+    no_args_is_help=True,
+    help="mem — a git-like memory store",
+)
 
 # --- Core ---
 app.command("init",           help="Initialize a new context and switch to it.")(init.cmd)
@@ -66,6 +72,16 @@ app.command(
 )(list_memories.cmd)
 app.command("show",           help="Show a memory, embedded context, or the current context in full.")(show.cmd)
 app.command("contexts",       help="List all available contexts.")(contexts.cmd)
+app.add_typer(
+    write_protection.lock_app,
+    name="lock",
+    help="Lock the current Context, a recursive Context set, Memory, or Profile.",
+)
+app.add_typer(
+    write_protection.unlock_app,
+    name="unlock",
+    help="Unlock the current Context, a recursive set, Memory, or Profile.",
+)
 app.command("clear",          help="Clear all memories from the current (or given) context.")(clear_cmd)
 app.command("delete",         help="Delete a context and its history; preserve descendants.")(delete.cmd)
 app.command(

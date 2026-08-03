@@ -348,6 +348,7 @@ def save_translation_view(
     with (
         store._context_graph_lock(exclusive=False),
         store._context_write_lock(view.context_name),
+        store.profile_write_guard(),
     ):
         try:
             current_context = store.load_direct(view.context_name)
@@ -454,6 +455,7 @@ def save_translation_catalog(
     with (
         store._context_graph_lock(exclusive=False),
         store._context_write_lock(catalog.context_name),
+        store.profile_write_guard(),
     ):
         try:
             current_context = store.load_direct(catalog.context_name)
