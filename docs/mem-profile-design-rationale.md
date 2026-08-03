@@ -26,6 +26,16 @@ picker returns only a registered display name; the normal `use_profile`
 boundary re-loads and validates the registry and selected store before the
 active selector is changed, so a stale screen is not authority to switch.
 
+Each Profile row also displays the public locator names of its routed
+query-only references, such as `query=campus-wiki`, before the potentially
+long current Context locator. A count alone made an included source look
+absent and was often clipped at ordinary terminal widths. The name is routing
+metadata that is already used by `mem query`; displaying it neither reads nor
+reveals the concealed source. An orphaned concealed record without an ordinary
+`QueryContextRef` may contribute to a diagnostic count but its name is not
+publicized. Query-only sources remain absent from `mem switch` because they
+cannot become an ordinary current Context.
+
 The name *profile* was chosen instead of *account* because no authentication,
 remote identity, or user ownership changes. A profile is only a locally
 registered set of Contexts, checkpoints, translation views, query-only

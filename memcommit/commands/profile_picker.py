@@ -23,6 +23,7 @@ class ProfilePickerEntry:
     context_count: int
     current_context: str | None
     query_source_count: int = 0
+    query_source_names: tuple[str, ...] = ()
 
 
 def _validate_entries(
@@ -40,6 +41,9 @@ def _validate_entries(
             or not entry.name
             or entry.context_count < 0
             or entry.query_source_count < 0
+            or len(entry.query_source_names) > entry.query_source_count
+            or any(not name for name in entry.query_source_names)
+            or len(set(entry.query_source_names)) != len(entry.query_source_names)
             for entry in options
         )
         or len(set(names)) != len(names)
@@ -76,9 +80,13 @@ def _render_profile_options(
         action_style = row_style or ("class:current" if is_current else "")
         current_context = entry.current_context or "(none)"
         query_note = (
-            f" · {entry.query_source_count} query-only"
-            if entry.query_source_count
-            else ""
+            f" · query={','.join(entry.query_source_names)}"
+            if entry.query_source_names
+            else (
+                f" · {entry.query_source_count} query-only"
+                if entry.query_source_count
+                else ""
+            )
         )
         fragments.extend(
             [
@@ -86,8 +94,8 @@ def _render_profile_options(
                 (action_style, f"{action:<7}"),
                 (
                     row_style,
-                    f"  {entry.context_count} Contexts "
-                    f"· current={current_context}{query_note}",
+                    f"  {entry.context_count} Contexts"
+                    f"{query_note} · current={current_context}",
                 ),
             ]
         )

@@ -49,6 +49,7 @@ class StoreInspection:
     current_context: str | None
     context_names: tuple[str, ...]
     query_source_count: int
+    query_source_names: tuple[str, ...]
     translation_catalog_count: int
 
 
@@ -224,6 +225,11 @@ def inspect_store(root: Path) -> StoreInspection:
         current_context=current,
         context_names=tuple(sorted(contexts)),
         query_source_count=len(sources),
+        # Only an ordinary QueryContextRef makes a source name public routing
+        # metadata.  Do not surface names from orphaned concealed records.
+        query_source_names=tuple(
+            sorted(reference.name for reference in query_refs.values())
+        ),
         translation_catalog_count=catalog_count,
     )
 
@@ -375,6 +381,7 @@ def import_profile(
                 current_context=inspection.current_context,
                 context_names=inspection.context_names,
                 query_source_count=inspection.query_source_count,
+                query_source_names=inspection.query_source_names,
                 translation_catalog_count=inspection.translation_catalog_count,
             )
         finally:
@@ -621,6 +628,7 @@ def import_study_profiles(bundle_root: Path) -> StudyImportResult:
                     current_context=inspection.current_context,
                     context_names=inspection.context_names,
                     query_source_count=inspection.query_source_count,
+                    query_source_names=inspection.query_source_names,
                     translation_catalog_count=inspection.translation_catalog_count,
                 )
                 for profile, inspection in zip(profiles, inspections, strict=True)

@@ -87,6 +87,26 @@ def test_bare_profile_prints_inventory_in_non_tty_mode(
     assert "Usage:" not in result.output
 
 
+def test_profile_inventory_does_not_expose_an_unrouted_query_source_name(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    MemoryStore().create_query_source(
+        "concealed-unrouted-name",
+        "CONTENT THAT MUST NOT APPEAR",
+    )
+
+    result = runner.invoke(app, ["profile"])
+
+    assert result.exit_code == 0, result.output
+    assert "1 query-only" in result.output
+    assert "concealed-unrouted-name" not in result.output
+    assert "CONTENT THAT MUST NOT APPEAR" not in result.output
+
+
 def test_bare_profile_uses_interactive_picker_result(
     isolated_store,
     tmp_path,
@@ -220,6 +240,7 @@ def test_import_study_registers_editable_isolated_copies_and_keeps_authoring(
     assert "task-1: 14 ordinary Contexts" in result.output
     assert "task-2: 34 ordinary Contexts" in result.output
     assert "task-3: 42 ordinary Contexts" in result.output
+    assert "query-only=campus-wiki" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -273,6 +294,7 @@ def test_profile_use_changes_the_next_process_and_keeps_query_only_hidden(
     profile_list = runner.invoke(app, ["profile", "list"])
     assert profile_list.exit_code == 0
     assert "* task-1" in profile_list.output
+    assert "query=campus-wiki" in profile_list.output
     assert "authoring" in profile_list.output
 
 

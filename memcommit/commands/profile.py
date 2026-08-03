@@ -50,6 +50,7 @@ def _pick_profile() -> str | None:
             context_count=len(inspection.context_names),
             current_context=inspection.current_context,
             query_source_count=inspection.query_source_count,
+            query_source_names=inspection.query_source_names,
         )
         for profile, inspection in zip(
             registry.profiles,
@@ -82,8 +83,9 @@ def _use_profile(name: str) -> None:
     typer.echo(f"Current Context: {inspection.current_context or '(none)'}")
     if inspection.query_source_count:
         typer.echo(
-            f"{inspection.query_source_count} query-only source(s) remain "
-            "hidden from 'mem switch'."
+            "Query-only: "
+            f"{', '.join(inspection.query_source_names)} "
+            "(visible by name; hidden from 'mem switch')."
         )
 
 
@@ -117,18 +119,24 @@ def list_cmd() -> None:
         action = "CURRENT" if profile.uid == registry.active_uid else "USE"
         current = inspection.current_context or "(none)"
         query_note = (
-            f" · {inspection.query_source_count} query-only"
-            if inspection.query_source_count
-            else ""
+            f" · query={','.join(inspection.query_source_names)}"
+            if inspection.query_source_names
+            else (
+                f" · {inspection.query_source_count} query-only"
+                if inspection.query_source_count
+                else ""
+            )
         )
         typer.echo(
             f"{marker} {profile.name:<12} "
             f"{action:<7} "
             f"{profile.kind.lower():<9} "
-            f"{len(inspection.context_names)} Contexts "
-            f"· current={current}{query_note}"
+            f"{len(inspection.context_names)} Contexts"
+            f"{query_note} · current={current}"
         )
-    typer.echo("Query-only sources are hidden from 'mem switch'.")
+    typer.echo(
+        "Query-only sources are visible by name here and hidden from 'mem switch'."
+    )
 
 
 app.command("ls", hidden=True)(list_cmd)
@@ -148,6 +156,8 @@ def current_cmd() -> None:
     typer.echo(f"Profile: {registry.active.name}")
     typer.echo(f"Store: {inspection.root}")
     typer.echo(f"Current Context: {inspection.current_context or '(none)'}")
+    if inspection.query_source_names:
+        typer.echo(f"Query-only: {', '.join(inspection.query_source_names)}")
 
 
 @app.command("use")
@@ -225,7 +235,8 @@ def import_study_cmd(
         typer.echo(
             f"  {profile.name}: {len(inspection.context_names)} ordinary "
             f"Contexts · current={inspection.current_context or '(none)'} · "
-            f"{inspection.query_source_count} query-only source(s)"
+            "query-only="
+            f"{','.join(inspection.query_source_names) or '(none)'}"
         )
     typer.echo("The authoring store and generated package sources were not modified.")
     typer.echo("Use one with: mem profile use task-1")
