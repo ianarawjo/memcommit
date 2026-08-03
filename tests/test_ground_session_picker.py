@@ -3,15 +3,19 @@ from __future__ import annotations
 import os
 
 import pytest
+from typer.testing import CliRunner
 
+import memcommit.commands.ground as ground_command
 import memcommit.commands.ground_session_picker as ground_picker_module
 import memcommit.ops as ops
+from memcommit.cli import app
 from memcommit.commands.ground_session_picker import (
     ground_session_picker_location,
     list_ground_session_catalog,
     list_ground_session_entries,
     reload_selected_ground_session,
 )
+from memcommit.commands.session_picker import SessionOpenReceipt
 from memcommit.ground import (
     GroundTargetSpec,
     bind_ground_workbench,
@@ -23,6 +27,9 @@ from memcommit.profile_config import (
     ProfileRegistry,
 )
 from memcommit.store import MemoryStore
+
+
+runner = CliRunner()
 
 
 def test_ground_session_entries_are_read_only_and_carry_exact_reopen_argv(
@@ -94,6 +101,110 @@ def test_bound_ground_groups_by_raw_context_and_retains_all_contexts_in_detail(
         "Contexts: temp/task-1, temp/task-1-atomized, campus-wiki"
         in picker_entry.detail
     )
+
+
+def test_ticker_ground_is_created_bound_and_reopened_from_its_context_group(
+    isolated_store,
+    monkeypatch,
+):
+    raw_name = "test/ground/ticker-rule-examples"
+    derived_name = "test/ground/ticker-rule-candidates"
+    target_name = "test/ground/ticker-rule-output"
+    goal = (
+        "Find reusable rules for generating consistent company tickers "
+        "from company names and share-class details."
+    )
+
+    created_raw = runner.invoke(app, ["init", raw_name, "--parents"])
+    first_example = runner.invoke(app, ["add", "Apple Inc. → AAPL"])
+    second_example = runner.invoke(
+        app,
+        ["add", "Berkshire Hathaway Class B → BRK.B"],
+    )
+    created_derived = runner.invoke(
+        app,
+        ["init", derived_name, "--parents"],
+    )
+    candidate = runner.invoke(app, ["add", "North Star Energy Inc. → NSE"])
+    created_target = runner.invoke(
+        app,
+        ["init", target_name, "--parents"],
+    )
+    for result in (
+        created_raw,
+        first_example,
+        second_example,
+        created_derived,
+        candidate,
+        created_target,
+    ):
+        assert result.exit_code == 0, result.output
+
+    created_ground = runner.invoke(
+        app,
+        ["ground", "ticker-rules", "--goal", goal],
+    )
+    assert created_ground.exit_code == 0, created_ground.output
+
+    bound_ground = runner.invoke(
+        app,
+        [
+            "ground",
+            "ticker-rules",
+            "--description",
+            (
+                "Infer and test reusable ticker-generation rules from "
+                "explicit examples."
+            ),
+            "--raw-context",
+            raw_name,
+            "--derived-context",
+            derived_name,
+            "--publication-target",
+            target_name,
+        ],
+    )
+    assert bound_ground.exit_code == 0, bound_ground.output
+
+    store = MemoryStore(create=False)
+    saved = store.load_ground_session("ticker-rules")
+    assert saved is not None
+    entry = list_ground_session_entries(store)[0]
+    assert entry.title == "ticker-rules"
+    assert entry.group == raw_name
+    assert f"Contexts: {raw_name}, {derived_name}, {target_name}" in entry.detail
+
+    before = {
+        path.relative_to(isolated_store).as_posix(): path.read_bytes()
+        for path in isolated_store.rglob("*")
+        if path.is_file()
+    }
+    opened = []
+    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        ground_command,
+        "choose_session",
+        lambda *_args, **_kwargs: SessionOpenReceipt(
+            kind="ground",
+            key="ticker-rules",
+            argv=("mem", "ground", "ticker-rules"),
+        ),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_existing_ground_shell",
+        lambda session: opened.append(session),
+    )
+
+    reopened = runner.invoke(app, ["ground"])
+
+    assert reopened.exit_code == 0, reopened.output
+    assert opened == [saved]
+    assert {
+        path.relative_to(isolated_store).as_posix(): path.read_bytes()
+        for path in isolated_store.rglob("*")
+        if path.is_file()
+    } == before
 
 
 def test_ground_session_entries_do_not_create_missing_storage(isolated_store):
