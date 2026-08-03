@@ -40,7 +40,7 @@
 - T2-L-080 — `structure/reviewer-opening-urgency` — OM — HCI 심사자는 첫 문단의 첫 두 문장에서 그 사용자 문제를 지금 연구할 이유를 판단한다.
 - T2-L-095 — `structure/formative-study-role` — PP — 제안서의 설계 단계마다 통제된 형성 평가가 어떤 다음 설계 결정을 바꿀지 연결하라.
 - T2-L-096 — `structure/conceptual-contribution-thread` — PP — 사용자 문제에서 관찰할 상호작용 현상, 비교할 설계 선택, 도출할 개념적 설계 지식까지 한 흐름으로 연결하라.
-- T2-L-097 — `structure/advisor-structure-check` — SM — 나는 각 연구 단계가 다음 단계의 설계 결정을 어떻게 제약하는지 드러나야 전체 연구 논리를 검토할 수 있다.
+- T2-L-097 — `structure/advisor-structure-check` — SM — the agent는 각 연구 단계가 다음 단계의 설계 결정을 어떻게 제약하는지 드러나야 전체 연구 논리를 검토할 수 있다.
 - T2-L-003 — `emphasis/contribution-count` — PP — 주된 HCI 기여는 두 가지를 넘기지 마라.
 - T2-L-051 — `emphasis/contribution-naming` — PP — 각 설계 또는 경험적 기여에 이름을 붙여 한 문장으로 제시하라.
 - T2-L-013 — `emphasis/recruitment-primary-constraint` — PP — 지역사회 참가자를 모집하는 연구에서는 참여에 따르는 시간 부담을 강조하라.
@@ -63,7 +63,7 @@
 - T2-L-102 — `claim-evidence/conceptual-claim-observation-chain` — PP — 제안하는 개념적 설계 원리를 최소 하나의 관찰 가능한 사용자 행동과 연결하라.
 - T2-L-103 — `claim-evidence/formative-finding-decision` — PP — 형성 평가에서 얻을 각 근거가 유지·수정·폐기 중 어떤 설계 판단을 지원하는지 밝혀라.
 - T2-L-104 — `claim-evidence/formative-evidence-limit` — KB — 통제된 형성 연구의 결과는 실제 장기 사용에서의 효과를 직접 입증하지 않는다.
-- T2-L-105 — `claim-evidence/advisor-claim-threshold` — SM — 나는 관찰 가능한 자료로 반증할 수 없는 설명을 개념적 기여로 승인할 수 없다.
+- T2-L-105 — `claim-evidence/advisor-claim-threshold` — SM — the agent는 관찰 가능한 자료로 반증할 수 없는 설명을 개념적 기여로 승인할 수 없다.
 - T2-L-019 — `style/research-team-voice` — PP — 연구팀이 선택한 설계 결정과 사용자 연구 행동은 1인칭 능동태로 써라.
 - T2-L-020 — `style/confirmed-procedure-status` — PP — 이미 구현해 확인한 시제품 동작은 관찰된 상태로 써라.
 - T2-L-052 — `style/unconfirmed-procedure-status` — PP — 아직 구현하거나 평가하지 않은 시제품 동작은 계획 또는 예상으로 써라.
@@ -77,14 +77,14 @@
 - T2-L-042 — `terminology/participant-role-language` — PP — 사람을 지칭할 때는 진단명이나 결핍보다 연구에서의 역할을 앞세워라.
 - T2-L-058 — `terminology/reviewer-undefined-abbreviation` — OM — 세부 분야가 다른 심사자는 처음에 정의되지 않은 약어를 문맥만으로 복원하기 어려워한다.
 - T2-L-109 — `terminology/formative-summative-distinction` — PP — 설계 수정 근거를 얻는 연구에는 형성 평가라는 용어를 사용하고 최종 효과 판정과 구분하라.
-- T2-L-110 — `terminology/advisor-contribution-term-check` — SM — 나는 원리, 모형, 지침이라는 기여 명칭이 실제 산출물의 추상화 수준과 맞아야 승인할 수 있다.
+- T2-L-110 — `terminology/advisor-contribution-term-check` — SM — the agent는 원리, 모형, 지침이라는 기여 명칭이 실제 산출물의 추상화 수준과 맞아야 승인할 수 있다.
 - T2-L-111 — `terminology/design-principle-scope` — KB — 설계 원리는 하나의 화면 배치를 그대로 복제하는 지시가 아니라 조건과 결과의 관계를 서술한다.
 - T2-L-033 — `expression/prototype-fidelity-separation` — KB — 시제품의 시각적 충실도와 기능적 충실도는 서로 다른 수준일 수 있다.
 - T2-L-081 — `expression/interaction-state-change` — KB — 상호작용 흐름 그림은 정적 화면 하나로 드러나지 않는 상태 변화를 나타낸다.
 - T2-L-059 — `expression/reviewer-caption-scan` — OM — HCI 심사자는 시제품 화면과 상호작용 흐름 그림을 본문보다 먼저 훑는 경우가 많다.
 - T2-L-112 — `expression/alternative-comparison-diagram` — KB — 설계 대안 비교표는 각 대안이 조작하는 상호작용 속성과 예상 사용자 반응의 차이를 함께 나타낸다.
 - T2-L-113 — `expression/formative-loop-diagram` — KB — 형성 평가 순환 그림은 관찰, 해석, 설계 수정, 재평가의 반복 관계를 나타낸다.
-- T2-L-114 — `expression/advisor-visual-evidence-check` — SM — 나는 그림의 각 설계 요소가 본문에서 검토할 연구 질문과 연결되어야 시각 자료의 필요성을 판단할 수 있다.
+- T2-L-114 — `expression/advisor-visual-evidence-check` — SM — the agent는 그림의 각 설계 요소가 본문에서 검토할 연구 질문과 연결되어야 시각 자료의 필요성을 판단할 수 있다.
 - T2-L-007 — `methods/question-evidence-analysis` — PP — 각 HCI 연구 질문을 대응하는 사용자 자료와 분석 절차에 직접 연결하라.
 - T2-L-014 — `methods/primary-evaluation-setting` — PP — 제안서의 주 평가를 통제된 환경의 사용성 연구로 설계하라.
 - T2-L-074 — `methods/field-deployment-scope` — PP — 현장 운영 승인을 석사 연구 기간 안에 받을 수 없으면 실제 배포를 후속 연구 범위로 남겨라.
@@ -93,7 +93,7 @@
 - T2-L-022 — `methods/sample-size-form` — PP — 모집 계획에는 목표 참가자 수를 하나의 정확한 수치로 제시하라.
 - T2-L-028 — `methods/data-collection-tool` — PP — 각 사용자 자료를 수집할 인터뷰 질문지, 기록 장치 또는 로그 도구를 구체적으로 적어라.
 - T2-L-076 — `methods/data-collection-timing` — PP — 각 사용자 자료를 상호작용 전·중·후 어느 시점에 수집할지 적어라.
-- T2-L-034 — `methods/recruitment-funnel-visibility` — SM — 나는 연락 대상에서 최종 참여자까지의 예상 이탈 단계가 없으면 모집 계획의 현실성을 검토할 수 없다.
+- T2-L-034 — `methods/recruitment-funnel-visibility` — SM — the agent는 연락 대상에서 최종 참여자까지의 예상 이탈 단계가 없으면 모집 계획의 현실성을 검토할 수 없다.
 - T2-L-036 — `methods/prototype-error-observation` — WM — 형성 평가용 시제품에서는 설계 선택 외에도 실행 불안정성이 독립적인 과업 실패 원인으로 존재한다.
 - T2-L-086 — `methods/prototype-instability-safety` — WM — 형성 평가 중 시제품 안전 신호가 발생하면 기관의 기존 안전 절차가 계획된 자료 수집보다 우선한다.
 - T2-L-060 — `methods/reviewer-answerability-trace` — OM — 심사자는 각 연구 질문에서 자료와 분석까지 이어지는 경로를 따라 답변 가능성을 판단한다.
@@ -139,12 +139,12 @@
 - T2-L-090 — `feasibility/operations-time-check` — OM — 운영 검토자는 각 절차에 배정된 시간을 보고 실행 가능성을 판단한다.
 - T2-L-134 — `feasibility/iteration-count-resource-fit` — PP — 계획한 형성 평가 반복 횟수가 시제품 수정 시간과 모집 자원 안에서 가능한지 검증하라.
 - T2-L-135 — `feasibility/minimum-testable-prototype` — PP — 주된 설계 가정을 비교하는 데 필요한 최소 기능만 형성 평가용 시제품 범위에 포함하라.
-- T2-L-136 — `feasibility/advisor-iteration-evidence` — SM — 나는 각 반복 사이에 시제품을 수정할 시간과 담당자가 배정되어야 반복 설계 계획을 실행 가능하다고 판단할 수 있다.
+- T2-L-136 — `feasibility/advisor-iteration-evidence` — SM — the agent는 각 반복 사이에 시제품을 수정할 시간과 담당자가 배정되어야 반복 설계 계획을 실행 가능하다고 판단할 수 있다.
 - T2-L-137 — `feasibility/recruitment-turnaround` — WM — 참가자 모집 지연은 형성 평가 사이의 시제품 수정 시간을 압축할 수 있다.
 - T2-L-035 — `reproducibility/software-version-assessability` — OM — HCI 심사자는 평가에 사용한 시제품 버전이 드러나지 않으면 결과의 재현 가능성을 평가하기 어렵다.
 - T2-L-138 — `reproducibility/design-alternative-specification` — PP — 비교한 설계 대안의 조작 요소와 고정 요소를 다른 연구자가 재구성할 수 있게 기록하라.
 - T2-L-139 — `reproducibility/formative-decision-trail` — KB — 형성 평가의 결정 기록은 원자료, 해석, 설계 수정 사이의 연결을 재구성하게 한다.
-- T2-L-140 — `reproducibility/advisor-iteration-trace` — SM — 나는 각 시제품 버전이 어느 관찰을 반영했는지 추적할 수 있어야 설계 지식의 도출 과정을 검토할 수 있다.
+- T2-L-140 — `reproducibility/advisor-iteration-trace` — SM — the agent는 각 시제품 버전이 어느 관찰을 반영했는지 추적할 수 있어야 설계 지식의 도출 과정을 검토할 수 있다.
 - T2-L-023 — `budget/body-detail-placement` — PP — 본문에서 각 핵심 연구 단계에 대응하는 주요 비용 범주를 짧게 연결하라.
 - T2-L-031 — `budget/personnel-work-time` — PP — 인건비에는 시제품 제작과 사용자 연구 역할별 작업 시간을 적어라.
 - T2-L-079 — `budget/personnel-rate-basis` — PP — 인건비에는 시제품 제작과 사용자 연구 역할별 단가의 산정 근거를 붙여라.
@@ -172,5 +172,5 @@
 - T2-L-094 — `review/reviewer-evidence-decision-confidence` — OM — HCI 심사자는 수집할 근거가 설계·운영 결정을 바꾸지 못하면 기여의 실용성을 낮게 본다.
 - T2-L-147 — `review/formative-decision-trace` — PP — 각 연구 질문, 형성 평가 자료, 설계 수정 판단이 끊김 없이 이어지는지 마지막에 대조하라.
 - T2-L-148 — `review/conceptual-transfer-boundary` — PP — 제안한 설계 원리의 적용 조건과 실패할 경계 사례가 함께 제시되었는지 검토하라.
-- T2-L-149 — `review/advisor-contribution-separation` — SM — 나는 시제품 결과와 그 결과에서 도출한 이전 가능한 설계 지식이 분리되어야 기여를 검토할 수 있다.
+- T2-L-149 — `review/advisor-contribution-separation` — SM — the agent는 시제품 결과와 그 결과에서 도출한 이전 가능한 설계 지식이 분리되어야 기여를 검토할 수 있다.
 - T2-L-150 — `review/reviewer-lab-transfer-risk` — WM — 통제된 형성 평가의 관찰 범위에는 실제 사용 맥락의 장기 적응과 운영 변화가 포함되지 않는다.

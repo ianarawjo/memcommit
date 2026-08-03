@@ -20,6 +20,7 @@ from memcommit.store import (
     canonical_context_record,
     context_record_digest,
 )
+from memcommit.translate import TRANSLATION_TARGET_CHAR_LIMIT
 
 
 Evidence = Literal["RECORDED", "RECONSTRUCTED", "INFERRED", "UNRECORDED"]
@@ -1311,7 +1312,11 @@ def _translation_events(
         and isinstance(operation_uid, str)
         and isinstance(target_language, str)
         and bool(target_language.strip())
-        and len(target_language) <= 80
+        # Trace validation must accept the same semantic target that the
+        # translation boundary accepted.  A second, shorter limit here would
+        # make a valid checkpoint look unrecorded merely because its audience
+        # or terminology guidance was descriptive.
+        and len(target_language) <= TRANSLATION_TARGET_CHAR_LIMIT
         and all(character.isprintable() for character in target_language)
         and isinstance(source_context, dict)
         and set(source_context) == {"uid", "name", "digest"}

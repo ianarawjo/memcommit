@@ -1,6 +1,7 @@
 """Query-only Context behavior and non-disclosure contracts."""
 
 import json
+import uuid
 
 import pytest
 from typer.testing import CliRunner
@@ -14,6 +15,203 @@ from memcommit.store import MemoryStore
 
 runner = CliRunner(mix_stderr=False)
 SECRET = "Contractors may enter Lab Seven only after 18:00."
+
+
+def test_legacy_v1_query_source_loads_as_one_stable_english_entry(
+    isolated_store,
+):
+    source_uid = str(uuid.uuid4())
+    source_dir = isolated_store / "query-sources" / source_uid
+    source_dir.mkdir(parents=True)
+    (source_dir / "source.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "uid": source_uid,
+                "name": "legacy-source",
+                "content": SECRET,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    first = MemoryStore().load_query_source(
+        source_uid,
+        expected_name="legacy-source",
+    )
+    second = MemoryStore().load_query_source(
+        source_uid,
+        expected_name="legacy-source",
+    )
+
+    assert first.content == SECRET
+    assert first.contents == (SECRET,)
+    assert first.canonical_language == "en"
+    assert first.selected_language == "en"
+    assert first.entries[0].key == "legacy-content"
+    assert first.entries[0].uid == second.entries[0].uid
+
+
+def test_bilingual_query_source_round_trip_preserves_entry_identity(
+    isolated_store,
+):
+    store = MemoryStore()
+    supplied_uid = str(uuid.uuid4())
+    created = store.create_bilingual_query_source(
+        "campus-wiki",
+        entries=(
+            {
+                "uid": supplied_uid,
+                "key": "T1-Q-001",
+                "canonical_content": "The rear entrance is closed.",
+                "translations": {"ko": "후문은 폐쇄된다."},
+            },
+            {
+                "key": "T1-Q-002",
+                "canonical_content": "Use the main entrance.",
+                "translations": {"ko": "정문을 이용한다."},
+            },
+        ),
+    )
+
+    english = store.load_query_source(
+        created.uid,
+        expected_name="campus-wiki",
+    )
+    korean = store.load_query_source(
+        created.uid,
+        expected_name="campus-wiki",
+        language="ko",
+    )
+
+    assert english.content == (
+        "The rear entrance is closed.\n\nUse the main entrance."
+    )
+    assert korean.content == "후문은 폐쇄된다.\n\n정문을 이용한다."
+    assert [entry.uid for entry in english.entries] == [
+        entry.uid for entry in korean.entries
+    ]
+    assert english.entries[0].uid == supplied_uid
+    persisted = json.loads(
+        (
+            isolated_store
+            / "query-sources"
+            / created.uid
+            / "source.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert persisted["schema_version"] == 2
+    assert persisted["canonical_language"] == "en"
+    assert "content" not in persisted
+    assert persisted["entries"][0]["translations"] == {
+        "ko": "후문은 폐쇄된다."
+    }
+
+
+def test_query_source_missing_language_requires_explicit_english_fallback(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = store.create_bilingual_query_source(
+        "partially-translated",
+        entries=(
+            {
+                "key": "translated",
+                "canonical_content": "Translated entry.",
+                "translations": {"ko": "번역된 항목."},
+            },
+            {
+                "key": "english-only",
+                "canonical_content": "English fallback.",
+            },
+        ),
+    )
+
+    with pytest.raises(ValueError) as error:
+        store.load_query_source(
+            source.uid,
+            expected_name="partially-translated",
+            language="ko",
+        )
+
+    assert str(error.value) == (
+        "Requested query-source translation is unavailable."
+    )
+    assert "english-only" not in str(error.value)
+
+    fallback = store.load_query_source(
+        source.uid,
+        expected_name="partially-translated",
+        language="ko",
+        fallback_to_canonical=True,
+    )
+    assert fallback.contents == ("번역된 항목.", "English fallback.")
+    assert [entry.uid for entry in fallback.entries] == [
+        entry.uid for entry in source.entries
+    ]
+
+
+@pytest.mark.parametrize(
+    ("entries", "message"),
+    [
+        ((), "at least one entry"),
+        (
+            (
+                {"key": "same", "canonical_content": "First."},
+                {"key": "same", "canonical_content": "Second."},
+            ),
+            "keys must be unique",
+        ),
+        (
+            (
+                {
+                    "key": "entry",
+                    "canonical_content": "English.",
+                    "translations": {"en": "Duplicate English."},
+                },
+            ),
+            "must not repeat the canonical",
+        ),
+        (
+            (
+                {
+                    "key": "entry",
+                    "canonical_content": "English.",
+                    "translations": {"KO": "한국어."},
+                },
+            ),
+            "normalized language identifier",
+        ),
+    ],
+)
+def test_bilingual_query_source_rejects_invalid_entry_records(
+    isolated_store,
+    entries,
+    message,
+):
+    with pytest.raises(ValueError, match=message):
+        MemoryStore().create_bilingual_query_source("invalid", entries)
+
+
+@pytest.mark.parametrize(
+    "key",
+    [
+        "line\nbreak",
+        "zero\u200bwidth",
+        "right-to-left\u202eoverride",
+        "line\u2028separator",
+        "surrogate\ud800key",
+    ],
+)
+def test_query_source_entry_key_rejects_nonvisible_unicode(
+    isolated_store,
+    key,
+):
+    with pytest.raises(ValueError, match="visible characters"):
+        MemoryStore().create_bilingual_query_source(
+            "invalid-key",
+            ({"key": key, "canonical_content": "Concealed content."},),
+        )
 
 
 def _attach_query_source(
@@ -175,6 +373,98 @@ def test_query_returns_provider_answer_without_checkpointing(
     )
     assert question not in persisted_text
     assert result.output.strip() not in persisted_text
+
+
+def test_query_selects_a_complete_concealed_language_variant(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = store.create_bilingual_query_source(
+        "campus-wiki",
+        entries=(
+            {
+                "key": "rear-entrance",
+                "canonical_content": "The rear entrance is closed.",
+                "translations": {"ko": "후문은 폐쇄된다."},
+            },
+            {
+                "key": "hours",
+                "canonical_content": "The main entrance closes at 17:00.",
+                "translations": {"ko": "정문은 오후 5시에 닫힌다."},
+            },
+        ),
+    )
+    parent = ops.init("participant/campus-wiki-fork")
+    ops.reference_query_context(source.name, source.uid, parent)
+    store.save(parent)
+    store.set_current(parent.name)
+    calls = []
+
+    class FakeProvider:
+        def query(self, source_name, source_content, question):
+            calls.append((source_name, source_content, question))
+            return "확인했습니다."
+
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        lambda provider: FakeProvider(),
+    )
+
+    result = runner.invoke(
+        app,
+        ["query", "campus-wiki", "무엇이 닫히나요?", "--language", "ko"],
+    )
+
+    assert result.exit_code == 0
+    assert calls == [
+        (
+            "campus-wiki",
+            "후문은 폐쇄된다.\n\n정문은 오후 5시에 닫힌다.",
+            "무엇이 닫히나요?",
+        )
+    ]
+
+
+def test_query_missing_language_error_does_not_disclose_entry_key(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    concealed_key = "concealed-internal-record-key"
+    source = store.create_bilingual_query_source(
+        "campus-wiki",
+        entries=(
+            {
+                "key": concealed_key,
+                "canonical_content": "English only.",
+            },
+        ),
+    )
+    parent = ops.init("participant/campus-wiki-fork")
+    ops.reference_query_context(source.name, source.uid, parent)
+    store.save(parent)
+    store.set_current(parent.name)
+
+    class FakeProvider:
+        def query(self, source_name, source_content, question):
+            pytest.fail("provider must not receive a partially translated source")
+
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        lambda provider: FakeProvider(),
+    )
+
+    result = runner.invoke(
+        app,
+        ["query", "campus-wiki", "질문", "--language", "ko"],
+    )
+
+    assert result.exit_code == 1
+    assert result.stderr == (
+        "Query error: Requested query-source translation is unavailable.\n"
+    )
+    assert concealed_key not in result.stderr
 
 
 def test_query_rejects_an_ordinary_context_item(isolated_store, monkeypatch):

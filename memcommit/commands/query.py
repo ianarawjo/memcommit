@@ -26,6 +26,17 @@ def cmd(
             help="Parent context containing the query-only reference",
         ),
     ] = None,
+    language: Annotated[
+        str,
+        typer.Option(
+            "--language",
+            "-l",
+            help=(
+                "Concealed source language to query; exact translations "
+                "must cover the whole source"
+            ),
+        ),
+    ] = "en",
 ) -> None:
     store = MemoryStore()
     try:
@@ -69,6 +80,7 @@ def cmd(
         source = store.load_query_source(
             item.target_source_uid,
             expected_name=item.name,
+            language=language,
         )
         answer = provider.query(source.name, source.content, question)
     except (

@@ -26,7 +26,9 @@ A parent Context stores only this pointer record:
 ```
 
 The source content is not copied into the parent or its checkpoints. For the
-study fixture, it is kept separately:
+study fixture, it is kept separately. Schema v2 stores an ordered set of
+stable entry UID/key records, canonical English content, and optional complete
+language variants such as `ko` inside that concealed file:
 
 ```text
 ~/.mem/
@@ -42,6 +44,9 @@ study fixture, it is kept separately:
 The UUID is validated before it is used as a path. The query-source directory
 and file are created with owner-only permissions where the operating system
 supports them. The original import pathname is not persisted.
+Stable entry keys must be printable and cannot contain control, format,
+surrogate, zero-width, or bidirectional-override characters. This prevents a
+concealed identifier from spoofing adjacent trusted output.
 
 This arrangement prevents normal memcommit operations from accidentally
 loading the source. It is deliberately outside `contexts/`, so it is not:
@@ -55,6 +60,22 @@ loading the source. It is deliberately outside `contexts/`, so it is not:
 A branch, merge, or revert carries only the `QueryContextRef` pointer.
 Removing or clearing that pointer does not delete the underlying study source,
 because another Context may still refer to it.
+
+Schema-v1 one-string sources remain readable as one deterministic legacy
+entry. New study packages use schema v2. Entry identity is invariant across
+language selection; a Korean query does not create a second query source or
+ordinary Memory. A requested non-English variant must cover every entry or
+loading fails closed with a generic unavailable-translation error. That error
+does not echo the concealed key or other source metadata. Mixed English fallback exists only as an explicit
+low-level option and is not the participant-facing default.
+
+`QuerySource.content` remains the compatibility surface for provider callers;
+it joins the selected entry contents exactly as the earlier one-string object
+did. Direct dataclass construction and `dataclasses.asdict()` were never a
+persistence contract and now expose the entry-oriented in-memory shape. Code
+outside the store should obtain a source through `MemoryStore` and consume
+`content` or `contents`, rather than constructing or serializing this internal
+record itself.
 
 ## Task 1 organizational origin and local fork
 
@@ -123,8 +144,16 @@ mem query contractor-agreements \
   "May contractors enter the building on weekends?"
 ```
 
+A bilingual study source can be queried in its complete Korean view without
+exposing it through Translate:
+
+```bash
+mem query campus-wiki "공사기간 후문을 이용할 수 있나요?" --language ko
+```
+
 `mem query` resolves only a direct `QueryContextRef`. It does not save the
-question, answer, or a checkpoint.
+question, answer, or a checkpoint. Language selection occurs only after
+provider authentication and inside the query-source loading boundary.
 
 ## Temporary Codex provider
 

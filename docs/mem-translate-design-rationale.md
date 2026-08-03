@@ -4,7 +4,7 @@
 
 Bare `mem translate` is a persisted, read-oriented language view. It translates
 the selected directly owned `Memory` records, saves the validated result as a
-digest-bound sidecar projection, renders that projection, and exits:
+digest-bound same-UID sidecar catalog, renders that representation, and exits:
 
 ```bash
 mem translate
@@ -16,13 +16,70 @@ mem translate --to English --refresh
 `--to` defaults to `English`. One UID or unique UID prefix narrows the view to
 one directly owned Memory. An exact stored projection is reused without
 contacting the provider. `--refresh` deliberately obtains and publishes a new
-translation even when the existing projection is an exact match.
+provider translation even when the existing representation is an exact match.
+It never overwrites a manually edited or imported representation.
+
+The same catalog is also an explicit editing and review surface:
+
+```bash
+mem translate ac827aaa --to ko --edit
+mem translate ac827aaa --to ko --set "정확한 한국어 본문"
+mem translate ac827aaa --to ko --verify
+mem translate ac827aaa --to ko --unverify
+mem translate ac827aaa --to ko --reset
+mem translate --to ko --export translations.json
+mem translate --to ko --input translations.json
+```
+
+`--export` emits source UID and source-content digest bindings plus the exact
+base catalog digest. `--input` requires those bindings and applies the complete
+validated batch in one catalog compare-and-swap. Rows whose text and review
+state were not changed retain their existing provider or curated provenance;
+only changed rows become imported curated layers. Imported text and manual
+edits are curated layers;
+their review state is either `UNREVIEWED` or `VERIFIED`. Verification binds
+the exact current translation digest rather than making a general quality
+claim about future edits.
 
 This default does not create or modify a Context, write a checkpoint, change
 the current Context, or allocate a result UID. In particular, translating a
 Context named `task-123` no longer implicitly consumes a `task-123-en` Context
 name. The translated strings are representations of existing Memories, not
 new Memory occurrences.
+
+## Provider and curated layers
+
+There is one schema-v2 catalog for each exact `(Context UID, semantic target)`
+pair and one entry for each source Memory UID. An entry may retain two layers:
+
+- a provider layer bound to the complete direct Context digest, source text
+  digest, provider response digest, and generation time; and
+- a curated layer bound to the source text digest, exact edited/imported text,
+  origin, review status, optional import evidence digest, and review time.
+
+The current curated layer wins when its source digest is current. Otherwise a
+current provider layer may be displayed. Provider refresh changes only the
+provider layer. This asymmetry is deliberate: a model refresh is allowed to
+improve a generated baseline but cannot silently replace text that a person
+edited, imported, or verified.
+
+A later source edit does not delete curated work because the same UID remains
+reachable. The catalog retains it as a stale entry and reports that state,
+while refusing to display or verify the old translation as current. Removing
+the source UID instead purges both provider and curated layers on the next
+catalog write: otherwise that text would have no valid selector, source, or
+reset path.
+
+The batch import schema is intentionally strict. It carries the exact Context
+UID/name, semantic target, and base catalog digest, and each record carries
+source UID, source SHA-256, translated content, and review status. Duplicate
+keys, duplicate source UIDs, unknown sources, stale hashes, invalid scalar
+types, attempts to blank an existing translation, or extra fields reject the
+whole batch before publication. Blank rows for sources that still have no
+translation remain harmless export placeholders. An imported `VERIFIED` value therefore
+means the supplied pair was reviewed by the importing workflow; existing
+fixture-level checkboxes about source text do not automatically imply
+cross-language equivalence.
 
 Materialization remains explicit:
 
@@ -77,11 +134,10 @@ it should use an explicit option such as `--to-tag`, not quote syntax.
 The serialized field remains named `target_language` for translation-plan,
 sidecar, and checkpoint compatibility. Its contract is the semantic target
 described above, not a claim that the value is a canonical language
-identifier. `translate-v1` names this complete semantic-target and provider
-contract because UID-less views are introduced with that behavior; there is
-no earlier released view contract to migrate. A later material change to
-prompt meaning or validation must use a new contract version and treat older
-slots as stale rather than silently reusing them.
+identifier. `translate-v1` remains the provider-only scoped-view contract;
+`translate-v2` is the one-catalog provider/curated contract. A later material
+change to prompt meaning or validation must use a new contract version rather
+than silently reusing incompatible results.
 
 ## Persisted view contract
 
@@ -106,15 +162,22 @@ source · English view
 ```
 
 The sidecar is not a `Context`, `Memory`, checkpoint, or trace event. It has no
-UID of its own and contains no translated-result UIDs. It records:
+UID of its own and contains no translated-result UIDs. The v2 catalog records:
 
 - the source Context's existing UID and name;
-- the exact source direct-record digest;
 - the exact validated semantic target and translation-contract version;
-- whole-frame or selected-Memory scope;
-- each existing source Memory UID and source-content digest;
-- the validated translated text in canonical source order;
-- a digest of the validated provider response.
+- catalog creation/update times and a compare-and-swap revision;
+- each existing source Memory UID; and
+- optional provider and curated variants with their separate source,
+  evidence, text, time, origin, and review bindings.
+
+Whole-frame and selected calls now merge into this one catalog rather than
+occupying competing scope files. Existing v1 whole/selected files remain
+readable. When no v2 catalog exists, valid v1 entries are combined in memory,
+using the newest creation time per source UID. Equal-time conflicting legacy
+entries fail closed. Read-only reuse does not rewrite the legacy files; the
+first later v2 mutation publishes the consolidated catalog with an absent-slot
+compare-and-swap.
 
 An integrity digest over the sidecar may be used for validation and
 compare-and-swap publication. That checksum is not an identity and must not be
@@ -131,28 +194,38 @@ explicitly materializes it.
 
 ## Reuse, refresh, and staleness
 
-A projection is reusable only when all inputs that define its meaning match:
-source Context UID, exact direct-record digest, semantic target string,
-selection scope, selected source UID and content digest, and
-translation-contract version. A matching call reads and renders the saved
-sidecar without spending provider allowance. `--refresh` bypasses that reuse
-check but retains the same source binding.
+A provider variant is reusable only when its source Context UID, exact direct
+record digest, semantic target, source UID/content digest, and contract match.
+A curated variant is reusable when its Context identity, target, source UID,
+and source-content digest match. It deliberately does not depend on unrelated
+Memory reorder or pointer changes because no provider inferred it from the
+whole frame. A matching call reads and renders the catalog without spending
+provider allowance. `--refresh` bypasses provider reuse but retains the same
+source binding and every curated layer.
 
-A changed direct frame makes the saved projection stale. This includes a
-direct edit, addition, removal, reorder, pointer change, or deletion and
-recreation of the Context. The next translation call obtains a new result and
-atomically replaces the stale projection for that language and scope. It does
-not accumulate a chain of obsolete translations and does not reuse a
-translation merely because the semantic target still matches.
+A changed direct frame makes provider variants stale. A source Memory edit also
+makes that UID's curated variant stale but preserves its text for repair.
+Removal purges the entry because there is no longer an identity against which
+it could be reviewed. A later provider call may populate a current provider
+fallback without silently deleting or relabeling stale curated work for an
+edited source.
 
 Provider work is performed outside long-lived Context locks. Before
 publication, the command reacquires the cooperative source and projection
 locks and revalidates both the exact source identity/digest and the previously
-observed sidecar checksum or absence. If the source changed during the
+observed catalog checksum or absence. If the source changed during the
 provider call, the candidate is discarded and the earlier sidecar is
 preserved. If another translation call published first, an older in-flight
-call cannot overwrite it. A complete projection is published atomically, so
+call cannot overwrite it. A complete catalog is published atomically, so
 readers never observe a partially written translation.
+
+Manual and imported changes use the same catalog-level compare-and-swap but
+revalidate only the exact source UIDs and content digests edited in that
+operation. This permits repair of one current entry even when an unrelated
+preserved entry is stale, without weakening the edited source binding. Every
+catalog entry must still have a directly owned source UID at the final locked
+write: an unrelated concurrent source removal rejects the save so stale
+caller state cannot resurrect its orphaned sidecar.
 
 Provider failure, invalid output, an empty candidate set, or failed
 revalidation leaves the source and any earlier sidecar unchanged. Because the
@@ -229,6 +302,14 @@ baseline and translation checkpoints, and switches to the destination only
 after the normal source and current-Context revalidation. There is no
 automatic language-suffix destination; a person must opt into both
 materialization and its name.
+
+The current checkpoint provenance schemas prove a single provider response
+digest. They do not yet describe manual/import evidence, reviewer identity,
+or a materialized mixture assembled from several provider batches. Therefore
+`--save-as` and `--in-place` currently fail closed for curated or mixed
+catalogs and for provider-only catalogs composed from more than one response.
+Those representations remain useful same-UID views. Materializing them later
+requires a new checkpoint schema rather than fabricating provider evidence.
 
 A selector produces a partially translated derived Context: only the selected
 slot is replaced, while other directly owned Memories remain in their source
@@ -319,7 +400,15 @@ Context deletion removes its translation projections while holding the same
 lifecycle boundary, so translated content does not survive as an
 undiscoverable orphan. A stale replacement removes the superseded payload
 only after the new projection is durable. Failure before atomic publication
-retains the prior payload.
+retains the prior payload. A provider refresh does not remove a curated
+payload; an explicit `--reset` removes only the selected curated layer.
+
+Concealed study sources use a separate QuerySource-v2 representation with
+stable entry UIDs, canonical English, and optional language variants. This is
+not an exception that lets `mem translate` open query-only content. The query
+command selects the concealed source language explicitly inside the query
+boundary; ordinary translate, list, show, find, and export operations still
+cannot read it.
 
 Sidecars are not copied merely because a Context is embedded or referenced,
 and deleting one must not touch the source Memories or a separately
@@ -347,8 +436,17 @@ derived Context the default. That avoided the bilingual list, established the
 version-2 baseline/provenance model, and preserved the source, but still
 created durable identity and changed navigation for a read-oriented request.
 
-The persisted UID-less view is the new default because it keeps the useful
+The persisted UID-less view became the default because it keeps the useful
 provider result and exact source binding without enlarging the Memory graph.
+The v2 catalog adds person-controlled text and review state without changing
+that identity decision. Legacy v1 scoped projections remain read-compatible
+and are migrated lazily only when a v2 write is requested. The first v2 write
+recomposes and hashes the legacy records while holding the same Context writer
+lock used by v1 publication; a newer legacy write therefore fails the
+migration CAS instead of being silently shadowed.
+After a v2 catalog exists, legacy v1 publication is rejected under the same
+Context lock; otherwise a late valid-looking v1 write would succeed but remain
+permanently hidden behind the authoritative catalog.
 The two earlier materialization behaviors remain explicit as `--in-place` and
 `--save-as`; their checkpoint schemas and trace validation remain readable.
 The live pilot establishes end-to-end execution, not automated translation
@@ -362,8 +460,13 @@ remains separate.
 - Source-language detection is delegated to the provider.
 - Recursive graph translation, automatic provider retries, and partial
   provider-result recovery remain outside this version.
-- One saved projection covers one exact semantic target and one whole-frame
-  or selected-Memory scope; it is not a multilingual Memory schema.
+- One saved catalog covers one exact semantic target for one direct Context;
+  it is a same-UID representation registry, not a multilingual base-Memory
+  schema.
+- Curated or mixed catalogs are intentionally not materializable until their
+  checkpoint provenance contract is defined. Verifying provider text creates
+  a curated layer, so its historical `PROVIDER` origin does not make it an
+  untouched materializable provider batch.
 - A partially translated materialized Context intentionally contains more
   than one language.
 - `mem merge` remains a structural fresh-UID union. Merging a materialized

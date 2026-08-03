@@ -1,6 +1,7 @@
 """Persisted, UID-preserving translation-view CLI contracts."""
 from __future__ import annotations
 
+import hashlib
 import json
 from types import SimpleNamespace
 
@@ -16,14 +17,23 @@ from memcommit.context import (
 from memcommit.store import MemoryStore
 from memcommit.translate import plan_translation
 from memcommit.translation_view import (
+    TRANSLATION_ORIGIN_MANUAL,
+    TRANSLATION_REVIEW_UNREVIEWED,
+    TRANSLATION_REVIEW_VERIFIED,
+    TranslationCatalog,
     TranslationView,
+    TranslationViewError,
+    translation_catalog_record_digest,
     translation_view_record_digest,
 )
 from memcommit.translation_view_store import (
     ConcurrentTranslationViewUpdateError,
+    load_translation_catalog,
+    load_translation_catalog_for_context,
     load_translation_view,
+    save_translation_catalog,
     save_translation_view,
-    translation_view_path,
+    translation_catalog_path,
 )
 
 
@@ -128,10 +138,10 @@ def test_default_saves_uid_preserving_view_without_materializing_context(
     assert store.load_direct(source.name).to_dict() == source_before
     assert store.list_checkpoints(source.name) == checkpoints_before
 
-    view = load_translation_view(source.uid, "English")
-    assert view is not None
-    assert view.matches(store.load_direct(source.name))
-    serialized = view.to_dict()
+    catalog = load_translation_catalog(source.uid, "English")
+    assert catalog is not None
+    assert catalog.covers(store.load_direct(source.name))
+    serialized = catalog.to_dict()
     assert all(
         source_uid in json.dumps(serialized)
         for source_uid in source_uids
@@ -179,7 +189,7 @@ def test_repeat_reuses_exact_saved_view_without_provider_call(
     provider = PayloadProvider(prefix="FIRST: ")
     _patch_provider(monkeypatch, provider)
     first = runner.invoke(app, ["translate", "--to", "English"])
-    path = translation_view_path(source.uid, "English")
+    path = translation_catalog_path(source.uid, "English")
     saved_before = path.read_bytes()
     _forbid_provider(monkeypatch)
 
@@ -217,8 +227,8 @@ def test_semantically_similar_targets_use_distinct_exact_view_keys(
         ["translate", "--to", second_target],
     )
 
-    first_path = translation_view_path(source.uid, first_target)
-    second_path = translation_view_path(source.uid, second_target)
+    first_path = translation_catalog_path(source.uid, first_target)
+    second_path = translation_catalog_path(source.uid, second_target)
     assert first.exit_code == 0
     assert second.exit_code == 0
     assert len(first_provider.calls) == 1
@@ -256,7 +266,7 @@ def test_target_is_trimmed_before_exact_view_lookup(
     assert padded.exit_code == 0
     assert len(provider.calls) == 1
     assert "CANONICAL: 원문" in padded.output
-    assert load_translation_view(source.uid, "English") is not None
+    assert load_translation_catalog(source.uid, "English") is not None
 
 
 def test_refresh_replaces_saved_view_and_later_calls_reuse_replacement(
@@ -268,7 +278,7 @@ def test_refresh_replaces_saved_view_and_later_calls_reuse_replacement(
     first_provider = PayloadProvider(prefix="OLD: ")
     _patch_provider(monkeypatch, first_provider)
     first = runner.invoke(app, ["translate", "--to", "English"])
-    path = translation_view_path(source.uid, "English")
+    path = translation_catalog_path(source.uid, "English")
     old_record = path.read_bytes()
 
     refreshed_provider = PayloadProvider(prefix="NEW: ")
@@ -301,7 +311,7 @@ def test_source_change_invalidates_and_regenerates_saved_view(
     initial_provider = PayloadProvider(prefix="OLD: ")
     _patch_provider(monkeypatch, initial_provider)
     initial = runner.invoke(app, ["translate", "--to", "English"])
-    path = translation_view_path(source.uid, "English")
+    path = translation_catalog_path(source.uid, "English")
     old_record = path.read_bytes()
 
     changed = store.load_for_update(source.name)
@@ -331,9 +341,9 @@ def test_source_change_invalidates_and_regenerates_saved_view(
     assert "NEW: 기존" in regenerated.output
     assert "NEW: 추가" in regenerated.output
     assert path.read_bytes() != old_record
-    view = load_translation_view(source.uid, "English")
-    assert view is not None
-    assert view.matches(store.load_direct(source.name))
+    catalog = load_translation_catalog(source.uid, "English")
+    assert catalog is not None
+    assert catalog.covers(store.load_direct(source.name))
 
 
 def test_save_as_materializes_saved_view_only_at_explicit_boundary(
@@ -377,7 +387,7 @@ def test_save_as_materializes_saved_view_only_at_explicit_boundary(
     assert store.list_checkpoints(destination.name)[0]["command"] == (
         "translate"
     )
-    assert load_translation_view(source.uid, "English") is not None
+    assert load_translation_catalog(source.uid, "English") is not None
 
 
 def test_declined_materialization_keeps_view_but_creates_no_context(
@@ -405,7 +415,7 @@ def test_declined_materialization_keeps_view_but_creates_no_context(
     assert "remains saved" in result.output
     assert store.current_context_name() == source.name
     assert not store.context_exists("declined-english")
-    assert load_translation_view(source.uid, "English") is not None
+    assert load_translation_catalog(source.uid, "English") is not None
 
 
 def test_yes_requires_materialization_while_explicit_in_place_remains(
@@ -427,7 +437,7 @@ def test_yes_requires_materialization_while_explicit_in_place_remains(
     assert "--in-place" in rejected.stderr
     assert store.load_direct(source.name).to_dict() == source_before
     assert store.list_checkpoints(source.name) == checkpoints_before
-    assert load_translation_view(source.uid, "English") is None
+    assert load_translation_catalog(source.uid, "English") is None
 
     provider = PayloadProvider()
     _patch_provider(monkeypatch, provider)
@@ -515,9 +525,9 @@ def test_view_sends_only_direct_memories_and_preserves_mixed_pointers(
         query_ref.uid,
         child.uid,
     ]
-    view = load_translation_view(parent.uid, "English")
-    assert view is not None
-    serialized = json.dumps(view.to_dict(), ensure_ascii=False)
+    catalog = load_translation_catalog(parent.uid, "English")
+    assert catalog is not None
+    serialized = json.dumps(catalog.to_dict(), ensure_ascii=False)
     assert owned.uid in serialized
     assert memory_ref.uid not in serialized
     assert query_ref.uid not in serialized
@@ -533,7 +543,7 @@ def test_concurrent_source_change_does_not_replace_prior_saved_view(
     initial_provider = PayloadProvider(prefix="STABLE: ")
     _patch_provider(monkeypatch, initial_provider)
     initial = runner.invoke(app, ["translate", "--to", "English"])
-    path = translation_view_path(source.uid, "English")
+    path = translation_catalog_path(source.uid, "English")
     stable_record = path.read_bytes()
 
     def mutate_then_respond(payload):
@@ -571,9 +581,9 @@ def test_concurrent_source_change_does_not_replace_prior_saved_view(
     # The older view is now stale, but it remains the last complete record;
     # a failed refresh must never publish a translation of an obsolete frame.
     assert path.read_bytes() == stable_record
-    preserved = load_translation_view(source.uid, "English")
+    preserved = load_translation_catalog(source.uid, "English")
     assert preserved is not None
-    assert not preserved.matches(store.load_direct(source.name))
+    assert not preserved.covers(store.load_direct(source.name))
 
 
 def test_context_deletion_removes_only_its_source_bound_translation_views(
@@ -588,7 +598,7 @@ def test_context_deletion_removes_only_its_source_bound_translation_views(
     )
     _patch_provider(monkeypatch, PayloadProvider(prefix="FIRST: "))
     assert runner.invoke(app, ["translate"]).exit_code == 0
-    first_path = translation_view_path(first.uid, "English")
+    first_path = translation_catalog_path(first.uid, "English")
     assert first_path.exists()
 
     second = _saved_context(
@@ -598,14 +608,14 @@ def test_context_deletion_removes_only_its_source_bound_translation_views(
     )
     _patch_provider(monkeypatch, PayloadProvider(prefix="SECOND: "))
     assert runner.invoke(app, ["translate"]).exit_code == 0
-    second_path = translation_view_path(second.uid, "English")
+    second_path = translation_catalog_path(second.uid, "English")
     assert second_path.exists()
 
     store.delete(first.name)
 
     assert not first_path.exists()
     assert second_path.exists()
-    assert load_translation_view(second.uid, "English") is not None
+    assert load_translation_catalog(second.uid, "English") is not None
 
 
 def test_stale_view_writer_cannot_overwrite_a_newer_same_source_refresh(
@@ -657,3 +667,472 @@ def test_stale_view_writer_cannot_overwrite_a_newer_same_source_refresh(
     saved = load_translation_view(source.uid, "English")
     assert saved is not None
     assert saved.entries[0].translated_content == "NEW: 원문"
+
+
+def _catalog_plan(
+    context: Context,
+    prefix: str,
+    *,
+    selector: str | None = None,
+):
+    return plan_translation(
+        context,
+        "ko",
+        lambda: PayloadProvider(prefix=prefix),
+        selector=selector,
+        allocate_operation_uid=False,
+    )
+
+
+def test_catalog_refresh_replaces_provider_but_preserves_curated_override(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(
+        store,
+        contents=("English A", "English B"),
+    )
+    first_uid, second_uid = source.ordered_uids()
+    initial = TranslationCatalog.from_plan(
+        _catalog_plan(source, "OLD: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    curated = initial.with_curated(
+        source,
+        first_uid,
+        "검수한 A",
+        origin=TRANSLATION_ORIGIN_MANUAL,
+        review_status=TRANSLATION_REVIEW_VERIFIED,
+        updated_at="2026-01-02T00:00:00+00:00",
+    )
+
+    refreshed = TranslationCatalog.from_plan(
+        _catalog_plan(source, "NEW: "),
+        source,
+        existing=curated,
+        created_at="2026-01-03T00:00:00+00:00",
+    )
+
+    effective = {
+        entry.source_uid: entry
+        for entry in refreshed.effective_entries(source)
+    }
+    assert effective[first_uid].translated_content == "검수한 A"
+    assert effective[first_uid].curated is True
+    assert effective[first_uid].review_status == (
+        TRANSLATION_REVIEW_VERIFIED
+    )
+    assert effective[second_uid].translated_content == "NEW: English B"
+    assert effective[second_uid].curated is False
+    first_record = refreshed.entry_for(first_uid)
+    assert first_record is not None
+    assert first_record.provider is not None
+    assert first_record.provider.translated_content == "NEW: English A"
+    assert TranslationCatalog.from_dict(refreshed.to_dict()) == refreshed
+
+
+def test_empty_catalog_accepts_first_curated_translation_without_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("English",))
+    source_uid = source.ordered_uids()[0]
+    empty = TranslationCatalog.empty(
+        source,
+        "ko",
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+
+    curated = empty.with_curated(
+        source,
+        source_uid,
+        "한국어",
+        origin=TRANSLATION_ORIGIN_MANUAL,
+        review_status=TRANSLATION_REVIEW_VERIFIED,
+        updated_at="2026-01-02T00:00:00+00:00",
+    )
+    source_digest = hashlib.sha256(
+        source.memories[source_uid].content.encode("utf-8")
+    ).hexdigest()
+    save_translation_catalog(
+        store,
+        curated,
+        expected_record_digest=None,
+        required_source_digests={source_uid: source_digest},
+    )
+
+    loaded = load_translation_catalog(source.uid, "ko")
+    assert loaded == curated
+    assert loaded is not None
+    effective = loaded.effective_entries(source)
+    assert len(effective) == 1
+    assert effective[0].translated_content == "한국어"
+    assert effective[0].curated is True
+    assert effective[0].review_status == TRANSLATION_REVIEW_VERIFIED
+
+
+def test_catalog_source_edit_retains_stale_curated_and_uses_new_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("English",))
+    source_uid = source.ordered_uids()[0]
+    catalog = TranslationCatalog.from_plan(
+        _catalog_plan(source, "OLD: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    ).with_curated(
+        source,
+        source_uid,
+        "검수 번역",
+        origin=TRANSLATION_ORIGIN_MANUAL,
+        updated_at="2026-01-02T00:00:00+00:00",
+    )
+    ops.edit(source, source_uid, "Changed English")
+
+    refreshed = TranslationCatalog.from_plan(
+        _catalog_plan(source, "NEW: "),
+        source,
+        existing=catalog,
+        created_at="2026-01-03T00:00:00+00:00",
+    )
+
+    entry = refreshed.entry_for(source_uid)
+    assert entry is not None and entry.curated is not None
+    assert entry.curated.translated_content == "검수 번역"
+    assert refreshed.stale_curated_uids(source) == (source_uid,)
+    effective = refreshed.effective_entries(source)
+    assert len(effective) == 1
+    assert effective[0].translated_content == "NEW: Changed English"
+    assert effective[0].curated is False
+
+
+def test_catalog_verify_freezes_provider_and_reset_exposes_latest_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("English",))
+    source_uid = source.ordered_uids()[0]
+    generated = TranslationCatalog.from_plan(
+        _catalog_plan(source, "FIRST: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+
+    verified = generated.with_review_status(
+        source,
+        source_uid,
+        TRANSLATION_REVIEW_VERIFIED,
+        updated_at="2026-01-02T00:00:00+00:00",
+    )
+    refreshed = TranslationCatalog.from_plan(
+        _catalog_plan(source, "SECOND: "),
+        source,
+        existing=verified,
+        created_at="2026-01-03T00:00:00+00:00",
+    )
+    effective = refreshed.effective_entries(source)[0]
+    assert effective.translated_content == "FIRST: English"
+    assert effective.review_status == TRANSLATION_REVIEW_VERIFIED
+
+    reset = refreshed.without_curated(
+        source,
+        source_uid,
+        updated_at="2026-01-04T00:00:00+00:00",
+    )
+    effective = reset.effective_entries(source)[0]
+    assert effective.translated_content == "SECOND: English"
+    assert effective.review_status == TRANSLATION_REVIEW_UNREVIEWED
+    assert effective.curated is False
+
+
+def test_catalog_lazy_migration_unifies_legacy_scopes_by_newest_entry(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(
+        store,
+        contents=("English A", "English B"),
+    )
+    first_uid = source.ordered_uids()[0]
+    whole = TranslationView.from_plan(
+        _catalog_plan(source, "WHOLE: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    selected = TranslationView.from_plan(
+        _catalog_plan(source, "SELECTED: ", selector=first_uid),
+        source,
+        created_at="2026-01-02T00:00:00+00:00",
+    )
+    save_translation_view(store, whole, expected_record_digest=None)
+    save_translation_view(store, selected, expected_record_digest=None)
+
+    catalog, migrated = load_translation_catalog_for_context(source, "ko")
+
+    assert migrated is True
+    assert catalog is not None
+    assert not translation_catalog_path(source.uid, "ko").exists()
+    effective = {
+        item.source_uid: item for item in catalog.effective_entries(source)
+    }
+    assert effective[first_uid].translated_content == (
+        "SELECTED: English A"
+    )
+    assert len(effective) == 2
+
+
+def test_catalog_lazy_migration_rejects_a_newer_legacy_write(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("English",))
+    source_uid = source.ordered_uids()[0]
+    original = TranslationView.from_plan(
+        _catalog_plan(source, "OLD: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    save_translation_view(store, original, expected_record_digest=None)
+    migrated, is_legacy = load_translation_catalog_for_context(source, "ko")
+    assert migrated is not None and is_legacy is True
+    expected_legacy_digest = translation_catalog_record_digest(migrated)
+
+    newer = TranslationView.from_plan(
+        _catalog_plan(source, "NEW: ", selector=source_uid),
+        source,
+        created_at="2026-01-02T00:00:00+00:00",
+    )
+    save_translation_view(store, newer, expected_record_digest=None)
+
+    with pytest.raises(
+        ConcurrentTranslationViewUpdateError,
+        match="legacy translation view changed",
+    ):
+        save_translation_catalog(
+            store,
+            migrated,
+            expected_record_digest=None,
+            expected_legacy_record_digest=expected_legacy_digest,
+        )
+    assert load_translation_catalog(source.uid, "ko") is None
+
+
+def test_legacy_writer_rejects_a_catalog_created_after_its_read(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("English",))
+    legacy = TranslationView.from_plan(
+        _catalog_plan(source, "OLD: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    save_translation_view(store, legacy, expected_record_digest=None)
+    migrated, is_legacy = load_translation_catalog_for_context(source, "ko")
+    assert migrated is not None and is_legacy is True
+    save_translation_catalog(
+        store,
+        migrated,
+        expected_record_digest=None,
+        expected_legacy_record_digest=(
+            translation_catalog_record_digest(migrated)
+        ),
+    )
+    late_v1 = TranslationView.from_plan(
+        _catalog_plan(source, "LATE: "),
+        source,
+        created_at="2026-01-02T00:00:00+00:00",
+    )
+
+    with pytest.raises(
+        ConcurrentTranslationViewUpdateError,
+        match="cannot be saved after its v2 catalog",
+    ):
+        save_translation_view(
+            store,
+            late_v1,
+            expected_record_digest=translation_view_record_digest(legacy),
+        )
+    assert load_translation_catalog(source.uid, "ko") == migrated
+
+
+def test_translate_prunes_removed_source_entries_from_catalog(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("English",))
+    source_uid = source.ordered_uids()[0]
+    _patch_provider(monkeypatch, PayloadProvider(prefix="KO: "))
+    assert runner.invoke(app, ["translate", "--to", "ko"]).exit_code == 0
+
+    changed = store.load_for_update(source.name)
+    ops.remove(changed, source_uid)
+    store.save(changed)
+    result = runner.invoke(app, ["translate", "--to", "ko"])
+
+    assert result.exit_code == 0
+    catalog = load_translation_catalog(source.uid, "ko")
+    assert catalog is not None
+    assert catalog.entry_for(source_uid) is None
+    raw = translation_catalog_path(source.uid, "ko").read_text(
+        encoding="utf-8"
+    )
+    assert source_uid not in raw
+
+
+def test_catalog_store_cas_and_source_binding_allow_unrelated_context_change(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(
+        store,
+        contents=("English A", "English B"),
+    )
+    first_uid = source.ordered_uids()[0]
+    catalog = TranslationCatalog.from_plan(
+        _catalog_plan(source, "KO: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    save_translation_catalog(
+        store,
+        catalog,
+        expected_record_digest=None,
+        expected_context_digest=catalog.entry_for(first_uid).provider.context_digest,
+    )
+    original_digest = translation_catalog_record_digest(catalog)
+
+    concurrent = store.load_for_update(source.name)
+    ops.add(concurrent, "Unrelated new Memory")
+    store.save(concurrent)
+    edited = catalog.with_curated(
+        source,
+        first_uid,
+        "수동 번역",
+        origin=TRANSLATION_ORIGIN_MANUAL,
+        updated_at="2026-01-02T00:00:00+00:00",
+    )
+    source_digest = hashlib.sha256(
+        source.memories[first_uid].content.encode("utf-8")
+    ).hexdigest()
+    save_translation_catalog(
+        store,
+        edited,
+        expected_record_digest=original_digest,
+        required_source_digests={first_uid: source_digest},
+    )
+
+    loaded = load_translation_catalog(source.uid, "ko")
+    assert loaded == edited
+    with pytest.raises(
+        ConcurrentTranslationViewUpdateError,
+        match="catalog changed",
+    ):
+        save_translation_catalog(
+            store,
+            catalog,
+            expected_record_digest=original_digest,
+        )
+
+
+def test_curated_save_rejects_an_unrelated_removed_catalog_source(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(
+        store,
+        contents=("English A", "English B"),
+    )
+    first_uid, second_uid = source.ordered_uids()
+    catalog = TranslationCatalog.from_plan(
+        _catalog_plan(source, "KO: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    save_translation_catalog(
+        store,
+        catalog,
+        expected_record_digest=None,
+        expected_context_digest=(
+            catalog.entry_for(first_uid).provider.context_digest
+        ),
+    )
+    edited = catalog.with_curated(
+        source,
+        first_uid,
+        "수동 A",
+        origin=TRANSLATION_ORIGIN_MANUAL,
+        updated_at="2026-01-02T00:00:00+00:00",
+    )
+    concurrent = store.load_for_update(source.name)
+    ops.remove(concurrent, second_uid)
+    store.save(concurrent)
+
+    with pytest.raises(
+        ConcurrentTranslationViewUpdateError,
+        match="source Memory was removed",
+    ):
+        save_translation_catalog(
+            store,
+            edited,
+            expected_record_digest=translation_catalog_record_digest(catalog),
+            required_source_digests={
+                first_uid: hashlib.sha256(b"English A").hexdigest()
+            },
+        )
+    assert load_translation_catalog(source.uid, "ko") == catalog
+
+
+def test_translation_disk_schemas_reject_float_versions(isolated_store):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("English",))
+    view = TranslationView.from_plan(
+        _catalog_plan(source, "KO: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    view_record = view.to_dict()
+    view_record["schema_version"] = 1.0
+    with pytest.raises(TranslationViewError, match="schema version"):
+        TranslationView.from_dict(view_record)
+
+    catalog = TranslationCatalog.from_plan(
+        _catalog_plan(source, "KO: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    catalog_record = catalog.to_dict()
+    catalog_record["schema_version"] = 2.0
+    with pytest.raises(TranslationViewError, match="schema version"):
+        TranslationCatalog.from_dict(catalog_record)
+
+
+def test_catalog_provider_save_rejects_concurrent_source_frame_change(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("English",))
+    catalog = TranslationCatalog.from_plan(
+        _catalog_plan(source, "KO: "),
+        source,
+        created_at="2026-01-01T00:00:00+00:00",
+    )
+    expected_context_digest = catalog.entries[0].provider.context_digest
+    concurrent = store.load_for_update(source.name)
+    ops.add(concurrent, "Changed during provider call")
+    store.save(concurrent)
+
+    with pytest.raises(
+        ConcurrentTranslationViewUpdateError,
+        match="Context changed",
+    ):
+        save_translation_catalog(
+            store,
+            catalog,
+            expected_record_digest=None,
+            expected_context_digest=expected_context_digest,
+        )
+    assert load_translation_catalog(source.uid, "ko") is None

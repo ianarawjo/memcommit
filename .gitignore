@@ -8,3 +8,7 @@ __pycache__/
 .env/
 .pytest_cache/
 .DS_Store
+
+# Local artifact-tool scratch space and inspection sidecars are regenerated.
+.codex-work/
+*.inspect.ndjson

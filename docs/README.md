@@ -58,10 +58,18 @@ considered sufficient design history.
 ## Translation contract
 
 - [`mem-translate-design-rationale.md`](mem-translate-design-rationale.md)
-  defines direct-only candidate scope, persisted UID-less views, exact
-  semantic targets, explicit materialization, strict provider output,
+  defines direct-only candidate scope, provider/curated same-UID catalogs,
+  exact semantic targets, edit/import/review, explicit materialization,
   concurrency validation, checkpoint lineage, and the query-only privacy
   boundary.
+- [`study-fixture-bundle-design-rationale.md`](study-fixture-bundle-design-rationale.md)
+  defines English-canonical Task 1--3 stores, same-UID Korean views, concealed
+  bilingual query sources, deterministic runtime identities, manifests, and
+  the task-by-task `.mem` swap boundary.
+- [`study-fixture-spreadsheet-design-rationale.md`](study-fixture-spreadsheet-design-rationale.md)
+  defines the paired 20-tab review workbook, native review checkboxes,
+  diff-only color cues, formula/read-back verification, and the boundary
+  between spreadsheet annotations and runtime Memory authority.
 
 ## Atomize contract notes
 

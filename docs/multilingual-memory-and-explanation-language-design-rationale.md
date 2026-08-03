@@ -84,13 +84,19 @@ For the current demo:
 3. Free-form user material is not translated merely to make a screen
    monolingual.
 4. Semantic operations do not silently translate their inputs before analysis.
-5. `mem translate` remains an explicit, persisted translation view with a
-   person-supplied semantic target. It does not set the language of Mem as a
-   whole.
+5. `mem translate` remains an explicit, persisted same-UID translation view
+   with a person-supplied semantic target. Provider text, manual edits,
+   imported text, and exact review status live in its sidecar catalog; none of
+   them sets the language of Mem as a whole.
 6. No saved English artifact is relabeled as though it had been generated in
    another language.
 7. Existing operation-specific conversational language behavior remains
    local to that operation; it is not generalized into an implicit setting.
+
+Study query-only sources may carry complete concealed English and Korean
+entry variants, selected by `mem query --language`. This is not a global
+interface preference and does not permit ordinary translation operations to
+open the concealed source.
 
 English provides one consistent comparison surface for the shared workbench
 demo and keeps the current implementation and evaluation scope bounded. It

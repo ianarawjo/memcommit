@@ -71,7 +71,7 @@
 - T2-R-022 — `methods/sample-size-form` — PP — 모집 가능성의 근거에 따라 목표 참가자 수를 하나의 수치나 정당화된 범위로 제시하라.
 - T2-R-028 — `methods/data-collection-tool` — PP — 각 현장·사용자 자료를 수집할 관찰 기록, 시스템 로그 또는 인터뷰 도구를 구체적으로 적어라.
 - T2-R-076 — `methods/data-collection-timing` — PP — 각 현장·사용자 자료를 배포 전·중·후 어느 시점에 수집할지 적어라.
-- T2-R-034 — `methods/recruitment-funnel-visibility` — SM — 나는 연락 대상에서 최종 참여자까지의 예상 이탈 단계가 없으면 모집 계획의 현실성을 검토할 수 없다.
+- T2-R-034 — `methods/recruitment-funnel-visibility` — SM — the agent는 연락 대상에서 최종 참여자까지의 예상 이탈 단계가 없으면 모집 계획의 현실성을 검토할 수 없다.
 - T2-R-036 — `methods/deployment-failure-observation` — WM — 현장 배포에서는 설계 선택 외에도 네트워크와 서비스 불안정성이 독립적인 과업 실패 원인으로 존재한다.
 - T2-R-084 — `methods/deployment-safety-signal` — WM — 현장 시스템에서 안전 신호가 발생하면 해당 기관의 기존 안전 절차가 연구 일정과 자료 수집 계획보다 우선한다.
 - T2-R-060 — `methods/reviewer-answerability-trace` — OM — 심사자는 각 연구 질문에서 자료원과 분석 절차까지 이어지는 경로를 따라 답변 가능성을 판단한다.
@@ -119,7 +119,7 @@
 - T2-R-093 — `structure/decision-chain` — PP — 사용자 문제에서 현장 근거, 설계 개입, 평가 결과, 운영 결정까지의 경로를 끊김 없이 제시하라.
 - T2-R-094 — `structure/deployment-handoff` — PP — 연구 단계가 끝난 뒤 시스템을 누가 어떤 조건에서 이어받는지 연구 흐름에 포함하라.
 - T2-R-095 — `structure/field-decision-argument` — KB — 현장 배포 연구의 논리는 설계가 작동하는지뿐 아니라 그 결과가 어떤 운영 결정을 뒷받침하는지까지 연결한다.
-- T2-R-096 — `structure/advisor-operational-owner-visibility` — SM — 나는 배포 이후 운영 주체가 드러나지 않으면 제안한 개입의 지속 가능성을 검토할 수 없다.
+- T2-R-096 — `structure/advisor-operational-owner-visibility` — SM — the agent는 배포 이후 운영 주체가 드러나지 않으면 제안한 개입의 지속 가능성을 검토할 수 없다.
 - T2-R-097 — `emphasis/primary-deployment-decision` — PP — 평가 결과로 바꾸려는 가장 중요한 현장 운영 결정 하나를 중심 주장으로 강조하라.
 - T2-R-098 — `emphasis/optional-feature-boundary` — PP — 주된 현장 문제를 검토하는 데 필요하지 않은 시제품 기능은 부차적 범위로 명시하라.
 - T2-R-099 — `emphasis/author-novelty-bias` — UM — 이 제안서를 작성하는 사용자는 운영 적합성보다 새로운 상호작용 기능을 먼저 강조하는 경향이 있다.
@@ -128,14 +128,14 @@
 - T2-R-102 — `claim-evidence/breakdown-log-value` — KB — 현장 장애 기록은 시스템 실패와 사용자의 적응 행동이 발생한 시점과 조건을 함께 보여줄 수 있다.
 - T2-R-103 — `claim-evidence/routine-adaptation` — WM — 새 시스템을 도입하는 현장에서는 공식 절차와 기존 수동 절차가 한동안 병행되어 단일 설계 효과를 분리하기 어렵다.
 - T2-R-104 — `style/field-actor-action` — PP — 현장 상호작용을 설명할 때 각 단계의 행위자, 행동, 대상 시스템을 구체적으로 써라.
-- T2-R-105 — `style/advisor-passive-responsibility` — SM — 나는 수동태로만 적힌 현장 절차에서 오류 대응 책임자를 판별할 수 없다.
+- T2-R-105 — `style/advisor-passive-responsibility` — SM — the agent는 수동태로만 적힌 현장 절차에서 오류 대응 책임자를 판별할 수 없다.
 - T2-R-106 — `style/partner-provisional-language` — WM — 현장 파트너가 아직 승인하지 않은 조건부 기능은 운영 절차와 사용자 역할이 확정되지 않아 예상 행동 변화의 메커니즘도 잠정적이다.
 - T2-R-107 — `terminology/operational-role-authority` — PP — 운영 역할을 처음 제시할 때 그 역할이 내릴 수 있는 결정과 수행할 수 있는 조치를 함께 정의하라.
 - T2-R-108 — `terminology/title-authority-variance` — KB — 같은 직함을 쓰는 사람이라도 배포 현장에 따라 시스템 변경 권한과 자료 접근 권한이 다를 수 있다.
 - T2-R-109 — `terminology/author-user-bucket` — UM — 이 제안서를 작성하는 사용자는 서로 다른 현장 역할을 모두 사용자라는 한 명칭으로 묶는 경향이 있다.
 - T2-R-110 — `expression/intervention-baseline-figure` — PP — 서비스 흐름 그림에는 설계가 바꾸는 단계와 그대로 유지하는 단계를 구별해 표시하라.
 - T2-R-111 — `expression/walkthrough-screen-difference` — KB — 화면 이미지는 인터페이스 상태를 보여주지만 현장 워크스루는 사람과 시스템 사이의 실제 인계 과정을 보여준다.
-- T2-R-112 — `expression/advisor-screen-decision-gap` — SM — 나는 화면 이미지의 나열만으로 현장 운영 결정이 어떻게 달라지는지 추론할 수 없다.
+- T2-R-112 — `expression/advisor-screen-decision-gap` — SM — the agent는 화면 이미지의 나열만으로 현장 운영 결정이 어떻게 달라지는지 추론할 수 없다.
 - T2-R-113 — `methods/pilot-main-transition` — PP — 파일럿 배포에서 본 배포로 넘어갈 기능 안정성, 운영 준비도, 안전 조건을 미리 정하라.
 - T2-R-114 — `methods/shadow-deployment-fallback` — PP — 실제 업무를 방해할 위험이 있으면 기존 절차를 유지한 채 결과를 비교하는 섀도 배포 단계를 설계하라.
 - T2-R-115 — `methods/time-coverage-sampling` — PP — 업무량과 참여자 구성이 달라지는 시간대를 포함하도록 현장 관찰 일정을 배치하라.
@@ -150,18 +150,18 @@
 - T2-R-124 — `evaluation/novelty-decay` — WM — 초기 평가와 장기 운영은 시스템 노출 기간과 반복 사용 횟수가 달라 같은 측정 조건이 아니다.
 - T2-R-125 — `ethics/safe-fallback` — PP — 연구 참여를 중단해도 참가자가 기존 업무 절차로 안전하게 돌아갈 수 있는 방법을 마련하라.
 - T2-R-126 — `ethics/refusal-nonpenalty` — PP — 조직 구성원이 연구 참여를 거절해도 업무 배정이나 평가에서 불이익을 받지 않는다고 명시하라.
-- T2-R-127 — `ethics/advisor-fallback-risk` — SM — 나는 현장 과업의 안전한 대체 절차가 없으면 참여 중단 위험을 충분히 검토할 수 없다.
+- T2-R-127 — `ethics/advisor-fallback-risk` — SM — the agent는 현장 과업의 안전한 대체 절차가 없으면 참여 중단 위험을 충분히 검토할 수 없다.
 - T2-R-128 — `ethics/author-short-session-burden` — UM — 이 제안서를 작성하는 사용자는 세션이 짧으면 업무 중단과 관리자 노출에서 생기는 부담도 작다고 가정하는 경향이 있다.
 - T2-R-129 — `scope/transfer-conditions` — PP — 설계 지침을 다른 현장에 적용하려면 같아야 하는 업무 흐름, 기술 기반, 운영 권한 조건을 명시하라.
 - T2-R-130 — `scope/transfer-boundary-components` — KB — 현장 설계 지식의 전이 가능성은 사용자 특성뿐 아니라 업무 흐름과 기술·조직 기반에도 좌우된다.
 - T2-R-131 — `scope/author-overgeneralization` — UM — 이 제안서를 작성하는 사용자는 한 배포 현장에서 확인한 결과를 유사한 모든 조직에 적용하려는 경향이 있다.
 - T2-R-132 — `safety/stop-rule` — PP — 참가자 피해, 운영 장애, 데이터 이상이 어느 수준이면 배포와 자료 수집을 중단할지 정하라.
 - T2-R-133 — `safety/restoration-plan` — PP — 현장 배포를 중단한 뒤 기존 시스템과 업무 상태를 복구할 절차를 마련하라.
-- T2-R-134 — `safety/advisor-recovery-authority` — SM — 나는 복구 명령을 내릴 권한과 실행 책임자가 없으면 중단 계획의 실행 가능성을 판단할 수 없다.
+- T2-R-134 — `safety/advisor-recovery-authority` — SM — the agent는 복구 명령을 내릴 권한과 실행 책임자가 없으면 중단 계획의 실행 가능성을 판단할 수 없다.
 - T2-R-135 — `safety/blame-reporting` — WM — 오류 보고가 개인 성과평가와 연결된 조직에서는 안전 신호 기록이 연구용 결정 기록과 분리되어 같은 사건의 추적 경로가 끊길 수 있다.
 - T2-R-136 — `feasibility/partner-commitment` — PP — 모집, 설치, 운영 지원에 필요한 현장 파트너의 약속과 확인 상태를 각각 적어라.
 - T2-R-137 — `feasibility/maintenance-owner` — PP — 배포 기간 중 소프트웨어 업데이트, 장비 점검, 사용자 지원을 맡을 책임자를 지정하라.
-- T2-R-138 — `feasibility/advisor-hidden-dependencies` — SM — 나는 외부 서비스와 현장 인력 의존성이 드러나지 않으면 배포 준비도를 검토할 수 없다.
+- T2-R-138 — `feasibility/advisor-hidden-dependencies` — SM — the agent는 외부 서비스와 현장 인력 의존성이 드러나지 않으면 배포 준비도를 검토할 수 없다.
 - T2-R-139 — `feasibility/site-schedule-change` — WM — 현장 일정과 담당 인력은 연구자가 통제할 수 없는 운영 사정으로 바뀔 수 있다.
 - T2-R-140 — `reproducibility/config-change-log` — PP — 배포 중 바뀐 시스템 설정, 현장 절차, 자료 수집 도구를 시점과 이유와 함께 기록하라.
 - T2-R-141 — `reproducibility/deployment-provenance` — KB — 배포 버전과 설정 변경의 이력은 서로 다른 현장에서 나온 결과를 해석하는 데 필요한 근거다.
@@ -173,4 +173,4 @@
 - T2-R-147 — `compensation/author-unpaid-preparation` — UM — 이 제안서를 작성하는 사용자는 세션 시간은 계산하지만 참가자의 사전 설정과 후속 보고 시간을 빠뜨리는 경향이 있다.
 - T2-R-148 — `review/failure-mode-walkthrough` — PP — 제출 전에 현장 담당자와 함께 설치 실패, 운영 중단, 복구 상황을 순서대로 점검하라.
 - T2-R-149 — `review/contribution-decision-test` — PP — 각 제안 기여가 실제로 어떤 설계 또는 운영 결정을 바꿀 수 있는지 한 문장으로 검증하라.
-- T2-R-150 — `review/advisor-placeholder-visibility` — SM — 나는 미확정 현장 파트너와 장비가 확정된 것처럼 쓰이면 남은 실행 위험을 구별할 수 없다.
+- T2-R-150 — `review/advisor-placeholder-visibility` — SM — the agent는 미확정 현장 파트너와 장비가 확정된 것처럼 쓰이면 남은 실행 위험을 구별할 수 없다.
