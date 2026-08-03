@@ -71,6 +71,14 @@ Memory and Context UIDs are deterministic UUIDv5 values derived from task and
 stable fixture identity, so rebuilds do not silently assign a different
 identity to unchanged fixture records.
 
+The package may omit a namespace-only prefix that owns no fixture Memory. At
+Study import and live-baseline snapshot boundaries, the Profile composer fills
+each such gap with a fresh empty ordinary Context. Existing fixture Context
+and Memory identities remain unchanged, while recursive listing and upward
+navigation obtain a continuous lexical chain. These structural parents are a
+Profile topology guarantee; they are not fixture claims and are not embedded
+into their children or parents.
+
 Task 1's task Profile owns only `participant/construction-updates`.
 `task-1-campus-authority` owns ordinary `campus-wiki` and its
 `construction-details` subtree. The task receives `READ+CREATE+UPDATE` for the

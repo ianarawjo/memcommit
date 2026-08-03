@@ -260,7 +260,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
 
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
-    assert "study-baseline: Contexts 123 owned + 0 granted" in result.output
+    assert "study-baseline: Contexts 127 owned + 0 granted" in result.output
     assert "Memories 1278 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
@@ -277,15 +277,24 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert root.is_dir()
     store = MemoryStore(root=root, create=False)
     names = set(store.list_context_names())
+    assert all(
+        "/".join(name.split("/")[:index]) in names
+        for name in names
+        for index in range(1, len(name.split("/")))
+    )
     assert store.current_context_name() == "task-1"
     assert {
         "task-1",
+        "task-1/participant",
         "task-2",
+        "task-2/participant",
         "task-3",
         "granted-memory",
         "granted-memory/task-1",
         "granted-memory/task-2",
         "granted-memory/task-3",
+        "granted-memory/task-3/government",
+        "granted-memory/task-3/government/healthcare-agent",
     }.issubset(names)
     assert "task-1/participant/construction-updates" in names
     assert "granted-memory/task-1/campus-wiki" in names
@@ -293,6 +302,29 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert "granted-memory/task-2/advisor1" in names
     assert "task-3/personal-memory" in names
     assert "granted-memory/task-3/guardrails" in names
+
+    selected = runner.invoke(
+        app,
+        ["profile", "use", STUDY_BASELINE_PROFILE_NAME],
+    )
+    assert selected.exit_code == 0, selected.output
+    recursive = _subprocess_mem(tmp_path, "ls", "-R", "task-1")
+    assert recursive.returncode == 0, recursive.stderr
+    assert "task-1/participant" in recursive.stdout
+    assert "task-1/participant/construction-updates" in recursive.stdout
+    assert "The indoor route that passed through" in recursive.stdout
+
+    leaf = _subprocess_mem(
+        tmp_path,
+        "switch",
+        "task-1/participant/construction-updates/route-changes",
+    )
+    first_parent = _subprocess_mem(tmp_path, "switch", "..")
+    second_parent = _subprocess_mem(tmp_path, "switch", "..")
+    assert leaf.returncode == 0, leaf.stderr
+    assert first_parent.returncode == 0, first_parent.stderr
+    assert second_parent.returncode == 0, second_parent.stderr
+    assert "task-1/participant'" in second_parent.stdout
 
 
 def test_profile_use_changes_the_next_process_and_keeps_query_only_hidden(
@@ -312,7 +344,7 @@ def test_profile_use_changes_the_next_process_and_keeps_query_only_hidden(
 
     assert selected.exit_code == 0, selected.output
     assert "Selected profile 'profile-view-task-1'." in selected.output
-    assert "Contexts 7 owned + 7 granted" in selected.output
+    assert "Contexts 8 owned + 7 granted" in selected.output
     assert "Memories 75 owned + 300 granted" in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
@@ -929,7 +961,7 @@ def test_init_study_is_all_or_nothing_when_live_baseline_is_invalid(
     result = runner.invoke(app, ["init-study", "pilot-invalid"])
 
     assert result.exit_code == 1
-    assert "current Context is missing" in result.stderr
+    assert "grant authority Context identity does not match" in result.stderr
     assert load_profile_registry() == registry_before
     stores = [
         item

@@ -96,6 +96,16 @@ permissioned authority views only when a Study is initialized. Keeping the
 authoring source in one Profile makes incomplete Memory sets easy to inspect,
 import, and revise without coordinating six live Profile identities.
 
+Every slash-delimited branch is completed with real empty ordinary Contexts
+for lexical prefixes absent from an older fixture package. For example,
+`task-1/participant` exists even when the package began at
+`participant/construction-updates`. These navigation Contexts neither create
+embed edges nor copy Memory. They ensure `mem switch ..` reaches every parent
+and `mem ls -R task-1` cannot lose a valid deeper subtree behind a missing
+intermediate name. The same clean-store write boundary is used when the live
+baseline is split, so initialized task and authority Profiles retain the
+completed lineage.
+
 ## Timestamped Study groups
 
 `mem init-study [NAME]` is the repeatable run-oriented entry point. It snapshots

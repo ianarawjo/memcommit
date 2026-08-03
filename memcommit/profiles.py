@@ -2153,6 +2153,38 @@ def _remap_translation_catalogs(
     return tuple(result)
 
 
+def _materialize_study_context_parents(
+    contexts: tuple[Context, ...],
+) -> tuple[Context, ...]:
+    """Fill every missing lexical prefix with an empty ordinary Context.
+
+    Study packages can legitimately predate a namespace root such as
+    ``participant``.  Once several packages are composed below ``task-N``, a
+    missing prefix would make both ``mem switch ..`` and ``mem ls -R`` stop at
+    that gap.  The clean-store write boundary is the one place shared by
+    baseline bootstrap and live-baseline cloning, so completing the chain here
+    preserves the invariant in both stores without inventing embed edges.
+    """
+
+    by_name = {context.name: context for context in contexts}
+    if len(by_name) != len(contexts):
+        raise ProfileError("Study store Context names are duplicated.")
+    missing: set[str] = set()
+    for name in tuple(by_name):
+        parts = name.split("/")
+        missing.update(
+            "/".join(parts[:index])
+            for index in range(1, len(parts))
+            if "/".join(parts[:index]) not in by_name
+        )
+    # These are structural navigation nodes, not copies of source content.
+    # Fresh identities keep them ordinary editable Contexts while leaving all
+    # imported Context and Memory identities untouched.
+    for name in sorted(missing, key=lambda value: (value.count("/"), value)):
+        by_name[name] = Context(uid=str(uuid.uuid4()), name=name)
+    return tuple(by_name[name] for name in sorted(by_name))
+
+
 def _write_mapped_study_store(
     destination: Path,
     *,
@@ -2164,6 +2196,7 @@ def _write_mapped_study_store(
 
     if destination.exists() or destination.is_symlink():
         raise ProfileError(f"Study store staging path is occupied: {destination}")
+    contexts = _materialize_study_context_parents(contexts)
     names = {context.name for context in contexts}
     if current_context not in names:
         raise ProfileError("Study store current Context is missing from its branch.")
