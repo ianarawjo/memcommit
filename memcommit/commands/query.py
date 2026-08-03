@@ -1,6 +1,7 @@
-"""Ask a question of an opaque or authority-granted query view."""
+"""Browse or ask a question of an opaque authority-granted query view."""
 
-from typing import Annotated, Optional
+import re
+from typing import Annotated, Optional, Sequence
 
 import typer
 
@@ -19,8 +20,10 @@ from memcommit.profiles import (
 )
 from memcommit.query_provider import QueryProviderError, connect_query_provider
 from memcommit.query_sessions import (
+    AuthorityQueryCatalogEntry,
     QuerySessionError,
     QuerySessionStore,
+    load_authority_query_catalog,
     load_authority_query_source,
     query_session_binding,
     render_session_question,
@@ -29,14 +32,58 @@ from memcommit.query_sessions import (
 from memcommit.store import MemoryStore
 
 
+_QUERY_MEMORY_SUFFIX = re.compile(r"(?P<view>.+)#(?P<handle>q-[0-9a-f]{12})\Z")
+
+
+def _split_query_memory_selector(selector: str) -> tuple[str, str | None]:
+    match = _QUERY_MEMORY_SUFFIX.fullmatch(selector)
+    if match is None:
+        return selector, None
+    return match.group("view"), match.group("handle")
+
+
+def _render_query_catalog(
+    selector: str,
+    catalog: Sequence[AuthorityQueryCatalogEntry],
+) -> None:
+    typer.secho(
+        f"Query-only Memories: {display_escape_text(selector)}",
+        bold=True,
+    )
+    count = len(catalog)
+    typer.echo(f"  {count} queryable Memor{'y' if count == 1 else 'ies'}")
+    typer.echo()
+    for entry in catalog:
+        typer.echo(f"  [{entry.handle}] {entry.placeholder}")
+    typer.secho(
+        "\nOnly normalized shape and word spacing are shown; source text is "
+        "not present.",
+        dim=True,
+    )
+    typer.secho(
+        "Ask one with: mem query '<VIEW>#<HANDLE>' 'QUESTION'",
+        dim=True,
+    )
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
-        typer.Argument(help="Query-only Context name or reference UID/prefix"),
+        typer.Argument(
+            help=(
+                "Query-only Context name, optional #HANDLE, or legacy "
+                "reference UID/prefix"
+            )
+        ),
     ] = None,
     question: Annotated[
         Optional[str],
-        typer.Argument(help="Question to answer from the concealed source"),
+        typer.Argument(
+            help=(
+                "Question to answer; omit it to browse opaque Memory handles "
+                "in an authority-granted view"
+            )
+        ),
     ] = None,
     context_name: Annotated[
         Optional[str],
@@ -147,9 +194,21 @@ def cmd(
             typer.echo(safe_terminal_text(turn.answer))
         return
 
-    if selector is None or question is None:
+    if selector is None:
         typer.secho(
-            "Error: provide SELECTOR and QUESTION, or inspect --sessions.",
+            "Error: provide SELECTOR, or inspect --sessions.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    candidate_route_selector, candidate_memory_handle = (
+        _split_query_memory_selector(selector)
+    )
+    route_selector = selector
+    memory_handle = None
+    if question is None and session_name is not None:
+        typer.secho(
+            "Error: --session requires a QUESTION.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -170,7 +229,7 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    if not question.strip():
+    if question is not None and not question.strip():
         typer.secho(
             "Error: question must be non-empty.",
             fg=typer.colors.RED,
@@ -196,6 +255,14 @@ def cmd(
         resolution_error = error
 
     if isinstance(item, QueryContextRef):
+        if question is None:
+            typer.secho(
+                "Error: legacy query-only references require a QUESTION; "
+                "opaque Memory browsing is available for authority grants.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
         if session_name is not None:
             typer.secho(
                 "Error: --session is available only for authority-granted "
@@ -212,7 +279,7 @@ def cmd(
     # item or a selector that has no query-view route at all.
     try:
         registry = load_profile_registry()
-        routed_grants = [
+        matching_grants = [
             grant
             for grant in registry.grants
             if grant.grantee_profile_uid == registry.active.uid
@@ -223,6 +290,22 @@ def cmd(
                 or selector.startswith(grant.public_name + "/")
             )
         ]
+        if matching_grants:
+            routed_grants = matching_grants
+        else:
+            route_selector = candidate_route_selector
+            memory_handle = candidate_memory_handle
+            routed_grants = [
+                grant
+                for grant in registry.grants
+                if grant.grantee_profile_uid == registry.active.uid
+                and grant.attachment_context_uid == ctx.uid
+                and grant.attachment_context_name == selected_name
+                and (
+                    route_selector == grant.public_name
+                    or route_selector.startswith(grant.public_name + "/")
+                )
+            ]
     except ProfileConfigError as error:
         typer.secho(
             f"Query error: {display_escape_text(str(error))}",
@@ -234,7 +317,7 @@ def cmd(
         message = (
             str(resolution_error)
             if resolution_error is not None
-            else f"'{selector}' is not a query-only Context."
+            else f"'{route_selector}' is not a query-only Context."
         )
         typer.secho(
             f"Error: {display_escape_text(message)}",
@@ -252,7 +335,7 @@ def cmd(
         typer.secho(
             f"Query error: Grant {effective_grant.uid[:8]} does not allow "
             f"{required_permission.lower()} access to "
-            f"{display_escape_text(selector)!r}.",
+            f"{display_escape_text(route_selector)!r}.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -272,13 +355,13 @@ def cmd(
 
     try:
         view = resolve_granted_context_view(
-            selector,
+            route_selector,
             attachment_name=selected_name,
             required_permission=required_permission,
         )
     except (ProfileConfigError, ProfileError) as error:
-        if str(error) == f"Granted view {selector!r} does not exist.":
-            message = f"'{selector}' is not a query-only Context."
+        if str(error) == f"Granted view {route_selector!r} does not exist.":
+            message = f"'{route_selector}' is not a query-only Context."
             prefix = "Error"
         else:
             message = str(error)
@@ -291,7 +374,34 @@ def cmd(
         raise typer.Exit(1)
 
     try:
-        source = load_authority_query_source(view, language=language)
+        if question is None:
+            catalog = load_authority_query_catalog(view, language=language)
+            # Catalog shape is itself a bounded disclosure. Recheck the grant
+            # and exact shapes while holding the revocation lock through output.
+            with authority_grant_snapshot_lock() as current_registry:
+                current_view = resolve_granted_context_view(
+                    route_selector,
+                    attachment_name=selected_name,
+                    required_permission="QUERY",
+                    registry=current_registry,
+                )
+                current_catalog = load_authority_query_catalog(
+                    current_view,
+                    language=language,
+                )
+                if current_catalog != catalog:
+                    raise QuerySessionError(
+                        "The granted query catalog changed while it was being "
+                        "opened; nothing was displayed."
+                    )
+                _render_query_catalog(route_selector, catalog)
+            return
+
+        source = load_authority_query_source(
+            view,
+            language=language,
+            memory_handle=memory_handle,
+        )
         binding = query_session_binding(view, source, language=language)
         session_store = QuerySessionStore(store.store_dir)
         saved_session = None
@@ -314,7 +424,7 @@ def cmd(
         # the final authority check and disclosure.
         with authority_grant_snapshot_lock() as current_registry:
             current_view = resolve_granted_context_view(
-                selector,
+                route_selector,
                 attachment_name=selected_name,
                 required_permission=required_permission,
                 registry=current_registry,
@@ -322,6 +432,7 @@ def cmd(
             current_source = load_authority_query_source(
                 current_view,
                 language=language,
+                memory_handle=memory_handle,
             )
             current_binding = query_session_binding(
                 current_view,

@@ -20,7 +20,7 @@ import uuid
 from typing import Iterator
 
 from memcommit.context import Context, Memory
-from memcommit.profile_config import load_profile_registry
+from memcommit.profile_config import GrantContextBinding, load_profile_registry
 from memcommit.profiles import GrantedContextView
 from memcommit.store import MemoryStore
 from memcommit.translation_view import (
@@ -282,6 +282,25 @@ class AuthorityQuerySource:
     digest: str
 
 
+@dataclass(frozen=True)
+class AuthorityQueryCatalogEntry:
+    """Opaque, display-only identity and shape for one queryable Memory."""
+
+    handle: str
+    placeholder: str
+
+
+@dataclass(frozen=True)
+class _AuthorityQueryMemory:
+    """Process-local authority material; never persist or render this object."""
+
+    context_uid: str
+    context_name: str
+    memory_uid: str
+    content: str
+    handle: str
+
+
 def _strict_json_object(
     pairs: list[tuple[str, object]],
 ) -> dict[str, object]:
@@ -341,15 +360,11 @@ def _load_translation_catalog_at_root(
     return catalog
 
 
-def load_authority_query_source(
+def _authority_query_bindings(
     view: GrantedContextView,
-    *,
-    language: str,
-) -> AuthorityQuerySource:
-    """Serialize only direct ordinary Memories admitted by the frozen grant."""
+) -> tuple[GrantContextBinding, ...]:
+    """Apply nested QUERY overrides before any authority Memory is opened."""
 
-    canonical_language = _language(language)
-    authority_store = MemoryStore(root=view.authority_root, create=False)
     prefix = view.authority_context_name + "/"
     candidate_bindings = tuple(
         binding
@@ -372,7 +387,7 @@ def load_authority_query_source(
     # A more-specific view is an authorization boundary, not merely a second
     # alias. Parent queries must not absorb its data even when the parent
     # grant's frozen authority scope happens to include the same path.
-    bindings = tuple(
+    return tuple(
         binding
         for binding in candidate_bindings
         if not any(
@@ -388,11 +403,39 @@ def load_authority_query_source(
             for override in overrides
         )
     )
+
+
+def _authority_query_handle(grant_uid: str, memory_uid: str) -> str:
+    """Derive a stable opaque handle without exposing an authority Memory UID."""
+
+    digest = hashlib.sha256(
+        f"{grant_uid}\0{memory_uid}".encode("utf-8")
+    ).hexdigest()
+    return "q-" + digest[:12]
+
+
+def _query_placeholder(content: str) -> str:
+    """Keep normalized word shape while ensuring source text is absent."""
+
+    normalized = " ".join(content.split())
+    return "".join(" " if character == " " else "●" for character in normalized)
+
+
+def _load_authority_query_memories(
+    view: GrantedContextView,
+    *,
+    language: str,
+) -> tuple[_AuthorityQueryMemory, ...]:
+    """Load process-local query material from the exact frozen grant scope."""
+
+    canonical_language = _language(language)
+    authority_store = MemoryStore(root=view.authority_root, create=False)
+    bindings = _authority_query_bindings(view)
     if not bindings:
         raise QuerySessionError("Granted authority Context scope is empty.")
 
-    contents: list[str] = []
-    digest_contexts: list[dict[str, object]] = []
+    loaded: list[_AuthorityQueryMemory] = []
+    handles: set[str] = set()
     for binding in bindings:
         try:
             context = authority_store.load_direct(binding.name)
@@ -424,25 +467,92 @@ def load_authority_query_source(
             selected = tuple(effective[memory.uid] for memory in memories)
         else:
             selected = ()
-        contents.extend(selected)
-        digest_contexts.append(
-            {
-                "uid": context.uid,
-                "name": context.name,
-                "memories": [
-                    {"uid": memory.uid, "content": content}
-                    for memory, content in zip(memories, selected, strict=True)
-                ],
-            }
-        )
-    if not contents:
+        for memory, content in zip(memories, selected, strict=True):
+            handle = _authority_query_handle(view.grant.uid, memory.uid)
+            if handle in handles:
+                raise QuerySessionError(
+                    "Granted authority query Memory handle collision."
+                )
+            handles.add(handle)
+            loaded.append(
+                _AuthorityQueryMemory(
+                    context_uid=context.uid,
+                    context_name=context.name,
+                    memory_uid=memory.uid,
+                    content=content,
+                    handle=handle,
+                )
+            )
+    if not loaded:
         raise QuerySessionError("Granted authority query view has no Memories.")
+    return tuple(loaded)
+
+
+def load_authority_query_catalog(
+    view: GrantedContextView,
+    *,
+    language: str,
+) -> tuple[AuthorityQueryCatalogEntry, ...]:
+    """Return only opaque handles and generated shapes for a QUERY view."""
+
+    return tuple(
+        AuthorityQueryCatalogEntry(
+            handle=memory.handle,
+            placeholder=_query_placeholder(memory.content),
+        )
+        for memory in _load_authority_query_memories(view, language=language)
+    )
+
+
+def load_authority_query_source(
+    view: GrantedContextView,
+    *,
+    language: str,
+    memory_handle: str | None = None,
+) -> AuthorityQuerySource:
+    """Serialize all granted Memories or one Memory selected by opaque handle."""
+
+    canonical_language = _language(language)
+    memories = _load_authority_query_memories(view, language=canonical_language)
+    if memory_handle is not None:
+        selected = tuple(
+            memory for memory in memories if memory.handle == memory_handle
+        )
+        if not selected:
+            raise QuerySessionError(
+                f"Query Memory handle {memory_handle!r} does not exist in this view."
+            )
+    else:
+        selected = memories
+
+    digest_contexts: list[dict[str, object]] = []
+    for memory in selected:
+        if (
+            not digest_contexts
+            or digest_contexts[-1]["uid"] != memory.context_uid
+        ):
+            digest_contexts.append(
+                {
+                    "uid": memory.context_uid,
+                    "name": memory.context_name,
+                    "memories": [],
+                }
+            )
+        raw_memories = digest_contexts[-1]["memories"]
+        assert isinstance(raw_memories, list)
+        raw_memories.append(
+            {"uid": memory.memory_uid, "content": memory.content}
+        )
     digest = _canonical_json_digest(
         {"language": canonical_language, "contexts": digest_contexts}
     )
     return AuthorityQuerySource(
-        name=view.requested_name,
-        content="\n\n".join(contents),
+        name=(
+            view.requested_name
+            if memory_handle is None
+            else f"{view.requested_name}#{memory_handle}"
+        ),
+        content="\n\n".join(memory.content for memory in selected),
         digest=digest,
     )
 
@@ -465,7 +575,7 @@ def query_session_binding(
         resource_uid=grant.resource_uid,
         resource_name=grant.resource_name,
         public_name=grant.public_name,
-        requested_name=view.requested_name,
+        requested_name=source.name,
         language=_language(language),
         source_digest=source.digest,
     )

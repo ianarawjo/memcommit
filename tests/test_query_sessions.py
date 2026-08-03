@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import stat
 import uuid
 
@@ -24,6 +25,7 @@ from memcommit.profiles import (
     create_authority_grant,
     delete_authority_grant,
 )
+from memcommit.query_provider import QueryProviderError
 from memcommit.store import MemoryStore
 from memcommit.translation_view import (
     TRANSLATION_ORIGIN_IMPORTED,
@@ -85,6 +87,175 @@ def _authority_grant(
         permissions=permissions,
     )
     return authority_store, source_context, source_memory, grant
+
+
+def test_authority_query_without_question_lists_only_opaque_memory_shapes(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _authority_store, _context, source_memory, _grant = _authority_grant(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        permissions=("QUERY",),
+    )
+    query_calls = 0
+
+    class Provider:
+        def query(self, *_args):
+            nonlocal query_calls
+            query_calls += 1
+            return "must not run"
+
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        lambda _provider: Provider(),
+    )
+
+    result = runner.invoke(app, ["query", "construction-details"])
+
+    assert result.exit_code == 0, result.output
+    assert "Query-only Memories: construction-details" in result.output
+    assert "1 queryable Memory" in result.output
+    assert "[q-" in result.output
+    expected_shape = "".join(
+        " " if character == " " else "●" for character in SECRET
+    )
+    assert expected_shape in result.output
+    assert SECRET not in result.output
+    assert source_memory.uid not in result.output
+    assert "source text is not present" in result.output
+    assert query_calls == 0
+
+
+def test_opaque_memory_handle_queries_only_the_selected_memory(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    authority_store, source_context, _source_memory, _grant = _authority_grant(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        permissions=("QUERY",),
+    )
+    second_content = "Blue badge required at the west entrance."
+    current = authority_store.load_direct(source_context.name)
+    ops.add(current, second_content)
+    authority_store.save(current)
+    calls: list[tuple[str, str, str]] = []
+
+    class Provider:
+        def query(self, source_name, source_content, question):
+            calls.append((source_name, source_content, question))
+            return "Use the west entrance."
+
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        lambda _provider: Provider(),
+    )
+    catalog = runner.invoke(app, ["query", "construction-details"])
+    handles = re.findall(r"\[(q-[0-9a-f]{12})\]", catalog.output)
+    assert catalog.exit_code == 0, catalog.output
+    assert len(handles) == 2
+
+    result = runner.invoke(
+        app,
+        [
+            "query",
+            f"construction-details#{handles[1]}",
+            "Which entrance?",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert result.output == "Use the west entrance.\n"
+    assert calls == [
+        (
+            f"construction-details#{handles[1]}",
+            second_content,
+            "Which entrance?",
+        )
+    ]
+    assert SECRET not in calls[0][1]
+
+
+def test_unknown_opaque_memory_handle_fails_without_querying_provider(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _authority_grant(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        permissions=("QUERY",),
+    )
+    query_calls = 0
+
+    class Provider:
+        def query(self, *_args):
+            nonlocal query_calls
+            query_calls += 1
+            return "must not run"
+
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        lambda _provider: Provider(),
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "query",
+            "construction-details#q-000000000000",
+            "Question?",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "does not exist in this view" in result.stderr
+    assert SECRET not in result.output
+    assert query_calls == 0
+
+
+def test_opaque_catalog_authenticates_before_loading_authority_memories(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _authority_grant(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        permissions=("QUERY",),
+    )
+    opened = False
+
+    def unavailable(_provider):
+        raise QueryProviderError("not logged in")
+
+    def track_open(*_args, **_kwargs):
+        nonlocal opened
+        opened = True
+        raise AssertionError("catalog opened authority Memories before auth")
+
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        unavailable,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.query.load_authority_query_catalog",
+        track_open,
+    )
+
+    result = runner.invoke(app, ["query", "construction-details"])
+
+    assert result.exit_code == 1
+    assert "not logged in" in result.stderr
+    assert opened is False
+    assert SECRET not in result.output
 
 
 def test_authority_query_reads_ordinary_memories_without_saving_a_session(
