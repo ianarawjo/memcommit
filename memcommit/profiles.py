@@ -144,6 +144,17 @@ class LegacyStudyArchiveResult:
 
 
 @dataclass(frozen=True)
+class ProfileRenameResult:
+    """One stable Profile identity published under a new display name."""
+
+    previous_name: str
+    profile: ProfileEntry
+    active_profile_name: str
+    was_active: bool
+    changed: bool
+
+
+@dataclass(frozen=True)
 class GrantedContextView:
     """One validated Context view resolved for a grantee Profile."""
 
@@ -945,6 +956,140 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
         )
         _write_registry(updated)
         return updated, inspection, True
+
+
+def rename_profile(
+    new_name: str,
+    *,
+    old_name: str | None = None,
+) -> ProfileRenameResult:
+    """Rename one ordinary managed Profile without changing its stable identity."""
+
+    try:
+        canonical_new = validate_profile_name(new_name)
+        canonical_old = (
+            validate_profile_name(old_name) if old_name is not None else None
+        )
+    except (ProfileConfigError, ValueError) as error:
+        raise ProfileError("Profile rename name is invalid.") from error
+
+    with _registry_lock():
+        registry = load_profile_registry()
+        target = (
+            registry.active
+            if canonical_old is None
+            else registry.by_name(canonical_old)
+        )
+        if target is None:
+            raise ProfileError(f"Profile {canonical_old!r} does not exist.")
+        was_active = target.uid == registry.active_uid
+
+        # An exact no-op must not become a hidden store validation or registry
+        # write, including for fixed anchors that cannot actually be renamed.
+        if target.name == canonical_new:
+            return ProfileRenameResult(
+                previous_name=target.name,
+                profile=target,
+                active_profile_name=registry.active.name,
+                was_active=was_active,
+                changed=False,
+            )
+
+        groups = study_profile_groups(registry.profiles)
+        membership = next(
+            (
+                group
+                for group in groups
+                if any(
+                    profile.uid == target.uid
+                    for profile in (*group.profiles, *group.support_profiles)
+                )
+            ),
+            None,
+        )
+        if target.kind == "AUTHORING":
+            raise ProfileError("The fixed authoring Profile cannot be renamed.")
+        if target.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
+            raise ProfileError(
+                "The fixed study-baseline Profile cannot be renamed."
+            )
+        if membership is not None:
+            raise ProfileError(
+                f"Profile {target.name!r} is a member of legacy Study "
+                f"{membership.name!r} and cannot be renamed individually."
+            )
+        if canonical_new.casefold() == AUTHORING_PROFILE_NAME.casefold():
+            raise ProfileError("The fixed authoring Profile name is reserved.")
+        if canonical_new.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
+            raise ProfileError("The fixed study-baseline Profile name is reserved.")
+        collision = next(
+            (
+                profile
+                for profile in registry.profiles
+                if profile.uid != target.uid
+                and profile.name.casefold() == canonical_new.casefold()
+            ),
+            None,
+        )
+        if collision is not None:
+            raise ProfileError(f"Profile {collision.name!r} already exists.")
+        group_collision = next(
+            (
+                group
+                for group in groups
+                if group.name.casefold() == canonical_new.casefold()
+            ),
+            None,
+        )
+        if group_collision is not None:
+            raise ProfileError(
+                f"Profile name {canonical_new!r} conflicts with existing legacy "
+                f"Study {group_collision.name!r}."
+            )
+
+        # Rename is a control-plane metadata mutation, but validate the live
+        # target before publishing a new locator for an unsafe or missing root.
+        inspect_store(profile_store_dir(target))
+        renamed = replace(target, name=canonical_new)
+        updated = ProfileRegistry(
+            generation=max(1, registry.generation + 1),
+            active_uid=registry.active_uid,
+            profiles=tuple(
+                renamed if profile.uid == target.uid else profile
+                for profile in registry.profiles
+            ),
+            grants=registry.grants,
+        )
+        try:
+            _write_registry(updated)
+        except Exception as error:
+            try:
+                visible = load_profile_registry()
+            except (OSError, ProfileConfigError, ValueError) as read_error:
+                raise ProfileError(
+                    "Profile rename registry state could not be confirmed; "
+                    "inspect it with 'mem profile list'."
+                ) from read_error
+            if visible == updated:
+                raise ProfileError(
+                    f"Profile {target.name!r} was renamed to {renamed.name!r}, "
+                    "but registry durability could not be confirmed; it remains "
+                    "renamed."
+                ) from error
+            if visible != registry:
+                raise ProfileError(
+                    "Profile rename registry changed unexpectedly; inspect it "
+                    "with 'mem profile list'."
+                ) from error
+            raise
+
+        return ProfileRenameResult(
+            previous_name=target.name,
+            profile=renamed,
+            active_profile_name=updated.active.name,
+            was_active=was_active,
+            changed=True,
+        )
 
 
 def archive_legacy_study(name: str) -> LegacyStudyArchiveResult:

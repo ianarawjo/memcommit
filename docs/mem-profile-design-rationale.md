@@ -22,9 +22,9 @@ the concise interactive spelling requested to parallel `mem switch NAME`.
 Both forms reach the same validation, locking, and atomic selector update;
 the shorthand is parser routing rather than a second mutation path. Known
 subcommands (`list`, its hidden `ls` alias, `current`, `use`, `import`,
-`import-study`, `archive-study`, and `grant`) take precedence, so a Profile
-whose name equals one of those reserved command tokens must be selected with
-the explicit `use` form. `mem profile list` remains an explicit inventory
+`import-study`, `archive-study`, `rename`, and `grant`) take precedence, so a
+Profile whose name equals one of those reserved command tokens must be selected
+with the explicit `use` form. `mem profile list` remains an explicit inventory
 command.
 
 When standard input or output is not a TTY, bare `mem profile` prints that
@@ -222,6 +222,80 @@ external file lock, generation number, fsynced temporary file, and atomic
 replacement. A corrupt existing registry fails closed; only an absent registry
 falls back to the legacy `authoring` store without creating metadata.
 
+## Stable-identity Profile rename
+
+`mem profile rename` changes one live managed Profile's display name without
+changing which complete MemoryStore it identifies. Its one- and two-argument
+forms deliberately have different target selection:
+
+```text
+mem profile rename NEW       # rename the current Profile
+mem profile rename OLD NEW   # rename this explicitly named Profile
+```
+
+In the one-argument form, `NEW` is never interpreted as an existing Profile
+selector. The command acquires the Profile registry lock and then captures the
+current Profile from that locked registry generation. The two-argument form
+resolves `OLD` from the same locked generation. For a real rename, both forms
+validate the target store before publishing one atomic registry generation, so
+a concurrent `profile use`, grant mutation, archive, or rename cannot change
+the target or interleave a partial control-plane update.
+
+A rename replaces only the selected `ProfileEntry.name`. The Profile UID,
+managed `stores/<profile-uid>/` directory, kind, source provenance, registry
+order, grants, and active UID remain unchanged. If the renamed Profile is
+active, the same UID remains selected under the new display name; otherwise
+the previously active Profile remains active. Because grants bind Profile UIDs,
+their capabilities and revisions do not change, although later human-readable
+grant output uses the new live display name. Context names, Memories, current
+Context state, checkpoints, sessions, and every other store byte are untouched.
+The cooperative `mem lock profile` policy protects writes inside that store,
+not administrative registry metadata, so it does not block display-name
+rename. Because the UID and root remain stable, the protection state remains
+attached to the same Profile after rename.
+
+Source provenance and archive manifests are historical snapshots, not live
+display-name indexes. A rename therefore does not rewrite an earlier
+`source_profile_name`, legacy Study provenance, or an archived Profile record.
+Those records retain the name observed when they were created, while their
+stable UIDs preserve identity. Archived names do not reserve a live display
+name; only the current registry and live legacy Study groups participate in
+rename collision checks.
+
+Profile names retain the portable one-segment contract. Existing Profile-name
+collisions and live legacy Study-group-name collisions are checked
+case-insensitively. An exact same-name request, where the resolved target name
+already equals `NEW`, is a successful no-op: it does not inspect the store,
+publish a new registry generation, or turn a fixed anchor into an error. A
+case-only change such as `Pilot` to `pilot` is a real rename and is allowed
+when the same Profile owns both spellings.
+
+The fixed `authoring` and `study-baseline` names are protected both as rename
+sources and destinations. `authoring` is the backward-compatible store anchor;
+`study-baseline` is the default `init-study` and bootstrap anchor. Members of a
+live legacy split Study are also protected from individual rename because their
+task/authority names are validated against immutable grouping provenance. A
+whole legacy-group rename would need to revise all member identities and is not
+an ordinary Profile rename.
+
+CLI subcommand tokens remain legal Profile names for compatibility with import
+and the existing shorthand contract. The reserved selection tokens are `list`,
+`ls`, `current`, `use`, `import`, `import-study`,
+`archive-study`, `rename`, and `grant`. A Profile with one of those names must
+be selected with `mem profile use NAME`; rename success output always prints
+that explicit form. An existing Profile named `rename` can itself be renamed
+with `mem profile rename rename NEW`.
+
+Success output distinguishes an active target from an inactive one, prints the
+unchanged Profile UID and store path, and states that store data, grants, and
+provenance were not modified. An exact no-op reports that the Profile already
+has that name. If registry publication fails and the old registry is still
+visible, the rename fails with the old name intact. If replacement is visible
+but the following durability confirmation fails, the command reports that
+durability is uncertain and that the Profile remains renamed. If registry
+state cannot be classified, it directs the person to `mem profile list`
+instead of claiming either name won.
+
 ## Import boundary
 
 `mem profile import` is an archival whole-store copy. The top-level `mem
@@ -246,8 +320,8 @@ preserves the already-visible Profile/store pair rather than creating a dangling
 registry entry.
 
 Profile names are portable single segments. Managed storage uses stable UUID
-directories so a future display-name rename need not move the data. The fixed
-`authoring` profile cannot be imported over or replaced.
+directories, so a display-name rename does not move the data. The fixed
+`authoring` profile cannot be imported over, replaced, or renamed.
 
 ## Authority, query-only, and translation boundaries
 
@@ -290,6 +364,15 @@ The local account can still read its files.
 - **Archive and initialize the replacement in one command:** rejected because
   preserving old state and allocating a new run are independently reviewable
   mutations with different failure boundaries.
+- **Move or rename a managed Store directory with its display name:** rejected
+  because stable UID paths are the Profile identity boundary and an already
+  running process may be using the resolved root.
+- **Rewrite prior provenance, grants, and archive manifests after rename:**
+  rejected because grants already bind stable UIDs, while provenance and
+  archives must retain the historical name observed when they were recorded.
+- **Rename one member of a legacy split Study:** rejected because its derived
+  task or authority name is part of the grouping provenance contract. A future
+  whole-group workflow would be a separate multi-record mutation.
 
 ## Current limitations
 
@@ -297,9 +380,12 @@ The local account can still read its files.
   already running in another terminal.
 - Editing a managed profile does not rewrite `docs/fixtures/` or refresh the
   generated package. Re-import refuses to overwrite the edited profile.
-- Generic Profile removal, replacement, rename, backup, and reset remain
-  deferred. The narrow legacy split-Study archive has an explicit recoverable
-  manifest, but a matching restore command remains future work.
+- Generic Profile removal, replacement, backup, and reset remain deferred. The
+  narrow legacy split-Study archive has an explicit recoverable manifest, but a
+  matching restore command remains future work.
+- Profile rename is limited to live ordinary managed Profiles. It does not
+  rename the fixed authoring/baseline anchors, individual legacy Study members,
+  archived records, historical provenance, or any Context inside the Store.
 - `archive-study` does not promise repeated-success acknowledgement. After the
   registry detach commits, repeating the old Study name reports that the live
   legacy Study does not exist; the durable manifest remains the completion

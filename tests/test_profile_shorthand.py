@@ -109,11 +109,17 @@ def test_profile_subcommands_keep_precedence_over_the_name_shorthand(
         app,
         ["profile", "archive-study", "missing-study"],
     )
+    rename = runner.invoke(
+        app,
+        ["profile", "rename", "missing-profile", "new-name"],
+    )
 
     assert result.exit_code == 0, result.output
     assert "* authoring" in result.output
     assert archive.exit_code == 1
     assert "Legacy Study 'missing-study' does not exist" in archive.stderr
+    assert rename.exit_code == 1
+    assert "Profile 'missing-profile' does not exist" in rename.stderr
 
 
 def test_profile_use_without_a_name_keeps_the_interactive_picker(

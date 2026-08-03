@@ -11,7 +11,7 @@ import typer
 from memcommit.commands.profile_group import ProfileAliasGroup
 from memcommit.commands.profile_picker import ProfilePickerEntry, choose_profile
 from memcommit.commands.tui_primitives import display_escape_text
-from memcommit.profile_config import ProfileConfigError
+from memcommit.profile_config import ProfileConfigError, profile_store_dir
 from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
@@ -24,6 +24,7 @@ from memcommit.profiles import (
     import_study_profiles,
     list_authority_grants,
     list_profiles,
+    rename_profile,
     study_profile_groups,
     update_authority_grant,
     use_profile,
@@ -480,6 +481,72 @@ def use_cmd(
             typer.echo("Profile selection cancelled.")
             return
     _use_profile(name)
+
+
+@app.command("rename")
+def rename_cmd(
+    profile_or_new: Annotated[
+        str,
+        typer.Argument(
+            metavar="NAME",
+            help=(
+                "New name for the current Profile, or existing Profile when "
+                "NEW is also supplied"
+            )
+        ),
+    ],
+    new_name: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="NEW",
+            help="New name for the explicitly named Profile",
+        ),
+    ] = None,
+) -> None:
+    """Rename one managed Profile without moving or rewriting its store."""
+
+    old_name = profile_or_new if new_name is not None else None
+    destination = new_name if new_name is not None else profile_or_new
+    try:
+        result = rename_profile(destination, old_name=old_name)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    if not result.changed:
+        typer.echo(
+            "Profile '"
+            + display_escape_text(result.profile.name)
+            + "' already has that name."
+        )
+        return
+
+    prefix = "Renamed active Profile" if result.was_active else "Renamed Profile"
+    typer.secho(
+        f"{prefix} '{display_escape_text(result.previous_name)}' to "
+        f"'{display_escape_text(result.profile.name)}'.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo("Profile UID unchanged: " + display_escape_text(result.profile.uid))
+    typer.echo(
+        "Store unchanged: "
+        + display_escape_text(str(profile_store_dir(result.profile)))
+    )
+    if result.was_active:
+        typer.echo(
+            "The same Profile remains current under its new name: "
+            + display_escape_text(result.active_profile_name)
+        )
+    else:
+        typer.echo(
+            "Active Profile unchanged: "
+            + display_escape_text(result.active_profile_name)
+        )
+    typer.echo(
+        "Store data, Contexts, Memories, grants, and provenance were not modified."
+    )
+    typer.echo(
+        "Use it with: mem profile use "
+        + display_escape_text(result.profile.name)
+    )
 
 
 @app.command("import")
