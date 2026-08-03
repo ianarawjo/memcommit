@@ -34,7 +34,7 @@ def _stage(store: MemoryStore, *, changes: bool = True):
         source,
         "Lot C now provides temporary visitor parking.",
     )
-    target = ops.init("participant/campus-wiki-fork")
+    target = ops.init("campus-wiki")
     target_memory = ops.add(
         target,
         "Visitor parking is available in Lot A.\nHours remain unchanged.",
@@ -106,12 +106,12 @@ def test_diff_renders_readable_semantic_edit_addition_and_provenance(
     assert "Update preview" in result.output
     assert (
         "participant/construction-updates → "
-        "participant/campus-wiki-fork"
+        "campus-wiki"
         in result.output
     )
     assert "2 changes · 1 edited · 1 added" in result.output
     assert (
-        f"EDIT  participant/campus-wiki-fork  "
+        f"EDIT  campus-wiki  "
         f"[{target_memory.uid[:8]}]"
         in result.output
     )
@@ -119,7 +119,7 @@ def test_diff_renders_readable_semantic_edit_addition_and_provenance(
     assert "  + Visitor parking is available in Lot C." in result.output
     assert "    Hours remain unchanged." in result.output
     assert (
-        "ADD   participant/campus-wiki-fork  "
+        "ADD   campus-wiki  "
         f"[new:{addition.memory_uid[:8]}]"
         in result.output
     )
@@ -145,17 +145,17 @@ def test_diff_raw_preserves_exact_unified_diff(isolated_store):
 
     assert result.exit_code == 0
     assert (
-        "diff --mem participant/campus-wiki-fork"
+        "diff --mem campus-wiki"
         f"#{target_memory.uid}"
         in result.output
     )
     assert (
-        "--- a/participant/campus-wiki-fork"
+        "--- a/campus-wiki"
         f"#{target_memory.uid}"
         in result.output
     )
     assert (
-        "+++ b/participant/campus-wiki-fork"
+        "+++ b/campus-wiki"
         f"#{target_memory.uid}"
         in result.output
     )
@@ -164,13 +164,13 @@ def test_diff_raw_preserves_exact_unified_diff(isolated_store):
     assert "+Visitor parking is available in Lot C." in result.output
     assert " Hours remain unchanged." in result.output
     assert (
-        "diff --mem participant/campus-wiki-fork"
+        "diff --mem campus-wiki"
         f"#{addition.memory_uid}"
         in result.output
     )
     assert "--- /dev/null" in result.output
     assert (
-        "+++ b/participant/campus-wiki-fork"
+        "+++ b/campus-wiki"
         f"#{addition.memory_uid}"
         in result.output
     )
@@ -219,7 +219,7 @@ def test_diff_is_read_only_and_does_not_depend_on_current_context(
     assert result.exit_code == 0
     assert (
         "participant/construction-updates → "
-        "participant/campus-wiki-fork"
+        "campus-wiki"
         in result.output
     )
     assert store.current_context_name() == "unrelated-current"
@@ -247,7 +247,7 @@ def test_diff_renders_applied_local_update_from_recorded_base_read_only(
     assert applied.application is not None
     assert provider.calls == 1
     assert (
-        store.load("participant/campus-wiki-fork")
+        store.load("campus-wiki")
         .memories[target_memory.uid]
         .content
         == "Visitor parking is available in Lot C.\nHours remain unchanged."
@@ -269,7 +269,7 @@ def test_diff_renders_applied_local_update_from_recorded_base_read_only(
     assert "Applied local update" in result.output
     assert (
         "participant/construction-updates → "
-        "participant/campus-wiki-fork"
+        "campus-wiki"
         in result.output
     )
     assert f"Update  {applied.uid}" in result.output
@@ -293,7 +293,7 @@ def test_diff_shows_captured_content_but_fails_when_target_is_stale(
 ):
     store = MemoryStore()
     _stage(store)
-    target = store.load("participant/campus-wiki-fork")
+    target = store.load("campus-wiki")
     ops.add(target, "A concurrent Wiki edit.")
     store.save(target)
 
@@ -321,7 +321,7 @@ def test_diff_fails_stale_when_source_is_missing_but_still_renders(
     assert result.exit_code == 1
     assert (
         "participant/construction-updates → "
-        "participant/campus-wiki-fork"
+        "campus-wiki"
         in result.output
     )
     assert "STALE — source or target changed" in result.stderr

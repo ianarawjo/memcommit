@@ -302,7 +302,7 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
     remove_uid = _uid()
     edit = EditOperation(
         owner_context_uid=target_context_uid,
-        owner_context_name="participant/campus-wiki-fork/buildings",
+        owner_context_name="campus-wiki/buildings",
         memory_uid=edit_uid,
         old_content="The north entrance is open.",
         new_content="The south entrance is open.",
@@ -311,7 +311,7 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
     )
     addition = AddOperation(
         owner_context_uid=target_context_uid,
-        owner_context_name="participant/campus-wiki-fork/buildings",
+        owner_context_name="campus-wiki/buildings",
         memory_uid=add_uid,
         new_content="Temporary accessible parking is in Lot C.",
         source_refs=(source_ref,),
@@ -319,7 +319,7 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
     )
     removal = RemoveOperation(
         owner_context_uid=target_context_uid,
-        owner_context_name="participant/campus-wiki-fork/buildings",
+        owner_context_name="campus-wiki/buildings",
         memory_uid=remove_uid,
         old_content="The construction shuttle stops at the north entrance.",
         source_refs=(source_ref,),
@@ -340,12 +340,12 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
             ),
         ),
         target_uid=target_context_uid,
-        target_name="participant/campus-wiki-fork",
+        target_name="campus-wiki",
         target_digest=_digest("target graph"),
         target_contexts=(
             ContextFingerprint(
                 uid=target_context_uid,
-                name="participant/campus-wiki-fork/buildings",
+                name="campus-wiki/buildings",
                 digest=_digest("target graph"),
             ),
         ),

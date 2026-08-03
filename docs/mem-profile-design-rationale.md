@@ -27,7 +27,7 @@ boundary re-loads and validates the registry and selected store before the
 active selector is changed, so a stale screen is not authority to switch.
 
 Each Profile row also displays the public locator names of its routed
-query-only references, such as `query=campus-wiki`, before the potentially
+query-only references, such as `query=construction-details`, before the potentially
 long current Context locator. A count alone made an included source look
 absent and was often clipped at ordinary terminal widths. The name is routing
 metadata that is already used by `mem query`; displaying it neither reads nor
@@ -72,9 +72,9 @@ Putting all task Contexts into one active graph would make `mem switch` look
 convenient during fixture authoring, but it would also mix three independent
 `state.json` files, query routing, translation catalogs, histories, and study
 conditions. It creates semantic collisions even where filesystem names do not
-collide: for example, the Task 1 query-only name `campus-wiki` can coexist with
-an older ordinary Context of the same name, and new task subtrees resemble
-older development subtrees without sharing identity.
+collide: for example, the Task 1 ordinary `campus-wiki` can coexist with an
+older Context of the same name, and new task subtrees resemble older
+development subtrees without sharing identity.
 
 Profiles satisfy the underlying authoring need without that ambiguity: all
 four stores are present locally and editable, while only one store is active

@@ -2,84 +2,82 @@
 
 ## Decision
 
-Task 1 uses stable role names rather than a fictional participant identity.
-The canonical identifiers are:
+Task 1 uses a top-level ordinary `campus-wiki` Context. The Task Profile is
+already the isolation boundary, so adding `participant/` and `-fork` to the
+wiki locator repeats ownership and publication concepts that the participant
+does not need in order to browse or update the fixture.
 
 | Role | Canonical identifier | Kind and authority |
 | --- | --- | --- |
-| organizational origin | `campus-wiki` | opaque query-only upstream represented by a `QueryContextRef` |
-| local wiki fork | `participant/campus-wiki-fork` | ordinary writable Context graph scoped to the participant's responsibility |
+| writable campus wiki | `campus-wiki` | ordinary readable and writable Context graph |
+| concealed construction detail | `construction-details` | query-only child represented by a direct `QueryContextRef` in `campus-wiki` |
 | verified change source | `participant/construction-updates` | ordinary readable local Context graph |
 | person in English prose | `the participant` | role label, not a personal name |
 
-`participant` is a literal, stable pseudonymous namespace in the study
-fixture. It is not a placeholder to replace with a participant's real name.
-Participant-facing prose likewise uses “the participant” instead of inventing
-a character name.
-
-The hyphen and slash have different meanings. `campus-wiki` is deliberately a
-flat public name for an opaque upstream. A slash denotes ordinary Context
-namespace structure, as in `participant/construction-updates`; it must not be
-introduced into the upstream name merely for visual grouping.
+`participant` remains a literal, stable pseudonymous namespace for the
+participant-facing change source. It is not a placeholder for a real name.
+The ordinary wiki does not use that namespace because it represents the
+campus reference collection, not the person who happens to update it.
 
 ## Task 1 object boundary
 
-The names preserve three different authority-bearing objects:
+The fixture contains one readable wiki with one narrower concealed source:
 
 ```text
 participant/construction-updates
-    verified local evidence
+    verified local change evidence
 
-participant/campus-wiki-fork
-    writable direct Memories in the participant's assigned scope
-    └── QueryContextRef: campus-wiki
-        opaque organizational origin; query access only
+campus-wiki
+    ordinary readable and writable Memories
+    └── QueryContextRef: construction-details
+        concealed construction details; query access only
 ```
 
-The query-only pointer may be addressed explicitly:
+The current explicit query command remains:
 
 ```bash
-mem query campus-wiki \
-  "What is the approved visitor route during construction?" \
-  --context participant/campus-wiki-fork
+mem query construction-details \
+  "What work is planned for the Main Building?" \
+  --context campus-wiki
 ```
 
-It is not an ordinary Context that can be selected, traversed, or used as the
-target of `impact` or `update`. The participant performs the directional
-operation against the writable fork:
+This change establishes the data topology only. Relative composite query
+locators and a no-argument interactive query entry point are deferred to the
+query UX implementation. The query-only pointer is not an ordinary Context:
+it cannot be selected, traversed, or used as an `impact` or `update` target.
+
+The participant performs directional operations against the ordinary wiki:
 
 ```bash
 mem switch participant/construction-updates
-mem impact --to participant/campus-wiki-fork
-mem update --to participant/campus-wiki-fork
+mem impact --to campus-wiki
+mem update --to campus-wiki
 mem diff
 ```
 
-A later `push` or PR is the separate publication boundary from the local fork
-toward `campus-wiki`.
+There is no separate `fork` object in this study fixture. Any later
+publication or synchronization workflow is a separate design concern and
+must not be implied by the Context name.
 
 ## Why this is a repository contract, not a Memory
 
 These names determine command semantics, fixture identity, and authority
 boundaries before any study Context is loaded. Storing the convention only as
-a Memory would make it dependent on the active Context, expose design
-instructions as participant evidence, and permit tests and documentation to
-drift independently. This document is therefore the source-of-truth contract.
-Fixture builders and regression tests should consume shared constants or
-otherwise check these exact identifiers as the implementation is migrated.
+a Memory would make it depend on the active Context, expose design
+instructions as participant evidence, and allow tests and documentation to
+drift independently. This document therefore records the source-of-truth
+contract.
 
-Generic documentation that needs an ordinary parent Context must use a neutral
-name such as `facilities-reference`. It must not reuse `campus-wiki` as both an
-ordinary readable parent and the Task 1 query-only upstream.
+Generic examples that need an ordinary parent Context should continue to use
+neutral names such as `facilities-reference`; they should not repurpose
+`campus-wiki` or `construction-details` for an unrelated topology.
 
 ## Current prototype boundary
 
-This naming contract records intended Task 1 semantics; it does not imply that
-all underlying mechanics exist. The current query-only implementation can
-store and query the pointer, and `update` can now materialize a validated plan
-in the already-provisioned local fork. The prototype still does not create
-that fork, bind it to an upstream revision, refresh it, or publish it.
-Multi-Context local application provides exception rollback but not a durable
-crash-recovery journal. Fixtures and tests that predate this contract require
-migration rather than reinterpretation as evidence that the old names remain
-canonical.
+The query-only implementation can preserve and query the
+`construction-details` pointer, and `update` can apply a validated plan to the
+already-provisioned ordinary `campus-wiki`. Query-only remains a research UI
+concealment boundary rather than operating-system access control. The current
+prototype does not refresh an already imported editable Task Profile when a
+generated bundle changes, so bundle regeneration and installed-Profile
+migration must be reviewed separately.

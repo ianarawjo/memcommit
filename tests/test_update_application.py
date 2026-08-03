@@ -70,9 +70,9 @@ def _add(
 
 
 def test_applies_edits_and_additions_to_detached_owner_post_images():
-    target = Context(uid="target", name="participant/campus-wiki-fork")
-    child = Context(uid="buildings", name="participant/campus-wiki-fork/buildings")
-    unchanged = Context(uid="parking", name="participant/campus-wiki-fork/parking")
+    target = Context(uid="target", name="campus-wiki")
+    child = Context(uid="buildings", name="campus-wiki/buildings")
+    unchanged = Context(uid="parking", name="campus-wiki/parking")
     root_memory = Memory(uid="root-memory", content="old root")
     child_memory = Memory(uid="child-memory", content="old child")
     target.add(root_memory)
@@ -113,7 +113,7 @@ def test_applies_edits_and_additions_to_detached_owner_post_images():
 
 
 def test_additions_append_in_session_order_and_edits_preserve_item_order():
-    target = Context(uid="target", name="participant/campus-wiki-fork")
+    target = Context(uid="target", name="campus-wiki")
     first = Memory(uid="first", content="first old")
     second = Memory(uid="second", content="second old")
     target.add(first)
@@ -140,7 +140,7 @@ def test_additions_append_in_session_order_and_edits_preserve_item_order():
 
 
 def test_empty_staged_plan_returns_no_owners_without_mutating_target():
-    target = Context(uid="target", name="participant/campus-wiki-fork")
+    target = Context(uid="target", name="campus-wiki")
     memory = Memory(uid="memory", content="unchanged")
     target.add(memory)
     before = target.to_dict()
@@ -154,7 +154,7 @@ def test_empty_staged_plan_returns_no_owners_without_mutating_target():
 
 @pytest.mark.parametrize("status", ["impact", "applied", "unknown"])
 def test_only_staged_sessions_can_be_applied(status):
-    target = Context(uid="target", name="participant/campus-wiki-fork")
+    target = Context(uid="target", name="campus-wiki")
 
     with pytest.raises(
         UpdateApplicationError,
@@ -164,7 +164,7 @@ def test_only_staged_sessions_can_be_applied(status):
 
 
 def test_session_must_name_the_supplied_target_root():
-    target = Context(uid="target", name="participant/campus-wiki-fork")
+    target = Context(uid="target", name="campus-wiki")
     other = Context(uid="other", name="participant/other-fork")
 
     with pytest.raises(UpdateApplicationError, match="does not match"):
@@ -174,16 +174,16 @@ def test_session_must_name_the_supplied_target_root():
 @pytest.mark.parametrize(
     ("owner_uid", "owner_name"),
     [
-        ("missing-owner", "participant/campus-wiki-fork/buildings"),
-        ("buildings", "participant/campus-wiki-fork/wrong-name"),
+        ("missing-owner", "campus-wiki/buildings"),
+        ("buildings", "campus-wiki/wrong-name"),
     ],
 )
 def test_every_operation_owner_uid_and_name_are_preflighted(
     owner_uid,
     owner_name,
 ):
-    target = Context(uid="target", name="participant/campus-wiki-fork")
-    child = Context(uid="buildings", name="participant/campus-wiki-fork/buildings")
+    target = Context(uid="target", name="campus-wiki")
+    child = Context(uid="buildings", name="campus-wiki/buildings")
     memory = Memory(uid="memory", content="old")
     child.add(memory)
     target.add(child)
@@ -204,8 +204,8 @@ def test_every_operation_owner_uid_and_name_are_preflighted(
 
 
 def test_a_late_invalid_operation_leaves_every_original_owner_unchanged():
-    target = Context(uid="target", name="participant/campus-wiki-fork")
-    child = Context(uid="child", name="participant/campus-wiki-fork/buildings")
+    target = Context(uid="target", name="campus-wiki")
+    child = Context(uid="child", name="campus-wiki/buildings")
     root_memory = Memory(uid="root-memory", content="old root")
     child_memory = Memory(uid="child-memory", content="old child")
     target.add(root_memory)
@@ -253,7 +253,7 @@ def test_a_late_invalid_operation_leaves_every_original_owner_unchanged():
     ],
 )
 def test_edit_cannot_modify_memory_or_query_context_references(read_only_item):
-    target = Context(uid="target", name="participant/campus-wiki-fork")
+    target = Context(uid="target", name="campus-wiki")
     target.add(read_only_item)
     operation = EditOperation(
         owner_context_uid=target.uid,
@@ -272,7 +272,7 @@ def test_edit_cannot_modify_memory_or_query_context_references(read_only_item):
 
 
 def test_edit_requires_an_existing_direct_memory_with_matching_old_content():
-    target = Context(uid="target", name="participant/campus-wiki-fork")
+    target = Context(uid="target", name="campus-wiki")
     memory = Memory(uid="memory", content="current")
     target.add(memory)
     missing = EditOperation(
@@ -318,11 +318,11 @@ def test_edit_requires_an_existing_direct_memory_with_matching_old_content():
             target_source_uid="query-source",
             provider="codex",
         ),
-        Context(uid="collision", name="participant/campus-wiki-fork/child"),
+        Context(uid="collision", name="campus-wiki/child"),
     ],
 )
 def test_addition_rejects_collision_with_any_direct_owner_item(existing_item):
-    target = Context(uid="target", name="participant/campus-wiki-fork")
+    target = Context(uid="target", name="campus-wiki")
     target.add(existing_item)
 
     with pytest.raises(UpdateApplicationError, match="already exists"):
@@ -338,7 +338,7 @@ def test_addition_rejects_collision_with_any_direct_owner_item(existing_item):
 
 
 def test_duplicate_operation_target_is_rejected_before_application():
-    target = Context(uid="target", name="participant/campus-wiki-fork")
+    target = Context(uid="target", name="campus-wiki")
     memory = Memory(uid="memory", content="old")
     target.add(memory)
 

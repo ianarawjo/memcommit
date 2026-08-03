@@ -2,15 +2,15 @@
   "command": "update",
   "schema_version": 1,
   "ruleset_version": "update-task1-v1-draft",
-  "description": "A compact executable Task 1 example with five verified source Memories and five Memories in a provisioned local wiki fork. It is a regression fixture, not the complete participant study dataset.",
+  "description": "A compact executable Task 1 example with five verified source Memories and five Memories in the ordinary campus wiki. It is a regression fixture, not the complete participant study dataset.",
   "cases": [
     {
       "id": "task1-compact-5x5",
       "description": "A conflict-free verified construction update produces two edits, one addition, and one explicit whole-Memory removal while preserving two unaffected target Memories.",
       "context_names": {
-        "upstream_query_only": "campus-wiki",
+        "upstream_query_only": "construction-details",
         "source_root": "participant/construction-updates",
-        "target_root": "participant/campus-wiki-fork"
+        "target_root": "campus-wiki"
       },
       "source": {
         "root_context": {
@@ -83,18 +83,18 @@
       "target_baseline": {
         "root_context": {
           "uid": "22222222-2222-4222-8222-222222222200",
-          "name": "participant/campus-wiki-fork"
+          "name": "campus-wiki"
         },
         "origin_pointer": {
           "uid": "33333333-3333-4333-8333-333333333301",
-          "name": "campus-wiki",
+          "name": "construction-details",
           "target_source_uid": "33333333-3333-4333-8333-333333333302",
           "provider": "codex_chatgpt"
         },
         "child_contexts": [
           {
             "uid": "22222222-2222-4222-8222-222222222201",
-            "name": "participant/campus-wiki-fork/buildings",
+            "name": "campus-wiki/buildings",
             "memories": [
               {
                 "id": "target-access",
@@ -105,7 +105,7 @@
           },
           {
             "uid": "22222222-2222-4222-8222-222222222202",
-            "name": "participant/campus-wiki-fork/events",
+            "name": "campus-wiki/events",
             "memories": [
               {
                 "id": "target-information-session",
@@ -116,7 +116,7 @@
           },
           {
             "uid": "22222222-2222-4222-8222-222222222203",
-            "name": "participant/campus-wiki-fork/transportation",
+            "name": "campus-wiki/transportation",
             "memories": [
               {
                 "id": "target-accessible-parking",
@@ -132,12 +132,12 @@
           },
           {
             "uid": "22222222-2222-4222-8222-222222222204",
-            "name": "participant/campus-wiki-fork/shops",
+            "name": "campus-wiki/shops",
             "memories": []
           },
           {
             "uid": "22222222-2222-4222-8222-222222222205",
-            "name": "participant/campus-wiki-fork/health",
+            "name": "campus-wiki/health",
             "memories": [
               {
                 "id": "target-health-hours",
@@ -169,12 +169,12 @@
         ],
         "additions": [
           {
-            "owner_context": "participant/campus-wiki-fork/shops",
+            "owner_context": "campus-wiki/shops",
             "new_content": "Campus Store order pickup is available at a temporary counter in the Library foyer, weekdays from 10:00 to 16:00.",
             "source_ids": [
               "source-store-pickup"
             ],
-            "reason": "The verified pickup location has no corresponding Memory in the local wiki fork."
+            "reason": "The verified pickup location has no corresponding Memory in the ordinary campus wiki."
           }
         ],
         "removals": [

@@ -22,7 +22,7 @@ ENTRIES = (
         context_count=14,
         current_context="participant/construction-updates",
         query_source_count=1,
-        query_source_names=("campus-wiki",),
+        query_source_names=("construction-details",),
     ),
     ProfilePickerEntry(
         name="task-2",
@@ -51,8 +51,10 @@ def test_profile_picker_marks_current_and_selected_use_action():
     assert "CURRENT" in lines[0]
     assert lines[1].startswith("›   task-1")
     assert "USE" in lines[1]
-    assert "query=campus-wiki" in lines[1]
-    assert lines[1].index("query=campus-wiki") < lines[1].index("current=")
+    assert "query=construction-details" in lines[1]
+    assert lines[1].index("query=construction-details") < lines[1].index(
+        "current="
+    )
     assert "USE" not in lines[2]
 
 

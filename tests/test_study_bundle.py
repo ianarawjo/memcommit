@@ -60,6 +60,20 @@ def test_builds_three_isolated_english_stores_with_same_uid_korean_views(
         with _isolated_store_root(manifest_path.parent / ".mem"):
             store = MemoryStore(create=False)
             assert store.current_context_name() == TASK_SPECS[task].current_context
+            if task == 1:
+                context_names = set(store.list_context_names())
+                assert "campus-wiki" in context_names
+                assert "campus-wiki/building-access" in context_names
+                assert not any("campus-wiki-fork" in name for name in context_names)
+                wiki = store.load_direct("campus-wiki")
+                query_refs = [
+                    item
+                    for item in wiki.iter_items()
+                    if isinstance(item, QueryContextRef)
+                ]
+                assert [item.name for item in query_refs] == [
+                    "construction-details"
+                ]
             ordinary = [entry for entry in entries if not entry["query_only"]]
             by_owner: dict[str, list[dict[str, object]]] = {}
             for entry in ordinary:

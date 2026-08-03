@@ -974,7 +974,7 @@ def test_named_contexts_pane_distinguishes_unbound_and_recorded_frames():
         GroundFrame(
             role="PUBLICATION_TARGET",
             context_uid="33333333-3333-4333-8333-333333333333",
-            context_name="participant/campus-wiki-fork",
+            context_name="campus-wiki",
             context_digest="3" * 64,
             direct_memory_count=0,
             direct_item_count=0,
@@ -998,7 +998,7 @@ def test_named_contexts_pane_distinguishes_unbound_and_recorded_frames():
         "temp/task-1-atomized · 61 direct Memories · 62 direct items"
         in rendered
     )
-    assert "PUBLICATION TARGET\nparticipant/campus-wiki-fork" in rendered
+    assert "PUBLICATION TARGET\ncampus-wiki" in rendered
     assert "freshness is rechecked before mutation" in rendered
     assert frames[0].context_uid not in rendered
     assert frames[0].context_digest not in rendered

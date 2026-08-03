@@ -159,10 +159,11 @@ accessible route처럼 일반 공개 캠퍼스 안내에 가까운 배경을 제
 이용하거나 그쪽으로 향하는 상황에는 이용할 수 없음을 먼저 알리고, 확인된
 대체 경로가 있을 때 함께 안내하는 정책을 별도 Memory로 둔다.
 
-`construction-details`는 `campus-wiki` query-only 원본 안의 논리적
-collection이다. 표시명은 `campus-wiki · construction-details`이며 실제 질의
-대상은 계속 `mem query campus-wiki ...`다. 일반 Memory 목록에 세부 공사
-내용을 복사해 우회 공개하지 않는다.
+`construction-details`는 ordinary `campus-wiki` Context에 직접 붙는
+query-only source다. 검수 소속은 `campus-wiki · construction-details`로
+표시할 수 있으며, 현재 명시적 질의 형태는
+`mem query construction-details ... --context campus-wiki`다. 일반 Memory
+목록에 세부 공사 내용을 복사해 우회 공개하지 않는다.
 
 ### Task 2
 

@@ -77,38 +77,26 @@ outside the store should obtain a source through `MemoryStore` and consume
 `content` or `contents`, rather than constructing or serializing this internal
 record itself.
 
-## Task 1 organizational origin and local fork
+## Task 1 visible wiki and concealed detail collection
 
-For the revised Task 1 authority model, the organizational wiki and the
-participant's working copy are deliberately different objects. Their
-canonical identifiers follow
+Task 1 keeps the ordinary wiki and its concealed construction details as
+different objects with different operations. Their canonical identifiers
+follow
 [`task-1-naming-contract.md`](task-1-naming-contract.md):
 
 ```text
-campus-wiki                         query-only organizational origin
-participant/campus-wiki-fork        writable local fork of the participant's assigned scope
 participant/construction-updates    verified local change source
+campus-wiki                         ordinary readable and writable wiki
+└── construction-details            direct query-only child
 ```
 
-The local fork can contain direct, writable Memories for the assigned wiki
-sections and a `QueryContextRef` named `campus-wiki` for asking bounded
-questions of the opaque origin. Ordinary traversal, `impact`, and `update`
-must not open that pointer. They operate only on the fork's directly available
-local material. This avoids treating query access as either a full checkout or
-write permission.
-
-The current query-only prototype can preserve and query such a pointer, but it
-does not create a scoped fork from the concealed source, bind a fork to an
-upstream revision, refresh it, or publish changes. Task 1 must therefore seed
-the local fork as fixture data. Future `push` or PR support must treat
-publication as a separate authorized operation rather than allowing `update`
-to write through the pointer.
-
-The seeded fork is assumed to be the latest approved snapshot of the
-participant's assigned scope when Task 1 begins, with no concurrent remote
-change to that scope during the task. This is a study-scenario simplification,
-not a guarantee provided by `QueryContextRef`. A later publication adapter
-must replace it with explicit upstream revision and divergence checks.
+`campus-wiki` contains direct, readable Memories for the participant's task
+and one `QueryContextRef` named `construction-details`. Ordinary traversal,
+`impact`, and `update` operate only on the direct ordinary material and must
+not open the concealed pointer. The top-level wiki name is sufficient because
+the selected Task Profile already supplies isolation; `participant/` and
+`-fork` would duplicate that boundary and imply a publication workflow that
+the prototype does not implement.
 
 ## Commands
 
@@ -148,7 +136,10 @@ A bilingual study source can be queried in its complete Korean view without
 exposing it through Translate:
 
 ```bash
-mem query campus-wiki "공사기간 후문을 이용할 수 있나요?" --language ko
+mem query construction-details \
+  "공사기간 후문을 이용할 수 있나요?" \
+  --context campus-wiki \
+  --language ko
 ```
 
 `mem query` resolves only a direct `QueryContextRef`. It does not save the

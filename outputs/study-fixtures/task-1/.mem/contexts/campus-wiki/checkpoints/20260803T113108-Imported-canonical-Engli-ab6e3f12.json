@@ -1,0 +1,66 @@
+{
+  "uid": "ab6e3f12-bdc5-4314-991c-c352186a341f",
+  "message": "Imported canonical English Task 1 fixture Context 'campus-wiki'.",
+  "timestamp": "2026-08-03T11:31:08.129664",
+  "snapshot": {
+    "uid": "a63350c9-cff1-5f32-a091-57e3cef17a77",
+    "name": "campus-wiki",
+    "memories": {
+      "91ee5b65-ef1c-5414-961c-e9d17c6b16c0": {
+        "type": "context_ref",
+        "uid": "91ee5b65-ef1c-5414-961c-e9d17c6b16c0",
+        "name": "campus-wiki/building-access"
+      },
+      "c56f66c9-ea2f-504b-85f3-69eb66929924": {
+        "type": "context_ref",
+        "uid": "c56f66c9-ea2f-504b-85f3-69eb66929924",
+        "name": "campus-wiki/event-relocations"
+      },
+      "c0d853a6-985e-574f-a921-7602a470d432": {
+        "type": "context_ref",
+        "uid": "c0d853a6-985e-574f-a921-7602a470d432",
+        "name": "campus-wiki/temporary-parking"
+      },
+      "d1995b25-eefe-5353-8c23-0e0965e7a6ae": {
+        "type": "context_ref",
+        "uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+        "name": "campus-wiki/shop-updates"
+      },
+      "0b57fe07-2a32-55b7-8ad3-cba6cd55df27": {
+        "type": "context_ref",
+        "uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+        "name": "campus-wiki/facility-updates"
+      },
+      "5cb64d0a-a8b5-5547-95df-d6dae155dce4": {
+        "type": "context_ref",
+        "uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+        "name": "campus-wiki/route-changes"
+      },
+      "0f39cee1-282e-5994-b9e0-d11b059811d0": {
+        "type": "query_context_ref",
+        "uid": "0f39cee1-282e-5994-b9e0-d11b059811d0",
+        "name": "construction-details",
+        "target_source_uid": "b13ec463-bf78-4900-bda0-9f8dd79b1611",
+        "provider": "codex_chatgpt"
+      }
+    },
+    "order": [
+      "91ee5b65-ef1c-5414-961c-e9d17c6b16c0",
+      "c56f66c9-ea2f-504b-85f3-69eb66929924",
+      "c0d853a6-985e-574f-a921-7602a470d432",
+      "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+      "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+      "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+      "0f39cee1-282e-5994-b9e0-d11b059811d0"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 1,
+    "context_uid": "a63350c9-cff1-5f32-a091-57e3cef17a77",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 1 fixture Context 'campus-wiki'.",
+  "auto": true
+}

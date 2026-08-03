@@ -327,13 +327,14 @@ location, audience, and purpose axes.
 
 ### Query-only construction details
 
-`construction-details` is not a separate ordinary Context. It is a logical
-collection inside the query-only `campus-wiki` source. The review view displays
-it as `campus-wiki · construction-details` so its content can be inspected
-directly, but the actual query target is `mem query campus-wiki ...`. A middle
-dot is used because a slash in the display name could be mistaken for an
-ordinary Context namespace. Detailed construction content is not copied into
-ordinary `campus-wiki` Memories to circumvent the query-only boundary.
+`construction-details` is not a separate ordinary Context. It is the direct
+query-only source attached to the ordinary `campus-wiki` Context. The review
+view displays it as `campus-wiki · construction-details` so its affiliation is
+clear, but the current explicit query form is
+`mem query construction-details ... --context campus-wiki`. A middle dot is
+used because a slash in the review label could be mistaken for an ordinary
+Context namespace. Detailed construction content is not copied into ordinary
+`campus-wiki` Memories to circumvent the query-only boundary.
 
 ## Task 2
 

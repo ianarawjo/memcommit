@@ -183,11 +183,12 @@ toward the third-floor rear-entrance route connecting to the library, a separate
 Memory requires advance notice that the route is unavailable and, when a
 verified alternative exists, guidance to that alternative.
 
-`construction-details` is a logical collection inside the query-only
-`campus-wiki` source. Its display name is
-`campus-wiki · construction-details`, while the actual query target remains
-`mem query campus-wiki ...`. Detailed construction content is not copied into
-the ordinary Memory list to circumvent this boundary.
+`construction-details` is the query-only source attached directly to the
+ordinary `campus-wiki` Context. Its review affiliation may be displayed as
+`campus-wiki · construction-details`, while the current explicit query form is
+`mem query construction-details ... --context campus-wiki`. Detailed
+construction content is not copied into the ordinary Memory list to
+circumvent this boundary.
 
 ### Task 2
 

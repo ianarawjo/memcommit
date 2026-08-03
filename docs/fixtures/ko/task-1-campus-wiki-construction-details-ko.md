@@ -21,10 +21,11 @@
   역할 인증이나 ACL 집행을 제공하지 않는다.
 - 이 자료는 일반 목록이나 일반 조회로 원문을 보여주지 않고 질의
   경로에서만 사용한다는 연구용 설정이다.
-- 이 자료는 query-only campus-wiki 원본 안의 construction-details 논리
-  collection이다. 일반 열람 campus-wiki의 300개 Memory와 섞지 않는다.
-  campus-wiki · construction-details는 검수용 소속 표기이며 Context
-  locator가 아니고, 실제 질의 대상 이름은 계속 campus-wiki다.
+- 이 자료는 ordinary campus-wiki Context에 직접 붙는 query-only
+  construction-details source다. 일반 열람 campus-wiki의 300개 Memory와
+  섞지 않는다. campus-wiki · construction-details는 검수용 소속 표기이며
+  ordinary Context locator가 아니고, 실제 질의 대상 이름은
+  construction-details다.
 - 아래 모든 항목의 합성 상태는 연구용으로 완전히 창작됨이다.
 
 ## 세부 작업 묶음 · 32개

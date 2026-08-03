@@ -20,7 +20,7 @@ from memcommit.update_application import (
 
 runner = CliRunner(mix_stderr=False)
 SOURCE_NAME = "participant/construction-updates"
-TARGET_NAME = "participant/campus-wiki-fork"
+TARGET_NAME = "campus-wiki"
 
 
 class _RemovalProvider:

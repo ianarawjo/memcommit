@@ -381,7 +381,7 @@ def test_query_selects_a_complete_concealed_language_variant(
 ):
     store = MemoryStore()
     source = store.create_bilingual_query_source(
-        "campus-wiki",
+        "construction-details",
         entries=(
             {
                 "key": "rear-entrance",
@@ -395,7 +395,7 @@ def test_query_selects_a_complete_concealed_language_variant(
             },
         ),
     )
-    parent = ops.init("participant/campus-wiki-fork")
+    parent = ops.init("campus-wiki")
     ops.reference_query_context(source.name, source.uid, parent)
     store.save(parent)
     store.set_current(parent.name)
@@ -413,13 +413,19 @@ def test_query_selects_a_complete_concealed_language_variant(
 
     result = runner.invoke(
         app,
-        ["query", "campus-wiki", "무엇이 닫히나요?", "--language", "ko"],
+        [
+            "query",
+            "construction-details",
+            "무엇이 닫히나요?",
+            "--language",
+            "ko",
+        ],
     )
 
     assert result.exit_code == 0
     assert calls == [
         (
-            "campus-wiki",
+            "construction-details",
             "후문은 폐쇄된다.\n\n정문은 오후 5시에 닫힌다.",
             "무엇이 닫히나요?",
         )
@@ -433,7 +439,7 @@ def test_query_missing_language_error_does_not_disclose_entry_key(
     store = MemoryStore()
     concealed_key = "concealed-internal-record-key"
     source = store.create_bilingual_query_source(
-        "campus-wiki",
+        "construction-details",
         entries=(
             {
                 "key": concealed_key,
@@ -441,7 +447,7 @@ def test_query_missing_language_error_does_not_disclose_entry_key(
             },
         ),
     )
-    parent = ops.init("participant/campus-wiki-fork")
+    parent = ops.init("campus-wiki")
     ops.reference_query_context(source.name, source.uid, parent)
     store.save(parent)
     store.set_current(parent.name)
@@ -457,7 +463,7 @@ def test_query_missing_language_error_does_not_disclose_entry_key(
 
     result = runner.invoke(
         app,
-        ["query", "campus-wiki", "질문", "--language", "ko"],
+        ["query", "construction-details", "질문", "--language", "ko"],
     )
 
     assert result.exit_code == 1

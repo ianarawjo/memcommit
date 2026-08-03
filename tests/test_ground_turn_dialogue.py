@@ -147,11 +147,11 @@ def test_unbound_turn_can_ask_or_propose_one_explicit_binding():
             description="Build a wiki from reviewed source notes.",
             raw_context="temp/task-1",
             derived_context="temp/task-1-atomized",
-            publication_target="participant/campus-wiki-fork",
+            publication_target="campus-wiki",
             placement_targets=["participant/construction-updates"],
             blocked_targets=[
                 {
-                    "context_name": "participant/campus-wiki-fork",
+                    "context_name": "campus-wiki",
                     "reason": "The local fork fixture is still empty.",
                 }
             ],
@@ -166,7 +166,7 @@ def test_unbound_turn_can_ask_or_propose_one_explicit_binding():
     assert result.placement_targets == ("participant/construction-updates",)
     assert (
         result.blocked_targets[0].context_name
-        == "participant/campus-wiki-fork"
+        == "campus-wiki"
     )
     prompt, operation, schema = provider.calls[0]
     assert operation == GROUND_TURN_OPERATION == "ground turn"

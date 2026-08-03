@@ -276,12 +276,13 @@ source는 최소 한 개의 실제 `수정` 또는 `추가` patch를 만들어�
 
 ### query-only construction details
 
-`construction-details`는 별도 ordinary Context가 아니라 `campus-wiki`
-query-only 원본의 논리적 collection이다. 검수 화면에서는 내용을 직접 검토할
-수 있도록 `campus-wiki · construction-details`로 표시하되, 실제 질의 대상은
-`mem query campus-wiki ...`다. slash를 표시명에 사용하면 ordinary Context
-namespace로 오해할 수 있어 가운데점을 사용한다. 일반 `campus-wiki` Memory에
-세부 공사 내용을 복사하여 query-only 경계를 우회하지 않는다.
+`construction-details`는 별도 ordinary Context가 아니라 ordinary
+`campus-wiki`에 직접 붙는 query-only source다. 검수 화면에서는 소속을
+`campus-wiki · construction-details`로 표시하되, 현재 명시적 질의 형태는
+`mem query construction-details ... --context campus-wiki`다. slash를 검수
+표시명에 사용하면 ordinary Context namespace로 오해할 수 있어 가운데점을
+사용한다. 일반 `campus-wiki` Memory에 세부 공사 내용을 복사하여 query-only
+경계를 우회하지 않는다.
 
 ## Task 2
 

@@ -104,12 +104,12 @@ TASK_SPECS = {
             ),
             BundleDatasetSpec(
                 "task1-campus-wiki",
-                "participant/campus-wiki-fork",
+                "campus-wiki",
             ),
             BundleDatasetSpec(
                 "task1-campus-wiki-details",
-                "campus-wiki",
-                ("participant/campus-wiki-fork",),
+                "construction-details",
+                ("campus-wiki",),
             ),
         ),
     ),

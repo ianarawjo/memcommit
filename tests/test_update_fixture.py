@@ -119,9 +119,9 @@ def test_update_fixture_is_a_strict_compact_5x5_task1_case() -> None:
     }
     assert case["id"] == "task1-compact-5x5"
     assert case["context_names"] == {
-        "upstream_query_only": "campus-wiki",
+        "upstream_query_only": "construction-details",
         "source_root": "participant/construction-updates",
-        "target_root": "participant/campus-wiki-fork",
+        "target_root": "campus-wiki",
     }
     _assert_context_graph(case["source"], origin=False)
     _assert_context_graph(case["target_baseline"], origin=True)

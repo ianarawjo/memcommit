@@ -21,10 +21,11 @@
   role authentication or ACL enforcement by audience.
 - This data is configured for research use so that its original text is not shown through
   general listings or general retrieval and is used only through the query path.
-- This data is the logical construction-details collection within the query-only campus-wiki
-  source. Do not mix it with the 300 Memories in the generally accessible campus-wiki.
-  campus-wiki · construction-details is a review-only affiliation label, not a Context
-  locator, and the actual query target name remains campus-wiki.
+- This data is the query-only construction-details source attached to the ordinary
+  campus-wiki Context. Do not mix it with the 300 Memories in the generally accessible
+  campus-wiki. campus-wiki · construction-details is a review-only affiliation label,
+  not an ordinary Context locator, and the actual query target name is
+  construction-details.
 - The synthetic status of every record below is: entirely fictional and created for research.
 
 ## Detailed Work Bundles · 32 Records

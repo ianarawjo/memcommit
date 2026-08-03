@@ -13,17 +13,16 @@ The current local store was inspected before writing this note:
   Contexts, but all six children are empty; and
 - the legacy ordinary `campus-wiki` Context is empty.
 
-These legacy names do not yet satisfy the authority boundary in
-[the Task 1 naming contract](task-1-naming-contract.md). The intended writable
-objects are `participant/construction-updates` and
-`participant/campus-wiki-fork`; `campus-wiki` is reserved for the opaque
-query-only organizational origin.
+The intended writable objects under
+[the Task 1 naming contract](task-1-naming-contract.md) are
+`participant/construction-updates` and top-level `campus-wiki`. The ordinary
+wiki directly carries an opaque `construction-details` query pointer.
 
 ## Goal
 
 Create a fictional but operationally coherent Task 1 dataset in which a
 participant uses six categories of verified local construction updates to
-update the corresponding six parts of a larger writable campus-wiki fork,
+update the corresponding six parts of a larger writable campus wiki,
 without exposing protected construction details or implying that the
 fictional university is a real institution.
 
@@ -41,13 +40,13 @@ Contexts:
 5. `facility-updates`
 6. `route-changes`
 
-The writable wiki fork must initially contain exactly the same six
+The writable campus wiki must initially contain exactly the same six
 task-relevant sections. Every source section must therefore have a
 corresponding target section. The initial fixture should not add unrelated
 top-level wiki departments merely to make the wiki appear large.
 
-The query-only organizational origin may additionally contain a concealed
-`construction-details` collection. That collection is not a seventh ordinary
+The ordinary wiki may additionally contain a direct query-only
+`construction-details` pointer. That source is not a seventh ordinary
 wiki section, is not participant-visible Context structure, and does not
 change the six-part correspondence above.
 
@@ -96,19 +95,19 @@ rather than inventing a location or mapping it to an actual university.
 
 ### 5. Query-only construction-details information
 
-Public operational consequences may appear in the writable wiki fork, but
+Public operational consequences may appear in the writable wiki, but
 detailed construction scope and internal reporting information must not be
 directly readable there. Protected material includes the precise maintenance
 and replacement work, inspection findings, and which components were
 reported.
 
-The fixture routes that material into a logical `construction-details`
-collection in the opaque `campus-wiki` query-only source. It is not held in a
+The fixture routes that material into the opaque query-only
+`construction-details` source attached to `campus-wiki`. It is not held in a
 `PROTECTED` bucket in `task1/participant`, and it must not be copied into
 ordinary participant-visible Memories, ordinary provider prompts, `mem ls`
 output, or update material merely to make the scenario more detailed. The
-writable wiki fork exposes only its direct `QueryContextRef` named
-`campus-wiki`.
+writable wiki exposes only its direct `QueryContextRef` named
+`construction-details`.
 
 The concealed construction-details material consists of the 12 internal
 construction and reporting entries routed from the raw Task 1 intake plus one
@@ -218,9 +217,9 @@ routing temporarily without rewriting the underlying campus geometry.
 ## Rename capability implemented after fixture work
 
 Task 1 fixture construction exposed a need for an explicit Context rename or
-namespace-migration operation. The existing empty roots use legacy names,
-while the naming contract requires participant-scoped writable names and
-reserves `campus-wiki` for a query-only origin.
+namespace-migration operation. The existing empty roots used legacy names,
+while the naming contract now gives the ordinary wiki the exact top-level
+name `campus-wiki`.
 
 `mem rename OLD NEW [-f|--force]` now provides the minimal ordinary-Context
 contract needed for that migration. It moves the exact slash-delimited source
@@ -240,9 +239,8 @@ storage, identity/name disagreement, and ambiguous ordinary/query selectors
 fail closed.
 
 The operation does not open or rename query-only sources and does not rewrite
-`QueryContextRef`. It therefore cannot turn the legacy ordinary `campus-wiki`
-object into the organizational query-only origin; fixture provisioning must
-still create that source through its separate opaque-source path. Exception
+`QueryContextRef`. Fixture provisioning must therefore create the separate
+`construction-details` source through its opaque-source path. Exception
 rollback is implemented, but a durable crash-recovery journal remains a
 prototype limitation. The complete decision record is
 [`mem-rename-design-rationale.md`](mem-rename-design-rationale.md).
@@ -257,7 +255,7 @@ The flat 54-Memory source also exposes a need for a bulk semantic placement
 operation. In this Task 1 usage, **sort** does not mean lexical ordering. It
 means classifying each source Memory and placing it in the most appropriate
 one of the six child Contexts or routing internal construction-details material
-to the query-only organizational source.
+to the query-only `construction-details` source.
 
 Earlier refinement notes used `place` as the semantic stage name. The current
 working CLI vocabulary is:
@@ -326,12 +324,12 @@ PARTICIPANT UPDATE ARTIFACT
   42 routed items: 36 placed, 5 unresolved, and 1 non-operational
 
 WRITABLE WIKI ARTIFACT
-  participant/campus-wiki-fork
-  60 ordinary baseline Memories across six corresponding sections
-  plus one opaque QueryContextRef named campus-wiki
-
-QUERY-ONLY ORGANIZATIONAL SOURCE
   campus-wiki
+  60 ordinary baseline Memories across six corresponding sections
+  plus one opaque QueryContextRef named construction-details
+
+QUERY-ONLY CONSTRUCTION SOURCE
+  construction-details
   construction-details collection: 12 routed entries plus 1 scope guard
 ```
 
@@ -427,9 +425,9 @@ automatically creates or accepts Ground Memories.
    and world-model Memory for every wiki section.
 9. Check every drafted wiki Memory against the Goal and applicable Rules, then
    run the separate aggregate invariant report.
-10. Provision the query-only `campus-wiki` source with the 12 internal
+10. Provision the query-only `construction-details` source with the 12 internal
     construction-details entries and one out-of-scope refusal policy; expose only
-    its `QueryContextRef` in the writable fork and verify it through
+    its `QueryContextRef` in the writable wiki and verify it through
     `mem query`.
 11. Populate the six source sections and the six corresponding wiki sections
    through normal `mem` commands.

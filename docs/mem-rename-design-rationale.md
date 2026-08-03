@@ -151,7 +151,7 @@ new locator could falsely imply that it was revalidated.
 Rename operates only on the ordinary Context store. It does not open, inspect,
 move, copy, or rewrite query-only source files, and it does not change a
 `QueryContextRef`. In particular, the command cannot convert an ordinary
-Context into the query-only organizational source used by Task 1.
+Context into Task 1's query-only `construction-details` source.
 
 An ordinary destination is not globally rejected merely because an opaque
 query-only source uses the same public name: these are separate authority

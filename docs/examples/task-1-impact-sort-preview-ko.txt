@@ -13,7 +13,7 @@ ARTIFACTS
           intended writable target: participant/construction-updates
   RIGHT · task1/campus-wiki · 60 ordinary drafted Memories
           + 1 query-only pointer
-          intended writable target: participant/campus-wiki-fork
+          intended writable target: campus-wiki
   OPAQUE · campus-wiki · construction-details collection
            12 routed source entries + 1 scope-guard entry
 
@@ -206,11 +206,11 @@ QUERY-ONLY CONSTRUCTION PLAN · DESIGNER PREVIEW ONLY
 
 Participant-visible pointer in task1/campus-wiki:
 
-  [query  draft-qo] campus-wiki (query-only)
+  [query  draft-qo] construction-details (query-only)
 
 Concealed source collection:
 
-  campus-wiki · construction-details
+  construction-details
     13 query-only entries
 
     [memory  db5358b7] 건물 전체 시설·안전 상태 점검.
@@ -228,7 +228,8 @@ Concealed source collection:
     [memory  qp000001] [에이전트정책] 이 query-only 자료는 본관 시설개선 공사계획과 내부 점검·보고 범위에 관한 질문에만 답한다. 범위 밖의 질문에는 “이 자료로는 답할 수 없습니다”라고 답하고, 다른 위키 정보나 추측을 제공하지 않는다.
 
   위 13개 항목은 participant의 `mem ls`, `mem show`, `impact`, `update`에
-  나타나지 않는다. 참가자는 `mem query campus-wiki ...`를 통해서만
+  나타나지 않는다. 참가자는
+  `mem query construction-details ... --context campus-wiki`를 통해서만
   답을 받을 수 있다. 현재 프로토타입은 query-only 원본을 하나의
   concealed source document로 저장하므로, 위 memory 표시는 의도한
   논리 단위와 출처를 검토하기 위한 fixture 표기다.

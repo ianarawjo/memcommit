@@ -240,7 +240,7 @@ def test_import_study_registers_editable_isolated_copies_and_keeps_authoring(
     assert "task-1: 14 ordinary Contexts" in result.output
     assert "task-2: 34 ordinary Contexts" in result.output
     assert "task-3: 42 ordinary Contexts" in result.output
-    assert "query-only=campus-wiki" in result.output
+    assert "query-only=construction-details" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -287,14 +287,14 @@ def test_profile_use_changes_the_next_process_and_keeps_query_only_hidden(
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
     assert "* participant/construction-updates" in contexts.stdout
-    assert "participant/campus-wiki-fork/building-access" in contexts.stdout
-    assert "campus-wiki\n" not in contexts.stdout
+    assert "campus-wiki/building-access" in contexts.stdout
+    assert "construction-details\n" not in contexts.stdout
     assert "authoring-notes" not in contexts.stdout
 
     profile_list = runner.invoke(app, ["profile", "list"])
     assert profile_list.exit_code == 0
     assert "* task-1" in profile_list.output
-    assert "query=campus-wiki" in profile_list.output
+    assert "query=construction-details" in profile_list.output
     assert "authoring" in profile_list.output
 
 

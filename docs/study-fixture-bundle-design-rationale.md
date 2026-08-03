@@ -56,8 +56,8 @@ identity to unchanged fixture records.
 Task 1 follows the separate naming contract:
 
 - `participant/construction-updates` is the initial Context;
-- `participant/campus-wiki-fork` is the writable local wiki graph; and
-- `campus-wiki` is the opaque query-only organizational source.
+- `campus-wiki` is the ordinary readable and writable wiki graph; and
+- `construction-details` is its opaque query-only child source.
 
 Task 2 starts at `advisor1` and also contains `advisor2`. Both roots reference
 the same concealed `proposal-submission-guidelines` source. Task 3 starts at
