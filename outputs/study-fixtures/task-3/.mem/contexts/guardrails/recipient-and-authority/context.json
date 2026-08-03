@@ -1,0 +1,56 @@
+{
+  "uid": "d2e9bd92-b7ea-535c-b40f-1ae3bff7cd2d",
+  "name": "guardrails/recipient-and-authority",
+  "memories": {
+    "5d8c0d9c-6e95-582c-9a5f-f3abc78ccebc": {
+      "type": "memory",
+      "uid": "5d8c0d9c-6e95-582c-9a5f-f3abc78ccebc",
+      "content": "Verify the recipient's exact account or address before approval."
+    },
+    "213bdf5e-d4d8-5133-930c-1bf97e83fe6a": {
+      "type": "memory",
+      "uid": "213bdf5e-d4d8-5133-930c-1bf97e83fe6a",
+      "content": "For a system recipient rather than a person, display the service name as well."
+    },
+    "b4abaae1-b2b4-5301-abb4-e08b5cbc304b": {
+      "type": "memory",
+      "uid": "b4abaae1-b2b4-5301-abb4-e08b5cbc304b",
+      "content": "Do not infer sharing authority from the recipient's role alone."
+    },
+    "a5a98da1-8d89-5117-9df9-7d37e67ea5a5": {
+      "type": "memory",
+      "uid": "a5a98da1-8d89-5117-9df9-7d37e67ea5a5",
+      "content": "If there is a proxy recipient, separately confirm the actual delivery target."
+    },
+    "e935f237-cd56-5bd2-ba4d-96ddd89ef2bd": {
+      "type": "memory",
+      "uid": "e935f237-cd56-5bd2-ba4d-96ddd89ef2bd",
+      "content": "Require new verification if the basis for the recipient's authority has expired."
+    },
+    "cf2143d5-f1cc-5f6a-8799-718a0873b2cb": {
+      "type": "memory",
+      "uid": "cf2143d5-f1cc-5f6a-8799-718a0873b2cb",
+      "content": "A recipient's identity and authority to receive are separate review items."
+    },
+    "c0bdfe20-8e0b-5b69-b7d7-4ded37dc0a03": {
+      "type": "memory",
+      "uid": "c0bdfe20-8e0b-5b69-b7d7-4ded37dc0a03",
+      "content": "The local agent can compare presented recipient identifiers, but those identifiers alone cannot guarantee actual authority to receive."
+    },
+    "23323a42-6d4e-5a8f-9aca-7b5a92ec4414": {
+      "type": "memory",
+      "uid": "23323a42-6d4e-5a8f-9aca-7b5a92ec4414",
+      "content": "An intermediary service operator may regard transforming input before final delivery as permitted processing."
+    }
+  },
+  "order": [
+    "5d8c0d9c-6e95-582c-9a5f-f3abc78ccebc",
+    "213bdf5e-d4d8-5133-930c-1bf97e83fe6a",
+    "b4abaae1-b2b4-5301-abb4-e08b5cbc304b",
+    "a5a98da1-8d89-5117-9df9-7d37e67ea5a5",
+    "e935f237-cd56-5bd2-ba4d-96ddd89ef2bd",
+    "cf2143d5-f1cc-5f6a-8799-718a0873b2cb",
+    "c0bdfe20-8e0b-5b69-b7d7-4ded37dc0a03",
+    "23323a42-6d4e-5a8f-9aca-7b5a92ec4414"
+  ]
+}

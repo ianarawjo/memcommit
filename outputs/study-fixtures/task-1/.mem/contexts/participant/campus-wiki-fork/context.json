@@ -1,0 +1,52 @@
+{
+  "uid": "8e3de93f-ea5f-578b-9d66-100ca05b8380",
+  "name": "participant/campus-wiki-fork",
+  "memories": {
+    "2f88231c-34f9-5d0b-b4e3-a420db2da31a": {
+      "type": "context_ref",
+      "uid": "2f88231c-34f9-5d0b-b4e3-a420db2da31a",
+      "name": "participant/campus-wiki-fork/building-access"
+    },
+    "98dbc4db-72d4-51cf-8719-f3b288c728e8": {
+      "type": "context_ref",
+      "uid": "98dbc4db-72d4-51cf-8719-f3b288c728e8",
+      "name": "participant/campus-wiki-fork/event-relocations"
+    },
+    "ab5623a4-04dd-5b13-ac9f-b5dc50453435": {
+      "type": "context_ref",
+      "uid": "ab5623a4-04dd-5b13-ac9f-b5dc50453435",
+      "name": "participant/campus-wiki-fork/temporary-parking"
+    },
+    "94ad60be-0b2c-5b92-b89a-070d4f701ba4": {
+      "type": "context_ref",
+      "uid": "94ad60be-0b2c-5b92-b89a-070d4f701ba4",
+      "name": "participant/campus-wiki-fork/shop-updates"
+    },
+    "81eaa938-e581-537a-840d-8b0a77c67eec": {
+      "type": "context_ref",
+      "uid": "81eaa938-e581-537a-840d-8b0a77c67eec",
+      "name": "participant/campus-wiki-fork/facility-updates"
+    },
+    "3cd3c50d-186a-5e1b-ade9-5e698a0a6a58": {
+      "type": "context_ref",
+      "uid": "3cd3c50d-186a-5e1b-ade9-5e698a0a6a58",
+      "name": "participant/campus-wiki-fork/route-changes"
+    },
+    "9af71859-cdeb-5a11-b5af-0b916aca3b83": {
+      "type": "query_context_ref",
+      "uid": "9af71859-cdeb-5a11-b5af-0b916aca3b83",
+      "name": "campus-wiki",
+      "target_source_uid": "5a370679-b3b9-4f8e-beae-2ea5091434cf",
+      "provider": "codex_chatgpt"
+    }
+  },
+  "order": [
+    "2f88231c-34f9-5d0b-b4e3-a420db2da31a",
+    "98dbc4db-72d4-51cf-8719-f3b288c728e8",
+    "ab5623a4-04dd-5b13-ac9f-b5dc50453435",
+    "94ad60be-0b2c-5b92-b89a-070d4f701ba4",
+    "81eaa938-e581-537a-840d-8b0a77c67eec",
+    "3cd3c50d-186a-5e1b-ade9-5e698a0a6a58",
+    "9af71859-cdeb-5a11-b5af-0b916aca3b83"
+  ]
+}

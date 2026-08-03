@@ -1,0 +1,68 @@
+{
+  "uid": "9476d193-ed7c-559f-9ca3-3040064eec0c",
+  "name": "personal-memory/2025-07",
+  "memories": {
+    "eae4ab77-6181-5e44-86f8-282b4a9c99ad": {
+      "type": "memory",
+      "uid": "eae4ab77-6181-5e44-86f8-282b4a9c99ad",
+      "content": "The user keeps a travel power bank in the first drawer beneath the desk."
+    },
+    "db2602cc-355d-5f18-b295-cfbf8777caeb": {
+      "type": "memory",
+      "uid": "db2602cc-355d-5f18-b295-cfbf8777caeb",
+      "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair."
+    },
+    "b5313bc9-748d-5c28-a492-adb0bbf0fe92": {
+      "type": "memory",
+      "uid": "b5313bc9-748d-5c28-a492-adb0bbf0fe92",
+      "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight."
+    },
+    "aa76604b-c57c-5351-8b00-39adec10ef26": {
+      "type": "memory",
+      "uid": "aa76604b-c57c-5351-8b00-39adec10ef26",
+      "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival."
+    },
+    "75dd4e5b-ad66-5561-90b7-062370c73bf9": {
+      "type": "memory",
+      "uid": "75dd4e5b-ad66-5561-90b7-062370c73bf9",
+      "content": "Before the next trip, the user checked charging items against a photo and packed all of them."
+    },
+    "af854fac-f6bb-5736-b691-4e275087d6c8": {
+      "type": "memory",
+      "uid": "af854fac-f6bb-5736-b691-4e275087d6c8",
+      "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place."
+    },
+    "ed28ac28-0381-5f67-8bde-9ade6706a691": {
+      "type": "memory",
+      "uid": "ed28ac28-0381-5f67-8bde-9ade6706a691",
+      "content": "The next time, the user closed the bag the night before and departed on time."
+    },
+    "30cbf09a-f171-5d17-8502-64fb19e59720": {
+      "type": "memory",
+      "uid": "30cbf09a-f171-5d17-8502-64fb19e59720",
+      "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems."
+    },
+    "124aa754-fdb7-5d3b-9dad-279b12a0c7da": {
+      "type": "memory",
+      "uid": "124aa754-fdb7-5d3b-9dad-279b12a0c7da",
+      "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user."
+    },
+    "6a3e6c28-3de5-5b13-b37b-78d6fdf9ad6c": {
+      "type": "memory",
+      "uid": "6a3e6c28-3de5-5b13-b37b-78d6fdf9ad6c",
+      "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone."
+    }
+  },
+  "order": [
+    "eae4ab77-6181-5e44-86f8-282b4a9c99ad",
+    "db2602cc-355d-5f18-b295-cfbf8777caeb",
+    "b5313bc9-748d-5c28-a492-adb0bbf0fe92",
+    "aa76604b-c57c-5351-8b00-39adec10ef26",
+    "75dd4e5b-ad66-5561-90b7-062370c73bf9",
+    "af854fac-f6bb-5736-b691-4e275087d6c8",
+    "ed28ac28-0381-5f67-8bde-9ade6706a691",
+    "30cbf09a-f171-5d17-8502-64fb19e59720",
+    "124aa754-fdb7-5d3b-9dad-279b12a0c7da",
+    "6a3e6c28-3de5-5b13-b37b-78d6fdf9ad6c"
+  ]
+}

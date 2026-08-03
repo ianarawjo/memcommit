@@ -1,0 +1,62 @@
+{
+  "uid": "9cf76811-b452-59b3-820f-970fbd6aed95",
+  "name": "guardrails/approval-and-delivery",
+  "memories": {
+    "13ad4119-d7cc-510e-8451-83304206739b": {
+      "type": "memory",
+      "uid": "13ad4119-d7cc-510e-8451-83304206739b",
+      "content": "Show the user the actual recipient before transmission."
+    },
+    "eed9ab34-ab35-564b-833b-83f0efe8ad9d": {
+      "type": "memory",
+      "uid": "eed9ab34-ab35-564b-833b-83f0efe8ad9d",
+      "content": "Show the user the recipient's purpose of use before transmission."
+    },
+    "43920405-b68c-5371-8d12-0ca534053d8c": {
+      "type": "memory",
+      "uid": "43920405-b68c-5371-8d12-0ca534053d8c",
+      "content": "Show the user the exact list of Memories to be conveyed before transmission."
+    },
+    "89a8f80f-5fa0-5265-bfea-2c48f1d3ad94": {
+      "type": "memory",
+      "uid": "89a8f80f-5fa0-5265-bfea-2c48f1d3ad94",
+      "content": "Obtain new approval if the recipient changes."
+    },
+    "15c582f0-c572-50ee-af76-2698dba27454": {
+      "type": "memory",
+      "uid": "15c582f0-c572-50ee-af76-2698dba27454",
+      "content": "Obtain new approval if the sharing purpose changes."
+    },
+    "d721aa45-3c16-5f59-8739-65d1289bce47": {
+      "type": "memory",
+      "uid": "d721aa45-3c16-5f59-8739-65d1289bce47",
+      "content": "Obtain new approval if the shared items change."
+    },
+    "2ee859cd-8595-5e74-ae47-b7db457fc8ac": {
+      "type": "memory",
+      "uid": "2ee859cd-8595-5e74-ae47-b7db457fc8ac",
+      "content": "The local agent can present sharing candidates and recipient scope but cannot approve external sharing on the user's behalf."
+    },
+    "d84fbfb8-a7ad-58a5-acdb-a448eb32b63f": {
+      "type": "memory",
+      "uid": "d84fbfb8-a7ad-58a5-acdb-a448eb32b63f",
+      "content": "Unless a separate restriction is provided, a recipient organization may judge that it may retain received input as an ordinary business record."
+    },
+    "552a4590-0076-504a-a7f1-9d0d1ca04002": {
+      "type": "memory",
+      "uid": "552a4590-0076-504a-a7f1-9d0d1ca04002",
+      "content": "Unless a separate restriction is provided, a recipient organization may judge that it may forward input to internal processors."
+    }
+  },
+  "order": [
+    "13ad4119-d7cc-510e-8451-83304206739b",
+    "eed9ab34-ab35-564b-833b-83f0efe8ad9d",
+    "43920405-b68c-5371-8d12-0ca534053d8c",
+    "89a8f80f-5fa0-5265-bfea-2c48f1d3ad94",
+    "15c582f0-c572-50ee-af76-2698dba27454",
+    "d721aa45-3c16-5f59-8739-65d1289bce47",
+    "2ee859cd-8595-5e74-ae47-b7db457fc8ac",
+    "d84fbfb8-a7ad-58a5-acdb-a448eb32b63f",
+    "552a4590-0076-504a-a7f1-9d0d1ca04002"
+  ]
+}

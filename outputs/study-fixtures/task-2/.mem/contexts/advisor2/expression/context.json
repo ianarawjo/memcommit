@@ -1,0 +1,44 @@
+{
+  "uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+  "name": "advisor2/expression",
+  "memories": {
+    "70a8c3f0-0f6a-5881-abd6-29f52833b7bd": {
+      "type": "memory",
+      "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd",
+      "content": "The visual fidelity of a prototype and its level of connection to actual data and services may differ."
+    },
+    "b410aa8d-db87-586b-a1cd-4af5767a9f7a": {
+      "type": "memory",
+      "uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a",
+      "content": "Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone."
+    },
+    "a385fbb1-85b4-5132-bbc7-8fd8daedb715": {
+      "type": "memory",
+      "uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715",
+      "content": "HCI reviewers often scan system structure and service flow diagrams before the main text."
+    },
+    "22254f16-4628-5fd9-b1af-6e66dc2572b3": {
+      "type": "memory",
+      "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3",
+      "content": "In service flow diagrams, clearly distinguish between steps modified by the design and those retained as baseline."
+    },
+    "32028269-5d43-5a65-b22b-9e570ceabfde": {
+      "type": "memory",
+      "uid": "32028269-5d43-5a65-b22b-9e570ceabfde",
+      "content": "While screen images display interface states, field walkthroughs reveal actual handoff processes between people and systems."
+    },
+    "939ee3d0-b611-574a-a25b-82708394bd5e": {
+      "type": "memory",
+      "uid": "939ee3d0-b611-574a-a25b-82708394bd5e",
+      "content": "The agent cannot infer how operational decisions change based solely on a sequence of screen images."
+    }
+  },
+  "order": [
+    "70a8c3f0-0f6a-5881-abd6-29f52833b7bd",
+    "b410aa8d-db87-586b-a1cd-4af5767a9f7a",
+    "a385fbb1-85b4-5132-bbc7-8fd8daedb715",
+    "22254f16-4628-5fd9-b1af-6e66dc2572b3",
+    "32028269-5d43-5a65-b22b-9e570ceabfde",
+    "939ee3d0-b611-574a-a25b-82708394bd5e"
+  ]
+}

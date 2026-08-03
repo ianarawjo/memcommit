@@ -1,0 +1,142 @@
+{
+  "uid": "e53e7d19-c6a7-44d9-aa3e-0d49df79a4e6",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor2/structure'.",
+  "timestamp": "2026-08-03T00:26:20.144629",
+  "snapshot": {
+    "uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+    "name": "advisor2/structure",
+    "memories": {
+      "e32f543b-1637-572a-ab96-319d74ee7e21": {
+        "type": "memory",
+        "uid": "e32f543b-1637-572a-ab96-319d74ee7e21",
+        "content": "Present an unresolved interaction problem in the actual usage environment within the first three sentences of the introduction."
+      },
+      "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3": {
+        "type": "memory",
+        "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
+        "content": "Present the burden this interaction problem imposes on current users or operations within the first three sentences of the introduction."
+      },
+      "48e887dc-7fc8-5a23-9999-890acb870251": {
+        "type": "memory",
+        "uid": "48e887dc-7fc8-5a23-9999-890acb870251",
+        "content": "Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question."
+      },
+      "e34bce0c-7d07-5fe6-b03f-39faa801640b": {
+        "type": "memory",
+        "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b",
+        "content": "Summarize the sequence of steps for unfamiliar interaction procedures in a single flowchart."
+      },
+      "68ad56f9-6ca2-587a-9182-fd98a79d3d5c": {
+        "type": "memory",
+        "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
+        "content": "Indicate the transition conditions between steps of unfamiliar interaction procedures in the flowchart."
+      },
+      "eca301ff-9feb-502d-b955-055c48342542": {
+        "type": "memory",
+        "uid": "eca301ff-9feb-502d-b955-055c48342542",
+        "content": "Present the master\u2019s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis."
+      },
+      "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a": {
+        "type": "memory",
+        "uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a",
+        "content": "Link deliverables that determine entry into the next phase to each milestone of the master\u2019s research."
+      },
+      "9283aedb-6818-5c99-8fe0-502b488acb66": {
+        "type": "memory",
+        "uid": "9283aedb-6818-5c99-8fe0-502b488acb66",
+        "content": "Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow."
+      },
+      "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1": {
+        "type": "memory",
+        "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
+        "content": "Do not create additional subheadings if the submission template permits only specified subheadings."
+      },
+      "87203bcf-6724-543a-ad19-60a2becc4598": {
+        "type": "memory",
+        "uid": "87203bcf-6724-543a-ad19-60a2becc4598",
+        "content": "Within the specified subheadings, connect user problems, design interventions, and evaluation logic into a continuous flow."
+      },
+      "c9591180-6f3a-5909-8695-31704b9b6f01": {
+        "type": "memory",
+        "uid": "c9591180-6f3a-5909-8695-31704b9b6f01",
+        "content": "Place preliminary results from field observations or technical validations near sentences supporting feasibility claims."
+      },
+      "0ac685f9-e338-5549-bf91-32078cf36f15": {
+        "type": "memory",
+        "uid": "0ac685f9-e338-5549-bf91-32078cf36f15",
+        "content": "HCI reviewers identify the user problem and actual usage environment in the first three sentences of the introduction to form their initial framing of the proposal."
+      },
+      "5567fb3c-de90-5363-af1b-62fb5b8e0bb1": {
+        "type": "memory",
+        "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
+        "content": "HCI reviewers judge the burden this problem imposes on current users or operations within the first three sentences of the introduction."
+      },
+      "32cef408-4c66-5ef2-9a59-eea6fc67b16e": {
+        "type": "memory",
+        "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
+        "content": "Present an unbroken path from user problems to field evidence, design interventions, evaluation results, and operational decisions."
+      },
+      "3579fcc0-c74e-5006-901b-6406a3106fa1": {
+        "type": "memory",
+        "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1",
+        "content": "Include in the research flow who inherits the system under what conditions after the research phase concludes."
+      },
+      "2c2aa1af-c450-5c8d-a907-042c5757d3ee": {
+        "type": "memory",
+        "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
+        "content": "The logic of field deployment research connects not only to whether the design works but also to how its results support operational decisions."
+      },
+      "1fb62d5b-532b-5664-842c-57622e3c8b9d": {
+        "type": "memory",
+        "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d",
+        "content": "The agent cannot assess the sustainability of proposed interventions if the operational owner post-deployment is not visible."
+      }
+    },
+    "order": [
+      "e32f543b-1637-572a-ab96-319d74ee7e21",
+      "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
+      "48e887dc-7fc8-5a23-9999-890acb870251",
+      "e34bce0c-7d07-5fe6-b03f-39faa801640b",
+      "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
+      "eca301ff-9feb-502d-b955-055c48342542",
+      "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a",
+      "9283aedb-6818-5c99-8fe0-502b488acb66",
+      "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
+      "87203bcf-6724-543a-ad19-60a2becc4598",
+      "c9591180-6f3a-5909-8695-31704b9b6f01",
+      "0ac685f9-e338-5549-bf91-32078cf36f15",
+      "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
+      "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
+      "3579fcc0-c74e-5006-901b-6406a3106fa1",
+      "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
+      "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 2,
+    "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+    "memory_uids": [
+      "e32f543b-1637-572a-ab96-319d74ee7e21",
+      "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
+      "48e887dc-7fc8-5a23-9999-890acb870251",
+      "e34bce0c-7d07-5fe6-b03f-39faa801640b",
+      "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
+      "eca301ff-9feb-502d-b955-055c48342542",
+      "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a",
+      "9283aedb-6818-5c99-8fe0-502b488acb66",
+      "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
+      "87203bcf-6724-543a-ad19-60a2becc4598",
+      "c9591180-6f3a-5909-8695-31704b9b6f01",
+      "0ac685f9-e338-5549-bf91-32078cf36f15",
+      "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
+      "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
+      "3579fcc0-c74e-5006-901b-6406a3106fa1",
+      "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
+      "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor2/structure'.",
+  "auto": true
+}

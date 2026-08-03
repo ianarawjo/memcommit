@@ -1,0 +1,608 @@
+{
+  "schema_version": 2,
+  "uid": "474c1851-53a2-4015-8cf1-21debe729997",
+  "name": "proposal-submission-guidelines",
+  "canonical_language": "en",
+  "entries": [
+    {
+      "uid": "fb5c2d93-1b70-58e3-96d2-a0a790b75439",
+      "key": "T2-Q-001",
+      "canonical_content": "Upload a single PDF file to the submission portal.",
+      "translations": {
+        "ko": "제출 포털에 PDF 파일 한 개를 업로드하라."
+      }
+    },
+    {
+      "uid": "3f4b26bc-0c12-5733-a606-8d3bc618ac23",
+      "key": "T2-Q-065",
+      "canonical_content": "Ensure that text in the submitted PDF is searchable.",
+      "translations": {
+        "ko": "제출할 PDF의 텍스트를 검색 가능하게 유지하라."
+      }
+    },
+    {
+      "uid": "d82111a2-69c7-57db-894c-2f3259978c5c",
+      "key": "T2-Q-002",
+      "canonical_content": "Keep the uploaded file size at or below 10 MB.",
+      "translations": {
+        "ko": "업로드 파일의 크기를 10MB 이하로 유지하라."
+      }
+    },
+    {
+      "uid": "508637d2-cf62-5a3e-97c9-cc4ff0eee6f5",
+      "key": "T2-Q-004",
+      "canonical_content": "Submit before 5:00 PM Eastern Time on the deadline indicated in the announcement.",
+      "translations": {
+        "ko": "공고에 표시된 마감일의 북미 동부시간 오후 5시 전에 제출하라."
+      }
+    },
+    {
+      "uid": "52541b04-e647-5719-9b0e-1fa15c441938",
+      "key": "T2-Q-005",
+      "canonical_content": "The administrator considers the portal server timestamp, rather than when the author initiated the upload, as authoritative evidence of submission completion.",
+      "translations": {
+        "ko": "접수 담당자는 작성자가 업로드를 시작한 시각보다 포털 서버 타임스탬프를 제출 완료 여부의 권위 있는 근거로 간주한다."
+      }
+    },
+    {
+      "uid": "5725d78e-1d60-55c3-ac64-9664f3468c42",
+      "key": "T2-Q-075",
+      "canonical_content": "Submission portal forms and announcement requirements may vary by submission cycle.",
+      "translations": {
+        "ko": "제출 포털의 양식과 공고 요구는 제출 회차에 따라 바뀔 수 있다."
+      }
+    },
+    {
+      "uid": "ec0f5d7b-369d-55cc-a238-b776c6b0271f",
+      "key": "T2-Q-006",
+      "canonical_content": "Limit the proposal body to a maximum of two pages.",
+      "translations": {
+        "ko": "제안서 본문을 최대 두 쪽으로 제한하라."
+      }
+    },
+    {
+      "uid": "78acd8e3-6cc0-5fa0-a60d-d1f80e21e00a",
+      "key": "T2-Q-007",
+      "canonical_content": "References are not included in the two-page limit for the body text.",
+      "translations": {
+        "ko": "참고문헌은 본문 두 쪽 제한에 포함되지 않는다."
+      }
+    },
+    {
+      "uid": "21dd4a7f-f397-5d2a-b675-a4800c262a27",
+      "key": "T2-Q-072",
+      "canonical_content": "Figures and tables placed within the body count toward the two-page limit for the body text.",
+      "translations": {
+        "ko": "본문에 배치한 그림과 표는 본문 두 쪽 제한에 포함된다."
+      }
+    },
+    {
+      "uid": "bff84712-882c-5a0d-a3e4-0e77912d9d3b",
+      "key": "T2-Q-008",
+      "canonical_content": "Maintain a font size of 11 points or larger in the body text.",
+      "translations": {
+        "ko": "본문 글자 크기를 11포인트 이상으로 유지하라."
+      }
+    },
+    {
+      "uid": "0dfe0e3c-999d-58da-93d3-796e3954ca2b",
+      "key": "T2-Q-009",
+      "canonical_content": "Format all pages to US Letter size.",
+      "translations": {
+        "ko": "모든 페이지를 US Letter 크기로 작성하라."
+      }
+    },
+    {
+      "uid": "f7e050f7-a5ed-5bea-b5b1-5decfc51edd7",
+      "key": "T2-Q-010",
+      "canonical_content": "Use Arial for the body typeface.",
+      "translations": {
+        "ko": "본문 글꼴은 Arial을 사용하라."
+      }
+    },
+    {
+      "uid": "b641d18e-e6d4-5967-a01c-11182fafa8a8",
+      "key": "T2-Q-011",
+      "canonical_content": "Maintain margins of at least one inch on all four sides of every page.",
+      "translations": {
+        "ko": "모든 페이지의 네 방향 여백을 1인치 이상으로 유지하라."
+      }
+    },
+    {
+      "uid": "801a95cb-fe6a-53f7-9e1a-e12ced336f34",
+      "key": "T2-Q-012",
+      "canonical_content": "Reviewers often scan figures and tables separately from the main text first.",
+      "translations": {
+        "ko": "심사자는 그림과 표를 본문과 별도로 먼저 훑는 경우가 많다."
+      }
+    },
+    {
+      "uid": "3072c57f-82ce-5070-8f92-6c64417f1e5a",
+      "key": "T2-Q-013",
+      "canonical_content": "Write the project summary in 80–100 words.",
+      "translations": {
+        "ko": "프로젝트 요약을 80~100단어로 작성하라."
+      }
+    },
+    {
+      "uid": "af2f6185-dca8-5b1c-848d-ae855c74c30b",
+      "key": "T2-Q-014",
+      "canonical_content": "State the problem to be solved in one sentence within the project summary.",
+      "translations": {
+        "ko": "프로젝트 요약에 해결할 문제를 한 문장으로 제시하라."
+      }
+    },
+    {
+      "uid": "9f3a5727-b894-5b44-90e2-601df1e68239",
+      "key": "T2-Q-015",
+      "canonical_content": "State the primary research objective in one sentence within the project summary.",
+      "translations": {
+        "ko": "프로젝트 요약에 주된 연구 목표를 한 문장으로 제시하라."
+      }
+    },
+    {
+      "uid": "27de1024-0842-5ac4-8136-70c0b3f561e0",
+      "key": "T2-Q-016",
+      "canonical_content": "Describe the proposed research approach in one sentence within the project summary.",
+      "translations": {
+        "ko": "프로젝트 요약에 사용할 연구 접근을 한 문장으로 제시하라."
+      }
+    },
+    {
+      "uid": "97cd68fe-123a-50fb-af86-226754d96b26",
+      "key": "T2-Q-017",
+      "canonical_content": "Present the expected outcome in one sentence within the project summary.",
+      "translations": {
+        "ko": "프로젝트 요약에 예상 결과를 한 문장으로 제시하라."
+      }
+    },
+    {
+      "uid": "06518fc1-758b-5b13-964c-584fabbd3b60",
+      "key": "T2-Q-018",
+      "canonical_content": "Reviewers initially determine whether a proposal fits the call scope based on the project summary.",
+      "translations": {
+        "ko": "심사자는 프로젝트 요약을 바탕으로 제안서가 공모 범위에 맞는지 처음 판단한다."
+      }
+    },
+    {
+      "uid": "027d5bb7-a725-540b-be99-3e7ebdb95fbd",
+      "key": "T2-Q-019",
+      "canonical_content": "Write the background and related literature section in 170–210 words combined.",
+      "translations": {
+        "ko": "배경과 관련 연구를 합쳐 170~210단어로 작성하라."
+      }
+    },
+    {
+      "uid": "5b118518-2ac2-55ea-b88c-c2bea1c6ecb2",
+      "key": "T2-Q-020",
+      "canonical_content": "Specifically identify an unresolved research problem.",
+      "translations": {
+        "ko": "아직 해결되지 않은 연구 문제를 구체적으로 특정하라."
+      }
+    },
+    {
+      "uid": "136e33dc-714e-595b-a546-ae6e767cd0e0",
+      "key": "T2-Q-021",
+      "canonical_content": "Explain why this issue must be addressed now.",
+      "translations": {
+        "ko": "해당 문제를 지금 다뤄야 하는 이유를 설명하라."
+      }
+    },
+    {
+      "uid": "7d5027f4-7e3c-59e0-b5f9-10fbbaefafe2",
+      "key": "T2-Q-022",
+      "canonical_content": "Present recent evidence most directly relevant to the proposed research question or approach.",
+      "translations": {
+        "ko": "제안한 연구 문제나 접근과 가장 직접 관련된 최신 근거를 제시하라."
+      }
+    },
+    {
+      "uid": "1a2f2ce9-91cf-5810-b612-83e2425008db",
+      "key": "T2-Q-023",
+      "canonical_content": "Explicitly state in one sentence the gap left by existing research.",
+      "translations": {
+        "ko": "기존 연구가 남긴 공백을 한 문장으로 명시하라."
+      }
+    },
+    {
+      "uid": "85edce8a-b03e-5f36-92fa-4ae09e08f056",
+      "key": "T2-Q-024",
+      "canonical_content": "Reviewers from different subfields have difficulty interpreting an undefined core concept consistently when they first encounter it.",
+      "translations": {
+        "ko": "세부 분야가 다른 심사자는 처음 정의되지 않은 핵심 개념을 같은 의미로 해석하기 어렵다."
+      }
+    },
+    {
+      "uid": "ef3d227a-30c3-559f-8bd0-5dfc49dc5e69",
+      "key": "T2-Q-003",
+      "canonical_content": "Combine research objectives and questions into 60–80 words.",
+      "translations": {
+        "ko": "연구 목표와 질문을 합쳐 60~80단어로 작성하라."
+      }
+    },
+    {
+      "uid": "baae7762-a298-57da-8b56-dedca1e74b1f",
+      "key": "T2-Q-025",
+      "canonical_content": "State the primary research objective in a single sentence.",
+      "translations": {
+        "ko": "주된 연구 목표를 한 문장으로 작성하라."
+      }
+    },
+    {
+      "uid": "fe75068c-5a22-5ccd-87c8-aa815ff146aa",
+      "key": "T2-Q-026",
+      "canonical_content": "The author of this proposal intends to narrow down research questions to three or fewer to fit within two limited pages.",
+      "translations": {
+        "ko": "이 제안서를 작성하는 사용자는 제한된 두 쪽에 맞추기 위해 연구 질문을 세 개 이하로 좁히려 한다."
+      }
+    },
+    {
+      "uid": "ec87bfc6-a068-587b-92ef-b328d27705be",
+      "key": "T2-Q-073",
+      "canonical_content": "The author of this proposal intends to reconcile conflicting internal advice against formal submission guidelines to determine the final structure.",
+      "translations": {
+        "ko": "이 제안서를 작성하는 사용자는 서로 다른 내부 조언을 공식 제출 지침과 대조해 최종 구성을 결정하려 한다."
+      }
+    },
+    {
+      "uid": "3c80ea67-5aca-5887-8945-24581a5fffbc",
+      "key": "T2-Q-027",
+      "canonical_content": "Specify criteria for determining whether the primary research objective has been achieved.",
+      "translations": {
+        "ko": "주된 연구 목표가 달성되었다고 판단할 기준을 명시하라."
+      }
+    },
+    {
+      "uid": "182188e7-ab1a-52d5-8fe0-2d4bec452758",
+      "key": "T2-Q-028",
+      "canonical_content": "The review panel compares proposals’ focus by aligning stated objectives with success criteria.",
+      "translations": {
+        "ko": "심사 패널은 명시된 연구 목표와 성공 기준을 대응시켜 제안서의 초점을 비교한다."
+      }
+    },
+    {
+      "uid": "6827e3df-800e-55ae-8b16-5b0a632d3c3c",
+      "key": "T2-Q-029",
+      "canonical_content": "Combine methods and evaluation plan into 300–340 words.",
+      "translations": {
+        "ko": "방법과 평가 계획을 합쳐 300~340단어로 작성하라."
+      }
+    },
+    {
+      "uid": "26f13e5a-cd0d-58f4-8300-2704f30bc97b",
+      "key": "T2-Q-030",
+      "canonical_content": "Link each research question to the type of data that will be collected to answer it.",
+      "translations": {
+        "ko": "각 연구 질문에 답하기 위해 수집할 자료 유형을 연결하라."
+      }
+    },
+    {
+      "uid": "760089ac-77cb-50ca-bfee-e1dba69db400",
+      "key": "T2-Q-031",
+      "canonical_content": "Specify tools for collecting each data type.",
+      "translations": {
+        "ko": "각 자료 유형을 수집할 도구를 명시하라."
+      }
+    },
+    {
+      "uid": "99b229a2-5230-5d8d-8a66-ff5f92335c7e",
+      "key": "T2-Q-033",
+      "canonical_content": "Specify analysis procedures applied to each data type.",
+      "translations": {
+        "ko": "각 자료 유형에 적용할 분석 절차를 명시하라."
+      }
+    },
+    {
+      "uid": "cfe861d8-39e3-5e89-ba61-81d9c8e1735a",
+      "key": "T2-Q-034",
+      "canonical_content": "If the study requires human, case, or material samples, provide target size and justification for its calculation.",
+      "translations": {
+        "ko": "사람·사례·자료 표본이 필요한 연구라면 목표 규모와 산정 근거를 제시하라."
+      }
+    },
+    {
+      "uid": "52564f5a-1477-516d-a83a-25b361fb315c",
+      "key": "T2-Q-035",
+      "canonical_content": "Specify criteria to judge whether proposed methods can be executed within given timeframes and resources.",
+      "translations": {
+        "ko": "제안한 방법을 주어진 기간과 자원 안에서 수행할 수 있는지 판단할 기준을 명시하라."
+      }
+    },
+    {
+      "uid": "6234be3b-5be0-5c7c-91d9-aa488ac7ab1d",
+      "key": "T2-Q-036",
+      "canonical_content": "Identify anticipated major execution constraints and corresponding mitigation plans.",
+      "translations": {
+        "ko": "예상되는 주요 실행 제약과 그 대응 계획을 명시하라."
+      }
+    },
+    {
+      "uid": "2d710526-f3d5-54fe-b638-1076172c582d",
+      "key": "T2-Q-037",
+      "canonical_content": "Reviewers assess answerability by tracing the path from research questions through data to analysis.",
+      "translations": {
+        "ko": "심사자는 연구 질문에서 자료와 분석까지 이어지는 경로를 따라 답변 가능성을 판단한다."
+      }
+    },
+    {
+      "uid": "10dfd39a-ceec-5f80-a629-ba7838fa7a36",
+      "key": "T2-Q-038",
+      "canonical_content": "Combine expected outcomes and contributions into 80–100 words.",
+      "translations": {
+        "ko": "예상 결과와 기여를 합쳐 80~100단어로 작성하라."
+      }
+    },
+    {
+      "uid": "62614c82-39bc-517f-896a-ec7c9bff0e0f",
+      "key": "T2-Q-039",
+      "canonical_content": "Identify at least one design or operational decision that research findings could change.",
+      "translations": {
+        "ko": "연구 결과가 바꿀 수 있는 설계 또는 운영 결정을 하나 이상 특정하라."
+      }
+    },
+    {
+      "uid": "e474b07f-9266-5632-889d-d238aeaf25eb",
+      "key": "T2-Q-040",
+      "canonical_content": "Reviewers read expected outcomes as distinct from already confirmed effects.",
+      "translations": {
+        "ko": "심사자는 예상 결과를 이미 확인된 효과와 구분해 읽는다."
+      }
+    },
+    {
+      "uid": "3d75c3b9-5c01-5481-a197-d851845953ac",
+      "key": "T2-Q-041",
+      "canonical_content": "Describe the full execution timeline for a master’s research project in 60–80 words.",
+      "translations": {
+        "ko": "석사 연구 프로젝트의 전체 실행 일정을 60~80단어로 작성하라."
+      }
+    },
+    {
+      "uid": "aa699e56-6c33-5033-9f60-fa782622f4cc",
+      "key": "T2-Q-032",
+      "canonical_content": "If costs arise or separate budgeting is required, describe the budget rationale in 40–60 words.",
+      "translations": {
+        "ko": "비용이 발생하거나 별도 예산이 요구되면 예산 설명을 40~60단어로 작성하라."
+      }
+    },
+    {
+      "uid": "42af8f14-805d-5902-bd80-367ac28b8426",
+      "key": "T2-Q-042",
+      "canonical_content": "Mark key recruitment milestones.",
+      "translations": {
+        "ko": "모집의 주요 이정표를 표시하라."
+      }
+    },
+    {
+      "uid": "872d5f43-aca8-592f-809b-b7ecc39e53b7",
+      "key": "T2-Q-066",
+      "canonical_content": "Mark key data collection milestones.",
+      "translations": {
+        "ko": "자료 수집의 주요 이정표를 표시하라."
+      }
+    },
+    {
+      "uid": "c7d88185-3862-5926-8b93-53f650ce9e05",
+      "key": "T2-Q-067",
+      "canonical_content": "Mark key analysis milestones.",
+      "translations": {
+        "ko": "분석의 주요 이정표를 표시하라."
+      }
+    },
+    {
+      "uid": "edd014a9-08e9-5e47-a149-4eb2557c4bc2",
+      "key": "T2-Q-043",
+      "canonical_content": "Indicate dependencies where certain milestones can only begin after preceding tasks are completed.",
+      "translations": {
+        "ko": "선행 작업이 끝나야 시작할 수 있는 이정표의 의존성을 표시하라."
+      }
+    },
+    {
+      "uid": "30e3cef8-0e20-59d5-8eb0-189cee62f6fb",
+      "key": "T2-Q-044",
+      "canonical_content": "If a separate budget table is required, submit it as an appendix of no more than one page.",
+      "translations": {
+        "ko": "별도 예산표가 요구되면 최대 한 쪽의 부록으로 제출하라."
+      }
+    },
+    {
+      "uid": "a2b14436-7a23-5cbe-8b48-d1ec945fcbcc",
+      "key": "T2-Q-045",
+      "canonical_content": "If participant compensation costs apply, list them in a separate line item.",
+      "translations": {
+        "ko": "참가자 보상 비용이 적용되면 별도 행에 기재하라."
+      }
+    },
+    {
+      "uid": "73f96454-bd6e-5574-8a92-b36458f97ae5",
+      "key": "T2-Q-068",
+      "canonical_content": "If travel costs apply, list them in a separate line item.",
+      "translations": {
+        "ko": "이동 비용이 적용되면 별도 행에 기재하라."
+      }
+    },
+    {
+      "uid": "25d8b0d9-865f-59e1-8009-56abee290cd2",
+      "key": "T2-Q-069",
+      "canonical_content": "If equipment costs apply, list them in a separate line item.",
+      "translations": {
+        "ko": "장비 비용이 적용되면 별도 행에 기재하라."
+      }
+    },
+    {
+      "uid": "47e3de35-0a8f-55a0-a6cd-2dc35bc66de3",
+      "key": "T2-Q-070",
+      "canonical_content": "If software costs apply, list them in a separate line item.",
+      "translations": {
+        "ko": "소프트웨어 비용이 적용되면 별도 행에 기재하라."
+      }
+    },
+    {
+      "uid": "9ec38b80-4887-54e9-a1cb-df6587b61b57",
+      "key": "T2-Q-071",
+      "canonical_content": "If external service costs apply, list them in a separate line item.",
+      "translations": {
+        "ko": "외부 서비스 비용이 적용되면 별도 행에 기재하라."
+      }
+    },
+    {
+      "uid": "ca994c16-8736-51e7-908d-4fd587c88bb1",
+      "key": "T2-Q-046",
+      "canonical_content": "State the calculation basis for each major budget category amount.",
+      "translations": {
+        "ko": "각 주요 예산 항목에 금액의 산정 근거를 적어라."
+      }
+    },
+    {
+      "uid": "607b039e-1658-5f73-a52a-4882fd2c70db",
+      "key": "T2-Q-047",
+      "canonical_content": "Specify which research activities are supported by each major budget category.",
+      "translations": {
+        "ko": "각 주요 예산 항목이 지원하는 연구 활동을 명시하라."
+      }
+    },
+    {
+      "uid": "abc911f3-663f-549a-9caa-c5dbd3a51084",
+      "key": "T2-Q-048",
+      "canonical_content": "The finance reviewer assesses the reasonableness of the budget by tracing how each cost is necessary for specific research activities.",
+      "translations": {
+        "ko": "재무 검토자는 각 비용이 어떤 연구 활동에 필요한지 추적해서 예산의 타당성을 판단한다."
+      }
+    },
+    {
+      "uid": "fa1481cb-03c3-54f8-955c-52d5236dccda",
+      "key": "T2-Q-049",
+      "canonical_content": "If ethical review is required, state the current status of that review.",
+      "translations": {
+        "ko": "윤리 심의가 필요한 연구라면 현재 심의 상태를 명시하라."
+      }
+    },
+    {
+      "uid": "35528264-cf67-5251-9d2d-d3a67086178d",
+      "key": "T2-Q-050",
+      "canonical_content": "Combine applicable descriptions of ethics, risk, data management, and accessibility into a 90–120 word statement.",
+      "translations": {
+        "ko": "해당되는 윤리, 위험, 데이터 관리, 접근성 설명을 합쳐 90~120단어로 작성하라."
+      }
+    },
+    {
+      "uid": "8d5d9472-e6fa-50e8-820c-fbd28c624a00",
+      "key": "T2-Q-051",
+      "canonical_content": "For research requiring ethics review, approval is a prerequisite for beginning the relevant research activities.",
+      "translations": {
+        "ko": "윤리 심의가 필요한 연구에서는 승인이 관련 연구 활동을 시작하기 위한 선행 조건이다."
+      }
+    },
+    {
+      "uid": "26f95aa6-291a-5327-8f18-974ddea38524",
+      "key": "T2-Q-052",
+      "canonical_content": "If recruiting people, organizations, or cases, describe inclusion criteria solely in terms of characteristics necessary to address the research questions.",
+      "translations": {
+        "ko": "사람·조직·사례를 모집하는 연구라면 포함 기준을 연구 질문에 필요한 특성으로만 설명하라."
+      }
+    },
+    {
+      "uid": "95d3e1c1-1b3b-5e55-a58d-2b6ca68702b9",
+      "key": "T2-Q-053",
+      "canonical_content": "Do not request sensitive personal information that is unnecessary for the research purpose.",
+      "translations": {
+        "ko": "연구 목적에 필요하지 않은 민감한 개인정보를 요구하지 마라."
+      }
+    },
+    {
+      "uid": "dde28f6d-3e2b-5520-bb4b-665ae54c713c",
+      "key": "T2-Q-054",
+      "canonical_content": "If researching people, specify in the proposal what accessibility accommodations participants may request.",
+      "translations": {
+        "ko": "사람 대상 연구라면 참가자가 요청할 수 있는 접근성 편의를 제안서에 명시하라."
+      }
+    },
+    {
+      "uid": "dec3fb63-a73c-5cc3-b28e-eed55afc5b9a",
+      "key": "T2-Q-055",
+      "canonical_content": "If researching people, specify in the proposal the procedure for requesting accessibility accommodations.",
+      "translations": {
+        "ko": "사람 대상 연구라면 접근성 편의를 요청하는 절차를 제안서에 명시하라."
+      }
+    },
+    {
+      "uid": "5f062279-7900-54e7-932e-63e2123b4665",
+      "key": "T2-Q-056",
+      "canonical_content": "Link each anticipated risk to its corresponding mitigation measure.",
+      "translations": {
+        "ko": "예상되는 각 위험에 대응하는 완화 조치를 연결하라."
+      }
+    },
+    {
+      "uid": "093799de-01e6-5708-806b-256102d56b55",
+      "key": "T2-Q-057",
+      "canonical_content": "Specify where collected materials will be stored.",
+      "translations": {
+        "ko": "수집 자료의 저장 위치를 명시하라."
+      }
+    },
+    {
+      "uid": "0599ce25-231a-5861-bac3-6d9e3645c4f8",
+      "key": "T2-Q-058",
+      "canonical_content": "Specify which roles have access to the collected materials.",
+      "translations": {
+        "ko": "수집 자료에 접근할 수 있는 역할을 명시하라."
+      }
+    },
+    {
+      "uid": "f204bb80-6d0a-5ce4-a3df-a698e2275e9e",
+      "key": "T2-Q-059",
+      "canonical_content": "Specify the retention period for collected materials.",
+      "translations": {
+        "ko": "수집 자료의 보존 기간을 명시하라."
+      }
+    },
+    {
+      "uid": "b871d733-bcd0-5e3f-b3ff-5a3639a4cde7",
+      "key": "T2-Q-060",
+      "canonical_content": "Specify how materials will be disposed of after their retention period ends.",
+      "translations": {
+        "ko": "보존 기간이 끝난 자료의 폐기 방식을 명시하라."
+      }
+    },
+    {
+      "uid": "cf911c1e-6634-5965-acdd-72f82935812d",
+      "key": "T2-Q-061",
+      "canonical_content": "The ethics reviewer verifies whether each anticipated risk has a corresponding mitigation measure in place.",
+      "translations": {
+        "ko": "윤리 검토자는 예상되는 위험마다 대응하는 완화 조치가 있는지 확인한다."
+      }
+    },
+    {
+      "uid": "60c1fb1f-98d4-541e-82bf-4caff1665169",
+      "key": "T2-Q-062",
+      "canonical_content": "If internal advice conflicts with official announcements or submission forms, prioritize the official requirements.",
+      "translations": {
+        "ko": "내부 조언이 공식 공고나 제출 양식과 충돌하면 공식 요구를 우선 적용하라."
+      }
+    },
+    {
+      "uid": "fce9d4b7-7899-5694-ab49-3d43a9ae7c37",
+      "key": "T2-Q-063",
+      "canonical_content": "The agent cannot guarantee that the portal will actually accept the submission.",
+      "translations": {
+        "ko": "로컬 에이전트는 포털의 실제 접수 성공을 보증할 수 없다."
+      }
+    },
+    {
+      "uid": "0e1d9d6a-4e52-5f27-a1be-5a544bba8e2c",
+      "key": "T2-Q-074",
+      "canonical_content": "The agent cannot establish submission requirements that do not appear in the official call.",
+      "translations": {
+        "ko": "로컬 에이전트는 공식 공고에 없는 제출 요건을 확정할 수 없다."
+      }
+    },
+    {
+      "uid": "2437d6d7-a8d6-5f4a-bc1f-12ae5a660941",
+      "key": "T2-Q-064",
+      "canonical_content": "The administrative reviewer first checks whether any mandatory sections are missing.",
+      "translations": {
+        "ko": "행정 검토자는 필수 섹션이 빠졌는지 먼저 확인한다."
+      }
+    }
+  ]
+}

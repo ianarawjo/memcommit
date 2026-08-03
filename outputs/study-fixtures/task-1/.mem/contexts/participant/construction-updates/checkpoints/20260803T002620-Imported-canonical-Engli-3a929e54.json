@@ -1,0 +1,58 @@
+{
+  "uid": "3a929e54-79fc-4821-8ba8-711db5f8df85",
+  "message": "Imported canonical English Task 1 fixture Context 'participant/construction-updates'.",
+  "timestamp": "2026-08-03T00:26:20.048154",
+  "snapshot": {
+    "uid": "6c15d7c6-408a-56fa-8bc4-691c468af7b2",
+    "name": "participant/construction-updates",
+    "memories": {
+      "5a66e0ec-3497-5ccf-9d8f-08c966647677": {
+        "type": "context_ref",
+        "uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+        "name": "participant/construction-updates/building-access"
+      },
+      "f95f7748-b112-5084-ad52-6848cdf1280b": {
+        "type": "context_ref",
+        "uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+        "name": "participant/construction-updates/event-relocations"
+      },
+      "b392133c-278c-5c86-aaf9-5791ed5e9cd4": {
+        "type": "context_ref",
+        "uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+        "name": "participant/construction-updates/temporary-parking"
+      },
+      "94dbac4b-70b5-5c76-b53a-1ebc69248a41": {
+        "type": "context_ref",
+        "uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+        "name": "participant/construction-updates/shop-updates"
+      },
+      "fe3ca57d-565a-5839-a78f-15f9a224e75d": {
+        "type": "context_ref",
+        "uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+        "name": "participant/construction-updates/facility-updates"
+      },
+      "725d4213-9ce1-569c-9e91-e4cd0d046bd5": {
+        "type": "context_ref",
+        "uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+        "name": "participant/construction-updates/route-changes"
+      }
+    },
+    "order": [
+      "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+      "f95f7748-b112-5084-ad52-6848cdf1280b",
+      "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+      "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+      "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+      "725d4213-9ce1-569c-9e91-e4cd0d046bd5"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 1,
+    "context_uid": "6c15d7c6-408a-56fa-8bc4-691c468af7b2",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 1 fixture Context 'participant/construction-updates'.",
+  "auto": true
+}

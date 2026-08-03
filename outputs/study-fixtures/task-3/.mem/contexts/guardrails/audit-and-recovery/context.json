@@ -1,0 +1,56 @@
+{
+  "uid": "86fb1a47-0153-58a9-9834-1e50890e9dc3",
+  "name": "guardrails/audit-and-recovery",
+  "memories": {
+    "ec26bc75-689f-5997-9676-b9a7710f9e73": {
+      "type": "memory",
+      "uid": "ec26bc75-689f-5997-9676-b9a7710f9e73",
+      "content": "Record the source Memory locator for approved sharing."
+    },
+    "7c0251ed-5a7a-53ce-9b58-5e9ca337df90": {
+      "type": "memory",
+      "uid": "7c0251ed-5a7a-53ce-9b58-5e9ca337df90",
+      "content": "Record the recipient of approved sharing."
+    },
+    "58c1cdbf-be4d-5856-9b73-4bf016fbeae1": {
+      "type": "memory",
+      "uid": "58c1cdbf-be4d-5856-9b73-4bf016fbeae1",
+      "content": "Record the purpose of approved sharing."
+    },
+    "34a9b50f-6027-5ec6-90c3-d5375793fb9a": {
+      "type": "memory",
+      "uid": "34a9b50f-6027-5ec6-90c3-d5375793fb9a",
+      "content": "Record the approval time."
+    },
+    "5028342e-eec2-5393-97d7-89afdc3b3da5": {
+      "type": "memory",
+      "uid": "5028342e-eec2-5393-97d7-89afdc3b3da5",
+      "content": "If a transmission error occurs, inform the user of the failure state."
+    },
+    "eb9a9b0f-1c1a-56b9-a816-51dbda2edcab": {
+      "type": "memory",
+      "uid": "eb9a9b0f-1c1a-56b9-a816-51dbda2edcab",
+      "content": "The local agent can reconstruct its own approval and transmission records but cannot trace unrecorded external processing."
+    },
+    "6fa529b5-1c25-5149-bab4-5b525782a06c": {
+      "type": "memory",
+      "uid": "6fa529b5-1c25-5149-bab4-5b525782a06c",
+      "content": "A copy conveyed to an external system may not automatically synchronize with a later correction to the local Memory."
+    },
+    "3452ec55-d87f-5f64-906a-b3843e6d0dd5": {
+      "type": "memory",
+      "uid": "3452ec55-d87f-5f64-906a-b3843e6d0dd5",
+      "content": "If a user's local record conflicts with an external system's audit record, an external system operator may place greater trust in its own audit record."
+    }
+  },
+  "order": [
+    "ec26bc75-689f-5997-9676-b9a7710f9e73",
+    "7c0251ed-5a7a-53ce-9b58-5e9ca337df90",
+    "58c1cdbf-be4d-5856-9b73-4bf016fbeae1",
+    "34a9b50f-6027-5ec6-90c3-d5375793fb9a",
+    "5028342e-eec2-5393-97d7-89afdc3b3da5",
+    "eb9a9b0f-1c1a-56b9-a816-51dbda2edcab",
+    "6fa529b5-1c25-5149-bab4-5b525782a06c",
+    "3452ec55-d87f-5f64-906a-b3843e6d0dd5"
+  ]
+}

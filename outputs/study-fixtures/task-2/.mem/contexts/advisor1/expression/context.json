@@ -1,0 +1,44 @@
+{
+  "uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+  "name": "advisor1/expression",
+  "memories": {
+    "019662a9-6f03-527f-9b6d-be5a2966d9e9": {
+      "type": "memory",
+      "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+      "content": "The visual fidelity of a prototype may differ from its functional fidelity."
+    },
+    "a6dfe9a7-1df8-561f-8d3e-fc19518beca9": {
+      "type": "memory",
+      "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+      "content": "Interaction flow diagrams depict state changes that are not visible in a single static screen."
+    },
+    "7047a23d-45b3-5d5c-a00b-c12552e9680d": {
+      "type": "memory",
+      "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+      "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text."
+    },
+    "50a71968-7e3f-5b99-b3fa-769af386d0c0": {
+      "type": "memory",
+      "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+      "content": "Design alternative comparison tables display both the interaction attributes manipulated by each alternative and the differences in expected user responses."
+    },
+    "ae1610f6-a855-56c1-a0fb-fd3207dab615": {
+      "type": "memory",
+      "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+      "content": "Formative evaluation cycle diagrams illustrate the iterative relationship among observation, interpretation, design modification, and re-evaluation."
+    },
+    "d2825b84-b4a6-58c9-8f8e-9e19c6192a03": {
+      "type": "memory",
+      "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03",
+      "content": "The agent can judge the necessity of visual evidence only if each design element in the figure is linked to a research question reviewed in the text."
+    }
+  },
+  "order": [
+    "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+    "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+    "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+    "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+    "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+    "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+  ]
+}

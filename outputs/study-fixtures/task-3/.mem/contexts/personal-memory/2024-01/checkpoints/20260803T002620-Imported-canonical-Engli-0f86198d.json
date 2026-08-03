@@ -1,0 +1,93 @@
+{
+  "uid": "0f86198d-67b3-4fe7-b6ec-f72d779897fe",
+  "message": "Imported canonical English Task 3 fixture Context 'personal-memory/2024-01'.",
+  "timestamp": "2026-08-03T00:26:20.235131",
+  "snapshot": {
+    "uid": "1665546e-bec7-563e-93be-6ffec7fb7a67",
+    "name": "personal-memory/2024-01",
+    "memories": {
+      "128256d4-82d2-5279-b108-f3286251c370": {
+        "type": "memory",
+        "uid": "128256d4-82d2-5279-b108-f3286251c370",
+        "content": "The user's mother's birthday falls in the third week of January."
+      },
+      "6af7c9ba-359a-5ee0-8ef1-9e1139614862": {
+        "type": "memory",
+        "uid": "6af7c9ba-359a-5ee0-8ef1-9e1139614862",
+        "content": "At the user's last family meal out, noise from the next table made conversation nearly impossible."
+      },
+      "11efc2c1-e2b1-55ee-a2fa-b5f5ab779e06": {
+        "type": "memory",
+        "uid": "11efc2c1-e2b1-55ee-a2fa-b5f5ab779e06",
+        "content": "At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice."
+      },
+      "0fecb900-97d9-5cea-80f6-c5aee813a961": {
+        "type": "memory",
+        "uid": "0fecb900-97d9-5cea-80f6-c5aee813a961",
+        "content": "During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes."
+      },
+      "7c601281-9233-5768-9eb4-931a0ecf6242": {
+        "type": "memory",
+        "uid": "7c601281-9233-5768-9eb4-931a0ecf6242",
+        "content": "When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment."
+      },
+      "f16bdbcc-f715-5df5-8dbd-b46e680dc3c2": {
+        "type": "memory",
+        "uid": "f16bdbcc-f715-5df5-8dbd-b46e680dc3c2",
+        "content": "At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food."
+      },
+      "197daf4d-9a75-5ad0-af9f-92193792ac9a": {
+        "type": "memory",
+        "uid": "197daf4d-9a75-5ad0-af9f-92193792ac9a",
+        "content": "On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal."
+      },
+      "844d9ecc-5433-523d-81fb-82dd6d1b7ee8": {
+        "type": "memory",
+        "uid": "844d9ecc-5433-523d-81fb-82dd6d1b7ee8",
+        "content": "The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift."
+      },
+      "3871608a-a75e-5e9c-9938-d4fa0cd8281f": {
+        "type": "memory",
+        "uid": "3871608a-a75e-5e9c-9938-d4fa0cd8281f",
+        "content": "When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user."
+      },
+      "10098fe3-7e75-5aa1-984f-e30c00a4983c": {
+        "type": "memory",
+        "uid": "10098fe3-7e75-5aa1-984f-e30c00a4983c",
+        "content": "The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering."
+      }
+    },
+    "order": [
+      "128256d4-82d2-5279-b108-f3286251c370",
+      "6af7c9ba-359a-5ee0-8ef1-9e1139614862",
+      "11efc2c1-e2b1-55ee-a2fa-b5f5ab779e06",
+      "0fecb900-97d9-5cea-80f6-c5aee813a961",
+      "7c601281-9233-5768-9eb4-931a0ecf6242",
+      "f16bdbcc-f715-5df5-8dbd-b46e680dc3c2",
+      "197daf4d-9a75-5ad0-af9f-92193792ac9a",
+      "844d9ecc-5433-523d-81fb-82dd6d1b7ee8",
+      "3871608a-a75e-5e9c-9938-d4fa0cd8281f",
+      "10098fe3-7e75-5aa1-984f-e30c00a4983c"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 3,
+    "context_uid": "1665546e-bec7-563e-93be-6ffec7fb7a67",
+    "memory_uids": [
+      "128256d4-82d2-5279-b108-f3286251c370",
+      "6af7c9ba-359a-5ee0-8ef1-9e1139614862",
+      "11efc2c1-e2b1-55ee-a2fa-b5f5ab779e06",
+      "0fecb900-97d9-5cea-80f6-c5aee813a961",
+      "7c601281-9233-5768-9eb4-931a0ecf6242",
+      "f16bdbcc-f715-5df5-8dbd-b46e680dc3c2",
+      "197daf4d-9a75-5ad0-af9f-92193792ac9a",
+      "844d9ecc-5433-523d-81fb-82dd6d1b7ee8",
+      "3871608a-a75e-5e9c-9938-d4fa0cd8281f",
+      "10098fe3-7e75-5aa1-984f-e30c00a4983c"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'personal-memory/2024-01'.",
+  "auto": true
+}

@@ -1,0 +1,74 @@
+{
+  "uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+  "name": "participant/construction-updates/building-access",
+  "memories": {
+    "8b077f2a-6a9f-50f0-ae91-f6536fb226cb": {
+      "type": "memory",
+      "uid": "8b077f2a-6a9f-50f0-ae91-f6536fb226cb",
+      "content": "During the construction period, the third-floor rear entrance cannot be used for general passage."
+    },
+    "56c34a24-0954-5c64-9fd4-880995e6e53c": {
+      "type": "memory",
+      "uid": "56c34a24-0954-5c64-9fd4-880995e6e53c",
+      "content": "During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m. to 5:00 p.m."
+    },
+    "84a45a62-09c7-5187-8fa6-ff7063f9e8d0": {
+      "type": "memory",
+      "uid": "84a45a62-09c7-5187-8fa6-ff7063f9e8d0",
+      "content": "During the construction period, the existing accessible route cannot be used because it is being reconstructed."
+    },
+    "89e6f853-8c98-51ba-98cc-ad5c84580a53": {
+      "type": "memory",
+      "uid": "89e6f853-8c98-51ba-98cc-ad5c84580a53",
+      "content": "The temporary accessible route next to the main entrance can be used throughout the construction period."
+    },
+    "f9d7eb4e-221f-5b5f-a237-213a31e04093": {
+      "type": "memory",
+      "uid": "f9d7eb4e-221f-5b5f-a237-213a31e04093",
+      "content": "Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app."
+    },
+    "f1b7843e-2c8a-5434-94a4-1383534abb3a": {
+      "type": "memory",
+      "uid": "f1b7843e-2c8a-5434-94a4-1383534abb3a",
+      "content": "During the construction period, instruct staff and construction/facilities personnel to use only the designated staff entrance instead of the third-floor rear entrance."
+    },
+    "be002fc9-b9e0-5d73-9c15-622c0688c73c": {
+      "type": "memory",
+      "uid": "be002fc9-b9e0-5d73-9c15-622c0688c73c",
+      "content": "In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing of the main entrance and the closure of the third-floor rear entrance."
+    },
+    "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0": {
+      "type": "memory",
+      "uid": "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0",
+      "content": "A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there."
+    },
+    "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0": {
+      "type": "memory",
+      "uid": "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0",
+      "content": "During the construction period, the general accessible route bypasses the existing accessible route under reconstruction and leads from the temporary passage next to the main entrance to the first-floor lobby."
+    },
+    "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527": {
+      "type": "memory",
+      "uid": "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527",
+      "content": "Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance that they cannot use that route during the construction period."
+    },
+    "31f5b67b-40f8-5690-b772-b329ce50e443": {
+      "type": "memory",
+      "uid": "31f5b67b-40f8-5690-b772-b329ce50e443",
+      "content": "A leader of an external group tour may expect the route used on a previous visit to remain valid during the construction period and lead the visiting group to the closed third-floor rear entrance."
+    }
+  },
+  "order": [
+    "8b077f2a-6a9f-50f0-ae91-f6536fb226cb",
+    "56c34a24-0954-5c64-9fd4-880995e6e53c",
+    "84a45a62-09c7-5187-8fa6-ff7063f9e8d0",
+    "89e6f853-8c98-51ba-98cc-ad5c84580a53",
+    "f9d7eb4e-221f-5b5f-a237-213a31e04093",
+    "f1b7843e-2c8a-5434-94a4-1383534abb3a",
+    "be002fc9-b9e0-5d73-9c15-622c0688c73c",
+    "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0",
+    "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0",
+    "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527",
+    "31f5b67b-40f8-5690-b772-b329ce50e443"
+  ]
+}

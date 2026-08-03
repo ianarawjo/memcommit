@@ -1,0 +1,58 @@
+{
+  "uid": "815e700f-ecdb-44e3-a72c-5bb57fa161b5",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/scope'.",
+  "timestamp": "2026-08-03T00:26:20.127191",
+  "snapshot": {
+    "uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+    "name": "advisor1/scope",
+    "memories": {
+      "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7": {
+        "type": "memory",
+        "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7",
+        "content": "Define in one sentence the user groups and usage contexts to which the design knowledge does not apply."
+      },
+      "31cdacff-7c49-547d-9f97-598a07b67fb6": {
+        "type": "memory",
+        "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6",
+        "content": "Reviewers judge the generalization boundary of results through explicitly excluded targets and situations."
+      },
+      "1459d986-4dc9-51f3-bf13-dbb0b07045c8": {
+        "type": "memory",
+        "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8",
+        "content": "Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred."
+      },
+      "1db5fcd6-f93c-5630-9810-053c10b5ceba": {
+        "type": "memory",
+        "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba",
+        "content": "Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms."
+      },
+      "fd29c315-521f-53c0-add5-c668ec318a43": {
+        "type": "memory",
+        "uid": "fd29c315-521f-53c0-add5-c668ec318a43",
+        "content": "The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population."
+      }
+    },
+    "order": [
+      "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7",
+      "31cdacff-7c49-547d-9f97-598a07b67fb6",
+      "1459d986-4dc9-51f3-bf13-dbb0b07045c8",
+      "1db5fcd6-f93c-5630-9810-053c10b5ceba",
+      "fd29c315-521f-53c0-add5-c668ec318a43"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 2,
+    "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+    "memory_uids": [
+      "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7",
+      "31cdacff-7c49-547d-9f97-598a07b67fb6",
+      "1459d986-4dc9-51f3-bf13-dbb0b07045c8",
+      "1db5fcd6-f93c-5630-9810-053c10b5ceba",
+      "fd29c315-521f-53c0-add5-c668ec318a43"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/scope'.",
+  "auto": true
+}

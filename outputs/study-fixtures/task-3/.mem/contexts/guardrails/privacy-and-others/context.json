@@ -1,0 +1,44 @@
+{
+  "uid": "fed54a14-c388-57d0-abdd-95962a35f92b",
+  "name": "guardrails/privacy-and-others",
+  "memories": {
+    "db4e7b93-78d6-5495-afdc-c541d6bb4536": {
+      "type": "memory",
+      "uid": "db4e7b93-78d6-5495-afdc-c541d6bb4536",
+      "content": "Exclude a third party's contact information unless it is essential to the current purpose."
+    },
+    "9b70a80f-0679-5bb5-b57a-12984eaa7a15": {
+      "type": "memory",
+      "uid": "9b70a80f-0679-5bb5-b57a-12984eaa7a15",
+      "content": "Share content authored by a third party only after confirming the scope of consent."
+    },
+    "32291807-db19-5d78-a3b7-a63c5b24bf30": {
+      "type": "memory",
+      "uid": "32291807-db19-5d78-a3b7-a63c5b24bf30",
+      "content": "Do not infer sensitive traits from fragmentary behavior records."
+    },
+    "c358cd6c-dbc9-51e4-855e-9e9fb657ba20": {
+      "type": "memory",
+      "uid": "c358cd6c-dbc9-51e4-855e-9e9fb657ba20",
+      "content": "Generalize rare combinations of details that could enable re-identification before sharing."
+    },
+    "55823c99-a98b-593f-af74-d4d8158839a6": {
+      "type": "memory",
+      "uid": "55823c99-a98b-593f-af74-d4d8158839a6",
+      "content": "If one Memory mixes information about the user and a third party, sharing the item unchanged also conveys the third party's information."
+    },
+    "c0c2a2f2-6bae-5f10-89ff-09f4a602c82b": {
+      "type": "memory",
+      "uid": "c0c2a2f2-6bae-5f10-89ff-09f4a602c82b",
+      "content": "A third party may not expect their information to be conveyed to an external agent."
+    }
+  },
+  "order": [
+    "db4e7b93-78d6-5495-afdc-c541d6bb4536",
+    "9b70a80f-0679-5bb5-b57a-12984eaa7a15",
+    "32291807-db19-5d78-a3b7-a63c5b24bf30",
+    "c358cd6c-dbc9-51e4-855e-9e9fb657ba20",
+    "55823c99-a98b-593f-af74-d4d8158839a6",
+    "c0c2a2f2-6bae-5f10-89ff-09f4a602c82b"
+  ]
+}

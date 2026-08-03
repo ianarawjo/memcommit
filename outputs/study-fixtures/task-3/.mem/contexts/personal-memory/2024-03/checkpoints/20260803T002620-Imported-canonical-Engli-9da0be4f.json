@@ -1,0 +1,93 @@
+{
+  "uid": "9da0be4f-610f-43fb-b88a-e8fb79f154bb",
+  "message": "Imported canonical English Task 3 fixture Context 'personal-memory/2024-03'.",
+  "timestamp": "2026-08-03T00:26:20.236867",
+  "snapshot": {
+    "uid": "33b0290b-c184-5210-b3bc-54827058244e",
+    "name": "personal-memory/2024-03",
+    "memories": {
+      "9c9a8333-3457-51a4-8e58-982db9732271": {
+        "type": "memory",
+        "uid": "9c9a8333-3457-51a4-8e58-982db9732271",
+        "content": "The instructions for one medication the user takes say to take it after the evening meal."
+      },
+      "73ade339-9bde-54a7-af91-a658084e0db7": {
+        "type": "memory",
+        "uid": "73ade339-9bde-54a7-af91-a658084e0db7",
+        "content": "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk."
+      },
+      "e078950b-ef1c-5831-8a02-22884068c3c6": {
+        "type": "memory",
+        "uid": "e078950b-ef1c-5831-8a02-22884068c3c6",
+        "content": "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit."
+      },
+      "1bc52052-c52e-51e6-a07a-9df4f22cd2cc": {
+        "type": "memory",
+        "uid": "1bc52052-c52e-51e6-a07a-9df4f22cd2cc",
+        "content": "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable."
+      },
+      "e38b7990-5fbb-5b41-a8fd-a60d8ba03347": {
+        "type": "memory",
+        "uid": "e38b7990-5fbb-5b41-a8fd-a60d8ba03347",
+        "content": "On a day medication instructions were explained all at once and at length, the user failed to write down an important time."
+      },
+      "810b43ee-4db3-540a-ba9d-c812ff25352c": {
+        "type": "memory",
+        "uid": "810b43ee-4db3-540a-ba9d-c812ff25352c",
+        "content": "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home."
+      },
+      "bc24653c-e073-5ca8-9528-bbac5d0f5e6a": {
+        "type": "memory",
+        "uid": "bc24653c-e073-5ca8-9528-bbac5d0f5e6a",
+        "content": "On a visit when their younger brother drove them, the user did not have to find a separate route home."
+      },
+      "30c835e0-03fb-54d6-8ea8-47a2492948d8": {
+        "type": "memory",
+        "uid": "30c835e0-03fb-54d6-8ea8-47a2492948d8",
+        "content": "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself."
+      },
+      "2120df91-0d9f-5f65-b1f6-aaa81d2559c8": {
+        "type": "memory",
+        "uid": "2120df91-0d9f-5f65-b1f6-aaa81d2559c8",
+        "content": "The local agent cannot determine the current prescription or whether use continues from medication notes alone."
+      },
+      "8dfa1a5f-14d1-5c2c-ba3c-7269b13ed23b": {
+        "type": "memory",
+        "uid": "8dfa1a5f-14d1-5c2c-ba3c-7269b13ed23b",
+        "content": "The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing."
+      }
+    },
+    "order": [
+      "9c9a8333-3457-51a4-8e58-982db9732271",
+      "73ade339-9bde-54a7-af91-a658084e0db7",
+      "e078950b-ef1c-5831-8a02-22884068c3c6",
+      "1bc52052-c52e-51e6-a07a-9df4f22cd2cc",
+      "e38b7990-5fbb-5b41-a8fd-a60d8ba03347",
+      "810b43ee-4db3-540a-ba9d-c812ff25352c",
+      "bc24653c-e073-5ca8-9528-bbac5d0f5e6a",
+      "30c835e0-03fb-54d6-8ea8-47a2492948d8",
+      "2120df91-0d9f-5f65-b1f6-aaa81d2559c8",
+      "8dfa1a5f-14d1-5c2c-ba3c-7269b13ed23b"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 3,
+    "context_uid": "33b0290b-c184-5210-b3bc-54827058244e",
+    "memory_uids": [
+      "9c9a8333-3457-51a4-8e58-982db9732271",
+      "73ade339-9bde-54a7-af91-a658084e0db7",
+      "e078950b-ef1c-5831-8a02-22884068c3c6",
+      "1bc52052-c52e-51e6-a07a-9df4f22cd2cc",
+      "e38b7990-5fbb-5b41-a8fd-a60d8ba03347",
+      "810b43ee-4db3-540a-ba9d-c812ff25352c",
+      "bc24653c-e073-5ca8-9528-bbac5d0f5e6a",
+      "30c835e0-03fb-54d6-8ea8-47a2492948d8",
+      "2120df91-0d9f-5f65-b1f6-aaa81d2559c8",
+      "8dfa1a5f-14d1-5c2c-ba3c-7269b13ed23b"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'personal-memory/2024-03'.",
+  "auto": true
+}

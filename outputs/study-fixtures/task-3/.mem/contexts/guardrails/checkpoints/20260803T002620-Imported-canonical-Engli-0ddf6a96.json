@@ -1,0 +1,90 @@
+{
+  "uid": "0ddf6a96-6769-4cd8-8097-6c36a66c9705",
+  "message": "Imported canonical English Task 3 fixture Context 'guardrails'.",
+  "timestamp": "2026-08-03T00:26:20.266320",
+  "snapshot": {
+    "uid": "4b7b6479-8675-53a9-af7a-35baa181db68",
+    "name": "guardrails",
+    "memories": {
+      "87278949-597a-5778-ba44-6385d8844f8b": {
+        "type": "context_ref",
+        "uid": "87278949-597a-5778-ba44-6385d8844f8b",
+        "name": "guardrails/purpose-and-scope"
+      },
+      "fed54a14-c388-57d0-abdd-95962a35f92b": {
+        "type": "context_ref",
+        "uid": "fed54a14-c388-57d0-abdd-95962a35f92b",
+        "name": "guardrails/privacy-and-others"
+      },
+      "c3f383f4-0ae6-5dfa-b16d-807e4d301878": {
+        "type": "context_ref",
+        "uid": "c3f383f4-0ae6-5dfa-b16d-807e4d301878",
+        "name": "guardrails/evidence-and-uncertainty"
+      },
+      "9cf76811-b452-59b3-820f-970fbd6aed95": {
+        "type": "context_ref",
+        "uid": "9cf76811-b452-59b3-820f-970fbd6aed95",
+        "name": "guardrails/approval-and-delivery"
+      },
+      "bfc83618-2e1e-55d5-8181-fb8bbc906613": {
+        "type": "context_ref",
+        "uid": "bfc83618-2e1e-55d5-8181-fb8bbc906613",
+        "name": "guardrails/retention-and-revocation"
+      },
+      "d2e9bd92-b7ea-535c-b40f-1ae3bff7cd2d": {
+        "type": "context_ref",
+        "uid": "d2e9bd92-b7ea-535c-b40f-1ae3bff7cd2d",
+        "name": "guardrails/recipient-and-authority"
+      },
+      "c9d0b5d5-fde1-5fea-95ee-c8419410b376": {
+        "type": "context_ref",
+        "uid": "c9d0b5d5-fde1-5fea-95ee-c8419410b376",
+        "name": "guardrails/minimization-and-redaction"
+      },
+      "b11b1ac4-659a-57c1-9d74-f4e2fca34aae": {
+        "type": "context_ref",
+        "uid": "b11b1ac4-659a-57c1-9d74-f4e2fca34aae",
+        "name": "guardrails/channel-and-format"
+      },
+      "b9fb49b4-4457-5195-baed-4524b0820b9b": {
+        "type": "context_ref",
+        "uid": "b9fb49b4-4457-5195-baed-4524b0820b9b",
+        "name": "guardrails/downstream-use"
+      },
+      "86fb1a47-0153-58a9-9834-1e50890e9dc3": {
+        "type": "context_ref",
+        "uid": "86fb1a47-0153-58a9-9834-1e50890e9dc3",
+        "name": "guardrails/audit-and-recovery"
+      },
+      "56270e33-6f47-572d-84e2-81517e3cfabe": {
+        "type": "query_context_ref",
+        "uid": "56270e33-6f47-572d-84e2-81517e3cfabe",
+        "name": "government/healthcare-agent/information-request",
+        "target_source_uid": "2ca32118-462e-4b7f-84a3-34e973a99a9e",
+        "provider": "codex_chatgpt"
+      }
+    },
+    "order": [
+      "87278949-597a-5778-ba44-6385d8844f8b",
+      "fed54a14-c388-57d0-abdd-95962a35f92b",
+      "c3f383f4-0ae6-5dfa-b16d-807e4d301878",
+      "9cf76811-b452-59b3-820f-970fbd6aed95",
+      "bfc83618-2e1e-55d5-8181-fb8bbc906613",
+      "d2e9bd92-b7ea-535c-b40f-1ae3bff7cd2d",
+      "c9d0b5d5-fde1-5fea-95ee-c8419410b376",
+      "b11b1ac4-659a-57c1-9d74-f4e2fca34aae",
+      "b9fb49b4-4457-5195-baed-4524b0820b9b",
+      "86fb1a47-0153-58a9-9834-1e50890e9dc3",
+      "56270e33-6f47-572d-84e2-81517e3cfabe"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 3,
+    "context_uid": "4b7b6479-8675-53a9-af7a-35baa181db68",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'guardrails'.",
+  "auto": true
+}

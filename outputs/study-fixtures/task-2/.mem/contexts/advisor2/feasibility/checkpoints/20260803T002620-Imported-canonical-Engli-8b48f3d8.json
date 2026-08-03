@@ -1,0 +1,100 @@
+{
+  "uid": "8b48f3d8-e0e4-4030-bcc9-5f7cf3d69111",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor2/feasibility'.",
+  "timestamp": "2026-08-03T00:26:20.138100",
+  "snapshot": {
+    "uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+    "name": "advisor2/feasibility",
+    "memories": {
+      "5c9755f8-78bd-5654-a3c7-8be0864e4f12": {
+        "type": "memory",
+        "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12",
+        "content": "Mark unverified schedule assumptions as such."
+      },
+      "75af48aa-b39e-5b55-95d9-f7f7d2becbad": {
+        "type": "memory",
+        "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad",
+        "content": "Mark unverified recruitment assumptions as such."
+      },
+      "292e33b0-4bfd-5e3a-9379-0fbf3619c42d": {
+        "type": "memory",
+        "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d",
+        "content": "Mark unverified technical assumptions as such."
+      },
+      "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48": {
+        "type": "memory",
+        "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48",
+        "content": "Trace back the resources required for each core prototype feature and field research procedure."
+      },
+      "7be25c27-6d67-50fe-90b5-76fca32a93d8": {
+        "type": "memory",
+        "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8",
+        "content": "Operations reviewers judge feasibility by examining the personnel required for each procedure."
+      },
+      "1aae182f-4eb3-58b7-b8cd-5ce517ead36a": {
+        "type": "memory",
+        "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a",
+        "content": "Operations reviewers judge feasibility by examining the equipment required for each procedure."
+      },
+      "84f6e5e3-96b4-538b-a633-1b656204a296": {
+        "type": "memory",
+        "uid": "84f6e5e3-96b4-538b-a633-1b656204a296",
+        "content": "Operations reviewers judge feasibility by examining the time required for each procedure."
+      },
+      "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be": {
+        "type": "memory",
+        "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be",
+        "content": "Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support."
+      },
+      "0ce26892-666f-5ebe-95b2-c6f48915f18b": {
+        "type": "memory",
+        "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b",
+        "content": "Designate a responsible party for software updates, equipment inspections, and user support during the deployment period."
+      },
+      "4f35fd0c-005a-56a7-b33a-d74bde2d65eb": {
+        "type": "memory",
+        "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb",
+        "content": "The agent cannot assess deployment readiness without visible dependencies on external services and field personnel."
+      },
+      "3b96bf66-59e4-5dbf-98d3-937402abc67b": {
+        "type": "memory",
+        "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b",
+        "content": "Field schedules and assigned personnel may change due to operational factors beyond the researcher\u2019s control."
+      }
+    },
+    "order": [
+      "5c9755f8-78bd-5654-a3c7-8be0864e4f12",
+      "75af48aa-b39e-5b55-95d9-f7f7d2becbad",
+      "292e33b0-4bfd-5e3a-9379-0fbf3619c42d",
+      "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48",
+      "7be25c27-6d67-50fe-90b5-76fca32a93d8",
+      "1aae182f-4eb3-58b7-b8cd-5ce517ead36a",
+      "84f6e5e3-96b4-538b-a633-1b656204a296",
+      "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be",
+      "0ce26892-666f-5ebe-95b2-c6f48915f18b",
+      "4f35fd0c-005a-56a7-b33a-d74bde2d65eb",
+      "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 2,
+    "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+    "memory_uids": [
+      "5c9755f8-78bd-5654-a3c7-8be0864e4f12",
+      "75af48aa-b39e-5b55-95d9-f7f7d2becbad",
+      "292e33b0-4bfd-5e3a-9379-0fbf3619c42d",
+      "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48",
+      "7be25c27-6d67-50fe-90b5-76fca32a93d8",
+      "1aae182f-4eb3-58b7-b8cd-5ce517ead36a",
+      "84f6e5e3-96b4-538b-a633-1b656204a296",
+      "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be",
+      "0ce26892-666f-5ebe-95b2-c6f48915f18b",
+      "4f35fd0c-005a-56a7-b33a-d74bde2d65eb",
+      "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor2/feasibility'.",
+  "auto": true
+}

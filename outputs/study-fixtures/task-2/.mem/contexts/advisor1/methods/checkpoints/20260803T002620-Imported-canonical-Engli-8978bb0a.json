@@ -1,0 +1,149 @@
+{
+  "uid": "8978bb0a-1ae4-4535-b762-5af322366258",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/methods'.",
+  "timestamp": "2026-08-03T00:26:20.122580",
+  "snapshot": {
+    "uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+    "name": "advisor1/methods",
+    "memories": {
+      "c8bcefee-c64a-5a1f-911c-502cc4522701": {
+        "type": "memory",
+        "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701",
+        "content": "Link each HCI research question directly to corresponding user data and analysis procedures."
+      },
+      "cc860653-ad91-52f8-91db-5b26371dca0a": {
+        "type": "memory",
+        "uid": "cc860653-ad91-52f8-91db-5b26371dca0a",
+        "content": "Design the proposal\u2019s primary evaluation as a usability study in a controlled environment."
+      },
+      "af0d191d-d23e-562b-997b-b1024dacefda": {
+        "type": "memory",
+        "uid": "af0d191d-d23e-562b-997b-b1024dacefda",
+        "content": "If field operation approval cannot be obtained within the master\u2019s research period, leave actual deployment to subsequent studies."
+      },
+      "8747b27e-6c2b-5498-9eac-c403e26101a6": {
+        "type": "memory",
+        "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6",
+        "content": "In preregistered studies, specify the conditions under which deviations from the plan are permissible."
+      },
+      "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0": {
+        "type": "memory",
+        "uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0",
+        "content": "In preregistered studies, specify how to record content that deviates from the plan."
+      },
+      "df53a41c-2fbf-532a-a5b0-560a196bf5cb": {
+        "type": "memory",
+        "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
+        "content": "Present the target number of participants in the recruitment plan as a single precise value."
+      },
+      "24d49198-fd7b-5810-bc56-1910a796f76e": {
+        "type": "memory",
+        "uid": "24d49198-fd7b-5810-bc56-1910a796f76e",
+        "content": "Specify the interview protocols, recording devices, or log tools used to collect each type of user data."
+      },
+      "2f367cf3-50c5-59bc-972e-6173e56343ac": {
+        "type": "memory",
+        "uid": "2f367cf3-50c5-59bc-972e-6173e56343ac",
+        "content": "Specify whether each type of user data is collected before, during, or after the interaction."
+      },
+      "91db3bd1-4417-5db6-b7a6-3e79c87ebe88": {
+        "type": "memory",
+        "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88",
+        "content": "The agent cannot assess the realism of a recruitment plan without seeing the expected attrition stages from initial contact to final participation."
+      },
+      "49746579-92d7-51ea-b158-7d770443d101": {
+        "type": "memory",
+        "uid": "49746579-92d7-51ea-b158-7d770443d101",
+        "content": "In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices."
+      },
+      "20d116ab-f9cc-5f61-808b-8555da09d707": {
+        "type": "memory",
+        "uid": "20d116ab-f9cc-5f61-808b-8555da09d707",
+        "content": "If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection."
+      },
+      "881bc037-c099-50e4-b7e0-d38fba5146c9": {
+        "type": "memory",
+        "uid": "881bc037-c099-50e4-b7e0-d38fba5146c9",
+        "content": "Reviewers judge answerability by tracing the path from each research question to the data and analysis."
+      },
+      "9a969676-6093-5fac-bda8-92ebdac70c37": {
+        "type": "memory",
+        "uid": "9a969676-6093-5fac-bda8-92ebdac70c37",
+        "content": "The author of this proposal tends to present implemented feature lists directly as design contributions."
+      },
+      "0ecc319a-ae60-5510-883d-52e613138164": {
+        "type": "memory",
+        "uid": "0ecc319a-ae60-5510-883d-52e613138164",
+        "content": "In formative evaluation, compare alternatives that differ in only one core design attribute."
+      },
+      "c4dfdb65-e673-52c0-a40c-e909d6014e00": {
+        "type": "memory",
+        "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00",
+        "content": "When comparing design alternatives, keep participant tasks and provided information identical."
+      },
+      "a7c3a123-3f05-52e0-b33e-c450d1a070ac": {
+        "type": "memory",
+        "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
+        "content": "After each formative evaluation iteration, specify the decision rules for determining which evidence justifies modifying the next prototype."
+      },
+      "13dc50e1-ecaa-504e-a602-7a10a09d5484": {
+        "type": "memory",
+        "uid": "13dc50e1-ecaa-504e-a602-7a10a09d5484",
+        "content": "The author of this proposal tends to attempt evaluating all features of a prototype simultaneously in a single study."
+      },
+      "358230d3-9ff0-51b9-9bf6-0752a2d9845a": {
+        "type": "memory",
+        "uid": "358230d3-9ff0-51b9-9bf6-0752a2d9845a",
+        "content": "When an evaluation assigns multiple design alternatives sequentially to one participant, later conditions occur after the participant has experienced earlier conditions."
+      }
+    },
+    "order": [
+      "c8bcefee-c64a-5a1f-911c-502cc4522701",
+      "cc860653-ad91-52f8-91db-5b26371dca0a",
+      "af0d191d-d23e-562b-997b-b1024dacefda",
+      "8747b27e-6c2b-5498-9eac-c403e26101a6",
+      "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0",
+      "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
+      "24d49198-fd7b-5810-bc56-1910a796f76e",
+      "2f367cf3-50c5-59bc-972e-6173e56343ac",
+      "91db3bd1-4417-5db6-b7a6-3e79c87ebe88",
+      "49746579-92d7-51ea-b158-7d770443d101",
+      "20d116ab-f9cc-5f61-808b-8555da09d707",
+      "881bc037-c099-50e4-b7e0-d38fba5146c9",
+      "9a969676-6093-5fac-bda8-92ebdac70c37",
+      "0ecc319a-ae60-5510-883d-52e613138164",
+      "c4dfdb65-e673-52c0-a40c-e909d6014e00",
+      "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
+      "13dc50e1-ecaa-504e-a602-7a10a09d5484",
+      "358230d3-9ff0-51b9-9bf6-0752a2d9845a"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 2,
+    "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+    "memory_uids": [
+      "c8bcefee-c64a-5a1f-911c-502cc4522701",
+      "cc860653-ad91-52f8-91db-5b26371dca0a",
+      "af0d191d-d23e-562b-997b-b1024dacefda",
+      "8747b27e-6c2b-5498-9eac-c403e26101a6",
+      "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0",
+      "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
+      "24d49198-fd7b-5810-bc56-1910a796f76e",
+      "2f367cf3-50c5-59bc-972e-6173e56343ac",
+      "91db3bd1-4417-5db6-b7a6-3e79c87ebe88",
+      "49746579-92d7-51ea-b158-7d770443d101",
+      "20d116ab-f9cc-5f61-808b-8555da09d707",
+      "881bc037-c099-50e4-b7e0-d38fba5146c9",
+      "9a969676-6093-5fac-bda8-92ebdac70c37",
+      "0ecc319a-ae60-5510-883d-52e613138164",
+      "c4dfdb65-e673-52c0-a40c-e909d6014e00",
+      "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
+      "13dc50e1-ecaa-504e-a602-7a10a09d5484",
+      "358230d3-9ff0-51b9-9bf6-0752a2d9845a"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/methods'.",
+  "auto": true
+}

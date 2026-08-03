@@ -1,0 +1,93 @@
+{
+  "uid": "ea6337e2-ac43-438c-88b2-19232e78e6a5",
+  "message": "Imported canonical English Task 3 fixture Context 'personal-memory/2024-09'.",
+  "timestamp": "2026-08-03T00:26:20.245364",
+  "snapshot": {
+    "uid": "8c4c8269-eec8-5f71-8e05-f1b4295068f8",
+    "name": "personal-memory/2024-09",
+    "memories": {
+      "ca24a4db-6bfe-5c35-a390-e461915dc847": {
+        "type": "memory",
+        "uid": "ca24a4db-6bfe-5c35-a390-e461915dc847",
+        "content": "The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment."
+      },
+      "76823d40-2ae3-540a-bda1-205dfa3830af": {
+        "type": "memory",
+        "uid": "76823d40-2ae3-540a-bda1-205dfa3830af",
+        "content": "The user once canceled an appointment booked for the same weekday as in the previous month."
+      },
+      "0dc43f92-534a-519c-b612-52282393d451": {
+        "type": "memory",
+        "uid": "0dc43f92-534a-519c-b612-52282393d451",
+        "content": "When asked again about availability just before booking, the user provided three free times for that week."
+      },
+      "df38f17c-22da-5b8d-a17a-b8a70b872b97": {
+        "type": "memory",
+        "uid": "df38f17c-22da-5b8d-a17a-b8a70b872b97",
+        "content": "On a day with two consecutive morning appointments, the user ate lunch at 3 p.m."
+      },
+      "5d807ce3-65d2-536b-b47d-ff9fb0971d41": {
+        "type": "memory",
+        "uid": "5d807ce3-65d2-536b-b47d-ff9fb0971d41",
+        "content": "On a day the user left an hour between appointments, they ate while traveling."
+      },
+      "5042dc4d-d166-56fe-a06f-8010691ff4fe": {
+        "type": "memory",
+        "uid": "5042dc4d-d166-56fe-a06f-8010691ff4fe",
+        "content": "After seeing a private reason written directly in a calendar title, the user removed the wording."
+      },
+      "f2157e6c-2be8-53f9-84a1-567d5443bdac": {
+        "type": "memory",
+        "uid": "f2157e6c-2be8-53f9-84a1-567d5443bdac",
+        "content": "The user checked that a calendar-sharing screen showed only the time and hid the details."
+      },
+      "f8433232-da65-5675-9555-51228836ed30": {
+        "type": "memory",
+        "uid": "f8433232-da65-5675-9555-51228836ed30",
+        "content": "When evening plans on the same day must change, the user's mother wants advance notice on the weekend morning."
+      },
+      "088ad1ec-0123-51fe-b397-469e77d2bd83": {
+        "type": "memory",
+        "uid": "088ad1ec-0123-51fe-b397-469e77d2bd83",
+        "content": "The local agent cannot know the private reason for unavailability from the unavailable time alone."
+      },
+      "bfce86be-b4ea-5125-a165-962920511f52": {
+        "type": "memory",
+        "uid": "bfce86be-b4ea-5125-a165-962920511f52",
+        "content": "The user's shared calendar does not automatically reserve travel time between events."
+      }
+    },
+    "order": [
+      "ca24a4db-6bfe-5c35-a390-e461915dc847",
+      "76823d40-2ae3-540a-bda1-205dfa3830af",
+      "0dc43f92-534a-519c-b612-52282393d451",
+      "df38f17c-22da-5b8d-a17a-b8a70b872b97",
+      "5d807ce3-65d2-536b-b47d-ff9fb0971d41",
+      "5042dc4d-d166-56fe-a06f-8010691ff4fe",
+      "f2157e6c-2be8-53f9-84a1-567d5443bdac",
+      "f8433232-da65-5675-9555-51228836ed30",
+      "088ad1ec-0123-51fe-b397-469e77d2bd83",
+      "bfce86be-b4ea-5125-a165-962920511f52"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 1,
+    "task": 3,
+    "context_uid": "8c4c8269-eec8-5f71-8e05-f1b4295068f8",
+    "memory_uids": [
+      "ca24a4db-6bfe-5c35-a390-e461915dc847",
+      "76823d40-2ae3-540a-bda1-205dfa3830af",
+      "0dc43f92-534a-519c-b612-52282393d451",
+      "df38f17c-22da-5b8d-a17a-b8a70b872b97",
+      "5d807ce3-65d2-536b-b47d-ff9fb0971d41",
+      "5042dc4d-d166-56fe-a06f-8010691ff4fe",
+      "f2157e6c-2be8-53f9-84a1-567d5443bdac",
+      "f8433232-da65-5675-9555-51228836ed30",
+      "088ad1ec-0123-51fe-b397-469e77d2bd83",
+      "bfce86be-b4ea-5125-a165-962920511f52"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'personal-memory/2024-09'.",
+  "auto": true
+}
