@@ -1,8 +1,13 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.granted_context import (
+    authorized_context_mutation,
+    grant_checkpoint_args,
+    resolve_context_access,
+)
 from memcommit.context import (
     AutoCheckpoint,
     Context,
@@ -10,15 +15,44 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
-def cmd(uid: Annotated[str, typer.Argument(help="UID (or unambiguous prefix) of the item to remove")]) -> None:
-    store = MemoryStore()
+def cmd(
+    uid: Annotated[
+        str,
+        typer.Argument(help="UID (or unambiguous prefix) of the item to remove"),
+    ],
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Local Context or granted view containing the item",
+        ),
+    ] = None,
+) -> None:
+    active_store = MemoryStore()
     try:
-        ctx = store.load_current_direct()
-    except RuntimeError as e:
-        typer.secho(str(e), fg=typer.colors.RED, err=True)
+        access = resolve_context_access(
+            active_store,
+            context_name,
+            current_name=active_store.current_context_name(),
+            required_permission="DELETE",
+        )
+        store = access.store
+        ctx = store.load_direct(access.context_name)
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        typer.secho(str(error), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
     try:
@@ -41,11 +75,16 @@ def cmd(uid: Annotated[str, typer.Argument(help="UID (or unambiguous prefix) of 
     elif isinstance(item, Context):
         description = f"Removed embedded context '{item.name}' [{item.uid[:8]}]"
 
-    store.save(ctx, AutoCheckpoint(
-        command="remove",
-        args={"uid": item.uid},
-        description=description,
-    ))
+    try:
+        with authorized_context_mutation(access):
+            store.save(ctx, AutoCheckpoint(
+                command="remove",
+                args={"uid": item.uid, **grant_checkpoint_args(access)},
+                description=description,
+            ))
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
 
     if isinstance(item, Memory):
         typer.secho(f"Removed [{item.uid[:8]}] {item.content}", fg=typer.colors.GREEN)

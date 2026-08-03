@@ -668,34 +668,151 @@ def _profile_write_guarded(method: Callable):
 
 class MemoryStore:
 
-    def __init__(self, *, create: bool = True):
+    def __init__(
+        self,
+        *,
+        create: bool = True,
+        root: Path | None = None,
+    ):
         """
         Open the store.
 
         Normal commands create missing store infrastructure. Read-only
         inspection commands can pass create=False to guarantee that merely
-        checking absent state does not create ~/.mem or state.json.
+        checking absent state does not create ~/.mem or state.json.  ``root``
+        is an explicit, already-authorized store boundary used by profile
+        grants; omitting it preserves the process-frozen active Profile.
         """
+        self._root_override = Path(root).absolute() if root is not None else None
         if create:
-            STORE_DIR.mkdir(parents=True, exist_ok=True)
-            CONTEXTS_DIR.mkdir(parents=True, exist_ok=True)
-            if not STATE_FILE.exists():
+            self.store_dir.mkdir(parents=True, exist_ok=True)
+            self.contexts_dir.mkdir(parents=True, exist_ok=True)
+            if not self.state_file.exists():
                 self._write_state({"current": None})
 
     @property
+    def store_dir(self) -> Path:
+        return self._root_override or Path(STORE_DIR)
+
+    @property
+    def contexts_dir(self) -> Path:
+        return (
+            self.store_dir / "contexts"
+            if self._root_override is not None
+            else Path(CONTEXTS_DIR)
+        )
+
+    @property
+    def state_file(self) -> Path:
+        return (
+            self.store_dir / "state.json"
+            if self._root_override is not None
+            else Path(STATE_FILE)
+        )
+
+    @property
+    def query_sources_dir(self) -> Path:
+        return (
+            self.store_dir / "query-sources"
+            if self._root_override is not None
+            else Path(QUERY_SOURCES_DIR)
+        )
+
+    @property
+    def impact_plan_file(self) -> Path:
+        return (
+            self.store_dir / "impact-plan.json"
+            if self._root_override is not None
+            else Path(IMPACT_PLAN_FILE)
+        )
+
+    @property
+    def staged_update_file(self) -> Path:
+        return (
+            self.store_dir / "staged-update.json"
+            if self._root_override is not None
+            else Path(STAGED_UPDATE_FILE)
+        )
+
+    @property
+    def review_session_file(self) -> Path:
+        return (
+            self.store_dir / "review-session.json"
+            if self._root_override is not None
+            else Path(REVIEW_SESSION_FILE)
+        )
+
+    @property
+    def atomize_analyses_dir(self) -> Path:
+        return (
+            self.store_dir / "atomize-analyses"
+            if self._root_override is not None
+            else Path(ATOMIZE_ANALYSES_DIR)
+        )
+
+    @property
+    def atomize_workbenches_dir(self) -> Path:
+        return (
+            self.store_dir / "atomize-workbenches"
+            if self._root_override is not None
+            else Path(ATOMIZE_WORKBENCHES_DIR)
+        )
+
+    @property
+    def atomize_grounding_sessions_dir(self) -> Path:
+        return (
+            self.store_dir / "atomize-groundings"
+            if self._root_override is not None
+            else Path(ATOMIZE_GROUNDING_SESSIONS_DIR)
+        )
+
+    @property
+    def atomize_grounding_history_dir(self) -> Path:
+        return (
+            self.store_dir / "atomize-grounding-history"
+            if self._root_override is not None
+            else Path(ATOMIZE_GROUNDING_HISTORY_DIR)
+        )
+
+    @property
+    def ground_sessions_dir(self) -> Path:
+        return (
+            self.store_dir / "ground-sessions"
+            if self._root_override is not None
+            else Path(GROUND_SESSIONS_DIR)
+        )
+
+    @property
+    def meld_sessions_dir(self) -> Path:
+        return (
+            self.store_dir / "meld-sessions"
+            if self._root_override is not None
+            else Path(MELD_SESSIONS_DIR)
+        )
+
+    @property
     def write_protection_registry(self) -> WriteProtectionRegistry:
-        """Return the persistent registry scoped to the active Profile."""
-        return WriteProtectionRegistry(STORE_DIR)
+        """Return the persistent registry scoped to this exact Profile store."""
+        return WriteProtectionRegistry(self.store_dir)
 
     def write_protection_state(self) -> WriteProtectionState:
-        """Read the active Profile's protection state."""
+        """Read the current Profile-scoped protection state."""
         return self.write_protection_registry.snapshot()
 
     @contextmanager
     def profile_write_guard(self) -> Iterator[WriteProtectionState]:
-        """Keep Profile-level permission stable through one durable write."""
+        """Keep Profile-level permission stable through one artifact write."""
         with self.write_protection_registry.profile_write_guard() as state:
             yield state
+
+    def _assert_profile_write_allowed(self) -> WriteProtectionState:
+        """Fail closed at a command boundary protected by its command lock."""
+        state = self.write_protection_state()
+        if state.profile_is_protected():
+            raise WriteProtectionError(
+                "Profile is locked against writes. Unlock that Profile first."
+            )
+        return state
 
     @staticmethod
     def _protected_context_message(name: str) -> str:
@@ -926,7 +1043,7 @@ class MemoryStore:
         therefore take this lock shared, while rename holds it exclusively
         from its final scan through publication and rollback.
         """
-        lock_path = STORE_DIR / "context-graph.lock"
+        lock_path = self.store_dir / "context-graph.lock"
         if lock_path.is_symlink():
             raise ValueError("Refusing to use a symbolic-link Context graph lock.")
         flags = os.O_RDWR | os.O_CREAT
@@ -954,7 +1071,7 @@ class MemoryStore:
     def _context_write_lock(self, name: str) -> Iterator[None]:
         """Serialize cooperative Context saves across local mem processes."""
         _context_name_parts(name)
-        lock_dir = STORE_DIR / "context-write-locks"
+        lock_dir = self.store_dir / "context-write-locks"
         if lock_dir.is_symlink():
             raise ValueError(
                 "Refusing to use a symbolic-link Context lock directory."
@@ -996,9 +1113,38 @@ class MemoryStore:
             yield
 
     @contextmanager
+    def _command_write_lock(self) -> Iterator[None]:
+        """Serialize checkpoint-producing commands across Contexts.
+
+        Per-Context locks prevent lost writes but cannot order two commands
+        aimed at different Contexts. Undo/Redo reconstruct one global command
+        stack, so future command commits share this short store-wide boundary.
+        """
+        lock_path = self.store_dir / "context-command-write.lock"
+        if lock_path.is_symlink():
+            raise ValueError("Refusing to use a symbolic-link command lock.")
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
+    @contextmanager
     def _state_write_lock(self) -> Iterator[None]:
         """Serialize cooperative changes to the global current Context."""
-        lock_path = STORE_DIR / "state-write.lock"
+        lock_path = self.store_dir / "state-write.lock"
         if lock_path.is_symlink():
             raise ValueError("Refusing to use a symbolic-link state lock.")
         flags = os.O_RDWR | os.O_CREAT
@@ -1094,14 +1240,14 @@ class MemoryStore:
     # --- Global state ---
 
     def _read_state(self) -> dict:
-        with open(STATE_FILE) as f:
+        with open(self.state_file) as f:
             return json.load(f)
 
     def _write_state(self, state: dict) -> None:
         # Context switching is the final phase of several multi-file
         # operations.  Replacing an fsynced sibling keeps an interrupted write
         # from leaving state.json truncated and making rollback impossible.
-        _write_json_atomic(STATE_FILE, state)
+        _write_json_atomic(self.state_file, state)
 
     def current_context_name(self) -> Optional[str]:
         return self._read_state().get("current")
@@ -2284,18 +2430,18 @@ class MemoryStore:
         ordinary Context paths enter through this guard so a catalog read and a
         later load/write enforce the same storage boundary.
         """
-        if CONTEXTS_DIR.is_symlink():
+        if self.contexts_dir.is_symlink():
             raise ValueError(
                 "Context storage root cannot be a symbolic link."
             )
-        if not CONTEXTS_DIR.exists():
+        if not self.contexts_dir.exists():
             return False
-        if not CONTEXTS_DIR.is_dir():
+        if not self.contexts_dir.is_dir():
             raise ValueError("Context storage root is not a directory.")
         return True
 
-    @staticmethod
     def _catalog_diagnostic(
+        self,
         code: ContextCatalogDiagnosticCode,
         path: Path,
         *,
@@ -2303,7 +2449,7 @@ class MemoryStore:
         message: str,
     ) -> ContextCatalogDiagnostic:
         try:
-            relative_path = path.relative_to(CONTEXTS_DIR).as_posix()
+            relative_path = path.relative_to(self.contexts_dir).as_posix()
         except ValueError:
             relative_path = str(path)
         return ContextCatalogDiagnostic(
@@ -2325,7 +2471,7 @@ class MemoryStore:
 
         records: list[tuple[str, Path]] = []
         diagnostics: list[ContextCatalogDiagnostic] = []
-        pending = [CONTEXTS_DIR]
+        pending = [self.contexts_dir]
         while pending:
             directory = pending.pop()
             try:
@@ -2416,7 +2562,7 @@ class MemoryStore:
                     )
                     continue
 
-                name = entry.parent.relative_to(CONTEXTS_DIR).as_posix()
+                name = entry.parent.relative_to(self.contexts_dir).as_posix()
                 try:
                     _context_name_parts(name)
                 except ValueError as error:
@@ -2486,8 +2632,8 @@ class MemoryStore:
     def _context_dir(self, name: str) -> Path:
         self._assert_context_storage_root()
         parts = _context_name_parts(name)
-        path = CONTEXTS_DIR.joinpath(*parts)
-        candidate = CONTEXTS_DIR
+        path = self.contexts_dir.joinpath(*parts)
+        candidate = self.contexts_dir
         for part in parts:
             candidate /= part
             if candidate.is_symlink():
@@ -2500,7 +2646,7 @@ class MemoryStore:
                     f"Invalid context name '{name}': namespace component "
                     f"'{candidate.name}' is not a directory."
                 )
-        contexts_root = CONTEXTS_DIR.resolve()
+        contexts_root = self.contexts_dir.resolve()
         resolved = path.resolve(strict=False)
         if resolved != contexts_root and contexts_root not in resolved.parents:
             raise ValueError(
@@ -2518,7 +2664,7 @@ class MemoryStore:
                 f"Refusing to access checkpoints for '{name}' through a "
                 "symbolic link."
             )
-        contexts_root = CONTEXTS_DIR.resolve()
+        contexts_root = self.contexts_dir.resolve()
         resolved = path.resolve(strict=False)
         if resolved != contexts_root and contexts_root not in resolved.parents:
             raise ValueError(
@@ -2561,11 +2707,10 @@ class MemoryStore:
                 + ", ".join(sorted(invalid_entries))
             )
 
-    @staticmethod
-    def _prune_empty_namespace_dirs(start: Path) -> None:
-        """Remove empty namespace directories without removing CONTEXTS_DIR."""
+    def _prune_empty_namespace_dirs(self, start: Path) -> None:
+        """Remove empty namespace directories without removing self.contexts_dir."""
         candidate = start
-        while candidate != CONTEXTS_DIR:
+        while candidate != self.contexts_dir:
             try:
                 candidate.rmdir()
             except OSError:

@@ -1,6 +1,9 @@
 import typer
 
+from memcommit.commands.granted_context import attached_grants
 from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
@@ -19,3 +22,23 @@ def cmd() -> None:
             typer.secho(f"* {label}", fg=typer.colors.GREEN, bold=True)
         else:
             typer.echo(f"  {label}")
+    if current:
+        try:
+            registry, grants = attached_grants(current)
+        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        profiles = {profile.uid: profile.name for profile in registry.profiles}
+        for grant in grants:
+            mode = ",".join(
+                permission.lower() for permission in grant.permissions
+            )
+            typer.echo(
+                "  "
+                + display_escape_text(grant.public_name)
+                + "  [view "
+                + mode
+                + " from "
+                + display_escape_text(profiles[grant.authority_profile_uid])
+                + "]"
+            )

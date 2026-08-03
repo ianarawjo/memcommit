@@ -14,10 +14,23 @@ import re
 import uuid
 
 
-PROFILE_REGISTRY_SCHEMA_VERSION = 1
+PROFILE_REGISTRY_SCHEMA_VERSION = 2
+LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION = 1
 AUTHORING_PROFILE_UID = "00000000-0000-0000-0000-000000000001"
 AUTHORING_PROFILE_NAME = "authoring"
 _PROFILE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}\Z")
+GRANT_RESOURCE_CONTEXT_TREE = "CONTEXT_TREE"
+GRANT_PERMISSIONS = frozenset(
+    {"CREATE", "READ", "UPDATE", "DELETE", "QUERY", "SESSION_LOG"}
+)
+_GRANT_PERMISSION_ORDER = (
+    "CREATE",
+    "READ",
+    "UPDATE",
+    "DELETE",
+    "QUERY",
+    "SESSION_LOG",
+)
 
 
 class ProfileConfigError(RuntimeError):
@@ -44,6 +57,106 @@ class ProfileEntry:
         return result
 
 
+def validate_grant_resource_name(value: object) -> str:
+    """Validate one canonical Context-tree locator without importing store."""
+
+    if not isinstance(value, str) or not value:
+        raise ProfileConfigError("Grant resource name must be non-empty.")
+    if "\\" in value or ":" in value:
+        raise ProfileConfigError("Grant resource name is invalid.")
+    parts = value.split("/")
+    if any(
+        not part
+        or part in {".", ".."}
+        or part.casefold() in {"context.json", "checkpoints"}
+        for part in parts
+    ):
+        raise ProfileConfigError("Grant resource name is invalid.")
+    if any(ord(character) < 32 or ord(character) == 127 for character in value):
+        raise ProfileConfigError("Grant resource name is invalid.")
+    return value
+
+
+def canonical_grant_permissions(value: object) -> tuple[str, ...]:
+    """Return a unique, stable permission tuple for one grant."""
+
+    if not isinstance(value, (list, tuple, set, frozenset)) or not value:
+        raise ProfileConfigError("Grant permissions must be a non-empty list.")
+    normalized: set[str] = set()
+    for raw in value:
+        if not isinstance(raw, str):
+            raise ProfileConfigError("Grant permission is invalid.")
+        permission = raw.strip().upper()
+        if permission == "EDIT":
+            permission = "UPDATE"
+        if permission not in GRANT_PERMISSIONS:
+            raise ProfileConfigError(f"Unsupported grant permission: {raw!r}.")
+        normalized.add(permission)
+    if "SESSION_LOG" in normalized and "QUERY" not in normalized:
+        raise ProfileConfigError("SESSION_LOG requires QUERY permission.")
+    if normalized & {"CREATE", "UPDATE", "DELETE"} and "READ" not in normalized:
+        raise ProfileConfigError("Create, update, and delete grants require READ.")
+    return tuple(item for item in _GRANT_PERMISSION_ORDER if item in normalized)
+
+
+def validate_grant_permission(value: object) -> str:
+    """Validate one permission without applying whole-grant dependencies."""
+
+    if not isinstance(value, str):
+        raise ProfileConfigError("Grant permission is invalid.")
+    permission = value.strip().upper()
+    if permission == "EDIT":
+        permission = "UPDATE"
+    if permission not in GRANT_PERMISSIONS:
+        raise ProfileConfigError(f"Unsupported grant permission: {value!r}.")
+    return permission
+
+
+@dataclass(frozen=True)
+class GrantContextBinding:
+    """One exact authority Context admitted to a frozen grant scope."""
+
+    uid: str
+    name: str
+
+    def to_dict(self) -> dict[str, str]:
+        return {"uid": self.uid, "name": self.name}
+
+
+@dataclass(frozen=True)
+class AuthorityGrant:
+    """One authority-owned Context view granted to another Profile."""
+
+    uid: str
+    revision: int
+    authority_profile_uid: str
+    grantee_profile_uid: str
+    attachment_context_uid: str
+    attachment_context_name: str
+    resource_kind: str
+    resource_uid: str
+    resource_name: str
+    public_name: str
+    permissions: tuple[str, ...]
+    contexts: tuple[GrantContextBinding, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "uid": self.uid,
+            "revision": self.revision,
+            "authority_profile_uid": self.authority_profile_uid,
+            "grantee_profile_uid": self.grantee_profile_uid,
+            "attachment_context_uid": self.attachment_context_uid,
+            "attachment_context_name": self.attachment_context_name,
+            "resource_kind": self.resource_kind,
+            "resource_uid": self.resource_uid,
+            "resource_name": self.resource_name,
+            "public_name": self.public_name,
+            "permissions": list(self.permissions),
+            "contexts": [context.to_dict() for context in self.contexts],
+        }
+
+
 @dataclass(frozen=True)
 class ProfileRegistry:
     """Validated selector state kept outside every MemoryStore."""
@@ -51,6 +164,7 @@ class ProfileRegistry:
     generation: int
     active_uid: str
     profiles: tuple[ProfileEntry, ...]
+    grants: tuple[AuthorityGrant, ...] = ()
 
     @property
     def active(self) -> ProfileEntry:
@@ -69,6 +183,7 @@ class ProfileRegistry:
             "generation": self.generation,
             "active_uid": self.active_uid,
             "profiles": [profile.to_dict() for profile in self.profiles],
+            "grants": [grant.to_dict() for grant in self.grants],
         }
 
 
@@ -143,6 +258,7 @@ def virtual_authoring_registry() -> ProfileRegistry:
                 kind="AUTHORING",
             ),
         ),
+        grants=(),
     )
 
 
@@ -161,7 +277,11 @@ def load_profile_registry() -> ProfileRegistry:
         raise ProfileConfigError("Profile registry is invalid JSON.") from error
     if not isinstance(value, dict):
         raise ProfileConfigError("Profile registry must be a JSON object.")
-    if value.get("schema_version") != PROFILE_REGISTRY_SCHEMA_VERSION:
+    schema_version = value.get("schema_version")
+    if schema_version not in {
+        LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION,
+        PROFILE_REGISTRY_SCHEMA_VERSION,
+    }:
         raise ProfileConfigError("Unsupported profile registry schema version.")
     generation = value.get("generation")
     if not isinstance(generation, int) or isinstance(generation, bool) or generation < 1:
@@ -200,12 +320,135 @@ def load_profile_registry() -> ProfileRegistry:
             "Profile registry must contain exactly the fixed authoring profile."
         )
     active_uid = _canonical_uid(value.get("active_uid"), field="Active profile uid")
-    if active_uid not in {profile.uid for profile in profiles}:
+    profile_uids = {profile.uid for profile in profiles}
+    if active_uid not in profile_uids:
         raise ProfileConfigError("Active profile is not registered.")
+
+    raw_grants = value.get("grants", [])
+    if schema_version == LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION:
+        if "grants" in value:
+            raise ProfileConfigError("Legacy profile registry cannot contain grants.")
+        raw_grants = []
+    if not isinstance(raw_grants, list):
+        raise ProfileConfigError("Profile grants must be a list.")
+    grants: list[AuthorityGrant] = []
+    for raw in raw_grants:
+        if not isinstance(raw, dict) or set(raw) != {
+            "uid",
+            "revision",
+            "authority_profile_uid",
+            "grantee_profile_uid",
+            "attachment_context_uid",
+            "attachment_context_name",
+            "resource_kind",
+            "resource_uid",
+            "resource_name",
+            "public_name",
+            "permissions",
+            "contexts",
+        }:
+            raise ProfileConfigError("Profile grant entry is invalid.")
+        revision = raw.get("revision")
+        if (
+            not isinstance(revision, int)
+            or isinstance(revision, bool)
+            or revision < 1
+        ):
+            raise ProfileConfigError("Profile grant revision is invalid.")
+        authority_uid = _canonical_uid(
+            raw.get("authority_profile_uid"),
+            field="Grant authority Profile uid",
+        )
+        grantee_uid = _canonical_uid(
+            raw.get("grantee_profile_uid"),
+            field="Grant grantee Profile uid",
+        )
+        if authority_uid not in profile_uids or grantee_uid not in profile_uids:
+            raise ProfileConfigError("Profile grant names an unregistered Profile.")
+        if authority_uid == grantee_uid:
+            raise ProfileConfigError("A Profile cannot grant a view to itself.")
+        resource_kind = raw.get("resource_kind")
+        if resource_kind != GRANT_RESOURCE_CONTEXT_TREE:
+            raise ProfileConfigError("Profile grant resource kind is invalid.")
+        raw_contexts = raw.get("contexts")
+        if not isinstance(raw_contexts, list) or not raw_contexts:
+            raise ProfileConfigError("Profile grant Context scope is invalid.")
+        contexts: list[GrantContextBinding] = []
+        for raw_context in raw_contexts:
+            if not isinstance(raw_context, dict) or set(raw_context) != {
+                "uid",
+                "name",
+            }:
+                raise ProfileConfigError("Profile grant Context binding is invalid.")
+            contexts.append(
+                GrantContextBinding(
+                    uid=_canonical_uid(
+                        raw_context.get("uid"),
+                        field="Grant Context uid",
+                    ),
+                    name=validate_grant_resource_name(raw_context.get("name")),
+                )
+            )
+        if len({item.uid for item in contexts}) != len(contexts) or len(
+            {item.name for item in contexts}
+        ) != len(contexts):
+            raise ProfileConfigError("Profile grant Context scope is duplicated.")
+        resource_uid = _canonical_uid(
+            raw.get("resource_uid"),
+            field="Grant resource uid",
+        )
+        resource_name = validate_grant_resource_name(raw.get("resource_name"))
+        if not any(
+            item.uid == resource_uid and item.name == resource_name
+            for item in contexts
+        ):
+            raise ProfileConfigError("Grant scope does not contain its root Context.")
+        if any(
+            item.name != resource_name
+            and not item.name.startswith(resource_name + "/")
+            for item in contexts
+        ):
+            raise ProfileConfigError(
+                "Grant scope contains a Context outside its resource tree."
+            )
+        grants.append(
+            AuthorityGrant(
+                uid=_canonical_uid(raw.get("uid"), field="Grant uid"),
+                revision=revision,
+                authority_profile_uid=authority_uid,
+                grantee_profile_uid=grantee_uid,
+                attachment_context_uid=_canonical_uid(
+                    raw.get("attachment_context_uid"),
+                    field="Grant attachment Context uid",
+                ),
+                attachment_context_name=validate_grant_resource_name(
+                    raw.get("attachment_context_name")
+                ),
+                resource_kind=resource_kind,
+                resource_uid=resource_uid,
+                resource_name=resource_name,
+                public_name=validate_grant_resource_name(raw.get("public_name")),
+                permissions=canonical_grant_permissions(raw.get("permissions")),
+                contexts=tuple(contexts),
+            )
+        )
+    if len({grant.uid for grant in grants}) != len(grants):
+        raise ProfileConfigError("Profile grant uids must be unique.")
+    public_keys = [
+        (
+            grant.grantee_profile_uid,
+            grant.attachment_context_uid,
+            grant.public_name.casefold(),
+        )
+        for grant in grants
+    ]
+    if len(set(public_keys)) != len(public_keys):
+        raise ProfileConfigError("Granted public view names must be unique per Profile.")
     return ProfileRegistry(
         generation=generation,
         active_uid=active_uid,
         profiles=tuple(profiles),
+        grants=tuple(grants),
     )
 
 

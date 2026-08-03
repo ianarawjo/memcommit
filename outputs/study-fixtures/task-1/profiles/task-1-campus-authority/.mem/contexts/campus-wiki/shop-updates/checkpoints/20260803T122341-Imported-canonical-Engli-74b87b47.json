@@ -1,0 +1,374 @@
+{
+  "uid": "74b87b47-f58f-40ab-8fb5-720049435629",
+  "message": "Imported canonical English Task 1 fixture Context 'campus-wiki/shop-updates' into profile 'task-1-campus-authority'.",
+  "timestamp": "2026-08-03T12:23:41.116369",
+  "snapshot": {
+    "uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+    "name": "campus-wiki/shop-updates",
+    "memories": {
+      "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83": {
+        "type": "memory",
+        "uid": "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83",
+        "content": "The Campus Store on the first floor of the Main Building operates from 7:00 a.m. to 11:00 p.m. even during recess."
+      },
+      "3ecf1523-62fe-5bb1-be29-2b4a9b3384df": {
+        "type": "memory",
+        "uid": "3ecf1523-62fe-5bb1-be29-2b4a9b3384df",
+        "content": "The Engineering Building Campus Store's usual operating hours during recess are from 9:00 a.m. to 6:00 p.m."
+      },
+      "2e45bd48-390e-5b77-9082-fec388b4bd9f": {
+        "type": "memory",
+        "uid": "2e45bd48-390e-5b77-9082-fec388b4bd9f",
+        "content": "The cafe on the first floor of the Main Building operates during summer break as well."
+      },
+      "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1": {
+        "type": "memory",
+        "uid": "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1",
+        "content": "The dining area on the first floor of the Main Building operates during summer break as well."
+      },
+      "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6": {
+        "type": "memory",
+        "uid": "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6",
+        "content": "There is a coffee machine inside the Innovation Hub on the first floor of the Main Building."
+      },
+      "65a4b93f-f1da-52c0-b013-34c876391794": {
+        "type": "memory",
+        "uid": "65a4b93f-f1da-52c0-b013-34c876391794",
+        "content": "Only staff may use the coffee machine inside the Innovation Hub on the first floor of the Main Building."
+      },
+      "ed7db155-c6c8-5a91-a574-fc44b081a92a": {
+        "type": "memory",
+        "uid": "ed7db155-c6c8-5a91-a574-fc44b081a92a",
+        "content": "The ATM in the West Complex is separate from the ATM inside the Main Building."
+      },
+      "ce4dd3c2-790f-5ef7-b851-e693f750c1ef": {
+        "type": "memory",
+        "uid": "ce4dd3c2-790f-5ef7-b851-e693f750c1ef",
+        "content": "The ATM in the West Complex is in the building next to Outdoor Parking Lot A."
+      },
+      "46192dec-18a4-5404-b3fe-5c0c42be97da": {
+        "type": "memory",
+        "uid": "46192dec-18a4-5404-b3fe-5c0c42be97da",
+        "content": "Students who need cash in the evening often expect that they can use the Main Building ATM at any time."
+      },
+      "644d9c0b-c300-51e4-b680-4318328aa4b9": {
+        "type": "memory",
+        "uid": "644d9c0b-c300-51e4-b680-4318328aa4b9",
+        "content": "Students who need basic items late at night expect the 24-hour store in the Main Building to be open."
+      },
+      "b03652e7-6a61-5dd6-8484-f19f93536d59": {
+        "type": "memory",
+        "uid": "b03652e7-6a61-5dd6-8484-f19f93536d59",
+        "content": "Identify and provide guidance to an alternative location of the same type as the closed facility."
+      },
+      "5f43f896-6a76-51f2-b034-221955b4165f": {
+        "type": "memory",
+        "uid": "5f43f896-6a76-51f2-b034-221955b4165f",
+        "content": "Do not treat the facilities in the West Complex and the facilities in the Main Building as the same place."
+      },
+      "b0fa660c-d579-5c27-bf74-c9b3839fd36d": {
+        "type": "memory",
+        "uid": "b0fa660c-d579-5c27-bf74-c9b3839fd36d",
+        "content": "The amenities information agent can answer with posted locations."
+      },
+      "16efed59-7583-5467-828e-b856ccf7c5e1": {
+        "type": "memory",
+        "uid": "16efed59-7583-5467-828e-b856ccf7c5e1",
+        "content": "The amenities information agent can answer with posted operating hours."
+      },
+      "150a226f-2cfb-523a-ae59-a37becaa4310": {
+        "type": "memory",
+        "uid": "150a226f-2cfb-523a-ae59-a37becaa4310",
+        "content": "The amenities information agent cannot check product inventory."
+      },
+      "0147df04-89c5-56a0-b119-5b6baf57bb29": {
+        "type": "memory",
+        "uid": "0147df04-89c5-56a0-b119-5b6baf57bb29",
+        "content": "The amenities information agent cannot check whether payment is available."
+      },
+      "91791ba2-e7cc-5437-9855-e10726378d20": {
+        "type": "memory",
+        "uid": "91791ba2-e7cc-5437-9855-e10726378d20",
+        "content": "The amenities information agent cannot check unexpected closures on the day."
+      },
+      "39b4d014-8b9d-55ac-a5c2-ccc3e948a721": {
+        "type": "memory",
+        "uid": "39b4d014-8b9d-55ac-a5c2-ccc3e948a721",
+        "content": "The Campus Store contractor incorporates students' tendency to use the Main Building ATM and the 24-hour store together in the evening into demand planning."
+      },
+      "6248ac88-de59-5039-b01e-328669694909": {
+        "type": "memory",
+        "uid": "6248ac88-de59-5039-b01e-328669694909",
+        "content": "The Engineering Building Campus Store sells school supplies and basic household goods."
+      },
+      "a64be11d-06da-56b0-9dcb-9c26b75a1cbb": {
+        "type": "memory",
+        "uid": "a64be11d-06da-56b0-9dcb-9c26b75a1cbb",
+        "content": "The return conditions for the Main Building Campus Store are posted in the store's receipt guidance."
+      },
+      "cf273ead-e557-5449-bc44-28b3fa5c1dc3": {
+        "type": "memory",
+        "uid": "cf273ead-e557-5449-bc44-28b3fa5c1dc3",
+        "content": "Each store determines the prices of products sold at the Campus Store."
+      },
+      "124a8981-a1c3-518a-a2cf-8c128b2e0c73": {
+        "type": "memory",
+        "uid": "124a8981-a1c3-518a-a2cf-8c128b2e0c73",
+        "content": "The Main Building dining area's menu for the day is posted on the menu board at the entrance."
+      },
+      "451e08d8-5b71-5655-af71-94e99eb46cb2": {
+        "type": "memory",
+        "uid": "451e08d8-5b71-5655-af71-94e99eb46cb2",
+        "content": "Labels for major allergens in the dining menu can be found on the menu board."
+      },
+      "ad2ae9ae-4630-5d1d-8930-ff5e61469bed": {
+        "type": "memory",
+        "uid": "ad2ae9ae-4630-5d1d-8930-ff5e61469bed",
+        "content": "The food and beverage information agent cannot guarantee that there is no cross-contact in the food preparation area."
+      },
+      "5b24402f-f130-5110-aa9b-3d7d781d43f9": {
+        "type": "memory",
+        "uid": "5b24402f-f130-5110-aa9b-3d7d781d43f9",
+        "content": "Vegetarian options are indicated by dietary symbols on the menu board for the day."
+      },
+      "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e": {
+        "type": "memory",
+        "uid": "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e",
+        "content": "There is a water fountain for filling personal water bottles on the first floor of the Main Building."
+      },
+      "d0fb793a-0864-5db7-a568-3fc424ae126a": {
+        "type": "memory",
+        "uid": "d0fb793a-0864-5db7-a568-3fc424ae126a",
+        "content": "General seating at the Main Building cafe cannot be reserved individually."
+      },
+      "3b64fba2-0530-5ec2-87f0-858e0b15445a": {
+        "type": "memory",
+        "uid": "3b64fba2-0530-5ec2-87f0-858e0b15445a",
+        "content": "The common lounge in the Student Centre has a microwave that users can use."
+      },
+      "7930a9bc-37f3-5344-8aef-9111f1007813": {
+        "type": "memory",
+        "uid": "7930a9bc-37f3-5344-8aef-9111f1007813",
+        "content": "There is a beverage vending machine on the second floor of the Main Building."
+      },
+      "3e06443d-ca8e-5f52-8500-e4c961bd45b7": {
+        "type": "memory",
+        "uid": "3e06443d-ca8e-5f52-8500-e4c961bd45b7",
+        "content": "There is a snack vending machine on the fifth floor of the Main Building."
+      },
+      "815ce86f-370a-51d0-8cb9-82aed0352946": {
+        "type": "memory",
+        "uid": "815ce86f-370a-51d0-8cb9-82aed0352946",
+        "content": "The ATMs in the Main Building and the West Complex are managed by different operators."
+      },
+      "07312b3b-fe85-51cf-8f96-b11cb830a5dd": {
+        "type": "memory",
+        "uid": "07312b3b-fe85-51cf-8f96-b11cb830a5dd",
+        "content": "The amenities information agent cannot access ATM transaction history or determine the cause of transaction errors."
+      },
+      "56b07b71-d6b0-5cde-b3ca-e165ea0275f5": {
+        "type": "memory",
+        "uid": "56b07b71-d6b0-5cde-b3ca-e165ea0275f5",
+        "content": "Contact the operator of the relevant ATM regarding a retained ATM card or transaction error."
+      },
+      "dc4bb95b-4196-552e-91c0-1f788dc081f7": {
+        "type": "memory",
+        "uid": "dc4bb95b-4196-552e-91c0-1f788dc081f7",
+        "content": "The operating hours of the visitor services desk are posted on the Main Building information page."
+      },
+      "eb08465c-7591-57d2-a932-ae4db8b73ef2": {
+        "type": "memory",
+        "uid": "eb08465c-7591-57d2-a932-ae4db8b73ef2",
+        "content": "The visitor services desk provides campus maps and public facility information."
+      },
+      "8a8f4943-ef7d-54d2-b797-25037a7b9ad7": {
+        "type": "memory",
+        "uid": "8a8f4943-ef7d-54d2-b797-25037a7b9ad7",
+        "content": "General facility inquiries can be submitted through the public online inquiry form."
+      },
+      "53aa3f6e-1be2-5ccc-80c7-003286636621": {
+        "type": "memory",
+        "uid": "53aa3f6e-1be2-5ccc-80c7-003286636621",
+        "content": "Student support services that handle personal records require identity verification."
+      },
+      "3b187e27-31b2-543f-8c62-6b43135e7b40": {
+        "type": "memory",
+        "uid": "3b187e27-31b2-543f-8c62-6b43135e7b40",
+        "content": "Visitors can use the campus's public guest network."
+      },
+      "fdbea8e9-d79b-5b0e-9742-406883f5aef6": {
+        "type": "memory",
+        "uid": "fdbea8e9-d79b-5b0e-9742-406883f5aef6",
+        "content": "Instructions for connecting to the guest network are posted in the visitor services information."
+      },
+      "209ddf18-2029-5fd1-82bf-e382dda2cf01": {
+        "type": "memory",
+        "uid": "209ddf18-2029-5fd1-82bf-e382dda2cf01",
+        "content": "The Engineering Building Campus Store is in a separate building from the Main Building and can be reached by a public pedestrian route that does not pass through the Main Building."
+      },
+      "8d71aef9-b9e7-5ee5-914a-95a943c18090": {
+        "type": "memory",
+        "uid": "8d71aef9-b9e7-5ee5-914a-95a943c18090",
+        "content": "The amenities information agent cannot access a user's purchase history."
+      },
+      "fa47663f-27a3-5962-ac4d-b2f7a905ec6d": {
+        "type": "memory",
+        "uid": "fa47663f-27a3-5962-ac4d-b2f7a905ec6d",
+        "content": "The food and beverage information agent must not infer ingredient composition that is not listed on the menu."
+      },
+      "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0": {
+        "type": "memory",
+        "uid": "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0",
+        "content": "The operating hours of each campus shop and food and beverage facility may vary on public holidays."
+      },
+      "1ff36f44-d288-52db-9f58-aa17a80a6259": {
+        "type": "memory",
+        "uid": "1ff36f44-d288-52db-9f58-aa17a80a6259",
+        "content": "Check the relevant store's official notice for extended operating hours during exam periods."
+      },
+      "3534e0d3-d005-50cc-bafa-887b1e0918fc": {
+        "type": "memory",
+        "uid": "3534e0d3-d005-50cc-bafa-887b1e0918fc",
+        "content": "The store operator determines product inventory and availability for sale."
+      },
+      "027bc3db-3b45-5d27-829d-678ecb2fed9e": {
+        "type": "memory",
+        "uid": "027bc3db-3b45-5d27-829d-678ecb2fed9e",
+        "content": "Students with long intervals between classes prefer the dining area on the first floor of the Main Building as a comfortable place to wait."
+      },
+      "45b26dcc-e2bc-554a-aeae-91aac780b121": {
+        "type": "memory",
+        "uid": "45b26dcc-e2bc-554a-aeae-91aac780b121",
+        "content": "External visitors often expect to be able to use a cafe in the same building as a public event."
+      },
+      "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d": {
+        "type": "memory",
+        "uid": "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d",
+        "content": "The reusable container return bin is next to the exit of the dining area on the first floor of the Main Building."
+      },
+      "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5": {
+        "type": "memory",
+        "uid": "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5",
+        "content": "The Main Building dining area has wheelchair-accessible seating."
+      },
+      "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da": {
+        "type": "memory",
+        "uid": "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da",
+        "content": "Direct users to report service issues to the relevant facility's posted contact point."
+      }
+    },
+    "order": [
+      "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83",
+      "3ecf1523-62fe-5bb1-be29-2b4a9b3384df",
+      "2e45bd48-390e-5b77-9082-fec388b4bd9f",
+      "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1",
+      "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6",
+      "65a4b93f-f1da-52c0-b013-34c876391794",
+      "ed7db155-c6c8-5a91-a574-fc44b081a92a",
+      "ce4dd3c2-790f-5ef7-b851-e693f750c1ef",
+      "46192dec-18a4-5404-b3fe-5c0c42be97da",
+      "644d9c0b-c300-51e4-b680-4318328aa4b9",
+      "b03652e7-6a61-5dd6-8484-f19f93536d59",
+      "5f43f896-6a76-51f2-b034-221955b4165f",
+      "b0fa660c-d579-5c27-bf74-c9b3839fd36d",
+      "16efed59-7583-5467-828e-b856ccf7c5e1",
+      "150a226f-2cfb-523a-ae59-a37becaa4310",
+      "0147df04-89c5-56a0-b119-5b6baf57bb29",
+      "91791ba2-e7cc-5437-9855-e10726378d20",
+      "39b4d014-8b9d-55ac-a5c2-ccc3e948a721",
+      "6248ac88-de59-5039-b01e-328669694909",
+      "a64be11d-06da-56b0-9dcb-9c26b75a1cbb",
+      "cf273ead-e557-5449-bc44-28b3fa5c1dc3",
+      "124a8981-a1c3-518a-a2cf-8c128b2e0c73",
+      "451e08d8-5b71-5655-af71-94e99eb46cb2",
+      "ad2ae9ae-4630-5d1d-8930-ff5e61469bed",
+      "5b24402f-f130-5110-aa9b-3d7d781d43f9",
+      "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e",
+      "d0fb793a-0864-5db7-a568-3fc424ae126a",
+      "3b64fba2-0530-5ec2-87f0-858e0b15445a",
+      "7930a9bc-37f3-5344-8aef-9111f1007813",
+      "3e06443d-ca8e-5f52-8500-e4c961bd45b7",
+      "815ce86f-370a-51d0-8cb9-82aed0352946",
+      "07312b3b-fe85-51cf-8f96-b11cb830a5dd",
+      "56b07b71-d6b0-5cde-b3ca-e165ea0275f5",
+      "dc4bb95b-4196-552e-91c0-1f788dc081f7",
+      "eb08465c-7591-57d2-a932-ae4db8b73ef2",
+      "8a8f4943-ef7d-54d2-b797-25037a7b9ad7",
+      "53aa3f6e-1be2-5ccc-80c7-003286636621",
+      "3b187e27-31b2-543f-8c62-6b43135e7b40",
+      "fdbea8e9-d79b-5b0e-9742-406883f5aef6",
+      "209ddf18-2029-5fd1-82bf-e382dda2cf01",
+      "8d71aef9-b9e7-5ee5-914a-95a943c18090",
+      "fa47663f-27a3-5962-ac4d-b2f7a905ec6d",
+      "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0",
+      "1ff36f44-d288-52db-9f58-aa17a80a6259",
+      "3534e0d3-d005-50cc-bafa-887b1e0918fc",
+      "027bc3db-3b45-5d27-829d-678ecb2fed9e",
+      "45b26dcc-e2bc-554a-aeae-91aac780b121",
+      "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d",
+      "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5",
+      "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 1,
+    "profile": "task-1-campus-authority",
+    "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+    "memory_uids": [
+      "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83",
+      "3ecf1523-62fe-5bb1-be29-2b4a9b3384df",
+      "2e45bd48-390e-5b77-9082-fec388b4bd9f",
+      "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1",
+      "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6",
+      "65a4b93f-f1da-52c0-b013-34c876391794",
+      "ed7db155-c6c8-5a91-a574-fc44b081a92a",
+      "ce4dd3c2-790f-5ef7-b851-e693f750c1ef",
+      "46192dec-18a4-5404-b3fe-5c0c42be97da",
+      "644d9c0b-c300-51e4-b680-4318328aa4b9",
+      "b03652e7-6a61-5dd6-8484-f19f93536d59",
+      "5f43f896-6a76-51f2-b034-221955b4165f",
+      "b0fa660c-d579-5c27-bf74-c9b3839fd36d",
+      "16efed59-7583-5467-828e-b856ccf7c5e1",
+      "150a226f-2cfb-523a-ae59-a37becaa4310",
+      "0147df04-89c5-56a0-b119-5b6baf57bb29",
+      "91791ba2-e7cc-5437-9855-e10726378d20",
+      "39b4d014-8b9d-55ac-a5c2-ccc3e948a721",
+      "6248ac88-de59-5039-b01e-328669694909",
+      "a64be11d-06da-56b0-9dcb-9c26b75a1cbb",
+      "cf273ead-e557-5449-bc44-28b3fa5c1dc3",
+      "124a8981-a1c3-518a-a2cf-8c128b2e0c73",
+      "451e08d8-5b71-5655-af71-94e99eb46cb2",
+      "ad2ae9ae-4630-5d1d-8930-ff5e61469bed",
+      "5b24402f-f130-5110-aa9b-3d7d781d43f9",
+      "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e",
+      "d0fb793a-0864-5db7-a568-3fc424ae126a",
+      "3b64fba2-0530-5ec2-87f0-858e0b15445a",
+      "7930a9bc-37f3-5344-8aef-9111f1007813",
+      "3e06443d-ca8e-5f52-8500-e4c961bd45b7",
+      "815ce86f-370a-51d0-8cb9-82aed0352946",
+      "07312b3b-fe85-51cf-8f96-b11cb830a5dd",
+      "56b07b71-d6b0-5cde-b3ca-e165ea0275f5",
+      "dc4bb95b-4196-552e-91c0-1f788dc081f7",
+      "eb08465c-7591-57d2-a932-ae4db8b73ef2",
+      "8a8f4943-ef7d-54d2-b797-25037a7b9ad7",
+      "53aa3f6e-1be2-5ccc-80c7-003286636621",
+      "3b187e27-31b2-543f-8c62-6b43135e7b40",
+      "fdbea8e9-d79b-5b0e-9742-406883f5aef6",
+      "209ddf18-2029-5fd1-82bf-e382dda2cf01",
+      "8d71aef9-b9e7-5ee5-914a-95a943c18090",
+      "fa47663f-27a3-5962-ac4d-b2f7a905ec6d",
+      "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0",
+      "1ff36f44-d288-52db-9f58-aa17a80a6259",
+      "3534e0d3-d005-50cc-bafa-887b1e0918fc",
+      "027bc3db-3b45-5d27-829d-678ecb2fed9e",
+      "45b26dcc-e2bc-554a-aeae-91aac780b121",
+      "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d",
+      "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5",
+      "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+    ]
+  },
+  "description": "Imported canonical English Task 1 fixture Context 'campus-wiki/shop-updates' into profile 'task-1-campus-authority'.",
+  "auto": true
+}

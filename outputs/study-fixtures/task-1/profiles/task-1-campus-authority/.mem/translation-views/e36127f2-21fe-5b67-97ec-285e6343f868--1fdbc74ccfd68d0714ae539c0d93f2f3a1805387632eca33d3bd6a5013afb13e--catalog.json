@@ -1,0 +1,82 @@
+{
+  "schema_version": 2,
+  "context_uid": "e36127f2-21fe-5b67-97ec-285e6343f868",
+  "context_name": "campus-wiki/construction-details/verification",
+  "target_language": "ko",
+  "created_at": "2026-08-03T16:23:41.167977+00:00",
+  "updated_at": "2026-08-03T16:23:41.168211+00:00",
+  "revision": 6,
+  "contract_version": "translate-v2",
+  "entries": [
+    {
+      "source_uid": "c7303f66-cbc0-5e51-86e6-40347b64e937",
+      "provider": null,
+      "curated": {
+        "source_sha256": "b7481e9b4ecafbad157b4f20cf928f9fc0d5c7e4ca7db678aa6f85f77d381a01",
+        "translated_content": "\ub9e4 \uc791\uc5c5\uc77c \uc2dc\uc791 \uc804\uc5d0 \uc801\uc7ac\uad6c\uc5ed \ud1b5\ub85c \uc0c1\ud0dc\ub97c \uae30\ub85d\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
+        "created_at": "2026-08-03T16:23:41.168012+00:00",
+        "updated_at": "2026-08-03T16:23:41.168012+00:00"
+      }
+    },
+    {
+      "source_uid": "557c44f0-92df-5c77-b91d-5cc5f6f6aa7b",
+      "provider": null,
+      "curated": {
+        "source_sha256": "7426d31f9838e2fa1606511a84db2d649e15c2cf7c6d913ff922d489f4c30fbd",
+        "translated_content": "\ub9e4 \uc791\uc5c5\uc77c \uc2dc\uc791 \uc804\uc5d0 \uc18c\ud654\uc124\ube44 \uc811\uadfc\uc131\uc744 \uae30\ub85d\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
+        "created_at": "2026-08-03T16:23:41.168062+00:00",
+        "updated_at": "2026-08-03T16:23:41.168062+00:00"
+      }
+    },
+    {
+      "source_uid": "46269465-9194-5644-9f84-bf809037a2bb",
+      "provider": null,
+      "curated": {
+        "source_sha256": "8a05c87b63a73f86704f9603f2348c3b5586160b9a6635a555659c17e41cb612",
+        "translated_content": "\ub9e4 \uc791\uc5c5\uc77c \uc2dc\uc791 \uc804\uc5d0 \uc784\uc2dc \uc870\uba85\uc758 \uc791\ub3d9 \uc5ec\ubd80\ub97c \uae30\ub85d\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
+        "created_at": "2026-08-03T16:23:41.168109+00:00",
+        "updated_at": "2026-08-03T16:23:41.168109+00:00"
+      }
+    },
+    {
+      "source_uid": "f433f66f-119c-5590-a54b-febd78d5dcab",
+      "provider": null,
+      "curated": {
+        "source_sha256": "b71157ea485f49a950b513916bebd800f9250e7bf8ecd932fdd204ad442bf65e",
+        "translated_content": "\ub0c9\ubc29 \uc810\uac80 \uc911\ub2e8\uc774 10\ubd84\uc744 \ub118\uac70\ub098 \uc815\uc0c1 \uc555\ub825\uc774 \ud68c\ubcf5\ub418\uc9c0 \uc54a\uc73c\uba74 \ub2e4\uc74c \uad6c\uac04 \uc791\uc5c5\uc744 \uba48\ucd94\uace0 \uc6b4\uc601 \ub2f4\ub2f9\uc790\uc5d0\uac8c \ubcf4\uace0\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
+        "created_at": "2026-08-03T16:23:41.168159+00:00",
+        "updated_at": "2026-08-03T16:23:41.168159+00:00"
+      }
+    },
+    {
+      "source_uid": "61a5aa0b-839d-5320-86b8-7846aa5aac6b",
+      "provider": null,
+      "curated": {
+        "source_sha256": "a150aca0b86bd7ffc023ef8988e75a0ae0744f4263896242477ce1a9faabcd7f",
+        "translated_content": "\ud604\uc7a5 \uc548\uc804\ub2f4\ub2f9\uc790\ub294 \ud1b5\ub85c\u00b7\uc18c\ud654\uc124\ube44\u00b7\uc784\uc2dc \uc870\uba85 \uc911 \ud558\ub098\ub77c\ub3c4 \ud655\uc778 \uae30\ub85d\uc774 \uc5c6\uc73c\uba74 \uc791\uc5c5 \uc2dc\uc791\uc744 \uc2b9\uc778\ud558\uae30 \uc5b4\ub835\ub2e4\uace0 \ud310\ub2e8\ud55c\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
+        "created_at": "2026-08-03T16:23:41.168211+00:00",
+        "updated_at": "2026-08-03T16:23:41.168211+00:00"
+      }
+    }
+  ]
+}

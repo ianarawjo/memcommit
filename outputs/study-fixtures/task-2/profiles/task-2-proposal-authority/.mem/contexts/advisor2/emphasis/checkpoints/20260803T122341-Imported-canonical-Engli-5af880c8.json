@@ -1,0 +1,87 @@
+{
+  "uid": "5af880c8-3a10-4410-a705-0106bb0b5ae4",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor2/emphasis' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-03T12:23:41.227538",
+  "snapshot": {
+    "uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+    "name": "advisor2/emphasis",
+    "memories": {
+      "d59dc83b-ce6a-5ac7-ab64-e5436df1f945": {
+        "type": "memory",
+        "uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945",
+        "content": "Do not exceed two primary HCI contributions that readers must remember."
+      },
+      "328de462-17a4-551f-9f74-cb3118519e45": {
+        "type": "memory",
+        "uid": "328de462-17a4-551f-9f74-cb3118519e45",
+        "content": "Present each design or operational contribution as a single named sentence."
+      },
+      "eab1dac5-8b61-5793-a56f-c4e3e64af190": {
+        "type": "memory",
+        "uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190",
+        "content": "In studies recruiting organizational members, emphasize workflow constraints."
+      },
+      "f90e616a-d5a4-5cc2-86e4-62534a1faf83": {
+        "type": "memory",
+        "uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83",
+        "content": "In studies recruiting organizational members, emphasize manager approval constraints."
+      },
+      "9bd2a9da-9720-5001-b958-f7a2a2658f87": {
+        "type": "memory",
+        "uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87",
+        "content": "Present the primary HCI design contribution of the proposal as design guidelines applicable to practitioners rather than conceptual models."
+      },
+      "78a1c87a-6936-516c-b578-8e97dc2e91f4": {
+        "type": "memory",
+        "uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4",
+        "content": "HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two."
+      },
+      "7af2db41-9091-5452-9beb-8fd7b48b7872": {
+        "type": "memory",
+        "uid": "7af2db41-9091-5452-9beb-8fd7b48b7872",
+        "content": "Highlight one primary field operational decision to be changed by evaluation results as the central claim."
+      },
+      "2312f35d-c17d-5af3-b84f-d2e671d7663f": {
+        "type": "memory",
+        "uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f",
+        "content": "Specify prototype features unnecessary for reviewing the primary field problem as secondary scope."
+      },
+      "888ce8af-a36e-5e74-9a0c-604aac48d3b7": {
+        "type": "memory",
+        "uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7",
+        "content": "The author of this proposal tends to prioritize novel interaction features over operational fit."
+      }
+    },
+    "order": [
+      "d59dc83b-ce6a-5ac7-ab64-e5436df1f945",
+      "328de462-17a4-551f-9f74-cb3118519e45",
+      "eab1dac5-8b61-5793-a56f-c4e3e64af190",
+      "f90e616a-d5a4-5cc2-86e4-62534a1faf83",
+      "9bd2a9da-9720-5001-b958-f7a2a2658f87",
+      "78a1c87a-6936-516c-b578-8e97dc2e91f4",
+      "7af2db41-9091-5452-9beb-8fd7b48b7872",
+      "2312f35d-c17d-5af3-b84f-d2e671d7663f",
+      "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+    "memory_uids": [
+      "d59dc83b-ce6a-5ac7-ab64-e5436df1f945",
+      "328de462-17a4-551f-9f74-cb3118519e45",
+      "eab1dac5-8b61-5793-a56f-c4e3e64af190",
+      "f90e616a-d5a4-5cc2-86e4-62534a1faf83",
+      "9bd2a9da-9720-5001-b958-f7a2a2658f87",
+      "78a1c87a-6936-516c-b578-8e97dc2e91f4",
+      "7af2db41-9091-5452-9beb-8fd7b48b7872",
+      "2312f35d-c17d-5af3-b84f-d2e671d7663f",
+      "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor2/emphasis' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

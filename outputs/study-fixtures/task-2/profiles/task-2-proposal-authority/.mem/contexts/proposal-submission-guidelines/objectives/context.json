@@ -1,0 +1,44 @@
+{
+  "uid": "beb9059e-15c3-52d5-8805-70aecbb5da7f",
+  "name": "proposal-submission-guidelines/objectives",
+  "memories": {
+    "ef3d227a-30c3-559f-8bd0-5dfc49dc5e69": {
+      "type": "memory",
+      "uid": "ef3d227a-30c3-559f-8bd0-5dfc49dc5e69",
+      "content": "Combine research objectives and questions into 60\u201380 words."
+    },
+    "baae7762-a298-57da-8b56-dedca1e74b1f": {
+      "type": "memory",
+      "uid": "baae7762-a298-57da-8b56-dedca1e74b1f",
+      "content": "State the primary research objective in a single sentence."
+    },
+    "fe75068c-5a22-5ccd-87c8-aa815ff146aa": {
+      "type": "memory",
+      "uid": "fe75068c-5a22-5ccd-87c8-aa815ff146aa",
+      "content": "The author of this proposal intends to narrow down research questions to three or fewer to fit within two limited pages."
+    },
+    "ec87bfc6-a068-587b-92ef-b328d27705be": {
+      "type": "memory",
+      "uid": "ec87bfc6-a068-587b-92ef-b328d27705be",
+      "content": "The author of this proposal intends to reconcile conflicting internal advice against formal submission guidelines to determine the final structure."
+    },
+    "3c80ea67-5aca-5887-8945-24581a5fffbc": {
+      "type": "memory",
+      "uid": "3c80ea67-5aca-5887-8945-24581a5fffbc",
+      "content": "Specify criteria for determining whether the primary research objective has been achieved."
+    },
+    "182188e7-ab1a-52d5-8fe0-2d4bec452758": {
+      "type": "memory",
+      "uid": "182188e7-ab1a-52d5-8fe0-2d4bec452758",
+      "content": "The review panel compares proposals\u2019 focus by aligning stated objectives with success criteria."
+    }
+  },
+  "order": [
+    "ef3d227a-30c3-559f-8bd0-5dfc49dc5e69",
+    "baae7762-a298-57da-8b56-dedca1e74b1f",
+    "fe75068c-5a22-5ccd-87c8-aa815ff146aa",
+    "ec87bfc6-a068-587b-92ef-b328d27705be",
+    "3c80ea67-5aca-5887-8945-24581a5fffbc",
+    "182188e7-ab1a-52d5-8fe0-2d4bec452758"
+  ]
+}

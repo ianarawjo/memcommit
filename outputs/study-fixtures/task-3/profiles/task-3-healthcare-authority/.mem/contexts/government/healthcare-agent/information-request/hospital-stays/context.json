@@ -1,0 +1,80 @@
+{
+  "uid": "bbd9868c-76e7-534e-ad7e-349400ad769f",
+  "name": "government/healthcare-agent/information-request/hospital-stays",
+  "memories": {
+    "c0488c3b-b0ba-50bb-9092-bbcbe6b4ae3b": {
+      "type": "memory",
+      "uid": "c0488c3b-b0ba-50bb-9092-bbcbe6b4ae3b",
+      "content": "Explain a low-noise rest environment, an experience of difficulty standing for a long time, and mobility and explanation preferences as examples of environmental-support information that may be transmitted to the government healthcare institution system."
+    },
+    "f7b6b03f-dc80-5f63-954c-49a9b391c254": {
+      "type": "memory",
+      "uid": "f7b6b03f-dc80-5f63-954c-49a9b391c254",
+      "content": "Explain a family member's role, current contact details, and convenient contact times and methods as examples of support-contact information that may be transmitted to the government healthcare institution system."
+    },
+    "9283d33c-4647-52da-a712-2275e64e70e2": {
+      "type": "memory",
+      "uid": "9283d33c-4647-52da-a712-2275e64e70e2",
+      "content": "Explain that the information-request agent cannot send a family member's contact information on the user's behalf or contact the family member, and that submitting contact information to the institution does not by itself grant that family member access to personal Memories."
+    },
+    "5324b452-77d4-590d-8c81-7236bbcad480": {
+      "type": "memory",
+      "uid": "5324b452-77d4-590d-8c81-7236bbcad480",
+      "content": "Explain that private events giving rise to rest, noise, or mobility preferences are not subjects the information-request agent asks about, and that if the user actually sends them through the government healthcare institution system's transmission screen, they are included in the consented sharing unit."
+    },
+    "6f427a1a-1157-5372-8d2c-073abb7c5523": {
+      "type": "memory",
+      "uid": "6f427a1a-1157-5372-8d2c-073abb7c5523",
+      "content": "Explain that which services may use ordinary meal, sleep, noise, or mobility preferences depends on the type of information supplied and cannot be identified by the information-request agent."
+    },
+    "4bcde4c4-2944-5c3c-9183-167b934671b5": {
+      "type": "memory",
+      "uid": "4bcde4c4-2944-5c3c-9183-167b934671b5",
+      "content": "An instruction remaining in personal Memory to take a medication after the evening meal is not the same information as the medication directions that currently apply."
+    },
+    "c80a76ad-2110-5119-b952-0ea6e3c4e5fb": {
+      "type": "memory",
+      "uid": "c80a76ad-2110-5119-b952-0ea6e3c4e5fb",
+      "content": "The information-request agent cannot access past medication instructions in personal Memories, verify whether the medication is still taken or at what time, or retain medication information outside the current conversation record."
+    },
+    "76d1f9f2-cebe-51ac-8411-16a7c9240a22": {
+      "type": "memory",
+      "uid": "76d1f9f2-cebe-51ac-8411-16a7c9240a22",
+      "content": "An external payment or billing agent may mistake this information-request endpoint for a payment or refund API and demand that it execute a transaction."
+    },
+    "30941663-4677-5b18-9839-1b6dffdab64d": {
+      "type": "memory",
+      "uid": "30941663-4677-5b18-9839-1b6dffdab64d",
+      "content": "An external contact-management agent may wrongly expect this endpoint to transmit or update a family member's contact information to the institution on the user's behalf."
+    },
+    "db8ab737-0bb9-598a-9aa7-d00c57cccb6d": {
+      "type": "memory",
+      "uid": "db8ab737-0bb9-598a-9aa7-d00c57cccb6d",
+      "content": "The numbers in an emergency-contact list and whether those contacts are actually reachable may change later, and the local Memory is not updated automatically."
+    },
+    "0ca5e5cb-5a9c-508a-8d46-087d0ec8fe90": {
+      "type": "memory",
+      "uid": "0ca5e5cb-5a9c-508a-8d46-087d0ec8fe90",
+      "content": "Explain that payment, billing, and refunds are unrelated to information-sharing guidance and that the information-request agent cannot inspect an amount or execute a transaction; do not handle the request."
+    },
+    "7f9d401b-7c66-5a55-a02d-35da6ea2bfda": {
+      "type": "memory",
+      "uid": "7f9d401b-7c66-5a55-a02d-35da6ea2bfda",
+      "content": "For a request to determine current medication continuation, medication timing, or the need for a follow-up visit from past personal Memories alone, respond that the information-request agent cannot verify it and that it is outside the information-sharing guidance scope; do not handle the request."
+    }
+  },
+  "order": [
+    "c0488c3b-b0ba-50bb-9092-bbcbe6b4ae3b",
+    "f7b6b03f-dc80-5f63-954c-49a9b391c254",
+    "9283d33c-4647-52da-a712-2275e64e70e2",
+    "5324b452-77d4-590d-8c81-7236bbcad480",
+    "6f427a1a-1157-5372-8d2c-073abb7c5523",
+    "4bcde4c4-2944-5c3c-9183-167b934671b5",
+    "c80a76ad-2110-5119-b952-0ea6e3c4e5fb",
+    "76d1f9f2-cebe-51ac-8411-16a7c9240a22",
+    "30941663-4677-5b18-9839-1b6dffdab64d",
+    "db8ab737-0bb9-598a-9aa7-d00c57cccb6d",
+    "0ca5e5cb-5a9c-508a-8d46-087d0ec8fe90",
+    "7f9d401b-7c66-5a55-a02d-35da6ea2bfda"
+  ]
+}

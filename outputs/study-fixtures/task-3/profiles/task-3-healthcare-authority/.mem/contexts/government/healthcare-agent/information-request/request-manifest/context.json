@@ -1,0 +1,80 @@
+{
+  "uid": "0c108ffd-8292-5b18-90d8-73c5e1eb66d5",
+  "name": "government/healthcare-agent/information-request/request-manifest",
+  "memories": {
+    "a968d972-3c67-5e7b-bd9e-2b60f83223cb": {
+      "type": "memory",
+      "uid": "a968d972-3c67-5e7b-bd9e-2b60f83223cb",
+      "content": "The information-request agent can explain only the use and sharing consequences when information is transmitted to the government healthcare institution system; it cannot select, include, exclude, edit, transmit, or delete information or perform the institution's downstream processing."
+    },
+    "7de7faba-a85d-520b-9260-aa5486bf3aef": {
+      "type": "memory",
+      "uid": "7de7faba-a85d-520b-9260-aa5486bf3aef",
+      "content": "Explain that private reasons a preference or limitation arose are not subjects the information-request agent asks about, and that if the user actually sends them through the government healthcare institution system's transmission screen, they are included in the consented sharing unit."
+    },
+    "931d97fe-65cf-5ab7-9085-e75c35d7a4d4": {
+      "type": "memory",
+      "uid": "931d97fe-65cf-5ab7-9085-e75c35d7a4d4",
+      "content": "Explain that a submission sent through the government healthcare institution system's transmission screen is treated as made directly by the account user unless the institution has separately verified proxy-submission requirements, but that the information-request agent does not verify identity or proxy authority."
+    },
+    "c6bfc662-ca13-5b08-9820-3a10b1328975": {
+      "type": "memory",
+      "uid": "c6bfc662-ca13-5b08-9820-3a10b1328975",
+      "content": "Explain that information sent may be provided to relevant third parties for healthcare purposes or used for service improvement, and that the exact services and recipient scope vary with the type of information supplied."
+    },
+    "336db01b-a930-5c48-b285-13013c31456e": {
+      "type": "memory",
+      "uid": "336db01b-a930-5c48-b285-13013c31456e",
+      "content": "The information-request agent cannot inspect the personal Memory store or government healthcare institution records, has no authority to retain information outside the current conversation record, and cannot grant or alter anyone's access permissions or delete existing records or copies."
+    },
+    "d207578c-6642-54da-8075-834af710e5ca": {
+      "type": "memory",
+      "uid": "d207578c-6642-54da-8075-834af710e5ca",
+      "content": "The information-request agent cannot verify whether medication instructions, prior visits, or mobility experiences left in personal Memories are still current or turn them into official government healthcare institution records."
+    },
+    "19b2235f-46af-5e45-baba-8df47b8e5bb6": {
+      "type": "memory",
+      "uid": "19b2235f-46af-5e45-baba-8df47b8e5bb6",
+      "content": "Some external automated agents may mistake this information-request endpoint for a personal Memory transmission API and repeatedly request submissions."
+    },
+    "4bcf4dc2-b704-578a-abac-555056da0dec": {
+      "type": "memory",
+      "uid": "4bcf4dc2-b704-578a-abac-555056da0dec",
+      "content": "An external information-management tool may wrongly expect this information-request endpoint to select and transform personal Memories into an institution transmission copy."
+    },
+    "eab07abe-bca9-595a-bdd7-1fe5f35fb967": {
+      "type": "memory",
+      "uid": "eab07abe-bca9-595a-bdd7-1fe5f35fb967",
+      "content": "Information transmitted to the government healthcare institution system is processed under the institution's retention and audit policies, and the information-request agent cannot delete it or control its retention period."
+    },
+    "123bf873-4554-5767-bae3-2c48c727a3c2": {
+      "type": "memory",
+      "uid": "123bf873-4554-5767-bae3-2c48c727a3c2",
+      "content": "Explain that the information-request agent has no authority to select, include, or exclude information to be sent to the government healthcare institution system or determine approval item by item."
+    },
+    "97e62a5d-ec63-5330-8939-e778847fca8f": {
+      "type": "memory",
+      "uid": "97e62a5d-ec63-5330-8939-e778847fca8f",
+      "content": "For a request asking whether past medication instructions, care visits, or mobility experiences in personal Memories are still current, explain that the information-request agent cannot verify them."
+    },
+    "a7d7902e-7ad2-55c1-8292-75c94dc33dc5": {
+      "type": "memory",
+      "uid": "a7d7902e-7ad2-55c1-8292-75c94dc33dc5",
+      "content": "A malicious automated client may make bulk and varied API calls that look like ordinary guidance requests in order to collect response patterns or consume endpoint resources."
+    }
+  },
+  "order": [
+    "a968d972-3c67-5e7b-bd9e-2b60f83223cb",
+    "7de7faba-a85d-520b-9260-aa5486bf3aef",
+    "931d97fe-65cf-5ab7-9085-e75c35d7a4d4",
+    "c6bfc662-ca13-5b08-9820-3a10b1328975",
+    "336db01b-a930-5c48-b285-13013c31456e",
+    "d207578c-6642-54da-8075-834af710e5ca",
+    "19b2235f-46af-5e45-baba-8df47b8e5bb6",
+    "4bcf4dc2-b704-578a-abac-555056da0dec",
+    "eab07abe-bca9-595a-bdd7-1fe5f35fb967",
+    "123bf873-4554-5767-bae3-2c48c727a3c2",
+    "97e62a5d-ec63-5330-8939-e778847fca8f",
+    "a7d7902e-7ad2-55c1-8292-75c94dc33dc5"
+  ]
+}

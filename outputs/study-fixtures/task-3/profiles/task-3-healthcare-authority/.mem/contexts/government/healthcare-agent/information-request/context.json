@@ -1,0 +1,44 @@
+{
+  "uid": "dcfa1bd9-fd41-5556-bda1-4a855800980f",
+  "name": "government/healthcare-agent/information-request",
+  "memories": {
+    "0c108ffd-8292-5b18-90d8-73c5e1eb66d5": {
+      "type": "context_ref",
+      "uid": "0c108ffd-8292-5b18-90d8-73c5e1eb66d5",
+      "name": "government/healthcare-agent/information-request/request-manifest"
+    },
+    "3ff7f95b-e651-5dff-8bb8-0cf3d01c4cd9": {
+      "type": "context_ref",
+      "uid": "3ff7f95b-e651-5dff-8bb8-0cf3d01c4cd9",
+      "name": "government/healthcare-agent/information-request/care-access"
+    },
+    "31ef31de-0d0e-57f6-9b88-f6683196d605": {
+      "type": "context_ref",
+      "uid": "31ef31de-0d0e-57f6-9b88-f6683196d605",
+      "name": "government/healthcare-agent/information-request/scheduling-and-continuity"
+    },
+    "bbd9868c-76e7-534e-ad7e-349400ad769f": {
+      "type": "context_ref",
+      "uid": "bbd9868c-76e7-534e-ad7e-349400ad769f",
+      "name": "government/healthcare-agent/information-request/hospital-stays"
+    },
+    "af05b3a5-b12c-5ed9-9529-1f8e498a960d": {
+      "type": "context_ref",
+      "uid": "af05b3a5-b12c-5ed9-9529-1f8e498a960d",
+      "name": "government/healthcare-agent/information-request/communication-and-explanations"
+    },
+    "41a8ec13-0d22-540d-9066-f24ce79eca95": {
+      "type": "context_ref",
+      "uid": "41a8ec13-0d22-540d-9066-f24ce79eca95",
+      "name": "government/healthcare-agent/information-request/memory-use-and-boundaries"
+    }
+  },
+  "order": [
+    "0c108ffd-8292-5b18-90d8-73c5e1eb66d5",
+    "3ff7f95b-e651-5dff-8bb8-0cf3d01c4cd9",
+    "31ef31de-0d0e-57f6-9b88-f6683196d605",
+    "bbd9868c-76e7-534e-ad7e-349400ad769f",
+    "af05b3a5-b12c-5ed9-9529-1f8e498a960d",
+    "41a8ec13-0d22-540d-9066-f24ce79eca95"
+  ]
+}

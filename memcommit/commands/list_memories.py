@@ -11,11 +11,18 @@ from memcommit.clipboard import (
 from memcommit.context import (
     Context,
     Information,
-    Memory,
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.context_locator import resolve_context_locator
+from memcommit.commands.granted_context import (
+    GrantedReadStore,
+    attached_grants,
+    project_grants_into_context,
+    resolve_context_access,
+)
+from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
@@ -473,6 +480,26 @@ def _emit_snapshot_text(text: str) -> None:
         typer.echo(line)
 
 
+def _emit_grant_notes(attachment_name: str) -> None:
+    registry, grants = attached_grants(attachment_name)
+    if not grants:
+        return
+    profiles = {profile.uid: profile.name for profile in registry.profiles}
+    typer.secho("Authority views:", bold=True)
+    for grant in grants:
+        permissions = ", ".join(
+            permission.lower() for permission in grant.permissions
+        )
+        typer.echo(
+            "  "
+            + display_escape_text(grant.public_name)
+            + "/ · "
+            + permissions
+            + " · from "
+            + display_escape_text(profiles[grant.authority_profile_uid])
+        )
+
+
 def render_index(ctx: Context, *, recursive: bool = False) -> None:
     """Print a compact index of a Context's visible navigation children."""
     store = MemoryStore(create=False)
@@ -503,8 +530,9 @@ def cmd(
         typer.Option(
             "-R",
             "--recursive",
+            "--expand",
             help=(
-                "Recursively list namespace children and embedded Contexts."
+                "Expand every descendant namespace and embedded Context."
             ),
         ),
     ] = False,
@@ -591,30 +619,42 @@ def cmd(
         )
         return
 
-    store = MemoryStore()
-    current_context_name = store.current_context_name()
-
-    if context_name is None:
-        context_name = current_context_name
-        if not context_name:
-            typer.secho("No current context. Run 'mem init <name>' first.", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-    else:
-        try:
-            context_name = resolve_context_locator(
-                context_name,
-                current=current_context_name,
+    active_store = MemoryStore()
+    current_context_name = active_store.current_context_name()
+    try:
+        access = resolve_context_access(
+            active_store,
+            context_name,
+            current_name=current_context_name,
+            required_permission="READ",
+        )
+        if access.is_granted:
+            granted_store = GrantedReadStore(access)
+            store = granted_store
+            context_names = tuple(granted_store.list_context_names())
+            ctx = (
+                granted_store.load(access.display_name)
+                if recursive
+                else granted_store.load_direct(access.display_name)
             )
-        except ValueError as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-
-    if not store.context_exists(context_name):
-        typer.secho(f"Error: context '{context_name}' not found.", fg=typer.colors.RED, err=True)
+        else:
+            store = access.store
+            context_names = tuple(store.list_context_names())
+            ctx = store.load(access.context_name)
+            _, grants = attached_grants(access.context_name)
+            if grants:
+                ctx = project_grants_into_context(ctx, grants)
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    context_names = tuple(store.list_context_names())
-    ctx = store.load(context_name)
     snapshot = _snapshot_context(
         ctx,
         store=store,
@@ -623,6 +663,8 @@ def cmd(
     )
     annotated_text = _render_snapshot(snapshot, with_ids=True)
     _emit_snapshot_text(annotated_text)
+    if not access.is_granted:
+        _emit_grant_notes(access.context_name)
 
     if copy_result:
         clipboard_text = _render_snapshot(

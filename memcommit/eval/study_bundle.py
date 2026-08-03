@@ -1,8 +1,9 @@
-"""Build isolated Task 1--3 `.mem` stores from paired fixture languages.
+"""Build Task 1--3 task/authority profile packages from paired fixtures.
 
 The authoring corpus is language-partitioned, but a runtime Memory has one
 canonical English body.  Korean remains a same-UID translation catalog for
-ordinary Contexts and a concealed language variant for query-only sources.
+ordinary Contexts.  Query-only is a grant on an authority-owned ordinary
+Context, not a second concealed storage format inside the participant profile.
 This builder is intentionally offline and refuses to reuse a non-empty target.
 """
 
@@ -20,7 +21,7 @@ from typing import Iterator
 import uuid
 
 import memcommit.store as store_module
-from memcommit.context import AutoCheckpoint, Context, Memory, QueryContextRef
+from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.eval.study_fixtures import (
     FixtureDataset,
     FixtureMemory,
@@ -63,19 +64,62 @@ class StudyBundleError(RuntimeError):
 class BundleDatasetSpec:
     dataset: str
     runtime_root: str
-    query_parents: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class BundleProfileSpec:
+    name: str
+    role: str
+    current_context: str
+    datasets: tuple[BundleDatasetSpec, ...] = ()
+    initial_contexts: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class BundleGrantTemplate:
+    key: str
+    authority_profile: str
+    grantee_profile: str
+    authority_context: str
+    public_name: str
+    permissions: tuple[str, ...]
+    grantee_parent_context: str | None = None
+    parent_grant_key: str | None = None
+    recursive: bool = True
+    excluded_contexts: tuple[str, ...] = ()
+    provider: str | None = None
 
 
 @dataclass(frozen=True)
 class BundleTaskSpec:
     task: int
-    current_context: str
-    datasets: tuple[BundleDatasetSpec, ...]
+    task_profile: BundleProfileSpec
+    authority_profile: BundleProfileSpec
+    grant_templates: tuple[BundleGrantTemplate, ...]
+
+    @property
+    def profiles(self) -> tuple[BundleProfileSpec, BundleProfileSpec]:
+        return (self.task_profile, self.authority_profile)
+
+    @property
+    def current_context(self) -> str:
+        """Retain the old task-current convenience for downstream callers."""
+
+        return self.task_profile.current_context
+
+    @property
+    def datasets(self) -> tuple[BundleDatasetSpec, ...]:
+        """Return every task dataset regardless of its owning profile."""
+
+        return tuple(
+            dataset for profile in self.profiles for dataset in profile.datasets
+        )
 
 
 @dataclass(frozen=True)
 class BundleManifestEntry:
     task: int
+    owner_profile: str
     dataset: str
     fixture_key: str
     canonical_locator: str
@@ -96,46 +140,138 @@ class BundleManifestEntry:
 TASK_SPECS = {
     1: BundleTaskSpec(
         task=1,
-        current_context="participant/construction-updates",
-        datasets=(
-            BundleDatasetSpec(
-                "task1-construction-updates",
-                "participant/construction-updates",
+        task_profile=BundleProfileSpec(
+            name="task-1",
+            role="TASK",
+            current_context="participant/construction-updates",
+            datasets=(
+                BundleDatasetSpec(
+                    "task1-construction-updates",
+                    "participant/construction-updates",
+                ),
             ),
-            BundleDatasetSpec(
-                "task1-campus-wiki",
-                "campus-wiki",
+        ),
+        authority_profile=BundleProfileSpec(
+            name="task-1-campus-authority",
+            role="AUTHORITY",
+            current_context="campus-wiki",
+            datasets=(
+                BundleDatasetSpec("task1-campus-wiki", "campus-wiki"),
+                # The fixture locators already include construction-details
+                # below campus-wiki.  Keeping the same root materializes that
+                # complete subtree as ordinary authority-owned Contexts.
+                BundleDatasetSpec("task1-campus-wiki-details", "campus-wiki"),
             ),
-            BundleDatasetSpec(
-                "task1-campus-wiki-details",
-                "construction-details",
-                ("campus-wiki",),
+        ),
+        grant_templates=(
+            BundleGrantTemplate(
+                key="task-1-campus-wiki-view",
+                authority_profile="task-1-campus-authority",
+                grantee_profile="task-1",
+                authority_context="campus-wiki",
+                public_name="campus-wiki",
+                permissions=("READ", "CREATE", "UPDATE"),
+                grantee_parent_context="participant/construction-updates",
+                excluded_contexts=("campus-wiki/construction-details",),
+            ),
+            BundleGrantTemplate(
+                key="task-1-construction-details-query",
+                authority_profile="task-1-campus-authority",
+                grantee_profile="task-1",
+                authority_context="campus-wiki/construction-details",
+                public_name="construction-details",
+                permissions=("QUERY", "SESSION_LOG"),
+                parent_grant_key="task-1-campus-wiki-view",
+                provider="codex_chatgpt",
             ),
         ),
     ),
     2: BundleTaskSpec(
         task=2,
-        current_context="advisor1",
-        datasets=(
-            BundleDatasetSpec("task2-advisor1", "advisor1"),
-            BundleDatasetSpec("task2-advisor2", "advisor2"),
-            BundleDatasetSpec(
-                "task2-proposal-guidelines",
-                "proposal-submission-guidelines",
-                ("advisor1", "advisor2"),
+        task_profile=BundleProfileSpec(
+            name="task-2",
+            role="TASK",
+            current_context="participant/proposal-workspace",
+            initial_contexts=("participant/proposal-workspace",),
+        ),
+        authority_profile=BundleProfileSpec(
+            name="task-2-proposal-authority",
+            role="AUTHORITY",
+            current_context="advisor1",
+            datasets=(
+                BundleDatasetSpec("task2-advisor1", "advisor1"),
+                BundleDatasetSpec("task2-advisor2", "advisor2"),
+                BundleDatasetSpec(
+                    "task2-proposal-guidelines",
+                    "proposal-submission-guidelines",
+                ),
             ),
+        ),
+        grant_templates=tuple(
+            BundleGrantTemplate(
+                key=key,
+                authority_profile="task-2-proposal-authority",
+                grantee_profile="task-2",
+                authority_context=context,
+                public_name=context,
+                permissions=(
+                    ("QUERY", "SESSION_LOG")
+                    if permission == "QUERY"
+                    else (permission,)
+                ),
+                grantee_parent_context="participant/proposal-workspace",
+                provider=("codex_chatgpt" if permission == "QUERY" else None),
+            )
+            for key, context, permission in (
+                ("task-2-advisor1-view", "advisor1", "READ"),
+                ("task-2-advisor2-view", "advisor2", "READ"),
+                (
+                    "task-2-proposal-guidelines-query",
+                    "proposal-submission-guidelines",
+                    "QUERY",
+                ),
+            )
         ),
     ),
     3: BundleTaskSpec(
         task=3,
-        current_context="personal-memory",
-        datasets=(
-            BundleDatasetSpec("task3-personal-memory", "personal-memory"),
-            BundleDatasetSpec("task3-guardrails", "guardrails"),
-            BundleDatasetSpec(
-                "task3-healthcare-info-request",
-                "government/healthcare-agent/information-request",
-                ("personal-memory", "guardrails"),
+        task_profile=BundleProfileSpec(
+            name="task-3",
+            role="TASK",
+            current_context="personal-memory",
+            datasets=(BundleDatasetSpec("task3-personal-memory", "personal-memory"),),
+        ),
+        authority_profile=BundleProfileSpec(
+            name="task-3-healthcare-authority",
+            role="AUTHORITY",
+            current_context="guardrails",
+            datasets=(
+                BundleDatasetSpec("task3-guardrails", "guardrails"),
+                BundleDatasetSpec(
+                    "task3-healthcare-info-request",
+                    "government/healthcare-agent/information-request",
+                ),
+            ),
+        ),
+        grant_templates=(
+            BundleGrantTemplate(
+                key="task-3-guardrails-view",
+                authority_profile="task-3-healthcare-authority",
+                grantee_profile="task-3",
+                authority_context="guardrails",
+                public_name="guardrails",
+                permissions=("READ",),
+                grantee_parent_context="personal-memory",
+            ),
+            BundleGrantTemplate(
+                key="task-3-healthcare-information-query",
+                authority_profile="task-3-healthcare-authority",
+                grantee_profile="task-3",
+                authority_context=("government/healthcare-agent/information-request"),
+                public_name=("government/healthcare-agent/information-request"),
+                permissions=("QUERY", "SESSION_LOG"),
+                grantee_parent_context="personal-memory",
+                provider="codex_chatgpt",
             ),
         ),
     ),
@@ -207,9 +343,7 @@ def _prepare_atomic_destination(destination: Path) -> None:
             f"Study bundle destination {destination} is not a directory."
         )
     if any(destination.iterdir()):
-        raise StudyBundleError(
-            f"Study bundle destination {destination} is not empty."
-        )
+        raise StudyBundleError(f"Study bundle destination {destination} is not empty.")
     # Removing an empty placeholder is lossless and lets the completed staging
     # directory become visible with one same-filesystem rename.
     destination.rmdir()
@@ -236,8 +370,7 @@ def _atomic_output_directory(destination: Path) -> Iterator[Path]:
         # platforms even though initial validation rejected one.
         if destination.is_symlink() or destination.exists():
             raise StudyBundleError(
-                f"Study bundle destination {destination} appeared during "
-                "the build."
+                f"Study bundle destination {destination} appeared during " "the build."
             )
         os.replace(staging, destination)
         published = True
@@ -348,6 +481,7 @@ def _ensure_hierarchy(
 def _ordinary_dataset(
     *,
     task_spec: BundleTaskSpec,
+    profile_spec: BundleProfileSpec,
     dataset_spec: BundleDatasetSpec,
     dataset: FixtureDataset,
     pairs: tuple[FixtureTranslationPair, ...],
@@ -376,7 +510,10 @@ def _ordinary_dataset(
         memory = Memory(
             uid=_stable_uid(
                 f"task-{task_spec.task}",
-                "memory",
+                # Moving a historical query-only fixture into an ordinary
+                # authority Context must not assign its stable entry a new
+                # identity merely because QUERY is now a grant/view mode.
+                "query-entry" if dataset.spec.query_only else "memory",
                 pair.uid_key,
             ),
             content=pair.canonical.content,
@@ -390,6 +527,7 @@ def _ordinary_dataset(
         manifest.append(
             _manifest_entry(
                 task_spec.task,
+                profile_spec.name,
                 dataset.spec.name,
                 pair,
                 runtime_context=owner_name,
@@ -402,6 +540,7 @@ def _ordinary_dataset(
 
 def _manifest_entry(
     task: int,
+    owner_profile: str,
     dataset: str,
     pair: FixtureTranslationPair,
     *,
@@ -411,6 +550,7 @@ def _manifest_entry(
 ) -> BundleManifestEntry:
     return BundleManifestEntry(
         task=task,
+        owner_profile=owner_profile,
         dataset=dataset,
         fixture_key=pair.canonical.identity_key,
         canonical_locator=pair.canonical.canonical_locator,
@@ -418,9 +558,7 @@ def _manifest_entry(
         memory_uid=memory_uid,
         query_only=query_only,
         purpose=pair.canonical.purpose,
-        audiences=tuple(
-            audience.value for audience in pair.canonical.audiences
-        ),
+        audiences=tuple(audience.value for audience in pair.canonical.audiences),
         verified=pair.canonical.verified,
         english_sha256=_digest(pair.canonical.content),
         korean_sha256=_digest(pair.translation.content),
@@ -437,65 +575,10 @@ def _manifest_entry(
     )
 
 
-def _attach_query_dataset(
-    *,
-    store: MemoryStore,
-    task_spec: BundleTaskSpec,
-    dataset_spec: BundleDatasetSpec,
-    dataset: FixtureDataset,
-    pairs: tuple[FixtureTranslationPair, ...],
-    contexts: dict[str, Context],
-) -> list[BundleManifestEntry]:
-    entries = []
-    manifest = []
-    for pair in pairs:
-        entry_uid = _stable_uid(
-            f"task-{task_spec.task}",
-            "query-entry",
-            pair.uid_key,
-        )
-        entries.append(
-            {
-                "uid": entry_uid,
-                "key": pair.canonical.identity_key,
-                "canonical_content": pair.canonical.content,
-                "translations": {"ko": pair.translation.content},
-            }
-        )
-        manifest.append(
-            _manifest_entry(
-                task_spec.task,
-                dataset.spec.name,
-                pair,
-                runtime_context=None,
-                memory_uid=entry_uid,
-                query_only=True,
-            )
-        )
-    source = store.create_bilingual_query_source(
-        dataset_spec.runtime_root,
-        entries,
-    )
-    for parent_name in dataset_spec.query_parents:
-        parent = _ensure_context(contexts, parent_name, task=task_spec.task)
-        ref = QueryContextRef(
-            uid=_stable_uid(
-                f"task-{task_spec.task}",
-                "query-ref",
-                parent_name,
-                dataset_spec.runtime_root,
-            ),
-            name=dataset_spec.runtime_root,
-            target_source_uid=source.uid,
-            provider="codex_chatgpt",
-        )
-        parent.add(ref)
-    return manifest
-
-
 def _save_contexts(
     store: MemoryStore,
     task_spec: BundleTaskSpec,
+    profile_spec: BundleProfileSpec,
     contexts: dict[str, Context],
 ) -> None:
     entries = tuple(
@@ -504,8 +587,9 @@ def _save_contexts(
             AutoCheckpoint(
                 command="fixture-import",
                 args={
-                    "schema_version": 1,
+                    "schema_version": 2,
                     "task": task_spec.task,
+                    "profile": profile_spec.name,
                     "context_uid": context.uid,
                     "memory_uids": [
                         item.uid
@@ -515,7 +599,8 @@ def _save_contexts(
                 },
                 description=(
                     f"Imported canonical English Task {task_spec.task} "
-                    f"fixture Context '{context.name}'."
+                    f"fixture Context '{context.name}' into profile "
+                    f"'{profile_spec.name}'."
                 ),
             ),
         )
@@ -528,7 +613,7 @@ def _save_contexts(
     )
     store.create_missing_contexts(
         entries,
-        make_current=task_spec.current_context,
+        make_current=profile_spec.current_context,
     )
 
 
@@ -568,10 +653,15 @@ def _remove_transient_lock_artifacts(store_root: Path) -> None:
         raise StudyBundleError("Fixture Context graph lock path is unsafe.")
     if graph_lock.exists():
         if not graph_lock.is_file():
-            raise StudyBundleError(
-                "Fixture Context graph lock path is invalid."
-            )
+            raise StudyBundleError("Fixture Context graph lock path is invalid.")
         graph_lock.unlink()
+    command_lock = store_root / "context-command-write.lock"
+    if command_lock.is_symlink():
+        raise StudyBundleError("Fixture command lock path is unsafe.")
+    if command_lock.exists():
+        if not command_lock.is_file():
+            raise StudyBundleError("Fixture command lock path is invalid.")
+        command_lock.unlink()
     state_lock = store_root / "state-write.lock"
     if state_lock.is_symlink():
         raise StudyBundleError("Fixture state lock path is unsafe.")
@@ -595,6 +685,232 @@ def _remove_transient_lock_artifacts(store_root: Path) -> None:
     context_locks.rmdir()
 
 
+_GRANT_PERMISSIONS = frozenset(
+    {"QUERY", "SESSION_LOG", "READ", "CREATE", "UPDATE", "DELETE"}
+)
+
+
+def _profile_store_path(package: Path, profile_name: str) -> Path:
+    return package / "profiles" / profile_name / ".mem"
+
+
+def _build_profile_contents(
+    task_spec: BundleTaskSpec,
+    profile_spec: BundleProfileSpec,
+    package: Path,
+    *,
+    fixture_root: Path,
+) -> tuple[dict[str, object], tuple[BundleManifestEntry, ...], frozenset[str]]:
+    """Build one owned store; grant views are installed only during import."""
+
+    store_root = _profile_store_path(package, profile_spec.name)
+    contexts: dict[str, Context] = {}
+    korean_by_owner: dict[
+        str,
+        list[tuple[Memory, FixtureTranslationPair]],
+    ] = {}
+    manifest: list[BundleManifestEntry] = []
+    for context_name in profile_spec.initial_contexts:
+        _ensure_context(contexts, context_name, task=task_spec.task)
+
+    with _isolated_store_root(store_root):
+        store = MemoryStore()
+        for dataset_spec in profile_spec.datasets:
+            dataset, pairs = _load_pairs(dataset_spec.dataset, fixture_root)
+            # A fixture's historical query_only flag describes the task-facing
+            # interaction.  The authority profile owns the same records as
+            # ordinary Contexts so its operator can inspect and maintain them.
+            manifest.extend(
+                _ordinary_dataset(
+                    task_spec=task_spec,
+                    profile_spec=profile_spec,
+                    dataset_spec=dataset_spec,
+                    dataset=dataset,
+                    pairs=pairs,
+                    contexts=contexts,
+                    korean_by_owner=korean_by_owner,
+                )
+            )
+        if profile_spec.current_context not in contexts:
+            raise StudyBundleError(
+                f"Current Context {profile_spec.current_context!r} was not "
+                f"built for profile {profile_spec.name!r}."
+            )
+        _save_contexts(store, task_spec, profile_spec, contexts)
+        _save_korean_catalogs(store, korean_by_owner)
+
+    # Lock files coordinate only the builder process. Shipping them would
+    # imply stale ownership and add non-data artifacts to every profile.
+    _remove_transient_lock_artifacts(store_root)
+    entries = tuple(manifest)
+    return (
+        {
+            "profile_name": profile_spec.name,
+            "role": profile_spec.role,
+            "store_path": (Path("profiles") / profile_spec.name / ".mem").as_posix(),
+            "current_context": profile_spec.current_context,
+            "context_count": len(contexts),
+            "ordinary_count": len(entries),
+            "datasets": [dataset.dataset for dataset in profile_spec.datasets],
+            "entries": [asdict(entry) for entry in entries],
+        },
+        entries,
+        frozenset(contexts),
+    )
+
+
+def _grant_uid(task: int, key: str) -> str:
+    return _stable_uid(f"task-{task}", "grant", key)
+
+
+def _context_manifest_identity(task: int, name: str) -> dict[str, str]:
+    return {
+        "uid": _stable_uid(f"task-{task}", "context", name),
+        "name": name,
+    }
+
+
+def _grant_template_records(
+    task_spec: BundleTaskSpec,
+    contexts_by_profile: dict[str, frozenset[str]],
+) -> list[dict[str, object]]:
+    """Validate and serialize import-time authority-owned grant templates."""
+
+    profile_names = {profile.name for profile in task_spec.profiles}
+    templates_by_key = {
+        template.key: template for template in task_spec.grant_templates
+    }
+    if len(templates_by_key) != len(task_spec.grant_templates):
+        raise StudyBundleError("Study grant template keys must be unique.")
+
+    result: list[dict[str, object]] = []
+    for template in task_spec.grant_templates:
+        if (
+            template.authority_profile not in profile_names
+            or template.grantee_profile not in profile_names
+        ):
+            raise StudyBundleError(
+                f"Grant template {template.key!r} names an unknown profile."
+            )
+        authority_contexts = contexts_by_profile[template.authority_profile]
+        if template.authority_context not in authority_contexts:
+            raise StudyBundleError(
+                f"Grant template {template.key!r} names a missing authority " "Context."
+            )
+        permissions = template.permissions
+        if (
+            not permissions
+            or len(set(permissions)) != len(permissions)
+            or any(permission not in _GRANT_PERMISSIONS for permission in permissions)
+            or (
+                "QUERY" in permissions
+                and set(permissions) - {"QUERY", "SESSION_LOG"}
+            )
+            or ("SESSION_LOG" in permissions and "QUERY" not in permissions)
+        ):
+            raise StudyBundleError(
+                f"Grant template {template.key!r} has invalid permissions."
+            )
+        if ("QUERY" in permissions) != (template.provider is not None):
+            raise StudyBundleError(
+                f"Grant template {template.key!r} has an invalid provider."
+            )
+        has_context_parent = template.grantee_parent_context is not None
+        has_grant_parent = template.parent_grant_key is not None
+        if has_context_parent == has_grant_parent:
+            raise StudyBundleError(
+                f"Grant template {template.key!r} must have exactly one parent."
+            )
+        if has_context_parent:
+            assert template.grantee_parent_context is not None
+            if (
+                template.grantee_parent_context
+                not in contexts_by_profile[template.grantee_profile]
+            ):
+                raise StudyBundleError(
+                    f"Grant template {template.key!r} names a missing grantee "
+                    "parent Context."
+                )
+            attachment: dict[str, object] = {
+                "kind": "GRANTEE_CONTEXT",
+                "context": _context_manifest_identity(
+                    task_spec.task,
+                    template.grantee_parent_context,
+                ),
+            }
+        else:
+            assert template.parent_grant_key is not None
+            parent = templates_by_key.get(template.parent_grant_key)
+            if parent is None or parent.grantee_profile != template.grantee_profile:
+                raise StudyBundleError(
+                    f"Grant template {template.key!r} has an invalid parent grant."
+                )
+            attachment = {
+                "kind": "GRANT_VIEW",
+                "grant_key": template.parent_grant_key,
+                "grant_uid": _grant_uid(
+                    task_spec.task,
+                    template.parent_grant_key,
+                ),
+            }
+
+        excluded: list[dict[str, str]] = []
+        for name in template.excluded_contexts:
+            if name not in authority_contexts or not name.startswith(
+                template.authority_context + "/"
+            ):
+                raise StudyBundleError(
+                    f"Grant template {template.key!r} has an invalid exclusion."
+                )
+            excluded.append(_context_manifest_identity(task_spec.task, name))
+
+        record: dict[str, object] = {
+            "schema_version": 1,
+            "key": template.key,
+            "grant_uid": _grant_uid(task_spec.task, template.key),
+            # Import allocates local Profile UIDs first, then resolves these
+            # package keys without trusting a mutable display lookup later.
+            "authority_profile": template.authority_profile,
+            "grantee_profile": template.grantee_profile,
+            "authority_context": _context_manifest_identity(
+                task_spec.task,
+                template.authority_context,
+            ),
+            "attachment": attachment,
+            "public_name": template.public_name,
+            "permissions": list(permissions),
+            "recursive": template.recursive,
+            "excluded_contexts": excluded,
+        }
+        if template.provider is not None:
+            record["provider"] = template.provider
+        result.append(record)
+    return result
+
+
+def _query_view_count(
+    entries: tuple[BundleManifestEntry, ...],
+    templates: tuple[BundleGrantTemplate, ...],
+) -> int:
+    roots = tuple(
+        (template.authority_profile, template.authority_context)
+        for template in templates
+        if "QUERY" in template.permissions
+    )
+    return sum(
+        any(
+            entry.owner_profile == profile
+            and entry.runtime_context is not None
+            and (
+                entry.runtime_context == root
+                or entry.runtime_context.startswith(root + "/")
+            )
+            for profile, root in roots
+        )
+        for entry in entries
+    )
+
+
 def _build_study_bundle_contents(
     task: int,
     package: Path,
@@ -608,70 +924,50 @@ def _build_study_bundle_contents(
     except KeyError as error:
         raise StudyBundleError(f"Unsupported study task {task!r}.") from error
     package = Path(package)
-    store_root = package / ".mem"
     if package.exists() and any(package.iterdir()):
         raise StudyBundleError(
             f"Study bundle staging directory {package} is not empty."
         )
     package.mkdir(parents=True, exist_ok=True)
-    root = fixture_root or (
-        Path(__file__).resolve().parents[2] / "docs" / "fixtures"
-    )
-    contexts: dict[str, Context] = {}
-    korean_by_owner: dict[
-        str,
-        list[tuple[Memory, FixtureTranslationPair]],
-    ] = {}
+    root = fixture_root or (Path(__file__).resolve().parents[2] / "docs" / "fixtures")
+    profile_records: list[dict[str, object]] = []
     manifest: list[BundleManifestEntry] = []
-
-    with _isolated_store_root(store_root):
-        store = MemoryStore()
-        for dataset_spec in task_spec.datasets:
-            dataset, pairs = _load_pairs(dataset_spec.dataset, root)
-            if dataset.spec.query_only:
-                manifest.extend(
-                    _attach_query_dataset(
-                        store=store,
-                        task_spec=task_spec,
-                        dataset_spec=dataset_spec,
-                        dataset=dataset,
-                        pairs=pairs,
-                        contexts=contexts,
-                    )
-                )
-            else:
-                manifest.extend(
-                    _ordinary_dataset(
-                        task_spec=task_spec,
-                        dataset_spec=dataset_spec,
-                        dataset=dataset,
-                        pairs=pairs,
-                        contexts=contexts,
-                        korean_by_owner=korean_by_owner,
-                    )
-                )
-        if task_spec.current_context not in contexts:
-            raise StudyBundleError(
-                f"Current Context {task_spec.current_context!r} was not built."
-            )
-        _save_contexts(store, task_spec, contexts)
-        _save_korean_catalogs(store, korean_by_owner)
-    # Lock files coordinate only the builder process. Shipping them would
-    # imply stale ownership and add non-data artifacts to every swap package.
-    _remove_transient_lock_artifacts(store_root)
+    contexts_by_profile: dict[str, frozenset[str]] = {}
+    for profile_spec in task_spec.profiles:
+        profile_record, profile_entries, context_names = _build_profile_contents(
+            task_spec,
+            profile_spec,
+            package,
+            fixture_root=root,
+        )
+        profile_records.append(profile_record)
+        manifest.extend(profile_entries)
+        contexts_by_profile[profile_spec.name] = context_names
+    all_entries = tuple(manifest)
+    if len({entry.memory_uid for entry in all_entries}) != len(all_entries):
+        raise StudyBundleError("Study profile stores contain duplicate Memory UIDs.")
+    grant_templates = _grant_template_records(task_spec, contexts_by_profile)
 
     manifest_path = package / "manifest.json"
     manifest_path.write_text(
         json.dumps(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "task": task,
                 "canonical_language": "en",
                 "translation_languages": ["ko"],
                 "current_context": task_spec.current_context,
-                "ordinary_count": sum(not entry.query_only for entry in manifest),
-                "query_only_count": sum(entry.query_only for entry in manifest),
-                "entries": [asdict(entry) for entry in manifest],
+                "ordinary_count": len(all_entries),
+                "query_only_count": 0,
+                "query_view_count": _query_view_count(
+                    all_entries,
+                    task_spec.grant_templates,
+                ),
+                "profiles": profile_records,
+                "grant_templates": grant_templates,
+                # Keep a task-wide join surface for spreadsheet and hash tools;
+                # owner_profile identifies the store containing each Memory.
+                "entries": [asdict(entry) for entry in all_entries],
             },
             ensure_ascii=False,
             indent=2,
@@ -708,7 +1004,7 @@ def build_all_study_bundles(
     *,
     fixture_root: Path | None = None,
 ) -> tuple[Path, ...]:
-    """Build Task 1--3 as independent swappable `.mem` package roots."""
+    """Build three task packages, each with task and authority stores."""
 
     root = Path(destination)
     with _atomic_output_directory(root) as staging:
@@ -719,27 +1015,35 @@ def build_all_study_bundles(
                 fixture_root=fixture_root,
             )
         (staging / "README.md").write_text(
-            """# Isolated memcommit study stores
+            """# Isolated memcommit study profile packages
 
-Each `task-N/` directory is a complete, independent package whose `.mem/`
-directory can be copied into one editable local profile. English is the
-canonical Memory content. Korean is attached to the same Memory UID as an
-unreviewed imported translation view. Query-only sources contain concealed
-English and Korean variants and remain accessible only through `mem query`.
+Each `task-N/` directory contains two complete stores below `profiles/`: the
+participant task profile and its switchable task-specific authority profile.
+The task manifest declares authority-owned grant templates that the importer
+binds only after allocating both local Profile UIDs. Do not merge or copy
+authority Contexts into the task store.
 
-Do not merge these `.mem/` directories. Run `mem profile import-study` to
-register editable copies, then use `mem profile use task-N` before navigating
-that task with `mem switch`. The legacy `~/.mem` remains the `authoring`
-profile and package sources are never edited in place. The package manifest
-records fixture identity, runtime UID, source hashes, purpose, and the
-translation review boundary; audience annotations are not ACL enforcement.
+All fixture data, including material exposed through a QUERY grant, is stored
+as ordinary authority-owned Contexts. English is canonical Memory content and
+Korean is attached to the same Memory UID as an unreviewed imported
+translation view. A task profile sees only the READ, CREATE, UPDATE, or QUERY
+views declared in its grant templates; study QUERY views also grant explicit
+SESSION_LOG retention for named visible Q/A transcripts.
+Audience annotations remain review metadata and are not automatically
+interpreted as ACL rules.
+
+Run `mem profile import-study` once to compose a clean editable
+`study-baseline` Profile without authoring checkpoints or run artifacts. Its
+`task-N` branches contain participant starting state and its
+`granted-memory/task-N` branches contain authority source material. Refine that
+single live Profile, then use `mem init-study NAME` to snapshot its current
+state into isolated Task and authority Profiles with bound grants. The legacy
+`~/.mem` remains the `authoring` profile and package sources are never edited
+in place.
 """,
             encoding="utf-8",
         )
-    return tuple(
-        root / f"task-{task}" / "manifest.json"
-        for task in sorted(TASK_SPECS)
-    )
+    return tuple(root / f"task-{task}" / "manifest.json" for task in sorted(TASK_SPECS))
 
 
 def _main() -> int:

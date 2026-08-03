@@ -1,0 +1,250 @@
+{
+  "schema_version": 2,
+  "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+  "context_name": "advisor2/structure",
+  "target_language": "ko",
+  "created_at": "2026-08-03T16:23:41.285323+00:00",
+  "updated_at": "2026-08-03T16:23:41.286093+00:00",
+  "revision": 18,
+  "contract_version": "translate-v2",
+  "entries": [
+    {
+      "source_uid": "e32f543b-1637-572a-ab96-319d74ee7e21",
+      "provider": null,
+      "curated": {
+        "source_sha256": "eff2bbdc298f7633c74175c071e08996341a26540ba6077df20419f767c4e242",
+        "translated_content": "\ub3c4\uc785\ubd80 \uc138 \ubb38\uc7a5 \uc548\uc5d0 \uc2e4\uc81c \uc0ac\uc6a9 \ud658\uacbd\uc5d0\uc11c \uc544\uc9c1 \ud480\ub9ac\uc9c0 \uc54a\uc740 \uc0c1\ud638\uc791\uc6a9 \ubb38\uc81c\ub97c \uc81c\uc2dc\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285364+00:00",
+        "updated_at": "2026-08-03T16:23:41.285364+00:00"
+      }
+    },
+    {
+      "source_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
+      "provider": null,
+      "curated": {
+        "source_sha256": "0757868a0d160950a2e612266bdb3be9c232e403c95824ec85819e932fdbfdb8",
+        "translated_content": "\ub3c4\uc785\ubd80 \uc138 \ubb38\uc7a5 \uc548\uc5d0 \uadf8 \uc0c1\ud638\uc791\uc6a9 \ubb38\uc81c\uac00 \ud604\uc7ac \uc0ac\uc6a9\uc790\ub098 \uc6b4\uc601\uc5d0 \uc8fc\ub294 \ubd80\ub2f4\uc744 \uc81c\uc2dc\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285412+00:00",
+        "updated_at": "2026-08-03T16:23:41.285412+00:00"
+      }
+    },
+    {
+      "source_uid": "48e887dc-7fc8-5a23-9999-890acb870251",
+      "provider": null,
+      "curated": {
+        "source_sha256": "3ab83046fede9de55435f98324226f435bcc4932d2a7440ef61fc21c2e0d71f3",
+        "translated_content": "\uc8fc\ub41c HCI \uc5f0\uad6c \uc9c8\ubb38\uc5d0 \uc0ac\uc6a9\uc790, \uc6b4\uc601 \uc774\ud574\uad00\uacc4\uc790, \uc2e4\uc81c \uc0ac\uc6a9 \ud658\uacbd\uc744 \uba85\uc2dc\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285459+00:00",
+        "updated_at": "2026-08-03T16:23:41.285459+00:00"
+      }
+    },
+    {
+      "source_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b",
+      "provider": null,
+      "curated": {
+        "source_sha256": "6b3911d3a010c4ddd13f9b1135f3becbbb9262331007c697baf0d395d2a30aef",
+        "translated_content": "\ub0af\uc120 \uc0c1\ud638\uc791\uc6a9 \uc808\ucc28\ub97c \uc81c\uc548\ud560 \ub54c\ub294 \ub2e8\uacc4 \uc21c\uc11c\ub97c \ud55c \uc7a5\uc758 \uc21c\uc11c\ud45c\ub85c \uc694\uc57d\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285504+00:00",
+        "updated_at": "2026-08-03T16:23:41.285504+00:00"
+      }
+    },
+    {
+      "source_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
+      "provider": null,
+      "curated": {
+        "source_sha256": "88adf442d22937ba607ce259ec628f6daf1ba97c559818c099dfe24658f7080f",
+        "translated_content": "\ub0af\uc120 \uc0c1\ud638\uc791\uc6a9 \uc808\ucc28\uc758 \ub2e8\uacc4 \uc0ac\uc774 \uc804\ud658 \uc870\uac74\uc744 \uc21c\uc11c\ud45c\uc5d0 \ud45c\uc2dc\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285548+00:00",
+        "updated_at": "2026-08-03T16:23:41.285548+00:00"
+      }
+    },
+    {
+      "source_uid": "eca301ff-9feb-502d-b955-055c48342542",
+      "provider": null,
+      "curated": {
+        "source_sha256": "035713de4f5d6577859b2602ae32a7561594bcbeca023049d4b0e2d4c930d94a",
+        "translated_content": "\uc11d\uc0ac \uc5f0\uad6c \uc77c\uc815\uc744 \ud604\uc7a5 \uc774\ud574, \uc2dc\uc2a4\ud15c \uad6c\ud604, \uc0ac\uc6a9\uc790 \uc5f0\uad6c, \ubd84\uc11d\uc758 \ub2e8\uacc4\ubcc4 \uc774\uc815\ud45c\ub85c \uc81c\uc2dc\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285591+00:00",
+        "updated_at": "2026-08-03T16:23:41.285591+00:00"
+      }
+    },
+    {
+      "source_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a",
+      "provider": null,
+      "curated": {
+        "source_sha256": "dff2c02b66c97696644d04ee7e685c706443257101e7ee34182dcc5021aa8525",
+        "translated_content": "\uc11d\uc0ac \uc5f0\uad6c\uc758 \uac01 \uc774\uc815\ud45c\uc5d0 \ub2e4\uc74c \ub2e8\uacc4 \uc9c4\uc785\uc744 \ud310\ub2e8\ud560 \uc0b0\ucd9c\ubb3c\uc744 \uc5f0\uacb0\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285636+00:00",
+        "updated_at": "2026-08-03T16:23:41.285636+00:00"
+      }
+    },
+    {
+      "source_uid": "9283aedb-6818-5c99-8fe0-502b488acb66",
+      "provider": null,
+      "curated": {
+        "source_sha256": "8da57ff6f210ec4a38d82a2550f96a6b30ba59b7f63f3f3c08e9dcec10dce381",
+        "translated_content": "\uc2e4\uc81c \uc0ac\uc6a9 \ub9e5\ub77d\uc758 \uacf5\ubc31\uacfc \uc81c\uc548\ud55c \uc124\uacc4\u00b7\uc6b4\uc601 \uae30\uc5ec\ub97c \ud55c \ud750\ub984 \uc548\uc5d0\uc11c \uc9c1\uc811 \uc5f0\uacb0\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285680+00:00",
+        "updated_at": "2026-08-03T16:23:41.285680+00:00"
+      }
+    },
+    {
+      "source_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
+      "provider": null,
+      "curated": {
+        "source_sha256": "a06ae19d322a527a2a166eca83011a710d99208df40fefae3d7dad7afa413af5",
+        "translated_content": "\uc81c\ucd9c \ud15c\ud50c\ub9bf\uc774 \uc815\ud574\uc9c4 \uc18c\uc81c\ubaa9\ub9cc \ud5c8\uc6a9\ud558\uba74 \ucd94\uac00 \uc18c\uc81c\ubaa9\uc744 \ub9cc\ub4e4\uc9c0 \ub9c8\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285727+00:00",
+        "updated_at": "2026-08-03T16:23:41.285727+00:00"
+      }
+    },
+    {
+      "source_uid": "87203bcf-6724-543a-ad19-60a2becc4598",
+      "provider": null,
+      "curated": {
+        "source_sha256": "d6709beb8d655e247cb1b4ba2b2802f2e5fbe8f421a4f55abc3e175727af1af2",
+        "translated_content": "\uc815\ud574\uc9c4 \uc18c\uc81c\ubaa9 \uc548\uc5d0\uc11c\ub294 \uc0ac\uc6a9\uc790 \ubb38\uc81c, \uc124\uacc4 \uac1c\uc785, \ud3c9\uac00 \ub17c\ub9ac\ub97c \ud558\ub098\uc758 \uc5f0\uc18d\ub41c \ud750\ub984\uc73c\ub85c \uc5f0\uacb0\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285772+00:00",
+        "updated_at": "2026-08-03T16:23:41.285772+00:00"
+      }
+    },
+    {
+      "source_uid": "c9591180-6f3a-5909-8695-31704b9b6f01",
+      "provider": null,
+      "curated": {
+        "source_sha256": "8cb8b48f7f57c3248d28f4b82181c9ddbac16acb7b67435abdfb761233b3aecb",
+        "translated_content": "\ud604\uc7a5 \uad00\ucc30\uc774\ub098 \uae30\uc220 \uac80\uc99d \uacb0\uacfc\ub294 \uc2e4\ud589 \uac00\ub2a5\uc131 \uc8fc\uc7a5\uc744 \ub4b7\ubc1b\uce68\ud558\ub294 \ubb38\uc7a5 \uac00\uae4c\uc774\uc5d0 \ubc30\uce58\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285818+00:00",
+        "updated_at": "2026-08-03T16:23:41.285818+00:00"
+      }
+    },
+    {
+      "source_uid": "0ac685f9-e338-5549-bf91-32078cf36f15",
+      "provider": null,
+      "curated": {
+        "source_sha256": "39ffdcf0e3a337acf14ceb51327ee9ce5ceda556f1609ec5f9627ac291c72bca",
+        "translated_content": "HCI \uc2ec\uc0ac\uc790\ub294 \ub3c4\uc785\ubd80\uc758 \uccab \uc138 \ubb38\uc7a5\uc5d0\uc11c \uc0ac\uc6a9\uc790\uc640 \uc2e4\uc81c \uc0ac\uc6a9 \ud658\uacbd\uc758 \ubb38\uc81c\ub97c \ucc3e\uc544 \ucd08\uae30 \ub17c\uc810\uc744 \ud615\uc131\ud55c\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285863+00:00",
+        "updated_at": "2026-08-03T16:23:41.285863+00:00"
+      }
+    },
+    {
+      "source_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
+      "provider": null,
+      "curated": {
+        "source_sha256": "546cdf4a34a757e669d9b55045b81fc811e68f83caf1ee2a1798f988a288feda",
+        "translated_content": "HCI \uc2ec\uc0ac\uc790\ub294 \ub3c4\uc785\ubd80\uc758 \uccab \uc138 \ubb38\uc7a5\uc5d0\uc11c \uadf8 \ubb38\uc81c\uac00 \ud604\uc7ac \uc0ac\uc6a9\uc790\ub098 \uc6b4\uc601\uc5d0 \uc8fc\ub294 \ubd80\ub2f4\uc744 \ud310\ub2e8\ud55c\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285909+00:00",
+        "updated_at": "2026-08-03T16:23:41.285909+00:00"
+      }
+    },
+    {
+      "source_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
+      "provider": null,
+      "curated": {
+        "source_sha256": "151aff5661ca0c51d74a5479b3f0b89c34f7f581f483e45382a51a5a88df50e1",
+        "translated_content": "\uc0ac\uc6a9\uc790 \ubb38\uc81c\uc5d0\uc11c \ud604\uc7a5 \uadfc\uac70, \uc124\uacc4 \uac1c\uc785, \ud3c9\uac00 \uacb0\uacfc, \uc6b4\uc601 \uacb0\uc815\uae4c\uc9c0\uc758 \uacbd\ub85c\ub97c \ub04a\uae40 \uc5c6\uc774 \uc81c\uc2dc\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.285955+00:00",
+        "updated_at": "2026-08-03T16:23:41.285955+00:00"
+      }
+    },
+    {
+      "source_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1",
+      "provider": null,
+      "curated": {
+        "source_sha256": "3e207e4752b4d4e892a3f8c2c8fe2008098f1edb493f370c7385d3e8b1014e03",
+        "translated_content": "\uc5f0\uad6c \ub2e8\uacc4\uac00 \ub05d\ub09c \ub4a4 \uc2dc\uc2a4\ud15c\uc744 \ub204\uac00 \uc5b4\ub5a4 \uc870\uac74\uc5d0\uc11c \uc774\uc5b4\ubc1b\ub294\uc9c0 \uc5f0\uad6c \ud750\ub984\uc5d0 \ud3ec\ud568\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.286000+00:00",
+        "updated_at": "2026-08-03T16:23:41.286000+00:00"
+      }
+    },
+    {
+      "source_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
+      "provider": null,
+      "curated": {
+        "source_sha256": "9b1c5b7c2c17f77ecccbe893f737d8d7191ba5706bbcee7d58acd0b4654e0b5a",
+        "translated_content": "\ud604\uc7a5 \ubc30\ud3ec \uc5f0\uad6c\uc758 \ub17c\ub9ac\ub294 \uc124\uacc4\uac00 \uc791\ub3d9\ud558\ub294\uc9c0\ubfd0 \uc544\ub2c8\ub77c \uadf8 \uacb0\uacfc\uac00 \uc5b4\ub5a4 \uc6b4\uc601 \uacb0\uc815\uc744 \ub4b7\ubc1b\uce68\ud558\ub294\uc9c0\uae4c\uc9c0 \uc5f0\uacb0\ud55c\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.286046+00:00",
+        "updated_at": "2026-08-03T16:23:41.286046+00:00"
+      }
+    },
+    {
+      "source_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d",
+      "provider": null,
+      "curated": {
+        "source_sha256": "6783b7b7bb59415b0e30fb68a3196208faae4f8addd2bb92b5f434973f886347",
+        "translated_content": "the agent\ub294 \ubc30\ud3ec \uc774\ud6c4 \uc6b4\uc601 \uc8fc\uccb4\uac00 \ub4dc\ub7ec\ub098\uc9c0 \uc54a\uc73c\uba74 \uc81c\uc548\ud55c \uac1c\uc785\uc758 \uc9c0\uc18d \uac00\ub2a5\uc131\uc744 \uac80\ud1a0\ud560 \uc218 \uc5c6\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "cfc8c1de50d01a2d42c9ca5cf398c6a73a152323e5ed767acb19ab1a418e9ec0",
+        "created_at": "2026-08-03T16:23:41.286093+00:00",
+        "updated_at": "2026-08-03T16:23:41.286093+00:00"
+      }
+    }
+  ]
+}

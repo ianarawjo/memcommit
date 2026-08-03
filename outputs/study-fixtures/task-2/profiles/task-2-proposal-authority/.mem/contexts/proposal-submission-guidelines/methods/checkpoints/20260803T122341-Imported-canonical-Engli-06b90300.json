@@ -1,0 +1,80 @@
+{
+  "uid": "06b90300-4d02-4990-aae9-a9b3f9c9784d",
+  "message": "Imported canonical English Task 2 fixture Context 'proposal-submission-guidelines/methods' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-03T12:23:41.247561",
+  "snapshot": {
+    "uid": "1d564cdb-1892-5b2e-8e51-fdb7113a1163",
+    "name": "proposal-submission-guidelines/methods",
+    "memories": {
+      "6827e3df-800e-55ae-8b16-5b0a632d3c3c": {
+        "type": "memory",
+        "uid": "6827e3df-800e-55ae-8b16-5b0a632d3c3c",
+        "content": "Combine methods and evaluation plan into 300\u2013340 words."
+      },
+      "26f13e5a-cd0d-58f4-8300-2704f30bc97b": {
+        "type": "memory",
+        "uid": "26f13e5a-cd0d-58f4-8300-2704f30bc97b",
+        "content": "Link each research question to the type of data that will be collected to answer it."
+      },
+      "760089ac-77cb-50ca-bfee-e1dba69db400": {
+        "type": "memory",
+        "uid": "760089ac-77cb-50ca-bfee-e1dba69db400",
+        "content": "Specify tools for collecting each data type."
+      },
+      "99b229a2-5230-5d8d-8a66-ff5f92335c7e": {
+        "type": "memory",
+        "uid": "99b229a2-5230-5d8d-8a66-ff5f92335c7e",
+        "content": "Specify analysis procedures applied to each data type."
+      },
+      "cfe861d8-39e3-5e89-ba61-81d9c8e1735a": {
+        "type": "memory",
+        "uid": "cfe861d8-39e3-5e89-ba61-81d9c8e1735a",
+        "content": "If the study requires human, case, or material samples, provide target size and justification for its calculation."
+      },
+      "52564f5a-1477-516d-a83a-25b361fb315c": {
+        "type": "memory",
+        "uid": "52564f5a-1477-516d-a83a-25b361fb315c",
+        "content": "Specify criteria to judge whether proposed methods can be executed within given timeframes and resources."
+      },
+      "6234be3b-5be0-5c7c-91d9-aa488ac7ab1d": {
+        "type": "memory",
+        "uid": "6234be3b-5be0-5c7c-91d9-aa488ac7ab1d",
+        "content": "Identify anticipated major execution constraints and corresponding mitigation plans."
+      },
+      "2d710526-f3d5-54fe-b638-1076172c582d": {
+        "type": "memory",
+        "uid": "2d710526-f3d5-54fe-b638-1076172c582d",
+        "content": "Reviewers assess answerability by tracing the path from research questions through data to analysis."
+      }
+    },
+    "order": [
+      "6827e3df-800e-55ae-8b16-5b0a632d3c3c",
+      "26f13e5a-cd0d-58f4-8300-2704f30bc97b",
+      "760089ac-77cb-50ca-bfee-e1dba69db400",
+      "99b229a2-5230-5d8d-8a66-ff5f92335c7e",
+      "cfe861d8-39e3-5e89-ba61-81d9c8e1735a",
+      "52564f5a-1477-516d-a83a-25b361fb315c",
+      "6234be3b-5be0-5c7c-91d9-aa488ac7ab1d",
+      "2d710526-f3d5-54fe-b638-1076172c582d"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "1d564cdb-1892-5b2e-8e51-fdb7113a1163",
+    "memory_uids": [
+      "6827e3df-800e-55ae-8b16-5b0a632d3c3c",
+      "26f13e5a-cd0d-58f4-8300-2704f30bc97b",
+      "760089ac-77cb-50ca-bfee-e1dba69db400",
+      "99b229a2-5230-5d8d-8a66-ff5f92335c7e",
+      "cfe861d8-39e3-5e89-ba61-81d9c8e1735a",
+      "52564f5a-1477-516d-a83a-25b361fb315c",
+      "6234be3b-5be0-5c7c-91d9-aa488ac7ab1d",
+      "2d710526-f3d5-54fe-b638-1076172c582d"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'proposal-submission-guidelines/methods' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

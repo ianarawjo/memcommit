@@ -1,0 +1,98 @@
+{
+  "uid": "ec1c8f65-117d-5b4d-a311-96a29e91bacf",
+  "name": "proposal-submission-guidelines/workplan-budget",
+  "memories": {
+    "3d75c3b9-5c01-5481-a197-d851845953ac": {
+      "type": "memory",
+      "uid": "3d75c3b9-5c01-5481-a197-d851845953ac",
+      "content": "Describe the full execution timeline for a master\u2019s research project in 60\u201380 words."
+    },
+    "aa699e56-6c33-5033-9f60-fa782622f4cc": {
+      "type": "memory",
+      "uid": "aa699e56-6c33-5033-9f60-fa782622f4cc",
+      "content": "If costs arise or separate budgeting is required, describe the budget rationale in 40\u201360 words."
+    },
+    "42af8f14-805d-5902-bd80-367ac28b8426": {
+      "type": "memory",
+      "uid": "42af8f14-805d-5902-bd80-367ac28b8426",
+      "content": "Mark key recruitment milestones."
+    },
+    "872d5f43-aca8-592f-809b-b7ecc39e53b7": {
+      "type": "memory",
+      "uid": "872d5f43-aca8-592f-809b-b7ecc39e53b7",
+      "content": "Mark key data collection milestones."
+    },
+    "c7d88185-3862-5926-8b93-53f650ce9e05": {
+      "type": "memory",
+      "uid": "c7d88185-3862-5926-8b93-53f650ce9e05",
+      "content": "Mark key analysis milestones."
+    },
+    "edd014a9-08e9-5e47-a149-4eb2557c4bc2": {
+      "type": "memory",
+      "uid": "edd014a9-08e9-5e47-a149-4eb2557c4bc2",
+      "content": "Indicate dependencies where certain milestones can only begin after preceding tasks are completed."
+    },
+    "30e3cef8-0e20-59d5-8eb0-189cee62f6fb": {
+      "type": "memory",
+      "uid": "30e3cef8-0e20-59d5-8eb0-189cee62f6fb",
+      "content": "If a separate budget table is required, submit it as an appendix of no more than one page."
+    },
+    "a2b14436-7a23-5cbe-8b48-d1ec945fcbcc": {
+      "type": "memory",
+      "uid": "a2b14436-7a23-5cbe-8b48-d1ec945fcbcc",
+      "content": "If participant compensation costs apply, list them in a separate line item."
+    },
+    "73f96454-bd6e-5574-8a92-b36458f97ae5": {
+      "type": "memory",
+      "uid": "73f96454-bd6e-5574-8a92-b36458f97ae5",
+      "content": "If travel costs apply, list them in a separate line item."
+    },
+    "25d8b0d9-865f-59e1-8009-56abee290cd2": {
+      "type": "memory",
+      "uid": "25d8b0d9-865f-59e1-8009-56abee290cd2",
+      "content": "If equipment costs apply, list them in a separate line item."
+    },
+    "47e3de35-0a8f-55a0-a6cd-2dc35bc66de3": {
+      "type": "memory",
+      "uid": "47e3de35-0a8f-55a0-a6cd-2dc35bc66de3",
+      "content": "If software costs apply, list them in a separate line item."
+    },
+    "9ec38b80-4887-54e9-a1cb-df6587b61b57": {
+      "type": "memory",
+      "uid": "9ec38b80-4887-54e9-a1cb-df6587b61b57",
+      "content": "If external service costs apply, list them in a separate line item."
+    },
+    "ca994c16-8736-51e7-908d-4fd587c88bb1": {
+      "type": "memory",
+      "uid": "ca994c16-8736-51e7-908d-4fd587c88bb1",
+      "content": "State the calculation basis for each major budget category amount."
+    },
+    "607b039e-1658-5f73-a52a-4882fd2c70db": {
+      "type": "memory",
+      "uid": "607b039e-1658-5f73-a52a-4882fd2c70db",
+      "content": "Specify which research activities are supported by each major budget category."
+    },
+    "abc911f3-663f-549a-9caa-c5dbd3a51084": {
+      "type": "memory",
+      "uid": "abc911f3-663f-549a-9caa-c5dbd3a51084",
+      "content": "The finance reviewer assesses the reasonableness of the budget by tracing how each cost is necessary for specific research activities."
+    }
+  },
+  "order": [
+    "3d75c3b9-5c01-5481-a197-d851845953ac",
+    "aa699e56-6c33-5033-9f60-fa782622f4cc",
+    "42af8f14-805d-5902-bd80-367ac28b8426",
+    "872d5f43-aca8-592f-809b-b7ecc39e53b7",
+    "c7d88185-3862-5926-8b93-53f650ce9e05",
+    "edd014a9-08e9-5e47-a149-4eb2557c4bc2",
+    "30e3cef8-0e20-59d5-8eb0-189cee62f6fb",
+    "a2b14436-7a23-5cbe-8b48-d1ec945fcbcc",
+    "73f96454-bd6e-5574-8a92-b36458f97ae5",
+    "25d8b0d9-865f-59e1-8009-56abee290cd2",
+    "47e3de35-0a8f-55a0-a6cd-2dc35bc66de3",
+    "9ec38b80-4887-54e9-a1cb-df6587b61b57",
+    "ca994c16-8736-51e7-908d-4fd587c88bb1",
+    "607b039e-1658-5f73-a52a-4882fd2c70db",
+    "abc911f3-663f-549a-9caa-c5dbd3a51084"
+  ]
+}

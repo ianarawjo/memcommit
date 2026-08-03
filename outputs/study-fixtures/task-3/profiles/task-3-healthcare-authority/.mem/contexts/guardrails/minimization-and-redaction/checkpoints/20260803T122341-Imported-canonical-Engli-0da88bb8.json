@@ -1,0 +1,80 @@
+{
+  "uid": "0da88bb8-cabf-4724-a14d-eae5d7e45b36",
+  "message": "Imported canonical English Task 3 fixture Context 'guardrails/minimization-and-redaction' into profile 'task-3-healthcare-authority'.",
+  "timestamp": "2026-08-03T12:23:41.467554",
+  "snapshot": {
+    "uid": "c9d0b5d5-fde1-5fea-95ee-c8419410b376",
+    "name": "guardrails/minimization-and-redaction",
+    "memories": {
+      "d4333949-4987-5332-a33d-90bbdac770dc": {
+        "type": "memory",
+        "uid": "d4333949-4987-5332-a33d-90bbdac770dc",
+        "content": "Select only the smallest Memory unit needed for the current purpose."
+      },
+      "c07ec431-d6ea-5a85-886b-196042fcac61": {
+        "type": "memory",
+        "uid": "c07ec431-d6ea-5a85-886b-196042fcac61",
+        "content": "Redact identifiers from the content when they are not needed for sharing."
+      },
+      "4fb307cc-12d6-58c0-829f-3e2d350d5bbd": {
+        "type": "memory",
+        "uid": "4fb307cc-12d6-58c0-829f-3e2d350d5bbd",
+        "content": "Check that generalized wording does not change the source's essential meaning."
+      },
+      "271a132e-50bd-5049-8d99-94de2ff726c9": {
+        "type": "memory",
+        "uid": "271a132e-50bd-5049-8d99-94de2ff726c9",
+        "content": "Do not replace a removed value with a plausible value."
+      },
+      "c578a8d8-1eea-5e9b-a26a-f20eda11cfb5": {
+        "type": "memory",
+        "uid": "c578a8d8-1eea-5e9b-a26a-f20eda11cfb5",
+        "content": "Show the user the types of fields that were redacted."
+      },
+      "31868e82-0f0d-5016-81b4-160db052b061": {
+        "type": "memory",
+        "uid": "31868e82-0f0d-5016-81b4-160db052b061",
+        "content": "Omitting information is not a statement of the opposite fact."
+      },
+      "9372846f-3e60-5b5f-9082-191a3ad50022": {
+        "type": "memory",
+        "uid": "9372846f-3e60-5b5f-9082-191a3ad50022",
+        "content": "A recipient organization may interpret content omitted from a summary as \u201cnot applicable\u201d rather than \u201cnot verified.\u201d"
+      },
+      "9a6e0b14-179c-5e23-8320-c39fbc625f99": {
+        "type": "memory",
+        "uid": "9a6e0b14-179c-5e23-8320-c39fbc625f99",
+        "content": "Combining multiple de-identified fragments can re-identify a person."
+      }
+    },
+    "order": [
+      "d4333949-4987-5332-a33d-90bbdac770dc",
+      "c07ec431-d6ea-5a85-886b-196042fcac61",
+      "4fb307cc-12d6-58c0-829f-3e2d350d5bbd",
+      "271a132e-50bd-5049-8d99-94de2ff726c9",
+      "c578a8d8-1eea-5e9b-a26a-f20eda11cfb5",
+      "31868e82-0f0d-5016-81b4-160db052b061",
+      "9372846f-3e60-5b5f-9082-191a3ad50022",
+      "9a6e0b14-179c-5e23-8320-c39fbc625f99"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3-healthcare-authority",
+    "context_uid": "c9d0b5d5-fde1-5fea-95ee-c8419410b376",
+    "memory_uids": [
+      "d4333949-4987-5332-a33d-90bbdac770dc",
+      "c07ec431-d6ea-5a85-886b-196042fcac61",
+      "4fb307cc-12d6-58c0-829f-3e2d350d5bbd",
+      "271a132e-50bd-5049-8d99-94de2ff726c9",
+      "c578a8d8-1eea-5e9b-a26a-f20eda11cfb5",
+      "31868e82-0f0d-5016-81b4-160db052b061",
+      "9372846f-3e60-5b5f-9082-191a3ad50022",
+      "9a6e0b14-179c-5e23-8320-c39fbc625f99"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'guardrails/minimization-and-redaction' into profile 'task-3-healthcare-authority'.",
+  "auto": true
+}

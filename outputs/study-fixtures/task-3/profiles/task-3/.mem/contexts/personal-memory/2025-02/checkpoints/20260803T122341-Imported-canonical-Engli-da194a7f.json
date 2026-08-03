@@ -1,0 +1,94 @@
+{
+  "uid": "da194a7f-bc24-40db-b90b-90a6a41b7d05",
+  "message": "Imported canonical English Task 3 fixture Context 'personal-memory/2025-02' into profile 'task-3'.",
+  "timestamp": "2026-08-03T12:23:41.366490",
+  "snapshot": {
+    "uid": "e79ea288-f189-55d2-9abb-80fafcb879d1",
+    "name": "personal-memory/2025-02",
+    "memories": {
+      "f5c5ca47-d55f-56f7-92cb-6f6d165e31be": {
+        "type": "memory",
+        "uid": "f5c5ca47-d55f-56f7-92cb-6f6d165e31be",
+        "content": "The user reviewed their emergency-contact list in February 2025."
+      },
+      "865ada9a-1b37-59db-9963-d479cb700b83": {
+        "type": "memory",
+        "uid": "865ada9a-1b37-59db-9963-d479cb700b83",
+        "content": "When preparation instructions arrived as a long paragraph, the user missed two items."
+      },
+      "b3760546-8b82-592a-82c1-c5f10ba38928": {
+        "type": "memory",
+        "uid": "b3760546-8b82-592a-82c1-c5f10ba38928",
+        "content": "After changing the same content into a checklist, the user marked every item they had prepared."
+      },
+      "d8eafe0d-e51f-552f-a94e-44c85af383e2": {
+        "type": "memory",
+        "uid": "d8eafe0d-e51f-552f-a94e-44c85af383e2",
+        "content": "The user called their mother on a weekend evening, but they spoke only briefly because the mother was out."
+      },
+      "1a9e4558-7577-5cb5-9c93-c25566e82c07": {
+        "type": "memory",
+        "uid": "1a9e4558-7577-5cb5-9c93-c25566e82c07",
+        "content": "The user called again on Saturday morning the following week and spoke for 40 minutes."
+      },
+      "f1a70dae-5f76-59b5-9685-4775dd894601": {
+        "type": "memory",
+        "uid": "f1a70dae-5f76-59b5-9685-4775dd894601",
+        "content": "The user sent a text to an old number for an emergency contact and saw that delivery failed."
+      },
+      "74383385-2f11-5e1d-b5f3-6190491f5ab6": {
+        "type": "memory",
+        "uid": "74383385-2f11-5e1d-b5f3-6190491f5ab6",
+        "content": "After confirming the new number with their older sister, the user updated the contact list."
+      },
+      "690f614b-f0a9-54ce-b775-fa0297f7781f": {
+        "type": "memory",
+        "uid": "690f614b-f0a9-54ce-b775-fa0297f7781f",
+        "content": "For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately."
+      },
+      "6614dc0a-df41-58f6-aa41-883b31ce3742": {
+        "type": "memory",
+        "uid": "6614dc0a-df41-58f6-aa41-883b31ce3742",
+        "content": "Before using an emergency contact, reconfirm the number and relationship information with the user."
+      },
+      "9a21f3c2-09ab-544f-bff8-9f3467caf4f1": {
+        "type": "memory",
+        "uid": "9a21f3c2-09ab-544f-bff8-9f3467caf4f1",
+        "content": "The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items."
+      }
+    },
+    "order": [
+      "f5c5ca47-d55f-56f7-92cb-6f6d165e31be",
+      "865ada9a-1b37-59db-9963-d479cb700b83",
+      "b3760546-8b82-592a-82c1-c5f10ba38928",
+      "d8eafe0d-e51f-552f-a94e-44c85af383e2",
+      "1a9e4558-7577-5cb5-9c93-c25566e82c07",
+      "f1a70dae-5f76-59b5-9685-4775dd894601",
+      "74383385-2f11-5e1d-b5f3-6190491f5ab6",
+      "690f614b-f0a9-54ce-b775-fa0297f7781f",
+      "6614dc0a-df41-58f6-aa41-883b31ce3742",
+      "9a21f3c2-09ab-544f-bff8-9f3467caf4f1"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "e79ea288-f189-55d2-9abb-80fafcb879d1",
+    "memory_uids": [
+      "f5c5ca47-d55f-56f7-92cb-6f6d165e31be",
+      "865ada9a-1b37-59db-9963-d479cb700b83",
+      "b3760546-8b82-592a-82c1-c5f10ba38928",
+      "d8eafe0d-e51f-552f-a94e-44c85af383e2",
+      "1a9e4558-7577-5cb5-9c93-c25566e82c07",
+      "f1a70dae-5f76-59b5-9685-4775dd894601",
+      "74383385-2f11-5e1d-b5f3-6190491f5ab6",
+      "690f614b-f0a9-54ce-b775-fa0297f7781f",
+      "6614dc0a-df41-58f6-aa41-883b31ce3742",
+      "9a21f3c2-09ab-544f-bff8-9f3467caf4f1"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'personal-memory/2025-02' into profile 'task-3'.",
+  "auto": true
+}

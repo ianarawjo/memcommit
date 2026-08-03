@@ -14,10 +14,17 @@ from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import (
     ProfileError,
+    STUDY_BASELINE_PROFILE_NAME,
+    StudyProfileGroup,
+    create_authority_grant,
     default_study_bundle_root,
+    delete_authority_grant,
     import_profile,
     import_study_profiles,
+    list_authority_grants,
     list_profiles,
+    study_profile_groups,
+    update_authority_grant,
     use_profile,
 )
 
@@ -32,6 +39,12 @@ app = typer.Typer(
         "Use 'mem profile NAME' to select one."
     ),
 )
+
+grant_app = typer.Typer(
+    no_args_is_help=True,
+    help="Grant, inspect, revise, or revoke cross-Profile Context views.",
+)
+app.add_typer(grant_app, name="grant")
 
 
 def _fail(error: Exception) -> None:
@@ -54,24 +67,93 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def _study_name(profile: object) -> str | None:
-    source = getattr(profile, "source", None)
-    if not isinstance(source, dict) or source.get("kind") != "STUDY_RUN_TASK":
-        return None
-    value = source.get("study_name")
-    return value if isinstance(value, str) and value else None
+def _inventory_label(inspection: object) -> str:
+    """Render physical ownership separately from READ-granted knowledge."""
+
+    return (
+        f"Contexts {len(inspection.context_names)} owned + "
+        f"{inspection.granted_context_count} granted · "
+        f"Memories {inspection.ordinary_memory_count} owned + "
+        f"{inspection.granted_memory_count} granted"
+    )
+
+
+def _grant_permissions_label(permissions: tuple[str, ...]) -> str:
+    return ",".join(permission.lower() for permission in permissions)
+
+
+def _study_memberships(
+    registry,
+) -> dict[str, tuple[StudyProfileGroup, int, str]]:
+    try:
+        groups = study_profile_groups(registry.profiles)
+    except (ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    memberships: dict[str, tuple[StudyProfileGroup, int, str]] = {}
+    for group in groups:
+        memberships.update(
+            {
+                profile.uid: (group, task, "TASK")
+                for task, profile in enumerate(group.profiles, start=1)
+            }
+        )
+        memberships.update(
+            {
+                profile.uid: (group, task, "AUTHORITY")
+                for task, profile in enumerate(group.support_profiles, start=1)
+            }
+        )
+    return memberships
+
+
+def _print_grant(registry, grant, *, prefix: str = "") -> None:
+    profiles = {profile.uid: profile.name for profile in registry.profiles}
+    authority = display_escape_text(profiles[grant.authority_profile_uid])
+    grantee = display_escape_text(profiles[grant.grantee_profile_uid])
+    public = display_escape_text(grant.public_name)
+    resource = display_escape_text(grant.resource_name)
+    attachment = display_escape_text(grant.attachment_context_name)
+    typer.echo(
+        f"{prefix}{grant.uid[:8]} · {authority}:{resource} -> "
+        f"{grantee}:{attachment}/{public} · "
+        f"{_grant_permissions_label(grant.permissions)} · "
+        f"{len(grant.contexts)} Context(s) · revision {grant.revision}"
+    )
 
 
 def _pick_profile() -> str | None:
     registry, inspections = _profile_rows()
+    memberships = _study_memberships(registry)
     entries = tuple(
         ProfilePickerEntry(
             name=profile.name,
             context_count=len(inspection.context_names),
+            memory_count=inspection.ordinary_memory_count,
             current_context=inspection.current_context,
+            granted_context_count=inspection.granted_context_count,
+            granted_memory_count=inspection.granted_memory_count,
             query_source_count=inspection.query_source_count,
             query_source_names=inspection.query_source_names,
-            study_name=_study_name(profile),
+            study_name=(
+                memberships[profile.uid][0].name
+                if profile.uid in memberships
+                else None
+            ),
+            study_created_at=(
+                memberships[profile.uid][0].created_at
+                if profile.uid in memberships
+                else None
+            ),
+            study_task=(
+                memberships[profile.uid][1]
+                if profile.uid in memberships
+                else None
+            ),
+            study_role=(
+                memberships[profile.uid][2]
+                if profile.uid in memberships
+                else None
+            ),
         )
         for profile, inspection in zip(
             registry.profiles,
@@ -99,10 +181,7 @@ def _use_profile(name: str) -> None:
         f"Selected profile '{display_escape_text(registry.active.name)}'.",
         fg=typer.colors.GREEN,
     )
-    typer.echo(
-        f"The next mem command will see {len(inspection.context_names)} "
-        "ordinary Contexts."
-    )
+    typer.echo("The next mem command will see " + _inventory_label(inspection) + ".")
     current_label = (
         display_escape_text(inspection.current_context)
         if inspection.current_context
@@ -138,22 +217,12 @@ def list_cmd() -> None:
     """List locally registered whole-store profiles."""
 
     registry, inspections = _profile_rows()
-    previous_study: str | None = None
+    memberships = _study_memberships(registry)
     for profile, inspection in zip(
         registry.profiles,
         inspections,
         strict=True,
     ):
-        study_name = _study_name(profile)
-        if study_name is not None and study_name != previous_study:
-            source = profile.source or {}
-            created_at = source.get("created_at", "")
-            typer.echo(
-                "Study "
-                + display_escape_text(study_name)
-                + (" · " + display_escape_text(str(created_at)) if created_at else "")
-            )
-        previous_study = study_name
         marker = "*" if profile.uid == registry.active_uid else " "
         action = "CURRENT" if profile.uid == registry.active_uid else "USE"
         profile_label = display_escape_text(profile.name)
@@ -174,19 +243,189 @@ def list_cmd() -> None:
                 else ""
             )
         )
+        granted_views = [
+            grant.public_name
+            for grant in registry.grants
+            if grant.grantee_profile_uid == profile.uid
+        ]
+        view_note = (
+            " · views=" + ",".join(display_escape_text(name) for name in granted_views)
+            if granted_views
+            else ""
+        )
+        membership = memberships.get(profile.uid)
+        if membership is not None:
+            group, task, role = membership
+            if task == 1 and role == "TASK":
+                typer.echo(
+                    "  "
+                    + display_escape_text(group.name)
+                    + "  STUDY   created="
+                    + display_escape_text(group.created_at)
+                )
+            is_last = task == 3 and (
+                role == "AUTHORITY" or not group.support_profiles
+            )
+            branch = "└─" if is_last else "├─"
+            role_label = "Task" if role == "TASK" else "Authority"
+            typer.echo(
+                f"    {branch} {marker} {role_label} {task}  "
+                f"{action:<7} profile={profile_label} · "
+                f"{profile.kind.lower()} · {_inventory_label(inspection)}"
+                f"{query_note}{view_note} · current={current}"
+            )
+            continue
         typer.echo(
-            f"{'  ' if study_name else ''}{marker} {profile_label:<12} "
+            f"{marker} {profile_label:<12} "
             f"{action:<7} "
             f"{profile.kind.lower():<9} "
-            f"{len(inspection.context_names)} Contexts"
-            f"{query_note} · current={current}"
+            f"{_inventory_label(inspection)}"
+            f"{query_note}{view_note} · current={current}"
         )
-    typer.echo(
-        "Query-only sources are visible by name here and hidden from 'mem switch'."
-    )
+    typer.echo("Granted views are permission projections, not copied Profiles.")
+    typer.echo("Authority Profiles are ordinary switchable owners of source data.")
 
 
 app.command("ls", hidden=True)(list_cmd)
+
+
+@grant_app.command("list")
+def grant_list_cmd() -> None:
+    """List cross-Profile Context views without opening authority content."""
+
+    try:
+        registry, grants = list_authority_grants()
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    if not grants:
+        typer.echo("No authority grants.")
+        return
+    for grant in grants:
+        _print_grant(registry, grant)
+
+
+grant_app.command("ls", hidden=True)(grant_list_cmd)
+
+
+@grant_app.command("create")
+def grant_create_cmd(
+    authority: Annotated[
+        str,
+        typer.Argument(help="Profile that owns the ordinary source Context"),
+    ],
+    grantee: Annotated[
+        str,
+        typer.Argument(help="Profile receiving the view"),
+    ],
+    resource: Annotated[
+        str,
+        typer.Argument(help="Authority Context-tree root"),
+    ],
+    attachment: Annotated[
+        str,
+        typer.Option("--into", help="Existing grantee Context that owns the view"),
+    ],
+    permissions: Annotated[
+        list[str],
+        typer.Option(
+            "--allow",
+            help=(
+                "Permission to grant; repeat CREATE, READ, UPDATE/EDIT, "
+                "DELETE, QUERY, or SESSION_LOG"
+            ),
+        ),
+    ],
+    public_name: Annotated[
+        Optional[str],
+        typer.Option("--as", help="Public view path; defaults to the resource path"),
+    ] = None,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "--recursive",
+            help="Freeze the resource's current descendants into this grant",
+        ),
+    ] = False,
+) -> None:
+    """Grant one frozen ordinary Context-tree view to another Profile."""
+
+    try:
+        registry, grant = create_authority_grant(
+            authority_name=authority,
+            grantee_name=grantee,
+            resource_name=resource,
+            attachment_name=attachment,
+            permissions=permissions,
+            public_name=public_name,
+            recursive=recursive,
+        )
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    typer.secho("Created authority grant.", fg=typer.colors.GREEN)
+    _print_grant(registry, grant, prefix="  ")
+    typer.echo(
+        "The source remains ordinary data owned by the authority Profile; "
+        "the grantee receives only this view."
+    )
+
+
+@grant_app.command("update")
+def grant_update_cmd(
+    selector: Annotated[
+        str,
+        typer.Argument(help="Full or unambiguous leading grant uid"),
+    ],
+    permissions: Annotated[
+        list[str],
+        typer.Option("--allow", help="Replacement permission; repeat as needed"),
+    ],
+    refresh_scope: Annotated[
+        bool,
+        typer.Option(
+            "--refresh-scope",
+            help="Replace the frozen scope with all current descendants",
+        ),
+    ] = False,
+    root_only: Annotated[
+        bool,
+        typer.Option(
+            "--root-only",
+            help="Replace the frozen scope with only its root Context",
+        ),
+    ] = False,
+) -> None:
+    """Replace permissions and optionally refresh one grant's frozen scope."""
+
+    if refresh_scope and root_only:
+        _fail(ProfileError("Choose either --refresh-scope or --root-only."))
+    recursive = True if refresh_scope else False if root_only else None
+    try:
+        registry, grant = update_authority_grant(
+            selector,
+            permissions=permissions,
+            recursive=recursive,
+        )
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    typer.secho("Updated authority grant.", fg=typer.colors.GREEN)
+    _print_grant(registry, grant, prefix="  ")
+
+
+@grant_app.command("delete")
+def grant_delete_cmd(
+    selector: Annotated[
+        str,
+        typer.Argument(help="Full or unambiguous leading grant uid"),
+    ],
+) -> None:
+    """Revoke a view immediately without deleting either Profile's data."""
+
+    try:
+        registry, grant = delete_authority_grant(selector)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    typer.secho("Revoked authority grant.", fg=typer.colors.GREEN)
+    _print_grant(registry, grant, prefix="  ")
 
 
 @app.command("current")
@@ -202,6 +441,7 @@ def current_cmd() -> None:
     inspection = inspections[index]
     typer.echo(f"Profile: {display_escape_text(registry.active.name)}")
     typer.echo(f"Store: {display_escape_text(str(inspection.root))}")
+    typer.echo(_inventory_label(inspection))
     current_label = (
         display_escape_text(inspection.current_context)
         if inspection.current_context
@@ -264,9 +504,7 @@ def import_cmd(
         if inspection.current_context
         else "(none)"
     )
-    typer.echo(
-        f"{len(inspection.context_names)} ordinary Contexts · current={current_label}"
-    )
+    typer.echo(f"{_inventory_label(inspection)} · current={current_label}")
     typer.echo("The source store was not modified.")
 
 
@@ -283,14 +521,14 @@ def import_study_cmd(
         ),
     ] = None,
 ) -> None:
-    """Copy all three study packages into editable isolated profiles."""
+    """Bootstrap one editable Profile containing the complete Study baseline."""
 
     bundle_root = source or default_study_bundle_root()
     try:
         result = import_study_profiles(bundle_root)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
-    typer.secho("Imported editable study profiles.", fg=typer.colors.GREEN)
+    typer.secho("Imported editable Study baseline.", fg=typer.colors.GREEN)
     for profile, inspection in zip(
         result.profiles,
         result.inspections,
@@ -303,10 +541,16 @@ def import_study_cmd(
         )
         typer.echo(
             f"  {display_escape_text(profile.name)}: "
-            f"{len(inspection.context_names)} ordinary "
-            f"Contexts · current={current_label} · "
-            "query-only="
-            f"{','.join(display_escape_text(name) for name in inspection.query_source_names) or '(none)'}"
+            f"{_inventory_label(inspection)} · current={current_label} · "
+            f"kind={display_escape_text(profile.kind.lower())}"
         )
     typer.echo("The authoring store and generated package sources were not modified.")
-    typer.echo("Use one with: mem profile use task-1")
+    typer.echo(
+        "Authoring checkpoints, sessions, caches, locks, and run logs "
+        "were not imported."
+    )
+    typer.echo(
+        "Edit it with: mem profile use "
+        + display_escape_text(STUDY_BASELINE_PROFILE_NAME)
+    )
+    typer.echo("Create an isolated run with: mem init-study NAME")

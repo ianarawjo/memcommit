@@ -11,7 +11,7 @@ import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.profile_config import load_profile_registry, profile_store_dir
-from memcommit.store import MemoryStore
+from memcommit.profiles import study_profile_groups
 
 
 runner = CliRunner(mix_stderr=False)
@@ -55,10 +55,7 @@ def test_mem_import_preserves_content_identity_but_not_history(
     profile = registry.by_name("fresh")
     assert profile is not None and profile.source is not None
     assert profile.source["kind"] == "BASELINE_IMPORT"
-    assert (
-        datetime.fromisoformat(profile.source["imported_at"]).utcoffset()
-        is not None
-    )
+    assert datetime.fromisoformat(profile.source["imported_at"]).utcoffset() is not None
     assert re.fullmatch(r"[0-9a-f]{64}", profile.source["baseline_sha256"])
     imported = profile_store_dir(profile)
     record = json.loads(
@@ -72,42 +69,29 @@ def test_mem_import_preserves_content_identity_but_not_history(
     assert not (imported / "query-sessions").exists()
 
 
-def test_init_study_groups_three_clean_task_profiles(
+def test_init_study_imports_each_profile_with_empty_history(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
-    store = MemoryStore()
-    store.save(ops.init("authoring"))
-    store.set_current("authoring")
     bundles = tmp_path / "bundles"
     build_all_study_bundles(bundles)
     assert any(bundles.rglob("checkpoints/*.json"))
-
-    result = runner.invoke(
+    imported = runner.invoke(
         app,
-        ["init-study", "clean-study", "--from", str(bundles)],
+        ["profile", "import-study", "--from", str(bundles)],
     )
+    assert imported.exit_code == 0, imported.stderr or imported.output
+
+    result = runner.invoke(app, ["init-study", "clean-study"])
 
     assert result.exit_code == 0, result.stderr or result.output
     registry = load_profile_registry()
-    assert registry.active.name == "authoring"
-    profiles = registry.profiles[1:]
-    assert [profile.name for profile in profiles] == [
-        "clean-study-task-1",
-        "clean-study-task-2",
-        "clean-study-task-3",
-    ]
-    assert len({profile.source["study_uid"] for profile in profiles}) == 1
-    assert all(
-        profile.source["study_name"] == "clean-study" for profile in profiles
-    )
+    group = study_profile_groups(registry.profiles)[0]
+    assert group.name == "clean-study"
+    assert len(group.profiles) == 3
     assert all(
         not any(profile_store_dir(profile).rglob("checkpoints/*.json"))
-        for profile in profiles
+        for profile in (*group.profiles, *group.support_profiles)
     )
-
-    listed = runner.invoke(app, ["profile", "list"])
-    assert listed.exit_code == 0
-    assert listed.output.count("Study clean-study · ") == 1

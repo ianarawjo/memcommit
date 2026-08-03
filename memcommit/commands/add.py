@@ -5,8 +5,15 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.batch_input import parse_add_lines, read_text_input
+from memcommit.commands.granted_context import (
+    authorized_context_mutation,
+    grant_checkpoint_args,
+    resolve_context_access,
+)
 from memcommit.commands.paste_input import PasteCancelled, capture_paste
 from memcommit.context import AutoCheckpoint
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
@@ -48,6 +55,14 @@ def cmd(
             ),
         ),
     ] = False,
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Local Context or granted view to receive the new Memories",
+        ),
+    ] = None,
 ) -> None:
     source_count = sum(
         (info is not None, input_source is not None, paste)
@@ -60,30 +75,50 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    store = MemoryStore()
+    active_store = MemoryStore()
     try:
-        ctx = store.load_current_direct()
-    except RuntimeError as e:
-        typer.secho(str(e), fg=typer.colors.RED, err=True)
+        access = resolve_context_access(
+            active_store,
+            context_name,
+            current_name=active_store.current_context_name(),
+            required_permission="CREATE",
+        )
+        store = access.store
+        ctx = store.load_direct(access.context_name)
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        typer.secho(str(error), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     context_name = ctx.name
     context_uid = ctx.uid
 
     if info is not None:
         mem = ops.add(ctx, info)
-        store.save(ctx, AutoCheckpoint(
-            command="add",
-            args={
-                "content": info,
-                "memory_uids": [mem.uid],
-                "source": _source_record(
-                    kind="argument",
-                    raw_text=info,
-                    parser="single-memory-v1",
-                ),
-            },
-            description=f'Added: "{info[:80]}"',
-        ))
+        try:
+            with authorized_context_mutation(access):
+                store.save(ctx, AutoCheckpoint(
+                    command="add",
+                    args={
+                        "content": info,
+                        "memory_uids": [mem.uid],
+                        "source": _source_record(
+                            kind="argument",
+                            raw_text=info,
+                            parser="single-memory-v1",
+                        ),
+                        **grant_checkpoint_args(access),
+                    },
+                    description=f'Added: "{info[:80]}"',
+                ))
+        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
         typer.secho(f"Added [{mem.uid[:8]}] {info}", fg=typer.colors.GREEN)
         return
 
@@ -136,30 +171,37 @@ def cmd(
             raise typer.Exit(1)
 
         memories = ops.add_many(ctx, contents)
-        store.save(
-            ctx,
-            AutoCheckpoint(
-                command="add",
-                args={
-                    "mode": "paste",
-                    "count": len(memories),
-                    "contents": [
-                        memory.content for memory in memories
-                    ],
-                    "memory_uids": [
-                        memory.uid for memory in memories
-                    ],
-                    "source": _source_record(
-                        kind="interactive-paste",
-                        raw_text=pasted_text,
-                        parser="stripped-nonempty-physical-lines-v1",
+        try:
+            with authorized_context_mutation(access):
+                store.save(
+                    ctx,
+                    AutoCheckpoint(
+                        command="add",
+                        args={
+                            "mode": "paste",
+                            "count": len(memories),
+                            "contents": [
+                                memory.content for memory in memories
+                            ],
+                            "memory_uids": [
+                                memory.uid for memory in memories
+                            ],
+                            "source": _source_record(
+                                kind="interactive-paste",
+                                raw_text=pasted_text,
+                                parser="stripped-nonempty-physical-lines-v1",
+                            ),
+                            **grant_checkpoint_args(access),
+                        },
+                        description=(
+                            "Added "
+                            f"{len(memories)} memories from interactive paste"
+                        ),
                     ),
-                },
-                description=(
-                    f"Added {len(memories)} memories from interactive paste"
-                ),
-            ),
-        )
+                )
+        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
         # Paste mode intentionally reports only a count. The captured payload
         # should not be copied into terminal scrollback after confirmation.
         typer.secho(
@@ -180,30 +222,36 @@ def cmd(
         raise typer.Exit(1)
 
     memories = ops.add_many(ctx, contents)
-    store.save(
-        ctx,
-        AutoCheckpoint(
-            command="add",
-            args={
-                "input": input_source,
-                "mode": "lines",
-                "count": len(memories),
-                "contents": [memory.content for memory in memories],
-                "memory_uids": [
-                    memory.uid for memory in memories
-                ],
-                "source": _source_record(
-                    kind="stdin" if input_source == "-" else "utf-8-file",
-                    raw_text=raw_text,
-                    parser="stripped-nonempty-physical-lines-v1",
+    try:
+        with authorized_context_mutation(access):
+            store.save(
+                ctx,
+                AutoCheckpoint(
+                    command="add",
+                    args={
+                        "input": input_source,
+                        "mode": "lines",
+                        "count": len(memories),
+                        "contents": [memory.content for memory in memories],
+                        "memory_uids": [
+                            memory.uid for memory in memories
+                        ],
+                        "source": _source_record(
+                            kind="stdin" if input_source == "-" else "utf-8-file",
+                            raw_text=raw_text,
+                            parser="stripped-nonempty-physical-lines-v1",
+                        ),
+                        **grant_checkpoint_args(access),
+                    },
+                    description=(
+                        f"Added {len(memories)} memories from "
+                        f"{'stdin' if input_source == '-' else repr(input_source)}"
+                    ),
                 ),
-            },
-            description=(
-                f"Added {len(memories)} memories from "
-                f"{'stdin' if input_source == '-' else repr(input_source)}"
-            ),
-        ),
-    )
+            )
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
 
     typer.secho(
         f"Added {len(memories)} memories to '{ctx.name}':",

@@ -4,12 +4,19 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
-from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.granted_context import (
+    GrantedReadStore,
+    attached_grants,
+    project_grants_into_context,
+    resolve_context_access,
+)
 from memcommit.commands.tui_primitives import (
     display_escape_text,
     safe_terminal_text,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
@@ -132,27 +139,32 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    store = MemoryStore()
+    active_store = MemoryStore()
     try:
-        context_snapshot = ContextOperandSnapshot.capture(store)
-        selected_name = context_snapshot.resolve_or_current(context_name)
-        if not selected_name:
-            raise RuntimeError("No current context. Run 'mem init <name>' first.")
-        if not store.context_exists(selected_name):
-            typer.secho(
-                "Error: context '"
-                + display_escape_text(selected_name)
-                + "' not found.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        ctx = store.load(selected_name)
-    except typer.Exit:
-        raise
-    except (OSError, RuntimeError, ValueError) as error:
+        current_name = active_store.current_context_name()
+        access = resolve_context_access(
+            active_store,
+            context_name,
+            current_name=current_name,
+            required_permission="READ",
+        )
+        if access.is_granted:
+            ctx = GrantedReadStore(access).load(access.display_name)
+        else:
+            ctx = access.store.load(access.context_name)
+            _, grants = attached_grants(access.context_name)
+            if grants:
+                ctx = project_grants_into_context(ctx, grants)
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
         typer.secho(
-            display_escape_text(str(error)),
+            "Error: " + display_escape_text(str(error)),
             fg=typer.colors.RED,
             err=True,
         )

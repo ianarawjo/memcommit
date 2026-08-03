@@ -1,0 +1,108 @@
+{
+  "uid": "9e6a98aa-084d-46d1-a791-644c08f06fdc",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/review' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-03T12:23:41.216813",
+  "snapshot": {
+    "uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+    "name": "advisor1/review",
+    "memories": {
+      "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9": {
+        "type": "memory",
+        "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9",
+        "content": "Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic."
+      },
+      "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25": {
+        "type": "memory",
+        "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25",
+        "content": "Cross-check whether research questions align with the core functions of the prototype."
+      },
+      "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9": {
+        "type": "memory",
+        "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9",
+        "content": "Cross-check whether evaluation tasks align with representative measures."
+      },
+      "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5": {
+        "type": "memory",
+        "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5",
+        "content": "Cross-check whether collected evidence aligns with design and operational decisions to be changed."
+      },
+      "0f89ab25-d9ee-5669-aa99-a0fe07803915": {
+        "type": "memory",
+        "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915",
+        "content": "Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow."
+      },
+      "3e4a9a3b-abc2-54ed-9b87-f81abf61b541": {
+        "type": "memory",
+        "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541",
+        "content": "HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions."
+      },
+      "fb785649-1947-5e7d-aafb-308f14fb21b4": {
+        "type": "memory",
+        "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4",
+        "content": "HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures."
+      },
+      "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2": {
+        "type": "memory",
+        "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2",
+        "content": "HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions."
+      },
+      "d17ba26c-187e-57bc-8468-c9c053fc303d": {
+        "type": "memory",
+        "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d",
+        "content": "Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected."
+      },
+      "48a91d19-cc68-5400-8971-8125236f3fbf": {
+        "type": "memory",
+        "uid": "48a91d19-cc68-5400-8971-8125236f3fbf",
+        "content": "Review whether the application conditions of proposed design principles and boundary cases of failure are presented together."
+      },
+      "774341c9-b92d-53a5-a24c-59c75e39756b": {
+        "type": "memory",
+        "uid": "774341c9-b92d-53a5-a24c-59c75e39756b",
+        "content": "The agent can review contributions only if prototype outcomes and the transferable design knowledge derived from them are separated."
+      },
+      "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e": {
+        "type": "memory",
+        "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e",
+        "content": "The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts."
+      }
+    },
+    "order": [
+      "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9",
+      "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25",
+      "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9",
+      "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5",
+      "0f89ab25-d9ee-5669-aa99-a0fe07803915",
+      "3e4a9a3b-abc2-54ed-9b87-f81abf61b541",
+      "fb785649-1947-5e7d-aafb-308f14fb21b4",
+      "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2",
+      "d17ba26c-187e-57bc-8468-c9c053fc303d",
+      "48a91d19-cc68-5400-8971-8125236f3fbf",
+      "774341c9-b92d-53a5-a24c-59c75e39756b",
+      "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+    "memory_uids": [
+      "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9",
+      "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25",
+      "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9",
+      "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5",
+      "0f89ab25-d9ee-5669-aa99-a0fe07803915",
+      "3e4a9a3b-abc2-54ed-9b87-f81abf61b541",
+      "fb785649-1947-5e7d-aafb-308f14fb21b4",
+      "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2",
+      "d17ba26c-187e-57bc-8468-c9c053fc303d",
+      "48a91d19-cc68-5400-8971-8125236f3fbf",
+      "774341c9-b92d-53a5-a24c-59c75e39756b",
+      "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/review' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

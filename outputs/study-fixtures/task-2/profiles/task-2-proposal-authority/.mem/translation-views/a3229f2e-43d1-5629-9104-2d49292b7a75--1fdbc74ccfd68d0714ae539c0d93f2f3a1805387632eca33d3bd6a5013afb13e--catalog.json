@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "context_uid": "a3229f2e-43d1-5629-9104-2d49292b7a75",
+  "context_name": "proposal-submission-guidelines/outcomes",
+  "target_language": "ko",
+  "created_at": "2026-08-03T16:23:41.320296+00:00",
+  "updated_at": "2026-08-03T16:23:41.320406+00:00",
+  "revision": 4,
+  "contract_version": "translate-v2",
+  "entries": [
+    {
+      "source_uid": "10dfd39a-ceec-5f80-a629-ba7838fa7a36",
+      "provider": null,
+      "curated": {
+        "source_sha256": "0363be6f79eaa8522e89dde67334d5ab25d11437474b5fef85ca2a4e64019b4d",
+        "translated_content": "\uc608\uc0c1 \uacb0\uacfc\uc640 \uae30\uc5ec\ub97c \ud569\uccd0 80~100\ub2e8\uc5b4\ub85c \uc791\uc131\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
+        "created_at": "2026-08-03T16:23:41.320327+00:00",
+        "updated_at": "2026-08-03T16:23:41.320327+00:00"
+      }
+    },
+    {
+      "source_uid": "62614c82-39bc-517f-896a-ec7c9bff0e0f",
+      "provider": null,
+      "curated": {
+        "source_sha256": "4a9473e33dc8acb9642ea429dac1fa77fac24ae723321702c25bd6cb3eb42ced",
+        "translated_content": "\uc5f0\uad6c \uacb0\uacfc\uac00 \ubc14\uafc0 \uc218 \uc788\ub294 \uc124\uacc4 \ub610\ub294 \uc6b4\uc601 \uacb0\uc815\uc744 \ud558\ub098 \uc774\uc0c1 \ud2b9\uc815\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
+        "created_at": "2026-08-03T16:23:41.320368+00:00",
+        "updated_at": "2026-08-03T16:23:41.320368+00:00"
+      }
+    },
+    {
+      "source_uid": "e474b07f-9266-5632-889d-d238aeaf25eb",
+      "provider": null,
+      "curated": {
+        "source_sha256": "72e7d4e9524d4d9ac2bbde451d3f58a8b3df4a2885b4c7f9026638249ef2050e",
+        "translated_content": "\uc2ec\uc0ac\uc790\ub294 \uc608\uc0c1 \uacb0\uacfc\ub97c \uc774\ubbf8 \ud655\uc778\ub41c \ud6a8\uacfc\uc640 \uad6c\ubd84\ud574 \uc77d\ub294\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
+        "created_at": "2026-08-03T16:23:41.320406+00:00",
+        "updated_at": "2026-08-03T16:23:41.320406+00:00"
+      }
+    }
+  ]
+}

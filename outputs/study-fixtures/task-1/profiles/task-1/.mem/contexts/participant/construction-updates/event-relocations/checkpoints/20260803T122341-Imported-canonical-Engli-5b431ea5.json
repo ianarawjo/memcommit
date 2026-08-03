@@ -1,0 +1,94 @@
+{
+  "uid": "5b431ea5-a57f-411f-99ec-7d21f28b5368",
+  "message": "Imported canonical English Task 1 fixture Context 'participant/construction-updates/event-relocations' into profile 'task-1'.",
+  "timestamp": "2026-08-03T12:23:41.064547",
+  "snapshot": {
+    "uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+    "name": "participant/construction-updates/event-relocations",
+    "memories": {
+      "3fcfa405-cf3d-500e-810b-28ddc81fefca": {
+        "type": "memory",
+        "uid": "3fcfa405-cf3d-500e-810b-28ddc81fefca",
+        "content": "Viewing in the tenth-floor exhibition and event hall is suspended during the construction period."
+      },
+      "1754ab18-13ca-5e07-a40c-eb12e45dcd1e": {
+        "type": "memory",
+        "uid": "1754ab18-13ca-5e07-a40c-eb12e45dcd1e",
+        "content": "Do not accept new reservations for Main Building event venues during the construction period."
+      },
+      "686d630d-defe-5aa1-a28d-470b3ebb9059": {
+        "type": "memory",
+        "uid": "686d630d-defe-5aa1-a28d-470b3ebb9059",
+        "content": "During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues."
+      },
+      "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a": {
+        "type": "memory",
+        "uid": "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a",
+        "content": "During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues."
+      },
+      "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18": {
+        "type": "memory",
+        "uid": "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18",
+        "content": "During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events."
+      },
+      "2587dbb3-dc02-5e13-b1de-9d704c7a706a": {
+        "type": "memory",
+        "uid": "2587dbb3-dc02-5e13-b1de-9d704c7a706a",
+        "content": "During the construction period, the event guidance agent may exclude closed Main Building event venues from comparison candidates and compare only designated alternative spaces."
+      },
+      "eee1213e-3582-5c9a-bde8-78af7b216df0": {
+        "type": "memory",
+        "uid": "eee1213e-3582-5c9a-bde8-78af7b216df0",
+        "content": "During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space."
+      },
+      "b867c632-6a7e-55c8-8371-91b3f0e1bb89": {
+        "type": "memory",
+        "uid": "b867c632-6a7e-55c8-8371-91b3f0e1bb89",
+        "content": "An external visitor who has previously visited a Main Building event venue may expect the entrance and floor from the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period."
+      },
+      "9ab36f33-97ce-5790-8b2e-d0ab195039ef": {
+        "type": "memory",
+        "uid": "9ab36f33-97ce-5790-8b2e-d0ab195039ef",
+        "content": "During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building."
+      },
+      "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5": {
+        "type": "memory",
+        "uid": "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5",
+        "content": "An external event operator may assume that the existing Main Building loading procedure remains valid during the construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late."
+      }
+    },
+    "order": [
+      "3fcfa405-cf3d-500e-810b-28ddc81fefca",
+      "1754ab18-13ca-5e07-a40c-eb12e45dcd1e",
+      "686d630d-defe-5aa1-a28d-470b3ebb9059",
+      "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a",
+      "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18",
+      "2587dbb3-dc02-5e13-b1de-9d704c7a706a",
+      "eee1213e-3582-5c9a-bde8-78af7b216df0",
+      "b867c632-6a7e-55c8-8371-91b3f0e1bb89",
+      "9ab36f33-97ce-5790-8b2e-d0ab195039ef",
+      "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 1,
+    "profile": "task-1",
+    "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+    "memory_uids": [
+      "3fcfa405-cf3d-500e-810b-28ddc81fefca",
+      "1754ab18-13ca-5e07-a40c-eb12e45dcd1e",
+      "686d630d-defe-5aa1-a28d-470b3ebb9059",
+      "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a",
+      "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18",
+      "2587dbb3-dc02-5e13-b1de-9d704c7a706a",
+      "eee1213e-3582-5c9a-bde8-78af7b216df0",
+      "b867c632-6a7e-55c8-8371-91b3f0e1bb89",
+      "9ab36f33-97ce-5790-8b2e-d0ab195039ef",
+      "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+    ]
+  },
+  "description": "Imported canonical English Task 1 fixture Context 'participant/construction-updates/event-relocations' into profile 'task-1'.",
+  "auto": true
+}

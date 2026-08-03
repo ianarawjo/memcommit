@@ -1,0 +1,115 @@
+{
+  "uid": "6fc39431-71b1-4089-b776-41a9fdc4e85e",
+  "message": "Imported canonical English Task 3 fixture Context 'government/healthcare-agent/information-request/care-access' into profile 'task-3-healthcare-authority'.",
+  "timestamp": "2026-08-03T12:23:41.450970",
+  "snapshot": {
+    "uid": "3ff7f95b-e651-5dff-8bb8-0cf3d01c4cd9",
+    "name": "government/healthcare-agent/information-request/care-access",
+    "memories": {
+      "c78a609b-2681-566b-ab3e-372083c78dff": {
+        "type": "memory",
+        "uid": "c78a609b-2681-566b-ab3e-372083c78dff",
+        "content": "Explain that information about mobility, standing for long periods, waiting, building access, and communication may be used in support processes if transmitted to the government healthcare institution system."
+      },
+      "68797128-18f7-53cb-8ce5-759c089fe713": {
+        "type": "memory",
+        "uid": "68797128-18f7-53cb-8ce5-759c089fe713",
+        "content": "Explain that one uncomfortable experience while standing for a long time does not establish that persistent accessibility support is necessarily required, and that the information-request agent cannot distinguish a convenience preference, temporary state, persistent functional limitation, or required support."
+      },
+      "2ae0bd6b-3042-5142-bcfd-a2455d0c42be": {
+        "type": "memory",
+        "uid": "2ae0bd6b-3042-5142-bcfd-a2455d0c42be",
+        "content": "Explain that the institution may consider location, time, recurrence, effects on daily functioning, and known exceptions together to distinguish a temporary state from a persistent support need, but that the information-request agent cannot substitute for that professional judgment."
+      },
+      "c803ff57-d7bf-57f6-9490-c20c72c033a1": {
+        "type": "memory",
+        "uid": "c803ff57-d7bf-57f6-9490-c20c72c033a1",
+        "content": "Explain that if the user sends what needs to differ about seating, mobility routes, waiting arrangements, or communication through the government healthcare institution system's transmission screen, the institution may use it to prepare support, but the information-request agent cannot determine the actual support need."
+      },
+      "698ddb48-2b76-59b5-baf1-2650636d63ac": {
+        "type": "memory",
+        "uid": "698ddb48-2b76-59b5-baf1-2650636d63ac",
+        "content": "Explain that the private cause of a functional limitation is not a subject the information-request agent asks about, and that if the user actually sends it through the government healthcare institution system's transmission screen, it is included in the consented sharing unit."
+      },
+      "e0562f74-c0c2-59be-91df-56ea43d79abf": {
+        "type": "memory",
+        "uid": "e0562f74-c0c2-59be-91df-56ea43d79abf",
+        "content": "A convenience preference, a temporary state, a persistent functional limitation, and required accessibility support are different kinds of information."
+      },
+      "06f385ec-7104-575e-9bb3-bcb91b5b2b28": {
+        "type": "memory",
+        "uid": "06f385ec-7104-575e-9bb3-bcb91b5b2b28",
+        "content": "The information-request agent cannot access past accessibility experiences, and even if an experience is presented in the conversation, it cannot verify a current functional limitation, support need, or facility condition."
+      },
+      "179f4db4-4cbb-5afa-b5df-ed10e7408ea7": {
+        "type": "memory",
+        "uid": "179f4db4-4cbb-5afa-b5df-ed10e7408ea7",
+        "content": "Some external requesters may try to exaggerate a temporary inconvenience as a persistent functional limitation, or submit a false account, to obtain desired support."
+      },
+      "f0c810fa-ea47-5b8c-9805-1f31e2d7ca99": {
+        "type": "memory",
+        "uid": "f0c810fa-ea47-5b8c-9805-1f31e2d7ca99",
+        "content": "If submitted content differs from information verified later, institutional reverification or processing delay may follow, but the information-request agent cannot determine truthfulness, exaggeration, or eligibility for support."
+      },
+      "af0050ad-00e3-5730-bb0e-834171af858f": {
+        "type": "memory",
+        "uid": "af0050ad-00e3-5730-bb0e-834171af858f",
+        "content": "Explain that entering a past accessibility experience or its private cause in this conversation does not transmit it to the government healthcare institution system and that this agent cannot select, delete, or transmit that content."
+      },
+      "cbadf961-76a5-5211-9543-4d437929bb42": {
+        "type": "memory",
+        "uid": "cbadf961-76a5-5211-9543-4d437929bb42",
+        "content": "Explain that if the user sends accessibility experiences, mobility and waiting preferences, or the private reasons those preferences arose directly to the government healthcare institution system, the user is treated as consenting to share all submitted information, which may be provided to relevant third parties for healthcare purposes or used for service improvement depending on the information type."
+      },
+      "1a72f5b6-041b-5d6e-8ae0-7117f7153d16": {
+        "type": "memory",
+        "uid": "1a72f5b6-041b-5d6e-8ae0-7117f7153d16",
+        "content": "Do not handle a request to falsely state or exaggerate a condition to obtain service priority or support eligibility; explain that submitted information may be separately verified by the institution."
+      },
+      "536a501d-61ac-59f9-a6d4-f86780627786": {
+        "type": "memory",
+        "uid": "536a501d-61ac-59f9-a6d4-f86780627786",
+        "content": "An automated collection attempt may repeatedly vary the categories and wording of accessibility questions to extract support-decision criteria or the information-request agent's response boundaries."
+      }
+    },
+    "order": [
+      "c78a609b-2681-566b-ab3e-372083c78dff",
+      "68797128-18f7-53cb-8ce5-759c089fe713",
+      "2ae0bd6b-3042-5142-bcfd-a2455d0c42be",
+      "c803ff57-d7bf-57f6-9490-c20c72c033a1",
+      "698ddb48-2b76-59b5-baf1-2650636d63ac",
+      "e0562f74-c0c2-59be-91df-56ea43d79abf",
+      "06f385ec-7104-575e-9bb3-bcb91b5b2b28",
+      "179f4db4-4cbb-5afa-b5df-ed10e7408ea7",
+      "f0c810fa-ea47-5b8c-9805-1f31e2d7ca99",
+      "af0050ad-00e3-5730-bb0e-834171af858f",
+      "cbadf961-76a5-5211-9543-4d437929bb42",
+      "1a72f5b6-041b-5d6e-8ae0-7117f7153d16",
+      "536a501d-61ac-59f9-a6d4-f86780627786"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3-healthcare-authority",
+    "context_uid": "3ff7f95b-e651-5dff-8bb8-0cf3d01c4cd9",
+    "memory_uids": [
+      "c78a609b-2681-566b-ab3e-372083c78dff",
+      "68797128-18f7-53cb-8ce5-759c089fe713",
+      "2ae0bd6b-3042-5142-bcfd-a2455d0c42be",
+      "c803ff57-d7bf-57f6-9490-c20c72c033a1",
+      "698ddb48-2b76-59b5-baf1-2650636d63ac",
+      "e0562f74-c0c2-59be-91df-56ea43d79abf",
+      "06f385ec-7104-575e-9bb3-bcb91b5b2b28",
+      "179f4db4-4cbb-5afa-b5df-ed10e7408ea7",
+      "f0c810fa-ea47-5b8c-9805-1f31e2d7ca99",
+      "af0050ad-00e3-5730-bb0e-834171af858f",
+      "cbadf961-76a5-5211-9543-4d437929bb42",
+      "1a72f5b6-041b-5d6e-8ae0-7117f7153d16",
+      "536a501d-61ac-59f9-a6d4-f86780627786"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'government/healthcare-agent/information-request/care-access' into profile 'task-3-healthcare-authority'.",
+  "auto": true
+}

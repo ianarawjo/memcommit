@@ -1,0 +1,92 @@
+{
+  "uid": "fca65366-9375-5552-a821-e90ef843f4ed",
+  "name": "campus-wiki/construction-details/query-policy",
+  "memories": {
+    "3c6863db-d82d-5072-8e4e-01e1702ccbe8": {
+      "type": "memory",
+      "uid": "3c6863db-d82d-5072-8e4e-01e1702ccbe8",
+      "content": "Do not copy the detailed work scope into general Memories or listing responses."
+    },
+    "39e85ee3-8def-5e52-b622-098d08f5d59f": {
+      "type": "memory",
+      "uid": "39e85ee3-8def-5e52-b622-098d08f5d59f",
+      "content": "Do not copy internal reporting status into general Memories or listing responses."
+    },
+    "13308bee-18d0-510a-b7f9-1d33d841ff40": {
+      "type": "memory",
+      "uid": "13308bee-18d0-510a-b7f9-1d33d841ff40",
+      "content": "Do not copy material placement details into general Memories or listing responses."
+    },
+    "97510b32-94a9-53bc-9b88-4c5e75977c0c": {
+      "type": "memory",
+      "uid": "97510b32-94a9-53bc-9b88-4c5e75977c0c",
+      "content": "Do not copy controlled-access methods into general Memories or listing responses."
+    },
+    "312f1c5f-d650-52d6-bbed-2b96bc3f7cc9": {
+      "type": "memory",
+      "uid": "312f1c5f-d650-52d6-bbed-2b96bc3f7cc9",
+      "content": "In the query path, answer only to the extent necessary for the question."
+    },
+    "9320f462-f5ac-5a10-bf87-59615ab0f0da": {
+      "type": "memory",
+      "uid": "9320f462-f5ac-5a10-bf87-59615ab0f0da",
+      "content": "Answer only questions about the Main Building facilities improvement construction plan."
+    },
+    "d4786324-5b65-5861-a2dc-2471f271f035": {
+      "type": "memory",
+      "uid": "d4786324-5b65-5861-a2dc-2471f271f035",
+      "content": "Answer only questions about the scope of internal inspections and reporting."
+    },
+    "b81df8e8-8f81-565d-8aeb-fa8932a180f5": {
+      "type": "memory",
+      "uid": "b81df8e8-8f81-565d-8aeb-fa8932a180f5",
+      "content": "For questions outside the scope, respond, \u201cThis data cannot answer that question.\u201d"
+    },
+    "f05b467b-a682-54af-98ef-998f63de21b8": {
+      "type": "memory",
+      "uid": "f05b467b-a682-54af-98ef-998f63de21b8",
+      "content": "Do not add other campus information to answers to questions outside the scope."
+    },
+    "29a4e3ab-a3d7-551c-a6e0-3a0b479c826e": {
+      "type": "memory",
+      "uid": "29a4e3ab-a3d7-551c-a6e0-3a0b479c826e",
+      "content": "Do not add speculation to answers to questions outside the scope."
+    },
+    "707a6be7-409f-5db7-a8c5-4450cddcd5fb": {
+      "type": "memory",
+      "uid": "707a6be7-409f-5db7-a8c5-4450cddcd5fb",
+      "content": "Do not use this fixture as evidence describing the construction status of a real institution."
+    },
+    "875d1f7a-20bf-5885-9c4a-ebf036fe67cd": {
+      "type": "memory",
+      "uid": "875d1f7a-20bf-5885-9c4a-ebf036fe67cd",
+      "content": "Do not use this fixture as evidence describing the inspection status of a real institution."
+    },
+    "ed9dc7b8-fb0f-5f53-8f8f-711e09f75b83": {
+      "type": "memory",
+      "uid": "ed9dc7b8-fb0f-5f53-8f8f-711e09f75b83",
+      "content": "Do not use this fixture as evidence describing the safety status of a real institution."
+    },
+    "d39a6b23-cc30-5e74-ba0b-8eaff2caa812": {
+      "type": "memory",
+      "uid": "d39a6b23-cc30-5e74-ba0b-8eaff2caa812",
+      "content": "The facilities operations department expects internal construction and inspection data not to be exposed in general campus guidance unrelated to the question."
+    }
+  },
+  "order": [
+    "3c6863db-d82d-5072-8e4e-01e1702ccbe8",
+    "39e85ee3-8def-5e52-b622-098d08f5d59f",
+    "13308bee-18d0-510a-b7f9-1d33d841ff40",
+    "97510b32-94a9-53bc-9b88-4c5e75977c0c",
+    "312f1c5f-d650-52d6-bbed-2b96bc3f7cc9",
+    "9320f462-f5ac-5a10-bf87-59615ab0f0da",
+    "d4786324-5b65-5861-a2dc-2471f271f035",
+    "b81df8e8-8f81-565d-8aeb-fa8932a180f5",
+    "f05b467b-a682-54af-98ef-998f63de21b8",
+    "29a4e3ab-a3d7-551c-a6e0-3a0b479c826e",
+    "707a6be7-409f-5db7-a8c5-4450cddcd5fb",
+    "875d1f7a-20bf-5885-9c4a-ebf036fe67cd",
+    "ed9dc7b8-fb0f-5f53-8f8f-711e09f75b83",
+    "d39a6b23-cc30-5e74-ba0b-8eaff2caa812"
+  ]
+}

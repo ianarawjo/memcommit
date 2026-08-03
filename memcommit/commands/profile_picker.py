@@ -25,9 +25,15 @@ class ProfilePickerEntry:
     name: str
     context_count: int
     current_context: str | None
+    memory_count: int = 0
+    granted_context_count: int = 0
+    granted_memory_count: int = 0
     query_source_count: int = 0
     query_source_names: tuple[str, ...] = ()
     study_name: str | None = None
+    study_created_at: str | None = None
+    study_task: int | None = None
+    study_role: str | None = None
 
 
 def _validate_entries(
@@ -43,17 +49,62 @@ def _validate_entries(
         not isinstance(entry.name, str)
         or not entry.name
         or entry.context_count < 0
+        or entry.memory_count < 0
+        or entry.granted_context_count < 0
+        or entry.granted_memory_count < 0
         or entry.query_source_count < 0
         or len(entry.query_source_names) > entry.query_source_count
         or any(not name for name in entry.query_source_names)
         or len(set(entry.query_source_names)) != len(entry.query_source_names)
         or (
-            entry.study_name is not None
-            and (not isinstance(entry.study_name, str) or not entry.study_name)
+            any(
+                value is not None
+                for value in (
+                    entry.study_name,
+                    entry.study_created_at,
+                    entry.study_task,
+                    entry.study_role,
+                )
+            )
+            and not (
+                isinstance(entry.study_name, str)
+                and bool(entry.study_name)
+                and isinstance(entry.study_created_at, str)
+                and bool(entry.study_created_at)
+                and type(entry.study_task) is int
+                and entry.study_task in {1, 2, 3}
+                and entry.study_role in {None, "TASK", "AUTHORITY"}
+            )
         )
         for entry in options
     ) or len(set(names)) != len(names):
         raise ValueError("Profile selection received invalid entries.")
+    study_metadata: dict[str, tuple[str, set[tuple[str, int]]]] = {}
+    finished_studies: set[str] = set()
+    previous_study: str | None = None
+    for entry in options:
+        study_name = entry.study_name
+        if study_name is None:
+            if previous_study is not None:
+                finished_studies.add(previous_study)
+            previous_study = None
+            continue
+        if previous_study is not None and study_name != previous_study:
+            finished_studies.add(previous_study)
+        if study_name in finished_studies:
+            raise ValueError("Study Profile entries must remain contiguous.")
+        created_at = entry.study_created_at
+        task = entry.study_task
+        assert isinstance(created_at, str) and type(task) is int
+        member = (entry.study_role or "TASK", task)
+        existing = study_metadata.get(study_name)
+        if existing is None:
+            study_metadata[study_name] = (created_at, {member})
+        elif existing[0] != created_at or member in existing[1]:
+            raise ValueError("Study Profile entries are inconsistent.")
+        else:
+            existing[1].add(member)
+        previous_study = study_name
     if current not in names:
         raise ValueError("The current profile is not available to select.")
     return options
@@ -69,18 +120,32 @@ def _render_profile_options(
     options = _validate_entries(entries, current=current)
     if selected < 0 or selected >= len(options):
         raise ValueError("Selected profile index is out of range.")
-    name_labels = tuple(display_escape_text(entry.name) for entry in options)
+    name_labels = tuple(
+        (
+            f"{(entry.study_role or 'TASK').title()} {entry.study_task} · "
+            f"{display_escape_text(entry.name)}"
+            if entry.study_name is not None
+            else display_escape_text(entry.name)
+        )
+        for entry in options
+    )
     name_width = min(max(max(len(label) for label in name_labels), 8), 24)
     fragments: list[tuple[str, str]] = []
     previous_study: str | None = None
     for index, entry in enumerate(options):
         if entry.study_name is not None and entry.study_name != previous_study:
-            if fragments:
-                fragments.append(("", "\n"))
-            fragments.append(
-                ("class:group", f"STUDY · {display_escape_text(entry.study_name)}\n")
+            fragments.extend(
+                [
+                    (
+                        "class:study",
+                        "  STUDY "
+                        + display_escape_text(entry.study_name)
+                        + " · created="
+                        + display_escape_text(entry.study_created_at or ""),
+                    ),
+                    ("", "\n"),
+                ]
             )
-        previous_study = entry.study_name
         is_selected = index == selected
         is_current = entry.name == current
         if is_selected:
@@ -116,13 +181,17 @@ def _render_profile_options(
                 (action_style, f"{action:<7}"),
                 (
                     row_style,
-                    f"  {entry.context_count} Contexts"
+                    f"  Contexts {entry.context_count} owned + "
+                    f"{entry.granted_context_count} granted · "
+                    f"Memories {entry.memory_count} owned + "
+                    f"{entry.granted_memory_count} granted"
                     f"{query_note} · current={current_context}",
                 ),
             ]
         )
         if index < len(options) - 1:
             fragments.append(("", "\n"))
+        previous_study = entry.study_name
     return fragments
 
 
@@ -230,7 +299,7 @@ def choose_profile(
             {
                 "selected": "reverse bold",
                 "current": "ansigreen bold",
-                "group": "ansicyan bold",
+                "study": "ansicyan bold",
             }
         ),
     )

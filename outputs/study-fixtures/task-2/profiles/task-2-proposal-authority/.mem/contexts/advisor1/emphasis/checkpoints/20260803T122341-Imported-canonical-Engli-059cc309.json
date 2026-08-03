@@ -1,0 +1,94 @@
+{
+  "uid": "059cc309-f593-42f4-9a68-a370f38db0fe",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/emphasis' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-03T12:23:41.207034",
+  "snapshot": {
+    "uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+    "name": "advisor1/emphasis",
+    "memories": {
+      "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c": {
+        "type": "memory",
+        "uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c",
+        "content": "Do not exceed two primary HCI contributions."
+      },
+      "b5b6a901-9047-5482-a0e1-d29e5f7171e8": {
+        "type": "memory",
+        "uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8",
+        "content": "Name each design or empirical contribution and present it in a single sentence."
+      },
+      "e89de514-48a5-5e9b-96ca-f194c0ed79ab": {
+        "type": "memory",
+        "uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab",
+        "content": "In studies recruiting community participants, emphasize the time burden associated with participation."
+      },
+      "f7025cbb-4005-53c6-9031-e33f04a86b92": {
+        "type": "memory",
+        "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92",
+        "content": "In studies recruiting community participants, emphasize the travel burden associated with participation."
+      },
+      "33503d41-7b99-5526-a028-0a1a20652c0d": {
+        "type": "memory",
+        "uid": "33503d41-7b99-5526-a028-0a1a20652c0d",
+        "content": "Present the primary HCI design contribution of the proposal as a conceptual model explaining the relationship between user behavior and design choices, rather than as practical design guidelines."
+      },
+      "a42891a1-b674-5747-a77c-43699b0b9723": {
+        "type": "memory",
+        "uid": "a42891a1-b674-5747-a77c-43699b0b9723",
+        "content": "HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two."
+      },
+      "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e": {
+        "type": "memory",
+        "uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e",
+        "content": "Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration."
+      },
+      "f8931b4e-9656-548d-84a1-f2f2c3eb47b1": {
+        "type": "memory",
+        "uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1",
+        "content": "Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype."
+      },
+      "9bf9e735-7598-5977-abe2-87b2c9c38a24": {
+        "type": "memory",
+        "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24",
+        "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives."
+      },
+      "79437c17-1f08-5188-8177-c622429dc4f9": {
+        "type": "memory",
+        "uid": "79437c17-1f08-5188-8177-c622429dc4f9",
+        "content": "The user writing this proposal tends to describe the visual polish of initial prototypes before describing research contributions."
+      }
+    },
+    "order": [
+      "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c",
+      "b5b6a901-9047-5482-a0e1-d29e5f7171e8",
+      "e89de514-48a5-5e9b-96ca-f194c0ed79ab",
+      "f7025cbb-4005-53c6-9031-e33f04a86b92",
+      "33503d41-7b99-5526-a028-0a1a20652c0d",
+      "a42891a1-b674-5747-a77c-43699b0b9723",
+      "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e",
+      "f8931b4e-9656-548d-84a1-f2f2c3eb47b1",
+      "9bf9e735-7598-5977-abe2-87b2c9c38a24",
+      "79437c17-1f08-5188-8177-c622429dc4f9"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+    "memory_uids": [
+      "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c",
+      "b5b6a901-9047-5482-a0e1-d29e5f7171e8",
+      "e89de514-48a5-5e9b-96ca-f194c0ed79ab",
+      "f7025cbb-4005-53c6-9031-e33f04a86b92",
+      "33503d41-7b99-5526-a028-0a1a20652c0d",
+      "a42891a1-b674-5747-a77c-43699b0b9723",
+      "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e",
+      "f8931b4e-9656-548d-84a1-f2f2c3eb47b1",
+      "9bf9e735-7598-5977-abe2-87b2c9c38a24",
+      "79437c17-1f08-5188-8177-c622429dc4f9"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/emphasis' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

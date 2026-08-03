@@ -1,0 +1,124 @@
+{
+  "schema_version": 2,
+  "context_uid": "c9d0b5d5-fde1-5fea-95ee-c8419410b376",
+  "context_name": "guardrails/minimization-and-redaction",
+  "target_language": "ko",
+  "created_at": "2026-08-03T16:23:41.483014+00:00",
+  "updated_at": "2026-08-03T16:23:41.483344+00:00",
+  "revision": 9,
+  "contract_version": "translate-v2",
+  "entries": [
+    {
+      "source_uid": "d4333949-4987-5332-a33d-90bbdac770dc",
+      "provider": null,
+      "curated": {
+        "source_sha256": "1e625c31f4f03126425f99f80c38749372a6203696b36fa3792e6e4c2b5a2b2f",
+        "translated_content": "\ud604\uc7ac \ubaa9\uc801\uc5d0 \ud544\uc694\ud55c \ucd5c\uc18c \ub2e8\uc704\uc758 Memory\ub9cc \uc120\ud0dd\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "db97163e55013500b89a4937e30a4efa99e95b91a44e023d87abfe70062ed37d",
+        "created_at": "2026-08-03T16:23:41.483050+00:00",
+        "updated_at": "2026-08-03T16:23:41.483050+00:00"
+      }
+    },
+    {
+      "source_uid": "c07ec431-d6ea-5a85-886b-196042fcac61",
+      "provider": null,
+      "curated": {
+        "source_sha256": "2de649d3455582e7bad4ec542513687ebc4aefaa2999e0e57d4516b477cb0226",
+        "translated_content": "\uacf5\uc720\uc5d0 \ud544\uc694\ud558\uc9c0 \uc54a\uc740 \uc2dd\ubcc4\uc790\ub294 \ubcf8\ubb38\uc5d0\uc11c \uac00\ub824\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "db97163e55013500b89a4937e30a4efa99e95b91a44e023d87abfe70062ed37d",
+        "created_at": "2026-08-03T16:23:41.483093+00:00",
+        "updated_at": "2026-08-03T16:23:41.483093+00:00"
+      }
+    },
+    {
+      "source_uid": "4fb307cc-12d6-58c0-829f-3e2d350d5bbd",
+      "provider": null,
+      "curated": {
+        "source_sha256": "96c5ab351fdb04d9ff7b41965e492de1ded825321fed04f7626591d834a74159",
+        "translated_content": "\uc77c\ubc18\ud654\ud55c \ud45c\ud604\uc774 \uc6d0\ubb38\uc758 \ud575\uc2ec \uc758\ubbf8\ub97c \ubc14\uafb8\uc9c0 \uc54a\ub294\uc9c0 \ud655\uc778\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "db97163e55013500b89a4937e30a4efa99e95b91a44e023d87abfe70062ed37d",
+        "created_at": "2026-08-03T16:23:41.483132+00:00",
+        "updated_at": "2026-08-03T16:23:41.483132+00:00"
+      }
+    },
+    {
+      "source_uid": "271a132e-50bd-5049-8d99-94de2ff726c9",
+      "provider": null,
+      "curated": {
+        "source_sha256": "d06b519ec47456d311eed5d22f20bd1bf79bfa48ccb324f5761659254e337794",
+        "translated_content": "\uc81c\uac70\ud55c \uac12\uc744 \uadf8\ub7f4\ub4ef\ud55c \uac12\uc73c\ub85c \ub300\uccb4\ud558\uc9c0 \ub9c8\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "db97163e55013500b89a4937e30a4efa99e95b91a44e023d87abfe70062ed37d",
+        "created_at": "2026-08-03T16:23:41.483171+00:00",
+        "updated_at": "2026-08-03T16:23:41.483171+00:00"
+      }
+    },
+    {
+      "source_uid": "c578a8d8-1eea-5e9b-a26a-f20eda11cfb5",
+      "provider": null,
+      "curated": {
+        "source_sha256": "cf502dfe4a96c8c1f8047d9e63cb9bcb0065b3b53a6c2404106e48e50f48f855",
+        "translated_content": "\uc0ac\uc6a9\uc790\uc5d0\uac8c \uac00\ub824\uc9c4 \ud544\ub4dc\uc758 \uc885\ub958\ub97c \ud45c\uc2dc\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "db97163e55013500b89a4937e30a4efa99e95b91a44e023d87abfe70062ed37d",
+        "created_at": "2026-08-03T16:23:41.483213+00:00",
+        "updated_at": "2026-08-03T16:23:41.483213+00:00"
+      }
+    },
+    {
+      "source_uid": "31868e82-0f0d-5016-81b4-160db052b061",
+      "provider": null,
+      "curated": {
+        "source_sha256": "bc1401b3d12cb1a4419f895e7e96d7f16f48bd0246fdf0bde877bd3d6c7098a1",
+        "translated_content": "\uc815\ubcf4\uc758 \uc0dd\ub7b5\uc740 \ubc18\ub300 \uc0ac\uc2e4\uc758 \uc9c4\uc220\uc774 \uc544\ub2c8\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "db97163e55013500b89a4937e30a4efa99e95b91a44e023d87abfe70062ed37d",
+        "created_at": "2026-08-03T16:23:41.483259+00:00",
+        "updated_at": "2026-08-03T16:23:41.483259+00:00"
+      }
+    },
+    {
+      "source_uid": "9372846f-3e60-5b5f-9082-191a3ad50022",
+      "provider": null,
+      "curated": {
+        "source_sha256": "e637f860fb5cec709ddf81a9e4d50a30041361c4a59dc6f8ddd3bf7dcfbdc64a",
+        "translated_content": "\uc218\uc2e0 \uc870\uc9c1\uc740 \uc694\uc57d\uc5d0\uc11c \uc0dd\ub7b5\ub41c \ub0b4\uc6a9\uc744 \u2018\ud655\uc778\ub418\uc9c0 \uc54a\uc74c\u2019\uc774 \uc544\ub2c8\ub77c \u2018\ud574\ub2f9 \uc5c6\uc74c\u2019\uc73c\ub85c \ud574\uc11d\ud560 \uc218 \uc788\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "db97163e55013500b89a4937e30a4efa99e95b91a44e023d87abfe70062ed37d",
+        "created_at": "2026-08-03T16:23:41.483304+00:00",
+        "updated_at": "2026-08-03T16:23:41.483304+00:00"
+      }
+    },
+    {
+      "source_uid": "9a6e0b14-179c-5e23-8320-c39fbc625f99",
+      "provider": null,
+      "curated": {
+        "source_sha256": "fc142368221c1fc4c4284241f0654c81cc6ded208abed55e1311e84ea056be3e",
+        "translated_content": "\uc5ec\ub7ec \ube44\uc2dd\ubcc4 \ub2e8\ud3b8\uc744 \uacb0\ud569\ud558\uba74 \uac1c\uc778\uc774 \ub2e4\uc2dc \uc2dd\ubcc4\ub420 \uc218 \uc788\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "db97163e55013500b89a4937e30a4efa99e95b91a44e023d87abfe70062ed37d",
+        "created_at": "2026-08-03T16:23:41.483344+00:00",
+        "updated_at": "2026-08-03T16:23:41.483344+00:00"
+      }
+    }
+  ]
+}

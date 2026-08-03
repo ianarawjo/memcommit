@@ -6,8 +6,8 @@
 different namespace from `mem switch`:
 
 ```text
-mem profile use task-1  # select a whole local store
-mem profile task-1      # concise spelling of the same selection
+mem profile use study-baseline  # select the editable source store
+mem profile study-baseline      # concise spelling of the same selection
 mem switch              # select a Context inside that store
 ```
 
@@ -33,20 +33,34 @@ picker returns only a registered display name; the normal `use_profile`
 boundary re-loads and validates the registry and selected store before the
 active selector is changed, so a stale screen is not authority to switch.
 
-Each Profile row also displays the public locator names of its routed
-query-only references, such as `query=construction-details`, before the potentially
-long current Context locator. A count alone made an included source look
-absent and was often clipped at ordinary terminal widths. The name is routing
-metadata that is already used by `mem query`; displaying it neither reads nor
-reveals the concealed source. An orphaned concealed record without an ordinary
-`QueryContextRef` may contribute to a diagnostic count but its name is not
-publicized. Query-only sources remain absent from `mem switch` because they
-cannot become an ordinary current Context.
+Each Profile row also displays its incoming granted public view names. A view
+name is registry routing metadata; displaying it neither opens nor copies the
+authority source. Legacy `QueryContextRef` sources may still appear as a
+separate `query=...` annotation. Neither kind is offered to `mem switch`:
+granted views are per-command capabilities, and legacy query sources are not
+ordinary Contexts in the selected Profile.
 
-The name *profile* was chosen instead of *account* because no authentication,
-remote identity, or user ownership changes. A profile is only a locally
-registered set of Contexts, checkpoints, translation views, query-only
-sources, and store state.
+Each row reports both Context and Memory cardinality, with ownership kept
+explicit:
+
+```text
+Contexts 14 owned + 1 granted · Memories 375 owned + 75 granted
+```
+
+`owned` means an ordinary Context or direct `Memory` record physically stored
+inside that Profile. `granted` means a distinct authority-owned Context or
+direct Memory reachable through an incoming grant that includes `READ`.
+Repeated public aliases do not increase either count: the inventory
+deduplicates by authority Profile and stable Context identity. Memory refs,
+embedded Context refs, legacy query refs, checkpoints, and translation views
+are not counted as Memories. A query-only authority grant is listed as a view
+but does not add to the `READ`-granted cardinality. This separation prevents a
+concise inventory from silently equating storage, delegated read access, and
+query reachability.
+
+The name *profile* was chosen instead of *account* because no authentication
+or remote identity changes. A Profile is a locally registered store root; an
+authority grant is a separate relationship between two such roots.
 
 The backward-compatible `~/.mem` remains the fixed `authoring` profile.
 Managed profiles are editable copies under an external control plane:
@@ -57,36 +71,89 @@ Managed profiles are editable copies under an external control plane:
 ├── registry.json                    # active profile selector
 ├── registry.lock
 └── stores/
-    ├── <stable-profile-uid>/         # for example, task-1
-    ├── <stable-profile-uid>/         # task-2
-    └── <stable-profile-uid>/         # task-3
+    ├── <stable-profile-uid>/         # study-baseline
+    └── <run-profile-uid>/...         # initialized Study members
 ```
 
-`mem profile import-study` copies the three generated study packages into
-managed roots in one all-or-nothing operation. The package sources remain
-unchanged. The resulting copies may be edited with ordinary `mem` commands,
-and their changes persist when another profile is selected and the person
-later returns.
+`mem profile import-study` validates the three generated packages once and
+publishes one editable `study-baseline` Profile. Package sources remain
+unchanged. The baseline uses one explicit Context contract:
 
-## Why profiles are not merged Contexts
+```text
+study-baseline
+├── task-1/...
+├── task-2/...
+├── task-3/...
+└── granted-memory/
+    ├── task-1/...
+    ├── task-2/...
+    └── task-3/...
+```
+
+The first three branches contain participant-owned starting state. The
+`granted-memory` branches contain editable source material that becomes
+permissioned authority views only when a Study is initialized. Keeping the
+authoring source in one Profile makes incomplete Memory sets easy to inspect,
+import, and revise without coordinating six live Profile identities.
+
+## Timestamped Study groups
+
+`mem init-study [NAME]` is the repeatable run-oriented entry point. It snapshots
+the currently registered `study-baseline` Profile, not the generated bundle,
+then publishes fresh namespaced copies under one timestamped heading:
+
+```text
+pilot-001  STUDY   created=2026-08-03T20:34:05+00:00
+  ├─ Task 1  profile=pilot-001-task-1
+  ├─ Authority 1  profile=pilot-001-task-1-campus-authority
+  ├─ Task 2  profile=pilot-001-task-2
+  ├─ Authority 2  profile=pilot-001-task-2-proposal-authority
+  ├─ Task 3  profile=pilot-001-task-3
+  └─ Authority 3  profile=pilot-001-task-3-healthcare-authority
+```
+
+Omitting `NAME` generates `study-YYYYMMDDTHHMMSSZ-<uid-prefix>`, so two
+initializations in the same second remain distinct. The timezone-aware UTC
+`created_at`, Study UUID, task number, source-manifest digest, and canonical
+language, exact branch digest, and source baseline Profile UID/name are frozen
+into each child Profile's provenance. This is a display group, not a parent
+MemoryStore: every Task retains its own `state.json`, Context graph,
+translations, and query boundary, while operational history begins empty at
+Study creation.
+
+The baseline's `granted-memory/task-N` branches create namespaced authority
+Profiles and run-specific grant UIDs in the same transaction. Those authority
+Profiles remain explicit,
+switchable registry owners and appear beneath the same Study heading beside
+the three participant-facing Task Profiles. Keeping them visible lets a
+researcher inspect or revise source data without bypassing Profile isolation;
+participants still work in the Task Profiles.
+
+Initialization locks one registry generation and one complete baseline Context
+snapshot, splits the six logical branches into clean staged stores, resolves
+grants, publishes the stores, and atomically replaces the registry. A duplicate
+Study name or any topology, copy, grant, or registry failure publishes none of
+the new Profiles.
+The previously active Profile intentionally remains active, so creating a
+Study never silently redirects an unrelated terminal's next `mem` command.
+
+## Why the source is merged but initialized runs are split
 
 The study needs two kinds of navigation with different meanings:
 
 - Profile selection changes the entire experimental memory environment.
 - Context switching navigates within one selected environment.
 
-Putting all task Contexts into one active graph would make `mem switch` look
-convenient during fixture authoring, but it would also mix three independent
-`state.json` files, query routing, translation catalogs, histories, and study
-conditions. It creates semantic collisions even where filesystem names do not
-collide: for example, the Task 1 ordinary `campus-wiki` can coexist with an
-older Context of the same name, and new task subtrees resemble older
-development subtrees without sharing identity.
+The baseline is an authoring template, not a participant execution boundary.
+Merging it keeps Task 1--3 and their granted source material in one selectable,
+copyable unit while the corpus is still changing. Its prefixes are part of a
+validated template contract and are stripped only during initialization.
 
-Profiles satisfy the underlying authoring need without that ambiguity: all
-four stores are present locally and editable, while only one store is active
-in any new CLI process. `mem profile list` is the cross-store inventory;
-`mem switch` remains an honest inventory of the active store only.
+Initialized Task Profiles remain separate because their `state.json`, history,
+query sessions, write policy, and granted capabilities are experimental state.
+Authority branches are also split into ordinary source-owner Profiles so a
+grant remains a real cross-Profile permission view. Thus one baseline snapshot
+is convenient to edit without weakening isolation in a run.
 
 ## Process snapshot and concurrency
 
@@ -104,23 +171,42 @@ falls back to the legacy `authoring` store without creating metadata.
 
 ## Import boundary
 
-Profile import rejects symbolic links and special files, validates Context
-path/name agreement, current-Context state, query-reference/source identity,
-and translation-catalog ownership, and copies into hidden same-filesystem
-staging. Study import publishes all three staged roots before atomically
-publishing their registry entries. A failure leaves the authoring store,
-package sources, and prior registry unchanged.
+`mem profile import` is an archival whole-store copy. The top-level `mem
+import` instead creates a clean baseline Profile through an allowlist:
+`state.json`, ordinary `context.json` records, query-source records, and
+translation views. It deliberately excludes checkpoints, command receipts,
+sessions, semantic workbenches, caches, locks, lifecycle ledgers, clipboard
+state, and write-protection state. The baseline digest and timezone-aware
+import timestamp remain in Profile provenance instead of carrying authoring
+history into the new run.
+
+Both forms reject symbolic links and special files, validate Context path/name
+agreement, current-Context state, query-reference/source identity, and
+translation-catalog ownership, and stage on the destination filesystem. Study
+bootstrap additionally validates Profile roles, grant permissions, exclusions,
+frozen scopes, and attachment identities before composing the single baseline
+Profile. Initialization later snapshots only allowlisted baseline data and
+publishes all required staged roots before atomically publishing one registry
+generation. A failure leaves the authoring store, package sources,
+and prior registry unchanged.
 
 Profile names are portable single segments. Managed storage uses stable UUID
 directories so a future display-name rename need not move the data. The fixed
 `authoring` profile cannot be imported over or replaced.
 
-## Query-only and translation boundaries
+## Authority, query-only, and translation boundaries
 
-Query-only sources travel with their complete profile but remain absent from
-`mem switch`, `mem ls`, and ordinary Context editing. They are accessed only
-through `mem query`. Korean ordinary representations remain same-UID
-translation catalogs rather than additional Contexts or Memories.
+New study query-only data is an ordinary Context tree in its task-specific
+authority Profile. A task receives only `QUERY`, so `mem ls` and `mem show`
+render public view metadata without opening the tree. Selecting the authority
+Profile gives the owner normal CRUD. Legacy concealed `query-sources/` remain
+supported but are no longer the study bundle's source model. Korean
+representations remain same-UID translation catalogs rather than additional
+Contexts or Memories.
+
+See `profile-authority-grant-design-rationale.md` and
+`query-session-design-rationale.md` for permission, precedence, and optional
+transcript retention contracts.
 
 This is a research-prototype UI boundary, not operating-system access control.
 The local account can still read its files.
@@ -146,6 +232,10 @@ The local account can still read its files.
   generated package. Re-import refuses to overwrite the edited profile.
 - Profile removal, replacement, rename, backup, and reset are intentionally
   deferred until they have explicit recoverable workflows.
+- Study creation records provenance and a creation timestamp. Whole-session
+  command/event logging and Study completion/archive state remain a separate
+  lifecycle boundary; ordinary checkpoint and opt-in query-session history
+  retain their existing narrower contracts.
 - `mem profile import-study` is a checkout-oriented research convenience; a
   packaged installation must pass `--from` when generated bundles are not
   shipped with the Python package.
