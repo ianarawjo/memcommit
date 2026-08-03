@@ -1197,10 +1197,32 @@ destructive/recovery boundary.
 
 There is deliberately no active-Ground pointer. Requiring a name for every
 persisted Ground avoids a global switch whose state could collide across
-terminals or agents. The named form is intentionally create-or-resume, so
+terminals or agents. The named form remains intentionally create-or-resume, so
 `--snapshot` also creates an empty Ground when the supplied name does not
-exist. A mistyped name can therefore create an extra empty file; listing,
-renaming, and archiving named Grounds remain future CLI work.
+exist and a mistyped direct name can still create an extra empty file.
+
+Interactive bare `mem ground` now mitigates that discovery problem with a
+read-only saved-work launcher and an explicit New action. The selected row is
+reloaded through an existing-only path after the picker closes; it never falls
+through to create-or-resume if the file disappeared. The launcher sorts by
+physical last-saved time or name and groups by bound Context, without creating
+an active Ground pointer. Ground rename and archive remain future CLI work.
+
+The initial Ground view is `BY CONTEXT · RECENT FIRST`: Context groups use
+case-insensitive name order with an exact-name tie breaker, and sessions within
+one group use physical last-saved time. A Ground appears only once, under its
+first `RAW_EVIDENCE` frame, then its first `WORKING_CANDIDATES` frame, or
+`Unbound` when neither exists. Every bound Context remains visible in detail
+and searchable. A scrolled slice repeats its first heading as `CONTINUED`, and
+its height budget counts headings and separators so the selected session cannot
+be hidden by grouping chrome.
+
+Ground JSON remains store-level rather than Context-owned. The launcher shows
+the frozen process profile and store root above the list so this physical
+boundary is visible. It derives the profile label by matching that frozen root
+against all registered profile roots instead of trusting the registry's live
+active pointer, which another terminal can change after the process imports
+and freezes its store.
 
 ## Schema
 
@@ -1593,7 +1615,7 @@ candidates, and whole-Ground approval remain future work. The process-local
   workflow are not implemented in this slice. The implemented TUI does use
   arrow keys to switch between command and effects, and exact interactive
   mutations use a save-boundary compare-and-swap guard.
-- Importance ordering, creation-time ordering, affected-decision estimates,
+- Importance ordering, durable creation-time ordering, affected-decision estimates,
   automatic batch generation from live Context evidence, inherited or
   predecessor Context handling, and integrated ambiguity/conflict resolution
   remain deferred. One-shot batching of the person's current Ground comment is

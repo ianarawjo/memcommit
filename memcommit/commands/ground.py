@@ -20,6 +20,17 @@ from memcommit.commands.ground_named_shell import (
     GroundCommandProposal,
     run_named_ground_shell,
 )
+from memcommit.commands.ground_session_picker import (
+    GroundSessionCatalogEntry,
+    ground_session_picker_location,
+    list_ground_session_catalog,
+    reload_selected_ground_session,
+)
+from memcommit.commands.session_picker import (
+    SessionNewReceipt,
+    SessionOpenReceipt,
+    choose_session,
+)
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import Context, Memory
 from memcommit.ground import (
@@ -1102,6 +1113,47 @@ def _run_existing_ground_shell(
     )
 
 
+def _run_ground_session_picker(
+    store: MemoryStore,
+    *,
+    catalog: Sequence[GroundSessionCatalogEntry] | None = None,
+) -> None:
+    """Open one existing Ground or continue into the unsaved new flow."""
+    frozen_catalog = tuple(
+        list_ground_session_catalog(store) if catalog is None else catalog
+    )
+    by_key = {entry.picker_entry.key: entry for entry in frozen_catalog}
+    receipt = choose_session(
+        tuple(entry.picker_entry for entry in frozen_catalog),
+        title="MEM GROUND · SAVED WORK",
+        new_receipt=SessionNewReceipt(
+            kind="ground",
+            argv=("mem", "ground"),
+        ),
+        initial_sort_mode="recent",
+        initial_group_mode="context",
+        location=ground_session_picker_location(),
+    )
+    if receipt is None:
+        typer.echo("Ground selection cancelled.")
+        return
+    if isinstance(receipt, SessionNewReceipt):
+        if receipt.kind != "ground" or receipt.argv != ("mem", "ground"):
+            raise GroundError("Ground picker returned an invalid new receipt.")
+        _run_new_ground_shell()
+        return
+    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "ground":
+        raise GroundError("Ground picker returned an invalid selection.")
+    entry = by_key.get(receipt.key)
+    if entry is None or receipt.argv != entry.picker_entry.reopen_argv:
+        raise GroundError("Ground picker changed the selected reopen command.")
+    # The picker is only a read-only projection. Re-load by the catalog key and
+    # compare UID, revision, and digest so neither deletion nor replacement can
+    # fall through to the historical create-or-resume path.
+    session = reload_selected_ground_session(store, entry)
+    _run_existing_ground_shell(session)
+
+
 def _count_items(session: GroundSession, kind: str) -> int:
     return sum(item.kind == kind for item in session.items)
 
@@ -1683,7 +1735,8 @@ def cmd(
             help=(
                 "Portable Ground name to create or resume, or a natural-"
                 "language starting request when the value cannot be a "
-                "portable name; omit to start from a blank, unsaved frame"
+                "portable name; omit to start from a blank, unsaved frame "
+                "outside a terminal or browse saved Grounds inside one"
             )
         ),
     ] = None,
@@ -1697,6 +1750,13 @@ def cmd(
             ),
         ),
     ] = None,
+    sessions: Annotated[
+        bool,
+        typer.Option(
+            "--sessions",
+            help="Choose an existing saved Ground or start a new one",
+        ),
+    ] = False,
     goal: Annotated[
         Optional[str],
         typer.Option("--goal", help="Goal for a new named Ground"),
@@ -1996,6 +2056,22 @@ def cmd(
         or bool(if_context_version)
     )
     initial_request: str | None = request
+    if sessions and (ground_name is not None or request is not None):
+        typer.secho(
+            "Ground error: --sessions cannot be combined with a Ground "
+            "name or starting request.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if sessions and seed_conflict_requested:
+        typer.secho(
+            "Ground error: --sessions cannot be combined with Ground "
+            "creation, view, or mutation options.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
     if request is not None and ground_name is not None:
         typer.secho(
             "Ground error: choose either GROUND_NAME_OR_REQUEST or "
@@ -2084,8 +2160,28 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
+        if sessions and not _interactive_terminal():
+            typer.secho(
+                "Ground error: --sessions requires an interactive terminal.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
         if _interactive_terminal():
-            _run_new_ground_shell()
+            try:
+                store = MemoryStore(create=False)
+                catalog = list_ground_session_catalog(store)
+                if catalog or sessions:
+                    _run_ground_session_picker(store, catalog=catalog)
+                else:
+                    _run_new_ground_shell()
+            except (GroundError, OSError, TypeError, ValueError) as error:
+                typer.secho(
+                    f"Ground error: {error}",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
         else:
             typer.echo(render_ground_start())
         return

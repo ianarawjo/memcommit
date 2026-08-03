@@ -162,8 +162,8 @@ app.command(
 app.command(
     "ground",
     help=(
-        "Open or revise a Goal–Rules–Memories Ground; blank or plain named "
-        "TTY use starts a provider-backed chat."
+        "Browse saved Grounds or revise one Goal–Rules–Memories workbench; "
+        "use N in the picker to start a provider-backed chat."
     ),
 )(ground.cmd)
 app.command(

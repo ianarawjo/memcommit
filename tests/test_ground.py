@@ -458,6 +458,119 @@ def test_cli_ground_without_name_preserves_a_populated_store(
     assert _store_bytes(isolated_store) == before
 
 
+def test_cli_ground_tty_picker_reopens_existing_without_creating_state(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore(create=False)
+    session = create_ground_session(
+        "saved-ground",
+        goal="Resume this Ground.",
+    )
+    store.save_ground_session(session)
+    before = _store_bytes(isolated_store)
+    opened = []
+    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
+    picker_options = []
+
+    def choose_saved_ground(*_args, **kwargs):
+        picker_options.append(kwargs)
+        return ground_command.SessionOpenReceipt(
+            kind="ground",
+            key="saved-ground",
+            argv=("mem", "ground", "saved-ground"),
+        )
+
+    monkeypatch.setattr(ground_command, "choose_session", choose_saved_ground)
+    monkeypatch.setattr(
+        ground_command,
+        "_run_existing_ground_shell",
+        lambda value, **_kwargs: opened.append(value),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_new_ground_shell",
+        lambda *_args, **_kwargs: pytest.fail("must not start a new Ground"),
+    )
+
+    result = runner.invoke(app, ["ground"])
+
+    assert result.exit_code == 0, result.output
+    assert opened == [session]
+    assert picker_options[0]["initial_sort_mode"] == "recent"
+    assert picker_options[0]["initial_group_mode"] == "context"
+    assert picker_options[0]["location"].store_path == str(isolated_store)
+    assert _store_bytes(isolated_store) == before
+
+
+def test_cli_ground_tty_picker_new_receipt_keeps_new_flow_explicit(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore(create=False)
+    store.save_ground_session(create_ground_session("saved-ground"))
+    started = []
+    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        ground_command,
+        "choose_session",
+        lambda *_args, **_kwargs: ground_command.SessionNewReceipt(
+            kind="ground",
+            argv=("mem", "ground"),
+        ),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_new_ground_shell",
+        lambda *_args, **_kwargs: started.append(True),
+    )
+
+    result = runner.invoke(app, ["ground"])
+
+    assert result.exit_code == 0, result.output
+    assert started == [True]
+
+
+def test_cli_ground_picker_does_not_recreate_a_disappeared_selection(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore(create=False)
+    store.save_ground_session(create_ground_session("vanishing-ground"))
+    path = isolated_store / "ground-sessions" / "vanishing-ground.json"
+
+    def remove_then_select(*_args, **_kwargs):
+        path.unlink()
+        return ground_command.SessionOpenReceipt(
+            kind="ground",
+            key="vanishing-ground",
+            argv=("mem", "ground", "vanishing-ground"),
+        )
+
+    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(ground_command, "choose_session", remove_then_select)
+
+    result = runner.invoke(app, ["ground", "--sessions"])
+
+    assert result.exit_code == 1
+    assert "no longer exists" in result.output
+    assert not path.exists()
+
+
+def test_cli_ground_sessions_requires_tty_without_changing_store(
+    isolated_store,
+):
+    store = MemoryStore(create=False)
+    store.save_ground_session(create_ground_session("saved-ground"))
+    before = _store_bytes(isolated_store)
+
+    result = runner.invoke(app, ["ground", "--sessions"])
+
+    assert result.exit_code == 1
+    assert "requires an interactive terminal" in result.output
+    assert _store_bytes(isolated_store) == before
+
+
 def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
     isolated_store,
     monkeypatch,
