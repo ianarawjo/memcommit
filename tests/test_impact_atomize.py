@@ -852,7 +852,7 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     assert "The store closes." in traced.output
 
 
-def test_atomize_save_as_rejects_conflicts_and_rolls_back_failure(
+def test_atomize_save_as_rejects_conflicts_and_preserves_published_failure(
     isolated_store,
     monkeypatch,
 ):
@@ -925,14 +925,19 @@ def test_atomize_save_as_rejects_conflicts_and_rolls_back_failure(
 
     assert failed.exit_code == 1
     assert "injected apply failure" in failed.stderr
-    assert not store.context_exists("rolled-back")
-    assert store.list_context_names() == ["existing", "source"]
+    assert "preserved for manual inspection" in failed.stderr
+    assert store.context_exists("rolled-back")
+    assert store.list_context_names() == ["existing", "rolled-back", "source"]
+    preserved = store.load_direct("rolled-back")
+    assert preserved.uid != source.uid
+    assert memory.uid in preserved.memories
+    assert len(store.list_checkpoints(preserved.name)) == 1
     assert store.current_context_name() == source.name
     assert store._context_file(source.name).read_bytes() == source_bytes
     assert memory.uid in store.load_direct(source.name).memories
 
 
-def test_atomize_save_as_rolls_back_when_final_state_switch_fails(
+def test_atomize_save_as_preserves_destination_when_final_switch_fails(
     isolated_store,
     monkeypatch,
 ):
@@ -990,10 +995,162 @@ def test_atomize_save_as_rolls_back_when_final_state_switch_fails(
 
     assert result.exit_code == 1
     assert "injected state switch failure" in result.stderr
-    assert not store.context_exists("derived")
+    assert "preserved for manual inspection" in result.stderr
+    assert store.context_exists("derived")
+    assert len(store.list_checkpoints("derived")) == 2
     assert store.current_context_name() == source.name
     assert store_module.STATE_FILE.read_bytes() == state_bytes
     assert store._context_file(source.name).read_bytes() == source_bytes
+    assert memory.uid in store.load_direct(source.name).memories
+
+
+def test_atomize_save_as_preserves_concurrent_current_selection(
+    isolated_store,
+    monkeypatch,
+):
+    from memcommit.atomize import apply_atomize_analysis as apply_analysis
+
+    store = MemoryStore()
+    source = ops.init("source")
+    ops.add(source, "First fact. Second fact.")
+    store.save(source)
+    store.save(ops.init("other"))
+    store.set_current(source.name)
+
+    def respond(payload):
+        return {
+            "items": [
+                _item(
+                    payload["memories"][0]["candidate_id"],
+                    "COMPOSITE",
+                    children=[
+                        {
+                            "content": "First fact.",
+                            "source_spans": ["First fact"],
+                        },
+                        {
+                            "content": "Second fact.",
+                            "source_spans": ["Second fact"],
+                        },
+                    ],
+                )
+            ]
+        }
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: AtomizeProvider(respond),
+    )
+    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
+
+    def switch_then_apply(context, analysis):
+        store.set_current("other")
+        return apply_analysis(context, analysis)
+
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.apply_atomize_analysis",
+        switch_then_apply,
+    )
+
+    result = runner.invoke(app, ["atomize", "--save-as", "derived"])
+
+    assert result.exit_code == 1
+    assert "current Context changed" in result.stderr
+    assert "preserved for manual inspection" in result.stderr
+    assert store.current_context_name() == "other"
+    assert store.context_exists("derived")
+
+
+def test_atomize_save_as_does_not_overwrite_concurrent_destination(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("source")
+    ops.add(source, "One atomic fact.")
+    store.save(source)
+    store.set_current(source.name)
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: AtomizeProvider(_all_atomic),
+    )
+    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
+    original_branch = ops.branch
+    competitor = None
+
+    def create_competitor(context, name):
+        nonlocal competitor
+        result = original_branch(context, name)
+        competitor = ops.init(name)
+        ops.add(competitor, "concurrent owner")
+        store.create_context(competitor)
+        return result
+
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.ops.branch",
+        create_competitor,
+    )
+
+    result = runner.invoke(app, ["atomize", "--save-as", "derived"])
+
+    assert result.exit_code == 1
+    assert "already exists" in result.stderr
+    assert competitor is not None
+    loaded = store.load_direct("derived")
+    assert loaded.uid == competitor.uid
+    assert [item.content for item in loaded.iter_items()] == [
+        "concurrent owner"
+    ]
+    assert store.current_context_name() == source.name
+
+
+def test_atomize_split_fails_closed_when_catalog_is_incomplete(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "First fact. Second fact.")
+    store.save(source)
+    store.set_current(source.name)
+
+    def respond(payload):
+        return {
+            "items": [
+                _item(
+                    payload["memories"][0]["candidate_id"],
+                    "COMPOSITE",
+                    children=[
+                        {
+                            "content": "First fact.",
+                            "source_spans": ["First fact"],
+                        },
+                        {
+                            "content": "Second fact.",
+                            "source_spans": ["Second fact"],
+                        },
+                    ],
+                )
+            ]
+        }
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: AtomizeProvider(respond),
+    )
+    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
+    before = store._context_file(source.name).read_bytes()
+    history = store.list_checkpoints(source.name)
+    malformed = isolated_store / "contexts" / "malformed" / "context.json"
+    malformed.parent.mkdir()
+    malformed.write_text("{", encoding="utf-8")
+
+    result = runner.invoke(app, ["atomize", "--save"])
+
+    assert result.exit_code == 1
+    assert "invalid" in result.stderr.lower()
+    assert store._context_file(source.name).read_bytes() == before
+    assert store.list_checkpoints(source.name) == history
     assert memory.uid in store.load_direct(source.name).memories
 
 

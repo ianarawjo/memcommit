@@ -1001,7 +1001,7 @@ def cmd(
             )
             created = False
             try:
-                store.create_context(
+                store.create_context_with_sources(
                     result.baseline,
                     AutoCheckpoint(
                         command="init",
@@ -1024,6 +1024,13 @@ def cmd(
                             f"Initialized '{destination_name}' from "
                             f"'{plan.context_name}' before translation "
                             f"[{operation_uid[:8]}]"
+                        ),
+                    ),
+                    source_bindings=(
+                        (
+                            plan.context_name,
+                            plan.context_uid,
+                            plan.context_digest,
                         ),
                     ),
                 )

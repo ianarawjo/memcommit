@@ -878,7 +878,7 @@ def test_cli_detects_concurrent_context_change_after_provider_call(
     assert not store.context_exists("translation-test-en")
 
 
-def test_cli_preserves_complete_destination_if_source_changes_during_creation(
+def test_cli_does_not_publish_destination_if_source_changes_before_creation(
     isolated_store,
     monkeypatch,
 ):
@@ -918,7 +918,6 @@ def test_cli_preserves_complete_destination_if_source_changes_during_creation(
 
     assert result.exit_code == 1
     assert "source Context changed" in result.stderr
-    assert "preserved for manual inspection" in result.stderr
     loaded = store.load_direct(ctx.name)
     assert [
         item.content
@@ -926,13 +925,7 @@ def test_cli_preserves_complete_destination_if_source_changes_during_creation(
         if isinstance(item, Memory)
     ] == ["원문", "saved while translated Context was created"]
     assert store.list_checkpoints(ctx.name)[0]["command"] == "add"
-    preserved = store.load_direct("translation-test-en")
-    assert [
-        item.content
-        for item in preserved.iter_items()
-        if isinstance(item, Memory)
-    ] == ["EN: 원문"]
-    assert len(store.list_checkpoints(preserved.name)) == 2
+    assert not store.context_exists("translation-test-en")
     assert store.current_context_name() == ctx.name
 
 

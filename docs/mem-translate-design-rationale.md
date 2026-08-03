@@ -352,10 +352,12 @@ created, removed, edited, or reordered events.
 
 Before contacting the provider or reusing a projection for `--save-as`, the
 destination name and current storage availability are checked. Creation
-rechecks absence while holding the destination's cooperative write lock, so a
-concurrently created Context is never overwritten. The baseline save and its
-checkpoint are one atomic store operation. The final destination save uses
-the baseline digest as an optimistic-concurrency compare-and-swap.
+rechecks both absence and the source name/UID/digest while holding the source
+and destination cooperative write locks, so neither a concurrent owner nor a
+stale source frame is published. A source change before this boundary leaves
+no destination. The baseline save and its checkpoint are one atomic store
+operation. The final destination save uses the baseline digest as an
+optimistic-concurrency compare-and-swap.
 
 The source is reloaded and compared with the exact projection before
 derivation and again before switching. Any source-frame or current-Context

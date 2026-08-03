@@ -62,7 +62,7 @@ def cmd(
 
     store = MemoryStore()
     try:
-        ctx = store.load_current()
+        ctx = store.load_current_direct()
     except RuntimeError as e:
         typer.secho(str(e), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
@@ -118,7 +118,7 @@ def cmd(
         # before mutation so updates saved by another process are not overwritten
         # by the Context snapshot that was current when paste mode started.
         try:
-            ctx = store.load(context_name)
+            ctx = store.load_direct(context_name)
         except (OSError, ValueError) as error:
             typer.secho(
                 f"Error: could not reload context '{context_name}': {error}",

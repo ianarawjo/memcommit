@@ -4,7 +4,6 @@ from __future__ import annotations
 from collections import Counter
 import shlex
 from typing import Annotated
-import unicodedata
 
 import typer
 
@@ -24,6 +23,7 @@ from memcommit.comparison_store import (
     load_comparison_analysis,
     save_comparison_analysis,
 )
+from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.context_locator import resolve_context_locator
 from memcommit.query_provider import (
     CodexChatGPTProvider,
@@ -38,37 +38,6 @@ COMPARE_AGGREGATE_TIMEOUT_SECONDS = 300
 
 class CompareCommandError(RuntimeError):
     """Safe user-facing Compare orchestration failure."""
-
-
-def display_escape_text(value: str) -> str:
-    """Render untrusted semantic text as one unambiguous terminal line."""
-    escaped: list[str] = []
-    named_controls = {
-        "\n": r"\n",
-        "\t": r"\t",
-        "\r": r"\r",
-        "\b": r"\b",
-        "\f": r"\f",
-        "\v": r"\v",
-    }
-    for character in value:
-        if character == "\\":
-            escaped.append(r"\\")
-        elif character in named_controls:
-            escaped.append(named_controls[character])
-        elif (
-            unicodedata.category(character).startswith("C")
-            or unicodedata.category(character) in {"Zl", "Zp"}
-        ):
-            codepoint = ord(character)
-            escaped.append(
-                f"\\u{codepoint:04x}"
-                if codepoint <= 0xFFFF
-                else f"\\U{codepoint:08x}"
-            )
-        else:
-            escaped.append(character)
-    return "".join(escaped)
 
 
 def _single_line(value: str, *, limit: int = 110) -> str:
@@ -507,7 +476,7 @@ def cmd(
         ValueError,
     ) as error:
         typer.secho(
-            f"Compare error: {error}",
+            f"Compare error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
             err=True,
         )

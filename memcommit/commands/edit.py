@@ -55,7 +55,7 @@ def cmd(
 
     store = MemoryStore()
     try:
-        ctx = store.load_current()
+        ctx = store.load_current_direct()
     except RuntimeError as error:
         typer.secho(str(error), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

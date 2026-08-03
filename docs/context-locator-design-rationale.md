@@ -15,12 +15,27 @@ mem update [--from LOCATOR] [--to LOCATOR]
 mem rename LOCATOR NEW_NAME
 mem list [LOCATOR]
 mem ls [LOCATOR]
+mem show [SELECTOR] --context LOCATOR
+mem trace [SELECTOR] --context LOCATOR
+mem rationale [SELECTOR] --context LOCATOR
+mem find [QUERY] --context LOCATOR
+mem find-{ambiguities,duplicates,conflicts} --context LOCATOR
+mem query SELECTOR --context LOCATOR
+mem review [KIND] --context LOCATOR
+mem impact atomize --context LOCATOR
+mem atomize --context LOCATOR
+mem clear [LOCATOR]
+mem delete LOCATOR
+mem merge LOCATOR
+mem embed LOCATOR --into LOCATOR
+mem reference SELECTOR --from LOCATOR [--into LOCATOR]
+mem dev query-source install ... --into LOCATOR
 ```
 
 These commands use `memcommit.context_locator.resolve_context_locator` for
-their existing-Context operands.
-Additional commands should adopt the same boundary when they are next changed,
-subject to the mutation and approval constraints below.
+their existing-Context operands, normally through the command-entry
+`ContextOperandSnapshot` that freezes one active-Context base for the complete
+invocation.
 
 ## Motivation
 
@@ -113,14 +128,13 @@ relative spelling directly to `MemoryStore`.
 List is a read-only adopter: it resolves `mem ls ../sibling` against one
 captured current-Context snapshot, then uses the canonical result for loading,
 the output heading, namespace-child discovery, and structured copy identity.
-Other read or analysis operands such as `show --context` or
-`rationale --context` remain suitable later adopters. Mutation-oriented
-operands such as `delete CONTEXT` and `embed --into` need an additional review:
-prompts or approval receipts must display the resolved canonical name, and the
-command must freeze the target identity before acting. Rename implements that
-boundary for its source: it resolves against one captured current-state
-snapshot, displays the canonical source and exact new name, and freezes a
-graph-wide plan before approval and application.
+Read and analysis commands use the same command-entry snapshot without
+changing their operation-specific loader. Mutation-oriented operands add the
+required authority boundary: prompts display the escaped canonical name,
+targets retain their UID/digest CAS, and source-dependent writes revalidate
+canonical source name/UID/digest receipts under the final lock set. Rename
+implements the wider form for its source by freezing a graph-wide plan before
+approval and application.
 
 The resolver must not be applied indiscriminately:
 
@@ -140,12 +154,14 @@ These distinctions make the resolver universal for one semantic role—
 locating an existing normal Context—without making every string that happens
 to contain a Context name depend on mutable current state.
 
-## Current limitation
+## Remaining intentional boundaries
 
-Switch, non-branch Checkout through its Switch delegation, List/Ls, Compare,
-Meld, directional Impact/Update, and Rename's source operand use the common
-locator today. Other existing-Context operands still require canonical names
-until migrated under the boundary above.
+Public existing-ordinary-Context CLI operands now use the common locator. The
+remaining Context-shaped strings are intentionally outside that role: new
+identifiers, Memory and query-only selectors, provider output, saved artifact
+bindings, and Ground's separately reviewed frame-binding receipt. Adding a new
+ordinary existing-Context operand requires adding it to the rollout list and a
+test that proves every relative operand shares one current snapshot.
 
 The graph migration, identity, reference, checkpoint, query-only, and failure
 semantics of Rename are specified separately in

@@ -1,10 +1,12 @@
 """mem dev — developer tools for evaluation and testing (hidden from main help)."""
 import copy
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import json
 import typer
+
+from memcommit.context_locator import resolve_context_locator
 
 app = typer.Typer(help="Developer tools: evals, diagnostics.")
 query_source_app = typer.Typer(
@@ -52,8 +54,10 @@ def dev_query_source_install(
 
     store = MemoryStore()
     try:
-        parent = store.load(into)
-    except (FileNotFoundError, ValueError) as e:
+        current_name = store.current_context_name()
+        target_name = resolve_context_locator(into, current=current_name)
+        parent = store.load_direct(target_name)
+    except (FileNotFoundError, OSError, ValueError) as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     original_parent = copy.deepcopy(parent)
@@ -79,11 +83,15 @@ def dev_query_source_install(
         saved_parent_digest = parent._store_digest
         store.checkpoint(
             parent,
-            message=f"Installed query-only Context '{name}' in '{into}'",
+            message=f"Installed query-only Context '{name}' in '{target_name}'",
             command="dev query-source install",
-            args={"name": name, "into": into, "provider": ref.provider},
+            args={
+                "name": name,
+                "into": target_name,
+                "provider": ref.provider,
+            },
             description=(
-                f"Installed query-only Context '{name}' in '{into}'"
+                f"Installed query-only Context '{name}' in '{target_name}'"
             ),
             auto=True,
         )
@@ -114,7 +122,7 @@ def dev_query_source_install(
         raise typer.Exit(1)
 
     typer.secho(
-        f"Installed query-only Context '{name}' in '{into}'.",
+        f"Installed query-only Context '{name}' in '{target_name}'.",
         fg=typer.colors.GREEN,
     )
 
@@ -136,7 +144,6 @@ def dev_fake(
         mem dev fake test-user "a software engineer who likes hiking and coffee"
     """
     from memcommit.config import Config
-    from memcommit.context import Context
     from memcommit.semantic.llm import LLMClient, LLMError
     from memcommit.store import MemoryStore
     import memcommit.ops as ops
@@ -149,6 +156,11 @@ def dev_fake(
         raise typer.Exit(1)
 
     store = MemoryStore()
+    try:
+        expected_current = store.current_context_name()
+    except (OSError, ValueError) as e:
+        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
     if store.context_exists(context_name):
         typer.secho(
             f"Error: context '{context_name}' already exists.",
@@ -182,8 +194,26 @@ def dev_fake(
         if isinstance(item, str) and item.strip():
             ctx.add(item.strip())
 
-    store.save(ctx)
-    store.set_current(context_name)
+    try:
+        store.create_context(ctx)
+    except (OSError, RuntimeError, ValueError) as e:
+        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+    try:
+        store.set_current_context_if(
+            expected_current,
+            context_name,
+            expected_context_uid=ctx.uid,
+            expected_context_digest=ctx._store_digest or "",
+        )
+    except (OSError, RuntimeError, ValueError) as e:
+        typer.secho(
+            f"Error: created context '{context_name}', but could not switch "
+            f"to it ({e}). The new Context was preserved.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
     typer.echo("Generated memories:")
     for idx, info in enumerate(ctx.get_all().values(), start=1):
         content = getattr(info, "content", str(info))

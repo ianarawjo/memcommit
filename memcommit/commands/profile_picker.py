@@ -1,4 +1,5 @@
 """Full-screen terminal picker for selecting one MemoryStore profile."""
+
 from __future__ import annotations
 
 from collections.abc import Sequence
@@ -13,6 +14,8 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
+
+from memcommit.commands.tui_primitives import display_escape_text
 
 
 @dataclass(frozen=True)
@@ -35,19 +38,16 @@ def _validate_entries(
     if not options:
         raise ValueError("No profiles are available to select.")
     names = [entry.name for entry in options]
-    if (
-        any(
-            not isinstance(entry.name, str)
-            or not entry.name
-            or entry.context_count < 0
-            or entry.query_source_count < 0
-            or len(entry.query_source_names) > entry.query_source_count
-            or any(not name for name in entry.query_source_names)
-            or len(set(entry.query_source_names)) != len(entry.query_source_names)
-            for entry in options
-        )
-        or len(set(names)) != len(names)
-    ):
+    if any(
+        not isinstance(entry.name, str)
+        or not entry.name
+        or entry.context_count < 0
+        or entry.query_source_count < 0
+        or len(entry.query_source_names) > entry.query_source_count
+        or any(not name for name in entry.query_source_names)
+        or len(set(entry.query_source_names)) != len(entry.query_source_names)
+        for entry in options
+    ) or len(set(names)) != len(names):
         raise ValueError("Profile selection received invalid entries.")
     if current not in names:
         raise ValueError("The current profile is not available to select.")
@@ -64,7 +64,8 @@ def _render_profile_options(
     options = _validate_entries(entries, current=current)
     if selected < 0 or selected >= len(options):
         raise ValueError("Selected profile index is out of range.")
-    name_width = min(max(max(len(entry.name) for entry in options), 8), 24)
+    name_labels = tuple(display_escape_text(entry.name) for entry in options)
+    name_width = min(max(max(len(label) for label in name_labels), 8), 24)
     fragments: list[tuple[str, str]] = []
     for index, entry in enumerate(options):
         is_selected = index == selected
@@ -78,9 +79,17 @@ def _render_profile_options(
         marker = "*" if is_current else " "
         action = "CURRENT" if is_current else ("USE" if is_selected else "")
         action_style = row_style or ("class:current" if is_current else "")
-        current_context = entry.current_context or "(none)"
+        # Raw entry values remain the selection identity.  Only labels passed
+        # to prompt-toolkit are escaped into a single unambiguous terminal row.
+        name_label = name_labels[index]
+        current_context = (
+            display_escape_text(entry.current_context)
+            if entry.current_context
+            else "(none)"
+        )
         query_note = (
-            f" · query={','.join(entry.query_source_names)}"
+            " · query="
+            + ",".join(display_escape_text(name) for name in entry.query_source_names)
             if entry.query_source_names
             else (
                 f" · {entry.query_source_count} query-only"
@@ -90,7 +99,7 @@ def _render_profile_options(
         )
         fragments.extend(
             [
-                (row_style, f"{pointer} {marker} {entry.name:<{name_width}}  "),
+                (row_style, f"{pointer} {marker} {name_label:<{name_width}}  "),
                 (action_style, f"{action:<7}"),
                 (
                     row_style,
@@ -114,9 +123,7 @@ def choose_profile(
 ) -> str | None:
     """Return the selected Profile name, or ``None`` when cancelled."""
     options = _validate_entries(entries, current=current)
-    if require_tty and (
-        not sys.stdin.isatty() or not sys.stdout.isatty()
-    ):
+    if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive profile selection requires a terminal. "
             "Pass a profile name explicitly."

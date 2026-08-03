@@ -232,6 +232,14 @@ metadata. It is not an immutable audit log, and it is not permission to
 restore an arbitrary intermediate Memory version. Restoration always ends at
 an exact retained checkpoint boundary.
 
+Revert treats checkpoint snapshots as direct persistence records. It rebuilds
+them without resolving embedded Contexts or MemoryRef targets, so an
+unavailable pointer is restored rather than silently erased. The replacement
+history is validated and prepared before destructive changes, every checkpoint
+write uses atomic same-directory replacement, and an ordinary exception
+restores the exact original Context and checkpoint bytes. This is exception
+atomicity, not a durable multi-file crash transaction.
+
 ## Content and privacy boundary
 
 Semantic history covers directly owned ordinary `Memory` values only.

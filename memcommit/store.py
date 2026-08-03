@@ -22,6 +22,11 @@ from pathlib import Path
 from typing import Iterable, Iterator, Optional
 
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
+from memcommit.context_catalog import (
+    ContextCatalogDiagnostic,
+    ContextCatalogDiagnosticCode,
+    ContextCatalogScan,
+)
 from memcommit.profile_config import resolve_active_store_dir
 
 STORE_DIR = resolve_active_store_dir()
@@ -1999,7 +2004,215 @@ class MemoryStore:
 
     # --- Context paths ---
 
+    def _assert_context_storage_root(self) -> bool:
+        """Return whether the ordinary root exists, rejecting unsafe aliases.
+
+        A symlink at ``contexts/`` used to bypass the per-namespace symlink
+        checks because every descendant resolved inside the aliased root.  All
+        ordinary Context paths enter through this guard so a catalog read and a
+        later load/write enforce the same storage boundary.
+        """
+        if CONTEXTS_DIR.is_symlink():
+            raise ValueError(
+                "Context storage root cannot be a symbolic link."
+            )
+        if not CONTEXTS_DIR.exists():
+            return False
+        if not CONTEXTS_DIR.is_dir():
+            raise ValueError("Context storage root is not a directory.")
+        return True
+
+    @staticmethod
+    def _catalog_diagnostic(
+        code: ContextCatalogDiagnosticCode,
+        path: Path,
+        *,
+        context_name: str | None,
+        message: str,
+    ) -> ContextCatalogDiagnostic:
+        try:
+            relative_path = path.relative_to(CONTEXTS_DIR).as_posix()
+        except ValueError:
+            relative_path = str(path)
+        return ContextCatalogDiagnostic(
+            code=code,
+            relative_path=relative_path or ".",
+            context_name=context_name,
+            message=message,
+        )
+
+    def _scan_context_record_paths(
+        self,
+    ) -> tuple[
+        tuple[tuple[str, Path], ...],
+        tuple[ContextCatalogDiagnostic, ...],
+    ]:
+        """Discover ordinary record paths without following namespace links."""
+        if not self._assert_context_storage_root():
+            return (), ()
+
+        records: list[tuple[str, Path]] = []
+        diagnostics: list[ContextCatalogDiagnostic] = []
+        pending = [CONTEXTS_DIR]
+        while pending:
+            directory = pending.pop()
+            try:
+                entries = tuple(
+                    sorted(directory.iterdir(), key=lambda entry: entry.name)
+                )
+            except OSError as error:
+                diagnostics.append(
+                    self._catalog_diagnostic(
+                        "UNREADABLE_ENTRY",
+                        directory,
+                        context_name=None,
+                        message=f"Context namespace could not be read: {error}",
+                    )
+                )
+                continue
+
+            child_directories: list[Path] = []
+            for entry in entries:
+                # Checkpoint snapshots are history, not ordinary Contexts. Their
+                # own readers retain the stricter checkpoint-specific boundary.
+                if entry.name == "checkpoints":
+                    continue
+                try:
+                    if entry.is_symlink():
+                        diagnostics.append(
+                            self._catalog_diagnostic(
+                                "UNSAFE_ENTRY",
+                                entry,
+                                context_name=None,
+                                message=(
+                                    "Context storage contains a symbolic-link "
+                                    "entry."
+                                ),
+                            )
+                        )
+                        continue
+                    if entry.is_dir():
+                        if entry.name == "context.json":
+                            diagnostics.append(
+                                self._catalog_diagnostic(
+                                    "UNSAFE_ENTRY",
+                                    entry,
+                                    context_name=None,
+                                    message=(
+                                        "Context record path is not a regular "
+                                        "file."
+                                    ),
+                                )
+                            )
+                        else:
+                            child_directories.append(entry)
+                        continue
+                    if entry.name != "context.json":
+                        if not entry.is_file():
+                            diagnostics.append(
+                                self._catalog_diagnostic(
+                                    "UNSAFE_ENTRY",
+                                    entry,
+                                    context_name=None,
+                                    message=(
+                                        "Context storage contains a special "
+                                        "entry."
+                                    ),
+                                )
+                            )
+                        continue
+                    if not entry.is_file():
+                        diagnostics.append(
+                            self._catalog_diagnostic(
+                                "UNSAFE_ENTRY",
+                                entry,
+                                context_name=None,
+                                message=(
+                                    "Context record path is not a regular file."
+                                ),
+                            )
+                        )
+                        continue
+                except OSError as error:
+                    diagnostics.append(
+                        self._catalog_diagnostic(
+                            "UNREADABLE_ENTRY",
+                            entry,
+                            context_name=None,
+                            message=f"Context storage entry is unreadable: {error}",
+                        )
+                    )
+                    continue
+
+                name = entry.parent.relative_to(CONTEXTS_DIR).as_posix()
+                try:
+                    _context_name_parts(name)
+                except ValueError as error:
+                    diagnostics.append(
+                        self._catalog_diagnostic(
+                            "INVALID_LOCATOR",
+                            entry,
+                            context_name=name,
+                            message=str(error),
+                        )
+                    )
+                    continue
+                records.append((name, entry))
+
+            # Reverse the sorted children because ``pending`` is a LIFO stack.
+            pending.extend(reversed(child_directories))
+
+        return tuple(sorted(records)), tuple(diagnostics)
+
+    def scan_context_catalog(self) -> ContextCatalogScan:
+        """Return header-valid ordinary names and typed omission diagnostics."""
+        records, diagnostics = self._scan_context_record_paths()
+        names: list[str] = []
+        found_diagnostics = list(diagnostics)
+        for name, context_file in records:
+            try:
+                with open(context_file, encoding="utf-8") as file:
+                    data = json.load(file)
+            except OSError as error:
+                found_diagnostics.append(
+                    self._catalog_diagnostic(
+                        "UNREADABLE_ENTRY",
+                        context_file,
+                        context_name=name,
+                        message=f"Context record could not be read: {error}",
+                    )
+                )
+                continue
+            except (UnicodeError, json.JSONDecodeError) as error:
+                found_diagnostics.append(
+                    self._catalog_diagnostic(
+                        "INVALID_JSON",
+                        context_file,
+                        context_name=name,
+                        message=f"Context record is invalid JSON: {error}",
+                    )
+                )
+                continue
+            try:
+                _validate_context_header(data, name)
+            except ValueError as error:
+                found_diagnostics.append(
+                    self._catalog_diagnostic(
+                        "INVALID_HEADER",
+                        context_file,
+                        context_name=name,
+                        message=str(error),
+                    )
+                )
+                continue
+            names.append(name)
+        return ContextCatalogScan(
+            names=tuple(sorted(names)),
+            diagnostics=tuple(found_diagnostics),
+        )
+
     def _context_dir(self, name: str) -> Path:
+        self._assert_context_storage_root()
         parts = _context_name_parts(name)
         path = CONTEXTS_DIR.joinpath(*parts)
         candidate = CONTEXTS_DIR
@@ -2043,6 +2256,8 @@ class MemoryStore:
         return path
 
     def context_exists(self, name: str) -> bool:
+        if not self._assert_context_storage_root():
+            return False
         try:
             context_file = self._context_file(name)
         except (OSError, TypeError, ValueError):
@@ -2050,26 +2265,7 @@ class MemoryStore:
         return context_file.is_file() and not context_file.is_symlink()
 
     def list_context_names(self) -> list[str]:
-        names: list[str] = []
-        for context_file in CONTEXTS_DIR.rglob("context.json"):
-            if not context_file.is_file() or context_file.is_symlink():
-                continue
-            name = context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
-            try:
-                _context_name_parts(name)
-            except ValueError:
-                continue
-            try:
-                with open(context_file) as f:
-                    data = json.load(f)
-                _validate_context_header(data, name)
-            except (OSError, json.JSONDecodeError):
-                continue
-            except ValueError:
-                continue
-
-            names.append(name)
-        return sorted(names)
+        return list(self.scan_context_catalog().names)
 
     def _assert_context_storage_available(self, name: str) -> None:
         """Allow a new root Context when only namespace directories predate it."""
@@ -2243,42 +2439,34 @@ class MemoryStore:
             raise FileExistsError(f"Context '{name}' already exists.")
         self._assert_context_storage_available(name)
 
-    def _read_context_graph_for_rename(
+    def _read_direct_context_records_strict(
         self,
-    ) -> tuple[
-        dict[str, dict[str, object]],
-        dict[str, dict[str, dict[str, object]]],
-    ]:
-        """Read every ordinary record and restorable checkpoint fail-closed."""
-        if CONTEXTS_DIR.is_symlink() or not CONTEXTS_DIR.is_dir():
-            raise ValueError("Context storage is invalid.")
+    ) -> dict[str, dict[str, object]]:
+        """Read every ordinary direct record or reject an incomplete graph."""
+        record_paths, diagnostics = self._scan_context_record_paths()
+        if diagnostics:
+            diagnostic = diagnostics[0]
+            raise ValueError(
+                "Context storage scan is incomplete at "
+                f"'{diagnostic.relative_path}': {diagnostic.message}"
+            )
 
         records: dict[str, dict[str, object]] = {}
-        checkpoints: dict[str, dict[str, dict[str, object]]] = {}
         uid_owners: dict[str, str] = {}
-        for context_file in sorted(CONTEXTS_DIR.rglob("context.json")):
-            if context_file.is_symlink() or not context_file.is_file():
-                raise ValueError("Context storage contains an unsafe context file.")
-            try:
-                name = context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
-            except ValueError as error:
-                raise ValueError("Context file escapes the Context store.") from error
-            _context_name_parts(name)
-            if self._context_file(name) != context_file:
-                raise ValueError("Context path does not match its canonical name.")
+        for name, context_file in record_paths:
             try:
                 with open(context_file, encoding="utf-8") as file:
                     raw = json.load(
                         file,
                         object_pairs_hook=_reject_duplicate_json_keys,
                     )
-            except (json.JSONDecodeError, ValueError) as error:
+            except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as error:
                 raise ValueError(
                     f"Context '{name}' is invalid JSON."
                 ) from error
             record = _validate_context_header(raw, name)
-            # Parse through the normal non-resolving model before migration;
-            # this rejects malformed typed pointers without opening targets.
+            # Parse without loaders so strict graph discovery never opens an
+            # embedded Context, MemoryRef target, or query-only source.
             try:
                 Context.from_dict(record)
                 _rewrite_context_pointers(
@@ -2300,7 +2488,41 @@ class MemoryStore:
                 )
             uid_owners[uid] = name
             records[name] = record
+        return records
 
+    def load_direct_context_graph_strict(self) -> tuple[Context, ...]:
+        """Load one complete direct ordinary graph without resolving pointers.
+
+        Unlike :meth:`list_context_names`, this API is a completeness boundary
+        for mutation preflights. Any malformed, unsafe, unreadable, or
+        duplicate record fails the whole scan instead of becoming an omitted
+        name.
+        """
+        contexts: list[Context] = []
+        for name, record in self._read_direct_context_records_strict().items():
+            try:
+                context = Context.from_dict(record)
+            except (KeyError, TypeError, ValueError) as error:
+                # The private record reader already performs this validation;
+                # retain a local guard so this public API never returns partial
+                # results if the model's constructor changes later.
+                raise ValueError(
+                    f"Context '{name}' has an invalid direct record: {error}"
+                ) from error
+            context._store_digest = context_record_digest(record)
+            contexts.append(context)
+        return tuple(contexts)
+
+    def _read_context_graph_for_rename(
+        self,
+    ) -> tuple[
+        dict[str, dict[str, object]],
+        dict[str, dict[str, dict[str, object]]],
+    ]:
+        """Read every ordinary record and restorable checkpoint fail-closed."""
+        records = self._read_direct_context_records_strict()
+        checkpoints: dict[str, dict[str, dict[str, object]]] = {}
+        for name in records:
             checkpoint_dir = self._checkpoints_dir(name)
             entries: dict[str, dict[str, object]] = {}
             if checkpoint_dir.exists():
@@ -3161,29 +3383,74 @@ class MemoryStore:
             or ctx.name in source_names
         ):
             raise ValueError("Invalid meld source lock set.")
-        with self._context_write_locks((*source_names, ctx.name)):
-            for name, expected_uid, expected_digest in bindings:
-                try:
-                    source = self.load_direct(name)
-                except FileNotFoundError as error:
-                    raise ConcurrentContextUpdateError(
-                        f"Source Context '{name}' no longer exists."
-                    ) from error
-                if (
-                    source.uid != expected_uid
-                    or context_record_digest(source) != expected_digest
-                ):
-                    raise ConcurrentContextUpdateError(
-                        f"Source Context '{name}' changed before the meld "
-                        "target could be saved."
-                    )
-            checkpoint = self._save_locked(
-                ctx,
-                auto_checkpoint,
-                expected_context_digest=expected_context_digest,
-            )
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_locks((*source_names, ctx.name)):
+                self._assert_source_bindings_locked(
+                    bindings,
+                    result_label="meld target",
+                )
+                checkpoint = self._save_locked(
+                    ctx,
+                    auto_checkpoint,
+                    expected_context_digest=expected_context_digest,
+                )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
+
+    def save_context_with_sources(
+        self,
+        ctx: Context,
+        auto_checkpoint: AutoCheckpoint,
+        *,
+        expected_context_digest: str,
+        source_bindings: Iterable[tuple[str, str, str]],
+    ) -> Checkpoint | None:
+        """Save a target only while every source receipt is still exact.
+
+        A target digest cannot detect a rename or replacement of a separate
+        source that supplied a persisted locator. Keep every source and the
+        target locked from final validation through the target write so a
+        successful command cannot reintroduce stale source names.
+        """
+        bindings = tuple(source_bindings)
+        source_names = tuple(name for name, _, _ in bindings)
+        if not bindings or len(source_names) != len(set(source_names)):
+            raise ValueError("Invalid Context source lock set.")
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_locks((*source_names, ctx.name)):
+                self._assert_source_bindings_locked(bindings)
+                checkpoint = self._save_locked(
+                    ctx,
+                    auto_checkpoint,
+                    expected_context_digest=expected_context_digest,
+                )
+        ctx._store_digest = context_record_digest(ctx)
+        return checkpoint
+
+    def _assert_source_bindings_locked(
+        self,
+        bindings: Iterable[tuple[str, str, str]],
+        *,
+        result_label: str = "result",
+    ) -> None:
+        """Validate exact source identities while their write locks are held."""
+        if not result_label:
+            raise ValueError("Context source result label cannot be empty.")
+        for name, expected_uid, expected_digest in bindings:
+            try:
+                source = self.load_direct(name)
+            except FileNotFoundError as error:
+                raise ConcurrentContextUpdateError(
+                    f"The source Context no longer exists: '{name}'."
+                ) from error
+            if (
+                source.uid != expected_uid
+                or context_record_digest(source) != expected_digest
+            ):
+                raise ConcurrentContextUpdateError(
+                    f"The source Context changed before the {result_label} "
+                    f"could be saved: '{name}'."
+                )
 
     def create_context(
         self,
@@ -3201,6 +3468,131 @@ class MemoryStore:
                 )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
+
+    def create_context_with_sources(
+        self,
+        ctx: Context,
+        auto_checkpoint: Optional[AutoCheckpoint] = None,
+        *,
+        source_bindings: Iterable[tuple[str, str, str]],
+    ) -> Checkpoint | None:
+        """Publish a new Context from exact source snapshots.
+
+        The source recheck and require-new write share one lock set. This is
+        the creation counterpart of ``save_context_with_sources`` and prevents
+        both stale locators and a concurrent owner from reaching the new path.
+        """
+        bindings = tuple(source_bindings)
+        source_names = tuple(name for name, _, _ in bindings)
+        if (
+            not bindings
+            or len(source_names) != len(set(source_names))
+            or ctx.name in source_names
+        ):
+            raise ValueError("Invalid Context creation source lock set.")
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_locks((*source_names, ctx.name)):
+                self._assert_source_bindings_locked(bindings)
+                checkpoint = self._save_locked(
+                    ctx,
+                    auto_checkpoint,
+                    expected_context_digest=None,
+                    require_new=True,
+                )
+        ctx._store_digest = context_record_digest(ctx)
+        return checkpoint
+
+    def create_branch_context(
+        self,
+        ctx: Context,
+        *,
+        source_name: str,
+        expected_source_uid: str,
+        expected_source_digest: str,
+        expected_history_digest: str,
+        expected_current: str,
+    ) -> None:
+        """Create, inherit history, and select one exact branch atomically.
+
+        Cooperative writers cannot observe a gap between source validation,
+        target publication, history copy, and current-state CAS. A failure is
+        rolled back while the exact target lock is still held, so cleanup can
+        never delete a replacement or another writer's completed update.
+        """
+        if ctx.name == source_name:
+            raise ValueError("A branch must have a new Context name.")
+        binding = (
+            source_name,
+            expected_source_uid,
+            expected_source_digest,
+        )
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_locks((source_name, ctx.name)):
+                self._assert_source_bindings_locked((binding,))
+                history = self.list_checkpoints(source_name)
+                if checkpoint_history_digest(history) != expected_history_digest:
+                    raise ConcurrentContextUpdateError(
+                        f"Checkpoint history for '{source_name}' changed "
+                        "before the branch could be created."
+                    )
+                source_checkpoints = self._checkpoints_dir(source_name)
+                checkpoint_files: tuple[Path, ...] = ()
+                if source_checkpoints.exists():
+                    checkpoint_files = tuple(
+                        sorted(source_checkpoints.glob("*.json"))
+                    )
+                    if any(
+                        path.is_symlink() or not path.is_file()
+                        for path in checkpoint_files
+                    ):
+                        raise ValueError(
+                            f"Checkpoint history for '{source_name}' is unsafe."
+                        )
+
+                created = False
+                branch_error: Exception | None = None
+                with self._state_write_lock():
+                    state = self._read_state()
+                    if state.get("current") != expected_current:
+                        raise ConcurrentContextUpdateError(
+                            "The current Context changed before the branch "
+                            "could be created."
+                        )
+                    try:
+                        self._save_locked(
+                            ctx,
+                            None,
+                            expected_context_digest=None,
+                            require_new=True,
+                        )
+                        created = True
+                        target_checkpoints = self._checkpoints_dir(ctx.name)
+                        for source_path in checkpoint_files:
+                            destination = target_checkpoints / source_path.name
+                            if destination.is_symlink():
+                                raise ValueError(
+                                    f"Refusing to copy checkpoint to "
+                                    f"'{ctx.name}' through a symbolic link."
+                                )
+                            _write_bytes_atomic(
+                                destination,
+                                source_path.read_bytes(),
+                            )
+                        state["current"] = ctx.name
+                        self._write_state(state)
+                    except Exception as error:
+                        branch_error = error
+                if branch_error is not None:
+                    if created:
+                        try:
+                            self._delete_locked(ctx.name)
+                        except Exception as rollback_error:
+                            raise RuntimeError(
+                                "Branch creation failed and its exact new "
+                                "Context could not be rolled back."
+                            ) from rollback_error
+                    raise branch_error
+        ctx._store_digest = context_record_digest(ctx)
 
     def create_missing_contexts(
         self,
@@ -3634,36 +4026,35 @@ class MemoryStore:
         source_file.unlink()
         source_dir.rmdir()
 
-    def copy_checkpoints(self, source_name: str, target_name: str) -> None:
-        """Copy one stable source history into a serial target history."""
-        with self._context_write_locks((source_name, target_name)):
-            if not self.context_exists(source_name):
-                raise FileNotFoundError(
-                    f"Context '{source_name}' not found."
-                )
-            if not self.context_exists(target_name):
-                raise FileNotFoundError(
-                    f"Context '{target_name}' not found."
-                )
-            src_dir = self._checkpoints_dir(source_name)
-            tgt_dir = self._checkpoints_dir(target_name)
-            tgt_dir.mkdir(parents=True, exist_ok=True)
-            if src_dir.exists():
-                for path in sorted(src_dir.glob("*.json")):
-                    if path.is_symlink() or not path.is_file():
-                        continue
-                    destination = tgt_dir / path.name
-                    if destination.is_symlink():
-                        raise ValueError(
-                            f"Refusing to copy checkpoint to '{target_name}' "
-                            "through a symbolic link."
-                        )
-                    shutil.copy2(path, destination)
-
     def delete(self, name: str) -> None:
         """Delete one Context while preserving descendant Context namespaces."""
         with self._context_write_lock(name):
             self._delete_locked(name)
+
+    def delete_context_if(
+        self,
+        name: str,
+        *,
+        expected_context_uid: str,
+        expected_context_digest: str,
+    ) -> None:
+        """Delete only the exact Context identity that was reviewed."""
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_lock(name):
+                try:
+                    current = self.load_direct(name)
+                except FileNotFoundError as error:
+                    raise ConcurrentContextUpdateError(
+                        f"Context '{name}' no longer exists."
+                    ) from error
+                if (
+                    current.uid != expected_context_uid
+                    or context_record_digest(current) != expected_context_digest
+                ):
+                    raise ConcurrentContextUpdateError(
+                        f"Context '{name}' changed after deletion was reviewed."
+                    )
+                self._delete_locked(name)
 
     def _delete_locked(self, name: str) -> None:
         """Delete one Context while its cooperative write lock is held."""
@@ -4020,78 +4411,176 @@ class MemoryStore:
         target_data = matches[0]
         target_ts = target_data["timestamp"]
         cp_dir = self._checkpoints_dir(ctx_name)
+        checkpoint_paths = tuple(sorted(cp_dir.glob("*.json")))
+        if any(path.is_symlink() or not path.is_file() for path in checkpoint_paths):
+            raise ValueError(f"Checkpoint history for '{ctx_name}' is unsafe.")
+        original_checkpoint_bytes = {
+            path.name: path.read_bytes() for path in checkpoint_paths
+        }
+        physical_records: dict[str, dict[str, object]] = {}
+        for path in checkpoint_paths:
+            try:
+                with open(path, encoding="utf-8") as file:
+                    record = json.load(
+                        file,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+            except (json.JSONDecodeError, ValueError) as error:
+                raise ValueError(
+                    f"Checkpoint history for '{ctx_name}' is invalid."
+                ) from error
+            if not isinstance(record, dict):
+                raise ValueError(
+                    f"Checkpoint history for '{ctx_name}' is invalid."
+                )
+            physical_records[path.name] = record
 
-        if not keep_history:
-            log_snapshot = (target_data.get("args") or {}).get("log_snapshot")
-
-            if log_snapshot is not None:
-                # Target carries a log snapshot — fully restore the log from it
-                for path in cp_dir.glob("*.json"):
-                    if path.is_symlink() or path.is_file():
-                        path.unlink()
-                for entry in sorted(log_snapshot, key=lambda x: x["timestamp"]):
-                    ts_file = datetime.fromisoformat(entry["timestamp"]).strftime("%Y%m%dT%H%M%S")
-                    fname = f"{ts_file}-{entry['uid'][:8]}.json"
-                    cp_file = cp_dir / fname
-                    if cp_file.is_symlink():
-                        raise ValueError(
-                            f"Refusing to restore checkpoint for '{ctx_name}' "
-                            "through a symbolic link."
-                        )
-                    with open(cp_file, "w") as f:
-                        json.dump(entry, f, indent=2)
-            else:
-                # Simple truncation: remove checkpoints newer than target
-                for path in cp_dir.glob("*.json"):
-                    if path.is_symlink() or not path.is_file():
-                        continue
-                    with open(path) as f:
-                        entry_data = json.load(f)
-                    if entry_data["timestamp"] > target_ts:
-                        path.unlink()
-
-        # Strip nested log_snapshots before storing to prevent recursive size growth
-        thin_entries = []
-        for e in entries:
-            args = e.get("args") or {}
+        # Strip nested log snapshots so the recovery frame remains bounded.
+        thin_entries: list[dict] = []
+        for entry in entries:
+            args = entry.get("args") or {}
             if "log_snapshot" in args:
-                e = {**e, "args": {k: v for k, v in args.items() if k != "log_snapshot"}}
-            thin_entries.append(e)
+                entry = {
+                    **entry,
+                    "args": {
+                        key: value
+                        for key, value in args.items()
+                        if key != "log_snapshot"
+                    },
+                }
+            thin_entries.append(entry)
 
-        # Revert already owns the same Context lock; append its recovery
-        # checkpoint inside that serial history without reacquiring the lock.
-        pre_cp = self._checkpoint_locked(
-            ctx,
-            message=f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo",
+        message = (
+            f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo"
+        )
+        pre_cp = Checkpoint(
+            uid=str(uuid.uuid4()),
+            message=message,
+            timestamp=datetime.now(),
+            snapshot=ctx.to_dict(),
             command="revert",
-            args={"target_uid": target_data["uid"], "log_snapshot": thin_entries},
-            description=f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo",
+            args={
+                "target_uid": target_data["uid"],
+                "log_snapshot": thin_entries,
+            },
+            description=message,
             auto=True,
         )
+        pre_slug = message[:24].replace(" ", "-").replace("/", "-")
+        pre_name = (
+            f"{pre_cp.timestamp.strftime('%Y%m%dT%H%M%S')}-"
+            f"{pre_slug}-{pre_cp.uid[:8]}.json"
+        )
+        pre_record: dict[str, object] = {
+            "uid": pre_cp.uid,
+            "message": pre_cp.message,
+            "timestamp": pre_cp.timestamp.isoformat(),
+            "snapshot": pre_cp.snapshot,
+            "command": pre_cp.command,
+            "args": pre_cp.args,
+            "description": pre_cp.description,
+            "auto": pre_cp.auto,
+        }
 
-        def loader(ref_name: str) -> "Context | None":
-            if not self.context_exists(ref_name):
-                return None
-            return self.load(ref_name)
+        desired_records: dict[str, dict[str, object]]
+        if keep_history:
+            desired_records = dict(physical_records)
+        else:
+            log_snapshot = (target_data.get("args") or {}).get("log_snapshot")
+            if log_snapshot is not None:
+                if not isinstance(log_snapshot, list):
+                    raise ValueError("Checkpoint log snapshot is invalid.")
+                desired_records = {}
+                for entry in sorted(
+                    log_snapshot,
+                    key=lambda value: value["timestamp"],
+                ):
+                    if not isinstance(entry, dict):
+                        raise ValueError("Checkpoint log snapshot is invalid.")
+                    timestamp = datetime.fromisoformat(entry["timestamp"])
+                    uid = entry.get("uid")
+                    if not isinstance(uid, str) or not uid:
+                        raise ValueError("Checkpoint log snapshot is invalid.")
+                    filename = (
+                        f"{timestamp.strftime('%Y%m%dT%H%M%S')}-"
+                        f"{uid[:8]}.json"
+                    )
+                    if filename in desired_records:
+                        raise ValueError(
+                            "Checkpoint log snapshot contains duplicate entries."
+                        )
+                    desired_records[filename] = entry
+            else:
+                desired_records = {
+                    filename: record
+                    for filename, record in physical_records.items()
+                    if record["timestamp"] <= target_ts
+                }
+        if pre_name in desired_records:
+            raise ValueError("Recovery checkpoint filename collided with history.")
+        desired_records[pre_name] = pre_record
 
         # A branch inherits checkpoint files whose snapshots still carry the
         # source Context identity. Restore their contents into the Context the
-        # caller requested instead of writing back to the source Context.
+        # caller requested instead of writing back to the source Context. A
+        # non-resolving parse preserves unavailable context_ref pointers.
         restored_snapshot = {
             **target_data["snapshot"],
             "uid": ctx.uid,
             "name": ctx.name,
         }
-        restored = Context.from_dict(
-            restored_snapshot,
-            loader=loader,
-            memory_loader=self._load_direct_memory,
-        )
-        self._save_locked(
-            restored,
-            None,
-            expected_context_digest=ctx._store_digest,
-        )
+        restored = Context.from_dict(restored_snapshot)
+
+        context_path = self._context_file(ctx_name)
+        original_context_bytes = context_path.read_bytes()
+        written_names: set[str] = set()
+        try:
+            # Prepare every replacement with the normal atomic writer before
+            # removing obsolete history. The Context lock keeps other history
+            # operations outside this exception-rollback boundary.
+            for filename, record in desired_records.items():
+                destination = cp_dir / filename
+                if destination.is_symlink():
+                    raise ValueError(
+                        f"Refusing to restore checkpoint for '{ctx_name}' "
+                        "through a symbolic link."
+                    )
+                _write_json_atomic(destination, record)
+                written_names.add(filename)
+            for filename in original_checkpoint_bytes:
+                if filename not in desired_records:
+                    (cp_dir / filename).unlink()
+            self._save_locked(
+                restored,
+                None,
+                expected_context_digest=ctx._store_digest,
+            )
+        except Exception as error:
+            rollback_error: Exception | None = None
+            for filename in written_names:
+                if filename in original_checkpoint_bytes:
+                    continue
+                try:
+                    path = cp_dir / filename
+                    if path.exists() and not path.is_symlink():
+                        path.unlink()
+                except Exception as candidate:
+                    rollback_error = rollback_error or candidate
+            for filename, content in original_checkpoint_bytes.items():
+                try:
+                    _write_bytes_atomic(cp_dir / filename, content)
+                except Exception as candidate:
+                    rollback_error = rollback_error or candidate
+            try:
+                _write_bytes_atomic(context_path, original_context_bytes)
+            except Exception as candidate:
+                rollback_error = rollback_error or candidate
+            if rollback_error is not None:
+                raise RuntimeError(
+                    "Revert failed and its original Context/history could not "
+                    "be fully restored."
+                ) from rollback_error
+            raise error
         restored._store_digest = context_record_digest(restored)
 
         target_cp = Checkpoint(

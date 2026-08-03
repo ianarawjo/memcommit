@@ -34,6 +34,7 @@ from memcommit.commands.atomize_grounding import (
     reply_to_grounding,
     start_grounding,
 )
+from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import ReviewCancelled
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.review import (
@@ -42,7 +43,7 @@ from memcommit.review import (
     direct_context_digest,
     review_response_digest,
 )
-from memcommit.store import MemoryStore
+from memcommit.store import MemoryStore, context_record_digest
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -91,8 +92,11 @@ def _inbound_split_references(
     if not split_uids:
         return []
     inbound: list[tuple[str, MemoryRef]] = []
-    for context_name in store.list_context_names():
-        context = store.load_direct(context_name)
+    # A destructive split needs proof that every ordinary owner was examined.
+    # Human navigation catalogs intentionally omit malformed records, so this
+    # safety scan uses the strict direct graph instead.
+    for context in store.load_direct_context_graph_strict():
+        context_name = context.name
         for item in context.iter_items():
             if (
                 isinstance(item, MemoryRef)
@@ -174,6 +178,7 @@ def _apply_to_new_context(
     source_name: str,
     destination_name: str,
     session: AtomizeAnalysisSession,
+    expected_current: str | None,
 ):
     """Create an init-like copy, then apply one saved preview to that copy."""
     if store.context_exists(destination_name):
@@ -185,37 +190,38 @@ def _apply_to_new_context(
     # Query-only refs remain opaque. ops.branch gives the destination a fresh
     # Context identity while preserving the source frame's direct Memory UIDs.
     source = store.load_for_update(source_name)
+    source_digest = context_record_digest(source)
     destination = ops.branch(source, destination_name)
     created = False
     try:
         # Persist the unmodified source frame first. This makes save-as
         # inspectable as original state -> atomized state without copying the
         # source Context's unrelated checkpoint history.
-        store.save(destination)
-        created = True
-        store.checkpoint(
+        store.create_context_with_sources(
             destination,
-            message=f"Initialized from '{source_name}' for atomize",
-            command="init",
-            args={
-                "name": destination_name,
-                "source_context": {
-                    "uid": source.uid,
-                    "name": source.name,
+            AutoCheckpoint(
+                command="init",
+                args={
+                    "name": destination_name,
+                    "source_context": {
+                        "uid": source.uid,
+                        "name": source.name,
+                    },
+                    "source_analysis_uid": session.uid,
+                    "memory_uids": [
+                        item.uid
+                        for item in destination.iter_items()
+                        if isinstance(item, Memory)
+                    ],
                 },
-                "source_analysis_uid": session.uid,
-                "memory_uids": [
-                    item.uid
-                    for item in destination.iter_items()
-                    if isinstance(item, Memory)
-                ],
-            },
-            description=(
-                f"Initialized '{destination_name}' from '{source_name}' "
-                f"before applying atomize [{session.uid[:8]}]"
+                description=(
+                    f"Initialized '{destination_name}' from '{source_name}' "
+                    f"before applying atomize [{session.uid[:8]}]"
+                ),
             ),
-            auto=True,
+            source_bindings=((source_name, source.uid, source_digest),),
         )
+        created = True
 
         destination_session = replace(
             session,
@@ -253,16 +259,23 @@ def _apply_to_new_context(
                 ),
             ),
         )
-        store.set_current(destination.name)
+        store.set_current_context_if(
+            expected_current,
+            destination.name,
+            expected_context_uid=destination.uid,
+            expected_context_digest=destination._store_digest or "",
+        )
         return destination_session, result
-    except Exception:
-        # save-as is one user action. Remove only the exact new Context and its
-        # derived preview if a later phase fails; the source is never touched.
-        try:
-            store.delete_atomize_analysis(destination.uid)
-        finally:
-            if created and store.context_exists(destination.name):
-                store.delete(destination.name)
+    except Exception as error:
+        if created:
+            # Publication is observable even when the destination itself has
+            # not changed. Deleting it by name could strand a concurrent
+            # reference, so preserve the exact partial result for inspection.
+            raise AtomizeImpactError(
+                f"Atomize save-as failed ({error}); destination "
+                f"'{destination.name}' was preserved for manual inspection "
+                "and the source was not changed."
+            ) from error
         raise
 
 
@@ -402,7 +415,8 @@ def cmd(
 
     store = MemoryStore(create=False)
     try:
-        name = context_name or store.current_context_name()
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        name = context_snapshot.resolve_or_current(context_name)
         if not name:
             raise AtomizeImpactError(
                 "No current context. Pass --context or run 'mem init <name>' first."
@@ -689,6 +703,7 @@ def cmd(
                 source_name=name,
                 destination_name=save_as,
                 session=session,
+                expected_current=context_snapshot.current_name,
             )
             applied_name = save_as
             created = True

@@ -1,4 +1,5 @@
 """CLI for selecting complete local MemoryStore profiles."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -8,6 +9,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.profile_picker import ProfilePickerEntry, choose_profile
+from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import (
     ProfileError,
@@ -27,7 +29,11 @@ app = typer.Typer(
 
 
 def _fail(error: Exception) -> None:
-    typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+    typer.secho(
+        f"Error: {display_escape_text(str(error))}",
+        fg=typer.colors.RED,
+        err=True,
+    )
     raise typer.Exit(1)
 
 
@@ -70,21 +76,28 @@ def _use_profile(name: str) -> None:
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     if not changed:
-        typer.echo(f"Already using profile '{registry.active.name}'.")
+        typer.echo(
+            "Already using profile '" + display_escape_text(registry.active.name) + "'."
+        )
         return
     typer.secho(
-        f"Selected profile '{registry.active.name}'.",
+        f"Selected profile '{display_escape_text(registry.active.name)}'.",
         fg=typer.colors.GREEN,
     )
     typer.echo(
         f"The next mem command will see {len(inspection.context_names)} "
         "ordinary Contexts."
     )
-    typer.echo(f"Current Context: {inspection.current_context or '(none)'}")
+    current_label = (
+        display_escape_text(inspection.current_context)
+        if inspection.current_context
+        else "(none)"
+    )
+    typer.echo(f"Current Context: {current_label}")
     if inspection.query_source_count:
         typer.echo(
             "Query-only: "
-            f"{', '.join(inspection.query_source_names)} "
+            f"{', '.join(display_escape_text(name) for name in inspection.query_source_names)} "
             "(visible by name; hidden from 'mem switch')."
         )
 
@@ -117,9 +130,17 @@ def list_cmd() -> None:
     ):
         marker = "*" if profile.uid == registry.active_uid else " "
         action = "CURRENT" if profile.uid == registry.active_uid else "USE"
-        current = inspection.current_context or "(none)"
+        profile_label = display_escape_text(profile.name)
+        current = (
+            display_escape_text(inspection.current_context)
+            if inspection.current_context
+            else "(none)"
+        )
         query_note = (
-            f" · query={','.join(inspection.query_source_names)}"
+            " · query="
+            + ",".join(
+                display_escape_text(name) for name in inspection.query_source_names
+            )
             if inspection.query_source_names
             else (
                 f" · {inspection.query_source_count} query-only"
@@ -128,7 +149,7 @@ def list_cmd() -> None:
             )
         )
         typer.echo(
-            f"{marker} {profile.name:<12} "
+            f"{marker} {profile_label:<12} "
             f"{action:<7} "
             f"{profile.kind.lower():<9} "
             f"{len(inspection.context_names)} Contexts"
@@ -153,11 +174,21 @@ def current_cmd() -> None:
         if profile.uid == registry.active_uid
     )
     inspection = inspections[index]
-    typer.echo(f"Profile: {registry.active.name}")
-    typer.echo(f"Store: {inspection.root}")
-    typer.echo(f"Current Context: {inspection.current_context or '(none)'}")
+    typer.echo(f"Profile: {display_escape_text(registry.active.name)}")
+    typer.echo(f"Store: {display_escape_text(str(inspection.root))}")
+    current_label = (
+        display_escape_text(inspection.current_context)
+        if inspection.current_context
+        else "(none)"
+    )
+    typer.echo(f"Current Context: {current_label}")
     if inspection.query_source_names:
-        typer.echo(f"Query-only: {', '.join(inspection.query_source_names)}")
+        typer.echo(
+            "Query-only: "
+            + ", ".join(
+                display_escape_text(name) for name in inspection.query_source_names
+            )
+        )
 
 
 @app.command("use")
@@ -198,10 +229,17 @@ def import_cmd(
         profile, inspection = import_profile(name, source)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
-    typer.secho(f"Imported profile '{profile.name}'.", fg=typer.colors.GREEN)
+    typer.secho(
+        f"Imported profile '{display_escape_text(profile.name)}'.",
+        fg=typer.colors.GREEN,
+    )
+    current_label = (
+        display_escape_text(inspection.current_context)
+        if inspection.current_context
+        else "(none)"
+    )
     typer.echo(
-        f"{len(inspection.context_names)} ordinary Contexts · "
-        f"current={inspection.current_context or '(none)'}"
+        f"{len(inspection.context_names)} ordinary Contexts · current={current_label}"
     )
     typer.echo("The source store was not modified.")
 
@@ -232,11 +270,17 @@ def import_study_cmd(
         result.inspections,
         strict=True,
     ):
+        current_label = (
+            display_escape_text(inspection.current_context)
+            if inspection.current_context
+            else "(none)"
+        )
         typer.echo(
-            f"  {profile.name}: {len(inspection.context_names)} ordinary "
-            f"Contexts · current={inspection.current_context or '(none)'} · "
+            f"  {display_escape_text(profile.name)}: "
+            f"{len(inspection.context_names)} ordinary "
+            f"Contexts · current={current_label} · "
             "query-only="
-            f"{','.join(inspection.query_source_names) or '(none)'}"
+            f"{','.join(display_escape_text(name) for name in inspection.query_source_names) or '(none)'}"
         )
     typer.echo("The authoring store and generated package sources were not modified.")
     typer.echo("Use one with: mem profile use task-1")

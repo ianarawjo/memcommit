@@ -6,6 +6,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.store as store_module
 from memcommit.cli import app
 from memcommit.context import AutoCheckpoint, Context
 from memcommit.store import MemoryStore
@@ -531,10 +532,14 @@ def test_failed_root_branch_rollback_preserves_existing_descendant(
     child_uid = store.load("review/existing-child").uid
     assert runner.invoke(app, ["switch", "source"]).exit_code == 0
 
-    def fail_copy(self, source_name, target_name):
-        raise OSError("forced checkpoint copy failure")
+    original_write = store_module._write_bytes_atomic
 
-    monkeypatch.setattr(MemoryStore, "copy_checkpoints", fail_copy)
+    def fail_copy(path, data):
+        if path.parent.parent.name == "review":
+            raise OSError("forced checkpoint copy failure")
+        return original_write(path, data)
+
+    monkeypatch.setattr(store_module, "_write_bytes_atomic", fail_copy)
 
     result = runner.invoke(app, ["branch", "review"])
 

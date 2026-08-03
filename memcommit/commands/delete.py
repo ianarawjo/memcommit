@@ -2,7 +2,9 @@ from typing import Annotated
 
 import typer
 
-from memcommit.store import MemoryStore
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.store import MemoryStore, context_record_digest
 
 
 def cmd(
@@ -10,14 +12,23 @@ def cmd(
     force: Annotated[bool, typer.Option("-f", "--force", help="Skip confirmation prompt")] = False,
 ) -> None:
     store = MemoryStore()
-
-    if not store.context_exists(context_name):
-        typer.secho(f"Error: context '{context_name}' not found.", fg=typer.colors.RED, err=True)
+    snapshot = ContextOperandSnapshot.capture(store)
+    try:
+        context_name = snapshot.resolve(context_name)
+        target = store.load_direct(context_name)
+    except (FileNotFoundError, OSError, ValueError) as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
+    target_digest = context_record_digest(target)
+    display_name = display_escape_text(context_name)
 
     if not force:
         typer.echo(
-            f"This will permanently delete context '{context_name}' and its "
+            f"This will permanently delete context '{display_name}' and its "
             "checkpoint history, plus its matching atomize analysis and "
             "semantic review artifacts, including peer Compare analyses. "
             "Descendant contexts will be preserved."
@@ -25,8 +36,16 @@ def cmd(
         typer.confirm("Continue?", abort=True)
 
     try:
-        store.delete(context_name)
-    except (OSError, ValueError) as e:
-        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+        store.delete_context_if(
+            context_name,
+            expected_context_uid=target.uid,
+            expected_context_digest=target_digest,
+        )
+    except (OSError, RuntimeError, ValueError) as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
-    typer.secho(f"Deleted context '{context_name}'.", fg=typer.colors.GREEN)
+    typer.secho(f"Deleted context '{display_name}'.", fg=typer.colors.GREEN)

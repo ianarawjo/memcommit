@@ -1,4 +1,5 @@
 """Small terminal picker for selecting one Context by name."""
+
 from __future__ import annotations
 
 import sys
@@ -12,6 +13,8 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
+
+from memcommit.commands.tui_primitives import display_escape_text
 
 
 def _render_context_options(
@@ -33,7 +36,9 @@ def _render_context_options(
         style = "class:selected" if is_selected else ""
         pointer = "›" if is_selected else " "
         active = "*" if is_current else " "
-        fragments.append((style, f"{pointer} {active} {name}"))
+        # Keep raw names in ``options`` for identity and return only an escaped
+        # label to prompt-toolkit; selection must never return presentation text.
+        fragments.append((style, f"{pointer} {active} {display_escape_text(name)}"))
         if index < len(options) - 1:
             fragments.append(("", "\n"))
     return fragments
@@ -51,14 +56,11 @@ def choose_context(
     options = tuple(names)
     if not options:
         raise ValueError("No contexts are available to select.")
-    if (
-        any(not isinstance(name, str) or not name for name in options)
-        or len(set(options)) != len(options)
-    ):
+    if any(not isinstance(name, str) or not name for name in options) or len(
+        set(options)
+    ) != len(options):
         raise ValueError("Context selection received invalid names.")
-    if require_tty and (
-        not sys.stdin.isatty() or not sys.stdout.isatty()
-    ):
+    if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive context selection requires a terminal. "
             "Pass a Context name explicitly."

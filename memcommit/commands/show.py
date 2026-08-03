@@ -4,27 +4,35 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.tui_primitives import (
+    display_escape_text,
+    safe_terminal_text,
+)
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.store import MemoryStore
 
 
 def render_memory(memory: Memory, context_name: str) -> None:
     """Print one atomic memory in full."""
-    typer.secho(f"Memory: {memory.uid}", bold=True)
-    typer.echo(f"Context: {context_name}")
+    typer.secho(f"Memory: {display_escape_text(memory.uid)}", bold=True)
+    typer.echo(f"Context: {display_escape_text(context_name)}")
     typer.echo()
-    typer.echo(memory.content)
+    typer.echo(safe_terminal_text(memory.content))
 
 
 def render_memory_ref(memory_ref: MemoryRef, context_name: str) -> None:
     """Print one read-only Memory reference and its currently resolved content."""
-    typer.secho(f"Memory reference: {memory_ref.uid}", bold=True)
-    typer.echo(f"Context: {context_name}")
-    typer.echo(
-        f"Source: {memory_ref.target_context_name} "
-        f"[{memory_ref.target_context_uid[:8]}]"
+    typer.secho(
+        f"Memory reference: {display_escape_text(memory_ref.uid)}",
+        bold=True,
     )
-    typer.echo(f"Target memory: {memory_ref.target_memory_uid}")
+    typer.echo(f"Context: {display_escape_text(context_name)}")
+    typer.echo(
+        f"Source: {display_escape_text(memory_ref.target_context_name)} "
+        f"[{display_escape_text(memory_ref.target_context_uid[:8])}]"
+    )
+    typer.echo("Target memory: " + display_escape_text(memory_ref.target_memory_uid))
     typer.echo("Mode: read-only live reference")
     typer.echo()
     if memory_ref.target is None:
@@ -33,7 +41,7 @@ def render_memory_ref(memory_ref: MemoryRef, context_name: str) -> None:
             fg=typer.colors.YELLOW,
         )
     else:
-        typer.echo(memory_ref.target.content)
+        typer.echo(safe_terminal_text(memory_ref.target.content))
 
 
 def render_query_context_ref(
@@ -41,16 +49,17 @@ def render_query_context_ref(
     context_name: str,
 ) -> None:
     """Print query-only metadata without opening or revealing its source."""
-    typer.secho(f"Query-only Context: {query_ref.name}", bold=True)
-    typer.echo(f"Reference: {query_ref.uid}")
-    typer.echo(f"Parent Context: {context_name}")
+    typer.secho(
+        f"Query-only Context: {display_escape_text(query_ref.name)}",
+        bold=True,
+    )
+    typer.echo(f"Reference: {display_escape_text(query_ref.uid)}")
+    typer.echo(f"Parent Context: {display_escape_text(context_name)}")
     typer.echo("Mode: query-only research prototype")
     typer.echo("Content: concealed from mem ls and mem show")
     typer.echo()
-    command = shlex.join(
-        ["mem", "query", query_ref.name, "<question>"]
-    )
-    typer.echo(f"Ask with: {command}")
+    command = shlex.join(["mem", "query", query_ref.name, "<question>"])
+    typer.echo(f"Ask with: {display_escape_text(command)}")
 
 
 def render_context(ctx: Context) -> None:
@@ -61,7 +70,7 @@ def render_context(ctx: Context) -> None:
     query_contexts = [v for v in items if isinstance(v, QueryContextRef)]
     embedded = [v for v in items if isinstance(v, Context)]
 
-    typer.secho(f"Context: {ctx.name}", bold=True)
+    typer.secho(f"Context: {display_escape_text(ctx.name)}", bold=True)
     typer.echo(
         f"  {len(memories)} memor{'y' if len(memories) == 1 else 'ies'}"
         f"  |  {len(references)} memory reference{'s' if len(references) != 1 else ''}"
@@ -76,24 +85,35 @@ def render_context(ctx: Context) -> None:
     typer.secho("\nItems (in context order):", bold=True)
     for item in items:
         if isinstance(item, Context):
-            typer.echo(f"  [context {item.uid[:8]}] {item.name}")
+            typer.echo(
+                f"  [context {display_escape_text(item.uid[:8])}] "
+                f"{display_escape_text(item.name)}"
+            )
         elif isinstance(item, QueryContextRef):
             typer.echo(
-                f"  [query   {item.uid[:8]}] {item.name} (query-only)"
+                f"  [query   {display_escape_text(item.uid[:8])}] "
+                f"{display_escape_text(item.name)} (query-only)"
             )
         elif isinstance(item, MemoryRef):
             state = "read-only" if item.is_resolved else "dangling"
             typer.echo(
-                f"  [ref     {item.uid[:8]}] "
-                f"{item.target_context_name}#{item.target_memory_uid[:8]} "
+                f"  [ref     {display_escape_text(item.uid[:8])}] "
+                f"{display_escape_text(item.target_context_name)}#"
+                f"{display_escape_text(item.target_memory_uid[:8])} "
                 f"({state})"
             )
             if item.target is not None:
-                typer.secho(f"           {item.target.content}", dim=True)
+                typer.secho(
+                    f"           {safe_terminal_text(item.target.content)}",
+                    dim=True,
+                )
         elif isinstance(item, Memory):
             memory = item
-            typer.echo(f"  [memory  {memory.uid[:8]}] ", nl=False)
-            typer.secho(memory.content, dim=True)
+            typer.echo(
+                f"  [memory  {display_escape_text(memory.uid[:8])}] ",
+                nl=False,
+            )
+            typer.secho(safe_terminal_text(memory.content), dim=True)
 
 
 def cmd(
@@ -113,22 +133,30 @@ def cmd(
     ] = None,
 ) -> None:
     store = MemoryStore()
-
-    if context_name is None:
-        try:
-            ctx = store.load_current()
-        except RuntimeError as e:
-            typer.secho(str(e), fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-    else:
-        if not store.context_exists(context_name):
+    try:
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        selected_name = context_snapshot.resolve_or_current(context_name)
+        if not selected_name:
+            raise RuntimeError("No current context. Run 'mem init <name>' first.")
+        if not store.context_exists(selected_name):
             typer.secho(
-                f"Error: context '{context_name}' not found.",
+                "Error: context '"
+                + display_escape_text(selected_name)
+                + "' not found.",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(1)
-        ctx = store.load(context_name)
+        ctx = store.load(selected_name)
+    except typer.Exit:
+        raise
+    except (OSError, RuntimeError, ValueError) as error:
+        typer.secho(
+            display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
 
     if selector is None:
         render_context(ctx)
@@ -136,8 +164,12 @@ def cmd(
 
     try:
         item = ops.resolve(ctx, selector)
-    except (KeyError, ValueError) as e:
-        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+    except (KeyError, ValueError) as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     if isinstance(item, Memory):

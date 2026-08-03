@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     format_exact_command,
@@ -24,7 +25,10 @@ from memcommit.commands.history_present import (
     history_result_recovery_label,
     history_result_picker_entries,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_primitives import (
+    display_escape_text,
+    safe_terminal_text,
+)
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.find_answer_dialogue import (
     FindAnswerCorpusTooLarge,
@@ -92,11 +96,7 @@ def _pending_find_clarification(state: FindChatState) -> str | None:
     if state.status != "WAITING FOR CLARIFICATION · RESULTS UNCHANGED":
         return None
     return next(
-        (
-            message.text
-            for message in reversed(state.messages)
-            if message.role == "MEM"
-        ),
+        (message.text for message in reversed(state.messages) if message.role == "MEM"),
         None,
     )
 
@@ -114,19 +114,11 @@ class FindShowProposal:
 def _find_answer_status(outside_status: FindOutsideStatus) -> str:
     """Describe the scopes actually checked, not merely the requested scope."""
     return {
-        "NOT_REQUESTED": (
-            "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED"
-        ),
-        "SEARCHED": (
-            "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS CHECKED"
-        ),
-        "PARTIAL": (
-            "ANSWERED · CONTEXT CHECKED · "
-            "OTHER CONTEXTS PARTIALLY CHECKED"
-        ),
+        "NOT_REQUESTED": ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED"),
+        "SEARCHED": ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS CHECKED"),
+        "PARTIAL": ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS PARTIALLY CHECKED"),
         "UNAVAILABLE": (
-            "ANSWERED · CONTEXT CHECKED · "
-            "OTHER CONTEXTS NOT FULLY CHECKED"
+            "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT FULLY CHECKED"
         ),
     }[outside_status]
 
@@ -351,10 +343,7 @@ def _history_context_names(
         if not recursive:
             return
         for item in context.iter_items():
-            if (
-                isinstance(item, Context)
-                and store.context_exists(item.name)
-            ):
+            if isinstance(item, Context) and store.context_exists(item.name):
                 # Historical traversal follows only explicit embedded
                 # Context pointers and uses non-resolving direct loads.
                 # MemoryRef targets and query-only sources stay unopened.
@@ -398,7 +387,7 @@ def _render_temporal_find(
     results: list[HistorySearchResult],
 ) -> None:
     if not results:
-        typer.secho(root_name, bold=True)
+        typer.secho(display_escape_text(root_name), bold=True)
         typer.echo("  (no matching historical items)")
         return
     grouped: dict[tuple[str, str], list[HistorySearchResult]] = {}
@@ -407,12 +396,10 @@ def _render_temporal_find(
             (result.context_uid, result.context_name),
             [],
         ).append(result)
-    for group_index, ((_, context_name), matches) in enumerate(
-        grouped.items()
-    ):
+    for group_index, ((_, context_name), matches) in enumerate(grouped.items()):
         if group_index:
             typer.echo()
-        typer.secho(context_name, bold=True)
+        typer.secho(display_escape_text(context_name), bold=True)
         for result in matches:
             timestamp = (
                 result.timestamp[:16].replace("T", " ")
@@ -430,7 +417,7 @@ def _render_temporal_find(
 
 def _render_labeled_content(label: str, content: str) -> None:
     """Render the first content line beside its item and align continuations."""
-    lines = content.splitlines() or [""]
+    lines = safe_terminal_text(content).splitlines() or [""]
     typer.echo(f"{label} {lines[0]}")
     continuation = " " * (len(label) + 1)
     for line in lines[1:]:
@@ -448,7 +435,8 @@ def _render_match(match: SearchMatch) -> None:
     elif isinstance(item, MemoryRef):
         label = (
             f"[ref     {item.uid[:8]}] "
-            f"-> {item.target_context_name}#{item.target_memory_uid[:8]}"
+            f"-> {display_escape_text(item.target_context_name)}#"
+            f"{display_escape_text(item.target_memory_uid[:8])}"
         )
         if item.target is not None:
             _render_labeled_content(label, item.target.content)
@@ -456,7 +444,7 @@ def _render_match(match: SearchMatch) -> None:
             typer.echo(label)
     elif isinstance(item, QueryContextRef):
         label = f"[query   {item.uid[:8]}]"
-        typer.echo(f"{label} {item.name} (query-only)")
+        typer.echo(f"{label} {display_escape_text(item.name)} (query-only)")
         command = shlex.join(
             [
                 "mem",
@@ -467,9 +455,7 @@ def _render_match(match: SearchMatch) -> None:
                 candidate.context_name,
             ]
         )
-        typer.echo(
-            f"{' ' * (len(label) + 1)}Ask with: {command}"
-        )
+        typer.echo(f"{' ' * (len(label) + 1)}Ask with: {display_escape_text(command)}")
 
 
 def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
@@ -479,9 +465,7 @@ def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
         content = item.content
     elif isinstance(item, MemoryRef):
         content = (
-            item.target.content
-            if item.target is not None
-            else "(dangling reference)"
+            item.target.content if item.target is not None else "(dangling reference)"
         )
     elif isinstance(item, QueryContextRef):
         content = f"{item.name} (query-only)"
@@ -518,14 +502,9 @@ def _initial_chat_state(
             ),
         ),
         results=tuple(
-            _chat_result(match, index)
-            for index, match in enumerate(matches, start=1)
+            _chat_result(match, index) for index, match in enumerate(matches, start=1)
         ),
-        status=(
-            "RESULTS READY"
-            if matches
-            else "NO MATCHING RESULTS"
-        ),
+        status=("RESULTS READY" if matches else "NO MATCHING RESULTS"),
     )
 
 
@@ -535,14 +514,10 @@ def _show_result_proposal(
     submitted_text: str,
 ) -> FindShowProposal:
     matches = tuple(
-        result
-        for result in state.results
-        if result.alias == action.selector
+        result for result in state.results if result.alias == action.selector
     )
     if len(matches) != 1:
-        raise FindError(
-            "The requested Find result is missing or ambiguous."
-        )
+        raise FindError("The requested Find result is missing or ambiguous.")
     selected = matches[0]
     review = ExactCommandReview(
         argv=(
@@ -606,14 +581,11 @@ def _apply_show_result(
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout).strip()
         raise FindError(
-            "The read-only mem show action failed"
-            + (f": {detail}" if detail else ".")
+            "The read-only mem show action failed" + (f": {detail}" if detail else ".")
         )
     actual_output = completed.stdout.strip()
     if not actual_output:
-        raise FindError(
-            "The read-only mem show action returned no output."
-        )
+        raise FindError("The read-only mem show action returned no output.")
     action = proposal.action
     return replace(
         state,
@@ -683,18 +655,13 @@ def _run_interactive_find(
     *,
     recursive: bool,
 ) -> FindChatSessionResult:
-    frame_candidates = tuple(
-        collect_candidates(root_context, recursive=recursive)
-    )
+    frame_candidates = tuple(collect_candidates(root_context, recursive=recursive))
     controller = FindTurnController(
         store=store,
         root_context=root_context,
         recursive=recursive,
         frame_candidates=frame_candidates,
-        visible_candidates=tuple(
-            match.candidate
-            for match in matches
-        ),
+        visible_candidates=tuple(match.candidate for match in matches),
     )
     result = run_find_chat_session(
         _initial_chat_state(root_context.name, query, matches),
@@ -737,23 +704,31 @@ def cmd(
     ] = False,
 ) -> None:
     store = MemoryStore()
+    try:
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        selected_name = context_snapshot.resolve_or_current(context_name)
+        if selected_name is None:
+            raise RuntimeError("No current context. Run 'mem init <name>' first.")
+    except (OSError, RuntimeError, ValueError) as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
     temporal = is_temporal_query(query)
     try:
         if temporal:
-            selected_name = context_name or store.current_context_name()
-            if selected_name is None:
-                raise RuntimeError(
-                    "No current context. Run 'mem init <name>' first."
-                )
             ctx = store.load_direct(selected_name)
         else:
-            ctx = (
-                store.load_current()
-                if context_name is None
-                else store.load(context_name)
-            )
-    except (FileNotFoundError, RuntimeError, ValueError) as e:
-        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+            ctx = store.load(selected_name)
+    except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     if temporal:
@@ -774,7 +749,7 @@ def cmd(
             ValueError,
         ) as error:
             typer.secho(
-                f"Find history error: {error}",
+                f"Find history error: {display_escape_text(str(error))}",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -788,7 +763,7 @@ def cmd(
                 )
             except ValueError as error:
                 typer.secho(
-                    f"Find history error: {error}",
+                    "Find history error: " + display_escape_text(str(error)),
                     fg=typer.colors.RED,
                     err=True,
                 )
@@ -805,8 +780,12 @@ def cmd(
             recursive=not direct,
             limit=limit,
         )
-    except (FindError, QueryProviderError) as e:
-        typer.secho(f"Find error: {e}", fg=typer.colors.RED, err=True)
+    except (FindError, QueryProviderError) as error:
+        typer.secho(
+            f"Find error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     if _interactive_terminal():
@@ -820,7 +799,7 @@ def cmd(
         return
 
     if not matches:
-        typer.secho(ctx.name, bold=True)
+        typer.secho(display_escape_text(ctx.name), bold=True)
         typer.echo("  (no matching items)")
         return
 
@@ -835,11 +814,9 @@ def cmd(
         )
         grouped.setdefault(owner, []).append(match)
 
-    for group_index, ((_, owner_name), owner_matches) in enumerate(
-        grouped.items()
-    ):
+    for group_index, ((_, owner_name), owner_matches) in enumerate(grouped.items()):
         if group_index:
             typer.echo()
-        typer.secho(owner_name, bold=True)
+        typer.secho(display_escape_text(owner_name), bold=True)
         for match in owner_matches:
             _render_match(match)

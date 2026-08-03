@@ -3,8 +3,10 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.context import AutoCheckpoint, Memory
-from memcommit.store import MemoryStore
+from memcommit.store import MemoryStore, context_record_digest
 
 
 def cmd(
@@ -25,16 +27,9 @@ def cmd(
     ] = None,
 ) -> None:
     store = MemoryStore()
-
-    if not store.context_exists(source_name):
-        typer.secho(
-            f"Error: context '{source_name}' does not exist.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
-    target_name = into or store.current_context_name()
+    snapshot = ContextOperandSnapshot.capture(store)
+    target_selector = into or snapshot.current_name
+    target_name = target_selector
     if not target_name:
         typer.secho(
             "No current context. Pass --into or run 'mem init <name>' first.",
@@ -42,45 +37,59 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    if not store.context_exists(target_name):
-        typer.secho(
-            f"Error: context '{target_name}' does not exist.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
 
-    source = store.load(source_name)
-    target = store.load(target_name)
     try:
+        source_name = snapshot.resolve(source_name)
+        target_name = snapshot.resolve(target_name)
+        for name in (source_name, target_name):
+            if not store.context_exists(name):
+                raise FileNotFoundError(f"Context '{name}' does not exist.")
+        source = store.load_direct(source_name)
+        target = store.load_for_update(target_name)
         item = ops.resolve(source, selector)
         if not isinstance(item, Memory):
             raise TypeError(
                 f"'{selector}' is not a directly owned Memory in '{source_name}'."
             )
         ref = ops.reference_memory(item, source, target)
-    except (KeyError, TypeError, ValueError) as e:
-        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
+        store.save_context_with_sources(
+            target,
+            AutoCheckpoint(
+                command="reference",
+                args={
+                    "reference_uid": ref.uid,
+                    "source": source_name,
+                    "memory_uid": item.uid,
+                    "into": target_name,
+                },
+                description=(
+                    f"Referenced [{item.uid[:8]}] from '{source_name}' "
+                    f"as [{ref.uid[:8]}] in '{target_name}'"
+                ),
+            ),
+            expected_context_digest=target._store_digest or "",
+            source_bindings=(
+                (source_name, source.uid, context_record_digest(source)),
+            ),
+        )
+    except (
+        FileNotFoundError,
+        KeyError,
+        OSError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+    ) as e:
+        typer.secho(
+            f"Error: {display_escape_text(str(e))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
-    store.save(
-        target,
-        AutoCheckpoint(
-            command="reference",
-            args={
-                "reference_uid": ref.uid,
-                "source": source_name,
-                "memory_uid": item.uid,
-                "into": target_name,
-            },
-            description=(
-                f"Referenced [{item.uid[:8]}] from '{source_name}' "
-                f"as [{ref.uid[:8]}] in '{target_name}'"
-            ),
-        ),
-    )
     typer.secho(
-        f"Referenced [{item.uid[:8]}] from '{source_name}' "
-        f"as [{ref.uid[:8]}] in '{target_name}'.",
+        f"Referenced [{item.uid[:8]}] from "
+        f"'{display_escape_text(source_name)}' as [{ref.uid[:8]}] in "
+        f"'{display_escape_text(target_name)}'.",
         fg=typer.colors.GREEN,
     )

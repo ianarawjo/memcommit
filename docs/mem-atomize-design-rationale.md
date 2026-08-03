@@ -523,9 +523,22 @@ one of the sources that would be split. References to unchanged Memories do not
 block it. Save-as does not remove those source Memories: it creates a fresh
 Context UID, first records an init-like source baseline, then records the
 atomized state, so references to the unchanged source Context remain valid.
+The inbound scan uses the strict direct ordinary-Context graph rather than the
+human navigation catalog. A malformed, unsafe, unreadable, or duplicate
+ordinary record therefore blocks an in-place split instead of becoming an
+invisible omission.
 The new Context is selected only after both states and the copied analysis have
-been persisted. Ordinary failures remove the exact partial destination,
-although no lock or crash-safe transaction journal spans all files.
+been persisted. Publication uses a require-new write and rechecks the exact
+source name, UID, and direct-record digest under the source/target lock set.
+The final selection compare-and-sets the current Context captured at command
+entry together with the destination UID/digest, so a concurrent switch is not
+overwritten.
+
+If a later phase fails after publication, the destination and its saved
+analysis are preserved for manual inspection. Another process may already have
+observed or referenced the new identity without changing its digest, so
+deleting it by name would risk creating a dangling pointer. Failure before the
+require-new publication leaves no destination.
 
 Atomize also depends on two store-wide mutation invariants. A mutating load
 must resolve every directly embedded Context pointer; otherwise saving the

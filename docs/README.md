@@ -57,6 +57,10 @@ considered sufficient design history.
 
 ## Context namespace migration
 
+- [`mem-command-dependency-design-rationale.md`](mem-command-dependency-design-rationale.md)
+  records the shared locator, loader, source-binding, creation/deletion,
+  catalog, display, and revert boundaries used across `mem` commands, plus the
+  privacy and authority differences that remain intentionally separate.
 - [`context-locator-design-rationale.md`](context-locator-design-rationale.md)
   defines canonical names, explicit relative existing-Context locators, the
   one-current-snapshot rule, and the rollout boundary between lookup operands

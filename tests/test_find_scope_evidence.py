@@ -1,8 +1,11 @@
 """Three-scope local evidence collection contracts."""
 from __future__ import annotations
 
+import pytest
+
 import memcommit.ops as ops
 from memcommit.context import QueryContextRef
+from memcommit.context_catalog import ContextCatalogScan
 from memcommit.find_scope_evidence import (
     candidate_logical_identity,
     collect_outside_context_evidence,
@@ -164,8 +167,8 @@ def test_disappearing_context_marks_outside_scan_partial(
     store.save(root)
     monkeypatch.setattr(
         store,
-        "list_context_names",
-        lambda: ["root", "disappeared"],
+        "scan_context_catalog",
+        lambda: ContextCatalogScan(names=("root", "disappeared")),
     )
 
     collected = collect_outside_context_evidence(
@@ -175,3 +178,30 @@ def test_disappearing_context_marks_outside_scan_partial(
     )
 
     assert collected.status == "PARTIAL"
+
+
+@pytest.mark.parametrize("issue", ("malformed", "symlink"))
+def test_hidden_catalog_issue_marks_outside_scan_partial(
+    isolated_store,
+    issue,
+):
+    store = MemoryStore()
+    root = ops.init("root")
+    store.save(root)
+    hidden = isolated_store / "contexts" / "hidden"
+    if issue == "malformed":
+        hidden.mkdir()
+        (hidden / "context.json").write_text("{not-json", encoding="utf-8")
+    else:
+        outside = isolated_store.parent / "outside-contexts"
+        outside.mkdir()
+        hidden.symlink_to(outside, target_is_directory=True)
+
+    collected = collect_outside_context_evidence(
+        store,
+        excluded_context_uids=frozenset({root.uid}),
+        excluded_candidates=(),
+    )
+
+    assert collected.status == "PARTIAL"
+    assert collected.evidence == ()

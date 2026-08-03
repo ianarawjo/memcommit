@@ -272,7 +272,17 @@ rewind a descendant's current memories or checkpoint log.
 A branch may create a Context at an ancestor namespace that already contains
 descendants. For example, branching to `review` is valid when
 `review/existing-child` already exists. Branch rollback removes only the new
-`review` Context artifacts and preserves the existing descendant.
+`review` Context artifacts and preserves the existing descendant. Creation,
+source UID/digest and history-digest revalidation, checkpoint copy, and final
+current-state compare-and-swap share one deterministic source/target lock set.
+Rollback therefore occurs only while the exact require-new identity remains
+locked; it cannot delete a replacement or another writer's completed update.
+A concurrent current selection aborts branch creation instead of being
+overwritten.
+
+Checkpoint inheritance is private to this branch transaction. The earlier
+public copy-only store choreography was removed because create, copy, and
+selection as separate calls could reintroduce the race this boundary closes.
 
 Creating a checkpoint for an unsaved Context is rejected. Initial auto
 checkpoints are allowed only as part of the internal `save` operation, avoiding

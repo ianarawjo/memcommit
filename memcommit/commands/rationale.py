@@ -6,7 +6,11 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.tui_primitives import (
+    display_escape_text,
+    safe_terminal_text,
+)
 from memcommit.provenance import ProvenanceError, TraceEvent, build_trace
 from memcommit.query_provider import connect_codex_chatgpt_provider
 from memcommit.rationale import (
@@ -76,7 +80,7 @@ def render_rationale(
         bold=True,
     )
     typer.echo(
-        f"Context: {safe_terminal_text(report.trace.context_name)} "
+        f"Context: {display_escape_text(report.trace.context_name)} "
         f"[{_uid(report.trace.context_uid, verbose)}]"
     )
     typer.secho("\nMEMORY", bold=True)
@@ -383,7 +387,8 @@ def cmd(
     """Separate recorded origin from inference within the current Context."""
     store = MemoryStore(create=False)
     try:
-        name = context_name or store.current_context_name()
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        name = context_snapshot.resolve_or_current(context_name)
         if not name:
             raise RationaleError(
                 "No current context. Pass --context or run 'mem init <name>' first."
@@ -408,7 +413,11 @@ def cmd(
         ProvenanceError,
         RationaleError,
     ) as error:
-        typer.secho(f"Rationale error: {error}", fg=typer.colors.RED, err=True)
+        typer.secho(
+            f"Rationale error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     if as_json:

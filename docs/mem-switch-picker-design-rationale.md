@@ -59,6 +59,55 @@ replacement, or modification of the selected record, and rejects a concurrent
 current-Context change. This prevents a slow picker or relative resolution
 from silently overwriting another terminal's later switch.
 
+## Dependency map and ownership
+
+`mem contexts` and the interactive form of `mem switch` are two presentations
+of the same ordinary-Context catalog. They do not call each other's CLI command
+or parse each other's output. Instead, both depend directly on the
+`MemoryStore` catalog API:
+
+```text
+memcommit.cli
+├── mem contexts -> commands.contexts.cmd
+│   ├── MemoryStore.list_context_names()
+│   ├── MemoryStore.current_context_name()
+│   └── render the read-only list and current `*` marker
+└── mem switch -> commands.switch.cmd
+    ├── MemoryStore.current_context_name()       # one command-start snapshot
+    ├── when NAME is omitted
+    │   ├── MemoryStore.list_context_names()
+    │   └── context_picker.choose_context()      # returns a name; writes nothing
+    ├── when NAME is supplied
+    │   └── bypass the catalog UI and use the operand directly
+    ├── context_locator.resolve_context_locator() # explicit relative operands
+    ├── MemoryStore.context_exists()
+    ├── MemoryStore.load()                       # full target validation
+    └── MemoryStore.set_current_context_if()     # the only switch-state write
+```
+
+This shared lower-level dependency is intentional. `mem contexts` owns plain
+listing presentation, while `context_picker` owns interactive selection and
+`commands.switch` owns relative resolution, target validation, and mutation.
+Keeping the commands from invoking one another avoids making human-oriented
+output into an internal data contract while still giving both surfaces the
+same sorted names from `MemoryStore.list_context_names()`.
+
+The catalog method scans only ordinary Context records under
+`contexts/**/context.json` and validates their minimum identity header. This is
+why query-only sources are absent from both `mem contexts` and the switch
+picker. A selected target is deliberately validated more deeply by
+`MemoryStore.load()` before the current pointer changes. The picker catalog can
+therefore be read cheaply, but a record with a valid header and malformed
+internal items may still appear in the list and then fail closed when selected.
+
+The two catalog reads are also not one atomic snapshot today. `mem contexts`
+reads the names and current pointer separately, and `mem switch` captures the
+current pointer before opening its independently read name list. This can make
+the displayed view temporarily stale during a concurrent create, delete, or
+switch, but it cannot authorize a stale switch: after selection, Switch
+reloads the target and the final compare-and-set rejects both a changed target
+record and a changed current pointer.
+
 The lexical resolver itself is operation-neutral and lives in
 `memcommit.context_locator`; Switch owns only picker behavior, existence and
 load validation, and the final state compare-and-set. Compare uses the same

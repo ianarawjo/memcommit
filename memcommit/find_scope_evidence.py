@@ -148,9 +148,13 @@ def collect_outside_context_evidence(
         for candidate in excluded_candidates
     }
     outside: list[SearchCandidate] = []
-    partial = False
+    catalog = store.scan_context_catalog()
+    # A tolerant navigation catalog omits malformed or unsafe records. Wider
+    # Find must retain that omission as evidence that its global scan was not
+    # complete; otherwise an empty result could overstate non-existence.
+    partial = not catalog.complete
     direct_contexts: list[Context] = []
-    for name in store.list_context_names():
+    for name in catalog.names:
         try:
             direct_contexts.append(store.load_direct(name))
         except (FileNotFoundError, OSError, RuntimeError, ValueError):

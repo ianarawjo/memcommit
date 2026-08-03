@@ -1,4 +1,5 @@
 """Preview directional updates or unary semantic Context operations."""
+
 import sys
 from enum import Enum
 from typing import Annotated, Optional
@@ -20,7 +21,9 @@ from memcommit.commands.atomize_workbench_shell import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
+from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import ReviewCancelled
+from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.commands.update_render import (
     render_plan,
     run_update_workbench,
@@ -53,14 +56,13 @@ def _usage_error(message: str) -> None:
 
 def _directional_impact(
     *,
+    store: MemoryStore,
+    current_name: str | None,
     source_name: str | None,
     target_name: str | None,
 ) -> None:
     """Preview one explicit or current-filled directional endpoint pair."""
-    store = MemoryStore()
     try:
-        # Freeze one current-name snapshot for both endpoint locators.
-        current_name = store.current_context_name()
         endpoints = resolve_update_endpoints(
             source_locator=source_name,
             target_locator=target_name,
@@ -69,7 +71,11 @@ def _directional_impact(
         source = store.load(endpoints.source_name)
         target = store.load(endpoints.target_name)
     except (FileNotFoundError, RuntimeError, ValueError) as error:
-        typer.secho(f"Impact error: {error}", fg=typer.colors.RED, err=True)
+        typer.secho(
+            f"Impact error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     try:
@@ -81,7 +87,11 @@ def _directional_impact(
         )
         store.save_impact_plan(session)
     except (OSError, QueryProviderError, UpdateError, ValueError) as error:
-        typer.secho(f"Impact error: {error}", fg=typer.colors.RED, err=True)
+        typer.secho(
+            f"Impact error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     if sys.stdin.isatty() and sys.stdout.isatty():
@@ -92,7 +102,8 @@ def _directional_impact(
 
 def _atomize_impact(
     *,
-    context_name: str | None,
+    store: MemoryStore,
+    context_name: str,
     show_all: bool,
     with_review: bool,
     refresh: bool,
@@ -106,15 +117,14 @@ def _atomize_impact(
             err=True,
         )
         raise typer.Exit(2)
-    store = MemoryStore(create=False)
     try:
-        ctx = (
-            store.load_current_direct()
-            if context_name is None
-            else store.load_direct(context_name)
-        )
+        ctx = store.load_direct(context_name)
     except (OSError, RuntimeError, ValueError) as error:
-        typer.secho(f"Impact error: {error}", fg=typer.colors.RED, err=True)
+        typer.secho(
+            f"Impact error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     try:
@@ -126,9 +136,7 @@ def _atomize_impact(
         if with_review:
             prior_analysis = store.load_atomize_analysis(ctx.uid)
             if prior_analysis is None:
-                raise ReviewError(
-                    "No saved atomize analysis exists for this Context."
-                )
+                raise ReviewError("No saved atomize analysis exists for this Context.")
             if not atomize_analysis_matches_context(prior_analysis, ctx):
                 raise ReviewError(
                     "The saved atomize analysis is stale for this Context. "
@@ -136,10 +144,7 @@ def _atomize_impact(
                     "Memories; run an explicit unframed --refresh first."
                 )
             source_workbench = store.load_atomize_workbench(prior_analysis)
-            if (
-                source_workbench is not None
-                and source_workbench.answered_count
-            ):
+            if source_workbench is not None and source_workbench.answered_count:
                 (
                     declared_frames,
                     declared_frame_origins,
@@ -160,13 +165,10 @@ def _atomize_impact(
             else:
                 # Compatibility path for the earlier global atomize review.
                 review = store.load_review_session()
-                if (
-                    review is None
-                    or not atomize_review_matches_analysis(
-                        review,
-                        ctx,
-                        prior_analysis,
-                    )
+                if review is None or not atomize_review_matches_analysis(
+                    review,
+                    ctx,
+                    prior_analysis,
                 ):
                     raise ReviewError(
                         "No current atomize workbench response matches this "
@@ -184,26 +186,22 @@ def _atomize_impact(
                         "The atomize review has no source analysis identity."
                     )
                 item_by_memory_uid = {
-                    item.source_uids[0]: item
-                    for item in review.items
+                    item.source_uids[0]: item for item in review.items
                 }
                 declared_frame_origins = {
                     memory_uid: AtomizeFrameOrigin(
                         review_item_uid=item_by_memory_uid[memory_uid].uid,
                         source_analysis_uid=review.source_analysis_uid,
-                        uncertainty_reason=(
-                            item_by_memory_uid[memory_uid].reason
-                        ),
+                        uncertainty_reason=(item_by_memory_uid[memory_uid].reason),
                     )
                     for memory_uid in declared_frames
                 }
+
         def validate_review_before_save() -> None:
             if not with_review:
                 return
             if source_workbench is not None and source_workbench.answered_count:
-                latest_workbench = store.load_atomize_workbench(
-                    prior_analysis
-                )
+                latest_workbench = store.load_atomize_workbench(prior_analysis)
                 if (
                     latest_workbench is None
                     or latest_workbench.uid != source_review_uid
@@ -219,8 +217,7 @@ def _atomize_impact(
             if (
                 latest_review is None
                 or latest_review.uid != source_review_uid
-                or review_response_digest(latest_review)
-                != source_review_digest
+                or review_response_digest(latest_review) != source_review_digest
             ):
                 raise AtomizeImpactError(
                     "The atomize review changed while reanalysis was "
@@ -248,7 +245,11 @@ def _atomize_impact(
         ReviewError,
         ValueError,
     ) as error:
-        typer.secho(f"Impact error: {error}", fg=typer.colors.RED, err=True)
+        typer.secho(
+            f"Impact error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     if not sys.stdin.isatty() or not sys.stdout.isatty():
@@ -298,18 +299,14 @@ def cmd(
         Optional[str],
         typer.Option(
             "--from",
-            help=(
-                "Source Context A; if --to is omitted, current supplies B"
-            ),
+            help=("Source Context A; if --to is omitted, current supplies B"),
         ),
     ] = None,
     target_name: Annotated[
         Optional[str],
         typer.Option(
             "--to",
-            help=(
-                "Target Context B; if --from is omitted, current supplies A"
-            ),
+            help=("Target Context B; if --from is omitted, current supplies A"),
         ),
     ] = None,
     context_name: Annotated[
@@ -354,8 +351,24 @@ def cmd(
                 "a directional 'mem impact --from SOURCE' / "
                 "'--to TARGET' form."
             )
+        try:
+            store = MemoryStore(create=False)
+            context_snapshot = ContextOperandSnapshot.capture(store)
+            canonical_context_name = context_snapshot.resolve_or_current(context_name)
+            if not canonical_context_name:
+                raise AtomizeImpactError(
+                    "No current context. Pass --context or run 'mem init <name>' first."
+                )
+        except (OSError, RuntimeError, ValueError) as error:
+            typer.secho(
+                f"Impact error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
         _atomize_impact(
-            context_name=context_name,
+            store=store,
+            context_name=canonical_context_name,
             show_all=show_all,
             with_review=with_review,
             refresh=refresh,
@@ -373,7 +386,19 @@ def cmd(
             "valid with "
             "'mem impact atomize'."
         )
+    try:
+        store = MemoryStore()
+        context_snapshot = ContextOperandSnapshot.capture(store)
+    except (OSError, RuntimeError, ValueError) as error:
+        typer.secho(
+            f"Impact error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
     _directional_impact(
+        store=store,
+        current_name=context_snapshot.current_name,
         source_name=source_name,
         target_name=target_name,
     )

@@ -1,4 +1,5 @@
 """Create or resume the shared terminal shell for semantic review."""
+
 from __future__ import annotations
 
 import sys
@@ -21,12 +22,14 @@ from memcommit.commands.atomize_workbench_shell import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
+from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import (
     ReviewCancelled,
     render_review_snapshot,
     run_review_shell,
     visible_ordinal_index,
 )
+from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
     QueryProviderError,
@@ -44,25 +47,33 @@ from memcommit.store import MemoryStore
 def _load_direct_context(
     store: MemoryStore,
     context_name: str | None,
+    *,
+    current_name: str | None,
 ):
-    return (
-        store.load_current_direct()
-        if context_name is None
-        else store.load_direct(context_name)
-    )
+    selected_name = context_name if context_name is not None else current_name
+    if not selected_name:
+        raise RuntimeError(
+            "No current context. Pass --context or run 'mem init <name>' first."
+        )
+    return store.load_direct(selected_name)
 
 
 def _run_atomize_workbench(
     *,
     store: MemoryStore,
     context_name: str | None,
+    current_name: str | None,
     snapshot: bool,
     replace: bool,
     respond_to: str | None,
     response: str | None,
 ) -> None:
     """Resume the Context-bound atomize workbench compatibility adapter."""
-    ctx = _load_direct_context(store, context_name)
+    ctx = _load_direct_context(
+        store,
+        context_name,
+        current_name=current_name,
+    )
     analysis = store.load_atomize_analysis(ctx.uid)
     if analysis is None:
         raise ReviewError(
@@ -74,9 +85,7 @@ def _run_atomize_workbench(
             "The saved atomize analysis is stale for this Context. Request "
             "an explicit reanalysis before reviewing it."
         )
-    workbench = (
-        None if replace else store.load_atomize_workbench(analysis)
-    )
+    workbench = None if replace else store.load_atomize_workbench(analysis)
     if workbench is None:
         workbench = create_atomize_workbench(analysis)
         store.save_atomize_workbench(workbench)
@@ -87,13 +96,9 @@ def _run_atomize_workbench(
         context_digest=analysis.context_digest,
         issues=atomize_workbench_issue_projection(analysis),
     ):
-        raise ReviewError(
-            "The saved atomize workbench does not match its analysis."
-        )
+        raise ReviewError("The saved atomize workbench does not match its analysis.")
     if (respond_to is None) != (response is None):
-        raise ReviewError(
-            "--respond-to and --response must be used together."
-        )
+        raise ReviewError("--respond-to and --response must be used together.")
     if respond_to is not None:
         selector = respond_to.strip()
         findings = project_atomize_workbench_findings(analysis)
@@ -120,14 +125,10 @@ def _run_atomize_workbench(
         workbench.cursor_uid = matches[0].uid
         workbench.response_for(matches[0].uid).text = response or ""
         store.save_atomize_workbench(workbench)
-        typer.echo(
-            render_atomize_workbench_snapshot(workbench, analysis)
-        )
+        typer.echo(render_atomize_workbench_snapshot(workbench, analysis))
         return
     if snapshot or not sys.stdin.isatty() or not sys.stdout.isatty():
-        typer.echo(
-            render_atomize_workbench_snapshot(workbench, analysis)
-        )
+        typer.echo(render_atomize_workbench_snapshot(workbench, analysis))
         return
     try:
         run_atomize_workbench_shell(
@@ -200,11 +201,16 @@ def cmd(
     """Stage review annotations without editing or checkpointing Memories."""
     store = MemoryStore()
     try:
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        canonical_context_name = (
+            None if context_name is None else context_snapshot.resolve(context_name)
+        )
         normalized_kind = kind.casefold() if kind is not None else None
         if normalized_kind == "atomize":
             _run_atomize_workbench(
                 store=store,
-                context_name=context_name,
+                context_name=canonical_context_name,
+                current_name=context_snapshot.current_name,
                 snapshot=snapshot,
                 replace=replace_review,
                 respond_to=respond_to,
@@ -220,7 +226,8 @@ def cmd(
             if session is None:
                 _run_atomize_workbench(
                     store=store,
-                    context_name=context_name,
+                    context_name=canonical_context_name,
+                    current_name=context_snapshot.current_name,
                     snapshot=snapshot,
                     replace=False,
                     respond_to=respond_to,
@@ -228,12 +235,10 @@ def cmd(
                 )
                 return
             if (
-                context_name is not None
-                and context_name != session.context_name
+                canonical_context_name is not None
+                and canonical_context_name != session.context_name
             ):
-                raise ReviewError(
-                    "The saved review belongs to a different Context."
-                )
+                raise ReviewError("The saved review belongs to a different Context.")
             ctx = store.load_direct(session.context_name)
         else:
             if normalized_kind not in {
@@ -246,18 +251,18 @@ def cmd(
                 )
             # Explicit replacement is also the recovery path for a malformed
             # prior artifact, so do not require that artifact to parse first.
-            existing = (
-                None
-                if replace_review
-                else store.load_review_session()
-            )
+            existing = None if replace_review else store.load_review_session()
             if existing is not None and not replace_review:
                 raise ReviewError(
                     "A saved review already exists. Resume it with "
                     "'mem review', or explicitly replace it with "
                     f"'mem review {normalized_kind} --replace-review'."
                 )
-            ctx = _load_direct_context(store, context_name)
+            ctx = _load_direct_context(
+                store,
+                canonical_context_name,
+                current_name=context_snapshot.current_name,
+            )
             report = ops.find_ambiguities(
                 ctx,
                 connect_codex_chatgpt_provider,
@@ -268,6 +273,7 @@ def cmd(
             store.save_review_session(session)
     except (
         FileNotFoundError,
+        OSError,
         RuntimeError,
         ValueError,
         FindingsError,
@@ -277,7 +283,7 @@ def cmd(
         ReviewError,
     ) as error:
         typer.secho(
-            f"Review error: {error}",
+            f"Review error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
             err=True,
         )
@@ -285,13 +291,11 @@ def cmd(
 
     try:
         analysis = (
-            store.load_atomize_analysis(ctx.uid)
-            if session.kind == "atomize"
-            else None
+            store.load_atomize_analysis(ctx.uid) if session.kind == "atomize" else None
         )
     except (OSError, RuntimeError, ValueError) as error:
         typer.secho(
-            f"Review error: {error}",
+            f"Review error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
             err=True,
         )
@@ -334,9 +338,7 @@ def cmd(
         if selected_index is not None:
             matches = [ordered[selected_index]]
         else:
-            matches = [
-                item for item in session.items if item.uid.startswith(selector)
-            ]
+            matches = [item for item in session.items if item.uid.startswith(selector)]
         if not selector or len(matches) != 1:
             typer.secho(
                 "Review error: the response target is missing or ambiguous. "
@@ -381,8 +383,7 @@ def cmd(
         raise typer.Exit(1)
 
     typer.secho(
-        f"Review saved: {session.answered_count}/{len(session.items)} "
-        "items answered.",
+        f"Review saved: {session.answered_count}/{len(session.items)} items answered.",
         fg=typer.colors.GREEN,
         bold=True,
     )
