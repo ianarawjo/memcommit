@@ -10,7 +10,7 @@ associated tests together whenever hands-on testing changes the workflow.
 |---|---|---|---|
 | **Atomic meld** *(informal shorthand)* | An issue-scoped directional meld embedded in atomize grounding | `mem atomize --evaluate ISSUE` | Implemented |
 | **Symmetric Context meld** | Two equal-authority Contexts combined into the current empty result Context | `mem meld LEFT_PEER RIGHT_PEER` | Implemented |
-| **Directional Context meld** | A read-only incoming Context melded into an authoritative baseline Context | `mem meld [INCOMING] --into BASELINE` | Implemented |
+| **Directional Context meld** | A read-only incoming Context melded into an authoritative baseline Context | Canonical: `mem meld [INCOMING] --into BASELINE`; current baseline convenience: `mem meld --from INCOMING` | Implemented |
 
 “Atomic” identifies the issue where review begins. It does **not** promise
 that only one Memory can change. A clarification may require several
@@ -146,6 +146,20 @@ The explicit form is useful when the incoming Context is not current:
 ```bash
 mem meld INCOMING --into BASELINE
 ```
+
+When the Context currently being viewed is the baseline, `--from` supplies
+the incoming side instead:
+
+```bash
+mem switch task2/advisor1
+mem meld --from ../advisor2
+```
+
+This is convenience grammar for the same directional operation, not another
+Meld mode. The example is normalized to the portable route
+`mem meld task2/advisor2 --into task2/advisor1`; saved-session identity,
+follow-up guidance, and application receipts use that canonical spelling.
+`--from` cannot be combined with `--into` or positional Contexts.
 
 Bare names such as `campus/wiki` remain global Context names. Only `.`, `..`,
 `./...`, and `../...` opt into current-relative lookup. They describe the
@@ -324,6 +338,7 @@ one saved atomize issue + clarification
 
 one read-only incoming Context + one authoritative baseline
 → mem meld [INCOMING] --into BASELINE
+→ or mem meld --from INCOMING while BASELINE is current
 → Context-wide directional meld
 
 two equal-authority Contexts + empty result Context
@@ -331,6 +346,6 @@ two equal-authority Contexts + empty result Context
 → Context-wide symmetric meld
 ```
 
-“Atomic” remains a scope shorthand, not `mem meld --atomic`; `--into` remains
-directional; and the unimplemented `--to` remains reserved for a distinct
-symmetric result Context.
+“Atomic” remains a scope shorthand, not `mem meld --atomic`; canonical `--into`
+and its current-baseline `--from` convenience remain directional; and the
+unimplemented `--to` remains reserved for a distinct symmetric result Context.

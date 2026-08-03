@@ -806,6 +806,47 @@ def test_directional_meld_uses_current_incoming_and_relative_baseline(
     ]
 
 
+def test_directional_meld_from_uses_current_baseline_and_canonical_session(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, _, _ = _directional_contexts(store)
+    store.set_current(baseline.name)
+    provider = DirectionalProvider()
+    _patch_provider(monkeypatch, provider)
+
+    shorthand = runner.invoke(app, ["meld", "--from", "../from"])
+
+    assert shorthand.exit_code == 0, shorthand.output
+    assert (
+        "INCOMING test/update/from → "
+        "BASELINE / TARGET test/update/to"
+    ) in shorthand.output
+    assert (
+        "mem meld test/update/from --into test/update/to --accept"
+        in shorthand.output
+    )
+    first_session = store.load_meld_session(baseline.uid)
+    assert first_session is not None
+    assert [frame.context_name for frame in first_session.frames] == [
+        incoming.name,
+        baseline.name,
+    ]
+    assert len(provider.payloads) == 1
+
+    canonical = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name],
+    )
+
+    assert canonical.exit_code == 0, canonical.output
+    resumed_session = store.load_meld_session(baseline.uid)
+    assert resumed_session is not None
+    assert resumed_session.uid == first_session.uid
+    assert len(provider.payloads) == 1
+
+
 def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
     isolated_store,
     monkeypatch,
@@ -1042,7 +1083,9 @@ def test_directional_meld_grammar_help_and_to_boundary(
     help_result = runner.invoke(app, ["meld", "--help"])
     assert help_result.exit_code == 0, help_result.output
     assert "--into" in help_result.output
+    assert "--from" in help_result.output
     assert "authoritative BASELINE" in help_result.output
+    assert "normalized to INCOMING" in help_result.output
     assert "--to" not in help_result.output
 
     unsupported_to = runner.invoke(
@@ -1072,6 +1115,47 @@ def test_directional_meld_grammar_help_and_to_boundary(
     assert "distinct" in same_context.output
     assert "INCOMING" in same_context.output
     assert "BASELINE" in same_context.output
+
+
+def test_directional_meld_from_rejects_ambiguous_or_missing_baseline(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, _, _ = _directional_contexts(store)
+
+    class UnexpectedProvider:
+        def complete(self, *args, **kwargs):
+            raise AssertionError("Invalid meld grammar called the provider.")
+
+    _patch_provider(monkeypatch, UnexpectedProvider())
+    store.set_current(baseline.name)
+
+    with_into = runner.invoke(
+        app,
+        ["meld", "--from", incoming.name, "--into", baseline.name],
+    )
+    assert with_into.exit_code == 2
+    assert "--from and --into" in with_into.output
+
+    with_positional = runner.invoke(
+        app,
+        ["meld", incoming.name, "--from", incoming.name],
+    )
+    assert with_positional.exit_code == 2
+    assert "cannot be combined with positional Contexts" in with_positional.output
+
+    same_context = runner.invoke(app, ["meld", "--from", "."])
+    assert same_context.exit_code == 1
+    assert "INCOMING and BASELINE must be distinct" in same_context.output
+
+    store._write_state({"current": None})
+    missing_baseline = runner.invoke(
+        app,
+        ["meld", "--from", incoming.name],
+    )
+    assert missing_baseline.exit_code == 1
+    assert "No current BASELINE Context" in missing_baseline.output
 
 
 def test_defer_all_is_provider_free_and_does_not_mutate_target(

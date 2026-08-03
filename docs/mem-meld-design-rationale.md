@@ -17,6 +17,9 @@ mem meld LEFT_PEER RIGHT_PEER
 # Directional: current or explicit incoming enters an existing baseline
 mem meld --into BASELINE
 mem meld INCOMING --into BASELINE
+
+# Directional convenience: explicit incoming enters the current baseline
+mem meld --from INCOMING
 ```
 
 Both save a resumable relation ledger and workbench, accept issue-scoped or
@@ -298,7 +301,7 @@ Meld has two actual modes. They describe authority and target direction:
 
 | Mode | Inputs | Authority contract | Target | Representative case | Current status |
 | --- | --- | --- | --- | --- | --- |
-| **Directional** | Prepared incoming evidence plus an existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE` |
+| **Directional** | Prepared incoming evidence plus an existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
 | **Symmetric** | Two independent Context frames treated as peers | Neither source wins by default; source-specific scope and unresolved differences remain visible | A distinct new result Context | Two co-advisors' proposal-writing policies | Implemented for two direct-Memory Contexts |
 
 `atomic` and `batch` are not additional modes. The semantic call always
@@ -352,6 +355,14 @@ mem meld construction-updates --into campus/wiki
 The baseline may already contain Memories. Its exact bound snapshot is
 preserved unless an accepted proposal contains a material `EDIT` or `ADD`.
 The incoming Context is never mutated.
+
+`--from INCOMING` is only a viewpoint-sensitive convenience spelling when the
+current Context is the baseline. It resolves `INCOMING` against the one current
+Context snapshot captured at command start, then immediately uses the same
+ordered frame pair, target-bound storage key, and provider contract as
+`mem meld INCOMING --into BASELINE`. Durable guidance and receipts therefore
+remain location-independent. Combining `--from` with `--into` or positional
+Contexts is rejected instead of inventing a third authority contract.
 
 This is a useful product boundary, but `Context` should not be the lowest-level
 semantic type in the implementation. The core should consume bound
@@ -407,7 +418,9 @@ mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT  # future
 the only possible mutation target. It therefore communicates an asymmetric
 authority relation, not merely a destination path. When `INCOMING` is omitted,
 the current Context supplies that role; spelling it explicitly does not change
-the contract.
+the contract. `--from` reverses only which role is omitted at the CLI boundary:
+the current Context supplies `BASELINE`, and the operation is normalized back
+to the same `INCOMING --into BASELINE` route.
 
 `--to` is deliberately left unused for now. Its future symmetric meaning is a
 distinct result Context selected explicitly rather than through the current
@@ -877,6 +890,7 @@ mem meld PEER_A PEER_B --accept
 # Implemented Context-to-Context directional meld
 mem meld --into BASELINE_CONTEXT
 mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT
+mem meld --from INCOMING_CONTEXT  # current Context is BASELINE_CONTEXT
 mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --issue N --choice N --comment TEXT
 mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --comment WHOLE_SET_GUIDANCE
 mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --preserve-all
@@ -934,8 +948,9 @@ embedding a second semantic implementation.
    target digests are rechecked, results enter an empty target in one
    checkpoint, both peer Contexts remain unchanged, retry can recover from the
    checkpoint, and trace reports recorded `MELDED` evidence.
-5. **Completed: implement Context-to-Context directional meld.** The public
-   `--into` path reuses the batch frame, turn, relation-group, proposal,
+5. **Completed: implement Context-to-Context directional meld.** The canonical
+   `--into` path and current-baseline `--from` convenience reuse the batch
+   frame, turn, relation-group, proposal,
    session-CAS, and acceptance machinery while enforcing ordered `INCOMING`
    and `BASELINE` authority, exact material `EDIT` / fresh-UID `ADD`
    validation, provider-free acceptance, and zero-change receipts.

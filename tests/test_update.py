@@ -793,6 +793,248 @@ def test_impact_then_update_resolve_relative_existing_target(
     assert len(provider.calls) == 1
 
 
+@pytest.mark.parametrize("command", ["impact", "update"])
+def test_directional_endpoint_help_explains_current_complement(command):
+    result = runner.invoke(app, [command, "--help"])
+
+    assert result.exit_code == 0, result.output
+    normalized = " ".join(result.output.replace("│", "").split())
+    assert "if --to is omitted, current supplies B" in normalized
+    assert "if --from is omitted, current supplies A" in normalized
+
+
+def test_impact_then_update_accept_from_with_current_target(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    store.set_current(TASK1_TARGET)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    impact = runner.invoke(app, ["impact", "--from", TASK1_SOURCE])
+    update = runner.invoke(app, ["update", "--from", TASK1_SOURCE])
+
+    assert impact.exit_code == 0, impact.output
+    assert update.exit_code == 0, update.output
+    assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
+    assert (
+        f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}"
+        in update.output
+    )
+    assert store.current_context_name() == TASK1_TARGET
+    assert len(provider.calls) == 1
+
+
+def test_cross_spelling_update_reuses_from_only_impact_plan(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    store.set_current(TASK1_TARGET)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    impact = runner.invoke(app, ["impact", "--from", TASK1_SOURCE])
+    impact_session = store.load_impact_plan()
+    anchor = ops.init("participant/after-impact")
+    store.save(anchor)
+    store.set_current(anchor.name)
+    update = runner.invoke(
+        app,
+        [
+            "update",
+            "--from",
+            TASK1_SOURCE,
+            "--to",
+            TASK1_TARGET,
+        ],
+    )
+    applied_session = store.load_staged_update()
+
+    assert impact.exit_code == 0, impact.output
+    assert update.exit_code == 0, update.output
+    assert impact_session is not None
+    assert applied_session is not None
+    assert applied_session.uid == impact_session.uid
+    assert store.current_context_name() == anchor.name
+    assert len(provider.calls) == 1
+
+
+def test_explicit_from_and_to_work_without_current_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source, source_child, _, target, target_child, _ = _make_nested_pair()
+    for context in (source_child, source, target_child, target):
+        store.save(context)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    endpoints = [
+        "--from",
+        TASK1_SOURCE,
+        "--to",
+        TASK1_TARGET,
+    ]
+    impact = runner.invoke(app, ["impact", *endpoints])
+    update = runner.invoke(app, ["update", *endpoints])
+
+    assert impact.exit_code == 0, impact.output
+    assert update.exit_code == 0, update.output
+    assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
+    assert (
+        f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}"
+        in update.output
+    )
+    assert store.current_context_name() is None
+    assert len(provider.calls) == 1
+
+
+def test_from_and_to_relative_locators_share_one_current_snapshot(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    anchor = ops.init("participant/endpoint-anchor")
+    store.save(anchor)
+    store.set_current(anchor.name)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    endpoints = [
+        "--from",
+        "../construction-updates",
+        "--to",
+        "../campus-wiki-fork",
+    ]
+    impact = runner.invoke(app, ["impact", *endpoints])
+    update = runner.invoke(app, ["update", *endpoints])
+
+    assert impact.exit_code == 0, impact.output
+    assert update.exit_code == 0, update.output
+    assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
+    assert (
+        f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}"
+        in update.output
+    )
+    assert len(provider.calls) == 1
+
+
+@pytest.mark.parametrize(
+    ("command", "endpoint", "message"),
+    [
+        (
+            "impact",
+            ["--from", TASK1_SOURCE],
+            "No current target Context. Supply '--to TARGET'.",
+        ),
+        (
+            "update",
+            ["--to", TASK1_TARGET],
+            "No current source Context. Supply '--from SOURCE'.",
+        ),
+    ],
+)
+def test_omitted_endpoint_requires_current_context(
+    isolated_store,
+    monkeypatch,
+    command,
+    endpoint,
+    message,
+):
+    store = MemoryStore()
+    source, source_child, _, target, target_child, _ = _make_nested_pair()
+    for context in (source_child, source, target_child, target):
+        store.save(context)
+    monkeypatch.setattr(
+        f"memcommit.commands.{command}.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("provider should not connect"),
+    )
+
+    result = runner.invoke(app, [command, *endpoint])
+
+    assert result.exit_code == 1
+    assert message in result.stderr
+
+
+def test_update_requires_at_least_one_directional_endpoint(
+    isolated_store,
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("provider should not connect"),
+    )
+
+    result = runner.invoke(app, ["update"])
+
+    assert result.exit_code == 2
+    assert "choose an endpoint" in result.stderr
+
+
+@pytest.mark.parametrize("command", ["impact", "update"])
+def test_directional_commands_reject_same_canonical_endpoints(
+    isolated_store,
+    monkeypatch,
+    command,
+):
+    store = MemoryStore()
+    context = ops.init("participant/source")
+    store.save(context)
+    store.set_current(context.name)
+    monkeypatch.setattr(
+        f"memcommit.commands.{command}.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("provider should not connect"),
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            command,
+            "--from",
+            ".",
+            "--to",
+            "participant/source",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "Source and target Contexts must be distinct" in result.stderr
+
+
 def test_task1_query_only_origin_cannot_be_an_update_target(
     isolated_store,
     monkeypatch,
@@ -1105,5 +1347,5 @@ def test_missing_target_and_same_target_fail_without_traceback(
     assert missing.exit_code == 1
     assert "not found" in missing.stderr
     assert same.exit_code == 1
-    assert "cannot update itself" in same.stderr
+    assert "Source and target Contexts must be distinct" in same.stderr
     assert "Traceback" not in missing.output + same.output

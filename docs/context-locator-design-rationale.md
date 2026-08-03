@@ -9,8 +9,9 @@ mem switch LOCATOR
 mem compare --to LOCATOR
 mem meld LOCATOR LOCATOR
 mem meld [LOCATOR] --into LOCATOR
-mem impact --to LOCATOR
-mem update --to LOCATOR
+mem meld --from LOCATOR
+mem impact [--from LOCATOR] [--to LOCATOR]
+mem update [--from LOCATOR] [--to LOCATOR]
 mem rename LOCATOR NEW_NAME
 mem list [LOCATOR]
 mem ls [LOCATOR]
@@ -90,6 +91,12 @@ mem compare --to test/update/to
 
 identify the same ordered comparison slot and the second spelling can reuse
 the first analysis.
+
+Directional Impact and Update resolve both optional endpoint operands against
+the same captured current name. `--to B` fills the source with current,
+`--from A` fills the target with current, and `--from A --to B` needs no
+current Context when both locators are canonical global names. A relative
+locator still requires current even when the other endpoint is explicit.
 
 Resolution itself grants no mutation authority and replaces no existing
 identity or freshness checks. Switch still compare-and-sets current state and

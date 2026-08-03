@@ -44,7 +44,9 @@ The implemented meld workflows have different entry points:
   `mem atomize --context CONTEXT --evaluate ISSUE`;
 - directional Context intake into an authoritative baseline:
   `mem meld --into BASELINE` when the current Context is incoming, or
-  `mem meld INCOMING --into BASELINE` when it is explicit;
+  `mem meld INCOMING --into BASELINE` when both roles are explicit. When the
+  current Context is the baseline, `mem meld --from INCOMING` is equivalent
+  convenience grammar;
 - symmetric combination of two equal-authority Contexts:
   create an empty result Context, then run `mem meld LEFT_PEER RIGHT_PEER`.
 

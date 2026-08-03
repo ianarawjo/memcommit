@@ -815,15 +815,19 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "First PEER source, or INCOMING source; omit with --into to "
-                "use the current Context"
+                "First PEER source, or INCOMING in the canonical "
+                "INCOMING --into BASELINE form; omit with --into to use the "
+                "current Context, and omit positional Contexts with --from"
             )
         ),
     ] = None,
     right: Annotated[
         Optional[str],
         typer.Argument(
-            help="Second PEER source; omit for a directional --into meld"
+            help=(
+                "Second PEER source; directional forms use --into BASELINE "
+                "or --from INCOMING instead"
+            )
         ),
     ] = None,
     into: Annotated[
@@ -831,8 +835,19 @@ def cmd(
         typer.Option(
             "--into",
             help=(
-                "Meld INCOMING into this existing authoritative BASELINE "
-                "Context"
+                "Canonical directional form: use authoritative BASELINE as "
+                "the target for positional or current INCOMING"
+            ),
+        ),
+    ] = None,
+    from_: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help=(
+                "Convenience form: meld INCOMING into the current "
+                "authoritative BASELINE; normalized to INCOMING --into "
+                "BASELINE"
             ),
         ),
     ] = None,
@@ -911,7 +926,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Meld peer Contexts symmetrically or INCOMING into a BASELINE."""
+    """Meld peers, or directionally use --into/--from Context roles."""
     action_count = sum(
         (
             comment is not None or choice is not None,
@@ -963,16 +978,52 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if from_ is not None and into is not None:
+        typer.secho(
+            "Meld error: --from and --into are alternative directional "
+            "spellings and cannot be combined.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if from_ is not None and (left is not None or right is not None):
+        typer.secho(
+            "Meld error: --from supplies INCOMING and cannot be combined "
+            "with positional Contexts.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
 
     store = MemoryStore(create=False)
     try:
         current_name = store.current_context_name()
-        if into is None:
+        if from_ is not None:
+            if not current_name:
+                raise MeldCommandError(
+                    "No current BASELINE Context. Switch to the intended "
+                    "baseline before using --from."
+                )
+            requested_mode = "DIRECTIONAL"
+            # Both roles are fixed from one current-name snapshot.  The
+            # convenience spelling must resume the same target-scoped session
+            # as the portable INCOMING --into BASELINE form.
+            left_name = resolve_context_locator(
+                from_,
+                current=current_name,
+            )
+            right_name = current_name
+            target_name = right_name
+            start_command = shlex.join(
+                ["mem", "meld", left_name, "--into", right_name]
+            )
+        elif into is None:
             if left is None or right is None:
                 raise MeldCommandError(
                     "Symmetric meld requires LEFT and RIGHT Contexts. For a "
                     "directional meld, use 'mem meld --into BASELINE' or "
-                    "'mem meld INCOMING --into BASELINE'."
+                    "'mem meld INCOMING --into BASELINE'; when the current "
+                    "Context is BASELINE, use 'mem meld --from INCOMING'."
                 )
             if not current_name:
                 raise MeldCommandError(
@@ -1008,7 +1059,9 @@ def cmd(
                 current=current_name,
             )
             target_name = right_name
-            start_command = "mem meld [INCOMING] --into BASELINE"
+            start_command = shlex.join(
+                ["mem", "meld", left_name, "--into", right_name]
+            )
 
         if left_name == right_name:
             if requested_mode == "DIRECTIONAL":

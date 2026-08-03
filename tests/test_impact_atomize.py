@@ -732,6 +732,10 @@ def test_cli_rejects_mixed_or_incomplete_impact_forms_before_provider(
         app,
         ["impact", "atomize", "--to", "target"],
     )
+    mixed_from = runner.invoke(
+        app,
+        ["impact", "atomize", "--from", "source"],
+    )
     missing = runner.invoke(app, ["impact"])
     wrong_options = runner.invoke(
         app,
@@ -740,8 +744,10 @@ def test_cli_rejects_mixed_or_incomplete_impact_forms_before_provider(
 
     assert mixed.exit_code == 2
     assert "cannot be combined" in mixed.stderr
+    assert mixed_from.exit_code == 2
+    assert "cannot be combined" in mixed_from.stderr
     assert missing.exit_code == 2
-    assert "choose a target" in missing.stderr
+    assert "choose an endpoint" in missing.stderr
     assert wrong_options.exit_code == 2
     assert "only valid" in wrong_options.stderr
 

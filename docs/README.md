@@ -120,7 +120,8 @@ considered sufficient design history.
   command guide. It standardizes “atomic meld” as informal shorthand for the
   implemented issue-scoped directional flow under
   `mem atomize --evaluate`; documents Context-wide directional
-  `mem meld [INCOMING] --into BASELINE`; distinguishes both from symmetric
+  `mem meld [INCOMING] --into BASELINE` and its current-baseline convenience
+  `mem meld --from INCOMING`; distinguishes both from symmetric
   `mem meld LEFT_PEER RIGHT_PEER`; and reserves `--to` for a future explicit
   symmetric result destination.
 - [`mem-meld-design-rationale.md`](mem-meld-design-rationale.md) distills the

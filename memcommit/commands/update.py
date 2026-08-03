@@ -1,10 +1,9 @@
-"""Apply a semantic update from current Context A to a local target Context B."""
-from typing import Annotated
+"""Apply a semantic update from Context A to a local target Context B."""
+from typing import Annotated, Optional
 
 import typer
 
 from memcommit.commands.update_render import render_plan
-from memcommit.context_locator import resolve_context_locator
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -16,16 +15,28 @@ from memcommit.update import (
     plan_update,
     session_matches,
 )
+from memcommit.update_endpoints import resolve_update_endpoints
 
 
 def cmd(
+    source_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help=(
+                "Source Context A; if --to is omitted, current supplies B"
+            ),
+        ),
+    ] = None,
     target_name: Annotated[
-        str,
+        Optional[str],
         typer.Option(
             "--to",
-            help="Target Context B to update from the current Context A",
+            help=(
+                "Target Context B; if --from is omitted, current supplies A"
+            ),
         ),
-    ],
+    ] = None,
     replace_stage: Annotated[
         bool,
         typer.Option(
@@ -34,17 +45,27 @@ def cmd(
         ),
     ] = False,
 ) -> None:
+    if source_name is None and target_name is None:
+        typer.secho(
+            "Update error: choose an endpoint with '--from SOURCE' or "
+            "'--to TARGET'.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+
     store = MemoryStore()
     try:
+        # Both locators must retain the meaning they had at command start,
+        # even if another process switches the global current Context later.
         current_name = store.current_context_name()
-        if not current_name:
-            raise RuntimeError("No current Context.")
-        resolved_target_name = resolve_context_locator(
-            target_name,
+        endpoints = resolve_update_endpoints(
+            source_locator=source_name,
+            target_locator=target_name,
             current=current_name,
         )
-        source = store.load(current_name)
-        target = store.load(resolved_target_name)
+        source = store.load(endpoints.source_name)
+        target = store.load(endpoints.target_name)
     except (FileNotFoundError, RuntimeError, ValueError) as error:
         typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

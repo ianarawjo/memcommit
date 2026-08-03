@@ -1,4 +1,4 @@
-# Directional `mem impact --to` and `mem update`
+# Directional `mem impact` and `mem update`
 
 `mem impact` now also exposes the unary preview
 `mem impact atomize`. That form classifies and proposes splits inside one
@@ -12,10 +12,11 @@ This document specifies only the directional A-to-B form.
 
 ## Intent
 
-These commands express a directional semantic operation:
+These commands express a directional semantic operation with independently
+selectable endpoints:
 
 ```text
-update target Context B from current Context A
+update target Context B from source Context A
 ```
 
 Context A is verified evidence. Context B is a writable local working target.
@@ -95,15 +96,36 @@ mem impact --to participant/campus-wiki-fork
 mem update --to participant/campus-wiki-fork
 ```
 
+Either endpoint may instead be explicit. An omitted endpoint is filled by the
+single current-Context snapshot captured when the command starts:
+
+```bash
+# Explicit target: current A → B (backward-compatible form)
+mem impact --to B
+
+# Explicit source: A → current B
+mem impact --from A
+
+# Both explicit: A → B, independent of current Context
+mem impact --from A --to B
+```
+
+`mem update` accepts the same three forms. `--from` and `--to` are therefore
+composable endpoint selectors, not mutually exclusive modes. At least one must
+be supplied. If an omitted endpoint has no current Context, the command fails
+and asks for that endpoint explicitly. Source and target must resolve to
+different canonical ordinary Context names.
+
 The two impact forms are mutually exclusive:
 
 ```text
-mem impact --to B       directional update preview
+mem impact [--from A] [--to B] directional update preview
 mem impact atomize      unary atomization preview
 ```
 
-Supplying both `atomize` and `--to`, or supplying neither, is a usage error.
-`--context` and `--all` belong only to the unary atomize form.
+Supplying `atomize` together with either `--from` or `--to`, or supplying no
+directional endpoint and no operation, is a usage error. `--context` and
+`--all` belong only to the unary atomize form.
 
 `impact` plans and previews the edits, additions, and explicitly supported
 whole-Memory removals that would make B reflect A. It does not change either
@@ -119,10 +141,13 @@ not claim that the current operations-only provider assessed an exhaustive
 unresolved-issue list. `update` uses the same projection for its applied
 result while preserving its existing application contract.
 
-The `--to` operand locates an existing Context through the shared Context
-locator contract. Bare names remain canonical global names; `.`, `..`,
-`./...`, and `../...` resolve lexically against one current-Context snapshot
-captured at command start.
+The `--from` and `--to` operands locate existing Contexts through the shared
+Context locator contract. Bare names remain canonical global names; `.`,
+`..`, `./...`, and `../...` resolve lexically against the same one
+current-Context snapshot captured at command start. The resolved canonical
+pair—not the input spelling—drives Context loading, equality checks, provider
+planning, impact-cache reuse, staged-session identity, application receipts,
+and output.
 
 The **current implementation** of `update` promotes a matching impact plan to
 a staged intent and then materializes its validated edits, additions, and

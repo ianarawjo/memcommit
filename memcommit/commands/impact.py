@@ -25,7 +25,6 @@ from memcommit.commands.update_render import (
     render_plan,
     run_update_workbench,
 )
-from memcommit.context_locator import resolve_context_locator
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -38,6 +37,7 @@ from memcommit.review import (
 )
 from memcommit.store import MemoryStore
 from memcommit.update import UpdateError, plan_update
+from memcommit.update_endpoints import resolve_update_endpoints
 
 
 class ImpactOperation(str, Enum):
@@ -51,19 +51,23 @@ def _usage_error(message: str) -> None:
     raise typer.Exit(2)
 
 
-def _directional_impact(target_name: str) -> None:
-    """Preserve the existing current-A to target-B impact behavior."""
+def _directional_impact(
+    *,
+    source_name: str | None,
+    target_name: str | None,
+) -> None:
+    """Preview one explicit or current-filled directional endpoint pair."""
     store = MemoryStore()
     try:
+        # Freeze one current-name snapshot for both endpoint locators.
         current_name = store.current_context_name()
-        if not current_name:
-            raise RuntimeError("No current Context.")
-        resolved_target_name = resolve_context_locator(
-            target_name,
+        endpoints = resolve_update_endpoints(
+            source_locator=source_name,
+            target_locator=target_name,
             current=current_name,
         )
-        source = store.load(current_name)
-        target = store.load(resolved_target_name)
+        source = store.load(endpoints.source_name)
+        target = store.load(endpoints.target_name)
     except (FileNotFoundError, RuntimeError, ValueError) as error:
         typer.secho(f"Impact error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
@@ -290,11 +294,22 @@ def cmd(
             help="Optional unary impact operation: atomize",
         ),
     ] = None,
+    source_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help=(
+                "Source Context A; if --to is omitted, current supplies B"
+            ),
+        ),
+    ] = None,
     target_name: Annotated[
         Optional[str],
         typer.Option(
             "--to",
-            help="Target Context B to assess from the current Context A",
+            help=(
+                "Target Context B; if --from is omitted, current supplies A"
+            ),
         ),
     ] = None,
     context_name: Annotated[
@@ -332,11 +347,12 @@ def cmd(
 ) -> None:
     """Dispatch one of the two non-mutating impact preview forms."""
     if operation is ImpactOperation.atomize:
-        if target_name is not None:
+        if source_name is not None or target_name is not None:
             _usage_error(
-                "'atomize' cannot be combined with '--to'. "
+                "'atomize' cannot be combined with '--from' or '--to'. "
                 "Use either 'mem impact atomize' or "
-                "'mem impact --to TARGET'."
+                "a directional 'mem impact --from SOURCE' / "
+                "'--to TARGET' form."
             )
         _atomize_impact(
             context_name=context_name,
@@ -346,10 +362,10 @@ def cmd(
         )
         return
 
-    if target_name is None:
+    if source_name is None and target_name is None:
         _usage_error(
-            "choose a target with '--to TARGET' or preview atomization with "
-            "'mem impact atomize'."
+            "choose an endpoint with '--from SOURCE' or '--to TARGET', or "
+            "preview atomization with 'mem impact atomize'."
         )
     if context_name is not None or show_all or with_review or refresh:
         _usage_error(
@@ -357,4 +373,7 @@ def cmd(
             "valid with "
             "'mem impact atomize'."
         )
-    _directional_impact(target_name)
+    _directional_impact(
+        source_name=source_name,
+        target_name=target_name,
+    )
