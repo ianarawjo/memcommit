@@ -65,11 +65,20 @@ input. Spreadsheet views are regenerated from the current parsed corpus.
 
 ## Ordinary Context mapping
 
-Each canonical locator's final segment is a Memory leaf; the preceding
-segments become physical ordinary Contexts linked from their parents. Runtime
-Memory and Context UIDs are deterministic UUIDv5 values derived from task and
-stable fixture identity, so rebuilds do not silently assign a different
-identity to unchanged fixture records.
+Each canonical locator's final segment is a Memory leaf. By default, the
+preceding segments become physical ordinary Contexts linked from their parents.
+Runtime Memory and Context UIDs are deterministic UUIDv5 values derived from
+task and stable fixture identity, so rebuilds do not silently assign a
+different identity to unchanged fixture records.
+
+Task 3 deliberately keeps its reviewed source locator keys in the historical
+`personal-memory/YYYY-MM/NN` form while mapping them to runtime owners named
+`personal-memory/YYYY/MM`. The builder therefore materializes `2024`, `2025`,
+and `2026` as empty structural year Contexts above the 30 monthly Contexts.
+Separating fixture identity from runtime placement lets the live baseline move
+the same monthly Contexts and Memories without rekeying their UIDs merely to
+gain a navigable year level. Only the newly introduced year Contexts receive
+new structural identities; they are organization, not personal Memory claims.
 
 The package may omit a namespace-only prefix that owns no fixture Memory. At
 Study import and live-baseline snapshot boundaries, the Profile composer fills

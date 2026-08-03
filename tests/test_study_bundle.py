@@ -9,7 +9,7 @@ import pytest
 
 import memcommit.eval.study_bundle as bundle_module
 import memcommit.store as store_module
-from memcommit.context import Memory
+from memcommit.context import Context, Memory
 from memcommit.eval.study_bundle import (
     StudyBundleError,
     _isolated_store_root,
@@ -50,7 +50,7 @@ EXPECTED_PROFILES = {
         ),
     },
     3: {
-        "task-3": ("TASK", 300, 31, "personal-memory"),
+        "task-3": ("TASK", 300, 34, "personal-memory"),
         "task-3-healthcare-authority": (
             "AUTHORITY",
             150,
@@ -132,6 +132,58 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
         assert "guardrails" not in task_contexts
         assert "guardrails" in authority_contexts
         assert "government/healthcare-agent/information-request" in authority_contexts
+        assert {
+            "personal-memory/2024",
+            "personal-memory/2024/01",
+            "personal-memory/2025",
+            "personal-memory/2025/12",
+            "personal-memory/2026",
+            "personal-memory/2026/06",
+        }.issubset(task_contexts)
+        assert "personal-memory/2024-01" not in task_contexts
+
+        personal_entries = [
+            entry
+            for entry in profile_records["task-3"]["entries"]
+            if entry["dataset"] == "task3-personal-memory"
+        ]
+        january = next(
+            entry
+            for entry in personal_entries
+            if entry["canonical_locator"] == "personal-memory/2024-01/01"
+        )
+        assert january["fixture_key"] == "personal-memory/2024-01/01"
+        assert january["runtime_context"] == "personal-memory/2024/01"
+        assert january["memory_uid"] == bundle_module._stable_uid(
+            "task-3",
+            "memory",
+            f"task3-personal-memory:{january['fixture_key']}",
+        )
+
+        store_path = profile_records["task-3"]["store_path"]
+        assert isinstance(store_path, str)
+        with _isolated_store_root(manifest_path.parent / store_path):
+            store = MemoryStore(create=False)
+            root = store.load_direct("personal-memory")
+            assert [
+                item.name for item in root.iter_items() if isinstance(item, Context)
+            ] == [
+                "personal-memory/2024",
+                "personal-memory/2025",
+                "personal-memory/2026",
+            ]
+            assert [
+                item.name
+                for item in store.load_direct("personal-memory/2024").iter_items()
+                if isinstance(item, Context)
+            ] == [f"personal-memory/2024/{month:02d}" for month in range(1, 13)]
+            assert store.load_direct("personal-memory/2024/01").uid == (
+                bundle_module._stable_uid(
+                    "task-3",
+                    "context",
+                    "personal-memory/2024-01",
+                )
+            )
 
 
 def _assert_grant_templates(task, manifest, context_uids):

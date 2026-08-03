@@ -1,0 +1,68 @@
+{
+  "uid": "8e9da012-0950-5f36-97c4-27fff7180b67",
+  "name": "personal-memory/2026/03",
+  "memories": {
+    "c6a9892b-8adb-5079-8308-562334c07c5d": {
+      "type": "memory",
+      "uid": "c6a9892b-8adb-5079-8308-562334c07c5d",
+      "content": "The user stores tax-related receipts in digital folders by year."
+    },
+    "f63d00f5-711d-5b2b-9490-793ac300bf9d": {
+      "type": "memory",
+      "uid": "f63d00f5-711d-5b2b-9490-793ac300bf9d",
+      "content": "The user found three paper receipts late and recalculated the expense total already prepared."
+    },
+    "0bf8036d-1634-545d-9e8f-e1ffb5411c94": {
+      "type": "memory",
+      "uid": "0bf8036d-1634-545d-9e8f-e1ffb5411c94",
+      "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions."
+    },
+    "d0e18101-1898-5a7d-88b8-ce3dad88cdca": {
+      "type": "memory",
+      "uid": "d0e18101-1898-5a7d-88b8-ce3dad88cdca",
+      "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt."
+    },
+    "c59329bb-b7ec-5178-90eb-0d8018134405": {
+      "type": "memory",
+      "uid": "c59329bb-b7ec-5178-90eb-0d8018134405",
+      "content": "The user later included the expense category in the filename and found the receipt immediately through search."
+    },
+    "87ae3a99-4a08-51d4-9a62-d15a666c182b": {
+      "type": "memory",
+      "uid": "87ae3a99-4a08-51d4-9a62-d15a666c182b",
+      "content": "While reviewing documents just before submission, the user discovered one blank signature field."
+    },
+    "02a690af-bd99-5a15-bc5c-473bde7d579c": {
+      "type": "memory",
+      "uid": "02a690af-bd99-5a15-bc5c-473bde7d579c",
+      "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist."
+    },
+    "67373f1e-7357-5812-abd8-17c7ff18fee3": {
+      "type": "memory",
+      "uid": "67373f1e-7357-5812-abd8-17c7ff18fee3",
+      "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo."
+    },
+    "c9efe8aa-2b6b-5d27-94c6-2fe66a1e77e6": {
+      "type": "memory",
+      "uid": "c9efe8aa-2b6b-5d27-94c6-2fe66a1e77e6",
+      "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible."
+    },
+    "248e0fe3-0eb3-52b1-86ab-59b406c415e0": {
+      "type": "memory",
+      "uid": "248e0fe3-0eb3-52b1-86ab-59b406c415e0",
+      "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance."
+    }
+  },
+  "order": [
+    "c6a9892b-8adb-5079-8308-562334c07c5d",
+    "f63d00f5-711d-5b2b-9490-793ac300bf9d",
+    "0bf8036d-1634-545d-9e8f-e1ffb5411c94",
+    "d0e18101-1898-5a7d-88b8-ce3dad88cdca",
+    "c59329bb-b7ec-5178-90eb-0d8018134405",
+    "87ae3a99-4a08-51d4-9a62-d15a666c182b",
+    "02a690af-bd99-5a15-bc5c-473bde7d579c",
+    "67373f1e-7357-5812-abd8-17c7ff18fee3",
+    "c9efe8aa-2b6b-5d27-94c6-2fe66a1e77e6",
+    "248e0fe3-0eb3-52b1-86ab-59b406c415e0"
+  ]
+}

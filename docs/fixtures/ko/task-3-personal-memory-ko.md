@@ -14,8 +14,10 @@ World Model은 사람의 마음과 독립적인 물리·제도·환경 조건만
 기관, 주소, 병명은 포함하지 않는다. 모든 날짜와 사건은 연구용 합성 자료다.
 
 `YYYY-MM/NN`은 `personal-memory` Context 아래의 계층형 Memory 위치다. 각
-위치는 월 단위 Context와 월 안의 개별 Memory를 나타낸다. 대괄호의 두 글자
-목적 ticker는 검수용 sidecar이며 실제 Memory 본문에 포함하지 않는다. 실제
+위치는 월 단위 Context와 월 안의 개별 Memory를 나타낸다. 생성된 Study
+Profile은 이 source locator를 안정적인 fixture key로 보존하면서, ordinary
+Context는 구조용 `YYYY` 부모를 포함한 `YYYY/MM` 경로로 노출한다. 대괄호의 두
+글자 목적 ticker는 검수용 sidecar이며 실제 Memory 본문에 포함하지 않는다. 실제
 Memory 후보는 ticker 뒤의 문장뿐이다. 목적 분포는 KB 30, PP 20, SM 20,
 UM 184, WM 16, OM 30이다.
 

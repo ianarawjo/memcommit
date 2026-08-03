@@ -20,10 +20,12 @@ are synthetic research data.
 
 `YYYY-MM/NN` is a hierarchical Memory location beneath the `personal-memory`
 Context. Each location identifies a monthly Context and one Memory within that
-month. The two-letter purpose ticker in brackets is a review sidecar and is not
-part of the Memory content. Only the sentence following the ticker is a Memory
-candidate. The purpose distribution is KB 30, PP 20, SM 20, UM 184, WM 16, and
-OM 30.
+month. Generated Study Profiles preserve that source locator as the stable
+fixture key while exposing the ordinary Context through `YYYY/MM`, including a
+materialized `YYYY` parent. The two-letter purpose ticker in brackets is a
+review sidecar and is not part of the Memory content. Only the sentence
+following the ticker is a Memory candidate. The purpose distribution is KB 30,
+PP 20, SM 20, UM 184, WM 16, and OM 30.
 
 ## 2024-01
 

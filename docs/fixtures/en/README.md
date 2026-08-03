@@ -240,8 +240,11 @@ two advisors' differences nor an answer key.
 
 ### Task 3
 
-The 300 `personal-memory` Memories are arranged as ten per month in 30 monthly
-directories from `2024-01` through `2026-06`, rather than by topic. Concrete
+The 300 `personal-memory` Memories retain source keys for ten Memories per month
+from `2024-01` through `2026-06`, rather than using topic keys. Generated Study
+Profiles expose them through year/month Contexts such as
+`personal-memory/2024/01`, including the structural `personal-memory/2024`
+parent. Concrete
 user experiences dominate the `UM` purpose, producing 184 User Models overall.
 Memories state events, actions, and preferences directly instead of explaining
 their provenance with phrases such as “wrote that” or “recorded that.” An actual

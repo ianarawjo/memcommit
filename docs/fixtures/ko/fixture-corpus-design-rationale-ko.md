@@ -369,10 +369,13 @@ query-only `proposal-submission-guidelines`는 75개, 10개 directory로 구성�
 
 ### 월별 personal-memory
 
-`personal-memory` 300개를 `2024-01`부터 `2026-06`까지 30개 월별 directory에
-열 개씩 배치한다. 주제별 category는 생활 기록이 시간에 따라 누적되는
-모습을 지우고, 사용자가 언제 알게 됐는지 보려면 다시 별도 시간 축이
-필요하므로 채택하지 않았다.
+`personal-memory` 300개의 안정적인 source key는 `2024-01`부터 `2026-06`까지
+30개 월 묶음으로 유지하며 월마다 열 개를 둔다. 생성된 Study Profile에서는
+같은 레코드를 실제 연도 Context 세 개 아래에 배치하므로 runtime 경로는
+`personal-memory/2024-01`이 아니라 `personal-memory/2024/01`이다. 이 topology
+정리만으로 fixture와 Memory identity가 바뀌지 않도록 source key는 유지한다.
+주제별 category는 생활 기록이 시간에 따라 누적되는 모습을 지우고, 사용자가
+언제 알게 됐는지 보려면 다시 별도 시간 축이 필요하므로 채택하지 않았다.
 
 내용은 가족 모임, 집안일, 공공요금, 행정, 생활비, 이동, 독서, 여행과 같은
 비임상적인 일상을 중심으로 구성하고 의료 관련 기억은 소수만 남긴다.

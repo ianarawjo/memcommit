@@ -64,6 +64,7 @@ class StudyBundleError(RuntimeError):
 class BundleDatasetSpec:
     dataset: str
     runtime_root: str
+    year_month_hierarchy: bool = False
 
 
 @dataclass(frozen=True)
@@ -239,7 +240,13 @@ TASK_SPECS = {
             name="task-3",
             role="TASK",
             current_context="personal-memory",
-            datasets=(BundleDatasetSpec("task3-personal-memory", "personal-memory"),),
+            datasets=(
+                BundleDatasetSpec(
+                    "task3-personal-memory",
+                    "personal-memory",
+                    year_month_hierarchy=True,
+                ),
+            ),
         ),
         authority_profile=BundleProfileSpec(
             name="task-3-healthcare-authority",
@@ -421,6 +428,7 @@ def _runtime_locator(
     *,
     authoring_root: str,
     runtime_root: str,
+    year_month_hierarchy: bool = False,
 ) -> str:
     locator = record.canonical_locator
     if locator == authoring_root:
@@ -430,7 +438,28 @@ def _runtime_locator(
         raise StudyBundleError(
             f"Fixture locator {locator!r} is outside {authoring_root!r}."
         )
-    return runtime_root + "/" + locator[len(prefix) :]
+    relative = locator[len(prefix) :]
+    if year_month_hierarchy:
+        bucket, separator, leaf = relative.partition("/")
+        year, dash, month = bucket.partition("-")
+        if (
+            not separator
+            or dash != "-"
+            or len(year) != 4
+            or not year.isdigit()
+            or len(month) != 2
+            or not month.isdigit()
+            or not 1 <= int(month) <= 12
+            or not leaf
+        ):
+            raise StudyBundleError(
+                f"Fixture locator {locator!r} is not a YYYY-MM/leaf path."
+            )
+        # Keep the authoring locator as the stable fixture identity while the
+        # runtime gains real year parents. This lets a topology-only change
+        # preserve the Memory UIDs used by existing Study baselines.
+        relative = f"{year}/{month}/{leaf}"
+    return runtime_root + "/" + relative
 
 
 def _ensure_context(
@@ -438,14 +467,24 @@ def _ensure_context(
     name: str,
     *,
     task: int,
+    identity_name: str | None = None,
 ) -> Context:
+    expected_uid = _stable_uid(
+        f"task-{task}",
+        "context",
+        identity_name or name,
+    )
     context = contexts.get(name)
     if context is None:
         context = Context(
-            uid=_stable_uid(f"task-{task}", "context", name),
+            uid=expected_uid,
             name=name,
         )
         contexts[name] = context
+    elif context.uid != expected_uid:
+        raise StudyBundleError(
+            f"Runtime Context {name!r} received conflicting stable identities."
+        )
     return context
 
 
@@ -455,6 +494,7 @@ def _ensure_hierarchy(
     *,
     root_name: str,
     task: int,
+    identity_names: dict[str, str] | None = None,
 ) -> Context:
     if owner_name != root_name and not owner_name.startswith(root_name + "/"):
         raise StudyBundleError(
@@ -469,7 +509,12 @@ def _ensure_hierarchy(
             for index in range(1, len(parts) + 1)
         )
     for name in names:
-        _ensure_context(contexts, name, task=task)
+        _ensure_context(
+            contexts,
+            name,
+            task=task,
+            identity_name=(identity_names or {}).get(name),
+        )
     for parent_name, child_name in zip(names, names[1:]):
         parent = contexts[parent_name]
         child = contexts[child_name]
@@ -495,17 +540,25 @@ def _ordinary_dataset(
             pair.canonical,
             authoring_root=authoring_root,
             runtime_root=dataset_spec.runtime_root,
+            year_month_hierarchy=dataset_spec.year_month_hierarchy,
         )
         if "/" not in runtime_locator:
             raise StudyBundleError(
                 f"Memory locator {runtime_locator!r} has no owner Context."
             )
         owner_name = runtime_locator.rsplit("/", 1)[0]
+        identity_names = None
+        if dataset_spec.year_month_hierarchy:
+            # The month Context moves under a new structural year parent, but
+            # it remains the same reviewed fixture bucket and keeps its UID.
+            authored_owner = pair.canonical.canonical_locator.rsplit("/", 1)[0]
+            identity_names = {owner_name: authored_owner}
         owner = _ensure_hierarchy(
             contexts,
             owner_name,
             root_name=dataset_spec.runtime_root,
             task=task_spec.task,
+            identity_names=identity_names,
         )
         memory = Memory(
             uid=_stable_uid(

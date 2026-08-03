@@ -444,10 +444,14 @@ apply only to research for which they are relevant.
 
 ### Monthly personal-memory
 
-The 300 `personal-memory` Memories are arranged as ten per month in 30 monthly
-directories from `2024-01` through `2026-06`. Topic categories were rejected
-because they would erase how daily-life records accumulate over time and require
-a separate time axis to recover when the user learned something.
+The 300 `personal-memory` Memories retain stable source keys in 30 monthly
+buckets from `2024-01` through `2026-06`, with ten Memories per month. Generated
+Study Profiles place those same records under three materialized year Contexts,
+so the runtime path is `personal-memory/2024/01` rather than
+`personal-memory/2024-01`. The source key remains unchanged to preserve fixture
+and Memory identity across this topology-only refinement. Topic categories were
+rejected because they would erase how daily-life records accumulate over time
+and require a separate time axis to recover when the user learned something.
 
 Content centers on nonclinical daily life such as family gatherings, household
 tasks, utilities, administrative work, living expenses, mobility, reading, and

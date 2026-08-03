@@ -260,7 +260,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
 
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
-    assert "study-baseline: Contexts 127 owned + 0 granted" in result.output
+    assert "study-baseline: Contexts 130 owned + 0 granted" in result.output
     assert "Memories 1278 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
@@ -301,6 +301,9 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert "task-2/participant/proposal-workspace" in names
     assert "granted-memory/task-2/advisor1" in names
     assert "task-3/personal-memory" in names
+    assert "task-3/personal-memory/2024" in names
+    assert "task-3/personal-memory/2024/01" in names
+    assert "task-3/personal-memory/2024-01" not in names
     assert "granted-memory/task-3/guardrails" in names
 
     selected = runner.invoke(

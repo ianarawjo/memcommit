@@ -1,0 +1,68 @@
+{
+  "uid": "61c1a62a-6c00-5b31-a72b-74602e9e781c",
+  "name": "personal-memory/2024/05",
+  "memories": {
+    "abc5c230-0551-5d93-8d3c-9b6796e0fd8e": {
+      "type": "memory",
+      "uid": "abc5c230-0551-5d93-8d3c-9b6796e0fd8e",
+      "content": "The user keeps a small table fan beside the bedroom window."
+    },
+    "588080d0-897c-562f-adc5-7574d097c44d": {
+      "type": "memory",
+      "uid": "588080d0-897c-562f-adc5-7574d097c44d",
+      "content": "On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn."
+    },
+    "452e9453-2a97-5bf5-9409-f2349e29e275": {
+      "type": "memory",
+      "uid": "452e9453-2a97-5bf5-9409-f2349e29e275",
+      "content": "On a day the user drank coffee before 2 p.m., they fell asleep at their usual time."
+    },
+    "b0445908-f48f-5132-8e44-1c09573ee8e0": {
+      "type": "memory",
+      "uid": "b0445908-f48f-5132-8e44-1c09573ee8e0",
+      "content": "On a tired day, the user ate dinner out and postponed even washing the dishes after returning home."
+    },
+    "ba32b71f-5880-5d3d-a87d-d82b4a430d79": {
+      "type": "memory",
+      "uid": "ba32b71f-5880-5d3d-a87d-d82b4a430d79",
+      "content": "In the same week, on a day the user made simple noodles at home, they rested immediately after the meal."
+    },
+    "3760c034-ad3e-5509-aba5-a6105d9cc4f3": {
+      "type": "memory",
+      "uid": "3760c034-ad3e-5509-aba5-a6105d9cc4f3",
+      "content": "On a night the window was left open, street noise woke the user twice."
+    },
+    "b96f30fe-ec44-5b1d-8103-b1a86d9298d0": {
+      "type": "memory",
+      "uid": "b96f30fe-ec44-5b1d-8103-b1a86d9298d0",
+      "content": "On a night the table fan was running, the user was not too warm even with the window closed."
+    },
+    "9f692376-8282-5778-be23-aba87710cc65": {
+      "type": "memory",
+      "uid": "9f692376-8282-5778-be23-aba87710cc65",
+      "content": "The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem."
+    },
+    "2de9b707-05ab-50d0-bd4b-6465f73127f3": {
+      "type": "memory",
+      "uid": "2de9b707-05ab-50d0-bd4b-6465f73127f3",
+      "content": "When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit."
+    },
+    "73cd9ecb-454d-5e19-a0ef-dac8c1867c75": {
+      "type": "memory",
+      "uid": "73cd9ecb-454d-5e19-a0ef-dac8c1867c75",
+      "content": "The user tends to go to bed much later after drinking coffee late in the afternoon."
+    }
+  },
+  "order": [
+    "abc5c230-0551-5d93-8d3c-9b6796e0fd8e",
+    "588080d0-897c-562f-adc5-7574d097c44d",
+    "452e9453-2a97-5bf5-9409-f2349e29e275",
+    "b0445908-f48f-5132-8e44-1c09573ee8e0",
+    "ba32b71f-5880-5d3d-a87d-d82b4a430d79",
+    "3760c034-ad3e-5509-aba5-a6105d9cc4f3",
+    "b96f30fe-ec44-5b1d-8103-b1a86d9298d0",
+    "9f692376-8282-5778-be23-aba87710cc65",
+    "2de9b707-05ab-50d0-bd4b-6465f73127f3",
+    "73cd9ecb-454d-5e19-a0ef-dac8c1867c75"
+  ]
+}

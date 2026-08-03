@@ -1,0 +1,94 @@
+{
+  "uid": "5dde8285-4cee-456e-aca5-4ee19268ea00",
+  "message": "Imported canonical English Task 3 fixture Context 'personal-memory/2024/07' into profile 'task-3'.",
+  "timestamp": "2026-08-03T14:43:33.827655",
+  "snapshot": {
+    "uid": "f27788e1-2eec-5114-ac80-81f69737ad6a",
+    "name": "personal-memory/2024/07",
+    "memories": {
+      "623199e6-77da-5bbb-899b-a576555048ce": {
+        "type": "memory",
+        "uid": "623199e6-77da-5bbb-899b-a576555048ce",
+        "content": "The user updated the utility account for their residence in July 2024."
+      },
+      "ea1ea7c7-1519-5053-aa7d-4a692f847d87": {
+        "type": "memory",
+        "uid": "ea1ea7c7-1519-5053-aa7d-4a692f847d87",
+        "content": "After putting a paper bill in a drawer, the user checked it one day after the payment date."
+      },
+      "3ccbbb2e-71c8-5f97-a6b4-6c5d7cd0c232": {
+        "type": "memory",
+        "uid": "3ccbbb2e-71c8-5f97-a6b4-6c5d7cd0c232",
+        "content": "In the month after receiving an electronic billing alert, the user paid two days before the deadline."
+      },
+      "9fe48ad6-2265-53a1-9b8a-3b3d5ebc2fdc": {
+        "type": "memory",
+        "uid": "9fe48ad6-2265-53a1-9b8a-3b3d5ebc2fdc",
+        "content": "The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff."
+      },
+      "87c66116-3a97-5f11-babe-c90f4c2e278d": {
+        "type": "memory",
+        "uid": "87c66116-3a97-5f11-babe-c90f4c2e278d",
+        "content": "After transferring a management-office notice to their phone calendar, the user did not miss the inspection time."
+      },
+      "0ab546d5-f142-5aa3-b683-55c53123995b": {
+        "type": "memory",
+        "uid": "0ab546d5-f142-5aa3-b683-55c53123995b",
+        "content": "During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage."
+      },
+      "f672c710-1365-5780-b4ef-72c6765e8b70": {
+        "type": "memory",
+        "uid": "f672c710-1365-5780-b4ef-72c6765e8b70",
+        "content": "The user cleared the entrance the day before the next visit so the inspection could begin immediately."
+      },
+      "35497013-19c1-5ed6-b58f-54aa01d4f57c": {
+        "type": "memory",
+        "uid": "35497013-19c1-5ed6-b58f-54aa01d4f57c",
+        "content": "The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area."
+      },
+      "30002959-9aa9-5e2e-9fc9-411cf8aa24e0": {
+        "type": "memory",
+        "uid": "30002959-9aa9-5e2e-9fc9-411cf8aa24e0",
+        "content": "Confirm the user's available time before finalizing a service visit to the residence."
+      },
+      "5d7b4175-e424-5126-83f5-d09c0fa79aaf": {
+        "type": "memory",
+        "uid": "5d7b4175-e424-5126-83f5-d09c0fa79aaf",
+        "content": "The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved."
+      }
+    },
+    "order": [
+      "623199e6-77da-5bbb-899b-a576555048ce",
+      "ea1ea7c7-1519-5053-aa7d-4a692f847d87",
+      "3ccbbb2e-71c8-5f97-a6b4-6c5d7cd0c232",
+      "9fe48ad6-2265-53a1-9b8a-3b3d5ebc2fdc",
+      "87c66116-3a97-5f11-babe-c90f4c2e278d",
+      "0ab546d5-f142-5aa3-b683-55c53123995b",
+      "f672c710-1365-5780-b4ef-72c6765e8b70",
+      "35497013-19c1-5ed6-b58f-54aa01d4f57c",
+      "30002959-9aa9-5e2e-9fc9-411cf8aa24e0",
+      "5d7b4175-e424-5126-83f5-d09c0fa79aaf"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "f27788e1-2eec-5114-ac80-81f69737ad6a",
+    "memory_uids": [
+      "623199e6-77da-5bbb-899b-a576555048ce",
+      "ea1ea7c7-1519-5053-aa7d-4a692f847d87",
+      "3ccbbb2e-71c8-5f97-a6b4-6c5d7cd0c232",
+      "9fe48ad6-2265-53a1-9b8a-3b3d5ebc2fdc",
+      "87c66116-3a97-5f11-babe-c90f4c2e278d",
+      "0ab546d5-f142-5aa3-b683-55c53123995b",
+      "f672c710-1365-5780-b4ef-72c6765e8b70",
+      "35497013-19c1-5ed6-b58f-54aa01d4f57c",
+      "30002959-9aa9-5e2e-9fc9-411cf8aa24e0",
+      "5d7b4175-e424-5126-83f5-d09c0fa79aaf"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'personal-memory/2024/07' into profile 'task-3'.",
+  "auto": true
+}
