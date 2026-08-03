@@ -43,10 +43,16 @@ handle fails closed.
 
 Flow Circular is bundled unmodified from the Google Fonts distribution under
 the SIL Open Font License 1.1, with its copyright and license alongside the
-TTF. Pillow is the rasterization dependency. Terminal ANSI cannot select a
-font for one span, so the Braille raster is the portable CLI representation of
-the actual Flow Circular geometry; the terminal's own Braille glyph design can
-slightly affect its final appearance.
+TTF. Pillow is a required runtime dependency, but it is imported only when the
+opaque catalog actually rasterizes a placeholder. The CLI constructs its full
+command tree at startup, so a feature-level import there would otherwise make
+an incomplete Pillow installation disable unrelated commands such as
+`mem profile`. Catalog rendering itself still fails closed with an actionable
+installation error; it never substitutes source text or a less private
+placeholder. Terminal ANSI cannot select a font for one span, so the Braille
+raster is the portable CLI representation of the actual Flow Circular
+geometry; the terminal's own Braille glyph design can slightly affect its
+final appearance.
 
 Using `VIEW#HANDLE` with a question sends only that selected Memory to the
 provider. The existing `VIEW QUESTION` form remains a whole-view query for
@@ -119,6 +125,10 @@ it contains only material previously disclosed to that task.
 - **Add a separate `LIST` permission:** rejected because the catalog is part
   of selecting the object of a query and never lists source content or
   authority identities.
+- **Make Pillow an optional extra:** rejected because no reduced installation
+  tier is defined and opaque catalog rendering has no non-Pillow contract.
+  Delaying the import limits an installation failure without weakening the
+  declared runtime dependency.
 - **Continue after source changes:** rejected for this study because a single
   transcript would then cite multiple unstated evidence snapshots.
 

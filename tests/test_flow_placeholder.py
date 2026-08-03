@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+import subprocess
+import sys
+import textwrap
+
 import pytest
 
 import memcommit.flow_placeholder as flow_placeholder
@@ -55,3 +60,48 @@ def test_flow_placeholder_fails_closed_when_bundled_font_is_missing(
 
     flow_placeholder._flow_font.cache_clear()
     flow_placeholder._render_word.cache_clear()
+
+
+def test_missing_pillow_does_not_disable_the_whole_cli():
+    script = textwrap.dedent(
+        """
+        import importlib.abc
+        import sys
+
+        class BlockPillow(importlib.abc.MetaPathFinder):
+            def find_spec(self, fullname, path=None, target=None):
+                if fullname == "PIL" or fullname.startswith("PIL."):
+                    raise ImportError("Pillow intentionally unavailable")
+                return None
+
+        sys.meta_path.insert(0, BlockPillow())
+
+        from typer.testing import CliRunner
+        from memcommit.cli import app
+        from memcommit.flow_placeholder import (
+            FlowPlaceholderError,
+            render_flow_circular_placeholder,
+        )
+
+        result = CliRunner(mix_stderr=False).invoke(app, ["profile", "--help"])
+        assert result.exit_code == 0, result.output
+
+        try:
+            render_flow_circular_placeholder("private source")
+        except FlowPlaceholderError as error:
+            assert "requires Pillow" in str(error)
+            assert isinstance(error.__cause__, ImportError)
+        else:
+            raise AssertionError("renderer did not fail closed without Pillow")
+        """
+    )
+
+    completed = subprocess.run(
+        [sys.executable, "-c", script],
+        cwd=Path(__file__).resolve().parents[1],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stdout + completed.stderr

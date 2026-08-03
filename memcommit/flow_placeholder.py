@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
-
-from PIL import Image, ImageDraw, ImageFont
+from typing import Any
 
 
 _FONT_PATH = Path(__file__).with_name("assets") / "FlowCircular-Regular.ttf"
@@ -27,9 +26,28 @@ class FlowPlaceholderError(RuntimeError):
 
 
 @lru_cache(maxsize=1)
-def _flow_font() -> ImageFont.FreeTypeFont:
+def _pillow_modules() -> tuple[Any, Any, Any]:
+    """Load the renderer dependency only when a placeholder is requested."""
+
+    # The CLI imports every command while it builds its command tree.  Keeping
+    # this feature-specific dependency behind the renderer boundary prevents a
+    # broken installation from disabling unrelated commands such as Profile
+    # selection, while the renderer itself still fails closed.
     try:
-        return ImageFont.truetype(str(_FONT_PATH), _FONT_SIZE)
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError as error:
+        raise FlowPlaceholderError(
+            "Flow Circular rendering requires Pillow; reinstall memcommit "
+            "with its runtime dependencies."
+        ) from error
+    return Image, ImageDraw, ImageFont
+
+
+@lru_cache(maxsize=1)
+def _flow_font() -> Any:
+    _image, _image_draw, image_font = _pillow_modules()
+    try:
+        return image_font.truetype(str(_FONT_PATH), _FONT_SIZE)
     except (OSError, ValueError) as error:
         raise FlowPlaceholderError(
             "The bundled Flow Circular font is unavailable."
@@ -42,6 +60,7 @@ def _render_word(length: int) -> str:
 
     if length < 1:
         raise FlowPlaceholderError("Flow Circular word length must be positive.")
+    image_module, image_draw, _image_font = _pillow_modules()
     font = _flow_font()
     dummy = "x" * length
     bounds = font.getbbox(dummy)
@@ -49,8 +68,8 @@ def _render_word(length: int) -> str:
         raise FlowPlaceholderError("Flow Circular could not render a word mask.")
     width = max(1, bounds[2] - bounds[0])
     height = max(1, bounds[3] - bounds[1])
-    image = Image.new("L", (width, height), color=255)
-    ImageDraw.Draw(image).text(
+    image = image_module.new("L", (width, height), color=255)
+    image_draw.Draw(image).text(
         (-bounds[0], -bounds[1]),
         dummy,
         font=font,
@@ -62,7 +81,7 @@ def _render_word(length: int) -> str:
     # retaining Flow Circular's rounded beginning and end caps.
     image = image.resize(
         (length * 2, 4),
-        resample=Image.Resampling.LANCZOS,
+        resample=image_module.Resampling.LANCZOS,
     ).point(lambda pixel: 0 if pixel < 180 else 255)
     pixels = image.load()
     rendered: list[str] = []
