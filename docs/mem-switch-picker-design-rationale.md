@@ -44,15 +44,18 @@ is expanded.
 
 - Up and Down move among currently visible rows and stop at the first or last
   row.
-- Right expands a collapsed branch; on an expanded branch it moves to the
-  first child. Left collapses an expanded branch; on a collapsed branch or
-  leaf it moves to the parent.
+- Right recursively expands a collapsed branch and every nested branch below
+  it; on an expanded branch it moves to the first child. Left recursively
+  collapses an expanded branch; on a collapsed branch or leaf it moves to the
+  parent. The footer names this control `←→ expand` so the visible action is
+  explicit rather than calling the widget itself a tree.
 - `A` snapshots the current compact expansion state and expands every branch.
   A second `A` restores that state. If the person selected a descendant that
   was hidden in the snapshot, its ancestors remain expanded so selection does
   not jump or disappear.
 - Enter accepts a materialized Context. On a namespace-only grouping row it
-  only expands or collapses that row.
+  recursively expands or collapses that grouping subtree without creating a
+  Context.
 - Escape, `q`, or Ctrl-C cancel without changing current state.
 - The list body expands to the terminal's available height. When visible rows
   exceed it, prompt-toolkit scrolls around the selected row and displays a

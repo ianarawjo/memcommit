@@ -19,6 +19,9 @@ from prompt_toolkit.styles import Style
 from memcommit.commands.tui_primitives import display_escape_text
 
 
+_CONTEXT_NAVIGATION_HINT = " ↑↓ move  ←→ expand  "
+
+
 @dataclass(frozen=True)
 class _ContextTreeRow:
     """One currently visible Context or grouping namespace."""
@@ -84,6 +87,21 @@ def _context_ancestors(tree: _ContextTree, name: str) -> set[str]:
         ancestors.add(parent)
         parent = tree.parent_by_name[parent]
     return ancestors
+
+
+def _expandable_context_subtree(tree: _ContextTree, name: str) -> set[str]:
+    """Return every expandable branch at or below one selected tree node."""
+
+    expandable: set[str] = set()
+    pending = [name]
+    while pending:
+        candidate = pending.pop()
+        children = tree.children_by_name[candidate]
+        if not children:
+            continue
+        expandable.add(candidate)
+        pending.extend(children)
+    return expandable
 
 
 def _visible_context_rows(
@@ -223,6 +241,14 @@ def choose_context(
             expansion_mode["all"] = False
             expansion_mode["before_all"] = set(expanded)
 
+    def expand_subtree(name: str) -> None:
+        enter_manual_expansion_mode()
+        expanded.update(_expandable_context_subtree(tree, name))
+
+    def collapse_subtree(name: str) -> None:
+        enter_manual_expansion_mode()
+        expanded.difference_update(_expandable_context_subtree(tree, name))
+
     @bindings.add("down")
     def _next_context(event) -> None:
         move(1)
@@ -238,8 +264,7 @@ def choose_context(
         name = selected["name"]
         children = tree.children_by_name[name]
         if children and name not in expanded:
-            enter_manual_expansion_mode()
-            expanded.add(name)
+            expand_subtree(name)
         elif children:
             selected["name"] = children[0]
         event.app.invalidate()
@@ -248,8 +273,7 @@ def choose_context(
     def _collapse_or_leave_context(event) -> None:
         name = selected["name"]
         if tree.children_by_name[name] and name in expanded:
-            enter_manual_expansion_mode()
-            expanded.remove(name)
+            collapse_subtree(name)
         else:
             parent = tree.parent_by_name[name]
             if parent is not None:
@@ -279,11 +303,10 @@ def choose_context(
         if name in tree.materialized_names:
             event.app.exit(result=name)
             return
-        enter_manual_expansion_mode()
         if name in expanded:
-            expanded.remove(name)
+            collapse_subtree(name)
         else:
-            expanded.add(name)
+            expand_subtree(name)
         event.app.invalidate()
 
     @bindings.add("q", eager=True)
@@ -318,8 +341,8 @@ def choose_context(
         else:
             enter_action = "Enter open"
         return (
-            " ↑↓ move  ←→ tree  "
-            f"{expansion_action}  {enter_action}  q cancel"
+            _CONTEXT_NAVIGATION_HINT
+            + f"{expansion_action}  {enter_action}  q cancel"
             f" · {selected_row_index() + 1}/{len(rows)}"
             f" · {len(options)} total"
         )

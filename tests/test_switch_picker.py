@@ -7,8 +7,10 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.commands.context_picker import (
+    _CONTEXT_NAVIGATION_HINT,
     _build_context_tree,
     _context_ancestors,
+    _expandable_context_subtree,
     _render_context_options,
     _render_context_roots,
     _visible_context_rows,
@@ -31,6 +33,11 @@ def test_switch_help_documents_explicit_relative_navigation():
     assert "explicit lexical relative" in result.output
     assert "./child" in result.output
     assert "../sibling" in result.output
+
+
+def test_picker_navigation_hint_names_expand_instead_of_tree():
+    assert "←→ expand" in _CONTEXT_NAVIGATION_HINT
+    assert "←→ tree" not in _CONTEXT_NAVIGATION_HINT
 
 
 def test_picker_preselects_current_and_accepts_enter():
@@ -199,6 +206,47 @@ def test_picker_right_expands_then_enters_first_child():
         )
 
     assert selected == "alpha/child"
+
+
+def test_picker_right_recursively_expands_the_selected_subtree():
+    with create_pipe_input() as pipe_input:
+        # Right opens alpha recursively, so two Down presses reach deep rather
+        # than skipping from the one visible child to the beta root.
+        pipe_input.send_text("\x1b[C\x1b[B\x1b[B\r")
+        selected = choose_context(
+            ("alpha", "alpha/child", "alpha/child/deep", "beta"),
+            current="alpha",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "alpha/child/deep"
+
+
+def test_expandable_context_subtree_includes_every_nested_branch():
+    tree = _build_context_tree(
+        (
+            "alpha",
+            "alpha/child",
+            "alpha/child/deep",
+            "alpha/sibling",
+            "beta",
+        )
+    )
+
+    expanded = _expandable_context_subtree(tree, "alpha")
+    rows = _visible_context_rows(tree, expanded)
+
+    assert expanded == {"alpha", "alpha/child"}
+    assert [row.name for row in rows] == [
+        "alpha",
+        "alpha/child",
+        "alpha/child/deep",
+        "alpha/sibling",
+        "beta",
+    ]
+    assert [row.expanded for row in rows] == [True, True, False, False, False]
 
 
 def test_picker_left_moves_to_parent_then_collapses_it():
