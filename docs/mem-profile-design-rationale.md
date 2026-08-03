@@ -10,6 +10,22 @@ mem profile use task-1  # select a whole local store
 mem switch              # select a Context inside that store
 ```
 
+In a terminal, the bare `mem profile` command is the primary Profile browser.
+It opens a full-height list at the current Profile, labels that row `CURRENT`,
+labels the selected non-current candidate `USE`, and changes the selector
+only after Enter. Arrow keys move the candidate and Escape or `q` exits
+without a mutation. This makes the whole-store boundary visible before a
+Context-level command such as `mem ls` or `mem switch` is run. `mem profile
+use NAME` remains the explicit form for scripts, and `mem profile list`
+remains an explicit inventory command.
+
+When standard input or output is not a TTY, bare `mem profile` prints that
+inventory instead of opening a picker or emitting help. This gives logs,
+shell pipelines, and agent-driven diagnostics a stable read-only result. The
+picker returns only a registered display name; the normal `use_profile`
+boundary re-loads and validates the registry and selected store before the
+active selector is changed, so a stale screen is not authority to switch.
+
 The name *profile* was chosen instead of *account* because no authentication,
 remote identity, or user ownership changes. A profile is only a locally
 registered set of Contexts, checkpoints, translation views, query-only

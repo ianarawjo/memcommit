@@ -70,6 +70,134 @@ def test_absent_registry_preserves_legacy_authoring_without_writing_metadata(
     assert not profile_registry_file().exists()
 
 
+def test_bare_profile_prints_inventory_in_non_tty_mode(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+
+    result = runner.invoke(app, ["profile"])
+
+    assert result.exit_code == 0, result.output
+    assert "* authoring" in result.output
+    assert "CURRENT" in result.output
+    assert "1 Contexts" in result.output
+    assert "Usage:" not in result.output
+
+
+def test_bare_profile_uses_interactive_picker_result(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    assert runner.invoke(
+        app,
+        ["profile", "import-study", "--from", str(bundles)],
+    ).exit_code == 0
+    observed: dict[str, object] = {}
+
+    def select(entries, *, current):
+        observed["names"] = [entry.name for entry in entries]
+        observed["current"] = current
+        return "task-1"
+
+    monkeypatch.setattr(
+        "memcommit.commands.profile._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.profile.choose_profile",
+        select,
+    )
+
+    result = runner.invoke(app, ["profile"])
+
+    assert result.exit_code == 0, result.output
+    assert "Selected profile 'task-1'." in result.output
+    assert observed == {
+        "names": ["authoring", "task-1", "task-2", "task-3"],
+        "current": "authoring",
+    }
+    assert load_profile_registry().active.name == "task-1"
+
+
+def test_bare_profile_cancel_preserves_active_profile(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    monkeypatch.setattr(
+        "memcommit.commands.profile._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.profile.choose_profile",
+        lambda entries, *, current: None,
+    )
+
+    result = runner.invoke(app, ["profile"])
+
+    assert result.exit_code == 0
+    assert "Profile selection cancelled." in result.output
+    assert load_profile_registry().active.name == "authoring"
+    assert not profile_registry_file().exists()
+
+
+def test_bare_profile_revalidates_picker_result_before_selection(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    monkeypatch.setattr(
+        "memcommit.commands.profile._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.profile.choose_profile",
+        lambda entries, *, current: "missing",
+    )
+
+    result = runner.invoke(app, ["profile"])
+
+    assert result.exit_code == 1
+    assert "does not exist" in result.stderr
+    assert load_profile_registry().active.name == "authoring"
+    assert not profile_registry_file().exists()
+
+
+def test_explicit_profile_use_does_not_open_picker(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+
+    def unexpected_picker(*args, **kwargs):
+        raise AssertionError("explicit profile use must not open the picker")
+
+    monkeypatch.setattr(
+        "memcommit.commands.profile.choose_profile",
+        unexpected_picker,
+    )
+
+    result = runner.invoke(app, ["profile", "use", "authoring"])
+
+    assert result.exit_code == 0
+    assert "Already using profile 'authoring'." in result.output
+    assert not profile_registry_file().exists()
+
+
 def test_import_study_registers_editable_isolated_copies_and_keeps_authoring(
     isolated_store,
     tmp_path,

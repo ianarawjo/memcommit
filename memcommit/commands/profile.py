@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.profile_picker import ProfilePickerEntry, choose_profile
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import (
     ProfileError,
@@ -19,7 +20,8 @@ from memcommit.profiles import (
 
 
 app = typer.Typer(
-    no_args_is_help=True,
+    invoke_without_command=True,
+    no_args_is_help=False,
     help="Register and select complete local MemoryStore profiles.",
 )
 
@@ -36,6 +38,71 @@ def _profile_rows() -> tuple[object, tuple[object, ...]]:
         _fail(error)
 
 
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _pick_profile() -> str | None:
+    registry, inspections = _profile_rows()
+    entries = tuple(
+        ProfilePickerEntry(
+            name=profile.name,
+            context_count=len(inspection.context_names),
+            current_context=inspection.current_context,
+            query_source_count=inspection.query_source_count,
+        )
+        for profile, inspection in zip(
+            registry.profiles,
+            inspections,
+            strict=True,
+        )
+    )
+    try:
+        return choose_profile(entries, current=registry.active.name)
+    except ValueError as error:
+        _fail(ProfileError(str(error)))
+
+
+def _use_profile(name: str) -> None:
+    try:
+        registry, inspection, changed = use_profile(name)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    if not changed:
+        typer.echo(f"Already using profile '{registry.active.name}'.")
+        return
+    typer.secho(
+        f"Selected profile '{registry.active.name}'.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo(
+        f"The next mem command will see {len(inspection.context_names)} "
+        "ordinary Contexts."
+    )
+    typer.echo(f"Current Context: {inspection.current_context or '(none)'}")
+    if inspection.query_source_count:
+        typer.echo(
+            f"{inspection.query_source_count} query-only source(s) remain "
+            "hidden from 'mem switch'."
+        )
+
+
+@app.callback(invoke_without_command=True)
+def profile_cmd(ctx: typer.Context) -> None:
+    """Open the Profile selector, or print its stable non-TTY list."""
+
+    if ctx.invoked_subcommand is not None:
+        return
+    if not _interactive_terminal():
+        list_cmd()
+        return
+    selected = _pick_profile()
+    if selected is None:
+        typer.echo("Profile selection cancelled.")
+        return
+    _use_profile(selected)
+
+
 @app.command("list")
 def list_cmd() -> None:
     """List locally registered whole-store profiles."""
@@ -47,6 +114,7 @@ def list_cmd() -> None:
         strict=True,
     ):
         marker = "*" if profile.uid == registry.active_uid else " "
+        action = "CURRENT" if profile.uid == registry.active_uid else "USE"
         current = inspection.current_context or "(none)"
         query_note = (
             f" · {inspection.query_source_count} query-only"
@@ -55,6 +123,7 @@ def list_cmd() -> None:
         )
         typer.echo(
             f"{marker} {profile.name:<12} "
+            f"{action:<7} "
             f"{profile.kind.lower():<9} "
             f"{len(inspection.context_names)} Contexts "
             f"· current={current}{query_note}"
@@ -91,37 +160,18 @@ def use_cmd(
     """Select the complete store used by the next mem invocation."""
 
     if name is None:
-        if not sys.stdin.isatty() or not sys.stdout.isatty():
+        if not _interactive_terminal():
             _fail(
                 ProfileError(
                     "Interactive profile selection requires a terminal. "
                     "Pass a profile name explicitly."
                 )
             )
-        registry, _inspections = _profile_rows()
-        typer.echo("Profiles: " + ", ".join(item.name for item in registry.profiles))
-        name = typer.prompt("Use profile", default=registry.active.name)
-    try:
-        registry, inspection, changed = use_profile(name)
-    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-        _fail(error)
-    if not changed:
-        typer.echo(f"Already using profile '{registry.active.name}'.")
-        return
-    typer.secho(
-        f"Selected profile '{registry.active.name}'.",
-        fg=typer.colors.GREEN,
-    )
-    typer.echo(
-        f"The next mem command will see {len(inspection.context_names)} "
-        "ordinary Contexts."
-    )
-    typer.echo(f"Current Context: {inspection.current_context or '(none)'}")
-    if inspection.query_source_count:
-        typer.echo(
-            f"{inspection.query_source_count} query-only source(s) remain "
-            "hidden from 'mem switch'."
-        )
+        name = _pick_profile()
+        if name is None:
+            typer.echo("Profile selection cancelled.")
+            return
+    _use_profile(name)
 
 
 @app.command("import")
