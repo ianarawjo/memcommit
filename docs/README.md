@@ -57,6 +57,10 @@ considered sufficient design history.
 
 ## Context namespace migration
 
+[`mem-import-design-rationale.md`](mem-import-design-rationale.md) defines clean
+baseline Profile import, its durable allowlist, excluded runtime artifacts,
+provenance receipt, and atomic three-Profile Study initialization.
+
 - [`mem-write-protection-design-rationale.md`](mem-write-protection-design-rationale.md)
   defines bare current-Context lock/unlock, frozen recursive Context sets,
   direct-Memory locks, the active Profile's upper read-only policy, shared

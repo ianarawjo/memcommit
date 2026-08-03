@@ -54,6 +54,14 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
+def _study_name(profile: object) -> str | None:
+    source = getattr(profile, "source", None)
+    if not isinstance(source, dict) or source.get("kind") != "STUDY_RUN_TASK":
+        return None
+    value = source.get("study_name")
+    return value if isinstance(value, str) and value else None
+
+
 def _pick_profile() -> str | None:
     registry, inspections = _profile_rows()
     entries = tuple(
@@ -63,6 +71,7 @@ def _pick_profile() -> str | None:
             current_context=inspection.current_context,
             query_source_count=inspection.query_source_count,
             query_source_names=inspection.query_source_names,
+            study_name=_study_name(profile),
         )
         for profile, inspection in zip(
             registry.profiles,
@@ -129,11 +138,22 @@ def list_cmd() -> None:
     """List locally registered whole-store profiles."""
 
     registry, inspections = _profile_rows()
+    previous_study: str | None = None
     for profile, inspection in zip(
         registry.profiles,
         inspections,
         strict=True,
     ):
+        study_name = _study_name(profile)
+        if study_name is not None and study_name != previous_study:
+            source = profile.source or {}
+            created_at = source.get("created_at", "")
+            typer.echo(
+                "Study "
+                + display_escape_text(study_name)
+                + (" · " + display_escape_text(str(created_at)) if created_at else "")
+            )
+        previous_study = study_name
         marker = "*" if profile.uid == registry.active_uid else " "
         action = "CURRENT" if profile.uid == registry.active_uid else "USE"
         profile_label = display_escape_text(profile.name)
@@ -155,7 +175,7 @@ def list_cmd() -> None:
             )
         )
         typer.echo(
-            f"{marker} {profile_label:<12} "
+            f"{'  ' if study_name else ''}{marker} {profile_label:<12} "
             f"{action:<7} "
             f"{profile.kind.lower():<9} "
             f"{len(inspection.context_names)} Contexts"

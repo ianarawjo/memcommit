@@ -24,12 +24,33 @@ only prints shell code; it does not edit shell startup files itself.
 complete local store should change instead:
 
 ```zsh
+mem import rehearsal-baseline --from path/to/source/.mem
+mem profile rehearsal-baseline
+```
+
+`mem import` creates a clean baseline Profile: it preserves Context and Memory
+identity but excludes checkpoints, sessions, caches, locks, ledgers, and prior
+run logs. `mem profile import` remains the explicit whole-store archival copy.
+
+```zsh
 mem profile import-study --from outputs/study-fixtures
 mem profile list
 mem profile task-1
 mem switch
 mem profile authoring
 ```
+
+For a fresh repeatable rehearsal or participant run, initialize a named Study:
+
+```zsh
+mem init-study pilot-001
+mem profile pilot-001-task-1
+```
+
+With no name, `mem init-study` generates a timestamped unique name. It creates
+three isolated Task Profiles atomically and groups them under the Study label
+in Profile inventory. Every task starts with empty operational history even if
+the fixture bundle contains authoring checkpoints.
 
 `mem profile use NAME` remains the equivalent explicit form for scripts.
 

@@ -138,11 +138,11 @@ and checkpoints. A single `clean up everything` command would make it hard to
 tell whether a Memory disappeared because it was a duplicate, was classified
 for an audience, was normalized, or was moved to another category.
 
-## `mem import` as a pipeline orchestrator
+## `mem ingest` as a pipeline orchestrator
 
 `mem add` remains the low-level intake operation: it stores one Memory or a
 batch of raw line-based Memory candidates and stops. The working design for
-`mem import` is a higher-level envelope around the refinement pipeline:
+`mem ingest` is a higher-level envelope around the refinement pipeline:
 
 ```text
 source intake
@@ -203,12 +203,12 @@ one opaque checkpoint. If `reconcile` cannot resolve a scope or a later stage
 cannot safely mutate several Contexts, the import pauses and can be resumed
 from the manifest. It does not guess or mark the run complete.
 
-A convenience form such as `mem import --input notes.txt --through atomize`
+A convenience form such as `mem ingest --input notes.txt --through atomize`
 means: commit deterministic raw intake, then generate previews through the
 named stage and stop at its first required confirmation or block. `--through`
 does not auto-approve semantic mutations. The default first implementation
 should create the intake plus a previewable manifest rather than silently
-applying every semantic proposal. `mem import` orchestrates provenance and
+applying every semantic proposal. `mem ingest` orchestrates provenance and
 progress; it does not own a second implementation of atomization,
 deduplication, or placement.
 
@@ -490,7 +490,7 @@ important than final CLI spelling.
 
 | Stage | Working operation | Primary output | Mutation boundary |
 |---|---|---|---|
-| Envelope | `mem import` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
+| Envelope | `mem ingest` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
 | 1 | `mem impact atomize`; `mem atomize --save`; `mem atomize --save-as NAME` | exhaustive classifications, ordered split proposals, and recorded source-to-child lineage | preview saves a Context-scoped analysis but no Context checkpoint; in-place apply creates one checkpoint; save-as creates an init-like baseline and atomize checkpoint in a fresh Context |
 | 2 | `mem find-duplicates` | positive pair evidence discovered from the whole direct Context | read-only; no checkpoint |
 | 2a | future `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed groups apply as one checkpoint |
@@ -715,5 +715,5 @@ read-only commands so that their whole-Context relation discovery, pair-target,
 and unary contracts stay observable. Stronger independent atomize validation,
 a future `dedup` apply path and `reconcile`, followed by `audience`, `normalize`,
 duplicate verification, and `place`, can then be added one at a time. A later
-`mem import` may orchestrate those same tested operations without replacing
+`mem ingest` may orchestrate those same tested operations without replacing
 their visible findings, plans, reasons, or checkpoints.

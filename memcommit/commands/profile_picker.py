@@ -27,6 +27,7 @@ class ProfilePickerEntry:
     current_context: str | None
     query_source_count: int = 0
     query_source_names: tuple[str, ...] = ()
+    study_name: str | None = None
 
 
 def _validate_entries(
@@ -46,6 +47,10 @@ def _validate_entries(
         or len(entry.query_source_names) > entry.query_source_count
         or any(not name for name in entry.query_source_names)
         or len(set(entry.query_source_names)) != len(entry.query_source_names)
+        or (
+            entry.study_name is not None
+            and (not isinstance(entry.study_name, str) or not entry.study_name)
+        )
         for entry in options
     ) or len(set(names)) != len(names):
         raise ValueError("Profile selection received invalid entries.")
@@ -67,7 +72,15 @@ def _render_profile_options(
     name_labels = tuple(display_escape_text(entry.name) for entry in options)
     name_width = min(max(max(len(label) for label in name_labels), 8), 24)
     fragments: list[tuple[str, str]] = []
+    previous_study: str | None = None
     for index, entry in enumerate(options):
+        if entry.study_name is not None and entry.study_name != previous_study:
+            if fragments:
+                fragments.append(("", "\n"))
+            fragments.append(
+                ("class:group", f"STUDY · {display_escape_text(entry.study_name)}\n")
+            )
+        previous_study = entry.study_name
         is_selected = index == selected
         is_current = entry.name == current
         if is_selected:
@@ -217,6 +230,7 @@ def choose_profile(
             {
                 "selected": "reverse bold",
                 "current": "ansigreen bold",
+                "group": "ansicyan bold",
             }
         ),
     )

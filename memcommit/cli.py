@@ -23,7 +23,9 @@ from memcommit.commands import (
     ground,
     help_inventory,
     impact,
+    import_profile,
     init,
+    init_study,
     integrate,
     list_memories,
     log,
@@ -60,6 +62,14 @@ app = typer.Typer(
 
 # --- Core ---
 app.command("init",           help="Initialize a new context and switch to it.")(init.cmd)
+app.command(
+    "import",
+    help="Import a clean MemoryStore baseline as a new isolated Profile.",
+)(import_profile.cmd)
+app.command(
+    "init-study",
+    help="Create one timestamped Study with isolated Task 1, 2, and 3 Profiles.",
+)(init_study.cmd)
 app.command("add",            help="Add one or more memories to the current context.")(add.cmd)
 app.command("status",         help="Show current context and recent memories.")(status.cmd)
 app.command(

@@ -925,7 +925,7 @@ Neither case mutates the incoming Context. `--to` remains deliberately absent:
 it is reserved for a future explicit destination of a symmetric meld rather
 than accepted as an alias for the authority-bearing `--into`.
 
-An eventual `mem import --paste` may orchestrate raw intake, atomization, and a
+An eventual `mem ingest --paste` may orchestrate raw intake, atomization, and a
 directional meld. Import owns the run manifest and resumability; it must call
 the same independently testable atomize and meld contracts rather than
 embedding a second semantic implementation.

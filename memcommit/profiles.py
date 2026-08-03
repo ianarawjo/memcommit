@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import fcntl
 import hashlib
 import json
@@ -48,6 +49,7 @@ class StoreInspection:
     root: Path
     current_context: str | None
     context_names: tuple[str, ...]
+    ordinary_memory_count: int
     query_source_count: int
     query_source_names: tuple[str, ...]
     translation_catalog_count: int
@@ -57,6 +59,18 @@ class StoreInspection:
 class StudyImportResult:
     profiles: tuple[ProfileEntry, ...]
     inspections: tuple[StoreInspection, ...]
+
+
+@dataclass(frozen=True)
+class StudyInitializationResult:
+    """Identity and task Profiles published for one repeatable Study run."""
+
+    uid: str
+    name: str
+    created_at: str
+    profiles: tuple[ProfileEntry, ...]
+    inspections: tuple[StoreInspection, ...]
+    active_profile_name: str
 
 
 def default_study_bundle_root() -> Path:
@@ -224,6 +238,12 @@ def inspect_store(root: Path) -> StoreInspection:
         root=root,
         current_context=current,
         context_names=tuple(sorted(contexts)),
+        ordinary_memory_count=sum(
+            1
+            for context in contexts.values()
+            for item in context.iter_items()
+            if isinstance(item, Memory)
+        ),
         query_source_count=len(sources),
         # Only an ordinary QueryContextRef makes a source name public routing
         # metadata.  Do not surface names from orphaned concealed records.
@@ -328,6 +348,72 @@ def _copy_store(source: Path, destination: Path) -> StoreInspection:
     return inspect_store(destination)
 
 
+def _baseline_store_files(root: Path) -> tuple[Path, ...]:
+    """Return the durable identity-bearing files admitted by clean import.
+
+    This is intentionally an allowlist. New operational artifacts therefore
+    start excluded until their baseline semantics are reviewed explicitly.
+    """
+
+    files: list[Path] = []
+    state = root / "state.json"
+    if state.is_file():
+        files.append(state)
+    contexts = root / "contexts"
+    if contexts.is_dir():
+        files.extend(sorted(contexts.rglob("context.json")))
+    query_sources = root / "query-sources"
+    if query_sources.is_dir():
+        files.extend(sorted(query_sources.glob("*/source.json")))
+    translations = root / "translation-views"
+    if translations.is_dir():
+        files.extend(sorted(translations.glob("*--catalog.json")))
+    return tuple(files)
+
+
+def baseline_store_digest(root: Path) -> str:
+    """Digest the exact durable baseline imported from one validated store."""
+
+    root = Path(root).absolute()
+    digest = hashlib.sha256()
+    for path in _baseline_store_files(root):
+        digest.update(path.relative_to(root).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def _copy_store_baseline(
+    source: Path,
+    destination: Path,
+    *,
+    expected_digest: str | None = None,
+) -> StoreInspection:
+    """Copy identity-bearing content while deliberately dropping run state."""
+
+    _assert_plain_tree(source, label="Source MemoryStore")
+    inspect_store(source)
+    before = baseline_store_digest(source)
+    if expected_digest is not None and before != expected_digest:
+        raise ProfileError("Source MemoryStore baseline changed before import.")
+    if destination.exists() or destination.is_symlink():
+        raise ProfileError(f"Profile staging path is already occupied: {destination}")
+    destination.mkdir()
+    (destination / "contexts").mkdir()
+    for path in _baseline_store_files(source):
+        target = destination / path.relative_to(source)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, target)
+    after = baseline_store_digest(source)
+    if after != before:
+        raise ProfileError("Source MemoryStore baseline changed during import.")
+    inspection = inspect_store(destination)
+    if baseline_store_digest(destination) != before:
+        raise ProfileError("Imported Profile baseline does not match its source.")
+    return inspection
+
+
 def _source_store(path: Path) -> Path:
     source = Path(path).expanduser().absolute()
     if source.name != ".mem" and (source / ".mem").is_dir():
@@ -380,6 +466,7 @@ def import_profile(
                 root=destination,
                 current_context=inspection.current_context,
                 context_names=inspection.context_names,
+                ordinary_memory_count=inspection.ordinary_memory_count,
                 query_source_count=inspection.query_source_count,
                 query_source_names=inspection.query_source_names,
                 translation_catalog_count=inspection.translation_catalog_count,
@@ -388,6 +475,71 @@ def import_profile(
             candidate = profile_store_dir(profile) if published else staging
             if not published and candidate.exists() and not candidate.is_symlink():
                 shutil.rmtree(candidate)
+
+
+def import_baseline_profile(
+    name: str,
+    source: Path,
+) -> tuple[ProfileEntry, StoreInspection]:
+    """Create an isolated Profile with content identity but no run history."""
+
+    canonical = validate_profile_name(name)
+    if canonical == AUTHORING_PROFILE_NAME:
+        raise ProfileError("The fixed authoring profile cannot be imported.")
+    source_root = _source_store(source)
+    inspect_store(source_root)
+    digest = baseline_store_digest(source_root)
+    imported_at = datetime.now(timezone.utc).isoformat()
+    with _registry_lock():
+        registry = load_profile_registry()
+        if registry.by_name(canonical) is not None:
+            raise ProfileError(f"Profile {canonical!r} already exists.")
+        profile = ProfileEntry(
+            uid=str(uuid.uuid4()),
+            name=canonical,
+            kind="MANAGED",
+            source={
+                "kind": "BASELINE_IMPORT",
+                "imported_at": imported_at,
+                "baseline_sha256": digest,
+            },
+        )
+        staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
+        published = False
+        try:
+            inspection = _copy_store_baseline(
+                source_root,
+                staging,
+                expected_digest=digest,
+            )
+            destination = profile_store_dir(profile)
+            if destination.exists() or destination.is_symlink():
+                raise ProfileError("Managed profile destination is occupied.")
+            os.replace(staging, destination)
+            published = True
+            updated = ProfileRegistry(
+                generation=max(1, registry.generation + 1),
+                active_uid=registry.active_uid,
+                profiles=(*registry.profiles, profile),
+            )
+            try:
+                _write_registry(updated)
+            except Exception:
+                os.replace(destination, staging)
+                published = False
+                raise
+            return profile, StoreInspection(
+                root=destination,
+                current_context=inspection.current_context,
+                context_names=inspection.context_names,
+                ordinary_memory_count=inspection.ordinary_memory_count,
+                query_source_count=inspection.query_source_count,
+                query_source_names=inspection.query_source_names,
+                translation_catalog_count=inspection.translation_catalog_count,
+            )
+        finally:
+            if not published and staging.exists() and not staging.is_symlink():
+                shutil.rmtree(staging)
 
 
 def _study_package(
@@ -627,6 +779,7 @@ def import_study_profiles(bundle_root: Path) -> StudyImportResult:
                     root=profile_store_dir(profile),
                     current_context=inspection.current_context,
                     context_names=inspection.context_names,
+                    ordinary_memory_count=inspection.ordinary_memory_count,
                     query_source_count=inspection.query_source_count,
                     query_source_names=inspection.query_source_names,
                     translation_catalog_count=inspection.translation_catalog_count,
@@ -634,6 +787,126 @@ def import_study_profiles(bundle_root: Path) -> StudyImportResult:
                 for profile, inspection in zip(profiles, inspections, strict=True)
             )
             return StudyImportResult(tuple(profiles), final_inspections)
+        finally:
+            if batch.exists() and not batch.is_symlink():
+                shutil.rmtree(batch)
+
+
+def _new_study_name(name: str | None, created_at: datetime) -> str:
+    if name is not None:
+        return validate_profile_name(name)
+    stamp = created_at.strftime("%Y%m%dT%H%M%SZ")
+    return validate_profile_name(f"study-{stamp}-{uuid.uuid4().hex[:6]}")
+
+
+def init_study_profiles(
+    bundle_root: Path,
+    *,
+    name: str | None = None,
+) -> StudyInitializationResult:
+    """Atomically branch Task 1--3 from clean, repeatable bundle baselines."""
+
+    root = Path(bundle_root).expanduser().absolute()
+    if root.is_symlink() or not root.is_dir():
+        raise ProfileError(f"Study bundle root is missing or unsafe: {root}")
+    packages = {task: _study_package(root, task) for task in (1, 2, 3)}
+    created = datetime.now(timezone.utc)
+    created_at = created.isoformat()
+    study_name = _new_study_name(name, created)
+    study_uid = str(uuid.uuid4())
+    profile_names = {
+        task: validate_profile_name(f"{study_name}-task-{task}")
+        for task in (1, 2, 3)
+    }
+
+    with _registry_lock():
+        registry = load_profile_registry()
+        existing = {profile.name.casefold() for profile in registry.profiles}
+        conflicts = [
+            value
+            for value in profile_names.values()
+            if value.casefold() in existing
+        ]
+        if conflicts:
+            raise ProfileError("Study Profiles already exist: " + ", ".join(conflicts))
+        batch = profile_stores_dir() / f".study-init-{uuid.uuid4().hex}"
+        batch.mkdir()
+        profiles: list[ProfileEntry] = []
+        inspections: list[StoreInspection] = []
+        published: list[tuple[Path, Path]] = []
+        try:
+            for task in (1, 2, 3):
+                store, manifest, manifest_digest = packages[task]
+                baseline_digest = baseline_store_digest(store)
+                profile = ProfileEntry(
+                    uid=str(uuid.uuid4()),
+                    name=profile_names[task],
+                    kind="MANAGED",
+                    source={
+                        "kind": "STUDY_RUN_TASK",
+                        "study_uid": study_uid,
+                        "study_name": study_name,
+                        "created_at": created_at,
+                        "task": task,
+                        "manifest_sha256": manifest_digest,
+                        "baseline_sha256": baseline_digest,
+                        "canonical_language": manifest.get("canonical_language"),
+                    },
+                )
+                staging = batch / profile.uid
+                inspection = _copy_store_baseline(
+                    store,
+                    staging,
+                    expected_digest=baseline_digest,
+                )
+                profiles.append(profile)
+                inspections.append(inspection)
+            for profile in profiles:
+                source = batch / profile.uid
+                destination = profile_store_dir(profile)
+                if destination.exists() or destination.is_symlink():
+                    raise ProfileError("Managed Profile destination is occupied.")
+                os.replace(source, destination)
+                published.append((destination, source))
+            final = tuple(
+                StoreInspection(
+                    root=profile_store_dir(profile),
+                    current_context=inspection.current_context,
+                    context_names=inspection.context_names,
+                    ordinary_memory_count=inspection.ordinary_memory_count,
+                    query_source_count=inspection.query_source_count,
+                    query_source_names=inspection.query_source_names,
+                    translation_catalog_count=inspection.translation_catalog_count,
+                )
+                for profile, inspection in zip(profiles, inspections, strict=True)
+            )
+            updated = ProfileRegistry(
+                generation=max(1, registry.generation + 1),
+                active_uid=registry.active_uid,
+                profiles=(*registry.profiles, *profiles),
+            )
+            try:
+                _write_registry(updated)
+            except Exception:
+                for destination, source in reversed(published):
+                    os.replace(destination, source)
+                published.clear()
+                raise
+            return StudyInitializationResult(
+                uid=study_uid,
+                name=study_name,
+                created_at=created_at,
+                profiles=tuple(profiles),
+                inspections=final,
+                active_profile_name=registry.active.name,
+            )
+        except Exception:
+            # A destination collision or I/O error after an earlier publication
+            # must not leave an unregistered partial Study behind.
+            for destination, source in reversed(published):
+                if destination.exists() and not destination.is_symlink():
+                    os.replace(destination, source)
+            raise
         finally:
             if batch.exists() and not batch.is_symlink():
                 shutil.rmtree(batch)
