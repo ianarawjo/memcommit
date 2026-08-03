@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import AbstractSet
+from typing import AbstractSet, Mapping
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.input import Input
@@ -49,9 +49,17 @@ class _ContextTree:
         )
 
 
-def _build_context_tree(options: Sequence[str]) -> _ContextTree:
+def _build_context_tree(
+    options: Sequence[str],
+    *,
+    materialized_names: AbstractSet[str] | None = None,
+) -> _ContextTree:
     """Arrange catalog names under lexical prefixes without inventing targets."""
-    materialized_names = frozenset(options)
+    materialized = frozenset(
+        options if materialized_names is None else materialized_names
+    )
+    if not materialized.issubset(options):
+        raise ValueError("Materialized Context names must be in the picker catalog.")
     parent_by_name: dict[str, str | None] = {}
     children: dict[str | None, list[str]] = {None: []}
     ordered_names: list[str] = []
@@ -70,12 +78,9 @@ def _build_context_tree(options: Sequence[str]) -> _ContextTree:
     # descendants collapsible but can never be returned as switch targets.
     return _ContextTree(
         roots=tuple(children[None]),
-        children_by_name={
-            name: tuple(children[name])
-            for name in ordered_names
-        },
+        children_by_name={name: tuple(children[name]) for name in ordered_names},
         parent_by_name=parent_by_name,
-        materialized_names=materialized_names,
+        materialized_names=materialized,
     )
 
 
@@ -125,9 +130,7 @@ def _visible_context_rows(
             )
         )
         if is_expanded:
-            pending.extend(
-                (child, depth + 1) for child in reversed(children)
-            )
+            pending.extend((child, depth + 1) for child in reversed(children))
     return tuple(rows)
 
 
@@ -136,6 +139,7 @@ def _render_context_options(
     *,
     selected: str,
     current: str | None,
+    annotations: Mapping[str, str] | None = None,
 ) -> list[tuple[str, str]]:
     """Render visible tree rows and anchor prompt-toolkit at the selection."""
     fragments: list[tuple[str, str]] = []
@@ -150,14 +154,21 @@ def _render_context_options(
         pointer = "›" if is_selected else " "
         active = "*" if is_current else " "
         branch = "▾" if row.expanded else "▸" if row.has_children else "·"
-        namespace_only = "  [namespace only]" if not row.materialized else ""
+        annotation = (annotations or {}).get(row.name)
+        suffix = (
+            "  " + annotation
+            if annotation is not None
+            else "  [namespace only]"
+            if not row.materialized
+            else ""
+        )
         # Keep raw names in the tree for identity and return only an escaped
         # label to prompt-toolkit; selection never returns presentation text.
         fragments.append(
             (
                 style,
                 f"{pointer} {active} {'  ' * row.depth}{branch} "
-                f"{display_escape_text(row.name)}{namespace_only}",
+                f"{display_escape_text(row.name)}{suffix}",
             )
         )
         if index < len(rows) - 1:
@@ -167,34 +178,47 @@ def _render_context_options(
 
 def _render_context_roots(tree: _ContextTree) -> str:
     """Render a pinned, read-only root ribbon for namespace orientation."""
-    return " Roots · " + " · ".join(
-        display_escape_text(name) for name in tree.roots
-    )
+    return " Roots · " + " · ".join(display_escape_text(name) for name in tree.roots)
 
 
 def choose_context(
     names: Sequence[str],
     *,
     current: str | None,
+    virtual_names: Sequence[str] = (),
+    virtual_annotations: Mapping[str, str] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> str | None:
     """Return the selected Context name, or ``None`` when cancelled."""
     options = tuple(names)
+    virtual = tuple(virtual_names)
     if not options:
         raise ValueError("No contexts are available to select.")
     if any(not isinstance(name, str) or not name for name in options) or len(
         set(options)
     ) != len(options):
         raise ValueError("Context selection received invalid names.")
+    if (
+        any(not isinstance(name, str) or not name for name in virtual)
+        or len(set(virtual)) != len(virtual)
+        or set(options).intersection(virtual)
+    ):
+        raise ValueError("Virtual Context selection received invalid names.")
+    annotations = dict(virtual_annotations or {})
+    if set(annotations) - set(virtual) or any(
+        not isinstance(label, str) or not label for label in annotations.values()
+    ):
+        raise ValueError("Virtual Context annotations are invalid.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive context selection requires a terminal. "
             "Pass a Context name explicitly."
         )
 
-    tree = _build_context_tree(options)
+    catalog = (*options, *virtual)
+    tree = _build_context_tree(catalog, materialized_names=frozenset(options))
     selected = {
         "name": current if current in options else options[0],
     }
@@ -222,6 +246,7 @@ def choose_context(
             visible_rows(),
             selected=selected["name"],
             current=current,
+            annotations=annotations,
         )
 
     control = FormattedTextControl(
@@ -316,9 +341,7 @@ def choose_context(
         event.app.exit(result=None)
 
     header = Window(
-        FormattedTextControl(
-            " Select a Context\n" + _render_context_roots(tree)
-        ),
+        FormattedTextControl(" Select a Context\n" + _render_context_roots(tree)),
         height=Dimension.exact(2),
         dont_extend_height=True,
     )
@@ -330,19 +353,18 @@ def choose_context(
 
     def render_footer() -> str:
         rows = visible_rows()
-        expansion_action = (
-            "A restore tree" if expansion_mode["all"] else "A expand all"
-        )
+        expansion_action = "A restore tree" if expansion_mode["all"] else "A expand all"
         name = selected["name"]
         if name in tree.materialized_names:
             enter_action = "Enter switch"
+        elif name in annotations:
+            enter_action = "Enter unavailable"
         elif name in expanded:
             enter_action = "Enter collapse"
         else:
             enter_action = "Enter open"
         return (
-            _CONTEXT_NAVIGATION_HINT
-            + f"{expansion_action}  {enter_action}  q cancel"
+            _CONTEXT_NAVIGATION_HINT + f"{expansion_action}  {enter_action}  q cancel"
             f" · {selected_row_index() + 1}/{len(rows)}"
             f" · {len(options)} total"
         )

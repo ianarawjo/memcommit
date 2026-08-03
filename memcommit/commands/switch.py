@@ -7,7 +7,33 @@ from memcommit.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
+from memcommit.profile_config import ProfileConfigError, load_profile_registry
+from memcommit.profiles import ProfileError
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+
+
+def _granted_picker_views() -> tuple[tuple[str, ...], dict[str, str]]:
+    """Return non-selectable granted rows for the active Profile tree."""
+
+    registry = load_profile_registry()
+    names: dict[str, str] = {}
+    for grant in registry.grants:
+        if grant.grantee_profile_uid != registry.active.uid:
+            continue
+        if "READ" not in grant.permissions:
+            # A query-only grant exposes its reviewed public route, never its
+            # frozen authority descendants, in ordinary navigation.
+            names[grant.public_name] = "[query only]"
+            continue
+        annotation = (
+            "[granted edit]"
+            if set(grant.permissions).intersection({"CREATE", "UPDATE", "DELETE"})
+            else "[granted read only]"
+        )
+        for binding in grant.contexts:
+            suffix = binding.name[len(grant.resource_name) :]
+            names[grant.public_name + suffix] = annotation
+    return tuple(sorted(names)), names
 
 
 def cmd(
@@ -34,11 +60,17 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
-            name = choose_context(
-                names,
-                current=expected_current,
-            )
-        except ValueError as error:
+            virtual_names, virtual_annotations = _granted_picker_views()
+            if virtual_names:
+                name = choose_context(
+                    names,
+                    current=expected_current,
+                    virtual_names=virtual_names,
+                    virtual_annotations=virtual_annotations,
+                )
+            else:
+                name = choose_context(names, current=expected_current)
+        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
             typer.secho(
                 f"Error: {error}",
                 fg=typer.colors.RED,
@@ -53,8 +85,7 @@ def cmd(
     if is_relative_context_locator(selector):
         if expected_current is None:
             typer.secho(
-                f"Error: cannot switch to '{selector}': no current context is "
-                "set.",
+                f"Error: cannot switch to '{selector}': no current context is set.",
                 fg=typer.colors.RED,
                 err=True,
             )

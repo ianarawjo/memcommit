@@ -18,6 +18,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.profiles as profiles_module
 from memcommit.cli import app
+from memcommit.commands.switch import _granted_picker_views
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.profile_config import (
@@ -465,11 +466,11 @@ def test_profile_use_selects_the_initialized_complete_profile(
     assert contexts.returncode == 0, contexts.stderr
     assert "* task-1" in contexts.stdout
     assert "task-1/participant/construction-updates" in contexts.stdout
-    assert "task-1/granted-memory/campus-wiki" in contexts.stdout
+    assert "task-1/campus-wiki" in contexts.stdout
     assert (
         "[view create,read,update from profile-view-granted-memory]" in contexts.stdout
     )
-    assert "task-1/granted-memory/campus-wiki/construction-details" in contexts.stdout
+    assert "task-1/campus-wiki/construction-details" in contexts.stdout
     assert (
         "[view query,session_log from profile-view-granted-memory]" in contexts.stdout
     )
@@ -479,20 +480,20 @@ def test_profile_use_selects_the_initialized_complete_profile(
         tmp_path,
         "ls",
         "-R",
-        "task-1/granted-memory/campus-wiki",
+        "task-1/campus-wiki",
     )
     assert readable.returncode == 0, readable.stderr
     assert "event information agent" in readable.stdout
     query_only = _subprocess_mem(
         tmp_path,
         "ls",
-        "task-1/granted-memory/campus-wiki/construction-details",
+        "task-1/campus-wiki/construction-details",
     )
     assert query_only.returncode == 1
     assert "does not allow read access" in query_only.stderr
 
     query_view = resolve_granted_context_view(
-        "task-1/granted-memory/campus-wiki/construction-details",
+        "task-1/campus-wiki/construction-details",
         attachment_name="task-1/participant/construction-updates",
         required_permission="QUERY",
     )
@@ -506,7 +507,7 @@ def test_profile_use_selects_the_initialized_complete_profile(
         "add",
         run_only_text,
         "--context",
-        "task-1/granted-memory/campus-wiki",
+        "task-1/campus-wiki",
     )
     assert granted_add.returncode == 0, granted_add.stderr
     registry = load_profile_registry()
@@ -535,24 +536,35 @@ def test_profile_use_selects_the_initialized_complete_profile(
     )
     assert switched.returncode == 0, switched.stderr
     task_two_contexts = _subprocess_mem(tmp_path, "contexts")
-    assert "task-2/granted-memory/advisor1" in task_two_contexts.stdout
+    assert "task-2/advisor1" in task_two_contexts.stdout
     assert "[view read from profile-view-granted-memory]" in task_two_contexts.stdout
     read_only_add = _subprocess_mem(
         tmp_path,
         "add",
         "This write must be rejected.",
         "--context",
-        "task-2/granted-memory/advisor1",
+        "task-2/advisor1",
     )
     assert read_only_add.returncode == 1
     assert "does not allow create access" in read_only_add.stderr
 
     task_two_query = resolve_granted_context_view(
-        "task-2/granted-memory/proposal-submission-guidelines",
+        "task-2/proposal-submission-guidelines",
         attachment_name="task-2/participant/proposal-workspace",
         required_permission="QUERY",
     )
     assert len(load_authority_query_catalog(task_two_query, language="en")) == 75
+
+    virtual_names, annotations = _granted_picker_views()
+    assert "task-1/campus-wiki" in virtual_names
+    assert "task-1/campus-wiki/route-changes" in virtual_names
+    assert annotations["task-1/campus-wiki"] == "[granted edit]"
+    assert annotations["task-2/advisor1"] == "[granted read only]"
+    assert annotations["task-2/proposal-submission-guidelines"] == "[query only]"
+    assert not any(
+        name.startswith("task-2/proposal-submission-guidelines/")
+        for name in virtual_names
+    )
 
     profile_list = runner.invoke(app, ["profile", "list"])
     assert profile_list.exit_code == 0

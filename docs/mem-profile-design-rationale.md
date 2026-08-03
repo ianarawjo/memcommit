@@ -132,8 +132,8 @@ the globally active Profile.
 The snapshot preserves every durable Context, Memory, and translation identity
 while remapping placement. Participant content remains below `task-N`; source
 content moves from baseline path `granted-memory/task-N/...` to authority path
-`task-N/...`. Actual borrowed views appear below
-`task-N/granted-memory/...`. A narrower query-only grant overrides a readable
+`task-N/...`. Actual borrowed views appear directly below `task-N`, such as
+`task-1/campus-wiki`. A narrower query-only grant overrides a readable
 parent, so list/show/export access remains closed while `mem query` receives
 only the frozen authority scope.
 

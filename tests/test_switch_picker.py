@@ -1,4 +1,5 @@
 """Contracts for interactive Context selection in ``mem switch``."""
+
 from __future__ import annotations
 
 from prompt_toolkit.input.defaults import create_pipe_input
@@ -167,16 +168,46 @@ def test_picker_groups_a_context_below_nonselectable_missing_parents():
         tree,
         {"missing", "missing/parent"},
     )
-    expanded_state = [
-        (row.name, row.depth, row.materialized)
-        for row in expanded_rows
-    ]
+    expanded_state = [(row.name, row.depth, row.materialized) for row in expanded_rows]
     assert expanded_state == [
         ("missing", 0, False),
         ("missing/parent", 1, False),
         ("missing/parent/leaf", 2, True),
         ("root", 0, True),
     ]
+
+
+def test_picker_renders_granted_views_below_owned_task_without_selecting_them():
+    tree = _build_context_tree(
+        (
+            "task-1",
+            "task-1/participant",
+            "task-1/campus-wiki",
+            "task-1/campus-wiki/route-changes",
+        ),
+        materialized_names={"task-1", "task-1/participant"},
+    )
+    rows = _visible_context_rows(
+        tree,
+        {"task-1", "task-1/campus-wiki"},
+    )
+    fragments = _render_context_options(
+        rows,
+        selected="task-1/campus-wiki",
+        current="task-1/participant",
+        annotations={
+            "task-1/campus-wiki": "[granted edit]",
+            "task-1/campus-wiki/route-changes": "[granted edit]",
+        },
+    )
+    rendered = "".join(
+        text for style, text in fragments if style != "[SetCursorPosition]"
+    )
+
+    assert "task-1/campus-wiki  [granted edit]" in rendered
+    assert "task-1/campus-wiki/route-changes  [granted edit]" in rendered
+    assert "[namespace only]" not in rendered
+    assert "task-1/campus-wiki" not in tree.materialized_names
 
 
 def test_picker_enter_opens_a_namespace_only_row_without_switching_to_it():
@@ -509,9 +540,7 @@ def test_switch_dot_child_resolves_below_current_context(isolated_store):
 
     assert result.exit_code == 0
     assert "Switched to context 'organization/wiki/facilities'." in result.output
-    assert MemoryStore().current_context_name() == (
-        "organization/wiki/facilities"
-    )
+    assert MemoryStore().current_context_name() == ("organization/wiki/facilities")
 
 
 def test_switch_dot_dot_sibling_resolves_from_current_parent(
@@ -601,12 +630,7 @@ def test_switch_unloadable_relative_target_preserves_current(isolated_store):
     invoke("init", "test/update/to")
     invoke("switch", "test/update")
     target_file = (
-        isolated_store
-        / "contexts"
-        / "test"
-        / "update"
-        / "to"
-        / "context.json"
+        isolated_store / "contexts" / "test" / "update" / "to" / "context.json"
     )
     target_file.write_text("{not-json", encoding="utf-8")
 

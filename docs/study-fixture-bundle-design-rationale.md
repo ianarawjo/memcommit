@@ -34,8 +34,8 @@ Study Memory must be selectable, importable, and copyable as one unit.
 the current registered baseline into two run-private Profiles: `NAME` owns the
 three participant Task branches, while `NAME-granted-memory` owns all three
 authority branches. The command rematerializes the reviewed manifest grant
-templates between those two Profiles, with public paths below
-`task-N/granted-memory`. Context and Memory identities, structural parents,
+templates between those two Profiles, with public paths directly below
+`task-N` (for example, `task-1/campus-wiki`). Context and Memory identities,
 translation views, and task current Contexts cross the snapshot boundary;
 checkpoints and other operational artifacts do not.
 

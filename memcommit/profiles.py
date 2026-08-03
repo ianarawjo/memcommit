@@ -3164,9 +3164,7 @@ def _prefix_study_grant_template(
         if isinstance(public_name, str):
             # The public path is deliberately task-local while the attachment
             # stays the exact participant Context required by the grant model.
-            result["public_name"] = (
-                f"{prefix}/{_STUDY_BASELINE_GRANTED_ROOT}/{public_name}"
-            )
+            result["public_name"] = f"{prefix}/{public_name}"
     return result
 
 
