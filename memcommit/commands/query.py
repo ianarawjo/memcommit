@@ -54,10 +54,12 @@ def _render_query_catalog(
     typer.echo(f"  {count} queryable Memor{'y' if count == 1 else 'ies'}")
     typer.echo()
     for entry in catalog:
-        typer.echo(f"  [{entry.handle}] {entry.placeholder}")
+        typer.echo(f"  [{entry.handle}]")
+        for line in entry.placeholder_lines:
+            typer.secho(f"    {line}", dim=True)
     typer.secho(
-        "\nOnly normalized shape and word spacing are shown; source text is "
-        "not present.",
+        "\nFlow Circular shapes preserve normalized word lengths and spacing; "
+        "source text is not present.",
         dim=True,
     )
     typer.secho(

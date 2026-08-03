@@ -25,18 +25,28 @@ metadata, provider prompt, authentication material, or hidden provider state.
 Omitting `QUESTION` from an authority-granted view opens its query flow as an
 opaque Memory catalog. `QUERY` itself authorizes this catalog; it is not an
 ordinary `LIST` or `READ` capability. Each admitted Memory is represented by
-a per-grant opaque handle and a generated `●` placeholder. The placeholder is
-inspired by a rounded skeleton font, but it is generated data rather than the
-source text rendered in a concealing font. Copying terminal output therefore
-copies only the placeholder, never recoverable source characters.
+a per-grant opaque handle and a Flow Circular capsule. The renderer replaces
+every source word with an equal-code-point-length dummy mask in memory, draws
+that mask with the bundled Flow Circular TTF, and converts the four-pixel-high
+raster to Unicode Braille cells. The source characters are never sent to the
+font renderer or terminal. Copying terminal output therefore copies only
+Braille pixels, never the source or dummy mask characters.
 
 The catalog intentionally discloses the number and order of queryable
 Memories, normalized word boundaries, and each word's Unicode-code-point
 length. Runs of whitespace are collapsed to one ordinary space; punctuation
-and every other non-space character become `●`. The handle is derived from
-the grant and Memory identities, so it remains stable across ordering and
-content edits without exposing the authority Memory UID. Recreating the grant
-changes the handle. A missing or nonmatching handle fails closed.
+and every other non-space character contribute only to their word's length.
+The handle is derived from the grant and Memory identities, so it remains
+stable across ordering and content edits without exposing the authority
+Memory UID. Recreating the grant changes the handle. A missing or nonmatching
+handle fails closed.
+
+Flow Circular is bundled unmodified from the Google Fonts distribution under
+the SIL Open Font License 1.1, with its copyright and license alongside the
+TTF. Pillow is the rasterization dependency. Terminal ANSI cannot select a
+font for one span, so the Braille raster is the portable CLI representation of
+the actual Flow Circular geometry; the terminal's own Braille glyph design can
+slightly affect its final appearance.
 
 Using `VIEW#HANDLE` with a question sends only that selected Memory to the
 provider. The existing `VIEW QUESTION` form remains a whole-view query for
@@ -102,9 +112,10 @@ it contains only material previously disclosed to that task.
 - **Store source snapshots with the transcript:** rejected because it would
   turn query authority into read/copy authority and retain concealed data in
   the task Profile.
-- **Render the real source in a rounded placeholder font:** rejected because
-  copy, accessibility, terminal history, and logs would still contain the
-  source characters.
+- **Render the real source directly in Flow Circular:** rejected because copy,
+  accessibility, terminal history, and logs would still contain the source
+  characters. The selected renderer sends only equal-length dummy masks to
+  Flow Circular and emits only raster cells.
 - **Add a separate `LIST` permission:** rejected because the catalog is part
   of selecting the object of a query and never lists source content or
   authority identities.

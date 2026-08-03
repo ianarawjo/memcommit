@@ -13,6 +13,7 @@ import memcommit.ops as ops
 import memcommit.query_sessions as query_sessions
 from memcommit.cli import app
 from memcommit.context import Memory
+from memcommit.flow_placeholder import render_flow_circular_placeholder
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -119,10 +120,9 @@ def test_authority_query_without_question_lists_only_opaque_memory_shapes(
     assert "Query-only Memories: construction-details" in result.output
     assert "1 queryable Memory" in result.output
     assert "[q-" in result.output
-    expected_shape = "".join(
-        " " if character == " " else "●" for character in SECRET
-    )
-    assert expected_shape in result.output
+    for expected_shape in render_flow_circular_placeholder(SECRET):
+        assert expected_shape in result.output
+    assert "●" not in result.output
     assert SECRET not in result.output
     assert source_memory.uid not in result.output
     assert "source text is not present" in result.output

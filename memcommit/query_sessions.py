@@ -20,6 +20,10 @@ import uuid
 from typing import Iterator
 
 from memcommit.context import Context, Memory
+from memcommit.flow_placeholder import (
+    FlowPlaceholderError,
+    render_flow_circular_placeholder,
+)
 from memcommit.profile_config import GrantContextBinding, load_profile_registry
 from memcommit.profiles import GrantedContextView
 from memcommit.store import MemoryStore
@@ -287,7 +291,7 @@ class AuthorityQueryCatalogEntry:
     """Opaque, display-only identity and shape for one queryable Memory."""
 
     handle: str
-    placeholder: str
+    placeholder_lines: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -414,13 +418,6 @@ def _authority_query_handle(grant_uid: str, memory_uid: str) -> str:
     return "q-" + digest[:12]
 
 
-def _query_placeholder(content: str) -> str:
-    """Keep normalized word shape while ensuring source text is absent."""
-
-    normalized = " ".join(content.split())
-    return "".join(" " if character == " " else "●" for character in normalized)
-
-
 def _load_authority_query_memories(
     view: GrantedContextView,
     *,
@@ -495,13 +492,21 @@ def load_authority_query_catalog(
 ) -> tuple[AuthorityQueryCatalogEntry, ...]:
     """Return only opaque handles and generated shapes for a QUERY view."""
 
-    return tuple(
-        AuthorityQueryCatalogEntry(
-            handle=memory.handle,
-            placeholder=_query_placeholder(memory.content),
+    try:
+        return tuple(
+            AuthorityQueryCatalogEntry(
+                handle=memory.handle,
+                placeholder_lines=render_flow_circular_placeholder(
+                    memory.content
+                ),
+            )
+            for memory in _load_authority_query_memories(
+                view,
+                language=language,
+            )
         )
-        for memory in _load_authority_query_memories(view, language=language)
-    )
+    except FlowPlaceholderError as error:
+        raise QuerySessionError(str(error)) from error
 
 
 def load_authority_query_source(
