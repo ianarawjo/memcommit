@@ -26,10 +26,12 @@ complete local store should change instead:
 ```zsh
 mem profile import-study --from outputs/study-fixtures
 mem profile list
-mem profile use task-1
+mem profile task-1
 mem switch
-mem profile use authoring
+mem profile authoring
 ```
+
+`mem profile use NAME` remains the equivalent explicit form for scripts.
 
 The existing `~/.mem` is the fixed `authoring` profile. Imported profiles are
 editable local copies; selecting another profile does not modify or move the

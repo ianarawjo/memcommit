@@ -7,6 +7,7 @@ different namespace from `mem switch`:
 
 ```text
 mem profile use task-1  # select a whole local store
+mem profile task-1      # concise spelling of the same selection
 mem switch              # select a Context inside that store
 ```
 
@@ -16,8 +17,14 @@ labels the selected non-current candidate `USE`, and changes the selector
 only after Enter. Arrow keys move the candidate and Escape or `q` exits
 without a mutation. This makes the whole-store boundary visible before a
 Context-level command such as `mem ls` or `mem switch` is run. `mem profile
-use NAME` remains the explicit form for scripts, and `mem profile list`
-remains an explicit inventory command.
+use NAME` remains the explicit form for scripts, while `mem profile NAME` is
+the concise interactive spelling requested to parallel `mem switch NAME`.
+Both forms reach the same validation, locking, and atomic selector update;
+the shorthand is parser routing rather than a second mutation path. Known
+subcommands (`list`, its hidden `ls` alias, `current`, `use`, `import`,
+`import-study`, and `grant`) take precedence, so a Profile whose name equals
+one of those reserved command tokens must be selected with the explicit `use`
+form. `mem profile list` remains an explicit inventory command.
 
 When standard input or output is not a TTY, bare `mem profile` prints that
 inventory instead of opening a picker or emitting help. This gives logs,

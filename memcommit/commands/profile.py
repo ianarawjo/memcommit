@@ -8,6 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.profile_group import ProfileAliasGroup
 from memcommit.commands.profile_picker import ProfilePickerEntry, choose_profile
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import ProfileConfigError
@@ -22,9 +23,14 @@ from memcommit.profiles import (
 
 
 app = typer.Typer(
+    cls=ProfileAliasGroup,
     invoke_without_command=True,
     no_args_is_help=False,
-    help="Register and select complete local MemoryStore profiles.",
+    subcommand_metavar="COMMAND|PROFILE",
+    help=(
+        "Register and select complete local MemoryStore profiles. "
+        "Use 'mem profile NAME' to select one."
+    ),
 )
 
 
