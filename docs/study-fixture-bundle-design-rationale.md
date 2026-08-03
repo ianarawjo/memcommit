@@ -31,12 +31,19 @@ contracts. The live authoring boundary is merged because the still-changing
 Study Memory must be selectable, importable, and copyable as one unit.
 
 `mem init-study [NAME]` never rereads these generated packages. It snapshots
-the current registered baseline Profile into one ordinary run Profile without
-splitting or renaming its `task-N` and `granted-memory/task-N` branches. Context
-and Memory identities, structural parents, translation views, and the selected
-current Context cross the snapshot boundary; checkpoints and all other
-operational artifacts do not. Registry grants are not synthesized or copied.
-Later baseline changes apply only to later initialized Profiles.
+the current registered baseline into two run-private Profiles: `NAME` owns the
+three participant Task branches, while `NAME-granted-memory` owns all three
+authority branches. The command rematerializes the reviewed manifest grant
+templates between those two Profiles, with public paths below
+`task-N/granted-memory`. Context and Memory identities, structural parents,
+translation views, and task current Contexts cross the snapshot boundary;
+checkpoints and other operational artifacts do not.
+
+Both stores and all grants publish in one registry transaction. A failure
+before that publication rolls back both stores. A participant mutation allowed
+by Task 1's `CREATE` or `UPDATE` permission therefore changes only that run's
+authority copy; it never changes `study-baseline`, the generated package, or a
+different run. Later baseline changes apply only to later initialized runs.
 
 ## Source and generated artifacts
 
@@ -82,9 +89,10 @@ Study import, the Profile composer fills
 each such gap with a fresh empty ordinary Context. Existing fixture Context
 and Memory identities remain unchanged, while recursive listing and upward
 navigation obtain a continuous lexical chain. These structural parents are a
-Profile topology guarantee; `init-study` copies them unchanged with the rest of
-the baseline. They are not fixture claims and are not embedded into their
-children or parents.
+Profile topology guarantee. During `init-study`, Task-side parents remain below
+`task-N`, while authority-side parents are rebuilt below the same task prefix
+inside the separate run-private authority Profile. They are not fixture claims
+and are not embedded into their children or parents.
 
 Task 1's task Profile owns only `participant/construction-updates`.
 `task-1-campus-authority` owns ordinary `campus-wiki` and its
@@ -156,8 +164,9 @@ remains a future refactor.
   ACL by the current Memory schema.
 - Translation status is review workflow state, not proof of equivalence.
 - The generated `.mem` stores are immutable import inputs. Edits belong to the
-  managed Profile baseline and do not flow back to the fixture source or
-  package. Authoring checkpoints in the generated store are intentionally not
+  editable baseline during authoring. Participant edits belong only to the
+  initialized run's authority copy and do not flow back to the baseline,
+  fixture source, or package. Authoring checkpoints are intentionally not
   imported into a participant run.
 - Profile replacement, reset, and export of participant outputs remain
   separate recoverable workflow decisions.

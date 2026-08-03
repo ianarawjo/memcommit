@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 from pathlib import Path
 import subprocess
@@ -25,7 +24,6 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import (
     create_authority_grant,
-    init_study_profile,
     study_profile_groups,
 )
 from memcommit.store import MemoryStore
@@ -125,9 +123,7 @@ def _install_legacy_split_study(
                 kind="MANAGED",
                 source={
                     "kind": (
-                        "STUDY_RUN_TASK"
-                        if role == "TASK"
-                        else "STUDY_RUN_AUTHORITY"
+                        "STUDY_RUN_TASK" if role == "TASK" else "STUDY_RUN_AUTHORITY"
                     ),
                     "study_uid": study_uid,
                     "study_name": name,
@@ -160,12 +156,12 @@ def _install_legacy_split_study(
 def test_rename_inactive_ordinary_study_changes_only_its_registry_name(
     profile_home,
 ):
-    baseline = _register_profile("custom-baseline", context_name="study/root")
-    initialized = init_study_profile(baseline.name, name="study-run")
-    original = initialized.profile
+    original = _register_profile("study-run", context_name="study/root")
     before = load_profile_registry()
     original_index = next(
-        index for index, profile in enumerate(before.profiles) if profile.uid == original.uid
+        index
+        for index, profile in enumerate(before.profiles)
+        if profile.uid == original.uid
     )
     root = profile_store_dir(original)
     digest = _tree_digest(root)
@@ -183,9 +179,14 @@ def test_rename_inactive_ordinary_study_changes_only_its_registry_name(
     assert after.by_name("study-run") is None
     assert after.generation == before.generation + 1
     assert after.active_uid == before.active_uid
-    assert next(
-        index for index, profile in enumerate(after.profiles) if profile.uid == renamed.uid
-    ) == original_index
+    assert (
+        next(
+            index
+            for index, profile in enumerate(after.profiles)
+            if profile.uid == renamed.uid
+        )
+        == original_index
+    )
     assert renamed.uid == original.uid
     assert renamed.kind == original.kind
     assert renamed.source == original.source
@@ -242,10 +243,14 @@ def test_profile_lock_remains_attached_to_the_same_store_after_rename(
     renamed = load_profile_registry().by_name("locked-new")
     assert renamed is not None and renamed.uid == profile.uid
     assert profile_store_dir(renamed) == root
-    assert MemoryStore(
-        root=root,
-        create=False,
-    ).write_protection_state().profile_is_protected()
+    assert (
+        MemoryStore(
+            root=root,
+            create=False,
+        )
+        .write_protection_state()
+        .profile_is_protected()
+    )
 
 
 @pytest.mark.parametrize("endpoint", ["authority", "grantee"])
@@ -363,7 +368,9 @@ def test_legacy_split_member_cannot_be_renamed_individually(profile_home):
     assert result.exit_code == 1
     assert "member of legacy Study 'legacy-run'" in result.stderr
     assert profile_registry_file().read_bytes() == before
-    assert study_profile_groups(load_profile_registry().profiles)[0].name == "legacy-run"
+    assert (
+        study_profile_groups(load_profile_registry().profiles)[0].name == "legacy-run"
+    )
     assert {
         profile.uid: _tree_digest(profile_store_dir(profile)) for profile in profiles
     } == digests

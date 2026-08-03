@@ -68,7 +68,7 @@ def test_mem_import_preserves_content_identity_but_not_history(
     assert not (imported / "query-sessions").exists()
 
 
-def test_init_study_imports_one_complete_profile_with_empty_history(
+def test_init_study_imports_an_isolated_pair_with_empty_history(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -88,10 +88,14 @@ def test_init_study_imports_one_complete_profile_with_empty_history(
     assert result.exit_code == 0, result.stderr or result.output
     registry = load_profile_registry()
     profile = registry.by_name("clean-study")
-    assert profile is not None
+    authority = registry.by_name("clean-study-granted-memory")
+    assert profile is not None and authority is not None
     assert [item.name for item in registry.profiles] == [
         "authoring",
         "study-baseline",
         "clean-study",
+        "clean-study-granted-memory",
     ]
+    assert len(registry.grants) == 7
     assert not any(profile_store_dir(profile).rglob("checkpoints/*.json"))
+    assert not any(profile_store_dir(authority).rglob("checkpoints/*.json"))

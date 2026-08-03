@@ -2,9 +2,9 @@
 
 Profiles are a control-plane selector around complete MemoryStore roots.  A
 single editable Study baseline deliberately namespaces all three task inputs
-inside one root, and ``mem init-study`` snapshots that complete topology into
-one new ordinary Profile.  Older split Study groups remain readable registry
-records, but new initialization does not create task/authority subprofiles.
+inside one root. ``mem init-study`` snapshots that source into one participant
+Profile and one run-private authority Profile, then restores the fixture's
+real grants between them. Older six-Profile Study groups remain readable.
 A process resolves its selected root once when :mod:`memcommit.store` is
 imported, so a profile selection affects the next CLI invocation while an
 already running operation finishes against the store it opened.
@@ -122,10 +122,12 @@ class StudyProfileGroup:
 
 @dataclass(frozen=True)
 class StudyInitializationResult:
-    """One ordinary Profile copied from an editable Study baseline."""
+    """One isolated participant/authority pair copied from a Study baseline."""
 
     profile: ProfileEntry
     inspection: StoreInspection
+    authority_profile: ProfileEntry
+    authority_inspection: StoreInspection
     baseline_profile_name: str
     active_profile_name: str
 
@@ -179,6 +181,8 @@ _STUDY_BASELINE_SCHEMA_VERSION = 1
 _STUDY_BASELINE_GRANTED_ROOT = "granted-memory"
 _STUDY_PROFILE_SOURCE_KIND = "STUDY_RUN_TASK"
 _STUDY_AUTHORITY_SOURCE_KIND = "STUDY_RUN_AUTHORITY"
+_STUDY_RUN_SOURCE_KIND = "STUDY_RUN"
+_STUDY_RUN_GRANTED_SOURCE_KIND = "STUDY_RUN_GRANTED_MEMORY"
 _STUDY_PROFILE_SOURCE_FIELDS = {
     "kind",
     "study_uid",
@@ -216,6 +220,17 @@ def _study_authority_profile_name(study_name: str, source_name: str) -> str:
     except (ProfileConfigError, ValueError) as error:
         raise ProfileError(
             "Study name is too long to create portable authority Profile names."
+        ) from error
+
+
+def _study_run_authority_profile_name(study_name: str) -> str:
+    """Return the visible run-private authority Profile name."""
+
+    try:
+        return validate_profile_name(f"{study_name}-granted-memory")
+    except (ProfileConfigError, ValueError) as error:
+        raise ProfileError(
+            "Study name is too long to create its granted-memory Profile."
         ) from error
 
 
@@ -450,8 +465,7 @@ def _context_record_at(root: Path, name: str) -> Context | None:
         raise ProfileError(f"Context {canonical_name!r} is invalid.") from error
     if context.name != canonical_name:
         raise ProfileError(
-            f"Context path {canonical_name!r} does not match record "
-            f"{context.name!r}."
+            f"Context path {canonical_name!r} does not match record {context.name!r}."
         )
     return context
 
@@ -592,10 +606,7 @@ def _inspection_with_grants(
         authority = profile_by_uid[grant.authority_profile_uid]
         authority_inspection = inspections.get(authority.uid)
         authority_by_name = (
-            {
-                item.name: item
-                for item in authority_inspection.context_inventory
-            }
+            {item.name: item for item in authority_inspection.context_inventory}
             if authority_inspection is not None
             else {}
         )
@@ -1010,9 +1021,7 @@ def rename_profile(
         if target.kind == "AUTHORING":
             raise ProfileError("The fixed authoring Profile cannot be renamed.")
         if target.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
-            raise ProfileError(
-                "The fixed study-baseline Profile cannot be renamed."
-            )
+            raise ProfileError("The fixed study-baseline Profile cannot be renamed.")
         if membership is not None:
             raise ProfileError(
                 f"Profile {target.name!r} is a member of legacy Study "
@@ -1271,14 +1280,13 @@ def _assert_public_view_available(
     public_folded = public_name.casefold()
     for name in grantee_contexts:
         name_folded = name.casefold()
-        if (
-            name_folded == public_folded
-            or name_folded.startswith(public_folded + "/")
-            or public_folded.startswith(name_folded + "/")
-        ):
+        if name_folded == public_folded or name_folded.startswith(public_folded + "/"):
             raise ProfileError(
                 f"Granted view {public_name!r} overlaps local Context {name!r}."
             )
+        # A lexical local ancestor is safe and lets a borrowed view appear
+        # below its task namespace. The granted leaf and its descendants must
+        # still remain absent locally or local resolution would bypass grants.
     for grant in registry.grants:
         if grant.uid == replacing_uid:
             continue
@@ -1712,10 +1720,7 @@ def _publish_baseline_profile_locked(
 ) -> tuple[ProfileEntry, StoreInspection]:
     """Publish one clean copy while the caller holds the registry lock."""
 
-    if any(
-        profile.name.casefold() == name.casefold()
-        for profile in registry.profiles
-    ):
+    if any(profile.name.casefold() == name.casefold() for profile in registry.profiles):
         raise ProfileError(f"Profile {name!r} already exists.")
     profile = ProfileEntry(
         uid=str(uuid.uuid4()),
@@ -2444,10 +2449,8 @@ def _materialize_study_grants(
                 if profile.uid == grant.grantee_profile_uid
             )
             for local_name in contexts_by_profile[grantee_name]:
-                if (
-                    local_name == grant.public_name
-                    or local_name.startswith(grant.public_name + "/")
-                    or grant.public_name.startswith(local_name + "/")
+                if local_name == grant.public_name or local_name.startswith(
+                    grant.public_name + "/"
                 ):
                     raise ProfileError(
                         f"Task {task} granted view overlaps a local Context."
@@ -2605,11 +2608,7 @@ def _study_packages(
 
 def _study_baseline_branch(task: int, *, authority: bool) -> str:
     task_name = f"task-{task}"
-    return (
-        f"{_STUDY_BASELINE_GRANTED_ROOT}/{task_name}"
-        if authority
-        else task_name
-    )
+    return f"{_STUDY_BASELINE_GRANTED_ROOT}/{task_name}" if authority else task_name
 
 
 def _remap_context_records(
@@ -2758,10 +2757,7 @@ def _compose_study_baseline_store(
     structural_names = [
         *(f"task-{task}" for task in _STUDY_TASKS),
         _STUDY_BASELINE_GRANTED_ROOT,
-        *(
-            f"{_STUDY_BASELINE_GRANTED_ROOT}/task-{task}"
-            for task in _STUDY_TASKS
-        ),
+        *(f"{_STUDY_BASELINE_GRANTED_ROOT}/task-{task}" for task in _STUDY_TASKS),
     ]
     contexts = [Context(uid=str(uuid.uuid4()), name=name) for name in structural_names]
     catalogs: list[TranslationCatalog] = []
@@ -2787,9 +2783,7 @@ def _compose_study_baseline_store(
                     "ordinary Contexts."
                 )
             branch = _study_baseline_branch(task, authority=authority)
-            mapping = {
-                name: f"{branch}/{name}" for name in source_contexts
-            }
+            mapping = {name: f"{branch}/{name}" for name in source_contexts}
             remapped = _remap_context_records(source_contexts, mapping)
             duplicate_uids = seen_context_uids.intersection(
                 context.uid for context in remapped
@@ -2817,7 +2811,9 @@ def _study_baseline_source_record(
     tasks: list[dict[str, object]] = []
     for task in _STUDY_TASKS:
         package = packages[task]
-        task_source = next(source for source in package.profiles if source.role == "TASK")
+        task_source = next(
+            source for source in package.profiles if source.role == "TASK"
+        )
         authority_source = next(
             source for source in package.profiles if source.role == "AUTHORITY"
         )
@@ -2962,9 +2958,10 @@ def _study_baseline_tasks(
         if type(task) is not int or task not in _STUDY_TASKS or task in tasks:
             raise ProfileError("Study baseline Task number is invalid.")
         _manifest_digest(raw.get("manifest_sha256"), field="manifest digest")
-        if raw.get("task_profile_name") != f"task-{task}" or raw.get(
-            "authority_profile_name"
-        ) != _STUDY_AUTHORITY_PROFILE_NAMES[task]:
+        if (
+            raw.get("task_profile_name") != f"task-{task}"
+            or raw.get("authority_profile_name") != _STUDY_AUTHORITY_PROFILE_NAMES[task]
+        ):
             raise ProfileError("Study baseline Profile topology is invalid.")
         for field in ("task_current_context", "authority_current_context"):
             try:
@@ -2997,7 +2994,9 @@ def _query_view_count_for_baseline(
         try:
             permissions = canonical_grant_permissions(template.get("permissions"))
         except (ProfileConfigError, ValueError) as error:
-            raise ProfileError("Study baseline grant permissions are invalid.") from error
+            raise ProfileError(
+                "Study baseline grant permissions are invalid."
+            ) from error
         if "QUERY" not in permissions:
             continue
         identity = template.get("authority_context")
@@ -3050,18 +3049,13 @@ def _snapshot_study_baseline(
     structural = {
         *(f"task-{task}" for task in _STUDY_TASKS),
         _STUDY_BASELINE_GRANTED_ROOT,
-        *(
-            f"{_STUDY_BASELINE_GRANTED_ROOT}/task-{task}"
-            for task in _STUDY_TASKS
-        ),
+        *(f"{_STUDY_BASELINE_GRANTED_ROOT}/task-{task}" for task in _STUDY_TASKS),
     }
     expected = set(structural)
     for task in _STUDY_TASKS:
         for authority in (False, True):
             branch = _study_baseline_branch(task, authority=authority)
-            expected.update(
-                name for name in contexts if name.startswith(branch + "/")
-            )
+            expected.update(name for name in contexts if name.startswith(branch + "/"))
     if set(contexts) != expected:
         extras = sorted(set(contexts) - expected)
         missing = sorted(expected - set(contexts))
@@ -3071,7 +3065,9 @@ def _snapshot_study_baseline(
         )
     catalogs = _study_catalogs(root)
     if any(name in structural for name, _language in catalogs):
-        raise ProfileError("Study baseline structural Contexts cannot own translations.")
+        raise ProfileError(
+            "Study baseline structural Contexts cannot own translations."
+        )
 
     packages: dict[int, _StudyTaskPackage] = {}
     for task in _STUDY_TASKS:
@@ -3081,9 +3077,7 @@ def _snapshot_study_baseline(
         for authority in (False, True):
             role = "AUTHORITY" if authority else "TASK"
             source_name = (
-                raw["authority_profile_name"]
-                if authority
-                else raw["task_profile_name"]
+                raw["authority_profile_name"] if authority else raw["task_profile_name"]
             )
             assert isinstance(source_name, str)
             branch = _study_baseline_branch(task, authority=authority)
@@ -3094,9 +3088,7 @@ def _snapshot_study_baseline(
             }
             if not selected:
                 raise ProfileError(f"Study baseline branch {branch!r} is empty.")
-            mapping = {
-                name: name[len(branch) + 1 :] for name in selected
-            }
+            mapping = {name: name[len(branch) + 1 :] for name in selected}
             remapped = _remap_context_records(selected, mapping)
             branch_catalogs = tuple(
                 replace(catalog, context_name=mapping[name])
@@ -3142,18 +3134,272 @@ def _snapshot_study_baseline(
     return packages
 
 
+def _prefix_study_grant_template(
+    raw: dict[str, object],
+    *,
+    task: int,
+) -> dict[str, object]:
+    """Map one package grant into the two-Profile run namespace."""
+
+    result = copy.deepcopy(raw)
+    prefix = f"task-{task}"
+
+    authority_context = result.get("authority_context")
+    if isinstance(authority_context, dict) and isinstance(
+        authority_context.get("name"), str
+    ):
+        authority_context["name"] = f"{prefix}/{authority_context['name']}"
+    exclusions = result.get("excluded_contexts")
+    if isinstance(exclusions, list):
+        for exclusion in exclusions:
+            if isinstance(exclusion, dict) and isinstance(exclusion.get("name"), str):
+                exclusion["name"] = f"{prefix}/{exclusion['name']}"
+
+    attachment = result.get("attachment")
+    if isinstance(attachment, dict) and attachment.get("kind") == "GRANTEE_CONTEXT":
+        context = attachment.get("context")
+        if isinstance(context, dict) and isinstance(context.get("name"), str):
+            context["name"] = f"{prefix}/{context['name']}"
+        public_name = result.get("public_name")
+        if isinstance(public_name, str):
+            # The public path is deliberately task-local while the attachment
+            # stays the exact participant Context required by the grant model.
+            result["public_name"] = (
+                f"{prefix}/{_STUDY_BASELINE_GRANTED_ROOT}/{public_name}"
+            )
+    return result
+
+
+def _compose_study_run_pair(
+    packages: dict[int, _StudyTaskPackage],
+    *,
+    participant_root: Path,
+    authority_root: Path,
+) -> dict[int, _StudyTaskPackage]:
+    """Write two run-private stores and return grant-ready package views."""
+
+    participant_contexts: list[Context] = []
+    authority_contexts: list[Context] = []
+    participant_catalogs: list[TranslationCatalog] = []
+    authority_catalogs: list[TranslationCatalog] = []
+
+    for task in _STUDY_TASKS:
+        package = packages[task]
+        for authority in (False, True):
+            role = "AUTHORITY" if authority else "TASK"
+            source = next(item for item in package.profiles if item.role == role)
+            source_contexts, query_refs = _context_records(source.store)
+            if query_refs:
+                raise ProfileError("Study run sources cannot contain query pointers.")
+            mapping = {name: f"task-{task}/{name}" for name in source_contexts}
+            remapped = _remap_context_records(source_contexts, mapping)
+            catalogs = _remap_translation_catalogs(source.store, mapping)
+            if authority:
+                authority_contexts.extend(remapped)
+                authority_catalogs.extend(catalogs)
+            else:
+                participant_contexts.extend(remapped)
+                participant_catalogs.extend(catalogs)
+
+    participant_inspection = _write_mapped_study_store(
+        participant_root,
+        contexts=tuple(participant_contexts),
+        catalogs=tuple(participant_catalogs),
+        current_context=(
+            "task-1/" + str(packages[1].profiles[0].inspection.current_context)
+        ),
+    )
+    authority_source = next(
+        source for source in packages[1].profiles if source.role == "AUTHORITY"
+    )
+    authority_inspection = _write_mapped_study_store(
+        authority_root,
+        contexts=tuple(authority_contexts),
+        catalogs=tuple(authority_catalogs),
+        current_context=f"task-1/{authority_source.inspection.current_context}",
+    )
+
+    # _materialize_study_grants validates each original package independently.
+    # Its source names remain the manifest identities, but every task now reads
+    # from one of the two merged run stores.
+    merged: dict[int, _StudyTaskPackage] = {}
+    for task in _STUDY_TASKS:
+        package = packages[task]
+        sources: list[_StudyProfileSource] = []
+        for source in package.profiles:
+            inspection = (
+                authority_inspection
+                if source.role == "AUTHORITY"
+                else participant_inspection
+            )
+            sources.append(
+                replace(
+                    source,
+                    store=authority_root
+                    if source.role == "AUTHORITY"
+                    else participant_root,
+                    inspection=inspection,
+                )
+            )
+        merged[task] = replace(
+            package,
+            profiles=tuple(sources),
+            grant_templates=tuple(
+                _prefix_study_grant_template(raw, task=task)
+                for raw in package.grant_templates
+            ),
+        )
+    return merged
+
+
+def _publish_study_run_pair(
+    registry: ProfileRegistry,
+    *,
+    baseline: ProfileEntry,
+    packages: dict[int, _StudyTaskPackage],
+    study_name: str,
+    study_uid: str,
+    created_at: str,
+    baseline_digest: str,
+) -> StudyInitializationResult:
+    """Publish the run's two stores and grants as one registry transaction."""
+
+    authority_name = _study_run_authority_profile_name(study_name)
+    requested_names = {study_name.casefold(), authority_name.casefold()}
+    conflicts = [
+        profile.name
+        for profile in registry.profiles
+        if profile.name.casefold() in requested_names
+    ]
+    if conflicts:
+        raise ProfileError(f"Profile {conflicts[0]!r} already exists.")
+
+    common_source: dict[str, object] = {
+        "study_uid": study_uid,
+        "study_name": study_name,
+        "created_at": created_at,
+        "baseline_sha256": baseline_digest,
+        "baseline_profile_uid": baseline.uid,
+        "baseline_profile_name": baseline.name,
+    }
+    participant = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name=study_name,
+        kind="MANAGED",
+        source={"kind": _STUDY_RUN_SOURCE_KIND, **common_source},
+    )
+    authority = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name=authority_name,
+        kind="MANAGED",
+        source={"kind": _STUDY_RUN_GRANTED_SOURCE_KIND, **common_source},
+    )
+    batch = profile_stores_dir() / f".{study_name}.study-run-{uuid.uuid4().hex}"
+    batch.mkdir()
+    participant_staging = batch / participant.uid
+    authority_staging = batch / authority.uid
+    published: list[tuple[Path, Path]] = []
+    committed = False
+    try:
+        merged = _compose_study_run_pair(
+            packages,
+            participant_root=participant_staging,
+            authority_root=authority_staging,
+        )
+        profiles_by_name: dict[str, ProfileEntry] = {}
+        roots_by_name: dict[str, Path] = {}
+        for package in merged.values():
+            for source in package.profiles:
+                target = authority if source.role == "AUTHORITY" else participant
+                profiles_by_name[source.name] = target
+                roots_by_name[source.name] = source.store
+        grants = _materialize_study_grants(
+            merged,
+            profiles_by_name,
+            roots_by_name,
+        )
+        namespace = uuid.UUID(study_uid)
+        grants = tuple(
+            replace(grant, uid=str(uuid.uuid5(namespace, grant.uid)))
+            for grant in grants
+        )
+        existing_grant_uids = {grant.uid for grant in registry.grants}
+        if any(grant.uid in existing_grant_uids for grant in grants):
+            raise ProfileError("Study grant identity already exists.")
+
+        participant_inspection = inspect_store(participant_staging)
+        authority_inspection = inspect_store(authority_staging)
+        updated = ProfileRegistry(
+            generation=max(1, registry.generation + 1),
+            active_uid=registry.active_uid,
+            profiles=(*registry.profiles, participant, authority),
+            grants=(*registry.grants, *grants),
+        )
+        participant_inspection = _inspection_with_grants(
+            updated,
+            participant,
+            participant_inspection,
+            cache={authority.uid: authority_inspection},
+        )
+
+        for profile, source in (
+            (participant, participant_staging),
+            (authority, authority_staging),
+        ):
+            destination = profile_store_dir(profile)
+            if destination.exists() or destination.is_symlink():
+                raise ProfileError("Managed profile destination is occupied.")
+            os.replace(source, destination)
+            published.append((destination, source))
+        try:
+            _write_registry(updated)
+        except Exception as error:
+            try:
+                replacement_is_visible = load_profile_registry() == updated
+            except (OSError, ProfileConfigError, ValueError):
+                replacement_is_visible = False
+            if replacement_is_visible:
+                # A post-replace fsync failure may still leave the complete
+                # pair and grant generation visible. Keep both stores so that
+                # the registry never points at missing run data.
+                committed = True
+                raise ProfileError(
+                    f"Study run {study_name!r} was published, but registry "
+                    "durability could not be confirmed; it remains registered."
+                ) from error
+            raise
+        committed = True
+        return StudyInitializationResult(
+            profile=participant,
+            inspection=replace(
+                participant_inspection,
+                root=profile_store_dir(participant),
+            ),
+            authority_profile=authority,
+            authority_inspection=replace(
+                authority_inspection,
+                root=profile_store_dir(authority),
+            ),
+            baseline_profile_name=baseline.name,
+            active_profile_name=registry.active.name,
+        )
+    except Exception:
+        if not committed:
+            for destination, source in reversed(published):
+                if destination.exists() and not source.exists():
+                    os.replace(destination, source)
+        raise
+    finally:
+        if batch.exists() and not batch.is_symlink():
+            shutil.rmtree(batch)
+
+
 def init_study_profile(
     baseline_profile_name: str = STUDY_BASELINE_PROFILE_NAME,
     *,
     name: str | None = None,
 ) -> StudyInitializationResult:
-    """Copy one complete editable baseline into an ordinary Profile.
-
-    The baseline's namespaced task and granted-memory branches are the Study
-    topology.  Keeping that topology intact avoids treating a still-changing
-    corpus as six independently stable stores.  The clean-import boundary also
-    prevents authoring history from becoming participant-run state.
-    """
+    """Create one isolated participant Profile and one authority Profile."""
 
     try:
         baseline_name = validate_profile_name(baseline_profile_name)
@@ -3206,21 +3452,26 @@ def init_study_profile(
                 "grants and cannot be copied as one self-contained Profile."
             )
 
+        task_records = _study_baseline_tasks(baseline)
         source_root = profile_store_dir(baseline)
-        digest, source_record = _baseline_import_provenance(
-            source_root,
-            source_profile=baseline,
+        before = baseline_store_digest(source_root)
+        staging = profile_stores_dir() / (
+            f".{profile_name}.study-source-{uuid.uuid4().hex}"
         )
-        profile, inspection = _publish_baseline_profile_locked(
-            registry,
-            name=profile_name,
-            source_root=source_root,
-            digest=digest,
-            source_record=source_record,
-        )
-        return StudyInitializationResult(
-            profile=profile,
-            inspection=inspection,
-            baseline_profile_name=baseline.name,
-            active_profile_name=registry.active.name,
-        )
+        try:
+            packages = _snapshot_study_baseline(baseline, task_records, staging)
+            after = baseline_store_digest(source_root)
+            if before != after:
+                raise ProfileError("Study baseline changed during initialization.")
+            return _publish_study_run_pair(
+                registry,
+                baseline=baseline,
+                packages=packages,
+                study_name=profile_name,
+                study_uid=str(generated_uid),
+                created_at=created.isoformat(),
+                baseline_digest=before,
+            )
+        finally:
+            if staging.exists() and not staging.is_symlink():
+                shutil.rmtree(staging)

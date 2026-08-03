@@ -621,7 +621,10 @@ def import_study_cmd(
         "Edit it with: mem profile use "
         + display_escape_text(STUDY_BASELINE_PROFILE_NAME)
     )
-    typer.echo("Clone it as one complete run Profile with: mem init-study NAME")
+    typer.echo(
+        "Clone it as an isolated participant/authority run with: "
+        "mem init-study NAME"
+    )
 
 
 @app.command("archive-study")

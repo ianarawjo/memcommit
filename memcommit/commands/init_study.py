@@ -1,4 +1,4 @@
-"""Initialize one Study as a complete copy of an editable baseline Profile."""
+"""Initialize one Study as an isolated participant/authority Profile pair."""
 
 from __future__ import annotations
 
@@ -24,11 +24,11 @@ def cmd(
         str,
         typer.Option(
             "--from-profile",
-            help=("Editable source Profile whose complete topology will be copied"),
+            help=("Editable Study baseline whose Task/grant topology will be copied"),
         ),
     ] = STUDY_BASELINE_PROFILE_NAME,
 ) -> None:
-    """Clone one live Study baseline into one ordinary Profile."""
+    """Clone one live Study baseline and restore its real grants."""
 
     try:
         result = init_study_profile(baseline_profile, name=name)
@@ -41,10 +41,14 @@ def cmd(
         raise typer.Exit(1)
 
     typer.secho(
-        f"Initialized Study Profile '{display_escape_text(result.profile.name)}'.",
+        f"Initialized Study run '{display_escape_text(result.profile.name)}'.",
         fg=typer.colors.GREEN,
     )
     typer.echo("Baseline Profile: " + display_escape_text(result.baseline_profile_name))
+    typer.echo("Participant Profile: " + display_escape_text(result.profile.name))
+    typer.echo(
+        "Granted-memory Profile: " + display_escape_text(result.authority_profile.name)
+    )
     current = (
         display_escape_text(result.inspection.current_context)
         if result.inspection.current_context
@@ -54,7 +58,14 @@ def cmd(
         f"Contexts {len(result.inspection.context_names)} · "
         f"Memories {result.inspection.ordinary_memory_count} · current={current}"
     )
-    typer.echo("The complete baseline Context topology was copied without splitting.")
+    typer.echo(
+        f"Granted Contexts {result.inspection.granted_context_count} · "
+        f"Granted Memories {result.inspection.granted_memory_count}"
+    )
+    typer.echo(
+        "Task-owned and granted-memory data were copied into isolated run "
+        "Profiles and connected with real authority grants."
+    )
     typer.echo(
         "Operational history starts empty; checkpoints, sessions, caches, locks, "
         "and run logs were not imported."

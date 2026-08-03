@@ -18,7 +18,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.profiles as profiles_module
 from memcommit.cli import app
-from memcommit.context import AutoCheckpoint, Context
+from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.profile_config import (
     GRANT_RESOURCE_CONTEXT_TREE,
@@ -33,10 +33,11 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import (
     STUDY_BASELINE_PROFILE_NAME,
-    baseline_store_digest,
     create_authority_grant,
+    resolve_granted_context_view,
     study_profile_groups,
 )
+from memcommit.query_sessions import load_authority_query_catalog
 from memcommit.store import MemoryStore
 
 
@@ -107,9 +108,7 @@ def _install_legacy_split_study(
                 kind="MANAGED",
                 source={
                     "kind": (
-                        "STUDY_RUN_TASK"
-                        if role == "TASK"
-                        else "STUDY_RUN_AUTHORITY"
+                        "STUDY_RUN_TASK" if role == "TASK" else "STUDY_RUN_AUTHORITY"
                     ),
                     "study_uid": study_uid,
                     "study_name": name,
@@ -181,13 +180,7 @@ def _install_legacy_split_study(
 
 
 def _legacy_archive_manifest(study_uid: str) -> Path:
-    return (
-        profile_control_dir()
-        / "archives"
-        / "studies"
-        / study_uid
-        / "manifest.json"
-    )
+    return profile_control_dir() / "archives" / "studies" / study_uid / "manifest.json"
 
 
 def test_absent_registry_preserves_legacy_authoring_without_writing_metadata(
@@ -466,19 +459,106 @@ def test_profile_use_selects_the_initialized_complete_profile(
 
     assert selected.exit_code == 0, selected.output
     assert "Selected profile 'profile-view'." in selected.output
-    assert "Contexts 130 owned + 0 granted" in selected.output
-    assert "Memories 1278 owned + 0 granted" in selected.output
+    assert "Contexts 47 owned + 52 granted" in selected.output
+    assert "Memories 375 owned + 675 granted" in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
     assert "* task-1" in contexts.stdout
     assert "task-1/participant/construction-updates" in contexts.stdout
-    assert "granted-memory/task-1/campus-wiki" in contexts.stdout
-    assert "[view " not in contexts.stdout
+    assert "task-1/granted-memory/campus-wiki" in contexts.stdout
+    assert (
+        "[view create,read,update from profile-view-granted-memory]" in contexts.stdout
+    )
+    assert "task-1/granted-memory/campus-wiki/construction-details" in contexts.stdout
+    assert (
+        "[view query,session_log from profile-view-granted-memory]" in contexts.stdout
+    )
     assert "authoring-notes" not in contexts.stdout
+
+    readable = _subprocess_mem(
+        tmp_path,
+        "ls",
+        "-R",
+        "task-1/granted-memory/campus-wiki",
+    )
+    assert readable.returncode == 0, readable.stderr
+    assert "event information agent" in readable.stdout
+    query_only = _subprocess_mem(
+        tmp_path,
+        "ls",
+        "task-1/granted-memory/campus-wiki/construction-details",
+    )
+    assert query_only.returncode == 1
+    assert "does not allow read access" in query_only.stderr
+
+    query_view = resolve_granted_context_view(
+        "task-1/granted-memory/campus-wiki/construction-details",
+        attachment_name="task-1/participant/construction-updates",
+        required_permission="QUERY",
+    )
+    query_catalog = load_authority_query_catalog(query_view, language="en")
+    assert len(query_catalog) == 78
+    assert all(entry.placeholder_lines for entry in query_catalog)
+
+    run_only_text = "Participant edit stored only in this Study run."
+    granted_add = _subprocess_mem(
+        tmp_path,
+        "add",
+        run_only_text,
+        "--context",
+        "task-1/granted-memory/campus-wiki",
+    )
+    assert granted_add.returncode == 0, granted_add.stderr
+    registry = load_profile_registry()
+    baseline = registry.by_name("study-baseline")
+    authority = registry.by_name("profile-view-granted-memory")
+    assert baseline is not None and authority is not None
+    run_context = MemoryStore(
+        root=profile_store_dir(authority), create=False
+    ).load_direct("task-1/campus-wiki")
+    baseline_context = MemoryStore(
+        root=profile_store_dir(baseline), create=False
+    ).load_direct("granted-memory/task-1/campus-wiki")
+    assert run_only_text in [
+        item.content for item in run_context.iter_items() if isinstance(item, Memory)
+    ]
+    assert run_only_text not in [
+        item.content
+        for item in baseline_context.iter_items()
+        if isinstance(item, Memory)
+    ]
+
+    switched = _subprocess_mem(
+        tmp_path,
+        "switch",
+        "task-2/participant/proposal-workspace",
+    )
+    assert switched.returncode == 0, switched.stderr
+    task_two_contexts = _subprocess_mem(tmp_path, "contexts")
+    assert "task-2/granted-memory/advisor1" in task_two_contexts.stdout
+    assert "[view read from profile-view-granted-memory]" in task_two_contexts.stdout
+    read_only_add = _subprocess_mem(
+        tmp_path,
+        "add",
+        "This write must be rejected.",
+        "--context",
+        "task-2/granted-memory/advisor1",
+    )
+    assert read_only_add.returncode == 1
+    assert "does not allow create access" in read_only_add.stderr
+
+    task_two_query = resolve_granted_context_view(
+        "task-2/granted-memory/proposal-submission-guidelines",
+        attachment_name="task-2/participant/proposal-workspace",
+        required_permission="QUERY",
+    )
+    assert len(load_authority_query_catalog(task_two_query, language="en")) == 75
 
     profile_list = runner.invoke(app, ["profile", "list"])
     assert profile_list.exit_code == 0
     assert "* profile-view" in profile_list.output
+    assert "profile-view-granted-memory" in profile_list.output
+    assert "52 granted" in profile_list.output
     assert "STUDY profile-view" not in profile_list.output
     assert "authoring" in profile_list.output
 
@@ -827,7 +907,7 @@ def test_profile_import_remains_an_explicit_archival_copy_with_history(
     assert len(imported_store.list_checkpoints("archived")) == 1
 
 
-def test_init_study_creates_one_complete_ordinary_profile(
+def test_init_study_creates_isolated_participant_and_authority_profiles(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -846,15 +926,12 @@ def test_init_study_creates_one_complete_ordinary_profile(
     )
 
     assert result.exit_code == 0, result.stderr or result.output
-    assert "Initialized Study Profile 'pilot-001'." in result.output
+    assert "Initialized Study run 'pilot-001'." in result.output
     assert "Baseline Profile: study-baseline" in result.output
-    assert "Contexts 130 · Memories 1278 · current=task-1" in result.output
-    assert (
-        "complete baseline Context topology was copied without splitting"
-        in result.output
-    )
-    assert "Task 1 ·" not in result.output
-    assert "Authority Profiles:" not in result.output
+    assert "Participant Profile: pilot-001" in result.output
+    assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
+    assert "Contexts 47 · Memories 375" in result.output
+    assert "Granted Contexts 52 · Granted Memories 675" in result.output
     assert "Active Profile unchanged: authoring" in result.output
     assert "Use it with: mem profile pilot-001" in result.output
     assert _tree_digest(bundle_root) == source_digest
@@ -865,30 +942,43 @@ def test_init_study_creates_one_complete_ordinary_profile(
         "authoring",
         "study-baseline",
         "pilot-001",
+        "pilot-001-granted-memory",
     ]
-    assert registry.grants == ()
+    assert len(registry.grants) == 7
     assert study_profile_groups(registry.profiles) == ()
     baseline = registry.by_name("study-baseline")
     copied = registry.by_name("pilot-001")
-    assert baseline is not None and copied is not None and copied.source is not None
-    assert copied.source["kind"] == "PROFILE_IMPORT"
-    assert copied.source["source_profile_uid"] == baseline.uid
-    assert copied.source["source_profile_name"] == baseline.name
+    authority = registry.by_name("pilot-001-granted-memory")
+    assert (
+        baseline is not None
+        and copied is not None
+        and authority is not None
+        and copied.source is not None
+        and authority.source is not None
+    )
+    assert copied.source["kind"] == "STUDY_RUN"
+    assert authority.source["kind"] == "STUDY_RUN_GRANTED_MEMORY"
+    assert copied.source["study_uid"] == authority.source["study_uid"]
+    assert copied.source["baseline_profile_uid"] == baseline.uid
+    assert copied.source["baseline_profile_name"] == baseline.name
     assert re.fullmatch(r"[0-9a-f]{64}", copied.source["baseline_sha256"])
     baseline_root = profile_store_dir(baseline)
     copied_root = profile_store_dir(copied)
+    authority_root = profile_store_dir(authority)
     assert copied_root != baseline_root
-    assert baseline_store_digest(copied_root) == baseline_store_digest(baseline_root)
     baseline_store = MemoryStore(root=baseline_root, create=False)
     copied_store = MemoryStore(root=copied_root, create=False)
-    assert copied_store.list_context_names() == baseline_store.list_context_names()
-    assert copied_store.current_context_name() == baseline_store.current_context_name()
-    for context_name in baseline_store.list_context_names():
-        assert (
-            copied_store.load_direct(context_name).to_dict()
-            == baseline_store.load_direct(context_name).to_dict()
-        )
+    authority_store = MemoryStore(root=authority_root, create=False)
+    assert len(copied_store.list_context_names()) == 47
+    assert len(authority_store.list_context_names()) == 82
+    assert copied_store.current_context_name() == (
+        "task-1/participant/construction-updates"
+    )
+    assert authority_store.current_context_name() == "task-1/campus-wiki"
+    assert "granted-memory/task-1/campus-wiki" in baseline_store.list_context_names()
+    assert "task-1/campus-wiki" in authority_store.list_context_names()
     assert not any(copied_root.rglob("checkpoints/*.json"))
+    assert not any(authority_root.rglob("checkpoints/*.json"))
 
 
 def test_init_study_without_name_generates_unique_timestamped_name(
@@ -912,13 +1002,19 @@ def test_init_study_without_name_generates_unique_timestamped_name(
         for profile in load_profile_registry().profiles
         if profile.name not in {"authoring", "study-baseline"}
     ]
-    assert len(names) == 2
-    assert names[0] != names[1]
-    assert all(re.fullmatch(r"study-\d{8}T\d{6}Z-[0-9a-f]{8}", name) for name in names)
+    assert len(names) == 4
+    participant_names = [name for name in names if not name.endswith("-granted-memory")]
+    assert len(participant_names) == 2
+    assert participant_names[0] != participant_names[1]
+    assert all(
+        re.fullmatch(r"study-\d{8}T\d{6}Z-[0-9a-f]{8}", name)
+        for name in participant_names
+    )
+    assert {f"{name}-granted-memory" for name in participant_names}.issubset(names)
     assert study_profile_groups(load_profile_registry().profiles) == ()
 
 
-def test_profile_inventory_shows_initialized_study_as_one_ordinary_profile(
+def test_profile_inventory_shows_run_pair_and_real_granted_counts(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -942,14 +1038,21 @@ def test_profile_inventory_shows_initialized_study_as_one_ordinary_profile(
     profile_line = next(
         line for line in result.output.splitlines() if "pilot-002" in line
     )
-    assert "Contexts 130 owned + 0 granted" in profile_line
-    assert "Memories 1278 owned + 0 granted" in profile_line
+    assert "Contexts 47 owned + 52 granted" in profile_line
+    assert "Memories 375 owned + 675 granted" in profile_line
+    authority_line = next(
+        line
+        for line in result.output.splitlines()
+        if "pilot-002-granted-memory" in line
+    )
+    assert "Contexts 82 owned + 0 granted" in authority_line
+    assert "Memories 903 owned + 0 granted" in authority_line
     assert "STUDY pilot-002" not in result.output
     assert "pilot-002-task-" not in result.output
     assert "Authority 1" not in result.output
 
 
-def test_initialized_study_picker_shows_one_ordinary_profile(
+def test_initialized_study_picker_shows_participant_and_authority_profiles(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -987,6 +1090,7 @@ def test_initialized_study_picker_shows_one_ordinary_profile(
         ("authoring", None),
         ("study-baseline", None),
         ("pilot-picker", None),
+        ("pilot-picker-granted-memory", None),
     ]
     assert load_profile_registry().active.name == "pilot-picker"
 
@@ -1071,10 +1175,19 @@ def test_init_study_preserves_a_store_after_visible_registry_replacement(
     registry = load_profile_registry()
     baseline = registry.by_name("study-baseline")
     published = registry.by_name("durability-visible")
-    assert baseline is not None and published is not None
+    authority = registry.by_name("durability-visible-granted-memory")
+    assert baseline is not None and published is not None and authority is not None
     assert profile_store_dir(published).is_dir()
-    assert baseline_store_digest(profile_store_dir(published)) == baseline_store_digest(
-        profile_store_dir(baseline)
+    assert profile_store_dir(authority).is_dir()
+    assert (
+        len(
+            [
+                grant
+                for grant in registry.grants
+                if grant.grantee_profile_uid == published.uid
+            ]
+        )
+        == 7
     )
     assert registry.active.name == "authoring"
 
@@ -1117,7 +1230,7 @@ def test_init_study_is_all_or_nothing_when_source_store_is_invalid(
     assert stores == [profile_store_dir(baseline)]
 
 
-def test_repeated_init_study_profiles_are_independent_complete_copies(
+def test_repeated_init_study_run_pairs_are_independent(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -1142,28 +1255,44 @@ def test_repeated_init_study_profiles_are_independent_complete_copies(
     registry = load_profile_registry()
     baseline = registry.by_name("study-baseline")
     first_profile = registry.by_name("pilot-v2-a")
+    first_authority = registry.by_name("pilot-v2-a-granted-memory")
     second_profile = registry.by_name("pilot-v2-b")
+    second_authority = registry.by_name("pilot-v2-b-granted-memory")
     assert (
         baseline is not None
         and first_profile is not None
+        and first_authority is not None
         and second_profile is not None
+        and second_authority is not None
     )
-    assert len({baseline.uid, first_profile.uid, second_profile.uid}) == 3
-    assert registry.grants == ()
+    assert (
+        len(
+            {
+                baseline.uid,
+                first_profile.uid,
+                first_authority.uid,
+                second_profile.uid,
+                second_authority.uid,
+            }
+        )
+        == 5
+    )
+    assert len(registry.grants) == 14
     assert study_profile_groups(registry.profiles) == ()
 
     baseline_root = profile_store_dir(baseline)
-    first_root = profile_store_dir(first_profile)
-    second_root = profile_store_dir(second_profile)
-    assert baseline_store_digest(first_root) == baseline_store_digest(baseline_root)
-    assert baseline_store_digest(second_root) == baseline_store_digest(baseline_root)
-
-    first_store = MemoryStore(root=first_root, create=False)
-    first_context = first_store.load_direct("task-1")
-    ops.add(first_context, "Only the first initialized Profile changes.")
+    baseline_store = MemoryStore(root=baseline_root, create=False)
+    first_store = MemoryStore(root=profile_store_dir(first_authority), create=False)
+    second_store = MemoryStore(root=profile_store_dir(second_authority), create=False)
+    first_context = first_store.load_direct("task-1/campus-wiki")
+    added = ops.add(first_context, "Only the first run authority copy changes.")
     first_store.save(first_context)
-    assert baseline_store_digest(first_root) != baseline_store_digest(baseline_root)
-    assert baseline_store_digest(second_root) == baseline_store_digest(baseline_root)
+    assert added.uid in first_store.load_direct("task-1/campus-wiki").memories
+    assert added.uid not in second_store.load_direct("task-1/campus-wiki").memories
+    assert (
+        added.uid
+        not in baseline_store.load_direct("granted-memory/task-1/campus-wiki").memories
+    )
 
     inventory = runner.invoke(app, ["profile", "list"])
     assert inventory.exit_code == 0, inventory.output
@@ -1181,7 +1310,7 @@ def test_repeated_init_study_profiles_are_independent_complete_copies(
     )
 
 
-def test_init_study_can_copy_an_explicit_self_contained_profile(
+def test_init_study_rejects_a_non_study_baseline_profile(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -1210,17 +1339,13 @@ def test_init_study_can_copy_an_explicit_self_contained_profile(
         ],
     )
 
-    assert result.exit_code == 0, result.stderr or result.output
+    assert result.exit_code == 1
+    assert "Study baseline Profile provenance is invalid" in result.stderr
     registry = load_profile_registry()
     source = registry.by_name("custom-baseline")
     copied = registry.by_name("custom-run")
-    assert source is not None and copied is not None and copied.source is not None
-    assert copied.source["source_profile_uid"] == source.uid
-    copied_store = MemoryStore(root=profile_store_dir(copied), create=False)
-    copied_context = copied_store.load_direct(context.name)
-    assert copied_context.uid == context.uid
-    assert [item.uid for item in copied_context.iter_items()] == [memory.uid]
-    assert copied_store.current_context_name() == context.name
+    assert source is not None and copied is None
+    assert memory.uid in source_store.load_direct(context.name).memories
     assert registry.active.name == "authoring"
 
 
@@ -1400,8 +1525,7 @@ def test_archive_legacy_study_resumes_a_prepared_manifest(
     )
     prepared = manifest_path.read_bytes()
     digests = {
-        profile.uid: _tree_digest(profile_store_dir(profile))
-        for profile in profiles
+        profile.uid: _tree_digest(profile_store_dir(profile)) for profile in profiles
     }
 
     result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
@@ -1414,10 +1538,11 @@ def test_archive_legacy_study_resumes_a_prepared_manifest(
     assert current.generation == registry.generation + 1
     assert current.active_uid == registry.active_uid
     assert all(profile.uid not in archived_uids for profile in current.profiles)
-    assert all(grant.uid not in {item.uid for item in grants} for grant in current.grants)
+    assert all(
+        grant.uid not in {item.uid for item in grants} for grant in current.grants
+    )
     assert {
-        profile.uid: _tree_digest(profile_store_dir(profile))
-        for profile in profiles
+        profile.uid: _tree_digest(profile_store_dir(profile)) for profile in profiles
     } == digests
 
 
@@ -1587,7 +1712,9 @@ def test_archive_legacy_study_rejects_cross_boundary_grants(
     monkeypatch.setenv("HOME", str(tmp_path))
     _prepare_authoring(isolated_store)
     study_uid, profiles, _grants = _install_legacy_split_study()
-    task_profile = next(profile for profile in profiles if profile.name == "legacy-run-task-1")
+    task_profile = next(
+        profile for profile in profiles if profile.name == "legacy-run-task-1"
+    )
     authority_profile = next(
         profile
         for profile in profiles
@@ -1695,6 +1822,8 @@ def test_archive_legacy_study_keeps_visible_commit_after_fsync_failure(
     registry = load_profile_registry()
     archived_uids = {profile.uid for profile in profiles}
     assert all(profile.uid not in archived_uids for profile in registry.profiles)
-    assert all(grant.uid not in {item.uid for item in grants} for grant in registry.grants)
+    assert all(
+        grant.uid not in {item.uid for item in grants} for grant in registry.grants
+    )
     assert _legacy_archive_manifest(study_uid).is_file()
     assert all(profile_store_dir(profile).is_dir() for profile in profiles)

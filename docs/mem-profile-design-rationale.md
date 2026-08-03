@@ -75,7 +75,8 @@ Managed profiles are editable copies under an external control plane:
 │   └── <legacy-study-uid>/manifest.json
 └── stores/
     ├── <stable-profile-uid>/         # study-baseline
-    ├── <run-profile-uid>/            # one complete initialized Profile
+    ├── <run-profile-uid>/            # participant Task branches
+    ├── <run-authority-uid>/          # run-private granted Memory
     └── <archived-profile-uid>/       # detached but not moved or deleted
 ```
 
@@ -110,62 +111,67 @@ intermediate name. `init-study` copies those real structural parents together
 with every descendant, so upward navigation and recursive listing have the
 same topology in the initialized Profile as in the baseline.
 
-## Single-Profile Study snapshots
+## Isolated two-Profile Study runs
 
 `mem init-study [NAME]` is the repeatable run-oriented entry point. It snapshots
 the currently registered `study-baseline` Profile, not the generated bundle,
-and publishes exactly one ordinary managed Profile:
+and publishes two managed Profiles plus their grants in one registry generation:
 
 ```text
-pilot-001  USE  Contexts 130 owned + 0 granted · Memories 1278 owned + 0 granted
+pilot-001                 Contexts 47 owned + 52 granted · Memories 375 owned + 675 granted
+pilot-001-granted-memory  Contexts 82 owned + 0 granted · Memories 903 owned + 0 granted
 ```
 
-The target is named exactly `NAME`; no `-task-N` or authority suffix is added
-and no synthetic STUDY heading is created. Omitting `NAME` generates
+The participant target is named exactly `NAME`; its run-private authority is
+named `NAME-granted-memory`. Omitting `NAME` generates
 `study-YYYYMMDDTHHMMSSZ-<uid-prefix>`, so two initializations in the same second
 remain distinct. `--from-profile` selects another registered self-contained
 source while the default remains the stable `study-baseline` name rather than
 the globally active Profile.
 
-The snapshot preserves the complete canonical Context names, every
-Context/Memory/reference identity, declared query sources and translation
-views, and `state.json.current`. In particular, `task-1`, `task-2`, `task-3`,
-and `granted-memory/task-{1,2,3}` remain branches of the same Profile. It does
-not split, rename, remap, synthesize, or grant those branches. Registry grants
-are relationships outside a MemoryStore; because silently dropping them would
-change the source's capabilities, `init-study` rejects a source Profile that
-participates in an incoming or outgoing grant.
+The snapshot preserves every durable Context, Memory, and translation identity
+while remapping placement. Participant content remains below `task-N`; source
+content moves from baseline path `granted-memory/task-N/...` to authority path
+`task-N/...`. Actual borrowed views appear below
+`task-N/granted-memory/...`. A narrower query-only grant overrides a readable
+parent, so list/show/export access remains closed while `mem query` receives
+only the frozen authority scope.
+
+The authority store is copied for every run. Task 1's allowed add or edit saves
+through the grant into that copy and cannot mutate `study-baseline` or another
+run. This reuses the existing permission, most-specific override, grant
+revocation, checkpoint provenance, and mutation revalidation boundaries rather
+than introducing a second local ACL implementation.
 
 Initialization uses the clean Profile-import allowlist. Checkpoints, command
 receipts, workflow and query sessions, caches, locks, lifecycle events,
 clipboard state, and write-protection state do not cross into the run. The
 admitted source files are digested before and after the staged copy and at the
-destination. Profile-name collisions are case-insensitive. A duplicate name,
+destination. Profile-name collisions, including the derived authority name,
+are case-insensitive. A duplicate name,
 invalid/changing source, or registry failure before atomic replacement
 publishes nothing. If replacement is already visible but the following
 directory `fsync` cannot confirm durability, deleting the store would corrupt
 the visible registry; the command instead reports the uncertain durability and
-leaves the new Profile registered with its store intact.
+leaves the complete pair and grants registered with both stores intact.
 The previously active Profile intentionally remains active, so initialization
 never silently redirects an unrelated terminal's next `mem` command.
 
-## Why initialized topology now remains merged
+## Why initialized topology is a pair rather than six Profiles
 
 Profile selection changes the complete experimental memory environment;
 Context switching navigates within that environment. The current Study corpus
-is still being revised, so Task 1--3 and the `granted-memory` material do not
-yet justify six independently managed run identities. Copying the whole
-baseline keeps the unit being reviewed identical to the unit being initialized
-and makes the source/clone relationship verifiable with one baseline digest.
+is still revised as one baseline, while a participant run must enforce the
+different Task permission conditions. Two Profiles are the smallest topology
+that permits real cross-Profile grants: one participant owner and one isolated
+authority owner. Six per-task Profiles were rejected because Profile switching
+would fragment a single run and duplicate its control-plane identity. One
+physical Profile was rejected because ordinary local Context resolution would
+bypass the grant engine.
 
-This deliberately does not provide per-task permission isolation in a newly
-initialized Profile: a user of that Profile can navigate all of its ordinary
-branches. If a later stabilized experiment needs participant/authority
-separation, that is a separate explicit grant workflow rather than an implicit
-side effect of `init-study`. Registries containing older
+Registries containing older
 `STUDY_RUN_TASK`/`STUDY_RUN_AUTHORITY` Profiles remain readable and selectable;
-the legacy grouping UI is retained only for those persisted records and new
-initializations do not add to it.
+the legacy six-Profile grouping UI is retained only for those persisted records.
 
 ## Recoverable legacy Study archive
 
@@ -206,7 +212,7 @@ the command keeps the manifest and detached registry state rather than
 manufacturing a dangling rollback. Archiving and
 `mem init-study NAME` remain two explicit commands: the first preserves the
 old run, while the second allocates a new ordinary Profile UID from the current
-baseline.
+baseline together with its run-private granted-memory Profile and grants.
 
 ## Process snapshot and concurrency
 
