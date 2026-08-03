@@ -33,6 +33,7 @@ from memcommit.commands import (
     query,
     rationale,
     reference,
+    rename,
     remove,
     review,
     revert,
@@ -77,6 +78,10 @@ app.command(
 
 # --- Navigation ---
 app.command("switch",         help="Switch to a different context.")(switch.cmd)
+app.command(
+    "rename",
+    help="Rename an ordinary Context namespace and all lexical descendants.",
+)(rename.cmd)
 app.command("branch",         help="Create a new context branched from the current one.")(branch.cmd)
 app.command(
     "merge",

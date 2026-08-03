@@ -7,6 +7,7 @@
 """
 from __future__ import annotations
 
+import copy
 from contextlib import ExitStack, contextmanager
 import fcntl
 import hashlib
@@ -130,6 +131,66 @@ class ConcurrentGroundUpdateError(RuntimeError):
     """A named Ground changed after a caller captured its expected record."""
 
 
+@dataclass(frozen=True)
+class ContextRenameBinding:
+    """One stable ordinary-Context identity in a namespace rename plan."""
+
+    old_name: str
+    new_name: str
+    context_uid: str
+
+
+@dataclass(frozen=True)
+class ContextRenamePlan:
+    """Read-only, freshness-bound preview for one Context namespace rename."""
+
+    old_name: str
+    new_name: str
+    bindings: tuple[ContextRenameBinding, ...]
+    changed_owner_names: tuple[str, ...]
+    reference_count: int
+    checkpoint_reference_count: int
+    ground_frame_count: int
+    translation_artifact_count: int
+    current_before: str | None
+    current_after: str | None
+    graph_digest: str
+
+    @property
+    def descendant_count(self) -> int:
+        return max(0, len(self.bindings) - 1)
+
+
+@dataclass(frozen=True)
+class ContextRenameResult:
+    """Committed counts returned by :meth:`MemoryStore.rename_contexts`."""
+
+    renamed_context_count: int
+    changed_owner_count: int
+    reference_count: int
+    checkpoint_reference_count: int
+    ground_frame_count: int
+    translation_artifact_count: int
+    current_context: str | None
+
+
+@dataclass(frozen=True)
+class _PreparedContextRename:
+    """Validated pre/post images used only inside the store transaction."""
+
+    plan: ContextRenamePlan
+    records: dict[str, dict[str, object]]
+    post_records: dict[str, dict[str, object]]
+    checkpoints: dict[str, dict[str, dict[str, object]]]
+    post_checkpoints: dict[str, dict[str, dict[str, object]]]
+    state: dict[str, object]
+    post_state: dict[str, object]
+    ground_records: dict[str, dict[str, object]]
+    post_ground_records: dict[str, dict[str, object]]
+    translation_records: dict[str, dict[str, object]]
+    post_translation_records: dict[str, dict[str, object]]
+
+
 def _context_name_parts(name: str) -> tuple[str, ...]:
     """Validate a Context name and return its POSIX namespace segments."""
     if not isinstance(name, str) or not name:
@@ -180,6 +241,182 @@ def validate_context_name(name: str) -> str:
     """
     _context_name_parts(name)
     return name
+
+
+def _mapped_context_name(name: str, old_root: str, new_root: str) -> str | None:
+    """Return the slash-boundary prefix mapping, or ``None`` when unrelated."""
+    if name == old_root:
+        return new_root
+    prefix = old_root + "/"
+    if name.startswith(prefix):
+        return new_root + name[len(old_root) :]
+    return None
+
+
+def _write_bytes_atomic(path: Path, data: bytes) -> None:
+    """Restore exact bytes through the same replace boundary as JSON writes."""
+    temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
+    try:
+        with open(temporary, "xb") as file:
+            file.write(data)
+            file.flush()
+            os.fsync(file.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists() and not temporary.is_symlink():
+            temporary.unlink()
+
+
+def _canonical_json_digest(value: object) -> str:
+    encoded = json.dumps(
+        value,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _rewrite_context_pointers(
+    record: dict[str, object],
+    *,
+    moved_names_by_uid: dict[str, tuple[str, str]],
+    rewrite_owner_name: bool,
+    require_current_pointer_names: bool,
+) -> tuple[dict[str, object], int, tuple[str, ...]]:
+    """Rewrite typed ordinary pointers by UID without touching prose/query refs.
+
+    ``require_current_pointer_names`` is true for live records. Historical
+    snapshots can legitimately retain a different name for a deleted/recreated
+    identity, so only an exact old-name match is migrated there.
+    """
+    rewritten = copy.deepcopy(record)
+    owner_uid = rewritten.get("uid")
+    if rewrite_owner_name and isinstance(owner_uid, str):
+        owner_mapping = moved_names_by_uid.get(owner_uid)
+        if owner_mapping is not None:
+            rewritten["name"] = owner_mapping[1]
+
+    memories = rewritten.get("memories")
+    if not isinstance(memories, dict):
+        raise ValueError("Context record has no valid memories object.")
+
+    changed = 0
+    selector_names: dict[str, str] = {}
+    collisions: set[str] = set()
+    for item_uid, item in memories.items():
+        if not isinstance(item_uid, str) or not isinstance(item, dict):
+            raise ValueError("Context record contains an invalid direct item.")
+        if item.get("uid") != item_uid:
+            raise ValueError(
+                "Context record contains a direct item whose uid does not "
+                "match its dictionary key."
+            )
+        kind = item.get("type")
+        if kind == "context_ref":
+            target_uid = item.get("uid")
+            target_name = item.get("name")
+            if not isinstance(target_name, str):
+                raise ValueError("Context reference has no valid target name.")
+            mapping = (
+                moved_names_by_uid.get(target_uid)
+                if isinstance(target_uid, str)
+                else None
+            )
+            if mapping is not None:
+                old_name, new_name = mapping
+                if target_name == old_name:
+                    item["name"] = new_name
+                    target_name = new_name
+                    changed += 1
+                elif require_current_pointer_names:
+                    raise ValueError(
+                        "Context reference identity and stored target name "
+                        f"disagree for uid '{target_uid}'."
+                    )
+            previous = selector_names.get(target_name)
+            if previous == "query_context_ref":
+                collisions.add(target_name)
+            selector_names[target_name] = "context_ref"
+        elif kind == "memory_ref":
+            target = item.get("target_context")
+            if not isinstance(target, dict):
+                raise ValueError("Memory reference has no valid target Context.")
+            target_uid = target.get("uid")
+            target_name = target.get("name")
+            if not isinstance(target_uid, str) or not isinstance(target_name, str):
+                raise ValueError("Memory reference has an invalid target Context.")
+            mapping = moved_names_by_uid.get(target_uid)
+            if mapping is not None:
+                old_name, new_name = mapping
+                if target_name == old_name:
+                    target["name"] = new_name
+                    changed += 1
+                elif require_current_pointer_names:
+                    raise ValueError(
+                        "Memory reference identity and stored target name "
+                        f"disagree for uid '{target_uid}'."
+                    )
+        elif kind == "query_context_ref":
+            query_name = item.get("name")
+            if not isinstance(query_name, str):
+                raise ValueError("Query-only Context reference has no valid name.")
+            previous = selector_names.get(query_name)
+            if previous == "context_ref":
+                collisions.add(query_name)
+            selector_names[query_name] = "query_context_ref"
+        elif kind == "memory":
+            if not isinstance(item.get("content"), str):
+                raise ValueError("Memory content must be a string.")
+        else:
+            raise ValueError(f"Unsupported direct Context item type: {kind!r}.")
+
+    return rewritten, changed, tuple(sorted(collisions))
+
+
+def _rewrite_checkpoint_record(
+    value: dict[str, object],
+    *,
+    moved_names_by_uid: dict[str, tuple[str, str]],
+) -> tuple[dict[str, object], int, tuple[str, ...]]:
+    """Migrate future-restorable typed pointers, including nested log frames."""
+    rewritten = copy.deepcopy(value)
+    changed = 0
+    collisions: set[str] = set()
+
+    snapshot = rewritten.get("snapshot")
+    if isinstance(snapshot, dict):
+        next_snapshot, count, found = _rewrite_context_pointers(
+            snapshot,
+            moved_names_by_uid=moved_names_by_uid,
+            # Existing checkpoint owner labels remain historical evidence.
+            # Revert already retargets the restored owner to the live Context.
+            rewrite_owner_name=False,
+            require_current_pointer_names=False,
+        )
+        rewritten["snapshot"] = next_snapshot
+        changed += count
+        collisions.update(found)
+
+    args = rewritten.get("args")
+    if isinstance(args, dict) and "log_snapshot" in args:
+        log_snapshot = args["log_snapshot"]
+        if not isinstance(log_snapshot, list):
+            raise ValueError("Checkpoint log_snapshot must be a list.")
+        next_entries: list[object] = []
+        for entry in log_snapshot:
+            if not isinstance(entry, dict):
+                raise ValueError("Checkpoint log_snapshot entry must be an object.")
+            next_entry, count, found = _rewrite_checkpoint_record(
+                entry,
+                moved_names_by_uid=moved_names_by_uid,
+            )
+            next_entries.append(next_entry)
+            changed += count
+            collisions.update(found)
+        args["log_snapshot"] = next_entries
+
+    return rewritten, changed, tuple(sorted(collisions))
 
 
 def _validate_context_header(data: object, expected_name: str) -> dict:
@@ -422,6 +659,40 @@ class MemoryStore:
                 self._write_state({"current": None})
 
     @contextmanager
+    def _context_graph_lock(self, *, exclusive: bool) -> Iterator[None]:
+        """Coordinate graph-wide Context migrations with ordinary writers.
+
+        Per-name locks cannot protect an inbound-reference scan: another
+        process could add a new owner under a previously unseen name while a
+        namespace migration is being prepared. Ordinary Context/state writers
+        therefore take this lock shared, while rename holds it exclusively
+        from its final scan through publication and rollback.
+        """
+        lock_path = STORE_DIR / "context-graph.lock"
+        if lock_path.is_symlink():
+            raise ValueError("Refusing to use a symbolic-link Context graph lock.")
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(
+                    lock_file.fileno(),
+                    fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH,
+                )
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
+    @contextmanager
     def _context_write_lock(self, name: str) -> Iterator[None]:
         """Serialize cooperative Context saves across local mem processes."""
         _context_name_parts(name)
@@ -578,13 +849,14 @@ class MemoryStore:
         return self._read_state().get("current")
 
     def set_current(self, name: str) -> None:
-        with self._context_write_lock(name):
-            if not self.context_exists(name):
-                raise FileNotFoundError(f"Context '{name}' not found.")
-            with self._state_write_lock():
-                state = self._read_state()
-                state["current"] = name
-                self._write_state(state)
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_lock(name):
+                if not self.context_exists(name):
+                    raise FileNotFoundError(f"Context '{name}' not found.")
+                with self._state_write_lock():
+                    state = self._read_state()
+                    state["current"] = name
+                    self._write_state(state)
 
     def set_current_context_if(
         self,
@@ -604,29 +876,30 @@ class MemoryStore:
             )
         ):
             raise ValueError("Expected Context digest is invalid.")
-        with self._context_write_lock(name):
-            if not self.context_exists(name):
-                raise ConcurrentContextUpdateError(
-                    f"Context '{name}' no longer exists."
-                )
-            target = self.load_direct(name)
-            if (
-                target.uid != expected_context_uid
-                or context_record_digest(target)
-                != expected_context_digest
-            ):
-                raise ConcurrentContextUpdateError(
-                    f"Context '{name}' changed before it could be selected."
-                )
-            with self._state_write_lock():
-                state = self._read_state()
-                if state.get("current") != expected_current:
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_lock(name):
+                if not self.context_exists(name):
                     raise ConcurrentContextUpdateError(
-                        "The current Context changed before it could be "
-                        "switched."
+                        f"Context '{name}' no longer exists."
                     )
-                state["current"] = name
-                self._write_state(state)
+                target = self.load_direct(name)
+                if (
+                    target.uid != expected_context_uid
+                    or context_record_digest(target)
+                    != expected_context_digest
+                ):
+                    raise ConcurrentContextUpdateError(
+                        f"Context '{name}' changed before it could be selected."
+                    )
+                with self._state_write_lock():
+                    state = self._read_state()
+                    if state.get("current") != expected_current:
+                        raise ConcurrentContextUpdateError(
+                            "The current Context changed before it could be "
+                            "switched."
+                        )
+                    state["current"] = name
+                    self._write_state(state)
 
     # --- Semantic update sessions ---
 
@@ -1109,6 +1382,16 @@ class MemoryStore:
         if restored.contract_name != session.contract_name:
             raise ValueError("Grounding session identity changed during save.")
         with ExitStack() as locks:
+            if session.frames:
+                # Bound Ground files are part of Context-rename freshness.
+                # Enter the graph lock before any Context/Ground locks so a
+                # newly created or revised binding cannot escape a concurrent
+                # namespace scan. An unbound Ground has no Context locator and
+                # retains its deliberate ability to exist without ~/.mem
+                # Context state.
+                locks.enter_context(
+                    self._context_graph_lock(exclusive=False)
+                )
             if verify_bound_frames:
                 if not session.frames:
                     raise ValueError(
@@ -1959,6 +2242,867 @@ class MemoryStore:
             raise FileExistsError(f"Context '{name}' already exists.")
         self._assert_context_storage_available(name)
 
+    def _read_context_graph_for_rename(
+        self,
+    ) -> tuple[
+        dict[str, dict[str, object]],
+        dict[str, dict[str, dict[str, object]]],
+    ]:
+        """Read every ordinary record and restorable checkpoint fail-closed."""
+        if CONTEXTS_DIR.is_symlink() or not CONTEXTS_DIR.is_dir():
+            raise ValueError("Context storage is invalid.")
+
+        records: dict[str, dict[str, object]] = {}
+        checkpoints: dict[str, dict[str, dict[str, object]]] = {}
+        uid_owners: dict[str, str] = {}
+        for context_file in sorted(CONTEXTS_DIR.rglob("context.json")):
+            if context_file.is_symlink() or not context_file.is_file():
+                raise ValueError("Context storage contains an unsafe context file.")
+            try:
+                name = context_file.parent.relative_to(CONTEXTS_DIR).as_posix()
+            except ValueError as error:
+                raise ValueError("Context file escapes the Context store.") from error
+            _context_name_parts(name)
+            if self._context_file(name) != context_file:
+                raise ValueError("Context path does not match its canonical name.")
+            try:
+                with open(context_file, encoding="utf-8") as file:
+                    raw = json.load(
+                        file,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+            except (json.JSONDecodeError, ValueError) as error:
+                raise ValueError(
+                    f"Context '{name}' is invalid JSON."
+                ) from error
+            record = _validate_context_header(raw, name)
+            # Parse through the normal non-resolving model before migration;
+            # this rejects malformed typed pointers without opening targets.
+            try:
+                Context.from_dict(record)
+                _rewrite_context_pointers(
+                    record,
+                    moved_names_by_uid={},
+                    rewrite_owner_name=False,
+                    require_current_pointer_names=True,
+                )
+            except (KeyError, TypeError, ValueError) as error:
+                raise ValueError(
+                    f"Context '{name}' has an invalid direct record: {error}"
+                ) from error
+            uid = record["uid"]
+            previous = uid_owners.get(uid)
+            if previous is not None:
+                raise ValueError(
+                    "Ordinary Context uid is duplicated by "
+                    f"'{previous}' and '{name}'."
+                )
+            uid_owners[uid] = name
+            records[name] = record
+
+            checkpoint_dir = self._checkpoints_dir(name)
+            entries: dict[str, dict[str, object]] = {}
+            if checkpoint_dir.exists():
+                if checkpoint_dir.is_symlink() or not checkpoint_dir.is_dir():
+                    raise ValueError(
+                        f"Checkpoints for '{name}' are not a safe directory."
+                    )
+                for checkpoint_file in sorted(checkpoint_dir.iterdir()):
+                    if (
+                        checkpoint_file.is_symlink()
+                        or not checkpoint_file.is_file()
+                        or checkpoint_file.suffix != ".json"
+                    ):
+                        raise ValueError(
+                            f"Checkpoints for '{name}' contain an unsafe entry."
+                        )
+                    try:
+                        with open(checkpoint_file, encoding="utf-8") as file:
+                            raw_checkpoint = json.load(
+                                file,
+                                object_pairs_hook=_reject_duplicate_json_keys,
+                            )
+                    except (json.JSONDecodeError, ValueError) as error:
+                        raise ValueError(
+                            f"Checkpoint '{checkpoint_file.name}' for '{name}' "
+                            "is invalid JSON."
+                        ) from error
+                    if (
+                        not isinstance(raw_checkpoint, dict)
+                        or not isinstance(raw_checkpoint.get("uid"), str)
+                        or not isinstance(raw_checkpoint.get("timestamp"), str)
+                        or not isinstance(raw_checkpoint.get("snapshot"), dict)
+                    ):
+                        raise ValueError(
+                            f"Checkpoint '{checkpoint_file.name}' for '{name}' "
+                            "is invalid."
+                        )
+                    try:
+                        _rewrite_checkpoint_record(
+                            raw_checkpoint,
+                            moved_names_by_uid={},
+                        )
+                    except ValueError as error:
+                        raise ValueError(
+                            f"Checkpoint '{checkpoint_file.name}' for '{name}' "
+                            f"is invalid: {error}"
+                        ) from error
+                    entries[checkpoint_file.name] = raw_checkpoint
+            checkpoints[name] = entries
+
+        if not records:
+            # Keep the later source-not-found message stable; an empty store is
+            # not itself corrupt.
+            return records, checkpoints
+        return records, checkpoints
+
+    def _assert_rename_destination_available(
+        self,
+        old_name: str,
+        new_name: str,
+        *,
+        records: dict[str, dict[str, object]],
+    ) -> None:
+        validate_context_name(old_name)
+        validate_context_name(new_name)
+        if old_name == new_name:
+            raise ValueError(
+                "source and destination Context namespaces are the same: "
+                f"'{old_name}'."
+            )
+        if old_name.startswith(new_name + "/") or new_name.startswith(
+            old_name + "/"
+        ):
+            raise ValueError(
+                "source and destination Context namespaces overlap: "
+                f"'{old_name}' → '{new_name}'."
+            )
+
+        source_dir = self._context_dir(old_name)
+        destination_dir = self._context_dir(new_name)
+        if destination_dir.exists() or destination_dir.is_symlink():
+            raise FileExistsError(
+                f"destination Context namespace '{new_name}' is already occupied."
+            )
+        try:
+            if source_dir.resolve() == destination_dir.resolve(strict=False):
+                raise ValueError(
+                    "source and destination Context namespaces resolve to the "
+                    "same filesystem location; case-only or normalization-only "
+                    "renames are not supported."
+                )
+        except OSError as error:
+            raise ValueError("Context namespace paths cannot be resolved safely.") from error
+
+        mapped_names = {
+            mapped
+            for name in records
+            if (mapped := _mapped_context_name(name, old_name, new_name))
+            is not None
+        }
+        occupied = mapped_names & (set(records) - {
+            name
+            for name in records
+            if _mapped_context_name(name, old_name, new_name) is not None
+        })
+        if occupied:
+            raise FileExistsError(
+                f"destination Context namespace '{new_name}' is already occupied."
+            )
+
+    @staticmethod
+    def _context_graph_digest_for_rename(
+        records: dict[str, dict[str, object]],
+        checkpoints: dict[str, dict[str, dict[str, object]]],
+        state: dict[str, object],
+        *,
+        ground_records: dict[str, dict[str, object]],
+        translation_records: dict[str, dict[str, object]],
+    ) -> str:
+        return _canonical_json_digest(
+            {
+                "contexts": [
+                    {
+                        "name": name,
+                        "record": records[name],
+                        "checkpoints": [
+                            {"file": filename, "record": record}
+                            for filename, record in sorted(
+                                checkpoints.get(name, {}).items()
+                            )
+                        ],
+                    }
+                    for name in sorted(records)
+                ],
+                "state": state,
+                "grounds": [
+                    {"file": name, "record": record}
+                    for name, record in sorted(ground_records.items())
+                ],
+                "translations": [
+                    {"file": name, "record": record}
+                    for name, record in sorted(translation_records.items())
+                ],
+            }
+        )
+
+    def _ground_contract_names_for_rename(self) -> tuple[str, ...]:
+        """Return every named Ground whose file must join rename freshness."""
+        if not GROUND_SESSIONS_DIR.exists():
+            if GROUND_SESSIONS_DIR.is_symlink():
+                raise ValueError("Grounding session storage is invalid.")
+            return ()
+        if not GROUND_SESSIONS_DIR.is_dir() or GROUND_SESSIONS_DIR.is_symlink():
+            raise ValueError("Grounding session storage is invalid.")
+        names: list[str] = []
+        for path in sorted(GROUND_SESSIONS_DIR.iterdir()):
+            if path.name == ".locks" and path.is_dir() and not path.is_symlink():
+                continue
+            if path.is_symlink() or not path.is_file() or path.suffix != ".json":
+                raise ValueError("Grounding session storage is invalid.")
+            names.append(path.stem)
+        return tuple(names)
+
+    def _read_ground_records_for_rename(
+        self,
+        contract_names: Iterable[str],
+    ) -> dict[str, dict[str, object]]:
+        from memcommit.ground import GroundError, GroundSession
+
+        records: dict[str, dict[str, object]] = {}
+        for contract_name in contract_names:
+            path = self._ground_session_path(contract_name)
+            try:
+                with open(path, encoding="utf-8") as file:
+                    raw = json.load(
+                        file,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+                session = GroundSession.from_dict(raw)
+            except (
+                json.JSONDecodeError,
+                GroundError,
+                OSError,
+                ValueError,
+            ) as error:
+                raise ValueError(
+                    f"Saved Ground '{contract_name}' is invalid."
+                ) from error
+            if session.contract_name != contract_name:
+                raise ValueError(
+                    f"Saved Ground '{contract_name}' does not match its file."
+                )
+            records[path.name] = raw
+        return records
+
+    @staticmethod
+    def _read_translation_records_for_rename(
+    ) -> dict[str, dict[str, object]]:
+        from memcommit.translation_view import (
+            TranslationCatalog,
+            TranslationView,
+            TranslationViewError,
+        )
+        from memcommit.translation_view_store import (
+            translation_catalog_path,
+            translation_view_path,
+            translation_views_dir,
+        )
+
+        root = translation_views_dir()
+        if not root.exists():
+            if root.is_symlink():
+                raise ValueError("Translation view storage is invalid.")
+            return {}
+        if not root.is_dir() or root.is_symlink():
+            raise ValueError("Translation view storage is invalid.")
+        records: dict[str, dict[str, object]] = {}
+        for path in sorted(root.iterdir()):
+            if path.is_symlink() or not path.is_file() or path.suffix != ".json":
+                raise ValueError("Translation view storage is invalid.")
+            try:
+                with open(path, encoding="utf-8") as file:
+                    raw = json.load(
+                        file,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+                if not isinstance(raw, dict):
+                    raise ValueError("Translation artifact must be an object.")
+                if "revision" in raw:
+                    artifact = TranslationCatalog.from_dict(raw)
+                    expected_path = translation_catalog_path(
+                        artifact.context_uid,
+                        artifact.target_language,
+                    )
+                else:
+                    artifact = TranslationView.from_dict(raw)
+                    expected_path = translation_view_path(
+                        artifact.context_uid,
+                        artifact.target_language,
+                        artifact.selected_memory_uid,
+                    )
+                if expected_path != path:
+                    raise ValueError(
+                        "Translation artifact does not match its storage key."
+                    )
+            except (
+                json.JSONDecodeError,
+                TranslationViewError,
+                ValueError,
+            ) as error:
+                raise ValueError(
+                    f"Saved translation artifact '{path.name}' is invalid."
+                ) from error
+            records[path.name] = raw
+        return records
+
+    def _prepare_context_rename_locked(
+        self,
+        old_name: str,
+        new_name: str,
+        *,
+        ground_contract_names: Iterable[str],
+    ) -> _PreparedContextRename:
+        """Build validated pre/post images while graph and item locks are held."""
+        records, checkpoints = self._read_context_graph_for_rename()
+        if old_name not in records:
+            raise FileNotFoundError(f"Context '{old_name}' not found.")
+        self._assert_rename_destination_available(
+            old_name,
+            new_name,
+            records=records,
+        )
+
+        bindings = tuple(
+            ContextRenameBinding(
+                old_name=name,
+                new_name=_mapped_context_name(name, old_name, new_name) or name,
+                context_uid=str(records[name]["uid"]),
+            )
+            for name in sorted(records)
+            if _mapped_context_name(name, old_name, new_name) is not None
+        )
+        moved_names_by_uid = {
+            binding.context_uid: (binding.old_name, binding.new_name)
+            for binding in bindings
+        }
+
+        post_records: dict[str, dict[str, object]] = {}
+        changed_owner_names: list[str] = []
+        live_reference_count = 0
+        for owner_name, record in records.items():
+            pre_probe, _, pre_collisions = _rewrite_context_pointers(
+                record,
+                moved_names_by_uid={},
+                rewrite_owner_name=False,
+                require_current_pointer_names=True,
+            )
+            if pre_probe != record:
+                raise ValueError(
+                    f"Context '{owner_name}' changed during rename validation."
+                )
+            post, count, post_collisions = _rewrite_context_pointers(
+                record,
+                moved_names_by_uid=moved_names_by_uid,
+                rewrite_owner_name=True,
+                require_current_pointer_names=True,
+            )
+            introduced = set(post_collisions) - set(pre_collisions)
+            if introduced:
+                raise ValueError(
+                    f"Renaming would give Context '{owner_name}' both an "
+                    "ordinary and query-only child named "
+                    + ", ".join(repr(name) for name in sorted(introduced))
+                    + "."
+                )
+            post_name = (
+                _mapped_context_name(owner_name, old_name, new_name)
+                or owner_name
+            )
+            _validate_context_header(post, post_name)
+            try:
+                Context.from_dict(post)
+            except (KeyError, TypeError, ValueError) as error:
+                raise ValueError(
+                    f"Renamed Context '{post_name}' would be invalid."
+                ) from error
+            post_records[owner_name] = post
+            live_reference_count += count
+            if post != record:
+                changed_owner_names.append(owner_name)
+
+        post_checkpoints: dict[str, dict[str, dict[str, object]]] = {}
+        checkpoint_reference_count = 0
+        for owner_name, entries in checkpoints.items():
+            next_entries: dict[str, dict[str, object]] = {}
+            for filename, entry in entries.items():
+                _, _, pre_collisions = _rewrite_checkpoint_record(
+                    entry,
+                    moved_names_by_uid={},
+                )
+                post, count, post_collisions = _rewrite_checkpoint_record(
+                    entry,
+                    moved_names_by_uid=moved_names_by_uid,
+                )
+                introduced = set(post_collisions) - set(pre_collisions)
+                if introduced:
+                    raise ValueError(
+                        f"Renaming would make checkpoint '{filename}' in "
+                        f"'{owner_name}' ambiguous with query-only child "
+                        + ", ".join(
+                            repr(name) for name in sorted(introduced)
+                        )
+                        + "."
+                    )
+                next_entries[filename] = post
+                checkpoint_reference_count += count
+            post_checkpoints[owner_name] = next_entries
+
+        if STATE_FILE.is_symlink() or not STATE_FILE.is_file():
+            raise ValueError("Context state storage is invalid.")
+        try:
+            with open(STATE_FILE, encoding="utf-8") as file:
+                raw_state = json.load(
+                    file,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+        except (json.JSONDecodeError, ValueError) as error:
+            raise ValueError("Context state storage is invalid JSON.") from error
+        if not isinstance(raw_state, dict):
+            raise ValueError("Context state storage must contain an object.")
+        current_before = raw_state.get("current")
+        if current_before is not None and not isinstance(current_before, str):
+            raise ValueError("Current Context state is invalid.")
+        current_after = current_before
+        if isinstance(current_before, str):
+            mapped_current = _mapped_context_name(
+                current_before,
+                old_name,
+                new_name,
+            )
+            if mapped_current is not None:
+                if current_before not in records:
+                    raise ValueError(
+                        "Current Context points inside the source namespace but "
+                        "does not identify a stored Context."
+                    )
+                current_after = mapped_current
+        post_state = copy.deepcopy(raw_state)
+        post_state["current"] = current_after
+
+        pre_digest_by_uid = {
+            str(record["uid"]): context_record_digest(record)
+            for record in records.values()
+        }
+        post_record_by_uid = {
+            str(record["uid"]): record for record in post_records.values()
+        }
+        post_digest_by_uid = {
+            uid: context_record_digest(record)
+            for uid, record in post_record_by_uid.items()
+        }
+        post_name_by_uid = {
+            str(record["uid"]): str(record["name"])
+            for record in post_records.values()
+        }
+        changed_uids = {
+            str(records[name]["uid"])
+            for name in changed_owner_names
+        }
+
+        ground_records = self._read_ground_records_for_rename(
+            ground_contract_names
+        )
+        post_ground_records: dict[str, dict[str, object]] = {}
+        ground_frame_count = 0
+        from memcommit.ground import GroundError, GroundSession
+
+        for filename, record in ground_records.items():
+            post = copy.deepcopy(record)
+            frames = post.get("frames")
+            if isinstance(frames, list):
+                for frame in frames:
+                    if not isinstance(frame, dict):
+                        raise ValueError(
+                            f"Saved Ground '{filename}' has an invalid frame."
+                        )
+                    context_uid = frame.get("context_uid")
+                    if context_uid not in changed_uids:
+                        continue
+                    before_frame = copy.deepcopy(frame)
+                    frame["context_name"] = post_name_by_uid[context_uid]
+                    # Preserve prior staleness. Only a frame that matched the
+                    # exact pre-rename record may follow the metadata-only
+                    # digest change to the post-rename record.
+                    if frame.get("context_digest") == pre_digest_by_uid[context_uid]:
+                        frame["context_digest"] = post_digest_by_uid[context_uid]
+                    if frame != before_frame:
+                        ground_frame_count += 1
+            try:
+                GroundSession.from_dict(post)
+            except GroundError as error:
+                raise ValueError(
+                    f"Saved Ground '{filename}' cannot follow this rename."
+                ) from error
+            post_ground_records[filename] = post
+
+        translation_records = self._read_translation_records_for_rename()
+        post_translation_records: dict[str, dict[str, object]] = {}
+        translation_artifact_count = 0
+        from memcommit.translation_view import (
+            TranslationCatalog,
+            TranslationView,
+            TranslationViewError,
+        )
+
+        for filename, record in translation_records.items():
+            post = copy.deepcopy(record)
+            context_uid = post.get("context_uid")
+            if isinstance(context_uid, str) and context_uid in changed_uids:
+                before_artifact = copy.deepcopy(post)
+                post["context_name"] = post_name_by_uid[context_uid]
+                if (
+                    "context_digest" in post
+                    and post.get("context_digest")
+                    == pre_digest_by_uid[context_uid]
+                ):
+                    post["context_digest"] = post_digest_by_uid[context_uid]
+                if post != before_artifact:
+                    translation_artifact_count += 1
+            try:
+                if "revision" in post:
+                    TranslationCatalog.from_dict(post)
+                else:
+                    TranslationView.from_dict(post)
+            except TranslationViewError as error:
+                raise ValueError(
+                    f"Saved translation artifact '{filename}' cannot follow "
+                    "this rename."
+                ) from error
+            post_translation_records[filename] = post
+
+        graph_digest = self._context_graph_digest_for_rename(
+            records,
+            checkpoints,
+            raw_state,
+            ground_records=ground_records,
+            translation_records=translation_records,
+        )
+        plan = ContextRenamePlan(
+            old_name=old_name,
+            new_name=new_name,
+            bindings=bindings,
+            changed_owner_names=tuple(sorted(changed_owner_names)),
+            reference_count=live_reference_count,
+            checkpoint_reference_count=checkpoint_reference_count,
+            ground_frame_count=ground_frame_count,
+            translation_artifact_count=translation_artifact_count,
+            current_before=current_before,
+            current_after=current_after,
+            graph_digest=graph_digest,
+        )
+        return _PreparedContextRename(
+            plan=plan,
+            records=records,
+            post_records=post_records,
+            checkpoints=checkpoints,
+            post_checkpoints=post_checkpoints,
+            state=raw_state,
+            post_state=post_state,
+            ground_records=ground_records,
+            post_ground_records=post_ground_records,
+            translation_records=translation_records,
+            post_translation_records=post_translation_records,
+        )
+
+    @staticmethod
+    def _rename_lock_names(
+        records: dict[str, dict[str, object]],
+        old_name: str,
+        new_name: str,
+    ) -> tuple[str, ...]:
+        names = set(records)
+        names.update(
+            mapped
+            for name in records
+            if (mapped := _mapped_context_name(name, old_name, new_name))
+            is not None
+        )
+        # Lock the exact requested destination even when the source scan is
+        # corrupt or empty so a cooperative creator cannot claim it between
+        # validation and the stable error/result.
+        names.add(new_name)
+        return tuple(sorted(names))
+
+    def plan_context_rename(
+        self,
+        old_name: str,
+        new_name: str,
+    ) -> ContextRenamePlan:
+        """Return one exact, read-only namespace migration preview."""
+        validate_context_name(old_name)
+        validate_context_name(new_name)
+        with self._context_graph_lock(exclusive=True):
+            records, _ = self._read_context_graph_for_rename()
+            lock_names = self._rename_lock_names(records, old_name, new_name)
+            ground_names = self._ground_contract_names_for_rename()
+            with self._context_write_locks(lock_names):
+                with self._state_write_lock():
+                    with ExitStack() as grounds:
+                        for contract_name in ground_names:
+                            grounds.enter_context(
+                                self._ground_session_write_lock(contract_name)
+                            )
+                        return self._prepare_context_rename_locked(
+                            old_name,
+                            new_name,
+                            ground_contract_names=ground_names,
+                        ).plan
+
+    def _commit_context_rename_locked(
+        self,
+        prepared: _PreparedContextRename,
+    ) -> ContextRenameResult:
+        """Publish prepared images with exception rollback under all locks.
+
+        The current prototype guarantees exception atomicity across the graph.
+        A durable crash-recovery journal remains a documented boundary, just
+        as for the existing multi-Context update transaction.
+        """
+        plan = prepared.plan
+        name_mapping = {
+            binding.old_name: binding.new_name for binding in plan.bindings
+        }
+        source_dir = self._context_dir(plan.old_name)
+        destination_dir = self._context_dir(plan.new_name)
+        destination_parent = destination_dir.parent
+
+        def live_name(owner_name: str) -> str:
+            return name_mapping.get(owner_name, owner_name)
+
+        restore_files: dict[Path, bytes] = {}
+        changed_context_paths: list[tuple[Path, dict[str, object]]] = []
+        changed_checkpoint_paths: list[tuple[Path, dict[str, object]]] = []
+        changed_ground_paths: list[tuple[Path, dict[str, object]]] = []
+        changed_translation_paths: list[tuple[Path, dict[str, object]]] = []
+
+        for owner_name in plan.changed_owner_names:
+            before_path = self._context_file(owner_name)
+            after_path = self._context_file(live_name(owner_name))
+            restore_files[after_path] = before_path.read_bytes()
+            changed_context_paths.append(
+                (after_path, prepared.post_records[owner_name])
+            )
+        for owner_name, entries in prepared.checkpoints.items():
+            for filename, before in entries.items():
+                after = prepared.post_checkpoints[owner_name][filename]
+                if after == before:
+                    continue
+                before_path = self._checkpoints_dir(owner_name) / filename
+                after_path = (
+                    self._checkpoints_dir(live_name(owner_name)) / filename
+                )
+                restore_files[after_path] = before_path.read_bytes()
+                changed_checkpoint_paths.append((after_path, after))
+        for filename, before in prepared.ground_records.items():
+            after = prepared.post_ground_records[filename]
+            if after == before:
+                continue
+            path = GROUND_SESSIONS_DIR / filename
+            restore_files[path] = path.read_bytes()
+            changed_ground_paths.append((path, after))
+        if prepared.translation_records:
+            from memcommit.translation_view_store import translation_views_dir
+
+            translation_root = translation_views_dir()
+            for filename, before in prepared.translation_records.items():
+                after = prepared.post_translation_records[filename]
+                if after == before:
+                    continue
+                path = translation_root / filename
+                restore_files[path] = path.read_bytes()
+                changed_translation_paths.append((path, after))
+        if prepared.post_state != prepared.state:
+            restore_files[STATE_FILE] = STATE_FILE.read_bytes()
+
+        timestamp = datetime.now()
+        checkpoint_paths: list[Path] = []
+        checkpoint_writes: list[tuple[Path, dict[str, object]]] = []
+        for owner_name in plan.changed_owner_names:
+            owner_after = live_name(owner_name)
+            checkpoint_uid = str(uuid.uuid4())
+            description = (
+                f"Renamed Context namespace '{plan.old_name}' to "
+                f"'{plan.new_name}'; updated '{owner_name}'"
+                + (
+                    f" to '{owner_after}'."
+                    if owner_name != owner_after
+                    else " references."
+                )
+            )
+            checkpoint = {
+                "uid": checkpoint_uid,
+                "message": description,
+                "timestamp": timestamp.isoformat(),
+                "snapshot": canonical_context_record(
+                    prepared.post_records[owner_name]
+                ),
+                "command": "rename",
+                "args": {
+                    "old_name": plan.old_name,
+                    "new_name": plan.new_name,
+                    "context_uid": prepared.records[owner_name]["uid"],
+                    "owner_before": owner_name,
+                    "owner_after": owner_after,
+                },
+                "description": description,
+                "auto": True,
+            }
+            checkpoint_dir = self._checkpoints_dir(owner_after)
+            filename = (
+                f"{timestamp.strftime('%Y%m%dT%H%M%S')}-rename-"
+                f"{checkpoint_uid[:8]}.json"
+            )
+            path = checkpoint_dir / filename
+            checkpoint_paths.append(path)
+            checkpoint_writes.append((path, checkpoint))
+
+        source_moved = False
+        try:
+            destination_parent.mkdir(parents=True, exist_ok=True)
+            # Recheck immediately before publication. Cooperative Context
+            # creators are excluded by the graph lock; this explicit check
+            # also prevents Path.rename from replacing a pre-existing empty
+            # destination directory on platforms that permit that behavior.
+            if destination_dir.exists() or destination_dir.is_symlink():
+                raise FileExistsError(
+                    f"destination Context namespace '{plan.new_name}' is "
+                    "already occupied."
+                )
+            source_dir.rename(destination_dir)
+            source_moved = True
+
+            for path, record in changed_context_paths:
+                _write_json_atomic(path, record)
+            for path, record in changed_checkpoint_paths:
+                _write_json_atomic(path, record)
+            for path, record in changed_ground_paths:
+                _write_json_atomic(path, record)
+            for path, record in changed_translation_paths:
+                _write_json_atomic(path, record)
+            for path, record in checkpoint_writes:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                if path.exists() or path.is_symlink():
+                    raise FileExistsError(
+                        "Rename checkpoint destination unexpectedly exists."
+                    )
+                _write_json_atomic(path, record)
+            if prepared.post_state != prepared.state:
+                _write_json_atomic(STATE_FILE, prepared.post_state)
+
+            for binding in plan.bindings:
+                if self.context_exists(binding.old_name):
+                    raise RuntimeError(
+                        f"Old Context '{binding.old_name}' remains after rename."
+                    )
+                renamed = self.load_direct(binding.new_name)
+                if renamed.uid != binding.context_uid:
+                    raise RuntimeError(
+                        f"Renamed Context '{binding.new_name}' changed identity."
+                    )
+            for owner_name in plan.changed_owner_names:
+                expected = canonical_context_record(
+                    prepared.post_records[owner_name]
+                )
+                actual = canonical_context_record(
+                    self.load_direct(live_name(owner_name))
+                )
+                if actual != expected:
+                    raise RuntimeError(
+                        f"Renamed Context '{live_name(owner_name)}' failed "
+                        "post-publication verification."
+                    )
+            if self._read_state() != prepared.post_state:
+                raise RuntimeError(
+                    "Current Context state failed post-rename verification."
+                )
+        except Exception as error:
+            rollback_error: Exception | None = None
+            for path in checkpoint_paths:
+                try:
+                    if path.exists() and not path.is_symlink():
+                        path.unlink()
+                except Exception as candidate:
+                    rollback_error = rollback_error or candidate
+            for path, original in restore_files.items():
+                try:
+                    if path.exists() and not path.is_symlink():
+                        _write_bytes_atomic(path, original)
+                except Exception as candidate:
+                    rollback_error = rollback_error or candidate
+            if source_moved:
+                try:
+                    if source_dir.exists() or source_dir.is_symlink():
+                        raise RuntimeError(
+                            "Source namespace reappeared during rollback."
+                        )
+                    destination_dir.rename(source_dir)
+                except Exception as candidate:
+                    rollback_error = rollback_error or candidate
+            self._prune_empty_namespace_dirs(destination_parent)
+            if rollback_error is not None:
+                raise RuntimeError(
+                    "Context rename failed and could not be fully rolled back."
+                ) from rollback_error
+            raise error
+
+        self._prune_empty_namespace_dirs(source_dir.parent)
+        return ContextRenameResult(
+            renamed_context_count=len(plan.bindings),
+            changed_owner_count=len(plan.changed_owner_names),
+            reference_count=plan.reference_count,
+            checkpoint_reference_count=plan.checkpoint_reference_count,
+            ground_frame_count=plan.ground_frame_count,
+            translation_artifact_count=plan.translation_artifact_count,
+            current_context=plan.current_after,
+        )
+
+    def rename_contexts(
+        self,
+        plan: ContextRenamePlan,
+    ) -> ContextRenameResult:
+        """Apply exactly one previously reviewed Context namespace plan."""
+        if not isinstance(plan, ContextRenamePlan):
+            raise TypeError("Expected a ContextRenamePlan.")
+        validate_context_name(plan.old_name)
+        validate_context_name(plan.new_name)
+        with self._context_graph_lock(exclusive=True):
+            records, _ = self._read_context_graph_for_rename()
+            lock_names = self._rename_lock_names(
+                records,
+                plan.old_name,
+                plan.new_name,
+            )
+            ground_names = self._ground_contract_names_for_rename()
+            with self._context_write_locks(lock_names):
+                with self._state_write_lock():
+                    with ExitStack() as grounds:
+                        for contract_name in ground_names:
+                            grounds.enter_context(
+                                self._ground_session_write_lock(contract_name)
+                            )
+                        prepared = self._prepare_context_rename_locked(
+                            plan.old_name,
+                            plan.new_name,
+                            ground_contract_names=ground_names,
+                        )
+                        if prepared.plan != plan:
+                            raise ConcurrentContextUpdateError(
+                                "The Context graph changed after the rename was "
+                                "reviewed; nothing was renamed."
+                            )
+                        return self._commit_context_rename_locked(prepared)
+
     def save(
         self,
         ctx: Context,
@@ -1969,12 +3113,25 @@ class MemoryStore:
         """Persist a Context, optionally only if its disk record is unchanged."""
         if expected_context_digest is None:
             expected_context_digest = getattr(ctx, "_store_digest", None)
-        with self._context_write_lock(ctx.name):
-            checkpoint = self._save_locked(
-                ctx,
-                auto_checkpoint,
-                expected_context_digest=expected_context_digest,
-            )
+        # A brand-new identity can add an inbound reference under a name that
+        # did not exist during rename's graph scan. Coordinate that creation
+        # with the graph lock; stale loaded writers already carry a digest and
+        # are rejected by ordinary per-Context CAS after a rename.
+        if expected_context_digest is None:
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_lock(ctx.name):
+                    checkpoint = self._save_locked(
+                        ctx,
+                        auto_checkpoint,
+                        expected_context_digest=expected_context_digest,
+                    )
+        else:
+            with self._context_write_lock(ctx.name):
+                checkpoint = self._save_locked(
+                    ctx,
+                    auto_checkpoint,
+                    expected_context_digest=expected_context_digest,
+                )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
@@ -2033,13 +3190,14 @@ class MemoryStore:
         auto_checkpoint: Optional[AutoCheckpoint] = None,
     ) -> Checkpoint | None:
         """Create one new Context without overwriting a concurrent owner."""
-        with self._context_write_lock(ctx.name):
-            checkpoint = self._save_locked(
-                ctx,
-                auto_checkpoint,
-                expected_context_digest=None,
-                require_new=True,
-            )
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_lock(ctx.name):
+                checkpoint = self._save_locked(
+                    ctx,
+                    auto_checkpoint,
+                    expected_context_digest=None,
+                    require_new=True,
+                )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
@@ -2075,49 +3233,50 @@ class MemoryStore:
                 "Selected Context must be part of the creation batch."
             )
 
-        with self._context_write_locks(names):
-            existing: set[str] = set()
-            for name in names:
-                if self.context_exists(name):
-                    # A present file is not reusable until its stored identity
-                    # and path-bound header have passed normal validation.
-                    self.load_direct(name)
-                    existing.add(name)
-                else:
-                    self._assert_context_storage_available(name)
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_locks(names):
+                existing: set[str] = set()
+                for name in names:
+                    if self.context_exists(name):
+                        # A present file is not reusable until its stored identity
+                        # and path-bound header have passed normal validation.
+                        self.load_direct(name)
+                        existing.add(name)
+                    else:
+                        self._assert_context_storage_available(name)
 
-            created: list[Context] = []
-            try:
-                for context, auto_checkpoint in records:
-                    if context.name in existing:
-                        continue
-                    self._save_locked(
-                        context,
-                        auto_checkpoint,
-                        expected_context_digest=None,
-                        require_new=True,
-                    )
-                    context._store_digest = context_record_digest(context)
-                    created.append(context)
-                if make_current is not None:
-                    with self._state_write_lock():
-                        state = self._read_state()
-                        state["current"] = make_current
-                        self._write_state(state)
-            except Exception as error:
-                rollback_error: Exception | None = None
-                for context in reversed(created):
-                    try:
-                        self._delete_locked(context.name)
-                    except Exception as candidate:
-                        rollback_error = candidate
-                        break
-                if rollback_error is not None:
-                    raise RuntimeError(
-                        "Context hierarchy creation failed and its newly "
-                        "created Contexts could not be rolled back."
-                    ) from rollback_error
-                raise error
+                created: list[Context] = []
+                try:
+                    for context, auto_checkpoint in records:
+                        if context.name in existing:
+                            continue
+                        self._save_locked(
+                            context,
+                            auto_checkpoint,
+                            expected_context_digest=None,
+                            require_new=True,
+                        )
+                        context._store_digest = context_record_digest(context)
+                        created.append(context)
+                    if make_current is not None:
+                        with self._state_write_lock():
+                            state = self._read_state()
+                            state["current"] = make_current
+                            self._write_state(state)
+                except Exception as error:
+                    rollback_error: Exception | None = None
+                    for context in reversed(created):
+                        try:
+                            self._delete_locked(context.name)
+                        except Exception as candidate:
+                            rollback_error = candidate
+                            break
+                    if rollback_error is not None:
+                        raise RuntimeError(
+                            "Context hierarchy creation failed and its newly "
+                            "created Contexts could not be rolled back."
+                        ) from rollback_error
+                    raise error
         return tuple(created)
 
     def _save_locked(

@@ -11,9 +11,11 @@ mem meld LOCATOR LOCATOR
 mem meld [LOCATOR] --into LOCATOR
 mem impact --to LOCATOR
 mem update --to LOCATOR
+mem rename LOCATOR NEW_NAME
 ```
 
-Both commands use `memcommit.context_locator.resolve_context_locator`.
+These commands use `memcommit.context_locator.resolve_context_locator` for
+their existing-Context operands.
 Additional commands should adopt the same boundary when they are next changed,
 subject to the mutation and approval constraints below.
 
@@ -101,14 +103,19 @@ relative spelling directly to `MemoryStore`.
 
 Read or analysis operands such as `ls CONTEXT`, `show --context`, or
 `rationale --context` are suitable later adopters. Mutation-oriented operands
-such as `delete CONTEXT`, `embed --into`, `update --to`, and Meld sources need
-an additional review: prompts or approval receipts must display the resolved
-canonical name, and the command must freeze the target identity before acting.
+such as `delete CONTEXT` and `embed --into` need an additional review: prompts
+or approval receipts must display the resolved canonical name, and the command
+must freeze the target identity before acting. Rename implements that boundary
+for its source: it resolves against one captured current-state snapshot,
+displays the canonical source and exact new name, and freezes a graph-wide
+plan before approval and application.
 
 The resolver must not be applied indiscriminately:
 
 - `init NAME`, `branch NAME`, `checkout -b NAME`, and `--save-as` values define
   new canonical identifiers; they are not existing-Context locators.
+- `mem rename OLD NEW` applies the resolver only to `OLD`. `NEW` is a new
+  canonical identifier and must not be reinterpreted as relative input.
 - Memory selectors, embedded-item selectors, requirement targets, and
   query-only source selectors have different namespaces.
 - Ground frame binding requires a separate approval-aware integration. A raw
@@ -123,7 +130,11 @@ to contain a Context name depend on mutable current state.
 
 ## Current limitation
 
-Switch, non-branch Checkout through its Switch delegation, Compare, Meld, and
-directional Impact/Update use the common locator today. Other existing-Context
-operands still require canonical names until migrated under the boundary
-above.
+Switch, non-branch Checkout through its Switch delegation, Compare, Meld,
+directional Impact/Update, and Rename's source operand use the common locator
+today. Other existing-Context operands still require canonical names until
+migrated under the boundary above.
+
+The graph migration, identity, reference, checkpoint, query-only, and failure
+semantics of Rename are specified separately in
+[`mem-rename-design-rationale.md`](mem-rename-design-rationale.md).

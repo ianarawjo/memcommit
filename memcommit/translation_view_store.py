@@ -342,7 +342,13 @@ def save_translation_view(
     # The source lock is also this Context-bound slot's cooperative writer
     # lock.  The record-digest CAS prevents a slower provider call from
     # replacing a newer view while requiring no synthetic artifact identity.
-    with store._context_write_lock(view.context_name):
+    # Rename scans and migrates Context-bound translation artifacts. The
+    # graph lock must precede the Context lock so a late provider result can
+    # neither recreate an old-name artifact nor deadlock the migration.
+    with (
+        store._context_graph_lock(exclusive=False),
+        store._context_write_lock(view.context_name),
+    ):
         try:
             current_context = store.load_direct(view.context_name)
         except FileNotFoundError as error:
@@ -445,7 +451,10 @@ def save_translation_catalog(
         catalog.target_language,
     )
 
-    with store._context_write_lock(catalog.context_name):
+    with (
+        store._context_graph_lock(exclusive=False),
+        store._context_write_lock(catalog.context_name),
+    ):
         try:
             current_context = store.load_direct(catalog.context_name)
         except FileNotFoundError as error:

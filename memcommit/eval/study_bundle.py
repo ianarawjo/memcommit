@@ -563,6 +563,15 @@ def _save_korean_catalogs(
 
 def _remove_transient_lock_artifacts(store_root: Path) -> None:
     """Exclude process-coordination files from a portable fixture package."""
+    graph_lock = store_root / "context-graph.lock"
+    if graph_lock.is_symlink():
+        raise StudyBundleError("Fixture Context graph lock path is unsafe.")
+    if graph_lock.exists():
+        if not graph_lock.is_file():
+            raise StudyBundleError(
+                "Fixture Context graph lock path is invalid."
+            )
+        graph_lock.unlink()
     state_lock = store_root / "state-write.lock"
     if state_lock.is_symlink():
         raise StudyBundleError("Fixture state lock path is unsafe.")

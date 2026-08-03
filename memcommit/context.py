@@ -313,6 +313,12 @@ class Context:
                     if loader is None
                     else loader(item["name"])
                 )
+                # Names are locators, not identity. A deleted/recreated
+                # Context must never silently capture an old embed merely
+                # because it reused the same path; this also makes Context
+                # namespace rename safe to drive by the persisted target UID.
+                if nested is not None and nested.uid != item["uid"]:
+                    nested = None
                 if nested is not None:
                     ctx.add(nested)
         return ctx

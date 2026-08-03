@@ -55,6 +55,18 @@ considered sufficient design history.
   applied-result receipts, exception rollback, deterministic diff, and the
   still-separate future publication boundary.
 
+## Context namespace migration
+
+- [`context-locator-design-rationale.md`](context-locator-design-rationale.md)
+  defines canonical names, explicit relative existing-Context locators, the
+  one-current-snapshot rule, and the rollout boundary between lookup operands
+  and newly declared names.
+- [`mem-rename-design-rationale.md`](mem-rename-design-rationale.md) defines
+  UID-preserving slash-subtree migration; typed reference, current-state,
+  checkpoint, Ground, and translation continuity; the query-only non-access
+  boundary; reviewed graph freshness; exception rollback; and the remaining
+  crash-journal limitation.
+
 ## Translation contract
 
 - [`mem-translate-design-rationale.md`](mem-translate-design-rationale.md)

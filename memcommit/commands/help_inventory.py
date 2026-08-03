@@ -50,6 +50,7 @@ IMPLEMENTATION_LEVELS = {
     "query": "implemented",
     "rationale": "implemented",
     "reference": "implemented",
+    "rename": "implemented",
     "remove": "implemented",
     "revert": "implemented",
     "review": "partial",

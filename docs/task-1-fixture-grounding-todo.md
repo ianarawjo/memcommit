@@ -215,25 +215,37 @@ recoverable without requiring knowledge of a real campus.
 These are stable world facts. Construction updates may change availability or
 routing temporarily without rewriting the underlying campus geometry.
 
-## Rename capability discovered during fixture work
+## Rename capability implemented after fixture work
 
 Task 1 fixture construction exposed a need for an explicit Context rename or
 namespace-migration operation. The existing empty roots use legacy names,
 while the naming contract requires participant-scoped writable names and
 reserves `campus-wiki` for a query-only origin.
 
-A future `mem rename` design must determine at least:
+`mem rename OLD NEW [-f|--force]` now provides the minimal ordinary-Context
+contract needed for that migration. It moves the exact slash-delimited source
+root and all lexical descendants, preserves Context and Memory UIDs, rewrites
+typed ordinary references and current state, keeps existing checkpoint
+identity while repairing future-restorable pointer locators, and records an
+automatic checkpoint for every changed live owner. Named Ground frames and
+translation artifacts have explicit UID-bound continuity rules; unrelated
+semantic caches retain their own freshness boundaries.
 
-- whether the first version renames Contexts only;
-- how a root rename migrates all descendant Context locators;
-- how embedded `context_ref` records and the current-state pointer are
-  updated;
-- how checkpoints and other persisted references retain history;
-- whether Context UIDs remain stable across the rename;
-- how collisions, query-only reserved names, and partial failures are
-  rejected; and
-- how the canonical old and new names are displayed and approved before this
-  mutating operation runs.
+`OLD` is an existing Context locator resolved against one current-state
+snapshot. `NEW` is an exact new canonical identifier. The command displays the
+canonical names and subtree size before its default confirmation, then
+requires the applied graph to equal the reviewed graph. `--force` skips only
+the prompt. Occupied or overlapping destinations, unsafe or inconsistent
+storage, identity/name disagreement, and ambiguous ordinary/query selectors
+fail closed.
+
+The operation does not open or rename query-only sources and does not rewrite
+`QueryContextRef`. It therefore cannot turn the legacy ordinary `campus-wiki`
+object into the organizational query-only origin; fixture provisioning must
+still create that source through its separate opaque-source path. Exception
+rollback is implemented, but a durable crash-recovery journal remains a
+prototype limitation. The complete decision record is
+[`mem-rename-design-rationale.md`](mem-rename-design-rationale.md).
 
 “Rename a Memory” is a separate question because the current atomic Memory
 record has content but no independent name. Changing its text belongs to
@@ -392,9 +404,11 @@ automatically creates or accepts Ground Memories.
 
 ## Ordered TODO
 
-1. Specify and implement the minimal safe Context rename contract.
-2. Migrate the legacy empty roots to the canonical Task 1 writable names
-   without populating them yet.
+1. Review and run the implemented `mem rename` migrations for the legacy empty
+   roots, moving them to the canonical Task 1 writable names without
+   populating them merely from this planning note.
+2. Verify the resulting Context UIDs, descendants, references, current state,
+   and rename checkpoints before fixture population.
 3. Specify `mem impact sort` and the eventual UID-preserving `mem sort`
    mutation contract.
 4. Add a multi-lane sort-plan or Ground adapter that can show the 54 raw
