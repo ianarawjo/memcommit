@@ -3144,6 +3144,15 @@ def _prefix_study_grant_template(
     result = copy.deepcopy(raw)
     prefix = f"task-{task}"
 
+    if task == 1 and result.get("key") == "task-1-campus-wiki-view":
+        permissions = result.get("permissions")
+        if isinstance(permissions, list) and "QUERY" not in permissions:
+            # Older editable baselines predate explicit whole-wiki query
+            # permission. Keep them initializable while making the current
+            # study contract explicit for every newly created run.
+            permissions.append("QUERY")
+        result.setdefault("provider", "codex_chatgpt")
+
     authority_context = result.get("authority_context")
     if isinstance(authority_context, dict) and isinstance(
         authority_context.get("name"), str
@@ -3221,6 +3230,9 @@ def _compose_study_run_pair(
     # Its source names remain the manifest identities, but every task now reads
     # from one of the two merged run stores.
     merged: dict[int, _StudyTaskPackage] = {}
+    merged_authority_contexts = {
+        context.name: context for context in authority_contexts
+    }
     for task in _STUDY_TASKS:
         package = packages[task]
         sources: list[_StudyProfileSource] = []
@@ -3239,12 +3251,17 @@ def _compose_study_run_pair(
                     inspection=inspection,
                 )
             )
+        templates = tuple(
+            _prefix_study_grant_template(raw, task=task)
+            for raw in package.grant_templates
+        )
         merged[task] = replace(
             package,
             profiles=tuple(sources),
-            grant_templates=tuple(
-                _prefix_study_grant_template(raw, task=task)
-                for raw in package.grant_templates
+            grant_templates=templates,
+            query_view_count=_query_view_count_for_baseline(
+                merged_authority_contexts,
+                templates,
             ),
         )
     return merged

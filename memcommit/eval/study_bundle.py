@@ -171,9 +171,10 @@ TASK_SPECS = {
                 grantee_profile="task-1",
                 authority_context="campus-wiki",
                 public_name="campus-wiki",
-                permissions=("READ", "CREATE", "UPDATE"),
+                permissions=("READ", "CREATE", "UPDATE", "QUERY"),
                 grantee_parent_context="participant/construction-updates",
                 excluded_contexts=("campus-wiki/construction-details",),
+                provider="codex_chatgpt",
             ),
             BundleGrantTemplate(
                 key="task-1-construction-details-query",
@@ -855,10 +856,6 @@ def _grant_template_records(
             not permissions
             or len(set(permissions)) != len(permissions)
             or any(permission not in _GRANT_PERMISSIONS for permission in permissions)
-            or (
-                "QUERY" in permissions
-                and set(permissions) - {"QUERY", "SESSION_LOG"}
-            )
             or ("SESSION_LOG" in permissions and "QUERY" not in permissions)
         ):
             raise StudyBundleError(

@@ -87,25 +87,30 @@ instead of writing through stale authority.
 The generated study package for each task contains a task store, a separate
 authority store, and grant templates. `mem profile import-study` validates all
 six package stores and composes one editable `study-baseline` Profile. `mem
-init-study` now copies that merged source into one ordinary Profile without
-materializing the templates as live registry grants. The table below therefore
-describes the generated package contract and legacy split Studies, not the
-capabilities of a newly initialized single Profile.
+init-study` copies that merged source into one participant Profile and one
+run-private authority Profile, then materializes these templates as real
+registry grants. The table therefore describes both the package contract and
+each newly initialized run.
 
 | Task | Task-owned data | Authority Profile and ordinary data | Granted views |
 | --- | --- | --- | --- |
-| 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE`; nested details `QUERY+SESSION_LOG` |
+| 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE+QUERY`; nested details `QUERY+SESSION_LOG` |
 | 2 | `participant/proposal-workspace` | `task-2-proposal-authority`: `advisor1`, `advisor2`, submission guidelines | advisors `READ`; guidelines `QUERY+SESSION_LOG` |
 | 3 | `personal-memory` | `task-3-healthcare-authority`: `guardrails`, healthcare information guidance | guardrails `READ`; information request `QUERY+SESSION_LOG` |
 
 `task-1-campus-authority` is intentionally task-specific. A future shared
 campus authority may be appropriate for a different experiment, but this
 fixture's exact contents and permissions are part of Task 1's condition.
+`QUERY` on the editable wiki is explicit so the same source can be used for
+one-shot questions; `SESSION_LOG` is deliberately absent there. Only the
+narrower details view may persist visible Q/A, keeping transcript retention a
+separate experimental condition from ordinary wiki editing.
 
-In the current single-Profile run model, the corresponding material remains
-under `granted-memory/task-N` as ordinary owned Contexts. Reintroducing the
-table's participant/authority enforcement requires an explicit later workflow;
-it is not an implicit effect of `init-study` while the topology is unstable.
+Within `study-baseline`, the corresponding authority material remains under
+`granted-memory/task-N` as ordinary owned Contexts. `init-study` separates
+those copied Contexts into its run-private authority Profile before creating
+the table's participant-facing grants; it never grants against the baseline
+itself.
 
 ## Why registry grants
 

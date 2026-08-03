@@ -60,7 +60,7 @@ EXPECTED_PROFILES = {
     },
 }
 
-EXPECTED_QUERY_VIEW_COUNTS = {1: 78, 2: 75, 3: 75}
+EXPECTED_QUERY_VIEW_COUNTS = {1: 378, 2: 75, 3: 75}
 
 
 def _digest(text: str) -> str:
@@ -226,7 +226,8 @@ def _assert_grant_templates(task, manifest, context_uids):
     if task == 1:
         campus = grants["task-1-campus-wiki-view"]
         details = grants["task-1-construction-details-query"]
-        assert campus["permissions"] == ["READ", "CREATE", "UPDATE"]
+        assert campus["permissions"] == ["READ", "CREATE", "UPDATE", "QUERY"]
+        assert campus["provider"] == "codex_chatgpt"
         assert campus["public_name"] == "campus-wiki"
         assert campus["attachment"]["context"]["name"] == (
             "participant/construction-updates"

@@ -7,18 +7,37 @@ from memcommit.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
-from memcommit.profile_config import ProfileConfigError, load_profile_registry
+from memcommit.profile_config import (
+    ProfileConfigError,
+    load_profile_registry,
+    profile_store_dir,
+)
 from memcommit.profiles import ProfileError
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
-def _granted_picker_views() -> tuple[tuple[str, ...], dict[str, str]]:
+def _granted_picker_views(
+    store: MemoryStore | None = None,
+) -> tuple[tuple[str, ...], dict[str, str]]:
     """Return non-selectable granted rows for the active Profile tree."""
 
     registry = load_profile_registry()
+    active_store = profile_store_dir(registry.active)
+    if store is None:
+        store = MemoryStore(root=active_store, create=False)
+    elif store.store_dir.resolve() != active_store.resolve():
+        # Tests and embedders may supply an isolated store while a separate
+        # host Profile is active. Never leak that host's virtual grants into
+        # navigation for an unrelated storage boundary.
+        return (), {}
     names: dict[str, str] = {}
     for grant in registry.grants:
         if grant.grantee_profile_uid != registry.active.uid:
+            continue
+        if not store.context_exists(grant.attachment_context_name):
+            continue
+        attachment = store.load_direct(grant.attachment_context_name)
+        if attachment.uid != grant.attachment_context_uid:
             continue
         if "READ" not in grant.permissions:
             # A query-only grant exposes its reviewed public route, never its
@@ -60,7 +79,7 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
-            virtual_names, virtual_annotations = _granted_picker_views()
+            virtual_names, virtual_annotations = _granted_picker_views(store)
             if virtual_names:
                 name = choose_context(
                     names,

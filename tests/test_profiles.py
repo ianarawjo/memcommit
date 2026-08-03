@@ -33,6 +33,7 @@ from memcommit.profile_config import (
     profile_store_dir,
 )
 from memcommit.profiles import (
+    ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
     create_authority_grant,
     resolve_granted_context_view,
@@ -468,7 +469,8 @@ def test_profile_use_selects_the_initialized_complete_profile(
     assert "task-1/participant/construction-updates" in contexts.stdout
     assert "task-1/campus-wiki" in contexts.stdout
     assert (
-        "[view create,read,update from profile-view-granted-memory]" in contexts.stdout
+        "[view create,read,update,query from profile-view-granted-memory]"
+        in contexts.stdout
     )
     assert "task-1/campus-wiki/construction-details" in contexts.stdout
     assert (
@@ -500,6 +502,19 @@ def test_profile_use_selects_the_initialized_complete_profile(
     query_catalog = load_authority_query_catalog(query_view, language="en")
     assert len(query_catalog) == 78
     assert all(entry.placeholder_lines for entry in query_catalog)
+
+    wiki_query_view = resolve_granted_context_view(
+        "task-1/campus-wiki",
+        attachment_name="task-1/participant/construction-updates",
+        required_permission="QUERY",
+    )
+    assert len(load_authority_query_catalog(wiki_query_view, language="en")) == 300
+    with pytest.raises(ProfileError, match="does not allow session_log access"):
+        resolve_granted_context_view(
+            "task-1/campus-wiki",
+            attachment_name="task-1/participant/construction-updates",
+            required_permission="SESSION_LOG",
+        )
 
     run_only_text = "Participant edit stored only in this Study run."
     granted_add = _subprocess_mem(
