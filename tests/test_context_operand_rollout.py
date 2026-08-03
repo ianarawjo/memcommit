@@ -14,7 +14,10 @@ from memcommit.commands import impact as impact_command
 from memcommit.commands import review as review_command
 from memcommit.commands.compare import display_escape_text as compare_escape
 from memcommit.commands.context_picker import (
+    _build_context_tree,
+    _context_ancestors,
     _render_context_options,
+    _visible_context_rows,
     choose_context,
 )
 from memcommit.commands.profile_picker import (
@@ -202,10 +205,11 @@ def _visible_text(fragments: list[tuple[str, str]]) -> str:
 
 def test_context_picker_escapes_labels_but_returns_raw_identity():
     raw_name = "scope/target\u202e\\name"
+    tree = _build_context_tree((raw_name,))
     rendered = _visible_text(
         _render_context_options(
-            (raw_name,),
-            selected=0,
+            _visible_context_rows(tree, _context_ancestors(tree, raw_name)),
+            selected=raw_name,
             current=raw_name,
         )
     )

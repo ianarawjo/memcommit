@@ -35,20 +35,57 @@ state.
 
 ## Interaction contract
 
-The picker presents canonical names from `MemoryStore.list_context_names()`.
-The current Context is marked with `*` and preselected.
+The picker derives a slash-delimited tree from the canonical names returned by
+`MemoryStore.list_context_names()`. Its compact initial view shows top-level
+rows and expands only the exact ancestor chain needed to reveal the current
+Context. The current Context is marked with `*` and preselected. With no
+current Context, the first catalog Context is selected and its ancestor chain
+is expanded.
 
-- Up and Down move the selection and stop at the first or last item.
-- Enter accepts the selected Context.
+- Up and Down move among currently visible rows and stop at the first or last
+  row.
+- Right expands a collapsed branch; on an expanded branch it moves to the
+  first child. Left collapses an expanded branch; on a collapsed branch or
+  leaf it moves to the parent.
+- `A` snapshots the current compact expansion state and expands every branch.
+  A second `A` restores that state. If the person selected a descendant that
+  was hidden in the snapshot, its ancestors remain expanded so selection does
+  not jump or disappear.
+- Enter accepts a materialized Context. On a namespace-only grouping row it
+  only expands or collapses that row.
 - Escape, `q`, or Ctrl-C cancel without changing current state.
-- The list body expands to the terminal's available height. All names are
-  visible when they fit; on a shorter terminal, prompt-toolkit scrolls the
-  viewport around the selected row and displays a scrollbar.
+- The list body expands to the terminal's available height. When visible rows
+  exceed it, prompt-toolkit scrolls around the selected row and displays a
+  scrollbar. The footer distinguishes visible rows from total materialized
+  Contexts.
+- A read-only root ribbon remains pinned above the scrolling body. Expanding
+  the current path can reveal many siblings under a high-fan-out parent; the
+  ribbon keeps the compact set of top-level starting namespaces visible even
+  when those rows themselves have scrolled outside the body viewport.
 
-The picker renders the complete name list into one flexible Window and marks
-the selected row as the viewport cursor anchor. It deliberately does not slice
-the list to a fixed row count: that earlier design left unused space below a
-twelve-row picker even when a taller terminal could show the complete set.
+The picker renders all *currently visible* tree rows into one flexible Window
+and marks the selected row as the viewport cursor anchor. It deliberately does
+not slice the tree to a fixed row count: that earlier design left unused space
+below a twelve-row picker even when a taller terminal could show more. It also
+does not start with the entire catalog expanded. In a study Profile with many
+descendants under one authority namespace, a fully expanded flat list consumed
+the initial viewport and made sibling task roots appear absent even though
+scrolling could eventually reach them.
+
+Expansion and selection are process-local presentation state. They never enter
+a Context record, Profile, or `state.json`. There is no `-R` Switch option:
+unlike `mem ls -R`, which changes the traversal included in output, the picker
+always knows the complete switchable catalog and `A` changes only its current
+presentation. Keeping the toggle inside the picker also lets a person inspect
+both compact and expanded views without restarting the command.
+
+Every slash prefix becomes a tree node so legacy names remain grouped even
+when an exact parent Context is absent. Such a prefix is visibly marked
+`[namespace only]`; it is neither loaded nor synthesized as a Context and
+cannot be returned as a switch target. This read-only fallback prevents an
+orphaned namespace from flattening many descendants back into the top-level
+view. Profile creation may separately materialize empty parents, but opening
+the picker never repairs or mutates storage.
 
 The picker returns a name but never writes store state. The common switch path
 reloads and validates that name after the picker closes and only then updates
@@ -125,7 +162,7 @@ Context name explicitly. It must not wait indefinitely for terminal input.
 The implementation uses a small prompt-toolkit component rather than the
 ambiguity `ReviewSession` shell. The two interfaces share key-handling
 conventions, but Context selection has no semantic finding, response,
-checkpoint, or resumable review state.
+checkpoint, resumable review state, or persisted tree expansion state.
 
 ## Explicit lexical relative navigation
 
@@ -170,10 +207,13 @@ command reports the error and leaves current state unchanged.
   embedding parent.
 - Relative switching does not create a namespace ancestor or target. Parent
   creation, if offered by `mem init`, is a separate operation and policy.
-- The picker does not yet filter or fuzzy-search names. Rendering is bounded
-  by the terminal viewport, but `list_context_names()` and the formatted-text
-  control still enumerate every Context. A store with very many Contexts needs
-  an indexed name search rather than only a larger terminal widget.
+- The picker does not yet filter or fuzzy-search names. Collapsing the tree
+  keeps unrelated descendants out of the initial viewport, but the process
+  still builds its model from every catalog Context. A store with very many
+  Contexts needs indexed name search rather than only a collapsible widget.
+- The root ribbon is a one-line orientation aid, not a second selection pane.
+  An unusually large or wide set of root names can be clipped by the terminal;
+  the scrollable tree remains the authoritative picker in that case.
 - The global current Context remains the repository's existing single-state
   mechanism. Compare-and-set prevents this command from overwriting a
   concurrent change, but it does not add per-shell current state.

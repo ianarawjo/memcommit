@@ -7,7 +7,11 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.commands.context_picker import (
+    _build_context_tree,
+    _context_ancestors,
     _render_context_options,
+    _render_context_roots,
+    _visible_context_rows,
     choose_context,
 )
 from memcommit.store import MemoryStore
@@ -58,30 +62,54 @@ def test_picker_moves_with_arrows_and_clamps_at_boundaries():
     assert selected == "alpha"
 
 
-def test_picker_renders_every_context_instead_of_a_fixed_height_slice():
-    options = tuple(f"namespace/context-{index:02}" for index in range(25))
-
-    fragments = _render_context_options(
-        options,
-        selected=19,
-        current=options[3],
+def test_picker_starts_with_roots_and_current_ancestry_visible():
+    options = (
+        "granted-memory",
+        "granted-memory/task-1",
+        "granted-memory/task-1/participant",
+        "task-1",
+        "task-1/participant",
+        "task-1/participant/route-changes",
+        "task-2",
+        "task-3",
     )
-    rendered_lines = "".join(
-        text for style, text in fragments if style != "[SetCursorPosition]"
-    ).splitlines()
+    tree = _build_context_tree(options)
+    expanded = _context_ancestors(
+        tree,
+        "task-1/participant/route-changes",
+    )
 
-    assert len(rendered_lines) == len(options)
-    for option in options:
-        assert sum(option in line for line in rendered_lines) == 1
+    rows = _visible_context_rows(tree, expanded)
+
+    assert [row.name for row in rows] == [
+        "granted-memory",
+        "task-1",
+        "task-1/participant",
+        "task-1/participant/route-changes",
+        "task-2",
+        "task-3",
+    ]
+    assert [row.depth for row in rows] == [0, 0, 1, 2, 0, 0]
+    assert rows[0].has_children is True
+    assert rows[0].expanded is False
+    assert rows[1].expanded is True
+    assert rows[2].expanded is True
 
 
-def test_picker_anchors_the_viewport_at_exactly_the_selected_context():
-    options = tuple(f"namespace/context-{index:02}" for index in range(25))
+def test_picker_renders_tree_and_anchors_exact_selected_context():
+    options = (
+        "namespace",
+        "namespace/child",
+        "namespace/child/deep",
+        "other",
+    )
+    tree = _build_context_tree(options)
+    rows = _visible_context_rows(tree, {"namespace"})
 
     fragments = _render_context_options(
-        options,
-        selected=19,
-        current=options[3],
+        rows,
+        selected="namespace/child",
+        current="namespace",
     )
     cursor_markers = [
         index
@@ -92,8 +120,141 @@ def test_picker_anchors_the_viewport_at_exactly_the_selected_context():
     assert len(cursor_markers) == 1
     selected_fragment = fragments[cursor_markers[0] + 1]
     assert selected_fragment[0] == "class:selected"
-    assert selected_fragment[1].endswith(options[19])
+    assert selected_fragment[1].endswith("namespace/child")
     assert selected_fragment[1].startswith("›")
+    rendered = "".join(
+        text for style, text in fragments if style != "[SetCursorPosition]"
+    )
+    assert "▾ namespace" in rendered
+    assert "  ▸ namespace/child" in rendered
+    assert "namespace/child/deep" not in rendered
+
+
+def test_picker_pins_all_root_names_above_a_scrolled_current_branch():
+    tree = _build_context_tree(
+        (
+            "granted-memory",
+            "granted-memory/task-1",
+            "task-1",
+            "task-2",
+            "task-3",
+        )
+    )
+
+    assert _render_context_roots(tree) == (
+        " Roots · granted-memory · task-1 · task-2 · task-3"
+    )
+
+
+def test_picker_groups_a_context_below_nonselectable_missing_parents():
+    tree = _build_context_tree(("missing/parent/leaf", "root"))
+
+    rows = _visible_context_rows(tree, set())
+
+    assert [(row.name, row.depth) for row in rows] == [
+        ("missing", 0),
+        ("root", 0),
+    ]
+    assert rows[0].materialized is False
+    expanded_rows = _visible_context_rows(
+        tree,
+        {"missing", "missing/parent"},
+    )
+    expanded_state = [
+        (row.name, row.depth, row.materialized)
+        for row in expanded_rows
+    ]
+    assert expanded_state == [
+        ("missing", 0, False),
+        ("missing/parent", 1, False),
+        ("missing/parent/leaf", 2, True),
+        ("root", 0, True),
+    ]
+
+
+def test_picker_enter_opens_a_namespace_only_row_without_switching_to_it():
+    with create_pipe_input() as pipe_input:
+        # leaf -> virtual parent -> virtual root -> collapse -> root -> switch
+        pipe_input.send_text("\x1b[A\x1b[A\r\x1b[B\r")
+        selected = choose_context(
+            ("missing/parent/leaf", "root"),
+            current="missing/parent/leaf",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "root"
+
+
+def test_picker_right_expands_then_enters_first_child():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[C\x1b[C\r")
+        selected = choose_context(
+            ("alpha", "alpha/child", "alpha/child/deep", "beta"),
+            current="alpha",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "alpha/child"
+
+
+def test_picker_left_moves_to_parent_then_collapses_it():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[D\x1b[D\x1b[B\r")
+        selected = choose_context(
+            ("alpha", "alpha/child", "beta"),
+            current="alpha/child",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "beta"
+
+
+def test_picker_a_expands_every_branch():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("A\x1b[B\x1b[B\r")
+        selected = choose_context(
+            ("alpha", "alpha/child", "alpha/child/deep", "beta"),
+            current="alpha",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "alpha/child/deep"
+
+
+def test_picker_second_a_restores_the_compact_tree():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("AA\x1b[B\r")
+        selected = choose_context(
+            ("alpha", "alpha/child", "beta"),
+            current="alpha",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "beta"
+
+
+def test_picker_restore_keeps_a_selection_from_expand_all_visible():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("A\x1b[B\x1b[BA\x1b[A\r")
+        selected = choose_context(
+            ("alpha", "alpha/child", "alpha/child/deep", "beta"),
+            current="alpha",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "alpha/child"
 
 
 def test_picker_cancels_without_a_selection():
