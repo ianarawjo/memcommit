@@ -56,8 +56,14 @@ app = typer.Typer(no_args_is_help=True, help="mem — a git-like memory store")
 app.command("init",           help="Initialize a new context and switch to it.")(init.cmd)
 app.command("add",            help="Add one or more memories to the current context.")(add.cmd)
 app.command("status",         help="Show current context and recent memories.")(status.cmd)
-app.command("list",           help="List direct items in the current (or given) context.")(list_memories.cmd)
-app.command("ls",             help="List direct items in the current (or given) context.")(list_memories.cmd)
+app.command(
+    "list",
+    help="List child Contexts and direct items in the current (or given) Context.",
+)(list_memories.cmd)
+app.command(
+    "ls",
+    help="List child Contexts and direct items in the current (or given) Context.",
+)(list_memories.cmd)
 app.command("show",           help="Show a memory, embedded context, or the current context in full.")(show.cmd)
 app.command("contexts",       help="List all available contexts.")(contexts.cmd)
 app.command("clear",          help="Clear all memories from the current (or given) context.")(clear_cmd)

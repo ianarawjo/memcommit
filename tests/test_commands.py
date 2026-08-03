@@ -66,7 +66,7 @@ class TestHelp:
         ls_row = next(line for line in lines if line.startswith("ls "))
         assert list_row.split(" - ", 1)[1] == ls_row.split(" - ", 1)[1]
         assert "implemented" in list_row
-        assert "List direct items in the current (or given) context." in list_row
+        assert "List child Contexts and direct items" in list_row
         assert any(
             line.startswith("checkout ")
             and " - alias " in line

@@ -181,6 +181,52 @@ def test_recursive_copy_freezes_visible_tree_and_paste_replays_it(
     assert "Copied 3 items" in copied.stderr
 
 
+def test_copy_freezes_a_typed_namespace_child_for_later_paste(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "parent/child")
+    child = MemoryStore().load_current()
+    invoke("add", "Child-only fact.")
+    invoke("init", "parent")
+    invoke("add", "Parent fact.")
+
+    copied = invoke("ls", "parent", "--copy")
+
+    assert copied.exit_code == 0
+    assert "Child-only fact." not in copied.stdout
+    assert fake_system_clipboard["text"] == (
+        "Context: parent\n"
+        "  2 items\n"
+        "\n"
+        "  parent/child/\n"
+        "  Parent fact.\n"
+    )
+    record = json.loads(
+        (Path(isolated_store) / "clipboard.json").read_text(encoding="utf-8")
+    )
+    assert record["selection"]["schema_version"] == 2
+    assert record["selection"]["items"][0] == {
+        "kind": "namespace_context",
+        "uid": child.uid,
+        "name": "parent/child",
+        "cycle": False,
+        "children": None,
+    }
+
+    store = MemoryStore()
+    store.delete("parent")
+    store.delete("parent/child")
+
+    pasted = invoke("list", "--paste")
+
+    assert pasted.exit_code == 0
+    assert pasted.stdout == fake_system_clipboard["text"]
+    assert "parent/child/" in pasted.stdout
+    assert not store.context_exists("parent")
+    assert not store.context_exists("parent/child")
+
+
 def test_copy_stages_query_pointer_without_hidden_source_content(
     isolated_store,
     fake_system_clipboard,
@@ -486,6 +532,37 @@ def test_paste_rejects_validly_hashed_text_that_matches_neither_renderer(
 
     assert result.exit_code == 1
     assert "object snapshot disagree" in result.stderr
+
+
+def test_paste_rejects_a_namespace_row_outside_its_frozen_parent(
+    isolated_store,
+    fake_system_clipboard,
+):
+    invoke("init", "parent/child")
+    invoke("init", "parent")
+    assert invoke("ls", "parent", "--copy").exit_code == 0
+    stage_path = Path(isolated_store) / "clipboard.json"
+    record = json.loads(stage_path.read_text(encoding="utf-8"))
+    record["selection"]["items"][0]["name"] = "other/child"
+    forged_text = fake_system_clipboard["text"].replace(
+        "parent/child/",
+        "other/child/",
+    )
+    replacement = ClipboardPayload.create(
+        producer="list",
+        plain_text=forged_text,
+        selection=record["selection"],
+    )
+    stage_path.write_text(
+        json.dumps(replacement.to_dict()),
+        encoding="utf-8",
+    )
+    fake_system_clipboard["text"] = forged_text
+
+    result = invoke("ls", "--paste")
+
+    assert result.exit_code == 1
+    assert "staged list snapshot is invalid" in result.stderr
 
 
 def test_system_clipboard_adapter_uses_fixed_macos_commands():

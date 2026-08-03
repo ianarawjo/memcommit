@@ -1,15 +1,16 @@
 # `mem ls` Design Rationale
 
 - Status: Implemented
-- Scope: the co-equal `mem list` and `mem ls` spellings, recursive listing
-  with `-R`, and dual text/structured `--copy` and `--paste`
+- Scope: the co-equal `mem list` and `mem ls` spellings, immediate namespace
+  child navigation, recursive listing with `-R`, and dual text/structured
+  `--copy` and `--paste`
 
 ## 1. Purpose
 
-`mem ls` is the navigation command for the logical contents of a memcommit
-Context. It answers:
+`mem ls` is the navigation command for a memcommit Context. It answers:
 
-> What are the direct items in this Context?
+> Which materialized child Contexts can I navigate to, and what direct items
+> are stored in this Context?
 
 It does not expose memcommit's physical storage layout. The fact that a Context
 is currently persisted in a `context.json` file is an implementation detail.
@@ -18,8 +19,9 @@ This distinction is similar to Git:
 
 - the shell's `ls` lists physical filesystem entries;
 - `git ls-tree` interprets Git objects and lists a logical tree;
-- `mem ls` interprets a Context and lists logical Memory, MemoryRef, and
-  embedded Context entries.
+- `mem ls` interprets a Context, derives its immediate materialized namespace
+  children, and lists its logical Memory, MemoryRef, and embedded Context
+  entries.
 
 Consequently, `context.json`, `checkpoints/`, and other storage artifacts must
 never be mixed into normal `mem ls` output.
@@ -48,15 +50,17 @@ When no Context is supplied, the current Context is used.
 
 ## 3. Default Listing Is Direct, Not Recursive
 
-Without `-R`, only direct items are listed.
+Without `-R`, only immediate navigation rows and direct persisted items are
+listed. A navigation row is derived for every existing ordinary Context whose
+canonical name is exactly one namespace segment below the listed Context.
 
 Given:
 
 ```text
 parent
-├── embedded Context: child
+├── materialized Context: parent/child
 │   └── Memory: Child fact.
-└── Memory: Parent fact.
+└── direct Memory: Parent fact.
 ```
 
 the default result is:
@@ -65,7 +69,7 @@ the default result is:
 Context: parent
   2 items
 
-  [context 12345678] child
+  [context 12345678] parent/child
   [memory  abcdef12] Parent fact.
 ```
 
@@ -73,10 +77,15 @@ Context: parent
 navigation model: listing a directory shows the child directory entry, not all
 of that child's descendants.
 
+The visible child keeps its full canonical name instead of shortening to
+`child/`. Bare Context operands are global in this CLI, so a basename would
+incorrectly suggest that `mem ls child` selects `parent/child`; the explicit
+relative spelling for that operation is `mem ls ./child`.
+
 The child can be inspected explicitly:
 
 ```bash
-mem ls child
+mem ls parent/child
 ```
 
 or recursively:
@@ -87,16 +96,30 @@ mem ls -R parent
 
 ## 4. Contexts Are Displayed Before Atomic Information
 
-A Context behaves like a logical directory, so direct embedded Contexts are
-displayed before direct Memory and MemoryRef entries.
+A Context behaves like a logical directory, so namespace children and direct
+embedded Contexts are displayed before direct Memory and MemoryRef entries.
 
 This grouping is a presentation rule only. It does not rewrite the Context's
 persisted `order` field.
 
 Within each group:
 
+- namespace-derived children are sorted by canonical name;
 - embedded Contexts retain their relative Context order;
 - Memory and MemoryRef entries retain their relative information order.
+
+Namespace-derived children precede persisted logical items. If the same
+canonical child with the same UID is also directly embedded, the derived row
+is suppressed and the persisted occurrence retains its typed embed identity,
+but it occupies that canonical name's sorted namespace-child position. This
+is a display reorder only; the Context's persisted `order` is unchanged. A
+same-named QueryContextRef is never deduplicated against an ordinary Context.
+
+The catalog and Context records are separate filesystem reads. If a child is
+deleted and recreated between them, the currently loadable child UID wins the
+one canonical-name row and an already loaded stale embed occurrence is
+suppressed. This avoids presenting one locator twice with conflicting
+identities; it does not repair or save the stale parent record.
 
 For example, if the persisted order is:
 
@@ -159,10 +182,12 @@ A stored Root Context named `aaa` and a stored descendant Context named
 descendant owns `aaa/ab/context.json`. Their histories and direct items remain
 independent.
 
-Path coexistence does not create a logical parent-child relationship. The
-descendant appears in `mem ls aaa` only after it has been explicitly embedded
-in the Root Context. A Memory whose content is `aaa` is independent of both
-Context paths.
+Path coexistence still does not create a persisted logical parent-child
+relationship. However, `mem ls aaa` derives a read-only navigation row for an
+existing immediate child such as `aaa/ab`; this does not add it to `aaa`'s
+items. A deeper name is not synthesized through a missing intermediate
+Context. Thus `aaa/ab/c` alone does not create a visible `aaa/ab` row. A
+Memory whose content is `aaa` is independent of both Context paths.
 
 ## 7. MemoryRef Listing
 
@@ -185,8 +210,10 @@ Detailed reference metadata remains the responsibility of `mem show <ref-uid>`.
 
 ## 8. Recursive Listing
 
-`-R` and `--recursive` traverse embedded Contexts to the deepest loaded level.
-The traversal is depth-first and preserves the same Context-first rule at each
+`-R` and `--recursive` traverse both namespace-derived children and embedded
+Contexts to the deepest loaded level. Every visited Context receives the same
+union view it would receive as the root of its own recursive list. The
+traversal is depth-first and preserves the same Context-first rule at each
 level:
 
 ```text
@@ -207,10 +234,12 @@ An empty embedded Context is explicit:
   (no items)
 ```
 
-### Embedded graph, not slash namespace
+### Materialized namespace edges, not implicit embeds
 
-Recursive listing follows explicit embedded Context references. It does not
-scan every stored Context whose name happens to share a slash prefix.
+Recursive listing follows exact immediate namespace children in addition to
+explicit embedded Context references. The ordinary Context catalog is frozen
+once per invocation; matching is one segment at a time rather than an
+unbounded prefix scan.
 
 For example, the existence of both:
 
@@ -219,12 +248,14 @@ construction-updates
 construction-updates/building-access
 ```
 
-does not by itself make `building-access` a child of `main`. It appears below
-the `construction-updates` Root Context only after it has been explicitly
-embedded.
+creates a read-only navigation edge from `construction-updates` to the
+materialized immediate child `construction-updates/building-access`. It does
+not add an embedded item to either Context, change either history, or make a
+missing intermediate Context real.
 
-This prevents physical naming conventions from silently changing logical
-Context membership.
+This separates shell-like discovery from logical membership. Explicit embeds
+still define the persisted graph used by mutation, checkpoints, and other
+semantic operations; namespace rows exist only in this list result.
 
 ## 9. Cycle and Shared-Context Behavior
 
@@ -253,8 +284,10 @@ second path.
 
 The intended conceptual split is:
 
-- `mem ls`: compact navigation and one-line names for direct logical items;
-- `mem ls -R`: recursive navigation through embedded Contexts;
+- `mem ls`: compact immediate namespace navigation and one-line names for
+  direct logical items;
+- `mem ls -R`: recursive navigation through namespace children and embedded
+  Contexts;
 - `mem show <selector>`: full detail for one selected Memory, MemoryRef, or
   embedded Context.
 
@@ -291,10 +324,16 @@ rather than an early target mutation.
 The structured half preserves full UIDs, full Memory text, MemoryRef pointer
 metadata and its frozen resolved display content, embedded Context pointer
 identity, QueryContextRef routing metadata, and canonical object order.
-Rendering reapplies the Context-first presentation rule. A non-recursive copy
-does not include the contents of an embedded Context. A recursive copy stores
-only the traversed occurrence tree, including repeated diamond paths and
-finite cycle markers.
+Namespace-derived rows use a distinct `namespace_context` kind so a frozen
+navigation edge is never later mistaken for a persisted embed. Snapshot schema
+version 2 introduces that kind; incompatible older staged list records fail
+closed. Replay also verifies that each typed namespace row is exactly one
+segment below its containing Context, so a validly rehashed malformed stage
+cannot move an unrelated Context under that parent. Rendering reapplies the
+Context-first presentation rule. A
+non-recursive copy does not include the contents of a child Context. A
+recursive copy stores only the traversed occurrence tree, including repeated
+diamond paths and finite cycle markers.
 
 The clean rendering is intentionally human-readable rather than parseable.
 A Memory whose text resembles a Context name or reference can therefore be
@@ -349,7 +388,8 @@ This change does not:
 
 - add a title field to Memory;
 - change the persisted item order;
-- turn slash namespace prefixes into automatic parent-child relationships;
+- persist namespace navigation rows as automatic embeds or logical
+  parent-child relationships;
 - recursively expand children without `-R`;
 - expose raw `context.json` data;
 - change the behavior of `mem show`;
@@ -357,6 +397,12 @@ This change does not:
 - paste staged objects into a Context or choose new UIDs;
 - add structured `--copy` or `--paste` to `show`, `find`, or other commands;
 - support non-macOS system clipboards.
+
+The current prototype discovers children by validating the complete ordinary
+Context catalog once per invocation. Listing cost therefore grows with the
+number of stored Contexts, even though each recursive level filters that frozen
+catalog in memory. A future indexed or namespace-local catalog can improve
+large-store performance without changing the visible contract.
 
 ## 13. Validation Scenarios
 
@@ -367,6 +413,10 @@ The implementation is covered by tests for:
 - `aaa/ab` Context and `aaa` Memory content coexisting without ambiguity;
 - relative ordering of Memory and MemoryRef entries;
 - default listing not leaking child content;
+- sorted immediate namespace children alongside current direct Memories;
+- no synthesized child when an intermediate Context is missing;
+- namespace recursion and explicit-embed deduplication;
+- relative existing-Context locators such as `mem ls ../sibling`;
 - recursion through two or more Context levels;
 - parity among `list -R`, `ls -R`, and `ls --recursive`;
 - finite output for an indirect persisted cycle;
@@ -375,7 +425,8 @@ The implementation is covered by tests for:
 - existing non-recursive list and embed behavior;
 - clean-by-default and `--with-ids` text/structured dual copy for both
   `list` and `ls`;
-- Context, query-only, MemoryRef, and recursive clean rendering;
+- embedded Context, namespace Context, query-only, MemoryRef, and recursive
+  clean rendering;
 - rejection of `--with-ids` outside `--copy`;
 - frozen direct and recursive snapshot replay after source mutation/deletion;
 - query-only source non-disclosure;

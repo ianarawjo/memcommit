@@ -253,7 +253,9 @@ def test_cli_initializes_root_after_child_and_switches_to_root(isolated_store):
     assert MemoryStore().context_exists("construction-updates/building-access")
 
 
-def test_path_descendant_is_not_implicitly_embedded_in_root(isolated_store):
+def test_path_descendant_is_listed_for_navigation_without_leaking_content(
+    isolated_store,
+):
     assert (
         runner.invoke(
             app,
@@ -272,12 +274,14 @@ def test_path_descendant_is_not_implicitly_embedded_in_root(isolated_store):
 
     assert direct.exit_code == 0
     assert recursive.exit_code == 0
-    assert "construction-updates/building-access" not in direct.output
-    assert "construction-updates/building-access" not in recursive.output
-    assert "Child-only detail." not in recursive.output
+    assert "  1 item\n" in direct.output
+    assert "construction-updates/building-access" in direct.output
+    assert "Child-only detail." not in direct.output
+    assert "construction-updates/building-access" in recursive.output
+    assert "Child-only detail." in recursive.output
 
 
-def test_root_explicit_embed_controls_direct_and_recursive_listing(
+def test_explicit_embed_deduplicates_lexical_child_in_list(
     isolated_store,
 ):
     assert (
@@ -315,13 +319,95 @@ def test_root_explicit_embed_controls_direct_and_recursive_listing(
     recursive = runner.invoke(app, ["ls", "-R", "construction-updates"])
 
     assert direct.exit_code == 0
-    assert "construction-updates/building-access" in direct.output
+    assert "  3 items\n" in direct.output
+    assert direct.output.count("construction-updates/building-access") == 1
+    assert direct.output.count("construction-updates/unembedded") == 1
+    assert direct.output.index("construction-updates/building-access") < (
+        direct.output.index("construction-updates/unembedded")
+    )
     assert "Root summary." in direct.output
     assert "Embedded child detail." not in direct.output
-    assert "construction-updates/unembedded" not in direct.output
+    assert "Unembedded detail." not in direct.output
     assert recursive.exit_code == 0
+    assert recursive.output.count("construction-updates/building-access") == 1
+    assert recursive.output.count("construction-updates/unembedded") == 1
     assert "Embedded child detail." in recursive.output
-    assert "Unembedded detail." not in recursive.output
+    assert "Unembedded detail." in recursive.output
+
+
+def test_ls_sorts_immediate_children_before_current_memories(isolated_store):
+    assert runner.invoke(app, ["init", "test/update/to"]).exit_code == 0
+    assert runner.invoke(app, ["add", "To-only detail."]).exit_code == 0
+    assert runner.invoke(app, ["init", "test/update/from"]).exit_code == 0
+    assert runner.invoke(app, ["add", "From-only detail."]).exit_code == 0
+    assert (
+        runner.invoke(app, ["init", "test/update/from/deep"]).exit_code == 0
+    )
+    assert runner.invoke(app, ["add", "Deep-only detail."]).exit_code == 0
+    assert runner.invoke(app, ["init", "test/update"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Current summary."]).exit_code == 0
+
+    direct = runner.invoke(app, ["ls", "test/update"])
+    recursive = runner.invoke(app, ["ls", "-R", "test/update"])
+
+    assert direct.exit_code == 0
+    assert "  3 items\n" in direct.output
+    assert "From-only detail." not in direct.output
+    assert "To-only detail." not in direct.output
+    assert "test/update/from/deep" not in direct.output
+    assert "Deep-only detail." not in direct.output
+    direct_lines = direct.output.splitlines()
+    from_index = next(
+        index
+        for index, line in enumerate(direct_lines)
+        if line.endswith("] test/update/from")
+    )
+    to_index = next(
+        index
+        for index, line in enumerate(direct_lines)
+        if line.endswith("] test/update/to")
+    )
+    summary_index = next(
+        index
+        for index, line in enumerate(direct_lines)
+        if line.endswith("] Current summary.")
+    )
+    assert from_index < to_index < summary_index
+    assert recursive.exit_code == 0
+    assert "From-only detail." in recursive.output
+    assert "To-only detail." in recursive.output
+    assert "test/update/from/deep" in recursive.output
+    assert "Deep-only detail." in recursive.output
+
+
+def test_ls_does_not_synthesize_a_missing_intermediate_context(
+    isolated_store,
+):
+    assert runner.invoke(app, ["init", "root/missing/leaf"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Leaf-only detail."]).exit_code == 0
+    assert runner.invoke(app, ["init", "root"]).exit_code == 0
+
+    direct = runner.invoke(app, ["ls", "root"])
+    recursive = runner.invoke(app, ["ls", "-R", "root"])
+
+    assert direct.exit_code == 0
+    assert recursive.exit_code == 0
+    assert "(no items)" in direct.output
+    assert "root/missing" not in direct.output
+    assert "root/missing" not in recursive.output
+    assert "Leaf-only detail." not in recursive.output
+
+
+def test_ls_resolves_relative_existing_context_locator(isolated_store):
+    assert runner.invoke(app, ["init", "test/update/to"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Sibling detail."]).exit_code == 0
+    assert runner.invoke(app, ["init", "test/update/from"]).exit_code == 0
+
+    result = runner.invoke(app, ["ls", "../to"])
+
+    assert result.exit_code == 0
+    assert "Context: test/update/to" in result.output
+    assert "Sibling detail." in result.output
 
 
 def test_switch_and_add_to_root_is_independent_of_descendant(isolated_store):

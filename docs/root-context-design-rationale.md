@@ -136,7 +136,7 @@ permanent “all ancestors exist” invariant: exact parent deletion may still
 leave a descendant addressable. Missing parents can be materialized again by
 re-running `mem init --parents` for that descendant.
 
-## 5. Path Hierarchy Is Not Logical Membership
+## 5. Path Hierarchy Is Navigation, Not Logical Membership
 
 Path prefixes are addresses and physical organization:
 
@@ -145,9 +145,13 @@ construction-updates
 construction-updates/building-access
 ```
 
-They do not automatically create an embed relationship.
+They do not automatically create an embed relationship. `mem ls` nevertheless
+uses this lexical hierarchy for read-only navigation: an existing Context
+exactly one segment below the listed Context appears as a child row, and
+`mem ls -R` can descend through that row.
 
-The Root Context lists a descendant only after an explicit operation:
+An explicit operation is still required when that descendant must become a
+persisted logical item of the Root Context:
 
 ```bash
 mem embed construction-updates/building-access \
@@ -157,10 +161,17 @@ mem embed construction-updates/building-access \
 This distinction is intentional:
 
 - namespace placement does not silently mutate Context contents;
-- the Root Context controls which descendants belong in its logical view;
+- `mem ls` can show discoverable children without changing the Root digest,
+  order, checkpoints, or direct items;
+- the Root Context still controls which descendants belong in its persisted
+  logical view;
 - a Root Context may embed a Context from another namespace;
-- an unembedded path descendant remains independently addressable;
-- `mem ls -R` traverses the explicit embed graph, not every matching path.
+- an unembedded path descendant remains independently addressable and visible
+  for list navigation;
+- only materialized immediate Contexts appear: a deeper descendant does not
+  synthesize a missing intermediate Context;
+- `mem ls -R` traverses both these exact namespace edges and the explicit
+  embed graph, while other semantic operations retain their existing scope.
 
 ## 6. Ordinary Context Operations Apply to Roots
 
@@ -308,8 +319,10 @@ The implementation is tested for:
 - opt-in, idempotent parent materialization and all-or-nothing rollback;
 - independent UIDs, memories, and checkpoint histories;
 - root and descendants appearing in `mem contexts`;
-- no implicit embed from a slash prefix;
-- explicit embed controlling `mem ls` and `mem ls -R`;
+- no persisted implicit embed from a slash prefix;
+- read-only immediate-child navigation in `mem ls` and `mem ls -R`;
+- explicit-embed deduplication when the same Context is also a namespace
+  child;
 - root `switch`, `add`, `clear`, checkpoint, and revert behavior;
 - unique files for rapid same-description checkpoints;
 - branch creation at an existing ancestor namespace;
