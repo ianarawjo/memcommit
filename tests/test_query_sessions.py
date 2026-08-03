@@ -90,6 +90,188 @@ def _authority_grant(
     return authority_store, source_context, source_memory, grant
 
 
+def _federated_authority_grants(isolated_store, tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    task_store = MemoryStore()
+    task_context = ops.init("task-root")
+    task_store.save(task_context)
+    task_store.set_current(task_context.name)
+
+    authority = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name="task-1-campus-authority",
+        kind="MANAGED",
+    )
+    authoring = ProfileEntry(
+        uid=AUTHORING_PROFILE_UID,
+        name=AUTHORING_PROFILE_NAME,
+        kind="AUTHORING",
+    )
+    authority_store = MemoryStore(root=profile_store_dir(authority))
+    wiki = ops.init("campus-wiki")
+    ops.add(wiki, "The public campus wiki lists service hours.")
+    details = ops.init("campus-wiki/construction-details")
+    ops.add(details, "Electrical testing is required before final inspection.")
+    authority_store.save(wiki)
+    authority_store.save(details)
+    authority_store.set_current(wiki.name)
+
+    registry = ProfileRegistry(
+        generation=1,
+        active_uid=authoring.uid,
+        profiles=(authoring, authority),
+        grants=(),
+    )
+    registry_path = profile_registry_file()
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(registry.to_dict(), indent=2) + "\n",
+        encoding="utf-8",
+    )
+    _registry, parent_grant = create_authority_grant(
+        authority_name=authority.name,
+        grantee_name=authoring.name,
+        resource_name=wiki.name,
+        attachment_name=task_context.name,
+        public_name="campus-wiki",
+        permissions=("QUERY",),
+    )
+    _registry, child_grant = create_authority_grant(
+        authority_name=authority.name,
+        grantee_name=authoring.name,
+        resource_name=details.name,
+        attachment_name=task_context.name,
+        public_name="campus-wiki/construction-details",
+        permissions=("QUERY", "SESSION_LOG"),
+    )
+    return parent_grant, child_grant
+
+
+def test_parent_query_federates_only_relevant_descendant_views(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _federated_authority_grants(isolated_store, tmp_path, monkeypatch)
+    route_prompts: list[str] = []
+    query_calls: list[tuple[str, str, str]] = []
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema):
+            route_prompts.append(prompt)
+            assert operation == "query view routing"
+            assert output_schema["properties"]["selected_views"]["items"] == {
+                "type": "string",
+                "enum": ["campus-wiki/construction-details"],
+            }
+            if "건설" in prompt:
+                return json.dumps(
+                    {"selected_views": ["campus-wiki/construction-details"]}
+                )
+            return json.dumps({"selected_views": []})
+
+        def query(self, source_name, source_content, question):
+            query_calls.append((source_name, source_content, question))
+            return "Answer."
+
+    provider = Provider()
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        lambda _provider: provider,
+    )
+
+    related = runner.invoke(
+        app,
+        ["query", "campus-wiki", "건설에는 무엇이 필요하니?"],
+    )
+    unrelated = runner.invoke(
+        app,
+        ["query", "campus-wiki", "도서관 운영 시간은?"],
+    )
+
+    assert related.exit_code == 0, related.output
+    assert unrelated.exit_code == 0, unrelated.output
+    assert len(route_prompts) == 2
+    assert "Electrical testing" not in route_prompts[0]
+    related_source = json.loads(query_calls[0][1])
+    assert [view["name"] for view in related_source["views"]] == [
+        "campus-wiki",
+        "campus-wiki/construction-details",
+    ]
+    assert "Electrical testing" in related_source["views"][1]["content"]
+    assert query_calls[1] == (
+        "campus-wiki",
+        "The public campus wiki lists service hours.",
+        "도서관 운영 시간은?",
+    )
+
+
+def test_federated_descendant_revocation_prevents_answer_disclosure(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _parent_grant, child_grant = _federated_authority_grants(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    class Provider:
+        def complete(self, *_args, **_kwargs):
+            return json.dumps({"selected_views": ["campus-wiki/construction-details"]})
+
+        def query(self, *_args):
+            delete_authority_grant(child_grant.uid)
+            return "Answer from a now-revoked descendant."
+
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        lambda _provider: Provider(),
+    )
+
+    result = runner.invoke(
+        app,
+        ["query", "campus-wiki", "What construction tests are required?"],
+    )
+
+    assert result.exit_code == 1
+    assert "outside the grant's frozen scope" in result.stderr
+    assert "Answer from a now-revoked descendant" not in result.output
+
+
+def test_federated_query_rejects_an_invented_descendant_route(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _federated_authority_grants(isolated_store, tmp_path, monkeypatch)
+    query_calls = 0
+
+    class Provider:
+        def complete(self, *_args, **_kwargs):
+            return json.dumps({"selected_views": ["campus-wiki/private-notes"]})
+
+        def query(self, *_args):
+            nonlocal query_calls
+            query_calls += 1
+            return "must not run"
+
+    monkeypatch.setattr(
+        "memcommit.commands.query.connect_query_provider",
+        lambda _provider: Provider(),
+    )
+
+    result = runner.invoke(
+        app,
+        ["query", "campus-wiki", "Question?"],
+    )
+
+    assert result.exit_code == 1
+    assert "invalid view-routing decision" in result.stderr
+    assert query_calls == 0
+
+
 def test_authority_query_without_question_lists_only_opaque_memory_shapes(
     isolated_store,
     tmp_path,
