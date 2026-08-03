@@ -16,6 +16,7 @@ from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
     StudyProfileGroup,
+    archive_legacy_study,
     create_authority_grant,
     default_study_bundle_root,
     delete_authority_grant,
@@ -554,3 +555,34 @@ def import_study_cmd(
         + display_escape_text(STUDY_BASELINE_PROFILE_NAME)
     )
     typer.echo("Clone it as one complete run Profile with: mem init-study NAME")
+
+
+@app.command("archive-study")
+def archive_study_cmd(
+    name: Annotated[
+        str,
+        typer.Argument(help="Complete legacy split Study name"),
+    ],
+) -> None:
+    """Detach a legacy split Study while preserving all of its store data."""
+
+    try:
+        result = archive_legacy_study(name)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    typer.secho(
+        "Archived legacy Study '" + display_escape_text(result.name) + "'.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo(f"Profiles removed from selector: {len(result.profiles)}")
+    typer.echo(f"Internal grants recorded in archive: {len(result.grants)}")
+    typer.echo(
+        "Archive manifest: " + display_escape_text(str(result.manifest_path))
+    )
+    typer.echo(
+        "Active Profile unchanged: "
+        + display_escape_text(result.active_profile_name)
+    )
+    typer.echo("No Memory data was moved or deleted.")
+    typer.echo("To create a merged replacement from an available Study baseline:")
+    typer.echo("  mem init-study " + display_escape_text(result.name))

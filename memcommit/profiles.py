@@ -131,6 +131,19 @@ class StudyInitializationResult:
 
 
 @dataclass(frozen=True)
+class LegacyStudyArchiveResult:
+    """One split legacy Study detached from the live Profile selector."""
+
+    uid: str
+    name: str
+    created_at: str
+    profiles: tuple[ProfileEntry, ...]
+    grants: tuple[AuthorityGrant, ...]
+    manifest_path: Path
+    active_profile_name: str
+
+
+@dataclass(frozen=True)
 class GrantedContextView:
     """One validated Context view resolved for a grantee Profile."""
 
@@ -169,6 +182,7 @@ _STUDY_PROFILE_OPTIONAL_SOURCE_FIELDS = {
     "baseline_profile_uid",
     "baseline_profile_name",
 }
+_LEGACY_STUDY_ARCHIVE_SCHEMA_VERSION = 1
 _BASELINE_TOP_LEVEL_DIRECTORIES = (
     "query-sources",
     "translation-views",
@@ -696,6 +710,201 @@ def _write_registry(registry: ProfileRegistry) -> None:
             temporary.unlink()
 
 
+def _fsync_directory(path: Path) -> None:
+    flags = os.O_RDONLY
+    if hasattr(os, "O_DIRECTORY"):
+        flags |= os.O_DIRECTORY
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _legacy_study_archives_dir() -> Path:
+    return profile_control_dir() / "archives" / "studies"
+
+
+def _ensure_legacy_study_archives_dir() -> Path:
+    control = profile_control_dir()
+    archives = control / "archives"
+    studies = archives / "studies"
+    for path, label in (
+        (archives, "Profile archive"),
+        (studies, "Legacy Study archive"),
+    ):
+        if path.is_symlink():
+            raise ProfileError(f"{label} directory cannot be a symbolic link.")
+        if path.exists() and not path.is_dir():
+            raise ProfileError(f"{label} storage is invalid.")
+        path.mkdir(mode=0o700, exist_ok=True)
+        if path.is_symlink() or not path.is_dir():
+            raise ProfileError(f"{label} directory is unsafe.")
+        # Repeat the parent fsync even when the directory is already visible.
+        # A previous process may have died after mkdir made the entry visible
+        # but before that namespace change became durable.
+        _fsync_directory(path.parent)
+    return studies
+
+
+def _legacy_study_archive_record(
+    registry: ProfileRegistry,
+    group: StudyProfileGroup,
+    profiles: tuple[ProfileEntry, ...],
+    grants: tuple[AuthorityGrant, ...],
+) -> dict[str, object]:
+    return {
+        "schema_version": _LEGACY_STUDY_ARCHIVE_SCHEMA_VERSION,
+        "kind": "LEGACY_STUDY_ARCHIVE",
+        "archived_at": datetime.now(timezone.utc).isoformat(),
+        "source_registry_generation": registry.generation,
+        "study": {
+            "uid": group.uid,
+            "name": group.name,
+            "created_at": group.created_at,
+        },
+        "profiles": [profile.to_dict() for profile in profiles],
+        "grants": [grant.to_dict() for grant in grants],
+        # Keep host paths out of portable archive metadata. Managed Profile
+        # UIDs already resolve below the fixed control-plane stores directory.
+        "stores": [
+            {
+                "profile_uid": profile.uid,
+                "control_relative_path": f"stores/{profile.uid}",
+            }
+            for profile in profiles
+        ],
+    }
+
+
+def _publish_legacy_study_archive(
+    destination: Path,
+    record: dict[str, object],
+) -> Path:
+    parent = _ensure_legacy_study_archives_dir()
+    if destination.parent != parent:
+        raise ProfileError("Legacy Study archive destination is invalid.")
+    staging = parent / f".{destination.name}.staging-{uuid.uuid4().hex}"
+    published = False
+    try:
+        staging.mkdir(mode=0o700)
+        manifest = staging / "manifest.json"
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(manifest, flags, 0o600)
+        with os.fdopen(descriptor, "w", encoding="utf-8") as file:
+            json.dump(record, file, ensure_ascii=False, indent=2)
+            file.write("\n")
+            file.flush()
+            os.fsync(file.fileno())
+        _fsync_directory(staging)
+        os.replace(staging, destination)
+        published = True
+        _fsync_directory(parent)
+        return destination / "manifest.json"
+    except Exception:
+        # Once the canonical manifest is visible, retain it as a prepared
+        # transaction. Deleting it in place could itself fail halfway and
+        # leave a non-resumable destination while the registry remains live.
+        candidate = None if published else staging
+        try:
+            if (
+                candidate is not None
+                and candidate.exists()
+                and not candidate.is_symlink()
+            ):
+                shutil.rmtree(candidate)
+                _fsync_directory(parent)
+        except Exception as rollback_error:
+            raise ProfileError(
+                "Legacy Study archive publication rollback failed."
+            ) from rollback_error
+        raise
+
+
+def _reuse_legacy_study_archive(
+    destination: Path,
+    expected: dict[str, object],
+) -> Path:
+    """Resume a manifest-first archive interrupted before registry detach."""
+
+    parent = _ensure_legacy_study_archives_dir()
+    if destination.parent != parent:
+        raise ProfileError("Legacy Study archive destination is invalid.")
+    if destination.is_symlink() or not destination.is_dir():
+        raise ProfileError(
+            f"Legacy Study archive destination is occupied: {destination}"
+        )
+    children = tuple(destination.iterdir())
+    if len(children) != 1 or children[0].name != "manifest.json":
+        raise ProfileError(
+            f"Legacy Study archive destination is occupied: {destination}"
+        )
+    manifest_path = destination / "manifest.json"
+    actual = _read_json(manifest_path, label="Legacy Study archive manifest")
+    if set(actual) != {
+        "schema_version",
+        "kind",
+        "archived_at",
+        "source_registry_generation",
+        "study",
+        "profiles",
+        "grants",
+        "stores",
+    }:
+        raise ProfileError("Existing legacy Study archive manifest is invalid.")
+    _timezone_timestamp(actual["archived_at"])
+    source_generation = actual["source_registry_generation"]
+    current_generation = expected["source_registry_generation"]
+    if (
+        not isinstance(source_generation, int)
+        or isinstance(source_generation, bool)
+        or not isinstance(current_generation, int)
+        or source_generation < 1
+        or source_generation > current_generation
+    ):
+        raise ProfileError("Existing legacy Study archive manifest is invalid.")
+    for field in (
+        "schema_version",
+        "kind",
+        "study",
+        "profiles",
+        "grants",
+        "stores",
+    ):
+        if actual[field] != expected[field]:
+            raise ProfileError(
+                "Legacy Study archive destination contains different records."
+            )
+
+    # The prior process may have died after publishing the directory entry but
+    # before fsyncing its parent. Re-establish the whole manifest-first boundary
+    # before registry detach, even though the JSON file was already durable.
+    flags = os.O_RDONLY
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(manifest_path, flags)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    _fsync_directory(destination)
+    _fsync_directory(parent)
+    return manifest_path
+
+
+def _prepare_legacy_study_archive(
+    destination: Path,
+    record: dict[str, object],
+) -> Path:
+    if destination.exists() or destination.is_symlink():
+        return _reuse_legacy_study_archive(destination, record)
+    return _publish_legacy_study_archive(destination, record)
+
+
 def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
     registry = load_profile_registry()
     base = tuple(inspect_store(profile_store_dir(item)) for item in registry.profiles)
@@ -736,6 +945,126 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
         )
         _write_registry(updated)
         return updated, inspection, True
+
+
+def archive_legacy_study(name: str) -> LegacyStudyArchiveResult:
+    """Detach one complete split Study while preserving every store in place."""
+
+    canonical = validate_profile_name(name)
+    with _registry_lock():
+        registry = load_profile_registry()
+        matches = [
+            group
+            for group in study_profile_groups(registry.profiles)
+            if group.name.casefold() == canonical.casefold()
+        ]
+        if not matches:
+            raise ProfileError(f"Legacy Study {canonical!r} does not exist.")
+        if len(matches) != 1:
+            raise ProfileError(f"Legacy Study selector {canonical!r} is ambiguous.")
+        group = matches[0]
+        grouped_uids = {
+            profile.uid for profile in (*group.profiles, *group.support_profiles)
+        }
+        profiles = tuple(
+            profile for profile in registry.profiles if profile.uid in grouped_uids
+        )
+        if registry.active_uid in grouped_uids:
+            raise ProfileError(
+                f"Legacy Study {group.name!r} contains the active Profile; "
+                "select another Profile before archiving it."
+            )
+
+        incident = tuple(
+            grant
+            for grant in registry.grants
+            if grant.authority_profile_uid in grouped_uids
+            or grant.grantee_profile_uid in grouped_uids
+        )
+        crossing = tuple(
+            grant
+            for grant in incident
+            if (grant.authority_profile_uid in grouped_uids)
+            != (grant.grantee_profile_uid in grouped_uids)
+        )
+        if crossing:
+            raise ProfileError(
+                f"Legacy Study {group.name!r} has a grant crossing its Profile "
+                f"boundary: {crossing[0].uid[:8]}."
+            )
+        internal_grants = tuple(
+            grant
+            for grant in incident
+            if grant.authority_profile_uid in grouped_uids
+            and grant.grantee_profile_uid in grouped_uids
+        )
+
+        # Archiving is a control-plane detach, not a data move. Validate each
+        # root first, then leave its stable UID path untouched so a process
+        # that already resolved that root can finish safely.
+        for profile in profiles:
+            inspect_store(profile_store_dir(profile))
+
+        archive_root = _legacy_study_archives_dir() / group.uid
+        record = _legacy_study_archive_record(
+            registry,
+            group,
+            profiles,
+            internal_grants,
+        )
+        manifest_path = _prepare_legacy_study_archive(
+            archive_root,
+            record,
+        )
+        internal_grant_uids = {grant.uid for grant in internal_grants}
+        updated = ProfileRegistry(
+            generation=max(1, registry.generation + 1),
+            active_uid=registry.active_uid,
+            profiles=tuple(
+                profile
+                for profile in registry.profiles
+                if profile.uid not in grouped_uids
+            ),
+            grants=tuple(
+                grant
+                for grant in registry.grants
+                if grant.uid not in internal_grant_uids
+            ),
+        )
+        try:
+            _write_registry(updated)
+        except Exception as error:
+            try:
+                visible = load_profile_registry()
+            except (OSError, ProfileConfigError, ValueError) as read_error:
+                raise ProfileError(
+                    f"Legacy Study {group.name!r} archive registry state could "
+                    f"not be confirmed; its manifest remains at {manifest_path}."
+                ) from read_error
+            if visible == updated:
+                raise ProfileError(
+                    f"Legacy Study {group.name!r} was archived, but registry "
+                    "durability could not be confirmed; it remains archived."
+                ) from error
+            if visible != registry:
+                raise ProfileError(
+                    f"Legacy Study {group.name!r} archive registry changed "
+                    f"unexpectedly; its manifest remains at {manifest_path}."
+                ) from error
+            raise ProfileError(
+                f"Legacy Study {group.name!r} was not detached; its prepared "
+                f"manifest remains for retry at {manifest_path}."
+            ) from error
+
+        return LegacyStudyArchiveResult(
+            uid=group.uid,
+            name=group.name,
+            created_at=group.created_at,
+            profiles=profiles,
+            grants=internal_grants,
+            manifest_path=manifest_path,
+            active_profile_name=registry.active.name,
+        )
 
 
 def _grant_selector(

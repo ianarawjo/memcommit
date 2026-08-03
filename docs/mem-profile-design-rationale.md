@@ -22,9 +22,10 @@ the concise interactive spelling requested to parallel `mem switch NAME`.
 Both forms reach the same validation, locking, and atomic selector update;
 the shorthand is parser routing rather than a second mutation path. Known
 subcommands (`list`, its hidden `ls` alias, `current`, `use`, `import`,
-`import-study`, and `grant`) take precedence, so a Profile whose name equals
-one of those reserved command tokens must be selected with the explicit `use`
-form. `mem profile list` remains an explicit inventory command.
+`import-study`, `archive-study`, and `grant`) take precedence, so a Profile
+whose name equals one of those reserved command tokens must be selected with
+the explicit `use` form. `mem profile list` remains an explicit inventory
+command.
 
 When standard input or output is not a TTY, bare `mem profile` prints that
 inventory instead of opening a picker or emitting help. This gives logs,
@@ -70,9 +71,12 @@ Managed profiles are editable copies under an external control plane:
 ~/.mem-profiles/
 ├── registry.json                    # active profile selector
 ├── registry.lock
+├── archives/studies/
+│   └── <legacy-study-uid>/manifest.json
 └── stores/
     ├── <stable-profile-uid>/         # study-baseline
-    └── <run-profile-uid>/            # one complete initialized Profile
+    ├── <run-profile-uid>/            # one complete initialized Profile
+    └── <archived-profile-uid>/       # detached but not moved or deleted
 ```
 
 `mem profile import-study` validates the three generated packages once and
@@ -163,6 +167,47 @@ side effect of `init-study`. Registries containing older
 the legacy grouping UI is retained only for those persisted records and new
 initializations do not add to it.
 
+## Recoverable legacy Study archive
+
+`mem profile archive-study NAME` applies only to a complete persisted split
+Study group created by the older initialization model. It does not archive an
+ordinary single-Profile Study. The command validates the group as one unit,
+rejects it when any member is the active Profile, and rejects any grant whose
+other endpoint lies outside the group. Internal grants are archived together
+with the member Profile records.
+
+The archive manifest records the Study identity and creation time, archive
+time, source registry generation, exact ordered Profile and internal-grant
+records, and `control_relative_path` store locators relative to
+`profile_control_dir()` (normally `~/.mem-profiles`). It contains no
+host-absolute store paths. The manifest is fsynced and published below
+`archives/studies/<study-uid>/` before one registry generation removes all
+members and internal grants from the live selector.
+
+The member managed stores deliberately remain at their stable
+`stores/<profile-uid>/` paths. No Memory, checkpoint, session, or other store
+byte is moved or deleted. This preserves the process-snapshot rule: a command
+that resolved an old root before the registry detach can finish against the
+same path. It also leaves all data and the exact control-plane records
+available for a future restore command. This is a durable control-plane detach,
+not a point-in-time immutable store snapshot: a process that resolved an old
+root before `archived_at` may still finish a write to that unchanged path.
+Restore is not implicit and is not yet implemented.
+
+If registry publication fails before replacement, the original registry
+remains authoritative and the prepared manifest remains for retry. Deleting a
+published directory in place was rejected because an interrupted recursive
+rollback could turn a valid retry point into a partial, occupied destination.
+An exact matching manifest left by a failed invocation or a process that
+stopped between manifest publication and registry detach is validated,
+re-fsynced, and reused; a foreign or modified destination fails closed. If
+replacement is already visible but its final durability cannot be confirmed,
+the command keeps the manifest and detached registry state rather than
+manufacturing a dangling rollback. Archiving and
+`mem init-study NAME` remain two explicit commands: the first preserves the
+old run, while the second allocates a new ordinary Profile UID from the current
+baseline.
+
 ## Process snapshot and concurrency
 
 The profile registry lives outside every MemoryStore. When
@@ -237,6 +282,14 @@ The local account can still read its files.
 - **Make `mem switch` scan package output directories:** rejected because it
   would list targets that are not members of the active store and cannot be
   switched to by the existing command contract.
+- **Delete legacy Study stores after hiding their rows:** rejected because it
+  destroys recoverability and can invalidate an already running process's
+  frozen root.
+- **Silently switch away from an active legacy Study:** rejected because an
+  archive request must not redirect another terminal's next command.
+- **Archive and initialize the replacement in one command:** rejected because
+  preserving old state and allocating a new run are independently reviewable
+  mutations with different failure boundaries.
 
 ## Current limitations
 
@@ -244,13 +297,18 @@ The local account can still read its files.
   already running in another terminal.
 - Editing a managed profile does not rewrite `docs/fixtures/` or refresh the
   generated package. Re-import refuses to overwrite the edited profile.
-- Profile removal, replacement, rename, backup, and reset are intentionally
-  deferred until they have explicit recoverable workflows.
+- Generic Profile removal, replacement, rename, backup, and reset remain
+  deferred. The narrow legacy split-Study archive has an explicit recoverable
+  manifest, but a matching restore command remains future work.
+- `archive-study` does not promise repeated-success acknowledgement. After the
+  registry detach commits, repeating the old Study name reports that the live
+  legacy Study does not exist; the durable manifest remains the completion
+  record until a dedicated archive-status surface exists.
 - Study Profile creation records source Profile identity, a baseline digest,
-  and an import timestamp. Whole-session command/event logging and Study
-  completion/archive state remain a separate lifecycle boundary; ordinary
-  checkpoint and opt-in query-session history retain their existing narrower
-  contracts.
+  and an import timestamp. Whole-session command/event logging and ordinary
+  single-Profile Study completion/archive state remain a separate lifecycle
+  boundary; ordinary checkpoint and opt-in query-session history retain their
+  existing narrower contracts.
 - `mem profile import-study` is a checkout-oriented research convenience; a
   packaged installation must pass `--from` when generated bundles are not
   shipped with the Python package.

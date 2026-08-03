@@ -10,16 +10,24 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import uuid
 
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.profiles as profiles_module
 from memcommit.cli import app
-from memcommit.context import AutoCheckpoint
+from memcommit.context import AutoCheckpoint, Context
 from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.profile_config import (
+    GRANT_RESOURCE_CONTEXT_TREE,
+    AuthorityGrant,
+    GrantContextBinding,
+    ProfileEntry,
+    ProfileRegistry,
     load_profile_registry,
+    profile_control_dir,
     profile_registry_file,
     profile_store_dir,
 )
@@ -71,6 +79,115 @@ def _bootstrap_study_baseline(bundles: Path):
     )
     assert result.exit_code == 0, result.stderr or result.output
     return result
+
+
+def _install_legacy_split_study(
+    name: str = "legacy-run",
+) -> tuple[str, tuple[ProfileEntry, ...], tuple[AuthorityGrant, ...]]:
+    """Recreate the complete split topology written by the former init-study."""
+
+    registry = load_profile_registry()
+    study_uid = str(uuid.uuid4())
+    created_at = "2026-08-03T18:50:46.360105+00:00"
+    authority_suffixes = {
+        1: "task-1-campus-authority",
+        2: "task-2-proposal-authority",
+        3: "task-3-healthcare-authority",
+    }
+    allocated: list[tuple[int, str, ProfileEntry]] = []
+    for task in (1, 2, 3):
+        for role in ("TASK", "AUTHORITY"):
+            profile = ProfileEntry(
+                uid=str(uuid.uuid4()),
+                name=(
+                    f"{name}-task-{task}"
+                    if role == "TASK"
+                    else f"{name}-{authority_suffixes[task]}"
+                ),
+                kind="MANAGED",
+                source={
+                    "kind": (
+                        "STUDY_RUN_TASK"
+                        if role == "TASK"
+                        else "STUDY_RUN_AUTHORITY"
+                    ),
+                    "study_uid": study_uid,
+                    "study_name": name,
+                    "created_at": created_at,
+                    "task": task,
+                    "manifest_sha256": str(task) * 64,
+                    "canonical_language": "en",
+                },
+            )
+            allocated.append((task, role, profile))
+
+    contexts: dict[tuple[int, str], Context] = {}
+    for task, role, profile in allocated:
+        context = ops.init("task-root" if role == "TASK" else "authority-root")
+        ops.add(context, f"Legacy {role.lower()} Memory for Task {task}.")
+        store = MemoryStore(root=profile_store_dir(profile))
+        store.save(context)
+        store.set_current(context.name)
+        contexts[(task, role)] = context
+
+    grants: list[AuthorityGrant] = []
+    grant_counts = {1: 2, 2: 3, 3: 2}
+    for task, count in grant_counts.items():
+        task_profile = next(
+            profile
+            for candidate_task, role, profile in allocated
+            if candidate_task == task and role == "TASK"
+        )
+        authority_profile = next(
+            profile
+            for candidate_task, role, profile in allocated
+            if candidate_task == task and role == "AUTHORITY"
+        )
+        task_context = contexts[(task, "TASK")]
+        authority_context = contexts[(task, "AUTHORITY")]
+        for index in range(1, count + 1):
+            grants.append(
+                AuthorityGrant(
+                    uid=str(uuid.uuid4()),
+                    revision=1,
+                    authority_profile_uid=authority_profile.uid,
+                    grantee_profile_uid=task_profile.uid,
+                    attachment_context_uid=task_context.uid,
+                    attachment_context_name=task_context.name,
+                    resource_kind=GRANT_RESOURCE_CONTEXT_TREE,
+                    resource_uid=authority_context.uid,
+                    resource_name=authority_context.name,
+                    public_name=f"view-{task}-{index}",
+                    permissions=("READ",),
+                    contexts=(
+                        GrantContextBinding(
+                            uid=authority_context.uid,
+                            name=authority_context.name,
+                        ),
+                    ),
+                )
+            )
+
+    profiles = tuple(profile for _task, _role, profile in allocated)
+    profiles_module._write_registry(
+        ProfileRegistry(
+            generation=max(1, registry.generation + 1),
+            active_uid=registry.active_uid,
+            profiles=(*registry.profiles, *profiles),
+            grants=(*registry.grants, *grants),
+        )
+    )
+    return study_uid, profiles, tuple(grants)
+
+
+def _legacy_archive_manifest(study_uid: str) -> Path:
+    return (
+        profile_control_dir()
+        / "archives"
+        / "studies"
+        / study_uid
+        / "manifest.json"
+    )
 
 
 def test_absent_registry_preserves_legacy_authoring_without_writing_metadata(
@@ -1161,3 +1278,423 @@ def test_init_study_rejects_a_source_with_registry_grants(
     assert "participates in registry grants" in result.stderr
     assert load_profile_registry() == before
     assert before.by_name("grant-bearing-run") is None
+
+
+def test_archive_legacy_study_preserves_stores_and_allows_merged_replacement(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    study_uid, profiles, grants = _install_legacy_split_study("legacy-run")
+    before = load_profile_registry()
+    roots = {profile.uid: profile_store_dir(profile) for profile in profiles}
+    digests = {uid: _tree_digest(root) for uid, root in roots.items()}
+
+    archived = runner.invoke(
+        app,
+        ["profile", "archive-study", "legacy-run"],
+    )
+
+    assert archived.exit_code == 0, archived.stderr or archived.output
+    assert "Archived legacy Study 'legacy-run'." in archived.output
+    assert "Profiles removed from selector: 6" in archived.output
+    assert "Internal grants recorded in archive: 7" in archived.output
+    assert "No Memory data was moved or deleted." in archived.output
+    after = load_profile_registry()
+    archived_uids = {profile.uid for profile in profiles}
+    assert after.generation == before.generation + 1
+    assert after.active_uid == before.active_uid
+    assert all(profile.uid not in archived_uids for profile in after.profiles)
+    assert all(grant.uid not in {item.uid for item in grants} for grant in after.grants)
+    assert study_profile_groups(after.profiles) == ()
+
+    manifest_path = _legacy_archive_manifest(study_uid)
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["schema_version"] == 1
+    assert manifest["kind"] == "LEGACY_STUDY_ARCHIVE"
+    assert manifest["source_registry_generation"] == before.generation
+    assert manifest["study"] == {
+        "uid": study_uid,
+        "name": "legacy-run",
+        "created_at": "2026-08-03T18:50:46.360105+00:00",
+    }
+    assert manifest["profiles"] == [profile.to_dict() for profile in profiles]
+    assert manifest["grants"] == [grant.to_dict() for grant in grants]
+    assert manifest["stores"] == [
+        {
+            "profile_uid": profile.uid,
+            "control_relative_path": f"stores/{profile.uid}",
+        }
+        for profile in profiles
+    ]
+    assert all(root.is_dir() for root in roots.values())
+    assert {uid: _tree_digest(root) for uid, root in roots.items()} == digests
+
+    initialized = runner.invoke(app, ["init-study", "legacy-run"])
+    assert initialized.exit_code == 0, initialized.stderr or initialized.output
+    current = load_profile_registry()
+    replacement = current.by_name("legacy-run")
+    assert replacement is not None
+    assert replacement.uid not in archived_uids
+    assert study_profile_groups(current.profiles) == ()
+    inventory = runner.invoke(app, ["profile", "list"])
+    assert inventory.exit_code == 0, inventory.output
+    assert "STUDY legacy-run" not in inventory.output
+    assert "legacy-run-task-" not in inventory.output
+    assert "legacy-run" in inventory.output
+
+
+def test_archive_legacy_study_rejects_an_active_member(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, _grants = _install_legacy_split_study()
+    registry = load_profile_registry()
+    profiles_module._write_registry(
+        ProfileRegistry(
+            generation=registry.generation + 1,
+            active_uid=profiles[0].uid,
+            profiles=registry.profiles,
+            grants=registry.grants,
+        )
+    )
+    before = profile_registry_file().read_bytes()
+
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "contains the active Profile" in result.stderr
+    assert profile_registry_file().read_bytes() == before
+    assert not _legacy_archive_manifest(study_uid).exists()
+    assert all(profile_store_dir(profile).is_dir() for profile in profiles)
+
+
+def test_archive_legacy_study_resumes_a_prepared_manifest(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, grants = _install_legacy_split_study()
+    registry = load_profile_registry()
+    group = study_profile_groups(registry.profiles)[0]
+    record = profiles_module._legacy_study_archive_record(
+        registry,
+        group,
+        profiles,
+        grants,
+    )
+    destination = _legacy_archive_manifest(study_uid).parent
+    manifest_path = profiles_module._publish_legacy_study_archive(
+        destination,
+        record,
+    )
+    prepared = manifest_path.read_bytes()
+    digests = {
+        profile.uid: _tree_digest(profile_store_dir(profile))
+        for profile in profiles
+    }
+
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert manifest_path.read_bytes() == prepared
+    assert tuple(path.name for path in destination.iterdir()) == ("manifest.json",)
+    current = load_profile_registry()
+    archived_uids = {profile.uid for profile in profiles}
+    assert current.generation == registry.generation + 1
+    assert current.active_uid == registry.active_uid
+    assert all(profile.uid not in archived_uids for profile in current.profiles)
+    assert all(grant.uid not in {item.uid for item in grants} for grant in current.grants)
+    assert {
+        profile.uid: _tree_digest(profile_store_dir(profile))
+        for profile in profiles
+    } == digests
+
+
+def test_archive_legacy_study_rejects_a_modified_prepared_manifest(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, grants = _install_legacy_split_study()
+    registry = load_profile_registry()
+    group = study_profile_groups(registry.profiles)[0]
+    destination = _legacy_archive_manifest(study_uid).parent
+    manifest_path = profiles_module._publish_legacy_study_archive(
+        destination,
+        profiles_module._legacy_study_archive_record(
+            registry,
+            group,
+            profiles,
+            grants,
+        ),
+    )
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["stores"][0]["control_relative_path"] = "stores/different"
+    manifest_path.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    modified = manifest_path.read_bytes()
+    before = profile_registry_file().read_bytes()
+
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "destination contains different records" in result.stderr
+    assert profile_registry_file().read_bytes() == before
+    assert manifest_path.read_bytes() == modified
+    assert all(profile_store_dir(profile).is_dir() for profile in profiles)
+
+
+def test_archive_legacy_study_keeps_a_reused_manifest_on_registry_failure(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, grants = _install_legacy_split_study()
+    registry = load_profile_registry()
+    group = study_profile_groups(registry.profiles)[0]
+    destination = _legacy_archive_manifest(study_uid).parent
+    manifest_path = profiles_module._publish_legacy_study_archive(
+        destination,
+        profiles_module._legacy_study_archive_record(
+            registry,
+            group,
+            profiles,
+            grants,
+        ),
+    )
+    prepared = manifest_path.read_bytes()
+
+    def fail_registry_write(_registry):
+        raise OSError("simulated resumed registry failure")
+
+    monkeypatch.setattr(profiles_module, "_write_registry", fail_registry_write)
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "was not detached" in result.stderr
+    assert "prepared manifest remains for retry" in result.stderr
+    assert load_profile_registry() == registry
+    assert manifest_path.read_bytes() == prepared
+    assert all(profile_store_dir(profile).is_dir() for profile in profiles)
+
+
+def test_archive_legacy_study_rejects_a_missing_member_store(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, _grants = _install_legacy_split_study()
+    missing_root = profile_store_dir(profiles[0])
+    backup = missing_root.with_name(missing_root.name + ".missing")
+    missing_digest = _tree_digest(missing_root)
+    healthy_digests = {
+        profile.uid: _tree_digest(profile_store_dir(profile))
+        for profile in profiles[1:]
+    }
+    missing_root.rename(backup)
+    before = profile_registry_file().read_bytes()
+
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "MemoryStore must be a real directory" in result.stderr
+    assert profile_registry_file().read_bytes() == before
+    assert not _legacy_archive_manifest(study_uid).exists()
+    assert not missing_root.exists()
+    assert backup.is_dir()
+    assert _tree_digest(backup) == missing_digest
+    assert {
+        profile.uid: _tree_digest(profile_store_dir(profile))
+        for profile in profiles[1:]
+    } == healthy_digests
+
+
+def test_archive_legacy_study_rejects_a_symlink_member_store(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, _grants = _install_legacy_split_study()
+    unsafe_root = profile_store_dir(profiles[0])
+    backup = unsafe_root.with_name(unsafe_root.name + ".backup")
+    digest = _tree_digest(unsafe_root)
+    unsafe_root.rename(backup)
+    unsafe_root.symlink_to(backup, target_is_directory=True)
+    before = profile_registry_file().read_bytes()
+
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "MemoryStore must be a real directory" in result.stderr
+    assert profile_registry_file().read_bytes() == before
+    assert not _legacy_archive_manifest(study_uid).exists()
+    assert unsafe_root.is_symlink()
+    assert backup.is_dir()
+    assert _tree_digest(backup) == digest
+    assert all(profile_store_dir(profile).is_dir() for profile in profiles[1:])
+
+
+def test_archive_legacy_study_does_not_target_an_ordinary_profile(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    before = profile_registry_file().read_bytes()
+
+    result = runner.invoke(
+        app,
+        ["profile", "archive-study", STUDY_BASELINE_PROFILE_NAME],
+    )
+
+    assert result.exit_code == 1
+    assert "Legacy Study 'study-baseline' does not exist" in result.stderr
+    assert profile_registry_file().read_bytes() == before
+
+
+@pytest.mark.parametrize("direction", ["outgoing", "incoming"])
+def test_archive_legacy_study_rejects_cross_boundary_grants(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+    direction,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, _grants = _install_legacy_split_study()
+    task_profile = next(profile for profile in profiles if profile.name == "legacy-run-task-1")
+    authority_profile = next(
+        profile
+        for profile in profiles
+        if profile.name == "legacy-run-task-1-campus-authority"
+    )
+    if direction == "outgoing":
+        create_authority_grant(
+            authority_name=authority_profile.name,
+            grantee_name="authoring",
+            resource_name="authority-root",
+            attachment_name="authoring-notes",
+            permissions=["READ"],
+            public_name="external-legacy-view",
+        )
+    else:
+        create_authority_grant(
+            authority_name="authoring",
+            grantee_name=task_profile.name,
+            resource_name="authoring-notes",
+            attachment_name="task-root",
+            permissions=["READ"],
+            public_name="external-authoring-view",
+        )
+    before = profile_registry_file().read_bytes()
+
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "crossing its Profile boundary" in result.stderr
+    assert profile_registry_file().read_bytes() == before
+    assert not _legacy_archive_manifest(study_uid).exists()
+    assert all(profile_store_dir(profile).is_dir() for profile in profiles)
+
+
+def test_archive_legacy_study_rejects_an_occupied_archive_destination(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, _grants = _install_legacy_split_study()
+    destination = _legacy_archive_manifest(study_uid).parent
+    destination.mkdir(parents=True)
+    sentinel = destination / "keep.txt"
+    sentinel.write_text("existing archive\n", encoding="utf-8")
+    before = profile_registry_file().read_bytes()
+
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "archive destination is occupied" in result.stderr
+    assert profile_registry_file().read_bytes() == before
+    assert sentinel.read_text(encoding="utf-8") == "existing archive\n"
+    assert all(profile_store_dir(profile).is_dir() for profile in profiles)
+
+
+def test_archive_legacy_study_keeps_manifest_when_registry_write_fails(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, _grants = _install_legacy_split_study()
+    before = profile_registry_file().read_bytes()
+
+    def fail_registry_write(_registry):
+        raise OSError("simulated registry failure")
+
+    monkeypatch.setattr(profiles_module, "_write_registry", fail_registry_write)
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "was not detached" in result.stderr
+    assert "prepared manifest remains for retry" in result.stderr
+    assert profile_registry_file().read_bytes() == before
+    assert _legacy_archive_manifest(study_uid).is_file()
+    assert all(profile_store_dir(profile).is_dir() for profile in profiles)
+
+
+def test_archive_legacy_study_keeps_visible_commit_after_fsync_failure(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    study_uid, profiles, grants = _install_legacy_split_study()
+    real_write_registry = profiles_module._write_registry
+
+    def fail_after_visible_replace(updated):
+        real_write_registry(updated)
+        raise OSError("simulated directory fsync failure")
+
+    monkeypatch.setattr(
+        profiles_module,
+        "_write_registry",
+        fail_after_visible_replace,
+    )
+    result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
+
+    assert result.exit_code == 1
+    assert "remains archived" in result.stderr
+    registry = load_profile_registry()
+    archived_uids = {profile.uid for profile in profiles}
+    assert all(profile.uid not in archived_uids for profile in registry.profiles)
+    assert all(grant.uid not in {item.uid for item in grants} for grant in registry.grants)
+    assert _legacy_archive_manifest(study_uid).is_file()
+    assert all(profile_store_dir(profile).is_dir() for profile in profiles)

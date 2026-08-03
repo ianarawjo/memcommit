@@ -105,9 +105,15 @@ def test_profile_subcommands_keep_precedence_over_the_name_shorthand(
     )
 
     result = runner.invoke(app, ["profile", "list"])
+    archive = runner.invoke(
+        app,
+        ["profile", "archive-study", "missing-study"],
+    )
 
     assert result.exit_code == 0, result.output
     assert "* authoring" in result.output
+    assert archive.exit_code == 1
+    assert "Legacy Study 'missing-study' does not exist" in archive.stderr
 
 
 def test_profile_use_without_a_name_keeps_the_interactive_picker(
