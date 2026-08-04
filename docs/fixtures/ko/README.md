@@ -176,20 +176,20 @@ query-only source다. 검수 소속은 `campus-wiki · construction-details`로
 분야 중립적인 외부 요구를 사용자 문제, 디자인 기여, 시제품, 사용자 연구,
 평가와 설계·운영 결정의 언어로 해석한 내부 조언이다.
 의미 대응 단위는 관계 **그룹**으로 보존한다. 확장 뒤에도 실제 `Conflict`는
-3개, 명시적인 `Compatible Complement`는 2개 관계 지점으로 제한하고, 추가된
+8개, 명시적인 `Compatible Complement`는 2개 관계 지점으로 제한하고, 추가된
 조언은 `Near Duplicate`, `Same-Principle Variant` 또는
 `Context-Dependent Variant`로 대응시킨다. 관계는 golden sidecar일 뿐
 advisor의 우열이나 본문의 정답 표식이 아니다. 한 의미 단위가 여러 원자 Memory로 분리되면
 `left_fixture_ids`와 `right_fixture_ids`에 세미콜론으로 구분한 멤버 목록을
 기록한다.
 
-실제 충돌은 연구방법 경험 없이도 판단할 수 있는 작성 선택 세 가지로
-제한한다. 흐름 그림과 순서표, 주장 하나씩의 짧은 문장과 연결된 생각의 호흡,
-em dash 회피와 의도적인 끊김·대조에서의 조건부 허용이다. 주변 Memory에는
-각 입장을 이해할 수 있는 자연스러운 관찰, 선호, 작성 비용을 두며 별도의
-rule/benefit/cost 설명은 넣지 않는다. Rationale은 이 Memory들에서 advisor의
-입장을 재구성할 수 있다. 소제목과 예산 배치 차이는 함께 적용하거나 문장 기능과
-제출 양식에 따라 고를 수 있어 충돌이 아닌 변형으로 둔다.
+실제 충돌은 연구방법 경험 없이도 판단할 수 있는 작성·계획 선택 여덟 가지로
+제한한다. 문제 설명 두 문장과 세 문장, 흐름 그림과 순서표, 짧은 문장과 연결된
+호흡, 설명적 소제목과 연속된 문단 흐름, 1인칭 책임 표시와 행동 우선 절차,
+하나의 정확한 목표와 근거 있는 범위, 본문 예산 근거와 별도 표, em dash 회피와
+의도적인 조건부 허용이다. 주변 Memory에는 각 입장을 이해할 수 있는 관찰, 선호,
+수정 비용, 작성 습관을 두며 별도의 rule/benefit/cost 설명은 넣지 않는다.
+Rationale은 이 Memory들에서 advisor의 입장을 재구성할 수 있다.
 
 질의 전용 제출 지침 75개는 10개 directory로 나뉘며 각 directory에 `OM`
 사례가 있다. 이는 특정 세부 분야가 아니라 적용 지향 석사 연구 프로젝트를 두

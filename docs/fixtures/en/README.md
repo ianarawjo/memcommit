@@ -204,7 +204,7 @@ design contributions, prototypes, user research, evaluation, and design or
 operational decisions.
 
 Semantic correspondence is preserved as relationship **groups**. After
-expansion, actual `Conflict` remains limited to 3 relationship points and
+expansion, actual `Conflict` remains limited to 8 relationship points and
 explicit `Compatible Complement` to 2; added advice is mapped as
 `Near Duplicate`, `Same-Principle Variant`, or `Context-Dependent Variant`.
 Relationships are a golden sidecar, not a marker of advisor superiority or of
@@ -212,15 +212,16 @@ correct answers in the content. When one semantic unit has been split across
 multiple atomic Memories, semicolon-separated member lists are recorded in
 `left_fixture_ids` and `right_fixture_ids`.
 
-The three actual conflicts are authoring choices accessible without research
-methods training: flow diagram versus sequence table, short one-claim sentences
-versus preserving the rhythm of connected thoughts, and avoiding em dashes
-versus allowing them for a deliberate interruption or contrast. Supporting
-Memories retain ordinary observations, preferences, and costs from which
-Rationale can reconstruct each advisor's position; they do not encode a
-separate rule/benefit/cost explanation. Differences in subheadings and budget
-placement remain variants because they can be combined or selected according
-to sentence function and submission format.
+The eight actual conflicts are authoring and planning choices accessible
+without research-methods training: two- versus three-sentence problem framing,
+flow diagram versus sequence table, short one-claim sentences versus connected
+rhythm, descriptive subheadings versus continuous paragraph flow, first-person
+responsibility versus action-first procedure prose, one exact target versus a
+bounded range, budget rationale in the main text versus a separate table, and
+avoiding em dashes versus deliberate conditional use. Supporting Memories
+retain ordinary observations, preferences, update costs, and author habits from
+which Rationale can reconstruct each advisor's position; they do not encode a
+separate rule/benefit/cost explanation.
 
 The 75 query-only submission-guideline Memories are divided across 10
 directories, each containing an `OM` example. They form a general submission

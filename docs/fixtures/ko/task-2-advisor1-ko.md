@@ -24,23 +24,23 @@
 > 정확히 150개의 독립 검토 가능한
 > 후보가 있다.
 
-- T2-L-001 — `structure/problem` — PP — 첫 문단의 첫 두 문장 안에서 사용자가 기술과 상호작용하거나 협업할 때 겪는 핵심 문제를 밝혀라.
-- T2-L-070 — `structure/problem-urgency` — PP — 첫 문단의 첫 두 문장 안에서 그 상호작용 문제를 지금 다뤄야 하는 이유를 밝혀라.
+- T2-L-001 — `structure/problem` — PP — 독자가 배경 설명보다 먼저 제안서의 핵심 쟁점에 도달하도록 첫 두 문장 안에 문제 설명을 완결하라.
+- T2-L-070 — `structure/two-sentence-opening-reserve` — PP — 첫 문장에는 구체적인 문제를, 둘째 문장에는 그 결과를 쓰고 이후 문장은 제안할 대응을 위해 남겨라.
 - T2-L-002 — `structure/research-question-position` — PP — 주된 HCI 연구 질문에 사용자, 사용 맥락, 탐구할 상호작용을 명시하라.
 - T2-L-011 — `structure/interaction-step-visual` — PP — 낯선 상호작용 절차를 제안할 때는 한 장의 간결한 시각 자료로 요약하라.
 - T2-L-071 — `structure/interaction-transition-visual` — PP — 낯선 상호작용 절차가 한 단계에서 다음 단계로 넘어가는 조건을 시각 자료에 표시하라.
 - T2-L-015 — `structure/masters-timeline-phases` — PP — 석사 연구 일정을 탐색, 설계, 시제품 제작, 사용자 평가의 단계별 시기로 제시하라.
 - T2-L-072 — `structure/masters-timeline-deliverables` — PP — 석사 연구의 각 단계에 검토 가능한 산출물을 하나씩 연결하라.
 - T2-L-017 — `structure/gap-contribution-link` — PP — HCI 관련 연구가 남긴 공백과 제안한 설계·경험적 기여를 인접하게 배치하라.
-- T2-L-018 — `structure/two-page-heading-problem` — PP — 자유 형식 제안서에서는 사용자 문제를 별도 소제목으로 구분하라.
-- T2-L-083 — `structure/two-page-heading-intervention` — PP — 자유 형식 제안서에서는 설계 개입을 별도 소제목으로 구분하라.
-- T2-L-084 — `structure/two-page-heading-evaluation` — PP — 자유 형식 제안서에서는 평가 계획을 별도 소제목으로 구분하라.
+- T2-L-018 — `structure/descriptive-subheadings` — PP — 두 쪽 제안서를 짧고 설명적인 소제목으로 나누어 독자가 문제, 제안할 대응, 다음 단계로 바로 이동할 수 있게 하라.
+- T2-L-083 — `structure/subheading-problem-response` — PP — 문단 전환에만 의존하지 말고 문제와 제안할 대응에 각각 설명적인 소제목을 붙여라.
+- T2-L-084 — `structure/subheading-next-steps` — PP — 다시 찾아볼 때 쉽게 보이도록 다음 단계와 요청할 지원에 별도 소제목을 붙여라.
 - T2-L-024 — `structure/preliminary-result-placement` — PP — 파일럿 관찰이나 초기 시제품 결과는 실행 가능성 주장을 뒷받침하는 문장 가까이에 배치하라.
-- T2-L-054 — `structure/reviewer-opening-problem` — OM — HCI 심사자는 첫 문단의 첫 두 문장에서 사용자와 상호작용 문제를 찾아 제안서의 초기 논점을 형성한다.
-- T2-L-080 — `structure/reviewer-opening-urgency` — OM — HCI 심사자는 첫 문단의 첫 두 문장에서 그 사용자 문제를 지금 연구할 이유를 판단한다.
-- T2-L-095 — `structure/formative-study-role` — PP — 제안서의 설계 단계마다 통제된 형성 평가가 어떤 다음 설계 결정을 바꿀지 연결하라.
-- T2-L-096 — `structure/conceptual-contribution-thread` — PP — 사용자 문제에서 관찰할 상호작용 현상, 비교할 설계 선택, 도출할 개념적 설계 지식까지 한 흐름으로 연결하라.
-- T2-L-097 — `structure/advisor-structure-check` — SM — the agent는 각 연구 단계가 다음 단계의 설계 결정을 어떻게 제약하는지 드러나야 전체 연구 논리를 검토할 수 있다.
+- T2-L-054 — `structure/reviewer-two-sentence-scan` — OM — 이 advisor는 독자가 나머지 페이지를 훑기 전에 첫 두 문장으로 제안서의 주제를 판단하는 모습을 반복해서 보았다.
+- T2-L-080 — `structure/late-problem-scan-cost` — OM — 설정 설명이 둘째 문장을 넘어가면 훑어 읽는 독자는 배경 주제는 기억하지만 제안하려는 정확한 문제를 놓치는 경우가 많다.
+- T2-L-095 — `structure/subheading-return-path` — PP — 논의할 때도 같은 짧은 소제목을 다시 사용해 독자가 페이지 전체를 뒤지지 않고 해당 부분으로 돌아갈 수 있게 하라.
+- T2-L-096 — `structure/subheading-omission-signal` — PP — 눈에 보이는 소제목을 완결성 점검표로 사용해 비었거나 빠진 부분이 즉시 드러나게 하라.
+- T2-L-097 — `structure/advisor-heading-scan-observation` — SM — 이 advisor는 독자가 어느 문단을 자세히 읽을지 정하기 전에 먼저 소제목을 훑는 모습을 반복해서 보았다.
 - T2-L-003 — `emphasis/contribution-count` — PP — 주된 HCI 기여는 두 가지를 넘기지 마라.
 - T2-L-051 — `emphasis/contribution-naming` — PP — 각 설계 또는 경험적 기여에 이름을 붙여 한 문장으로 제시하라.
 - T2-L-013 — `emphasis/recruitment-primary-constraint` — PP — 지역사회 참가자를 모집하는 연구에서는 참여에 따르는 시간 부담을 강조하라.
@@ -64,13 +64,13 @@
 - T2-L-103 — `claim-evidence/formative-finding-decision` — PP — 형성 평가에서 얻을 각 근거가 유지·수정·폐기 중 어떤 설계 판단을 지원하는지 밝혀라.
 - T2-L-104 — `claim-evidence/formative-evidence-limit` — KB — 통제된 형성 연구의 결과는 실제 장기 사용에서의 효과를 직접 입증하지 않는다.
 - T2-L-105 — `claim-evidence/advisor-claim-threshold` — SM — the agent는 관찰 가능한 자료로 반증할 수 없는 설명을 개념적 기여로 승인할 수 없다.
-- T2-L-019 — `style/research-team-voice` — PP — 연구팀이 선택한 설계 결정과 사용자 연구 행동은 1인칭 능동태로 써라.
+- T2-L-019 — `style/first-person-responsibility` — PP — 제안서 작성자가 맡는 선택과 약속은 1인칭 능동태로 써서 작업 계획 전체에서 책임 주체를 분명히 하라.
 - T2-L-020 — `style/confirmed-procedure-status` — PP — 이미 구현해 확인한 시제품 동작은 관찰된 상태로 써라.
 - T2-L-052 — `style/unconfirmed-procedure-status` — PP — 아직 구현하거나 평가하지 않은 시제품 동작은 계획 또는 예상으로 써라.
-- T2-L-057 — `style/reviewer-voice-interpretation` — OM — HCI 심사자는 1인칭 능동태에서 연구팀이 책임지는 설계 선택과 연구 행동을 쉽게 식별한다.
-- T2-L-106 — `style/design-knowledge-language` — PP — 기능을 만들었다는 표현 대신 어떤 조건에서 어떤 설계 선택이 유효한지를 설명하는 문장으로 기여를 써라.
-- T2-L-107 — `style/mechanism-versus-feature` — KB — 설계 메커니즘은 인터페이스 기능 목록과 달리 사용자 행동이 변하는 이유에 관한 설명을 포함한다.
-- T2-L-108 — `style/author-feature-verb-tendency` — UM — 이 제안서를 작성하는 사용자는 설계 지식을 설명할 때도 구현 기능을 나열하는 동사를 자주 사용한다.
+- T2-L-057 — `style/reviewer-first-person-responsibility` — OM — 이 advisor는 문장이 누가 선택했고 무엇을 전달하거나 수정할지 1인칭 능동태로 밝힐 때 독자가 책임을 더 정확히 배정하는 모습을 보았다.
+- T2-L-106 — `style/first-person-choice-boundary` — PP — 저자가 통제하는 결정과 약속에만 “우리”를 쓰고 외부 사실이나 다른 주체의 행동에는 쓰지 마라.
+- T2-L-107 — `style/first-person-accountability-effect` — KB — 저자를 행위자로 밝히면 의도적인 약속과 단지 존재하는 조건을 더 쉽게 구별할 수 있다.
+- T2-L-108 — `style/author-passive-commitment-tendency` — UM — 이 제안서를 작성하는 사용자는 확정되지 않은 약속을 “검토될 것이다”나 “예상된다” 같은 수동 표현 뒤에 숨기는 경향이 있다.
 - T2-L-006 — `terminology/term-consistency` — PP — 같은 상호작용 개념이나 인터페이스 요소에는 제안서 전체에서 같은 용어를 사용하라.
 - T2-L-021 — `terminology/abbreviation-eligibility` — PP — 반복되는 세 단어 이상의 명칭에만 약어를 사용하라.
 - T2-L-082 — `terminology/abbreviation-definition` — PP — 약어를 처음 사용할 때 전체 명칭과 약어를 함께 제시하라.
@@ -90,17 +90,17 @@
 - T2-L-074 — `style/one-claim-sentences` — PP — 심사자가 빠르게 찾아 판단할 수 있도록 문장마다 핵심 주장 하나만 담아라.
 - T2-L-016 — `methods/preregistration-change-condition` — PP — 사전등록 연구에서는 계획에서 벗어날 수 있는 조건을 밝혀라.
 - T2-L-075 — `methods/preregistration-change-record` — PP — 사전등록 연구에서는 계획에서 벗어난 내용을 기록하는 방식을 밝혀라.
-- T2-L-022 — `methods/sample-size-form` — PP — 모집 계획에는 목표 참가자 수를 하나의 정확한 수치로 제시하라.
+- T2-L-022 — `methods/exact-target` — PP — 일정, 작업량, 예산을 같은 수량에 맞춰 확인할 수 있도록 참가자 목표 수를 하나의 정확한 값으로 확정하라.
 - T2-L-028 — `methods/data-collection-tool` — PP — 각 사용자 자료를 수집할 인터뷰 질문지, 기록 장치 또는 로그 도구를 구체적으로 적어라.
 - T2-L-076 — `methods/data-collection-timing` — PP — 각 사용자 자료를 상호작용 전·중·후 어느 시점에 수집할지 적어라.
-- T2-L-034 — `methods/recruitment-funnel-visibility` — SM — the agent는 연락 대상에서 최종 참여자까지의 예상 이탈 단계가 없으면 모집 계획의 현실성을 검토할 수 없다.
+- T2-L-034 — `methods/exact-target-review` — SM — 이 advisor는 제안서의 여러 부분이 서로 다른 목표 수를 암시하면 일정과 예산이 일치하는지 판단할 수 없다.
 - T2-L-036 — `methods/prototype-error-observation` — WM — 형성 평가용 시제품에서는 설계 선택 외에도 실행 불안정성이 독립적인 과업 실패 원인으로 존재한다.
 - T2-L-086 — `methods/prototype-instability-safety` — WM — 형성 평가 중 시제품 안전 신호가 발생하면 기관의 기존 안전 절차가 계획된 자료 수집보다 우선한다.
 - T2-L-060 — `methods/reviewer-answerability-trace` — OM — 심사자는 각 연구 질문에서 자료와 분석까지 이어지는 경로를 따라 답변 가능성을 판단한다.
 - T2-L-069 — `methods/author-feature-contribution-assumption` — UM — 이 제안서를 작성하는 사용자는 구현한 기능 목록을 설계 기여로 바로 제시하는 경향이 있다.
-- T2-L-115 — `methods/formative-alternative-control` — PP — 형성 평가에서는 핵심 설계 속성 하나만 다르게 한 대안을 비교하라.
-- T2-L-116 — `methods/formative-task-equivalence` — PP — 설계 대안을 비교할 때 참가자 과업과 제공 정보는 동일하게 유지하라.
-- T2-L-117 — `methods/iteration-decision-rule` — PP — 각 형성 평가 반복이 끝난 뒤 어떤 근거로 다음 시제품을 수정할지 판단 규칙을 미리 밝혀라.
+- T2-L-115 — `methods/exact-target-resource-fit` — PP — 필요한 세션 수, 진행자 시간, 참가자 지급액을 서로 다른 대략치가 아니라 같은 정확한 목표 수에서 계산하라.
+- T2-L-116 — `methods/exact-target-shortfall` — PP — 모집 수가 정확한 목표보다 적으면 부족분을 명시하고 영향을 받는 일정이나 산출물을 수정하라.
+- T2-L-117 — `methods/author-range-deferral` — PP — 제안서의 다른 부분이 뒷받침해야 할 수량 선택을 미루기 위해 넓은 범위를 사용하지 마라.
 - T2-L-118 — `style/author-em-dash-tendency` — UM — 이 제안서를 작성하는 사용자는 이미 절이 여러 개인 문장에서 em dash를 반복해서 쓰는 경향이 있다.
 - T2-L-119 — `style/em-dash-authorship-suspicion` — WM — em dash가 반복되면 심사자의 관심이 제안서의 논리에서 AI가 생성한 문장인지에 대한 의심으로 옮겨갈 수 있다.
 - T2-L-043 — `evaluation/primary-measure` — PP — 비교한 설계 대안을 유지·수정·폐기할 기준이 되는 대표 측정값 하나를 지정하라.
@@ -145,13 +145,13 @@
 - T2-L-138 — `reproducibility/design-alternative-specification` — PP — 비교한 설계 대안의 조작 요소와 고정 요소를 다른 연구자가 재구성할 수 있게 기록하라.
 - T2-L-139 — `reproducibility/formative-decision-trail` — KB — 형성 평가의 결정 기록은 원자료, 해석, 설계 수정 사이의 연결을 재구성하게 한다.
 - T2-L-140 — `reproducibility/advisor-iteration-trace` — SM — the agent는 각 시제품 버전이 어느 관찰을 반영했는지 추적할 수 있어야 설계 지식의 도출 과정을 검토할 수 있다.
-- T2-L-023 — `budget/body-detail-placement` — PP — 본문에서 각 핵심 연구 단계에 대응하는 주요 비용 범주를 짧게 연결하라.
-- T2-L-031 — `budget/personnel-work-time` — PP — 인건비에는 시제품 제작과 사용자 연구 역할별 작업 시간을 적어라.
-- T2-L-079 — `budget/personnel-rate-basis` — PP — 인건비에는 시제품 제작과 사용자 연구 역할별 단가의 산정 근거를 붙여라.
-- T2-L-066 — `budget/finance-activity-trace` — OM — 재무 검토자는 각 비용 범주가 어떤 HCI 연구 단계에 연결되는지 추적해 예산의 타당성을 판단한다.
-- T2-L-141 — `budget/formative-iteration-costs` — PP — 각 형성 평가 반복에 필요한 모집, 시제품 수정, 세션 운영 비용을 별도로 산정하라.
-- T2-L-142 — `budget/contingency-redesign-cost` — PP — 평가에서 핵심 설계 가정이 기각될 때 필요한 재설계 예비비를 밝혀라.
-- T2-L-143 — `budget/author-prototype-cost-omission` — UM — 이 제안서를 작성하는 사용자는 사용자 연구 사이에 발생하는 시제품 수정 비용을 예산에서 빠뜨리는 경향이 있다.
+- T2-L-023 — `budget/main-text-rationale` — PP — 제안서를 벗어나지 않고 자원 논리를 이해할 수 있도록 총액, 주요 비용 범주, 한 줄의 산정 근거를 본문에 유지하라.
+- T2-L-031 — `budget/main-text-activity-link` — PP — 주요 비용을 그 비용이 가능하게 하는 활동이나 산출물 바로 옆의 본문에 배치하라.
+- T2-L-079 — `budget/main-text-estimate-basis` — PP — 각 주요 비용의 수량과 단가 근거를 그 비용을 요청하는 같은 문단에 적어라.
+- T2-L-066 — `budget/reviewer-inline-cost-reading` — OM — 이 advisor는 주장한 이점과 같은 페이지에서 비용을 확인할 수 없을 때 독자가 제안한 우선순위를 의심하는 모습을 보았다.
+- T2-L-141 — `budget/main-text-revision-consistency` — PP — 관련 활동이 바뀔 때마다 비용 문장도 갱신해 서술과 요청 금액이 어긋나지 않게 하라.
+- T2-L-142 — `budget/main-text-space-cost` — PP — 요청이 적절한지 결정하는 데 산정 근거가 중요하다면 본문 문단이 더 빽빽해지는 비용을 감수하라.
+- T2-L-143 — `budget/author-detached-table-omission` — UM — 이 제안서를 작성하는 사용자는 주요 금액이 활동 옆에도 반복되지 않으면 작업 계획을 고치고도 떨어져 있는 예산표 갱신을 잊는 경향이 있다.
 - T2-L-046 — `compensation/base-hourly-rate` — PP — 사용자 연구 보상 예산은 세션 시간과 준비 부담을 합친 예상 참여 부담을 기준으로 산정하라.
 - T2-L-047 — `compensation/modality-burden` — PP — 대면 사용자 연구에서 요구하는 필수 이동 시간도 보상하라.
 - T2-L-053 — `compensation/participation-time` — PP — 연구 방식과 관계없이 세션에 실제로 참여한 시간을 보상하라.

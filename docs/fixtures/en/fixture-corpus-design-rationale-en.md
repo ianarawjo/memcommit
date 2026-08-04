@@ -378,21 +378,31 @@ pair.
 
 Most groups are `Near Duplicate`, `Same-Principle Variant`, or
 `Context-Dependent Variant`. Even after expansion, actual conflicts remain at
-only 3 relationship points and explicit complements at only 2. This helps
+only 8 relationship points and explicit complements at only 2. This helps
 participants distinguish duplication, contextual variation, and genuine
 conflict rather than treating every difference as disagreement. Relationship
 bands are a golden sidecar, not Memory content or advisor priority. If a fully
 atomic pairwise answer key is later needed, it must be created separately from
 this group sidecar.
 
-The three conflicts are limited to authoring choices that a participant without
+The eight conflicts are limited to authoring and planning choices that a participant without
 research-methods training can understand and decide:
 
+- `T2-001`: whether the opening must complete its problem framing in two
+  sentences or may use a third sentence to preserve a concrete situation;
 - `T2-009`: whether a branching procedure should use a flow diagram that makes
   alternate outcomes visible at once or a sequence table that is faster to
   update during drafting;
 - `T2-014`: whether independently reviewable claims should be split into short
-  sentences or connected thoughts should retain a longer reading rhythm; and
+  sentences or connected thoughts should retain a longer reading rhythm;
+- `T2-018`: whether short descriptive subheadings should support navigation or
+  paragraph transitions should preserve one continuous two-page argument;
+- `T2-019`: whether author-owned commitments should use first-person active
+  voice or procedural sentences should begin with their action or condition;
+- `T2-022`: whether planning should commit to one exact target or retain a
+  justified range with distinct minimum and maximum cases;
+- `T2-023`: whether estimate bases should remain beside the requested activity
+  in the main text or move to a compact table or appendix; and
 - `T2-026`: whether em dashes should be avoided because they can trigger
   suspicion of AI-generated prose or allowed conditionally for a deliberate
   interruption or contrast.
@@ -403,13 +413,14 @@ separate rule/benefit/cost explanation. A parent-scoped Rationale can infer the
 relationship from readable descendant Memories, while provenance remains a
 separate access decision.
 
-Existing differences about using subheadings, first-person versus impersonal
-style, and placing a budget in the body versus an appendix can be combined or
-selected based on sentence function or official format. They remain contextual
-or same-principle variants. The former conflicts about question paradigm,
-evaluation setting, and contribution form were removed because they require
-domain expertise and are largely determined by the proposal's research context
-rather than an ordinary participant's authoring judgment.
+The associated support groups remain contextual variants because they describe
+why each advisor reached a different recommendation rather than adding more
+top-level decisions. They record scanning behavior, omission risk, editing
+cost, arithmetic checking, schedule consequences, and author habits. Former
+material about question paradigms, evaluation settings, contribution forms,
+deployment transitions, field sampling, and other research-specialist choices
+was removed because those choices are largely determined by research context
+rather than an ordinary participant's judgment.
 
 ### Detailed two-page submission guidance
 

@@ -30,23 +30,23 @@
 > the same pair. This file contains exactly 150 independently reviewable
 > candidates.
 
-- T2-L-001 — `structure/problem` — PP — Identify the core problem users face when interacting with or collaborating through technology within the first two sentences of the opening paragraph.
-- T2-L-070 — `structure/problem-urgency` — PP — Articulate the rationale for addressing this interaction problem immediately within the first two sentences of the opening paragraph.
+- T2-L-001 — `structure/problem` — PP — Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.
+- T2-L-070 — `structure/two-sentence-opening-reserve` — PP — Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.
 - T2-L-002 — `structure/research-question-position` — PP — Specify the user, context, and interaction to be explored in the primary HCI research question.
 - T2-L-011 — `structure/interaction-step-visual` — PP — Provide one compact visual summary when proposing an unfamiliar interaction procedure.
 - T2-L-071 — `structure/interaction-transition-visual` — PP — Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.
 - T2-L-015 — `structure/masters-timeline-phases` — PP — Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.
 - T2-L-072 — `structure/masters-timeline-deliverables` — PP — Link one reviewable deliverable to each phase of the master’s research.
 - T2-L-017 — `structure/gap-contribution-link` — PP — Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.
-- T2-L-018 — `structure/two-page-heading-problem` — PP — In a free-form proposal, separate the user problem into its own subsection heading.
-- T2-L-083 — `structure/two-page-heading-intervention` — PP — In a free-form proposal, separate the design intervention into its own subsection heading.
-- T2-L-084 — `structure/two-page-heading-evaluation` — PP — In a free-form proposal, separate the evaluation plan into its own subsection heading.
+- T2-L-018 — `structure/descriptive-subheadings` — PP — Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.
+- T2-L-083 — `structure/subheading-problem-response` — PP — Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.
+- T2-L-084 — `structure/subheading-next-steps` — PP — Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.
 - T2-L-024 — `structure/preliminary-result-placement` — PP — Place pilot observation or initial prototype results near sentences supporting feasibility claims.
-- T2-L-054 — `structure/reviewer-opening-problem` — OM — HCI reviewers identify the user and interaction problem in the first two sentences of the opening paragraph to form their initial framing of the proposal.
-- T2-L-080 — `structure/reviewer-opening-urgency` — OM — HCI reviewers judge the rationale for researching this user problem immediately from the first two sentences of the opening paragraph.
-- T2-L-095 — `structure/formative-study-role` — PP — Link how controlled formative evaluations at each design phase alter subsequent design decisions in the proposal.
-- T2-L-096 — `structure/conceptual-contribution-thread` — PP — Connect the interaction phenomena observed from the user problem, the design choices to be compared, and the conceptual design knowledge derived into a single thread.
-- T2-L-097 — `structure/advisor-structure-check` — SM — The agent can review the overall research logic only if it is evident how each research phase constrains the design decisions of the next phase.
+- T2-L-054 — `structure/reviewer-two-sentence-scan` — OM — This advisor has repeatedly seen readers decide what a proposal is about from its first two sentences before scanning the rest of the page.
+- T2-L-080 — `structure/late-problem-scan-cost` — OM — When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.
+- T2-L-095 — `structure/subheading-return-path` — PP — Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.
+- T2-L-096 — `structure/subheading-omission-signal` — PP — Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.
+- T2-L-097 — `structure/advisor-heading-scan-observation` — SM — This advisor has repeatedly seen readers scan section labels before deciding which paragraph to read closely.
 - T2-L-003 — `emphasis/contribution-count` — PP — Do not exceed two primary HCI contributions.
 - T2-L-051 — `emphasis/contribution-naming` — PP — Name each design or empirical contribution and present it in a single sentence.
 - T2-L-013 — `emphasis/recruitment-primary-constraint` — PP — In studies recruiting community participants, emphasize the time burden associated with participation.
@@ -70,13 +70,13 @@
 - T2-L-103 — `claim-evidence/formative-finding-decision` — PP — Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.
 - T2-L-104 — `claim-evidence/formative-evidence-limit` — KB — Results from controlled formative studies do not directly prove effects in actual long-term use.
 - T2-L-105 — `claim-evidence/advisor-claim-threshold` — SM — The agent cannot approve explanations as conceptual contributions if they are not falsifiable with observable data.
-- T2-L-019 — `style/research-team-voice` — PP — Write design decisions chosen by the research team and user study actions in the first-person active voice.
+- T2-L-019 — `style/first-person-responsibility` — PP — Use first-person active voice for choices and commitments owned by the proposal author so responsibility remains explicit throughout the work plan.
 - T2-L-020 — `style/confirmed-procedure-status` — PP — Describe prototype operations that have already been implemented and verified as observed states.
 - T2-L-052 — `style/unconfirmed-procedure-status` — PP — Describe prototype operations not yet implemented or evaluated as plans or expectations.
-- T2-L-057 — `style/reviewer-voice-interpretation` — OM — HCI reviewers easily identify design choices and research actions for which the research team takes responsibility from first-person active voice.
-- T2-L-106 — `style/design-knowledge-language` — PP — Write contributions as sentences explaining under what conditions certain design choices are valid, rather than using expressions that imply creating a feature.
-- T2-L-107 — `style/mechanism-versus-feature` — KB — Design mechanisms include explanations of why user behavior changes, unlike interface feature lists.
-- T2-L-108 — `style/author-feature-verb-tendency` — UM — The user writing this proposal often uses verbs that list implementation features even when describing design knowledge.
+- T2-L-057 — `style/reviewer-first-person-responsibility` — OM — This advisor has seen readers assign responsibility more accurately when the sentence says who chose, will deliver, or will revise an item in first-person active voice.
+- T2-L-106 — `style/first-person-choice-boundary` — PP — Use “we” only for decisions and commitments the authors control, not for external facts or actions owned by another party.
+- T2-L-107 — `style/first-person-accountability-effect` — KB — Naming the author as the actor makes it easier to distinguish a deliberate commitment from a condition that merely exists.
+- T2-L-108 — `style/author-passive-commitment-tendency` — UM — The user writing this proposal tends to hide unsettled commitments behind passive phrases such as “will be considered” or “is expected.”
 - T2-L-006 — `terminology/term-consistency` — PP — Use the same term throughout the proposal for the same interaction concept or interface element.
 - T2-L-021 — `terminology/abbreviation-eligibility` — PP — Use abbreviations only for recurring terms of three or more words.
 - T2-L-082 — `terminology/abbreviation-definition` — PP — Present the full name and abbreviation together when using an abbreviation for the first time.
@@ -96,17 +96,17 @@
 - T2-L-074 — `style/one-claim-sentences` — PP — Keep one main claim in each sentence so a reviewer can locate and assess it quickly.
 - T2-L-016 — `methods/preregistration-change-condition` — PP — In preregistered studies, specify the conditions under which deviations from the plan are permissible.
 - T2-L-075 — `methods/preregistration-change-record` — PP — In preregistered studies, specify how to record content that deviates from the plan.
-- T2-L-022 — `methods/sample-size-form` — PP — Present the target number of participants in the recruitment plan as a single precise value.
+- T2-L-022 — `methods/exact-target` — PP — Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.
 - T2-L-028 — `methods/data-collection-tool` — PP — Specify the interview protocols, recording devices, or log tools used to collect each type of user data.
 - T2-L-076 — `methods/data-collection-timing` — PP — Specify whether each type of user data is collected before, during, or after the interaction.
-- T2-L-034 — `methods/recruitment-funnel-visibility` — SM — The agent cannot assess the realism of a recruitment plan without seeing the expected attrition stages from initial contact to final participation.
+- T2-L-034 — `methods/exact-target-review` — SM — This advisor cannot tell whether the schedule and budget agree when different sections imply different target counts.
 - T2-L-036 — `methods/prototype-error-observation` — WM — In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.
 - T2-L-086 — `methods/prototype-instability-safety` — WM — If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.
 - T2-L-060 — `methods/reviewer-answerability-trace` — OM — Reviewers judge answerability by tracing the path from each research question to the data and analysis.
 - T2-L-069 — `methods/author-feature-contribution-assumption` — UM — The author of this proposal tends to present implemented feature lists directly as design contributions.
-- T2-L-115 — `methods/formative-alternative-control` — PP — In formative evaluation, compare alternatives that differ in only one core design attribute.
-- T2-L-116 — `methods/formative-task-equivalence` — PP — When comparing design alternatives, keep participant tasks and provided information identical.
-- T2-L-117 — `methods/iteration-decision-rule` — PP — After each formative evaluation iteration, specify the decision rules for determining which evidence justifies modifying the next prototype.
+- T2-L-115 — `methods/exact-target-resource-fit` — PP — Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.
+- T2-L-116 — `methods/exact-target-shortfall` — PP — If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.
+- T2-L-117 — `methods/author-range-deferral` — PP — Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.
 - T2-L-118 — `style/author-em-dash-tendency` — UM — The user writing this proposal tends to repeat em dashes when a sentence already contains several clauses.
 - T2-L-119 — `style/em-dash-authorship-suspicion` — WM — Repeated em dashes can shift a reviewer’s attention from the proposal’s argument to suspicion that its prose was generated by AI.
 - T2-L-043 — `evaluation/primary-measure` — PP — Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.
@@ -151,13 +151,13 @@
 - T2-L-138 — `reproducibility/design-alternative-specification` — PP — Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.
 - T2-L-139 — `reproducibility/formative-decision-trail` — KB — Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.
 - T2-L-140 — `reproducibility/advisor-iteration-trace` — SM — The agent must be able to trace which observations each prototype version reflects in order to review the process of deriving design knowledge.
-- T2-L-023 — `budget/body-detail-placement` — PP — Briefly link major cost categories corresponding to each core research stage in the main text.
-- T2-L-031 — `budget/personnel-work-time` — PP — List the work time for each prototyping and user-study role under personnel costs.
-- T2-L-079 — `budget/personnel-rate-basis` — PP — Provide the basis for each role-specific rate used for prototyping and user-study personnel costs.
-- T2-L-066 — `budget/finance-activity-trace` — OM — Finance reviewers trace which HCI research stage each cost category connects to, judging budget validity.
-- T2-L-141 — `budget/formative-iteration-costs` — PP — Calculate separately the recruitment, prototype modification, and session operation costs required for each formative evaluation iteration.
-- T2-L-142 — `budget/contingency-redesign-cost` — PP — Disclose the contingency budget required for redesign if core design assumptions are rejected in the evaluation.
-- T2-L-143 — `budget/author-prototype-cost-omission` — UM — The author of this proposal tends to omit prototype modification costs incurred between user studies from the budget.
+- T2-L-023 — `budget/main-text-rationale` — PP — Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.
+- T2-L-031 — `budget/main-text-activity-link` — PP — Place each major cost beside the activity or deliverable it enables in the main text.
+- T2-L-079 — `budget/main-text-estimate-basis` — PP — State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.
+- T2-L-066 — `budget/reviewer-inline-cost-reading` — OM — This advisor has seen readers question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.
+- T2-L-141 — `budget/main-text-revision-consistency` — PP — Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.
+- T2-L-142 — `budget/main-text-space-cost` — PP — Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.
+- T2-L-143 — `budget/author-detached-table-omission` — UM — The user writing this proposal tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.
 - T2-L-046 — `compensation/base-hourly-rate` — PP — Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.
 - T2-L-047 — `compensation/modality-burden` — PP — Compensate for required travel time in face-to-face user studies as well.
 - T2-L-053 — `compensation/participation-time` — PP — Compensate for the actual time participants spent in sessions, regardless of research modality.
