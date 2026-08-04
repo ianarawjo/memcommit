@@ -23,77 +23,64 @@ Context A is verified evidence. Context B is a writable local working target.
 This is not a symmetric merge and it is not a command for manually replacing
 one Memory by UID.
 
-## Task 1 authority boundary: query-only origin and writable local fork
+## Task 1 authority boundary: ordinary wiki and concealed details
 
-Task 1 uses two different wiki-bearing objects and must not collapse them into
-one Context. The canonical identifiers follow
+Task 1 keeps task-owned change evidence separate from authority-owned campus
+data. The task sees permissioned views rather than a local wiki copy.
+The canonical identifiers follow
 [`task-1-naming-contract.md`](task-1-naming-contract.md):
 
 | Role | Task 1 example | Authority |
 | --- | --- | --- |
-| organizational origin | `campus-wiki` | query-only; never an `impact` or `update` mutation target |
-| participant fork | `participant/campus-wiki-fork` | writable local Context graph containing only the participant's assigned wiki scope |
-| verified change source | `participant/construction-updates` | readable local evidence |
+| campus wiki | `campus-wiki` | authority-owned graph granted `READ+CREATE+UPDATE+DELETE+QUERY` |
+| construction details | `campus-wiki/construction-details` | narrower `QUERY` view; never a mutation target |
+| verified change source | `participant/construction-updates` | task-owned readable evidence |
 
-The study setup is assumed to provision the scoped local fork before the
-participant begins. The current `mem branch` command does not create it from
-the query-only origin. The fork contains a writable snapshot of the wiki
-sections for which the participant is responsible, not a readable clone of the
-whole organizational wiki. Its scope is selected by responsibility and
-authority, not by foreknowledge of the impact result: it must include every
-page that could reasonably be affected in the assigned scope, plus relevant
-unchanged pages, rather than only the records already known to require edits.
-`impact` still has to identify the affected subset. It may also carry a
-`QueryContextRef` named `campus-wiki`, allowing questions to be sent to the
-opaque organizational origin without copying that origin into ordinary Context
-storage.
+`task-1-campus-authority` provisions the complete wiki and details before the
+participant begins. A broader read/edit grant and narrower query grant expose
+the intended subsets without copying them into the task store.
 
-For the current study simplification, that provisioned fork is assumed to be
-the latest approved snapshot of the assigned organizational scope when Task 1
-starts, and that remote scope is assumed not to change concurrently during the
-task. The query-only adapter cannot verify either condition. A future
-publication adapter must replace this assumption with an upstream base revision
-and a compare-and-swap or equivalent remote-divergence check.
-
-Fixture review must separately verify that the fork covers the complete
-authorized candidate scope. Otherwise a missing affected page would be
+Fixture review must separately verify that the ordinary wiki covers the
+complete authorized candidate scope. Otherwise a missing affected page is
 indistinguishable from a correct no-change judgment, and Task 1 could not claim
 that all affected parts were updated.
 
 This separation makes the mutation boundary explicit:
 
 ```text
-query campus-wiki when additional organizational context is needed
-→ preview verified changes against participant/campus-wiki-fork
-→ apply them to participant/campus-wiki-fork
+query campus-wiki/construction-details when detail context is needed
+→ preview verified changes against campus-wiki
+→ apply them to campus-wiki
 → inspect the local diff
-→ later push or propose that diff to campus-wiki
 ```
 
-`impact` and `update` therefore target the local fork. A future `push` or PR is
-the only operation that may contribute from that fork toward the
-organizational origin, and it remains a separate approval and permission
-boundary. `update` must never interpret access to a query-only origin as write
-authority.
+`mem impact` now accepts that granted ordinary wiki view as a read-only target
+for planning. It freezes the exact grantee, authority, attachment, resource,
+grant identity, grant revision, grant digest, and permission set into a
+schema-v4 plan. The target projection excludes any descendant covered by the
+narrower `QUERY`-only grant, so concealed construction details cannot enter the
+ordinary impact corpus. Provider authentication happens before authority-owned
+content is opened. After the provider turn, the command reloads the source,
+grant, and projected target under the grant registry lock and saves nothing if
+any identity or digest changed.
 
-The current prototype does not yet create this fork, persist its upstream
-binding, refresh it, or publish it. Its `QueryContextRef` can represent the
-opaque origin pointer, but the scoped fork and origin relationship is presently
-a Task 1 fixture and future persistence contract. This section records the
-intended model; it does not claim that remote collaboration or access control
-has been implemented.
-
-This revises the original example workflow: the participant does not
-`mem switch campus-wiki` or use the organizational origin as the `--to`
-target. The participant may query that origin through its pointer, inspect the
-local fork, and run `impact` and `update` against the fork.
+The preview reports the permissions implied by its actual operations:
+`READ`, plus `CREATE` for additions, `UPDATE` for edits, and `DELETE` for
+removals. `READY` means only that the frozen grant contains those permissions;
+it does not mean that the plan has been applied. `mem impact` remains
+non-mutating, and the current `mem update` implementation does not yet apply a
+schema-v4 granted target across Profile stores. That later application must
+revalidate the same binding and permissions under both registry and Context
+write locks. Direct granted `add`, `edit`, and `delete` retain their existing
+individual command boundaries in the meantime. A `-fork` suffix would still
+imply a divergent-copy model that this design deliberately avoids.
 
 ## Usage
 
 ```bash
 mem switch participant/construction-updates
-mem impact --to participant/campus-wiki-fork
-mem update --to participant/campus-wiki-fork
+mem ls campus-wiki
+mem impact --to campus-wiki
 ```
 
 Either endpoint may instead be explicit. An omitted endpoint is filled by the

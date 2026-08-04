@@ -9,7 +9,11 @@ from memcommit.commands.resolution_workbench_shell import (
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,
 )
-from memcommit.update import UpdateSession, count_operations
+from memcommit.update import (
+    UpdateSession,
+    count_operations,
+    required_grant_permissions,
+)
 from memcommit.update_resolution_adapter import (
     UpdateResolutionWorkbenchAdapter,
 )
@@ -64,6 +68,18 @@ def render_plan(
         f"{additions} addition{'s' if additions != 1 else ''}, "
         f"{removals} removal{'s' if removals != 1 else ''}"
     )
+    if session.granted_target is not None:
+        required = required_grant_permissions(session.operations)
+        granted = set(session.granted_target.permissions)
+        ready = set(required).issubset(granted)
+        typer.echo(
+            "GRANTED TARGET · "
+            f"{session.granted_target.public_name} · "
+            f"grant {session.granted_target.grant_uid[:8]} "
+            f"revision {session.granted_target.grant_revision}"
+        )
+        typer.echo("REQUIRED TO APPLY · " + " + ".join(required))
+        typer.echo("GRANT PERMISSIONS · " + ("READY" if ready else "BLOCKED"))
     if not session.operations:
         typer.echo("\n(no changes needed)")
     if view.items:

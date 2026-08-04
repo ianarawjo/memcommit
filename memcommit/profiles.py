@@ -3146,11 +3146,14 @@ def _prefix_study_grant_template(
 
     if task == 1 and result.get("key") == "task-1-campus-wiki-view":
         permissions = result.get("permissions")
-        if isinstance(permissions, list) and "QUERY" not in permissions:
-            # Older editable baselines predate explicit whole-wiki query
-            # permission. Keep them initializable while making the current
-            # study contract explicit for every newly created run.
-            permissions.append("QUERY")
+        if isinstance(permissions, list):
+            # Older editable baselines predate explicit whole-wiki query and
+            # delete permissions. Keep them initializable while preserving the
+            # current Task 1 operation contract in every newly created run.
+            if "DELETE" not in permissions:
+                permissions.append("DELETE")
+            if "QUERY" not in permissions:
+                permissions.append("QUERY")
         result.setdefault("provider", "codex_chatgpt")
 
     authority_context = result.get("authority_context")

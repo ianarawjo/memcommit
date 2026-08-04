@@ -469,7 +469,7 @@ def test_profile_use_selects_the_initialized_complete_profile(
     assert "task-1/participant/construction-updates" in contexts.stdout
     assert "task-1/campus-wiki" in contexts.stdout
     assert (
-        "[view create,read,update,query from profile-view-granted-memory]"
+        "[view create,read,update,delete,query from profile-view-granted-memory]"
         in contexts.stdout
     )
     assert "task-1/campus-wiki/construction-details" in contexts.stdout

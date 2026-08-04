@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from typing import Callable, Literal, Protocol, TypeAlias
 
 from memcommit.context import Context, Memory, MemoryRef
+from memcommit.profile_config import ProfileConfigError, canonical_grant_permissions
 
 
 UPDATE_CORPUS_CHAR_LIMIT = 200_000
@@ -16,7 +17,7 @@ UPDATE_RESPONSE_CHAR_LIMIT = 1_000_000
 UPDATE_OPERATION_LIMIT = 200
 UPDATE_SOURCE_REFS_PER_OPERATION = 50
 UPDATE_REASON_CHAR_LIMIT = 1_000
-UPDATE_SCHEMA_VERSION = 3
+UPDATE_SCHEMA_VERSION = 4
 UpdateStatus = Literal["impact", "staged", "applied"]
 
 
@@ -502,6 +503,167 @@ def _operation_from_dict(value: object) -> UpdateOperation:
 
 
 @dataclass(frozen=True)
+class GrantedUpdateTarget:
+    """Frozen control-plane identity for one granted update target."""
+
+    public_name: str
+    grantee_profile_uid: str
+    authority_profile_uid: str
+    attachment_context_uid: str
+    attachment_context_name: str
+    grant_uid: str
+    grant_revision: int
+    grant_digest: str
+    resource_uid: str
+    resource_name: str
+    authority_context_name: str
+    permissions: tuple[str, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "kind": "GRANTED_CONTEXT",
+            "public_name": self.public_name,
+            "grantee_profile_uid": self.grantee_profile_uid,
+            "authority_profile_uid": self.authority_profile_uid,
+            "attachment": {
+                "uid": self.attachment_context_uid,
+                "name": self.attachment_context_name,
+            },
+            "grant": {
+                "uid": self.grant_uid,
+                "revision": self.grant_revision,
+                "digest": self.grant_digest,
+                "permissions": list(self.permissions),
+            },
+            "resource": {
+                "uid": self.resource_uid,
+                "name": self.resource_name,
+            },
+            "authority_context_name": self.authority_context_name,
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> GrantedUpdateTarget:
+        data = _require_exact_keys(
+            value,
+            {
+                "kind",
+                "public_name",
+                "grantee_profile_uid",
+                "authority_profile_uid",
+                "attachment",
+                "grant",
+                "resource",
+                "authority_context_name",
+            },
+            "granted update target",
+        )
+        if data["kind"] != "GRANTED_CONTEXT":
+            raise ValueError("Invalid granted update target kind.")
+        attachment = _require_exact_keys(
+            data["attachment"],
+            {"uid", "name"},
+            "granted update attachment",
+        )
+        grant = _require_exact_keys(
+            data["grant"],
+            {"uid", "revision", "digest", "permissions"},
+            "granted update grant",
+        )
+        resource = _require_exact_keys(
+            data["resource"],
+            {"uid", "name"},
+            "granted update resource",
+        )
+        revision = grant["revision"]
+        permissions = grant["permissions"]
+        if (
+            not isinstance(revision, int)
+            or isinstance(revision, bool)
+            or revision < 1
+        ):
+            raise ValueError("Invalid granted update grant revision.")
+        if (
+            not isinstance(permissions, list)
+            or not permissions
+            or any(not isinstance(item, str) or not item for item in permissions)
+            or len(set(permissions)) != len(permissions)
+        ):
+            raise ValueError("Invalid granted update permissions.")
+        try:
+            canonical_permissions = canonical_grant_permissions(permissions)
+        except ProfileConfigError as error:
+            raise ValueError("Invalid granted update permissions.") from error
+        if tuple(permissions) != canonical_permissions:
+            raise ValueError("Invalid granted update permission order.")
+        if not _is_sha256(grant["digest"]):
+            raise ValueError("Invalid granted update grant digest.")
+        return cls(
+            public_name=_require_string(
+                data["public_name"],
+                "granted update public name",
+            ),
+            grantee_profile_uid=_require_uuid(
+                data["grantee_profile_uid"],
+                "granted update grantee Profile uid",
+            ),
+            authority_profile_uid=_require_uuid(
+                data["authority_profile_uid"],
+                "granted update authority Profile uid",
+            ),
+            attachment_context_uid=_require_string(
+                attachment["uid"],
+                "granted update attachment Context uid",
+            ),
+            attachment_context_name=_require_string(
+                attachment["name"],
+                "granted update attachment Context name",
+            ),
+            grant_uid=_require_uuid(
+                grant["uid"],
+                "granted update grant uid",
+            ),
+            grant_revision=revision,
+            grant_digest=grant["digest"],
+            resource_uid=_require_string(
+                resource["uid"],
+                "granted update resource uid",
+            ),
+            resource_name=_require_string(
+                resource["name"],
+                "granted update resource name",
+            ),
+            authority_context_name=_require_string(
+                data["authority_context_name"],
+                "granted update authority Context name",
+            ),
+            permissions=canonical_permissions,
+        )
+
+
+def granted_target_digest(value: object) -> str:
+    """Digest one validated registry grant record for a saved target binding."""
+
+    return _sha256_json(value)
+
+
+def required_grant_permissions(
+    operations: tuple[UpdateOperation, ...],
+) -> tuple[str, ...]:
+    """Return the exact granted permissions needed to apply a plan."""
+
+    required = {"READ"}
+    if any(isinstance(operation, EditOperation) for operation in operations):
+        required.add("UPDATE")
+    if any(isinstance(operation, AddOperation) for operation in operations):
+        required.add("CREATE")
+    if any(isinstance(operation, RemoveOperation) for operation in operations):
+        required.add("DELETE")
+    order = ("READ", "CREATE", "UPDATE", "DELETE")
+    return tuple(permission for permission in order if permission in required)
+
+
+@dataclass(frozen=True)
 class UpdateSession:
     uid: str
     status: UpdateStatus
@@ -515,6 +677,7 @@ class UpdateSession:
     target_digest: str
     target_contexts: tuple[ContextFingerprint, ...]
     operations: tuple[UpdateOperation, ...]
+    granted_target: GrantedUpdateTarget | None = None
     application: UpdateApplicationReceipt | None = None
 
     def with_status(self, status: UpdateStatus) -> UpdateSession:
@@ -544,8 +707,17 @@ class UpdateSession:
         )
 
     def to_dict(self) -> dict[str, object]:
+        schema_version = 4 if self.granted_target is not None else 3
+        target: dict[str, object] = {
+            "uid": self.target_uid,
+            "name": self.target_name,
+            "digest": self.target_digest,
+            "contexts": [context.to_dict() for context in self.target_contexts],
+        }
+        if self.granted_target is not None:
+            target["access"] = self.granted_target.to_dict()
         return {
-            "schema_version": UPDATE_SCHEMA_VERSION,
+            "schema_version": schema_version,
             "uid": self.uid,
             "status": self.status,
             "created_at": self.created_at,
@@ -558,15 +730,7 @@ class UpdateSession:
                     for context in self.source_contexts
                 ],
             },
-            "target": {
-                "uid": self.target_uid,
-                "name": self.target_name,
-                "digest": self.target_digest,
-                "contexts": [
-                    context.to_dict()
-                    for context in self.target_contexts
-                ],
-            },
+            "target": target,
             "operations": [
                 operation.to_dict()
                 for operation in self.operations
@@ -598,7 +762,7 @@ class UpdateSession:
                 "update session",
             )
             application = None
-        elif schema_version in {2, UPDATE_SCHEMA_VERSION}:
+        elif schema_version in {2, 3, UPDATE_SCHEMA_VERSION}:
             data = _require_exact_keys(
                 value,
                 {
@@ -631,10 +795,14 @@ class UpdateSession:
             {"uid", "name", "digest", "contexts"},
             "update source",
         )
-        target = _require_exact_keys(
-            data["target"],
-            {"uid", "name", "digest", "contexts"},
-            "update target",
+        target_keys = {"uid", "name", "digest", "contexts"}
+        if schema_version == UPDATE_SCHEMA_VERSION:
+            target_keys.add("access")
+        target = _require_exact_keys(data["target"], target_keys, "update target")
+        granted_target = (
+            None
+            if schema_version < 4
+            else GrantedUpdateTarget.from_dict(target["access"])
         )
         if not _is_sha256(source["digest"]) or not _is_sha256(target["digest"]):
             raise ValueError("Invalid update input digest.")
@@ -733,6 +901,7 @@ class UpdateSession:
                 for item in target["contexts"]
             ),
             operations=operations,
+            granted_target=granted_target,
             application=application,
         )
 
@@ -1358,6 +1527,7 @@ def plan_update(
     provider_factory: Callable[[], UpdateProvider],
     *,
     status: UpdateStatus = "impact",
+    granted_target: GrantedUpdateTarget | None = None,
 ) -> UpdateSession:
     """Ask a provider for a validated, non-mutating update plan."""
     if status not in {"impact", "staged"}:
@@ -1392,6 +1562,7 @@ def plan_update(
         target_digest=inputs.target_digest,
         target_contexts=inputs.target_context_fingerprints,
         operations=operations,
+        granted_target=granted_target,
     )
 
 
@@ -1399,6 +1570,8 @@ def session_matches(
     session: UpdateSession,
     source: Context,
     target: Context,
+    *,
+    granted_target: GrantedUpdateTarget | None = None,
 ) -> bool:
     """Return whether an impact plan still describes the exact A/B inputs."""
     if (
@@ -1406,6 +1579,7 @@ def session_matches(
         or session.source_name != source.name
         or session.target_uid != target.uid
         or session.target_name != target.name
+        or session.granted_target != granted_target
     ):
         return False
     try:
@@ -1425,6 +1599,8 @@ def applied_session_matches(
     session: UpdateSession,
     source: Context,
     target: Context,
+    *,
+    granted_target: GrantedUpdateTarget | None = None,
 ) -> bool:
     """Return whether A and the locally applied B still match the receipt."""
     application = session.application
@@ -1435,6 +1611,7 @@ def applied_session_matches(
         or session.source_name != source.name
         or session.target_uid != target.uid
         or session.target_name != target.name
+        or session.granted_target != granted_target
     ):
         return False
     try:

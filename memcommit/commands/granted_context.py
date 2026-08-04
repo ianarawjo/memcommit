@@ -42,6 +42,7 @@ def resolve_context_access(
     *,
     current_name: str | None,
     required_permission: str,
+    registry: ProfileRegistry | None = None,
 ) -> ContextAccess:
     """Prefer an ordinary local Context, then resolve an explicit granted view."""
 
@@ -73,6 +74,7 @@ def resolve_context_access(
         operand,
         attachment_name=current_name,
         required_permission=required_permission,
+        registry=registry,
     )
     return ContextAccess(
         store=MemoryStore(root=view.authority_root, create=False),
@@ -215,14 +217,19 @@ def _authority_name(grant: AuthorityGrant, public_name: str) -> str:
 class GrantedReadStore:
     """A read-only, name-remapping store constrained to one effective READ view."""
 
-    def __init__(self, access: ContextAccess):
+    def __init__(
+        self,
+        access: ContextAccess,
+        *,
+        registry: ProfileRegistry | None = None,
+    ):
         if access.view is None or access.attachment_name is None:
             raise ValueError("GrantedReadStore requires a granted Context access.")
         self._access = access
         self._store = access.store
         self._grant = access.view.grant
         self._attachment = access.attachment_name
-        self._registry = load_profile_registry()
+        self._registry = registry or load_profile_registry()
         self._all_grants = grants_for_attachment(
             attachment_name=self._attachment,
             registry=self._registry,

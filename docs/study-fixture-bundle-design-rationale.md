@@ -97,7 +97,7 @@ and are not embedded into their children or parents.
 Task 1's task Profile owns only `participant/construction-updates`.
 `task-1-campus-authority` owns ordinary `campus-wiki` and its
 `construction-details` subtree. The task receives
-`READ+CREATE+UPDATE+QUERY` for the wiki and a narrower
+`READ+CREATE+UPDATE+DELETE+QUERY` for the wiki and a narrower
 `QUERY+SESSION_LOG` override for the details. Whole-wiki query is explicit but
 one-shot; durable transcript permission remains limited to the query-only
 details condition.

@@ -57,7 +57,7 @@ but it is not a substitute for the runtime work below.
   - Preserve the compact expected result: two edits, one addition, one
     explicit removal, two unchanged target Memories, and five final Memories.
 
-- [ ] 2. Add granted-target support to read-only `mem impact`.
+- [x] 2. Add granted-target support to read-only `mem impact`.
   - Resolve the target through the existing grant resolver rather than
     command-local path parsing.
   - Load only READ-authorized frozen bindings from the run-private authority
@@ -66,7 +66,7 @@ but it is not a substitute for the runtime work below.
     grant and authority identities, without writing either source or target.
   - Render the same preview contract used for ordinary targets.
 
-- [ ] 3. Extend staged-update records and validation for a granted target.
+- [x] 3. Extend staged-update records and validation for a granted target.
   - Persist the frozen public target name plus authority Profile, grant,
     attachment, binding, and base-digest preconditions.
   - Keep backward compatibility for existing ordinary source/target records.

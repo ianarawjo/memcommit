@@ -94,7 +94,7 @@ each newly initialized run.
 
 | Task | Task-owned data | Authority Profile and ordinary data | Granted views |
 | --- | --- | --- | --- |
-| 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE+QUERY`; nested details `QUERY+SESSION_LOG` |
+| 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE+DELETE+QUERY`; nested details `QUERY+SESSION_LOG` |
 | 2 | `participant/proposal-workspace` | `task-2-proposal-authority`: `advisor1`, `advisor2`, submission guidelines | advisors `READ`; guidelines `QUERY+SESSION_LOG` |
 | 3 | `personal-memory` | `task-3-healthcare-authority`: `guardrails`, healthcare information guidance | guardrails `READ`; information request `QUERY+SESSION_LOG` |
 

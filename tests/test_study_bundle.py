@@ -226,7 +226,13 @@ def _assert_grant_templates(task, manifest, context_uids):
     if task == 1:
         campus = grants["task-1-campus-wiki-view"]
         details = grants["task-1-construction-details-query"]
-        assert campus["permissions"] == ["READ", "CREATE", "UPDATE", "QUERY"]
+        assert campus["permissions"] == [
+            "READ",
+            "CREATE",
+            "UPDATE",
+            "DELETE",
+            "QUERY",
+        ]
         assert campus["provider"] == "codex_chatgpt"
         assert campus["public_name"] == "campus-wiki"
         assert campus["attachment"]["context"]["name"] == (
