@@ -199,6 +199,66 @@ def test_temporal_find_rejects_granted_view_without_history_access(
     assert "does not expose authority checkpoint history" in result.stderr
 
 
+def test_granted_chunk_requires_create_and_delete_before_authority_save(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ", "DELETE"),
+    )
+    original = ops.add(wiki, "First paragraph.\n\nSecond paragraph.")
+    authority.save(wiki)
+    active.set_current_virtual_context_if(source.name, "campus-wiki")
+
+    denied = runner.invoke(
+        app,
+        ["chunk", original.uid, "--method", "paragraphs"],
+        input="y\n",
+    )
+
+    assert denied.exit_code == 1
+    assert "does not allow CREATE" in denied.stderr
+    unchanged = authority.load_direct(wiki.name)
+    assert original.uid in unchanged.memories
+
+
+def test_granted_chunk_and_clear_apply_to_authority_with_effect_permissions(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ", "CREATE", "DELETE"),
+    )
+    original = ops.add(wiki, "First paragraph.\n\nSecond paragraph.")
+    item_count_before = len(wiki.memories)
+    authority.save(wiki)
+    active.set_current_virtual_context_if(source.name, "campus-wiki")
+
+    chunked = runner.invoke(
+        app,
+        ["chunk", original.uid, "--method", "paragraphs"],
+        input="y\n",
+    )
+
+    assert chunked.exit_code == 0, chunked.output + chunked.stderr
+    after_chunk = authority.load_direct(wiki.name)
+    assert original.uid not in after_chunk.memories
+    assert len(after_chunk.memories) == item_count_before + 1
+
+    cleared = runner.invoke(app, ["clear", "campus-wiki", "--force"])
+
+    assert cleared.exit_code == 0, cleared.output + cleared.stderr
+    assert not authority.load_direct(wiki.name).memories
+
+
 def test_granted_context_binding_revalidates_exact_view_and_rejects_revocation(
     isolated_store,
     tmp_path,

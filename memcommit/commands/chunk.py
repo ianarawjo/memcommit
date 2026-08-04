@@ -4,7 +4,14 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.chunking import ChunkMethod
+from memcommit.commands.granted_context import (
+    authorized_context_mutation,
+    grant_checkpoint_args,
+    resolve_context_access,
+)
 from memcommit.context import AutoCheckpoint
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
@@ -22,10 +29,24 @@ def cmd(
         ),
     ] = ChunkMethod.paragraphs,
 ) -> None:
-    store = MemoryStore()
+    active_store = MemoryStore()
     try:
-        ctx = store.load_current_direct()
-    except RuntimeError as e:
+        access = resolve_context_access(
+            active_store,
+            None,
+            current_name=active_store.current_context_name(),
+            required_permission="DELETE",
+        )
+        store = access.store
+        ctx = store.load_direct(access.context_name)
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as e:
         typer.secho(str(e), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
@@ -74,16 +95,28 @@ def cmd(
     for offset, chunk_mem in enumerate(chunks):
         ctx.add(chunk_mem, position=original_position + offset)
 
-    store.save(
-        ctx,
-        AutoCheckpoint(
-            command="chunk",
-            args={"uid": original.uid, "method": method.value},
-            description=(
-                f"Chunked [{original.uid[:8]}] → {n} memories "
-                f"({method.value})"
-            ),
-        ),
-    )
+    try:
+        with authorized_context_mutation(
+            access,
+            required_permissions=("CREATE", "DELETE"),
+        ):
+            store.save(
+                ctx,
+                AutoCheckpoint(
+                    command="chunk",
+                    args={
+                        "uid": original.uid,
+                        "method": method.value,
+                        **grant_checkpoint_args(access),
+                    },
+                    description=(
+                        f"Chunked [{original.uid[:8]}] → {n} memories "
+                        f"({method.value})"
+                    ),
+                ),
+            )
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
 
     typer.secho(f"Done — {n} memories added.", fg=typer.colors.GREEN)

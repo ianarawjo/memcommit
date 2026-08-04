@@ -79,6 +79,17 @@ participant Profile. The grant and source projection are revalidated after the
 provider call before even that ephemeral result is published. Durable granted
 Compare sessions require a separately redacted artifact schema.
 
+## Composite mutation permissions
+
+Mutation authorization follows the concrete item effects, not the command's
+friendly name. `chunk` removes the selected Memory UID and creates replacement
+UIDs, so a granted execution requires both `DELETE` and `CREATE`; `clear`
+requires `DELETE` for its directly owned items. The complete permission set is
+checked again while holding the grant-registry lock through the authority save.
+Failure therefore occurs before the first authority write, and the authority
+checkpoint records the grant UID, revision, grantee Profile, and public Context
+used for the operation.
+
 ## Safety and limitations
 
 The persistent current pointer intentionally does not freeze a grant revision.

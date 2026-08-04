@@ -226,17 +226,38 @@ def revalidate_context_access(
         )
 
 
+def _require_granted_permissions(
+    access: ContextAccess,
+    required_permissions: tuple[str, ...],
+) -> None:
+    if access.view is None:
+        return
+    missing = sorted(set(required_permissions) - set(access.view.grant.permissions))
+    if missing:
+        raise ProfileError(
+            f"Grant {access.view.grant.uid[:8]} does not allow "
+            + " + ".join(missing)
+            + f" access to {access.display_name!r}."
+        )
+
+
 @contextmanager
-def authorized_context_mutation(access: ContextAccess) -> Iterator[None]:
-    """Keep a granted mutation authorized until its authority save completes."""
+def authorized_context_mutation(
+    access: ContextAccess,
+    *,
+    required_permissions: tuple[str, ...] = (),
+) -> Iterator[None]:
+    """Keep every required grant permission valid through authority save."""
 
     if access.view is None:
         yield
         return
+    _require_granted_permissions(access, required_permissions)
     # Grant changes and Profile switching use this same registry lock. Holding
     # it across the authority-store save closes the revoke-after-check race.
     with authority_grant_snapshot_lock() as registry:
         revalidate_context_access(access, registry=registry)
+        _require_granted_permissions(access, required_permissions)
         yield
 
 
