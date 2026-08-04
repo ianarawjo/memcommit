@@ -12,9 +12,13 @@ Task 2 workflow.
 
 ## Navigation contract
 
+- Every granted row displays its complete normalized permission tuple, such as
+  `[grant READ]`, `[grant CREATE + READ + UPDATE + DELETE + QUERY]`, or
+  `[grant QUERY + SESSION_LOG]`. This keeps the experimental condition visible
+  instead of collapsing several capabilities into an ambiguous edit label.
 - A granted `READ` Context and every READ-visible frozen descendant are
-  selectable in `mem switch` and are labelled `[granted read only]` or
-  `[granted edit]` according to their mutation permissions.
+  selectable in `mem switch`. Selectability is derived from the structured
+  `READ` permission, never by interpreting the user-facing annotation.
 - A `QUERY`-only route remains visible but non-selectable. It is opened only by
   `mem query`, because ordinary navigation must not disclose its content.
 - Selecting a granted Context stores only its public canonical name as the

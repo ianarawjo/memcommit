@@ -18,7 +18,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.profiles as profiles_module
 from memcommit.cli import app
-from memcommit.commands.switch import _granted_picker_views
+from memcommit.commands.switch import _granted_picker_state, _granted_picker_views
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.profile_config import (
@@ -573,9 +573,19 @@ def test_profile_use_selects_the_initialized_complete_profile(
     virtual_names, annotations = _granted_picker_views()
     assert "task-1/campus-wiki" in virtual_names
     assert "task-1/campus-wiki/route-changes" in virtual_names
-    assert annotations["task-1/campus-wiki"] == "[granted edit]"
-    assert annotations["task-2/advisor1"] == "[granted read only]"
-    assert annotations["task-2/proposal-submission-guidelines"] == "[query only]"
+    assert annotations["task-1/campus-wiki"] == (
+        "[grant CREATE + READ + UPDATE + DELETE + QUERY]"
+    )
+    assert annotations["task-2/advisor1"] == "[grant READ]"
+    assert annotations["task-2/proposal-submission-guidelines"] == (
+        "[grant QUERY + SESSION_LOG]"
+    )
+    picker_state = _granted_picker_state()
+    assert "task-2/advisor1" in picker_state.selectable_names
+    assert (
+        "task-2/proposal-submission-guidelines"
+        not in picker_state.selectable_names
+    )
     assert not any(
         name.startswith("task-2/proposal-submission-guidelines/")
         for name in virtual_names

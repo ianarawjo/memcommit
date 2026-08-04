@@ -196,16 +196,27 @@ def test_picker_renders_granted_views_below_owned_task_without_selecting_them():
         selected="task-1/campus-wiki",
         current="task-1/participant",
         annotations={
-            "task-1/campus-wiki": "[granted edit]",
-            "task-1/campus-wiki/route-changes": "[granted edit]",
+            "task-1/campus-wiki": (
+                "[grant CREATE + READ + UPDATE + DELETE + QUERY]"
+            ),
+            "task-1/campus-wiki/route-changes": (
+                "[grant CREATE + READ + UPDATE + DELETE + QUERY]"
+            ),
         },
     )
     rendered = "".join(
         text for style, text in fragments if style != "[SetCursorPosition]"
     )
 
-    assert "task-1/campus-wiki  [granted edit]" in rendered
-    assert "task-1/campus-wiki/route-changes  [granted edit]" in rendered
+    assert (
+        "task-1/campus-wiki  [grant CREATE + READ + UPDATE + DELETE + QUERY]"
+        in rendered
+    )
+    assert (
+        "task-1/campus-wiki/route-changes  "
+        "[grant CREATE + READ + UPDATE + DELETE + QUERY]"
+        in rendered
+    )
     assert "[namespace only]" not in rendered
     assert "task-1/campus-wiki" not in tree.materialized_names
 
@@ -234,7 +245,7 @@ def test_picker_enter_selects_a_read_granted_virtual_context():
             virtual_names=("task-2/advisor1",),
             selectable_virtual_names={"task-2/advisor1"},
             virtual_annotations={
-                "task-2/advisor1": "[granted read only]",
+                "task-2/advisor1": "[grant READ]",
             },
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -252,7 +263,9 @@ def test_picker_enter_does_not_select_a_query_only_virtual_context():
             current="task-2/proposal-submission-guidelines",
             virtual_names=("task-2/proposal-submission-guidelines",),
             virtual_annotations={
-                "task-2/proposal-submission-guidelines": "[query only]",
+                "task-2/proposal-submission-guidelines": (
+                    "[grant QUERY + SESSION_LOG]"
+                ),
             },
             app_input=pipe_input,
             app_output=DummyOutput(),

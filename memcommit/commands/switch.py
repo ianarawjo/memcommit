@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Annotated, Optional
 
 import typer
@@ -21,10 +22,23 @@ from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
-def _granted_picker_views(
+@dataclass(frozen=True)
+class _GrantedPickerState:
+    names: tuple[str, ...]
+    annotations: dict[str, str]
+    selectable_names: frozenset[str]
+
+
+def _grant_annotation(permissions: tuple[str, ...]) -> str:
+    """Render the exact normalized grant instead of a lossy access summary."""
+
+    return "[grant " + " + ".join(permissions) + "]"
+
+
+def _granted_picker_state(
     store: MemoryStore | None = None,
-) -> tuple[tuple[str, ...], dict[str, str]]:
-    """Return granted rows and their permission labels."""
+) -> _GrantedPickerState:
+    """Return granted rows, exact permission labels, and navigation rights."""
 
     registry = load_profile_registry()
     active_store = profile_store_dir(registry.active)
@@ -34,8 +48,9 @@ def _granted_picker_views(
         # Tests and embedders may supply an isolated store while a separate
         # host Profile is active. Never leak that host's virtual grants into
         # navigation for an unrelated storage boundary.
-        return (), {}
+        return _GrantedPickerState((), {}, frozenset())
     names: dict[str, str] = {}
+    selectable_names: set[str] = set()
     for grant in registry.grants:
         if grant.grantee_profile_uid != registry.active.uid:
             continue
@@ -44,21 +59,34 @@ def _granted_picker_views(
         attachment = store.load_direct(grant.attachment_context_name)
         if attachment.uid != grant.attachment_context_uid:
             continue
+        annotation = _grant_annotation(grant.permissions)
         if "READ" not in grant.permissions:
             # A query-only grant exposes its reviewed public route, never its
             # frozen authority descendants, in ordinary navigation.
-            names[grant.public_name] = "[query only]"
+            names[grant.public_name] = annotation
+            selectable_names.discard(grant.public_name)
             continue
-        annotation = (
-            "[granted edit]"
-            if set(grant.permissions).intersection({"CREATE", "UPDATE", "DELETE"})
-            else "[granted read only]"
-        )
         for binding in grant.contexts:
             suffix = binding.name[len(grant.resource_name) :]
             public_name = grant.public_name + suffix
             names[public_name] = annotation
-    return tuple(sorted(names)), names
+            # Navigation is authorized from structured grant data. Display
+            # wording may evolve without accidentally opening a query-only row.
+            selectable_names.add(public_name)
+    return _GrantedPickerState(
+        tuple(sorted(names)),
+        names,
+        frozenset(selectable_names),
+    )
+
+
+def _granted_picker_views(
+    store: MemoryStore | None = None,
+) -> tuple[tuple[str, ...], dict[str, str]]:
+    """Return granted rows and their permission labels."""
+
+    state = _granted_picker_state(store)
+    return state.names, state.annotations
 
 
 def cmd(
@@ -85,18 +113,15 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
-            virtual_names, virtual_annotations = _granted_picker_views(store)
-            selectable_virtual_names = frozenset(
-                virtual_name
-                for virtual_name, annotation in virtual_annotations.items()
-                if annotation != "[query only]"
-            )
+            granted_state = _granted_picker_state(store)
+            virtual_names = granted_state.names
+            virtual_annotations = granted_state.annotations
             if virtual_names:
                 name = choose_context(
                     names,
                     current=expected_current,
                     virtual_names=virtual_names,
-                    selectable_virtual_names=selectable_virtual_names,
+                    selectable_virtual_names=granted_state.selectable_names,
                     virtual_annotations=virtual_annotations,
                 )
             else:
