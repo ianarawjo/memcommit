@@ -24,7 +24,6 @@ from memcommit.commands.atomize_workbench_shell import (
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.granted_context import (
     GrantedReadStore,
-    attached_grants,
     freeze_granted_update_target,
     resolve_context_access,
 )
@@ -60,6 +59,25 @@ class ImpactOperation(str, Enum):
     atomize = "atomize"
 
 
+def _resolve_directional_access(
+    store: MemoryStore,
+    name: str,
+    *,
+    current_name: str | None,
+):
+    try:
+        return resolve_context_access(
+            store,
+            name,
+            current_name=current_name,
+            required_permission="READ",
+        )
+    except ProfileError as error:
+        if "does not exist" not in str(error):
+            raise
+        raise FileNotFoundError(f"Context '{name}' not found.") from error
+
+
 def _usage_error(message: str) -> None:
     typer.secho(f"Impact error: {message}", fg=typer.colors.RED, err=True)
     raise typer.Exit(2)
@@ -79,108 +97,102 @@ def _directional_impact(
             target_locator=target_name,
             current=current_name,
         )
-        source = store.load(endpoints.source_name)
-    except (FileNotFoundError, RuntimeError, ValueError) as error:
-        typer.secho(
-            f"Impact error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
+        source_access = _resolve_directional_access(
+            store,
+            endpoints.source_name,
+            current_name=current_name,
         )
-        raise typer.Exit(1)
+        target_access = _resolve_directional_access(
+            store,
+            endpoints.target_name,
+            current_name=current_name,
+        )
+        # Authenticate before opening authority-owned Memory content.
+        provider = connect_codex_chatgpt_provider()
+        source = (
+            GrantedReadStore(source_access).load(source_access.display_name)
+            if source_access.is_granted
+            else store.load(source_access.context_name)
+        )
+        target = (
+            GrantedReadStore(target_access).load(target_access.display_name)
+            if target_access.is_granted
+            else store.load(target_access.context_name)
+        )
+        granted_source = (
+            freeze_granted_update_target(source_access)
+            if source_access.is_granted
+            else None
+        )
+        granted_target = (
+            freeze_granted_update_target(target_access)
+            if target_access.is_granted
+            else None
+        )
+        session = plan_update(
+            source,
+            target,
+            lambda: provider,
+            status="impact",
+            granted_source=granted_source,
+            granted_target=granted_target,
+        )
 
-    try:
-        if store.context_exists(endpoints.target_name):
-            target = store.load(endpoints.target_name)
-            session = plan_update(
-                source,
-                target,
-                connect_codex_chatgpt_provider,
-                status="impact",
+        # Provider latency is not an authorization lease. Re-resolve both
+        # endpoints and rebuild both projections before publishing the plan.
+        with authority_grant_snapshot_lock() as registry:
+            current_source_access = resolve_context_access(
+                store,
+                endpoints.source_name,
+                current_name=current_name,
+                required_permission="READ",
+                registry=registry,
             )
+            current_target_access = resolve_context_access(
+                store,
+                endpoints.target_name,
+                current_name=current_name,
+                required_permission="READ",
+                registry=registry,
+            )
+            current_source = (
+                GrantedReadStore(
+                    current_source_access,
+                    registry=registry,
+                ).load(current_source_access.display_name)
+                if current_source_access.is_granted
+                else store.load(current_source_access.context_name)
+            )
+            current_target = (
+                GrantedReadStore(
+                    current_target_access,
+                    registry=registry,
+                ).load(current_target_access.display_name)
+                if current_target_access.is_granted
+                else store.load(current_target_access.context_name)
+            )
+            current_granted_source = (
+                freeze_granted_update_target(current_source_access)
+                if current_source_access.is_granted
+                else None
+            )
+            current_granted_target = (
+                freeze_granted_update_target(current_target_access)
+                if current_target_access.is_granted
+                else None
+            )
+            if not session_matches(
+                session,
+                current_source,
+                current_target,
+                granted_source=current_granted_source,
+                granted_target=current_granted_target,
+            ):
+                raise UpdateError(
+                    "An update endpoint or grant changed while planning; "
+                    "no preview was saved."
+                )
             store.save_impact_plan(session)
-        else:
-            if target_name is None:
-                raise FileNotFoundError(
-                    f"Context '{endpoints.target_name}' not found."
-                )
-            _registry, grants = attached_grants(endpoints.source_name)
-            candidates = [
-                grant
-                for grant in grants
-                if endpoints.target_name == grant.public_name
-                or endpoints.target_name.startswith(grant.public_name + "/")
-            ]
-            if not candidates:
-                raise FileNotFoundError(
-                    f"Context '{endpoints.target_name}' not found."
-                )
-            effective = max(
-                candidates,
-                key=lambda grant: len(grant.public_name.split("/")),
-            )
-            if "READ" not in effective.permissions:
-                raise ProfileError(
-                    f"Grant {effective.uid[:8]} does not allow read access to "
-                    f"{endpoints.target_name!r}."
-                )
-            # Authenticate before opening any authority-owned target content.
-            provider = connect_codex_chatgpt_provider()
-            with authority_grant_snapshot_lock() as registry:
-                access = resolve_context_access(
-                    store,
-                    target_name,
-                    current_name=endpoints.source_name,
-                    required_permission="READ",
-                    registry=registry,
-                )
-                if not access.is_granted:
-                    raise UpdateError("Expected a granted update target.")
-                target = GrantedReadStore(access, registry=registry).load(
-                    access.display_name
-                )
-                granted_target = freeze_granted_update_target(access)
-
-            session = plan_update(
-                source,
-                target,
-                lambda: provider,
-                status="impact",
-                granted_target=granted_target,
-            )
-
-            # A provider turn is not an authorization lease. Rebuild the same
-            # projection under the registry lock and publish the plan only if
-            # the source, grant, and readable target remain exact.
-            with authority_grant_snapshot_lock() as registry:
-                current_access = resolve_context_access(
-                    store,
-                    granted_target.public_name,
-                    current_name=granted_target.attachment_context_name,
-                    required_permission="READ",
-                    registry=registry,
-                )
-                if not current_access.is_granted:
-                    raise UpdateError(
-                        "The granted target changed while planning; no preview "
-                        "was saved."
-                    )
-                current_granted_target = freeze_granted_update_target(current_access)
-                current_target = GrantedReadStore(
-                    current_access,
-                    registry=registry,
-                ).load(current_access.display_name)
-                current_source = store.load(endpoints.source_name)
-                if not session_matches(
-                    session,
-                    current_source,
-                    current_target,
-                    granted_target=current_granted_target,
-                ):
-                    raise UpdateError(
-                        "The update source or granted target changed while "
-                        "planning; no preview was saved."
-                    )
-                store.save_impact_plan(session)
     except (
         OSError,
         ProfileConfigError,

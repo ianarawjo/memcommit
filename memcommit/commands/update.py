@@ -9,9 +9,12 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.commands.update_render import render_plan
+from memcommit.granted_source_update_application import (
+    apply_granted_source_staged_update,
+)
 from memcommit.granted_update_application import apply_granted_staged_update
 from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
+from memcommit.profiles import ProfileError
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -24,6 +27,25 @@ from memcommit.update import (
     session_matches,
 )
 from memcommit.update_endpoints import resolve_update_endpoints
+
+
+def _resolve_update_access(
+    store: MemoryStore,
+    name: str,
+    *,
+    current_name: str | None,
+):
+    try:
+        return resolve_context_access(
+            store,
+            name,
+            current_name=current_name,
+            required_permission="READ",
+        )
+    except ProfileError as error:
+        if "does not exist" not in str(error):
+            raise
+        raise FileNotFoundError(f"Context '{name}' not found.") from error
 
 
 def cmd(
@@ -72,33 +94,41 @@ def cmd(
             target_locator=target_name,
             current=current_name,
         )
-        source = store.load(endpoints.source_name)
-        granted_target = None
-        if store.context_exists(endpoints.target_name):
-            target = store.load(endpoints.target_name)
-        else:
-            with authority_grant_snapshot_lock() as registry:
-                try:
-                    access = resolve_context_access(
-                        store,
-                        endpoints.target_name,
-                        current_name=endpoints.source_name,
-                        required_permission="READ",
-                        registry=registry,
-                    )
-                except ProfileError as error:
-                    if "does not exist" not in str(error):
-                        raise
-                    raise FileNotFoundError(
-                        f"Context '{endpoints.target_name}' not found."
-                    ) from error
-                if not access.is_granted:
-                    raise UpdateError("Expected a granted update target.")
-                target = GrantedReadStore(
-                    access,
-                    registry=registry,
-                ).load(access.display_name)
-                granted_target = freeze_granted_update_target(access)
+        source_access = _resolve_update_access(
+            store,
+            endpoints.source_name,
+            current_name=current_name,
+        )
+        target_access = _resolve_update_access(
+            store,
+            endpoints.target_name,
+            current_name=current_name,
+        )
+        source = (
+            GrantedReadStore(source_access).load(source_access.display_name)
+            if source_access.is_granted
+            else store.load(source_access.context_name)
+        )
+        target = (
+            GrantedReadStore(target_access).load(target_access.display_name)
+            if target_access.is_granted
+            else store.load(target_access.context_name)
+        )
+        granted_source = (
+            freeze_granted_update_target(source_access)
+            if source_access.is_granted
+            else None
+        )
+        granted_target = (
+            freeze_granted_update_target(target_access)
+            if target_access.is_granted
+            else None
+        )
+        if granted_source is not None and granted_target is not None:
+            raise UpdateError(
+                "Update between two granted Profile stores is not supported; "
+                "use a local participant target or source."
+            )
     except (
         FileNotFoundError,
         ProfileConfigError,
@@ -120,6 +150,7 @@ def cmd(
             existing,
             source,
             target,
+            granted_source=granted_source,
             granted_target=granted_target,
         ):
             render_plan(existing, applied=True)
@@ -155,6 +186,7 @@ def cmd(
             existing,
             source,
             target,
+            granted_source=granted_source,
             granted_target=granted_target,
         ):
             session = existing
@@ -183,6 +215,7 @@ def cmd(
                 cached,
                 source,
                 target,
+                granted_source=granted_source,
                 granted_target=granted_target,
             ):
                 session = cached.with_status("staged")
@@ -192,6 +225,7 @@ def cmd(
                     target,
                     connect_codex_chatgpt_provider,
                     status="staged",
+                    granted_source=granted_source,
                     granted_target=granted_target,
                 )
             # Bind the staged intent to the active record observed above.
@@ -201,11 +235,12 @@ def cmd(
                 session,
                 expected_current=existing,
             )
-        applied = (
-            apply_granted_staged_update(store, session)
-            if session.granted_target is not None
-            else store.apply_staged_update(session)
-        )
+        if session.granted_target is not None:
+            applied = apply_granted_staged_update(store, session)
+        elif session.granted_source is not None:
+            applied = apply_granted_source_staged_update(store, session)
+        else:
+            applied = store.apply_staged_update(session)
     except (
         OSError,
         ProfileConfigError,

@@ -513,7 +513,7 @@ def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing
     compared = runner.invoke(app, ["compare", "--to", "./services"])
 
     assert switched.exit_code == 0, switched.output
-    assert compared.exit_code == 0, compared.output
+    assert compared.exit_code == 0, compared.output + compared.stderr
     assert "NOT SAVED (GRANTED VIEW)" in compared.output
     assert len(payloads) == 1
     encoded = json.dumps(payloads[0])
@@ -581,6 +581,87 @@ def _removal_plan(prompt: str) -> str:
             ],
         }
     )
+
+
+def _source_grant_addition_plan(prompt: str) -> str:
+    payload = json.loads(prompt.split("UPDATE PAYLOAD:\n", 1)[1])
+    return json.dumps(
+        {
+            "edits": [],
+            "additions": [
+                {
+                    "target_context_id": payload["target"]["contexts"][0][
+                        "context_id"
+                    ],
+                    "new_content": "Advisor-derived campus note.",
+                    "source_ids": [
+                        payload["source"]["memories"][0]["source_id"]
+                    ],
+                    "reason": "The granted source supports this addition.",
+                }
+            ],
+            "removals": [],
+        }
+    )
+
+
+def test_granted_source_impact_and_update_apply_to_local_target(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, _source, wiki, grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+    )
+    local_target = ops.init("participant-proposal")
+    ops.add(local_target, "Existing participant draft.")
+    active.save(local_target)
+    calls = 0
+
+    class Provider:
+        def complete(self, prompt, **_kwargs):
+            nonlocal calls
+            calls += 1
+            return _source_grant_addition_plan(prompt)
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("matching impact plan must be reused"),
+    )
+
+    impact = runner.invoke(
+        app,
+        ["impact", "--from", wiki.name, "--to", local_target.name],
+    )
+    planned = active.load_impact_plan()
+    assert impact.exit_code == 0, impact.output + impact.stderr
+    assert planned is not None
+    assert planned.to_dict()["schema_version"] == 5
+    assert planned.granted_source is not None
+    assert planned.granted_source.grant_uid == grant.uid
+    assert planned.granted_target is None
+    update = runner.invoke(
+        app,
+        ["update", "--from", wiki.name, "--to", local_target.name],
+    )
+
+    assert update.exit_code == 0, update.output + update.stderr
+    assert calls == 1
+    assert any(
+        isinstance(item, Memory)
+        and item.content == "Advisor-derived campus note."
+        for item in active.load_direct(local_target.name).iter_items()
+    )
+    assert authority.load_direct(wiki.name).to_dict() == wiki.to_dict()
+
+
 def test_granted_impact_projects_only_readable_target_scope(
     isolated_store,
     tmp_path,

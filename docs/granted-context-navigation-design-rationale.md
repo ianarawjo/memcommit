@@ -104,6 +104,20 @@ query-only routes are deliberately omitted because their UIDs and locators are
 meaningful only inside the source Profile. Both grant bindings and the source
 projection digest are rechecked before the target save.
 
+Directional `impact` resolves both `--from` and `--to` as READ endpoints and
+stores an exact grant binding for either granted side. A granted-source plan
+uses update-session schema 5; applying it to a participant-owned target holds
+the registry lock and every authority source Context lock through target
+freshness checks and the complete local multi-owner write. Revocation or
+source drift therefore invalidates the staged plan instead of treating a saved
+digest as continuing authority. The established local-source to granted-target
+path still derives CREATE, UPDATE, and DELETE from planned target effects.
+
+An Update whose source and target are both granted but belong to separate
+authority Profile stores remains intentionally rejected. Coordinating two
+remote authority write domains requires a durable cross-store transaction
+journal; approximating that boundary could leave a partial write.
+
 ## Safety and limitations
 
 The persistent current pointer intentionally does not freeze a grant revision.

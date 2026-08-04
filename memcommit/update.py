@@ -17,7 +17,7 @@ UPDATE_RESPONSE_CHAR_LIMIT = 1_000_000
 UPDATE_OPERATION_LIMIT = 200
 UPDATE_SOURCE_REFS_PER_OPERATION = 50
 UPDATE_REASON_CHAR_LIMIT = 1_000
-UPDATE_SCHEMA_VERSION = 4
+UPDATE_SCHEMA_VERSION = 5
 UpdateStatus = Literal["impact", "staged", "applied"]
 
 
@@ -677,6 +677,7 @@ class UpdateSession:
     target_digest: str
     target_contexts: tuple[ContextFingerprint, ...]
     operations: tuple[UpdateOperation, ...]
+    granted_source: GrantedUpdateTarget | None = None
     granted_target: GrantedUpdateTarget | None = None
     application: UpdateApplicationReceipt | None = None
 
@@ -707,7 +708,17 @@ class UpdateSession:
         )
 
     def to_dict(self) -> dict[str, object]:
-        schema_version = 4 if self.granted_target is not None else 3
+        schema_version = (
+            UPDATE_SCHEMA_VERSION
+            if self.granted_source is not None
+            else 4 if self.granted_target is not None else 3
+        )
+        source: dict[str, object] = {
+            "uid": self.source_uid,
+            "name": self.source_name,
+            "digest": self.source_digest,
+            "contexts": [context.to_dict() for context in self.source_contexts],
+        }
         target: dict[str, object] = {
             "uid": self.target_uid,
             "name": self.target_name,
@@ -716,20 +727,19 @@ class UpdateSession:
         }
         if self.granted_target is not None:
             target["access"] = self.granted_target.to_dict()
+        if schema_version == UPDATE_SCHEMA_VERSION:
+            source["access"] = self.granted_source.to_dict()
+            target["access"] = (
+                None
+                if self.granted_target is None
+                else self.granted_target.to_dict()
+            )
         return {
             "schema_version": schema_version,
             "uid": self.uid,
             "status": self.status,
             "created_at": self.created_at,
-            "source": {
-                "uid": self.source_uid,
-                "name": self.source_name,
-                "digest": self.source_digest,
-                "contexts": [
-                    context.to_dict()
-                    for context in self.source_contexts
-                ],
-            },
+            "source": source,
             "target": target,
             "operations": [
                 operation.to_dict()
@@ -762,7 +772,7 @@ class UpdateSession:
                 "update session",
             )
             application = None
-        elif schema_version in {2, 3, UPDATE_SCHEMA_VERSION}:
+        elif schema_version in {2, 3, 4, UPDATE_SCHEMA_VERSION}:
             data = _require_exact_keys(
                 value,
                 {
@@ -790,19 +800,27 @@ class UpdateSession:
         if (status == "applied") != (application is not None):
             raise ValueError("Invalid update application state.")
 
-        source = _require_exact_keys(
-            data["source"],
-            {"uid", "name", "digest", "contexts"},
-            "update source",
-        )
-        target_keys = {"uid", "name", "digest", "contexts"}
+        source_keys = {"uid", "name", "digest", "contexts"}
         if schema_version == UPDATE_SCHEMA_VERSION:
+            source_keys.add("access")
+        source = _require_exact_keys(data["source"], source_keys, "update source")
+        target_keys = {"uid", "name", "digest", "contexts"}
+        if schema_version in {4, UPDATE_SCHEMA_VERSION}:
             target_keys.add("access")
         target = _require_exact_keys(data["target"], target_keys, "update target")
+        granted_source = (
+            None
+            if schema_version < UPDATE_SCHEMA_VERSION
+            else GrantedUpdateTarget.from_dict(source["access"])
+        )
         granted_target = (
             None
             if schema_version < 4
-            else GrantedUpdateTarget.from_dict(target["access"])
+            else (
+                None
+                if target["access"] is None
+                else GrantedUpdateTarget.from_dict(target["access"])
+            )
         )
         if not _is_sha256(source["digest"]) or not _is_sha256(target["digest"]):
             raise ValueError("Invalid update input digest.")
@@ -901,6 +919,7 @@ class UpdateSession:
                 for item in target["contexts"]
             ),
             operations=operations,
+            granted_source=granted_source,
             granted_target=granted_target,
             application=application,
         )
@@ -1527,6 +1546,7 @@ def plan_update(
     provider_factory: Callable[[], UpdateProvider],
     *,
     status: UpdateStatus = "impact",
+    granted_source: GrantedUpdateTarget | None = None,
     granted_target: GrantedUpdateTarget | None = None,
 ) -> UpdateSession:
     """Ask a provider for a validated, non-mutating update plan."""
@@ -1562,6 +1582,7 @@ def plan_update(
         target_digest=inputs.target_digest,
         target_contexts=inputs.target_context_fingerprints,
         operations=operations,
+        granted_source=granted_source,
         granted_target=granted_target,
     )
 
@@ -1571,6 +1592,7 @@ def session_matches(
     source: Context,
     target: Context,
     *,
+    granted_source: GrantedUpdateTarget | None = None,
     granted_target: GrantedUpdateTarget | None = None,
 ) -> bool:
     """Return whether an impact plan still describes the exact A/B inputs."""
@@ -1579,6 +1601,7 @@ def session_matches(
         or session.source_name != source.name
         or session.target_uid != target.uid
         or session.target_name != target.name
+        or session.granted_source != granted_source
         or session.granted_target != granted_target
     ):
         return False
@@ -1600,6 +1623,7 @@ def applied_session_matches(
     source: Context,
     target: Context,
     *,
+    granted_source: GrantedUpdateTarget | None = None,
     granted_target: GrantedUpdateTarget | None = None,
 ) -> bool:
     """Return whether A and the locally applied B still match the receipt."""
@@ -1611,6 +1635,7 @@ def applied_session_matches(
         or session.source_name != source.name
         or session.target_uid != target.uid
         or session.target_name != target.name
+        or session.granted_source != granted_source
         or session.granted_target != granted_target
     ):
         return False
