@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from contextlib import ExitStack
 from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Literal
@@ -10,6 +11,7 @@ from typing import Literal
 from memcommit.commands.granted_context import (
     GrantedReadStore,
     freeze_granted_update_target,
+    revalidate_granted_context_binding,
     resolve_context_access,
 )
 from memcommit.context import Context, Memory
@@ -89,7 +91,18 @@ def inspect_granted_update(
                 session.granted_target,
                 registry,
             )
-            source = active_store.load(session.source_name)
+            if session.granted_source is None:
+                source = active_store.load(session.source_name)
+            else:
+                source_access = revalidate_granted_context_binding(
+                    session.granted_source,
+                    required_permission="READ",
+                    registry=registry,
+                )
+                source = GrantedReadStore(
+                    source_access,
+                    registry=registry,
+                ).load(session.granted_source.public_name)
             target = GrantedReadStore(access, registry=registry).load(
                 session.granted_target.public_name
             )
@@ -98,6 +111,7 @@ def inspect_granted_update(
                     session,
                     source,
                     target,
+                    granted_source=session.granted_source,
                     granted_target=session.granted_target,
                 )
                 if session.status == "applied"
@@ -105,6 +119,7 @@ def inspect_granted_update(
                     session,
                     source,
                     target,
+                    granted_source=session.granted_source,
                     granted_target=session.granted_target,
                 )
             )
@@ -262,13 +277,7 @@ def apply_granted_staged_update(
     if session.status != "staged" or session.granted_target is None:
         raise ValueError("Expected one staged granted UpdateSession.")
     binding = session.granted_target
-    source_lock_names = {
-        context.name for context in session.source_contexts
-    } | {
-        source.context_name
-        for operation in session.operations
-        for source in operation.source_refs
-    }
+    source_binding = session.granted_source
     authority_lock_names = {
         _authority_name(binding, context.name)
         for context in session.target_contexts
@@ -278,6 +287,40 @@ def apply_granted_staged_update(
         access = _resolve_exact_access(active_store, binding, registry)
         _validate_operation_permissions(session, registry)
         authority_store = access.store
+        if source_binding is None:
+            source_access = None
+            source_store = active_store
+            source_lock_names = {
+                context.name for context in session.source_contexts
+            } | {
+                source.context_name
+                for operation in session.operations
+                for source in operation.source_refs
+            }
+        else:
+            source_access = revalidate_granted_context_binding(
+                source_binding,
+                required_permission="READ",
+                registry=registry,
+            )
+            source_store = source_access.store
+            source_lock_names = {
+                _authority_name(source_binding, context.name)
+                for context in session.source_contexts
+            } | {
+                _authority_name(source_binding, source.context_name)
+                for operation in session.operations
+                for source in operation.source_refs
+            }
+
+        def load_source() -> Context:
+            if source_access is None:
+                return active_store.load(session.source_name)
+            return GrantedReadStore(
+                source_access,
+                registry=registry,
+            ).load(source_binding.public_name)
+
         with active_store._update_session_write_lock():
             current = active_store._load_update_session(
                 active_store.staged_update_file
@@ -287,11 +330,20 @@ def apply_granted_staged_update(
                     "The active staged update changed before application."
                 )
             active_store._assert_profile_write_allowed()
-            with active_store._context_write_locks(source_lock_names):
+            with ExitStack() as source_locks:
+                if source_store.store_dir != authority_store.store_dir:
+                    source_locks.enter_context(
+                        source_store._context_write_locks(source_lock_names)
+                    )
                 with authority_store._command_write_lock():
                     authority_store._assert_profile_write_allowed()
-                    with authority_store._context_write_locks(authority_lock_names):
-                        source = active_store.load(session.source_name)
+                    combined_authority_locks = set(authority_lock_names)
+                    if source_store.store_dir == authority_store.store_dir:
+                        combined_authority_locks.update(source_lock_names)
+                    with authority_store._context_write_locks(
+                        combined_authority_locks
+                    ):
+                        source = load_source()
                         target = GrantedReadStore(
                             access,
                             registry=registry,
@@ -300,6 +352,7 @@ def apply_granted_staged_update(
                             session,
                             source,
                             target,
+                            granted_source=source_binding,
                             granted_target=binding,
                         ):
                             raise ConcurrentContextUpdateError(
@@ -385,6 +438,11 @@ def apply_granted_staged_update(
                                                 ),
                                                 "public_context": binding.public_name,
                                             },
+                                            "granted_source": (
+                                                None
+                                                if source_binding is None
+                                                else source_binding.to_dict()
+                                            ),
                                             "operation_memory_uids": [
                                                 operation.memory_uid
                                                 for operation in owner_operations
@@ -424,7 +482,7 @@ def apply_granted_staged_update(
                                     (authority_name, public_name, checkpoint.uid)
                                 )
 
-                            source_after = active_store.load(session.source_name)
+                            source_after = load_source()
                             target_after = GrantedReadStore(
                                 access,
                                 registry=registry,
@@ -461,6 +519,7 @@ def apply_granted_staged_update(
                                 applied,
                                 source_after,
                                 target_after,
+                                granted_source=source_binding,
                                 granted_target=binding,
                             ):
                                 raise RuntimeError(

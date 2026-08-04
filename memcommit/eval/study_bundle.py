@@ -29,6 +29,7 @@ from memcommit.eval.study_fixtures import (
     load_study_fixture,
     pair_fixture_translations,
 )
+from memcommit.profile_config import GRANT_PERMISSIONS
 from memcommit.store import MemoryStore
 from memcommit.translation_view import (
     TRANSLATION_ORIGIN_IMPORTED,
@@ -171,7 +172,18 @@ TASK_SPECS = {
                 grantee_profile="task-1",
                 authority_context="campus-wiki",
                 public_name="campus-wiki",
-                permissions=("READ", "CREATE", "UPDATE", "DELETE", "QUERY"),
+                permissions=(
+                    "CREATE",
+                    "READ",
+                    "UPDATE",
+                    "DELETE",
+                    "QUERY",
+                    "DERIVE",
+                    "COMBINE",
+                    "EXPORT",
+                    "ACCEPT_DERIVED",
+                    "SAVE_ANALYSIS",
+                ),
                 grantee_parent_context="participant/construction-updates",
                 excluded_contexts=("campus-wiki/construction-details",),
                 provider="codex_chatgpt",
@@ -219,7 +231,13 @@ TASK_SPECS = {
                 permissions=(
                     ("QUERY", "SESSION_LOG")
                     if permission == "QUERY"
-                    else (permission,)
+                    else (
+                        "READ",
+                        "DERIVE",
+                        "COMBINE",
+                        "EXPORT",
+                        "SAVE_ANALYSIS",
+                    )
                 ),
                 grantee_parent_context="participant/proposal-workspace",
                 provider=("codex_chatgpt" if permission == "QUERY" else None),
@@ -268,7 +286,13 @@ TASK_SPECS = {
                 grantee_profile="task-3",
                 authority_context="guardrails",
                 public_name="guardrails",
-                permissions=("READ",),
+                permissions=(
+                    "READ",
+                    "DERIVE",
+                    "COMBINE",
+                    "EXPORT",
+                    "SAVE_ANALYSIS",
+                ),
                 grantee_parent_context="personal-memory",
             ),
             BundleGrantTemplate(
@@ -739,9 +763,7 @@ def _remove_transient_lock_artifacts(store_root: Path) -> None:
     context_locks.rmdir()
 
 
-_GRANT_PERMISSIONS = frozenset(
-    {"QUERY", "SESSION_LOG", "READ", "CREATE", "UPDATE", "DELETE"}
-)
+_GRANT_PERMISSIONS = GRANT_PERMISSIONS
 
 
 def _profile_store_path(package: Path, profile_name: str) -> Path:

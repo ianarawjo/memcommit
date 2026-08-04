@@ -227,11 +227,16 @@ def _assert_grant_templates(task, manifest, context_uids):
         campus = grants["task-1-campus-wiki-view"]
         details = grants["task-1-construction-details-query"]
         assert campus["permissions"] == [
-            "READ",
             "CREATE",
+            "READ",
             "UPDATE",
             "DELETE",
             "QUERY",
+            "DERIVE",
+            "COMBINE",
+            "EXPORT",
+            "ACCEPT_DERIVED",
+            "SAVE_ANALYSIS",
         ]
         assert campus["provider"] == "codex_chatgpt"
         assert campus["public_name"] == "campus-wiki"
@@ -253,8 +258,15 @@ def _assert_grant_templates(task, manifest, context_uids):
         assert details["provider"] == "codex_chatgpt"
         assert details["attachment"]["grant_key"] == campus["key"]
     elif task == 2:
-        assert grants["task-2-advisor1-view"]["permissions"] == ["READ"]
-        assert grants["task-2-advisor2-view"]["permissions"] == ["READ"]
+        advisor_permissions = [
+            "READ",
+            "DERIVE",
+            "COMBINE",
+            "EXPORT",
+            "SAVE_ANALYSIS",
+        ]
+        assert grants["task-2-advisor1-view"]["permissions"] == advisor_permissions
+        assert grants["task-2-advisor2-view"]["permissions"] == advisor_permissions
         guidelines = grants["task-2-proposal-guidelines-query"]
         assert guidelines["permissions"] == ["QUERY", "SESSION_LOG"]
         assert guidelines["provider"] == "codex_chatgpt"
@@ -262,7 +274,13 @@ def _assert_grant_templates(task, manifest, context_uids):
             grant["attachment"]["context"]["name"] for grant in grants.values()
         } == {"participant/proposal-workspace"}
     else:
-        assert grants["task-3-guardrails-view"]["permissions"] == ["READ"]
+        assert grants["task-3-guardrails-view"]["permissions"] == [
+            "READ",
+            "DERIVE",
+            "COMBINE",
+            "EXPORT",
+            "SAVE_ANALYSIS",
+        ]
         healthcare = grants["task-3-healthcare-information-query"]
         assert healthcare["permissions"] == ["QUERY", "SESSION_LOG"]
         assert healthcare["provider"] == "codex_chatgpt"

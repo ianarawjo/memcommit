@@ -3206,7 +3206,8 @@ def _prefix_study_grant_template(
     result = copy.deepcopy(raw)
     prefix = f"task-{task}"
 
-    if task == 1 and result.get("key") == "task-1-campus-wiki-view":
+    key = result.get("key")
+    if task == 1 and key == "task-1-campus-wiki-view":
         permissions = result.get("permissions")
         if isinstance(permissions, list):
             # Older editable baselines predate explicit whole-wiki query and
@@ -3216,7 +3217,33 @@ def _prefix_study_grant_template(
                 permissions.append("DELETE")
             if "QUERY" not in permissions:
                 permissions.append("QUERY")
+            for permission in (
+                "DERIVE",
+                "COMBINE",
+                "EXPORT",
+                "ACCEPT_DERIVED",
+                "SAVE_ANALYSIS",
+            ):
+                if permission not in permissions:
+                    permissions.append(permission)
         result.setdefault("provider", "codex_chatgpt")
+    elif key in {
+        "task-2-advisor1-view",
+        "task-2-advisor2-view",
+        "task-3-guardrails-view",
+    }:
+        permissions = result.get("permissions")
+        if isinstance(permissions, list):
+            # Existing baselines remain importable, but each new Study run
+            # receives the current source-side derivation contract.
+            for permission in (
+                "DERIVE",
+                "COMBINE",
+                "EXPORT",
+                "SAVE_ANALYSIS",
+            ):
+                if permission not in permissions:
+                    permissions.append(permission)
 
     authority_context = result.get("authority_context")
     if isinstance(authority_context, dict) and isinstance(

@@ -9,6 +9,7 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.commands.update_render import render_plan
+from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.granted_source_update_application import (
     apply_granted_source_staged_update,
 )
@@ -124,11 +125,7 @@ def cmd(
             if target_access.is_granted
             else None
         )
-        if granted_source is not None and granted_target is not None:
-            raise UpdateError(
-                "Update between two granted Profile stores is not supported; "
-                "use a local participant target or source."
-            )
+        authorize_derived_transfer(source_access, target_access)
     except (
         FileNotFoundError,
         ProfileConfigError,

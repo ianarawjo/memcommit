@@ -33,6 +33,7 @@ from memcommit.commands.update_render import (
     render_plan,
     run_update_workbench,
 )
+from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -107,6 +108,7 @@ def _directional_impact(
             endpoints.target_name,
             current_name=current_name,
         )
+        authorize_derived_transfer(source_access, target_access)
         # Authenticate before opening authority-owned Memory content.
         provider = connect_codex_chatgpt_provider()
         source = (

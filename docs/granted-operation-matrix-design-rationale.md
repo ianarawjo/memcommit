@@ -21,10 +21,10 @@ nor can a friendly command name stand in for the effects it eventually writes.
 | clear | DELETE | Direct items removed in one Context save |
 | forget | UPDATE and/or DELETE from accepted proposal | One authority Context save |
 | integrate | CREATE, UPDATE, and/or DELETE from accepted proposal | One authority Context save |
-| merge | source READ + target CREATE | Cross-Profile transfer copies direct Memory values only |
-| compare | READ on both frames | Granted result is process-local and revalidated after provider use |
-| impact | READ on both endpoints | Schema 5 binds a granted source; schema 4 binds a granted target |
-| update | target effects; granted source READ remains live | Local-target or authority-target application with receipts and rollback |
+| merge | source READ + DERIVE; EXPORT across domains; target CREATE + ACCEPT_DERIVED | Cross-Profile transfer copies direct Memory values only |
+| compare | READ + DERIVE; COMBINE across domains | Granted result is process-local and revalidated after provider use |
+| impact | READ + source DERIVE/EXPORT + target ACCEPT_DERIVED | Schema 5 can bind granted source and target together |
+| update | impact transfer authority + target mutation effects | Local or granted target application with exact bindings, receipts, and rollback |
 
 Every granted mutation revalidates the exact grant revision, grantee and
 authority Profile identities, attachment, public/resource mapping, and required
@@ -41,8 +41,12 @@ permission set while the registry lock remains held through the write.
   Context `rename`, `embed`, and `reference`) do not treat an authority Context
   as participant-owned topology. A cross-Profile merge copies values rather
   than persisting authority-local Context or Memory-reference identities.
-- An Update cannot currently mutate one granted authority from a second granted
-  authority source. That needs a durable cross-store transaction journal.
+- An Update may read one granted authority and mutate a distinct granted target
+  when the source grants DERIVE + EXPORT and the target grants ACCEPT_DERIVED
+  plus every planned mutation permission. It locks both exact source and target
+  scopes, but writes and rolls back only the target authority store. A future
+  operation that writes more than one authority still needs a cross-store
+  transaction journal.
 - Granted Compare is intentionally not saved. The ordinary comparison artifact
   contains full frame text; durable parity needs a redacted binding-and-digest
   schema with live reconstruction and revocation checks.

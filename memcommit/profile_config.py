@@ -21,7 +21,19 @@ AUTHORING_PROFILE_NAME = "authoring"
 _PROFILE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}\Z")
 GRANT_RESOURCE_CONTEXT_TREE = "CONTEXT_TREE"
 GRANT_PERMISSIONS = frozenset(
-    {"CREATE", "READ", "UPDATE", "DELETE", "QUERY", "SESSION_LOG"}
+    {
+        "CREATE",
+        "READ",
+        "UPDATE",
+        "DELETE",
+        "QUERY",
+        "SESSION_LOG",
+        "DERIVE",
+        "COMBINE",
+        "EXPORT",
+        "ACCEPT_DERIVED",
+        "SAVE_ANALYSIS",
+    }
 )
 _GRANT_PERMISSION_ORDER = (
     "CREATE",
@@ -30,6 +42,11 @@ _GRANT_PERMISSION_ORDER = (
     "DELETE",
     "QUERY",
     "SESSION_LOG",
+    "DERIVE",
+    "COMBINE",
+    "EXPORT",
+    "ACCEPT_DERIVED",
+    "SAVE_ANALYSIS",
 )
 
 
@@ -94,6 +111,25 @@ def canonical_grant_permissions(value: object) -> tuple[str, ...]:
         normalized.add(permission)
     if "SESSION_LOG" in normalized and "QUERY" not in normalized:
         raise ProfileConfigError("SESSION_LOG requires QUERY permission.")
+    if normalized & {"DERIVE", "ACCEPT_DERIVED"} and "READ" not in normalized:
+        raise ProfileConfigError(
+            "Derive and accept-derived grants require READ permission."
+        )
+    if (
+        normalized & {"COMBINE", "EXPORT", "SAVE_ANALYSIS"}
+        and "DERIVE" not in normalized
+    ):
+        raise ProfileConfigError(
+            "Combine, export, and save-analysis grants require DERIVE permission."
+        )
+    if "ACCEPT_DERIVED" in normalized and not normalized & {
+        "CREATE",
+        "UPDATE",
+        "DELETE",
+    }:
+        raise ProfileConfigError(
+            "ACCEPT_DERIVED requires a create, update, or delete permission."
+        )
     if normalized & {"CREATE", "UPDATE", "DELETE"} and "READ" not in normalized:
         raise ProfileConfigError("Create, update, and delete grants require READ.")
     return tuple(item for item in _GRANT_PERMISSION_ORDER if item in normalized)

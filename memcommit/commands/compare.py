@@ -31,6 +31,7 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
 )
 from memcommit.context_locator import resolve_context_locator
+from memcommit.derived_policy import authorize_combination
 from memcommit.commands.compare_sessions import (
     choose_comparison_session,
     load_saved_comparison,
@@ -510,6 +511,7 @@ def cmd(
                 raise CompareCommandError(
                     f"Compared Context '{to}'{resolution} does not exist."
                 ) from error
+            authorize_combination((reference_access, compared_access))
             reference = _load_compare_context(reference_access)
             compared = _load_compare_context(compared_access)
             reference_binding = (

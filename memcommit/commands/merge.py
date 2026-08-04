@@ -18,6 +18,7 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
+from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore, context_record_digest
@@ -65,6 +66,7 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
             else source_store.load_for_update(source_access.context_name)
         )
         target = target_store.load_for_update(target_access.context_name)
+        authorize_derived_transfer(source_access, target_access)
     except (
         FileNotFoundError,
         OSError,

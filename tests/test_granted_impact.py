@@ -19,11 +19,13 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.derived_policy import authorize_analysis_save
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
     ProfileRegistry,
+    load_profile_registry,
     profile_registry_file,
     profile_store_dir,
 )
@@ -68,7 +70,18 @@ def _setup_granted_target(
     tmp_path,
     monkeypatch,
     *,
-    parent_permissions=("READ", "CREATE", "UPDATE", "DELETE", "QUERY"),
+    parent_permissions=(
+        "READ",
+        "CREATE",
+        "UPDATE",
+        "DELETE",
+        "QUERY",
+        "DERIVE",
+        "COMBINE",
+        "EXPORT",
+        "ACCEPT_DERIVED",
+        "SAVE_ANALYSIS",
+    ),
     authority_name="run-granted-memory",
     authority_source=None,
 ):
@@ -352,7 +365,13 @@ def test_merge_supports_granted_source_and_target_without_copying_pointers(
         isolated_store,
         tmp_path,
         monkeypatch,
-        parent_permissions=("READ", "CREATE"),
+        parent_permissions=(
+            "READ",
+            "CREATE",
+            "DERIVE",
+            "EXPORT",
+            "ACCEPT_DERIVED",
+        ),
     )
 
     from_grant = runner.invoke(app, ["merge", "campus-wiki"])
@@ -466,7 +485,7 @@ def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing
         isolated_store,
         tmp_path,
         monkeypatch,
-        parent_permissions=("READ",),
+        parent_permissions=("READ", "DERIVE"),
     )
     service = authority.load_direct("campus-wiki/services")
     payloads = []
@@ -614,7 +633,7 @@ def test_granted_source_impact_and_update_apply_to_local_target(
         isolated_store,
         tmp_path,
         monkeypatch,
-        parent_permissions=("READ",),
+        parent_permissions=("READ", "DERIVE", "EXPORT"),
     )
     local_target = ops.init("participant-proposal")
     ops.add(local_target, "Existing participant draft.")
@@ -662,6 +681,141 @@ def test_granted_source_impact_and_update_apply_to_local_target(
     assert authority.load_direct(wiki.name).to_dict() == wiki.to_dict()
 
 
+def test_derived_transfer_permissions_fail_before_provider_or_write(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+    )
+    local_target = ops.init("participant-proposal")
+    active.save(local_target)
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("provider must not run without derivation consent"),
+    )
+
+    source_denied = runner.invoke(
+        app,
+        ["impact", "--from", wiki.name, "--to", local_target.name],
+    )
+    target_denied = runner.invoke(
+        app,
+        ["impact", "--from", source.name, "--to", wiki.name],
+    )
+
+    assert source_denied.exit_code == 1
+    assert "DERIVE + EXPORT" in source_denied.stderr
+    assert target_denied.exit_code == 1
+    assert "ACCEPT_DERIVED" in target_denied.stderr
+    assert authority.load_direct(wiki.name).to_dict() == wiki.to_dict()
+
+
+def test_cross_domain_compare_requires_combine_and_saved_analysis_consent(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ", "DERIVE"),
+    )
+    active.set_current(source.name)
+    denied = runner.invoke(app, ["compare", "--to", wiki.name])
+
+    assert denied.exit_code == 1
+    assert "COMBINE" in denied.stderr
+    granted_access = resolve_context_access(
+        active,
+        wiki.name,
+        current_name=source.name,
+        required_permission="READ",
+    )
+    with pytest.raises(ProfileError, match="SAVE_ANALYSIS"):
+        authorize_analysis_save((granted_access,))
+
+
+def test_update_between_distinct_grants_writes_only_accepting_target(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, source_authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ", "DERIVE", "EXPORT"),
+    )
+    registry = load_profile_registry()
+    target_authority = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name="run-advisor-authority",
+        kind="MANAGED",
+    )
+    target_store = MemoryStore(root=profile_store_dir(target_authority))
+    advisor = ops.init("advisor2")
+    ops.add(advisor, "Existing authority-owned advisor note.")
+    target_store.save(advisor)
+    target_store.set_current(advisor.name)
+    expanded = ProfileRegistry(
+        generation=registry.generation + 1,
+        active_uid=registry.active_uid,
+        profiles=(*registry.profiles, target_authority),
+        grants=registry.grants,
+    )
+    profile_registry_file().write_text(
+        json.dumps(expanded.to_dict()) + "\n",
+        encoding="utf-8",
+    )
+    create_authority_grant(
+        authority_name=target_authority.name,
+        grantee_name=AUTHORING_PROFILE_NAME,
+        resource_name=advisor.name,
+        attachment_name=source.name,
+        public_name="advisor2",
+        permissions=("READ", "CREATE", "ACCEPT_DERIVED"),
+        recursive=True,
+    )
+    source_before = source_authority.load_direct(wiki.name).to_dict()
+
+    class Provider:
+        def complete(self, prompt, **_kwargs):
+            return _source_grant_addition_plan(prompt)
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("Update must reuse the exact impact plan"),
+    )
+
+    impact = runner.invoke(
+        app,
+        ["impact", "--from", wiki.name, "--to", "advisor2"],
+    )
+    update = runner.invoke(
+        app,
+        ["update", "--from", wiki.name, "--to", "advisor2"],
+    )
+
+    assert impact.exit_code == 0, impact.output + impact.stderr
+    assert update.exit_code == 0, update.output + update.stderr
+    assert any(
+        isinstance(item, Memory)
+        and item.content == "Advisor-derived campus note."
+        for item in target_store.load_direct(advisor.name).iter_items()
+    )
+    assert source_authority.load_direct(wiki.name).to_dict() == source_before
+
+
 def test_granted_impact_projects_only_readable_target_scope(
     isolated_store,
     tmp_path,
@@ -703,6 +857,11 @@ def test_granted_impact_projects_only_readable_target_scope(
         "UPDATE",
         "DELETE",
         "QUERY",
+        "DERIVE",
+        "COMBINE",
+        "EXPORT",
+        "ACCEPT_DERIVED",
+        "SAVE_ANALYSIS",
     )
     assert {context.name for context in session.target_contexts} == {
         "campus-wiki",
@@ -1170,7 +1329,13 @@ def test_granted_update_checks_create_permission_before_first_write(
         isolated_store,
         tmp_path,
         monkeypatch,
-        parent_permissions=("READ", "UPDATE", "DELETE", "QUERY"),
+        parent_permissions=(
+            "READ",
+            "UPDATE",
+            "DELETE",
+            "QUERY",
+            "ACCEPT_DERIVED",
+        ),
     )
     authority_before = {
         name: authority_store.load_direct(name).to_dict()
@@ -1215,7 +1380,13 @@ def test_granted_update_requires_explicit_delete_for_removal(
         isolated_store,
         tmp_path,
         monkeypatch,
-        parent_permissions=("READ", "CREATE", "UPDATE", "QUERY"),
+        parent_permissions=(
+            "READ",
+            "CREATE",
+            "UPDATE",
+            "QUERY",
+            "ACCEPT_DERIVED",
+        ),
     )
     root_before = authority_store.load_direct(wiki.name).to_dict()
 
