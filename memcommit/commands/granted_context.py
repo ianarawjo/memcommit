@@ -242,6 +242,27 @@ def _require_granted_permissions(
 
 
 @contextmanager
+def authorized_context_operation(
+    checks: tuple[tuple[ContextAccess, tuple[str, ...]], ...],
+) -> Iterator[None]:
+    """Freeze all granted participants in one operation through its writes."""
+
+    granted = tuple(check for check in checks if check[0].is_granted)
+    if not granted:
+        yield
+        return
+    for access, permissions in granted:
+        _require_granted_permissions(access, permissions)
+    # Grant changes and Profile switching use this same registry lock. Holding
+    # it across the authority-store save closes the revoke-after-check race.
+    with authority_grant_snapshot_lock() as registry:
+        for access, permissions in granted:
+            revalidate_context_access(access, registry=registry)
+            _require_granted_permissions(access, permissions)
+        yield
+
+
+@contextmanager
 def authorized_context_mutation(
     access: ContextAccess,
     *,
@@ -249,15 +270,7 @@ def authorized_context_mutation(
 ) -> Iterator[None]:
     """Keep every required grant permission valid through authority save."""
 
-    if access.view is None:
-        yield
-        return
-    _require_granted_permissions(access, required_permissions)
-    # Grant changes and Profile switching use this same registry lock. Holding
-    # it across the authority-store save closes the revoke-after-check race.
-    with authority_grant_snapshot_lock() as registry:
-        revalidate_context_access(access, registry=registry)
-        _require_granted_permissions(access, required_permissions)
+    with authorized_context_operation(((access, required_permissions),)):
         yield
 
 

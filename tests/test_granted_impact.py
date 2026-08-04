@@ -343,6 +343,39 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
     assert original.uid in authority.load_direct(wiki.name).memories
 
 
+def test_merge_supports_granted_source_and_target_without_copying_pointers(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ", "CREATE"),
+    )
+
+    from_grant = runner.invoke(app, ["merge", "campus-wiki"])
+
+    assert from_grant.exit_code == 0, from_grant.output + from_grant.stderr
+    local_after = active.load_direct(source.name)
+    assert any(
+        isinstance(item, Memory) and "west lobby" in item.content
+        for item in local_after.iter_items()
+    )
+    assert not any(isinstance(item, Context) for item in local_after.iter_items())
+
+    active.set_current_virtual_context_if(source.name, "campus-wiki")
+    into_grant = runner.invoke(app, ["merge", "task-root"])
+
+    assert into_grant.exit_code == 0, into_grant.output + into_grant.stderr
+    authority_after = authority.load_direct(wiki.name)
+    assert any(
+        isinstance(item, Memory) and "Verified update" in item.content
+        for item in authority_after.iter_items()
+    )
+
+
 def test_granted_context_binding_revalidates_exact_view_and_rejects_revocation(
     isolated_store,
     tmp_path,

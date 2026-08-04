@@ -97,6 +97,13 @@ require `UPDATE`, and removals require `DELETE`. The accepted changes remain
 in-memory until that complete union is revalidated under the registry lock and
 the single Context save succeeds.
 
+`merge` authorizes its source for `READ` and its current target for `CREATE`.
+When the two endpoints belong to different Profile stores, only direct ordinary
+Memory values are portable: embedded Contexts, Memory references, and
+query-only routes are deliberately omitted because their UIDs and locators are
+meaningful only inside the source Profile. Both grant bindings and the source
+projection digest are rechecked before the target save.
+
 ## Safety and limitations
 
 The persistent current pointer intentionally does not freeze a grant revision.
