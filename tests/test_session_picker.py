@@ -389,11 +389,34 @@ def test_detail_escapes_untrusted_metadata_and_each_exact_argv_argument():
     assert "OPEN\\u2066" in rendered
     assert "context\\rOTHER" in rendered
     assert "first line" in rendered
+    assert " Summary      subtitle\\nheading" in rendered
+    assert " Subtitle     " not in rendered
     assert "              second line\\u202e" in rendered
     assert "[2] unsafe\\n--delete" in rendered
     assert "[3] \\\\literal" in rendered
     assert "\u202e" not in rendered
     assert "\u2066" not in rendered
+
+
+def test_detail_only_mode_renders_content_without_metadata_envelope():
+    candidate = SessionPickerEntry(
+        kind="compare",
+        key="analysis-one",
+        title="Advisor 1 ↔ Advisor 2",
+        status="CURRENT",
+        subtitle="12 relations",
+        group="advisor1",
+        sort_timestamp=0,
+        detail="MEM COMPARE\nWHAT BOTH CONTAIN\nunsafe\tvalue",
+        reopen_argv=("mem", "compare", "--to", "advisor2"),
+        detail_only=True,
+    )
+
+    rendered = _render_detail(candidate)
+
+    assert rendered == "MEM COMPARE\nWHAT BOTH CONTAIN\nunsafe\\tvalue"
+    assert " Kind " not in rendered
+    assert "Public route hint" not in rendered
 
 
 def test_picker_rejects_non_tty_by_default(monkeypatch):
@@ -480,6 +503,7 @@ def test_picker_location_rejects_invalid_orientation(changes, message):
         ({"sort_timestamp": True}, "timestamp"),
         ({"reopen_argv": ("", "ground")}, "argv"),
         ({"reopen_argv": ["mem", "ground"]}, "argv"),
+        ({"detail_only": "yes"}, "detail-only"),
     ],
 )
 def test_entry_rejects_invalid_presentation_fields(changes, message):

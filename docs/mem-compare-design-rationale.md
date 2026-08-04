@@ -5,11 +5,56 @@
 The first bounded Compare slice is implemented as:
 
 ```text
+mem compare
+mem compare --sessions
 mem compare --to PEER
 mem compare --to ../PEER
 mem compare --to PEER --refresh
+mem compare --to PEER --snapshot
 mem compare --to PEER --ledger
 ```
+
+Bare `mem compare` and `mem compare --sessions` open the shared saved-work
+picker. This is compatible with the earlier command because omitting `--to`
+previously produced only a missing-option error; it did not mean “start a new
+comparison.” Explicit `--to` behavior is unchanged. `--refresh` still requires
+an explicit peer and is rejected on the picker route.
+
+The picker presents Compare as a **saved read-only analysis**, not as a chat,
+dialogue, or mutable session. Each row names the ordered pair, reports relation
+and grounding-candidate counts, groups under the reference Context, and sorts
+by the latest analysis modification time by default. Its detail pane is the
+complete compact Compare report that opening the analysis will preserve; the
+generic key/status/route metadata envelope is intentionally omitted because
+the selected row already provides identity and status and the envelope would
+push the semantic report below the initial viewport.
+`PageUp`/`PageDown` scroll that preview without changing the selected analysis.
+The shared metadata label is `Summary`, not the implementation-oriented
+`Subtitle`. The existing order is preserved: `A → B` and `B → A` remain
+distinct entries even though the compact title uses a symmetric peer marker.
+
+Selecting a row freezes its analysis UID process-locally. Compare reloads that
+exact persisted UID after the picker closes, loads both sources by the names
+and UIDs captured in the artifact, verifies their complete direct digests and
+the current Compare ruleset, and only then opens the saved analysis workbench
+in a TTY. It does
+not consult or switch the global current Context after selection, connect a
+provider, refresh an analysis, save a replacement, or create a checkpoint. A
+deleted, replaced, stale, or older-ruleset selection fails with an explicit
+refresh instruction instead of silently entering the normal `--to` path.
+
+The shared picker currently requires an argv-shaped presentation field. The
+Compare adapter displays `mem compare --to COMPARED` as a route hint and states
+that it requires the displayed reference Context to be current; the picker
+does not execute it. The frozen analysis UID is the authority for the selected
+render. A public UID route and multiple historical revisions of one ordered
+pair are outside this first selector slice.
+
+The picker includes both ordinary comparison slots and authorized retained or
+grant-bound comparison artifacts. Otherwise a participant could successfully
+save a granted Compare result but have no route back to it from bare
+`mem compare`. Reopening revalidates the artifact according to its retention
+mode and never broadens its source grant.
 
 The active Context is the display reference and `--to` names the compared
 Context. Both sources have equal authority. `REFERENCE` controls layout and
@@ -207,9 +252,67 @@ Comparison artifacts copy source text and derived explanations. Deleting
 either bound source therefore removes both ordered orientations involving
 that Context. Compare never opens query-only sources.
 
-## Compact report and exact ledger
+## Interactive workbench, compact snapshot, and exact ledger
 
-The default non-interactive snapshot is ordered by decision relevance:
+In a TTY, a newly completed or reopened analysis enters one read-only
+workbench. The upper Viewer receives roughly seventy percent of the available
+content height and initially preserves the complete compact report. The lower
+item navigator is deliberately short: it contains individually selectable
+report sections, individual Potential Conflict items, one explicit Relation
+Ledger boundary, and every relation in that exact saved ledger as compact
+single-line rows. Relation count therefore increases scroll depth without
+taking the report's reading area away.
+
+The Viewer is focused initially. `Tab` or `Shift-Tab` switches focus between
+the upper Viewer and lower item navigator. `Up`/`Down` scroll the Viewer when
+it is focused by jumping to the previous or next semantic section heading, and
+move the selected item when the navigator is focused. The Viewer retains the
+complete report and moves a hidden cursor anchor between semantic headings.
+While the next heading remains inside the visible viewport, only the blue
+focus line moves. Prompt-toolkit scrolls the Viewer by the minimum required
+amount only after that anchor crosses the upper or lower boundary. Upward
+navigation follows the same boundary behavior instead of forcing every focused
+heading to the first line;
+`PageUp`/`PageDown` scroll the Viewer by a larger step from either pane.
+The panes are titled `VIEWER` and `ITEMS`. Both use the same focused-frame
+border and label styling as Ground, so the active pane remains visually
+explicit in addition to the footer's textual `FOCUS` indicator. Within the
+Viewer, the current logical section heading is separately rendered as
+`── HEADING ──` in the focus color. This second boundary identifies the exact
+semantic section independently of pane focus and leaves a stable target for a
+later interactive Potential Conflicts action.
+Selecting a lower item replaces the Viewer content with that item's report or
+source-linked detail, while returning to the first `REPORT` item restores the
+whole report. `Left`/`Right` select an exact source frame when one is available,
+and `Enter` expands the selected section, conflict, or relation. The renderer
+escapes each untrusted line separately so trusted report layout newlines remain
+real terminal newlines rather than visible `\\n` text. Cursor, scroll, source,
+focus, and expansion state remain process-local and are never written into the
+analysis artifact.
+
+`B` is the explicit detail-back action: it selects the first `REPORT` item,
+collapses any source detail, and resets Viewer scroll. `Escape` performs the
+same back action while a detail item is selected, but closes Compare when the
+complete report is already selected. `Q` always closes Compare. Keeping Back
+and Close distinct prevents a person from losing the workbench merely while
+trying to leave one deeply inspected relation.
+
+`R` leaves the workbench and runs Rationale for the selected exact source
+Memory. It never invents a rationale for an aggregate report or relation: an
+issue first resolves to its linked relation, and the source selection supplies
+the exact Context name and Memory UID. The normal Rationale grant boundary
+still applies, so granted READ material exposes current readable-subtree
+inference but not authority Trace or checkpoint history.
+
+`L` leaves the workbench and prints the complete static ledger. `M` leaves and
+prints the exact two-source `mem meld ... --to RESULT_CONTEXT` route without
+creating the target. `Q` closes with no semantic or durable change. These
+actions deliberately exit rather than returning to a hidden cursor so their
+terminal output remains visible; bare `mem compare` is the stable resume
+route.
+
+Non-TTY execution and explicit `--snapshot` use the compact report ordered by
+decision relevance:
 
 ```text
 METRICS
@@ -218,7 +321,7 @@ WHAT BOTH CONTAIN
 WHAT DIFFERS
 ONLY IN REFERENCE
 ONLY IN COMPARED
-GROUNDING CANDIDATES
+POTENTIAL CONFLICTS
 ```
 
 Memory, relation, relation-kind, and grounding-candidate counts appear directly
@@ -234,11 +337,14 @@ omitted from this compact body, as is a zero-count grounding section. The top
 metadata remains the explicit proof that these categories were evaluated and
 found empty rather than skipped.
 
-When non-empty, `GROUNDING CANDIDATES` remains a complete final list because
+When non-empty, `POTENTIAL CONFLICTS` remains a complete final list because
 those are the places where human intervention can change later
-reconciliation. Each candidate includes the kind and summary of every linked
-relation, so a hidden ledger row never leaves an unexplained `R7`-style
-reference. After the last non-empty semantic section, one plain footer sentence
+reconciliation. Each conflict is one compact paragraph: title, source Context
+names, relation summary, consequence, and the effect of each available option.
+Provider priority labels, `RELATED · R…`, `WHY`, `ASK`, and indented option rows
+are deliberately omitted from the report; stable relation numbers remain in
+the exhaustive Ledger, where they are meaningful audit locators. After the
+last non-empty semantic section, one plain footer sentence
 states that the relation ledger is saved and ends with `Inspect it with:`.
 The next line contains the complete shell-quoted command for the provider-free
 `--ledger` view. Omitting another label keeps this small navigation hint
@@ -255,8 +361,8 @@ header; Compare has no stateless `--from` operand.
 
 `--ledger` renders every validated relation, its exact source snapshots, and
 its explanation without another provider call. The exhaustive ledger remains
-part of the durable analysis and is therefore available for audit and a future
-arrow/Enter relation browser; it is merely not the default reading burden.
+part of the durable analysis and is therefore available for audit and the TTY
+relation browser; it is merely not the default snapshot reading burden.
 This differs from Atomize, where unchanged atomic Memories can be omitted from
 the issue list.
 
@@ -265,9 +371,8 @@ injective single-line escape boundary. Embedded newlines, tabs, bidi controls,
 or other terminal controls therefore cannot impersonate trusted section
 headings.
 
-Both views remain intentionally static. They establish semantic quality,
-durable resume, report hierarchy, and relation coverage before view-state
-persistence or a TUI is added.
+The workbench is only a presentation layer over the immutable analysis. It
+adds no chat state, provider state, target, or mutation authority.
 
 ## Task 2 smoke-test observation
 
@@ -295,13 +400,16 @@ overview, list, arrow navigation, exact-source detail, explanation, stable
 resume, and a separate application boundary. Compare can reuse that grammar
 and the neutral terminal primitives, but not Atomize's semantic session.
 
-The primary Compare list unit must be a **relation**, not an Atomize issue or
-a Meld target proposal. A future Compare TUI may use:
+The primary deep-inspection unit remains a **relation**, not an Atomize issue
+or a Meld target proposal. Report-section and Potential Conflict rows are
+navigation projections whose linked relations remain authoritative. The
+implemented workbench uses:
 
 ```text
-overview
-→ relation list and category filters
-→ arrow/Enter detail
+complete compact report
+→ individually selectable report sections and Potential Conflicts
+→ Relation Ledger boundary and relation list
+→ arrow/Enter source-linked detail
 → exact source Memories, classification, and reason
 → return to the same saved position
 ```
@@ -320,11 +428,12 @@ operation-specific identities, evidence, persistence, and mutation semantics.
 
 ## Current limitations and next connection
 
-- Compare accepts two normal direct-Memory Contexts only. References, embedded
-  Contexts, and query-only sources are rejected rather than silently omitted.
-- There is no interactive relation picker, category filter, JSON output,
-  history browser, or analysis diff yet. `--ledger` is a complete static
-  detail view, not a persisted interactive cursor.
+- Compare accepts readable ordinary or granted Context subtrees and flattens
+  their Memory paths into immutable frames. Query-only sources remain
+  concealed, and live Memory references are rejected rather than copied.
+- The interactive workbench has no category filter, JSON output, history
+  browser, analysis diff, or persisted cursor. `--ledger` remains the complete
+  static audit view.
 - Automatic fresh analysis after a source change is intentional for Compare;
   it differs from an in-progress Atomize review, whose reviewed proposal fails
   stale rather than silently changing.

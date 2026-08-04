@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 import shlex
+import sys
 from typing import Annotated, Optional
 
 import typer
@@ -45,7 +46,10 @@ from memcommit.commands.compare_sessions import (
     load_saved_comparison,
     revalidate_saved_comparison,
 )
+from memcommit.commands.compare_workbench import run_compare_workbench
+from memcommit.commands.rationale import render_rationale
 from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.understanding_render import understanding_lines
 from memcommit.query_provider import (
     CodexChatGPTProvider,
     QueryProviderError,
@@ -53,7 +57,14 @@ from memcommit.query_provider import (
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.profile_config import ProfileConfigError
+from memcommit.provenance import ProvenanceError
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
+from memcommit.rationale import RationaleError, build_rationale
+from memcommit.rationale_scope import (
+    load_rationale_scope,
+    rationale_trace,
+    resolve_rationale_target,
+)
 from memcommit.store import MemoryStore
 
 
@@ -166,7 +177,7 @@ def _header_lines(
             f"MEMORIES {len(reference.memories)} + "
             f"{len(compared.memories)} · "
             f"RELATIONS {len(analysis.relations)} · "
-            f"GROUNDING {len(analysis.issues)}"
+            f"POTENTIAL CONFLICTS {len(analysis.issues)}"
         ),
         (
             f"EQUIVALENT {counts['EQUIVALENT']} · "
@@ -179,43 +190,48 @@ def _header_lines(
     ]
 
 
-def _grounding_candidate_lines(
+def _potential_conflict_lines(
     analysis: ComparisonAnalysis,
     numbered: dict[str, int],
 ) -> list[str]:
+    del numbered  # Stable relation numbers belong to the exhaustive ledger only.
     relation_by_uid = {relation.uid: relation for relation in analysis.relations}
+    frame_by_uid = {frame.uid: frame for frame in analysis.frames}
     lines = [
         "",
-        f"GROUNDING CANDIDATES · {len(analysis.issues)}",
+        f"POTENTIAL CONFLICTS · {len(analysis.issues)}",
     ]
     if not analysis.issues:
         lines.append("  (none)")
         return lines
 
     for index, issue in enumerate(analysis.issues, start=1):
-        lines.append(
-            (f"  {index}. [{issue.priority}] {display_escape_text(issue.title)}")
-        )
+        source_names: list[str] = []
+        relation_summaries: list[str] = []
         for relation_uid in issue.relation_uids:
             relation = relation_by_uid[relation_uid]
-            lines.append(
-                (
-                    f"     RELATED · R{numbered[relation_uid]} · "
-                    f"{relation.kind} · {_single_line(relation.summary)}"
-                )
-            )
+            relation_summaries.append(_single_line(relation.summary, limit=180))
+            for member in relation.members:
+                name = frame_by_uid[member.frame_uid].context_name
+                if name not in source_names:
+                    source_names.append(name)
+        options = "; ".join(
+            f"{display_escape_text(option.label)}: "
+            f"{display_escape_text(option.text).rstrip(' .;')}"
+            for option in issue.options
+        )
         lines.extend(
             [
-                (f"     WHY · {display_escape_text(issue.why_it_matters)}"),
-                f"     ASK · {display_escape_text(issue.question)}",
+                "",
+                (
+                    f"{index}. {display_escape_text(issue.title).rstrip(' .')}. "
+                    f"{' ↔ '.join(display_escape_text(name) for name in source_names)}: "
+                    f"{' '.join(relation_summaries)} "
+                    f"{display_escape_text(issue.why_it_matters)} "
+                    f"{options}."
+                ),
             ]
         )
-        for option_index, option in enumerate(issue.options, start=1):
-            lines.append(
-                f"     ↳ {option_index}. "
-                f"{display_escape_text(option.label)} · "
-                f"{display_escape_text(option.text)}"
-            )
     return lines
 
 
@@ -240,13 +256,8 @@ def render_comparison(
         durable=durable,
         retention=retention,
     )
-    lines.extend(
-        [
-            "",
-            "WHAT MEM UNDERSTOOD",
-            display_escape_text(analysis.overview),
-        ]
-    )
+    lines.append("")
+    lines.extend(understanding_lines(analysis.understanding))
 
     if not ledger:
         if analysis.reports is None:
@@ -297,7 +308,7 @@ def render_comparison(
                 ]
             )
         if analysis.issues:
-            lines.extend(_grounding_candidate_lines(analysis, numbered))
+            lines.extend(_potential_conflict_lines(analysis, numbered))
         ledger_command = display_escape_text(
             shlex.join(
                 [
@@ -398,7 +409,7 @@ def render_comparison(
                 )
             )
 
-    lines.extend(_grounding_candidate_lines(analysis, numbered))
+    lines.extend(_potential_conflict_lines(analysis, numbered))
     return "\n".join(lines)
 
 
@@ -417,11 +428,123 @@ def _resume_selected_comparison(
     store: MemoryStore,
     analysis_uid: str,
     ledger: bool,
+    snapshot: bool,
 ) -> None:
-    """Render one exact saved analysis without provider or refresh fallback."""
-    analysis = load_saved_comparison(analysis_uid)
+    """Open one exact saved analysis without provider or refresh fallback."""
+    analysis = load_saved_comparison(analysis_uid, store=store)
     revalidate_saved_comparison(store, analysis)
-    typer.echo(render_comparison(analysis, reused=True, ledger=ledger))
+    _present_comparison(
+        store=store,
+        analysis=analysis,
+        reused=True,
+        ledger=ledger,
+        snapshot=snapshot,
+    )
+
+
+def _render_meld_route(analysis: ComparisonAnalysis) -> None:
+    reference, compared = analysis.frames
+    typer.echo("Create a result Context and continue with Meld:")
+    typer.echo(
+        "  "
+        + display_escape_text(
+            shlex.join(
+                [
+                    "mem",
+                    "meld",
+                    reference.context_name,
+                    compared.context_name,
+                    "--to",
+                    "RESULT_CONTEXT",
+                ]
+            )
+        )
+    )
+
+
+def _render_selected_rationale(
+    *,
+    store: MemoryStore,
+    context_name: str,
+    memory_uid: str,
+) -> None:
+    """Explain one exact source selected from the immutable Compare ledger."""
+    scope = load_rationale_scope(
+        store,
+        context_name,
+        current_name=store.current_context_name(),
+    )
+    target = resolve_rationale_target(scope, memory_uid)
+    trace = rationale_trace(scope, target)
+    report = build_rationale(
+        scope.access.store,
+        target.owner,
+        trace,
+        connect_codex_chatgpt_provider,
+        cache_inference=not scope.granted,
+        inference_contexts=scope.contexts,
+        inference_scope_name=scope.root_name,
+        recorded_evidence_available=not scope.granted,
+    )
+    render_rationale(report)
+
+
+def _present_comparison(
+    *,
+    store: MemoryStore,
+    analysis: ComparisonAnalysis,
+    reused: bool,
+    ledger: bool,
+    snapshot: bool,
+    durable: bool = True,
+    retention: AnalysisRetention | None = None,
+) -> None:
+    """Use the TTY workbench by default and preserve stable snapshot output."""
+    if ledger or snapshot or not (sys.stdin.isatty() and sys.stdout.isatty()):
+        typer.echo(
+            render_comparison(
+                analysis,
+                reused=reused,
+                ledger=ledger,
+                durable=durable,
+                retention=retention,
+            )
+        )
+        return
+
+    receipt = run_compare_workbench(
+        analysis,
+        report_text=render_comparison(
+            analysis,
+            reused=reused,
+            durable=durable,
+            retention=retention,
+        ),
+    )
+    if receipt.action == "ledger":
+        typer.echo(
+            render_comparison(
+                analysis,
+                reused=True,
+                ledger=True,
+                durable=durable,
+                retention=retention,
+            )
+        )
+    elif receipt.action == "meld":
+        _render_meld_route(analysis)
+    elif receipt.action == "rationale":
+        if receipt.context_name is None or receipt.memory_uid is None:
+            raise CompareCommandError(
+                "Compare workbench returned an incomplete Rationale selection."
+            )
+        _render_selected_rationale(
+            store=store,
+            context_name=receipt.context_name,
+            memory_uid=receipt.memory_uid,
+        )
+    else:
+        typer.echo("Compare view closed.")
 
 
 def _recursive_compare_projection(root: Context) -> Context:
@@ -493,6 +616,13 @@ def cmd(
             help="Show every exact source-linked relation and explanation",
         ),
     ] = False,
+    snapshot: Annotated[
+        bool,
+        typer.Option(
+            "--snapshot",
+            help="Print the compact report instead of opening the TTY workbench",
+        ),
+    ] = False,
     sessions: Annotated[
         bool,
         typer.Option(
@@ -527,6 +657,7 @@ def cmd(
                 store=store,
                 analysis_uid=receipt.key,
                 ledger=ledger,
+                snapshot=snapshot,
             )
             return
         reference_name = store.current_context_name()
@@ -596,17 +727,17 @@ def cmd(
             and existing.ruleset_version == COMPARISON_RULESET_VERSION
             and not refresh
         ):
-            typer.echo(
-                render_comparison(
-                    existing,
-                    reused=True,
-                    ledger=ledger,
-                    retention=(
-                        granted_artifact.retention
-                        if granted_artifact is not None
-                        else None
-                    ),
-                )
+            _present_comparison(
+                store=store,
+                analysis=existing,
+                reused=True,
+                ledger=ledger,
+                snapshot=snapshot,
+                retention=(
+                    granted_artifact.retention
+                    if granted_artifact is not None
+                    else None
+                ),
             )
             return
 
@@ -668,14 +799,14 @@ def cmd(
                             existing.uid if existing is not None else None
                         ),
                     )
-            typer.echo(
-                render_comparison(
-                    analysis,
-                    reused=False,
-                    ledger=ledger,
-                    durable=retention is not None,
-                    retention=retention,
-                )
+            _present_comparison(
+                store=store,
+                analysis=analysis,
+                reused=False,
+                ledger=ledger,
+                snapshot=snapshot,
+                durable=retention is not None,
+                retention=retention,
             )
             return
         save_comparison_analysis(
@@ -683,12 +814,12 @@ def cmd(
             analysis,
             expected_analysis_uid=(existing.uid if existing is not None else None),
         )
-        typer.echo(
-            render_comparison(
-                analysis,
-                reused=False,
-                ledger=ledger,
-            )
+        _present_comparison(
+            store=store,
+            analysis=analysis,
+            reused=False,
+            ledger=ledger,
+            snapshot=snapshot,
         )
     except (
         CompareCommandError,
@@ -697,9 +828,11 @@ def cmd(
         ConcurrentComparisonUpdateError,
         FileNotFoundError,
         OSError,
+        ProvenanceError,
         ProfileConfigError,
         ProfileError,
         QueryProviderError,
+        RationaleError,
         ValueError,
     ) as error:
         typer.secho(

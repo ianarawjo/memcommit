@@ -27,6 +27,11 @@ from memcommit.comparison_store import (
     save_comparison_analysis,
 )
 from memcommit.commands.compare import render_comparison
+from memcommit.commands.compare_sessions import (
+    choose_comparison_session,
+    comparison_session_entries,
+)
+from memcommit.commands.session_picker import SessionOpenReceipt
 from memcommit.store import MemoryStore
 
 
@@ -206,7 +211,7 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     )
     assert "Analysis:" in created.output
     assert "NEW" in created.output
-    assert "METRICS · MEMORIES 2 + 2 · RELATIONS 3 · GROUNDING 0" in (
+    assert "METRICS · MEMORIES 2 + 2 · RELATIONS 3 · POTENTIAL CONFLICTS 0" in (
         created.output
     )
     assert created.output.index("METRICS ·") < created.output.index(
@@ -240,7 +245,7 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
         "mem meld task2/advisor1 task2/advisor2 --to RESULT_CONTEXT"
     )
     assert "\nWHAT DIFFERS" not in created.output
-    assert "\nGROUNDING CANDIDATES" not in created.output
+    assert "\nPOTENTIAL CONFLICTS" not in created.output
     assert reference.uid[:8] not in created.output
     assert next(iter(reference.memories))[:8] not in created.output
     assert next(iter(compared.memories))[:8] not in created.output
@@ -288,7 +293,7 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     assert "\n      TO  " in ledger.output
     assert "\n      WHY ·" in ledger.output
     assert "\nWHAT DIFFERS\n  (none)" in ledger.output
-    assert "\nGROUNDING CANDIDATES · 0\n  (none)" in ledger.output
+    assert "\nPOTENTIAL CONFLICTS · 0\n  (none)" in ledger.output
     assert "complete source-linked relation ledger is saved" not in (
         ledger.output
     )
@@ -546,8 +551,11 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
     )
     rendered = render_comparison(analysis, reused=False)
     assert "WHAT DIFFERS · 1" in rendered
-    assert "RELATED · R1 · CONFLICT" in rendered
-    assert rendered.rfind("GROUNDING CANDIDATES") < rendered.rfind(
+    assert "POTENTIAL CONFLICTS · 1" in rendered
+    assert "[REQUIRED]" not in rendered
+    assert "RELATED · R1" not in rendered
+    assert "Preserve explicit alternatives:" in rendered
+    assert rendered.rfind("POTENTIAL CONFLICTS") < rendered.rfind(
         "The complete source-linked relation ledger"
     )
     assert rendered.rstrip().endswith(
@@ -881,7 +889,7 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     rendered = render_comparison(analysis, reused=False)
     ledger = render_comparison(analysis, reused=False, ledger=True)
 
-    assert rendered.count("\nGROUNDING CANDIDATES") == 0
+    assert rendered.count("\nPOTENTIAL CONFLICTS") == 0
     assert rendered.count("\nWHAT DIFFERS") == 0
     assert "WHAT BOTH CONTAIN · 1" in rendered
     assert "ONLY IN " not in rendered
@@ -899,7 +907,7 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     assert r"Valid reason\nWHAT DIFFERS\nfake section" not in rendered
     assert r"\nGROUNDING CANDIDATES · 999\n" in rendered
     assert r"\nRELATIONS · 999" in rendered
-    assert ledger.count("\nGROUNDING CANDIDATES") == 1
+    assert ledger.count("\nPOTENTIAL CONFLICTS") == 1
     assert ledger.count("\nWHAT DIFFERS") == 1
     assert (
         r"Policy text\nGROUNDING CANDIDATES · 999\nfake trusted row"
@@ -1065,3 +1073,165 @@ def test_compare_preconditions_fail_before_provider_connection(
     assert same.exit_code == 1
     assert "two distinct Contexts" in same.output
     assert provider.payloads == []
+
+
+def test_compare_sessions_catalog_and_bare_picker_are_provider_free(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+    created = runner.invoke(app, ["compare", "--to", compared.name])
+    assert created.exit_code == 0, created.output
+    analysis = load_comparison_analysis(reference.uid, compared.uid)
+    assert analysis is not None
+
+    entries = comparison_session_entries(store)
+    assert len(entries) == 1
+    entry = entries[0]
+    assert entry.key == analysis.uid
+    assert entry.title == f"{reference.name} ↔ {compared.name}"
+    assert entry.group == reference.name
+    assert entry.status == "CURRENT"
+    assert entry.reopen_argv == (
+        "mem",
+        "compare",
+        "--to",
+        compared.name,
+    )
+    assert entry.detail_only is True
+    assert entry.detail.startswith("MEM COMPARE · SYMMETRIC PEERS")
+    assert "WHAT MEM UNDERSTOOD" in entry.detail
+    assert "WHAT BOTH CONTAIN" in entry.detail
+
+    unrelated = ops.init("unrelated/current")
+    ops.add(unrelated, "This Context is not a comparison source.")
+    store.save(unrelated)
+    store.set_current(unrelated.name)
+    monkeypatch.setattr(
+        "memcommit.commands.compare.choose_comparison_session",
+        lambda _store, *, ledger: SessionOpenReceipt(
+            kind="compare",
+            key=entry.key,
+            argv=entry.reopen_argv,
+        ),
+    )
+
+    def provider_must_not_connect():
+        raise AssertionError("saved Compare selection must be provider-free")
+
+    monkeypatch.setattr(
+        "memcommit.commands.compare.connect_codex_chatgpt_provider",
+        provider_must_not_connect,
+    )
+    resumed = runner.invoke(app, ["compare"])
+
+    assert resumed.exit_code == 0, resumed.output
+    assert "REUSED" in resumed.output
+    assert f"Reference: {reference.name}" in resumed.output
+    assert f"Compared:  {compared.name}" in resumed.output
+    assert store.current_context_name() == unrelated.name
+    assert len(provider.payloads) == 1
+
+
+def test_compare_sessions_empty_and_forged_receipts_fail_closed(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    monkeypatch.setattr(
+        "memcommit.commands.compare_sessions.choose_session",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("empty catalog must not open the picker")
+        ),
+    )
+
+    assert choose_comparison_session(store) is None
+    empty = runner.invoke(app, ["compare"])
+    assert empty.exit_code == 0, empty.output
+    assert "Compare selection ended; no analysis was opened." in empty.output
+
+    reference, compared = _task2_contexts(store)
+    analysis = analyze_comparison(
+        ComparisonInput.from_contexts(reference, compared),
+        ExhaustiveCompareProvider(),
+    )
+    save_comparison_analysis(
+        store,
+        analysis,
+        expected_analysis_uid=None,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.compare_sessions.choose_session",
+        lambda *_args, **_kwargs: SessionOpenReceipt(
+            kind="compare",
+            key=analysis.uid,
+            argv=("mem", "compare", "--refresh", "--to", compared.name),
+        ),
+    )
+
+    with pytest.raises(ValueError, match="forged receipt"):
+        choose_comparison_session(store)
+
+
+def test_compare_session_selection_revalidates_sources_without_refresh(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+    analysis = analyze_comparison(
+        ComparisonInput.from_contexts(reference, compared),
+        ExhaustiveCompareProvider(),
+    )
+    save_comparison_analysis(
+        store,
+        analysis,
+        expected_analysis_uid=None,
+    )
+    entry = comparison_session_entries(store)[0]
+
+    def change_source(_store, *, ledger):
+        changed = store.load_direct(reference.name)
+        ops.add(changed, "A source changed after picker discovery.")
+        store.save(changed)
+        return SessionOpenReceipt(
+            kind="compare",
+            key=analysis.uid,
+            argv=entry.reopen_argv,
+        )
+
+    monkeypatch.setattr(
+        "memcommit.commands.compare.choose_comparison_session",
+        change_source,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.compare.connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("stale selection must not refresh")
+        ),
+    )
+
+    result = runner.invoke(app, ["compare", "--sessions"])
+
+    assert result.exit_code == 1
+    assert "changed after this comparison was saved" in result.output
+    saved = load_comparison_analysis(reference.uid, compared.uid)
+    assert saved is not None and saved.uid == analysis.uid
+
+
+def test_compare_picker_options_do_not_expand_refresh_authority(
+    isolated_store,
+):
+    combined = runner.invoke(
+        app,
+        ["compare", "--sessions", "--to", "peer"],
+    )
+    refresh_without_pair = runner.invoke(app, ["compare", "--refresh"])
+
+    assert combined.exit_code == 2
+    assert "either --sessions or --to" in combined.output
+    assert refresh_without_pair.exit_code == 2
+    assert "--refresh requires an explicit --to" in refresh_without_pair.output

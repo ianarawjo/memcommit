@@ -16,6 +16,9 @@ from typing import Iterable, Literal
 
 from memcommit.context import Context, Memory
 from memcommit.store import context_record_digest
+from memcommit.understanding import (
+    UnderstandingSummary,
+)
 
 
 COMPARISON_SCHEMA_VERSION = 2
@@ -676,7 +679,7 @@ class ComparisonAnalysis:
     created_at: str
     ruleset_version: str
     frames: tuple[ComparisonFrame, ComparisonFrame]
-    overview: str
+    understanding: UnderstandingSummary
     reports: ComparisonReports | None
     relations: tuple[ComparisonRelation, ...]
     issues: tuple[ComparisonIssue, ...]
@@ -696,7 +699,20 @@ class ComparisonAnalysis:
             created_at=comparison_input.created_at,
             ruleset_version=comparison_input.ruleset_version,
             frames=comparison_input.frames,
-            overview=overview,
+            understanding=UnderstandingSummary(
+                text=overview,
+                # Recursive parent/child comparisons may expose the same
+                # Memory on both sides. Understanding provenance names the
+                # evidence once even though the relation ledger preserves
+                # both frame memberships.
+                source_uids=tuple(
+                    dict.fromkeys(
+                        memory.uid
+                        for frame in comparison_input.frames
+                        for memory in frame.memories
+                    )
+                ),
+            ),
             reports=reports,
             relations=tuple(relations),
             issues=tuple(issues),
@@ -716,7 +732,7 @@ class ComparisonAnalysis:
             "created_at": self.created_at,
             "ruleset_version": self.ruleset_version,
             "frames": [frame.to_dict() for frame in self.frames],
-            "overview": self.overview,
+            "overview": self.understanding.text,
             "relations": [
                 relation.to_dict() for relation in self.relations
             ],
@@ -789,9 +805,15 @@ class ComparisonAnalysis:
                 "comparison ruleset version",
             ),
             frames=(frames[0], frames[1]),
-            overview=_string(
-                data["overview"],
-                "comparison overview",
+            understanding=UnderstandingSummary(
+                text=_string(data["overview"], "comparison overview"),
+                source_uids=tuple(
+                    dict.fromkeys(
+                        memory.uid
+                        for frame in frames
+                        for memory in frame.memories
+                    )
+                ),
             ),
             reports=(
                 ComparisonReports.from_dict(data["reports"])
@@ -803,6 +825,11 @@ class ComparisonAnalysis:
         )
         result._validate()
         return result
+
+    @property
+    def overview(self) -> str:
+        """Compatibility text view for older renderers and stored artifacts."""
+        return self.understanding.text
 
     def matches(
         self,
@@ -838,6 +865,15 @@ class ComparisonAnalysis:
             raise ComparisonError(
                 "Invalid comparison relation or issue collection."
             )
+        expected_source_uids = {
+            memory.uid for frame in self.frames for memory in frame.memories
+        }
+        if (
+            not isinstance(self.understanding, UnderstandingSummary)
+            or not self.understanding.text.strip()
+            or set(self.understanding.source_uids) != expected_source_uids
+        ):
+            raise ComparisonError("Invalid comparison understanding summary.")
         if (
             self.ruleset_version == COMPARISON_RULESET_VERSION
             and self.reports is None

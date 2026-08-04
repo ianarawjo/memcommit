@@ -68,6 +68,9 @@ class SessionPickerEntry:
     # expose a public command that identifies one immutable saved artifact.
     # Adapters must reopen by ``key`` and revalidate persisted identity instead.
     reopen_argv: tuple[str, ...]
+    # Compare uses the detail pane as the report itself. Other adapters retain
+    # the shared metadata envelope and public route hint.
+    detail_only: bool = False
 
     def __post_init__(self) -> None:
         for label, value in (
@@ -85,6 +88,8 @@ class SessionPickerEntry:
         ):
             if not isinstance(value, str):
                 raise ValueError(f"{label} must be text.")
+        if not isinstance(self.detail_only, bool):
+            raise ValueError("session detail-only mode must be boolean.")
         if (
             isinstance(self.sort_timestamp, bool)
             or not isinstance(self.sort_timestamp, (int, float))
@@ -307,6 +312,10 @@ def _detail_lines(value: str) -> tuple[str, ...]:
 
 def _render_detail(entry: SessionPickerEntry) -> str:
     """Render untrusted metadata and each route-hint element visibly escaped."""
+    if entry.detail_only:
+        return "\n".join(
+            display_escape_text(line) for line in entry.detail.split("\n")
+        )
     argv_lines = tuple(
         f"   [{index}] {display_escape_text(argument)}"
         for index, argument in enumerate(entry.reopen_argv)
@@ -320,7 +329,7 @@ def _render_detail(entry: SessionPickerEntry) -> str:
             f" Status       {display_escape_text(entry.status)}",
             f" Context      {display_escape_text(entry.group)}",
             f" Modified     {_format_timestamp(entry.sort_timestamp)}",
-            f" Subtitle     {display_escape_text(subtitle)}",
+            f" Summary      {display_escape_text(subtitle)}",
             *_detail_lines(entry.detail),
             " Public route hint · NOT EXECUTED",
             *argv_lines,
@@ -388,6 +397,7 @@ def choose_session(
         sort_mode=initial_sort_mode,
         group_mode=initial_group_mode,
     )
+    windows: dict[str, Window] = {}
     bindings = KeyBindings()
     search_area = TextArea(
         height=1,
@@ -434,6 +444,8 @@ def choose_session(
             0,
             min(state.selected_index + delta, len(projected) - 1),
         )
+        if "detail" in windows:
+            windows["detail"].vertical_scroll = 0
 
     def render_entries() -> list[tuple[str, str]]:
         projected = current_options()
@@ -509,7 +521,7 @@ def choose_session(
             else ""
         )
         return (
-            " ↑/↓ move  Enter reopen  S sort  G group  / filter"
+            " ↑/↓ move  PgUp/PgDn detail  Enter reopen  S sort  G group  / filter"
             f"{new_hint}  Esc/q cancel  ·  {position}{query_hint}"
         )
 
@@ -534,6 +546,19 @@ def choose_session(
     @bindings.add("up", filter=list_focused)
     def _previous_session(event) -> None:
         move(-1)
+        event.app.invalidate()
+
+    @bindings.add("pagedown", filter=list_focused)
+    def _scroll_detail_down(event) -> None:
+        windows["detail"].vertical_scroll += 8
+        event.app.invalidate()
+
+    @bindings.add("pageup", filter=list_focused)
+    def _scroll_detail_up(event) -> None:
+        windows["detail"].vertical_scroll = max(
+            0,
+            windows["detail"].vertical_scroll - 8,
+        )
         event.app.invalidate()
 
     @bindings.add("enter", filter=list_focused)
@@ -647,6 +672,7 @@ def choose_session(
         wrap_lines=True,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
+    windows["detail"] = detail_window
     footer = Window(
         FormattedTextControl(render_footer),
         height=Dimension.exact(1),

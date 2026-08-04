@@ -22,6 +22,7 @@ from memcommit.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
+from memcommit.understanding import understanding_text_schema
 
 
 COMPARISON_PAYLOAD_MARKER = "COMPARISON PAYLOAD:\n"
@@ -206,16 +207,14 @@ def _provider_view(
 
 def comparison_output_schema(source_count: int) -> dict[str, object]:
     text = {"type": "string", "minLength": 1, "maxLength": COMPARISON_TEXT_LIMIT}
-    overview_text = {
-        **text,
-        "description": (
-            "One short English natural-language report paragraph using "
-            "complete sentences, normally no more than roughly "
-            f"{RESULT_REPORT_SECTION_TARGET_MIN_WORDS}-"
-            f"{RESULT_REPORT_SECTION_SOFT_MAX_WORDS} words. Do not use "
-            "bullets, headings, key-value records, opaque IDs, or counts."
-        ),
-    }
+    overview_text = understanding_text_schema(limit=COMPARISON_TEXT_LIMIT)
+    overview_text["description"] = (
+        "One short English natural-language report paragraph using complete "
+        "sentences, normally no more than roughly "
+        f"{RESULT_REPORT_SECTION_TARGET_MIN_WORDS}-"
+        f"{RESULT_REPORT_SECTION_SOFT_MAX_WORDS} words. Do not use bullets, "
+        "numbered lists, headings, key-value records, opaque IDs, or counts."
+    )
     # Empty is meaningful only for an absent ledger group; the model cannot
     # know that through JSON Schema, so the analysis validator proves it.
     optional_text = {
