@@ -8,6 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
+import memcommit.ops as ops
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
@@ -70,19 +71,24 @@ def _comparison_prerequisite_error(
     target: Context,
     refresh: bool,
     reason: str,
+    create_target: bool = False,
 ) -> MeldCommandError:
     compare_argv = ["mem", "compare", "--to", right.name]
     if refresh:
         compare_argv.append("--refresh")
-    return MeldCommandError(
-        f"{reason}\n"
-        "Create the exact ordered Compare basis first:\n"
-        f"  {shlex.join(['mem', 'switch', left.name])}\n"
-        f"  {shlex.join(compare_argv)}\n"
-        f"  {shlex.join(['mem', 'switch', target.name])}\n"
-        "Then rerun:\n"
-        f"  {shlex.join(['mem', 'meld', left.name, right.name])}"
-    )
+    rerun_argv = ["mem", "meld", left.name, right.name]
+    if create_target:
+        rerun_argv.extend(("--to", target.name))
+    lines = [
+        reason,
+        "Create the exact ordered Compare basis first:",
+        f"  {shlex.join(['mem', 'switch', left.name])}",
+        f"  {shlex.join(compare_argv)}",
+    ]
+    if not create_target:
+        lines.append(f"  {shlex.join(['mem', 'switch', target.name])}")
+    lines.extend(("Then rerun:", f"  {shlex.join(rerun_argv)}"))
+    return MeldCommandError("\n".join(lines))
 
 
 def _load_symmetric_comparison(
@@ -90,6 +96,7 @@ def _load_symmetric_comparison(
     left: Context,
     right: Context,
     target: Context,
+    create_target: bool = False,
 ) -> ComparisonAnalysis:
     """Load the exact reviewed LEFT→RIGHT basis; never use a reverse slot."""
     try:
@@ -108,6 +115,7 @@ def _load_symmetric_comparison(
             target=target,
             refresh=True,
             reason="The saved ordered Compare analysis is invalid.",
+            create_target=create_target,
         ) from error
     if analysis is None:
         raise _comparison_prerequisite_error(
@@ -119,6 +127,7 @@ def _load_symmetric_comparison(
                 f"Meld requires a saved Compare analysis for "
                 f"'{left.name}' → '{right.name}'."
             ),
+            create_target=create_target,
         )
     if (
         not analysis.matches(left, right)
@@ -133,6 +142,7 @@ def _load_symmetric_comparison(
                 f"The saved Compare analysis for '{left.name}' → "
                 f"'{right.name}' is stale."
             ),
+            create_target=create_target,
         )
     return analysis
 
@@ -900,6 +910,16 @@ def cmd(
             ),
         ),
     ] = None,
+    to: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            help=(
+                "Create a new empty RESULT Context for a symmetric "
+                "LEFT RIGHT meld without switching Contexts"
+            ),
+        ),
+    ] = None,
     from_: Annotated[
         Optional[str],
         typer.Option(
@@ -1046,6 +1066,14 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if to is not None and (into is not None or from_ is not None):
+        typer.secho(
+            "Meld error: --to creates a symmetric result and cannot be "
+            "combined with directional --into or --from.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if from_ is not None and (left is not None or right is not None):
         typer.secho(
             "Meld error: --from supplies INCOMING and cannot be combined "
@@ -1058,6 +1086,7 @@ def cmd(
     store = MemoryStore(create=False)
     try:
         current_name = store.current_context_name()
+        create_target = False
         if from_ is not None:
             if not current_name:
                 raise MeldCommandError(
@@ -1085,15 +1114,25 @@ def cmd(
                     "'mem meld INCOMING --into BASELINE'; when the current "
                     "Context is BASELINE, use 'mem meld --from INCOMING'."
                 )
-            if not current_name:
+            if to is None and not current_name:
                 raise MeldCommandError(
                     "No current target Context. Run 'mem init TARGET' first."
                 )
             requested_mode = "SYMMETRIC"
             left_name = resolve_context_locator(left, current=current_name)
             right_name = resolve_context_locator(right, current=current_name)
-            target_name = current_name
-            start_command = "mem meld LEFT RIGHT"
+            if to is None:
+                assert current_name is not None
+                target_name = current_name
+                start_command = "mem meld LEFT RIGHT"
+            else:
+                # A result name creates a new identity, so it deliberately does
+                # not pass through the existing-Context locator resolver.
+                target_name = to
+                create_target = True
+                start_command = shlex.join(
+                    ["mem", "meld", left_name, right_name, "--to", target_name]
+                )
         else:
             if right is not None:
                 raise MeldCommandError(
@@ -1139,8 +1178,18 @@ def cmd(
                 "The two PEER sources and active target must be distinct "
                 "Contexts."
             )
-        target = store.load_direct(target_name)
-        session = store.load_meld_session(target.uid)
+        if create_target:
+            if store.context_exists(target_name):
+                raise MeldCommandError(
+                    f"RESULT Context '{target_name}' already exists. Choose "
+                    "a new name; --to never adopts or overwrites an existing "
+                    "Context."
+                )
+            target = ops.init(target_name)
+            session = None
+        else:
+            target = store.load_direct(target_name)
+            session = store.load_meld_session(target.uid)
         left_access: ContextAccess | None = None
         right_access: ContextAccess | None = None
         if requested_mode == "SYMMETRIC" and session is None:
@@ -1154,11 +1203,21 @@ def cmd(
                 right_name,
                 current_name=current_name,
             )
-            target_access = resolve_context_access(
-                store,
-                target_name,
-                current_name=current_name,
-                required_permission="READ",
+            target_access = (
+                ContextAccess(
+                    store=store,
+                    context_name=target_name,
+                    display_name=target_name,
+                    attachment_name=None,
+                    permission="READ",
+                )
+                if create_target
+                else resolve_context_access(
+                    store,
+                    target_name,
+                    current_name=current_name,
+                    required_permission="READ",
+                )
             )
             if target_access.is_granted:
                 raise MeldCommandError(
@@ -1218,6 +1277,7 @@ def cmd(
                     left=left_ctx,
                     right=right_ctx,
                     target=target,
+                    create_target=create_target,
                 )
                 session = MeldSession.create_symmetric_from_comparison(
                     comparison,
@@ -1228,10 +1288,29 @@ def cmd(
                 # before the target-scoped session is made durable.
                 _assert_source_bindings(session, left_ctx, right_ctx)
                 _assert_unapplied_target(session, target)
-                store.save_meld_session(
-                    session,
-                    expected_session_digest=None,
-                )
+                if create_target:
+                    store.create_meld_target_with_session(
+                        target,
+                        session,
+                        AutoCheckpoint(
+                            command="meld",
+                            args={
+                                "left": left_name,
+                                "right": right_name,
+                                "to": target_name,
+                            },
+                            description=(
+                                f"Initialized symmetric Meld result "
+                                f"'{target_name}' from '{left_name}' and "
+                                f"'{right_name}'"
+                            ),
+                        ),
+                    )
+                else:
+                    store.save_meld_session(
+                        session,
+                        expected_session_digest=None,
+                    )
             if sys.stdin.isatty() and sys.stdout.isatty():
                 session = _run_interactive(
                     store=store,

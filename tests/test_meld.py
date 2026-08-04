@@ -1084,17 +1084,16 @@ def test_directional_meld_grammar_help_and_to_boundary(
     assert help_result.exit_code == 0, help_result.output
     assert "--into" in help_result.output
     assert "--from" in help_result.output
+    assert "--to" in help_result.output
     assert "authoritative BASELINE" in help_result.output
     assert "normalized to INCOMING" in help_result.output
-    assert "--to" not in help_result.output
 
-    unsupported_to = runner.invoke(
+    missing_peers = runner.invoke(
         app,
         ["meld", "--to", baseline.name],
     )
-    assert unsupported_to.exit_code == 2
-    assert "No such option" in unsupported_to.output
-    assert "--to" in unsupported_to.output
+    assert missing_peers.exit_code == 1
+    assert "requires LEFT and RIGHT Contexts" in missing_peers.output
 
     too_many = runner.invoke(
         app,
@@ -1115,6 +1114,62 @@ def test_directional_meld_grammar_help_and_to_boundary(
     assert "distinct" in same_context.output
     assert "INCOMING" in same_context.output
     assert "BASELINE" in same_context.output
+
+
+def test_symmetric_meld_to_creates_empty_result_without_switching(
+    isolated_store,
+):
+    store = MemoryStore()
+    left, right, current = _task2_contexts(store)
+    result_name = "task-2/participant/proposal-workspace"
+
+    result = runner.invoke(
+        app,
+        ["meld", left.name, right.name, "--to", result_name],
+    )
+
+    assert result.exit_code == 0, result.output
+    created = store.load_direct(result_name)
+    assert tuple(created.iter_items()) == ()
+    assert store.current_context_name() == current.name
+    session = store.load_meld_session(created.uid)
+    assert session is not None
+    assert session.mode == "SYMMETRIC"
+    assert session.target.context_name == result_name
+    assert f"{left.name} + {right.name} → {result_name}" in result.output
+    checkpoints = store.list_checkpoints(result_name)
+    assert len(checkpoints) == 1
+    assert checkpoints[0]["command"] == "meld"
+    assert checkpoints[0]["args"] == {
+        "left": left.name,
+        "right": right.name,
+        "to": result_name,
+    }
+
+
+def test_symmetric_meld_to_never_adopts_existing_or_leaves_failed_target(
+    isolated_store,
+):
+    store = MemoryStore()
+    left, right, existing = _task2_contexts(store, with_comparison=False)
+
+    occupied = runner.invoke(
+        app,
+        ["meld", left.name, right.name, "--to", existing.name],
+    )
+    assert occupied.exit_code == 1
+    assert "already exists" in occupied.output
+    assert store.load_meld_session(existing.uid) is None
+
+    missing_name = "task-2/participant/missing-compare-result"
+    missing_compare = runner.invoke(
+        app,
+        ["meld", left.name, right.name, "--to", missing_name],
+    )
+    assert missing_compare.exit_code == 1
+    assert "requires a saved Compare analysis" in missing_compare.output
+    assert not store.context_exists(missing_name)
+    assert f"--to {missing_name}" in missing_compare.output
 
 
 def test_directional_meld_from_rejects_ambiguous_or_missing_baseline(

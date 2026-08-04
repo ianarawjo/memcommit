@@ -2024,6 +2024,80 @@ class MemoryStore:
                     )
                 _write_json_atomic(path, data)
 
+    def create_meld_target_with_session(
+        self,
+        ctx: Context,
+        session,
+        auto_checkpoint: AutoCheckpoint,
+    ) -> None:
+        """Atomically publish a new empty symmetric target and its session.
+
+        ``meld --to`` must not leave a selectable empty Context when session
+        publication fails. Both records therefore share the command and target
+        locks, and the exact new Context is rolled back before either lock is
+        released if the session cannot be written.
+        """
+        from memcommit.meld import MeldError, MeldSession
+
+        if not isinstance(session, MeldSession):
+            raise TypeError("Expected a MeldSession.")
+        if session.mode != "SYMMETRIC":
+            raise ValueError("A new Meld result requires a symmetric session.")
+        if (
+            session.target.context_uid != ctx.uid
+            or session.target.context_name != ctx.name
+            or context_record_digest(ctx) != session.target.context_digest
+        ):
+            raise ValueError("Meld session does not bind the new target exactly.")
+        if tuple(ctx.iter_items()):
+            raise ValueError("A new symmetric Meld target must be empty.")
+
+        path = self._meld_session_path(ctx.uid)
+        data = session.to_dict()
+        try:
+            restored = MeldSession.from_dict(data)
+        except MeldError as error:
+            raise ValueError("Meld session is invalid.") from error
+        if restored.uid != session.uid:
+            raise ValueError("Meld session identity changed during save.")
+
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_lock(ctx.name):
+                    with self.profile_write_guard():
+                        if self.meld_sessions_dir.exists() and (
+                            not self.meld_sessions_dir.is_dir()
+                            or self.meld_sessions_dir.is_symlink()
+                        ):
+                            raise ValueError("Meld session storage is invalid.")
+                        if path.exists() or path.is_symlink():
+                            raise ConcurrentContextUpdateError(
+                                "A meld session already exists for the new "
+                                "target identity."
+                            )
+                        self._save_locked(
+                            ctx,
+                            auto_checkpoint,
+                            expected_context_digest=None,
+                            require_new=True,
+                        )
+                        try:
+                            self.meld_sessions_dir.mkdir(parents=True, exist_ok=True)
+                            _write_json_atomic(path, data)
+                        except Exception as error:
+                            try:
+                                # No lifecycle deletion is recorded: the new
+                                # result was never a successfully committed
+                                # command outcome.
+                                self._delete_locked(ctx.name)
+                            except Exception as rollback_error:
+                                raise RuntimeError(
+                                    "Meld result creation failed and its exact "
+                                    "new Context could not be rolled back."
+                                ) from rollback_error
+                            raise error
+        ctx._store_digest = context_record_digest(ctx)
+
     @_profile_write_guarded
     def delete_meld_session(self, target_context_uid: str) -> None:
         """Remove one exact target-bound meld artifact."""
