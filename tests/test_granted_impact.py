@@ -295,6 +295,7 @@ def test_switch_to_read_grant_makes_it_current_without_materializing_copy(
     listed = runner.invoke(app, ["ls"])
     status = runner.invoke(app, ["status"])
     contexts = runner.invoke(app, ["contexts"])
+    profile_current = runner.invoke(app, ["profile", "current"])
     switched_child = runner.invoke(app, ["switch", "campus-wiki/services"])
     switched_parent = runner.invoke(app, ["switch", ".."])
     blocked_add = runner.invoke(app, ["add", "must not persist"])
@@ -314,6 +315,8 @@ def test_switch_to_read_grant_makes_it_current_without_materializing_copy(
     assert "Granted view: read only" in status.output
     assert contexts.exit_code == 0, contexts.output
     assert "* campus-wiki  [granted read only]" in contexts.output
+    assert profile_current.exit_code == 0, profile_current.output
+    assert "Current Context: campus-wiki" in profile_current.output
     assert switched_child.exit_code == 0, switched_child.output
     assert switched_parent.exit_code == 0, switched_parent.output
     assert active.current_context_name() == wiki.name

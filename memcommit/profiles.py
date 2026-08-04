@@ -533,7 +533,11 @@ def _translation_catalogs(
     return count
 
 
-def inspect_store(root: Path) -> StoreInspection:
+def inspect_store(
+    root: Path,
+    *,
+    allowed_virtual_currents: frozenset[str] = frozenset(),
+) -> StoreInspection:
     """Validate one complete store without creating or resolving content."""
 
     root = Path(root).absolute()
@@ -542,7 +546,11 @@ def inspect_store(root: Path) -> StoreInspection:
     state = _read_json(root / "state.json", label="MemoryStore state")
     current = state.get("current")
     if current is not None and (
-        not isinstance(current, str) or current not in contexts
+        not isinstance(current, str)
+        or (
+            current not in contexts
+            and current not in allowed_virtual_currents
+        )
     ):
         raise ProfileError("MemoryStore current Context is invalid.")
     sources = _query_sources(root)
@@ -927,9 +935,57 @@ def _prepare_legacy_study_archive(
     return _publish_legacy_study_archive(destination, record)
 
 
+def _read_granted_public_names(
+    registry: ProfileRegistry,
+    profile_uid: str,
+) -> frozenset[str]:
+    """Return public names whose effective frozen grant includes READ."""
+
+    result: set[str] = set()
+    grants = tuple(
+        grant
+        for grant in registry.grants
+        if grant.grantee_profile_uid == profile_uid
+    )
+    for grant in grants:
+        for binding in grant.contexts:
+            public_name = (
+                grant.public_name
+                + binding.name[len(grant.resource_name) :]
+            )
+            candidates = tuple(
+                candidate
+                for candidate in grants
+                if (
+                    candidate.attachment_context_uid
+                    == grant.attachment_context_uid
+                    and (
+                        public_name == candidate.public_name
+                        or public_name.startswith(candidate.public_name + "/")
+                    )
+                )
+            )
+            effective = max(
+                candidates,
+                key=lambda candidate: len(candidate.public_name.split("/")),
+            )
+            if "READ" in effective.permissions:
+                result.add(public_name)
+    return frozenset(result)
+
+
 def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
     registry = load_profile_registry()
-    base = tuple(inspect_store(profile_store_dir(item)) for item in registry.profiles)
+    base = tuple(
+        inspect_store(
+            profile_store_dir(item),
+            allowed_virtual_currents=_read_granted_public_names(
+                registry,
+                item.uid,
+            ),
+        )
+        for item in registry.profiles
+    )
     cache = {
         profile.uid: inspection
         for profile, inspection in zip(registry.profiles, base, strict=True)
@@ -955,7 +1011,13 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
         inspection = _inspection_with_grants(
             registry,
             target,
-            inspect_store(profile_store_dir(target)),
+            inspect_store(
+                profile_store_dir(target),
+                allowed_virtual_currents=_read_granted_public_names(
+                    registry,
+                    target.uid,
+                ),
+            ),
         )
         if target.uid == registry.active_uid:
             return registry, inspection, False

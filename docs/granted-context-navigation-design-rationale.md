@@ -36,8 +36,10 @@ Task 2 workflow.
 
 `mem ls`, `mem show`, and `mem status` resolve the current READ grant through
 the bounded `GrantedReadStore`. `mem contexts` marks the public granted name as
-current. Mutating commands use the same resolver with their required permission
-and therefore reject an Advisor READ grant.
+current, and Profile inventory accepts it only when the active registry still
+contains an effective READ grant for that public name. Mutating commands use
+the same resolver with their required permission and therefore reject an
+Advisor READ grant.
 
 READ does not expose authority checkpoint history. Grant-aware Find remains a
 separate integration slice because it must preserve that history boundary while
