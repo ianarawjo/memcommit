@@ -28,8 +28,9 @@ but it is not a substitute for the runtime work below.
   only the authority Profile created for that Study run.
 - `impact` requires target `READ` and discloses only the frozen granted scope.
 - `update` additionally requires the exact operation permissions it will use:
-  `UPDATE` for replacements and `CREATE` for additions. A future whole-Memory
-  removal needs an explicit permission decision before it is enabled.
+  `UPDATE` for replacements, `CREATE` for additions, and `DELETE` for
+  whole-Memory removals. Task 1's parent wiki grant will explicitly include
+  all three; `UPDATE` must never be interpreted as implicit deletion authority.
 - The narrower `construction-details` override remains `QUERY`-only. Neither
   `impact` nor `update` may treat it as readable or writable merely because it
   is below `campus-wiki` in the public namespace.
@@ -75,8 +76,8 @@ but it is not a substitute for the runtime work below.
 - [ ] 4. Apply `mem update` through the grant under authority-store locks.
   - Recheck the active participant Profile and exact grant snapshot.
   - Check `UPDATE` and `CREATE` per planned operation before the first write.
-  - Decide and document whether whole-Memory removal maps to a new `DELETE`
-    grant permission or remains unsupported for granted targets initially.
+  - Require the explicitly granted `DELETE` permission for every planned
+    whole-Memory removal.
   - Save only the run-private authority Context post-images; never write the
     baseline or concealed query-only descendants.
   - Preserve rollback behavior across all affected authority Contexts.
