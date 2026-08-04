@@ -309,6 +309,18 @@ def render_comparison(
                 ]
             )
         )
+        meld_command = display_escape_text(
+            shlex.join(
+                [
+                    "mem",
+                    "meld",
+                    reference.context_name,
+                    compared.context_name,
+                    "--to",
+                    "RESULT_CONTEXT",
+                ]
+            )
+        )
         lines.extend(
             [
                 "",
@@ -322,6 +334,17 @@ def render_comparison(
                 f"  {ledger_command}",
             ]
         )
+        if durable:
+            lines.extend(
+                [
+                    "",
+                    (
+                        "Create a new result Context and review both sources "
+                        "with Meld:"
+                    ),
+                    f"  {meld_command}",
+                ]
+            )
         return "\n".join(lines)
 
     lines.extend(

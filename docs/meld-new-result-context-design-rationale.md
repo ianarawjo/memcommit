@@ -55,3 +55,17 @@ The existing `mem meld LEFT_PEER RIGHT_PEER` form continues to use the active
 empty Context and resumes its target-bound session. `--to` is a creation form;
 later work on its result uses the established target-bound Meld session rather
 than silently reusing an unrelated pre-existing Context name.
+
+## Compare handoff
+
+The default durable Compare report ends with the portable next action:
+
+```bash
+mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
+```
+
+The report preserves the exact displayed peer order and leaves
+`RESULT_CONTEXT` as an explicit naming placeholder because Compare has no
+authority to choose a durable ordinary Context name for the person. An
+unsaved Compare omits this handoff because Meld cannot consume a non-durable
+analysis as its exact basis.

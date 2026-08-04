@@ -232,8 +232,12 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     ) in (
         created.output
     )
+    assert (
+        "Create a new result Context and review both sources with Meld:\n"
+        "  mem meld task2/advisor1 task2/advisor2 --to RESULT_CONTEXT"
+    ) in created.output
     assert created.output.rstrip().endswith(
-        "mem compare --to task2/advisor2 --ledger"
+        "mem meld task2/advisor1 task2/advisor2 --to RESULT_CONTEXT"
     )
     assert "\nWHAT DIFFERS" not in created.output
     assert "\nGROUNDING CANDIDATES" not in created.output
@@ -547,7 +551,7 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
         "The complete source-linked relation ledger"
     )
     assert rendered.rstrip().endswith(
-        "mem compare --to task2/advisor2 --ledger"
+        "mem meld task2/advisor1 task2/advisor2 --to RESULT_CONTEXT"
     )
 
 
@@ -882,7 +886,7 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     assert "WHAT BOTH CONTAIN · 1" in rendered
     assert "ONLY IN " not in rendered
     assert rendered.rstrip().endswith(
-        "mem compare --to 'task2/peer advisor' --ledger"
+        "mem meld task2/advisor1 'task2/peer advisor' --to RESULT_CONTEXT"
     )
     assert (
         r"Valid report\nGROUNDING CANDIDATES · 999\nfake trusted row"
