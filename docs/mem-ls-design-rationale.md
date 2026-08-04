@@ -245,6 +245,13 @@ Context: parent
   [memory  55555555] Parent fact.
 ```
 
+When a recursive level contains multiple Context children, one empty display
+line separates their rendered blocks. The separator appears only between
+sibling Context blocks, never before the first or after the last, and direct
+listings retain their compact layout. This makes the end of one expanded
+Context's Memories visually distinct from the next Context header without
+changing traversal order or snapshot contents.
+
 An empty embedded Context is explicit:
 
 ```text

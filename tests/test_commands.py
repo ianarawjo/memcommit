@@ -373,6 +373,48 @@ class TestList:
             < parent_memory_index
         )
 
+    def test_recursive_list_separates_sibling_context_blocks_only(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "alpha")
+        invoke("add", "Alpha memory.")
+        invoke("init", "beta")
+        invoke("add", "Beta memory.")
+        invoke("init", "parent")
+        invoke("add", "Parent memory.")
+        invoke("embed", "alpha", "--into", "parent")
+        invoke("embed", "beta", "--into", "parent")
+
+        recursive = invoke("ls", "-R", "parent")
+        direct = invoke("ls", "parent")
+
+        assert recursive.exit_code == 0
+        assert direct.exit_code == 0
+        recursive_lines = recursive.output.splitlines()
+        alpha_index = next(
+            index
+            for index, line in enumerate(recursive_lines)
+            if "[context " in line and line.endswith("] alpha")
+        )
+        beta_index = next(
+            index
+            for index, line in enumerate(recursive_lines)
+            if "[context " in line and line.endswith("] beta")
+        )
+        assert recursive_lines[alpha_index - 1] == ""
+        assert recursive_lines[alpha_index - 2] != ""
+        assert recursive_lines[beta_index - 1] == ""
+        assert recursive_lines[beta_index + 1] != ""
+        assert "" not in recursive_lines[beta_index + 1 :]
+        direct_lines = direct.output.splitlines()
+        direct_beta_index = next(
+            index
+            for index, line in enumerate(direct_lines)
+            if "[context " in line and line.endswith("] beta")
+        )
+        assert direct_lines[direct_beta_index - 1].endswith("] alpha")
+
     def test_recursive_long_option_matches_short_option(self, isolated_store):
         invoke("init", "child")
         invoke("add", "Nested memory.")
