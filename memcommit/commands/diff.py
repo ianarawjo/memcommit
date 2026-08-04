@@ -9,6 +9,7 @@ from typing import Annotated
 import typer
 
 from memcommit.store import MemoryStore
+from memcommit.granted_update_application import inspect_granted_update
 from memcommit.update import (
     AddOperation,
     EditOperation,
@@ -66,7 +67,11 @@ def _summary(session: UpdateSession) -> str:
 
 def _render_header(session: UpdateSession, *, verbose: bool) -> None:
     heading = (
-        "Applied local update"
+        (
+            "Applied granted update"
+            if session.granted_target is not None
+            else "Applied local update"
+        )
         if session.status == "applied"
         else "Update preview"
     )
@@ -90,6 +95,19 @@ def _render_header(session: UpdateSession, *, verbose: bool) -> None:
             typer.secho(
                 f"Result  {session.target_uid}  "
                 f"{session.application.target_digest}",
+                dim=True,
+            )
+            for checkpoint in session.application.checkpoints:
+                typer.secho(
+                    f"Checkpoint  {checkpoint.context_name}  "
+                    f"{checkpoint.checkpoint_uid}",
+                    dim=True,
+                )
+        if session.granted_target is not None:
+            typer.secho(
+                "Grant   "
+                f"{session.granted_target.grant_uid}  "
+                f"authority {session.granted_target.authority_profile_uid}",
                 dim=True,
             )
 
@@ -447,16 +465,21 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    fresh = False
-    try:
-        source = store.load(session.source_name)
-        target = store.load(session.target_name)
-        if session.status == "applied":
-            fresh = applied_session_matches(session, source, target)
-        else:
-            fresh = session_matches(session, source, target)
-    except (OSError, ValueError):
+    inspection_status = "current"
+    if session.granted_target is not None:
+        inspection_status = inspect_granted_update(store, session).status
+        fresh = inspection_status == "current"
+    else:
         fresh = False
+        try:
+            source = store.load(session.source_name)
+            target = store.load(session.target_name)
+            if session.status == "applied":
+                fresh = applied_session_matches(session, source, target)
+            else:
+                fresh = session_matches(session, source, target)
+        except (OSError, ValueError):
+            fresh = False
 
     if not fresh:
         timing = (
@@ -464,8 +487,13 @@ def cmd(
             if session.status == "applied"
             else "after this update was staged"
         )
+        status_label = (
+            "REVOKED — saved grant is no longer available"
+            if inspection_status == "revoked"
+            else f"STALE — source or target changed {timing}"
+        )
         typer.secho(
-            f"STALE — source or target changed {timing}",
+            status_label,
             fg=typer.colors.YELLOW,
             bold=True,
             err=True,
@@ -477,9 +505,18 @@ def cmd(
         verbose=verbose,
     )
     if not fresh:
+        guidance = (
+            "The recorded diff remains inspectable, but it cannot be treated "
+            "as a current applied result. Re-run impact/update only after "
+            "access and endpoints are current."
+            if session.granted_target is not None
+            else (
+                "Review the local fork and re-run impact/update before "
+                "contributing."
+            )
+        )
         typer.secho(
-            "Review the local fork and re-run impact/update before "
-            "contributing.",
+            guidance,
             fg=typer.colors.YELLOW,
             err=True,
         )

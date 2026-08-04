@@ -34,6 +34,7 @@ from memcommit.commands import (
     merge,
     query,
     rationale,
+    redo,
     reference,
     rename,
     remove,
@@ -155,7 +156,14 @@ app.command(
     "log",
     help="Inspect or semantically search checkpoint history for the current Context.",
 )(log.cmd)
-app.command("undo",           help="Restore the previous distinct Context state.")(undo.cmd)
+app.command(
+    "undo",
+    help="Undo the most recent recorded Context command across its affected Contexts.",
+)(undo.cmd)
+app.command(
+    "redo",
+    help="Redo the most recently undone recorded Context command.",
+)(redo.cmd)
 app.command(
     "trace",
     help="Trace one current or historical Memory from retained origin to current descendants.",

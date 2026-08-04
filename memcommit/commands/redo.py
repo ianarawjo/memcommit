@@ -1,7 +1,5 @@
-"""Undo the most recent recorded Context command across affected Contexts."""
+"""Redo the most recently undone recorded Context command."""
 from __future__ import annotations
-
-from typing import Annotated
 
 import typer
 
@@ -13,32 +11,19 @@ from memcommit.granted_update_application import restore_granted_update
 from memcommit.store import MemoryStore
 
 
-def cmd(
-    keep: Annotated[
-        bool,
-        typer.Option(
-            "--keep",
-            "-k",
-            help=(
-                "Compatibility option; command-unit Undo always preserves "
-                "checkpoint history"
-            ),
-        ),
-    ] = False,
-) -> None:
-    """Undo one global checkpoint-producing command unit."""
-    del keep
+def cmd() -> None:
+    """Redo one global checkpoint-producing command unit."""
     store = MemoryStore()
     try:
         session = store.load_staged_update()
         result = (
-            restore_granted_update(store, session, "undo")
+            restore_granted_update(store, session, "redo")
             if (
                 session is not None
                 and session.status == "applied"
                 and session.granted_target is not None
             )
-            else store.restore_recent_context_command("undo")
+            else store.restore_recent_context_command("redo")
         )
     except (
         CommandHistoryError,
@@ -47,6 +32,6 @@ def cmd(
         RuntimeError,
         ValueError,
     ) as error:
-        typer.secho(f"Undo error: {error}", fg=typer.colors.RED, err=True)
+        typer.secho(f"Redo error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     render_command_restore_receipt(result)

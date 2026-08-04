@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.context import Context
+from memcommit.context import AutoCheckpoint, Context
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -349,6 +349,266 @@ def test_granted_impact_then_update_changes_only_run_authority(
     assert len(applied.application.checkpoints) == 2
     assert len(authority_store.list_checkpoints(wiki.name)) == 1
     assert len(authority_store.list_checkpoints("campus-wiki/services")) == 1
+
+
+def test_granted_diff_revalidates_authority_and_keeps_public_names(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _active, _authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    class Provider:
+        def complete(self, prompt, **_kwargs):
+            return _edit_and_add_plan(prompt)
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    assert runner.invoke(
+        app,
+        ["impact", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    assert runner.invoke(
+        app,
+        ["update", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+
+    result = runner.invoke(app, ["diff", "--stat"])
+
+    assert result.exit_code == 0, result.output
+    assert "Applied granted update" in result.stdout
+    assert "task-root → campus-wiki" in result.stdout
+    assert "2 changes · 1 edited · 1 added" in result.stdout
+    assert "STALE" not in result.stderr
+    assert "REVOKED" not in result.stderr
+
+
+def test_granted_diff_remains_inspectable_after_revocation(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _active, _authority, source, wiki, grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    class Provider:
+        def complete(self, prompt, **_kwargs):
+            return _edit_and_add_plan(prompt)
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    assert runner.invoke(
+        app,
+        ["impact", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    assert runner.invoke(
+        app,
+        ["update", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    delete_authority_grant(grant.uid)
+
+    result = runner.invoke(app, ["diff", "--stat"])
+
+    assert result.exit_code == 1
+    assert "Applied granted update" in result.stdout
+    assert "2 changes · 1 edited · 1 added" in result.stdout
+    assert "REVOKED" in result.stderr
+    assert "remains inspectable" in result.stderr
+
+
+def test_granted_diff_marks_authority_drift_stale_but_keeps_receipts(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    class Provider:
+        def complete(self, prompt, **_kwargs):
+            return _edit_and_add_plan(prompt)
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    assert runner.invoke(
+        app,
+        ["impact", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    assert runner.invoke(
+        app,
+        ["update", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    changed = authority.load_direct(wiki.name)
+    ops.add(changed, "A later authority correction.")
+    authority.save(changed)
+
+    result = runner.invoke(app, ["diff", "--verbose", "--stat"])
+
+    assert result.exit_code == 1
+    assert "STALE" in result.stderr
+    assert "2 changes · 1 edited · 1 added" in result.stdout
+    assert "Checkpoint  campus-wiki" in result.stdout
+    assert "Checkpoint  campus-wiki/services" in result.stdout
+
+
+def test_revoked_granted_update_cannot_be_undone_by_participant(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _active, authority, source, wiki, grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    class Provider:
+        def complete(self, prompt, **_kwargs):
+            return _edit_and_add_plan(prompt)
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    assert runner.invoke(
+        app,
+        ["impact", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    assert runner.invoke(
+        app,
+        ["update", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    authority_after = {
+        name: authority.load_direct(name).to_dict()
+        for name in (wiki.name, "campus-wiki/services")
+    }
+    delete_authority_grant(grant.uid)
+
+    result = runner.invoke(app, ["undo"])
+
+    assert result.exit_code == 1
+    assert "Undo error" in result.stderr
+    assert {
+        name: authority.load_direct(name).to_dict()
+        for name in authority_after
+    } == authority_after
+
+
+def test_granted_undo_does_not_substitute_newer_authority_command(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    class Provider:
+        def complete(self, prompt, **_kwargs):
+            return _edit_and_add_plan(prompt)
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    assert runner.invoke(
+        app,
+        ["impact", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    assert runner.invoke(
+        app,
+        ["update", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    later = authority.load_direct(wiki.name)
+    ops.add(later, "A later independent authority command.")
+    authority.save(
+        later,
+        AutoCheckpoint(
+            command="add",
+            args={},
+            description="Later authority addition.",
+        ),
+    )
+    authority_before_undo = authority.load_direct(wiki.name).to_dict()
+
+    result = runner.invoke(app, ["undo"])
+
+    assert result.exit_code == 1
+    assert "not the next Context command to undo" in result.stderr
+    assert authority.load_direct(wiki.name).to_dict() == authority_before_undo
+
+
+def test_granted_update_undo_and_redo_restore_exact_authority_unit(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    root_before = authority.load_direct(wiki.name).to_dict()
+    services_before = authority.load_direct("campus-wiki/services").to_dict()
+
+    class Provider:
+        def complete(self, prompt, **_kwargs):
+            return _edit_and_add_plan(prompt)
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    assert runner.invoke(
+        app,
+        ["impact", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    assert runner.invoke(
+        app,
+        ["update", "--from", source.name, "--to", wiki.name],
+    ).exit_code == 0
+    root_after = authority.load_direct(wiki.name).to_dict()
+    services_after = authority.load_direct("campus-wiki/services").to_dict()
+
+    undone = runner.invoke(app, ["undo"])
+
+    assert undone.exit_code == 0, undone.output
+    assert "Undid command: mem update" in undone.stdout
+    assert "Affected Context: campus-wiki" in undone.stdout
+    assert authority.load_direct(wiki.name).to_dict() == root_before
+    assert (
+        authority.load_direct("campus-wiki/services").to_dict()
+        == services_before
+    )
+
+    redone = runner.invoke(app, ["redo"])
+
+    assert redone.exit_code == 0, redone.output
+    assert "Redid command: mem update" in redone.stdout
+    assert "Affected Context: campus-wiki/services" in redone.stdout
+    assert authority.load_direct(wiki.name).to_dict() == root_after
+    assert (
+        authority.load_direct("campus-wiki/services").to_dict()
+        == services_after
+    )
 
 
 def test_granted_update_checks_create_permission_before_first_write(

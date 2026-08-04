@@ -4169,6 +4169,7 @@ class MemoryStore:
                     args=auto_checkpoint.args,
                     description=auto_checkpoint.description,
                     auto=True,
+                    command_before=current_record,
                 )
             _write_json_atomic(context_file, ctx.to_dict())
         except Exception as error:
@@ -4723,8 +4724,10 @@ class MemoryStore:
         args: Optional[dict] = None,
         description: Optional[str] = None,
         auto: bool = False,
+        command_before: dict[str, object] | None = None,
     ) -> Checkpoint:
         """Write one checkpoint while the caller holds the Context lock."""
+        self._assert_profile_write_allowed()
         cp = Checkpoint(
             uid=str(uuid.uuid4()),
             message=message,
@@ -4745,19 +4748,19 @@ class MemoryStore:
                 f"Refusing to write checkpoint for '{ctx.name}' through a "
                 "symbolic link."
             )
-        _write_json_atomic(
-            cp_file,
-            {
-                "uid": cp.uid,
-                "message": cp.message,
-                "timestamp": cp.timestamp.isoformat(),
-                "snapshot": cp.snapshot,
-                "command": cp.command,
-                "args": cp.args,
-                "description": cp.description,
-                "auto": cp.auto,
-            },
-        )
+        checkpoint_record = {
+            "uid": cp.uid,
+            "message": cp.message,
+            "timestamp": cp.timestamp.isoformat(),
+            "snapshot": cp.snapshot,
+            "command": cp.command,
+            "args": cp.args,
+            "description": cp.description,
+            "auto": cp.auto,
+        }
+        if command_before is not None:
+            checkpoint_record["command_before"] = command_before
+        _write_json_atomic(cp_file, checkpoint_record)
         return cp
 
     def list_checkpoints(self, name: str) -> list[dict]:
@@ -4773,6 +4776,169 @@ class MemoryStore:
                 entries.append(json.load(f))
         return sorted(entries, key=lambda x: x["timestamp"], reverse=True)
 
+    def restore_recent_context_command(
+        self,
+        direction: str,
+        *,
+        expected_unit_uid: str | None = None,
+    ):
+        """Undo or redo one globally ordered checkpoint-producing command.
+
+        The command stack is reconstructed while the store-wide command lock
+        is held, then every affected Context is freshness-checked and restored
+        under one deterministic multi-lock boundary. This supplies exception
+        atomicity for multi-Context Update commands; as elsewhere in this
+        prototype, a machine crash can still interrupt several file replaces.
+        """
+        from memcommit.command_history import (
+            CommandHistoryError,
+            CommandRestoreResult,
+            build_command_stacks,
+            command_restore_metadata,
+        )
+
+        if direction not in {"undo", "redo"}:
+            raise ValueError("Command restoration direction must be undo or redo.")
+        with self._command_write_lock():
+            self._assert_profile_write_allowed()
+            stacks = build_command_stacks(self)
+            candidates = stacks.undo if direction == "undo" else stacks.redo
+            if not candidates:
+                raise CommandHistoryError(
+                    f"There is no recorded Context command to {direction}."
+                )
+            unit = candidates[-1]
+            if (
+                expected_unit_uid is not None
+                and unit.uid != expected_unit_uid
+            ):
+                # Granted recovery names one exact authority command from the
+                # participant-side receipt. Never substitute a newer, unrelated
+                # authority mutation merely because it is currently on top.
+                raise CommandHistoryError(
+                    "The recorded granted update is not the next Context "
+                    f"command to {direction}."
+                )
+            names = tuple(change.context_name for change in unit.changes)
+            receipt_uid = str(uuid.uuid4())
+            restore_metadata = command_restore_metadata(
+                receipt_uid=receipt_uid,
+                direction=direction,
+                unit=unit,
+            )
+            original_records: dict[str, dict[str, object]] = {}
+            created_checkpoints: list[tuple[str, Checkpoint]] = []
+            written_names: list[str] = []
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_locks(names):
+                    for change in unit.changes:
+                        try:
+                            current = self.load_direct(change.context_name)
+                        except FileNotFoundError as error:
+                            raise ConcurrentContextUpdateError(
+                                f"Affected Context '{change.context_name}' "
+                                "no longer exists."
+                            ) from error
+                        expected = (
+                            change.after if direction == "undo" else change.before
+                        )
+                        if (
+                            current.uid != change.context_uid
+                            or context_record_digest(current)
+                            != context_record_digest(expected)
+                        ):
+                            raise ConcurrentContextUpdateError(
+                                f"Affected Context '{change.context_name}' changed "
+                                f"after the command selected for {direction}."
+                            )
+                        original_records[change.context_name] = current.to_dict()
+
+                    try:
+                        for change in unit.changes:
+                            target_record = (
+                                change.before
+                                if direction == "undo"
+                                else change.after
+                            )
+                            restored = Context.from_dict(target_record)
+                            expected_digest = context_record_digest(
+                                original_records[change.context_name]
+                            )
+                            restored._store_digest = expected_digest
+                            checkpoint = self._save_locked(
+                                restored,
+                                AutoCheckpoint(
+                                    command=direction,
+                                    args={
+                                        "command_restore": restore_metadata,
+                                    },
+                                    description=(
+                                        f"{direction.title()} command "
+                                        f"'mem {unit.command}' "
+                                        f"[{receipt_uid[:8]}]"
+                                    ),
+                                ),
+                                expected_context_digest=expected_digest,
+                            )
+                            if checkpoint is None:
+                                raise RuntimeError(
+                                    "Command restoration created no checkpoint."
+                                )
+                            written_names.append(change.context_name)
+                            created_checkpoints.append(
+                                (change.context_name, checkpoint)
+                            )
+                    except Exception:
+                        rollback_error: Exception | None = None
+                        for name in written_names:
+                            try:
+                                _write_json_atomic(
+                                    self._context_file(name),
+                                    original_records[name],
+                                )
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                        for name, checkpoint in created_checkpoints:
+                            try:
+                                removed = False
+                                for path in self._checkpoints_dir(name).glob(
+                                    f"*-{checkpoint.uid[:8]}.json"
+                                ):
+                                    if path.is_symlink() or not path.is_file():
+                                        continue
+                                    with open(path, encoding="utf-8") as file:
+                                        value = json.load(
+                                            file,
+                                            object_pairs_hook=(
+                                                _reject_duplicate_json_keys
+                                            ),
+                                        )
+                                    if value.get("uid") == checkpoint.uid:
+                                        path.unlink()
+                                        removed = True
+                                        break
+                                if not removed:
+                                    raise RuntimeError(
+                                        "Restoration checkpoint could not be "
+                                        "found during rollback."
+                                    )
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                        if rollback_error is not None:
+                            raise RuntimeError(
+                                "Command restoration failed and its Contexts "
+                                "could not be fully rolled back."
+                            ) from rollback_error
+                        raise
+            return CommandRestoreResult(
+                unit=unit,
+                direction=direction,
+                receipt_uid=receipt_uid,
+                checkpoints=tuple(
+                    checkpoint for _, checkpoint in created_checkpoints
+                ),
+            )
+
     def revert(
         self,
         ctx_name: str,
@@ -4784,18 +4950,17 @@ class MemoryStore:
         expected_history_digest: str | None = None,
     ) -> tuple[Checkpoint, Checkpoint]:
         """Revert one Context while holding its cooperative write lock."""
-        with (
-            self._context_write_lock(ctx_name),
-            self.profile_write_guard(),
-        ):
-            return self._revert_locked(
-                ctx_name,
-                uid_prefix,
-                keep_history=keep_history,
-                expected_context_uid=expected_context_uid,
-                expected_context_digest=expected_context_digest,
-                expected_history_digest=expected_history_digest,
-            )
+        with self._command_write_lock():
+            self._assert_profile_write_allowed()
+            with self._context_write_lock(ctx_name):
+                return self._revert_locked(
+                    ctx_name,
+                    uid_prefix,
+                    keep_history=keep_history,
+                    expected_context_uid=expected_context_uid,
+                    expected_context_digest=expected_context_digest,
+                    expected_history_digest=expected_history_digest,
+                )
 
     def _revert_locked(
         self,
@@ -4979,7 +5144,7 @@ class MemoryStore:
         written_names: set[str] = set()
         try:
             # Prepare every replacement with the normal atomic writer before
-            # removing obsolete history. The Context lock keeps other history
+            # removing obsolete history. The command lock keeps other history
             # operations outside this exception-rollback boundary.
             for filename, record in desired_records.items():
                 destination = cp_dir / filename

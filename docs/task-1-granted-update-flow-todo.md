@@ -91,13 +91,28 @@ but it is not a substitute for the runtime work below.
     baseline or concealed query-only descendants.
   - Preserve rollback behavior across all affected authority Contexts.
 
-- [ ] 5. Make receipts, `mem diff`, checkpoints, and recovery grant-aware.
+- [x] 5. Make receipts, `mem diff`, checkpoints, and recovery grant-aware.
   - Render the reviewed public target while validating the underlying
     authority identities.
   - Ensure repeated update is idempotent and does not reconnect to the provider
     or create duplicate checkpoints.
   - Verify stale/revoked results remain inspectable but cannot be presented as
     current or applied again.
+  - `mem diff` reopens the participant-side immutable operation record but
+    resolves the frozen grant to validate the current authority projection. A
+    revoked or changed grant therefore cannot erase the reviewed diff; it
+    changes the command to a non-current, failing inspection result.
+  - Automatic checkpoints live only beside the authority Contexts they cover.
+    Their physical `command_contexts` membership uses authority names, while
+    participant receipts and restoration output retain public granted names.
+  - Participant `mem undo`/`mem redo` may cross into the authority Profile only
+    while the exact frozen grant and required operation permissions remain
+    valid. The authority stack must name the exact saved Update session and
+    operation digest as its next unit; recovery never substitutes another
+    authority command.
+  - Recovery provides exception atomicity across the affected authority
+    Contexts. Process-crash atomicity remains outside this slice until a
+    durable multi-store journal exists.
 
 - [ ] 6. Run an end-to-end Study verification.
   - Initialize a fresh two-Profile Study run.

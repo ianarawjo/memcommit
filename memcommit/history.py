@@ -183,7 +183,7 @@ def _entry_identity_digest(entry: dict[str, Any]) -> str:
     return _json_digest(entry)
 
 
-def _flatten_checkpoint_entries(
+def flatten_checkpoint_entries(
     physical_entries: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], frozenset[str]]:
     """Recover entries retained inside pre-revert ``log_snapshot`` records."""
@@ -417,7 +417,7 @@ def build_history(
         physical = store.list_checkpoints(context_name)
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
         raise HistoryError(str(error)) from error
-    entries, physical_uids = _flatten_checkpoint_entries(physical)
+    entries, physical_uids = flatten_checkpoint_entries(physical)
     context_uid = current_context.uid
     empty_record: dict[str, object] = {
         "uid": context_uid,

@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass, replace
 from datetime import datetime
+from typing import Literal
 
 from memcommit.commands.granted_context import (
     GrantedReadStore,
@@ -11,6 +13,7 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.context import Context, Memory
+from memcommit.command_history import CommandRestoreResult
 from memcommit.profile_config import ProfileRegistry
 from memcommit.profiles import (
     ProfileError,
@@ -50,6 +53,110 @@ def _authority_name(binding: GrantedUpdateTarget, public_name: str) -> str:
     ):
         raise UpdateError("A planned owner is outside the granted target namespace.")
     return binding.resource_name + public_name[len(binding.public_name) :]
+
+
+def _public_name(binding: GrantedUpdateTarget, authority_name: str) -> str:
+    if not (
+        authority_name == binding.resource_name
+        or authority_name.startswith(binding.resource_name + "/")
+    ):
+        raise UpdateError(
+            "An authority recovery Context is outside the granted namespace."
+        )
+    return binding.public_name + authority_name[len(binding.resource_name) :]
+
+
+@dataclass(frozen=True)
+class GrantedUpdateInspection:
+    """Read-only status of a saved granted UpdateSession."""
+
+    status: Literal["current", "stale", "revoked"]
+    detail: str = ""
+
+
+def inspect_granted_update(
+    active_store: MemoryStore,
+    session: UpdateSession,
+) -> GrantedUpdateInspection:
+    """Revalidate a saved grant while keeping its recorded diff inspectable."""
+
+    if session.granted_target is None:
+        raise ValueError("Expected a granted UpdateSession.")
+    try:
+        with authority_grant_snapshot_lock() as registry:
+            access = _resolve_exact_access(
+                active_store,
+                session.granted_target,
+                registry,
+            )
+            source = active_store.load(session.source_name)
+            target = GrantedReadStore(access, registry=registry).load(
+                session.granted_target.public_name
+            )
+            fresh = (
+                applied_session_matches(
+                    session,
+                    source,
+                    target,
+                    granted_target=session.granted_target,
+                )
+                if session.status == "applied"
+                else session_matches(
+                    session,
+                    source,
+                    target,
+                    granted_target=session.granted_target,
+                )
+            )
+            return GrantedUpdateInspection(
+                status="current" if fresh else "stale"
+            )
+    except ProfileError as error:
+        return GrantedUpdateInspection("revoked", str(error))
+    except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
+        return GrantedUpdateInspection("stale", str(error))
+
+
+def _public_restore_result(
+    result: CommandRestoreResult,
+    binding: GrantedUpdateTarget,
+) -> CommandRestoreResult:
+    changes = tuple(
+        replace(
+            change,
+            context_name=_public_name(binding, change.context_name),
+        )
+        for change in result.unit.changes
+    )
+    return replace(result, unit=replace(result.unit, changes=changes))
+
+
+def restore_granted_update(
+    active_store: MemoryStore,
+    session: UpdateSession,
+    direction: Literal["undo", "redo"],
+) -> CommandRestoreResult:
+    """Restore the exact authority command named by a participant receipt."""
+
+    if (
+        session.status != "applied"
+        or session.granted_target is None
+        or session.application is None
+    ):
+        raise ValueError("Expected one applied granted UpdateSession.")
+    binding = session.granted_target
+    expected_unit_uid = (
+        f"update:{session.uid}:{session.application.operation_digest}"
+    )
+    with authority_grant_snapshot_lock() as registry:
+        access = _resolve_exact_access(active_store, binding, registry)
+        _validate_operation_permissions(session, registry)
+        active_store._assert_profile_write_allowed()
+        result = access.store.restore_recent_context_command(
+            direction,
+            expected_unit_uid=expected_unit_uid,
+        )
+    return _public_restore_result(result, binding)
 
 
 def _operation_permission(
@@ -282,10 +389,18 @@ def apply_granted_staged_update(
                                                 operation.memory_uid
                                                 for operation in owner_operations
                                             ],
+                                            # Command history is reconstructed
+                                            # inside the authority store, so its
+                                            # membership must use physical names.
+                                            # Public names remain in the participant
+                                            # receipt and presentation layer.
                                             "command_contexts": [
                                                 {
                                                     "uid": affected.owner_context_uid,
-                                                    "name": affected.owner_context_name,
+                                                    "name": _authority_name(
+                                                        binding,
+                                                        affected.owner_context_name,
+                                                    ),
                                                 }
                                                 for affected in result.affected_owners
                                             ],
