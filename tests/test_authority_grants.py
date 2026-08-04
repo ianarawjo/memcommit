@@ -98,7 +98,11 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
     tmp_path,
     monkeypatch,
 ):
-    _grant_fixture(isolated_store, tmp_path, monkeypatch)
+    _authority, _editable, campus_grant, _details_grant = _grant_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
 
     root = runner.invoke(app, ["ls"])
     view = runner.invoke(app, ["ls", "campus-wiki", "--recursive"])
@@ -109,7 +113,18 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
     assert "campus-wiki" in root.output
     assert "Authority views:" in root.output
     assert "task-1-campus-authority" in root.output
+    assert "Permissions: CREATE + READ + UPDATE" in root.output
+    assert (
+        "Source boundary: DERIVE blocked · COMBINE blocked · EXPORT blocked"
+        in root.output
+    )
+    assert (
+        "Target/artifact boundary: ACCEPT_DERIVED blocked · "
+        "SAVE_ANALYSIS blocked" in root.output
+    )
     assert view.exit_code == 0, view.output
+    assert "Access: GRANTED VIEW · from task-1-campus-authority" in view.output
+    assert f"grant {campus_grant.uid[:8]} revision 1" in view.output
     assert PUBLIC in view.output
     assert "campus-wiki/construction-details (query-only)" in view.output
     assert view.output.count("campus-wiki/construction-details") == 1

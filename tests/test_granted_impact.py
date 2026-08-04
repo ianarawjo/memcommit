@@ -454,6 +454,13 @@ def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
     )
 
     assert copied.exit_code == 0, copied.output
+    assert "Access: GRANTED VIEW · from run-granted-memory" in copied.output
+    assert "Permissions: READ" in copied.output
+    assert (
+        "Source boundary: DERIVE blocked · COMBINE blocked · EXPORT blocked"
+        in copied.output
+    )
+    assert "Source boundary:" not in system_clipboard["text"]
     assert "west lobby" in system_clipboard["text"]
     record = json.loads(
         (active.store_dir / "clipboard.json").read_text(encoding="utf-8")

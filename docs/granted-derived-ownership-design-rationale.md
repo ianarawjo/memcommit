@@ -71,6 +71,20 @@ Task 2 advisor grants and Task 3 guardrails permit source-side derivation,
 combination, export, and retained analysis. Query-only sources remain
 `QUERY + SESSION_LOG`; they do not silently become READ or derivative grants.
 
+## `mem ls` disclosure
+
+The ordinary list surface exposes the boundary at the point where a person is
+reading the material. Listing a granted Context shows its authority Profile,
+short grant identity and revision, complete permission set, and separate
+source (`DERIVE`, `COMBINE`, `EXPORT`) and target/artifact
+(`ACCEPT_DERIVED`, `SAVE_ANALYSIS`) decisions. Listing a local attachment
+shows the same details for every attached authority view, including blocked
+capabilities on query-only or read-only grants.
+
+These lines are display metadata, not Memory content. `mem ls --copy` keeps its
+canonical content-only clipboard representation, while a granted copy remains
+bound to the existing redacted receipt and live grant revalidation path.
+
 ## Rejected alternatives and limits
 
 - Treating READ as permission for every derivative use collapses visibility,

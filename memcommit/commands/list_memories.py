@@ -18,6 +18,7 @@ from memcommit.context import (
     QueryContextRef,
 )
 from memcommit.commands.granted_context import (
+    ContextAccess,
     GrantedReadStore,
     attached_grants,
     freeze_granted_context_binding,
@@ -26,7 +27,7 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
 )
 from memcommit.commands.tui_primitives import display_escape_text
-from memcommit.profile_config import ProfileConfigError
+from memcommit.profile_config import AuthorityGrant, ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 from memcommit.update import GrantedUpdateTarget
@@ -662,14 +663,66 @@ def _restore_granted_list_receipt(
     return snapshot, with_ids
 
 
-def _emit_snapshot_text(text: str) -> None:
+def _emit_snapshot_text(
+    text: str,
+    *,
+    header_notes: tuple[str, ...] = (),
+) -> None:
     """Preserve the existing bold Context heading while keeping canonical text."""
     lines = text.splitlines()
     if not lines:
         return
     typer.secho(lines[0], bold=True)
+    for note in header_notes:
+        typer.echo(note)
     for line in lines[1:]:
         typer.echo(line)
+
+
+def _permission_text(permissions: tuple[str, ...]) -> str:
+    return " + ".join(
+        "SAVE QUERY SESSION" if item == "SESSION_LOG" else item
+        for item in permissions
+    )
+
+
+def _boundary_value(permission: str, permissions: set[str]) -> str:
+    return "allowed" if permission in permissions else "blocked"
+
+
+def _derived_boundary_lines(
+    grant: AuthorityGrant,
+    *,
+    indent: str = "  ",
+) -> tuple[str, ...]:
+    permissions = set(grant.permissions)
+    return (
+        indent
+        + "Source boundary: "
+        + f"DERIVE {_boundary_value('DERIVE', permissions)} · "
+        + f"COMBINE {_boundary_value('COMBINE', permissions)} · "
+        + f"EXPORT {_boundary_value('EXPORT', permissions)}",
+        indent
+        + "Target/artifact boundary: "
+        + "ACCEPT_DERIVED "
+        + _boundary_value("ACCEPT_DERIVED", permissions)
+        + " · SAVE_ANALYSIS "
+        + _boundary_value("SAVE_ANALYSIS", permissions),
+    )
+
+
+def _granted_access_notes(access: ContextAccess) -> tuple[str, ...]:
+    view = access.view
+    if view is None:
+        return ()
+    grant = view.grant
+    return (
+        "  Access: GRANTED VIEW · from "
+        + display_escape_text(view.authority.name)
+        + f" · grant {grant.uid[:8]} revision {grant.revision}",
+        "  Permissions: " + _permission_text(grant.permissions),
+        *_derived_boundary_lines(grant),
+    )
 
 
 def _emit_grant_notes(attachment_name: str) -> None:
@@ -679,17 +732,16 @@ def _emit_grant_notes(attachment_name: str) -> None:
     profiles = {profile.uid: profile.name for profile in registry.profiles}
     typer.secho("Authority views:", bold=True)
     for grant in grants:
-        permissions = ", ".join(
-            permission.lower() for permission in grant.permissions
-        )
         typer.echo(
             "  "
             + display_escape_text(grant.public_name)
-            + "/ · "
-            + permissions
-            + " · from "
+            + "/ · from "
             + display_escape_text(profiles[grant.authority_profile_uid])
+            + f" · grant {grant.uid[:8]} revision {grant.revision}"
         )
+        typer.echo("    Permissions: " + _permission_text(grant.permissions))
+        for line in _derived_boundary_lines(grant, indent="    "):
+            typer.echo(line)
 
 
 def render_index(ctx: Context, *, recursive: bool = False) -> None:
@@ -881,7 +933,10 @@ def cmd(
         memory_layout="hanging",
         terminal_width=shutil.get_terminal_size(fallback=(100, 24)).columns,
     )
-    _emit_snapshot_text(annotated_text)
+    _emit_snapshot_text(
+        annotated_text,
+        header_notes=_granted_access_notes(access),
+    )
     if not access.is_granted:
         _emit_grant_notes(access.context_name)
 
