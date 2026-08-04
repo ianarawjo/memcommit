@@ -27,7 +27,7 @@ from memcommit.result_workbench import (
 COMPARISON_PAYLOAD_MARKER = "COMPARISON PAYLOAD:\n"
 COMPARISON_INPUT_CHAR_LIMIT = 400_000
 COMPARISON_RESPONSE_CHAR_LIMIT = 1_000_000
-COMPARISON_ITEM_LIMIT = 200
+COMPARISON_ITEM_LIMIT = 400
 COMPARISON_KEY_LIMIT = 100
 COMPARISON_OPTION_LIMIT = 5
 
@@ -155,7 +155,7 @@ def _provider_view(
     if source_count > COMPARISON_ITEM_LIMIT:
         raise ComparisonProviderError(
             "This Context pair exceeds the one-shot compare limit of "
-            f"{COMPARISON_ITEM_LIMIT} direct Memories. Input is never "
+            f"{COMPARISON_ITEM_LIMIT} projected Memories. Input is never "
             "truncated."
         )
 

@@ -64,6 +64,17 @@ the same grant and unchanged authority projection before replaying the text.
 It therefore fails after revocation, grant revision, Profile change, or source
 drift instead of retaining a hidden durable copy of authority Memories.
 
+Compare resolves both the active reference and `--to` peer through the same
+READ boundary. When a selected root contains descendant Contexts, its bounded
+current projection is flattened in deterministic traversal order and each
+Memory is labelled with its public source Context; nested QUERY-only overrides
+are omitted. A comparison involving any granted frame is initially
+process-local and visibly marked `NOT SAVED (GRANTED VIEW)`: persisting the
+ordinary full-frame artifact would copy authority source text into the
+participant Profile. The grant and source projection are revalidated after the
+provider call before even that ephemeral result is published. Durable granted
+Compare sessions require a separately redacted artifact schema.
+
 ## Safety and limitations
 
 The persistent current pointer intentionally does not freeze a grant revision.

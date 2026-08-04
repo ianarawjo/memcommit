@@ -11,6 +11,8 @@ from typer.testing import CliRunner
 import memcommit.clipboard as clipboard
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
+from memcommit.comparison_store import comparison_analysis_path
 from memcommit.commands.granted_context import (
     freeze_granted_context_binding,
     resolve_context_access,
@@ -191,6 +193,73 @@ def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
     blocked = runner.invoke(app, ["ls", "--paste"])
     assert blocked.exit_code == 1
     assert "no longer available under its exact grant" in blocked.stderr
+
+
+def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, _source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+    )
+    service = authority.load_direct("campus-wiki/services")
+    payloads = []
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert operation == "compare_contexts"
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            payloads.append(payload)
+            reference, compared = payload["frames"]
+            return json.dumps(
+                {
+                    "overview": "The granted views share service guidance.",
+                    "reports": {
+                        "both": "Both frames contain related service guidance.",
+                        "differences": "",
+                        "reference_only": "",
+                        "compared_only": "",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "all",
+                            "reference_memory_ids": [
+                                item["memory_id"] for item in reference["memories"]
+                            ],
+                            "compared_memory_ids": [
+                                item["memory_id"] for item in compared["memories"]
+                            ],
+                            "kind": "COMPATIBLE",
+                            "status": "RESOLVED",
+                            "summary": "The service guidance can coexist.",
+                            "reason": "The supplied claims address service access.",
+                        }
+                    ],
+                    "issues": [],
+                }
+            )
+
+    monkeypatch.setattr(
+        "memcommit.commands.compare.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    switched = runner.invoke(app, ["switch", wiki.name])
+    compared = runner.invoke(app, ["compare", "--to", "./services"])
+
+    assert switched.exit_code == 0, switched.output
+    assert compared.exit_code == 0, compared.output
+    assert "NOT SAVED (GRANTED VIEW)" in compared.output
+    assert len(payloads) == 1
+    encoded = json.dumps(payloads[0])
+    assert "west lobby" in encoded
+    assert "open on weekdays" in encoded
+    assert DETAIL_SECRET not in encoded
+    assert not comparison_analysis_path(wiki.uid, service.uid).exists()
+    assert active.current_context_name() == wiki.name
 
 
 def _edit_and_add_plan(prompt: str) -> str:
