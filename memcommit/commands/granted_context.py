@@ -37,8 +37,14 @@ class ContextAccess:
         return self.view is not None
 
 
-def freeze_granted_update_target(access: ContextAccess) -> GrantedUpdateTarget:
-    """Freeze the complete control-plane identity behind one public view."""
+def freeze_granted_context_binding(access: ContextAccess) -> GrantedUpdateTarget:
+    """Freeze the complete control-plane identity behind one public view.
+
+    ``GrantedUpdateTarget`` remains the serialized compatibility name, but the
+    receipt itself is operation-neutral: read artifacts need the same grant,
+    Profile, attachment, resource, and authority-Context preconditions as an
+    update target.
+    """
 
     view = access.view
     if view is None or access.attachment_name is None:
@@ -58,6 +64,42 @@ def freeze_granted_update_target(access: ContextAccess) -> GrantedUpdateTarget:
         authority_context_name=view.authority_context_name,
         permissions=grant.permissions,
     )
+
+
+def freeze_granted_update_target(access: ContextAccess) -> GrantedUpdateTarget:
+    """Compatibility wrapper for persisted Update-session bindings."""
+
+    return freeze_granted_context_binding(access)
+
+
+def revalidate_granted_context_binding(
+    binding: GrantedUpdateTarget,
+    *,
+    required_permission: str = "READ",
+    registry: ProfileRegistry | None = None,
+) -> ContextAccess:
+    """Resolve one frozen artifact binding against the active grant registry."""
+
+    active_store = MemoryStore()
+    registry = registry or load_profile_registry()
+    if registry.active.uid != binding.grantee_profile_uid:
+        raise ProfileError(
+            "The active Profile no longer matches the granted artifact binding."
+        )
+    access = resolve_context_access(
+        active_store,
+        binding.public_name,
+        current_name=binding.attachment_context_name,
+        required_permission=required_permission,
+        registry=registry,
+    )
+    if not access.is_granted:
+        raise ProfileError("The artifact no longer resolves to a granted Context.")
+    if freeze_granted_context_binding(access) != binding:
+        raise ProfileError(
+            "The authority grant changed after this artifact was created."
+        )
+    return access
 
 
 def resolve_context_access(

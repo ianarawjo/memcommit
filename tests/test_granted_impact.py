@@ -10,6 +10,11 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.commands.granted_context import (
+    freeze_granted_context_binding,
+    resolve_context_access,
+    revalidate_granted_context_binding,
+)
 from memcommit.context import AutoCheckpoint, Context
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
@@ -20,6 +25,7 @@ from memcommit.profile_config import (
     profile_store_dir,
 )
 from memcommit.profiles import (
+    ProfileError,
     create_authority_grant,
     delete_authority_grant,
 )
@@ -103,6 +109,36 @@ def _setup_granted_target(
 
 def _empty_plan() -> str:
     return json.dumps({"edits": [], "additions": [], "removals": []})
+
+
+def test_granted_context_binding_revalidates_exact_view_and_rejects_revocation(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, source, wiki, grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    access = resolve_context_access(
+        active,
+        wiki.name,
+        current_name=source.name,
+        required_permission="READ",
+    )
+    binding = freeze_granted_context_binding(access)
+
+    restored = revalidate_granted_context_binding(binding)
+
+    assert restored.display_name == wiki.name
+    assert restored.view is not None
+    assert restored.view.grant.uid == grant.uid
+    assert DETAIL_SECRET not in json.dumps(binding.to_dict())
+
+    delete_authority_grant(grant.uid)
+    with pytest.raises(ProfileError, match="does not exist"):
+        revalidate_granted_context_binding(binding)
 
 
 def _edit_and_add_plan(prompt: str) -> str:
