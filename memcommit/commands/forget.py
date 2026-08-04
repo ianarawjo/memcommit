@@ -3,11 +3,26 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.granted_context import (
+    authorized_context_mutation,
+    grant_checkpoint_args,
+    resolve_context_access,
+)
 from memcommit.config import Config
 from memcommit.context import AutoCheckpoint, Context
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.semantic.llm import LLMClient, LLMError
 from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange, apply_changes
 from memcommit.store import MemoryStore
+
+
+def _required_permissions(changes: list[ProposedChange]) -> tuple[str, ...]:
+    permissions = {
+        "DELETE" if isinstance(change, RemoveChange) else "UPDATE"
+        for change in changes
+    }
+    return tuple(sorted(permissions))
 
 
 def _print_proposals(proposals: list[ProposedChange], query: str) -> None:
@@ -86,10 +101,24 @@ def cmd(info: Annotated[str, typer.Argument(help="Description of memories to for
         typer.secho(str(e), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    store = MemoryStore()
+    active_store = MemoryStore()
     try:
-        ctx = store.load_current_direct()
-    except RuntimeError as e:
+        access = resolve_context_access(
+            active_store,
+            None,
+            current_name=active_store.current_context_name(),
+            required_permission="READ",
+        )
+        store = access.store
+        ctx = store.load_direct(access.context_name)
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as e:
         typer.secho(str(e), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
@@ -107,8 +136,19 @@ def cmd(info: Annotated[str, typer.Argument(help="Description of memories to for
             parts.append(f'removed "{removes[0].content[:40]}"' if len(removes) == 1 else f"removed {len(removes)}")
         if edits:
             parts.append(f'edited "{edits[0].old_content[:40]}"' if len(edits) == 1 else f"edited {len(edits)}")
-        store.save(ctx, AutoCheckpoint(
-            command="forget",
-            args={"query": info},
-            description=f'Forgot ({info[:40]}): {", ".join(parts)}',
-        ))
+        try:
+            with authorized_context_mutation(
+                access,
+                required_permissions=_required_permissions(applied),
+            ):
+                store.save(ctx, AutoCheckpoint(
+                    command="forget",
+                    args={
+                        "query": info,
+                        **grant_checkpoint_args(access),
+                    },
+                    description=f'Forgot ({info[:40]}): {", ".join(parts)}',
+                ))
+        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)

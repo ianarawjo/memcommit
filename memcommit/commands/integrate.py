@@ -7,8 +7,15 @@ from rich.console import Console
 from rich.text import Text
 
 import memcommit.ops as ops
+from memcommit.commands.granted_context import (
+    authorized_context_mutation,
+    grant_checkpoint_args,
+    resolve_context_access,
+)
 from memcommit.config import Config
 from memcommit.context import AutoCheckpoint, Context
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.semantic.changes import AddChange, EditChange, ProposedChange, RemoveChange, apply_changes
 from memcommit.semantic.llm import LLMClient, LLMError
 from memcommit.store import MemoryStore
@@ -16,6 +23,18 @@ from memcommit.store import MemoryStore
 
 _DIFF_INDENT = "       "
 _diff_console = Console(highlight=False)
+
+
+def _required_permissions(changes: list[ProposedChange]) -> tuple[str, ...]:
+    permissions = set()
+    for change in changes:
+        if isinstance(change, AddChange):
+            permissions.add("CREATE")
+        elif isinstance(change, RemoveChange):
+            permissions.add("DELETE")
+        else:
+            permissions.add("UPDATE")
+    return tuple(sorted(permissions))
 
 
 def _word_tokens(text: str) -> list[str]:
@@ -206,10 +225,24 @@ def cmd(
         typer.secho(str(e), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    store = MemoryStore()
+    active_store = MemoryStore()
     try:
-        ctx = store.load_current_direct()
-    except RuntimeError as e:
+        access = resolve_context_access(
+            active_store,
+            None,
+            current_name=active_store.current_context_name(),
+            required_permission="READ",
+        )
+        store = access.store
+        ctx = store.load_direct(access.context_name)
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as e:
         typer.secho(str(e), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
@@ -239,8 +272,21 @@ def cmd(
                 f"edited [{edits[0].uid[:8]}]"
                 if len(edits) == 1 else f"edited {len(edits)}"
             )
-        store.save(ctx, AutoCheckpoint(
-            command="integrate",
-            args={"info": info},
-            description=f'Integrated ({info[:40]}): {", ".join(parts)}',
-        ))
+        try:
+            with authorized_context_mutation(
+                access,
+                required_permissions=_required_permissions(applied),
+            ):
+                store.save(ctx, AutoCheckpoint(
+                    command="integrate",
+                    args={
+                        "info": info,
+                        **grant_checkpoint_args(access),
+                    },
+                    description=(
+                        f'Integrated ({info[:40]}): {", ".join(parts)}'
+                    ),
+                ))
+        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)

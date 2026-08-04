@@ -90,6 +90,13 @@ Failure therefore occurs before the first authority write, and the authority
 checkpoint records the grant UID, revision, grantee Profile, and public Context
 used for the operation.
 
+`forget` and `integrate` cannot authorize from the natural-language request or
+command name. They first produce a reviewable proposal, then derive the exact
+permission union from the accepted changes: additions require `CREATE`, edits
+require `UPDATE`, and removals require `DELETE`. The accepted changes remain
+in-memory until that complete union is revalidated under the registry lock and
+the single Context save succeeds.
+
 ## Safety and limitations
 
 The persistent current pointer intentionally does not freeze a grant revision.
