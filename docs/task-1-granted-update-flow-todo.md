@@ -120,6 +120,24 @@ but it is not a substitute for the runtime work below.
     explicitly; do not document planned behavior as complete before its tests
     and live verification pass.
 
+- [ ] 8. Expand the `mem impact` detail surface after the update flow is stable.
+  - Do not implement this as part of the current granted-update slice; first
+    observe which information participants actually need while reviewing a
+    full Task 1 plan.
+  - Consider showing the source disposition, authoritative answer-key or
+    evaluation status when available, target selection rationale, operation
+    permission, grant and Profile identity, freshness state, intended
+    disclosure audience, and whether several source Memories were consolidated
+    into one proposed target change.
+  - Make omitted, already-present, merged, and unresolved source items
+    inspectable so a structurally valid but incomplete plan cannot look
+    exhaustive.
+  - Decide separately which fields belong in the compact list, the expanded
+    detail card, and an evaluation-only view. Do not expose concealed
+    query-only content or present Study Gold as participant-visible guidance.
+  - Preserve copyable full before/after text and source-reference digests while
+    avoiding an unreadable default screen for large plans.
+
 ## Recommended first slice
 
 Start with checklist items 1 and 2 only: contract tests plus read-only granted
