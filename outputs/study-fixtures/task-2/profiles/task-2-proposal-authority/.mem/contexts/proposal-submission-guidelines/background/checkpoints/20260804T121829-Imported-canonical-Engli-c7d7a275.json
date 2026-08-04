@@ -1,0 +1,66 @@
+{
+  "uid": "c7d7a275-be49-40e7-af5b-fa2d4bdbf839",
+  "message": "Imported canonical English Task 2 fixture Context 'proposal-submission-guidelines/background' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T12:18:29.103959",
+  "snapshot": {
+    "uid": "fc469c19-05c5-5e15-9793-cca3ad277e50",
+    "name": "proposal-submission-guidelines/background",
+    "memories": {
+      "027d5bb7-a725-540b-be99-3e7ebdb95fbd": {
+        "type": "memory",
+        "uid": "027d5bb7-a725-540b-be99-3e7ebdb95fbd",
+        "content": "Write the background and related literature section in 170\u2013210 words combined."
+      },
+      "5b118518-2ac2-55ea-b88c-c2bea1c6ecb2": {
+        "type": "memory",
+        "uid": "5b118518-2ac2-55ea-b88c-c2bea1c6ecb2",
+        "content": "Specifically identify an unresolved research problem."
+      },
+      "136e33dc-714e-595b-a546-ae6e767cd0e0": {
+        "type": "memory",
+        "uid": "136e33dc-714e-595b-a546-ae6e767cd0e0",
+        "content": "Explain why this issue must be addressed now."
+      },
+      "7d5027f4-7e3c-59e0-b5f9-10fbbaefafe2": {
+        "type": "memory",
+        "uid": "7d5027f4-7e3c-59e0-b5f9-10fbbaefafe2",
+        "content": "Present recent evidence most directly relevant to the proposed research question or approach."
+      },
+      "1a2f2ce9-91cf-5810-b612-83e2425008db": {
+        "type": "memory",
+        "uid": "1a2f2ce9-91cf-5810-b612-83e2425008db",
+        "content": "Explicitly state in one sentence the gap left by existing research."
+      },
+      "85edce8a-b03e-5f36-92fa-4ae09e08f056": {
+        "type": "memory",
+        "uid": "85edce8a-b03e-5f36-92fa-4ae09e08f056",
+        "content": "Reviewers from different subfields have difficulty interpreting an undefined core concept consistently when they first encounter it."
+      }
+    },
+    "order": [
+      "027d5bb7-a725-540b-be99-3e7ebdb95fbd",
+      "5b118518-2ac2-55ea-b88c-c2bea1c6ecb2",
+      "136e33dc-714e-595b-a546-ae6e767cd0e0",
+      "7d5027f4-7e3c-59e0-b5f9-10fbbaefafe2",
+      "1a2f2ce9-91cf-5810-b612-83e2425008db",
+      "85edce8a-b03e-5f36-92fa-4ae09e08f056"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "fc469c19-05c5-5e15-9793-cca3ad277e50",
+    "memory_uids": [
+      "027d5bb7-a725-540b-be99-3e7ebdb95fbd",
+      "5b118518-2ac2-55ea-b88c-c2bea1c6ecb2",
+      "136e33dc-714e-595b-a546-ae6e767cd0e0",
+      "7d5027f4-7e3c-59e0-b5f9-10fbbaefafe2",
+      "1a2f2ce9-91cf-5810-b612-83e2425008db",
+      "85edce8a-b03e-5f36-92fa-4ae09e08f056"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'proposal-submission-guidelines/background' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

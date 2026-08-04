@@ -20,7 +20,7 @@
     "df53a41c-2fbf-532a-a5b0-560a196bf5cb": {
       "type": "memory",
       "uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
-      "content": "Present the target number of participants in the recruitment plan as a single precise value."
+      "content": "Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity."
     },
     "24d49198-fd7b-5810-bc56-1910a796f76e": {
       "type": "memory",
@@ -35,7 +35,7 @@
     "91db3bd1-4417-5db6-b7a6-3e79c87ebe88": {
       "type": "memory",
       "uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88",
-      "content": "The agent cannot assess the realism of a recruitment plan without seeing the expected attrition stages from initial contact to final participation."
+      "content": "This advisor cannot tell whether the schedule and budget agree when different sections imply different target counts."
     },
     "49746579-92d7-51ea-b158-7d770443d101": {
       "type": "memory",
@@ -60,17 +60,17 @@
     "0ecc319a-ae60-5510-883d-52e613138164": {
       "type": "memory",
       "uid": "0ecc319a-ae60-5510-883d-52e613138164",
-      "content": "In formative evaluation, compare alternatives that differ in only one core design attribute."
+      "content": "Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates."
     },
     "c4dfdb65-e673-52c0-a40c-e909d6014e00": {
       "type": "memory",
       "uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00",
-      "content": "When comparing design alternatives, keep participant tasks and provided information identical."
+      "content": "If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable."
     },
     "a7c3a123-3f05-52e0-b33e-c450d1a070ac": {
       "type": "memory",
       "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
-      "content": "After each formative evaluation iteration, specify the decision rules for determining which evidence justifies modifying the next prototype."
+      "content": "Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support."
     }
   },
   "order": [

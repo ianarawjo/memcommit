@@ -1,0 +1,94 @@
+{
+  "uid": "16853f1a-0cd4-4cfa-93ee-7189b7790475",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor2/compensation' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T12:18:29.083340",
+  "snapshot": {
+    "uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+    "name": "advisor2/compensation",
+    "memories": {
+      "be9e402b-8d3b-58da-9766-2cf2ec25b9ae": {
+        "type": "memory",
+        "uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae",
+        "content": "Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation."
+      },
+      "85157c57-410f-5c7d-8183-b37d61eebf8a": {
+        "type": "memory",
+        "uid": "85157c57-410f-5c7d-8183-b37d61eebf8a",
+        "content": "Compensate participants who withdraw from the study midway for their actual participation time."
+      },
+      "8abeab95-3e41-5378-8409-08200aee9d58": {
+        "type": "memory",
+        "uid": "8abeab95-3e41-5378-8409-08200aee9d58",
+        "content": "Compensate for the time actually spent in sessions, regardless of the research modality."
+      },
+      "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68": {
+        "type": "memory",
+        "uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68",
+        "content": "Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers."
+      },
+      "5c6c461d-05e5-5b0c-b801-245de2f9c8d7": {
+        "type": "memory",
+        "uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7",
+        "content": "Do not treat an unresolved payment method as a deficiency at the proposal stage."
+      },
+      "44abc098-8c9f-5abb-bc49-9deb25066d93": {
+        "type": "memory",
+        "uid": "44abc098-8c9f-5abb-bc49-9deb25066d93",
+        "content": "Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation."
+      },
+      "2a252668-f3f2-5582-b248-43ad81c54a48": {
+        "type": "memory",
+        "uid": "2a252668-f3f2-5582-b248-43ad81c54a48",
+        "content": "Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation."
+      },
+      "7e647a83-81b0-52d6-9362-e513dc2a5032": {
+        "type": "memory",
+        "uid": "7e647a83-81b0-52d6-9362-e513dc2a5032",
+        "content": "In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations."
+      },
+      "d77affab-60c8-5403-b189-17022b484640": {
+        "type": "memory",
+        "uid": "d77affab-60c8-5403-b189-17022b484640",
+        "content": "Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties."
+      },
+      "0c470c6b-26a6-5501-93ac-c51fecd708ae": {
+        "type": "memory",
+        "uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae",
+        "content": "The user writing this proposal tends to count session time but omit participants\u2019 advance setup and follow-up reporting time."
+      }
+    },
+    "order": [
+      "be9e402b-8d3b-58da-9766-2cf2ec25b9ae",
+      "85157c57-410f-5c7d-8183-b37d61eebf8a",
+      "8abeab95-3e41-5378-8409-08200aee9d58",
+      "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68",
+      "5c6c461d-05e5-5b0c-b801-245de2f9c8d7",
+      "44abc098-8c9f-5abb-bc49-9deb25066d93",
+      "2a252668-f3f2-5582-b248-43ad81c54a48",
+      "7e647a83-81b0-52d6-9362-e513dc2a5032",
+      "d77affab-60c8-5403-b189-17022b484640",
+      "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+    "memory_uids": [
+      "be9e402b-8d3b-58da-9766-2cf2ec25b9ae",
+      "85157c57-410f-5c7d-8183-b37d61eebf8a",
+      "8abeab95-3e41-5378-8409-08200aee9d58",
+      "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68",
+      "5c6c461d-05e5-5b0c-b801-245de2f9c8d7",
+      "44abc098-8c9f-5abb-bc49-9deb25066d93",
+      "2a252668-f3f2-5582-b248-43ad81c54a48",
+      "7e647a83-81b0-52d6-9362-e513dc2a5032",
+      "d77affab-60c8-5403-b189-17022b484640",
+      "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor2/compensation' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

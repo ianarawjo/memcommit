@@ -1,0 +1,80 @@
+{
+  "uid": "78498307-ce77-4e48-a3ce-4aceb0250d14",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/expression' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T12:18:29.067035",
+  "snapshot": {
+    "uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+    "name": "advisor1/expression",
+    "memories": {
+      "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865": {
+        "type": "memory",
+        "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
+        "content": "Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes."
+      },
+      "e686bd4d-3ebd-5e55-ba39-f26971247965": {
+        "type": "memory",
+        "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965",
+        "content": "Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once."
+      },
+      "019662a9-6f03-527f-9b6d-be5a2966d9e9": {
+        "type": "memory",
+        "uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+        "content": "The visual fidelity of a prototype may differ from its functional fidelity."
+      },
+      "a6dfe9a7-1df8-561f-8d3e-fc19518beca9": {
+        "type": "memory",
+        "uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+        "content": "A flow diagram can make alternate branches and their different outcomes visible in one view."
+      },
+      "7047a23d-45b3-5d5c-a00b-c12552e9680d": {
+        "type": "memory",
+        "uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+        "content": "HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text."
+      },
+      "50a71968-7e3f-5b99-b3fa-769af386d0c0": {
+        "type": "memory",
+        "uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+        "content": "Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time."
+      },
+      "ae1610f6-a855-56c1-a0fb-fd3207dab615": {
+        "type": "memory",
+        "uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+        "content": "Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table."
+      },
+      "d2825b84-b4a6-58c9-8f8e-9e19c6192a03": {
+        "type": "memory",
+        "uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03",
+        "content": "This advisor has repeatedly seen reviewers inspect the proposal\u2019s main visual before reading the procedural explanation in full."
+      }
+    },
+    "order": [
+      "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
+      "e686bd4d-3ebd-5e55-ba39-f26971247965",
+      "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+      "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+      "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+      "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+      "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+      "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+    "memory_uids": [
+      "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
+      "e686bd4d-3ebd-5e55-ba39-f26971247965",
+      "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+      "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+      "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+      "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+      "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+      "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/expression' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

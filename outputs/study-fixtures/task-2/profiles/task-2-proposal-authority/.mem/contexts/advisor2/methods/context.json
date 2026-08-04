@@ -20,7 +20,7 @@
     "8a49f598-804e-5a81-8e88-add7b665633a": {
       "type": "memory",
       "uid": "8a49f598-804e-5a81-8e88-add7b665633a",
-      "content": "Present the target number of participants as a single value or justified range based on grounds for recruitment feasibility."
+      "content": "Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases."
     },
     "629cb159-6f6c-5476-870d-716ab573aef8": {
       "type": "memory",
@@ -35,7 +35,7 @@
     "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d": {
       "type": "memory",
       "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d",
-      "content": "The agent cannot review the realism of recruitment plans without expected attrition stages from contact targets to final participants."
+      "content": "This advisor cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost."
     },
     "f150891e-7635-5c35-b986-d369bc630ef4": {
       "type": "memory",
@@ -60,27 +60,27 @@
     "40f23f85-561e-55b3-825b-5000f9638f8a": {
       "type": "memory",
       "uid": "40f23f85-561e-55b3-825b-5000f9638f8a",
-      "content": "Predefine criteria for functional stability, operational readiness, and safety conditions before transitioning from pilot to full deployment."
+      "content": "Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical."
     },
     "9527ccb8-6662-58e3-8edd-daf7c0a713af": {
       "type": "memory",
       "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af",
-      "content": "If there is a risk of disrupting actual work, design shadow deployment phases that maintain existing procedures while comparing outcomes."
+      "content": "Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed."
     },
     "3ff9ec36-b70d-5dbd-9692-27fdf734fd20": {
       "type": "memory",
       "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20",
-      "content": "Schedule field observations to include time periods with varying workload levels and participant compositions."
+      "content": "Show how session count and facilitator time change at the minimum and maximum bounds."
     },
     "9e1c3629-641f-5c09-915d-8a2ad1c8013a": {
       "type": "memory",
       "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a",
-      "content": "Specify data collection methods for recording instances where operators bypass the system or perform manual recovery actions."
+      "content": "Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion."
     },
     "7ba672db-131e-5795-89c9-46f56344e7ed": {
       "type": "memory",
       "uid": "7ba672db-131e-5795-89c9-46f56344e7ed",
-      "content": "Interviews reveal participants\u2019 perceived reasons, while field observations show actual procedures and workarounds performed in practice."
+      "content": "A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target."
     }
   },
   "order": [

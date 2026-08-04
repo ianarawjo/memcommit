@@ -3,8 +3,8 @@
   "context_uid": "a3229f2e-43d1-5629-9104-2d49292b7a75",
   "context_name": "proposal-submission-guidelines/outcomes",
   "target_language": "ko",
-  "created_at": "2026-08-04T15:51:08.470574+00:00",
-  "updated_at": "2026-08-04T15:51:08.470694+00:00",
+  "created_at": "2026-08-04T16:18:29.198844+00:00",
+  "updated_at": "2026-08-04T16:18:29.198975+00:00",
   "revision": 4,
   "contract_version": "translate-v2",
   "entries": [
@@ -18,8 +18,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
-        "created_at": "2026-08-04T15:51:08.470608+00:00",
-        "updated_at": "2026-08-04T15:51:08.470608+00:00"
+        "created_at": "2026-08-04T16:18:29.198885+00:00",
+        "updated_at": "2026-08-04T16:18:29.198885+00:00"
       }
     },
     {
@@ -32,8 +32,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
-        "created_at": "2026-08-04T15:51:08.470653+00:00",
-        "updated_at": "2026-08-04T15:51:08.470653+00:00"
+        "created_at": "2026-08-04T16:18:29.198932+00:00",
+        "updated_at": "2026-08-04T16:18:29.198932+00:00"
       }
     },
     {
@@ -46,8 +46,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
-        "created_at": "2026-08-04T15:51:08.470694+00:00",
-        "updated_at": "2026-08-04T15:51:08.470694+00:00"
+        "created_at": "2026-08-04T16:18:29.198975+00:00",
+        "updated_at": "2026-08-04T16:18:29.198975+00:00"
       }
     }
   ]

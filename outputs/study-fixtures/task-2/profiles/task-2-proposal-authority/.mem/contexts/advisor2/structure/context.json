@@ -5,12 +5,12 @@
     "e32f543b-1637-572a-ab96-319d74ee7e21": {
       "type": "memory",
       "uid": "e32f543b-1637-572a-ab96-319d74ee7e21",
-      "content": "Present an unresolved interaction problem in the actual usage environment within the first three sentences of the introduction."
+      "content": "Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable."
     },
     "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3": {
       "type": "memory",
       "uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
-      "content": "Present the burden this interaction problem imposes on current users or operations within the first three sentences of the introduction."
+      "content": "Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary."
     },
     "48e887dc-7fc8-5a23-9999-890acb870251": {
       "type": "memory",
@@ -45,12 +45,12 @@
     "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1": {
       "type": "memory",
       "uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
-      "content": "Do not create additional subheadings if the submission template permits only specified subheadings."
+      "content": "Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps."
     },
     "87203bcf-6724-543a-ad19-60a2becc4598": {
       "type": "memory",
       "uid": "87203bcf-6724-543a-ad19-60a2becc4598",
-      "content": "Within the specified subheadings, connect user problems, design interventions, and evaluation logic into a continuous flow."
+      "content": "Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments."
     },
     "c9591180-6f3a-5909-8695-31704b9b6f01": {
       "type": "memory",
@@ -60,32 +60,32 @@
     "0ac685f9-e338-5549-bf91-32078cf36f15": {
       "type": "memory",
       "uid": "0ac685f9-e338-5549-bf91-32078cf36f15",
-      "content": "HCI reviewers identify the user problem and actual usage environment in the first three sentences of the introduction to form their initial framing of the proposal."
+      "content": "This advisor has repeatedly seen readers misinterpret a compressed opening when the person, setting, or consequence is only implied."
     },
     "5567fb3c-de90-5363-af1b-62fb5b8e0bb1": {
       "type": "memory",
       "uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
-      "content": "HCI reviewers judge the burden this problem imposes on current users or operations within the first three sentences of the introduction."
+      "content": "A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change."
     },
     "32cef408-4c66-5ef2-9a59-eea6fc67b16e": {
       "type": "memory",
       "uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
-      "content": "Present an unbroken path from user problems to field evidence, design interventions, evaluation results, and operational decisions."
+      "content": "Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself."
     },
     "3579fcc0-c74e-5006-901b-6406a3106fa1": {
       "type": "memory",
       "uid": "3579fcc0-c74e-5006-901b-6406a3106fa1",
-      "content": "Include in the research flow who inherits the system under what conditions after the research phase concludes."
+      "content": "End each paragraph with the question or consequence that the next paragraph answers."
     },
     "2c2aa1af-c450-5c8d-a907-042c5757d3ee": {
       "type": "memory",
       "uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
-      "content": "The logic of field deployment research connects not only to whether the design works but also to how its results support operational decisions."
+      "content": "A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels."
     },
     "1fb62d5b-532b-5664-842c-57622e3c8b9d": {
       "type": "memory",
       "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d",
-      "content": "The agent cannot assess the sustainability of proposed interventions if the operational owner post-deployment is not visible."
+      "content": "This advisor has repeatedly seen very short headed sections read like an outline because each new label interrupts the connection to the previous paragraph."
     }
   },
   "order": [

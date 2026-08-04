@@ -1,0 +1,80 @@
+{
+  "uid": "d3158e60-3a1b-401e-bc5c-b1bdad37b9b0",
+  "message": "Imported canonical English Task 2 fixture Context 'proposal-submission-guidelines/format' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T12:18:29.106872",
+  "snapshot": {
+    "uid": "7fe9fd43-0d6d-54b3-aa7d-06b6ad8dd0d1",
+    "name": "proposal-submission-guidelines/format",
+    "memories": {
+      "ec0f5d7b-369d-55cc-a238-b776c6b0271f": {
+        "type": "memory",
+        "uid": "ec0f5d7b-369d-55cc-a238-b776c6b0271f",
+        "content": "Limit the proposal body to a maximum of two pages."
+      },
+      "78acd8e3-6cc0-5fa0-a60d-d1f80e21e00a": {
+        "type": "memory",
+        "uid": "78acd8e3-6cc0-5fa0-a60d-d1f80e21e00a",
+        "content": "References are not included in the two-page limit for the body text."
+      },
+      "21dd4a7f-f397-5d2a-b675-a4800c262a27": {
+        "type": "memory",
+        "uid": "21dd4a7f-f397-5d2a-b675-a4800c262a27",
+        "content": "Figures and tables placed within the body count toward the two-page limit for the body text."
+      },
+      "bff84712-882c-5a0d-a3e4-0e77912d9d3b": {
+        "type": "memory",
+        "uid": "bff84712-882c-5a0d-a3e4-0e77912d9d3b",
+        "content": "Maintain a font size of 11 points or larger in the body text."
+      },
+      "0dfe0e3c-999d-58da-93d3-796e3954ca2b": {
+        "type": "memory",
+        "uid": "0dfe0e3c-999d-58da-93d3-796e3954ca2b",
+        "content": "Format all pages to US Letter size."
+      },
+      "f7e050f7-a5ed-5bea-b5b1-5decfc51edd7": {
+        "type": "memory",
+        "uid": "f7e050f7-a5ed-5bea-b5b1-5decfc51edd7",
+        "content": "Use Arial for the body typeface."
+      },
+      "b641d18e-e6d4-5967-a01c-11182fafa8a8": {
+        "type": "memory",
+        "uid": "b641d18e-e6d4-5967-a01c-11182fafa8a8",
+        "content": "Maintain margins of at least one inch on all four sides of every page."
+      },
+      "801a95cb-fe6a-53f7-9e1a-e12ced336f34": {
+        "type": "memory",
+        "uid": "801a95cb-fe6a-53f7-9e1a-e12ced336f34",
+        "content": "Reviewers often scan figures and tables separately from the main text first."
+      }
+    },
+    "order": [
+      "ec0f5d7b-369d-55cc-a238-b776c6b0271f",
+      "78acd8e3-6cc0-5fa0-a60d-d1f80e21e00a",
+      "21dd4a7f-f397-5d2a-b675-a4800c262a27",
+      "bff84712-882c-5a0d-a3e4-0e77912d9d3b",
+      "0dfe0e3c-999d-58da-93d3-796e3954ca2b",
+      "f7e050f7-a5ed-5bea-b5b1-5decfc51edd7",
+      "b641d18e-e6d4-5967-a01c-11182fafa8a8",
+      "801a95cb-fe6a-53f7-9e1a-e12ced336f34"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "7fe9fd43-0d6d-54b3-aa7d-06b6ad8dd0d1",
+    "memory_uids": [
+      "ec0f5d7b-369d-55cc-a238-b776c6b0271f",
+      "78acd8e3-6cc0-5fa0-a60d-d1f80e21e00a",
+      "21dd4a7f-f397-5d2a-b675-a4800c262a27",
+      "bff84712-882c-5a0d-a3e4-0e77912d9d3b",
+      "0dfe0e3c-999d-58da-93d3-796e3954ca2b",
+      "f7e050f7-a5ed-5bea-b5b1-5decfc51edd7",
+      "b641d18e-e6d4-5967-a01c-11182fafa8a8",
+      "801a95cb-fe6a-53f7-9e1a-e12ced336f34"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'proposal-submission-guidelines/format' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

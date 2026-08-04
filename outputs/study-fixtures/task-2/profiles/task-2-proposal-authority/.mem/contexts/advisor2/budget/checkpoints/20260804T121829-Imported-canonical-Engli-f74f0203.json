@@ -1,0 +1,73 @@
+{
+  "uid": "f74f0203-281d-4838-9d18-0865e98878aa",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor2/budget' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T12:18:29.080678",
+  "snapshot": {
+    "uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+    "name": "advisor2/budget",
+    "memories": {
+      "d614b55d-d9f6-5347-8d02-2d219d621a09": {
+        "type": "memory",
+        "uid": "d614b55d-d9f6-5347-8d02-2d219d621a09",
+        "content": "Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix."
+      },
+      "24500129-4b07-564f-ba67-39e40d7d7860": {
+        "type": "memory",
+        "uid": "24500129-4b07-564f-ba67-39e40d7d7860",
+        "content": "Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table."
+      },
+      "07bad409-af9c-512a-b829-7ceb28273f91": {
+        "type": "memory",
+        "uid": "07bad409-af9c-512a-b829-7ceb28273f91",
+        "content": "Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative."
+      },
+      "abf6d361-c2eb-512f-87e0-f3af9c5eb677": {
+        "type": "memory",
+        "uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677",
+        "content": "This advisor has seen readers verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose."
+      },
+      "473cf3ca-9832-5d9c-97df-974f1d9b0d1b": {
+        "type": "memory",
+        "uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b",
+        "content": "Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs."
+      },
+      "675956de-2c61-53e1-bb89-9b49d92558ba": {
+        "type": "memory",
+        "uid": "675956de-2c61-53e1-bb89-9b49d92558ba",
+        "content": "Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference."
+      },
+      "f4371f72-f222-5066-b2f4-0a6be5d6865e": {
+        "type": "memory",
+        "uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e",
+        "content": "The user writing this proposal tends to interrupt the argument with long cost enumerations when no separate budget table is available."
+      }
+    },
+    "order": [
+      "d614b55d-d9f6-5347-8d02-2d219d621a09",
+      "24500129-4b07-564f-ba67-39e40d7d7860",
+      "07bad409-af9c-512a-b829-7ceb28273f91",
+      "abf6d361-c2eb-512f-87e0-f3af9c5eb677",
+      "473cf3ca-9832-5d9c-97df-974f1d9b0d1b",
+      "675956de-2c61-53e1-bb89-9b49d92558ba",
+      "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+    "memory_uids": [
+      "d614b55d-d9f6-5347-8d02-2d219d621a09",
+      "24500129-4b07-564f-ba67-39e40d7d7860",
+      "07bad409-af9c-512a-b829-7ceb28273f91",
+      "abf6d361-c2eb-512f-87e0-f3af9c5eb677",
+      "473cf3ca-9832-5d9c-97df-974f1d9b0d1b",
+      "675956de-2c61-53e1-bb89-9b49d92558ba",
+      "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor2/budget' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

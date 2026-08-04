@@ -1,0 +1,59 @@
+{
+  "uid": "3db7aefb-419a-4c2d-8c94-067116b956d2",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/safety' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T12:18:29.074025",
+  "snapshot": {
+    "uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+    "name": "advisor1/safety",
+    "memories": {
+      "9d6f5228-d182-571a-83d2-6a67becb7736": {
+        "type": "memory",
+        "uid": "9d6f5228-d182-571a-83d2-6a67becb7736",
+        "content": "Specify the order and recipients for reporting serious discomfort during the study."
+      },
+      "00ed485d-66c2-59ad-9c5b-9ae445412690": {
+        "type": "memory",
+        "uid": "00ed485d-66c2-59ad-9c5b-9ae445412690",
+        "content": "Field staff rely on a pre-defined contact sequence when serious discomfort is reported."
+      },
+      "9c6e1561-f671-52cb-aa67-245cc4987ad4": {
+        "type": "memory",
+        "uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4",
+        "content": "Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation."
+      },
+      "2381ecf7-2b11-583d-91d9-0a5cfc279ba1": {
+        "type": "memory",
+        "uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1",
+        "content": "Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification."
+      },
+      "c5ce1b00-36d9-5cdd-a318-93b88ca0e322": {
+        "type": "memory",
+        "uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322",
+        "content": "Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task."
+      }
+    },
+    "order": [
+      "9d6f5228-d182-571a-83d2-6a67becb7736",
+      "00ed485d-66c2-59ad-9c5b-9ae445412690",
+      "9c6e1561-f671-52cb-aa67-245cc4987ad4",
+      "2381ecf7-2b11-583d-91d9-0a5cfc279ba1",
+      "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+    "memory_uids": [
+      "9d6f5228-d182-571a-83d2-6a67becb7736",
+      "00ed485d-66c2-59ad-9c5b-9ae445412690",
+      "9c6e1561-f671-52cb-aa67-245cc4987ad4",
+      "2381ecf7-2b11-583d-91d9-0a5cfc279ba1",
+      "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/safety' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

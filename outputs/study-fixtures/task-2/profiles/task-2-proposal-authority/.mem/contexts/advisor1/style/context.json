@@ -15,7 +15,7 @@
     "807a906c-d519-59b1-8406-43c8015ef068": {
       "type": "memory",
       "uid": "807a906c-d519-59b1-8406-43c8015ef068",
-      "content": "Write design decisions chosen by the research team and user study actions in the first-person active voice."
+      "content": "Use first-person active voice for choices and commitments owned by the proposal author so responsibility remains explicit throughout the work plan."
     },
     "e463a3b5-263f-58da-9895-242965892e60": {
       "type": "memory",
@@ -30,22 +30,22 @@
     "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b": {
       "type": "memory",
       "uid": "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b",
-      "content": "HCI reviewers easily identify design choices and research actions for which the research team takes responsibility from first-person active voice."
+      "content": "This advisor has seen readers assign responsibility more accurately when the sentence says who chose, will deliver, or will revise an item in first-person active voice."
     },
     "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508": {
       "type": "memory",
       "uid": "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508",
-      "content": "Write contributions as sentences explaining under what conditions certain design choices are valid, rather than using expressions that imply creating a feature."
+      "content": "Use \u201cwe\u201d only for decisions and commitments the authors control, not for external facts or actions owned by another party."
     },
     "58565355-bec5-5b2b-89ed-f0b8cab0351a": {
       "type": "memory",
       "uid": "58565355-bec5-5b2b-89ed-f0b8cab0351a",
-      "content": "Design mechanisms include explanations of why user behavior changes, unlike interface feature lists."
+      "content": "Naming the author as the actor makes it easier to distinguish a deliberate commitment from a condition that merely exists."
     },
     "bec16e02-b267-50b8-9c0e-964184f2a6b4": {
       "type": "memory",
       "uid": "bec16e02-b267-50b8-9c0e-964184f2a6b4",
-      "content": "The user writing this proposal often uses verbs that list implementation features even when describing design knowledge."
+      "content": "The user writing this proposal tends to hide unsettled commitments behind passive phrases such as \u201cwill be considered\u201d or \u201cis expected.\u201d"
     },
     "cc860653-ad91-52f8-91db-5b26371dca0a": {
       "type": "memory",

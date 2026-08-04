@@ -5,12 +5,12 @@
     "44249c8a-e84f-5c20-a9cd-a55457e98511": {
       "type": "memory",
       "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511",
-      "content": "Identify the core problem users face when interacting with or collaborating through technology within the first two sentences of the opening paragraph."
+      "content": "Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background."
     },
     "21371c6c-c74f-5791-8f9b-6d099306bfb5": {
       "type": "memory",
       "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5",
-      "content": "Articulate the rationale for addressing this interaction problem immediately within the first two sentences of the opening paragraph."
+      "content": "Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response."
     },
     "f69ea80c-0d56-5fe8-9d24-8793eefa6643": {
       "type": "memory",
@@ -45,17 +45,17 @@
     "a1857f07-36cd-5a6c-946d-a308e712e9eb": {
       "type": "memory",
       "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb",
-      "content": "In a free-form proposal, separate the user problem into its own subsection heading."
+      "content": "Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps."
     },
     "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d": {
       "type": "memory",
       "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
-      "content": "In a free-form proposal, separate the design intervention into its own subsection heading."
+      "content": "Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions."
     },
     "3005f4c5-e17b-531b-b9bf-c9d69411c71f": {
       "type": "memory",
       "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
-      "content": "In a free-form proposal, separate the evaluation plan into its own subsection heading."
+      "content": "Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit."
     },
     "4913f63e-ceb9-587a-ade9-494fc8f28849": {
       "type": "memory",
@@ -65,27 +65,27 @@
     "8ecaec22-7c25-5a39-a85b-56db9c3b607e": {
       "type": "memory",
       "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
-      "content": "HCI reviewers identify the user and interaction problem in the first two sentences of the opening paragraph to form their initial framing of the proposal."
+      "content": "This advisor has repeatedly seen readers decide what a proposal is about from its first two sentences before scanning the rest of the page."
     },
     "a4536b84-40f2-57db-84e4-024c97c9fecb": {
       "type": "memory",
       "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb",
-      "content": "HCI reviewers judge the rationale for researching this user problem immediately from the first two sentences of the opening paragraph."
+      "content": "When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed."
     },
     "2312cb6e-4f50-56f5-b725-ba5e45697a73": {
       "type": "memory",
       "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73",
-      "content": "Link how controlled formative evaluations at each design phase alter subsequent design decisions in the proposal."
+      "content": "Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page."
     },
     "1d90043b-f010-5a14-9493-77f636c13975": {
       "type": "memory",
       "uid": "1d90043b-f010-5a14-9493-77f636c13975",
-      "content": "Connect the interaction phenomena observed from the user problem, the design choices to be compared, and the conceptual design knowledge derived into a single thread."
+      "content": "Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent."
     },
     "b77fe6ec-676b-5bb9-9119-45aefea2aa27": {
       "type": "memory",
       "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27",
-      "content": "The agent can review the overall research logic only if it is evident how each research phase constrains the design decisions of the next phase."
+      "content": "This advisor has repeatedly seen readers scan section labels before deciding which paragraph to read closely."
     }
   },
   "order": [

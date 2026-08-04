@@ -10,7 +10,7 @@
     "e3e20261-e03c-52fb-be9e-04f5f9b1294d": {
       "type": "memory",
       "uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d",
-      "content": "Write repeatable user study procedures so that tasks and steps precede people."
+      "content": "In procedural passages, begin each sentence with the action, condition, or output instead of repeating \u201cwe\u201d so the steps remain easy to follow and reuse."
     },
     "8d8d0e8d-dad1-50b5-9438-049052748a6a": {
       "type": "memory",
@@ -25,7 +25,7 @@
     "1f29de31-5429-5dfc-ab27-01779fa16704": {
       "type": "memory",
       "uid": "1f29de31-5429-5dfc-ab27-01779fa16704",
-      "content": "HCI reviewers easily identify repeatable user study procedures in sentences where tasks and steps precede people."
+      "content": "This advisor has seen readers reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author."
     },
     "1d181223-f750-57d2-97a5-b79f276a589f": {
       "type": "memory",
@@ -45,17 +45,17 @@
     "ddf40413-3274-5662-ba5e-d6cae2a1e546": {
       "type": "memory",
       "uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546",
-      "content": "When describing field interactions, explicitly specify the actor, action, and target system at each step."
+      "content": "Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning."
     },
     "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1": {
       "type": "memory",
       "uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1",
-      "content": "The agent cannot identify who is responsible for error handling in field procedures written exclusively in passive voice."
+      "content": "This advisor has repeatedly seen procedural paragraphs become harder to scan when every sentence begins with \u201cwe.\u201d"
     },
     "89c2ce30-d6aa-5762-bf17-c697caac68e4": {
       "type": "memory",
       "uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4",
-      "content": "Because operational procedures and user roles remain undefined, the mechanisms behind expected behavioral changes are provisional when conditional features have not yet been approved by field partners."
+      "content": "Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author."
     },
     "9f1b647a-bd2b-50df-8141-5b8c142c0fa5": {
       "type": "memory",
