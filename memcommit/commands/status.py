@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import typer
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
@@ -6,12 +8,46 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.commands.log import render_checkpoint_rows
-from memcommit.profile_config import ProfileConfigError
+from memcommit.profile_config import (
+    ProfileConfigError,
+    load_profile_registry,
+    profile_store_dir,
+)
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
-def cmd() -> None:
+def _profile_name(store: MemoryStore) -> str:
+    """Name the active Profile only when it owns this exact store boundary."""
+
+    registry = load_profile_registry()
+    if profile_store_dir(registry.active).resolve() == store.store_dir.resolve():
+        return registry.active.name
+    return "standalone"
+
+
+def _lineage(name: str) -> str:
+    return " > ".join(name.split("/"))
+
+
+def cmd(
+    short: Annotated[
+        bool,
+        typer.Option(
+            "-s",
+            "--short",
+            help="Show the current Context and counts on one line",
+        ),
+    ] = False,
+    branch: Annotated[
+        bool,
+        typer.Option(
+            "-b",
+            "--branch",
+            help="Include the active Profile and Context lineage",
+        ),
+    ] = False,
+) -> None:
     store = MemoryStore()
     name = store.current_context_name()
     if not name:
@@ -47,6 +83,30 @@ def cmd() -> None:
     embedded = [v for v in items if isinstance(v, Context)]
     # READ grants expose the current projection, not authority history.
     checkpoints = [] if access.is_granted else store.list_checkpoints(name)
+
+    profile_name = _profile_name(store) if branch else None
+    access_label = (
+        f"granted {access.view.grant.uid[:8]} r{access.view.grant.revision}"
+        if access.is_granted and access.view is not None
+        else "local"
+    )
+    counts = (
+        f"memories {len(memories)} · refs {len(references)} · "
+        f"queries {len(query_contexts)} · children {len(embedded)} · "
+        f"checkpoints {len(checkpoints)}"
+    )
+    if short:
+        prefix = (
+            f"## {profile_name} :: {_lineage(name)}"
+            if branch
+            else name
+        )
+        typer.echo(f"{prefix} [{access_label}] · {counts}")
+        return
+
+    if branch:
+        typer.secho(f"Profile: {profile_name}", bold=True)
+        typer.echo(f"Context lineage: {_lineage(name)}")
 
     typer.secho(f"On context: {name}", bold=True)
     if access.is_granted:
