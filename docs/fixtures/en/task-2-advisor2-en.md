@@ -33,8 +33,8 @@
 - T2-R-001 — `structure/problem` — PP — Present an unresolved interaction problem in the actual usage environment within the first three sentences of the introduction.
 - T2-R-070 — `structure/problem-urgency` — PP — Present the burden this interaction problem imposes on current users or operations within the first three sentences of the introduction.
 - T2-R-002 — `structure/research-question-position` — PP — Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.
-- T2-R-011 — `structure/interaction-step-visual` — PP — Summarize the sequence of steps for unfamiliar interaction procedures in a single flowchart.
-- T2-R-071 — `structure/interaction-transition-visual` — PP — Indicate the transition conditions between steps of unfamiliar interaction procedures in the flowchart.
+- T2-R-011 — `structure/interaction-step-visual` — PP — Provide one compact visual summary when proposing an unfamiliar interaction procedure.
+- T2-R-071 — `structure/interaction-transition-visual` — PP — Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.
 - T2-R-015 — `structure/masters-timeline-phases` — PP — Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.
 - T2-R-072 — `structure/masters-timeline-deliverables` — PP — Link deliverables that determine entry into the next phase to each milestone of the master’s research.
 - T2-R-017 — `structure/gap-contribution-link` — PP — Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.
@@ -47,11 +47,11 @@
 - T2-R-051 — `emphasis/contribution-naming` — PP — Present each design or operational contribution as a single named sentence.
 - T2-R-013 — `emphasis/recruitment-primary-constraint` — PP — In studies recruiting organizational members, emphasize workflow constraints.
 - T2-R-073 — `emphasis/recruitment-secondary-constraint` — PP — In studies recruiting organizational members, emphasize manager approval constraints.
-- T2-R-026 — `emphasis/contribution-type` — PP — Present the primary HCI design contribution of the proposal as design guidelines applicable to practitioners rather than conceptual models.
+- T2-R-026 — `style/em-dash-conditional-use` — PP — Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.
 - T2-R-055 — `emphasis/reviewer-contribution-capacity` — OM — HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.
 - T2-R-004 — `claim-evidence/evidence-adjacency` — PP — Place observational evidence or sources adjacent to claims regarding user needs or field effects.
 - T2-R-005 — `claim-evidence/observation-prediction-status` — PP — Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.
-- T2-R-009 — `claim-evidence/study-directionality` — PP — Express the primary research question of the proposal as an exploratory qualitative question without directional hypotheses.
+- T2-R-009 — `expression/sequence-table-choice` — PP — Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.
 - T2-R-010 — `claim-evidence/causal-language` — PP — Do not use verbs implying proof of causality if the design does not support causal inference.
 - T2-R-012 — `claim-evidence/source-priority` — PP — Prioritize citations of recent systems and field research in rapidly changing HCI topics.
 - T2-R-027 — `claim-evidence/design-rationale` — PP — Explain the user or operational stakeholder needs that each design choice aims to address.
@@ -70,8 +70,8 @@
 - T2-R-081 — `expression/interaction-state-change` — KB — Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.
 - T2-R-059 — `expression/reviewer-caption-scan` — OM — HCI reviewers often scan system structure and service flow diagrams before the main text.
 - T2-R-007 — `methods/question-evidence-analysis` — PP — Specify field and user data sources and analysis procedures corresponding to all HCI research questions.
-- T2-R-014 — `methods/primary-evaluation-setting` — PP — Design the primary evaluation of the proposal as a field deployment study in the actual usage environment.
-- T2-R-074 — `methods/lab-evaluation-scope` — PP — If the primary contribution changes actual operational decisions, do not judge solely by controlled laboratory evaluations.
+- T2-R-014 — `style/sentence-rhythm-rule` — PP — Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.
+- T2-R-074 — `style/connected-thoughts` — PP — Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.
 - T2-R-016 — `methods/preregistration-change-condition` — PP — In preregistered studies, clarify the criteria for judging plan changes.
 - T2-R-075 — `methods/preregistration-change-record` — PP — In preregistered studies, clarify the location for recording plan changes.
 - T2-R-022 — `methods/sample-size-form` — PP — Present the target number of participants as a single value or justified range based on grounds for recruitment feasibility.
@@ -128,7 +128,7 @@
 - T2-R-096 — `structure/advisor-operational-owner-visibility` — SM — The agent cannot assess the sustainability of proposed interventions if the operational owner post-deployment is not visible.
 - T2-R-097 — `emphasis/primary-deployment-decision` — PP — Highlight one primary field operational decision to be changed by evaluation results as the central claim.
 - T2-R-098 — `emphasis/optional-feature-boundary` — PP — Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.
-- T2-R-099 — `emphasis/author-novelty-bias` — UM — The author of this proposal tends to prioritize novel interaction features over operational fit.
+- T2-R-099 — `style/author-sentence-rhythm-preference` — UM — The user writing this proposal understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.
 - T2-R-100 — `claim-evidence/workaround-evidence` — PP — Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.
 - T2-R-101 — `claim-evidence/stakeholder-report-observation` — PP — Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.
 - T2-R-102 — `claim-evidence/breakdown-log-value` — KB — Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.
@@ -139,16 +139,16 @@
 - T2-R-107 — `terminology/operational-role-authority` — PP — When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.
 - T2-R-108 — `terminology/title-authority-variance` — KB — Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.
 - T2-R-109 — `terminology/author-user-bucket` — UM — The user writing this proposal tends to group distinct field roles under the single label “user.”
-- T2-R-110 — `expression/intervention-baseline-figure` — PP — In service flow diagrams, clearly distinguish between steps modified by the design and those retained as baseline.
-- T2-R-111 — `expression/walkthrough-screen-difference` — KB — While screen images display interface states, field walkthroughs reveal actual handoff processes between people and systems.
-- T2-R-112 — `expression/advisor-screen-decision-gap` — SM — The agent cannot infer how operational decisions change based solely on a sequence of screen images.
+- T2-R-110 — `expression/sequence-table-stable-rows` — PP — Give each step, actor, condition, and outcome a stable row in the sequence table.
+- T2-R-111 — `expression/sequence-table-update-cost` — KB — Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.
+- T2-R-112 — `expression/advisor-table-overview-limit` — SM — This advisor finds sequence tables easy to check step by step but less immediate for seeing the overall branching shape.
 - T2-R-113 — `methods/pilot-main-transition` — PP — Predefine criteria for functional stability, operational readiness, and safety conditions before transitioning from pilot to full deployment.
 - T2-R-114 — `methods/shadow-deployment-fallback` — PP — If there is a risk of disrupting actual work, design shadow deployment phases that maintain existing procedures while comparing outcomes.
 - T2-R-115 — `methods/time-coverage-sampling` — PP — Schedule field observations to include time periods with varying workload levels and participant compositions.
 - T2-R-116 — `methods/operator-workaround-capture` — PP — Specify data collection methods for recording instances where operators bypass the system or perform manual recovery actions.
 - T2-R-117 — `methods/interview-observation-complement` — KB — Interviews reveal participants’ perceived reasons, while field observations show actual procedures and workarounds performed in practice.
-- T2-R-118 — `methods/author-convenience-recruitment` — UM — The user writing this proposal tends to choose participants who are easier to recruit over roles relevant to operational decisions.
-- T2-R-119 — `methods/organizational-rhythm` — WM — Workload, staffing configurations, and exception-handling practices may vary by day of the week and time period within field sites.
+- T2-R-118 — `style/author-em-dash-confidence` — UM — The user writing this proposal can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.
+- T2-R-119 — `style/em-dash-rhetorical-function` — WM — An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.
 - T2-R-120 — `evaluation/decision-threshold` — PP — Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.
 - T2-R-121 — `evaluation/work-redistribution` — PP — Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.
 - T2-R-122 — `evaluation/acceptability-usability-separation` — PP — Distinguish usability from organizational adoption intent as separate evaluation outcomes.

@@ -212,17 +212,15 @@ correct answers in the content. When one semantic unit has been split across
 multiple atomic Memories, semicolon-separated member lists are recorded in
 `left_fixture_ids` and `right_fixture_ids`.
 
-The three actual conflicts are limited to whether the primary research question
-should be a quantitative hypothesis or an exploratory qualitative question,
-whether primary evaluation should be a controlled usability study or field
-deployment, and whether the primary HCI contribution should be a conceptual
-model or actionable design guidance. Differences in subheadings, writing style,
-or budget placement can be combined or chosen according to sentence function
-and submission format, so they remain variants rather than conflicts. Both
-advisors interpret the external “design or operational decision” requirement as
-an HCI design contribution; one prioritizes a conceptual model linking user
-behavior and design choices, while the other prioritizes design guidance that
-practitioners can apply.
+The three actual conflicts are authoring choices accessible without research
+methods training: flow diagram versus sequence table, short one-claim sentences
+versus preserving the rhythm of connected thoughts, and avoiding em dashes
+versus allowing them for a deliberate interruption or contrast. Supporting
+Memories retain ordinary observations, preferences, and costs from which
+Rationale can reconstruct each advisor's position; they do not encode a
+separate rule/benefit/cost explanation. Differences in subheadings and budget
+placement remain variants because they can be combined or selected according
+to sentence function and submission format.
 
 The 75 query-only submission-guideline Memories are divided across 10
 directories, each containing an `OM` example. They form a general submission

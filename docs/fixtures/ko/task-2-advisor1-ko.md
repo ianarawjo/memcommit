@@ -27,8 +27,8 @@
 - T2-L-001 — `structure/problem` — PP — 첫 문단의 첫 두 문장 안에서 사용자가 기술과 상호작용하거나 협업할 때 겪는 핵심 문제를 밝혀라.
 - T2-L-070 — `structure/problem-urgency` — PP — 첫 문단의 첫 두 문장 안에서 그 상호작용 문제를 지금 다뤄야 하는 이유를 밝혀라.
 - T2-L-002 — `structure/research-question-position` — PP — 주된 HCI 연구 질문에 사용자, 사용 맥락, 탐구할 상호작용을 명시하라.
-- T2-L-011 — `structure/interaction-step-visual` — PP — 낯선 상호작용 절차를 제안할 때는 한 장의 흐름 그림으로 단계 순서를 요약하라.
-- T2-L-071 — `structure/interaction-transition-visual` — PP — 낯선 상호작용 절차의 단계 사이 전환 조건을 흐름 그림에 표시하라.
+- T2-L-011 — `structure/interaction-step-visual` — PP — 낯선 상호작용 절차를 제안할 때는 한 장의 간결한 시각 자료로 요약하라.
+- T2-L-071 — `structure/interaction-transition-visual` — PP — 낯선 상호작용 절차가 한 단계에서 다음 단계로 넘어가는 조건을 시각 자료에 표시하라.
 - T2-L-015 — `structure/masters-timeline-phases` — PP — 석사 연구 일정을 탐색, 설계, 시제품 제작, 사용자 평가의 단계별 시기로 제시하라.
 - T2-L-072 — `structure/masters-timeline-deliverables` — PP — 석사 연구의 각 단계에 검토 가능한 산출물을 하나씩 연결하라.
 - T2-L-017 — `structure/gap-contribution-link` — PP — HCI 관련 연구가 남긴 공백과 제안한 설계·경험적 기여를 인접하게 배치하라.
@@ -45,16 +45,16 @@
 - T2-L-051 — `emphasis/contribution-naming` — PP — 각 설계 또는 경험적 기여에 이름을 붙여 한 문장으로 제시하라.
 - T2-L-013 — `emphasis/recruitment-primary-constraint` — PP — 지역사회 참가자를 모집하는 연구에서는 참여에 따르는 시간 부담을 강조하라.
 - T2-L-073 — `emphasis/recruitment-secondary-constraint` — PP — 지역사회 참가자를 모집하는 연구에서는 참여에 따르는 이동 부담을 강조하라.
-- T2-L-026 — `emphasis/contribution-type` — PP — 제안서의 주된 HCI 디자인 기여는 실무 설계 지침이 아니라 사용자 행동과 설계 선택의 관계를 설명하는 개념적 모형으로 제시하라.
+- T2-L-026 — `style/em-dash-avoidance` — PP — 제안서에서는 em dash를 피하고 문장을 나누거나 더 일반적인 문장부호를 사용하라.
 - T2-L-055 — `emphasis/reviewer-contribution-capacity` — OM — HCI 심사자는 이름 붙은 설계·경험적 기여가 두 개를 넘으면 주된 기여를 파악하기 어려워한다.
 - T2-L-098 — `emphasis/formative-decision-priority` — PP — 완성도 높은 제품 시연보다 형성 평가가 바꿀 핵심 설계 결정을 우선 강조하라.
 - T2-L-099 — `emphasis/transferable-knowledge-priority` — PP — 특정 시제품의 성능보다 다른 유사 상호작용에 이전할 수 있는 설계 원리를 주된 기여로 강조하라.
 - T2-L-100 — `emphasis/formative-evaluation-function` — KB — 형성 평가는 설계 대안의 우열을 최종 확정하기보다 다음 반복에서 수정할 근거를 만든다.
-- T2-L-101 — `emphasis/author-polish-tendency` — UM — 이 제안서를 작성하는 사용자는 초기 시제품의 시각적 완성도를 연구 기여보다 먼저 설명하는 경향이 있다.
+- T2-L-101 — `style/author-compound-sentence-tendency` — UM — 이 제안서를 작성하는 사용자는 서로 따로 검토할 수 있는 주장 여러 개를 한 문장에 넣는 경향이 있다.
 - T2-L-004 — `claim-evidence/evidence-adjacency` — PP — 사용자 행동이나 기술 효과에 관한 검증 가능한 주장에는 인접한 근거나 인용을 붙여라.
 - T2-L-005 — `claim-evidence/observation-prediction-status` — PP — 파일럿에서 관찰한 결과와 본 사용자 연구에서 확인할 예상을 서로 다른 표현으로 구분하라.
-- T2-L-009 — `claim-evidence/main-hypothesis-direction` — PP — 제안서의 주된 연구 질문을 정량적으로 검증 가능한 방향성 가설로 표현하라.
-- T2-L-085 — `claim-evidence/primary-outcome-direction` — PP — 주된 연구 질문의 대표 결과지표에서 예상하는 변화 방향을 밝혀라.
+- T2-L-009 — `expression/flow-diagram-choice` — PP — 절차의 갈림길에 따라 결과가 달라질 때는 순서표보다 흐름 그림을 사용하라.
+- T2-L-085 — `expression/flow-diagram-branches` — PP — 독자가 갈림길과 그 결과를 한눈에 비교할 수 있도록 같은 흐름 그림에 함께 그려라.
 - T2-L-010 — `claim-evidence/causal-language` — PP — 설계가 인과 추론을 뒷받침하지 않으면 인과를 입증한다는 동사를 사용하지 마라.
 - T2-L-012 — `claim-evidence/source-priority` — PP — HCI 연구 근거가 충분히 축적된 주제라면 개별 사례 나열보다 최신 종합 연구를 우선 인용하라.
 - T2-L-027 — `claim-evidence/design-rationale` — PP — 각 설계 선택이 어떤 사용자 필요를 해결하도록 도출되었는지 설명하라.
@@ -80,14 +80,14 @@
 - T2-L-110 — `terminology/advisor-contribution-term-check` — SM — the agent는 원리, 모형, 지침이라는 기여 명칭이 실제 산출물의 추상화 수준과 맞아야 승인할 수 있다.
 - T2-L-111 — `terminology/design-principle-scope` — KB — 설계 원리는 하나의 화면 배치를 그대로 복제하는 지시가 아니라 조건과 결과의 관계를 서술한다.
 - T2-L-033 — `expression/prototype-fidelity-separation` — KB — 시제품의 시각적 충실도와 기능적 충실도는 서로 다른 수준일 수 있다.
-- T2-L-081 — `expression/interaction-state-change` — KB — 상호작용 흐름 그림은 정적 화면 하나로 드러나지 않는 상태 변화를 나타낸다.
+- T2-L-081 — `expression/interaction-state-change` — KB — 흐름 그림은 절차의 갈림길과 서로 다른 결과를 한 화면에서 보여줄 수 있다.
 - T2-L-059 — `expression/reviewer-caption-scan` — OM — HCI 심사자는 시제품 화면과 상호작용 흐름 그림을 본문보다 먼저 훑는 경우가 많다.
-- T2-L-112 — `expression/alternative-comparison-diagram` — KB — 설계 대안 비교표는 각 대안이 조작하는 상호작용 속성과 예상 사용자 반응의 차이를 함께 나타낸다.
-- T2-L-113 — `expression/formative-loop-diagram` — KB — 형성 평가 순환 그림은 관찰, 해석, 설계 수정, 재평가의 반복 관계를 나타낸다.
-- T2-L-114 — `expression/advisor-visual-evidence-check` — SM — the agent는 그림의 각 설계 요소가 본문에서 검토할 연구 질문과 연결되어야 시각 자료의 필요성을 판단할 수 있다.
+- T2-L-112 — `expression/flow-diagram-overview` — KB — 독자는 행을 하나씩 읽는 표보다 흐름 그림에서 절차의 전체 갈림 구조를 더 빠르게 이해할 수 있다.
+- T2-L-113 — `expression/flow-diagram-redraw-cost` — KB — 절차가 바뀔 때 갈림 구조의 흐름 그림을 다시 그리는 일은 표의 한 행을 고치는 일보다 대체로 오래 걸린다.
+- T2-L-114 — `expression/advisor-visual-scan-observation` — SM — 이 advisor는 심사자가 절차 설명을 전부 읽기 전에 제안서의 핵심 시각 자료부터 살펴보는 경우를 반복해서 보았다.
 - T2-L-007 — `methods/question-evidence-analysis` — PP — 각 HCI 연구 질문을 대응하는 사용자 자료와 분석 절차에 직접 연결하라.
-- T2-L-014 — `methods/primary-evaluation-setting` — PP — 제안서의 주 평가를 통제된 환경의 사용성 연구로 설계하라.
-- T2-L-074 — `methods/field-deployment-scope` — PP — 현장 운영 승인을 석사 연구 기간 안에 받을 수 없으면 실제 배포를 후속 연구 범위로 남겨라.
+- T2-L-014 — `style/short-sentence-rule` — PP — 한 문장에 서로 따로 검토할 수 있는 주장이 둘 이상 들어가면 짧은 문장으로 나누어라.
+- T2-L-074 — `style/one-claim-sentences` — PP — 심사자가 빠르게 찾아 판단할 수 있도록 문장마다 핵심 주장 하나만 담아라.
 - T2-L-016 — `methods/preregistration-change-condition` — PP — 사전등록 연구에서는 계획에서 벗어날 수 있는 조건을 밝혀라.
 - T2-L-075 — `methods/preregistration-change-record` — PP — 사전등록 연구에서는 계획에서 벗어난 내용을 기록하는 방식을 밝혀라.
 - T2-L-022 — `methods/sample-size-form` — PP — 모집 계획에는 목표 참가자 수를 하나의 정확한 수치로 제시하라.
@@ -101,8 +101,8 @@
 - T2-L-115 — `methods/formative-alternative-control` — PP — 형성 평가에서는 핵심 설계 속성 하나만 다르게 한 대안을 비교하라.
 - T2-L-116 — `methods/formative-task-equivalence` — PP — 설계 대안을 비교할 때 참가자 과업과 제공 정보는 동일하게 유지하라.
 - T2-L-117 — `methods/iteration-decision-rule` — PP — 각 형성 평가 반복이 끝난 뒤 어떤 근거로 다음 시제품을 수정할지 판단 규칙을 미리 밝혀라.
-- T2-L-118 — `methods/author-all-feature-evaluation-tendency` — UM — 이 제안서를 작성하는 사용자는 한 번의 연구에서 시제품의 모든 기능을 동시에 평가하려는 경향이 있다.
-- T2-L-119 — `methods/learning-effect-order` — WM — 여러 설계 대안을 한 참가자에게 연속 배정하는 평가는 뒤쪽 조건이 앞쪽 조건의 경험 이후에 수행되는 순서 구조를 가진다.
+- T2-L-118 — `style/author-em-dash-tendency` — UM — 이 제안서를 작성하는 사용자는 이미 절이 여러 개인 문장에서 em dash를 반복해서 쓰는 경향이 있다.
+- T2-L-119 — `style/em-dash-authorship-suspicion` — WM — em dash가 반복되면 심사자의 관심이 제안서의 논리에서 AI가 생성한 문장인지에 대한 의심으로 옮겨갈 수 있다.
 - T2-L-043 — `evaluation/primary-measure` — PP — 비교한 설계 대안을 유지·수정·폐기할 기준이 되는 대표 측정값 하나를 지정하라.
 - T2-L-061 — `evaluation/panel-primary-measure` — OM — HCI 심사 패널은 선언된 대표 측정값으로 설계 대안의 판단 기준이 분명한지 확인한다.
 - T2-L-120 — `evaluation/formative-diagnostic-measures` — PP — 대표 결과지표와 함께 문제가 발생한 상호작용 단계를 진단할 과정 측정값을 수집하라.

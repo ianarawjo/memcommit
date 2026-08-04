@@ -27,8 +27,8 @@
 - T2-R-001 — `structure/problem` — PP — 도입부 세 문장 안에 실제 사용 환경에서 아직 풀리지 않은 상호작용 문제를 제시하라.
 - T2-R-070 — `structure/problem-urgency` — PP — 도입부 세 문장 안에 그 상호작용 문제가 현재 사용자나 운영에 주는 부담을 제시하라.
 - T2-R-002 — `structure/research-question-position` — PP — 주된 HCI 연구 질문에 사용자, 운영 이해관계자, 실제 사용 환경을 명시하라.
-- T2-R-011 — `structure/interaction-step-visual` — PP — 낯선 상호작용 절차를 제안할 때는 단계 순서를 한 장의 순서표로 요약하라.
-- T2-R-071 — `structure/interaction-transition-visual` — PP — 낯선 상호작용 절차의 단계 사이 전환 조건을 순서표에 표시하라.
+- T2-R-011 — `structure/interaction-step-visual` — PP — 낯선 상호작용 절차를 제안할 때는 한 장의 간결한 시각 자료로 요약하라.
+- T2-R-071 — `structure/interaction-transition-visual` — PP — 낯선 상호작용 절차가 한 단계에서 다음 단계로 넘어가는 조건을 시각 자료에 표시하라.
 - T2-R-015 — `structure/masters-timeline-phases` — PP — 석사 연구 일정을 현장 이해, 시스템 구현, 사용자 연구, 분석의 단계별 이정표로 제시하라.
 - T2-R-072 — `structure/masters-timeline-deliverables` — PP — 석사 연구의 각 이정표에 다음 단계 진입을 판단할 산출물을 연결하라.
 - T2-R-017 — `structure/gap-contribution-link` — PP — 실제 사용 맥락의 공백과 제안한 설계·운영 기여를 한 흐름 안에서 직접 연결하라.
@@ -41,11 +41,11 @@
 - T2-R-051 — `emphasis/contribution-naming` — PP — 각 설계 또는 운영 기여를 이름 붙인 한 문장으로 제시하라.
 - T2-R-013 — `emphasis/recruitment-primary-constraint` — PP — 조직 구성원을 모집하는 연구에서는 업무 흐름 제약을 강조하라.
 - T2-R-073 — `emphasis/recruitment-secondary-constraint` — PP — 조직 구성원을 모집하는 연구에서는 관리자 승인 제약을 강조하라.
-- T2-R-026 — `emphasis/contribution-type` — PP — 제안서의 주된 HCI 디자인 기여는 개념적 모형이 아니라 실무자가 적용할 수 있는 설계 지침으로 제시하라.
+- T2-R-026 — `style/em-dash-conditional-use` — PP — 의도적인 끊김이나 강한 대조를 나타낼 때만 em dash를 사용하고, 그렇지 않으면 문장을 나누거나 일반적인 문장부호를 사용하라.
 - T2-R-055 — `emphasis/reviewer-contribution-capacity` — OM — HCI 심사자는 이름 붙은 설계·운영 기여가 두 개를 넘으면 주된 기여를 파악하기 어려워한다.
 - T2-R-004 — `claim-evidence/evidence-adjacency` — PP — 사용자 요구나 현장 효과에 관한 주장 바로 옆에 관찰 근거나 출처를 두어라.
 - T2-R-005 — `claim-evidence/observation-prediction-status` — PP — 현장에서 이미 확인한 사실과 사용자 연구가 검토할 예상을 문장 수준에서 구별하라.
-- T2-R-009 — `claim-evidence/study-directionality` — PP — 제안서의 주된 연구 질문을 방향성 가설이 없는 탐색적 질적 질문으로 표현하라.
+- T2-R-009 — `expression/sequence-table-choice` — PP — 초안 작성 중 절차가 자주 바뀔 가능성이 크면 흐름 그림보다 순서표를 사용하라.
 - T2-R-010 — `claim-evidence/causal-language` — PP — 설계가 인과 추론을 뒷받침하지 않으면 인과를 입증한다는 동사를 사용하지 마라.
 - T2-R-012 — `claim-evidence/source-priority` — PP — 빠르게 바뀌는 HCI 주제에서는 최신 시스템과 현장 연구를 우선 인용하라.
 - T2-R-027 — `claim-evidence/design-rationale` — PP — 각 설계 선택이 해결하려는 사용자나 운영 이해관계자의 필요를 설명하라.
@@ -64,8 +64,8 @@
 - T2-R-081 — `expression/interaction-state-change` — KB — 서비스 흐름 그림은 개별 화면만으로 드러나지 않는 사람·시스템 간 전환을 나타낸다.
 - T2-R-059 — `expression/reviewer-caption-scan` — OM — HCI 심사자는 시스템 구조와 서비스 흐름 그림을 본문보다 먼저 훑는 경우가 많다.
 - T2-R-007 — `methods/question-evidence-analysis` — PP — 모든 HCI 연구 질문에 대응하는 현장·사용자 자료원과 분석 절차를 지정하라.
-- T2-R-014 — `methods/primary-evaluation-setting` — PP — 제안서의 주 평가를 실제 사용 환경의 현장 배포 연구로 설계하라.
-- T2-R-074 — `methods/lab-evaluation-scope` — PP — 주된 기여가 실제 운영 결정을 바꾸는 것이라면 통제된 실험실 평가만으로 판단하지 마라.
+- T2-R-014 — `style/sentence-rhythm-rule` — PP — 서로 연결된 생각을 나누어서 의도한 읽기 호흡이 사라진다면 짧은 문장으로 기계적으로 쪼개지 마라.
+- T2-R-074 — `style/connected-thoughts` — PP — 여러 절이 하나의 연속된 흐름을 이루어 함께 읽는 편이 자연스러우면 긴 문장을 유지하라.
 - T2-R-016 — `methods/preregistration-change-condition` — PP — 사전등록 연구에서는 계획 변경의 판단 기준을 밝혀라.
 - T2-R-075 — `methods/preregistration-change-record` — PP — 사전등록 연구에서는 계획 변경의 기록 위치를 밝혀라.
 - T2-R-022 — `methods/sample-size-form` — PP — 모집 가능성의 근거에 따라 목표 참가자 수를 하나의 수치나 정당화된 범위로 제시하라.
@@ -122,7 +122,7 @@
 - T2-R-096 — `structure/advisor-operational-owner-visibility` — SM — the agent는 배포 이후 운영 주체가 드러나지 않으면 제안한 개입의 지속 가능성을 검토할 수 없다.
 - T2-R-097 — `emphasis/primary-deployment-decision` — PP — 평가 결과로 바꾸려는 가장 중요한 현장 운영 결정 하나를 중심 주장으로 강조하라.
 - T2-R-098 — `emphasis/optional-feature-boundary` — PP — 주된 현장 문제를 검토하는 데 필요하지 않은 시제품 기능은 부차적 범위로 명시하라.
-- T2-R-099 — `emphasis/author-novelty-bias` — UM — 이 제안서를 작성하는 사용자는 운영 적합성보다 새로운 상호작용 기능을 먼저 강조하는 경향이 있다.
+- T2-R-099 — `style/author-sentence-rhythm-preference` — UM — 이 제안서를 작성하는 사용자는 짧은 문장이 훑어보기 쉽다는 점을 이해하지만 모든 문장을 잘게 나누면 읽는 호흡이 사라진다고 느낀다.
 - T2-R-100 — `claim-evidence/workaround-evidence` — PP — 기존 도구를 우회해 과업을 끝낸 현장 사례를 설계 필요성의 근거로 연결하라.
 - T2-R-101 — `claim-evidence/stakeholder-report-observation` — PP — 운영 이해관계자가 보고한 문제와 연구자가 직접 관찰한 문제를 서로 다른 근거로 표시하라.
 - T2-R-102 — `claim-evidence/breakdown-log-value` — KB — 현장 장애 기록은 시스템 실패와 사용자의 적응 행동이 발생한 시점과 조건을 함께 보여줄 수 있다.
@@ -133,16 +133,16 @@
 - T2-R-107 — `terminology/operational-role-authority` — PP — 운영 역할을 처음 제시할 때 그 역할이 내릴 수 있는 결정과 수행할 수 있는 조치를 함께 정의하라.
 - T2-R-108 — `terminology/title-authority-variance` — KB — 같은 직함을 쓰는 사람이라도 배포 현장에 따라 시스템 변경 권한과 자료 접근 권한이 다를 수 있다.
 - T2-R-109 — `terminology/author-user-bucket` — UM — 이 제안서를 작성하는 사용자는 서로 다른 현장 역할을 모두 사용자라는 한 명칭으로 묶는 경향이 있다.
-- T2-R-110 — `expression/intervention-baseline-figure` — PP — 서비스 흐름 그림에는 설계가 바꾸는 단계와 그대로 유지하는 단계를 구별해 표시하라.
-- T2-R-111 — `expression/walkthrough-screen-difference` — KB — 화면 이미지는 인터페이스 상태를 보여주지만 현장 워크스루는 사람과 시스템 사이의 실제 인계 과정을 보여준다.
-- T2-R-112 — `expression/advisor-screen-decision-gap` — SM — the agent는 화면 이미지의 나열만으로 현장 운영 결정이 어떻게 달라지는지 추론할 수 없다.
+- T2-R-110 — `expression/sequence-table-stable-rows` — PP — 순서표에서 각 단계, 행위자, 조건, 결과에 고정된 행을 부여하라.
+- T2-R-111 — `expression/sequence-table-update-cost` — KB — 절차가 바뀔 때 순서표의 한 행을 고치는 일은 갈림 구조의 그림을 다시 그리는 일보다 대체로 빠르다.
+- T2-R-112 — `expression/advisor-table-overview-limit` — SM — 이 advisor는 순서표를 단계별로 확인하기는 쉽지만 전체 갈림 구조를 한눈에 보기는 어렵다고 느낀다.
 - T2-R-113 — `methods/pilot-main-transition` — PP — 파일럿 배포에서 본 배포로 넘어갈 기능 안정성, 운영 준비도, 안전 조건을 미리 정하라.
 - T2-R-114 — `methods/shadow-deployment-fallback` — PP — 실제 업무를 방해할 위험이 있으면 기존 절차를 유지한 채 결과를 비교하는 섀도 배포 단계를 설계하라.
 - T2-R-115 — `methods/time-coverage-sampling` — PP — 업무량과 참여자 구성이 달라지는 시간대를 포함하도록 현장 관찰 일정을 배치하라.
 - T2-R-116 — `methods/operator-workaround-capture` — PP — 운영자가 시스템을 우회하거나 수동으로 복구한 행동을 기록할 자료 수집 방법을 지정하라.
 - T2-R-117 — `methods/interview-observation-complement` — KB — 인터뷰는 참여자가 인식한 이유를 보여주고 현장 관찰은 실제로 수행된 절차와 우회 행동을 보여준다.
-- T2-R-118 — `methods/author-convenience-recruitment` — UM — 이 제안서를 작성하는 사용자는 운영 결정과 관련된 역할보다 쉽게 모집할 수 있는 참가자를 먼저 선택하는 경향이 있다.
-- T2-R-119 — `methods/organizational-rhythm` — WM — 현장의 업무량, 담당자 구성, 예외 처리 방식은 요일과 시간대에 따라 달라질 수 있다.
+- T2-R-118 — `style/author-em-dash-confidence` — UM — 이 제안서를 작성하는 사용자는 em dash가 장식이 아니라 의도적인 끊김이나 대조를 나타내는지 설명할 수 있다.
+- T2-R-119 — `style/em-dash-rhetorical-function` — WM — em dash는 쉼표보다 강한 끊김을 만들며 문장의 의도적인 대조를 더 분명하게 들리게 할 수 있다.
 - T2-R-120 — `evaluation/decision-threshold` — PP — 대표 측정값이 어느 수준에 도달하면 설계를 유지, 수정, 중단할지 판단 기준을 정하라.
 - T2-R-121 — `evaluation/work-redistribution` — PP — 설계가 한 역할의 부담을 줄이는 대신 다른 역할에 새 업무를 만드는지 평가하라.
 - T2-R-122 — `evaluation/acceptability-usability-separation` — PP — 사용 가능성과 조직이 실제로 도입할 의향을 서로 다른 평가 결과로 구분하라.

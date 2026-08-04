@@ -33,8 +33,8 @@
 - T2-L-001 — `structure/problem` — PP — Identify the core problem users face when interacting with or collaborating through technology within the first two sentences of the opening paragraph.
 - T2-L-070 — `structure/problem-urgency` — PP — Articulate the rationale for addressing this interaction problem immediately within the first two sentences of the opening paragraph.
 - T2-L-002 — `structure/research-question-position` — PP — Specify the user, context, and interaction to be explored in the primary HCI research question.
-- T2-L-011 — `structure/interaction-step-visual` — PP — Summarize the sequence of steps with a single flow diagram when proposing an unfamiliar interaction procedure.
-- T2-L-071 — `structure/interaction-transition-visual` — PP — Indicate transition conditions between steps of the unfamiliar interaction procedure in the flow diagram.
+- T2-L-011 — `structure/interaction-step-visual` — PP — Provide one compact visual summary when proposing an unfamiliar interaction procedure.
+- T2-L-071 — `structure/interaction-transition-visual` — PP — Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.
 - T2-L-015 — `structure/masters-timeline-phases` — PP — Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.
 - T2-L-072 — `structure/masters-timeline-deliverables` — PP — Link one reviewable deliverable to each phase of the master’s research.
 - T2-L-017 — `structure/gap-contribution-link` — PP — Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.
@@ -51,16 +51,16 @@
 - T2-L-051 — `emphasis/contribution-naming` — PP — Name each design or empirical contribution and present it in a single sentence.
 - T2-L-013 — `emphasis/recruitment-primary-constraint` — PP — In studies recruiting community participants, emphasize the time burden associated with participation.
 - T2-L-073 — `emphasis/recruitment-secondary-constraint` — PP — In studies recruiting community participants, emphasize the travel burden associated with participation.
-- T2-L-026 — `emphasis/contribution-type` — PP — Present the primary HCI design contribution of the proposal as a conceptual model explaining the relationship between user behavior and design choices, rather than as practical design guidelines.
+- T2-L-026 — `style/em-dash-avoidance` — PP — Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead.
 - T2-L-055 — `emphasis/reviewer-contribution-capacity` — OM — HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.
 - T2-L-098 — `emphasis/formative-decision-priority` — PP — Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.
 - T2-L-099 — `emphasis/transferable-knowledge-priority` — PP — Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.
 - T2-L-100 — `emphasis/formative-evaluation-function` — KB — Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.
-- T2-L-101 — `emphasis/author-polish-tendency` — UM — The user writing this proposal tends to describe the visual polish of initial prototypes before describing research contributions.
+- T2-L-101 — `style/author-compound-sentence-tendency` — UM — The user writing this proposal tends to place several independently reviewable claims in one long sentence.
 - T2-L-004 — `claim-evidence/evidence-adjacency` — PP — Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.
 - T2-L-005 — `claim-evidence/observation-prediction-status` — PP — Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.
-- T2-L-009 — `claim-evidence/main-hypothesis-direction` — PP — Express the primary research question of the proposal as a directional hypothesis that is quantitatively verifiable.
-- T2-L-085 — `claim-evidence/primary-outcome-direction` — PP — Identify the expected direction of change in the representative outcome measure for the primary research question.
+- T2-L-009 — `expression/flow-diagram-choice` — PP — Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.
+- T2-L-085 — `expression/flow-diagram-branches` — PP — Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.
 - T2-L-010 — `claim-evidence/causal-language` — PP — Do not use verbs that imply proving causation if the design does not support causal inference.
 - T2-L-012 — `claim-evidence/source-priority` — PP — For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.
 - T2-L-027 — `claim-evidence/design-rationale` — PP — Explain how each design choice was derived to address specific user needs.
@@ -86,14 +86,14 @@
 - T2-L-110 — `terminology/advisor-contribution-term-check` — SM — The agent can approve contribution labels such as principles, models, or guidelines only if they align with the abstraction level of the actual deliverables.
 - T2-L-111 — `terminology/design-principle-scope` — KB — Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.
 - T2-L-033 — `expression/prototype-fidelity-separation` — KB — The visual fidelity of a prototype may differ from its functional fidelity.
-- T2-L-081 — `expression/interaction-state-change` — KB — Interaction flow diagrams depict state changes that are not visible in a single static screen.
+- T2-L-081 — `expression/interaction-state-change` — KB — A flow diagram can make alternate branches and their different outcomes visible in one view.
 - T2-L-059 — `expression/reviewer-caption-scan` — OM — HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.
-- T2-L-112 — `expression/alternative-comparison-diagram` — KB — Design alternative comparison tables display both the interaction attributes manipulated by each alternative and the differences in expected user responses.
-- T2-L-113 — `expression/formative-loop-diagram` — KB — Formative evaluation cycle diagrams illustrate the iterative relationship among observation, interpretation, design modification, and re-evaluation.
-- T2-L-114 — `expression/advisor-visual-evidence-check` — SM — The agent can judge the necessity of visual evidence only if each design element in the figure is linked to a research question reviewed in the text.
+- T2-L-112 — `expression/flow-diagram-overview` — KB — Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.
+- T2-L-113 — `expression/flow-diagram-redraw-cost` — KB — Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.
+- T2-L-114 — `expression/advisor-visual-scan-observation` — SM — This advisor has repeatedly seen reviewers inspect the proposal’s main visual before reading the procedural explanation in full.
 - T2-L-007 — `methods/question-evidence-analysis` — PP — Link each HCI research question directly to corresponding user data and analysis procedures.
-- T2-L-014 — `methods/primary-evaluation-setting` — PP — Design the proposal’s primary evaluation as a usability study in a controlled environment.
-- T2-L-074 — `methods/field-deployment-scope` — PP — If field operation approval cannot be obtained within the master’s research period, leave actual deployment to subsequent studies.
+- T2-L-014 — `style/short-sentence-rule` — PP — Split proposal prose into short sentences when a sentence contains more than one independently reviewable claim.
+- T2-L-074 — `style/one-claim-sentences` — PP — Keep one main claim in each sentence so a reviewer can locate and assess it quickly.
 - T2-L-016 — `methods/preregistration-change-condition` — PP — In preregistered studies, specify the conditions under which deviations from the plan are permissible.
 - T2-L-075 — `methods/preregistration-change-record` — PP — In preregistered studies, specify how to record content that deviates from the plan.
 - T2-L-022 — `methods/sample-size-form` — PP — Present the target number of participants in the recruitment plan as a single precise value.
@@ -107,8 +107,8 @@
 - T2-L-115 — `methods/formative-alternative-control` — PP — In formative evaluation, compare alternatives that differ in only one core design attribute.
 - T2-L-116 — `methods/formative-task-equivalence` — PP — When comparing design alternatives, keep participant tasks and provided information identical.
 - T2-L-117 — `methods/iteration-decision-rule` — PP — After each formative evaluation iteration, specify the decision rules for determining which evidence justifies modifying the next prototype.
-- T2-L-118 — `methods/author-all-feature-evaluation-tendency` — UM — The author of this proposal tends to attempt evaluating all features of a prototype simultaneously in a single study.
-- T2-L-119 — `methods/learning-effect-order` — WM — When an evaluation assigns multiple design alternatives sequentially to one participant, later conditions occur after the participant has experienced earlier conditions.
+- T2-L-118 — `style/author-em-dash-tendency` — UM — The user writing this proposal tends to repeat em dashes when a sentence already contains several clauses.
+- T2-L-119 — `style/em-dash-authorship-suspicion` — WM — Repeated em dashes can shift a reviewer’s attention from the proposal’s argument to suspicion that its prose was generated by AI.
 - T2-L-043 — `evaluation/primary-measure` — PP — Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.
 - T2-L-061 — `evaluation/panel-primary-measure` — OM — HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.
 - T2-L-120 — `evaluation/formative-diagnostic-measures` — PP — Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.

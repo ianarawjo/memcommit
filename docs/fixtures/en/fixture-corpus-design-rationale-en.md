@@ -385,30 +385,31 @@ bands are a golden sidecar, not Memory content or advisor priority. If a fully
 atomic pairwise answer key is later needed, it must be created separately from
 this group sidecar.
 
-The three conflicts are limited to points requiring an actual choice of HCI
-research direction:
+The three conflicts are limited to authoring choices that a participant without
+research-methods training can understand and decide:
 
-- `T2-009`: whether to frame the primary research question as a directional
-  quantitative hypothesis or an exploratory qualitative question;
-- `T2-014`: whether to place primary evaluation in a controlled usability study
-  or a field deployment in a real setting; and
-- `T2-026`: whether to present the primary HCI contribution as a conceptual
-  model of user behavior or actionable design guidance.
+- `T2-009`: whether a branching procedure should use a flow diagram that makes
+  alternate outcomes visible at once or a sequence table that is faster to
+  update during drafting;
+- `T2-014`: whether independently reviewable claims should be split into short
+  sentences or connected thoughts should retain a longer reading rhythm; and
+- `T2-026`: whether em dashes should be avoided because they can trigger
+  suspicion of AI-generated prose or allowed conditionally for a deliberate
+  interruption or contrast.
 
-The external guideline `T2-Q-039` remains a general requirement to identify the
-design or operational decision the research outcome will change. At the HCI
-layer, both advisors translate this into a **design contribution**, not a simple
-feature list. Advisor 1 treats a transferable conceptual model explaining the
-relationship between user behavior and design choices as the primary design
-contribution, while Advisor 2 treats design guidance practitioners can apply
-immediately as primary.
+The surrounding Advisor Memories retain observations, user preferences, and
+costs that make each recommendation intelligible. They do not serialize a
+separate rule/benefit/cost explanation. A parent-scoped Rationale can infer the
+relationship from readable descendant Memories, while provenance remains a
+separate access decision.
 
 Existing differences about using subheadings, first-person versus impersonal
 style, and placing a budget in the body versus an appendix can be combined or
-selected based on sentence function or official format. They were therefore
-downgraded to contextual or same-principle variants. This was not an arbitrary
-replacement to force the conflict count to three; it retains as `Conflict` only
-differences that make a user refine an actual research direction during meld.
+selected based on sentence function or official format. They remain contextual
+or same-principle variants. The former conflicts about question paradigm,
+evaluation setting, and contribution form were removed because they require
+domain expertise and are largely determined by the proposal's research context
+rather than an ordinary participant's authoring judgment.
 
 ### Detailed two-page submission guidance
 
