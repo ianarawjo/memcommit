@@ -68,12 +68,13 @@ The preview reports the permissions implied by its actual operations:
 `READ`, plus `CREATE` for additions, `UPDATE` for edits, and `DELETE` for
 removals. `READY` means only that the frozen grant contains those permissions;
 it does not mean that the plan has been applied. `mem impact` remains
-non-mutating, and the current `mem update` implementation does not yet apply a
-schema-v4 granted target across Profile stores. That later application must
-revalidate the same binding and permissions under both registry and Context
-write locks. Direct granted `add`, `edit`, and `delete` retain their existing
-individual command boundaries in the meantime. A `-fork` suffix would still
-imply a divergent-copy model that this design deliberately avoids.
+non-mutating. `mem update` can promote that exact schema-v4 plan and apply it
+to the run-private authority store. It holds the grant registry snapshot,
+rechecks the active grantee and complete frozen binding, resolves every owner
+through the same grant, and requires `UPDATE`, `CREATE`, or `DELETE` for the
+corresponding operation before the first write. The fixed `study-baseline`
+Profile is rejected explicitly. A `-fork` suffix would still imply a
+divergent-copy model that this design deliberately avoids.
 
 ## Usage
 
@@ -139,10 +140,12 @@ and output.
 The **current implementation** of `update` promotes a matching impact plan to
 a staged intent and then materializes its validated edits, additions, and
 constrained removals in B. It changes only directly owned `Memory` values in
-the writable local fork. `MemoryRef`, `QueryContextRef`, embedded-Context
-pointers, the verified source, and the query-only organizational origin remain
-unchanged. Repository terminology reserves `delete` for a whole Context, so
-removing one target Memory is represented as `RemoveOperation`.
+either an ordinary local target or the exact run-private authority Contexts
+covered by a frozen editable grant. `MemoryRef`, `QueryContextRef`,
+embedded-Context pointers, the verified source, concealed query-only
+descendants, and `study-baseline` remain unchanged. Repository terminology
+reserves `delete` for a whole Context, so removing one target Memory is
+represented as `RemoveOperation`.
 
 A removal is permitted only when readable, verified source evidence explicitly
 states that the entire standalone target Memory is obsolete and should no
@@ -153,20 +156,24 @@ references, a reason, and the target's locally captured `old_content`; the
 provider selects a supplied target ID but cannot author that old-content
 snapshot. The same target cannot be both edited and removed.
 
-This deliberately narrow contract supports the compact Task 1 case without
-turning update into general-purpose semantic deletion. A real ambiguity such
+This deliberately narrow removal contract supports a developer smoke case
+without turning update into general-purpose semantic deletion. The full Task 1
+Study Gold contains no removal: its 75 source Memories produce 77 patches,
+specifically 34 modifications and 43 additions. A real ambiguity such
 as “remove this listing or retain it as a cancellation notice” must block the
 plan and enter the future issue-scoped directional Meld path described below.
 
 Before the first write, application reloads the complete recorded A/B graph,
 checks its identities and fingerprints, validates every operation and old
 content value, and prepares detached post-images for all affected direct owner
-Contexts. It then holds the active-update lock and all recorded Context write
-locks, saves one post-image per affected owner, and creates one automatic
-checkpoint per affected owner. Every checkpoint carries the same update
-session UID and ordered-operation digest. Only after all owners have been
-saved does the active record become `applied` and receive the result
-fingerprints and checkpoint receipts.
+Contexts. Granted application additionally holds the registry snapshot, the
+participant source locks, the participant update-record lock, and the
+authority command and Context locks through receipt publication. It saves one
+post-image per affected authority owner and creates one authority-side
+automatic checkpoint per owner. Every checkpoint carries the same update
+session UID, ordered-operation digest, public owner, and grant identity. Only
+after all owners have been saved does the participant's active record become
+`applied` and receive projected result fingerprints and checkpoint receipts.
 
 `mem diff` renders the captured baseline-to-result operations deterministically
 after application. It does not recompute a model result or compare arbitrary
@@ -194,11 +201,10 @@ participant path does not open a clarification or reconciliation dialogue:
 
 ```text
 verified local A
-→ impact preview against writable local fork B
+→ impact preview against granted run-private authority B
 → optional provenance review
-→ update applies B locally
-→ diff of fork baseline versus local result
-→ future contribution to query-only organizational origin
+→ update applies B through the frozen editable grant
+→ future grant-aware diff and recovery inspection
 ```
 
 This is an intentional **Task 1 scenario boundary**, not a general invariant
@@ -296,7 +302,7 @@ complete revised version. The planner must preserve unrelated target facts. An
 addition receives a new local UUID and names its owning target Context. A
 removal preserves the selected target's old-content snapshot and provenance in
 the update session while removing only that directly owned Memory from the
-local fork.
+authorized target.
 
 ## Compact executable Task 1 fixture
 
@@ -310,6 +316,13 @@ and five target-baseline Memories. The expected result is:
 2 target Memories unchanged
 5 final target Memories
 ```
+
+This five-by-five case is only a smoke fixture for operation mechanics and
+rollback. It is not a quality target for the Study planner. The full harness
+must record a disposition for all 75/75 source Memories and compare the
+resulting operation set with the authoritative 77-patch sidecar (34
+modifications and 43 additions), while retaining provider, resolved model,
+reasoning effort, and runtime identity for reproducibility.
 
 The source includes one already-present fact to test no-op recognition, while
 an unrelated health-hours Memory tests impact scoping. Its removal source

@@ -23,9 +23,9 @@ from memcommit.commands.atomize_workbench_shell import (
 )
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.granted_context import (
-    ContextAccess,
     GrantedReadStore,
     attached_grants,
+    freeze_granted_update_target,
     resolve_context_access,
 )
 from memcommit.commands.review_shell import ReviewCancelled
@@ -50,13 +50,7 @@ from memcommit.review import (
     review_response_digest,
 )
 from memcommit.store import MemoryStore
-from memcommit.update import (
-    GrantedUpdateTarget,
-    UpdateError,
-    granted_target_digest,
-    plan_update,
-    session_matches,
-)
+from memcommit.update import UpdateError, plan_update, session_matches
 from memcommit.update_endpoints import resolve_update_endpoints
 
 
@@ -69,29 +63,6 @@ class ImpactOperation(str, Enum):
 def _usage_error(message: str) -> None:
     typer.secho(f"Impact error: {message}", fg=typer.colors.RED, err=True)
     raise typer.Exit(2)
-
-
-def _granted_update_target(access: ContextAccess) -> GrantedUpdateTarget:
-    """Freeze the control-plane identity behind one public target view."""
-
-    view = access.view
-    if view is None:
-        raise UpdateError("Expected a granted update target.")
-    grant = view.grant
-    return GrantedUpdateTarget(
-        public_name=access.display_name,
-        grantee_profile_uid=view.grantee.uid,
-        authority_profile_uid=view.authority.uid,
-        attachment_context_uid=grant.attachment_context_uid,
-        attachment_context_name=grant.attachment_context_name,
-        grant_uid=grant.uid,
-        grant_revision=grant.revision,
-        grant_digest=granted_target_digest(grant.to_dict()),
-        resource_uid=grant.resource_uid,
-        resource_name=grant.resource_name,
-        authority_context_name=view.authority_context_name,
-        permissions=grant.permissions,
-    )
 
 
 def _directional_impact(
@@ -167,7 +138,7 @@ def _directional_impact(
                 target = GrantedReadStore(access, registry=registry).load(
                     access.display_name
                 )
-                granted_target = _granted_update_target(access)
+                granted_target = freeze_granted_update_target(access)
 
             session = plan_update(
                 source,
@@ -193,7 +164,7 @@ def _directional_impact(
                         "The granted target changed while planning; no preview "
                         "was saved."
                     )
-                current_granted_target = _granted_update_target(current_access)
+                current_granted_target = freeze_granted_update_target(current_access)
                 current_target = GrantedReadStore(
                     current_access,
                     registry=registry,

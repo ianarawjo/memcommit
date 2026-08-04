@@ -49,13 +49,22 @@ but it is not a substitute for the runtime work below.
 
 ## Ordered implementation checklist
 
-- [ ] 1. Freeze the executable contract in tests.
+- [ ] 1. Freeze both executable contracts in tests.
+  - Treat the compact five-by-five fixture only as a developer smoke test for
+    edits, additions, explicit removals, unchanged Memories, and rollback. It
+    is not the Task 1 Study answer key.
+  - Make the full Study harness account for all 75/75
+    `construction-updates` source Memories and compare the result with the
+    authoritative 77-patch sidecar: 34 modifications and 43 additions. The
+    one-to-many `T1-U-009` source explains why 75 sources produce 77 patches.
+  - Record an explicit disposition for every source so omission or accidental
+    consolidation cannot pass merely because the provider returned valid
+    structured output. Retain provider, resolved model, reasoning effort, and
+    runtime identity with each evaluation result.
   - Cover one participant-owned source and one editable granted target.
   - Assert the query-only descendant is excluded from impact/update input.
   - Assert read-only, query-only, stale, revoked, wrong-attachment, and
     baseline-target cases fail closed.
-  - Preserve the compact expected result: two edits, one addition, one
-    explicit removal, two unchanged target Memories, and five final Memories.
 
 - [x] 2. Add granted-target support to read-only `mem impact`.
   - Resolve the target through the existing grant resolver rather than
@@ -73,7 +82,7 @@ but it is not a substitute for the runtime work below.
   - Reject old or incomplete granted-target records rather than inferring
     authority from current global state.
 
-- [ ] 4. Apply `mem update` through the grant under authority-store locks.
+- [x] 4. Apply `mem update` through the grant under authority-store locks.
   - Recheck the active participant Profile and exact grant snapshot.
   - Check `UPDATE` and `CREATE` per planned operation before the first write.
   - Require the explicitly granted `DELETE` permission for every planned
@@ -94,7 +103,8 @@ but it is not a substitute for the runtime work below.
   - Initialize a fresh two-Profile Study run.
   - Ask a parent wiki question that selects `construction-details` only when
     relevant.
-  - Preview and apply the compact Task 1 update against the granted wiki.
+  - Preview and apply the full Task 1 update against the granted wiki, then
+    score all 75 source dispositions and 77 expected patches.
   - Confirm the run-private authority changed, the participant source did not,
     and `study-baseline` remained byte-for-byte unchanged.
   - Confirm Task 2/3 grants and query sessions are unaffected.
@@ -104,7 +114,7 @@ but it is not a substitute for the runtime work below.
   - Add the parent federated-query example while retaining exact-child and
     `#HANDLE` examples.
   - Update Task 1 permission tables to
-    `READ+CREATE+UPDATE+QUERY` for the wiki and
+    `READ+CREATE+UPDATE+DELETE+QUERY` for the wiki and
     `QUERY+SESSION_LOG` for `construction-details`.
   - Show which commands are executable and retain any remaining limitation
     explicitly; do not document planned behavior as complete before its tests

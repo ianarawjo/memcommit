@@ -18,6 +18,7 @@ from memcommit.profiles import (
     resolve_granted_context_view,
 )
 from memcommit.store import MemoryStore
+from memcommit.update import GrantedUpdateTarget, granted_target_digest
 
 
 @dataclass(frozen=True)
@@ -34,6 +35,29 @@ class ContextAccess:
     @property
     def is_granted(self) -> bool:
         return self.view is not None
+
+
+def freeze_granted_update_target(access: ContextAccess) -> GrantedUpdateTarget:
+    """Freeze the complete control-plane identity behind one public view."""
+
+    view = access.view
+    if view is None or access.attachment_name is None:
+        raise ValueError("Expected a granted update target.")
+    grant = view.grant
+    return GrantedUpdateTarget(
+        public_name=access.display_name,
+        grantee_profile_uid=view.grantee.uid,
+        authority_profile_uid=view.authority.uid,
+        attachment_context_uid=grant.attachment_context_uid,
+        attachment_context_name=access.attachment_name,
+        grant_uid=grant.uid,
+        grant_revision=grant.revision,
+        grant_digest=granted_target_digest(grant.to_dict()),
+        resource_uid=grant.resource_uid,
+        resource_name=grant.resource_name,
+        authority_context_name=view.authority_context_name,
+        permissions=grant.permissions,
+    )
 
 
 def resolve_context_access(

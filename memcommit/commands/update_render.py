@@ -92,11 +92,20 @@ def render_plan(
                 typer.echo(f"    {line}")
     typer.echo()
     if applied:
-        typer.echo(f"Updated local working copy {session.target_name}.")
-        typer.echo(
-            "No shared origin was changed. Contribution still requires "
-            "mem push or PR."
-        )
+        if session.granted_target is not None:
+            typer.echo(
+                f"Updated granted authority target {session.target_name}."
+            )
+            typer.echo(
+                "The participant source and fixed study baseline were not "
+                "changed."
+            )
+        else:
+            typer.echo(f"Updated local working copy {session.target_name}.")
+            typer.echo(
+                "No shared origin was changed. Contribution still requires "
+                "mem push or PR."
+            )
     elif staged:
         typer.echo(f"Shared {session.target_name} is unchanged.")
     else:

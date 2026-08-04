@@ -3,7 +3,15 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.granted_context import (
+    GrantedReadStore,
+    freeze_granted_update_target,
+    resolve_context_access,
+)
 from memcommit.commands.update_render import render_plan
+from memcommit.granted_update_application import apply_granted_staged_update
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -65,8 +73,39 @@ def cmd(
             current=current_name,
         )
         source = store.load(endpoints.source_name)
-        target = store.load(endpoints.target_name)
-    except (FileNotFoundError, RuntimeError, ValueError) as error:
+        granted_target = None
+        if store.context_exists(endpoints.target_name):
+            target = store.load(endpoints.target_name)
+        else:
+            with authority_grant_snapshot_lock() as registry:
+                try:
+                    access = resolve_context_access(
+                        store,
+                        endpoints.target_name,
+                        current_name=endpoints.source_name,
+                        required_permission="READ",
+                        registry=registry,
+                    )
+                except ProfileError as error:
+                    if "does not exist" not in str(error):
+                        raise
+                    raise FileNotFoundError(
+                        f"Context '{endpoints.target_name}' not found."
+                    ) from error
+                if not access.is_granted:
+                    raise UpdateError("Expected a granted update target.")
+                target = GrantedReadStore(
+                    access,
+                    registry=registry,
+                ).load(access.display_name)
+                granted_target = freeze_granted_update_target(access)
+    except (
+        FileNotFoundError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
         typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
@@ -77,7 +116,12 @@ def cmd(
         raise typer.Exit(1)
 
     if existing is not None and existing.status == "applied":
-        if applied_session_matches(existing, source, target):
+        if applied_session_matches(
+            existing,
+            source,
+            target,
+            granted_target=granted_target,
+        ):
             render_plan(existing, applied=True)
             typer.echo("This update was already applied locally.")
             return
@@ -107,7 +151,12 @@ def cmd(
         and existing.status == "staged"
         and not replace_stage
     ):
-        if session_matches(existing, source, target):
+        if session_matches(
+            existing,
+            source,
+            target,
+            granted_target=granted_target,
+        ):
             session = existing
         else:
             typer.secho(
@@ -130,7 +179,12 @@ def cmd(
 
     try:
         if session is None:
-            if cached is not None and session_matches(cached, source, target):
+            if cached is not None and session_matches(
+                cached,
+                source,
+                target,
+                granted_target=granted_target,
+            ):
                 session = cached.with_status("staged")
             else:
                 session = plan_update(
@@ -138,6 +192,7 @@ def cmd(
                     target,
                     connect_codex_chatgpt_provider,
                     status="staged",
+                    granted_target=granted_target,
                 )
             # Bind the staged intent to the active record observed above.
             # This prevents two update processes from silently replacing one
@@ -146,9 +201,15 @@ def cmd(
                 session,
                 expected_current=existing,
             )
-        applied = store.apply_staged_update(session)
+        applied = (
+            apply_granted_staged_update(store, session)
+            if session.granted_target is not None
+            else store.apply_staged_update(session)
+        )
     except (
         OSError,
+        ProfileConfigError,
+        ProfileError,
         QueryProviderError,
         RuntimeError,
         UpdateError,
