@@ -16,11 +16,17 @@ from typing import Callable, Protocol
 from memcommit.context import Context, Memory
 from memcommit.provenance import MemoryState, TraceEvent, TraceReport
 from memcommit.query_provider import QueryProviderError
+from memcommit.rationale_cache import (
+    CachedRationaleInference,
+    load_rationale_inference,
+    rationale_inference_input_digest,
+    save_rationale_inference,
+)
 from memcommit.review import (
     atomize_review_matches_analysis,
     review_matches_context,
 )
-from memcommit.store import MemoryStore
+from memcommit.store import MemoryStore, context_record_digest
 
 
 RATIONALE_INPUT_CHAR_LIMIT = 200_000
@@ -51,6 +57,7 @@ class RationaleProvider(Protocol):
 class ContextEvidence:
     candidate_id: str
     memory: Memory
+    context_name: str
     position: int
     distance: int
 
@@ -59,6 +66,7 @@ class ContextEvidence:
             "candidate_id": self.candidate_id,
             "memory_uid": self.memory.uid,
             "content": self.memory.content,
+            "context_name": self.context_name,
             "position": self.position,
             "distance": self.distance,
         }
@@ -141,9 +149,13 @@ class RationaleReport:
     stale_analysis: bool
     proposals: tuple[UpdateProposalEvidence, ...]
     inference: ContextInference | None
+    inference_cached: bool
     fallback_evidence: tuple[ContextEvidence, ...]
     inference_error: str | None
     warnings: tuple[str, ...]
+    inference_scope_name: str
+    inference_scope_context_count: int
+    recorded_evidence_available: bool
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -167,11 +179,17 @@ class RationaleReport:
                 if self.inference is not None
                 else None
             ),
+            "inference_cached": self.inference_cached,
             "fallback_evidence": [
                 item.to_dict() for item in self.fallback_evidence
             ],
             "inference_error": self.inference_error,
             "warnings": list(self.warnings),
+            "inference_scope": {
+                "context_name": self.inference_scope_name,
+                "context_count": self.inference_scope_context_count,
+            },
+            "recorded_evidence_available": self.recorded_evidence_available,
         }
 
 
@@ -365,18 +383,18 @@ def _proposal_evidence(
 
 
 def _context_candidates(
-    ctx: Context,
+    contexts: tuple[Context, ...],
     target: MemoryState,
 ) -> tuple[list[ContextEvidence], bool]:
     memories = [
-        item
-        for item in ctx.iter_items()
+        (context.name, item)
+        for context in contexts
+        for item in context.iter_items()
         if isinstance(item, Memory)
     ]
     current_position = next(
         (
-            index
-            for index, memory in enumerate(memories)
+            index for index, (_context_name, memory) in enumerate(memories)
             if memory.uid == target.uid
         ),
         target.position,
@@ -385,10 +403,11 @@ def _context_candidates(
         ContextEvidence(
             candidate_id=f"m{index + 1:06d}",
             memory=memory,
+            context_name=context_name,
             position=index,
             distance=abs(index - current_position),
         )
-        for index, memory in enumerate(memories)
+        for index, (context_name, memory) in enumerate(memories)
         if memory.uid != target.uid
     ]
     payload_size = len(
@@ -396,6 +415,7 @@ def _context_candidates(
             [
                 {
                     "candidate_id": candidate.candidate_id,
+                    "context_name": candidate.context_name,
                     "position": candidate.position,
                     "content": candidate.memory.content,
                 }
@@ -504,13 +524,14 @@ def _inference_prompt(
             "content": target.content,
         },
         "context_scope": (
-            "nearest direct Memories selected under a size limit"
+            "nearest readable subtree Memories selected under a size limit"
             if limited
-            else "all other directly owned Memories in Context order"
+            else "all other directly owned Memories in the readable Context subtree"
         ),
         "candidates": [
             {
                 "candidate_id": candidate.candidate_id,
+                "context_name": candidate.context_name,
                 "position": candidate.position,
                 "distance_from_target": candidate.distance,
                 "content": candidate.memory.content,
@@ -630,14 +651,13 @@ def _parse_inference(
     )
 
 
-def _infer_context(
+def _inference_request(
     *,
     target: MemoryState,
     candidates: list[ContextEvidence],
     analysis: SavedAnalysis | None,
     limited: bool,
-    provider_factory: Callable[[], RationaleProvider],
-) -> ContextInference:
+) -> tuple[str, dict[str, object]]:
     if not candidates:
         raise RationaleError(
             "No other directly owned Memories are available for inference."
@@ -648,13 +668,50 @@ def _infer_context(
         analysis,
         limited=limited,
     )
-    provider = provider_factory()
-    raw = provider.complete(
-        prompt,
-        operation="rationale inference",
-        output_schema=_inference_schema(candidates),
+    output_schema = _inference_schema(candidates)
+    return prompt, output_schema
+
+
+def _cached_inference(
+    cached: CachedRationaleInference,
+    candidates: list[ContextEvidence],
+) -> ContextInference:
+    """Revalidate a cache record against the current opaque candidate set."""
+    by_memory_uid: dict[str, ContextEvidence] = {}
+    for candidate in candidates:
+        if candidate.memory.uid in by_memory_uid:
+            raise RationaleError("Saved rationale inference cache is invalid.")
+        by_memory_uid[candidate.memory.uid] = candidate
+    try:
+        support_ids = [
+            by_memory_uid[memory_uid].candidate_id
+            for memory_uid in cached.support_memory_uids
+        ]
+    except KeyError as error:
+        raise RationaleError(
+            "Saved rationale inference cache is invalid."
+        ) from error
+    normalized = json.dumps(
+        {
+            "best_supported_reading": cached.best_supported_reading,
+            "contextual_flow": cached.contextual_flow,
+            "support_ids": support_ids,
+            "unresolved": list(cached.unresolved),
+        },
+        ensure_ascii=False,
     )
-    return _parse_inference(raw, candidates)
+    return _parse_inference(normalized, candidates)
+
+
+def _cache_record(inference: ContextInference) -> CachedRationaleInference:
+    return CachedRationaleInference(
+        best_supported_reading=inference.best_supported_reading,
+        contextual_flow=inference.contextual_flow,
+        support_memory_uids=tuple(
+            evidence.memory.uid for evidence in inference.evidence
+        ),
+        unresolved=inference.unresolved,
+    )
 
 
 def build_rationale(
@@ -662,16 +719,30 @@ def build_rationale(
     ctx: Context,
     trace: TraceReport,
     provider_factory: Callable[[], RationaleProvider] | None,
+    *,
+    cache_inference: bool = False,
+    refresh_inference: bool = False,
+    inference_contexts: tuple[Context, ...] | None = None,
+    inference_scope_name: str | None = None,
+    recorded_evidence_available: bool = True,
 ) -> RationaleReport:
-    """Combine durable evidence with an optional one-shot contextual reading."""
+    """Combine live durable evidence with an optional contextual reading."""
     target = _target_state(trace)
-    saved_analysis, stale_analysis, review_warnings = _saved_analysis(
-        store,
-        ctx,
-        trace,
-    )
-    proposals, proposal_warnings = _proposal_evidence(store, ctx, trace)
-    candidates, limited = _context_candidates(ctx, target)
+    if recorded_evidence_available:
+        saved_analysis, stale_analysis, review_warnings = _saved_analysis(
+            store,
+            ctx,
+            trace,
+        )
+        proposals, proposal_warnings = _proposal_evidence(store, ctx, trace)
+    else:
+        saved_analysis = None
+        stale_analysis = False
+        proposals = ()
+        review_warnings = []
+        proposal_warnings = []
+    inference_contexts = inference_contexts or (ctx,)
+    candidates, limited = _context_candidates(inference_contexts, target)
     fallback = _fallback_evidence(candidates)
     warnings = [*review_warnings, *proposal_warnings]
     if limited:
@@ -681,16 +752,105 @@ def build_rationale(
         )
 
     inference: ContextInference | None = None
+    inference_cached = False
     inference_error: str | None = None
     if provider_factory is not None:
         try:
-            inference = _infer_context(
+            prompt, output_schema = _inference_request(
                 target=target,
                 candidates=candidates,
                 analysis=saved_analysis,
                 limited=limited,
-                provider_factory=provider_factory,
             )
+            input_digest: str | None = None
+            # A subtree cache needs a multi-Context publication transaction.
+            # Until that exists, keep recursive and granted inference ephemeral
+            # rather than publishing a result after validating only one owner.
+            cache_enabled = (
+                cache_inference
+                and recorded_evidence_available
+                and len(inference_contexts) == 1
+            )
+            if cache_enabled:
+                try:
+                    input_digest = rationale_inference_input_digest(
+                        context_uid=ctx.uid,
+                        selected_memory_uid=target.uid,
+                        prompt=prompt,
+                        output_schema=output_schema,
+                    )
+                except (OSError, RuntimeError, ValueError):
+                    cache_enabled = False
+                    warnings.append(
+                        "Rationale inference caching is unavailable for this "
+                        "Context or Memory identity."
+                    )
+            if (
+                cache_enabled
+                and input_digest is not None
+                and not refresh_inference
+            ):
+                try:
+                    cached = load_rationale_inference(
+                        ctx.uid,
+                        target.uid,
+                        input_digest,
+                    )
+                except (OSError, RuntimeError, ValueError):
+                    warnings.append(
+                        "Saved rationale inference cache was invalid or "
+                        "unavailable and was ignored."
+                    )
+                else:
+                    if cached is not None:
+                        try:
+                            inference = _cached_inference(cached, candidates)
+                        except RationaleError:
+                            warnings.append(
+                                "Saved rationale inference cache was invalid "
+                                "and was ignored."
+                            )
+                        else:
+                            inference_cached = True
+
+            if inference is None:
+                provider = provider_factory()
+                raw = provider.complete(
+                    prompt,
+                    operation="rationale inference",
+                    output_schema=output_schema,
+                )
+                inference = _parse_inference(raw, candidates)
+                if cache_enabled and input_digest is not None:
+                    try:
+                        # The provider is intentionally called without a long
+                        # Context lock. Revalidate the exact direct frame in a
+                        # short locked publication boundary so a late result
+                        # cannot outlive deletion or replace a newer frame's
+                        # useful cache slot.
+                        with store._context_write_lock(ctx.name):
+                            current = store.load_direct(ctx.name)
+                            if (
+                                current.uid != ctx.uid
+                                or context_record_digest(current)
+                                != context_record_digest(ctx)
+                            ):
+                                warnings.append(
+                                    "The Context changed during rationale "
+                                    "inference, so the result was not cached."
+                                )
+                            else:
+                                save_rationale_inference(
+                                    ctx.uid,
+                                    target.uid,
+                                    input_digest,
+                                    _cache_record(inference),
+                                )
+                    except (OSError, RuntimeError, ValueError):
+                        warnings.append(
+                            "Rationale inference was not cached because cache "
+                            "storage was unavailable."
+                        )
         except (QueryProviderError, RationaleError) as error:
             # Recorded evidence remains useful when the temporary semantic
             # provider is unavailable. Unvalidated model text is never rendered.
@@ -705,7 +865,11 @@ def build_rationale(
         stale_analysis=stale_analysis,
         proposals=proposals,
         inference=inference,
+        inference_cached=inference_cached,
         fallback_evidence=fallback,
         inference_error=inference_error,
         warnings=tuple(warnings),
+        inference_scope_name=inference_scope_name or ctx.name,
+        inference_scope_context_count=len(inference_contexts),
+        recorded_evidence_available=recorded_evidence_available,
     )

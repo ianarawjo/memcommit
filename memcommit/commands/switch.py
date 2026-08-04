@@ -20,6 +20,7 @@ from memcommit.commands.granted_context import (
 )
 from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.study_operation_policy import analysis_boundary_label
 
 
 @dataclass(frozen=True)
@@ -63,7 +64,14 @@ def _granted_picker_state(
         attachment = store.load_direct(grant.attachment_context_name)
         if attachment.uid != grant.attachment_context_uid:
             continue
-        annotation = _grant_annotation(grant.permissions)
+        annotation = _grant_annotation(grant.permissions)[:-1] + " · " + (
+            analysis_boundary_label(
+                grant.public_name,
+                granted=True,
+                readable="READ" in grant.permissions,
+                registry=registry,
+            )
+        ) + "]"
         if "READ" not in grant.permissions:
             # A query-only grant exposes its reviewed public route, never its
             # frozen authority descendants, in ordinary navigation.
@@ -93,6 +101,34 @@ def _granted_picker_views(
     return state.names, state.annotations
 
 
+def _local_picker_annotations(
+    names: tuple[str, ...] | list[str],
+    store: MemoryStore | None = None,
+) -> dict[str, str]:
+    """Expose Study-only analysis boundaries without annotating normal stores."""
+
+    registry = load_profile_registry()
+    if (
+        store is not None
+        and store.store_dir.resolve()
+        != profile_store_dir(registry.active).resolve()
+    ):
+        return {}
+    source = registry.active.source
+    if not isinstance(source, dict) or source.get("kind") != "STUDY_RUN":
+        return {}
+    return {
+        name: "["
+        + analysis_boundary_label(
+            name,
+            granted=False,
+            registry=registry,
+        )
+        + "]"
+        for name in names
+    }
+
+
 def cmd(
     name: Annotated[
         Optional[str],
@@ -120,16 +156,27 @@ def cmd(
             granted_state = _granted_picker_state(store)
             virtual_names = granted_state.names
             virtual_annotations = granted_state.annotations
+            local_annotations = _local_picker_annotations(names, store)
+            local_options = (
+                {"local_annotations": local_annotations}
+                if local_annotations
+                else {}
+            )
             if virtual_names:
                 name = choose_context(
                     names,
                     current=expected_current,
+                    **local_options,
                     virtual_names=virtual_names,
                     selectable_virtual_names=granted_state.selectable_names,
                     virtual_annotations=virtual_annotations,
                 )
             else:
-                name = choose_context(names, current=expected_current)
+                name = choose_context(
+                    names,
+                    current=expected_current,
+                    **local_options,
+                )
         except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
             typer.secho(
                 f"Error: {error}",

@@ -580,14 +580,15 @@ def test_profile_use_selects_the_initialized_complete_profile(
     assert "task-1/campus-wiki/route-changes" in virtual_names
     assert annotations["task-1/campus-wiki"] == (
         "[grant CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + "
-        "EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS]"
+        "EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · "
+        "RATIONALE SUBTREE + TRACE BLOCKED]"
     )
     assert annotations["task-2/advisor1"] == (
         "[grant READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + "
-        "SAVE_ANALYSIS]"
+        "SAVE_ANALYSIS · RATIONALE SUBTREE + TRACE BLOCKED]"
     )
     assert annotations["task-2/proposal-submission-guidelines"] == (
-        "[grant QUERY + SAVE QUERY SESSION]"
+        "[grant QUERY + SAVE QUERY SESSION · RATIONALE BLOCKED + TRACE BLOCKED]"
     )
     picker_state = _granted_picker_state()
     assert "task-2/advisor1" in picker_state.selectable_names

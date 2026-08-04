@@ -18,22 +18,84 @@ change was applied.
 ## Command contract
 
 ```text
+mem trace
 mem trace MEMORY
+mem rationale
 mem rationale MEMORY
 mem rationale MEMORY --recorded-only
+mem rationale MEMORY --refresh
 ```
 
 Both commands accept a current or retained historical direct-Memory UID or
-unambiguous prefix. They are read-only with respect to Contexts, checkpoints,
-analysis artifacts, and active state.
+unambiguous prefix. Neither command changes Contexts, checkpoints, saved
+semantic analyses, proposals, or active state. `mem rationale` may update a
+replaceable provider-inference cache after a successful validated inference;
+`mem trace` and `mem rationale --recorded-only` remain storage-read-only.
 
-`mem trace` renders:
+In an interactive terminal, omitting `MEMORY` opens one shared read-only
+Memory picker for the selected or current Context. The picker lists each UID
+once: currently present Memories first in canonical Context order, followed by
+historical-only Memories using their last retained content. `HISTORICAL` means
+only that the UID is no longer directly present; it can identify a removed
+Memory, a split parent, or another retained earlier state. Equal text never
+collapses distinct UIDs, and edits of one UID never create multiple picker
+rows.
 
-- the earliest retained state in the selected lineage component;
-- ordered content events;
-- saved atomize analyses as separate attachments;
-- current descendants, if any;
-- explicit limits when history cannot be reconstructed safely.
+The picker returns the exact full UID and then enters the same command path as
+an explicit selector. It does not perform per-row semantic inference or open
+Memory references, embedded Contexts, or query-only sources. `mem rationale`
+connects its optional inference provider only after Enter selects a Memory;
+canceling therefore performs no provider call. After the full-screen picker
+closes, the command reloads the direct Context before reconstructing the report
+so it does not combine a pre-picker live frame with post-picker history.
+The selected-card detail names the resulting scope before Enter: Trace covers
+the full retained lineage from earliest retained evidence through the current
+Context, while Rationale covers recorded evidence, saved analysis, and current
+interpretation. This shared first-stage picker is the interactive boundary for
+choosing a Memory; it does not silently choose an operation subrange.
+
+Outside a TTY, omission fails instead of silently selecting the first Memory;
+automation must pass an explicit UID or prefix. `--json` also requires an
+explicit selector so machine-readable stdout is never preceded by terminal
+selection traffic. Escape, `q`, and Ctrl-C cancel the picker without changing
+the store. If no current or retained historical direct Memory exists, the
+command reports that boundary without opening an empty UI.
+
+By default, `mem trace` renders the entire selected lineage as compact
+operation rows. The current endpoint comes first, followed by operations in
+newest-first order, and the earliest retained origin comes last. A trusted
+range label states both directions explicitly: rows run downward into older
+history, while every row's `before → after` arrow still points forward in
+time. Creation is `∅ → Memory`; removal is `Memory → ∅`; a Revert, Undo, or
+Redo that removes a Memory is labeled `RESTORED/REMOVED` instead of relying on
+a bare minus sign.
+
+Presentation groups events by retained command-unit receipt, then explicit
+operation identity, with checkpoint UID only as the legacy fallback when no
+stronger operation identity exists. Several events from one operation become
+one row. Compact restoration rows filter before/after states to the selected
+lineage because a command-unit receipt may describe other changed Memories or
+Contexts. Multiline and control-bearing content is display-escaped and bounded
+inside the row. Checkpoint identity, descriptions, citations, complete UIDs,
+and saved-analysis detail move to `--verbose`; `--json` keeps the chronological
+structured event order for programmatic consumers.
+
+Thus the human-facing scopes remain distinct:
+
+- `mem log` browses Context checkpoint states and restoration addresses;
+- `mem revert` restores one reviewed checkpoint;
+- `mem undo` and `mem redo` restore one global command unit;
+- `mem trace` shows operations that affected one Memory lineage; and
+- `mem rationale` adds recorded reasons, saved analysis, and contextual
+  interpretation to that lineage.
+
+Trace must not become the execution authority for Undo or Redo. A per-Memory
+lineage can include reconstructed or unrecorded events and cannot prove the
+complete before/after frame of a multi-Context command. Undo/Redo therefore
+continue to use their exact command-unit snapshots and receipts. Trace links
+them in presentation as, for example, `mem undo ← mem add`, so the restoration
+and its source operation remain visible without coupling a read-only report to
+the mutation boundary.
 
 “Earliest retained” is deliberately weaker than “created here.” When the
 Context has no checkpoint, the earliest state available to trace is the
@@ -50,10 +112,13 @@ creation event was found.
 - **SAVED ATOMIZE ANALYSIS** — current, stale, or applied preview;
 - **UNAPPLIED PROPOSALS** — update/impact material that has not changed this
   Memory;
-- **INFERRED WITHIN THE CURRENT CONTEXT — not recorded** — a one-shot,
-  best-effort ordinary reading.
+- **INFERRED WITHIN THE CURRENT CONTEXT — not recorded** — a best-effort
+  ordinary reading, freshly generated or reused from an exact-input cache.
 
-`--recorded-only` never connects the inference provider.
+`--recorded-only` neither reads nor writes the inference cache and never
+connects the inference provider. `--refresh` bypasses a matching cache entry
+and replaces it only after a new provider response passes normal validation;
+combining the two options is rejected.
 
 ## Evidence labels
 
@@ -84,6 +149,29 @@ that existed immediately before the revert; the target checkpoint records the
 restored state. Retained `log_snapshot` data is read so undo-revert history can
 be reconstructed without treating the pre-revert snapshot as the result of the
 revert.
+
+### Command-unit Undo/Redo events
+
+An Undo or Redo is rendered as the command that actually ran, not as a generic
+Revert. Its `RESTORED · RECORDED` event retains the shared restoration receipt
+UID, the original command-unit UID and command name, and the complete affected
+Context identity list repeated by that receipt. Consequently, tracing a Memory
+in either owner of a multi-Context Update shows the same Undo/Redo operation
+boundary even though the content diff remains local to the selected Memory's
+Context.
+
+The original Update event carries its shared Update session/digest unit and
+the same affected-Context membership. Undo/Redo `source_uid` therefore points
+back to an operation identity visible on the source Update event rather than
+only to one owner's checkpoint.
+
+The trace does not collapse several owners' Memory changes into one synthetic
+cross-Context lineage. That would mix otherwise independent provenance graphs.
+Instead, the shared operation identity correlates the per-Context events while
+each event continues to show only its owner's before/after content. Receipt
+metadata must match the checkpoint command, include the traced Context, and
+contain unique, structurally valid Context identities; otherwise Trace falls
+back to snapshot reconstruction and reports the invalid metadata as a limit.
 
 ## Raw add provenance
 
@@ -205,6 +293,88 @@ A stale ambiguity review is not presented as current evidence. Provider
 failure or invalid output falls back to a deterministic Context window while
 preserving all recorded sections.
 
+## Context-inference cache
+
+Only the validated provider-created `ContextInference` is cached. The complete
+`RationaleReport` is not: trace events, recorded reasons, saved analysis,
+atomize attachments, and unapplied proposals are rebuilt from current local
+state on every invocation. Consequently a proposal or recorded provenance
+change appears immediately without forcing an unrelated provider call.
+
+The active profile keeps one replaceable slot per Context UID and selected
+Memory UID under its own MemoryStore root (the authoring profile uses
+`~/.mem`):
+
+```text
+<active-store>/rationale-inferences/<context-uid>/<sha256(memory-uid)>.json
+```
+
+The raw Memory UID is hashed for the filename because legacy identities are
+data, not safe path components. The record is bound to both exact identities
+and to a canonical SHA-256 digest of the inference contract, provider-contract
+namespace, exact prompt, and exact output schema. The prompt already contains
+the target content and retained position, the ordered current direct-Memory
+frame or deterministic size-limited subset, and the current saved-analysis
+fields that inference can use. Editing, adding, removing, or reordering one of
+those Memories, changing the target frame, or changing those analysis fields
+therefore causes a cache miss. Display mode, picker use, trace-only evidence,
+and proposal-only state do not affect provider input and do not invalidate the
+entry.
+
+The cache persists only normalized explanation text, unresolved items, and
+the supporting ordinary Memory UIDs. Explanation text can quote or paraphrase
+an ordinary Memory, which is why deletion shares the Context's privacy
+lifetime. The record does not persist the prompt, a separate candidate-frame
+payload, raw provider response, complete report, references, or query-only
+material. On a hit, support UIDs are mapped back through the current opaque
+candidate allowlist and the reconstructed response passes the same strict
+length, shape, duplicate, and unknown-evidence validation as a fresh response.
+A malformed, oversized, identity-mismatched, or symlinked cache is never
+rendered; it is treated as a miss and the command can still use a fresh
+provider or deterministic fallback. Cache read or publication failure remains
+a visible limit but does not discard an otherwise valid report.
+
+Provider work runs without holding a long Context lock. Before publishing a
+new entry, the command briefly locks and rechecks the exact direct Context
+identity and digest, then writes through an atomic same-directory replace. A
+late response for a changed or deleted Context is not published. Concurrent
+same-input misses may still duplicate a provider call; avoiding that would
+require holding an interprocess lock across an unbounded external request.
+Deleting a Context preflights and removes its inference subtree because the
+derived explanation shares the source Context's privacy lifetime.
+
+## Readable subtree Rationale and Study Trace boundary
+
+Rationale does not perform an outbound search into arbitrary sibling or global
+Contexts. Selecting a Context freezes that Context plus every materialized
+lexical descendant whose ordinary Memory content is readable through the same
+store or granted READ projection. The target UID may belong to any direct
+Context in that subtree, and inference candidates retain their public owner
+Context names. Query-only pointers, MemoryRef targets, and narrower grant
+overrides never broaden this frame. This matches recursive Find's namespace
+expectation while keeping the disclosure boundary deterministic.
+
+A granted READ view permits this content interpretation but does not imply
+authority to inspect the source Profile's checkpoints, command receipts, saved
+reviews, or atomize attachments. Granted Rationale therefore constructs a
+history-free current-Memory projection, labels authority history as withheld,
+and keeps its inference ephemeral. `--recorded-only` is rejected on a granted
+view because it would request precisely the history that READ does not expose.
+Trace is always rejected for a granted view.
+
+Within a composed participant Study run, local Trace is additionally limited
+to the `task-3` subtree. Task 3 deliberately studies personal-memory history;
+Tasks 1 and 2 do not. Normal authoring stores retain Trace. `mem ls` and the
+Switch picker render `RATIONALE SUBTREE` together with `TRACE ALLOWED` or
+`TRACE BLOCKED` so the difference is visible before a participant selects an
+operation.
+
+Recursive inference is not cached yet. Publishing a reusable result safely
+would require one freshness boundary over every Context in the subtree, while
+the current cache publication validates one direct Context. Recomputing is
+preferred to retaining a result whose supporting descendant changed during the
+provider turn.
+
 ## Query-only boundary
 
 Trace, rationale, atomize preview, and both apply modes never open a
@@ -227,6 +397,11 @@ This is a tested command-path invariant, not operating-system confidentiality.
   Context identity.
 - **Putting raw source metadata into every Memory:** rejected to keep Memory
   minimal and operation provenance centralized.
+- **Caching the complete rationale report:** rejected because recorded and
+  proposed evidence has independent freshness requirements.
+- **Keeping an unbounded content-addressed rationale archive:** rejected to
+  avoid silently accumulating provider-derived copies of private Context
+  material. The cache is an optimization, not historical evidence.
 
 ## Remaining limitations
 
@@ -247,5 +422,12 @@ This is a tested command-path invariant, not operating-system confidentiality.
   checkpoint.
 - Literal source-span validation does not independently prove full semantic
   entailment of a generated child.
-- The one-shot inference provider and atomize provider are not pinned to an
-  immutable model version.
+- The rationale and atomize providers are not pinned to an immutable model
+  version. A rationale cache can therefore continue serving a valid result
+  across a backend change until its explicit contract version changes or the
+  person runs `--refresh`.
+- Bare interactive selection reconstructs the retained history once to build
+  its candidate catalog and again after selection to produce a fresh report.
+  This favors one authoritative selector domain and post-picker freshness over
+  caching private frame objects; very large retained histories can therefore
+  make the interactive path slower than an explicit UID.

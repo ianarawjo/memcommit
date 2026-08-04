@@ -31,6 +31,7 @@ from memcommit.profile_config import AuthorityGrant, ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 from memcommit.update import GrantedUpdateTarget
+from memcommit.study_operation_policy import analysis_boundary_label, operation_policy
 
 
 _LIST_SNAPSHOT_VERSION = 2
@@ -723,7 +724,34 @@ def _granted_access_notes(access: ContextAccess) -> tuple[str, ...]:
         + display_escape_text(view.authority.name)
         + f" · grant {grant.uid[:8]} revision {grant.revision}",
         "  Permissions: " + _permission_text(grant.permissions),
+        "  Analysis: "
+        + analysis_boundary_label(
+            access.display_name,
+            granted=True,
+            readable="READ" in grant.permissions,
+        ),
         *_derived_boundary_lines(grant),
+    )
+
+
+def _local_analysis_notes(
+    context_name: str,
+    store: MemoryStore,
+) -> tuple[str, ...]:
+    policy = operation_policy(
+        context_name,
+        granted=False,
+        store_root=store.store_dir,
+    )
+    if policy.study_task is None:
+        return ()
+    return (
+        "  Analysis: "
+        + analysis_boundary_label(
+            context_name,
+            granted=False,
+            store_root=store.store_dir,
+        ),
     )
 
 
@@ -742,6 +770,15 @@ def _emit_grant_notes(attachment_name: str) -> None:
             + f" · grant {grant.uid[:8]} revision {grant.revision}"
         )
         typer.echo("    Permissions: " + _permission_text(grant.permissions))
+        typer.echo(
+            "    Analysis: "
+            + analysis_boundary_label(
+                grant.public_name,
+                granted=True,
+                readable="READ" in grant.permissions,
+                registry=registry,
+            )
+        )
         for line in _derived_boundary_lines(grant, indent="    "):
             typer.echo(line)
 
@@ -937,7 +974,11 @@ def cmd(
     )
     _emit_snapshot_text(
         annotated_text,
-        header_notes=_granted_access_notes(access),
+        header_notes=(
+            _granted_access_notes(access)
+            if access.is_granted
+            else _local_analysis_notes(access.context_name, active_store)
+        ),
     )
     if not access.is_granted:
         _emit_grant_notes(access.context_name)

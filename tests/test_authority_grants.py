@@ -137,6 +137,79 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
     assert "[view query from task-1-campus-authority]" in contexts.output
 
 
+def test_granted_read_allows_subtree_rationale_but_never_trace_history(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    authority_store, _editable, _campus_grant, _details_grant = _grant_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    target = next(
+        item
+        for item in authority_store.load_direct("campus-wiki/public").iter_items()
+        if isinstance(item, Memory)
+    )
+    calls: list[dict[str, object]] = []
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
+            calls.append(payload)
+            return json.dumps(
+                {
+                    "best_supported_reading": "The public note is contextualized.",
+                    "contextual_flow": "The readable wiki note supports it.",
+                    "support_ids": [payload["candidates"][0]["candidate_id"]],
+                    "unresolved": [],
+                }
+            )
+
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
+        Provider,
+    )
+
+    def forbidden_history(*args, **kwargs):
+        raise AssertionError("granted READ opened authority checkpoint history")
+
+    monkeypatch.setattr(MemoryStore, "list_checkpoints", forbidden_history)
+
+    rationale = runner.invoke(
+        app,
+        ["rationale", target.uid[:8], "--context", "campus-wiki"],
+    )
+    trace = runner.invoke(
+        app,
+        ["trace", target.uid[:8], "--context", "campus-wiki/public"],
+    )
+    recorded = runner.invoke(
+        app,
+        [
+            "rationale",
+            target.uid[:8],
+            "--context",
+            "campus-wiki",
+            "--recorded-only",
+        ],
+    )
+
+    assert rationale.exit_code == 0, rationale.output
+    assert "AUTHORITY HISTORY" in rationale.output
+    assert "not exposed by this granted read view" in rationale.output.casefold()
+    assert calls
+    assert {candidate["context_name"] for candidate in calls[0]["candidates"]} == {
+        "campus-wiki"
+    }
+    assert SECRET not in json.dumps(calls)
+    assert trace.exit_code == 1
+    assert "READ does not expose authority checkpoint" in trace.stderr
+    assert recorded.exit_code == 1
+    assert "--recorded-only is unavailable" in recorded.stderr
+
+
 def test_read_view_does_not_open_nested_query_authority_record(
     isolated_store,
     tmp_path,

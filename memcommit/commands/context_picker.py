@@ -185,6 +185,7 @@ def choose_context(
     names: Sequence[str],
     *,
     current: str | None,
+    local_annotations: Mapping[str, str] | None = None,
     virtual_names: Sequence[str] = (),
     selectable_virtual_names: AbstractSet[str] = frozenset(),
     virtual_annotations: Mapping[str, str] | None = None,
@@ -207,11 +208,14 @@ def choose_context(
         or set(options).intersection(virtual)
     ):
         raise ValueError("Virtual Context selection received invalid names.")
-    annotations = dict(virtual_annotations or {})
+    local_labels = dict(local_annotations or {})
+    annotations = {**local_labels, **dict(virtual_annotations or {})}
     selectable_virtual = frozenset(selectable_virtual_names)
     if not selectable_virtual <= set(virtual):
         raise ValueError("Selectable virtual Contexts are invalid.")
-    if set(annotations) - set(virtual) or any(
+    if set(local_labels) - set(options):
+        raise ValueError("Local Context annotations are invalid.")
+    if set(virtual_annotations or {}) - set(virtual) or any(
         not isinstance(label, str) or not label for label in annotations.values()
     ):
         raise ValueError("Virtual Context annotations are invalid.")
