@@ -12,11 +12,6 @@
       "uid": "b95e0185-f933-508d-8da7-41c65e2cc340",
       "content": "Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study."
     },
-    "4264c20d-3e44-578d-866e-7787cc7b59e2": {
-      "type": "memory",
-      "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2",
-      "content": "Express the primary research question of the proposal as an exploratory qualitative question without directional hypotheses."
-    },
     "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a": {
       "type": "memory",
       "uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a",
@@ -66,7 +61,6 @@
   "order": [
     "b39cf79f-d174-5ecb-98c9-b3f62ce0696a",
     "b95e0185-f933-508d-8da7-41c65e2cc340",
-    "4264c20d-3e44-578d-866e-7787cc7b59e2",
     "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a",
     "b5461283-9001-510c-9a30-bb367f247b25",
     "87340c01-2e0f-5b82-9410-2133648022da",

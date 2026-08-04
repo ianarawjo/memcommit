@@ -7,16 +7,6 @@
       "uid": "c8bcefee-c64a-5a1f-911c-502cc4522701",
       "content": "Link each HCI research question directly to corresponding user data and analysis procedures."
     },
-    "cc860653-ad91-52f8-91db-5b26371dca0a": {
-      "type": "memory",
-      "uid": "cc860653-ad91-52f8-91db-5b26371dca0a",
-      "content": "Design the proposal\u2019s primary evaluation as a usability study in a controlled environment."
-    },
-    "af0d191d-d23e-562b-997b-b1024dacefda": {
-      "type": "memory",
-      "uid": "af0d191d-d23e-562b-997b-b1024dacefda",
-      "content": "If field operation approval cannot be obtained within the master\u2019s research period, leave actual deployment to subsequent studies."
-    },
     "8747b27e-6c2b-5498-9eac-c403e26101a6": {
       "type": "memory",
       "uid": "8747b27e-6c2b-5498-9eac-c403e26101a6",
@@ -81,22 +71,10 @@
       "type": "memory",
       "uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
       "content": "After each formative evaluation iteration, specify the decision rules for determining which evidence justifies modifying the next prototype."
-    },
-    "13dc50e1-ecaa-504e-a602-7a10a09d5484": {
-      "type": "memory",
-      "uid": "13dc50e1-ecaa-504e-a602-7a10a09d5484",
-      "content": "The author of this proposal tends to attempt evaluating all features of a prototype simultaneously in a single study."
-    },
-    "358230d3-9ff0-51b9-9bf6-0752a2d9845a": {
-      "type": "memory",
-      "uid": "358230d3-9ff0-51b9-9bf6-0752a2d9845a",
-      "content": "When an evaluation assigns multiple design alternatives sequentially to one participant, later conditions occur after the participant has experienced earlier conditions."
     }
   },
   "order": [
     "c8bcefee-c64a-5a1f-911c-502cc4522701",
-    "cc860653-ad91-52f8-91db-5b26371dca0a",
-    "af0d191d-d23e-562b-997b-b1024dacefda",
     "8747b27e-6c2b-5498-9eac-c403e26101a6",
     "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0",
     "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
@@ -109,8 +87,6 @@
     "9a969676-6093-5fac-bda8-92ebdac70c37",
     "0ecc319a-ae60-5510-883d-52e613138164",
     "c4dfdb65-e673-52c0-a40c-e909d6014e00",
-    "a7c3a123-3f05-52e0-b33e-c450d1a070ac",
-    "13dc50e1-ecaa-504e-a602-7a10a09d5484",
-    "358230d3-9ff0-51b9-9bf6-0752a2d9845a"
+    "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
   ]
 }

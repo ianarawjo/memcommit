@@ -2,6 +2,11 @@
   "uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
   "name": "advisor2/expression",
   "memories": {
+    "4264c20d-3e44-578d-866e-7787cc7b59e2": {
+      "type": "memory",
+      "uid": "4264c20d-3e44-578d-866e-7787cc7b59e2",
+      "content": "Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting."
+    },
     "70a8c3f0-0f6a-5881-abd6-29f52833b7bd": {
       "type": "memory",
       "uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd",
@@ -20,20 +25,21 @@
     "22254f16-4628-5fd9-b1af-6e66dc2572b3": {
       "type": "memory",
       "uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3",
-      "content": "In service flow diagrams, clearly distinguish between steps modified by the design and those retained as baseline."
+      "content": "Give each step, actor, condition, and outcome a stable row in the sequence table."
     },
     "32028269-5d43-5a65-b22b-9e570ceabfde": {
       "type": "memory",
       "uid": "32028269-5d43-5a65-b22b-9e570ceabfde",
-      "content": "While screen images display interface states, field walkthroughs reveal actual handoff processes between people and systems."
+      "content": "Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change."
     },
     "939ee3d0-b611-574a-a25b-82708394bd5e": {
       "type": "memory",
       "uid": "939ee3d0-b611-574a-a25b-82708394bd5e",
-      "content": "The agent cannot infer how operational decisions change based solely on a sequence of screen images."
+      "content": "This advisor finds sequence tables easy to check step by step but less immediate for seeing the overall branching shape."
     }
   },
   "order": [
+    "4264c20d-3e44-578d-866e-7787cc7b59e2",
     "70a8c3f0-0f6a-5881-abd6-29f52833b7bd",
     "b410aa8d-db87-586b-a1cd-4af5767a9f7a",
     "a385fbb1-85b4-5132-bbc7-8fd8daedb715",

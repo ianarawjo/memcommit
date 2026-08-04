@@ -12,25 +12,25 @@
       "uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
       "name": "advisor1/emphasis"
     },
-    "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf": {
-      "type": "context_ref",
-      "uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
-      "name": "advisor1/claim-evidence"
-    },
     "a759f597-4f26-5782-828b-55f1c90076bf": {
       "type": "context_ref",
       "uid": "a759f597-4f26-5782-828b-55f1c90076bf",
       "name": "advisor1/style"
     },
-    "7699c7c5-e48b-5548-b0aa-256d793c6c06": {
+    "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf": {
       "type": "context_ref",
-      "uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
-      "name": "advisor1/terminology"
+      "uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+      "name": "advisor1/claim-evidence"
     },
     "39a6f298-c511-5c21-a106-998c1df9d951": {
       "type": "context_ref",
       "uid": "39a6f298-c511-5c21-a106-998c1df9d951",
       "name": "advisor1/expression"
+    },
+    "7699c7c5-e48b-5548-b0aa-256d793c6c06": {
+      "type": "context_ref",
+      "uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+      "name": "advisor1/terminology"
     },
     "d2f78b99-5dcf-5876-89a9-1058bceca333": {
       "type": "context_ref",
@@ -86,10 +86,10 @@
   "order": [
     "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
     "6f253a9e-f504-53bf-a1d1-de2c4532171e",
-    "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
     "a759f597-4f26-5782-828b-55f1c90076bf",
-    "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+    "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
     "39a6f298-c511-5c21-a106-998c1df9d951",
+    "7699c7c5-e48b-5548-b0aa-256d793c6c06",
     "d2f78b99-5dcf-5876-89a9-1058bceca333",
     "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
     "5cdea05f-b6ec-586d-a87f-5347d1d51f96",

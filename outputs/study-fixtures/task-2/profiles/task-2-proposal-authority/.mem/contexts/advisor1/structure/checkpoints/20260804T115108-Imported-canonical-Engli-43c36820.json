@@ -1,0 +1,143 @@
+{
+  "uid": "43c36820-21f1-4b87-b32a-930859d27856",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/structure' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T11:51:08.366909",
+  "snapshot": {
+    "uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+    "name": "advisor1/structure",
+    "memories": {
+      "44249c8a-e84f-5c20-a9cd-a55457e98511": {
+        "type": "memory",
+        "uid": "44249c8a-e84f-5c20-a9cd-a55457e98511",
+        "content": "Identify the core problem users face when interacting with or collaborating through technology within the first two sentences of the opening paragraph."
+      },
+      "21371c6c-c74f-5791-8f9b-6d099306bfb5": {
+        "type": "memory",
+        "uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5",
+        "content": "Articulate the rationale for addressing this interaction problem immediately within the first two sentences of the opening paragraph."
+      },
+      "f69ea80c-0d56-5fe8-9d24-8793eefa6643": {
+        "type": "memory",
+        "uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643",
+        "content": "Specify the user, context, and interaction to be explored in the primary HCI research question."
+      },
+      "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e": {
+        "type": "memory",
+        "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
+        "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure."
+      },
+      "5ab99a77-8836-50cf-8377-fdd23a208bc4": {
+        "type": "memory",
+        "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4",
+        "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary."
+      },
+      "b9b7932b-85c1-5a14-80f7-0983dbf22380": {
+        "type": "memory",
+        "uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380",
+        "content": "Present the master\u2019s research schedule as phased periods for exploration, design, prototyping, and user evaluation."
+      },
+      "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac": {
+        "type": "memory",
+        "uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac",
+        "content": "Link one reviewable deliverable to each phase of the master\u2019s research."
+      },
+      "2f7092a7-2625-5d27-bd76-a13ee5809cc2": {
+        "type": "memory",
+        "uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2",
+        "content": "Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity."
+      },
+      "a1857f07-36cd-5a6c-946d-a308e712e9eb": {
+        "type": "memory",
+        "uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb",
+        "content": "In a free-form proposal, separate the user problem into its own subsection heading."
+      },
+      "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d": {
+        "type": "memory",
+        "uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
+        "content": "In a free-form proposal, separate the design intervention into its own subsection heading."
+      },
+      "3005f4c5-e17b-531b-b9bf-c9d69411c71f": {
+        "type": "memory",
+        "uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
+        "content": "In a free-form proposal, separate the evaluation plan into its own subsection heading."
+      },
+      "4913f63e-ceb9-587a-ade9-494fc8f28849": {
+        "type": "memory",
+        "uid": "4913f63e-ceb9-587a-ade9-494fc8f28849",
+        "content": "Place pilot observation or initial prototype results near sentences supporting feasibility claims."
+      },
+      "8ecaec22-7c25-5a39-a85b-56db9c3b607e": {
+        "type": "memory",
+        "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
+        "content": "HCI reviewers identify the user and interaction problem in the first two sentences of the opening paragraph to form their initial framing of the proposal."
+      },
+      "a4536b84-40f2-57db-84e4-024c97c9fecb": {
+        "type": "memory",
+        "uid": "a4536b84-40f2-57db-84e4-024c97c9fecb",
+        "content": "HCI reviewers judge the rationale for researching this user problem immediately from the first two sentences of the opening paragraph."
+      },
+      "2312cb6e-4f50-56f5-b725-ba5e45697a73": {
+        "type": "memory",
+        "uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73",
+        "content": "Link how controlled formative evaluations at each design phase alter subsequent design decisions in the proposal."
+      },
+      "1d90043b-f010-5a14-9493-77f636c13975": {
+        "type": "memory",
+        "uid": "1d90043b-f010-5a14-9493-77f636c13975",
+        "content": "Connect the interaction phenomena observed from the user problem, the design choices to be compared, and the conceptual design knowledge derived into a single thread."
+      },
+      "b77fe6ec-676b-5bb9-9119-45aefea2aa27": {
+        "type": "memory",
+        "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27",
+        "content": "The agent can review the overall research logic only if it is evident how each research phase constrains the design decisions of the next phase."
+      }
+    },
+    "order": [
+      "44249c8a-e84f-5c20-a9cd-a55457e98511",
+      "21371c6c-c74f-5791-8f9b-6d099306bfb5",
+      "f69ea80c-0d56-5fe8-9d24-8793eefa6643",
+      "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
+      "5ab99a77-8836-50cf-8377-fdd23a208bc4",
+      "b9b7932b-85c1-5a14-80f7-0983dbf22380",
+      "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac",
+      "2f7092a7-2625-5d27-bd76-a13ee5809cc2",
+      "a1857f07-36cd-5a6c-946d-a308e712e9eb",
+      "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
+      "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
+      "4913f63e-ceb9-587a-ade9-494fc8f28849",
+      "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
+      "a4536b84-40f2-57db-84e4-024c97c9fecb",
+      "2312cb6e-4f50-56f5-b725-ba5e45697a73",
+      "1d90043b-f010-5a14-9493-77f636c13975",
+      "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+    "memory_uids": [
+      "44249c8a-e84f-5c20-a9cd-a55457e98511",
+      "21371c6c-c74f-5791-8f9b-6d099306bfb5",
+      "f69ea80c-0d56-5fe8-9d24-8793eefa6643",
+      "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
+      "5ab99a77-8836-50cf-8377-fdd23a208bc4",
+      "b9b7932b-85c1-5a14-80f7-0983dbf22380",
+      "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac",
+      "2f7092a7-2625-5d27-bd76-a13ee5809cc2",
+      "a1857f07-36cd-5a6c-946d-a308e712e9eb",
+      "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
+      "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
+      "4913f63e-ceb9-587a-ade9-494fc8f28849",
+      "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
+      "a4536b84-40f2-57db-84e4-024c97c9fecb",
+      "2312cb6e-4f50-56f5-b725-ba5e45697a73",
+      "1d90043b-f010-5a14-9493-77f636c13975",
+      "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/structure' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

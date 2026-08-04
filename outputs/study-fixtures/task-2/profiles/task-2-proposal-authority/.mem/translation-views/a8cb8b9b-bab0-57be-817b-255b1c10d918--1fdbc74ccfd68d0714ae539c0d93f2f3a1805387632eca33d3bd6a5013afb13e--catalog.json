@@ -3,8 +3,8 @@
   "context_uid": "a8cb8b9b-bab0-57be-817b-255b1c10d918",
   "context_name": "proposal-submission-guidelines/review",
   "target_language": "ko",
-  "created_at": "2026-08-03T16:23:41.325605+00:00",
-  "updated_at": "2026-08-03T16:23:41.325766+00:00",
+  "created_at": "2026-08-04T15:51:08.476035+00:00",
+  "updated_at": "2026-08-04T15:51:08.476216+00:00",
   "revision": 5,
   "contract_version": "translate-v2",
   "entries": [
@@ -18,8 +18,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
-        "created_at": "2026-08-03T16:23:41.325649+00:00",
-        "updated_at": "2026-08-03T16:23:41.325649+00:00"
+        "created_at": "2026-08-04T15:51:08.476074+00:00",
+        "updated_at": "2026-08-04T15:51:08.476074+00:00"
       }
     },
     {
@@ -32,8 +32,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
-        "created_at": "2026-08-03T16:23:41.325690+00:00",
-        "updated_at": "2026-08-03T16:23:41.325690+00:00"
+        "created_at": "2026-08-04T15:51:08.476121+00:00",
+        "updated_at": "2026-08-04T15:51:08.476121+00:00"
       }
     },
     {
@@ -46,8 +46,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
-        "created_at": "2026-08-03T16:23:41.325728+00:00",
-        "updated_at": "2026-08-03T16:23:41.325728+00:00"
+        "created_at": "2026-08-04T15:51:08.476165+00:00",
+        "updated_at": "2026-08-04T15:51:08.476165+00:00"
       }
     },
     {
@@ -60,8 +60,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "2111bfb3b0f67b3f7963e562ad72026387150b0e9953acf4a75cc76676e0c04a",
-        "created_at": "2026-08-03T16:23:41.325766+00:00",
-        "updated_at": "2026-08-03T16:23:41.325766+00:00"
+        "created_at": "2026-08-04T15:51:08.476216+00:00",
+        "updated_at": "2026-08-04T15:51:08.476216+00:00"
       }
     }
   ]

@@ -20,12 +20,12 @@
     "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e": {
       "type": "memory",
       "uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
-      "content": "Summarize the sequence of steps with a single flow diagram when proposing an unfamiliar interaction procedure."
+      "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure."
     },
     "5ab99a77-8836-50cf-8377-fdd23a208bc4": {
       "type": "memory",
       "uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4",
-      "content": "Indicate transition conditions between steps of the unfamiliar interaction procedure in the flow diagram."
+      "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary."
     },
     "b9b7932b-85c1-5a14-80f7-0983dbf22380": {
       "type": "memory",

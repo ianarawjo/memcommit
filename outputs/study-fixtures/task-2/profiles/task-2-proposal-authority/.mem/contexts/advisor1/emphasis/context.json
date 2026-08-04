@@ -22,11 +22,6 @@
       "uid": "f7025cbb-4005-53c6-9031-e33f04a86b92",
       "content": "In studies recruiting community participants, emphasize the travel burden associated with participation."
     },
-    "33503d41-7b99-5526-a028-0a1a20652c0d": {
-      "type": "memory",
-      "uid": "33503d41-7b99-5526-a028-0a1a20652c0d",
-      "content": "Present the primary HCI design contribution of the proposal as a conceptual model explaining the relationship between user behavior and design choices, rather than as practical design guidelines."
-    },
     "a42891a1-b674-5747-a77c-43699b0b9723": {
       "type": "memory",
       "uid": "a42891a1-b674-5747-a77c-43699b0b9723",
@@ -46,11 +41,6 @@
       "type": "memory",
       "uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24",
       "content": "Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives."
-    },
-    "79437c17-1f08-5188-8177-c622429dc4f9": {
-      "type": "memory",
-      "uid": "79437c17-1f08-5188-8177-c622429dc4f9",
-      "content": "The user writing this proposal tends to describe the visual polish of initial prototypes before describing research contributions."
     }
   },
   "order": [
@@ -58,11 +48,9 @@
     "b5b6a901-9047-5482-a0e1-d29e5f7171e8",
     "e89de514-48a5-5e9b-96ca-f194c0ed79ab",
     "f7025cbb-4005-53c6-9031-e33f04a86b92",
-    "33503d41-7b99-5526-a028-0a1a20652c0d",
     "a42891a1-b674-5747-a77c-43699b0b9723",
     "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e",
     "f8931b4e-9656-548d-84a1-f2f2c3eb47b1",
-    "9bf9e735-7598-5977-abe2-87b2c9c38a24",
-    "79437c17-1f08-5188-8177-c622429dc4f9"
+    "9bf9e735-7598-5977-abe2-87b2c9c38a24"
   ]
 }

@@ -20,12 +20,12 @@
     "e34bce0c-7d07-5fe6-b03f-39faa801640b": {
       "type": "memory",
       "uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b",
-      "content": "Summarize the sequence of steps for unfamiliar interaction procedures in a single flowchart."
+      "content": "Provide one compact visual summary when proposing an unfamiliar interaction procedure."
     },
     "68ad56f9-6ca2-587a-9182-fd98a79d3d5c": {
       "type": "memory",
       "uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
-      "content": "Indicate the transition conditions between steps of unfamiliar interaction procedures in the flowchart."
+      "content": "Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary."
     },
     "eca301ff-9feb-502d-b955-055c48342542": {
       "type": "memory",

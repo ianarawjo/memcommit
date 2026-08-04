@@ -1,0 +1,136 @@
+{
+  "uid": "e2840997-1e69-4d57-93cc-f0498e5019db",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor2/methods' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T11:51:08.380187",
+  "snapshot": {
+    "uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+    "name": "advisor2/methods",
+    "memories": {
+      "90be328f-1c05-5574-9657-1b0cc04a10b8": {
+        "type": "memory",
+        "uid": "90be328f-1c05-5574-9657-1b0cc04a10b8",
+        "content": "Specify field and user data sources and analysis procedures corresponding to all HCI research questions."
+      },
+      "452ab231-3131-5697-a728-475289deafd0": {
+        "type": "memory",
+        "uid": "452ab231-3131-5697-a728-475289deafd0",
+        "content": "In preregistered studies, clarify the criteria for judging plan changes."
+      },
+      "9c979f39-9660-5392-a1cd-0d1317af0e0f": {
+        "type": "memory",
+        "uid": "9c979f39-9660-5392-a1cd-0d1317af0e0f",
+        "content": "In preregistered studies, clarify the location for recording plan changes."
+      },
+      "8a49f598-804e-5a81-8e88-add7b665633a": {
+        "type": "memory",
+        "uid": "8a49f598-804e-5a81-8e88-add7b665633a",
+        "content": "Present the target number of participants as a single value or justified range based on grounds for recruitment feasibility."
+      },
+      "629cb159-6f6c-5476-870d-716ab573aef8": {
+        "type": "memory",
+        "uid": "629cb159-6f6c-5476-870d-716ab573aef8",
+        "content": "Specify the observation records, system logs, or interview tools used to collect each type of field and user data."
+      },
+      "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39": {
+        "type": "memory",
+        "uid": "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39",
+        "content": "Specify whether each type of field and user data will be collected before, during, or after deployment."
+      },
+      "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d": {
+        "type": "memory",
+        "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d",
+        "content": "The agent cannot review the realism of recruitment plans without expected attrition stages from contact targets to final participants."
+      },
+      "f150891e-7635-5c35-b986-d369bc630ef4": {
+        "type": "memory",
+        "uid": "f150891e-7635-5c35-b986-d369bc630ef4",
+        "content": "In field deployments, network and service instability exist as independent causes of task failure alongside design choices."
+      },
+      "7860d9d6-5c2e-5969-b956-f71398218d02": {
+        "type": "memory",
+        "uid": "7860d9d6-5c2e-5969-b956-f71398218d02",
+        "content": "If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan."
+      },
+      "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2": {
+        "type": "memory",
+        "uid": "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2",
+        "content": "Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures."
+      },
+      "2db331a6-28d7-5c32-8372-7d3f8bc5b04a": {
+        "type": "memory",
+        "uid": "2db331a6-28d7-5c32-8372-7d3f8bc5b04a",
+        "content": "The user authoring this proposal tends to present implemented feature lists directly as design contributions."
+      },
+      "40f23f85-561e-55b3-825b-5000f9638f8a": {
+        "type": "memory",
+        "uid": "40f23f85-561e-55b3-825b-5000f9638f8a",
+        "content": "Predefine criteria for functional stability, operational readiness, and safety conditions before transitioning from pilot to full deployment."
+      },
+      "9527ccb8-6662-58e3-8edd-daf7c0a713af": {
+        "type": "memory",
+        "uid": "9527ccb8-6662-58e3-8edd-daf7c0a713af",
+        "content": "If there is a risk of disrupting actual work, design shadow deployment phases that maintain existing procedures while comparing outcomes."
+      },
+      "3ff9ec36-b70d-5dbd-9692-27fdf734fd20": {
+        "type": "memory",
+        "uid": "3ff9ec36-b70d-5dbd-9692-27fdf734fd20",
+        "content": "Schedule field observations to include time periods with varying workload levels and participant compositions."
+      },
+      "9e1c3629-641f-5c09-915d-8a2ad1c8013a": {
+        "type": "memory",
+        "uid": "9e1c3629-641f-5c09-915d-8a2ad1c8013a",
+        "content": "Specify data collection methods for recording instances where operators bypass the system or perform manual recovery actions."
+      },
+      "7ba672db-131e-5795-89c9-46f56344e7ed": {
+        "type": "memory",
+        "uid": "7ba672db-131e-5795-89c9-46f56344e7ed",
+        "content": "Interviews reveal participants\u2019 perceived reasons, while field observations show actual procedures and workarounds performed in practice."
+      }
+    },
+    "order": [
+      "90be328f-1c05-5574-9657-1b0cc04a10b8",
+      "452ab231-3131-5697-a728-475289deafd0",
+      "9c979f39-9660-5392-a1cd-0d1317af0e0f",
+      "8a49f598-804e-5a81-8e88-add7b665633a",
+      "629cb159-6f6c-5476-870d-716ab573aef8",
+      "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39",
+      "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d",
+      "f150891e-7635-5c35-b986-d369bc630ef4",
+      "7860d9d6-5c2e-5969-b956-f71398218d02",
+      "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2",
+      "2db331a6-28d7-5c32-8372-7d3f8bc5b04a",
+      "40f23f85-561e-55b3-825b-5000f9638f8a",
+      "9527ccb8-6662-58e3-8edd-daf7c0a713af",
+      "3ff9ec36-b70d-5dbd-9692-27fdf734fd20",
+      "9e1c3629-641f-5c09-915d-8a2ad1c8013a",
+      "7ba672db-131e-5795-89c9-46f56344e7ed"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "531f5f15-65f7-5315-8ccf-0cea6e53b76a",
+    "memory_uids": [
+      "90be328f-1c05-5574-9657-1b0cc04a10b8",
+      "452ab231-3131-5697-a728-475289deafd0",
+      "9c979f39-9660-5392-a1cd-0d1317af0e0f",
+      "8a49f598-804e-5a81-8e88-add7b665633a",
+      "629cb159-6f6c-5476-870d-716ab573aef8",
+      "b565c5c9-a0f7-5aff-a3b1-19696c4d3b39",
+      "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d",
+      "f150891e-7635-5c35-b986-d369bc630ef4",
+      "7860d9d6-5c2e-5969-b956-f71398218d02",
+      "4fc24f87-e7b5-5d34-b850-f90cdc9b1ea2",
+      "2db331a6-28d7-5c32-8372-7d3f8bc5b04a",
+      "40f23f85-561e-55b3-825b-5000f9638f8a",
+      "9527ccb8-6662-58e3-8edd-daf7c0a713af",
+      "3ff9ec36-b70d-5dbd-9692-27fdf734fd20",
+      "9e1c3629-641f-5c09-915d-8a2ad1c8013a",
+      "7ba672db-131e-5795-89c9-46f56344e7ed"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor2/methods' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

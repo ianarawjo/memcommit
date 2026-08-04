@@ -1,0 +1,66 @@
+{
+  "uid": "6d85afeb-6a6d-43f1-8500-6f2bd23ff7fb",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/evaluation' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T11:51:08.358069",
+  "snapshot": {
+    "uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+    "name": "advisor1/evaluation",
+    "memories": {
+      "a50f6ecb-de38-5769-8a6e-23b84a7eb35c": {
+        "type": "memory",
+        "uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c",
+        "content": "Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives."
+      },
+      "44c61beb-24a2-584a-ad96-e622690d8171": {
+        "type": "memory",
+        "uid": "44c61beb-24a2-584a-ad96-e622690d8171",
+        "content": "HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure."
+      },
+      "23202824-b576-5d77-b591-8b4cc0757632": {
+        "type": "memory",
+        "uid": "23202824-b576-5d77-b591-8b4cc0757632",
+        "content": "Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure."
+      },
+      "65ae88bf-8002-5ada-8590-eaf345b38863": {
+        "type": "memory",
+        "uid": "65ae88bf-8002-5ada-8590-eaf345b38863",
+        "content": "Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype."
+      },
+      "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1": {
+        "type": "memory",
+        "uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1",
+        "content": "Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison."
+      },
+      "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547": {
+        "type": "memory",
+        "uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547",
+        "content": "Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use."
+      }
+    },
+    "order": [
+      "a50f6ecb-de38-5769-8a6e-23b84a7eb35c",
+      "44c61beb-24a2-584a-ad96-e622690d8171",
+      "23202824-b576-5d77-b591-8b4cc0757632",
+      "65ae88bf-8002-5ada-8590-eaf345b38863",
+      "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1",
+      "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+    "memory_uids": [
+      "a50f6ecb-de38-5769-8a6e-23b84a7eb35c",
+      "44c61beb-24a2-584a-ad96-e622690d8171",
+      "23202824-b576-5d77-b591-8b4cc0757632",
+      "65ae88bf-8002-5ada-8590-eaf345b38863",
+      "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1",
+      "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/evaluation' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

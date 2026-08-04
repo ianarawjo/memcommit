@@ -1,0 +1,45 @@
+{
+  "uid": "da13f7af-c1fe-4c99-afb9-cb3ec14f225a",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor2/reproducibility' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T11:51:08.381527",
+  "snapshot": {
+    "uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+    "name": "advisor2/reproducibility",
+    "memories": {
+      "40f11374-d91b-546a-9e93-fcf98a0fde98": {
+        "type": "memory",
+        "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98",
+        "content": "HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed."
+      },
+      "cc72ad54-4cf3-56cd-9119-46776f5b2184": {
+        "type": "memory",
+        "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+        "content": "Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales."
+      },
+      "75f22b45-fb1b-568c-bb05-080fdacdcab2": {
+        "type": "memory",
+        "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2",
+        "content": "The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites."
+      }
+    },
+    "order": [
+      "40f11374-d91b-546a-9e93-fcf98a0fde98",
+      "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+      "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+    "memory_uids": [
+      "40f11374-d91b-546a-9e93-fcf98a0fde98",
+      "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+      "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor2/reproducibility' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

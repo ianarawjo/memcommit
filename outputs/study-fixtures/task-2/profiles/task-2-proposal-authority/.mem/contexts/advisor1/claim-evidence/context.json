@@ -12,16 +12,6 @@
       "uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad",
       "content": "Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions."
     },
-    "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865": {
-      "type": "memory",
-      "uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
-      "content": "Express the primary research question of the proposal as a directional hypothesis that is quantitatively verifiable."
-    },
-    "e686bd4d-3ebd-5e55-ba39-f26971247965": {
-      "type": "memory",
-      "uid": "e686bd4d-3ebd-5e55-ba39-f26971247965",
-      "content": "Identify the expected direction of change in the representative outcome measure for the primary research question."
-    },
     "f5adf029-a750-5a3a-8eb8-d68e43bb5c13": {
       "type": "memory",
       "uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13",
@@ -71,8 +61,6 @@
   "order": [
     "06f6c673-ea0c-5657-89d2-3f8711097cd7",
     "58991ce7-d394-5087-b14f-0b014b0ec6ad",
-    "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
-    "e686bd4d-3ebd-5e55-ba39-f26971247965",
     "f5adf029-a750-5a3a-8eb8-d68e43bb5c13",
     "b2a7ff8a-dfca-5857-8733-fe03cbd943ec",
     "1f0c95f4-69bb-5764-a358-d428ff7019d2",
