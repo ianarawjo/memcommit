@@ -1,6 +1,8 @@
+import shutil
 from typing import Annotated, Literal, Optional
 
 import typer
+from prompt_toolkit.utils import get_cwidth
 
 from memcommit.clipboard import (
     ClipboardError,
@@ -27,12 +29,79 @@ from memcommit.store import MemoryStore
 
 
 _LIST_SNAPSHOT_VERSION = 2
-_MemoryLayout = Literal["stacked", "inline"]
+_MemoryLayout = Literal["hanging", "inline"]
+_MIN_HANGING_CONTENT_WIDTH = 20
 
 
 def _one_line(content: str) -> str:
     """Render atomic Memory content as its compact, human-readable name."""
     return " ".join(content.split()) or "(empty)"
+
+
+def _wrap_display_words(content: str, width: int) -> tuple[str, ...]:
+    """Wrap normalized text by terminal cells while preserving word boundaries."""
+
+    if width < 1:
+        raise ValueError("display wrap width must be positive")
+
+    def split_word(word: str) -> list[str]:
+        chunks: list[str] = []
+        current = ""
+        for character in word:
+            if current and get_cwidth(current + character) > width:
+                chunks.append(current)
+                current = ""
+            current += character
+        if current:
+            chunks.append(current)
+        return chunks
+
+    lines: list[str] = []
+    current = ""
+    for word in content.split(" "):
+        candidate = word if not current else f"{current} {word}"
+        if get_cwidth(candidate) <= width:
+            current = candidate
+            continue
+        if current:
+            lines.append(current)
+            current = ""
+        chunks = split_word(word)
+        lines.extend(chunks[:-1])
+        current = chunks[-1]
+    if current:
+        lines.append(current)
+    return tuple(lines) or ("",)
+
+
+def _hanging_memory_lines(
+    label: str,
+    content: str,
+    *,
+    indent: int,
+    terminal_width: int,
+) -> tuple[str, ...]:
+    """Put content beside its selector and align visual continuation rows."""
+
+    content_column = get_cwidth(label) + 1
+    available = terminal_width - content_column
+    if available < _MIN_HANGING_CONTENT_WIDTH:
+        # Very deep recursive rows cannot retain a useful content column beside
+        # the selector. Preserve readable content instead of forcing a narrow
+        # vertical strip or overflowing the terminal.
+        continuation = " " * (indent + 2)
+        fallback_width = max(
+            _MIN_HANGING_CONTENT_WIDTH,
+            terminal_width - get_cwidth(continuation),
+        )
+        wrapped = _wrap_display_words(content, fallback_width)
+        return (label, *(continuation + line for line in wrapped))
+    continuation = " " * content_column
+    wrapped = _wrap_display_words(content, available)
+    return (
+        f"{label} {wrapped[0]}",
+        *(continuation + line for line in wrapped[1:]),
+    )
 
 
 def _immediate_namespace_child_names(
@@ -292,6 +361,7 @@ def _render_snapshot_item(
     lines: list[str],
     with_ids: bool,
     memory_layout: _MemoryLayout,
+    terminal_width: int,
 ) -> None:
     prefix = " " * indent
     kind = _require_string(item, "kind")
@@ -331,6 +401,7 @@ def _render_snapshot_item(
                     lines=lines,
                     with_ids=with_ids,
                     memory_layout=memory_layout,
+                    terminal_width=terminal_width,
                 )
         return
     if kind == "query_context_ref":
@@ -397,15 +468,14 @@ def _render_snapshot_item(
         content = _require_string(item, "content")
         if with_ids:
             label = f"{prefix}[memory  {uid[:8]}]"
-            if memory_layout == "stacked":
-                # The selector owns its own visual row, so content never starts
-                # beside it. Clipboard output deliberately uses the separate
-                # inline renderer.
+            if memory_layout == "hanging":
                 lines.extend(
-                    [
+                    _hanging_memory_lines(
                         label,
-                        f"{' ' * (indent + 2)}{_one_line(content)}",
-                    ]
+                        _one_line(content),
+                        indent=indent,
+                        terminal_width=terminal_width,
+                    )
                 )
             else:
                 lines.append(f"{label} {_one_line(content)}")
@@ -423,6 +493,7 @@ def _render_snapshot_items(
     lines: list[str],
     with_ids: bool,
     memory_layout: _MemoryLayout,
+    terminal_width: int,
 ) -> None:
     contexts, memories = _group_snapshot_items(items)
     for item in [*contexts, *memories]:
@@ -433,6 +504,7 @@ def _render_snapshot_items(
             lines=lines,
             with_ids=with_ids,
             memory_layout=memory_layout,
+            terminal_width=terminal_width,
         )
 
 
@@ -441,8 +513,11 @@ def _render_snapshot(
     *,
     with_ids: bool = True,
     memory_layout: _MemoryLayout,
+    terminal_width: int = 100,
 ) -> str:
-    if memory_layout not in {"stacked", "inline"}:
+    if memory_layout not in {"hanging", "inline"}:
+        raise _snapshot_error()
+    if terminal_width < 1:
         raise _snapshot_error()
     expected = {"schema_version", "context", "recursive", "items"}
     if set(snapshot) != expected:
@@ -472,6 +547,7 @@ def _render_snapshot(
             lines=lines,
             with_ids=with_ids,
             memory_layout=memory_layout,
+            terminal_width=terminal_width,
         )
     return "\n".join(lines) + "\n"
 
@@ -530,7 +606,8 @@ def render_index(ctx: Context, *, recursive: bool = False) -> None:
                 context_names=tuple(store.list_context_names()),
                 recursive=recursive,
             ),
-            memory_layout="stacked",
+            memory_layout="hanging",
+            terminal_width=shutil.get_terminal_size(fallback=(100, 24)).columns,
         )
     )
 
@@ -686,7 +763,8 @@ def cmd(
     annotated_text = _render_snapshot(
         snapshot,
         with_ids=True,
-        memory_layout="stacked",
+        memory_layout="hanging",
+        terminal_width=shutil.get_terminal_size(fallback=(100, 24)).columns,
     )
     _emit_snapshot_text(annotated_text)
     if not access.is_granted:

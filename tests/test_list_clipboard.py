@@ -64,8 +64,8 @@ def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
         "  Café north entrance. Closed through Friday.\n"
     )
     assert (
-        f"  [memory  {memory.uid[:8]}]\n"
-        "    Café north entrance. Closed through Friday.\n"
+        f"  [memory  {memory.uid[:8]}] "
+        "Café north entrance. Closed through Friday.\n"
     ) in result.stdout
     assert "[memory " in result.stdout
     assert "[memory " not in fake_system_clipboard["text"]
@@ -93,7 +93,7 @@ def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
     assert os.stat(stage_path).st_mode & 0o777 == 0o600
 
 
-def test_list_copy_with_ids_uses_inline_clipboard_but_stacked_stdout(
+def test_list_copy_with_ids_uses_inline_clipboard_and_hanging_stdout(
     isolated_store,
     fake_system_clipboard,
 ):
@@ -117,11 +117,10 @@ def test_list_copy_with_ids_uses_inline_clipboard_but_stacked_stdout(
         "Context: source\n"
         "  1 item\n"
         "\n"
-        f"  [memory  {memory.uid[:8]}]\n"
-        "    Keep this object's visible identifier.\n"
+        f"  [memory  {memory.uid[:8]}] "
+        "Keep this object's visible identifier.\n"
     )
     assert fake_system_clipboard["text"] == inline
-    assert fake_system_clipboard["text"] != expected.stdout
     assert "[memory " in fake_system_clipboard["text"]
     assert "text with IDs" in copied.stderr
     record = json.loads(
@@ -133,6 +132,65 @@ def test_list_copy_with_ids_uses_inline_clipboard_but_stacked_stdout(
 
     assert pasted.exit_code == 0
     assert pasted.stdout == inline
+
+
+def test_list_long_memory_uses_hanging_indent_but_clipboard_stays_one_line(
+    isolated_store,
+    fake_system_clipboard,
+    monkeypatch,
+):
+    monkeypatch.setenv("COLUMNS", "88")
+    invoke("init", "source")
+    content = (
+        "Use the term formative evaluation for studies seeking design "
+        "modification evidence, and distinguish it from final efficacy judgments."
+    )
+    invoke("add", content)
+    memory = next(iter(MemoryStore().load_current().memories.values()))
+
+    copied = invoke("ls", "--copy", "--with-ids")
+
+    label = f"  [memory  {memory.uid[:8]}]"
+    visible_lines = copied.stdout.splitlines()
+    first = next(line for line in visible_lines if line.startswith(label))
+    continuation = visible_lines[visible_lines.index(first) + 1]
+    assert first.startswith(f"{label} Use the term")
+    assert continuation.startswith(" " * (len(label) + 1) + "modification")
+    assert fake_system_clipboard["text"] == (
+        "Context: source\n"
+        "  1 item\n"
+        "\n"
+        f"{label} {content}\n"
+    )
+
+
+def test_recursive_list_uses_same_hanging_and_inline_clipboard_contract(
+    isolated_store,
+    fake_system_clipboard,
+    monkeypatch,
+):
+    monkeypatch.setenv("COLUMNS", "88")
+    content = (
+        "The agent can approve contribution labels such as principles, models, "
+        "or guidelines only if they align with the abstraction level of the "
+        "actual deliverables."
+    )
+    invoke("init", "child")
+    invoke("add", content)
+    memory = next(iter(MemoryStore().load_current().memories.values()))
+    invoke("init", "parent")
+    invoke("embed", "child", "--into", "parent")
+
+    copied = invoke("ls", "-R", "parent", "--copy", "--with-ids")
+
+    label = f"    [memory  {memory.uid[:8]}]"
+    visible_lines = copied.stdout.splitlines()
+    first = next(line for line in visible_lines if line.startswith(label))
+    continuation = visible_lines[visible_lines.index(first) + 1]
+    assert first.startswith(f"{label} The agent can approve")
+    assert continuation.startswith(" " * (len(label) + 1))
+    assert continuation.strip()
+    assert f"{label} {content}\n" in fake_system_clipboard["text"]
 
 
 def test_list_copy_and_ls_paste_are_coequal_and_snapshot_based(

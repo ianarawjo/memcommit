@@ -370,11 +370,10 @@ def test_ls_sorts_immediate_children_before_current_memories(isolated_store):
     )
     summary_index = next(
         index
-        for index, line in enumerate(direct_lines[:-1])
+        for index, line in enumerate(direct_lines)
         if "[memory  " in line
-        and direct_lines[index + 1].strip() == "Current summary."
+        and line.endswith("] Current summary.")
     )
-    assert direct_lines[summary_index + 1] == "    Current summary."
     assert from_index < to_index < summary_index
     assert recursive.exit_code == 0
     assert "From-only detail." in recursive.output
