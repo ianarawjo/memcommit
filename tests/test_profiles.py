@@ -578,7 +578,7 @@ def test_profile_use_selects_the_initialized_complete_profile(
     )
     assert annotations["task-2/advisor1"] == "[grant READ]"
     assert annotations["task-2/proposal-submission-guidelines"] == (
-        "[grant QUERY + SESSION_LOG]"
+        "[grant QUERY + SAVE QUERY SESSION]"
     )
     picker_state = _granted_picker_state()
     assert "task-2/advisor1" in picker_state.selectable_names

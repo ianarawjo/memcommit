@@ -14,8 +14,11 @@ Task 2 workflow.
 
 - Every granted row displays its complete normalized permission tuple, such as
   `[grant READ]`, `[grant CREATE + READ + UPDATE + DELETE + QUERY]`, or
-  `[grant QUERY + SESSION_LOG]`. This keeps the experimental condition visible
-  instead of collapsing several capabilities into an ambiguous edit label.
+  `[grant QUERY + SAVE QUERY SESSION]`. This keeps the experimental condition
+  visible instead of collapsing several capabilities into an ambiguous edit
+  label. `SAVE QUERY SESSION` is the user-facing name for the persisted
+  `SESSION_LOG` permission; the friendlier label does not change serialized
+  grants or command authorization.
 - A granted `READ` Context and every READ-visible frozen descendant are
   selectable in `mem switch`. Selectability is derived from the structured
   `READ` permission, never by interpreting the user-facing annotation.

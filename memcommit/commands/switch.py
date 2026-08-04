@@ -30,9 +30,13 @@ class _GrantedPickerState:
 
 
 def _grant_annotation(permissions: tuple[str, ...]) -> str:
-    """Render the exact normalized grant instead of a lossy access summary."""
+    """Render every permission, translating opaque storage tokens for people."""
 
-    return "[grant " + " + ".join(permissions) + "]"
+    labels = (
+        "SAVE QUERY SESSION" if permission == "SESSION_LOG" else permission
+        for permission in permissions
+    )
+    return "[grant " + " + ".join(labels) + "]"
 
 
 def _granted_picker_state(
