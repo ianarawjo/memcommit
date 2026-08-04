@@ -39,6 +39,29 @@ runner = CliRunner(mix_stderr=False)
 DETAIL_SECRET = "Concealed construction sequence must not enter impact planning."
 
 
+class _GrantedFindProvider:
+    def __init__(self):
+        self.prompts = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        self.prompts.append(prompt)
+        if operation != "find":
+            return json.dumps({"findings": []})
+        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        matches = [
+            {"candidate_id": candidate["candidate_id"]}
+            for candidate in payload["candidates"]
+            if "service desk" in candidate.get("content", "").casefold()
+        ]
+        return json.dumps(
+            {
+                "matches": matches,
+                "related_query": "",
+                "related_matches": [],
+            }
+        )
+
+
 def _setup_granted_target(
     isolated_store,
     tmp_path,
@@ -112,6 +135,68 @@ def _setup_granted_target(
 
 def _empty_plan() -> str:
     return json.dumps({"edits": [], "additions": [], "removals": []})
+
+
+def test_find_and_quality_finders_read_granted_current_projection(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, source, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+    )
+    active.set_current_virtual_context_if(source.name, "campus-wiki")
+    provider = _GrantedFindProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    for module in (
+        "find_duplicates",
+        "find_ambiguities",
+        "find_conflicts",
+    ):
+        monkeypatch.setattr(
+            f"memcommit.commands.{module}.connect_codex_chatgpt_provider",
+            lambda: provider,
+        )
+
+    result = runner.invoke(app, ["find", "service desk"])
+
+    assert result.exit_code == 0, result.output
+    assert "west lobby" in result.output
+    assert "open on weekdays" in result.output
+    assert DETAIL_SECRET not in "\n".join(provider.prompts)
+
+    active.set_current(source.name)
+    for command in ("find-duplicates", "find-ambiguities", "find-conflicts"):
+        quality = runner.invoke(app, [command, "--context", "campus-wiki"])
+        assert quality.exit_code == 0, quality.output + quality.stderr
+
+
+def test_temporal_find_rejects_granted_view_without_history_access(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, _source, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+    )
+    active.set_current_virtual_context_if(
+        active.current_context_name(),
+        "campus-wiki",
+    )
+
+    result = runner.invoke(app, ["find", "the last updated Memory"])
+
+    assert result.exit_code == 1
+    assert "does not expose authority checkpoint history" in result.stderr
 
 
 def test_granted_context_binding_revalidates_exact_view_and_rejects_revocation(

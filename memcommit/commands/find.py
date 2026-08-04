@@ -8,6 +8,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
 from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     format_exact_command,
@@ -69,6 +70,8 @@ from memcommit.search import (
     collect_candidates,
 )
 from memcommit.store import MemoryStore
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 
 
 FIND_OUTSIDE_CONFIRMATION = "confirm other contexts"
@@ -709,7 +712,20 @@ def cmd(
         selected_name = context_snapshot.resolve_or_current(context_name)
         if selected_name is None:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
-    except (OSError, RuntimeError, ValueError) as error:
+        access = resolve_context_access(
+            store,
+            context_name,
+            current_name=context_snapshot.current_name,
+            required_permission="READ",
+        )
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
@@ -719,10 +735,16 @@ def cmd(
 
     temporal = is_temporal_query(query)
     try:
+        if temporal and access.is_granted:
+            raise RuntimeError(
+                "Temporal Find is unavailable for a granted READ view because "
+                "the grant does not expose authority checkpoint history."
+            )
+        read_store = GrantedReadStore(access) if access.is_granted else store
         if temporal:
-            ctx = store.load_direct(selected_name)
+            ctx = read_store.load_direct(access.display_name)
         else:
-            ctx = store.load(selected_name)
+            ctx = read_store.load(access.display_name)
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
@@ -790,7 +812,7 @@ def cmd(
 
     if _interactive_terminal():
         _run_interactive_find(
-            store,
+            read_store,
             ctx,
             query,
             matches,

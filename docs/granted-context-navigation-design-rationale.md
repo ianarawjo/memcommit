@@ -48,10 +48,14 @@ contains an effective READ grant for that public name. Mutating commands use
 the same resolver with their required permission and therefore reject an
 Advisor READ grant.
 
-READ does not expose authority checkpoint history. Grant-aware Find remains a
-separate integration slice because it must preserve that history boundary while
-adapting its broader recursive frame. Query routing recovers the owned
-attachment behind a current READ-granted view so a
+READ does not expose authority checkpoint history. Current-state `mem find`
+and the three quality finders (`find-duplicates`, `find-ambiguities`, and
+`find-conflicts`) use the same bounded READ projection as listing: recursive
+Find includes READ-visible namespace descendants, while a more-specific
+QUERY-only override never becomes candidate evidence. Temporal Find fails
+closed with an explicit history-boundary error instead of opening the
+authority store's checkpoints. Query routing recovers the owned attachment
+behind a current READ-granted view so a
 participant may enter an advisor and still invoke the separately authorized
 proposal-guidelines query route.
 

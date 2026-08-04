@@ -8,6 +8,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
     render_heading,
     render_memory,
@@ -20,6 +21,8 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.store import MemoryStore
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 
 
 _RELATION_COLORS = {
@@ -44,13 +47,25 @@ def cmd(
     store = MemoryStore(create=False)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        selected_name = context_snapshot.resolve_or_current(context_name)
-        if not selected_name:
-            raise RuntimeError(
-                "No current context. Pass --context or run 'mem init <name>' first."
-            )
-        ctx = store.load_direct(selected_name)
-    except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
+        access = resolve_context_access(
+            store,
+            context_name,
+            current_name=context_snapshot.current_name,
+            required_permission="READ",
+        )
+        ctx = (
+            GrantedReadStore(access).load_direct(access.display_name)
+            if access.is_granted
+            else store.load_direct(access.context_name)
+        )
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
         typer.secho(
             "Find duplicates error: " + display_escape_text(str(error)),
             fg=typer.colors.RED,
