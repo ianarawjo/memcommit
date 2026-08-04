@@ -1,6 +1,7 @@
 import typer
 
 from memcommit.commands.granted_context import attached_grants
+from memcommit.commands.switch import _granted_picker_views
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
@@ -22,6 +23,21 @@ def cmd() -> None:
             typer.secho(f"* {label}", fg=typer.colors.GREEN, bold=True)
         else:
             typer.echo(f"  {label}")
+    try:
+        virtual_names, annotations = _granted_picker_views(store)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+    if current in virtual_names:
+        typer.secho(
+            "* "
+            + display_escape_text(current)
+            + "  "
+            + annotations[current],
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+        return
     if current:
         try:
             registry, grants = attached_grants(current)

@@ -186,6 +186,7 @@ def choose_context(
     *,
     current: str | None,
     virtual_names: Sequence[str] = (),
+    selectable_virtual_names: AbstractSet[str] = frozenset(),
     virtual_annotations: Mapping[str, str] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -207,6 +208,9 @@ def choose_context(
     ):
         raise ValueError("Virtual Context selection received invalid names.")
     annotations = dict(virtual_annotations or {})
+    selectable_virtual = frozenset(selectable_virtual_names)
+    if not selectable_virtual <= set(virtual):
+        raise ValueError("Selectable virtual Contexts are invalid.")
     if set(annotations) - set(virtual) or any(
         not isinstance(label, str) or not label for label in annotations.values()
     ):
@@ -218,9 +222,12 @@ def choose_context(
         )
 
     catalog = (*options, *virtual)
-    tree = _build_context_tree(catalog, materialized_names=frozenset(options))
+    tree = _build_context_tree(
+        catalog,
+        materialized_names=frozenset(options) | selectable_virtual,
+    )
     selected = {
-        "name": current if current in options else options[0],
+        "name": current if current in catalog else options[0],
     }
     # Expansion is deliberately process-local. Opening the picker must never
     # turn a navigation preference into Context, Profile, or current-state data.

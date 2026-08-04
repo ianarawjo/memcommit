@@ -277,6 +277,53 @@ def test_granted_impact_query_only_target_fails_before_provider(
     assert connections == 0
 
 
+def test_switch_to_read_grant_makes_it_current_without_materializing_copy(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+    )
+    assert active.current_context_name() == source.name
+    assert not active.context_exists(wiki.name)
+
+    switched = runner.invoke(app, ["switch", wiki.name])
+    listed = runner.invoke(app, ["ls"])
+    status = runner.invoke(app, ["status"])
+    contexts = runner.invoke(app, ["contexts"])
+    switched_child = runner.invoke(app, ["switch", "campus-wiki/services"])
+    switched_parent = runner.invoke(app, ["switch", ".."])
+    blocked_add = runner.invoke(app, ["add", "must not persist"])
+    blocked_query_switch = runner.invoke(
+        app,
+        ["switch", "campus-wiki/construction-details"],
+    )
+
+    assert switched.exit_code == 0, switched.output
+    assert "Switched to context 'campus-wiki'" in switched.output
+    assert active.current_context_name() == wiki.name
+    assert not active.context_exists(wiki.name)
+    assert listed.exit_code == 0, listed.output
+    assert "The public service desk is in the west lobby." in listed.output
+    assert status.exit_code == 0, status.output
+    assert "On context: campus-wiki" in status.output
+    assert "Granted view: read only" in status.output
+    assert contexts.exit_code == 0, contexts.output
+    assert "* campus-wiki  [granted read only]" in contexts.output
+    assert switched_child.exit_code == 0, switched_child.output
+    assert switched_parent.exit_code == 0, switched_parent.output
+    assert active.current_context_name() == wiki.name
+    assert blocked_add.exit_code == 1
+    assert "does not allow create access" in blocked_add.stderr
+    assert blocked_query_switch.exit_code == 1
+    assert "does not allow read access" in blocked_query_switch.stderr
+    assert authority.load_direct(wiki.name).name == wiki.name
+
+
 def test_granted_impact_then_update_changes_only_run_authority(
     isolated_store,
     tmp_path,

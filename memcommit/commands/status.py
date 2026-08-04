@@ -1,7 +1,13 @@
 import typer
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.commands.granted_context import (
+    GrantedReadStore,
+    resolve_context_access,
+)
 from memcommit.commands.log import render_checkpoint_rows
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
@@ -12,15 +18,39 @@ def cmd() -> None:
         typer.secho("No current context. Run 'mem init <name>' to get started.", fg=typer.colors.YELLOW)
         return
 
-    ctx = store.load(name)
+    try:
+        access = resolve_context_access(
+            store,
+            None,
+            current_name=name,
+            required_permission="READ",
+        )
+        ctx = (
+            GrantedReadStore(access).load(access.display_name)
+            if access.is_granted
+            else store.load(access.context_name)
+        )
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        typer.secho(f"Status error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
     items = list(ctx.iter_items())
     memories = [v for v in items if isinstance(v, Memory)]
     references = [v for v in items if isinstance(v, MemoryRef)]
     query_contexts = [v for v in items if isinstance(v, QueryContextRef)]
     embedded = [v for v in items if isinstance(v, Context)]
-    checkpoints = store.list_checkpoints(name)
+    # READ grants expose the current projection, not authority history.
+    checkpoints = [] if access.is_granted else store.list_checkpoints(name)
 
     typer.secho(f"On context: {name}", bold=True)
+    if access.is_granted:
+        typer.secho("  Granted view: read only", dim=True)
     typer.echo(
         f"  {len(memories)} memor{'y' if len(memories) == 1 else 'ies'}"
         f"  |  {len(references)} memory reference{'s' if len(references) != 1 else ''}"

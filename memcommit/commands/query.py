@@ -313,6 +313,35 @@ def cmd(
             raise RuntimeError(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
+        if not store.context_exists(selected_name):
+            # A READ-granted current view is not a local Context. Query routes
+            # remain attached to its owned workspace, so recover that public
+            # control-plane anchor without opening authority content.
+            navigation_registry = load_profile_registry()
+            attachment_identities = {
+                (
+                    grant.attachment_context_uid,
+                    grant.attachment_context_name,
+                )
+                for grant in navigation_registry.grants
+                if grant.grantee_profile_uid == navigation_registry.active.uid
+                and (
+                    selected_name == grant.public_name
+                    or selected_name.startswith(grant.public_name + "/")
+                )
+                and store.context_exists(grant.attachment_context_name)
+            }
+            if len(attachment_identities) != 1:
+                raise RuntimeError(
+                    "The current granted view has no unique local query anchor."
+                )
+            attachment_uid, attachment_name = next(iter(attachment_identities))
+            attachment = store.load_direct(attachment_name)
+            if attachment.uid != attachment_uid:
+                raise RuntimeError(
+                    "The current granted view's query anchor changed."
+                )
+            selected_name = attachment_name
         ctx = store.load(selected_name)
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
         typer.secho(

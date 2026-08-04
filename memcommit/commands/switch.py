@@ -13,13 +13,18 @@ from memcommit.profile_config import (
     profile_store_dir,
 )
 from memcommit.profiles import ProfileError
+from memcommit.commands.granted_context import (
+    GrantedReadStore,
+    resolve_context_access,
+)
+from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def _granted_picker_views(
     store: MemoryStore | None = None,
 ) -> tuple[tuple[str, ...], dict[str, str]]:
-    """Return non-selectable granted rows for the active Profile tree."""
+    """Return granted rows and their permission labels."""
 
     registry = load_profile_registry()
     active_store = profile_store_dir(registry.active)
@@ -51,7 +56,8 @@ def _granted_picker_views(
         )
         for binding in grant.contexts:
             suffix = binding.name[len(grant.resource_name) :]
-            names[grant.public_name + suffix] = annotation
+            public_name = grant.public_name + suffix
+            names[public_name] = annotation
     return tuple(sorted(names)), names
 
 
@@ -80,11 +86,17 @@ def cmd(
             raise typer.Exit(1)
         try:
             virtual_names, virtual_annotations = _granted_picker_views(store)
+            selectable_virtual_names = frozenset(
+                virtual_name
+                for virtual_name, annotation in virtual_annotations.items()
+                if annotation != "[query only]"
+            )
             if virtual_names:
                 name = choose_context(
                     names,
                     current=expected_current,
                     virtual_names=virtual_names,
+                    selectable_virtual_names=selectable_virtual_names,
                     virtual_annotations=virtual_annotations,
                 )
             else:
@@ -130,26 +142,54 @@ def cmd(
             raise typer.Exit(1)
         # Slash namespaces are lexical only. Explicit Context embeddings are
         # not unique filesystem-style parents and never affect relative paths.
-        if selector == ".." and not store.context_exists(name):
+        if (
+            selector == ".."
+            and store.context_exists(expected_current)
+            and not store.context_exists(name)
+        ):
             typer.secho(
                 f"Error: namespace parent context '{name}' does not exist.",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(1)
+        if (
+            store.context_exists(expected_current)
+            and not store.context_exists(name)
+        ):
+            typer.secho(
+                f"Error: context '{name}' does not exist.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
 
-    # Revalidate after the picker closes: another process may have changed or
-    # deleted the selected Context while the terminal UI was open.
-    if not store.context_exists(name):
+    try:
+        access = resolve_context_access(
+            store,
+            name,
+            current_name=expected_current,
+            required_permission="READ",
+        )
+        target = (
+            GrantedReadStore(access).load_direct(access.display_name)
+            if access.is_granted
+            else store.load(name)
+        )
+    except FileNotFoundError:
         typer.secho(
             f"Error: context '{name}' does not exist.",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
-    try:
-        target = store.load(name)
-    except (OSError, ValueError) as e:
+    except (
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as e:
         typer.secho(
             f"Error: cannot switch to context '{name}': {e}",
             fg=typer.colors.RED,
@@ -161,12 +201,26 @@ def cmd(
         # Bind both the target record and the current-state snapshot. Without
         # this CAS, a concurrent switch could be silently overwritten after a
         # relative selector or picker result was resolved.
-        store.set_current_context_if(
-            expected_current,
-            name,
-            expected_context_uid=target.uid,
-            expected_context_digest=target._store_digest or "",
-        )
+        if access.is_granted:
+            with authority_grant_snapshot_lock() as registry:
+                # Resolve once more under the registry lock before publishing
+                # the virtual current pointer. Later commands independently
+                # reauthorize that pointer, so revocation fails closed.
+                resolve_context_access(
+                    store,
+                    name,
+                    current_name=expected_current,
+                    required_permission="READ",
+                    registry=registry,
+                )
+                store.set_current_virtual_context_if(expected_current, name)
+        else:
+            store.set_current_context_if(
+                expected_current,
+                name,
+                expected_context_uid=target.uid,
+                expected_context_digest=target._store_digest or "",
+            )
     except (ConcurrentContextUpdateError, OSError, ValueError) as error:
         typer.secho(
             f"Error: cannot switch to context '{name}': {error}",

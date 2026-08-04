@@ -73,13 +73,7 @@ def resolve_context_access(
     if operand is None:
         if not current_name:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
-        return ContextAccess(
-            store=active_store,
-            context_name=current_name,
-            display_name=current_name,
-            attachment_name=None,
-            permission=required_permission,
-        )
+        operand = current_name
 
     local_name = resolve_context_locator(operand, current=current_name)
     if active_store.context_exists(local_name):
@@ -90,21 +84,72 @@ def resolve_context_access(
             attachment_name=None,
             permission=required_permission,
         )
-    if operand.startswith("."):
+    relative = operand.startswith(".")
+    if (
+        relative
+        and current_name
+        and active_store.context_exists(current_name)
+    ):
         raise FileNotFoundError(f"Context '{local_name}' not found.")
-    if not current_name:
+    public_name = local_name if relative else operand
+    registry = registry or load_profile_registry()
+    attachment_names: list[str] = []
+    if current_name and active_store.context_exists(current_name):
+        attachment_names.append(current_name)
+    for grant in registry.grants:
+        if grant.grantee_profile_uid != registry.active.uid:
+            continue
+        if not (
+            public_name == grant.public_name
+            or public_name.startswith(grant.public_name + "/")
+        ):
+            continue
+        if not active_store.context_exists(grant.attachment_context_name):
+            continue
+        attachment = active_store.load_direct(grant.attachment_context_name)
+        if attachment.uid != grant.attachment_context_uid:
+            continue
+        if grant.attachment_context_name not in attachment_names:
+            attachment_names.append(grant.attachment_context_name)
+
+    resolved: list[GrantedContextView] = []
+    errors: list[ProfileError] = []
+    for attachment_name in attachment_names:
+        try:
+            candidate = resolve_granted_context_view(
+                public_name,
+                attachment_name=attachment_name,
+                required_permission=required_permission,
+                registry=registry,
+            )
+        except ProfileError as error:
+            errors.append(error)
+            continue
+        if candidate not in resolved:
+            resolved.append(candidate)
+    if not resolved:
+        if errors:
+            raise errors[0]
         raise FileNotFoundError(f"Context '{local_name}' not found.")
-    view = resolve_granted_context_view(
-        operand,
-        attachment_name=current_name,
-        required_permission=required_permission,
-        registry=registry,
-    )
+    identities = {
+        (
+            candidate.grant.uid,
+            candidate.grant.revision,
+            candidate.authority.uid,
+            candidate.authority_context_name,
+        )
+        for candidate in resolved
+    }
+    if len(identities) != 1:
+        raise ProfileError(
+            f"Granted view '{public_name}' is ambiguous across attachment Contexts."
+        )
+    view = resolved[0]
     return ContextAccess(
         store=MemoryStore(root=view.authority_root, create=False),
         context_name=view.authority_context_name,
-        display_name=operand,
-        attachment_name=current_name,
+        display_name=public_name,
+        attachment_name=view.grant.attachment_context_name,
         permission=required_permission,
         view=view,
     )

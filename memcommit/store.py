@@ -1305,6 +1305,34 @@ class MemoryStore:
                     state["current"] = name
                     self._write_state(state)
 
+    def set_current_virtual_context_if(
+        self,
+        expected_current: str | None,
+        name: str,
+    ) -> None:
+        """CAS-select one externally validated granted Context name.
+
+        A granted view is a navigation pointer, not a locally materialized
+        Context. Authorization and authority identity are therefore resolved
+        again by each command that consumes the pointer. Only ``mem switch``
+        may call this after validating a READ grant; query-only routes remain
+        non-selectable.
+        """
+
+        _context_name_parts(name)
+        if self.context_exists(name):
+            raise ValueError(
+                f"Context '{name}' is local and must use the ordinary switch path."
+            )
+        with self._state_write_lock():
+            state = self._read_state()
+            if state.get("current") != expected_current:
+                raise ConcurrentContextUpdateError(
+                    "The current Context changed before it could be switched."
+                )
+            state["current"] = name
+            self._write_state(state)
+
     # --- Semantic update sessions ---
 
     @staticmethod

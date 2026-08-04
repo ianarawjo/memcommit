@@ -225,6 +225,43 @@ def test_picker_enter_opens_a_namespace_only_row_without_switching_to_it():
     assert selected == "root"
 
 
+def test_picker_enter_selects_a_read_granted_virtual_context():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r")
+        selected = choose_context(
+            ("task-2",),
+            current="task-2/advisor1",
+            virtual_names=("task-2/advisor1",),
+            selectable_virtual_names={"task-2/advisor1"},
+            virtual_annotations={
+                "task-2/advisor1": "[granted read only]",
+            },
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "task-2/advisor1"
+
+
+def test_picker_enter_does_not_select_a_query_only_virtual_context():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\rq")
+        selected = choose_context(
+            ("task-2",),
+            current="task-2/proposal-submission-guidelines",
+            virtual_names=("task-2/proposal-submission-guidelines",),
+            virtual_annotations={
+                "task-2/proposal-submission-guidelines": "[query only]",
+            },
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+
+
 def test_picker_right_expands_then_enters_first_child():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b[C\x1b[C\r")
