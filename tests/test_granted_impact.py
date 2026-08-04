@@ -19,7 +19,10 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.derived_policy import authorize_analysis_save
+from memcommit.derived_policy import analysis_retention, authorize_analysis_save
+from memcommit.granted_comparison_store import (
+    load_granted_comparison_artifact,
+)
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -80,6 +83,7 @@ def _setup_granted_target(
         "COMBINE",
         "EXPORT",
         "ACCEPT_DERIVED",
+        "SAVE_BOUND_ANALYSIS",
         "SAVE_ANALYSIS",
     ),
     authority_name="run-granted-memory",
@@ -748,6 +752,117 @@ def test_cross_domain_compare_requires_combine_and_saved_analysis_consent(
         authorize_analysis_save((granted_access,))
 
 
+def test_analysis_retention_uses_weakest_granted_storage_mode(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=(
+            "READ",
+            "DERIVE",
+            "COMBINE",
+            "EXPORT",
+            "SAVE_BOUND_ANALYSIS",
+        ),
+    )
+    source_access = resolve_context_access(
+        active,
+        source.name,
+        current_name=source.name,
+        required_permission="READ",
+    )
+    granted_access = resolve_context_access(
+        active,
+        wiki.name,
+        current_name=source.name,
+        required_permission="READ",
+    )
+
+    assert analysis_retention((source_access, granted_access)) == "GRANT_BOUND"
+
+
+def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    calls = 0
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            nonlocal calls
+            calls += 1
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            reference, compared = payload["frames"]
+            return json.dumps(
+                {
+                    "overview": "The participant update and campus guidance align.",
+                    "reports": {
+                        "both": "Both concern the public service location.",
+                        "differences": "",
+                        "reference_only": "",
+                        "compared_only": "",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "all",
+                            "reference_memory_ids": [
+                                item["memory_id"] for item in reference["memories"]
+                            ],
+                            "compared_memory_ids": [
+                                item["memory_id"] for item in compared["memories"]
+                            ],
+                            "kind": "COMPATIBLE",
+                            "status": "RESOLVED",
+                            "summary": "The location guidance can coexist.",
+                            "reason": "Both sources address the public service desk.",
+                        }
+                    ],
+                    "issues": [],
+                }
+            )
+
+    monkeypatch.setattr(
+        "memcommit.commands.compare.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    compared = runner.invoke(app, ["compare", "--to", wiki.name])
+
+    assert compared.exit_code == 0, compared.output + compared.stderr
+    assert "SAVED · RETAINED" in compared.output
+    assert calls == 1
+    artifact = load_granted_comparison_artifact(active, source.uid, wiki.uid)
+    assert artifact is not None
+    assert artifact.retention == "RETAINED"
+
+    target = ops.init("participant-meld")
+    active.save(target)
+    active.set_current(target.name)
+    melded = runner.invoke(app, ["meld", source.name, wiki.name])
+
+    assert melded.exit_code == 0, melded.output + melded.stderr
+    assert "MEM MELD · SYMMETRIC" in melded.output
+    assert source.name in melded.output
+    assert wiki.name in melded.output
+    assert active.load_meld_session(target.uid) is not None
+
+    delete_authority_grant(_grant.uid)
+    resumed = runner.invoke(app, ["meld", source.name, wiki.name])
+
+    assert resumed.exit_code == 0, resumed.output + resumed.stderr
+    assert "MEM MELD · SYMMETRIC" in resumed.output
+    assert "Resumed without calling the semantic provider." in resumed.output
+
+
 def test_update_between_distinct_grants_writes_only_accepting_target(
     isolated_store,
     tmp_path,
@@ -868,6 +983,7 @@ def test_granted_impact_projects_only_readable_target_scope(
         "COMBINE",
         "EXPORT",
         "ACCEPT_DERIVED",
+        "SAVE_BOUND_ANALYSIS",
         "SAVE_ANALYSIS",
     )
     assert {context.name for context in session.target_contexts} == {

@@ -470,7 +470,8 @@ def test_profile_use_selects_the_initialized_complete_profile(
     assert "task-1/campus-wiki" in contexts.stdout
     assert (
         "[view create,read,update,delete,query,derive,combine,export,"
-        "accept_derived,save_analysis from profile-view-granted-memory]"
+        "accept_derived,save_bound_analysis,save_analysis from "
+        "profile-view-granted-memory]"
         in contexts.stdout
     )
     assert "task-1/campus-wiki/construction-details" in contexts.stdout
@@ -554,7 +555,7 @@ def test_profile_use_selects_the_initialized_complete_profile(
     task_two_contexts = _subprocess_mem(tmp_path, "contexts")
     assert "task-2/advisor1" in task_two_contexts.stdout
     assert (
-        "[view read,derive,combine,export,save_analysis from "
+        "[view read,derive,combine,export,save_bound_analysis,save_analysis from "
         "profile-view-granted-memory]" in task_two_contexts.stdout
     )
     read_only_add = _subprocess_mem(
@@ -579,10 +580,11 @@ def test_profile_use_selects_the_initialized_complete_profile(
     assert "task-1/campus-wiki/route-changes" in virtual_names
     assert annotations["task-1/campus-wiki"] == (
         "[grant CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + "
-        "EXPORT + ACCEPT_DERIVED + SAVE_ANALYSIS]"
+        "EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS]"
     )
     assert annotations["task-2/advisor1"] == (
-        "[grant READ + DERIVE + COMBINE + EXPORT + SAVE_ANALYSIS]"
+        "[grant READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + "
+        "SAVE_ANALYSIS]"
     )
     assert annotations["task-2/proposal-submission-guidelines"] == (
         "[grant QUERY + SAVE QUERY SESSION]"

@@ -706,6 +706,8 @@ def _derived_boundary_lines(
         + "Target/artifact boundary: "
         + "ACCEPT_DERIVED "
         + _boundary_value("ACCEPT_DERIVED", permissions)
+        + " · SAVE_BOUND_ANALYSIS "
+        + _boundary_value("SAVE_BOUND_ANALYSIS", permissions)
         + " · SAVE_ANALYSIS "
         + _boundary_value("SAVE_ANALYSIS", permissions),
     )

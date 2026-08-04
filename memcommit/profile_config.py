@@ -32,6 +32,7 @@ GRANT_PERMISSIONS = frozenset(
         "COMBINE",
         "EXPORT",
         "ACCEPT_DERIVED",
+        "SAVE_BOUND_ANALYSIS",
         "SAVE_ANALYSIS",
     }
 )
@@ -46,6 +47,7 @@ _GRANT_PERMISSION_ORDER = (
     "COMBINE",
     "EXPORT",
     "ACCEPT_DERIVED",
+    "SAVE_BOUND_ANALYSIS",
     "SAVE_ANALYSIS",
 )
 
@@ -116,11 +118,12 @@ def canonical_grant_permissions(value: object) -> tuple[str, ...]:
             "Derive and accept-derived grants require READ permission."
         )
     if (
-        normalized & {"COMBINE", "EXPORT", "SAVE_ANALYSIS"}
+        normalized
+        & {"COMBINE", "EXPORT", "SAVE_BOUND_ANALYSIS", "SAVE_ANALYSIS"}
         and "DERIVE" not in normalized
     ):
         raise ProfileConfigError(
-            "Combine, export, and save-analysis grants require DERIVE permission."
+            "Combine, export, and analysis-save grants require DERIVE permission."
         )
     if "ACCEPT_DERIVED" in normalized and not normalized & {
         "CREATE",

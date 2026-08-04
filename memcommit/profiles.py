@@ -3222,6 +3222,7 @@ def _prefix_study_grant_template(
                 "COMBINE",
                 "EXPORT",
                 "ACCEPT_DERIVED",
+                "SAVE_BOUND_ANALYSIS",
                 "SAVE_ANALYSIS",
             ):
                 if permission not in permissions:
@@ -3240,6 +3241,7 @@ def _prefix_study_grant_template(
                 "DERIVE",
                 "COMBINE",
                 "EXPORT",
+                "SAVE_BOUND_ANALYSIS",
                 "SAVE_ANALYSIS",
             ):
                 if permission not in permissions:

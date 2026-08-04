@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from typing import Literal
 
 from memcommit.commands.granted_context import ContextAccess
 from memcommit.profiles import ProfileError
+
+
+AnalysisRetention = Literal["GRANT_BOUND", "RETAINED"]
 
 
 def _require(access: ContextAccess, permissions: Iterable[str]) -> None:
@@ -73,8 +77,40 @@ def authorize_combination(accesses: Iterable[ContextAccess]) -> None:
         _require(access, required)
 
 
-def authorize_analysis_save(accesses: Iterable[ContextAccess]) -> None:
-    """Require each authority source to permit a grantee-owned analysis."""
+def analysis_retention(
+    accesses: Iterable[ContextAccess],
+) -> AnalysisRetention | None:
+    """Return the strongest storage mode every granted contributor allows."""
 
+    granted = tuple(access for access in accesses if access.is_granted)
+    if not granted:
+        return "RETAINED"
+    permission_sets = tuple(
+        set(access.view.grant.permissions)
+        for access in granted
+        if access.view is not None
+    )
+    if all("SAVE_ANALYSIS" in permissions for permissions in permission_sets):
+        return "RETAINED"
+    if all(
+        "SAVE_BOUND_ANALYSIS" in permissions
+        for permissions in permission_sets
+    ):
+        return "GRANT_BOUND"
+    return None
+
+
+def authorize_analysis_save(
+    accesses: Iterable[ContextAccess],
+    *,
+    retention: AnalysisRetention = "RETAINED",
+) -> None:
+    """Require every authority source to permit the requested retention."""
+
+    permission = (
+        "SAVE_ANALYSIS"
+        if retention == "RETAINED"
+        else "SAVE_BOUND_ANALYSIS"
+    )
     for access in accesses:
-        _require(access, {"DERIVE", "SAVE_ANALYSIS"})
+        _require(access, {"DERIVE", permission})

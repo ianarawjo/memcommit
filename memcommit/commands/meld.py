@@ -15,6 +15,20 @@ from memcommit.comparison import (
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_locator import resolve_context_locator
+from memcommit.commands.granted_context import (
+    ContextAccess,
+    GrantedReadStore,
+    resolve_context_access,
+)
+from memcommit.derived_policy import (
+    authorize_combination,
+    authorize_derived_transfer,
+)
+from memcommit.granted_comparison_store import (
+    granted_artifact_contexts,
+    load_granted_comparison_artifact,
+    recursive_comparison_projection,
+)
 from memcommit.meld import (
     MeldError,
     MeldIssue,
@@ -32,6 +46,8 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
     ConcurrentContextUpdateError,
@@ -78,6 +94,13 @@ def _load_symmetric_comparison(
     """Load the exact reviewed LEFT→RIGHT basis; never use a reverse slot."""
     try:
         analysis = load_comparison_analysis(left.uid, right.uid)
+        if analysis is None:
+            artifact = load_granted_comparison_artifact(
+                MemoryStore(create=False),
+                left.uid,
+                right.uid,
+            )
+            analysis = artifact.analysis if artifact is not None else None
     except ValueError as error:
         raise _comparison_prerequisite_error(
             left=left,
@@ -383,10 +406,47 @@ def _load_bound_contexts(
     store: MemoryStore,
     session: MeldSession,
 ) -> tuple[Context, Context, Context]:
-    left = store.load_direct(session.frames[0].context_name)
-    right = store.load_direct(session.frames[1].context_name)
+    try:
+        left = store.load_direct(session.frames[0].context_name)
+        right = store.load_direct(session.frames[1].context_name)
+    except FileNotFoundError:
+        if session.mode != "SYMMETRIC" or session.comparison_seed is None:
+            raise
+        artifact = load_granted_comparison_artifact(
+            store,
+            session.frames[0].context_uid,
+            session.frames[1].context_uid,
+        )
+        if artifact is None:
+            raise MeldCommandError(
+                "The granted Compare basis for this Meld is unavailable."
+            )
+        left, right = granted_artifact_contexts(store, artifact)
     target = store.load_direct(session.target.context_name)
     return left, right, target
+
+
+def _resolve_meld_source(
+    store: MemoryStore,
+    name: str,
+    *,
+    current_name: str | None,
+) -> ContextAccess:
+    return resolve_context_access(
+        store,
+        name,
+        current_name=current_name,
+        required_permission="READ",
+    )
+
+
+def _load_meld_source(access: ContextAccess) -> Context:
+    context = (
+        GrantedReadStore(access).load(access.display_name)
+        if access.is_granted
+        else access.store.load_direct(access.context_name)
+    )
+    return recursive_comparison_projection(context)
 
 
 def _assert_source_bindings(
@@ -1079,19 +1139,44 @@ def cmd(
                 "The two PEER sources and active target must be distinct "
                 "Contexts."
             )
-        if not store.context_exists(left_name):
-            role = "INCOMING" if requested_mode == "DIRECTIONAL" else "source"
-            raise MeldCommandError(
-                f"{role} Context '{left_name}' does not exist."
-            )
-        if not store.context_exists(right_name):
-            role = "BASELINE" if requested_mode == "DIRECTIONAL" else "source"
-            raise MeldCommandError(
-                f"{role} Context '{right_name}' does not exist."
-            )
         target = store.load_direct(target_name)
         session = store.load_meld_session(target.uid)
-
+        left_access: ContextAccess | None = None
+        right_access: ContextAccess | None = None
+        if requested_mode == "SYMMETRIC" and session is None:
+            left_access = _resolve_meld_source(
+                store,
+                left_name,
+                current_name=current_name,
+            )
+            right_access = _resolve_meld_source(
+                store,
+                right_name,
+                current_name=current_name,
+            )
+            target_access = resolve_context_access(
+                store,
+                target_name,
+                current_name=current_name,
+                required_permission="READ",
+            )
+            if target_access.is_granted:
+                raise MeldCommandError(
+                    "Symmetric granted-source Meld currently requires a local "
+                    "participant target."
+                )
+            authorize_combination((left_access, right_access))
+            authorize_derived_transfer(left_access, target_access)
+            authorize_derived_transfer(right_access, target_access)
+        elif requested_mode == "DIRECTIONAL":
+            if not store.context_exists(left_name):
+                raise MeldCommandError(
+                    f"INCOMING Context '{left_name}' does not exist."
+                )
+            if not store.context_exists(right_name):
+                raise MeldCommandError(
+                    f"BASELINE Context '{right_name}' does not exist."
+                )
         if session is None:
             if any(
                 (
@@ -1106,8 +1191,16 @@ def cmd(
                 raise MeldCommandError(
                     f"Start the meld with a plain '{start_command}' first."
                 )
-            left_ctx = store.load_direct(left_name)
-            right_ctx = store.load_direct(right_name)
+            left_ctx = (
+                _load_meld_source(left_access)
+                if left_access is not None
+                else store.load_direct(left_name)
+            )
+            right_ctx = (
+                _load_meld_source(right_access)
+                if right_access is not None
+                else store.load_direct(right_name)
+            )
             if requested_mode == "DIRECTIONAL":
                 session = MeldSession.create_directional(
                     left_ctx,
@@ -1150,8 +1243,22 @@ def cmd(
 
         if restart:
             prior_digest = meld_canonical_digest(session.to_dict())
-            left_ctx = store.load_direct(left_name)
-            right_ctx = store.load_direct(right_name)
+            if requested_mode == "SYMMETRIC" and left_access is None:
+                left_ctx, right_ctx, _current_target = _load_bound_contexts(
+                    store,
+                    session,
+                )
+            else:
+                left_ctx = (
+                    _load_meld_source(left_access)
+                    if left_access is not None
+                    else store.load_direct(left_name)
+                )
+                right_ctx = (
+                    _load_meld_source(right_access)
+                    if right_access is not None
+                    else store.load_direct(right_name)
+                )
             if requested_mode == "DIRECTIONAL":
                 replacement = MeldSession.create_directional(
                     left_ctx,
@@ -1370,6 +1477,8 @@ def cmd(
         MeldError,
         MeldProviderError,
         MeldCommandError,
+        ProfileConfigError,
+        ProfileError,
         QueryProviderError,
     ) as error:
         typer.secho(f"Meld error: {error}", fg=typer.colors.RED, err=True)

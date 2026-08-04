@@ -182,6 +182,7 @@ TASK_SPECS = {
                     "COMBINE",
                     "EXPORT",
                     "ACCEPT_DERIVED",
+                    "SAVE_BOUND_ANALYSIS",
                     "SAVE_ANALYSIS",
                 ),
                 grantee_parent_context="participant/construction-updates",
@@ -236,6 +237,7 @@ TASK_SPECS = {
                         "DERIVE",
                         "COMBINE",
                         "EXPORT",
+                        "SAVE_BOUND_ANALYSIS",
                         "SAVE_ANALYSIS",
                     )
                 ),
@@ -291,6 +293,7 @@ TASK_SPECS = {
                     "DERIVE",
                     "COMBINE",
                     "EXPORT",
+                    "SAVE_BOUND_ANALYSIS",
                     "SAVE_ANALYSIS",
                 ),
                 grantee_parent_context="personal-memory",

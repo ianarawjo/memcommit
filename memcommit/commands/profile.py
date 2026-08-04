@@ -334,7 +334,7 @@ def grant_create_cmd(
             help=(
                 "Permission to grant; repeat CREATE, READ, UPDATE/EDIT, "
                 "DELETE, QUERY, SESSION_LOG, DERIVE, COMBINE, EXPORT, "
-                "ACCEPT_DERIVED, or SAVE_ANALYSIS"
+                "ACCEPT_DERIVED, SAVE_BOUND_ANALYSIS, or SAVE_ANALYSIS"
             ),
         ),
     ],

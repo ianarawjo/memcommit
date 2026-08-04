@@ -236,6 +236,7 @@ def _assert_grant_templates(task, manifest, context_uids):
             "COMBINE",
             "EXPORT",
             "ACCEPT_DERIVED",
+            "SAVE_BOUND_ANALYSIS",
             "SAVE_ANALYSIS",
         ]
         assert campus["provider"] == "codex_chatgpt"
@@ -263,6 +264,7 @@ def _assert_grant_templates(task, manifest, context_uids):
             "DERIVE",
             "COMBINE",
             "EXPORT",
+            "SAVE_BOUND_ANALYSIS",
             "SAVE_ANALYSIS",
         ]
         assert grants["task-2-advisor1-view"]["permissions"] == advisor_permissions
@@ -279,6 +281,7 @@ def _assert_grant_templates(task, manifest, context_uids):
             "DERIVE",
             "COMBINE",
             "EXPORT",
+            "SAVE_BOUND_ANALYSIS",
             "SAVE_ANALYSIS",
         ]
         healthcare = grants["task-3-healthcare-information-query"]

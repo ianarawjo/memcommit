@@ -22,7 +22,8 @@ nor can a friendly command name stand in for the effects it eventually writes.
 | forget | UPDATE and/or DELETE from accepted proposal | One authority Context save |
 | integrate | CREATE, UPDATE, and/or DELETE from accepted proposal | One authority Context save |
 | merge | source READ + DERIVE; EXPORT across domains; target CREATE + ACCEPT_DERIVED | Cross-Profile transfer copies direct Memory values only |
-| compare | READ + DERIVE; COMBINE across domains | Granted result is process-local and revalidated after provider use |
+| compare | READ + DERIVE; COMBINE across domains; common SAVE mode | Exact grant-bound or retained artifact, otherwise process-local |
+| meld | Compare save authority + source EXPORT; local target | Imports the exact ordered Compare ledger into a target-bound review session |
 | impact | READ + source DERIVE/EXPORT + target ACCEPT_DERIVED | Schema 5 can bind granted source and target together |
 | update | impact transfer authority + target mutation effects | Local or granted target application with exact bindings, receipts, and rollback |
 
@@ -47,10 +48,11 @@ permission set while the registry lock remains held through the write.
   scopes, but writes and rolls back only the target authority store. A future
   operation that writes more than one authority still needs a cross-store
   transaction journal.
-- Granted Compare is intentionally not saved. The ordinary comparison artifact
-  contains full frame text; durable parity needs a redacted binding-and-digest
-  schema with live reconstruction and revocation checks.
-- `atomize`, `meld`, `review`, and `translate` currently use durable artifacts
+- Granted Compare uses a distinct artifact containing the exact analysis and
+  frozen source bindings. Grant-bound artifacts require live revalidation;
+  retained artifacts survive revocation because permanent retention was
+  authorized by every source when saved.
+- `atomize`, `review`, and `translate` currently use durable artifacts
   containing source or derived text and local Context identities. Grant parity
   for these commands is deferred until each artifact has a redacted form and a
   live grant revalidation path. Simply pointing their existing local stores at

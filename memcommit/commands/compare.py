@@ -31,7 +31,15 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
 )
 from memcommit.context_locator import resolve_context_locator
-from memcommit.derived_policy import authorize_combination
+from memcommit.derived_policy import (
+    AnalysisRetention,
+    analysis_retention,
+    authorize_combination,
+)
+from memcommit.granted_comparison_store import (
+    load_granted_comparison_artifact,
+    save_granted_comparison_artifact,
+)
 from memcommit.commands.compare_sessions import (
     choose_comparison_session,
     load_saved_comparison,
@@ -129,6 +137,7 @@ def _header_lines(
     *,
     reused: bool,
     durable: bool,
+    retention: AnalysisRetention | None,
 ) -> list[str]:
     reference, compared = analysis.frames
     counts = Counter(relation.kind for relation in analysis.relations)
@@ -142,7 +151,15 @@ def _header_lines(
         (
             f"Analysis: {analysis.uid[:8]} · "
             f"{'REUSED' if reused else 'NEW'}"
-            + ("" if durable else " · NOT SAVED (GRANTED VIEW)")
+            + (
+                " · SAVED · RETAINED"
+                if retention == "RETAINED"
+                else " · SAVED · GRANT-BOUND"
+                if retention == "GRANT_BOUND"
+                else ""
+                if durable
+                else " · NOT SAVED (GRANTED VIEW)"
+            )
         ),
         (
             "METRICS · "
@@ -208,6 +225,7 @@ def render_comparison(
     reused: bool,
     ledger: bool = False,
     durable: bool = True,
+    retention: AnalysisRetention | None = None,
 ) -> str:
     """Render a compact report, optionally followed by the complete ledger."""
     reference, compared = analysis.frames
@@ -216,7 +234,12 @@ def render_comparison(
         relation.uid: index
         for index, relation in enumerate(analysis.relations, start=1)
     }
-    lines = _header_lines(analysis, reused=reused, durable=durable)
+    lines = _header_lines(
+        analysis,
+        reused=reused,
+        durable=durable,
+        retention=retention,
+    )
     lines.extend(
         [
             "",
@@ -292,6 +315,9 @@ def render_comparison(
                 (
                     "The complete source-linked relation ledger is saved. "
                     "Inspect it with:"
+                    if durable
+                    else "The complete source-linked relation ledger was not "
+                    "saved. Re-run it with:"
                 ),
                 f"  {ledger_command}",
             ]
@@ -528,11 +554,19 @@ def cmd(
             raise CompareCommandError("Compare requires two distinct Contexts.")
 
         granted = reference_binding is not None or compared_binding is not None
-        existing = (
-            None
+        granted_artifact = (
+            load_granted_comparison_artifact(store, reference.uid, compared.uid)
             if granted
-            else load_comparison_analysis(reference.uid, compared.uid)
+            else None
         )
+        if granted:
+            existing = (
+                granted_artifact.analysis
+                if granted_artifact is not None
+                else None
+            )
+        else:
+            existing = load_comparison_analysis(reference.uid, compared.uid)
         if (
             existing is not None
             and existing.matches(reference, compared)
@@ -544,6 +578,11 @@ def cmd(
                     existing,
                     reused=True,
                     ledger=ledger,
+                    retention=(
+                        granted_artifact.retention
+                        if granted_artifact is not None
+                        else None
+                    ),
                 )
             )
             return
@@ -593,12 +632,26 @@ def cmd(
                         "A granted comparison source changed while Compare was "
                         "analyzing it; no result was published."
                     )
+                retention = analysis_retention(
+                    (current_reference_access, current_compared_access)
+                )
+                if retention is not None:
+                    save_granted_comparison_artifact(
+                        store,
+                        analysis,
+                        (current_reference_access, current_compared_access),
+                        retention=retention,
+                        expected_analysis_uid=(
+                            existing.uid if existing is not None else None
+                        ),
+                    )
             typer.echo(
                 render_comparison(
                     analysis,
                     reused=False,
                     ledger=ledger,
-                    durable=False,
+                    durable=retention is not None,
+                    retention=retention,
                 )
             )
             return
