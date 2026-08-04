@@ -8,6 +8,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
+import memcommit.clipboard as clipboard
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.commands.granted_context import (
@@ -139,6 +140,57 @@ def test_granted_context_binding_revalidates_exact_view_and_rejects_revocation(
     delete_authority_grant(grant.uid)
     with pytest.raises(ProfileError, match="does not exist"):
         revalidate_granted_context_binding(binding)
+
+
+def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, source, wiki, grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+    )
+    system_clipboard = {"text": ""}
+    monkeypatch.setattr(
+        clipboard,
+        "write_system_clipboard",
+        lambda text: system_clipboard.__setitem__("text", text),
+    )
+    monkeypatch.setattr(
+        clipboard,
+        "read_system_clipboard",
+        lambda: system_clipboard["text"],
+    )
+
+    copied = runner.invoke(
+        app,
+        ["ls", wiki.name, "--copy", "--with-ids"],
+    )
+
+    assert copied.exit_code == 0, copied.output
+    assert "west lobby" in system_clipboard["text"]
+    record = json.loads(
+        (active.store_dir / "clipboard.json").read_text(encoding="utf-8")
+    )
+    serialized = json.dumps(record)
+    assert record["schema_version"] == 2
+    assert record["plain_text"] is None
+    assert record["selection"]["kind"] == "GRANTED_LIST_RECEIPT"
+    assert "west lobby" not in serialized
+    assert "open on weekdays" not in serialized
+
+    pasted = runner.invoke(app, ["ls", "--paste"])
+    assert pasted.exit_code == 0, pasted.output
+    assert "west lobby" in pasted.output
+    assert active.current_context_name() == source.name
+
+    delete_authority_grant(grant.uid)
+    blocked = runner.invoke(app, ["ls", "--paste"])
+    assert blocked.exit_code == 1
+    assert "no longer available under its exact grant" in blocked.stderr
 
 
 def _edit_and_add_plan(prompt: str) -> str:

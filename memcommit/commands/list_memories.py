@@ -9,6 +9,7 @@ from memcommit.clipboard import (
     ClipboardPayload,
     copy_payload,
     load_payload,
+    selection_digest,
 )
 from memcommit.context import (
     Context,
@@ -19,16 +20,20 @@ from memcommit.context import (
 from memcommit.commands.granted_context import (
     GrantedReadStore,
     attached_grants,
+    freeze_granted_context_binding,
     project_grants_into_context,
     resolve_context_access,
+    revalidate_granted_context_binding,
 )
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
+from memcommit.update import GrantedUpdateTarget
 
 
 _LIST_SNAPSHOT_VERSION = 2
+_GRANTED_LIST_RECEIPT_VERSION = 1
 _MemoryLayout = Literal["hanging", "inline"]
 _MIN_HANGING_CONTENT_WIDTH = 20
 
@@ -362,6 +367,7 @@ def _render_snapshot_item(
     with_ids: bool,
     memory_layout: _MemoryLayout,
     terminal_width: int,
+    separate_context_blocks: bool,
 ) -> None:
     prefix = " " * indent
     kind = _require_string(item, "kind")
@@ -402,6 +408,7 @@ def _render_snapshot_item(
                     with_ids=with_ids,
                     memory_layout=memory_layout,
                     terminal_width=terminal_width,
+                    separate_context_blocks=separate_context_blocks,
                 )
         return
     if kind == "query_context_ref":
@@ -494,9 +501,14 @@ def _render_snapshot_items(
     with_ids: bool,
     memory_layout: _MemoryLayout,
     terminal_width: int,
+    separate_context_blocks: bool,
 ) -> None:
     contexts, memories = _group_snapshot_items(items)
-    for item in [*contexts, *memories]:
+    for index, item in enumerate(contexts):
+        if separate_context_blocks and index:
+            # Recursive Contexts read as sections; separate siblings without
+            # adding whitespace at the start or end of their containing list.
+            lines.append("")
         _render_snapshot_item(
             item,
             parent_name=parent_name,
@@ -505,6 +517,18 @@ def _render_snapshot_items(
             with_ids=with_ids,
             memory_layout=memory_layout,
             terminal_width=terminal_width,
+            separate_context_blocks=separate_context_blocks,
+        )
+    for item in memories:
+        _render_snapshot_item(
+            item,
+            parent_name=parent_name,
+            indent=indent,
+            lines=lines,
+            with_ids=with_ids,
+            memory_layout=memory_layout,
+            terminal_width=terminal_width,
+            separate_context_blocks=separate_context_blocks,
         )
 
 
@@ -529,7 +553,7 @@ def _render_snapshot(
         raise _snapshot_error()
     _require_string(context, "uid")
     name = _require_string(context, "name")
-    _require_bool(snapshot, "recursive")
+    recursive = _require_bool(snapshot, "recursive")
     items = _require_items(snapshot.get("items"))
 
     lines = [
@@ -548,6 +572,7 @@ def _render_snapshot(
             with_ids=with_ids,
             memory_layout=memory_layout,
             terminal_width=terminal_width,
+            separate_context_blocks=recursive,
         )
     return "\n".join(lines) + "\n"
 
@@ -563,6 +588,78 @@ def _snapshot_occurrence_count(snapshot: dict[str, object]) -> int:
         return total
 
     return count(_require_items(snapshot.get("items")))
+
+
+def _granted_list_receipt(
+    snapshot: dict[str, object],
+    *,
+    binding: GrantedUpdateTarget,
+    with_ids: bool,
+) -> dict[str, object]:
+    """Persist grant identity and snapshot digests without authority text."""
+
+    return {
+        "kind": "GRANTED_LIST_RECEIPT",
+        "schema_version": _GRANTED_LIST_RECEIPT_VERSION,
+        "binding": binding.to_dict(),
+        "recursive": _require_bool(snapshot, "recursive"),
+        "with_ids": with_ids,
+        "snapshot_sha256": selection_digest(snapshot),
+    }
+
+
+def _restore_granted_list_receipt(
+    receipt: dict[str, object],
+) -> tuple[dict[str, object], bool]:
+    expected = {
+        "kind",
+        "schema_version",
+        "binding",
+        "recursive",
+        "with_ids",
+        "snapshot_sha256",
+    }
+    if set(receipt) != expected:
+        raise ClipboardError("The granted list receipt is invalid.")
+    if (
+        receipt.get("kind") != "GRANTED_LIST_RECEIPT"
+        or receipt.get("schema_version") != _GRANTED_LIST_RECEIPT_VERSION
+    ):
+        raise ClipboardError("The granted list receipt is invalid.")
+    recursive = receipt.get("recursive")
+    with_ids = receipt.get("with_ids")
+    expected_digest = receipt.get("snapshot_sha256")
+    if (
+        not isinstance(recursive, bool)
+        or not isinstance(with_ids, bool)
+        or not isinstance(expected_digest, str)
+    ):
+        raise ClipboardError("The granted list receipt is invalid.")
+    try:
+        binding = GrantedUpdateTarget.from_dict(receipt.get("binding"))
+        access = revalidate_granted_context_binding(binding)
+        granted_store = GrantedReadStore(access)
+        context_names = tuple(granted_store.list_context_names())
+        context = (
+            granted_store.load(access.display_name)
+            if recursive
+            else granted_store.load_direct(access.display_name)
+        )
+        snapshot = _snapshot_context(
+            context,
+            store=granted_store,
+            context_names=context_names,
+            recursive=recursive,
+        )
+    except (FileNotFoundError, OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        raise ClipboardError(
+            "The granted list source is no longer available under its exact grant."
+        ) from error
+    if selection_digest(snapshot) != expected_digest:
+        raise ClipboardError(
+            "The granted list source changed after it was copied."
+        )
+    return snapshot, with_ids
 
 
 def _emit_snapshot_text(text: str) -> None:
@@ -688,26 +785,44 @@ def cmd(
             raise typer.Exit(1)
         try:
             payload = load_payload(expected_producer="list")
-            annotated_text = _render_snapshot(
-                payload.selection,
-                with_ids=True,
-                memory_layout="inline",
-            )
-            clean_text = _render_snapshot(
-                payload.selection,
-                with_ids=False,
-                memory_layout="inline",
-            )
-            if payload.plain_text not in {annotated_text, clean_text}:
-                raise ClipboardError(
-                    "The structured clipboard text and object snapshot disagree."
+            if payload.selection.get("kind") == "GRANTED_LIST_RECEIPT":
+                snapshot, copied_with_ids = _restore_granted_list_receipt(
+                    payload.selection
                 )
+                replay_text = _render_snapshot(
+                    snapshot,
+                    with_ids=copied_with_ids,
+                    memory_layout="inline",
+                )
+                if not payload.matches_text(replay_text):
+                    raise ClipboardError(
+                        "The granted list receipt and system clipboard disagree."
+                    )
+                staged_text = replay_text
+            else:
+                snapshot = payload.selection
+                annotated_text = _render_snapshot(
+                    snapshot,
+                    with_ids=True,
+                    memory_layout="inline",
+                )
+                clean_text = _render_snapshot(
+                    snapshot,
+                    with_ids=False,
+                    memory_layout="inline",
+                )
+                if payload.plain_text not in {annotated_text, clean_text}:
+                    raise ClipboardError(
+                        "The structured clipboard text and object snapshot disagree."
+                    )
+                assert payload.plain_text is not None
+                staged_text = payload.plain_text
         except (ClipboardError, ValueError) as error:
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
-        _emit_snapshot_text(payload.plain_text)
-        count = _snapshot_occurrence_count(payload.selection)
-        source_context = _require_record(payload.selection.get("context"))
+        _emit_snapshot_text(staged_text)
+        count = _snapshot_occurrence_count(snapshot)
+        source_context = _require_record(snapshot.get("context"))
         source_name = _require_string(source_context, "name")
         typer.secho(
             f"Pasted {count} staged item{'s' if count != 1 else ''} "
@@ -776,10 +891,20 @@ def cmd(
             with_ids=with_ids,
             memory_layout="inline",
         )
+        staged_selection = snapshot
+        redact_plain_text = False
+        if access.is_granted:
+            staged_selection = _granted_list_receipt(
+                snapshot,
+                binding=freeze_granted_context_binding(access),
+                with_ids=with_ids,
+            )
+            redact_plain_text = True
         payload = ClipboardPayload.create(
             producer="list",
             plain_text=clipboard_text,
-            selection=snapshot,
+            selection=staged_selection,
+            redact_plain_text=redact_plain_text,
         )
         try:
             copy_payload(payload)

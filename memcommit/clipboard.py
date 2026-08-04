@@ -23,6 +23,7 @@ except ImportError:  # pragma: no cover - clipboard support is macOS-only.
 
 
 SCHEMA_VERSION = 1
+REDACTED_SCHEMA_VERSION = 2
 _STAGE_FILE_NAME = "clipboard.json"
 _LOCK_FILE_NAME = "clipboard.lock"
 _CLIPBOARD_TIMEOUT_SECONDS = 5
@@ -39,7 +40,7 @@ def _digest_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def _digest_selection(selection: dict[str, object]) -> str:
+def selection_digest(selection: dict[str, object]) -> str:
     try:
         canonical = json.dumps(
             selection,
@@ -175,9 +176,11 @@ class ClipboardPayload:
     """One frozen command result with text and a producer-owned typed selection."""
 
     producer: str
-    plain_text: str
+    plain_text: str | None
+    plain_text_sha256: str
     selection: dict[str, object]
     created_at: str
+    redact_plain_text: bool = False
 
     @classmethod
     def create(
@@ -186,23 +189,28 @@ class ClipboardPayload:
         producer: str,
         plain_text: str,
         selection: dict[str, object],
+        redact_plain_text: bool = False,
     ) -> ClipboardPayload:
         return cls(
             producer=producer,
             plain_text=plain_text,
+            plain_text_sha256=_digest_text(plain_text),
             selection=selection,
             created_at=datetime.now(timezone.utc).isoformat(),
+            redact_plain_text=redact_plain_text,
         )
 
     def to_dict(self) -> dict[str, object]:
         return {
-            "schema_version": SCHEMA_VERSION,
+            "schema_version": (
+                REDACTED_SCHEMA_VERSION if self.redact_plain_text else SCHEMA_VERSION
+            ),
             "producer": self.producer,
             "created_at": self.created_at,
-            "plain_text": self.plain_text,
-            "plain_text_sha256": _digest_text(self.plain_text),
+            "plain_text": None if self.redact_plain_text else self.plain_text,
+            "plain_text_sha256": self.plain_text_sha256,
             "selection": self.selection,
-            "selection_sha256": _digest_selection(self.selection),
+            "selection_sha256": selection_digest(self.selection),
         }
 
     @classmethod
@@ -220,7 +228,8 @@ class ClipboardPayload:
         }
         if set(value) != expected_keys:
             raise ClipboardError("The structured clipboard record is invalid.")
-        if value["schema_version"] != SCHEMA_VERSION:
+        schema_version = value["schema_version"]
+        if schema_version not in {SCHEMA_VERSION, REDACTED_SCHEMA_VERSION}:
             raise ClipboardError(
                 "The structured clipboard was created by an unsupported version."
             )
@@ -229,27 +238,43 @@ class ClipboardPayload:
         plain_text = value["plain_text"]
         digest = value["plain_text_sha256"]
         selection = value["selection"]
-        selection_digest = value["selection_sha256"]
+        stored_selection_digest = value["selection_sha256"]
         if (
             not isinstance(producer, str)
             or not producer
             or not isinstance(created_at, str)
             or not created_at
-            or not isinstance(plain_text, str)
+            or not (
+                isinstance(plain_text, str)
+                if schema_version == SCHEMA_VERSION
+                else plain_text is None
+            )
             or not isinstance(digest, str)
             or not isinstance(selection, dict)
-            or not isinstance(selection_digest, str)
+            or not isinstance(stored_selection_digest, str)
         ):
             raise ClipboardError("The structured clipboard record is invalid.")
-        if digest != _digest_text(plain_text):
+        if (
+            schema_version == SCHEMA_VERSION
+            and digest != _digest_text(plain_text)
+        ):
             raise ClipboardError("The structured clipboard record is invalid.")
-        if selection_digest != _digest_selection(selection):
+        if stored_selection_digest != selection_digest(selection):
             raise ClipboardError("The structured clipboard record is invalid.")
         return cls(
             producer=producer,
             plain_text=plain_text,
+            plain_text_sha256=digest,
             selection=selection,
             created_at=created_at,
+            redact_plain_text=(schema_version == REDACTED_SCHEMA_VERSION),
+        )
+
+    def matches_text(self, text: str) -> bool:
+        """Check text without requiring redacted source text in the stage."""
+
+        return _digest_text(text) == self.plain_text_sha256 and (
+            self.plain_text is None or text == self.plain_text
         )
 
 
@@ -344,6 +369,8 @@ def copy_payload(payload: ClipboardPayload) -> None:
     The old stage is invalidated first because two selections can render the
     same text while carrying different object identities.
     """
+    if payload.plain_text is None:
+        raise ClipboardError("Cannot copy a payload without transient text.")
     with _clipboard_lock():
         _invalidate_stage()
         write_system_clipboard(payload.plain_text)
@@ -377,10 +404,7 @@ def load_payload(*, expected_producer: str) -> ClipboardPayload:
                 f"{expected_producer} result."
             )
         current_text = read_system_clipboard()
-        if (
-            current_text != payload.plain_text
-            or _digest_text(current_text) != _digest_text(payload.plain_text)
-        ):
+        if not payload.matches_text(current_text):
             raise ClipboardError(
                 "The system clipboard changed after the mem result was copied; "
                 "run 'mem ls --copy' again."

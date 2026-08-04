@@ -55,6 +55,15 @@ attachment behind a current READ-granted view so a
 participant may enter an advisor and still invoke the separately authorized
 proposal-guidelines query route.
 
+An explicit `mem ls --copy` may place READ-visible text on the operating-system
+clipboard, which is an intentional user-controlled disclosure and cannot be
+revoked afterward. The participant Profile's private structured clipboard is
+different: for a granted list it stores only the exact grant binding, copy
+mode, recursive flag, and snapshot digests. `mem ls --paste` must re-resolve
+the same grant and unchanged authority projection before replaying the text.
+It therefore fails after revocation, grant revision, Profile change, or source
+drift instead of retaining a hidden durable copy of authority Memories.
+
 ## Safety and limitations
 
 The persistent current pointer intentionally does not freeze a grant revision.
