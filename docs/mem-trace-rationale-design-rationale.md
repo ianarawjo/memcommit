@@ -347,20 +347,29 @@ derived explanation shares the source Context's privacy lifetime.
 
 Rationale does not perform an outbound search into arbitrary sibling or global
 Contexts. Selecting a Context freezes that Context plus every materialized
-lexical descendant whose ordinary Memory content is readable through the same
-store or granted READ projection. The target UID may belong to any direct
-Context in that subtree, and inference candidates retain their public owner
-Context names. Query-only pointers, MemoryRef targets, and narrower grant
-overrides never broaden this frame. This matches recursive Find's namespace
-expectation while keeping the disclosure boundary deterministic.
+lexical descendant in the shared readable public namespace. The public name,
+not the Grant attachment, determines hierarchy, so a local `task-1` scope can
+contain both `task-1/participant` and a granted `task-1/campus-wiki` sibling.
+Each Context retains its own local or grant-bound access object; the hierarchy
+does not merge ownership. The target UID may belong to any direct Context in
+that subtree, and inference candidates retain their public owner Context names.
+Query-only pointers, MemoryRef targets, and narrower query-only overrides never
+broaden this frame. This matches recursive Find's namespace expectation while
+keeping the disclosure boundary deterministic.
 
 A granted READ view permits this content interpretation but does not imply
 authority to inspect the source Profile's checkpoints, command receipts, saved
 reviews, or atomize attachments. Granted Rationale therefore constructs a
 history-free current-Memory projection, labels authority history as withheld,
-and keeps its inference ephemeral. `--recorded-only` is rejected on a granted
-view because it would request precisely the history that READ does not expose.
-Trace is always rejected for a granted view.
+and keeps its inference ephemeral. An inference confined to one exact granted
+resource needs READ; an inference that combines local and granted ownership or
+distinct Grants additionally requires every contributing Grant to authorize
+`DERIVE` and `COMBINE`. This check happens before the provider is connected, so
+missing combination authority cannot leak candidate content. `--recorded-only`
+is rejected when the selected target itself is granted because it would request
+precisely the history that READ does not expose; a local target can still show
+its retained local evidence without invoking the provider. Trace is always
+rejected for a granted target.
 
 Within a composed participant Study run, local Trace is additionally limited
 to the `task-3` subtree. Task 3 deliberately studies local/personal-memory history;

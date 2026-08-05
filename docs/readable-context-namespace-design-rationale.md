@@ -1,0 +1,82 @@
+# Readable Context namespace design rationale
+
+## Motivation
+
+An authority grant is intentionally stored in the Profile registry rather than
+as a persisted child in the grantee's `context.json`. Revocation and grant
+revision must therefore remain authoritative. The earlier read commands each
+reconstructed part of that virtual topology independently: exact granted names
+worked, but a recursive operation rooted at a local ancestor saw only the local
+`MemoryStore` catalog. A granted public name such as `task-1/campus-wiki` could
+therefore appear in Switch while `mem ls -R task-1` and `mem find --context
+task-1` silently omitted it.
+
+Grant attachment and public namespace membership are different relationships.
+The attachment identifies which local Context authorizes the view; it is not a
+semantic parent edge. The public name determines navigation. A grant attached
+to `task-1/participant/construction-updates` may consequently expose
+`task-1/campus-wiki` as a sibling branch under the public `task-1` namespace.
+
+## Decision
+
+`ReadableContextCatalog` freezes one command-local public namespace containing
+ordinary local Context names and effectively READ-granted public names. Every
+name retains an exact `ContextAccess` binding. Local names load through the
+active `MemoryStore`; granted names load through a grant-bounded
+`GrantedReadStore`. Commands may therefore traverse one namespace without
+collapsing storage ownership, grant identity, or authorization.
+
+The catalog observes these invariants:
+
+- canonical public names, not grant attachments, determine lexical hierarchy;
+- a local Context always remains locally owned and a granted Context always
+  retains its authority Profile, grant UID/revision, attachment, and frozen
+  resource binding;
+- a narrower QUERY-only override is absent from the readable catalog and is
+  represented only as an opaque name route where its canonical parent is
+  visible;
+- stale, ambiguous, or unauthorized grant bindings are never guessed during
+  enumeration;
+- query-only source content and authority checkpoint history are never opened;
+- namespace projection is process-local and never writes grant pointers into a
+  Context record.
+
+`mem ls`, current-state `mem find`, and `mem rationale` consume this shared
+catalog. Recursive listing, search, and Rationale inference from `task-1` can
+therefore see both
+`task-1/participant/...` and `task-1/campus-wiki/...`, even when the latter is
+stored by another Profile. Find also performs one bounded relevance check over
+omitted first-level branches when a small global limit would otherwise show
+material matches from only one sibling branch. `--direct` still excludes
+namespace descendants and does not turn a virtual query route into a direct
+item. Temporal Find retains its history-specific store boundary and does not
+traverse granted history. Rationale likewise uses only current Memories for a
+granted contributor; it never treats READ as permission to inspect that
+contributor's authority history.
+
+## Safety and limitations
+
+The catalog is a read view, not a cross-store transaction or a merged Context.
+Mutation commands must continue to resolve and lock the exact owning store.
+Provider-backed operations must continue to apply their operation-specific
+disclosure and combination rules; a readable name alone does not authorize a
+derived save or cross-authority mutation.
+
+Rationale checks that boundary before connecting to its provider. Inference
+within one exact granted resource remains a READ-only, current-state
+interpretation. If a public subtree combines local and granted ownership, or
+combines distinct grants, every contributing Grant must additionally permit
+`DERIVE` and `COMBINE`. Missing permission fails closed before any candidate
+content is sent. Query-only routes remain excluded from the inference frame.
+
+A recursive list rooted locally can now contain both local and granted Memory
+content. The private structured clipboard does not yet have a multi-source,
+multi-grant freshness receipt, so `mem ls -R --copy` rejects such a mixed
+scope. A person can copy an exact granted Context using the existing
+grant-bound receipt. Implementing a composite receipt is intentionally left as
+a separate persistence change.
+
+This rollout does not make every operation picker grant-aware. Some
+creation workflows intentionally accept only ordinary owned Contexts. Those
+pickers must adopt the catalog only when their operation contract permits a
+granted endpoint.

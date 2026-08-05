@@ -27,6 +27,10 @@ from memcommit.comparison import (
     ComparisonMember,
     ComparisonRelation,
 )
+from memcommit.session_workbench_navigation import (
+    SessionWorkbenchNavigation,
+    WorkbenchSection,
+)
 
 
 CompareWorkbenchAction = Literal["close", "ledger", "meld", "rationale"]
@@ -234,20 +238,23 @@ def run_compare_workbench(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
+    workbench_navigation: SessionWorkbenchNavigation | None = None,
 ) -> CompareWorkbenchReceipt:
     """Browse an immutable analysis and return one explicit follow-up action."""
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError("Interactive Compare requires a terminal.")
     rows = _rows(analysis)
-    selected = {"row": 0, "member": 0, "expanded": False}
-    focus = {"pane": "viewer"}
-    viewer = {"section": 0}
+    selected = {"member": 0, "expanded": False}
+    navigation = workbench_navigation or SessionWorkbenchNavigation()
     groups = _relation_groups(analysis)
     windows: dict[str, Window] = {}
     bindings = KeyBindings()
 
     def current_row() -> _WorkbenchRow:
-        return rows[selected["row"]]
+        return rows[navigation.row_index]
+
+    def current_viewer_row() -> _WorkbenchRow:
+        return rows[navigation.viewer_row_index]
 
     def current_relation() -> ComparisonRelation | None:
         return _relation_for_row(analysis, current_row())
@@ -257,10 +264,10 @@ def run_compare_workbench(
         return () if relation is None else relation.members
 
     def move_row(delta: int) -> None:
-        selected["row"] = max(0, min(selected["row"] + delta, len(rows) - 1))
+        navigation.move_row(len(rows), delta)
         selected["member"] = 0
         selected["expanded"] = False
-        viewer["section"] = 0
+        navigation.section_uid = None
 
     def move_member(delta: int) -> None:
         members = current_members()
@@ -287,22 +294,23 @@ def run_compare_workbench(
         selected["member"] = (selected["member"] + delta) % len(members)
 
     def back_to_report() -> None:
-        selected["row"] = 0
+        navigation.row_index = 0
+        navigation.viewer_row_index = 0
         selected["member"] = 0
         selected["expanded"] = False
-        viewer["section"] = 0
+        navigation.section_uid = None
 
     def render_rows():
         fragments: list[tuple[str, str]] = []
         for index, row in enumerate(rows):
-            active = index == selected["row"]
+            active = index == navigation.row_index
             if active:
                 fragments.append(("[SetCursorPosition]", ""))
             pointer = "›" if active else " "
             style = (
-                "class:selected"
-                if active and focus["pane"] == "items"
-                else "class:selected-inactive"
+                "class:memcommit.table.selected"
+                if active and navigation.pane == "items"
+                else "bold"
                 if active
                 else ""
             )
@@ -367,7 +375,7 @@ def run_compare_workbench(
         return "\n".join(lines)
 
     def render_detail() -> str:
-        row = current_row()
+        row = current_viewer_row()
         if row.kind == "REPORT":
             return _display_multiline(report_text or fallback_report())
 
@@ -430,7 +438,7 @@ def run_compare_workbench(
             return _display_multiline("\n".join(lines))
 
         issue = _issue_for_row(analysis, row)
-        relation = current_relation()
+        relation = _relation_for_row(analysis, row)
         lines: list[str] = []
         if issue is not None:
             lines.extend(
@@ -463,6 +471,16 @@ def run_compare_workbench(
                     )
         return _display_multiline("\n".join(lines))
 
+    def _current_reader_sections() -> tuple[WorkbenchSection, ...]:
+        offsets = _reader_section_offsets(render_detail())
+        return tuple(
+            WorkbenchSection(
+                uid=f"COMPARE:{current_viewer_row().key}:LINE:{offset}",
+                kind="REPORT_SECTION",
+            )
+            for offset in offsets
+        )
+
     def render_reader():
         """Anchor focus at one heading and let the viewport follow minimally.
 
@@ -472,10 +490,8 @@ def run_compare_workbench(
         """
         lines = render_detail().split("\n")
         offsets = _reader_section_offsets("\n".join(lines))
-        section_index = max(
-            0,
-            min(viewer["section"], len(offsets) - 1),
-        )
+        sections = _current_reader_sections()
+        section_index = navigation.section_index(sections)
         anchor = offsets[section_index]
         fragments: list[tuple[str, str]] = []
         for index, line in enumerate(lines):
@@ -493,10 +509,9 @@ def run_compare_workbench(
 
     @bindings.add("down")
     def _down(event) -> None:
-        if focus["pane"] == "viewer":
-            viewer["section"] = _next_viewer_section_index(
-                render_detail(),
-                viewer["section"],
+        if navigation.pane == "viewer":
+            navigation.move_section(
+                _current_reader_sections(),
                 1,
             )
         else:
@@ -505,10 +520,9 @@ def run_compare_workbench(
 
     @bindings.add("up")
     def _up(event) -> None:
-        if focus["pane"] == "viewer":
-            viewer["section"] = _next_viewer_section_index(
-                render_detail(),
-                viewer["section"],
+        if navigation.pane == "viewer":
+            navigation.move_section(
+                _current_reader_sections(),
                 -1,
             )
         else:
@@ -517,53 +531,79 @@ def run_compare_workbench(
 
     @bindings.add("pagedown")
     def _page_down(event) -> None:
-        viewer["section"] = _next_viewer_section_index(
-            render_detail(),
-            viewer["section"],
-            3,
-        )
+        if navigation.pane == "viewer":
+            navigation.move_section(_current_reader_sections(), 8)
+        else:
+            move_row(8)
         event.app.invalidate()
 
     @bindings.add("pageup")
     def _page_up(event) -> None:
-        viewer["section"] = _next_viewer_section_index(
-            render_detail(),
-            viewer["section"],
-            -3,
-        )
+        if navigation.pane == "viewer":
+            navigation.move_section(_current_reader_sections(), -8)
+        else:
+            move_row(-8)
+        event.app.invalidate()
+
+    @bindings.add("home")
+    def _home(event) -> None:
+        if navigation.pane == "viewer":
+            navigation.move_section(_current_reader_sections(), -1_000_000)
+        else:
+            move_row(-1_000_000)
+        event.app.invalidate()
+
+    @bindings.add("end")
+    def _end(event) -> None:
+        if navigation.pane == "viewer":
+            navigation.move_section(_current_reader_sections(), 1_000_000)
+        else:
+            move_row(1_000_000)
         event.app.invalidate()
 
     @bindings.add("right")
     def _right(event) -> None:
-        if focus["pane"] != "items":
+        if navigation.pane != "items":
             return
         move_member(1)
         event.app.invalidate()
 
     @bindings.add("left")
     def _left(event) -> None:
-        if focus["pane"] != "items":
+        if navigation.pane != "items":
             return
         move_member(-1)
         event.app.invalidate()
 
     @bindings.add("enter")
     def _expand(event) -> None:
-        if focus["pane"] != "items":
+        if navigation.pane == "items":
+            selected["expanded"] = True
+            navigation.section_uid = None
+            navigation.open_selected()
+            event.app.layout.focus(windows["viewer"])
+            event.app.invalidate()
             return
         selected["expanded"] = not selected["expanded"]
+        navigation.section_uid = None
         event.app.invalidate()
 
     @bindings.add("tab")
     @bindings.add("s-tab")
     def _switch_pane(event) -> None:
-        focus["pane"] = "items" if focus["pane"] == "viewer" else "viewer"
-        event.app.layout.focus(windows[focus["pane"]])
+        pane = navigation.toggle_frames()
+        event.app.layout.focus(windows[pane])
         event.app.invalidate()
 
     @bindings.add("r", eager=True)
     def _rationale(event) -> None:
-        members = current_members()
+        row = (
+            current_viewer_row()
+            if navigation.pane == "viewer"
+            else current_row()
+        )
+        relation = _relation_for_row(analysis, row)
+        members = () if relation is None else relation.members
         if not members:
             return
         member = members[selected["member"]]
@@ -587,12 +627,16 @@ def run_compare_workbench(
     @bindings.add("b", eager=True)
     def _back(event) -> None:
         back_to_report()
+        navigation.focus("items")
+        event.app.layout.focus(windows["items"])
         event.app.invalidate()
 
     @bindings.add("escape", eager=True)
     def _escape(event) -> None:
-        if selected["row"] != 0 or selected["expanded"]:
+        if navigation.row_index != 0 or selected["expanded"]:
             back_to_report()
+            navigation.focus("items")
+            event.app.layout.focus(windows["items"])
             event.app.invalidate()
             return
         event.app.exit(result=CompareWorkbenchReceipt(action="close"))
@@ -633,10 +677,10 @@ def run_compare_workbench(
     footer = Window(
         FormattedTextControl(
             lambda: (
-                f" FOCUS {focus['pane'].upper()} · B/Esc back · Q close · "
+                f" FOCUS {navigation.pane.upper()} · B/Esc back · Q close · "
                 "Tab switch · ↑↓ section/item · Enter deeper · ←→ source · "
-                "PgUp/PgDn viewer · R rationale · L ledger · M meld"
-                f"  ·  {selected['row'] + 1}/{len(rows)}"
+                "PgUp/PgDn page · Home/End · R rationale · L ledger · M meld"
+                f"  ·  {navigation.row_index + 1}/{len(rows)}"
             )
         ),
         height=Dimension.exact(1),
@@ -652,7 +696,7 @@ def run_compare_workbench(
                     footer,
                 ]
             ),
-            focused_element=detail_window,
+            focused_element=list_window,
         ),
         key_bindings=bindings,
         full_screen=True,
@@ -664,8 +708,6 @@ def run_compare_workbench(
                 MEMCOMMIT_TUI_STYLE,
                 Style.from_dict(
                     {
-                        "selected": "reverse bold",
-                        "selected-inactive": "bold",
                         "viewer-section": "fg:#8bd5ff bold",
                     }
                 ),
@@ -675,7 +717,7 @@ def run_compare_workbench(
     for pane_name, frame in (("viewer", reader_frame), ("items", items_frame)):
         bind_focused_frame_style(
             frame,
-            is_focused=lambda pane_name=pane_name: focus["pane"] == pane_name,
+            is_focused=lambda pane_name=pane_name: navigation.pane == pane_name,
         )
     try:
         return app.run()

@@ -8,7 +8,9 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.update as update_command
 from memcommit.cli import app
+from memcommit.commands.endpoint_setup_flows import UpdateSetupReceipt
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.provenance import build_trace
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
@@ -726,6 +728,8 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
         "context_name": TASK1_TARGET_CHILD,
         "checkpoint_uid": checkpoint["uid"],
     }
+
+
     fork_root = store.load_direct(TASK1_TARGET)
     origin_pointer = fork_root.memories["11111111-1111-4111-8111-111111111111"]
     assert isinstance(origin_pointer, QueryContextRef)
@@ -739,6 +743,41 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     } == source_bytes_before
     assert (isolated_store / "state.json").read_bytes() == state_before
     assert store.current_context_name() == TASK1_SOURCE
+
+
+def test_tty_update_keeps_stage_when_impact_apply_review_is_closed(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _, target_memory = _persist_pair(store)
+    target_before = store.load_direct(TASK1_TARGET_CHILD)
+    monkeypatch.setattr(
+        update_command,
+        "connect_codex_chatgpt_provider",
+        lambda: PlanProvider(_one_edit_response),
+    )
+    monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
+    reviewed = []
+    monkeypatch.setattr(
+        update_command,
+        "review_update_application",
+        lambda session: reviewed.append(session) or False,
+    )
+
+    result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+
+    assert result.exit_code == 0, result.output
+    assert "Update remains staged; no target changes were applied." in result.output
+    assert len(reviewed) == 1
+    staged = store.load_staged_update()
+    assert staged is not None
+    assert staged.status == "staged"
+    assert staged.application is None
+    target_after = store.load_direct(TASK1_TARGET_CHILD)
+    assert target_after.memories[target_memory.uid].content == (
+        target_before.memories[target_memory.uid].content
+    )
 
 
 def test_update_undo_and_redo_follow_the_affected_target_not_current_context(
@@ -1016,7 +1055,7 @@ def test_omitted_endpoint_requires_current_context(
     assert message in result.stderr
 
 
-def test_update_requires_at_least_one_directional_endpoint(
+def test_bare_update_reports_empty_saved_session_outside_tty(
     isolated_store,
     monkeypatch,
 ):
@@ -1027,8 +1066,47 @@ def test_update_requires_at_least_one_directional_endpoint(
 
     result = runner.invoke(app, ["update"])
 
-    assert result.exit_code == 2
-    assert "choose an endpoint" in result.stderr
+    assert result.exit_code == 0
+    assert "No saved Update session." in result.output
+
+
+def test_empty_update_launcher_new_collects_distinct_endpoints(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+
+    class TTY:
+        @staticmethod
+        def isatty():
+            return True
+
+    monkeypatch.setattr(update_command.sys, "stdin", TTY())
+    monkeypatch.setattr(update_command.sys, "stdout", TTY())
+    monkeypatch.setattr(
+        update_command,
+        "choose_session",
+        lambda entries, **kwargs: (
+            kwargs["new_receipt"]
+            if entries == ()
+            else pytest.fail("empty Update unexpectedly had a saved row")
+        ),
+    )
+    monkeypatch.setattr(
+        update_command,
+        "choose_update_setup",
+        lambda _store: UpdateSetupReceipt("source", "target"),
+    )
+    invoked = []
+    monkeypatch.setattr(
+        update_command,
+        "cmd",
+        lambda **kwargs: invoked.append(kwargs),
+    )
+
+    update_command._browse_saved_update(store)
+
+    assert invoked == [{"source_name": "source", "target_name": "target"}]
 
 
 @pytest.mark.parametrize("command", ["impact", "update"])

@@ -332,6 +332,15 @@ difference as evidence that either side is false.
 
 Meld has two actual modes. They describe authority and target direction:
 
+The bare-New session TTY makes this distinction visible before either session
+is prepared. A shared horizontal choice selects `A → B` directional
+or `A + B → C` symmetric mode, and a role-based setup shell embeds one
+independent Context namespace tree per active operand. Switching away from
+symmetric mode may retain a process-local C draft for reversible navigation,
+but C is absent from the directional receipt and cannot affect its provider or
+target identity. See `session-endpoint-setup-design-rationale.md` for the
+presentation, receipt, and validation boundaries.
+
 | Mode | Inputs | Authority contract | Target | Representative case | Current status |
 | --- | --- | --- | --- | --- | --- |
 | **Directional** | Prepared incoming evidence plus an existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
@@ -808,6 +817,18 @@ Compare navigation footer that would tell the user to start Meld again, then
 appends its current proposed target Memories and whole-set strategy section.
 Directional Meld has no Compare seed and therefore keeps its authority-specific
 report projection.
+
+Immediately above Apply, Meld also exposes the shared revision-bound Impact
+surface. For symmetric Meld this Impact is the saved Compare report itself:
+the equal-authority analysis is reused rather than summarized into a second
+dialect. Directional Meld deliberately does not call its Impact Compare; it
+shows the exact proposed baseline effects because incoming and baseline do not
+have peer authority. Impact is provider-free and cannot apply the Meld.
+
+`mem review meld` opens the same saved assessment as an adaptive Review report.
+It may record the existing issue or whole-set semantic turns and reassess the
+Meld, but its projected capabilities exclude Accept. Applying proposed target
+Memories remains available only after leaving Review for the owning Meld flow.
 
 Inside the Meld Viewer, each ordinary seeded report section is rendered as a
 smaller bordered card. Potential conflicts instead use separated indented

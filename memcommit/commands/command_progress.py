@@ -1,0 +1,170 @@
+"""Operation-neutral progress feedback for blocking CLI work.
+
+The provider boundary is often one indivisible call, so this module reports
+honest host-owned stages and elapsed time rather than inventing a percentage.
+Progress is transient and TTY-only: stable stdout, redirected stderr, and
+machine-readable command output remain unchanged.
+"""
+from __future__ import annotations
+
+import sys
+import threading
+import time
+from types import TracebackType
+from typing import TextIO
+
+from memcommit.commands.tui_primitives import display_escape_text
+
+
+BUSY_FRAMES = (".", "..", "…")
+BUSY_INTERVAL_SECONDS = 0.35
+
+
+def busy_suffix(frame_index: int) -> str:
+    """Return the shared deterministic dot-animation frame."""
+    return BUSY_FRAMES[frame_index % len(BUSY_FRAMES)]
+
+
+def render_progress_line(
+    operation: str,
+    stage: str,
+    *,
+    step: int,
+    total: int,
+    elapsed_seconds: float,
+    frame_index: int,
+) -> str:
+    """Render one safe, single-line snapshot of known command progress."""
+    if not operation.strip() or not stage.strip():
+        raise ValueError("Progress operation and stage must be nonblank.")
+    if total < 1 or not 1 <= step <= total:
+        raise ValueError("Progress step must be within the declared total.")
+    elapsed = max(0, int(elapsed_seconds))
+    return (
+        f"MEM {display_escape_text(operation.upper())} · {step}/{total} · "
+        f"{display_escape_text(stage.upper())} {busy_suffix(frame_index)} · "
+        f"{elapsed}s"
+    )
+
+
+class CommandProgress:
+    """Animate one transient status line while synchronous work blocks.
+
+    Callers update only at real orchestration boundaries. The animation and
+    elapsed clock prove liveness within a boundary without claiming insight
+    into provider-side completion.
+    """
+
+    def __init__(
+        self,
+        operation: str,
+        stage: str,
+        *,
+        total: int,
+        step: int = 1,
+        stream: TextIO | None = None,
+        enabled: bool | None = None,
+        interval: float = BUSY_INTERVAL_SECONDS,
+    ) -> None:
+        if interval <= 0:
+            raise ValueError("Progress interval must be positive.")
+        # Capture stderr once so Click/Typer redirection and tests retain the
+        # same output boundary for the lifetime of the status line.
+        self._stream = stream if stream is not None else sys.stderr
+        is_tty = bool(getattr(self._stream, "isatty", lambda: False)())
+        self._enabled = is_tty if enabled is None else enabled
+        self._operation = operation
+        self._stage = stage
+        self._step = step
+        self._total = total
+        self._interval = interval
+        self._started_at = time.monotonic()
+        self._frame_index = 0
+        self._rendered_width = 0
+        self._lock = threading.Lock()
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+        # Validate eagerly even when rendering is disabled.
+        render_progress_line(
+            operation,
+            stage,
+            step=step,
+            total=total,
+            elapsed_seconds=0,
+            frame_index=0,
+        )
+
+    def __enter__(self) -> CommandProgress:
+        if not self._enabled:
+            return self
+        self._render()
+        self._thread = threading.Thread(
+            target=self._animate,
+            name="mem-command-progress",
+            daemon=True,
+        )
+        self._thread.start()
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
+        del exc_type, exc_value, traceback
+        self.close()
+
+    def update(self, stage: str, *, step: int) -> None:
+        """Publish a real host-side stage transition immediately."""
+        render_progress_line(
+            self._operation,
+            stage,
+            step=step,
+            total=self._total,
+            elapsed_seconds=0,
+            frame_index=0,
+        )
+        with self._lock:
+            self._stage = stage
+            self._step = step
+            self._frame_index = 0
+            if self._enabled:
+                self._render_locked()
+
+    def close(self) -> None:
+        """Stop repainting and remove the transient line."""
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=max(1.0, self._interval * 2))
+            self._thread = None
+        if not self._enabled:
+            return
+        with self._lock:
+            self._stream.write("\r" + (" " * self._rendered_width) + "\r")
+            self._stream.flush()
+            self._rendered_width = 0
+
+    def _animate(self) -> None:
+        while not self._stop.wait(self._interval):
+            with self._lock:
+                self._frame_index += 1
+                self._render_locked()
+
+    def _render(self) -> None:
+        with self._lock:
+            self._render_locked()
+
+    def _render_locked(self) -> None:
+        line = render_progress_line(
+            self._operation,
+            self._stage,
+            step=self._step,
+            total=self._total,
+            elapsed_seconds=time.monotonic() - self._started_at,
+            frame_index=self._frame_index,
+        )
+        padding = " " * max(0, self._rendered_width - len(line))
+        self._stream.write("\r" + line + padding)
+        self._stream.flush()
+        self._rendered_width = len(line)

@@ -98,6 +98,28 @@ mem impact --from A
 mem impact --from A --to B
 ```
 
+### Reusable Impact and the TTY Apply boundary
+
+The exact saved operations now project through a provider-free
+`ImpactController`. The controller is reusable by the standalone Impact
+workbench and by an owning operation TUI; it does not resolve endpoints, call a
+provider, save a session, or apply changes. Its view must match the active
+Update UID and operation digest revision, preventing a stale preview from
+appearing above a newer Apply action.
+
+In a TTY, `mem update` saves or reuses the staged receipt first, displays that
+revision-bound Impact immediately above `REVIEW & APPLY UPDATE`, and applies
+only after explicit acceptance. Closing the workbench leaves the receipt
+staged and all target owners unchanged. Non-TTY explicit update retains the
+existing scriptable application behavior; adding an interactive approval to a
+pipeline would make the command unusable rather than safer.
+
+The same saved `UpdateSession` also supplies `mem review update`. Review keeps
+the existing detailed ADD/EDIT/REMOVE presentation, including OWNER, Memory
+UID, BEFORE/AFTER, REASON, and SOURCE REFERENCES. It is a read-only explanation
+of the plan and exposes no Accept or Apply capability. Impact remains the
+separate exact-effect surface adjacent to application.
+
 `mem update` accepts the same three forms. `--from` and `--to` are therefore
 composable endpoint selectors, not mutually exclusive modes. At least one must
 be supplied. If an omitted endpoint has no current Context, the command fails

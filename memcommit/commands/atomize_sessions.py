@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 import re
+import sys
 import uuid
 
 import memcommit.store as store_module
@@ -14,6 +15,7 @@ from memcommit.atomize import (
     atomize_analysis_matches_context,
 )
 from memcommit.commands.session_picker import (
+    SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
@@ -259,17 +261,22 @@ def choose_atomize_session(
     store: MemoryStore,
     *,
     show_all: bool = False,
-) -> SessionOpenReceipt | None:
+) -> SessionOpenReceipt | SessionNewReceipt | None:
     """Return an exact picker receipt; never create Atomize work."""
     entries = atomize_session_entries(store, show_all=show_all)
-    if not entries:
+    if not entries and not (sys.stdin.isatty() and sys.stdout.isatty()):
         return None
     receipt = choose_session(
         entries,
         title="MEM ATOMIZE · SAVED ANALYSES",
+        new_receipt=SessionNewReceipt(kind="atomize", argv=("mem", "atomize")),
     )
     if receipt is None:
         return None
+    if isinstance(receipt, SessionNewReceipt):
+        if receipt.kind != "atomize" or receipt.argv != ("mem", "atomize"):
+            raise ValueError("Atomize session picker returned an invalid receipt.")
+        return receipt
     if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "atomize":
         raise ValueError("Atomize session picker returned an invalid receipt.")
     entry_by_key = {entry.key: entry for entry in entries}

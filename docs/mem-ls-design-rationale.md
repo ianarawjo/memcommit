@@ -14,7 +14,10 @@
 > are stored in this Context?
 
 It does not expose memcommit's physical storage layout. The fact that a Context
-is currently persisted in a `context.json` file is an implementation detail.
+is currently persisted in a local `context.json` file or read through an exact
+authority grant is an implementation detail. Canonical public names determine
+the visible hierarchy; a grant's attachment Context remains authorization
+metadata rather than becoming the granted Context's semantic parent.
 
 This distinction is similar to Git:
 
@@ -61,8 +64,9 @@ All three forms remain rooted at the selected Context and do not mean
 ## 3. Default Listing Is Direct, Not Recursive
 
 Without `-R`, only immediate navigation rows and direct persisted items are
-listed. A navigation row is derived for every existing ordinary Context whose
-canonical name is exactly one namespace segment below the listed Context.
+listed. A navigation row is derived for every existing ordinary or effectively
+READ-granted Context whose canonical public name is exactly one namespace
+segment below the listed Context.
 
 Given:
 
@@ -315,7 +319,33 @@ root -> left  -> shared
 valid embed paths. A global "visited" set would incorrectly suppress the
 second path.
 
-## 10. Relationship to `mem show`
+## 10. Interactive terminal browser
+
+With interactive stdin and stdout, and without `--copy` or `--paste`, `mem ls`
+opens the shared Context tree as a read-only browser rooted at the exact
+resolved target. Direct Memory and MemoryRef rows start visible; lowercase
+`m` hides or restores them for the focused Context, while uppercase `M`
+operates on all Contexts. Neither makes Memory rows selectable. Enter opens or
+collapses the focused Context, arrows navigate one depth at a time, `A`
+toggles full expansion, and `q` closes without changing any Context or current
+pointer.
+
+Plain `mem ls` starts with the target's direct Context children visible.
+`mem ls -R` starts with every descendant occurrence expanded. The browser is
+adapted from the same frozen recursive snapshot used by the text renderer,
+not reconstructed from names alone. Process-local occurrence IDs therefore
+preserve embedded Contexts, repeated embeds, cycle leaves, query-only opaque
+rows, and namespace-derived children even when two occurrences have the same
+canonical name. Those IDs never become Context locators or persisted state.
+
+Noninteractive stdout retains the stable text format for scripts, tests, and
+agents. `--copy`, `--with-ids`, and `--paste` also retain their existing text
+and structured-snapshot contract even in a terminal; clipboard commands never
+open the browser. Grant resolution happens before presentation, and the
+browser consumes only the authorized frozen projection. It never opens a
+query-only source.
+
+## 11. Relationship to `mem show`
 
 The intended conceptual split is:
 
@@ -332,7 +362,7 @@ overlaps with the compact listing use case. Raw storage JSON is not the normal
 output of either command; a future export or developer command would be a
 better place for raw JSON.
 
-## 11. Copy and paste as a frozen result boundary
+## 12. Copy and paste as a frozen result boundary
 
 `mem ls --copy` creates two synchronized representations of the same list
 result:
@@ -420,7 +450,7 @@ does not silently switch to structured clipboard consumption. General
 `show/find/add --paste` inputs and actual materialization of staged objects
 need their own command contracts.
 
-## 12. Deliberate Non-Goals
+## 13. Deliberate Non-Goals
 
 This change does not:
 
@@ -442,7 +472,7 @@ number of stored Contexts, even though each recursive level filters that frozen
 catalog in memory. A future indexed or namespace-local catalog can improve
 large-store performance without changing the visible contract.
 
-## 13. Validation Scenarios
+## 14. Validation Scenarios
 
 The implementation is covered by tests for:
 
@@ -452,6 +482,9 @@ The implementation is covered by tests for:
 - `aaa/ab` Context and `aaa` Memory content coexisting without ambiguity;
 - relative ordering of Memory and MemoryRef entries;
 - default listing not leaking child content;
+- TTY `ls` rooted browsing with Memory rows initially visible;
+- TTY `ls -R` beginning fully expanded while retaining repeated embedded
+  occurrences;
 - sorted immediate namespace children alongside current direct Memories;
 - no synthesized child when an intermediate Context is missing;
 - namespace recursion and explicit-embed deduplication;

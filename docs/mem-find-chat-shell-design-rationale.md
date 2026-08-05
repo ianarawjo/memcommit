@@ -1,5 +1,11 @@
 # Interactive Find chat and read-only action rationale
 
+> Compatibility status: the shell and controller remain as tested internal
+> components, but ordinary `mem find` no longer launches them. Current-state
+> Find now prints static grouped results and exits. This document preserves the
+> rationale for retained compatibility code rather than describing the active
+> CLI entry path.
+
 ## Problem
 
 `mem find` needs a conversational surface because a person often cannot know

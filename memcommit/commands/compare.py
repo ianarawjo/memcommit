@@ -47,7 +47,10 @@ from memcommit.commands.compare_sessions import (
     revalidate_saved_comparison,
 )
 from memcommit.commands.compare_workbench import run_compare_workbench
+from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.endpoint_setup_flows import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
+from memcommit.commands.session_picker import SessionNewReceipt
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.commands.understanding_render import understanding_lines
 from memcommit.query_provider import (
@@ -605,6 +608,16 @@ def _load_compare_context(access) -> Context:
 
 
 def cmd(
+    from_: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help=(
+                "Existing REFERENCE Context locator; defaults to the active "
+                "Context when --to is used alone"
+            ),
+        ),
+    ] = None,
     to: Annotated[
         Optional[str],
         typer.Option(
@@ -645,9 +658,16 @@ def cmd(
     ] = False,
 ) -> None:
     """Compare the active Context with one equal-authority PEER Context."""
-    if sessions and to is not None:
+    if sessions and (from_ is not None or to is not None):
         typer.secho(
-            "Compare error: use either --sessions or --to, not both.",
+            "Compare error: use either --sessions or --to/explicit endpoints, not both.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if from_ is not None and to is None:
+        typer.secho(
+            "Compare error: --from requires --to.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -661,10 +681,23 @@ def cmd(
         raise typer.Exit(2)
     store = MemoryStore(create=False)
     try:
-        if sessions or to is None:
+        if sessions or (from_ is None and to is None):
             receipt = choose_comparison_session(store, ledger=ledger)
             if receipt is None:
                 typer.echo("Compare selection ended; no analysis was opened.")
+                return
+            if isinstance(receipt, SessionNewReceipt):
+                setup = choose_compare_setup(store)
+                if setup is None:
+                    typer.echo("New Compare cancelled; no analysis was opened.")
+                    return
+                cmd(
+                    from_=setup.reference_name,
+                    to=setup.compared_name,
+                    refresh=refresh,
+                    ledger=ledger,
+                    snapshot=snapshot,
+                )
                 return
             _resume_selected_comparison(
                 store=store,
@@ -673,25 +706,40 @@ def cmd(
                 snapshot=snapshot,
             )
             return
-        reference_name = store.current_context_name()
-        if not reference_name:
+        current_name = store.current_context_name()
+        if not current_name:
             raise CompareCommandError(
                 "No current reference Context. Run 'mem switch NAME' first."
             )
-        compared_name = resolve_context_locator(to, current=reference_name)
+        reference_name = (
+            resolve_context_locator(from_, current=current_name)
+            if from_ is not None
+            else current_name
+        )
+        compared_name = resolve_context_locator(to, current=current_name)
         with authority_grant_snapshot_lock() as registry:
-            reference_access = resolve_context_access(
-                store,
-                reference_name,
-                current_name=reference_name,
-                required_permission="READ",
-                registry=registry,
-            )
+            try:
+                reference_access = resolve_context_access(
+                    store,
+                    reference_name,
+                    current_name=current_name,
+                    required_permission="READ",
+                    registry=registry,
+                )
+            except FileNotFoundError as error:
+                resolution = (
+                    ""
+                    if from_ is None or reference_name == from_
+                    else f" (resolved to '{reference_name}')"
+                )
+                raise CompareCommandError(
+                    f"Reference Context '{from_}'{resolution} does not exist."
+                ) from error
             try:
                 compared_access = resolve_context_access(
                     store,
                     to,
-                    current_name=reference_name,
+                    current_name=current_name,
                     required_permission="READ",
                     registry=registry,
                 )
@@ -758,8 +806,14 @@ def cmd(
             reference,
             compared,
         )
-        provider = _connect_compare_provider(connect_codex_chatgpt_provider)
-        analysis = analyze_comparison(comparison_input, provider)
+        with CommandProgress(
+            "COMPARE",
+            "connecting provider",
+            total=2,
+        ) as progress:
+            provider = _connect_compare_provider(connect_codex_chatgpt_provider)
+            progress.update("analyzing relations", step=2)
+            analysis = analyze_comparison(comparison_input, provider)
         if granted:
             with authority_grant_snapshot_lock() as registry:
                 current_reference_access = (
@@ -771,7 +825,7 @@ def cmd(
                     else resolve_context_access(
                         store,
                         reference.name,
-                        current_name=reference_name,
+                        current_name=current_name,
                         required_permission="READ",
                         registry=registry,
                     )
@@ -785,7 +839,7 @@ def cmd(
                     else resolve_context_access(
                         store,
                         compared.name,
-                        current_name=reference_name,
+                        current_name=current_name,
                         required_permission="READ",
                         registry=registry,
                     )

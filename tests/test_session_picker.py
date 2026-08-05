@@ -20,6 +20,8 @@ from memcommit.commands.session_picker import (
     _ordered_entries,
     _render_detail,
     _render_location,
+    _render_new_detail,
+    _new_session_label,
     _visible_bounds,
     _visible_grouped_bounds,
     choose_session,
@@ -252,6 +254,58 @@ def test_n_returns_only_an_explicitly_enabled_new_receipt():
     assert disabled is None
 
 
+def test_add_new_is_a_selectable_row_above_saved_sessions():
+    receipt = SessionNewReceipt(kind="meld", argv=("mem", "meld"))
+    candidate = entry("saved", title="Saved", timestamp=1, kind="meld")
+    with create_pipe_input() as pipe_input:
+        # A nonempty catalog retains the saved session as the initial choice;
+        # Up reaches the pinned Add-new row and Enter returns its exact receipt.
+        pipe_input.send_text("\x1b[A\r")
+        selected = choose_session(
+            (candidate,),
+            title="MEM MELD · SAVED SESSIONS",
+            new_receipt=receipt,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is receipt
+
+
+def test_empty_catalog_selects_add_new_row_for_enter():
+    receipt = SessionNewReceipt(kind="sever", argv=("mem", "sever"))
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r")
+        selected = choose_session(
+            (),
+            title="MEM SEVER · SAVED SESSIONS",
+            new_receipt=receipt,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is receipt
+
+
+def test_add_new_label_and_detail_are_operation_specific_and_nonexecuting():
+    receipt = SessionNewReceipt(
+        kind="saved_review",
+        argv=("mem", "review", "unsafe\nname"),
+    )
+
+    assert _new_session_label(receipt) == "Add new Saved Review session"
+    detail = _render_new_detail(receipt)
+    assert "Add new Saved Review session" in detail
+    assert "NOT EXECUTED" in detail
+    assert "unsafe\\nname" in detail
+    assert "unsafe\nname" not in detail
+
+    unsafe = SessionNewReceipt(kind="meld\nFAKE", argv=("mem", "meld"))
+    assert _new_session_label(unsafe) == "Add new Meld\\nFake session"
+
+
 @pytest.mark.parametrize("key", ["q", "\x1b", "\x03"])
 def test_cancel_keys_return_none(key: str):
     with create_pipe_input() as pipe_input:
@@ -308,6 +362,8 @@ def test_visible_window_tracks_selection_and_handles_an_empty_catalog():
     assert _visible_bounds(0, 20) == (0, 12)
     assert _visible_bounds(10, 20) == (4, 16)
     assert _visible_bounds(19, 20) == (8, 20)
+    # The pinned Add-new launcher consumes one of the twelve list lines.
+    assert _visible_bounds(10, 20, line_budget=11) == (5, 16)
 
 
 def test_grouped_window_accounts_for_heading_and_separator_lines():
@@ -433,8 +489,18 @@ def test_picker_rejects_non_tty_by_default(monkeypatch):
 def test_picker_validates_empty_duplicate_and_invalid_catalogs():
     candidate = entry("one", title="One", timestamp=1)
 
-    with pytest.raises(ValueError, match="No resumable sessions"):
-        choose_session((), title="SAVED WORK", require_tty=False)
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        assert (
+            choose_session(
+                (),
+                title="SAVED WORK",
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+            is None
+        )
     with pytest.raises(ValueError, match="duplicate"):
         choose_session(
             (candidate, candidate),
@@ -474,6 +540,22 @@ def test_picker_validates_empty_duplicate_and_invalid_catalogs():
             location=object(),  # type: ignore[arg-type]
             require_tty=False,
         )
+
+
+def test_empty_picker_can_return_an_explicit_new_session_receipt():
+    receipt = SessionNewReceipt(kind="sever", argv=("mem", "sever"))
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("N")
+        selected = choose_session(
+            (),
+            title="MEM SEVER · SAVED SESSIONS",
+            new_receipt=receipt,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == receipt
 
 
 @pytest.mark.parametrize(

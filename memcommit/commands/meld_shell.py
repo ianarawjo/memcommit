@@ -567,6 +567,7 @@ def run_meld_shell(
     app_output: Output | None = None,
     require_tty: bool = True,
     read_only: bool = False,
+    review_only: bool = False,
 ) -> MeldShellAction | None:
     """Collect one action through the shared dynamic resolution workbench."""
     from memcommit.commands.resolution_workbench_shell import (
@@ -576,6 +577,8 @@ def run_meld_shell(
     from memcommit.meld_resolution_adapter import (
         MeldResolutionWorkbenchAdapter,
     )
+    from memcommit.impact_controller import ImpactController
+    from memcommit.review_report_adapters import meld_review_report
 
     snapshot_hint = (
         "Run the same 'mem meld' command outside a TTY to render its saved snapshot."
@@ -588,6 +591,11 @@ def run_meld_shell(
     if session.current_assessment is None:
         return None
     adapter = MeldResolutionWorkbenchAdapter(session)
+    review_view = None
+    if review_only:
+        review_view = meld_review_report(session).report().view
+        if review_view is None:
+            raise ValueError("Meld Review report has no interactive view.")
     compare_report: str | None = None
     if session.mode == "SYMMETRIC" and session.comparison_seed is not None:
         # The Compare analysis is already copied into the Meld seed. Re-render
@@ -669,8 +677,31 @@ def run_meld_shell(
             ),
         ),
     )
+    active_view = adapter.view()
+    impact_controller = (
+        ImpactController.from_text(
+            operation=active_view.operation,
+            artifact_uid=active_view.artifact_uid,
+            revision=active_view.revision,
+            title="IMPACT · COMPARE",
+            summary=(
+                "This saved Compare analysis is the symmetric Meld impact. "
+                "It remains read-only until the reviewed Meld is applied."
+            ),
+            detail=compare_report,
+        )
+        if compare_report is not None
+        else ImpactController.from_resolution(
+            adapter.view,
+            title="IMPACT · DIRECTIONAL MELD",
+            summary=(
+                "These are the exact proposed baseline effects of this "
+                "directional Meld, not an equal-authority Compare."
+            ),
+        )
+    )
     action = run_resolution_workbench_shell(
-        adapter.view,
+        review_view if review_view is not None else adapter.view,
         navigation=navigation,
         app_input=app_input,
         app_output=app_output,
@@ -682,8 +713,9 @@ def run_meld_shell(
         split_report_text=compare_report,
         split_report_item_badges=report_badges,
         split_report_conflicts_remaining=report_conflicts_remaining,
-        review_and_apply=not read_only,
+        review_and_apply=not read_only and not review_only,
         read_only=read_only,
+        impact_controller=None if review_only else impact_controller,
     )
     if action.kind == "CLOSE":
         return None

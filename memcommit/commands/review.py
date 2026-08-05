@@ -18,16 +18,17 @@ from memcommit.atomize_workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.commands.atomize_workbench_shell import (
-    render_atomize_workbench_snapshot,
-    run_atomize_workbench_shell,
-)
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import (
     ReviewCancelled,
     render_review_snapshot,
     run_review_shell,
     visible_ordinal_index,
+)
+from memcommit.commands.session_picker import (
+    SessionOpenReceipt,
+    SessionPickerEntry,
+    choose_session,
 )
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.findings import FindingsError
@@ -42,6 +43,179 @@ from memcommit.review import (
     review_matches_context,
 )
 from memcommit.store import MemoryStore
+
+
+def _select_report_session(
+    entries: tuple[SessionPickerEntry, ...],
+    *,
+    kind: str,
+    title: str,
+    session_uid: str | None,
+) -> SessionPickerEntry | None:
+    """Resolve an exact report artifact or return one TTY picker selection."""
+    if session_uid is not None:
+        matches = [entry for entry in entries if entry.key == session_uid]
+        if len(matches) != 1:
+            raise ReviewError(
+                f"Saved {kind} review artifact '{session_uid}' is not available."
+            )
+        return matches[0]
+    if not entries:
+        raise ReviewError(f"No saved {kind} review artifacts are available.")
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        if len(entries) == 1:
+            return entries[0]
+        raise ReviewError(
+            f"Several saved {kind} artifacts are available; pass --session UID."
+        )
+    receipt = choose_session(entries, title=title)
+    if receipt is None:
+        return None
+    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != kind:
+        raise ReviewError("Review session picker returned an invalid receipt.")
+    selected = next((entry for entry in entries if entry.key == receipt.key), None)
+    if selected is None or selected.reopen_argv != receipt.argv:
+        raise ReviewError("Review session picker returned a stale receipt.")
+    return selected
+
+
+def _show_operation_review(controller, *, snapshot: bool) -> None:
+    from memcommit.commands.review_report import (
+        render_review_report_snapshot,
+        run_review_report_shell,
+    )
+
+    report = controller.report()
+    if snapshot or not sys.stdin.isatty() or not sys.stdout.isatty():
+        typer.echo(render_review_report_snapshot(report))
+        return
+    run_review_report_shell(controller, interactive_actions=False)
+
+
+def _run_update_report(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+    snapshot: bool,
+) -> None:
+    from memcommit.review_report_adapters import update_review_report
+
+    session = store.load_staged_update() or store.load_impact_plan()
+    if session is None:
+        raise ReviewError(
+            "No saved Update or Impact plan exists. Run 'mem impact' first."
+        )
+    if session_uid is not None and session.uid != session_uid:
+        raise ReviewError(f"Saved Update artifact '{session_uid}' is not available.")
+    _show_operation_review(update_review_report(session), snapshot=snapshot)
+
+
+def _run_compare_report(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+    snapshot: bool,
+) -> None:
+    from memcommit.commands.compare_sessions import (
+        comparison_session_entries,
+        load_saved_comparison,
+        revalidate_saved_comparison,
+    )
+    from memcommit.review_report_adapters import compare_review_report
+
+    selected = _select_report_session(
+        comparison_session_entries(store),
+        kind="compare",
+        title="MEM REVIEW · COMPARE REPORTS",
+        session_uid=session_uid,
+    )
+    if selected is None:
+        return
+    analysis = load_saved_comparison(selected.key, store=store)
+    revalidate_saved_comparison(store, analysis)
+    _show_operation_review(compare_review_report(analysis), snapshot=snapshot)
+
+
+def _run_meld_report(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+    snapshot: bool,
+) -> None:
+    from memcommit.commands.meld_sessions import (
+        list_meld_session_catalog,
+        reload_selected_meld_session,
+    )
+    from memcommit.review_report_adapters import meld_review_report
+
+    catalog = list_meld_session_catalog(store)
+    by_key = {entry.session_uid: entry for entry in catalog}
+    entries = tuple(
+        SessionPickerEntry(
+            kind="meld",
+            key=entry.session_uid,
+            title=entry.title,
+            status=entry.status,
+            subtitle=entry.subtitle,
+            group=entry.group,
+            sort_timestamp=entry.modified_timestamp,
+            detail=entry.detail,
+            reopen_argv=entry.reopen_argv,
+        )
+        for entry in catalog
+    )
+    selected = _select_report_session(
+        entries,
+        kind="meld",
+        title="MEM REVIEW · MELD REPORTS",
+        session_uid=session_uid,
+    )
+    if selected is None:
+        return
+    session = reload_selected_meld_session(store, by_key[selected.key])
+    if not snapshot and sys.stdin.isatty() and sys.stdout.isatty():
+        from memcommit.commands.meld import run_meld_review
+
+        run_meld_review(
+            store=store,
+            session=session,
+            provider_factory=connect_codex_chatgpt_provider,
+        )
+        return
+    _show_operation_review(meld_review_report(session), snapshot=True)
+
+
+def _run_sever_report(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+    snapshot: bool,
+) -> None:
+    from memcommit.commands.sever_sessions import (
+        list_sever_session_catalog,
+        reload_selected_sever_session,
+    )
+    from memcommit.review_report_adapters import sever_review_report
+    from memcommit.sever_store import SeverSessionStore
+
+    sessions = SeverSessionStore(store)
+    catalog = list_sever_session_catalog(sessions)
+    by_key = {entry.picker_entry.key: entry for entry in catalog}
+    selected = _select_report_session(
+        tuple(entry.picker_entry for entry in catalog),
+        kind="sever",
+        title="MEM REVIEW · SEVER REPORTS",
+        session_uid=session_uid,
+    )
+    if selected is None:
+        return
+    session = reload_selected_sever_session(sessions, by_key[selected.key])
+    if not snapshot and sys.stdin.isatty() and sys.stdout.isatty():
+        from memcommit.commands.sever import run_sever_review
+
+        run_sever_review(store, session)
+        return
+    _show_operation_review(sever_review_report(session), snapshot=True)
 
 
 def _load_direct_context(
@@ -125,27 +299,77 @@ def _run_atomize_workbench(
         workbench.cursor_uid = matches[0].uid
         workbench.response_for(matches[0].uid).text = response or ""
         store.save_atomize_workbench(workbench)
-        typer.echo(render_atomize_workbench_snapshot(workbench, analysis))
+        from memcommit.commands.review_report import render_review_report_snapshot
+        from memcommit.review_report_adapters import atomize_review_report
+
+        typer.echo(
+            render_review_report_snapshot(
+                atomize_review_report(analysis, workbench).report()
+            )
+        )
         return
     if snapshot or not sys.stdin.isatty() or not sys.stdout.isatty():
-        typer.echo(render_atomize_workbench_snapshot(workbench, analysis))
-        return
-    try:
-        run_atomize_workbench_shell(
-            workbench,
-            analysis,
-            save=store.save_atomize_workbench,
+        from memcommit.commands.review_report import render_review_report_snapshot
+        from memcommit.review_report_adapters import atomize_review_report
+
+        typer.echo(
+            render_review_report_snapshot(
+                atomize_review_report(analysis, workbench).report()
+            )
         )
-    except ReviewCancelled:
-        typer.echo("Atomize workbench saved. No Memory changes applied.")
         return
-    typer.secho(
-        f"Atomize workbench saved: {workbench.answered_count}/"
-        f"{workbench.issue_count} issues answered.",
-        fg=typer.colors.GREEN,
-        bold=True,
-    )
-    typer.echo("No Memory changes applied. No checkpoint created.")
+    from memcommit.commands.review_report import run_review_report_shell
+    from memcommit.resolution_workbench import ResolutionNavigation
+    from memcommit.review_report_adapters import atomize_review_report
+
+    navigation = ResolutionNavigation(selected_item_uid=workbench.cursor_uid)
+
+    def load_draft(item_uid: str) -> tuple[str | None, str]:
+        response = workbench.responses.get(item_uid)
+        if response is None:
+            return None, ""
+        return response.selected_choice_uid, response.text
+
+    def save_draft(
+        item_uid: str,
+        option_uid: str | None,
+        comment: str,
+    ) -> None:
+        issue = next(
+            (candidate for candidate in workbench.issues if candidate.uid == item_uid),
+            None,
+        )
+        if issue is None or (
+            option_uid is not None and option_uid not in issue.choice_uids
+        ):
+            raise ReviewError("Atomize Review returned an invalid item response.")
+        workbench.cursor_uid = item_uid
+        response = workbench.response_for(item_uid)
+        response.selected_choice_uid = option_uid
+        response.text = comment
+        store.save_atomize_workbench(workbench)
+
+    def toggle_sort() -> None:
+        workbench.toggle_sort()
+        store.save_atomize_workbench(workbench)
+
+    while True:
+        action = run_review_report_shell(
+            atomize_review_report(analysis, workbench),
+            interactive_actions=True,
+            navigation=navigation,
+            draft_loader=load_draft,
+            draft_saver=save_draft,
+            save_draft_on_close=True,
+            toggle_sort=toggle_sort,
+        )
+        if action.kind == "CLOSE":
+            typer.echo("Atomize workbench saved. No Memory changes applied.")
+            return
+        if action.kind != "SUBMIT_ITEM":
+            raise ReviewError(
+                f"Unsupported Atomize Review action '{action.kind}'."
+            )
 
 
 def cmd(
@@ -153,9 +377,17 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Start a review adapter (ambiguities or atomize); "
+                "Open a review report (compare, meld, sever, update, atomize, "
+                "or ambiguities); "
                 "omit to resume the saved review"
             )
+        ),
+    ] = None,
+    session_uid: Annotated[
+        Optional[str],
+        typer.Option(
+            "--session",
+            help="Exact saved operation artifact uid for an adaptive report",
         ),
     ] = None,
     context_name: Annotated[
@@ -198,7 +430,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Stage review annotations without editing or checkpointing Memories."""
+    """Open adaptive reports or stage responses without applying Memories."""
     store = MemoryStore()
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
@@ -206,7 +438,30 @@ def cmd(
             None if context_name is None else context_snapshot.resolve(context_name)
         )
         normalized_kind = kind.casefold() if kind is not None else None
+        if normalized_kind in {"compare", "meld", "sever", "update"}:
+            if replace_review or respond_to is not None or response is not None:
+                raise ReviewError(
+                    "Adaptive operation reports do not use --replace-review or "
+                    "--respond-to. Review actions remain operation-owned."
+                )
+            runners = {
+                "compare": _run_compare_report,
+                "meld": _run_meld_report,
+                "sever": _run_sever_report,
+                "update": _run_update_report,
+            }
+            runners[normalized_kind](
+                store,
+                session_uid=session_uid,
+                snapshot=snapshot,
+            )
+            return
         if normalized_kind == "atomize":
+            if session_uid is not None:
+                raise ReviewError(
+                    "Atomize Review is Context-bound; use --context instead of "
+                    "--session."
+                )
             _run_atomize_workbench(
                 store=store,
                 context_name=canonical_context_name,
@@ -218,6 +473,8 @@ def cmd(
             )
             return
         if kind is None:
+            if session_uid is not None:
+                raise ReviewError("--session requires an explicit review kind.")
             if replace_review:
                 raise ReviewError(
                     "--replace-review is valid only when starting an adapter."
@@ -247,7 +504,13 @@ def cmd(
             }:
                 raise ReviewError(
                     "Unsupported review adapter. "
-                    "Implemented adapters are 'ambiguities' and 'atomize'."
+                    "Implemented adapters are 'ambiguities', 'atomize', "
+                    "'compare', 'meld', 'sever', and 'update'."
+                )
+            if session_uid is not None:
+                raise ReviewError(
+                    "Ambiguity Review is Context-bound; use --context instead of "
+                    "--session."
                 )
             # Explicit replacement is also the recovery path for a malformed
             # prior artifact, so do not require that artifact to parse first.

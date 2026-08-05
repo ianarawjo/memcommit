@@ -72,8 +72,12 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
     current_reads = _count_current_reads(monkeypatch)
 
     monkeypatch.setattr(
-        "memcommit.commands.find.ops.find",
-        lambda context, *_args, **_kwargs: [],
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: object(),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find.rank_candidates",
+        lambda *_args, **_kwargs: [],
     )
 
     def empty_report(context, *_args, **_kwargs):

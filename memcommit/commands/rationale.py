@@ -25,6 +25,7 @@ from memcommit.rationale import (
     build_rationale,
 )
 from memcommit.rationale_scope import (
+    authorize_rationale_inference,
     load_rationale_scope,
     rationale_candidates,
     rationale_trace,
@@ -410,11 +411,6 @@ def cmd(
             context_name,
             current_name=context_snapshot.current_name,
         )
-        if scope.granted and recorded_only:
-            raise RationaleError(
-                "--recorded-only is unavailable for a granted READ view because "
-                "authority history is not granted."
-            )
         if selector is None:
             if as_json:
                 raise RationaleError("JSON output requires an explicit Memory UID.")
@@ -435,17 +431,24 @@ def cmd(
                 current_name=context_snapshot.current_name,
             )
         target = resolve_rationale_target(scope, selector)
+        if target.access.is_granted and recorded_only:
+            raise RationaleError(
+                "--recorded-only is unavailable for a granted READ view because "
+                "authority history is not granted."
+            )
+        if not recorded_only:
+            authorize_rationale_inference(scope)
         trace = rationale_trace(scope, target)
         report = build_rationale(
-            scope.access.store,
+            target.access.store,
             target.owner,
             trace,
             (None if recorded_only else connect_codex_chatgpt_provider),
-            cache_inference=not recorded_only and not scope.granted,
+            cache_inference=not recorded_only and not target.access.is_granted,
             refresh_inference=refresh,
             inference_contexts=scope.contexts,
             inference_scope_name=scope.root_name,
-            recorded_evidence_available=not scope.granted,
+            recorded_evidence_available=not target.access.is_granted,
         )
     except (
         FileNotFoundError,

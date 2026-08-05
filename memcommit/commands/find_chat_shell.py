@@ -36,21 +36,24 @@ from memcommit.commands.tui_primitives import (
     require_interactive_terminal,
     safe_terminal_text,
 )
+from memcommit.commands.command_progress import (
+    BUSY_INTERVAL_SECONDS,
+    busy_suffix,
+)
 
 
 FindChatRole = Literal["USER", "MEM", "STATUS"]
 FindChatActionKind = Literal["SUBMIT", "CLOSE"]
 FindChatResultKind = Literal["memory", "ref", "query", "artifact"]
 FindChatRelevance = Literal["primary", "related"]
-_FIND_BUSY_FRAMES = (".", "..", "…")
-_FIND_BUSY_INTERVAL_SECONDS = 0.35
+# Compatibility name remains patchable by focused shell tests while its
+# default comes from the shared blocking-progress visual contract.
+_FIND_BUSY_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
 
 
 def _processing_find_turn_label(frame_index: int) -> str:
     """Render one deterministic frame of the in-process busy indicator."""
-    return " PROCESSING FIND TURN " + _FIND_BUSY_FRAMES[
-        frame_index % len(_FIND_BUSY_FRAMES)
-    ]
+    return " PROCESSING FIND TURN " + busy_suffix(frame_index)
 
 
 @dataclass(frozen=True)

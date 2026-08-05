@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 import uuid
-from typing import Annotated, Optional
+from typing import Annotated, Literal, Optional
 
 import typer
 
@@ -13,6 +13,15 @@ from memcommit.commands.granted_context import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
+)
+from memcommit.commands.session_picker import (
+    SessionNewReceipt,
+    SessionOpenReceipt,
+    choose_session,
+)
+from memcommit.commands.sever_sessions import (
+    list_sever_session_catalog,
+    reload_selected_sever_session,
 )
 from memcommit.commands.switch import _granted_picker_state
 from memcommit.commands.sever_setup_shell import choose_sever_setup
@@ -43,6 +52,10 @@ from memcommit.store import MemoryStore, context_record_digest, validate_context
 
 class SeverCommandError(RuntimeError):
     pass
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def _capture_binding(
@@ -252,6 +265,11 @@ def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
     auto_checkpoint = AutoCheckpoint(
         command="sever",
         args={
+            "context_creation": {
+                "version": 1,
+                "context_uid": output.uid,
+                "context_name": output.name,
+            },
             "sever": {
                 "session_uid": session.uid,
                 "session_digest": sever_record_digest(session),
@@ -319,24 +337,90 @@ def _interactive_setup(store: MemoryStore) -> tuple[str, str, str, bool, bool] |
     )
 
 
-def _run_workbench(store: MemoryStore, session: SeverSession) -> SeverSession:
+def _render_saved_session_list(sessions: SeverSessionStore) -> None:
+    """Keep the existing non-TTY listing stable and provider-free."""
+
+    saved = sessions.list()
+    if not saved:
+        typer.echo("No saved Sever sessions.")
+        return
+    for item in saved:
+        typer.echo(
+            f"{item.uid} · {item.state} · {item.source.root_name} × "
+            f"{item.criteria.root_name} → {item.output_name}"
+        )
+
+
+def _choose_saved_sever_session(
+    sessions: SeverSessionStore,
+) -> tuple[Literal["OPEN", "NEW", "CANCEL"], SeverSession | None]:
+    """Return OPEN, NEW, or CANCEL from the shared saved-work launcher."""
+
+    catalog = list_sever_session_catalog(sessions)
+    by_key = {entry.picker_entry.key: entry for entry in catalog}
+    receipt = choose_session(
+        tuple(entry.picker_entry for entry in catalog),
+        title="MEM SEVER · SAVED SESSIONS · NOT SENT",
+        new_receipt=SessionNewReceipt(kind="sever", argv=("mem", "sever")),
+    )
+    if receipt is None:
+        return "CANCEL", None
+    if isinstance(receipt, SessionNewReceipt):
+        if receipt.kind != "sever" or receipt.argv != ("mem", "sever"):
+            raise SeverCommandError(
+                "Sever session picker returned an invalid new-session receipt."
+            )
+        return "NEW", None
+    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "sever":
+        raise SeverCommandError("Sever session picker returned an invalid receipt.")
+    entry = by_key.get(receipt.key)
+    if entry is None or receipt.argv != entry.picker_entry.reopen_argv:
+        raise SeverCommandError("Sever session picker returned a stale receipt.")
+    return "OPEN", reload_selected_sever_session(sessions, entry)
+
+
+def _run_workbench(
+    store: MemoryStore,
+    session: SeverSession,
+    *,
+    allow_apply: bool = True,
+) -> SeverSession:
     from memcommit.commands.resolution_workbench_shell import run_resolution_workbench_shell
+    from memcommit.impact_controller import ImpactController
+    from memcommit.review_report_adapters import sever_review_report
 
     sessions = SeverSessionStore(store)
     navigation = ResolutionNavigation()
     while session.state == "REVIEWING":
         adapter = SeverResolutionWorkbenchAdapter(session)
+        review_view = None
+        if not allow_apply:
+            review_view = sever_review_report(session).report().view
+            if review_view is None:
+                raise SeverCommandError("Sever Review report has no interactive view.")
+        impact_controller = ImpactController.from_resolution(
+            review_view if review_view is not None else adapter.view,
+            title="IMPACT · LOCAL OUTBOUND DRAFT · NOT SENT",
+            summary=(
+                "This is the exact local disclosure draft that Apply would "
+                "materialize. It does not send or publish anything."
+            ),
+        )
         action = run_resolution_workbench_shell(
-            adapter.view(),
+            review_view if review_view is not None else adapter.view,
             navigation=navigation,
             terminal_label="Interactive Sever",
             snapshot_hint="Run 'mem sever --resume SESSION' outside a TTY for a snapshot.",
-            review_and_apply=True,
+            review_and_apply=allow_apply,
+            split_viewer_items=True,
+            impact_controller=None if not allow_apply else impact_controller,
         )
         if action.kind == "CLOSE":
             break
         expected = sever_record_digest(session)
         if action.kind == "ACCEPT":
+            if not allow_apply:
+                raise SeverCommandError("Review cannot apply a Sever output.")
             applied = _apply(store, session)
             sessions.save(applied, expected_digest=expected)
             session = applied
@@ -359,6 +443,11 @@ def _run_workbench(store: MemoryStore, session: SeverSession) -> SeverSession:
     return session
 
 
+def run_sever_review(store: MemoryStore, session: SeverSession) -> SeverSession:
+    """Run Sever decisions without exposing output materialization."""
+    return _run_workbench(store, session, allow_apply=False)
+
+
 def cmd(
     source_name: Annotated[Optional[str], typer.Option("--source", help="Existing ordinary Source Context; defaults to current only in explicit flag mode")] = None,
     criteria_name: Annotated[Optional[str], typer.Option("--criteria", "--against", help="One readable Criteria root Context; query-only views are rejected")] = None,
@@ -370,7 +459,7 @@ def cmd(
     choice: Annotated[Optional[str], typer.Option("--choice", help="recommended, as-written, exclude, or custom")] = None,
     comment: Annotated[Optional[str], typer.Option("--comment", help="Exact custom outbound content when --choice custom")] = None,
     accept: Annotated[bool, typer.Option("--accept", help="Create the reviewed local output Context; sends nothing")] = False,
-    sessions_flag: Annotated[bool, typer.Option("--sessions", help="List saved Sever sessions")] = False,
+    sessions_flag: Annotated[bool, typer.Option("--sessions", help="Browse saved Sever sessions or start a new one")] = False,
 ) -> None:
     store = MemoryStore()
     session_store = SeverSessionStore(store)
@@ -378,24 +467,63 @@ def cmd(
         if sessions_flag:
             if any(value is not None for value in (source_name, criteria_name, save_as, resume, candidate, choice, comment)) or accept:
                 raise SeverCommandError("--sessions cannot be combined with another Sever action.")
-            saved = session_store.list()
-            if not saved:
-                typer.echo("No saved Sever sessions.")
-                return
-            for item in saved:
-                typer.echo(
-                    f"{item.uid} · {item.state} · {item.source.root_name} × "
-                    f"{item.criteria.root_name} → {item.output_name}"
-                )
-            return
 
-        if resume is not None:
+        interactive = _interactive_terminal()
+        bare_launcher = (
+            source_name is None
+            and criteria_name is None
+            and save_as is None
+            and resume is None
+            and candidate is None
+            and choice is None
+            and comment is None
+            and not accept
+        )
+        session: SeverSession | None = None
+        start_from_launcher = False
+        if sessions_flag or bare_launcher:
+            if not interactive:
+                if sessions_flag:
+                    _render_saved_session_list(session_store)
+                else:
+                    typer.echo(
+                        "No Sever setup supplied. Use --source, --criteria, "
+                        "and --save-as, or run in a TTY."
+                    )
+                return
+            launcher_action, selected_session = _choose_saved_sever_session(
+                session_store
+            )
+            if launcher_action == "CANCEL":
+                typer.echo("Sever selection cancelled. No session was opened.")
+                return
+            if launcher_action == "OPEN":
+                if selected_session is None:
+                    raise SeverCommandError(
+                        "Sever session picker returned no selected session."
+                    )
+                session = selected_session
+            elif launcher_action == "NEW":
+                start_from_launcher = True
+            else:
+                raise SeverCommandError(
+                    "Sever session picker returned an unsupported action."
+                )
+
+        if session is not None:
+            pass
+        elif resume is not None:
             if any(value is not None for value in (source_name, criteria_name, save_as)):
                 raise SeverCommandError("--resume cannot be combined with Source, Criteria, or output operands.")
             session = session_store.load(resume)
         else:
-            if source_name is None and criteria_name is None and save_as is None:
-                if not (sys.stdin.isatty() and sys.stdout.isatty()):
+            if (
+                start_from_launcher
+                or source_name is None
+                and criteria_name is None
+                and save_as is None
+            ):
+                if not interactive:
                     typer.echo("No Sever setup supplied. Use --source, --criteria, and --save-as, or run in a TTY.")
                     return
                 setup = _interactive_setup(store)

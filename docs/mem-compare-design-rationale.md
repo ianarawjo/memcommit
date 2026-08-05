@@ -8,6 +8,7 @@ The first bounded Compare slice is implemented as:
 mem compare
 mem compare --sessions
 mem compare --to PEER
+mem compare --from REFERENCE --to PEER
 mem compare --to ../PEER
 mem compare --to PEER --refresh
 mem compare --to PEER --snapshot
@@ -57,14 +58,18 @@ save a granted Compare result but have no route back to it from bare
 mode and never broadens its source grant.
 
 The active Context is the display reference and `--to` names the compared
-Context. Both sources have equal authority. `REFERENCE` controls layout and
-navigation only; it is not a baseline and does not win a disagreement.
+Context when `--from` is omitted. The shared New setup may instead select both
+A and B without switching the active Context; it invokes the same explicit
+`--from REFERENCE --to PEER` endpoint contract. Both sources have equal
+authority. `REFERENCE` controls layout and navigation only; it is not a
+baseline and does not win a disagreement.
 
-`--to` is an existing-Context locator. A canonical name remains global, while
-an explicit `.` or `..` spelling is resolved lexically against the active
-reference Context captured at command start. The resolved canonical name is
-used for loading, frames, cache identity, and output, so relative and canonical
-spellings reuse the same durable analysis. The shared contract and its
+`--from` and `--to` are existing-Context locators. A canonical name remains
+global, while an explicit `.` or `..` spelling is resolved lexically against
+the same active-Context snapshot captured at command start. The resolved
+canonical names are used for loading, frames, cache identity, and output, so
+relative and canonical spellings reuse the same durable analysis. The shared
+contract and its
 non-goals are recorded in
 [`context-locator-design-rationale.md`](context-locator-design-rationale.md).
 

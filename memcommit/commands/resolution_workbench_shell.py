@@ -35,11 +35,16 @@ from memcommit.commands.tui_primitives import (
     require_interactive_terminal,
     safe_terminal_text,
 )
+from memcommit.impact_controller import ImpactController, ImpactView
 from memcommit.resolution_workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
     ResolutionWorkbenchError,
     ResolutionWorkbenchView,
+)
+from memcommit.session_workbench_navigation import (
+    SessionWorkbenchNavigation,
+    WorkbenchSection,
 )
 
 
@@ -50,6 +55,45 @@ class ResolutionGlobalStrategy:
     label: str
     action_kind: str
     comment: str = ""
+
+
+def _apply_heading(view: ResolutionWorkbenchView) -> str:
+    return f"REVIEW & APPLY {view.operation.upper()}"
+
+
+def _current_impact(
+    controller: ImpactController | None,
+    view: ResolutionWorkbenchView,
+) -> ImpactView | None:
+    if controller is None:
+        return None
+    impact = controller.view()
+    if (
+        impact.operation.upper() != view.operation.upper()
+        or impact.artifact_uid != view.artifact_uid
+        or impact.revision != view.revision
+    ):
+        raise ValueError("Impact projection does not match the active artifact revision.")
+    return impact
+
+
+def _impact_lines(impact: ImpactView) -> list[str]:
+    lines = [impact.title, impact.summary]
+    if impact.detail:
+        lines.extend(["", impact.detail])
+    for index, entry in enumerate(impact.entries, start=1):
+        lines.extend(
+            [
+                "",
+                f"  {entry.marker} {index}. [{entry.label}]",
+                f"      {entry.text}",
+            ]
+        )
+        if entry.reason:
+            lines.append(f"      WHY · {entry.reason}")
+    if not impact.detail and not impact.entries:
+        lines.extend(["", "  (no effects)"])
+    return lines
 
 
 @dataclass
@@ -101,6 +145,31 @@ def _line(value: str, limit: int = 100) -> str:
         kept.append(character)
         width += character_width
     return "".join(kept).rstrip() + "…"
+
+
+def _item_kind_label(value: str) -> str:
+    """Render operation-owned kind tokens as stable human-facing row labels."""
+    return safe_terminal_text(value.replace("_", " "))
+
+
+def _stable_sections(
+    entries: tuple[tuple[str, str, int | None], ...],
+) -> tuple[WorkbenchSection, ...]:
+    """Give repeated semantic section kinds stable occurrence identities."""
+    counts: dict[str, int] = {}
+    sections: list[WorkbenchSection] = []
+    for kind, identity, row_index in entries:
+        count = counts.get(identity, 0)
+        counts[identity] = count + 1
+        suffix = f":{count}" if count else ""
+        sections.append(
+            WorkbenchSection(
+                uid=f"{identity}{suffix}",
+                kind=kind,
+                row_index=row_index,
+            )
+        )
+    return tuple(sections)
 
 
 def _indented(value: str, indent: str = "       ") -> str:
@@ -225,7 +294,7 @@ def resolution_workbench_fragments(
                 "",
                 (
                     "       "
-                    f"{safe_terminal_text(item.kind)} · "
+                    f"{_item_kind_label(item.kind)} · "
                     f"{safe_terminal_text(item.status)} · "
                     f"{_line(item.summary)}\n"
                 ),
@@ -447,8 +516,8 @@ def resolution_viewer_fragments(
         1,
     )
     card(
-        f"CONFLICT {item_index}/{len(view.items)} · {item.title}",
-        f"[{item.priority}] {item.kind} · {item.status}\n{item.summary}",
+        f"{_item_kind_label(item.kind)} {item_index}/{len(view.items)} · {item.title}",
+        f"[{item.priority}] {_item_kind_label(item.kind)} · {item.status}\n{item.summary}",
     )
     if item.question:
         card("QUESTION", item.question)
@@ -466,13 +535,15 @@ def resolution_report_fragments(
     focused_section: int = 0,
     review_and_apply: bool = False,
     read_only: bool = False,
+    impact_controller: ImpactController | None = None,
 ) -> list[tuple[str, str]]:
     """Render the complete Meld reading surface before any individual issue."""
     metric_text = " · ".join(
         f"{safe_terminal_text(metric.value)} {safe_terminal_text(metric.label)}"
         for metric in view.metrics
     )
-    section_count = len(view.items) + (3 if read_only else 4)
+    impact = _current_impact(impact_controller, view)
+    section_count = len(view.items) + (4 if read_only else 5) + (impact is not None)
     focused_section = max(0, min(focused_section, section_count - 1))
     section_index = 0
     fragments: list[tuple[str, str]] = []
@@ -506,10 +577,11 @@ def resolution_report_fragments(
     )
     heading("WHAT MEM UNDERSTOOD")
     fragments.append(("", f" {safe_terminal_text(view.overview) or '(none)'}\n\n"))
+    heading(f"{view.list_label} · {len(view.items)}")
     if not view.items:
         fragments.append(("", f"  {safe_terminal_text(view.empty_message)}\n"))
     for index, item in enumerate(view.items, start=1):
-        heading(f"CONFLICT {index} · {item.title}")
+        heading(f"{_item_kind_label(item.kind)} {index} · {item.title}")
         fragments.extend(
             [
                 (
@@ -538,9 +610,27 @@ def resolution_report_fragments(
                 f"{safe_terminal_text(result.text)}\n",
             )
         )
+    if impact is not None:
+        heading(impact.title)
+        fragments.append(("", f" {safe_terminal_text(impact.summary)}\n"))
+        if impact.detail:
+            fragments.append(("", f"\n {safe_terminal_text(impact.detail)}\n"))
+        for index, entry in enumerate(impact.entries, start=1):
+            fragments.append(
+                (
+                    "",
+                    f"\n  {safe_terminal_text(entry.marker)} {index}. "
+                    f"[{safe_terminal_text(entry.label)}] "
+                    f"{safe_terminal_text(entry.text)}\n",
+                )
+            )
+            if entry.reason:
+                fragments.append(
+                    ("", f"     WHY · {safe_terminal_text(entry.reason)}\n")
+                )
     if not read_only:
         heading(
-            ("REVIEW & APPLY MELD" if view.accept_enabled else "MATERIALIZE REVIEW")
+            (_apply_heading(view) if view.accept_enabled else "MATERIALIZE REVIEW")
             if review_and_apply
             else "RESOLVE ALL · WHOLE-SET STRATEGY"
         )
@@ -577,6 +667,7 @@ def _seeded_report_lines(
     strategies: tuple[ResolutionGlobalStrategy, ...],
     review_and_apply: bool = False,
     read_only: bool = False,
+    impact_controller: ImpactController | None = None,
 ) -> list[str]:
     lines = report_text.splitlines()
     lines.extend(["", f"{view.results_label} · {len(view.results)}"])
@@ -593,13 +684,16 @@ def _seeded_report_lines(
                 lines.append(f"      WHY · {result.reason}")
     else:
         lines.append("  (none)")
+    impact = _current_impact(impact_controller, view)
+    if impact is not None:
+        lines.extend(["", *_impact_lines(impact)])
     if not read_only:
         lines.extend(
             [
                 "",
                 (
                     (
-                        "REVIEW & APPLY MELD"
+                        _apply_heading(view)
                         if view.accept_enabled
                         else "MATERIALIZE REVIEW"
                     )
@@ -641,7 +735,8 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         "PROPOSED BASELINE CHANGES",
         "RESOLVE ALL ·",
         "MATERIALIZE REVIEW",
-        "REVIEW & APPLY MELD",
+        "IMPACT ·",
+        "REVIEW & APPLY ",
     )
     sections: list[tuple[int, str]] = []
     in_conflicts = False
@@ -655,7 +750,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
             in_conflicts = False
             in_results = True
         if line.startswith(
-            ("RESOLVE ALL ·", "MATERIALIZE REVIEW", "REVIEW & APPLY MELD")
+            ("RESOLVE ALL ·", "MATERIALIZE REVIEW", "REVIEW & APPLY ")
         ):
             in_results = False
         if line.startswith(headings):
@@ -665,7 +760,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                     (
                         "RESOLVE ALL ·",
                         "MATERIALIZE REVIEW",
-                        "REVIEW & APPLY MELD",
+                        "REVIEW & APPLY ",
                     )
                 )
                 else "REPORT"
@@ -702,6 +797,7 @@ def resolution_seeded_report_fragments(
     focused_section: int = 0,
     review_and_apply: bool = False,
     read_only: bool = False,
+    impact_controller: ImpactController | None = None,
 ) -> list[tuple[str, str]]:
     """Render Compare and Meld report sections as nested Viewer cards."""
     lines = _seeded_report_lines(
@@ -710,6 +806,7 @@ def resolution_seeded_report_fragments(
         strategies,
         review_and_apply,
         read_only,
+        impact_controller,
     )
     sections = _seeded_report_sections(lines)
     if not sections:
@@ -1002,7 +1099,7 @@ def resolution_review_fragments(
     if focused_section == 0:
         fragments.append(("[SetCursorPosition]", ""))
     for line in _boxed_lines(
-        f"REVIEW & APPLY MELD · {answered}/{len(view.items)} RESOLVED",
+        f"{_apply_heading(view)} · {answered}/{len(view.items)} RESOLVED",
         "\n".join(response_lines).rstrip(),
     ):
         fragments.append(("class:detail-card.focused", f" {line}\n"))
@@ -1024,7 +1121,7 @@ def resolution_review_fragments(
     fragments.append(("", "\n"))
 
     next_text = (
-        "This Meld is ready. Press A to apply the reviewed target changes."
+        f"This {view.operation.title()} is ready. Press A to apply the reviewed changes."
         if view.accept_enabled
         else (
             "Press Enter to resolve the staged choices and remaining-item policy. "
@@ -1043,6 +1140,7 @@ def run_resolution_workbench_shell(
     view_or_supplier: (ResolutionWorkbenchView | Callable[[], ResolutionWorkbenchView]),
     *,
     navigation: ResolutionNavigation | None = None,
+    workbench_navigation: SessionWorkbenchNavigation | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -1061,6 +1159,7 @@ def run_resolution_workbench_shell(
     split_report_conflicts_remaining: int | None = None,
     review_and_apply: bool = False,
     read_only: bool = False,
+    impact_controller: ImpactController | None = None,
 ) -> ResolutionWorkbenchAction:
     """Collect one UID-bound semantic or close action; never call a provider."""
     if require_tty:
@@ -1078,10 +1177,101 @@ def run_resolution_workbench_shell(
         current_navigation.sync(view)
         return view
 
+    session_navigation = workbench_navigation or SessionWorkbenchNavigation(
+        pane="items" if split_viewer_items else "viewer"
+    )
+    if not split_viewer_items:
+        session_navigation.focus("viewer")
+
+    def report_sections() -> tuple[WorkbenchSection, ...]:
+        active_view = current_view()
+        if split_report_text is not None:
+            lines = _seeded_report_lines(
+                active_view,
+                split_report_text,
+                global_strategies,
+                review_and_apply,
+                read_only,
+                impact_controller,
+            )
+            entries = tuple(
+                (
+                    key.split(":", 1)[0],
+                    f"SEEDED:{line_index}:{key}",
+                    (
+                        int(key.split(":", 1)[1]) + 1
+                        if key.startswith("ITEM:")
+                        else len(active_view.items) + 1
+                        if key == "RESOLVE_ALL"
+                        else 0
+                    ),
+                )
+                for line_index, key in _seeded_report_sections(lines)
+            )
+            return _stable_sections(entries)
+        entries: list[tuple[str, str, int | None]] = [
+            ("TITLE", "REPORT:TITLE", 0),
+            ("UNDERSTANDING", "REPORT:UNDERSTANDING", 0),
+            ("REVIEW_ITEMS", "REPORT:REVIEW_ITEMS", 0),
+        ]
+        entries.extend(
+            ("ITEM", f"ITEM:{item.uid}", index)
+            for index, item in enumerate(active_view.items, start=1)
+        )
+        entries.append(("RESULTS", "REPORT:RESULTS", 0))
+        if impact_controller is not None:
+            entries.append(("IMPACT", "REPORT:IMPACT", 0))
+        if not read_only:
+            entries.append(
+                (
+                    "APPLY" if review_and_apply else "RESOLVE_ALL",
+                    "REPORT:ACTION",
+                    len(active_view.items) + 1,
+                )
+            )
+        return _stable_sections(tuple(entries))
+
+    def item_sections() -> tuple[WorkbenchSection, ...]:
+        item = current_navigation.current_item(current_view())
+        if item is None:
+            return _stable_sections((("SUMMARY", "ITEM:SUMMARY", None),))
+        entries: list[tuple[str, str, int | None]] = [
+            ("SUMMARY", f"ITEM:{item.uid}:SUMMARY", None)
+        ]
+        if item.question:
+            entries.append(("QUESTION", f"ITEM:{item.uid}:QUESTION", None))
+        if item.options:
+            entries.append(("OPTIONS", f"ITEM:{item.uid}:OPTIONS", None))
+        entries.extend(
+            ("BLOCK", f"ITEM:{item.uid}:BLOCK:{index}:{block.heading}", None)
+            for index, block in enumerate(item.blocks)
+        )
+        return _stable_sections(tuple(entries))
+
+    def active_viewer_sections() -> tuple[WorkbenchSection, ...]:
+        if viewer_content["kind"] == "REPORT":
+            return report_sections()
+        if viewer_content["kind"] == "REVIEW":
+            return _stable_sections(
+                (
+                    ("SUMMARY", "REVIEW:SUMMARY", None),
+                    ("POLICY", "REVIEW:POLICY", None),
+                    ("NEXT", "REVIEW:NEXT", None),
+                )
+            )
+        return item_sections()
+
+    def viewer_section_index() -> int:
+        return session_navigation.section_index(active_viewer_sections())
+
+    def reset_viewer_section() -> None:
+        sections = active_viewer_sections()
+        session_navigation.section_uid = sections[0].uid if sections else None
+
     def split_kind() -> str:
-        if split_row["index"] == 0:
+        if session_navigation.row_index == 0:
             return "REPORT"
-        if split_row["index"] <= len(current_view().items):
+        if session_navigation.row_index <= len(current_view().items):
             return "ITEM"
         return "RESOLVE_ALL"
 
@@ -1094,9 +1284,9 @@ def run_resolution_workbench_shell(
                     local_drafts,
                     global_strategies,
                     strategy["index"],
-                    viewer_section["index"],
+                    viewer_section_index(),
                 ),
-                focused=pane_focus["value"] == "viewer",
+                focused=session_navigation.pane == "viewer",
             )
         if viewer_content["kind"] == "REPORT":
             if split_report_text is not None:
@@ -1109,45 +1299,44 @@ def run_resolution_workbench_shell(
                         report_item_badges=split_report_item_badges,
                         report_conflicts_remaining=split_report_conflicts_remaining,
                         selected_strategy_index=strategy["index"],
-                        focused_section=viewer_section["index"],
+                        focused_section=viewer_section_index(),
                         review_and_apply=review_and_apply,
                         read_only=read_only,
+                        impact_controller=impact_controller,
                     ),
-                    focused=pane_focus["value"] == "viewer",
+                    focused=session_navigation.pane == "viewer",
                 )
             return _viewer_focus_fragments(
                 resolution_report_fragments(
                     active_view,
                     strategies=global_strategies,
-                    focused_section=viewer_section["index"],
+                    focused_section=viewer_section_index(),
                     review_and_apply=review_and_apply,
                     read_only=read_only,
+                    impact_controller=impact_controller,
                 ),
-                focused=pane_focus["value"] == "viewer",
+                focused=session_navigation.pane == "viewer",
             )
         return _viewer_focus_fragments(
             resolution_viewer_fragments(
                 active_view,
                 current_navigation,
-                focused_section=viewer_section["index"],
+                focused_section=viewer_section_index(),
                 other_direction_focused=other_direction["focused"],
                 other_direction_editing=other_direction_editor["open"],
             ),
-            focused=pane_focus["value"] == "viewer",
+            focused=session_navigation.pane == "viewer",
         )
 
     bindings = KeyBindings()
     status = {"value": ""}
     global_comment = {"value": False}
-    pane_focus = {"value": "items" if split_viewer_items else "viewer"}
-    split_row = {"index": 0}
     strategy = {"index": 0}
     viewer_content = {"kind": "REPORT"}
-    viewer_section = {"index": 0}
     navigation_accelerator = _NavigationAccelerator()
     other_direction = {"focused": False}
     other_direction_editor = {"open": False}
-    input_heading = {"value": "COMMENT ON SELECTED CONFLICT"}
+    input_heading = {"value": "COMMENT ON SELECTED ITEM"}
     local_drafts: dict[str, tuple[str | None, str]] = {}
 
     composer = build_framed_multiline_input(
@@ -1184,11 +1373,14 @@ def run_resolution_workbench_shell(
                     (
                         "Complete Compare report"
                         if split_report_text is not None
-                        else "Complete Meld report"
+                        else f"Complete {active_view.operation.title()} report"
                     ),
                 ),
             )
-            + tuple(("CONFLICT", item.title) for item in active_view.items)
+            + tuple(
+                (_item_kind_label(item.kind).upper(), item.title)
+                for item in active_view.items
+            )
             + (
                 ()
                 if read_only
@@ -1213,14 +1405,14 @@ def run_resolution_workbench_shell(
             )
         )
         for index, (kind, label) in enumerate(rows):
-            selected = index == split_row["index"]
+            selected = index == session_navigation.row_index
             if selected:
                 fragments.append(("[SetCursorPosition]", ""))
             fragments.append(
                 (
                     (
                         "class:memcommit.table.selected"
-                        if selected and pane_focus["value"] == "items"
+                        if selected and session_navigation.pane == "items"
                         else "bold"
                         if selected
                         else ""
@@ -1300,80 +1492,20 @@ def run_resolution_workbench_shell(
     def move(delta: int) -> None:
         active_view = current_view()
         if split_viewer_items:
-            if pane_focus["value"] == "viewer":
-                if viewer_content["kind"] == "REVIEW":
-                    viewer_section["index"] = max(
-                        0,
-                        min(viewer_section["index"] + delta, 2),
-                    )
-                elif viewer_content["kind"] == "REPORT":
-                    if split_report_text is not None:
-                        report_lines = _seeded_report_lines(
-                            active_view,
-                            split_report_text,
-                            global_strategies,
-                            review_and_apply,
-                            read_only,
-                        )
-                        sections = _seeded_report_sections(report_lines)
-                        last_section = len(sections) - 1
-                    else:
-                        sections = ()
-                        last_section = len(active_view.items) + (2 if read_only else 3)
-                    viewer_section["index"] = max(
-                        0,
-                        min(viewer_section["index"] + delta, last_section),
-                    )
-                    section = viewer_section["index"]
-                    if sections:
-                        key = sections[section][1]
-                        if key.startswith("ITEM:"):
-                            item_index = int(key.split(":", 1)[1])
-                            if item_index < len(active_view.items):
-                                split_row["index"] = item_index + 1
-                                current_navigation.selected_item_uid = (
-                                    active_view.items[item_index].uid
-                                )
-                        elif key == "RESOLVE_ALL":
-                            split_row["index"] = len(active_view.items) + 1
-                        else:
-                            split_row["index"] = 0
-                    elif 2 <= section <= len(active_view.items) + 1:
-                        split_row["index"] = section - 1
-                        item = active_view.items[section - 2]
+            if session_navigation.pane == "viewer":
+                section = session_navigation.move_section(
+                    active_viewer_sections(),
+                    delta,
+                )
+                if viewer_content["kind"] == "REPORT" and section is not None:
+                    session_navigation.row_index = section.row_index or 0
+                    if section.kind == "ITEM" and section.row_index is not None:
+                        item = active_view.items[section.row_index - 1]
                         current_navigation.selected_item_uid = item.uid
-                    elif section == last_section and not read_only:
-                        split_row["index"] = len(active_view.items) + 1
-                    else:
-                        split_row["index"] = 0
-                else:
-                    item = current_navigation.current_item(active_view)
-                    last_section = (
-                        bool(item and item.question)
-                        + bool(item and item.options)
-                        + len(item.blocks if item is not None else ())
-                    )
-                    viewer_section["index"] = max(
-                        0,
-                        min(viewer_section["index"] + delta, last_section),
-                    )
                 set_status("")
                 return
             total_rows = len(active_view.items) + (1 if read_only else 2)
-            split_row["index"] = max(
-                0,
-                min(split_row["index"] + delta, total_rows - 1),
-            )
-            if split_kind() == "ITEM":
-                item = active_view.items[split_row["index"] - 1]
-                current_navigation.selected_item_uid = item.uid
-                current_navigation.expanded_item_uid = item.uid
-                current_navigation.option_cursor_uid = (
-                    item.options[0].uid if item.options else None
-                )
-                current_navigation.selected_option_uid = item.selected_option_uid
-                other_direction["focused"] = False
-                load_draft()
+            session_navigation.move_row(total_rows, delta)
             set_status("")
             return
         item = current_navigation.current_item(active_view)
@@ -1395,7 +1527,7 @@ def run_resolution_workbench_shell(
         """Accelerate only inside long proposed-result runs."""
         if not (
             split_viewer_items
-            and pane_focus["value"] == "viewer"
+            and session_navigation.pane == "viewer"
             and viewer_content["kind"] == "REPORT"
             and split_report_text is not None
         ):
@@ -1408,9 +1540,10 @@ def run_resolution_workbench_shell(
                 global_strategies,
                 review_and_apply,
                 read_only,
+                impact_controller,
             )
         )
-        section_index = max(0, min(viewer_section["index"], len(sections) - 1))
+        section_index = max(0, min(viewer_section_index(), len(sections) - 1))
         if not sections[section_index][1].startswith("RESULT:"):
             navigation_accelerator.reset()
             return direction
@@ -1438,7 +1571,7 @@ def run_resolution_workbench_shell(
         input_heading["value"] = title
         if clear:
             input_area.text = ""
-        pane_focus["value"] = "viewer"
+        session_navigation.focus("composer")
         get_app().layout.focus(input_area)
 
     def submit(event) -> None:
@@ -1448,7 +1581,7 @@ def run_resolution_workbench_shell(
             item = current_navigation.current_item(active_view)
             save_draft()
             other_direction_editor["open"] = False
-            pane_focus["value"] = "viewer"
+            session_navigation.focus("viewer")
             event.app.layout.focus(body_control)
             if item is not None:
                 option_uid, saved_comment = local_drafts.get(item.uid, (None, ""))
@@ -1517,7 +1650,12 @@ def run_resolution_workbench_shell(
                     strategy["index"] + 1,
                     len(global_strategies) - 1,
                 )
-            elif split_kind() == "ITEM":
+            elif (
+                split_kind() == "ITEM"
+                and session_navigation.pane == "viewer"
+                and session_navigation.viewer_row_index
+                == session_navigation.row_index
+            ):
                 move_split_option(1)
             event.app.invalidate()
             return
@@ -1531,7 +1669,12 @@ def run_resolution_workbench_shell(
         if split_viewer_items:
             if split_kind() == "RESOLVE_ALL" and global_strategies:
                 strategy["index"] = max(strategy["index"] - 1, 0)
-            elif split_kind() == "ITEM":
+            elif (
+                split_kind() == "ITEM"
+                and session_navigation.pane == "viewer"
+                and session_navigation.viewer_row_index
+                == session_navigation.row_index
+            ):
                 move_split_option(-1)
             event.app.invalidate()
             return
@@ -1548,25 +1691,35 @@ def run_resolution_workbench_shell(
             if kind == "REPORT":
                 other_direction_editor["open"] = False
                 viewer_content["kind"] = "REPORT"
-                viewer_section["index"] = 0
-                pane_focus["value"] = "viewer"
+                reset_viewer_section()
+                session_navigation.open_selected(report_sections())
                 event.app.layout.focus(body_control)
                 set_status("")
             elif kind == "ITEM":
-                if viewer_content["kind"] != "ITEM":
+                if (
+                    viewer_content["kind"] != "ITEM"
+                    or session_navigation.viewer_row_index
+                    != session_navigation.row_index
+                ):
                     other_direction_editor["open"] = False
+                    item = active_view.items[session_navigation.row_index - 1]
+                    current_navigation.selected_item_uid = item.uid
+                    current_navigation.sync(active_view)
                     viewer_content["kind"] = "ITEM"
-                    viewer_section["index"] = 0
+                    reset_viewer_section()
                     current_navigation.expanded_item_uid = (
                         current_navigation.selected_item_uid
                     )
-                    item = current_navigation.current_item(active_view)
                     current_navigation.option_cursor_uid = (
                         item.options[0].uid
-                        if item is not None and item.options
+                        if item.options
                         else None
                     )
+                    current_navigation.selected_option_uid = item.selected_option_uid
                     other_direction["focused"] = False
+                    session_navigation.open_selected(item_sections())
+                    event.app.layout.focus(body_control)
+                    load_draft()
                     set_status("")
                 elif read_only:
                     set_status("Applied Melds are read-only.")
@@ -1585,14 +1738,16 @@ def run_resolution_workbench_shell(
                             current_navigation.selected_item_uid
                         ).option(selected_uid)
                         set_status(f"Selected · {selected_option.label}")
-            elif not global_strategies:
-                set_status("No whole-set strategies are available.")
             elif review_and_apply:
                 save_draft()
                 if active_view.accept_enabled:
                     action = semantic_action("ACCEPT")
                     if action is not None:
                         event.app.exit(result=action)
+                    event.app.invalidate()
+                    return
+                if not global_strategies:
+                    set_status("No remaining-item policies are available.")
                     event.app.invalidate()
                     return
                 selected_strategy = global_strategies[strategy["index"]]
@@ -1642,38 +1797,22 @@ def run_resolution_workbench_shell(
                 action = semantic_action("SUBMIT_ALL", comment="\n".join(lines))
                 if action is not None:
                     event.app.exit(result=action)
-            elif viewer_content["kind"] != "REPORT" or viewer_section["index"] != (
-                len(
-                    _seeded_report_sections(
-                        _seeded_report_lines(
-                            active_view,
-                            split_report_text,
-                            global_strategies,
-                            review_and_apply,
-                            read_only,
-                        )
-                    )
+            elif not global_strategies:
+                set_status("No whole-set strategies are available.")
+            elif (
+                viewer_content["kind"] != "REPORT"
+                or session_navigation.section_uid
+                != next(
+                    section.uid
+                    for section in report_sections()
+                    if section.kind == "RESOLVE_ALL"
                 )
-                - 1
-                if split_report_text is not None
-                else len(active_view.items) + (2 if read_only else 3)
             ):
                 viewer_content["kind"] = "REPORT"
-                viewer_section["index"] = (
-                    len(
-                        _seeded_report_sections(
-                            _seeded_report_lines(
-                                active_view,
-                                split_report_text,
-                                global_strategies,
-                                review_and_apply,
-                                read_only,
-                            )
-                        )
-                    )
-                    - 1
-                    if split_report_text is not None
-                    else len(active_view.items) + (2 if read_only else 3)
+                session_navigation.focus_section(
+                    report_sections(),
+                    kind="RESOLVE_ALL",
+                    last=True,
                 )
                 set_status("")
             else:
@@ -1682,7 +1821,7 @@ def run_resolution_workbench_shell(
                     global_comment["value"] = True
                     input_heading["value"] = "WHOLE-SET GUIDANCE"
                     input_area.text = ""
-                    pane_focus["value"] = "viewer"
+                    session_navigation.focus("composer")
                     event.app.layout.focus(input_area)
                 else:
                     action = semantic_action(
@@ -1709,23 +1848,22 @@ def run_resolution_workbench_shell(
         event.app.invalidate()
 
     @bindings.add("tab")
+    @bindings.add("s-tab")
     def _focus_input(event) -> None:
         if event.app.layout.has_focus(input_area):
             save_draft()
             other_direction_editor["open"] = False
             if split_viewer_items:
-                pane_focus["value"] = "viewer"
+                session_navigation.focus("viewer")
                 event.app.layout.focus(body_control)
             else:
                 event.app.layout.focus(body_control)
             event.app.invalidate()
             return
         if split_viewer_items:
-            pane_focus["value"] = (
-                "viewer" if pane_focus["value"] == "items" else "items"
-            )
+            session_navigation.toggle_frames()
             event.app.layout.focus(
-                body_control if pane_focus["value"] == "viewer" else items_control
+                body_control if session_navigation.pane == "viewer" else items_control
             )
             event.app.invalidate()
             return
@@ -1739,10 +1877,10 @@ def run_resolution_workbench_shell(
             event.app.invalidate()
             return
         global_comment["value"] = False
-        composer.frame.title = "COMMENT ON SELECTED CONFLICT"
-        input_heading["value"] = "COMMENT ON SELECTED CONFLICT"
+        composer.frame.title = "COMMENT ON SELECTED ITEM"
+        input_heading["value"] = "COMMENT ON SELECTED ITEM"
         if split_viewer_items:
-            pane_focus["value"] = "viewer"
+            session_navigation.focus("composer")
         event.app.layout.focus(input_area)
 
     @bindings.add("c", filter=~has_focus(input_area))
@@ -1759,15 +1897,15 @@ def run_resolution_workbench_shell(
             other_direction_editor["open"] = False
             input_heading["value"] = "WHOLE-SET GUIDANCE"
             input_area.text = ""
-            pane_focus["value"] = "viewer"
+            session_navigation.focus("composer")
             event.app.layout.focus(input_area)
             return
         if split_kind() != "ITEM":
-            set_status("Choose one conflict or RESOLVE ALL first.")
+            set_status("Choose one review item or RESOLVE ALL first.")
             event.app.invalidate()
             return
         if viewer_content["kind"] != "ITEM":
-            set_status("Press Enter to open the selected conflict first.")
+            set_status("Press Enter to open the selected review item first.")
             event.app.invalidate()
             return
         if active_view.input_locked or "SUBMIT_ITEM" not in active_view.capabilities:
@@ -1777,8 +1915,8 @@ def run_resolution_workbench_shell(
         global_comment["value"] = False
         other_direction_editor["open"] = False
         composer.frame.title = "MESSAGE"
-        input_heading["value"] = "COMMENT ON SELECTED CONFLICT"
-        pane_focus["value"] = "viewer"
+        input_heading["value"] = "COMMENT ON SELECTED ITEM"
+        session_navigation.focus("composer")
         event.app.layout.focus(input_area)
 
     @bindings.add("g", filter=~has_focus(input_area))
@@ -1798,7 +1936,7 @@ def run_resolution_workbench_shell(
         input_heading["value"] = "WHOLE-SET GUIDANCE"
         input_area.text = ""
         if split_viewer_items:
-            pane_focus["value"] = "viewer"
+            session_navigation.focus("composer")
         event.app.layout.focus(input_area)
 
     @bindings.add("enter", filter=has_focus(input_area), eager=True)
@@ -1861,13 +1999,13 @@ def run_resolution_workbench_shell(
         if (
             split_viewer_items
             and not event.app.layout.has_focus(input_area)
-            and split_row["index"] != 0
+            and session_navigation.row_index != 0
         ):
-            split_row["index"] = 0
+            session_navigation.row_index = 0
             viewer_content["kind"] = "REPORT"
-            viewer_section["index"] = 0
+            reset_viewer_section()
             current_navigation.close_detail()
-            pane_focus["value"] = "items"
+            session_navigation.focus("items")
             event.app.layout.focus(items_control)
             event.app.invalidate()
             return
@@ -1983,11 +2121,11 @@ def run_resolution_workbench_shell(
         )
         bind_focused_frame_style(
             viewer_frame,
-            is_focused=lambda: pane_focus["value"] == "viewer",
+            is_focused=lambda: session_navigation.pane == "viewer",
         )
         bind_focused_frame_style(
             items_frame,
-            is_focused=lambda: pane_focus["value"] == "items",
+            is_focused=lambda: session_navigation.pane == "items",
         )
         focused_element = items_control
     else:

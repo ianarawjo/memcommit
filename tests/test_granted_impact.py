@@ -89,11 +89,15 @@ def _setup_granted_target(
     ),
     authority_name="run-granted-memory",
     authority_source=None,
+    attachment_name="task-root",
+    public_name="campus-wiki",
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
     active_store = MemoryStore()
-    source = ops.init("task-root")
+    source = ops.init(attachment_name)
     ops.add(source, "Verified update: the public service desk moved east.")
+    if "/" in attachment_name:
+        active_store.save(ops.init(attachment_name.split("/", 1)[0]))
     active_store.save(source)
     active_store.set_current(source.name)
 
@@ -136,7 +140,7 @@ def _setup_granted_target(
         grantee_name=authoring.name,
         resource_name=wiki.name,
         attachment_name=source.name,
-        public_name="campus-wiki",
+        public_name=public_name,
         permissions=parent_permissions,
         recursive=True,
     )
@@ -145,11 +149,148 @@ def _setup_granted_target(
         grantee_name=authoring.name,
         resource_name=details.name,
         attachment_name=source.name,
-        public_name="campus-wiki/construction-details",
+        public_name=public_name + "/construction-details",
         permissions=("QUERY", "SESSION_LOG"),
         recursive=True,
     )
     return active_store, authority_store, source, wiki, parent_grant
+
+
+def test_local_namespace_root_reads_granted_and_owned_descendants_together(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, attachment, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        attachment_name="task-root/participant",
+        public_name="task-root/campus-wiki",
+    )
+    active.set_current("task-root")
+    provider = _GrantedFindProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    found = runner.invoke(app, ["find", "service desk", "--limit", "10"])
+    listed = runner.invoke(app, ["ls", "-R", "task-root"])
+    mixed_copy = runner.invoke(app, ["ls", "-R", "task-root", "--copy"])
+
+    assert found.exit_code == 0, found.output + found.stderr
+    assert attachment.name in found.output
+    assert "task-root/campus-wiki" in found.output
+    assert "west lobby" in found.output
+    assert listed.exit_code == 0, listed.output + listed.stderr
+    assert "task-root/participant" in listed.output
+    assert "task-root/campus-wiki" in listed.output
+    assert mixed_copy.exit_code == 1
+    assert "mixed local and granted recursive list" in mixed_copy.stderr
+    assert DETAIL_SECRET not in "\n".join(provider.prompts)
+
+
+def test_rationale_local_root_combines_authorized_granted_public_subtree(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, attachment, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        attachment_name="task-root/participant",
+        public_name="task-root/campus-wiki",
+    )
+    active.set_current("task-root")
+    target = next(
+        item for item in attachment.iter_items() if isinstance(item, Memory)
+    )
+    payloads: list[dict[str, object]] = []
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert operation == "rationale inference"
+            payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
+            payloads.append(payload)
+            candidates = payload["candidates"]
+            return json.dumps(
+                {
+                    "best_supported_reading": "The public and local views align.",
+                    "contextual_flow": "The granted wiki supplies context.",
+                    "support_ids": [candidate["candidate_id"] for candidate in candidates],
+                    "unresolved": [],
+                }
+            )
+
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
+        Provider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["rationale", target.uid[:8], "--context", "task-root"],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert payloads
+    candidate_contexts = {
+        candidate["context_name"] for candidate in payloads[0]["candidates"]
+    }
+    assert "task-root/campus-wiki" in candidate_contexts
+    assert "task-root/campus-wiki/services" in candidate_contexts
+    assert "Rationale scope: task-root and readable descendants · 4 Context(s)" in (
+        result.output
+    )
+    assert DETAIL_SECRET not in json.dumps(payloads)
+
+
+def test_rationale_mixed_subtree_requires_grant_combination_permissions(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, attachment, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+        attachment_name="task-root/participant",
+        public_name="task-root/campus-wiki",
+    )
+    active.set_current("task-root")
+    target = next(
+        item for item in attachment.iter_items() if isinstance(item, Memory)
+    )
+    calls = []
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
+        lambda: calls.append("connected"),
+    )
+
+    result = runner.invoke(
+        app,
+        ["rationale", target.uid[:8], "--context", "task-root"],
+    )
+
+    assert result.exit_code == 1
+    assert "does not authorize COMBINE + DERIVE" in result.stderr
+    assert calls == []
+
+    recorded = runner.invoke(
+        app,
+        [
+            "rationale",
+            target.uid[:8],
+            "--context",
+            "task-root",
+            "--recorded-only",
+        ],
+    )
+    assert recorded.exit_code == 0, recorded.output + recorded.stderr
+    assert calls == []
 
 
 def _empty_plan() -> str:

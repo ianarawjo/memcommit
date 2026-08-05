@@ -22,6 +22,7 @@ from memcommit.commands.granted_context import (
     GrantedReadStore,
     resolve_context_access,
 )
+from memcommit.commands.endpoint_setup_flows import choose_meld_setup
 from memcommit.derived_policy import (
     authorize_combination,
     authorize_derived_transfer,
@@ -53,6 +54,7 @@ from memcommit.commands.meld_sessions import (
     reload_selected_meld_session,
 )
 from memcommit.commands.session_picker import (
+    SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
@@ -860,11 +862,16 @@ def _run_interactive(
     store: MemoryStore,
     session: MeldSession,
     provider_factory,
+    allow_apply: bool = True,
 ) -> MeldSession:
     """Run issue and whole-set turns through one shared interactive shell."""
     navigation = ResolutionNavigation()
     while session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}:
-        action = run_meld_shell(session, navigation=navigation)
+        action = run_meld_shell(
+            session,
+            navigation=navigation,
+            review_only=not allow_apply,
+        )
         if action is None:
             break
         expected = meld_canonical_digest(session.to_dict())
@@ -876,6 +883,8 @@ def _run_interactive(
             )
             break
         if action.kind == "ACCEPT":
+            if not allow_apply:
+                raise MeldCommandError("Review cannot apply a Meld target.")
             _accept(
                 store=store,
                 session=session,
@@ -927,6 +936,21 @@ def _run_interactive(
             expected_session_digest=expected,
         )
     return session
+
+
+def run_meld_review(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    provider_factory,
+) -> MeldSession:
+    """Run semantic Meld review turns without exposing target application."""
+    return _run_interactive(
+        store=store,
+        session=session,
+        provider_factory=provider_factory,
+        allow_apply=False,
+    )
 
 
 def start_reviewed_symmetric_meld(
@@ -1111,16 +1135,21 @@ def _resume_picked_meld(
 def _browse_saved_meld_sessions(store: MemoryStore) -> None:
     """Select one saved Meld by metadata, then reopen its exact persisted route."""
     catalog = list_meld_session_catalog(store)
-    if not catalog:
+    if not catalog and not (sys.stdin.isatty() and sys.stdout.isatty()):
         typer.echo("No saved Meld sessions.")
         return
     by_key = {entry.key: entry for entry in catalog}
     receipt = choose_session(
         tuple(_meld_picker_entry(entry) for entry in catalog),
         title="MELD SESSIONS · RECENTLY MODIFIED",
-        new_receipt=None,
+        new_receipt=SessionNewReceipt(kind="meld", argv=("mem", "meld")),
     )
     if receipt is None:
+        return
+    if isinstance(receipt, SessionNewReceipt):
+        if receipt.kind != "meld" or receipt.argv != ("mem", "meld"):
+            raise MeldCommandError("Meld session picker returned an invalid receipt.")
+        _start_new_meld_from_picker(store)
         return
     if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "meld":
         raise MeldCommandError("Meld session picker returned an invalid receipt.")
@@ -1131,6 +1160,37 @@ def _browse_saved_meld_sessions(store: MemoryStore) -> None:
     # target UID reload below is authoritative and its saved frames are bound
     # again before any workbench is opened.
     _resume_picked_meld(store=store, entry=entry)
+
+
+def _start_new_meld_from_picker(store: MemoryStore) -> None:
+    """Collect the complete mode and endpoint shape in one setup shell."""
+    receipt = choose_meld_setup(store)
+    if receipt is None:
+        typer.echo("New Meld cancelled; no session was created.")
+        return
+    left = receipt.left_name
+    right = receipt.right_name
+    if receipt.mode == "directional":
+        cmd(left=left, into=right)
+        return
+
+    left_ctx = store.load_direct(left)
+    right_ctx = store.load_direct(right)
+    analysis = load_comparison_analysis(left_ctx.uid, right_ctx.uid)
+    if analysis is None:
+        raise MeldCommandError(
+            "A symmetric Meld requires a saved ordered Compare analysis for "
+            "the selected peers. Start Compare first."
+        )
+    if receipt.target_name is None:
+        raise MeldCommandError("Symmetric Meld setup omitted result C.")
+    session = start_reviewed_symmetric_meld(
+        store=store,
+        analysis=analysis,
+        target_name=receipt.target_name,
+        create_target=receipt.create_target,
+    )
+    typer.echo(render_meld_session(session))
 
 
 def cmd(

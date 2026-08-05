@@ -44,15 +44,27 @@ is expanded.
 
 - Up and Down move among currently visible rows and stop at the first or last
   row.
-- Right recursively expands a collapsed branch and every nested branch below
-  it; on an expanded branch it moves to the first child. Left recursively
-  collapses an expanded branch; on a collapsed branch or leaf it moves to the
-  parent. The footer names this control `←→ expand` so the visible action is
-  explicit rather than calling the widget itself a tree.
+- Right expands one complete descendant depth below the selected anchor. The
+  first press reveals its direct children, the next reveals grandchildren
+  below every expandable direct child, and later presses continue one depth at
+  a time. Once the complete subtree is visible, Right moves to the first child.
+  Left removes the deepest expanded descendant depth one layer at a time; only
+  when no layer remains does it move to the parent. A partially open initial
+  current path is normalized at its shallowest missing depth before a deeper
+  layer opens. The footer names this control `←→ expand` so the visible
+  action is explicit rather than calling the widget itself a tree.
 - `A` snapshots the current compact expansion state and expands every branch.
   A second `A` restores that state. If the person selected a descendant that
   was hidden in the snapshot, its ancestors remain expanded so selection does
   not jump or disappear.
+- Lowercase `m` toggles read-only direct Memory rows only for the selected
+  Context. Uppercase `M` shows or hides them for all Contexts and clears prior
+  per-Context exceptions, providing a predictable fresh global state. Memory
+  rows show their short selector and escaped one-line content, but never become
+  cursor targets and never change which Context Enter accepts. Newly revealed
+  Contexts are loaded into a process-local cache only when their effective
+  visibility is on. Query-only and otherwise unavailable virtual rows remain
+  opaque; their source content is never opened for the preview.
 - Enter accepts the selected Context. Every displayed row comes from the
   frozen real or granted Context catalog.
 - Escape, `q`, or Ctrl-C cancel without changing current state.
@@ -74,8 +86,9 @@ descendants under one authority namespace, a fully expanded flat list consumed
 the initial viewport and made sibling task roots appear absent even though
 scrolling could eventually reach them.
 
-Expansion and selection are process-local presentation state. They never enter
-a Context record, Profile, or `state.json`. There is no `-R` Switch option:
+Expansion, Memory visibility, and selection are process-local presentation
+state. They never enter a Context record, Profile, or `state.json`. There is no
+`-R` Switch option:
 unlike `mem ls -R`, which changes the traversal included in output, the picker
 always knows the complete switchable catalog and `A` changes only its current
 presentation. Keeping the toggle inside the picker also lets a person inspect
@@ -96,6 +109,18 @@ replacement, or modification of the selected record, and rejects a concurrent
 current-Context change. This prevents a slow picker or relative resolution
 from silently overwriting another terminal's later switch.
 
+The namespace tree is also available as the terminal-independent
+`ContextTree` plus `ContextTreeState` component. It owns the frozen tree,
+cursor, visible-row projection, depth-wise expansion and collapse, and
+expand-all restore behavior. Optional `ContextMemoryRow` projections add
+read-only leaves without changing the Context cursor. The component performs
+no terminal I/O and assigns no operational role to the selected name.
+`choose_context()` is the existing full-screen, single-selection wrapper over
+that state and can also run in read-only browse mode. Larger TUIs may embed one or more
+independent states and retain their own role, scope, validation, and receipt
+contracts. Sever setup uses one state for Source and one for Criteria while
+keeping descendant scope and the require-new Output name Sever-owned.
+
 ## Dependency map and ownership
 
 `mem contexts` and the interactive form of `mem switch` are two presentations
@@ -113,7 +138,7 @@ memcommit.cli
     ├── MemoryStore.current_context_name()       # one command-start snapshot
     ├── when NAME is omitted
     │   ├── MemoryStore.list_context_names()
-    │   └── context_picker.choose_context()      # returns a name; writes nothing
+    │   └── context_picker.choose_context()      # full-screen wrapper; returns a name
     ├── when NAME is supplied
     │   └── bypass the catalog UI and use the operand directly
     ├── context_locator.resolve_context_locator() # explicit relative operands
@@ -128,6 +153,12 @@ listing presentation, while `context_picker` owns interactive selection and
 Keeping the commands from invoking one another avoids making human-oriented
 output into an internal data contract while still giving both surfaces the
 same sorted names from `MemoryStore.list_context_names()`.
+
+`choose_context()` accepts caller-owned title and acceptance labels so a
+Compare, Update, Ground, or Switch flow does not mislabel selection as another
+operation. The lower `ContextTreeState` boundary is preferred when selection
+must remain inside an existing full-screen application; launching nested Typer
+commands is not an integration mechanism.
 
 The catalog method scans only ordinary Context records under
 `contexts/**/context.json` and validates their minimum identity header. This is

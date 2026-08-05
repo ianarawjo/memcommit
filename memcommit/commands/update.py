@@ -1,14 +1,23 @@
-"""Apply a semantic update from Context A to a local target Context B."""
+"""Apply or reopen a semantic update from Context A to a local target B."""
+from datetime import datetime
+import sys
 from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.endpoint_setup_flows import choose_update_setup
 from memcommit.commands.granted_context import (
     GrantedReadStore,
     freeze_granted_update_target,
     resolve_context_access,
 )
-from memcommit.commands.update_render import render_plan
+from memcommit.commands.session_picker import (
+    SessionNewReceipt,
+    SessionOpenReceipt,
+    SessionPickerEntry,
+    choose_session,
+)
+from memcommit.commands.update_render import render_plan, review_update_application
 from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.granted_source_update_application import (
     apply_granted_source_staged_update,
@@ -28,6 +37,87 @@ from memcommit.update import (
     session_matches,
 )
 from memcommit.update_endpoints import resolve_update_endpoints
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _browse_saved_update(store: MemoryStore) -> None:
+    """Browse the singleton receipt, or collect endpoints for a new Update."""
+    session = store.load_staged_update()
+    interactive = _interactive_terminal()
+    if not interactive:
+        if session is None:
+            typer.echo("No saved Update session.")
+        else:
+            render_plan(
+                session,
+                staged=session.status == "staged",
+                applied=session.status == "applied",
+            )
+        return
+
+    entries: tuple[SessionPickerEntry, ...] = ()
+    if session is not None:
+        entries = (
+            SessionPickerEntry(
+                kind="update",
+                key=session.uid,
+                title=f"{session.source_name} → {session.target_name}",
+                status=session.status.upper(),
+                subtitle=(
+                    f"{len(session.operations)} planned "
+                    f"{'change' if len(session.operations) == 1 else 'changes'}"
+                ),
+                group=session.target_name,
+                sort_timestamp=datetime.fromisoformat(session.created_at).timestamp(),
+                detail=(
+                    f"Session {session.uid}\n"
+                    f"Source {session.source_name}\n"
+                    f"Target {session.target_name}\n"
+                    "Update retains one global receipt; New replaces it only "
+                    "through the existing explicit endpoint checks."
+                ),
+                reopen_argv=("mem", "update"),
+            ),
+        )
+    receipt = choose_session(
+        entries,
+        title="MEM UPDATE · SAVED SESSION",
+        new_receipt=SessionNewReceipt(kind="update", argv=("mem", "update")),
+    )
+    if receipt is None:
+        typer.echo("Update selection cancelled.")
+        return
+    if isinstance(receipt, SessionNewReceipt):
+        if receipt.kind != "update" or receipt.argv != ("mem", "update"):
+            raise UpdateError("Update session picker returned an invalid receipt.")
+        setup = choose_update_setup(store)
+        if setup is None:
+            typer.echo("New Update cancelled; no session was created.")
+            return
+        cmd(source_name=setup.source_name, target_name=setup.target_name)
+        return
+    if (
+        not isinstance(receipt, SessionOpenReceipt)
+        or receipt.kind != "update"
+        or session is None
+        or receipt.key != session.uid
+        or receipt.argv != ("mem", "update")
+    ):
+        raise UpdateError("Update session picker returned an invalid receipt.")
+    current = store.load_staged_update()
+    if current is None or current.to_dict() != session.to_dict():
+        raise UpdateError(
+            "The saved Update session changed while the launcher was open. "
+            "Reopen it."
+        )
+    render_plan(
+        current,
+        staged=current.status == "staged",
+        applied=current.status == "applied",
+    )
 
 
 def _resolve_update_access(
@@ -77,13 +167,13 @@ def cmd(
     ] = False,
 ) -> None:
     if source_name is None and target_name is None:
-        typer.secho(
-            "Update error: choose an endpoint with '--from SOURCE' or "
-            "'--to TARGET'.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
+        store = MemoryStore(create=False)
+        try:
+            _browse_saved_update(store)
+        except (OSError, UpdateError, ValueError) as error:
+            typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        return
 
     store = MemoryStore()
     try:
@@ -240,6 +330,10 @@ def cmd(
                 session,
                 expected_current=existing,
             )
+        if _interactive_terminal() and not review_update_application(session):
+            render_plan(session, staged=True)
+            typer.echo("Update remains staged; no target changes were applied.")
+            return
         if session.granted_target is not None:
             applied = apply_granted_staged_update(store, session)
         elif session.granted_source is not None:

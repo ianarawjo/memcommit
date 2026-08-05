@@ -5,6 +5,7 @@ from dataclasses import replace
 
 import typer
 
+from memcommit.impact_controller import ImpactController
 from memcommit.commands.resolution_workbench_shell import (
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,
@@ -40,14 +41,49 @@ def _view(
 
 def run_update_workbench(session: UpdateSession) -> None:
     """Open provider-free drill-down over one already-saved Impact plan."""
+    view = _view(session, staged=False, applied=False)
     run_resolution_workbench_shell(
-        _view(session, staged=False, applied=False),
+        view,
         terminal_label="Interactive update impact",
         snapshot_hint=(
             "Run the same 'mem impact --to TARGET' command outside a TTY "
             "to render the saved plan."
         ),
+        split_viewer_items=True,
+        read_only=True,
+        impact_controller=ImpactController.from_resolution(
+            view,
+            title="IMPACT · UPDATE",
+            summary="These are the exact planned target changes. Nothing is applied.",
+        ),
     )
+
+
+def review_update_application(session: UpdateSession) -> bool:
+    """Return true only after explicit TTY acceptance of one staged Update."""
+    view = replace(
+        _view(session, staged=True, applied=False),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+    )
+    action = run_resolution_workbench_shell(
+        view,
+        terminal_label="Review staged Update impact",
+        snapshot_hint=(
+            "Run 'mem update --to TARGET' in a TTY to review Impact before Apply."
+        ),
+        split_viewer_items=True,
+        review_and_apply=True,
+        impact_controller=ImpactController.from_resolution(
+            view,
+            title="IMPACT · UPDATE",
+            summary=(
+                "These exact target changes are staged. Apply remains a separate "
+                "explicit action."
+            ),
+        ),
+    )
+    return action.kind == "ACCEPT"
 
 
 def render_plan(

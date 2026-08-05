@@ -3,7 +3,8 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands.context_picker import choose_context
+from memcommit.commands.context_picker import ContextMemoryRow, choose_context
+from memcommit.context import Memory, MemoryRef
 from memcommit.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
@@ -129,6 +130,23 @@ def _local_picker_annotations(
     }
 
 
+def _picker_memory_rows(context) -> tuple[ContextMemoryRow, ...]:
+    """Project direct Memories without making them selectable tree nodes."""
+
+    rows: list[ContextMemoryRow] = []
+    for item in context.iter_items():
+        if isinstance(item, Memory):
+            rows.append(ContextMemoryRow(f"memory {item.uid[:8]}", item.content))
+        elif isinstance(item, MemoryRef):
+            content = (
+                item.target.content
+                if item.target is not None
+                else f"(dangling reference) {item.target_context_name}"
+            )
+            rows.append(ContextMemoryRow(f"ref {item.uid[:8]}", content))
+    return tuple(rows)
+
+
 def cmd(
     name: Annotated[
         Optional[str],
@@ -162,20 +180,38 @@ def cmd(
                 if local_annotations
                 else {}
             )
+
+            def load_picker_memories(context_name: str):
+                if context_name in names:
+                    return _picker_memory_rows(store.load(context_name))
+                access = resolve_context_access(
+                    store,
+                    context_name,
+                    current_name=expected_current,
+                    required_permission="READ",
+                )
+                return _picker_memory_rows(
+                    GrantedReadStore(access).load(access.display_name)
+                )
+
             if virtual_names:
                 name = choose_context(
                     names,
                     current=expected_current,
+                    accept_label="switch",
                     **local_options,
                     virtual_names=virtual_names,
                     selectable_virtual_names=granted_state.selectable_names,
                     virtual_annotations=virtual_annotations,
+                    memory_loader=load_picker_memories,
                 )
             else:
                 name = choose_context(
                     names,
                     current=expected_current,
+                    accept_label="switch",
                     **local_options,
+                    memory_loader=load_picker_memories,
                 )
         except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
             typer.secho(

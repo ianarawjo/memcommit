@@ -6,10 +6,14 @@ from dataclasses import dataclass
 
 from memcommit.commands.granted_context import (
     ContextAccess,
-    GrantedReadStore,
     resolve_context_access,
 )
+from memcommit.commands.readable_context_catalog import (
+    ReadableContextCatalog,
+    freeze_readable_context_catalog,
+)
 from memcommit.context import Context, Memory
+from memcommit.derived_policy import authorize_combination
 from memcommit.provenance import (
     MemoryState,
     TraceCandidate,
@@ -26,13 +30,26 @@ class RationaleScope:
     """One frozen readable Context subtree and its access boundary."""
 
     access: ContextAccess
-    read_store: MemoryStore | GrantedReadStore
+    read_store: ReadableContextCatalog
     root_name: str
     contexts: tuple[Context, ...]
+    context_accesses: tuple[tuple[str, ContextAccess], ...]
 
     @property
     def granted(self) -> bool:
         return self.access.is_granted
+
+    def access_for(self, context_name: str) -> ContextAccess:
+        for name, access in self.context_accesses:
+            if name == context_name:
+                return access
+        raise RationaleError(
+            f"Context {context_name!r} is outside the frozen Rationale scope."
+        )
+
+    @property
+    def contributor_accesses(self) -> tuple[ContextAccess, ...]:
+        return tuple(access for _name, access in self.context_accesses)
 
 
 @dataclass(frozen=True)
@@ -42,6 +59,7 @@ class RationaleTarget:
     selector: str
     owner: Context
     candidate: TraceCandidate
+    access: ContextAccess
 
 
 def load_rationale_scope(
@@ -58,8 +76,10 @@ def load_rationale_scope(
         current_name=current_name,
         required_permission="READ",
     )
-    read_store: MemoryStore | GrantedReadStore = (
-        GrantedReadStore(access) if access.is_granted else access.store
+    read_store = freeze_readable_context_catalog(
+        active_store,
+        access,
+        include_query_routes=False,
     )
     root_name = access.display_name
     names = [
@@ -77,7 +97,30 @@ def load_rationale_scope(
         read_store=read_store,
         root_name=root_name,
         contexts=contexts,
+        context_accesses=tuple(
+            (name, read_store.access_for(name)) for name in names
+        ),
     )
+
+
+def authorize_rationale_inference(scope: RationaleScope) -> None:
+    """Authorize contextual inference only when it crosses ownership domains."""
+
+    accesses = scope.contributor_accesses
+    if not any(access.is_granted for access in accesses):
+        return
+    domains = {
+        (
+            "grant",
+            access.view.grant.uid,
+            access.view.grant.resource_uid,
+        )
+        if access.is_granted and access.view is not None
+        else ("local", str(access.store.store_dir), access.context_name)
+        for access in accesses
+    }
+    if len(domains) > 1:
+        authorize_combination(accesses)
 
 
 def rationale_candidates(
@@ -88,7 +131,8 @@ def rationale_candidates(
     ordered: list[TraceCandidate] = []
     owners: dict[str, tuple[Context, TraceCandidate]] = {}
     for context in scope.contexts:
-        if scope.granted:
+        access = scope.access_for(context.name)
+        if access.is_granted:
             candidates = tuple(
                 TraceCandidate(
                     uid=memory.uid,
@@ -103,7 +147,7 @@ def rationale_candidates(
                 )
             )
         else:
-            candidates = collect_trace_candidates(scope.read_store, context)
+            candidates = collect_trace_candidates(access.store, context)
         for candidate in candidates:
             if candidate.uid in owners:
                 raise RationaleError(
@@ -138,15 +182,19 @@ def resolve_rationale_target(
     if len(matches) != 1:
         raise RationaleError(f"Memory selector {selector!r} is ambiguous.")
     uid, owner, candidate = matches[0]
-    return RationaleTarget(selector=uid, owner=owner, candidate=candidate)
+    return RationaleTarget(
+        selector=uid,
+        owner=owner,
+        candidate=candidate,
+        access=scope.access_for(owner.name),
+    )
 
 
 def rationale_trace(scope: RationaleScope, target: RationaleTarget) -> TraceReport:
     """Build local provenance or a history-free granted READ projection."""
 
-    if not scope.granted:
-        assert isinstance(scope.read_store, MemoryStore)
-        return build_trace(scope.read_store, target.owner, target.selector)
+    if not target.access.is_granted:
+        return build_trace(target.access.store, target.owner, target.selector)
     state = MemoryState(
         uid=target.candidate.uid,
         content=target.candidate.content,

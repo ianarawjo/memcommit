@@ -44,9 +44,19 @@ operation adapter's reload checks are authoritative.
 preview without moving the selected entry. `S` switches between recently modified
 and name order, `G` switches between a flat list and Context grouping, `/`
 filters the frozen projection including detail and secondary Context names,
-and Escape cancels. `N` exists only when an
-adapter supplies an explicit new-session receipt; initially Ground alone does
-so. No picker executes the displayed argv. When a grouped list scrolls into
+and Escape cancels. When an adapter supplies an explicit new-session receipt,
+the picker pins an operation-specific `Add new <Operation> session` row above
+the saved catalog. It is a launcher row rather than a synthetic saved session:
+sorting, Context grouping, and filtering do not move or remove it. With saved
+work present the newest saved row retains initial focus and Up reaches Add-new;
+with an empty or no-match catalog Add-new receives focus. Enter on that row and
+`N` both return the exact same new-session receipt. Ground, Compare, Meld,
+Atomize, Update, and Sever adapters use it to leave the read-only launcher and
+collect the operation-specific Contexts or setup fields. The list reserves one
+of its visible lines for the pinned row so scrolling around a saved selection
+cannot hide the explicit creation path. An empty catalog therefore remains an
+actionable screen instead of short-circuiting before the picker opens. No
+picker executes the displayed argv. When a grouped list scrolls into
 the middle of one Context, it repeats that Context heading with `CONTINUED`;
 the visible slice is budgeted by rendered lines rather than item count so
 headings cannot hide the selected session.
@@ -72,7 +82,10 @@ Bare `mem meld`, which previously had no complete no-operand operation, and
 `mem meld --sessions` show target-bound Meld sessions. The adapter reloads the
 selected target slot, checks session identity and digest, and revalidates its
 persisted source and target Context frames before opening it. Explicit source,
-target, and action forms retain their existing behavior.
+target, and action forms retain their existing behavior. `N` asks for the Meld
+mode and two distinct ordinary Contexts. Directional setup enters the normal
+INCOMING-to-BASELINE path; symmetric setup additionally requires an existing
+ordered Compare analysis and the existing reviewed result-target picker.
 
 ### Atomize
 
@@ -80,6 +93,7 @@ Bare `mem atomize` retains its current-Context create-or-resume behavior.
 `mem atomize --sessions` is the cross-Context browser. Selection may render or
 resume only a still-current saved analysis/workbench/grounding artifact; it
 must not silently regenerate stale work or switch the current Context.
+`N` chooses an ordinary Context and hands it to the same create-or-resume path.
 
 ### Compare
 
@@ -92,6 +106,28 @@ opening and omits the generic metadata envelope, so entering the workbench is
 progressive disclosure rather than a replacement of the result the person just
 inspected. Refresh remains an
 explicit `mem compare --to ... --refresh` action.
+
+`N` selects one ordinary peer for the frozen current reference Context, then
+hands that exact pair to the normal Compare path. Cancelling peer selection
+creates no analysis.
+
+### Update
+
+Bare `mem update` opens the singleton saved Update receipt, or an empty
+launcher before the first receipt exists. `N` collects distinct ordinary
+source and target Contexts and then invokes the normal explicit-endpoint
+Update path; provider planning, replacement checks, application, and receipts
+remain authoritative there. Opening a saved row reloads the singleton and
+requires its complete serialized value to remain unchanged before rendering.
+
+### Sever
+
+Bare `mem sever` and interactive `mem sever --sessions` browse retained Sever
+reviews through the shared launcher. `N` leaves the launcher for Sever's
+Source–Criteria–Output setup. Opening a saved row reloads the exact session and
+compares its complete digest before entering the provider-free Resolution
+Workbench. Outside a terminal, bare Sever retains its explicit-operand guidance
+and `--sessions` retains the stable plain listing for automation.
 
 ## Time and grouping semantics
 
@@ -133,7 +169,8 @@ archive, and concurrency behavior; the picker must not manufacture apparent
 history from the current single overwrite slot.
 
 Find conversations remain process-local, while Impact/Update retain global
-single records. Compare and translation artifacts may eventually share a
+single records. The Update launcher exposes that honest singleton rather than
+implying an append-only session history. Compare and translation artifacts may eventually share a
 broader saved-view browser, but only Compare is in this implementation slice.
 
 ## Safety and limitations
@@ -148,6 +185,9 @@ broader saved-view browser, but only Compare is in this implementation slice.
 - A public route hint is displayed and compared as argv elements, not executed
   by the shared picker and never interpolated through a shell. Selection uses
   the opaque catalog key, not that hint.
+- The Add-new row is derived only from the adapter's validated
+  `SessionNewReceipt`. It never enters the saved catalog, does not acquire a
+  fake timestamp or Context group, and returns no open-session key.
 - The first implementation loads complete records to build summaries. A
   rebuildable derived index may replace that scan if scale requires it; such
   an index must never become the source of session truth.

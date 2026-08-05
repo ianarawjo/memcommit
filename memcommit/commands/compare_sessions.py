@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 import re
+import sys
 import uuid
 
 from memcommit.comparison import (
@@ -16,6 +17,7 @@ from memcommit.comparison_store import (
     load_comparison_analysis,
 )
 from memcommit.commands.session_picker import (
+    SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
@@ -220,17 +222,27 @@ def choose_comparison_session(
     store: MemoryStore,
     *,
     ledger: bool = False,
-) -> SessionOpenReceipt | None:
+) -> SessionOpenReceipt | SessionNewReceipt | None:
     """Return an exact saved-analysis receipt; never run Compare."""
     entries = comparison_session_entries(store, ledger=ledger)
-    if not entries:
+    # Non-interactive callers retain a stable empty result, while a terminal
+    # deliberately opens the launcher even before the first analysis exists.
+    if not entries and not (sys.stdin.isatty() and sys.stdout.isatty()):
         return None
     receipt = choose_session(
         entries,
         title="MEM COMPARE · SAVED ANALYSES",
+        new_receipt=SessionNewReceipt(
+            kind="compare",
+            argv=("mem", "compare"),
+        ),
     )
     if receipt is None:
         return None
+    if isinstance(receipt, SessionNewReceipt):
+        if receipt.kind != "compare" or receipt.argv != ("mem", "compare"):
+            raise ValueError("Compare session picker returned an invalid receipt.")
+        return receipt
     if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "compare":
         raise ValueError("Compare session picker returned an invalid receipt.")
     entry_by_key = {entry.key: entry for entry in entries}

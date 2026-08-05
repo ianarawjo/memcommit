@@ -7,6 +7,7 @@ The first shared rollout is implemented in:
 ```text
 mem switch LOCATOR
 mem compare --to LOCATOR
+mem compare --from LOCATOR --to LOCATOR
 mem meld LOCATOR LOCATOR
 mem meld [LOCATOR] --into LOCATOR
 mem meld --from LOCATOR
@@ -102,6 +103,7 @@ canonical name. Thus:
 ```text
 mem compare --to ../to
 mem compare --to test/update/to
+mem compare --from ../from --to ../to
 ```
 
 identify the same ordered comparison slot and the second spelling can reuse

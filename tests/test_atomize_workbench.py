@@ -11,6 +11,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.atomize_sessions as atomize_sessions_module
 from memcommit.atomize import (
     ATOMIZE_LEGACY_RULESET_VERSION,
     AtomizeAnalysisSession,
@@ -45,7 +46,7 @@ from memcommit.commands.atomize_sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.commands.review_shell import RESPONSE_LABEL
-from memcommit.commands.session_picker import SessionOpenReceipt
+from memcommit.commands.session_picker import SessionNewReceipt, SessionOpenReceipt
 from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.store import MemoryStore
 
@@ -417,8 +418,11 @@ def test_cli_reuses_one_analysis_across_impact_atomize_and_review(
         assert "WHAT HAPPENED" in output
         assert "WHAT REMAINS UNRESOLVED" in output
         assert "REPRESENTATIVE / BOUNDARY CASES" in output
-        assert "ISSUES" in output
-        assert RESPONSE_LABEL in output
+    assert "ISSUES" in first.output
+    assert "REVIEW ITEMS" in review.output
+    assert RESPONSE_LABEL in first.output
+    assert "EXACT RESULTS" in review.output
+    assert RESPONSE_LABEL not in review.output
     resumed = store.load_atomize_workbench(analysis)
     assert resumed is not None
     assert resumed.uid == workbench.uid
@@ -500,6 +504,24 @@ def test_atomize_sessions_empty_and_forged_receipts_fail_closed(
     empty = runner.invoke(app, ["atomize", "--sessions"])
     assert empty.exit_code == 0, empty.output
     assert "Atomize selection ended; no analysis was opened." in empty.output
+
+    class TTY:
+        @staticmethod
+        def isatty():
+            return True
+
+    monkeypatch.setattr(atomize_sessions_module.sys, "stdin", TTY())
+    monkeypatch.setattr(atomize_sessions_module.sys, "stdout", TTY())
+    new_receipt = SessionNewReceipt(kind="atomize", argv=("mem", "atomize"))
+    monkeypatch.setattr(
+        "memcommit.commands.atomize_sessions.choose_session",
+        lambda entries, **kwargs: (
+            new_receipt
+            if entries == () and kwargs["new_receipt"] == new_receipt
+            else pytest.fail("empty Atomize must offer New")
+        ),
+    )
+    assert choose_atomize_session(store) == new_receipt
 
     ctx, _ = _init_context(store)
     opened = open_or_create_atomize_workbench(

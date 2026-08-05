@@ -18,10 +18,13 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame, TextArea
 
 from memcommit.commands.context_picker import (
-    _build_context_tree,
-    _context_ancestors,
-    _expandable_context_subtree,
-    _visible_context_rows,
+    ContextTreeState,
+    build_context_tree,
+)
+from memcommit.commands.horizontal_choice import (
+    HorizontalChoiceOption,
+    HorizontalChoiceState,
+    render_horizontal_choice,
 )
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
@@ -83,11 +86,11 @@ def choose_sever_setup(
             "and --save-as outside a terminal."
         )
 
-    tree = _build_context_tree(catalog, materialized_names=selectable)
+    tree = build_context_tree(catalog, materialized_names=selectable)
     initial_name = current if current in selectable else local[0]
-    cursor: dict[_Role, str] = {
-        "SOURCE": initial_name,
-        "CRITERIA": initial_name,
+    tree_state: dict[_Role, ContextTreeState] = {
+        role: ContextTreeState.create(tree, selected=initial_name)
+        for role in ("SOURCE", "CRITERIA")
     }
     # Both roles begin at the local current Context for orientation. Sever
     # still refuses to continue until the person makes them distinct.
@@ -95,21 +98,19 @@ def choose_sever_setup(
         "SOURCE": initial_name,
         "CRITERIA": initial_name,
     }
-    expanded: dict[_Role, set[str]] = {
-        role: _context_ancestors(tree, initial_name)
+    scope_choice: dict[_Role, HorizontalChoiceState] = {
+        role: HorizontalChoiceState(
+            (
+                HorizontalChoiceOption("EXACT", "THIS CONTEXT ONLY"),
+                HorizontalChoiceOption("SUBTREE", "INCLUDE DESCENDANTS"),
+            ),
+            selected_uid="SUBTREE",
+        )
         for role in ("SOURCE", "CRITERIA")
-    }
-    expand_all: dict[_Role, bool] = {"SOURCE": False, "CRITERIA": False}
-    include_descendants: dict[_Role, bool] = {
-        "SOURCE": True,
-        "CRITERIA": True,
     }
     scope_focused: dict[_Role, bool] = {
         "SOURCE": False,
         "CRITERIA": False,
-    }
-    before_expand_all: dict[_Role, set[str]] = {
-        role: set(expanded[role]) for role in ("SOURCE", "CRITERIA")
     }
     output_base = current if current in local else local[0]
     output_stem = f"{output_base}/severed"
@@ -123,20 +124,16 @@ def choose_sever_setup(
     bindings = KeyBindings()
 
     def visible_rows(role: _Role):
-        return _visible_context_rows(tree, expanded[role])
+        return tree_state[role].visible_rows()
 
     def selected_row_index(role: _Role) -> int:
-        return next(
-            index
-            for index, row in enumerate(visible_rows(role))
-            if row.name == cursor[role]
-        )
+        return tree_state[role].selected_row_index()
 
     def render_context(role: _Role) -> list[tuple[str, str]]:
         fragments: list[tuple[str, str]] = []
         rows = visible_rows(role)
         for index, row in enumerate(rows):
-            focused = cursor[role] == row.name
+            focused = tree_state[role].selected_name == row.name
             if focused:
                 fragments.append(("[SetCursorPosition]", ""))
             available = row.name in selectable
@@ -174,16 +171,11 @@ def choose_sever_setup(
 
     def context_frame(role: _Role, control: FormattedTextControl) -> Frame:
         def render_scope() -> list[tuple[str, str]]:
-            style = (
-                "class:memcommit.table.selected" if scope_focused[role] else ""
+            return render_horizontal_choice(
+                scope_choice[role],
+                title="SCOPE",
+                focused=scope_focused[role],
             )
-            pointer = "›" if scope_focused[role] else " "
-            text = (
-                "( ) THIS CONTEXT ONLY · (●) INCLUDE DESCENDANTS"
-                if include_descendants[role]
-                else "(●) THIS CONTEXT ONLY · ( ) INCLUDE DESCENDANTS"
-            )
-            return [(style, f"{pointer} SCOPE · {text} · ←/→ SELECT")]
 
         scope = Window(
             FormattedTextControl(render_scope),
@@ -241,9 +233,9 @@ def choose_sever_setup(
         return (
             " MEM SEVER · SETUP · NOT SENT\n "
             f"SOURCE {display_escape_text(selected['SOURCE'])} "
-            f"({'SUBTREE' if include_descendants['SOURCE'] else 'THIS ONLY'}) × "
+            f"({'SUBTREE' if scope_choice['SOURCE'].selected_uid == 'SUBTREE' else 'THIS ONLY'}) × "
             f"CRITERIA {display_escape_text(selected['CRITERIA'])} "
-            f"({'SUBTREE' if include_descendants['CRITERIA'] else 'THIS ONLY'}) → "
+            f"({'SUBTREE' if scope_choice['CRITERIA'].selected_uid == 'SUBTREE' else 'THIS ONLY'}) → "
             f"OUTPUT {display_escape_text(output_editor.text.strip())}"
         )
 
@@ -266,7 +258,9 @@ def choose_sever_setup(
                 f" {role} SCOPE: ← this Context only · → include descendants · "
                 "↓ Context list · Tab/Shift-Tab pane · F continue · Q cancel"
             )
-        expansion_action = "A restore tree" if expand_all[role] else "A expand all"
+        expansion_action = (
+            "A restore tree" if tree_state[role].all_expanded else "A expand all"
+        )
         return (
             f" {role}: ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · "
             f"top ↑ enters scope · {expansion_action} · Tab/Shift-Tab pane · "
@@ -309,45 +303,17 @@ def choose_sever_setup(
 
     def move(delta: int) -> None:
         role = active_role()
-        rows = visible_rows(role)
-        index = selected_row_index(role)
         if scope_focused[role]:
             if delta > 0:
                 scope_focused[role] = False
             error_message["value"] = ""
             return
-        if delta < 0 and index == 0:
+        if delta < 0 and selected_row_index(role) == 0:
             scope_focused[role] = True
             error_message["value"] = ""
             return
-        cursor[role] = rows[max(0, min(index + delta, len(rows) - 1))].name
+        tree_state[role].move(delta)
         error_message["value"] = ""
-
-    def enter_manual_expansion(role: _Role) -> None:
-        if expand_all[role]:
-            expand_all[role] = False
-            before_expand_all[role] = set(expanded[role])
-
-    def expand_right(role: _Role) -> None:
-        name = cursor[role]
-        children = tree.children_by_name[name]
-        if children and name not in expanded[role]:
-            enter_manual_expansion(role)
-            expanded[role].update(_expandable_context_subtree(tree, name))
-        elif children:
-            cursor[role] = children[0]
-
-    def collapse_left(role: _Role) -> None:
-        name = cursor[role]
-        if tree.children_by_name[name] and name in expanded[role]:
-            enter_manual_expansion(role)
-            expanded[role].difference_update(
-                _expandable_context_subtree(tree, name)
-            )
-        else:
-            parent = tree.parent_by_name[name]
-            if parent is not None:
-                cursor[role] = parent
 
     @bindings.add("down", filter=tree_focus, eager=True)
     def _down(event) -> None:
@@ -363,9 +329,9 @@ def choose_sever_setup(
     def _right(event) -> None:
         role = active_role()
         if scope_focused[role]:
-            include_descendants[role] = True
+            scope_choice[role].move(1)
         else:
-            expand_right(role)
+            tree_state[role].expand_selected()
         error_message["value"] = ""
         event.app.invalidate()
 
@@ -373,9 +339,9 @@ def choose_sever_setup(
     def _left(event) -> None:
         role = active_role()
         if scope_focused[role]:
-            include_descendants[role] = False
+            scope_choice[role].move(-1)
         else:
-            collapse_left(role)
+            tree_state[role].collapse_selected()
         error_message["value"] = ""
         event.app.invalidate()
 
@@ -383,15 +349,7 @@ def choose_sever_setup(
     @bindings.add("A", filter=tree_focus, eager=True)
     def _toggle_expand_all(event) -> None:
         role = active_role()
-        if expand_all[role]:
-            restored = set(before_expand_all[role])
-            restored.update(_context_ancestors(tree, cursor[role]))
-            expanded[role] = restored
-            expand_all[role] = False
-        else:
-            before_expand_all[role] = set(expanded[role])
-            expanded[role].update(tree.expandable_names)
-            expand_all[role] = True
+        tree_state[role].toggle_expand_all()
         event.app.invalidate()
 
     @bindings.add("tab")
@@ -423,7 +381,7 @@ def choose_sever_setup(
                 "Use Left/Right to choose this Context only or include descendants."
             )
             return
-        name = cursor[role]
+        name = tree_state[role].selected_name
         if name not in selectable:
             error_message["value"] = (
                 "That row is query-only or a namespace and is unavailable to Sever."
@@ -464,8 +422,12 @@ def choose_sever_setup(
                 source_name=selected["SOURCE"],
                 criteria_name=selected["CRITERIA"],
                 output_name=candidate,
-                source_descendants=include_descendants["SOURCE"],
-                criteria_descendants=include_descendants["CRITERIA"],
+                source_descendants=(
+                    scope_choice["SOURCE"].selected_uid == "SUBTREE"
+                ),
+                criteria_descendants=(
+                    scope_choice["CRITERIA"].selected_uid == "SUBTREE"
+                ),
             )
         )
 

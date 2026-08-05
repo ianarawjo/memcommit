@@ -117,22 +117,26 @@ def test_non_temporal_find_keeps_the_existing_current_state_path(
     invoke("init", "notes")
     observed = {}
 
+    provider = object()
+
     def current_find(
-        context,
         query,
-        provider_factory,
+        candidates,
+        selected_provider,
         *,
-        recursive,
         limit,
-        additional_roots,
     ):
         observed["query"] = query
-        observed["recursive"] = recursive
+        observed["candidate_kinds"] = [candidate.kind for candidate in candidates]
+        observed["provider"] = selected_provider
         observed["limit"] = limit
-        observed["additional_roots"] = additional_roots
         return []
 
-    monkeypatch.setattr("memcommit.commands.find.ops.find", current_find)
+    monkeypatch.setattr("memcommit.commands.find.rank_candidates", current_find)
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
     monkeypatch.setattr(
         "memcommit.commands.find.build_history",
         lambda *args, **kwargs: (_ for _ in ()).throw(
@@ -145,9 +149,9 @@ def test_non_temporal_find_keeps_the_existing_current_state_path(
     assert result.exit_code == 0
     assert observed == {
         "query": "parking information",
-        "recursive": True,
+        "candidate_kinds": ["artifact"],
+        "provider": provider,
         "limit": 5,
-        "additional_roots": (),
     }
 
 

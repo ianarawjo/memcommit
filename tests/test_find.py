@@ -16,10 +16,10 @@ from memcommit.commands.find import (
     _initial_chat_state,
     _run_read_only_find_command,
     _show_result_proposal,
+    _supplement_namespace_branch_coverage,
 )
 from memcommit.commands.find_chat_shell import (
     FindChatMessage,
-    FindChatSessionResult,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.find_turn_dialogue import FindTurnAction
@@ -268,6 +268,41 @@ def test_rank_candidates_preserves_model_order_and_dedupes_repeats():
         for match in matches
     ] == ["c000002", "c000001"]
     assert all(match.relevance == "primary" for match in matches)
+
+
+def test_recursive_find_reserves_room_for_material_omitted_namespace_branch():
+    candidates = []
+    for index in range(1, 8):
+        branch = "baseline" if index <= 5 else "participant"
+        item = Memory(uid=f"memory-{index}", content=f"opening hours {index}")
+        candidates.append(
+            SearchCandidate(
+                candidate_id=f"c{index:06d}",
+                kind="memory",
+                context_uid=f"context-{branch}",
+                context_names=(f"task-1/{branch}/building-access",),
+                item=item,
+                search_text=item.content,
+            )
+        )
+    initial = [SearchMatch(candidate=candidate) for candidate in candidates[:5]]
+
+    matches = _supplement_namespace_branch_coverage(
+        "opening hours",
+        candidates,
+        initial,
+        KeywordProvider(),
+        root_name="task-1",
+        limit=5,
+    )
+
+    assert [match.candidate.context_name for match in matches] == [
+        "task-1/baseline/building-access",
+        "task-1/baseline/building-access",
+        "task-1/baseline/building-access",
+        "task-1/participant/building-access",
+        "task-1/participant/building-access",
+    ]
 
 
 def test_rank_candidates_returns_related_fallback_only_after_no_primary_match():
@@ -545,7 +580,7 @@ def test_initial_chat_state_preserves_related_tier_and_broader_query():
     assert "I found no primary matches" in state.messages[-1].text
 
 
-def test_find_cli_tty_opens_chat_with_stable_result_aliases(
+def test_find_cli_tty_prints_static_results_without_opening_chat(
     isolated_store,
     monkeypatch,
 ):
@@ -563,33 +598,23 @@ def test_find_cli_tty_opens_chat_with_stable_result_aliases(
         "memcommit.commands.find._interactive_terminal",
         lambda: True,
     )
-    captured = {}
-
-    def fake_session(state, *, handle_turn):
-        captured["state"] = state
-        captured["handle_turn"] = handle_turn
-        return FindChatSessionResult(status="CLOSED", state=state)
-
     monkeypatch.setattr(
         "memcommit.commands.find.run_find_chat_session",
-        fake_session,
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("ordinary Find must not open the chat shell")
+        ),
     )
 
     result = runner.invoke(app, ["find", "cafe"])
 
     assert result.exit_code == 0, result.output
-    state = captured["state"]
-    assert state.current_query == "cafe"
-    assert len(state.results) == 1
-    assert state.results[0].alias == "m1"
-    assert state.results[0].uid == memory.uid
-    assert state.results[0].context_name == ctx.name
-    assert state.results[0].content == memory.content
-    assert callable(captured["handle_turn"])
-    assert "Find dialogue closed with 1 visible result" in result.output
+    assert ctx.name in result.output
+    assert f"[memory  {memory.uid[:8]}]" in result.output
+    assert memory.content in result.output
+    assert "Find dialogue closed" not in result.output
 
 
-def test_find_cli_tty_keeps_namespace_descendants_in_the_follow_up_frame(
+def test_find_cli_tty_static_results_include_namespace_descendants(
     isolated_store,
     monkeypatch,
 ):
@@ -609,27 +634,19 @@ def test_find_cli_tty_keeps_namespace_descendants_in_the_follow_up_frame(
         lambda: True,
     )
 
-    def fake_session(state, *, handle_turn):
-        assert [result.uid for result in state.results] == [memory.uid]
-        assert [ctx.name for ctx in handle_turn.frame_roots] == [
-            "task-3",
-            "task-3/personal-memory",
-        ]
-        assert [
-            candidate.search_text
-            for candidate in handle_turn.frame_candidates
-        ] == [memory.content]
-        return FindChatSessionResult(status="CLOSED", state=state)
-
     monkeypatch.setattr(
         "memcommit.commands.find.run_find_chat_session",
-        fake_session,
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("ordinary Find must not open the chat shell")
+        ),
     )
 
     result = runner.invoke(app, ["find", "healthcare"])
 
     assert result.exit_code == 0, result.output
-    assert "Find dialogue closed with 1 visible result" in result.output
+    assert child.name in result.output
+    assert f"[memory  {memory.uid[:8]}]" in result.output
+    assert "Find dialogue closed" not in result.output
 
 
 def test_zero_result_follow_up_refines_and_replaces_search_results(

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
@@ -12,6 +14,7 @@ from memcommit.commands.resolution_workbench_shell import (
     resolution_workbench_fragments,
     run_resolution_workbench_shell,
 )
+from memcommit.impact_controller import ImpactController
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
     ResolutionItem,
@@ -20,6 +23,7 @@ from memcommit.resolution_workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
+from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 
 def _item(
@@ -263,12 +267,13 @@ def test_split_report_contains_conflicts_and_whole_set_strategies():
     fragments = resolution_report_fragments(
         view,
         strategies=strategies,
-        focused_section=2,
+        focused_section=3,
     )
     rendered = "".join(text for _style, text in fragments)
 
-    assert "── CONFLICT 1 · Issue a ──" in rendered
-    assert "CONFLICT 2 · Issue b" in rendered
+    assert "ISSUES · 2" in rendered
+    assert "── ISSUE 1 · Issue a ──" in rendered
+    assert "ISSUE 2 · Issue b" in rendered
     assert "RESOLVE ALL · WHOLE-SET STRATEGY" in rendered
     assert "Choose broadest" in rendered
 
@@ -374,9 +379,10 @@ def test_split_viewer_section_navigation_selects_matching_item_row():
     view = _view(_item("a"), _item("b"))
 
     with create_pipe_input() as pipe_input:
-        # Tab focuses Viewer. Three Down presses move title -> understanding ->
-        # conflict a -> conflict b, which must synchronize the lower row.
-        pipe_input.send_text("\t\x1b[B\x1b[B\x1b[Bq")
+        # Tab focuses Viewer. Four Down presses move title -> understanding ->
+        # item-list heading -> issue a -> issue b, which must synchronize the
+        # lower row.
+        pipe_input.send_text("\t\x1b[B\x1b[B\x1b[B\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             navigation=navigation,
@@ -398,10 +404,10 @@ def test_enter_on_report_moves_focus_from_items_into_viewer():
     view = _view(_item("a"), _item("b"))
 
     with create_pipe_input() as pipe_input:
-        # Enter opens the selected REPORT row in Viewer. Two Down presses then
-        # move through Viewer sections to conflict a. If focus had remained in
-        # ITEMS, the same keys would instead select conflict b.
-        pipe_input.send_text("\r\x1b[B\x1b[Bq")
+        # Enter opens the selected REPORT row in Viewer. Three Down presses
+        # move through title, understanding, and the list heading to issue a.
+        # If focus had remained in ITEMS, the same keys would select issue b.
+        pipe_input.send_text("\r\x1b[B\x1b[B\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             navigation=navigation,
@@ -416,6 +422,66 @@ def test_enter_on_report_moves_focus_from_items_into_viewer():
 
     assert action.kind == "CLOSE"
     assert navigation.selected_item_uid == "a"
+
+
+def test_item_selection_does_not_replace_open_viewer_until_enter():
+    item_navigation = ResolutionNavigation()
+    workbench_navigation = SessionWorkbenchNavigation()
+    view = _view(_item("a"), _item("b"))
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r\t\x1b[Bq")
+        action = run_resolution_workbench_shell(
+            view,
+            navigation=item_navigation,
+            workbench_navigation=workbench_navigation,
+            split_viewer_items=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.row_index == 2
+    assert workbench_navigation.viewer_row_index == 1
+    assert item_navigation.selected_item_uid == "a"
+
+
+def test_apply_section_uses_stable_identity_after_review_items_and_impact():
+    view = replace(
+        _view(
+            _item("a"),
+            capabilities=frozenset({"ACCEPT"}),
+            accept_enabled=True,
+        ),
+        operation="UPDATE",
+        title="Review staged Update",
+    )
+    workbench_navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Viewer order is title, understanding, review-items, item, results,
+        # impact, apply. The controller must retain APPLY by identity rather
+        # than by the pre-review-items numeric offset.
+        pipe_input.send_text("\t" + "\x1b[B" * 6 + "q")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            impact_controller=ImpactController.from_resolution(
+                view,
+                title="IMPACT · UPDATE",
+                summary="Exact staged effects.",
+            ),
+            workbench_navigation=workbench_navigation,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.section_uid == "REPORT:ACTION"
+    assert workbench_navigation.row_index == 2
 
 
 def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
@@ -436,7 +502,9 @@ def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
     with create_pipe_input() as pipe_input:
         # Select the first option in each conflict, then open the final review
         # row and submit the combined resolution turn.
-        pipe_input.send_text("\x1b[B\r\r\x1b[B\r\x1b[B\r\r")
+        pipe_input.send_text(
+            "\x1b[B\r\r\t\x1b[B\r\r\t\x1b[B\r"
+        )
         action = run_resolution_workbench_shell(
             _view(first, second, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,
@@ -466,7 +534,7 @@ def test_review_and_apply_treats_enter_again_as_selection_cancellation():
     with create_pipe_input() as pipe_input:
         # The second Enter on the same option clears it. Final review therefore
         # routes the conflict through the explicit unresolved policy.
-        pipe_input.send_text("\x1b[B\r\r\r\x1b[B\r\r")
+        pipe_input.send_text("\x1b[B\r\r\r\t\x1b[B\r")
         action = run_resolution_workbench_shell(
             _view(item, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,

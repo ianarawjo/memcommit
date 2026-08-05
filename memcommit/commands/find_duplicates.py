@@ -14,6 +14,7 @@ from memcommit.commands.findings_render import (
     render_memory,
     render_reason,
 )
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
@@ -74,7 +75,12 @@ def cmd(
         raise typer.Exit(1)
 
     try:
-        report = ops.find_duplicates(ctx, connect_codex_chatgpt_provider)
+        with CommandProgress(
+            "FIND DUPLICATES",
+            "analyzing direct memories",
+            total=1,
+        ):
+            report = ops.find_duplicates(ctx, connect_codex_chatgpt_provider)
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
             "Find duplicates error: " + display_escape_text(str(error)),

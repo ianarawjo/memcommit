@@ -6,9 +6,8 @@
 `mem query`. Its initial ranking call does not ask the model to answer the
 user's query: the model may select only opaque candidate IDs. memcommit
 validates those IDs and renders the corresponding local Information objects
-itself. In an interactive TTY, a separate staged follow-up may answer an
-ordinary question from the visible results, the remainder of the same frozen
-search frame, and—only when explicitly requested—other stored Contexts.
+itself. The command renders static grouped results and exits in both TTY and
+non-TTY execution.
 
 This separation keeps the model in the role of semantic ranker:
 
@@ -18,13 +17,11 @@ visible local items
 → temporary Codex ranking
 → strict ID validation
 → canonical local rendering
-→ optional same-frame follow-up reranking
 ```
 
 Model-generated content, names, explanations, and replacement text are never
-accepted as find results. A generated follow-up answer is dialogue, not a
-result, and carries locally validated scope aliases that the host turns into
-numbered references to local source contents.
+accepted as find results. The retained compatibility controller can still be
+tested independently, but it is no longer reachable from ordinary `mem find`.
 
 When no candidate materially satisfies the query, the same ranking completion
 may return a separate related tier. The CLI keeps the primary count at zero,
@@ -42,9 +39,12 @@ mem find "parking changes" --direct
 ```
 
 The default search frame contains the selected Context, every materialized
-ordinary Context whose canonical name begins with `SELECTED/`, and every
-explicitly embedded Context reachable from any of those roots. The ordinary
-Context catalog is frozen once for the invocation. A namespace descendant
+ordinary or effectively READ-granted Context whose canonical public name
+begins with `SELECTED/`, and every explicitly embedded Context reachable from
+any of those roots. The unified readable Context catalog is frozen once for
+the invocation, while every granted node retains its exact authority binding.
+Grant attachment authorizes the view but does not become a namespace edge. A
+namespace descendant
 that is also explicitly embedded is visited once by Context UID, and no
 missing prefix is synthesized as a Context. `--direct` searches only direct
 items in the selected Context and excludes both namespace descendants and
@@ -60,8 +60,9 @@ result for ordinary namespaced Contexts and would conflate lexical navigation
 with persisted composition differently in each importer.
 
 The broader default is also a provider-disclosure boundary. Invoking Find on
-a namespace root may send ordinary Memory content from that entire materialized
-subtree, plus its explicit embeds, to the ranking provider. A person who wants
+a namespace root may send ordinary and READ-granted Memory content from that
+entire materialized public subtree, plus its explicit embeds, to the ranking
+provider. A person who wants
 the former narrow scope can use `--direct`. Query-only sources remain outside
 the ordinary catalog and are never opened; only a QueryContextRef's public name
 can become a candidate.
@@ -69,26 +70,31 @@ can become a candidate.
 `--context` selects a search root without changing the active Context.
 `--limit` accepts values from 1 through 20 and defaults to 5.
 
-Find is read-only. It does not save the query, matches, a Memory, or a
-checkpoint. In a TTY it opens the interactive Find view after ranking. The
-view keeps one full-screen Application alive, assigns local result aliases,
-and accepts repeated natural-language turns. A controller turn runs in the
-background while that same view displays a busy state, then applies the
-completed state in place rather than returning to the terminal between turns.
-The view supports three read-only outcomes: refine the query and replace the
-visible results by reranking the same frozen frame; answer an ordinary question
-from visible and same-frame content, optionally extending that answer to
-explicitly requested other Contexts; or inspect one visible result through an
-allowlisted, explicit-Context `mem show` command. Generated answers carry
-validated provenance and a host-rendered reference list. The show command is
-constructed and executed locally; neither answer provider turn receives
-durable UID or command authority.
+The first ranking remains global. If a recursive result fills its bounded
+limit from only a subset of the root's canonical first-level namespace
+branches, Find performs one bounded supplemental ranking over the omitted
+branches. Only material primary matches from that second ranking may replace
+up to three tail results, with at least half of a small result set retained
+from the global ranking. This preserves baseline/modification or other sibling
+coverage without forcing an irrelevant branch into the result. Artifacts and
+direct root items do not create synthetic namespace branches, `--direct`
+never performs the supplemental pass, and the total visible count still obeys
+`--limit`.
 
-Outside a TTY, Find retains its ordinary grouped stdout so it can be redirected
-or copied by the shell. That output is a presentation format, not a durable or
-supported structured selection for another memcommit operation. The
-interactive transcript and aliases are likewise in-process presentation state,
-not a persisted selection or resumable Find session.
+Find is read-only. It does not save the query, matches, a Memory, or a
+checkpoint. Ordinary current-state Find prints the same grouped static result
+rows in TTY and non-TTY execution, then exits. It does not open a composer,
+accept a refinement turn, synthesize an answer, or print a dialogue-closed
+message. A person can run another `mem find` for a revised query or use an
+explicit `mem show` for detail. This keeps Find as a retrieval command and
+avoids retaining a full-screen application merely to offer optional follow-up
+dialogue.
+
+The grouped stdout can be redirected or copied by the shell. It is a
+presentation format, not a durable or supported structured selection for
+another memcommit operation. Temporal Find retains its separate history picker
+when an interactive terminal is available; removing the current-state chat
+surface does not change that historical selection contract.
 
 The CLI groups results by their primary owning Context instead of repeating
 the Context name on every item. Context groups appear in the order of their
@@ -151,7 +157,13 @@ copies remain distinct candidates even when a Memory UID was inherited.
 Repeated occurrences of one logical candidate retain their visible Context
 names as provenance.
 
-## Same-frame follow-up refinement
+## Retained compatibility controller
+
+The sections below document the no-longer-launched chat controller so its
+security boundaries remain reviewable while compatibility code and focused
+tests still exist. They are not part of the current CLI interaction contract.
+
+### Same-frame follow-up refinement
 
 A natural-language follow-up that supplies a concrete new topic, keywords,
 constraints, or a broader or narrower description returns a strict `REFINE`

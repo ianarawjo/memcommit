@@ -13,7 +13,7 @@ from memcommit.commands.meld_sessions import (
     list_meld_session_catalog,
     reload_selected_meld_session,
 )
-from memcommit.commands.session_picker import SessionOpenReceipt
+from memcommit.commands.session_picker import SessionNewReceipt, SessionOpenReceipt
 from memcommit.meld import MeldSession
 from memcommit.store import MemoryStore
 
@@ -121,7 +121,10 @@ def test_meld_session_picker_reopens_without_provider_or_mutation(
 
     def choose(entries, **kwargs):
         assert kwargs["title"] == "MELD SESSIONS · RECENTLY MODIFIED"
-        assert kwargs["new_receipt"] is None
+        assert kwargs["new_receipt"] == SessionNewReceipt(
+            kind="meld",
+            argv=("mem", "meld"),
+        )
         assert len(entries) == 1
         option = entries[0]
         assert option.group == session.target.context_name

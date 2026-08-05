@@ -206,13 +206,17 @@ app.command("find-ambiguities", help="Find ambiguous or underspecified direct Me
 app.command("find-conflicts", help="Find conflicting direct Memory pairs.")(find_conflicts.cmd)
 app.command(
     "review",
-    help="Stage ambiguity or atomize-workbench responses without editing Memories.",
+    help=(
+        "Open adaptive operation reports or stage semantic review responses; "
+        "never apply Memories."
+    ),
 )(review.cmd)
 app.command(
     "sever",
     help=(
-        "Review one Source root against one scoped Criteria root and "
-        "create a local outbound draft; never transmit it."
+        "Browse saved Sever work with no operands, or review one Source root "
+        "against one scoped Criteria root and create a local outbound draft; "
+        "never transmit it."
     ),
 )(sever.cmd)
 app.command(

@@ -4,13 +4,22 @@ from __future__ import annotations
 
 import json
 
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.commands import sever as sever_command
+from memcommit.commands.session_picker import (
+    SessionNewReceipt,
+    SessionOpenReceipt,
+)
+from memcommit.commands.sever_sessions import (
+    list_sever_session_catalog,
+    reload_selected_sever_session,
+)
 from memcommit.context import QueryContextRef
-from memcommit.sever import SeverSession
+from memcommit.sever import SeverSession, sever_record_digest
 from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
 from memcommit.sever_resolution_adapter import SeverResolutionWorkbenchAdapter
 from memcommit.sever_store import SeverSessionStore
@@ -337,3 +346,150 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
         "Send as written",
         "Do not send",
     ]
+
+
+def test_saved_sever_catalog_projects_common_picker_rows_and_reloads(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _context(store, "source", "Source")
+    criteria = _context(store, "criteria", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="draft",
+        provider_factory=lambda: SeverProvider(),
+    )
+    sessions = SeverSessionStore(store)
+    sessions.save(session, expected_digest=None)
+
+    catalog = list_sever_session_catalog(sessions)
+
+    assert len(catalog) == 1
+    entry = catalog[0]
+    assert entry.picker_entry.kind == "sever"
+    assert entry.picker_entry.key == session.uid
+    assert entry.picker_entry.status == "REVIEWING · NOT SENT"
+    assert entry.picker_entry.reopen_argv == (
+        "mem",
+        "sever",
+        "--resume",
+        session.uid,
+    )
+    assert "source × criteria → draft" == entry.picker_entry.title
+    assert reload_selected_sever_session(sessions, entry) == session
+
+
+def test_shared_sever_picker_revalidates_the_selected_record(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _context(store, "source", "Source")
+    criteria = _context(store, "criteria", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="draft",
+        provider_factory=lambda: SeverProvider(),
+    )
+    sessions = SeverSessionStore(store)
+    sessions.save(session, expected_digest=None)
+
+    def change_then_select(entries, **kwargs):
+        changed = session.select(session.candidates[0].uid, "EXCLUDE")
+        sessions.save(changed, expected_digest=sever_record_digest(session))
+        entry = entries[0]
+        return SessionOpenReceipt(
+            kind=entry.kind,
+            key=entry.key,
+            argv=entry.reopen_argv,
+        )
+
+    monkeypatch.setattr(sever_command, "choose_session", change_then_select)
+
+    with pytest.raises(ValueError, match="changed while the list was open"):
+        sever_command._choose_saved_sever_session(sessions)
+
+
+def test_shared_sever_picker_new_receipt_enters_setup_path(
+    isolated_store,
+    monkeypatch,
+):
+    sessions = SeverSessionStore(MemoryStore())
+    monkeypatch.setattr(
+        sever_command,
+        "choose_session",
+        lambda entries, **kwargs: SessionNewReceipt(
+            kind="sever",
+            argv=("mem", "sever"),
+        ),
+    )
+
+    action, session = sever_command._choose_saved_sever_session(sessions)
+
+    assert action == "NEW"
+    assert session is None
+
+
+def test_bare_sever_opens_a_selected_saved_session_without_provider_call(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _context(store, "source", "Source")
+    criteria = _context(store, "criteria", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="draft",
+        provider_factory=lambda: SeverProvider(),
+    )
+    SeverSessionStore(store).save(session, expected_digest=None)
+    monkeypatch.setattr(sever_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        sever_command,
+        "_choose_saved_sever_session",
+        lambda sessions: ("OPEN", session),
+    )
+    monkeypatch.setattr(
+        sever_command,
+        "_run_workbench",
+        lambda store, selected: selected,
+    )
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(AssertionError("provider called")),
+    )
+
+    result = runner.invoke(app, ["sever"])
+
+    assert result.exit_code == 0, result.output
+    assert f"Session · {session.uid}" in result.output
+    assert "REVIEWING · NOT SENT" in result.output
+
+
+def test_non_tty_sever_sessions_retains_plain_listing(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _context(store, "source", "Source")
+    criteria = _context(store, "criteria", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="draft",
+        provider_factory=lambda: SeverProvider(),
+    )
+    SeverSessionStore(store).save(session, expected_digest=None)
+
+    result = runner.invoke(app, ["sever", "--sessions"])
+
+    assert result.exit_code == 0, result.output
+    assert session.uid in result.output
+    assert "source × criteria → draft" in result.output

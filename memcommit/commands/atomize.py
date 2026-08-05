@@ -40,6 +40,8 @@ from memcommit.commands.atomize_sessions import (
     load_saved_atomize_analysis,
     revalidate_saved_atomize_analysis,
 )
+from memcommit.commands.context_picker import choose_context
+from memcommit.commands.session_picker import SessionNewReceipt
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import ReviewCancelled
 from memcommit.context import AutoCheckpoint, Memory, MemoryRef
@@ -469,6 +471,21 @@ def cmd(
             receipt = choose_atomize_session(store, show_all=show_all)
             if receipt is None:
                 typer.echo("Atomize selection ended; no analysis was opened.")
+                return
+            if isinstance(receipt, SessionNewReceipt):
+                names = store.list_context_names()
+                if not names:
+                    raise AtomizeImpactError(
+                        "Starting Atomize requires an ordinary Context."
+                    )
+                selected = choose_context(
+                    names,
+                    current=store.current_context_name(),
+                )
+                if selected is None:
+                    typer.echo("New Atomize cancelled; no analysis was opened.")
+                    return
+                cmd(context_name=selected, show_all=show_all)
                 return
             _resume_selected_atomize(
                 store=store,

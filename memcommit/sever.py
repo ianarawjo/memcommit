@@ -361,6 +361,27 @@ class SeverSession:
             application=application,
         )
 
+    def clear_application(
+        self,
+        *,
+        output_context_uid: str,
+        checkpoint_uid: str,
+    ) -> "SeverSession":
+        """Return an applied review to its exact pre-materialization state."""
+        if (
+            self.state != "APPLIED"
+            or self.application is None
+            or self.application.output_context_uid != output_context_uid
+            or self.application.checkpoint_uid != checkpoint_uid
+        ):
+            raise SeverError("Sever application does not match the Context creation.")
+        return replace(
+            self,
+            revision=self.revision + 1,
+            state="REVIEWING",
+            application=None,
+        )
+
     def to_dict(self) -> dict[str, object]:
         return {
             "schema_version": SEVER_SCHEMA_VERSION,

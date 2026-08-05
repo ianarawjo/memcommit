@@ -9,6 +9,9 @@ from typer.testing import CliRunner
 from memcommit.cli import app
 from memcommit.commands.context_picker import (
     _CONTEXT_NAVIGATION_HINT,
+    ContextTreeState,
+    ContextMemoryRow,
+    build_context_tree,
     _build_context_tree,
     _context_ancestors,
     _expandable_context_subtree,
@@ -39,6 +42,31 @@ def test_switch_help_documents_explicit_relative_navigation():
 def test_picker_navigation_hint_names_expand_instead_of_tree():
     assert "←→ expand" in _CONTEXT_NAVIGATION_HINT
     assert "←→ tree" not in _CONTEXT_NAVIGATION_HINT
+
+
+def test_public_context_tree_state_can_be_embedded_without_running_an_app():
+    tree = build_context_tree(
+        ("alpha", "alpha/child", "alpha/child/deep", "beta")
+    )
+    state = ContextTreeState.create(tree, selected="alpha")
+
+    state.expand_selected()
+    state.expand_selected()
+    state.move(2)
+
+    assert state.selected_name == "alpha/child/deep"
+    assert [row.name for row in state.visible_rows()] == [
+        "alpha",
+        "alpha/child",
+        "alpha/child/deep",
+        "beta",
+    ]
+
+    state.toggle_expand_all()
+    assert state.all_expanded
+    state.toggle_expand_all()
+    assert not state.all_expanded
+    assert state.selected_name == "alpha/child/deep"
 
 
 def test_picker_preselects_current_and_accepts_enter():
@@ -136,6 +164,98 @@ def test_picker_renders_tree_and_anchors_exact_selected_context():
     assert "▾ namespace" in rendered
     assert "  ▸ namespace/child" in rendered
     assert "namespace/child/deep" not in rendered
+
+
+def test_picker_memory_rows_toggle_without_becoming_context_rows():
+    tree = build_context_tree(("alpha", "alpha/child"))
+    state = ContextTreeState.create(tree, selected="alpha")
+    memories = {
+        "alpha": (ContextMemoryRow("memory abcdef12", "first\nline"),)
+    }
+
+    hidden = _render_context_options(
+        state.visible_rows(),
+        selected="alpha",
+        current="alpha",
+        memories_by_context=memories,
+        show_memories=state.show_memories,
+    )
+    state.toggle_memories()
+    shown = _render_context_options(
+        state.visible_rows(),
+        selected="alpha",
+        current="alpha",
+        memories_by_context=memories,
+        show_memories=state.show_memories,
+    )
+
+    assert "first" not in "".join(text for _, text in hidden)
+    rendered = "".join(text for _, text in shown)
+    assert "[memory abcdef12] first\\nline" in rendered
+    assert [row.name for row in state.visible_rows()] == ["alpha"]
+
+
+def test_picker_can_toggle_memories_for_only_the_selected_context():
+    tree = build_context_tree(("alpha", "beta"))
+    state = ContextTreeState.create(tree, selected="alpha")
+    state.show_memories = True
+
+    state.toggle_selected_memories()
+
+    assert state.memories_visible_for("alpha") is False
+    assert state.memories_visible_for("beta") is True
+    state.selected_name = "beta"
+    state.toggle_selected_memories()
+    assert state.memories_visible_for("alpha") is False
+    assert state.memories_visible_for("beta") is False
+
+    state.toggle_memories()
+    assert state.show_memories is False
+    assert state.memory_visibility_overrides == {}
+
+
+def test_picker_lowercase_m_loads_only_selected_context_memories():
+    loaded: list[str] = []
+
+    def load(name: str):
+        loaded.append(name)
+        return (ContextMemoryRow("memory abcdef12", "content"),)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("m\r")
+        selected = choose_context(
+            ("alpha", "beta"),
+            current="alpha",
+            memory_loader=load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "alpha"
+    assert loaded == ["alpha"]
+
+
+def test_picker_m_loads_visible_memories_and_still_accepts_context():
+    loaded: list[str] = []
+
+    def load(name: str):
+        loaded.append(name)
+        return (ContextMemoryRow("memory abcdef12", "content"),)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("M\r")
+        selected = choose_context(
+            ("alpha", "beta"),
+            current="alpha",
+            memory_loader=load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == "alpha"
+    assert loaded == ["alpha", "beta"]
 
 
 def test_picker_pins_all_root_names_above_a_scrolled_current_branch():
@@ -267,7 +387,7 @@ def test_picker_enter_does_not_select_a_query_only_virtual_context():
 
 def test_picker_right_expands_then_enters_first_child():
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[C\x1b[C\r")
+        pipe_input.send_text("\x1b[C\x1b[C\x1b[C\r")
         selected = choose_context(
             ("alpha", "alpha/child", "alpha/child/deep", "beta"),
             current="alpha",
@@ -279,11 +399,11 @@ def test_picker_right_expands_then_enters_first_child():
     assert selected == "alpha/child"
 
 
-def test_picker_right_recursively_expands_the_selected_subtree():
+def test_picker_right_expands_the_selected_subtree_one_depth_at_a_time():
     with create_pipe_input() as pipe_input:
-        # Right opens alpha recursively, so two Down presses reach deep rather
-        # than skipping from the one visible child to the beta root.
-        pipe_input.send_text("\x1b[C\x1b[B\x1b[B\r")
+        # The first Right reveals direct children and the second reveals their
+        # children. Two Down presses can reach deep only after both levels.
+        pipe_input.send_text("\x1b[C\x1b[C\x1b[B\x1b[B\r")
         selected = choose_context(
             ("alpha", "alpha/child", "alpha/child/deep", "beta"),
             current="alpha",
@@ -293,6 +413,70 @@ def test_picker_right_recursively_expands_the_selected_subtree():
         )
 
     assert selected == "alpha/child/deep"
+
+
+def test_context_tree_state_expands_and_collapses_one_complete_depth_per_key():
+    tree = build_context_tree(
+        (
+            "1",
+            "1/1",
+            "1/1/1",
+            "1/1/2",
+            "1/1/3",
+            "1/1/3/1",
+            "1/2",
+            "1/3",
+            "1/4",
+        )
+    )
+    state = ContextTreeState.create(tree, selected="1")
+
+    state.expand_selected()
+    assert [row.name for row in state.visible_rows()] == [
+        "1",
+        "1/1",
+        "1/2",
+        "1/3",
+        "1/4",
+    ]
+
+    state.expand_selected()
+    assert [row.name for row in state.visible_rows()] == [
+        "1",
+        "1/1",
+        "1/1/1",
+        "1/1/2",
+        "1/1/3",
+        "1/2",
+        "1/3",
+        "1/4",
+    ]
+
+    state.expand_selected()
+    assert [row.name for row in state.visible_rows()] == [
+        "1",
+        "1/1",
+        "1/1/1",
+        "1/1/2",
+        "1/1/3",
+        "1/1/3/1",
+        "1/2",
+        "1/3",
+        "1/4",
+    ]
+
+    state.collapse_selected()
+    assert "1/1/3/1" not in [row.name for row in state.visible_rows()]
+    state.collapse_selected()
+    assert [row.name for row in state.visible_rows()] == [
+        "1",
+        "1/1",
+        "1/2",
+        "1/3",
+        "1/4",
+    ]
+    state.collapse_selected()
+    assert [row.name for row in state.visible_rows()] == ["1"]
 
 
 def test_expandable_context_subtree_includes_every_nested_branch():
@@ -398,9 +582,11 @@ def test_bare_switch_uses_picker_result(
     invoke("init", "beta")
     observed: dict[str, object] = {}
 
-    def select(names, *, current):
+    def select(names, *, current, accept_label, memory_loader):
         observed["names"] = names
         observed["current"] = current
+        observed["accept_label"] = accept_label
+        observed["memory_loader"] = memory_loader
         return "alpha"
 
     monkeypatch.setattr(
@@ -412,10 +598,10 @@ def test_bare_switch_uses_picker_result(
 
     assert result.exit_code == 0
     assert "Switched to context 'alpha'" in result.output
-    assert observed == {
-        "names": ["alpha", "beta"],
-        "current": "beta",
-    }
+    assert observed["names"] == ["alpha", "beta"]
+    assert observed["current"] == "beta"
+    assert observed["accept_label"] == "switch"
+    assert callable(observed["memory_loader"])
     assert MemoryStore().current_context_name() == "alpha"
 
 
@@ -427,7 +613,7 @@ def test_bare_switch_cancel_preserves_current(
     invoke("init", "beta")
     monkeypatch.setattr(
         "memcommit.commands.switch.choose_context",
-        lambda names, *, current: None,
+        lambda names, *, current, accept_label, memory_loader: None,
     )
 
     result = invoke("switch")
@@ -444,7 +630,9 @@ def test_picker_result_is_revalidated_before_switch(
     invoke("init", "alpha")
     invoke("init", "beta")
 
-    def delete_selected_then_return_it(names, *, current):
+    def delete_selected_then_return_it(
+        names, *, current, accept_label, memory_loader
+    ):
         MemoryStore().delete("alpha")
         return "alpha"
 

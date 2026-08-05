@@ -18,6 +18,7 @@ from memcommit.commands.compare_workbench import (
     _rows,
     run_compare_workbench,
 )
+from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.comparison import ComparisonInput
 from memcommit.comparison_provider import analyze_comparison
 from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
@@ -90,8 +91,9 @@ def _analysis():
 def test_issue_can_choose_either_exact_source_for_rationale():
     analysis, _left, right = _analysis()
     with create_pipe_input() as pipe_input:
-        # Tab focuses the compact item pane; report sections precede the issue.
-        pipe_input.send_text("\t\x1b[B\x1b[B\x1b[B\x1b[B\r\x1b[Cr")
+        # Items owns initial focus. Report sections precede the issue; Enter
+        # opens that row in Viewer after choosing its second exact source.
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\x1b[B\x1b[C\rr")
         receipt = run_compare_workbench(
             analysis,
             app_input=pipe_input,
@@ -156,6 +158,24 @@ def test_report_sections_precede_issues_and_relation_ledger():
     assert rows[-2].label == "Relation ledger · 1"
 
 
+def test_item_selection_does_not_replace_viewer_until_enter():
+    analysis, _left, _right = _analysis()
+    navigation = SessionWorkbenchNavigation()
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Bq")
+        receipt = run_compare_workbench(
+            analysis,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            workbench_navigation=navigation,
+        )
+
+    assert receipt.action == "close"
+    assert navigation.row_index == 1
+    assert navigation.viewer_row_index == 0
+
+
 def test_multiline_report_preserves_layout_and_escapes_controls_per_line():
     rendered = _display_multiline("WHAT BOTH CONTAIN\nunsafe\tvalue\nWHAT DIFFERS")
 
@@ -196,7 +216,7 @@ def test_reader_arrows_move_between_semantic_section_boundaries():
 def test_report_detail_can_scroll_without_changing_selection():
     analysis, _left, _right = _analysis()
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[6~q")
+        pipe_input.send_text("\r\x1b[6~q")
         receipt = run_compare_workbench(
             analysis,
             report_text="\n".join(f"line {index}" for index in range(30)),
@@ -211,9 +231,9 @@ def test_report_detail_can_scroll_without_changing_selection():
 def test_tab_switches_to_item_navigation_and_back_to_reader():
     analysis, _left, _right = _analysis()
     with create_pipe_input() as pipe_input:
-        # Move to WHAT MEM UNDERSTOOD in the lower pane, return to the reader,
-        # then scroll its selected-section content before closing.
-        pipe_input.send_text("\t\x1b[B\t\x1b[Bq")
+        # Items starts focused. Tab opens Viewer navigation, another Tab
+        # returns to Items, and the final Tab restores semantic scrolling.
+        pipe_input.send_text("\t\x1b[B\t\x1b[B\t\x1b[Bq")
         receipt = run_compare_workbench(
             analysis,
             app_input=pipe_input,
@@ -228,9 +248,9 @@ def test_tab_switches_to_item_navigation_and_back_to_reader():
 def test_detail_back_key_returns_to_complete_report(back_key: str):
     analysis, _left, _right = _analysis()
     with create_pipe_input() as pipe_input:
-        # Select a report section below, return to REPORT, then R must remain a
-        # no-op because the aggregate report has no synthetic Memory target.
-        pipe_input.send_text(f"\t\x1b[B{back_key}rq")
+        # Select and open a report section, return to REPORT, then R must remain
+        # a no-op because the aggregate report has no synthetic Memory target.
+        pipe_input.send_text(f"\x1b[B\r{back_key}rq")
         receipt = run_compare_workbench(
             analysis,
             app_input=pipe_input,

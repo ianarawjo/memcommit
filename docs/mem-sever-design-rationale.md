@@ -36,8 +36,9 @@ first two panes expose the same
 frozen ordinary Context catalog, while query-only rows remain visible and
 unavailable. Both trees begin with the current Context selected and reuse the
 `mem switch` namespace behavior: only the current ancestry begins expanded,
-`Left`/`Right` collapse or expand branches, and `A` temporarily expands the
-whole tree. The former `ROOTS` summary above each tree is replaced by an
+`Left`/`Right` collapse or expand one complete descendant depth at a time, and
+`A` temporarily expands the whole tree. The former `ROOTS` summary above each
+tree is replaced by an
 independent `THIS CONTEXT ONLY / INCLUDE DESCENDANTS` scope row. `Up` from the
 first visible Context enters that row, `Down` returns to the tree, and
 `Left`/`Right` select exact/subtree scope. The default includes descendants to
@@ -56,6 +57,18 @@ workbench lets a person retain the recommendation, use exact source text,
 exclude an item, or submit exact custom outbound text. `--resume`,
 `--candidate`, `--choice`, and `--accept` expose the same saved-session
 transitions for recovery, scripts, and exact command review.
+
+Sever's Source and Criteria panes use two independent instances of the same
+terminal-independent `ContextTreeState` that backs the `mem switch` namespace
+picker. Sever retains the chosen-role markers, descendant-scope controls, and
+new Output editor; the common tree owns only cursor and namespace navigation.
+
+Bare `mem sever` now opens the shared saved-session launcher in a terminal.
+Interactive `mem sever --sessions` opens the same launcher, while non-TTY
+`--sessions` retains the plain stable listing. Selecting `N` enters the
+Source–Criteria–Output setup. Selecting a saved row reloads the exact record and
+compares its digest before opening the existing provider-free Resolution
+Workbench. The public route hint is presentation only and is never executed.
 
 The initial provider turn is analysis only. It creates a retained Sever session
 and no output Context. `--accept` creates a require-new local Context and an
@@ -131,6 +144,20 @@ The output checkpoint records the Sever session identity, pre-application
 digest, Source, Criteria, output name, result-to-source mapping, and selection.
 Local rationale and excluded content stay in the Sever session rather than
 becoming ordinary outbound Memories.
+
+## Embedded Impact boundary
+
+The shared Sever workbench projects the exact reviewed outbound draft through
+the reusable `ImpactController` immediately above Apply. The card remains
+`LOCAL OUTBOUND DRAFT · NOT SENT`; it neither transmits content nor creates the
+output Context. It is bound to the current Sever UID and digest, so a stale
+projection cannot be shown as the effect of a newer review revision. Apply
+continues through Sever's existing output validation, checkpoint, and session
+receipt boundary.
+
+`mem review sever` reuses the same candidate evidence and outbound-draft
+projection with Accept removed. Item decisions and comments remain durable
+Sever review state, but Review cannot create the output Context or send it.
 
 ## Provider invariants
 

@@ -1,4 +1,5 @@
 import shutil
+import sys
 from typing import Annotated, Literal, Optional
 
 import typer
@@ -22,9 +23,16 @@ from memcommit.commands.granted_context import (
     GrantedReadStore,
     attached_grants,
     freeze_granted_context_binding,
-    project_grants_into_context,
     resolve_context_access,
     revalidate_granted_context_binding,
+)
+from memcommit.commands.readable_context_catalog import (
+    freeze_readable_context_catalog,
+)
+from memcommit.commands.context_picker import (
+    ContextMemoryRow,
+    ContextTree,
+    choose_context,
 )
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import AuthorityGrant, ProfileConfigError
@@ -38,6 +46,10 @@ _LIST_SNAPSHOT_VERSION = 2
 _GRANTED_LIST_RECEIPT_VERSION = 1
 _MemoryLayout = Literal["hanging", "inline"]
 _MIN_HANGING_CONTENT_WIDTH = 20
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def _one_line(content: str) -> str:
@@ -312,6 +324,108 @@ def _snapshot_context(
             ancestors=frozenset({ctx.uid}),
         ),
     }
+
+
+def _snapshot_memory_rows(
+    snapshot: dict[str, object],
+) -> tuple[ContextMemoryRow, ...]:
+    """Adapt only direct Memory occurrences to the shared tree presentation."""
+
+    rows: list[ContextMemoryRow] = []
+    for item in _require_items(snapshot.get("items")):
+        kind = _require_string(item, "kind")
+        uid = _require_string(item, "uid")
+        if kind == "memory":
+            rows.append(
+                ContextMemoryRow(
+                    f"memory {uid[:8]}",
+                    _require_string(item, "content"),
+                )
+            )
+        elif kind == "memory_ref":
+            content = item.get("resolved_content")
+            target_name = _require_string(item, "target_context_name")
+            rows.append(
+                ContextMemoryRow(
+                    f"ref {uid[:8]}",
+                    content
+                    if isinstance(content, str)
+                    else f"(dangling reference) {target_name}",
+                )
+            )
+    return tuple(rows)
+
+
+def _snapshot_browser_tree(
+    snapshot: dict[str, object],
+) -> tuple[
+    ContextTree,
+    tuple[str, ...],
+    tuple[str, ...],
+    dict[str, str],
+    dict[str, str],
+    dict[str, tuple[ContextMemoryRow, ...]],
+]:
+    """Adapt the frozen recursive occurrence graph to the common tree UI.
+
+    Occurrence IDs, rather than Context names, preserve repeated embeds and
+    cycles. They remain process-local and are never returned as locators.
+    """
+
+    root = _require_record(snapshot.get("context"))
+    root_name = _require_string(root, "name")
+    root_id = "occurrence:0"
+    ordered: list[str] = [root_id]
+    virtual: list[str] = []
+    children: dict[str, tuple[str, ...]] = {}
+    parents: dict[str, str | None] = {root_id: None}
+    labels = {root_id: root_name}
+    annotations: dict[str, str] = {}
+    memories: dict[str, tuple[ContextMemoryRow, ...]] = {}
+
+    def visit(parent_id: str, items: list[dict[str, object]]) -> None:
+        memories[parent_id] = _snapshot_memory_rows({"items": items})
+        child_ids: list[str] = []
+        contexts, _ = _group_snapshot_items(items)
+        for index, item in enumerate(contexts):
+            kind = _require_string(item, "kind")
+            child_id = f"{parent_id}/{index}"
+            child_ids.append(child_id)
+            ordered.append(child_id)
+            parents[child_id] = parent_id
+            if kind == "query_context_ref":
+                labels[child_id] = _require_string(item, "name")
+                annotations[child_id] = "[query-only]"
+                virtual.append(child_id)
+                children[child_id] = ()
+                continue
+            labels[child_id] = _require_string(item, "name")
+            cycle = _require_bool(item, "cycle")
+            if cycle:
+                annotations[child_id] = "[cycle]"
+                child_items: list[dict[str, object]] = []
+            else:
+                value = item.get("children")
+                child_items = [] if value is None else _require_items(value)
+            visit(child_id, child_items)
+        children[parent_id] = tuple(child_ids)
+
+    visit(root_id, _require_items(snapshot.get("items")))
+    materialized = tuple(name for name in ordered if name not in set(virtual))
+    tree = ContextTree(
+        roots=(root_id,),
+        children_by_name=children,
+        parent_by_name=parents,
+        materialized_names=frozenset(materialized),
+    )
+    return (
+        tree,
+        materialized,
+        tuple(virtual),
+        labels,
+        annotations,
+        memories,
+    )
 
 
 def _snapshot_error() -> ValueError:
@@ -933,22 +1047,22 @@ def cmd(
             current_name=current_context_name,
             required_permission="READ",
         )
-        if access.is_granted:
-            granted_store = GrantedReadStore(access)
-            store = granted_store
-            context_names = tuple(granted_store.list_context_names())
-            ctx = (
-                granted_store.load(access.display_name)
-                if recursive
-                else granted_store.load_direct(access.display_name)
+        store = freeze_readable_context_catalog(active_store, access)
+        context_names = tuple(store.list_context_names())
+        if (
+            copy_result
+            and recursive
+            and not access.is_granted
+            and store.granted_names_below(access.display_name)
+        ):
+            raise RuntimeError(
+                "Copying a mixed local and granted recursive list is not yet "
+                "supported. Copy the granted Context explicitly so its exact "
+                "grant receipt can be retained."
             )
-        else:
-            store = access.store
-            context_names = tuple(store.list_context_names())
-            ctx = store.load(access.context_name)
-            _, grants = attached_grants(access.context_name)
-            if grants:
-                ctx = project_grants_into_context(ctx, grants)
+        # Load resolves direct MemoryRefs even when presentation is collapsed;
+        # ``recursive`` below controls what the snapshot exposes.
+        ctx = store.load(access.display_name)
     except (
         FileNotFoundError,
         OSError,
@@ -966,6 +1080,47 @@ def cmd(
         context_names=context_names,
         recursive=recursive,
     )
+    if (
+        not copy_result
+        and _interactive_terminal()
+    ):
+        browser_snapshot = (
+            snapshot
+            if recursive
+            else _snapshot_context(
+                ctx,
+                store=store,
+                context_names=context_names,
+                recursive=True,
+            )
+        )
+        (
+            browser_tree,
+            browser_names,
+            browser_virtual_names,
+            browser_labels,
+            browser_annotations,
+            browser_memories,
+        ) = _snapshot_browser_tree(browser_snapshot)
+        root_id = browser_tree.roots[0]
+
+        choose_context(
+            browser_names,
+            current=root_id,
+            title=f"List · {access.display_name}",
+            virtual_names=browser_virtual_names,
+            virtual_annotations=browser_annotations,
+            memory_loader=lambda occurrence: browser_memories.get(
+                occurrence, ()
+            ),
+            browse_only=True,
+            initially_expand_selected=not recursive,
+            initially_expand_all=recursive,
+            initially_show_memories=True,
+            tree_override=browser_tree,
+            display_names=browser_labels,
+        )
+        return
     annotated_text = _render_snapshot(
         snapshot,
         with_ids=True,

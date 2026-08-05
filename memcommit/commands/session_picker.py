@@ -154,6 +154,7 @@ class SessionPickerLocation:
 @dataclass
 class _PickerState:
     selected_index: int = 0
+    new_selected: bool = False
     sort_mode: SessionSortMode = "recent"
     group_mode: SessionGroupMode = "all"
     search_active: bool = False
@@ -222,10 +223,15 @@ def _ordered_entries(
     return tuple(sorted(filtered, key=item_key))
 
 
-def _visible_bounds(selected: int, count: int) -> tuple[int, int]:
+def _visible_bounds(
+    selected: int,
+    count: int,
+    *,
+    line_budget: int = _VISIBLE_ROWS,
+) -> tuple[int, int]:
     if count == 0:
         return 0, 0
-    visible = min(count, _VISIBLE_ROWS)
+    visible = min(count, line_budget)
     start = max(0, selected - visible // 2)
     start = min(start, count - visible)
     return start, start + visible
@@ -234,6 +240,8 @@ def _visible_bounds(selected: int, count: int) -> tuple[int, int]:
 def _visible_grouped_bounds(
     entries: Sequence[SessionPickerEntry],
     selected: int,
+    *,
+    line_budget: int = _VISIBLE_ROWS,
 ) -> tuple[int, int]:
     """Keep a grouped slice within the list's display-line budget.
 
@@ -242,11 +250,15 @@ def _visible_grouped_bounds(
     inside prompt_toolkit's second scrolling layer when many Contexts are
     adjacent.
     """
-    start, end = _visible_bounds(selected, len(entries))
+    start, end = _visible_bounds(
+        selected,
+        len(entries),
+        line_budget=line_budget,
+    )
 
     while (
         start < end
-        and _grouped_line_count(entries, start=start, end=end) > _VISIBLE_ROWS
+        and _grouped_line_count(entries, start=start, end=end) > line_budget
     ):
         left_distance = selected - start
         right_distance = (end - 1) - selected
@@ -347,6 +359,28 @@ def _render_location(location: SessionPickerLocation) -> str:
     )
 
 
+def _new_session_label(receipt: SessionNewReceipt) -> str:
+    """Return the operation-specific label for the pinned launcher row."""
+
+    operation = receipt.kind.replace("_", " ").replace("-", " ").title()
+    return f"Add new {display_escape_text(operation)} session"
+
+
+def _render_new_detail(receipt: SessionNewReceipt) -> str:
+    argv_lines = tuple(
+        f"   [{index}] {display_escape_text(argument)}"
+        for index, argument in enumerate(receipt.argv)
+    )
+    return "\n".join(
+        (
+            f" {_new_session_label(receipt)}",
+            " Leave saved-session browsing and enter operation-specific setup.",
+            " Exact new-session route · NOT EXECUTED",
+            *argv_lines,
+        )
+    )
+
+
 def choose_session(
     entries: Sequence[SessionPickerEntry],
     *,
@@ -381,8 +415,6 @@ def choose_session(
         raise ValueError("Session picker received an invalid initial sort mode.")
     if initial_group_mode not in ("all", "context"):
         raise ValueError("Session picker received an invalid initial group mode.")
-    if not options and new_receipt is None:
-        raise ValueError("No resumable sessions are available to select.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive session selection requires a terminal. "
@@ -396,6 +428,7 @@ def choose_session(
     state = _PickerState(
         sort_mode=initial_sort_mode,
         group_mode=initial_group_mode,
+        new_selected=new_receipt is not None and not options,
     )
     windows: dict[str, Window] = {}
     bindings = KeyBindings()
@@ -417,6 +450,8 @@ def choose_session(
             0,
             min(state.selected_index, max(0, len(projected) - 1)),
         )
+        if not projected and new_receipt is not None:
+            state.new_selected = True
         return projected
 
     def selected_identity() -> tuple[str, str] | None:
@@ -433,12 +468,24 @@ def choose_session(
         for index, entry in enumerate(projected):
             if _entry_identity(entry) == identity:
                 state.selected_index = index
+                state.new_selected = False
                 return
         state.selected_index = 0
+        state.new_selected = new_receipt is not None and not projected
 
     def move(delta: int) -> None:
         projected = current_options()
+        if state.new_selected:
+            if delta > 0 and projected:
+                state.new_selected = False
+                state.selected_index = 0
+            return
         if not projected:
+            return
+        if delta < 0 and state.selected_index == 0 and new_receipt is not None:
+            state.new_selected = True
+            if "detail" in windows:
+                windows["detail"].vertical_scroll = 0
             return
         state.selected_index = max(
             0,
@@ -449,16 +496,50 @@ def choose_session(
 
     def render_entries() -> list[tuple[str, str]]:
         projected = current_options()
+        fragments: list[tuple[str, str]] = []
+        if new_receipt is not None:
+            if state.new_selected:
+                fragments.append(("[SetCursorPosition]", ""))
+            pointer = "›" if state.new_selected else " "
+            fragments.append(
+                (
+                    "class:selected" if state.new_selected else "class:new",
+                    f"{pointer} + {_new_session_label(new_receipt)}",
+                )
+            )
         if not projected:
-            return [("class:empty", "  No matching saved sessions.")]
+            message = (
+                "No saved sessions yet."
+                if not options and not search_area.text
+                else "No matching saved sessions."
+            )
+            if fragments:
+                fragments.append(("", "\n"))
+                fragments.append(("class:empty", f"  {message}"))
+                return fragments
+            return [("class:empty", f"  {message}")]
         if state.group_mode == "context":
             start, end = _visible_grouped_bounds(
                 projected,
                 state.selected_index,
+                line_budget=(
+                    _VISIBLE_ROWS - 1
+                    if new_receipt is not None
+                    else _VISIBLE_ROWS
+                ),
             )
         else:
-            start, end = _visible_bounds(state.selected_index, len(projected))
-        fragments: list[tuple[str, str]] = []
+            start, end = _visible_bounds(
+                state.selected_index,
+                len(projected),
+                line_budget=(
+                    _VISIBLE_ROWS - 1
+                    if new_receipt is not None
+                    else _VISIBLE_ROWS
+                ),
+            )
+        if fragments:
+            fragments.append(("", "\n"))
         prior_group: str | None = None
         for index in range(start, end):
             entry = projected[index]
@@ -497,7 +578,16 @@ def choose_session(
 
     def render_detail() -> str:
         projected = current_options()
+        if state.new_selected and new_receipt is not None:
+            return _render_new_detail(new_receipt)
         if not projected:
+            if not options and not search_area.text:
+                suffix = (
+                    " Press N to start a new session."
+                    if new_receipt is not None
+                    else " Start one with this operation's explicit operands."
+                )
+                return " No saved sessions are available.\n" + suffix
             return (
                 " No saved session matches the current filter.\n"
                 " Clear or revise the filter, or press N when New is enabled."
@@ -511,17 +601,22 @@ def choose_session(
 
     def render_footer() -> str:
         projected = current_options()
-        position = (
-            f"{state.selected_index + 1}/{len(projected)}" if projected else "0/0"
-        )
-        new_hint = "  N new" if new_receipt is not None else ""
+        total = len(projected) + (1 if new_receipt is not None else 0)
+        if state.new_selected:
+            position = f"1/{total}"
+        elif projected:
+            offset = 1 if new_receipt is not None else 0
+            position = f"{state.selected_index + 1 + offset}/{total}"
+        else:
+            position = "0/0"
+        new_hint = "  N add new session" if new_receipt is not None else ""
         query_hint = (
             f"  · filter: {display_escape_text(search_area.text)}"
             if search_area.text and not state.search_active
             else ""
         )
         return (
-            " ↑/↓ move  PgUp/PgDn detail  Enter reopen  S sort  G group  / filter"
+            " ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter"
             f"{new_hint}  Esc/q cancel  ·  {position}{query_hint}"
         )
 
@@ -563,6 +658,9 @@ def choose_session(
 
     @bindings.add("enter", filter=list_focused)
     def _open_session(event) -> None:
+        if state.new_selected and new_receipt is not None:
+            event.app.exit(result=new_receipt)
+            return
         projected = current_options()
         if not projected:
             return
@@ -577,16 +675,20 @@ def choose_session(
 
     @bindings.add("s", filter=list_focused)
     def _toggle_sort(event) -> None:
+        keep_new = state.new_selected
         identity = selected_identity()
         state.sort_mode = "name" if state.sort_mode == "recent" else "recent"
-        restore_selection(identity)
+        if not keep_new:
+            restore_selection(identity)
         event.app.invalidate()
 
     @bindings.add("g", filter=list_focused)
     def _toggle_group(event) -> None:
+        keep_new = state.new_selected
         identity = selected_identity()
         state.group_mode = "context" if state.group_mode == "all" else "all"
-        restore_selection(identity)
+        if not keep_new:
+            restore_selection(identity)
         event.app.invalidate()
 
     @bindings.add("/", filter=list_focused)
@@ -600,6 +702,7 @@ def choose_session(
     def _apply_filter(event) -> None:
         state.search_active = False
         state.selected_index = 0
+        state.new_selected = new_receipt is not None and not current_options()
         event.app.layout.focus(list_control)
         event.app.invalidate()
 
@@ -608,12 +711,14 @@ def choose_session(
         search_area.text = state.search_before_edit
         state.search_active = False
         state.selected_index = 0
+        state.new_selected = new_receipt is not None and not current_options()
         event.app.layout.focus(list_control)
         event.app.invalidate()
 
     if new_receipt is not None:
 
         @bindings.add("n", filter=list_focused)
+        @bindings.add("N", filter=list_focused)
         def _new_session(event) -> None:
             event.app.exit(result=new_receipt)
 
@@ -647,9 +752,10 @@ def choose_session(
     list_preferred_height = min(
         _VISIBLE_ROWS,
         max(
-            1,
-            len(options),
-            _grouped_line_count(grouped_catalog),
+            2 if not options and new_receipt is not None else 1,
+            len(options) + (1 if new_receipt is not None else 0),
+            _grouped_line_count(grouped_catalog)
+            + (1 if new_receipt is not None else 0),
         ),
     )
     list_window = Window(
@@ -706,6 +812,7 @@ def choose_session(
                 "group": "bold",
                 "search-label": "bold",
                 "empty": "italic",
+                "new": "bold",
             }
         ),
     )

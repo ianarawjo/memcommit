@@ -11,6 +11,8 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.meld as meld_command
+from memcommit.commands.endpoint_setup_flows import MeldSetupReceipt
 from memcommit.atomize_grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
@@ -71,6 +73,56 @@ from memcommit.store import (
 
 
 runner = CliRunner()
+
+
+def test_empty_meld_launcher_offers_new_session(isolated_store, monkeypatch):
+    store = MemoryStore()
+
+    class TTY:
+        @staticmethod
+        def isatty():
+            return True
+
+    monkeypatch.setattr(meld_command.sys, "stdin", TTY())
+    monkeypatch.setattr(meld_command.sys, "stdout", TTY())
+    monkeypatch.setattr(
+        meld_command,
+        "choose_session",
+        lambda entries, **kwargs: (
+            kwargs["new_receipt"]
+            if entries == ()
+            else pytest.fail("empty Meld unexpectedly had a saved row")
+        ),
+    )
+    started = []
+    monkeypatch.setattr(
+        meld_command,
+        "_start_new_meld_from_picker",
+        lambda selected_store: started.append(selected_store),
+    )
+
+    meld_command._browse_saved_meld_sessions(store)
+
+    assert started == [store]
+
+
+def test_new_meld_setup_routes_directional_a_into_b(isolated_store, monkeypatch):
+    store = MemoryStore()
+    monkeypatch.setattr(
+        meld_command,
+        "choose_meld_setup",
+        lambda selected_store: (
+            MeldSetupReceipt("directional", "incoming", "baseline")
+            if selected_store is store
+            else pytest.fail("Meld setup received another store")
+        ),
+    )
+    calls = []
+    monkeypatch.setattr(meld_command, "cmd", lambda **kwargs: calls.append(kwargs))
+
+    meld_command._start_new_meld_from_picker(store)
+
+    assert calls == [{"left": "incoming", "into": "baseline"}]
 
 
 class Task2Provider:
@@ -2673,6 +2725,41 @@ def test_ready_meld_applies_from_report_without_separate_review_screen():
 
     assert action is not None
     assert action.kind == "ACCEPT"
+
+
+def test_ready_meld_review_report_cannot_accept_or_apply():
+    left = ops.init("left/review-no-apply")
+    ops.add(left, "Cash compensation includes travel time.")
+    right = ops.init("right/review-no-apply")
+    ops.add(right, "Use e-transfer or a gift card.")
+    target = ops.init("target/review-no-apply")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    provider = Task2Provider()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, provider),
+    )
+    issue_uid = session.current_assessment.issues[0].uid
+    session.start_turn("Keep all supported details.", scope="ISSUE", issue_uids=(issue_uid,))
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, provider),
+    )
+    assert session.state == "READY_TO_APPLY"
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("aq")
+        action = run_meld_shell(
+            session,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            review_only=True,
+        )
+
+    assert action is None
+    assert session.state == "READY_TO_APPLY"
 
 
 def test_meld_framed_composer_matches_ground_send_and_newline_contract():

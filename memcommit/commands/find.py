@@ -7,7 +7,6 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
 from memcommit.commands.exact_command_review import (
@@ -22,10 +21,14 @@ from memcommit.commands.find_chat_shell import (
     FindPendingAnswerRequest,
     run_find_chat_session,
 )
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.history_picker import choose_history
 from memcommit.commands.history_present import (
     history_result_recovery_label,
     history_result_picker_entries,
+)
+from memcommit.commands.readable_context_catalog import (
+    freeze_readable_context_catalog,
 )
 from memcommit.commands.tui_primitives import (
     display_escape_text,
@@ -240,6 +243,15 @@ class FindTurnController:
             provider,
             limit=self.limit,
         )
+        if self.recursive:
+            matches = _supplement_namespace_branch_coverage(
+                turn.query,
+                self.frame_candidates,
+                matches,
+                provider,
+                root_name=self.root_context.name,
+                limit=self.limit,
+            )
         related_query = _related_query_for_matches(matches)
         return replace(
             state,
@@ -462,6 +474,90 @@ def _collect_find_frame_candidates(
             collect_search_artifacts(store, frame_roots),
         )
     return tuple(candidates)
+
+
+def _namespace_branch(name: str, root_name: str) -> str | None:
+    """Return the first canonical namespace segment below one Find root."""
+
+    prefix = root_name + "/"
+    if not name.startswith(prefix):
+        return None
+    return name[len(prefix) :].split("/", 1)[0]
+
+
+def _supplement_namespace_branch_coverage(
+    query: str,
+    candidates: Sequence[SearchCandidate],
+    matches: list[SearchMatch],
+    provider,
+    *,
+    root_name: str,
+    limit: int,
+) -> list[SearchMatch]:
+    """Preserve a material match from another relevant public branch.
+
+    Global semantic ranking can fill a small limit with near-duplicate facts
+    from one branch. A second bounded rank over omitted sibling branches asks
+    the same primary-relevance question; it does not force an irrelevant
+    branch into the result.
+    """
+
+    if limit < 2 or not matches or any(
+        match.relevance != "primary" for match in matches
+    ):
+        return matches
+    candidate_branches = {
+        branch
+        for candidate in candidates
+        if candidate.kind != "artifact"
+        if (branch := _namespace_branch(candidate.context_name, root_name))
+        is not None
+    }
+    selected_branches = {
+        branch
+        for match in matches
+        if (
+            branch := _namespace_branch(
+                match.candidate.context_name,
+                root_name,
+            )
+        )
+        is not None
+    }
+    omitted = candidate_branches - selected_branches
+    if not selected_branches or not omitted:
+        return matches
+    omitted_candidates = [
+        candidate
+        for candidate in candidates
+        if _namespace_branch(candidate.context_name, root_name) in omitted
+        and candidate.kind != "artifact"
+    ]
+    supplemental = [
+        match
+        for match in rank_candidates(
+            query,
+            omitted_candidates,
+            provider,
+            limit=limit,
+        )
+        if match.relevance == "primary"
+    ]
+    if not supplemental:
+        return matches
+
+    reserve = min(len(supplemental), max(1, min(3, limit // 2)))
+    keep = min(len(matches), limit - reserve)
+    combined = [*matches[:keep], *supplemental[:reserve]]
+    seen: set[tuple[str, str]] = set()
+    result: list[SearchMatch] = []
+    for match in combined:
+        identity = (match.candidate.context_uid, match.candidate.item.uid)
+        if identity in seen:
+            continue
+        seen.add(identity)
+        result.append(match)
+    return result[:limit]
 
 
 def _history_context_names(
@@ -871,7 +967,7 @@ def _handle_find_turn(
         current_name=store.current_context_name(),
         required_permission="READ",
     )
-    read_store = GrantedReadStore(access) if access.is_granted else store
+    read_store = freeze_readable_context_catalog(store, access)
     root = read_store.load(access.display_name)
     frame_roots = _load_find_frame_roots(
         read_store,
@@ -886,7 +982,9 @@ def _handle_find_turn(
         include_artifacts=not access.is_granted,
     )
     return FindTurnController(
-        store=read_store,
+        # Other-Context confirmation retains its established profile-local
+        # boundary; the unified catalog is only the selected Find frame.
+        store=store,
         root_context=root,
         frame_roots=frame_roots,
         recursive=True,
@@ -897,6 +995,7 @@ def _handle_find_turn(
 
 def _run_interactive_find(
     store: MemoryStore,
+    outside_store: MemoryStore,
     root_context: Context,
     frame_roots: tuple[Context, ...],
     query: str,
@@ -904,15 +1003,10 @@ def _run_interactive_find(
     *,
     recursive: bool,
     limit: int,
+    frame_candidates: tuple[SearchCandidate, ...],
 ) -> FindChatSessionResult:
-    frame_candidates = _collect_find_frame_candidates(
-        store,
-        frame_roots,
-        recursive=recursive,
-        include_artifacts=isinstance(store, MemoryStore),
-    )
     controller = FindTurnController(
-        store=store,
+        store=outside_store,
         root_context=root_context,
         frame_roots=frame_roots,
         recursive=recursive,
@@ -1003,10 +1097,15 @@ def cmd(
                 "Temporal Find is unavailable for a granted READ view because "
                 "the grant does not expose authority checkpoint history."
             )
-        read_store = GrantedReadStore(access) if access.is_granted else store
         if temporal:
+            read_store = GrantedReadStore(access) if access.is_granted else store
             ctx = read_store.load_direct(access.display_name)
         else:
+            read_store = freeze_readable_context_catalog(
+                store,
+                access,
+                include_query_routes=not direct,
+            )
             ctx = read_store.load(access.display_name)
         frame_roots = _load_find_frame_roots(
             read_store,
@@ -1075,13 +1174,29 @@ def cmd(
             recursive=not direct,
             include_artifacts=not access.is_granted,
         )
-        provider = connect_codex_chatgpt_provider()
-        matches = rank_candidates(
-            query,
-            list(frame_candidates),
-            provider,
-            limit=limit,
-        )
+        with CommandProgress(
+            "FIND",
+            "connecting provider",
+            total=3,
+        ) as progress:
+            provider = connect_codex_chatgpt_provider()
+            progress.update("ranking candidates", step=2)
+            matches = rank_candidates(
+                query,
+                list(frame_candidates),
+                provider,
+                limit=limit,
+            )
+            if not direct:
+                progress.update("checking namespace coverage", step=3)
+                matches = _supplement_namespace_branch_coverage(
+                    query,
+                    frame_candidates,
+                    matches,
+                    provider,
+                    root_name=ctx.name,
+                    limit=limit,
+                )
     except (FindError, QueryProviderError) as error:
         typer.secho(
             f"Find error: {display_escape_text(str(error))}",
@@ -1089,18 +1204,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-
-    if _interactive_terminal():
-        _run_interactive_find(
-            read_store,
-            ctx,
-            frame_roots,
-            query,
-            matches,
-            recursive=not direct,
-            limit=limit,
-        )
-        return
 
     if not matches:
         typer.secho(display_escape_text(ctx.name), bold=True)

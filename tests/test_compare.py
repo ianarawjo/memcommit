@@ -11,6 +11,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.compare_sessions as compare_sessions_module
 from memcommit.cli import app
 from memcommit.comparison import ComparisonInput
 from memcommit.comparison_provider import (
@@ -31,7 +32,7 @@ from memcommit.commands.compare_sessions import (
     choose_comparison_session,
     comparison_session_entries,
 )
-from memcommit.commands.session_picker import SessionOpenReceipt
+from memcommit.commands.session_picker import SessionNewReceipt, SessionOpenReceipt
 from memcommit.store import MemoryStore
 
 
@@ -466,6 +467,35 @@ def test_relative_peer_locator_errors_before_provider(
     assert "contains an empty segment" in malformed.output
     assert provider.payloads == []
     assert store.current_context_name() == reference.name
+
+
+def test_compare_explicit_from_does_not_change_current_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+    orientation = ops.init("orientation/only")
+    store.create_context(orientation)
+    store.set_current(orientation.name)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        [
+            "compare",
+            "--from",
+            reference.name,
+            "--to",
+            compared.name,
+            "--snapshot",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert len(provider.payloads) == 1
+    assert store.current_context_name() == orientation.name
 
 
 def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
@@ -1152,6 +1182,26 @@ def test_compare_sessions_empty_and_forged_receipts_fail_closed(
     empty = runner.invoke(app, ["compare"])
     assert empty.exit_code == 0, empty.output
     assert "Compare selection ended; no analysis was opened." in empty.output
+
+    class TTY:
+        @staticmethod
+        def isatty():
+            return True
+
+    monkeypatch.setattr(compare_sessions_module.sys, "stdin", TTY())
+    monkeypatch.setattr(compare_sessions_module.sys, "stdout", TTY())
+    new_receipt = SessionNewReceipt(kind="compare", argv=("mem", "compare"))
+    monkeypatch.setattr(
+        "memcommit.commands.compare_sessions.choose_session",
+        lambda entries, **kwargs: (
+            new_receipt
+            if entries == () and kwargs["new_receipt"] == new_receipt
+            else pytest.fail("empty Compare must offer the exact New receipt")
+        ),
+    )
+    # Compare constructs an equivalent immutable receipt for the picker.
+    opened = choose_comparison_session(store)
+    assert opened == new_receipt
 
     reference, compared = _task2_contexts(store)
     analysis = analyze_comparison(

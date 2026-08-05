@@ -2,17 +2,29 @@
 
 ## Status and scope
 
-Meld, Atomize, and Update now project their operation-owned artifacts into one
-interactive Resolution Workbench presentation contract.  A future Reconcile
-implementation is expected to use the same contract.  Ground deliberately does
-not: its Goal–Contexts–Rules–Memories–Chat frame, draft lifecycle, and exact
-command approval are a different interaction.
+Meld, Atomize, Update, and Sever now project their operation-owned artifacts
+into one interactive Resolution Workbench presentation contract.  A future
+Reconcile implementation is expected to use the same contract.  Ground
+deliberately does not: its Goal–Contexts–Rules–Memories–Chat frame, draft
+lifecycle, and exact command approval are a different interaction.
 
 The shared workbench is not a shared semantic session.  It owns only an
 immutable view projection, UID-addressed action envelope, terminal-safe
 list/detail/comment presentation, and ephemeral navigation.  Each operation
 continues to own its provider schema, durable state, evidence rules,
 reanalysis, readiness, concurrency checks, application, and provenance.
+
+Its optional `ImpactController` is likewise a presentation controller, not a
+mutation controller. It supplies a provider-free immutable effect projection
+bound to the same operation, artifact UID, and revision as the active view.
+The shell renders that projection immediately before the operation-aware
+Apply card and rejects stale or cross-artifact projections.
+
+The same workbench can host an adaptive `ReviewReport`, but Review applies a
+different capability boundary: its controller removes `ACCEPT`, preserves only
+operation-owned semantic response actions, and never renders target Apply as
+a report action. Compare may supply exact report prose, while Meld, Sever,
+Atomize, and Update reuse their existing view blocks.
 
 This distinction follows the same successful boundary as the read-only
 `ResultWorkbench`, but the two assets have different responsibilities:
@@ -136,10 +148,12 @@ comment or accept capability and explicitly does not claim that no unresolved
 issue exists.
 
 `mem impact --to` uses the common interactive drill-down in a terminal and a
-deterministic snapshot outside one.  `mem update --to` remains the explicit
-request to apply a ready conflict-free plan to the local working copy.  Its
-multi-owner locks, rollback, checkpoints, operation digest, and application
-receipt remain unchanged.
+deterministic snapshot outside one. In a TTY, `mem update --to` stages the
+ready plan, embeds that same exact Impact projection, and requires a distinct
+Apply action; closing leaves the receipt staged and the target unchanged. The
+non-TTY explicit command retains its deterministic scripted application
+behavior. Its multi-owner locks, rollback, checkpoints, operation digest, and
+application receipt remain unchanged.
 
 A general Update resolution loop still requires a separate durable
 `UpdateResolutionSession`, stable issue and operation keys, a provider contract
@@ -149,6 +163,18 @@ REQUIRED issue is resolved.  It must not overload the current impact cache or
 staged-update file and must not delegate physical application to Meld, because
 Update supports embedded multi-owner targets, resolved `MemoryRef` evidence,
 removal, and linked rollback boundaries that Context Meld does not.
+
+### Sever
+
+Sever projects each outbound candidate and its operation-owned choices through
+the common Resolution Workbench after its separate Source–Criteria–Output
+setup. The Sever controller continues to own the scoped source snapshots,
+candidate selection semantics, exact output, durable session digest, and final
+local application. Sharing the workbench does not make the setup screen or the
+saved-session listing common, and it does not relax Sever's rule that reviewed
+output is never transmitted by the Sever operation.
+The embedded Impact is the exact local outbound draft and is explicitly
+labelled `NOT SENT`; Apply materializes the local output only.
 
 ### Reconcile
 
@@ -160,6 +186,8 @@ exists.
 ## Invariants
 
 - Ground is not a Resolution Workbench adapter.
+- Impact never grants an adapter an Apply capability and never performs an
+  operation mutation itself.
 - A common view never becomes semantic authority or durable operation state.
 - A full adapter revision is replaced atomically; the shell does not patch
   provider results row by row.
