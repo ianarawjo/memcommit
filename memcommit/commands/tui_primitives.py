@@ -51,6 +51,10 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
         "memcommit.focused frame.label": "fg:#8bd5ff bold",
         "memcommit.notification": "fg:#f5a97f bold",
         "memcommit.table.selected": "reverse bold",
+        # A chosen value should remain legible without another moving glyph.
+        # The blue surface is persistent selection; reverse video remains the
+        # separate navigation cursor while a person browses a tree.
+        "memcommit.choice.active": "fg:#effaff bg:#245b78 bold",
     }
 )
 

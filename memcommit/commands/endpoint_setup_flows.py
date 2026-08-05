@@ -164,12 +164,14 @@ def choose_meld_setup(
                 "DIRECTIONAL · A → B",
                 ("A", "B"),
                 {"A": "A · INCOMING", "B": "B · BASELINE + RESULT"},
+                "A is incoming evidence. B remains authoritative and is the result target.",
             ),
             EndpointModeSpec(
                 "SYMMETRIC",
                 "SYMMETRIC · A + B → C",
                 ("A", "B", "C"),
                 {"A": "A · PEER", "B": "B · PEER", "C": "C · RESULT"},
+                "A and B are equal peers. A saved ordered Compare is required; the result is separate C.",
             ),
         ),
         roles=(

@@ -18,7 +18,7 @@ def test_horizontal_choice_clamps_and_renders_active_value():
     state = HorizontalChoiceState(
         (
             HorizontalChoiceOption("LEFT", "LEFT MODE"),
-            HorizontalChoiceOption("RIGHT", "RIGHT MODE"),
+            HorizontalChoiceOption("RIGHT", "RIGHT MODE", "Right-side meaning."),
         ),
         selected_uid="LEFT",
     )
@@ -34,11 +34,14 @@ def test_horizontal_choice_clamps_and_renders_active_value():
             state,
             title="MODE",
             focused=True,
+            show_description=True,
         )
     )
-    assert "[  LEFT MODE]" in rendered
-    assert "[● RIGHT MODE]" in rendered
+    assert "[ LEFT MODE ]" in rendered
+    assert "[ RIGHT MODE ]" in rendered
+    assert "●" not in rendered
     assert "←/→ SELECT" in rendered
+    assert "MEANING · Right-side meaning." in rendered
 
 
 def test_fixed_update_setup_returns_both_initial_roles(isolated_store):

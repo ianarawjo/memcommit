@@ -41,6 +41,7 @@ class EndpointModeSpec:
     label: str
     active_roles: tuple[str, ...]
     role_titles: Mapping[str, str]
+    description: str = ""
 
 
 @dataclass(frozen=True)
@@ -134,7 +135,10 @@ def choose_session_endpoints(
     selected = {role.uid: role.initial_name for role in role_specs}
     create = {role.uid: role.prefer_new for role in role_specs}
     mode_state = HorizontalChoiceState(
-        tuple(HorizontalChoiceOption(mode.uid, mode.label) for mode in mode_specs),
+        tuple(
+            HorizontalChoiceOption(mode.uid, mode.label, mode.description)
+            for mode in mode_specs
+        ),
         selected_uid=initial_mode_uid,
     )
     status = {"value": ""}
@@ -164,19 +168,26 @@ def choose_session_endpoints(
             available = row.name in role.selectable_names
             chosen = not create[uid] and selected[uid] == row.name
             pointer = "›" if cursor else " "
-            marker = "●" if chosen else " "
             branch = "▾" if row.expanded else "▸" if row.has_children else "·"
             annotation = labels.get(row.name, "")
             if not available:
                 annotation = annotation or "UNAVAILABLE"
             suffix = f"  {display_escape_text(annotation)}" if annotation else ""
-            style = "class:memcommit.table.selected" if cursor else ""
-            fragments.append(
-                (
-                    style,
-                    f"{pointer} ({marker}) {'  ' * row.depth}{branch} "
-                    f"{display_escape_text(row.name)}{suffix}",
-                )
+            cursor_style = "class:memcommit.table.selected" if cursor else ""
+            value_style = (
+                "class:memcommit.choice.active" if chosen else cursor_style
+            )
+            fragments.extend(
+                [
+                    (
+                        cursor_style,
+                        f"{pointer}   {'  ' * row.depth}{branch} ",
+                    ),
+                    (
+                        value_style,
+                        f"{display_escape_text(row.name)}{suffix}",
+                    ),
+                ]
             )
             if index < len(state.visible_rows()) - 1:
                 fragments.append(("", "\n"))
@@ -210,11 +221,20 @@ def choose_session_endpoints(
                     Window(height=1, char="─"),
                     Window(
                         FormattedTextControl(
-                            lambda uid=role.uid: (
-                                f" {'●' if create[uid] else '+'} "
-                                f"{display_escape_text(role_by_uid[uid].new_label)}"
-                                " · N EDIT"
-                            )
+                            lambda uid=role.uid: [
+                                ("", "  NEW · "),
+                                (
+                                    (
+                                        "class:memcommit.choice.active"
+                                        if create[uid]
+                                        else ""
+                                    ),
+                                    "[ "
+                                    f"{display_escape_text(role_by_uid[uid].new_label)}"
+                                    " ]",
+                                ),
+                                ("", " · N EDIT"),
+                            ]
                         ),
                         height=1,
                     ),
@@ -243,12 +263,13 @@ def choose_session_endpoints(
             title="MODE",
             focused=app_ref.get("app") is not None
             and app_ref["app"].layout.has_focus(mode_control),
+            show_description=True,
         ),
         focusable=True,
         show_cursor=False,
     )
     mode_frame = Frame(
-        Window(mode_control, height=1, dont_extend_height=True),
+        Window(mode_control, height=2, dont_extend_height=True),
         title="OPERATION SHAPE",
     )
     bind_focused_frame_style(

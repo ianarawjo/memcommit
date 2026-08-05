@@ -34,7 +34,8 @@ Meld adds a focused horizontal mode selector above those inputs:
 ```text
  NEW MELD
 
- MODE  ‹ DIRECTIONAL · A → B ›   ‹ SYMMETRIC · A + B → C ›
+ MODE  [ DIRECTIONAL · A → B ]   [ SYMMETRIC · A + B → C ]
+ MEANING · A is incoming evidence. B remains authoritative and is the result target.
 
  A · INCOMING / PEER     [Context namespace tree]
  B · BASELINE / PEER     [Context namespace tree]
@@ -74,7 +75,8 @@ Its contract is intentionally narrow:
 - options have stable UIDs and display labels;
 - exactly one option is active;
 - `Left` and `Right` move with clamped, non-wrapping behavior;
-- rendering exposes focus, the active marker, and a concise `←/→` hint;
+- rendering exposes focus, a stable blue active-value surface, and a concise
+  `←/→` hint without moving a radio glyph;
 - changing the active option performs no I/O, provider call, persistence, or
   semantic action; and
 - callers own the meaning and validation of the selected UID.
@@ -87,6 +89,14 @@ component later, but that is not required to prove the extraction.
 
 This boundary avoids making a visual segmented selector responsible for
 review acceptance or durable decisions.
+
+The Meld mode selector additionally renders one `MEANING` line for the active
+contract. Directional explains that B remains authoritative and is also the
+result target. Symmetric explains that A and B are equal peers, requires their
+saved ordered Compare, and introduces separate result C. Context roles use the
+same blue surface for the retained choice while `›` and reverse video remain
+separate browsing-cursor signals; changing a selection therefore does not move
+an additional `(●)` column through the namespace tree.
 
 ## Setup state and mode transitions
 

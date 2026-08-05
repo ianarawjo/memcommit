@@ -15,9 +15,15 @@ class HorizontalChoiceOption:
 
     uid: str
     label: str
+    description: str = ""
 
     def __post_init__(self) -> None:
-        if not self.uid or not self.label or any(c in self.label for c in "\r\n"):
+        if (
+            not self.uid
+            or not self.label
+            or any(c in self.label for c in "\r\n")
+            or any(c in self.description for c in "\r\n")
+        ):
             raise ValueError("Horizontal choices require nonempty single-line values.")
 
 
@@ -59,20 +65,29 @@ def render_horizontal_choice(
     *,
     title: str,
     focused: bool,
+    show_description: bool = False,
 ) -> StyleAndTextTuples:
     """Render one segmented row; callers retain all meaning and key bindings."""
-    style = "class:memcommit.table.selected" if focused else ""
-    fragments: StyleAndTextTuples = [(style, f"{'›' if focused else ' '} {title} · ")]
+    fragments: StyleAndTextTuples = [
+        ("", f"{'›' if focused else ' '} {title} · ")
+    ]
     for index, option in enumerate(state.options):
         selected = option.uid == state.selected_uid
-        marker = "●" if selected else " "
         fragments.append(
             (
-                style if selected else "",
-                f"[{marker} {display_escape_text(option.label)}]",
+                "class:memcommit.choice.active" if selected else "",
+                f"[ {display_escape_text(option.label)} ]",
             )
         )
         if index < len(state.options) - 1:
             fragments.append(("", "  "))
     fragments.append(("", " · ←/→ SELECT"))
+    selected = state.options[state.selected_index]
+    if show_description and selected.description:
+        fragments.extend(
+            [
+                ("", "\n"),
+                ("", f"  MEANING · {display_escape_text(selected.description)}"),
+            ]
+        )
     return fragments
