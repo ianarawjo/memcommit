@@ -54,7 +54,7 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
         # A chosen value should remain legible without another moving glyph.
         # The blue surface is persistent selection; reverse video remains the
         # separate navigation cursor while a person browses a tree.
-        "memcommit.choice.active": "fg:#effaff bg:#245b78 bold",
+        "memcommit.choice.active": "fg:#10242f bg:#8bd5ff bold",
     }
 )
 
