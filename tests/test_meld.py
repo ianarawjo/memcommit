@@ -1,4 +1,5 @@
 """End-to-end contracts for Context-to-Context symmetric meld."""
+
 from __future__ import annotations
 
 import json
@@ -183,8 +184,7 @@ class Task2Provider:
                             "participation and applicable travel time."
                         ),
                         "reason": (
-                            "The rate and travel-time condition come from "
-                            "Ian's policy."
+                            "The rate and travel-time condition come from Ian's policy."
                         ),
                         "relation_keys": ["r000001"],
                         "source_memory_ids": [left_id],
@@ -217,9 +217,7 @@ class Task2CompareProvider:
 
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "compare_contexts"
-        payload = json.loads(
-            prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1]
-        )
+        payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
         reference_id = payload["frames"][0]["memories"][0]["memory_id"]
         compared_id = payload["frames"][1]["memories"][0]["memory_id"]
         return json.dumps(
@@ -314,10 +312,7 @@ def _task2_contexts(
     left = ops.init("ian/proposal-writing-policy")
     ops.add(
         left,
-        (
-            "Budget CAD 20–30 per hour in cash, including participation and "
-            "travel time."
-        ),
+        ("Budget CAD 20–30 per hour in cash, including participation and travel time."),
     )
     right = ops.init("damien/proposal-writing-policy")
     ops.add(
@@ -353,9 +348,7 @@ class DirectionalProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "meld_contexts"
         result_schema = output_schema["properties"]["results"]["items"]
-        assert {"operation", "target_memory_ids"} <= set(
-            result_schema["required"]
-        )
+        assert {"operation", "target_memory_ids"} <= set(result_schema["required"])
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
         assert payload["mode"] == "DIRECTIONAL"
@@ -567,9 +560,9 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     assert [frame.uid for frame in session.frames] == [
         frame.uid for frame in comparison.frames
     ]
-    assert [
-        relation.uid for relation in session.current_assessment.relations
-    ] == [relation.uid for relation in comparison.relations]
+    assert [relation.uid for relation in session.current_assessment.relations] == [
+        relation.uid for relation in comparison.relations
+    ]
     assert [issue.uid for issue in session.current_assessment.issues] == [
         issue.uid for issue in comparison.issues
     ]
@@ -577,11 +570,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
         option.uid
         for issue in session.current_assessment.issues
         for option in issue.options
-    ] == [
-        option.uid
-        for issue in comparison.issues
-        for option in issue.options
-    ]
+    ] == [option.uid for issue in comparison.issues for option in issue.options]
 
     resumed = runner.invoke(app, ["meld", left.name, right.name])
     assert resumed.exit_code == 0, resumed.output
@@ -643,9 +632,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     assert meld_event.evidence == "RECORDED"
     assert meld_event.reason_codes[:1] == ("MELD",)
     assert "ian/proposal-writing-policy" in (meld_event.declared_frame or "")
-    assert "Budget CAD 20–30 per hour in cash" in (
-        meld_event.declared_frame or ""
-    )
+    assert "Budget CAD 20–30 per hour in cash" in (meld_event.declared_frame or "")
 
     second_accept = runner.invoke(
         app,
@@ -679,10 +666,7 @@ def test_symmetric_meld_requires_saved_compare_before_provider_connection(
     result = runner.invoke(app, ["meld", left.name, right.name])
 
     assert result.exit_code == 1
-    assert (
-        "requires a saved Compare analysis"
-        in result.output
-    )
+    assert "requires a saved Compare analysis" in result.output
     assert f"mem switch {left.name}" in result.output
     assert f"mem compare --to {right.name}" in result.output
     assert f"mem switch {target.name}" in result.output
@@ -762,9 +746,9 @@ def test_seeded_meld_schema_round_trips_and_rejects_tampering(
         MeldSession.from_dict(bad_digest)
 
     bad_import = json.loads(json.dumps(value))
-    bad_import["turns"][0]["assessment"]["relations"][0][
-        "summary"
-    ] = "A forged imported relation."
+    bad_import["turns"][0]["assessment"]["relations"][0]["summary"] = (
+        "A forged imported relation."
+    )
     with pytest.raises(MeldError, match="turn zero does not match"):
         MeldSession.from_dict(bad_import)
 
@@ -785,15 +769,14 @@ def test_directional_meld_uses_current_incoming_and_relative_baseline(
     assert result.exit_code == 0, result.output
     assert "MEM MELD · DIRECTIONAL" in result.output
     assert (
-        "INCOMING test/update/from → "
-        "BASELINE / TARGET test/update/to"
+        "INCOMING test/update/from → BASELINE / TARGET test/update/to"
     ) in result.output
     assert "State: READY_TO_APPLY" in result.output
     assert len(provider.payloads) == 1
-    assert [
-        frame["context_name"]
-        for frame in provider.payloads[0]["frames"]
-    ] == [incoming.name, baseline.name]
+    assert [frame["context_name"] for frame in provider.payloads[0]["frames"]] == [
+        incoming.name,
+        baseline.name,
+    ]
     assert store._context_file(incoming.name).read_bytes() == incoming_before
     assert store._context_file(baseline.name).read_bytes() == baseline_before
     assert store.list_checkpoints(baseline.name) == []
@@ -820,12 +803,10 @@ def test_directional_meld_from_uses_current_baseline_and_canonical_session(
 
     assert shorthand.exit_code == 0, shorthand.output
     assert (
-        "INCOMING test/update/from → "
-        "BASELINE / TARGET test/update/to"
+        "INCOMING test/update/from → BASELINE / TARGET test/update/to"
     ) in shorthand.output
     assert (
-        "mem meld test/update/from --into test/update/to --accept"
-        in shorthand.output
+        "mem meld test/update/from --into test/update/to --accept" in shorthand.output
     )
     first_session = store.load_meld_session(baseline.uid)
     assert first_session is not None
@@ -969,9 +950,7 @@ def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
     monkeypatch,
 ):
     store = MemoryStore()
-    incoming, baseline, baseline_memory = (
-        _zero_change_directional_contexts(store)
-    )
+    incoming, baseline, baseline_memory = _zero_change_directional_contexts(store)
     provider = ZeroChangeDirectionalProvider()
     _patch_provider(monkeypatch, provider)
     incoming_before = store._context_file(incoming.name).read_bytes()
@@ -993,10 +972,7 @@ def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
     assert applied.exit_code == 0, applied.output
     assert "Applied 0 meld changes" in applied.output
     current = store.load_direct(baseline.name)
-    assert [
-        (memory.uid, memory.content)
-        for memory in current.iter_items()
-    ] == [
+    assert [(memory.uid, memory.content) for memory in current.iter_items()] == [
         (
             baseline_memory.uid,
             "The Campus Store remains open during construction.",
@@ -1030,10 +1006,13 @@ def test_zero_change_directional_meld_recovers_checkpoint_after_receipt_failure(
     incoming, baseline, _ = _zero_change_directional_contexts(store)
     provider = ZeroChangeDirectionalProvider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(
-        app,
-        ["meld", incoming.name, "--into", baseline.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["meld", incoming.name, "--into", baseline.name],
+        ).exit_code
+        == 0
+    )
     original = MemoryStore.save_meld_session
     fail_once = {"value": True}
 
@@ -1221,10 +1200,13 @@ def test_defer_all_is_provider_free_and_does_not_mutate_target(
     left, right, target = _task2_contexts(store)
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(
-        app,
-        ["meld", left.name, right.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["meld", left.name, right.name],
+        ).exit_code
+        == 0
+    )
     before = store._context_file(target.name).read_bytes()
 
     deferred = runner.invoke(
@@ -1248,10 +1230,13 @@ def test_deferred_session_restart_requires_exact_ordered_compare_basis(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["meld", left.name, right.name, "--defer-all"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["meld", left.name, right.name, "--defer-all"],
+        ).exit_code
+        == 0
+    )
     deferred = store.load_meld_session(target.uid)
     assert deferred is not None
 
@@ -1260,10 +1245,7 @@ def test_deferred_session_restart_requires_exact_ordered_compare_basis(
         ["meld", right.name, left.name, "--restart"],
     )
     assert failed.exit_code == 1
-    assert (
-        "requires a saved Compare analysis"
-        in failed.output
-    )
+    assert "requires a saved Compare analysis" in failed.output
     still_deferred = store.load_meld_session(target.uid)
     assert still_deferred is not None
     assert still_deferred.uid == deferred.uid
@@ -1397,10 +1379,13 @@ def test_preserve_all_is_one_semantic_round_and_remains_non_applying(
 
     provider = PreserveProvider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(
-        app,
-        ["meld", left.name, right.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["meld", left.name, right.name],
+        ).exit_code
+        == 0
+    )
     before = store._context_file(target.name).read_bytes()
 
     result = runner.invoke(
@@ -1505,9 +1490,7 @@ def test_user_comment_can_ground_a_new_result_without_peer_attribution():
     assert addition.grounded_by_turn_uids == (turn.uid,)
     tampered = session.to_dict()
     proposals = tampered["turns"][-1]["assessment"]["proposals"]
-    user_add = next(
-        item for item in proposals if item["disposition"] == "USER_ADD"
-    )
+    user_add = next(item for item in proposals if item["disposition"] == "USER_ADD")
     source_derived = next(
         item for item in proposals if item["disposition"] != "USER_ADD"
     )
@@ -1583,20 +1566,23 @@ def test_source_is_rechecked_under_lock_at_the_target_mutation_boundary(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
-    assert runner.invoke(
-        app,
-        [
-            "meld",
-            left.name,
-            right.name,
-            "--issue",
-            "1",
-            "--choice",
-            "1",
-            "--comment",
-            "Keep all of these payment options.",
-        ],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            [
+                "meld",
+                left.name,
+                right.name,
+                "--issue",
+                "1",
+                "--choice",
+                "1",
+                "--comment",
+                "Keep all of these payment options.",
+            ],
+        ).exit_code
+        == 0
+    )
     original = MemoryStore.save_meld_target
 
     def mutate_then_save(self, ctx, checkpoint, **kwargs):
@@ -1632,20 +1618,23 @@ def test_accept_recovers_checkpoint_after_receipt_save_failure(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
-    assert runner.invoke(
-        app,
-        [
-            "meld",
-            left.name,
-            right.name,
-            "--issue",
-            "1",
-            "--choice",
-            "1",
-            "--comment",
-            "Keep all of these payment options.",
-        ],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            [
+                "meld",
+                left.name,
+                right.name,
+                "--issue",
+                "1",
+                "--choice",
+                "1",
+                "--comment",
+                "Keep all of these payment options.",
+            ],
+        ).exit_code
+        == 0
+    )
     original = MemoryStore.save_meld_session
     fail_once = {"value": True}
 
@@ -1691,24 +1680,30 @@ def test_applied_accept_rejects_a_target_that_no_longer_matches_receipt(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
-    assert runner.invoke(
-        app,
-        [
-            "meld",
-            left.name,
-            right.name,
-            "--issue",
-            "1",
-            "--choice",
-            "1",
-            "--comment",
-            "Keep all of these payment options.",
-        ],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["meld", left.name, right.name, "--accept"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            [
+                "meld",
+                left.name,
+                right.name,
+                "--issue",
+                "1",
+                "--choice",
+                "1",
+                "--comment",
+                "Keep all of these payment options.",
+            ],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["meld", left.name, right.name, "--accept"],
+        ).exit_code
+        == 0
+    )
     changed = store.load_direct(target.name)
     memory = next(iter(changed.iter_items()))
     changed.replace(
@@ -1902,9 +1897,7 @@ def test_directional_edit_target_field_supplies_baseline_provenance():
             baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
             return json.dumps(
                 {
-                    "overview": (
-                        "The incoming rule narrows one baseline closure."
-                    ),
+                    "overview": ("The incoming rule narrows one baseline closure."),
                     "relations": [
                         {
                             "relation_key": "parking",
@@ -1939,9 +1932,10 @@ def test_directional_edit_target_field_supplies_baseline_provenance():
 
     proposal = assessment.proposals[0]
     assert proposal.memory_uid == baseline_memory.uid
-    assert {
-        member.memory_uid for member in proposal.source_members
-    } == {incoming_memory.uid, baseline_memory.uid}
+    assert {member.memory_uid for member in proposal.source_members} == {
+        incoming_memory.uid,
+        baseline_memory.uid,
+    }
 
 
 def test_directional_edit_target_must_belong_to_baseline():
@@ -2040,16 +2034,14 @@ def test_strict_model_rejects_impossible_state_and_relation_shapes():
         MeldSession.from_dict(pending)
 
     duplicate_source = session.to_dict()
-    duplicate_source["frames"][1]["context_uid"] = (
-        duplicate_source["frames"][0]["context_uid"]
-    )
+    duplicate_source["frames"][1]["context_uid"] = duplicate_source["frames"][0][
+        "context_uid"
+    ]
     with pytest.raises(MeldError, match="Duplicate meld source"):
         MeldSession.from_dict(duplicate_source)
 
     cross_peer_distinct = session.to_dict()
-    cross_peer_distinct["turns"][0]["assessment"]["relations"][0][
-        "kind"
-    ] = "DISTINCT"
+    cross_peer_distinct["turns"][0]["assessment"]["relations"][0]["kind"] = "DISTINCT"
     with pytest.raises(MeldError, match="DISTINCT"):
         MeldSession.from_dict(cross_peer_distinct)
 
@@ -2106,9 +2098,7 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "\r\r\tKeep all supported details.\x13"
-        )
+        pipe_input.send_text("\x1b[B\r\rcKeep all supported details.\x13\t\x1b[B\r\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -2117,11 +2107,10 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
         )
 
     assert action is not None
-    assert action.kind == "COMMENT_ISSUE"
-    assert action.choice_index == 0
-    assert action.comment == "Keep all supported details."
-    assert action.issue_uid == session.current_assessment.issues[0].uid
-    assert action.issue_uid == comparison.issues[0].uid
+    assert action.kind == "COMMENT_ALL"
+    assert "Choose this reading:" in action.comment
+    assert "Keep all supported details." in action.comment
+    assert comparison.issues[0].title in action.comment
 
 
 def test_meld_framed_composer_matches_ground_send_and_newline_contract():
@@ -2139,7 +2128,7 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\r\r\tKeep the rate.\nKeep every payment method.\r"
+            "\x1b[B\r\rcKeep the rate.\nKeep every payment method.\r\t\x1b[B\r\r"
         )
         action = run_meld_shell(
             session,
@@ -2149,11 +2138,9 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
         )
 
     assert action is not None
-    assert action.kind == "COMMENT_ISSUE"
-    assert action.choice_index == 0
-    assert action.comment == (
-        "Keep the rate.\nKeep every payment method."
-    )
+    assert action.kind == "COMMENT_ALL"
+    assert "Choose this reading:" in action.comment
+    assert "Keep the rate.\nKeep every payment method." in action.comment
 
 
 def test_meld_escape_collapses_detail_before_leaving_the_workbench():
@@ -2170,11 +2157,9 @@ def test_meld_escape_collapses_detail_before_leaving_the_workbench():
     )
 
     with create_pipe_input() as pipe_input:
-        # Enter opens detail. Escape consumes only that presentation layer, so
-        # the following comment can still be submitted from the same shell.
-        # The extra Enter is a non-Alt sequence now: it reopens the detail
-        # after Escape collapsed it, proving the application did not close.
-        pipe_input.send_text("\r\x1b\r\tStill reviewing.\x13")
+        # The first Down opens conflict 1. Escape returns to REPORT instead of
+        # closing, and the conflict can then be selected again for a comment.
+        pipe_input.send_text("\x1b[B\r\x1b\x1b[B\rcStill reviewing.\x13\t\x1b[B\r\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -2183,9 +2168,8 @@ def test_meld_escape_collapses_detail_before_leaving_the_workbench():
         )
 
     assert action is not None
-    assert action.kind == "COMMENT_ISSUE"
-    assert action.choice_index is None
-    assert action.comment == "Still reviewing."
+    assert action.kind == "COMMENT_ALL"
+    assert "Other direction: Still reviewing." in action.comment
 
 
 def test_meld_escape_from_overview_closes_without_changing_session():
@@ -2213,6 +2197,71 @@ def test_meld_escape_from_overview_closes_without_changing_session():
 
     assert action is None
     assert session.to_dict() == before
+
+
+def test_applied_meld_reopens_in_read_only_workbench():
+    incoming = ops.init("incoming/applied-view")
+    ops.add(incoming, "The Campus Store remains open during construction.")
+    baseline = ops.init("baseline/applied-view")
+    ops.add(baseline, "The Campus Store remains open during construction.")
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, ZeroChangeDirectionalProvider()),
+    )
+    change_set = session.prepare_changes()
+    session.record_application(
+        change_set_digest=change_set.digest,
+        checkpoint_uid="00000000-0000-4000-8000-000000000001",
+        result_memory_uids=(),
+    )
+    before = session.to_dict()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        action = run_meld_shell(
+            session,
+            read_only=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action is None
+    assert session.to_dict() == before
+
+
+def test_meld_resolve_all_can_choose_broadest_scope_without_applying():
+    left = ops.init("left/global-strategy")
+    ops.add(left, "Cash compensation includes travel time.")
+    right = ops.init("right/global-strategy")
+    ops.add(right, "Use e-transfer or a gift card.")
+    target = ops.init("target/global-strategy")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, Task2Provider()),
+    )
+    issue_count = len(session.current_assessment.issues)
+
+    with create_pipe_input() as pipe_input:
+        # REPORT -> every conflict -> RESOLVE ALL; Right moves from preserve
+        # all to the broadest-applicable whole-set strategy.
+        pipe_input.send_text("\x1b[B" * (issue_count + 1) + "\r\x1b[C\r")
+        action = run_meld_shell(
+            session,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action is not None
+    assert action.kind == "COMMENT_ALL"
+    assert "broadest justified applicability" in action.comment
+    assert session.state == "AWAITING_REPLY"
+    assert session.application is None
 
 
 def test_meld_escape_never_implicitly_accepts_a_ready_session():
@@ -2245,7 +2294,10 @@ def test_meld_escape_never_implicitly_accepts_a_ready_session():
 
 @pytest.mark.parametrize(
     "prefix",
-    ["\tUnsent issue comment", "gUnsent whole-set comment"],
+    [
+        "\x1b[B\rcUnsent issue comment",
+        "gUnsent whole-set comment",
+    ],
 )
 def test_meld_escape_from_composer_discards_unsent_text(prefix):
     left = ops.init("left/escape-composer")
@@ -2529,7 +2581,5 @@ def test_atomize_ephemeral_frame_preserves_slots_without_opening_references():
     assert [memory.frame_position for memory in baseline.memories] == [0, 1]
     assert [memory.source_position for memory in baseline.memories] == [0, 2]
     assert secret.content not in {
-        memory.content
-        for frame in view.frames
-        for memory in frame.memories
+        memory.content for frame in view.frames for memory in frame.memories
     }

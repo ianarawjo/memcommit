@@ -3907,11 +3907,7 @@ class MemoryStore:
         """
         bindings = tuple(source_bindings)
         source_names = tuple(name for name, _, _ in bindings)
-        if (
-            not bindings
-            or len(source_names) != len(set(source_names))
-            or ctx.name in source_names
-        ):
+        if len(source_names) != len(set(source_names)) or ctx.name in source_names:
             raise ValueError("Invalid meld source lock set.")
         with self._context_graph_lock(exclusive=False):
             with self._context_write_locks((*source_names, ctx.name)):

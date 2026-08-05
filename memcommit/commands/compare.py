@@ -442,24 +442,37 @@ def _resume_selected_comparison(
     )
 
 
-def _render_meld_route(analysis: ComparisonAnalysis) -> None:
-    reference, compared = analysis.frames
-    typer.echo("Create a result Context and continue with Meld:")
-    typer.echo(
-        "  "
-        + display_escape_text(
-            shlex.join(
-                [
-                    "mem",
-                    "meld",
-                    reference.context_name,
-                    compared.context_name,
-                    "--to",
-                    "RESULT_CONTEXT",
-                ]
-            )
-        )
+def _start_meld_from_compare(
+    *,
+    store: MemoryStore,
+    analysis: ComparisonAnalysis,
+) -> None:
+    """Collect one result target, then hand authority back to Meld."""
+    from memcommit.commands.meld import (
+        MeldCommandError,
+        render_meld_session,
+        start_reviewed_symmetric_meld,
     )
+    from memcommit.commands.meld_target_picker import choose_meld_target
+
+    reference, compared = analysis.frames
+    receipt = choose_meld_target(
+        store,
+        source_names=(reference.context_name, compared.context_name),
+    )
+    if receipt is None:
+        typer.echo("Meld target selection cancelled.")
+        return
+    try:
+        session = start_reviewed_symmetric_meld(
+            store=store,
+            analysis=analysis,
+            target_name=receipt.context_name,
+            create_target=receipt.create,
+        )
+    except (MeldCommandError, OSError, RuntimeError, ValueError) as error:
+        raise CompareCommandError(str(error)) from error
+    typer.echo(render_meld_session(session))
 
 
 def _render_selected_rationale(
@@ -532,7 +545,7 @@ def _present_comparison(
             )
         )
     elif receipt.action == "meld":
-        _render_meld_route(analysis)
+        _start_meld_from_compare(store=store, analysis=analysis)
     elif receipt.action == "rationale":
         if receipt.context_name is None or receipt.memory_uid is None:
             raise CompareCommandError(

@@ -305,8 +305,11 @@ still applies, so granted READ material exposes current readable-subtree
 inference but not authority Trace or checkpoint history.
 
 `L` leaves the workbench and prints the complete static ledger. `M` leaves and
-prints the exact two-source `mem meld ... --to RESULT_CONTEXT` route without
-creating the target. `Q` closes with no semantic or durable change. These
+opens Meld's result-target picker. The picker can select an existing empty
+local Context or validate one new exact name; it creates nothing itself. Meld
+then revalidates the frozen Compare UID, both source bindings, grant/transfer
+policy, and the target before atomically creating any new result and its
+target-bound session. `Q` closes with no semantic or durable change. These
 actions deliberately exit rather than returning to a hidden cursor so their
 terminal output remains visible; bare `mem compare` is the stable resume
 route.

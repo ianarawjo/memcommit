@@ -35,6 +35,38 @@ text strings or individual Memory UIDs as its two frames. The implemented
 atomic entry point remains under `mem atomize` because atomize owns the saved
 analysis, issue identity, and source evidence.
 
+## Browse saved Context Meld sessions
+
+Use either of these forms without Context operands to browse existing
+Context-wide Meld workbenches:
+
+```bash
+mem meld
+mem meld --sessions
+```
+
+The picker initially orders entries by the saved JSON file's modification time
+and labels that view `RECENTLY MODIFIED`; it does not claim that the Meld
+schema contains a semantic creation or update timestamp. Entries can also be
+grouped by their persisted target Context. A target is the natural grouping
+boundary because every saved Meld is target-scoped; the picker does not infer
+a separate project model.
+
+Selecting an entry does not switch a global active Meld and does not execute
+the displayed command receipt. The command reloads the target-UID-keyed JSON,
+checks that its session identity and complete digest still match the selected
+snapshot, reloads the exact persisted source and target Context names, and
+revalidates their UID and digest bindings before opening the workbench. If the
+session or a bound Context changed while the picker was open, reopening fails
+and the list must be opened again. Browsing, cancellation, and provider-free
+snapshot rendering create no Context, checkpoint, or replacement session.
+
+Explicit forms such as `mem meld LEFT RIGHT`,
+`mem meld INCOMING --into BASELINE`, and its current-baseline convenience
+`mem meld --from INCOMING` retain their existing create-or-resume behavior.
+`--sessions` cannot be combined with Context operands or semantic, terminal,
+restart, or expansion actions.
+
 ## Atomic meld (informal shorthand): resolve one atomize issue
 
 ### 1. Create or resume the atomize analysis

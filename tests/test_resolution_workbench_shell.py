@@ -5,11 +5,15 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.resolution_workbench_shell import (
+    ResolutionGlobalStrategy,
     render_resolution_workbench_snapshot,
+    resolution_report_fragments,
+    resolution_viewer_fragments,
     resolution_workbench_fragments,
     run_resolution_workbench_shell,
 )
 from memcommit.resolution_workbench import (
+    ResolutionDetailBlock,
     ResolutionItem,
     ResolutionNavigation,
     ResolutionOption,
@@ -247,3 +251,233 @@ def test_snapshot_neutralizes_terminal_controls_across_adapter_text():
     assert "\x1b" not in snapshot
     assert "\u202e" not in snapshot
     assert "\u2066" not in snapshot
+
+
+def test_split_report_contains_conflicts_and_whole_set_strategies():
+    view = _view(_item("a"), _item("b"))
+    strategies = (
+        ResolutionGlobalStrategy("Preserve all", "PRESERVE_ALL"),
+        ResolutionGlobalStrategy("Choose broadest", "SUBMIT_ALL", "Broad."),
+    )
+
+    fragments = resolution_report_fragments(
+        view,
+        strategies=strategies,
+        focused_section=2,
+    )
+    rendered = "".join(text for _style, text in fragments)
+
+    assert "── CONFLICT 1 · Issue a ──" in rendered
+    assert "CONFLICT 2 · Issue b" in rendered
+    assert "RESOLVE ALL · WHOLE-SET STRATEGY" in rendered
+    assert "Choose broadest" in rendered
+
+
+def test_issue_detail_is_compact_and_section_navigable():
+    item = ResolutionItem(
+        uid="a",
+        kind="CONFLICT",
+        status="OPEN",
+        priority="REQUIRED",
+        title="Question paradigm",
+        summary="The choice changes the proposal.",
+        question="Which form should be used?",
+        options=(ResolutionOption("one", "First", "Use the first form."),),
+        blocks=(
+            ResolutionDetailBlock(
+                "EVIDENCE",
+                "advisor1 · #1\nA supporting Memory.",
+            ),
+        ),
+    )
+    view = _view(item)
+    navigation = ResolutionNavigation(selected_item_uid="a")
+
+    rendered = "".join(
+        text
+        for _style, text in resolution_viewer_fragments(
+            view,
+            navigation,
+            focused_section=1,
+        )
+    )
+
+    assert "CONFLICT 1/1 · Question paradigm" in rendered
+    assert "╭─ QUESTION " in rendered
+    assert "╭─ OPTIONS " in rendered
+    assert "2. Other direction" in rendered
+    assert "╭─ EVIDENCE " in rendered
+    assert "│   advisor1 · #1" in rendered
+    assert "╯\n\n ╭─ QUESTION" in rendered
+    assert "WHAT MEM UNDERSTOOD" not in rendered
+    assert "Review the current resolution." not in rendered
+
+
+def test_split_detail_submits_a_supplied_option_with_an_optional_comment():
+    item = _item(
+        "issue-1",
+        options=(
+            ResolutionOption("keep", "Keep", "Keep the first direction."),
+            ResolutionOption("replace", "Replace", "Use the second direction."),
+        ),
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Open conflict 1, choose its first supplied option, then use C to
+        # send that choice with the optional comment field empty.
+        pipe_input.send_text("\x1b[B\r\rc\r")
+        action = run_resolution_workbench_shell(
+            _view(item),
+            split_viewer_items=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ITEM"
+    assert action.item_uid == "issue-1"
+    assert action.option_uid == "keep"
+    assert action.comment == ""
+
+
+def test_split_detail_submits_other_direction_without_a_fabricated_option():
+    item = _item(
+        "issue-1",
+        options=(
+            ResolutionOption("keep", "Keep", "Keep the first direction."),
+            ResolutionOption("replace", "Replace", "Use the second direction."),
+        ),
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Open conflict 1, move beyond both supplied options to Other
+        # direction, and submit a free-form resolution.
+        pipe_input.send_text(
+            "\x1b[B\r\x1b[C\x1b[C\rUse a staged combination instead.\r"
+        )
+        action = run_resolution_workbench_shell(
+            _view(item),
+            split_viewer_items=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ITEM"
+    assert action.item_uid == "issue-1"
+    assert action.option_uid is None
+    assert action.comment == "Use a staged combination instead."
+
+
+def test_split_viewer_section_navigation_selects_matching_item_row():
+    navigation = ResolutionNavigation()
+    view = _view(_item("a"), _item("b"))
+
+    with create_pipe_input() as pipe_input:
+        # Tab focuses Viewer. Three Down presses move title -> understanding ->
+        # conflict a -> conflict b, which must synchronize the lower row.
+        pipe_input.send_text("\t\x1b[B\x1b[B\x1b[Bq")
+        action = run_resolution_workbench_shell(
+            view,
+            navigation=navigation,
+            split_viewer_items=True,
+            global_strategies=(
+                ResolutionGlobalStrategy("Preserve all", "PRESERVE_ALL"),
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert navigation.selected_item_uid == "b"
+
+
+def test_enter_on_report_moves_focus_from_items_into_viewer():
+    navigation = ResolutionNavigation()
+    view = _view(_item("a"), _item("b"))
+
+    with create_pipe_input() as pipe_input:
+        # Enter opens the selected REPORT row in Viewer. Two Down presses then
+        # move through Viewer sections to conflict a. If focus had remained in
+        # ITEMS, the same keys would instead select conflict b.
+        pipe_input.send_text("\r\x1b[B\x1b[Bq")
+        action = run_resolution_workbench_shell(
+            view,
+            navigation=navigation,
+            split_viewer_items=True,
+            global_strategies=(
+                ResolutionGlobalStrategy("Preserve all", "PRESERVE_ALL"),
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert navigation.selected_item_uid == "a"
+
+
+def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
+    first = _item(
+        "a",
+        options=(ResolutionOption("a-1", "First A", "Use answer A."),),
+    )
+    second = _item(
+        "b",
+        options=(ResolutionOption("b-1", "First B", "Use answer B."),),
+    )
+    policy = ResolutionGlobalStrategy(
+        "Preserve unresolved",
+        "SUBMIT_ALL",
+        "Preserve every unresolved distinction.",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Select the first option in each conflict, then open the final review
+        # row and submit the combined resolution turn.
+        pipe_input.send_text("\x1b[B\r\r\x1b[B\r\x1b[B\r\r")
+        action = run_resolution_workbench_shell(
+            _view(first, second, capabilities=frozenset({"SUBMIT_ALL"})),
+            split_viewer_items=True,
+            global_strategies=(policy,),
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ALL"
+    assert "Issue a: Choose this reading: Use answer A." in action.comment
+    assert "Issue b: Choose this reading: Use answer B." in action.comment
+
+
+def test_review_and_apply_treats_enter_again_as_selection_cancellation():
+    item = _item(
+        "a",
+        options=(ResolutionOption("a-1", "First A", "Use answer A."),),
+    )
+    policy = ResolutionGlobalStrategy(
+        "Preserve unresolved",
+        "SUBMIT_ALL",
+        "Preserve every unresolved distinction.",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # The second Enter on the same option clears it. Final review therefore
+        # routes the conflict through the explicit unresolved policy.
+        pipe_input.send_text("\x1b[B\r\r\r\x1b[B\r\r")
+        action = run_resolution_workbench_shell(
+            _view(item, capabilities=frozenset({"SUBMIT_ALL"})),
+            split_viewer_items=True,
+            global_strategies=(policy,),
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ALL"
+    assert "Choose this reading" not in action.comment
+    assert "Issue a" in action.comment
+    assert "Preserve every unresolved distinction." in action.comment

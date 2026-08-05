@@ -14,6 +14,9 @@ Two public Context-to-Context paths now exist as bounded research prototypes:
 mem init RESULT
 mem meld LEFT_PEER RIGHT_PEER
 
+# Symmetric: create the result without switching Contexts
+mem meld LEFT_PEER RIGHT_PEER --to NEW_RESULT
+
 # Directional: current or explicit incoming enters an existing baseline
 mem meld --into BASELINE
 mem meld INCOMING --into BASELINE
@@ -34,6 +37,36 @@ a complete result to an empty third Context. Directional meld leaves the
 incoming Context read-only and applies only exact material `EDIT` and `ADD`
 changes to its baseline; a fully represented input may instead produce an
 accepted zero-change checkpoint.
+
+Saved Context Melds can also be entered through `mem meld` or
+`mem meld --sessions` without restating their Context operands. This is a
+catalog and open operation, not a global `switch`: choosing an item does not
+install an active Meld that could leak across terminals or agents. The
+catalog's stable key is the persisted target Context UID, while its group is
+the persisted target Context name. This uses Meld's existing target-scoped
+identity instead of introducing an ungrounded project field.
+
+The first ordering is honestly named `RECENTLY MODIFIED` because the current
+Meld schema has no durable `created_at` or `updated_at` field. It uses the JSON
+file mtime only as display metadata. The catalog also freezes the selected
+session UID and canonical record digest. After Enter, the command reloads the
+record by target UID, rejects deletion or replacement under that key, and
+rechecks every persisted source/target Context UID and digest before opening
+the workbench. The displayed explicit argv is useful orientation but is never
+blindly executed: doing so could fall through the ordinary create/restart
+grammar or reinterpret a relative/current Context. Consequently selection and
+cancellation themselves remain read-only; later workbench actions keep their
+existing CAS and explicit-acceptance boundaries.
+
+A saved Compare workbench now provides the equivalent guided entry. Pressing
+`M` opens a result-target picker instead of merely printing a placeholder
+command. It offers only local, empty, session-free Contexts distinct from both
+sources, plus one exact-name editor for a new Context. Selecting an existing
+target or validating a new name is still process-local. Meld then reloads the
+exact ordered Compare UID, source UIDs and digests, grant combination and
+derived-transfer policy, and target state before it creates the target-bound
+session. A new target and its initial Meld session are written through the
+same atomic store boundary; the picker itself never creates a Context.
 
 The earlier local conversational change flow inside atomize grounding is also
 retained:
@@ -633,6 +666,110 @@ first-frame report remains near the shared 120-150-word envelope.
 
 ## Interactive workbench
 
+The live Meld surface uses the same high-level reading grammar as Compare: a
+large `VIEWER` above a compact `ITEMS` navigator, with identical focused-frame
+styling. `REPORT` is always the first item and initial selection, so a person
+sees the complete understanding, issue summary, and proposed results before
+conflict 1. The complete report contains one semantic section for every
+conflict and ends with the whole-set strategies. `Tab` moves focus between
+`ITEMS` and `VIEWER`; Viewer arrows move section by section with the same
+hidden-cursor, minimum-boundary scrolling as Compare. Entering a conflict from
+Items replaces the Viewer with that issue's full question, options, and
+source-linked blocks. Moving to a conflict or `RESOLVE ALL` section in the
+report also selects the corresponding lower row, so the two panes never imply
+different current subjects. Merely moving the lower cursor does not open a
+different report; `Enter` is the explicit drill-down boundary.
+Entering the `REPORT` row also transfers keyboard focus into Viewer, making
+`Enter` a direct entry path while retaining `Tab` as the reversible pane
+switch.
+
+The opened detail does not repeat the overall report. Its Viewer moves through
+only the selected conflict's question, options, evidence, relations, and
+proposed result. Symmetric evidence omits the meaningless `PEER` role,
+recursive Memory locations appear once, and durable identifiers are shortened
+for orientation. Directional roles remain visible because their asymmetry is
+part of the operation's meaning.
+
+Each detail section is a separate fixed-width card with a blank line between
+cards. Options are nested cards with distinct focused, selected, and
+other-direction colors. Evidence and relation bodies receive an additional
+content indent inside their cards, so source boundaries remain readable even
+when terminal wrapping is dense. The fixed card width is intentionally smaller
+than the Viewer at the minimum supported layout rather than tracking every
+terminal resize and destabilizing reading position.
+
+Every conflict with bounded choices also exposes one local `Other direction`
+row. `Enter` keeps its existing select/clear behavior for a supplied option,
+and `C` stages that selection with an optional issue-scoped explanation.
+Choosing `Other direction` opens a required free-form resolution directly. It
+submits no fabricated option UID, so provider and audit state retain the
+difference between accepting a supplied answer and proposing another one.
+
+In the two-pane Meld shell these responses are now staged per conflict rather
+than sent to the provider immediately. `Enter` visibly selects a supplied
+answer and a second `Enter` clears it; an Other-direction submission returns to
+the same workbench as a staged response. The final item is `REVIEW & APPLY
+MELD`, which lists every staged answer, marks blanks as unresolved, and requires
+one explicit policy for those blanks. Continuing sends one combined semantic
+turn. It does not bypass the existing readiness checkpoint: the resulting
+target Memories are shown again, and only the readiness-gated apply action may
+write them.
+
+The one-shot Meld item bound is 500 source Memories. The canonical Task 2
+topology contains 150 Memories from each Advisor, so the former total bound of
+200 allowed Compare to produce a reviewed relation ledger but made its Meld
+impossible to resolve. Raising only the item-count bound admits that intended
+300-Memory case without truncation; the independent 400,000-character input
+bound, strict output schema, complete source coverage, and single-call contract
+remain unchanged.
+
+The aggregate Meld call has a 900-second completion allowance. The canonical
+300-Memory Task 2 follow-up exceeded the previous five-minute window while
+producing its complete cumulative ledger. This longer timeout is local to Meld;
+it does not change other semantic commands, permit multiple hidden calls, or
+relax source, response, and compare-seed validation.
+
+A follow-up response may omit a prior relation despite the cumulative-ledger
+instruction. Mem carries such a relation forward only when every member of that
+prior relation is absent from every newly returned relation. Any partial member
+overlap still fails closed, because locally guessing a provider-intended split
+or regrouping would change provenance. Exact once-only coverage is rechecked
+after this conservative carry-forward step.
+
+When both symmetric sources come from a `RETAINED` granted Compare artifact,
+application validates that immutable artifact and does not try to reopen its
+public aliases as ordinary local Contexts. The final write still holds target
+CAS and records all source snapshots in the Meld checkpoint. Live ordinary or
+grant-bound sources retain their existing revalidation path; this exception is
+only for participant-owned retained evidence whose authority state is
+deliberately no longer consulted.
+
+For a symmetric Meld seeded from Compare, `REPORT` is not a second Meld-authored
+summary. It re-renders the exact saved `ComparisonAnalysis` through Compare's
+own compact renderer, preserving `WHAT BOTH CONTAIN`, `WHAT DIFFERS`, both
+`ONLY IN` sections, and `POTENTIAL CONFLICTS` verbatim. Meld removes only the
+Compare navigation footer that would tell the user to start Meld again, then
+appends its current proposed target Memories and whole-set strategy section.
+Directional Meld has no Compare seed and therefore keeps its authority-specific
+report projection.
+
+There is no permanently visible `MESSAGE` frame. `C` on an opened conflict
+opens a temporary `COMMENT ON SELECTED CONFLICT` section inside the
+Viewer's existing frame. `G` and the custom whole-set route similarly open
+`WHOLE-SET GUIDANCE` in that frame. This makes authoring feel like an extension
+of the report being reviewed instead of an unrelated chat window.
+
+`RESOLVE ALL` is the final item after the conflicts and the final section of
+the complete report. It offers bounded
+whole-set strategies: preserve every remaining distinction; choose the
+broadest justified option in each conflict; choose the narrowest useful option;
+choose the strongest-supported option independently per conflict; or write
+custom guidance. Broad and narrow are scope policies, not permission to exceed
+source support or discard compatible distinct information. Every strategy
+produces either the existing preserve action or one provider-mediated
+whole-set turn; none applies the target. Only the readiness-gated `A` action
+or `--accept` crosses the target checkpoint boundary.
+
 Task 2 should not force the user to decide every cross-Context relationship
 before seeing the whole analysis, nor should it hide all decisions behind one
 bulk approval. Meld should reuse the interaction grammar already established
@@ -929,6 +1066,23 @@ An eventual `mem ingest --paste` may orchestrate raw intake, atomization, and a
 directional meld. Import owns the run manifest and resumability; it must call
 the same independently testable atomize and meld contracts rather than
 embedding a second semantic implementation.
+
+## Reopening terminal Melds
+
+Applied and review-only Meld sessions remain durable artifacts in
+`mem meld --sessions`. In a TTY, selecting either terminal state reopens the
+same report Viewer in an explicitly read-only presentation: report sections
+and any retained conflict details remain navigable, while resolution,
+provider-turn, and apply controls are absent. Closing the Viewer returns only a
+short confirmation instead of printing the full report into the terminal
+scrollback. Outside a TTY, the command still emits the stable text snapshot so
+scripts and redirected inspection retain their existing contract.
+
+This split avoids two misleading alternatives. Removing completed sessions
+would discard the decision artifact, while reopening the ordinary mutable
+workbench could imply that an applied receipt may be edited or applied twice.
+The read-only Viewer preserves inspectability without weakening the saved
+application and checkpoint boundary.
 
 ## Implementation sequence
 

@@ -1,4 +1,5 @@
 """Create, ground, resume, and explicitly apply bounded Context melds."""
+
 from __future__ import annotations
 
 import hashlib
@@ -42,6 +43,17 @@ from memcommit.meld_provider import (
 )
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.commands.meld_shell import run_meld_shell
+from memcommit.commands.meld_sessions import (
+    MeldSessionCatalogEntry,
+    MeldSessionCatalogError,
+    list_meld_session_catalog,
+    reload_selected_meld_session,
+)
+from memcommit.commands.session_picker import (
+    SessionOpenReceipt,
+    SessionPickerEntry,
+    choose_session,
+)
 from memcommit.query_provider import (
     CodexChatGPTProvider,
     QueryProviderError,
@@ -57,7 +69,11 @@ from memcommit.store import (
 )
 
 
-MELD_AGGREGATE_TIMEOUT_SECONDS = 300
+# A full 150 + 150 Task 2 Meld must return a complete relation ledger and
+# proposal set in one call. Live runs can exceed the five-minute Compare-sized
+# window, so keep the longer allowance local to Meld rather than weakening
+# timeouts for every semantic command.
+MELD_AGGREGATE_TIMEOUT_SECONDS = 900
 
 
 class MeldCommandError(RuntimeError):
@@ -154,10 +170,7 @@ def _session_command(session: MeldSession) -> str:
             f"mem meld {session.frames[0].context_name} "
             f"--into {session.frames[1].context_name}"
         )
-    return (
-        f"mem meld {session.frames[0].context_name} "
-        f"{session.frames[1].context_name}"
-    )
+    return f"mem meld {session.frames[0].context_name} {session.frames[1].context_name}"
 
 
 def _session_route(session: MeldSession) -> str:
@@ -217,18 +230,12 @@ def _issue_selector(
         index = int(selector)
         if 1 <= index <= len(assessment.issues):
             return assessment.issues[index - 1]
-    matches = [
-        issue
-        for issue in assessment.issues
-        if issue.uid.startswith(selector)
-    ]
+    matches = [issue for issue in assessment.issues if issue.uid.startswith(selector)]
     if len(matches) == 1:
         return matches[0]
     if not matches:
         raise MeldCommandError(f"No meld issue matches '{selector}'.")
-    raise MeldCommandError(
-        f"Meld issue selector '{selector}' is ambiguous."
-    )
+    raise MeldCommandError(f"Meld issue selector '{selector}' is ambiguous.")
 
 
 def render_meld_session(
@@ -242,14 +249,8 @@ def render_meld_session(
         _session_route(session),
     ]
     if session.comparison_seed is not None:
-        lines.append(
-            "Compare: "
-            f"{session.comparison_seed.analysis.uid[:8]} · IMPORTED"
-        )
-    lines.append(
-        f"State: {session.state} · "
-        f"Round: {len(session.turns)}"
-    )
+        lines.append(f"Compare: {session.comparison_seed.analysis.uid[:8]} · IMPORTED")
+    lines.append(f"State: {session.state} · Round: {len(session.turns)}")
     assessment = session.current_assessment
     if assessment is None:
         lines.extend(["", "Analysis is pending."])
@@ -270,17 +271,14 @@ def render_meld_session(
     for index, relation in enumerate(assessment.relations, start=1):
         marker = "?" if relation.status == "UNRESOLVED" else "✓"
         lines.append(
-            f"  {marker} R{index}. {relation.kind} · "
-            f"{_single_line(relation.summary)}"
+            f"  {marker} R{index}. {relation.kind} · {_single_line(relation.summary)}"
         )
     lines.extend(["", "ISSUES"])
     relation_number = {
         relation.uid: index
         for index, relation in enumerate(assessment.relations, start=1)
     }
-    relation_by_uid = {
-        relation.uid: relation for relation in assessment.relations
-    }
+    relation_by_uid = {relation.uid: relation for relation in assessment.relations}
     frame_by_uid = {frame.uid: frame for frame in session.frames}
     memory_by_key = {
         (frame.uid, memory.uid): memory
@@ -293,18 +291,13 @@ def render_meld_session(
         expanded = issue.uid == expanded_issue_uid
         pointer = "▾" if expanded else "›"
         lines.append(
-            f"{pointer} {index:>2}. [{issue.priority}] "
-            f"{_single_line(issue.title)}"
+            f"{pointer} {index:>2}. [{issue.priority}] {_single_line(issue.title)}"
         )
         lines.append(f"      WHY · {_single_line(issue.why_it_matters)}")
         for option_index, option in enumerate(issue.options, start=1):
-            lines.append(
-                f"      ↳ {option_index}. {_single_line(option.label)}"
-            )
+            lines.append(f"      ↳ {option_index}. {_single_line(option.label)}")
             if expanded:
-                lines.append(
-                    f"         {safe_terminal_text(option.text)}"
-                )
+                lines.append(f"         {safe_terminal_text(option.text)}")
         if expanded:
             lines.extend(
                 [
@@ -345,9 +338,7 @@ def render_meld_session(
             ]
             lines.append("      AFFECTED RESULTS")
             if not affected:
-                lines.append(
-                    "        - unresolved; no target Memory is proposed yet"
-                )
+                lines.append("        - unresolved; no target Memory is proposed yet")
             for proposal in affected:
                 lines.append(
                     f"        - [{proposal.disposition}] "
@@ -368,8 +359,7 @@ def render_meld_session(
             (
                 "  (no material baseline changes; acceptance records the "
                 "resolved zero-change meld)"
-                if session.mode == "DIRECTIONAL"
-                and assessment.ready_to_apply
+                if session.mode == "DIRECTIONAL" and assessment.ready_to_apply
                 else "  (none until required issues are grounded)"
             )
         )
@@ -381,13 +371,9 @@ def render_meld_session(
             else proposal.disposition
         )
         lines.append(
-            f"  {marker} {index:>2}. "
-            f"[{label}] "
-            f"{safe_terminal_text(proposal.content)}"
+            f"  {marker} {index:>2}. [{label}] {safe_terminal_text(proposal.content)}"
         )
-        lines.append(
-            f"       WHY · {safe_terminal_text(proposal.reason)}"
-        )
+        lines.append(f"       WHY · {safe_terminal_text(proposal.reason)}")
     if session.state == "AWAITING_REPLY":
         command = _session_command(session)
         lines.extend(
@@ -403,10 +389,7 @@ def render_meld_session(
         lines.extend(
             [
                 "",
-                (
-                    "Apply exactly this proposal: "
-                    f"{_session_command(session)} --accept"
-                ),
+                (f"Apply exactly this proposal: {_session_command(session)} --accept"),
             ]
         )
     return "\n".join(lines)
@@ -521,6 +504,32 @@ def _assert_unapplied_target(
         )
 
 
+def _target_save_source_bindings(
+    store: MemoryStore,
+    session: MeldSession,
+) -> tuple[tuple[str, str, str], ...]:
+    """Return only live local sources that must stay locked through target CAS."""
+    if session.mode == "SYMMETRIC" and session.comparison_seed is not None:
+        artifact = load_granted_comparison_artifact(
+            store,
+            session.frames[0].context_uid,
+            session.frames[1].context_uid,
+        )
+        if artifact is not None and artifact.retention == "RETAINED":
+            # The source postures are immutable participant-owned snapshots.
+            # Requiring same-name ordinary Contexts here would both fail for a
+            # granted alias and incorrectly reintroduce live authority state.
+            return ()
+    return tuple(
+        (frame.context_name, frame.context_uid, frame.context_digest)
+        for frame in session.frames
+        if (
+            frame.context_uid != session.target.context_uid
+            or frame.context_name != session.target.context_name
+        )
+    )
+
+
 def _assess_and_save(
     *,
     store: MemoryStore,
@@ -559,17 +568,11 @@ def _meld_checkpoint_record(
         "sources": [
             {
                 "frame_uid": frame.uid,
-                **(
-                    {"role": frame.role}
-                    if session.mode == "DIRECTIONAL"
-                    else {}
-                ),
+                **({"role": frame.role} if session.mode == "DIRECTIONAL" else {}),
                 "context_uid": frame.context_uid,
                 "context_name": frame.context_name,
                 "context_digest": frame.context_digest,
-                "memories": [
-                    memory.to_dict() for memory in frame.memories
-                ],
+                "memories": [memory.to_dict() for memory in frame.memories],
             }
             for frame in session.frames
         ],
@@ -605,9 +608,7 @@ def _meld_checkpoint_record(
                 "source_members": [
                     member.to_dict() for member in proposal.source_members
                 ],
-                "grounded_by_turn_uids": list(
-                    proposal.grounded_by_turn_uids
-                ),
+                "grounded_by_turn_uids": list(proposal.grounded_by_turn_uids),
                 "relation_uids": list(proposal.relation_uids),
                 "reason": proposal.reason,
             }
@@ -628,13 +629,9 @@ def _expected_target_memories(
         )
     baseline = session.frames[1]
     expected = [
-        Memory(uid=memory.uid, content=memory.content)
-        for memory in baseline.memories
+        Memory(uid=memory.uid, content=memory.content) for memory in baseline.memories
     ]
-    position_by_uid = {
-        memory.uid: position
-        for position, memory in enumerate(expected)
-    }
+    position_by_uid = {memory.uid: position for position, memory in enumerate(expected)}
     for proposal in change_set.proposals:
         candidate = Memory(
             uid=proposal.memory_uid,
@@ -660,9 +657,7 @@ def _recover_application(
         or target.name != session.target.context_name
     ):
         return None
-    result_uids = tuple(
-        proposal.memory_uid for proposal in change_set.proposals
-    )
+    result_uids = tuple(proposal.memory_uid for proposal in change_set.proposals)
     expected_memories = _expected_target_memories(session, change_set)
     current_items = tuple(target.iter_items())
     if any(not isinstance(item, Memory) for item in current_items):
@@ -784,24 +779,11 @@ def _accept(
             description=description,
         ),
         expected_context_digest=session.target.context_digest,
-        source_bindings=(
-            (
-                frame.context_name,
-                frame.context_uid,
-                frame.context_digest,
-            )
-            for frame in session.frames
-            if (
-                frame.context_uid != session.target.context_uid
-                or frame.context_name != session.target.context_name
-            )
-        ),
+        source_bindings=_target_save_source_bindings(store, session),
     )
     if checkpoint is None:
         raise MeldCommandError("Meld application created no checkpoint.")
-    result_uids = tuple(
-        proposal.memory_uid for proposal in change_set.proposals
-    )
+    result_uids = tuple(proposal.memory_uid for proposal in change_set.proposals)
     session.record_application(
         change_set_digest=change_set.digest,
         checkpoint_uid=checkpoint.uid,
@@ -852,9 +834,7 @@ def _run_interactive(
             assessment = session.current_assessment
             assert assessment is not None and action.issue_uid is not None
             issue = next(
-                item
-                for item in assessment.issues
-                if item.uid == action.issue_uid
+                item for item in assessment.issues if item.uid == action.issue_uid
             )
             parts: list[str] = []
             if action.choice_index is not None:
@@ -878,6 +858,210 @@ def _run_interactive(
             expected_session_digest=expected,
         )
     return session
+
+
+def start_reviewed_symmetric_meld(
+    *,
+    store: MemoryStore,
+    analysis: ComparisonAnalysis,
+    target_name: str,
+    create_target: bool,
+    provider_factory=connect_codex_chatgpt_provider,
+) -> MeldSession:
+    """Create and open a target-bound Meld from one exact Compare analysis.
+
+    Compare may collect the target choice, but Meld repeats every source,
+    grant, transfer, target, and saved-analysis check before it creates state.
+    This keeps the picker a presentation convenience rather than a new
+    mutation authority.
+    """
+    left_name, right_name = (
+        analysis.frames[0].context_name,
+        analysis.frames[1].context_name,
+    )
+    if target_name in {left_name, right_name}:
+        raise MeldCommandError(
+            "The symmetric Meld result must differ from both source Contexts."
+        )
+    current_name = store.current_context_name()
+    left_access = _resolve_meld_source(
+        store,
+        left_name,
+        current_name=current_name,
+    )
+    right_access = _resolve_meld_source(
+        store,
+        right_name,
+        current_name=current_name,
+    )
+    authorize_combination((left_access, right_access))
+    left_ctx = _load_meld_source(left_access)
+    right_ctx = _load_meld_source(right_access)
+
+    if create_target:
+        store.assert_context_creatable(target_name)
+        target = ops.init(target_name)
+    else:
+        if not store.context_exists(target_name):
+            raise MeldCommandError(f"RESULT Context '{target_name}' no longer exists.")
+        target = store.load_direct(target_name)
+        if tuple(target.iter_items()):
+            raise MeldCommandError(
+                f"RESULT Context '{target_name}' is no longer empty."
+            )
+        if store.load_meld_session(target.uid) is not None:
+            raise MeldCommandError(
+                f"RESULT Context '{target_name}' already owns a Meld session."
+            )
+
+    target_access = ContextAccess(
+        store=store,
+        context_name=target_name,
+        display_name=target_name,
+        attachment_name=None,
+        permission="READ",
+    )
+    authorize_derived_transfer(left_access, target_access)
+    authorize_derived_transfer(right_access, target_access)
+    reviewed = _load_symmetric_comparison(
+        left=left_ctx,
+        right=right_ctx,
+        target=target,
+        create_target=create_target,
+    )
+    if reviewed.uid != analysis.uid:
+        raise MeldCommandError(
+            "The selected Compare analysis changed before Meld started. "
+            "Reopen Compare and choose the target again."
+        )
+    session = MeldSession.create_symmetric_from_comparison(reviewed, target)
+    _assert_source_bindings(session, left_ctx, right_ctx)
+    _assert_unapplied_target(session, target)
+    if create_target:
+        store.create_meld_target_with_session(
+            target,
+            session,
+            AutoCheckpoint(
+                command="meld",
+                args={
+                    "left": left_name,
+                    "right": right_name,
+                    "to": target_name,
+                },
+                description=(
+                    f"Initialized symmetric Meld result '{target_name}' from "
+                    f"'{left_name}' and '{right_name}'"
+                ),
+            ),
+        )
+    else:
+        store.save_meld_session(session, expected_session_digest=None)
+    if sys.stdin.isatty() and sys.stdout.isatty():
+        session = _run_interactive(
+            store=store,
+            session=session,
+            provider_factory=provider_factory,
+        )
+    return session
+
+
+def _meld_picker_entry(
+    entry: MeldSessionCatalogEntry,
+) -> SessionPickerEntry:
+    """Adapt one target-bound Meld snapshot to the shared session picker."""
+    return SessionPickerEntry(
+        kind="meld",
+        key=entry.key,
+        title=entry.title,
+        status=entry.status,
+        subtitle=entry.subtitle,
+        group=entry.group,
+        sort_timestamp=entry.modified_timestamp,
+        detail=entry.detail,
+        reopen_argv=entry.reopen_argv,
+    )
+
+
+def _resume_picked_meld(
+    *,
+    store: MemoryStore,
+    entry: MeldSessionCatalogEntry,
+) -> None:
+    """Reload, rebind, and open one picker selection without creating state."""
+    session = reload_selected_meld_session(store, entry)
+    left_ctx, right_ctx, target = _load_bound_contexts(store, session)
+    if (
+        target.uid != session.target.context_uid
+        or target.name != session.target.context_name
+    ):
+        raise MeldCommandError(
+            "The selected Meld target identity no longer matches its saved session."
+        )
+    _assert_non_target_source_bindings(session, left_ctx, right_ctx)
+    if session.state != "APPLIED":
+        _assert_source_bindings(session, left_ctx, right_ctx)
+        _assert_unapplied_target(session, target)
+
+    interactive_ran = sys.stdin.isatty() and sys.stdout.isatty()
+    read_only_ran = interactive_ran and session.state in {
+        "APPLIED",
+        "KEPT_REVIEW_ONLY",
+    }
+    if interactive_ran:
+        if read_only_ran:
+            # Terminal states remain durable research artifacts. Reopen the
+            # same report surface without controls that could imply another
+            # provider turn or a second application.
+            run_meld_shell(session, read_only=True)
+        else:
+            session = _run_interactive(
+                store=store,
+                session=session,
+                provider_factory=connect_codex_chatgpt_provider,
+            )
+    else:
+        typer.echo(render_meld_session(session))
+    if interactive_ran:
+        if read_only_ran:
+            typer.secho(
+                "Read-only Meld view closed; saved session unchanged.",
+                fg=typer.colors.CYAN,
+            )
+        else:
+            typer.secho(
+                "Interactive Meld view closed; any approved turns remain saved.",
+                fg=typer.colors.CYAN,
+            )
+    else:
+        typer.secho(
+            "Resumed without calling the semantic provider.",
+            fg=typer.colors.CYAN,
+        )
+
+
+def _browse_saved_meld_sessions(store: MemoryStore) -> None:
+    """Select one saved Meld by metadata, then reopen its exact persisted route."""
+    catalog = list_meld_session_catalog(store)
+    if not catalog:
+        typer.echo("No saved Meld sessions.")
+        return
+    by_key = {entry.key: entry for entry in catalog}
+    receipt = choose_session(
+        tuple(_meld_picker_entry(entry) for entry in catalog),
+        title="MELD SESSIONS · RECENTLY MODIFIED",
+        new_receipt=None,
+    )
+    if receipt is None:
+        return
+    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "meld":
+        raise MeldCommandError("Meld session picker returned an invalid receipt.")
+    entry = by_key.get(receipt.key)
+    if entry is None or receipt.argv != entry.reopen_argv:
+        raise MeldCommandError("Meld session picker returned an invalid receipt.")
+    # The argv is a user-visible receipt, not an instruction to execute.  The
+    # target UID reload below is authoritative and its saved frames are bound
+    # again before any workbench is opened.
+    _resume_picked_meld(store=store, entry=entry)
 
 
 def cmd(
@@ -979,8 +1163,7 @@ def cmd(
         typer.Option(
             "--restart",
             help=(
-                "Replace the saved review session after rechecking its bound "
-                "Contexts"
+                "Replace the saved review session after rechecking its bound Contexts"
             ),
         ),
     ] = False,
@@ -1005,6 +1188,13 @@ def cmd(
             help="Render one issue's complete options provider-free",
         ),
     ] = None,
+    sessions: Annotated[
+        bool,
+        typer.Option(
+            "--sessions",
+            help="Browse and reopen an existing saved Meld session",
+        ),
+    ] = False,
 ) -> None:
     """Meld peers, or directionally use --into/--from Context roles."""
     action_count = sum(
@@ -1018,8 +1208,7 @@ def cmd(
     )
     if action_count > 1:
         typer.secho(
-            "Meld error: use one comment, preserve, defer, accept, or restart "
-            "action.",
+            "Meld error: use one comment, preserve, defer, accept, or restart action.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -1046,14 +1235,9 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    if (
-        (revision is not None or revises_turn)
-        and comment is None
-        and choice is None
-    ):
+    if (revision is not None or revises_turn) and comment is None and choice is None:
         typer.secho(
-            "Meld error: --revision and --revises-turn require a comment "
-            "or choice.",
+            "Meld error: --revision and --revises-turn require a comment or choice.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -1083,8 +1267,37 @@ def cmd(
         )
         raise typer.Exit(2)
 
+    browse_by_default = (
+        left is None
+        and right is None
+        and into is None
+        and to is None
+        and from_ is None
+        and issue is None
+        and choice is None
+        and comment is None
+        and not preserve_all
+        and not defer_all
+        and not accept
+        and not restart
+        and revision is None
+        and not revises_turn
+        and expand is None
+    )
+    if sessions and not browse_by_default:
+        typer.secho(
+            "Meld error: --sessions cannot be combined with Context operands "
+            "or Meld actions.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+
     store = MemoryStore(create=False)
     try:
+        if sessions or browse_by_default:
+            _browse_saved_meld_sessions(store)
+            return
         current_name = store.current_context_name()
         create_target = False
         if from_ is not None:
@@ -1103,9 +1316,7 @@ def cmd(
             )
             right_name = current_name
             target_name = right_name
-            start_command = shlex.join(
-                ["mem", "meld", left_name, "--into", right_name]
-            )
+            start_command = shlex.join(["mem", "meld", left_name, "--into", right_name])
         elif into is None:
             if left is None or right is None:
                 raise MeldCommandError(
@@ -1158,25 +1369,20 @@ def cmd(
                 current=current_name,
             )
             target_name = right_name
-            start_command = shlex.join(
-                ["mem", "meld", left_name, "--into", right_name]
-            )
+            start_command = shlex.join(["mem", "meld", left_name, "--into", right_name])
 
         if left_name == right_name:
             if requested_mode == "DIRECTIONAL":
                 raise MeldCommandError(
                     "INCOMING and BASELINE must be distinct Contexts."
                 )
-            raise MeldCommandError(
-                "The two PEER source Contexts must be distinct."
-            )
+            raise MeldCommandError("The two PEER source Contexts must be distinct.")
         if requested_mode == "SYMMETRIC" and target_name in {
             left_name,
             right_name,
         }:
             raise MeldCommandError(
-                "The two PEER sources and active target must be distinct "
-                "Contexts."
+                "The two PEER sources and active target must be distinct Contexts."
             )
         if create_target:
             if store.context_exists(target_name):
@@ -1322,11 +1528,39 @@ def cmd(
 
         if restart:
             prior_digest = meld_canonical_digest(session.to_dict())
-            if requested_mode == "SYMMETRIC" and left_access is None:
-                left_ctx, right_ctx, _current_target = _load_bound_contexts(
+            if requested_mode == "SYMMETRIC":
+                # Restart is defined by the newly supplied ordered pair, not
+                # by the old session's frames. Reusing the bound frames here
+                # would silently turn RIGHT LEFT into the prior LEFT RIGHT
+                # Compare basis and defeat the exact-order review contract.
+                restart_left_access = _resolve_meld_source(
                     store,
-                    session,
+                    left_name,
+                    current_name=current_name,
                 )
+                restart_right_access = _resolve_meld_source(
+                    store,
+                    right_name,
+                    current_name=current_name,
+                )
+                authorize_combination((restart_left_access, restart_right_access))
+                restart_target_access = ContextAccess(
+                    store=store,
+                    context_name=target.name,
+                    display_name=target.name,
+                    attachment_name=None,
+                    permission="READ",
+                )
+                authorize_derived_transfer(
+                    restart_left_access,
+                    restart_target_access,
+                )
+                authorize_derived_transfer(
+                    restart_right_access,
+                    restart_target_access,
+                )
+                left_ctx = _load_meld_source(restart_left_access)
+                right_ctx = _load_meld_source(restart_right_access)
             else:
                 left_ctx = (
                     _load_meld_source(left_access)
@@ -1356,11 +1590,9 @@ def cmd(
                     right=right_ctx,
                     target=target,
                 )
-                replacement = (
-                    MeldSession.create_symmetric_from_comparison(
-                        comparison,
-                        target,
-                    )
+                replacement = MeldSession.create_symmetric_from_comparison(
+                    comparison,
+                    target,
                 )
                 _assert_source_bindings(
                     replacement,
@@ -1387,9 +1619,7 @@ def cmd(
                 "The target already has a saved meld with a different "
                 "authority mode. Use --restart to replace it."
             )
-        saved_names = tuple(
-            frame.context_name for frame in session.frames
-        )
+        saved_names = tuple(frame.context_name for frame in session.frames)
         sources_match = (
             saved_names == (left_name, right_name)
             if requested_mode == "DIRECTIONAL"
@@ -1422,9 +1652,7 @@ def cmd(
                 )
             else:
                 noun = (
-                    "meld changes"
-                    if session.mode == "DIRECTIONAL"
-                    else "meld results"
+                    "meld changes" if session.mode == "DIRECTIONAL" else "meld results"
                 )
                 typer.secho(
                     f"Applied {result_count} {noun} in checkpoint "
@@ -1473,9 +1701,7 @@ def cmd(
                         f"Issue has only {len(selected_issue.options)} choices."
                     )
                 option = selected_issue.options[choice - 1]
-                text_parts.append(
-                    f"Choose this reading: {option.text}"
-                )
+                text_parts.append(f"Choose this reading: {option.text}")
             if comment is not None and comment.strip():
                 text_parts.append(comment)
             turn_comment = "\n\n".join(text_parts)
@@ -1492,16 +1718,13 @@ def cmd(
             revises = tuple(revises_turn or ())
             if revises and revision_value not in {"CORRECT", "RETRACT"}:
                 raise MeldCommandError(
-                    "--revises-turn is valid only with --revision correct or "
-                    "retract."
+                    "--revises-turn is valid only with --revision correct or retract."
                 )
             session.start_turn(
                 turn_comment,
                 scope=("ISSUE" if selected_issue is not None else "ALL"),
                 issue_uids=(
-                    (selected_issue.uid,)
-                    if selected_issue is not None
-                    else ()
+                    (selected_issue.uid,) if selected_issue is not None else ()
                 ),
                 revision=revision_value,  # type: ignore[arg-type]
                 revises_turn_uids=revises,
@@ -1556,6 +1779,7 @@ def cmd(
         MeldError,
         MeldProviderError,
         MeldCommandError,
+        MeldSessionCatalogError,
         ProfileConfigError,
         ProfileError,
         QueryProviderError,

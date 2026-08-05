@@ -1,4 +1,5 @@
 """Pure adapter contracts for the shared resolution workbench."""
+
 from __future__ import annotations
 
 import hashlib
@@ -121,7 +122,7 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
                         {
                             "frame_uid": right_frame.uid,
                             "memory_uid": right_memory.uid,
-                        }
+                        },
                     ],
                     "grounded_by_turn_uids": [],
                 }
@@ -135,8 +136,7 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
 
     assert view.title == "MEM MELD · SYMMETRIC"
     assert view.route == (
-        "participant/updates + participant/wiki-guidance → "
-        "participant/merged-guidance"
+        "participant/updates + participant/wiki-guidance → participant/merged-guidance"
     )
     assert view.status == "READY_TO_APPLY"
     assert view.overview == assessment.overview
@@ -154,12 +154,13 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
     assert item.options[0].uid == option_uid
     assert item.options[0].text == "Replace north with south."
     blocks = {block.heading: block.text for block in item.blocks}
-    assert "[PEER] participant/updates" in blocks["SOURCE MEMORIES"]
-    assert left_memory.content in blocks["SOURCE MEMORIES"]
-    assert "[PEER] participant/wiki-guidance" in blocks["SOURCE MEMORIES"]
-    assert "SCOPED · RESOLVED" in blocks["RELATED RELATIONS"]
-    assert assessment.relations[0].reason in blocks["RELATED RELATIONS"]
-    assert assessment.proposals[0].content in blocks["AFFECTED RESULTS"]
+    assert "participant/updates" in blocks["EVIDENCE"]
+    assert "[PEER]" not in blocks["EVIDENCE"]
+    assert left_memory.content in blocks["EVIDENCE"]
+    assert "participant/wiki-guidance" in blocks["EVIDENCE"]
+    assert "SCOPED · RESOLVED" in blocks["RELATIONS"]
+    assert assessment.relations[0].reason in blocks["RELATIONS"]
+    assert assessment.proposals[0].content in blocks["PROPOSED RESULT"]
     assert view.results[0].uid == proposal_uid
     assert view.results[0].marker == "+"
     assert view.results[0].label == "SYNTHESIZE"

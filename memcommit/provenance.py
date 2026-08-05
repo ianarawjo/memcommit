@@ -69,6 +69,16 @@ class MemoryState:
 
 
 @dataclass(frozen=True)
+class TraceCandidate:
+    """One full-UID Memory choice for trace/rationale selection."""
+
+    uid: str
+    content: str
+    position: int
+    status: Literal["CURRENT", "HISTORICAL"]
+
+
+@dataclass(frozen=True)
 class SourceOccurrence:
     mode: str
     ordinal: int
@@ -2552,6 +2562,18 @@ def _history(
     return events, warnings, frames
 
 
+def _known_historical_uids(
+    events: Iterable[TraceEvent],
+    frames: Iterable[_Frame],
+) -> set[str]:
+    """Return the exact UID domain accepted by trace/rationale selectors."""
+    known = {uid for frame in frames for uid in frame.memories}
+    known.update(
+        state.uid for event in events for state in (*event.before, *event.after)
+    )
+    return known
+
+
 def _resolve_historical_uid(
     selector: str,
     events: Iterable[TraceEvent],
@@ -2734,6 +2756,77 @@ def _analysis_attachments(
         if item.memory_uid in component
     )
     return analyses, []
+
+
+def collect_trace_candidates(
+    store: MemoryStore,
+    ctx: Context,
+) -> tuple[TraceCandidate, ...]:
+    """List each selectable current or historical direct Memory once.
+
+    Current Memories retain canonical Context order. Historical-only Memories
+    use their last retained state, with the most recently observed frame first.
+    The UID set intentionally shares the resolver's exact provenance domain so
+    opening the picker cannot narrow what an explicit selector can trace.
+    """
+    events, _, frames = _history(store, ctx)
+    current_frame = frames[-1]
+    current_uids = set(current_frame.memories)
+    current = tuple(
+        TraceCandidate(
+            uid=uid,
+            content=current_frame.memories[uid].content,
+            position=current_frame.memories[uid].position,
+            status="CURRENT",
+        )
+        for uid in current_frame.order
+    )
+
+    last_frame_state: dict[str, tuple[int, MemoryState]] = {}
+    for frame_index, frame in enumerate(frames):
+        for uid in frame.order:
+            last_frame_state[uid] = (frame_index, frame.memories[uid])
+
+    # Valid explicit metadata normally names states also present in a retained
+    # frame. Keep an event fallback so the picker and explicit selector still
+    # share one domain when only an event retains the selected UID.
+    last_event_state: dict[str, tuple[int, MemoryState]] = {}
+    for event_index, event in enumerate(events):
+        for state in (*event.before, *event.after):
+            last_event_state[state.uid] = (event_index, state)
+
+    historical: list[tuple[int, int, TraceCandidate]] = []
+    for uid in _known_historical_uids(events, frames) - current_uids:
+        frame_observation = last_frame_state.get(uid)
+        if frame_observation is not None:
+            rank, state = frame_observation
+            frame_backed = 1
+        else:
+            # Event-only choices sort after frame-backed history. The event
+            # index is retained only as a deterministic tie breaker.
+            rank, state = last_event_state[uid]
+            frame_backed = 0
+        historical.append(
+            (
+                frame_backed,
+                rank,
+                TraceCandidate(
+                    uid=uid,
+                    content=state.content,
+                    position=state.position,
+                    status="HISTORICAL",
+                ),
+            )
+        )
+    historical.sort(
+        key=lambda item: (
+            -item[0],
+            -item[1],
+            item[2].position,
+            item[2].uid,
+        )
+    )
+    return (*current, *(candidate for _, _, candidate in historical))
 
 
 def build_trace(

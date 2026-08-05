@@ -1,4 +1,5 @@
 """One-shot semantic provider for a bounded Context-to-Context meld turn."""
+
 from __future__ import annotations
 
 import json
@@ -26,7 +27,10 @@ from memcommit.result_workbench import (
 MELD_PAYLOAD_MARKER = "MELD TURN PAYLOAD:\n"
 MELD_INPUT_CHAR_LIMIT = 400_000
 MELD_RESPONSE_CHAR_LIMIT = 1_000_000
-MELD_ITEM_LIMIT = 200
+# The canonical Task 2 pair contains 150 + 150 Memories. Keep one bounded,
+# lossless call large enough for that studied topology; the independent encoded
+# input limit remains the primary protection against oversized provider turns.
+MELD_ITEM_LIMIT = 500
 MELD_KEY_LIMIT = 100
 MELD_OPTION_LIMIT = 5
 
@@ -66,6 +70,7 @@ class _ProviderView:
     turn_by_id: dict[str, str]
     turn_id_by_uid: dict[str, str]
     prior_relation_by_id: dict[str, str]
+    prior_relation_records: dict[str, dict[str, object]]
     prior_issue_by_id: dict[str, str]
     prior_proposal_by_id: dict[str, str]
     payload: dict[str, object]
@@ -88,17 +93,13 @@ def _exact_dict(
     label: str,
 ) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != keys:
-        raise MeldProviderError(
-            f"Codex meld returned an invalid {label}."
-        )
+        raise MeldProviderError(f"Codex meld returned an invalid {label}.")
     return value
 
 
 def _array(value: object, label: str) -> list[object]:
     if not isinstance(value, list):
-        raise MeldProviderError(
-            f"Codex meld returned an invalid {label}."
-        )
+        raise MeldProviderError(f"Codex meld returned an invalid {label}.")
     return value
 
 
@@ -114,9 +115,7 @@ def _string(
         or (not empty and not value.strip())
         or len(value) > limit
     ):
-        raise MeldProviderError(
-            f"Codex meld returned an invalid {label}."
-        )
+        raise MeldProviderError(f"Codex meld returned an invalid {label}.")
     return value
 
 
@@ -126,9 +125,7 @@ def _key(value: object, label: str) -> str:
 
 def _literal(value: object, allowed: set[str], label: str) -> str:
     if not isinstance(value, str) or value not in allowed:
-        raise MeldProviderError(
-            f"Codex meld returned an invalid {label}."
-        )
+        raise MeldProviderError(f"Codex meld returned an invalid {label}.")
     return value
 
 
@@ -140,14 +137,10 @@ def _keys(
 ) -> tuple[str, ...]:
     values = _array(value, label)
     if not empty and not values:
-        raise MeldProviderError(
-            f"Codex meld returned an invalid {label}."
-        )
+        raise MeldProviderError(f"Codex meld returned an invalid {label}.")
     result = tuple(_key(item, label) for item in values)
     if len(result) != len(set(result)):
-        raise MeldProviderError(
-            f"Codex meld returned duplicate {label}."
-        )
+        raise MeldProviderError(f"Codex meld returned duplicate {label}.")
     return result
 
 
@@ -157,9 +150,7 @@ def _mapped(
     label: str,
 ) -> tuple[str, ...]:
     if any(value not in mapping for value in values):
-        raise MeldProviderError(
-            f"Codex meld returned an unknown {label}."
-        )
+        raise MeldProviderError(f"Codex meld returned an unknown {label}.")
     return tuple(mapping[value] for value in values)
 
 
@@ -177,9 +168,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
     memory_by_id: dict[str, MeldMember] = {}
     memory_id_by_key: dict[tuple[str, str], str] = {}
     frame_ids = (
-        ("left", "right")
-        if session.mode == "SYMMETRIC"
-        else ("incoming", "baseline")
+        ("left", "right") if session.mode == "SYMMETRIC" else ("incoming", "baseline")
     )
     frame_payloads: list[dict[str, object]] = []
     for frame_index, (frame, frame_id) in enumerate(
@@ -235,6 +224,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
             )
 
     prior_relation_by_id: dict[str, str] = {}
+    prior_relation_records: dict[str, dict[str, object]] = {}
     prior_issue_by_id: dict[str, str] = {}
     prior_proposal_by_id: dict[str, str] = {}
     previous: dict[str, object] | None = None
@@ -251,29 +241,21 @@ def _provider_view(session: MeldSession) -> _ProviderView:
             "content": proposal.content,
             "reason": proposal.reason,
             "relation_keys": [
-                relation_id_by_uid[uid]
-                for uid in proposal.relation_uids
+                relation_id_by_uid[uid] for uid in proposal.relation_uids
             ],
             "source_memory_ids": [
-                memory_id_by_key[
-                    (member.frame_uid, member.memory_uid)
-                ]
+                memory_id_by_key[(member.frame_uid, member.memory_uid)]
                 for member in proposal.source_members
             ],
             "grounded_turn_ids": [
-                turn_id_by_uid[uid]
-                for uid in proposal.grounded_by_turn_uids
+                turn_id_by_uid[uid] for uid in proposal.grounded_by_turn_uids
             ],
         }
         if session.mode == "DIRECTIONAL":
             baseline = session.frames[1]
             payload["operation"] = proposal.operation
             payload["target_memory_ids"] = (
-                [
-                    memory_id_by_key[
-                        (baseline.uid, proposal.memory_uid)
-                    ]
-                ]
+                [memory_id_by_key[(baseline.uid, proposal.memory_uid)]]
                 if proposal.operation == "EDIT"
                 else []
             )
@@ -309,16 +291,12 @@ def _provider_view(session: MeldSession) -> _ProviderView:
                 {
                     "relation_key": relation_id_by_uid[relation.uid],
                     "left_memory_ids": [
-                        memory_id_by_key[
-                            (member.frame_uid, member.memory_uid)
-                        ]
+                        memory_id_by_key[(member.frame_uid, member.memory_uid)]
                         for member in relation.members
                         if member.frame_uid == session.frames[0].uid
                     ],
                     "right_memory_ids": [
-                        memory_id_by_key[
-                            (member.frame_uid, member.memory_uid)
-                        ]
+                        memory_id_by_key[(member.frame_uid, member.memory_uid)]
                         for member in relation.members
                         if member.frame_uid == session.frames[1].uid
                     ],
@@ -333,8 +311,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
                 {
                     "issue_key": issue_id_by_uid[issue.uid],
                     "relation_keys": [
-                        relation_id_by_uid[uid]
-                        for uid in issue.relation_uids
+                        relation_id_by_uid[uid] for uid in issue.relation_uids
                     ],
                     "priority": issue.priority,
                     "title": issue.title,
@@ -359,6 +336,9 @@ def _provider_view(session: MeldSession) -> _ProviderView:
                 for proposal in prior_assessment.proposals
             ],
         }
+        prior_relation_records = {
+            record["relation_key"]: record for record in previous["relations"]
+        }
 
     current = session.current_turn
     assert current is not None
@@ -370,25 +350,16 @@ def _provider_view(session: MeldSession) -> _ProviderView:
         "revision": current.revision,
         "scope": current.scope,
         "issue_ids": [
-            next(
-                alias
-                for alias, uid in prior_issue_by_id.items()
-                if uid == issue_uid
-            )
+            next(alias for alias, uid in prior_issue_by_id.items() if uid == issue_uid)
             for issue_uid in current.issue_uids
         ],
         "comment": current.comment,
-        "revises_turn_ids": [
-            turn_id_by_uid[uid] for uid in current.revises_turn_uids
-        ],
+        "revises_turn_ids": [turn_id_by_uid[uid] for uid in current.revises_turn_uids],
     }
     payload = {
         "mode": session.mode,
         "authority": (
-            (
-                "Both PEER sources have equal authority. Neither source wins "
-                "by default."
-            )
+            ("Both PEER sources have equal authority. Neither source wins by default.")
             if session.mode == "SYMMETRIC"
             else (
                 "INCOMING may extend or correct the BASELINE only where the "
@@ -398,9 +369,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
         ),
         "target": {
             "context_name": session.target.context_name,
-            "must_remain_empty_until_acceptance": (
-                session.mode == "SYMMETRIC"
-            ),
+            "must_remain_empty_until_acceptance": (session.mode == "SYMMETRIC"),
             "must_remain_unchanged_until_acceptance": True,
         },
         "frames": frame_payloads,
@@ -415,6 +384,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
         turn_by_id=turn_by_id,
         turn_id_by_uid=turn_id_by_uid,
         prior_relation_by_id=prior_relation_by_id,
+        prior_relation_records=prior_relation_records,
         prior_issue_by_id=prior_issue_by_id,
         prior_proposal_by_id=prior_proposal_by_id,
         payload=payload,
@@ -637,8 +607,7 @@ def _prompt(payload: dict[str, object]) -> str:
         else ""
     )
     return (
-        authority_contract
-        + "\n"
+        authority_contract + "\n"
         "Every supplied source Memory must appear in exactly one primary "
         "relation. A relation may contain one-to-many or many-to-one members; "
         "do not enumerate a Cartesian product. EQUIVALENT means the same "
@@ -657,8 +626,7 @@ def _prompt(payload: dict[str, object]) -> str:
         "a source frame. Recompute the complete ledger after every turn; "
         "do not append a local answer to a stale result.\n"
         + result_contract
-        +
-        "A result is a complete standalone Memory. Preserve rate, condition, "
+        + "A result is a complete standalone Memory. Preserve rate, condition, "
         "audience, modality, exceptions, and source-specific scope. Do not "
         "invent facts or resolve a difference from outside knowledge. Write "
         "overview as one short English natural-language report paragraph in "
@@ -702,9 +670,7 @@ def _parse_assessment(
         or not raw.strip()
         or len(raw) > MELD_RESPONSE_CHAR_LIMIT
     ):
-        raise MeldProviderError(
-            "Codex meld returned invalid structured output."
-        )
+        raise MeldProviderError("Codex meld returned invalid structured output.")
     try:
         value = json.loads(raw, object_pairs_hook=_strict_json_object)
     except (json.JSONDecodeError, ValueError) as error:
@@ -723,17 +689,13 @@ def _parse_assessment(
         "meld response",
     )
     if not isinstance(data["ready_to_apply"], bool):
-        raise MeldProviderError(
-            "Codex meld returned invalid readiness."
-        )
+        raise MeldProviderError("Codex meld returned invalid readiness.")
     current = session.current_turn
     assert current is not None
 
     raw_relations = _array(data["relations"], "meld relations")
     if not 1 <= len(raw_relations) <= MELD_ITEM_LIMIT:
-        raise MeldProviderError(
-            "Codex meld returned an invalid number of relations."
-        )
+        raise MeldProviderError("Codex meld returned an invalid number of relations.")
     relation_records: list[tuple[str, dict[str, object]]] = []
     for item in raw_relations:
         record = _exact_dict(
@@ -754,9 +716,31 @@ def _parse_assessment(
         )
     relation_keys = [key for key, _ in relation_records]
     if not relation_records or len(relation_keys) != len(set(relation_keys)):
-        raise MeldProviderError(
-            "Codex meld returned duplicate or empty relation keys."
+        raise MeldProviderError("Codex meld returned duplicate or empty relation keys.")
+    # A follow-up may return only relations it changed even though the prompt
+    # requests the cumulative ledger. Carry forward an omitted prior relation
+    # only when none of its members appears in the new response. Partial
+    # overlap remains a hard failure because locally guessing how a provider
+    # split or regrouped that relation could corrupt provenance.
+    returned_memory_ids: set[str] = set()
+    for _key_value, record in relation_records:
+        returned_memory_ids.update(
+            _keys(record["left_memory_ids"], "left Memory ids", empty=True)
         )
+        returned_memory_ids.update(
+            _keys(record["right_memory_ids"], "right Memory ids", empty=True)
+        )
+    returned_relation_keys = set(relation_keys)
+    for key, record in view.prior_relation_records.items():
+        if key in returned_relation_keys:
+            continue
+        prior_member_ids = {
+            *_keys(record["left_memory_ids"], "left Memory ids", empty=True),
+            *_keys(record["right_memory_ids"], "right Memory ids", empty=True),
+        }
+        if prior_member_ids.isdisjoint(returned_memory_ids):
+            relation_records.append((key, record))
+            relation_keys.append(key)
     relation_uid_by_key = {
         key: (
             view.prior_relation_by_id[key]
@@ -789,9 +773,8 @@ def _parse_assessment(
             _RELATIONS,
             "meld relation kind",
         )
-        if (
-            not memory_ids
-            or any(memory_id not in view.memory_by_id for memory_id in memory_ids)
+        if not memory_ids or any(
+            memory_id not in view.memory_by_id for memory_id in memory_ids
         ):
             raise MeldProviderError(
                 "Codex meld returned an unknown or empty relation member."
@@ -811,13 +794,11 @@ def _parse_assessment(
         if kind == "DISTINCT":
             if bool(left_ids) == bool(right_ids):
                 raise MeldProviderError(
-                    "Codex meld returned a DISTINCT relation with invalid "
-                    "source sides."
+                    "Codex meld returned a DISTINCT relation with invalid source sides."
                 )
         elif not left_ids or not right_ids:
             raise MeldProviderError(
-                "Codex meld returned a cross-source relation without both "
-                "PEER sides."
+                "Codex meld returned a cross-source relation without both PEER sides."
             )
         covered_memory_ids.extend(memory_ids)
         relations.append(
@@ -845,19 +826,16 @@ def _parse_assessment(
                 }
             )
         )
-    if (
-        set(covered_memory_ids) != set(view.memory_by_id)
-        or len(covered_memory_ids) != len(view.memory_by_id)
-    ):
+    if set(covered_memory_ids) != set(view.memory_by_id) or len(
+        covered_memory_ids
+    ) != len(view.memory_by_id):
         raise MeldProviderError(
             "Codex meld must cover every source Memory exactly once."
         )
 
     raw_issues = _array(data["issues"], "meld issues")
     if len(raw_issues) > MELD_ITEM_LIMIT:
-        raise MeldProviderError(
-            "Codex meld returned too many issues."
-        )
+        raise MeldProviderError("Codex meld returned too many issues.")
     issue_records: list[tuple[str, dict[str, object]]] = []
     for item in raw_issues:
         record = _exact_dict(
@@ -873,9 +851,7 @@ def _parse_assessment(
             },
             "meld issue",
         )
-        issue_records.append(
-            (_key(record["issue_key"], "meld issue key"), record)
-        )
+        issue_records.append((_key(record["issue_key"], "meld issue key"), record))
     issue_keys = [key for key, _ in issue_records]
     if len(issue_keys) != len(set(issue_keys)):
         raise MeldProviderError("Codex meld returned duplicate issue keys.")
@@ -962,9 +938,7 @@ def _parse_assessment(
 
     raw_results = _array(data["results"], "meld results")
     if len(raw_results) > MELD_ITEM_LIMIT:
-        raise MeldProviderError(
-            "Codex meld returned too many results."
-        )
+        raise MeldProviderError("Codex meld returned too many results.")
     result_records: list[tuple[str, dict[str, object]]] = []
     for item in raw_results:
         result_keys = {
@@ -983,9 +957,7 @@ def _parse_assessment(
             result_keys,
             "meld result",
         )
-        result_records.append(
-            (_key(record["result_key"], "meld result key"), record)
-        )
+        result_records.append((_key(record["result_key"], "meld result key"), record))
     result_keys = [key for key, _ in result_records]
     if len(result_keys) != len(set(result_keys)):
         raise MeldProviderError("Codex meld returned duplicate result keys.")
@@ -1083,9 +1055,7 @@ def _parse_assessment(
                 # even when the model sensibly omits that duplicate alias from
                 # `source_memory_ids`.
                 proposal_source_ids = (
-                    source_ids
-                    if target_id in source_ids
-                    else (*source_ids, target_id)
+                    source_ids if target_id in source_ids else (*source_ids, target_id)
                 )
         proposals.append(
             MeldProposal.from_dict(
@@ -1119,13 +1089,9 @@ def _parse_assessment(
                     data["overview"],
                     "meld overview",
                 ),
-                "relations": [
-                    relation.to_dict() for relation in relations
-                ],
+                "relations": [relation.to_dict() for relation in relations],
                 "issues": [issue.to_dict() for issue in issues],
-                "proposals": [
-                    proposal.to_dict() for proposal in proposals
-                ],
+                "proposals": [proposal.to_dict() for proposal in proposals],
                 "ready_to_apply": data["ready_to_apply"],
             }
         )

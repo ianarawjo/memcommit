@@ -1,4 +1,5 @@
 """Arrow-key workbench for one saved Context meld."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -116,9 +117,7 @@ def _screen_text(
             ("class:section", " ISSUES\n"),
         ]
     )
-    relation_by_uid = {
-        relation.uid: relation for relation in assessment.relations
-    }
+    relation_by_uid = {relation.uid: relation for relation in assessment.relations}
     relation_number = {
         relation.uid: index
         for index, relation in enumerate(assessment.relations, start=1)
@@ -149,8 +148,7 @@ def _screen_text(
             fragments.append(
                 (
                     "",
-                    "       QUESTION · "
-                    f"{safe_terminal_text(issue.question)}\n",
+                    f"       QUESTION · {safe_terminal_text(issue.question)}\n",
                 )
             )
             for option_index, option in enumerate(issue.options):
@@ -165,9 +163,7 @@ def _screen_text(
                         ),
                     )
                 )
-                fragments.append(
-                    ("", f"          {safe_terminal_text(option.text)}\n")
-                )
+                fragments.append(("", f"          {safe_terminal_text(option.text)}\n"))
             fragments.append(("class:section", "       SOURCE MEMORIES\n"))
             seen_members: set[tuple[str, str]] = set()
             for relation_uid in issue.relation_uids:
@@ -179,11 +175,7 @@ def _screen_text(
                     seen_members.add(key)
                     frame = frame_by_uid[member.frame_uid]
                     memory = memory_by_key[key]
-                    role = (
-                        f"[{frame.role}] "
-                        if session.mode == "DIRECTIONAL"
-                        else ""
-                    )
+                    role = f"[{frame.role}] " if session.mode == "DIRECTIONAL" else ""
                     fragments.append(
                         (
                             "",
@@ -273,10 +265,7 @@ def _screen_text(
         fragments.append(
             (
                 "",
-                (
-                    f"  {marker} {index:>2}. [{label}] "
-                    f"{_line(proposal.content, 120)}\n"
-                ),
+                (f"  {marker} {index:>2}. [{label}] {_line(proposal.content, 120)}\n"),
             )
         )
     return fragments
@@ -348,9 +337,7 @@ def run_meld_shell(
             if not text:
                 status["value"] = "Enter a whole-set comment first."
                 return
-            event.app.exit(
-                result=MeldShellAction(kind="COMMENT_ALL", comment=text)
-            )
+            event.app.exit(result=MeldShellAction(kind="COMMENT_ALL", comment=text))
             return
         if not assessment.issues:
             status["value"] = "There is no issue to comment on."
@@ -384,21 +371,16 @@ def run_meld_shell(
         event.app.invalidate()
 
     for number in range(1, 6):
+
         def choose_reading(event, index=number - 1) -> None:
-            if (
-                assessment.issues
-                and index
-                < len(assessment.issues[selected["index"]].options)
+            if assessment.issues and index < len(
+                assessment.issues[selected["index"]].options
             ):
                 expanded["value"] = True
-                choice["index"] = (
-                    None if choice["index"] == index else index
-                )
+                choice["index"] = None if choice["index"] == index else index
             event.app.invalidate()
 
-        bindings.add(str(number), filter=~has_focus(input_area))(
-            choose_reading
-        )
+        bindings.add(str(number), filter=~has_focus(input_area))(choose_reading)
 
     @bindings.add("tab")
     def _focus_input(event) -> None:
@@ -508,9 +490,11 @@ def run_meld_shell(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
+    read_only: bool = False,
 ) -> MeldShellAction | None:
     """Collect one action through the shared dynamic resolution workbench."""
     from memcommit.commands.resolution_workbench_shell import (
+        ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
     from memcommit.meld_resolution_adapter import (
@@ -518,8 +502,7 @@ def run_meld_shell(
     )
 
     snapshot_hint = (
-        "Run the same 'mem meld' command outside a TTY to render its saved "
-        "snapshot."
+        "Run the same 'mem meld' command outside a TTY to render its saved snapshot."
     )
     if require_tty:
         require_interactive_terminal(
@@ -529,6 +512,62 @@ def run_meld_shell(
     if session.current_assessment is None:
         return None
     adapter = MeldResolutionWorkbenchAdapter(session)
+    compare_report: str | None = None
+    if session.mode == "SYMMETRIC" and session.comparison_seed is not None:
+        # The Compare analysis is already copied into the Meld seed. Re-render
+        # that exact artifact instead of maintaining a second summary dialect.
+        # Navigation hints are omitted because this target-bound Meld already
+        # supplies the next interaction below the shared report.
+        from memcommit.commands.compare import render_comparison
+
+        compare_report = (
+            render_comparison(
+                session.comparison_seed.analysis,
+                reused=True,
+                durable=True,
+            )
+            .partition("\nThe complete source-linked relation ledger")[0]
+            .rstrip()
+        )
+    global_strategies = (
+        ResolutionGlobalStrategy(
+            label="Preserve every unresolved distinction",
+            action_kind="SUBMIT_ALL",
+            comment=(
+                "Preserve every unresolved distinction without forcing a "
+                "choice, while applying the explicitly reviewed responses."
+            ),
+        ),
+        ResolutionGlobalStrategy(
+            label="Use the broadest applicable choice for unresolved conflicts",
+            action_kind="SUBMIT_ALL",
+            comment=(
+                "For each remaining conflict, choose the option with the "
+                "broadest justified applicability or coverage. Retain any "
+                "qualification needed to avoid extending a claim beyond its "
+                "source support, and preserve compatible distinct information."
+            ),
+        ),
+        ResolutionGlobalStrategy(
+            label="Use the narrowest useful choice for unresolved conflicts",
+            action_kind="SUBMIT_ALL",
+            comment=(
+                "For each remaining conflict, choose the narrowest, most "
+                "specific, or most constrained option that remains useful. "
+                "Preserve compatible distinct information outside the conflict."
+            ),
+        ),
+        ResolutionGlobalStrategy(
+            label="Use the strongest-supported choice for unresolved conflicts",
+            action_kind="SUBMIT_ALL",
+            comment=(
+                "Resolve each remaining conflict independently by choosing "
+                "the option with the strongest support in the source Memories "
+                "and current user guidance. Preserve compatible and "
+                "non-conflicting distinct information from both sources."
+            ),
+        ),
+    )
     action = run_resolution_workbench_shell(
         adapter.view,
         navigation=navigation,
@@ -537,6 +576,11 @@ def run_meld_shell(
         require_tty=False,
         terminal_label="Interactive meld",
         snapshot_hint=snapshot_hint,
+        split_viewer_items=True,
+        global_strategies=global_strategies,
+        split_report_text=compare_report,
+        review_and_apply=not read_only,
+        read_only=read_only,
     )
     if action.kind == "CLOSE":
         return None
@@ -549,9 +593,7 @@ def run_meld_shell(
     if action.kind == "ACCEPT":
         return MeldShellAction(kind="ACCEPT")
     if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
-        raise ValueError(
-            f"Unsupported resolution action '{action.kind}' for Meld."
-        )
+        raise ValueError(f"Unsupported resolution action '{action.kind}' for Meld.")
     issue = adapter.view().item(action.item_uid)
     choice_index = (
         next(

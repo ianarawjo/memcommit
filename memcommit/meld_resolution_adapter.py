@@ -4,6 +4,7 @@ Meld remains authoritative for relation judgments, replacement assessments,
 readiness, and application.  This adapter only gives the shared interactive
 surface enough exact, UID-addressed data to render the current revision.
 """
+
 from __future__ import annotations
 
 from memcommit.meld import MeldProposal, MeldSession
@@ -42,6 +43,15 @@ def _proposal_label(session: MeldSession, proposal: MeldProposal) -> str:
     if session.mode == "DIRECTIONAL":
         return f"{proposal.operation} · {proposal.disposition}"
     return proposal.disposition
+
+
+def _memory_location(fallback_context: str, content: str) -> tuple[str, str]:
+    """Avoid repeating a recursive Context prefix in both metadata and text."""
+    if content.startswith("[") and "] " in content:
+        prefix, body = content[1:].split("] ", 1)
+        if prefix == fallback_context or prefix.startswith(f"{fallback_context}/"):
+            return prefix, body
+    return fallback_context, content
 
 
 class MeldResolutionWorkbenchAdapter:
@@ -94,9 +104,9 @@ class MeldResolutionWorkbenchAdapter:
                     if relation.kind not in relation_kinds:
                         relation_kinds.append(relation.kind)
                     relation_lines.append(
-                        f"R{relation_number[relation_uid]} "
-                        f"[{relation.kind} · {relation.status}]\n"
-                        f"{relation.summary}\nReason: {relation.reason}"
+                        f"R{relation_number[relation_uid]} · "
+                        f"{relation.kind} · {relation.status}\n"
+                        f"{relation.summary}\nWHY · {relation.reason}"
                     )
                     for member in relation.members:
                         key = (member.frame_uid, member.memory_uid)
@@ -105,10 +115,14 @@ class MeldResolutionWorkbenchAdapter:
                         seen_members.add(key)
                         frame = frame_by_uid[member.frame_uid]
                         memory = memory_by_key[key]
+                        location, content = _memory_location(
+                            frame.context_name,
+                            memory.content,
+                        )
+                        role = "" if session.mode == "SYMMETRIC" else f"{frame.role} · "
                         source_lines.append(
-                            f"[{frame.role}] {frame.context_name} "
-                            f"#{memory.position + 1} [{memory.uid}]\n"
-                            f"{memory.content}"
+                            f"{role}{location} · #{memory.position + 1} "
+                            f"· [{memory.uid[:8]}]\n{content}"
                         )
                 affected = [
                     proposal
@@ -119,8 +133,8 @@ class MeldResolutionWorkbenchAdapter:
                     (
                         f"{_proposal_marker(session, proposal)} "
                         f"[{_proposal_label(session, proposal)}] "
-                        f"Memory [{proposal.memory_uid}]\n"
-                        f"{proposal.content}\nReason: {proposal.reason}"
+                        f"Memory [{proposal.memory_uid[:8]}]\n"
+                        f"{proposal.content}\nWHY · {proposal.reason}"
                     )
                     for proposal in affected
                 ]
@@ -147,15 +161,15 @@ class MeldResolutionWorkbenchAdapter:
                         ),
                         blocks=(
                             ResolutionDetailBlock(
-                                heading="SOURCE MEMORIES",
+                                heading="EVIDENCE",
                                 text="\n\n".join(source_lines),
                             ),
                             ResolutionDetailBlock(
-                                heading="RELATED RELATIONS",
+                                heading="RELATIONS",
                                 text="\n\n".join(relation_lines),
                             ),
                             ResolutionDetailBlock(
-                                heading="AFFECTED RESULTS",
+                                heading="PROPOSED RESULT",
                                 text="\n\n".join(affected_lines),
                             ),
                         ),
@@ -174,10 +188,10 @@ class MeldResolutionWorkbenchAdapter:
             )
             overview = assessment.overview
 
-        active = (
-            assessment is not None
-            and session.state in {"AWAITING_REPLY", "READY_TO_APPLY"}
-        )
+        active = assessment is not None and session.state in {
+            "AWAITING_REPLY",
+            "READY_TO_APPLY",
+        }
         capabilities = (
             frozenset(
                 {
