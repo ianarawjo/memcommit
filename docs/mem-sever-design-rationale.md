@@ -62,6 +62,16 @@ and no output Context. `--accept` creates a require-new local Context and an
 automatic checkpoint. The source and criteria remain unchanged, and every
 screen and snapshot says `NOT SENT`.
 
+Sever treats its Source as already selected for the current review, normally by
+an earlier `find` or an explicit Context choice. Its semantic job is local
+minimization, de-identification, condition preservation, and exclusion—not
+recipient selection or delivery approval. Recipient identity, authority,
+channel, approval, retention, and downstream-use Criteria remain visible as
+deferred Share preconditions, but missing delivery facts alone must not turn
+every Source Memory into `DO_NOT_SEND`. This phase distinction lets one
+guardrail tree remain useful across preparation and delivery without treating a
+locally saved draft as a transmission attempt.
+
 ## Context and capability model
 
 Both Source and Criteria must resolve through ordinary `READ` access. Query-only

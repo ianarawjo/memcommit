@@ -27,6 +27,9 @@ class SeverProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "sever_context"
         assert "query-only sources" in prompt
+        assert "local minimization and de-identification draft" in prompt
+        assert "later Share preconditions" in prompt
+        assert "must not by itself cause DO_NOT_SEND" in prompt
         payload = json.loads(prompt.split(SEVER_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
         criterion_id = payload["criteria"]["memories"][0]["memory_id"]
