@@ -484,7 +484,7 @@ def resolution_report_fragments(
         )
     if not read_only:
         heading(
-            "REVIEW & APPLY MELD"
+            ("REVIEW & APPLY MELD" if view.accept_enabled else "MATERIALIZE REVIEW")
             if review_and_apply
             else "RESOLVE ALL · WHOLE-SET STRATEGY"
         )
@@ -492,8 +492,13 @@ def resolution_report_fragments(
             (
                 "",
                 (
-                    " Review staged choices and choose how unresolved conflicts "
-                    "will be handled.\n"
+                    (
+                        " The exact proposed Memories are shown above. Press Enter "
+                        "to apply them.\n"
+                        if view.accept_enabled
+                        else " Review the choices and policy already shown in this "
+                        "report, then press Enter to materialize the proposal.\n"
+                    )
                     if review_and_apply
                     else " Choose a strategy below. It requests a revised proposal "
                     "and never applies the target.\n"
@@ -520,10 +525,16 @@ def _seeded_report_lines(
     lines = report_text.splitlines()
     lines.extend(["", f"{view.results_label} · {len(view.results)}"])
     if view.results:
-        lines.extend(
-            f"{result.marker} {index}. [{result.label}] {result.text}"
-            for index, result in enumerate(view.results, start=1)
-        )
+        for index, result in enumerate(view.results, start=1):
+            lines.extend(
+                [
+                    "",
+                    f"  {result.marker} {index}. [{result.label}]",
+                    f"      {result.text}",
+                ]
+            )
+            if result.reason:
+                lines.append(f"      WHY · {result.reason}")
     else:
         lines.append("  (none)")
     if not read_only:
@@ -531,13 +542,22 @@ def _seeded_report_lines(
             [
                 "",
                 (
-                    "REVIEW & APPLY MELD"
+                    (
+                        "REVIEW & APPLY MELD"
+                        if view.accept_enabled
+                        else "MATERIALIZE REVIEW"
+                    )
                     if review_and_apply
                     else "RESOLVE ALL · WHOLE-SET STRATEGY"
                 ),
                 (
-                    "Review staged choices and choose how unresolved conflicts "
-                    "will be handled."
+                    (
+                        "The exact proposed Memories are shown above. Press Enter "
+                        "to apply them."
+                        if view.accept_enabled
+                        else "Review the choices and policy already shown in this "
+                        "report, then press Enter to materialize the proposal."
+                    )
                     if review_and_apply
                     else "Choose a strategy below. It requests a revised proposal "
                     "and never applies the target."
@@ -545,8 +565,7 @@ def _seeded_report_lines(
             ]
         )
         lines.extend(
-            f"  {index}. {item.label}"
-            for index, item in enumerate(strategies, start=1)
+            f"  {index}. {item.label}" for index, item in enumerate(strategies, start=1)
         )
     return lines
 
@@ -563,21 +582,48 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         "PROPOSED TARGET MEMORIES",
         "PROPOSED BASELINE CHANGES",
         "RESOLVE ALL ·",
+        "MATERIALIZE REVIEW",
         "REVIEW & APPLY MELD",
     )
     sections: list[tuple[int, str]] = []
     in_conflicts = False
+    in_results = False
     conflict_index = 0
     for line_index, line in enumerate(lines):
         if line.startswith("POTENTIAL CONFLICTS"):
             in_conflicts = True
+            in_results = False
+        if line.startswith(("PROPOSED TARGET MEMORIES", "PROPOSED BASELINE CHANGES")):
+            in_conflicts = False
+            in_results = True
+        if line.startswith(
+            ("RESOLVE ALL ·", "MATERIALIZE REVIEW", "REVIEW & APPLY MELD")
+        ):
+            in_results = False
         if line.startswith(headings):
             key = (
                 "RESOLVE_ALL"
-                if line.startswith(("RESOLVE ALL ·", "REVIEW & APPLY MELD"))
+                if line.startswith(
+                    (
+                        "RESOLVE ALL ·",
+                        "MATERIALIZE REVIEW",
+                        "REVIEW & APPLY MELD",
+                    )
+                )
                 else "REPORT"
             )
             sections.append((line_index, key))
+            continue
+        stripped = line.strip()
+        result_prefix = stripped.split(".", 1)[0]
+        if (
+            in_results
+            and len(result_prefix) > 2
+            and result_prefix[0] in {"+", "~"}
+            and result_prefix[1:].strip().isdigit()
+        ):
+            result_index = int(result_prefix[1:].strip()) - 1
+            sections.append((line_index, f"RESULT:{result_index}"))
             continue
         prefix = line.split(".", 1)[0]
         if in_conflicts and prefix.isdigit():
@@ -591,11 +637,15 @@ def resolution_seeded_report_fragments(
     report_text: str,
     *,
     strategies: tuple[ResolutionGlobalStrategy, ...] = (),
+    drafts: dict[str, tuple[str | None, str]] | None = None,
+    report_item_badges: tuple[str, ...] = (),
+    report_conflicts_remaining: int | None = None,
+    selected_strategy_index: int = 0,
     focused_section: int = 0,
     review_and_apply: bool = False,
     read_only: bool = False,
 ) -> list[tuple[str, str]]:
-    """Render the exact Compare report followed only by Meld-owned sections."""
+    """Render Compare and Meld report sections as nested Viewer cards."""
     lines = _seeded_report_lines(
         view,
         report_text,
@@ -604,22 +654,206 @@ def resolution_seeded_report_fragments(
         read_only,
     )
     sections = _seeded_report_sections(lines)
+    if not sections:
+        return [("", safe_terminal_text("\n".join(lines)))]
     focused_section = max(0, min(focused_section, len(sections) - 1))
-    anchor = sections[focused_section][0]
+    draft_values = drafts or {}
     fragments: list[tuple[str, str]] = []
-    for index, line in enumerate(lines):
-        if index == anchor:
-            fragments.append(("[SetCursorPosition]", ""))
-        fragments.append(
-            (
-                "class:viewer-section" if index == anchor else "",
-                f"── {safe_terminal_text(line)} ──"
-                if index == anchor
-                else safe_terminal_text(line),
-            )
+
+    section_index = 0
+    while section_index < len(sections):
+        start, key = sections[section_index]
+        end = (
+            sections[section_index + 1][0]
+            if section_index + 1 < len(sections)
+            else len(lines)
         )
-        if index < len(lines) - 1:
+        title = lines[start].strip()
+
+        if title.startswith("POTENTIAL CONFLICTS"):
+            original_count = sum(
+                next_key.startswith("ITEM:") for _offset, next_key in sections
+            )
+            remaining = (
+                original_count
+                if report_conflicts_remaining is None
+                else report_conflicts_remaining
+            )
+            group_title = f"POTENTIAL CONFLICTS · {original_count} → {remaining}"
+            group_active = section_index == focused_section
+            width = 76
+            inner_width = width - 2
+            label = f"─ {_line(group_title, inner_width - 3)} "
+            if group_active:
+                fragments.append(("[SetCursorPosition]", ""))
+            fragments.append(
+                (
+                    "class:detail-card.focused"
+                    if group_active
+                    else "class:detail-card",
+                    f" ╭{label}{'─' * (inner_width - _visual_width(label))}╮\n",
+                )
+            )
+            fragments.append(("class:detail-card", f" │{' ' * inner_width}│\n"))
+            section_index += 1
+            while section_index < len(sections) and sections[section_index][
+                1
+            ].startswith("ITEM:"):
+                item_start, item_key = sections[section_index]
+                item_end = (
+                    sections[section_index + 1][0]
+                    if section_index + 1 < len(sections)
+                    else len(lines)
+                )
+                item_index = int(item_key.split(":", 1)[1])
+                item_body = [
+                    lines[item_start].strip().split(".", 1)[-1].lstrip(),
+                    *lines[item_start + 1 : item_end],
+                ]
+                while item_body and not item_body[-1].strip():
+                    item_body.pop()
+                badge = ""
+                if item_index < len(view.items):
+                    item = view.items[item_index]
+                    option_uid, comment = draft_values.get(
+                        item.uid,
+                        (item.selected_option_uid, ""),
+                    )
+                    if option_uid is not None:
+                        badge = f"SELECTED · {item.option(option_uid).label}"
+                    elif comment.strip():
+                        badge = "OTHER DIRECTION · STAGED"
+                if not badge and item_index < len(report_item_badges):
+                    badge = report_item_badges[item_index]
+                if badge:
+                    item_body = [badge, "", *item_body]
+                item_active = section_index == focused_section
+                if item_active:
+                    fragments.append(("[SetCursorPosition]", ""))
+                conflict_heading = f"CONFLICT {item_index + 1}"
+                heading_style = (
+                    "class:viewer-section" if item_active else "class:section"
+                )
+                fragments.append(
+                    (
+                        heading_style,
+                        f" │   {conflict_heading}\n",
+                    )
+                )
+                badge_visual_lines = (
+                    _visual_wrap(badge, inner_width - 6) if badge else []
+                )
+                body_visual_lines = _visual_wrap(
+                    "\n".join(item_body[(2 if badge else 0) :]),
+                    inner_width - 6,
+                )
+                for badge_line in badge_visual_lines:
+                    fragments.append(
+                        (
+                            "class:selection-badge",
+                            f" │     {_visual_pad(badge_line, inner_width - 6)} │\n",
+                        )
+                    )
+                if badge_visual_lines:
+                    fragments.append(("class:detail-card", f" │{' ' * inner_width}│\n"))
+                for body_line in body_visual_lines:
+                    fragments.append(
+                        (
+                            "class:detail-card",
+                            f" │     {_visual_pad(body_line, inner_width - 6)} │\n",
+                        )
+                    )
+                section_index += 1
+                if section_index < len(sections) and sections[section_index][
+                    1
+                ].startswith("ITEM:"):
+                    fragments.append(("class:detail-card", f" │{' ' * inner_width}│\n"))
+            fragments.append(("class:detail-card", f" ╰{'─' * inner_width}╯\n"))
+            if section_index < len(sections):
+                fragments.append(("", "\n"))
+            continue
+
+        if key.startswith("RESULT:"):
+            active = section_index == focused_section
+            if active:
+                fragments.append(("[SetCursorPosition]", ""))
+            fragments.append(
+                (
+                    "class:viewer-section" if active else "class:section",
+                    f" {safe_terminal_text(title)}\n",
+                )
+            )
+            result_body = list(lines[start + 1 : end])
+            while result_body and not result_body[-1].strip():
+                result_body.pop()
+            for result_line in result_body:
+                fragments.append(
+                    ("class:detail-card", f" {safe_terminal_text(result_line)}\n")
+                )
+            if section_index < len(sections) - 1:
+                fragments.append(("", "\n"))
+            section_index += 1
+            continue
+
+        if title.startswith(("PROPOSED TARGET MEMORIES", "PROPOSED BASELINE CHANGES")):
+            active = section_index == focused_section
+            if active:
+                fragments.append(("[SetCursorPosition]", ""))
+            fragments.append(
+                (
+                    "class:viewer-section" if active else "class:section",
+                    f" {safe_terminal_text(title)}\n",
+                )
+            )
             fragments.append(("", "\n"))
+            section_index += 1
+            continue
+
+        body_lines = list(lines[start + 1 : end])
+        while body_lines and not body_lines[0].strip():
+            body_lines.pop(0)
+        while body_lines and not body_lines[-1].strip():
+            body_lines.pop()
+
+        badge = ""
+        if key.startswith("ITEM:"):
+            item_index = int(key.split(":", 1)[1])
+            # The Compare paragraph is itself the conflict body; using it as
+            # a card title would truncate the evidence-rich one-paragraph
+            # summary that the report is meant to preserve.
+            body_lines.insert(0, title.split(".", 1)[-1].lstrip())
+            title = f"POTENTIAL CONFLICT {item_index + 1}"
+            if item_index < len(view.items):
+                item = view.items[item_index]
+                option_uid, comment = draft_values.get(
+                    item.uid,
+                    (item.selected_option_uid, ""),
+                )
+                if option_uid is not None:
+                    badge = f"SELECTED · {item.option(option_uid).label}"
+                elif comment.strip():
+                    badge = "OTHER DIRECTION · STAGED"
+        elif key == "RESOLVE_ALL" and strategies:
+            policy_index = max(0, min(selected_strategy_index, len(strategies) - 1))
+            badge = f"POLICY · {strategies[policy_index].label}"
+        if badge:
+            # Keep the blue review state directly below the card title so a
+            # long conflict paragraph cannot push the chosen reading offscreen.
+            body_lines = [badge, "", *body_lines]
+
+        active = section_index == focused_section
+        card_lines = _boxed_lines(title, "\n".join(body_lines))
+        if active:
+            fragments.append(("[SetCursorPosition]", ""))
+        badge_line_count = len(_visual_wrap(badge, 68)) if badge else 0
+        for card_line_index, card_line in enumerate(card_lines):
+            style = "class:detail-card.focused" if active else "class:detail-card"
+            if badge and 1 <= card_line_index <= badge_line_count:
+                style = "class:selection-badge"
+            fragments.append((style, f" {safe_terminal_text(card_line)}\n"))
+        if section_index < len(sections) - 1:
+            fragments.append(("", "\n"))
+        section_index += 1
     return fragments
 
 
@@ -635,6 +869,8 @@ def resolution_review_fragments(
     fragments: list[tuple[str, str]] = []
     answered = 0
     response_lines: list[str] = []
+    unresolved_counts: dict[str, int] = {}
+    unresolved_required: list[str] = []
     for index, item in enumerate(view.items, start=1):
         option_uid, comment = drafts.get(
             item.uid,
@@ -649,13 +885,37 @@ def resolution_review_fragments(
             answered += 1
         else:
             answer = "UNRESOLVED"
+        if answer == "UNRESOLVED":
+            unresolved_counts[item.priority] = (
+                unresolved_counts.get(item.priority, 0) + 1
+            )
+            if item.priority == "REQUIRED":
+                unresolved_required.append(item.title)
+            continue
         response_lines.extend([f"{index}. {item.title}", f"   {answer}"])
+
+    if not response_lines:
+        response_lines.append("No staged issue responses yet.")
+    remaining_summary = (
+        " · ".join(
+            f"{priority} {count}"
+            for priority, count in (
+                ("REQUIRED", unresolved_counts.get("REQUIRED", 0)),
+                ("HELPFUL", unresolved_counts.get("HELPFUL", 0)),
+            )
+            if count
+        )
+        or "NONE"
+    )
+    response_lines.append(f"REMAINING · {remaining_summary}")
+    if unresolved_required:
+        response_lines.append("REQUIRED NEXT · " + "; ".join(unresolved_required))
 
     if focused_section == 0:
         fragments.append(("[SetCursorPosition]", ""))
     for line in _boxed_lines(
         f"REVIEW & APPLY MELD · {answered}/{len(view.items)} RESOLVED",
-        "\n".join(response_lines).rstrip() or "No conflict responses are required.",
+        "\n".join(response_lines).rstrip(),
     ):
         fragments.append(("class:detail-card.focused", f" {line}\n"))
     fragments.append(("", "\n"))
@@ -666,7 +926,7 @@ def resolution_review_fragments(
         marker = "›" if selected else " "
         policy_lines.append(f"{marker} {index + 1}. {policy.label}")
     policy_box = _boxed_lines(
-        "UNRESOLVED CONFLICTS",
+        "REMAINING-ITEM POLICY",
         "\n".join(policy_lines) or "No unresolved-conflict policies are available.",
     )
     for index, line in enumerate(policy_box):
@@ -679,7 +939,7 @@ def resolution_review_fragments(
         "This Meld is ready. Press A to apply the reviewed target changes."
         if view.accept_enabled
         else (
-            "Press Enter to resolve the staged choices and unresolved policy. "
+            "Press Enter to resolve the staged choices and remaining-item policy. "
             "Mem will show the resulting target Memories for final application."
         )
     )
@@ -709,6 +969,8 @@ def run_resolution_workbench_shell(
     split_viewer_items: bool = False,
     global_strategies: tuple[ResolutionGlobalStrategy, ...] = (),
     split_report_text: str | None = None,
+    split_report_item_badges: tuple[str, ...] = (),
+    split_report_conflicts_remaining: int | None = None,
     review_and_apply: bool = False,
     read_only: bool = False,
 ) -> ResolutionWorkbenchAction:
@@ -751,6 +1013,10 @@ def run_resolution_workbench_shell(
                     active_view,
                     split_report_text,
                     strategies=global_strategies,
+                    drafts=local_drafts,
+                    report_item_badges=split_report_item_badges,
+                    report_conflicts_remaining=split_report_conflicts_remaining,
+                    selected_strategy_index=strategy["index"],
                     focused_section=viewer_section["index"],
                     review_and_apply=review_and_apply,
                     read_only=read_only,
@@ -822,16 +1088,28 @@ def run_resolution_workbench_shell(
                 ),
             )
             + tuple(("CONFLICT", item.title) for item in active_view.items)
-            + (() if read_only else (
-                (
+            + (
+                ()
+                if read_only
+                else (
                     (
-                        "REVIEW & APPLY",
-                        "Review choices and complete Meld",
-                    )
-                    if review_and_apply
-                    else ("RESOLVE ALL", "Whole-set resolution strategy")
-                ),
-            ))
+                        (
+                            (
+                                "REVIEW & APPLY"
+                                if active_view.accept_enabled
+                                else "MATERIALIZE"
+                            ),
+                            (
+                                "Apply the exact reviewed proposal"
+                                if active_view.accept_enabled
+                                else "Materialize choices shown in Report"
+                            ),
+                        )
+                        if review_and_apply
+                        else ("RESOLVE ALL", "Whole-set resolution strategy")
+                    ),
+                )
+            )
         )
         for index, (kind, label) in enumerate(rows):
             selected = index == split_row["index"]
@@ -940,9 +1218,7 @@ def run_resolution_workbench_shell(
                         last_section = len(sections) - 1
                     else:
                         sections = ()
-                        last_section = len(active_view.items) + (
-                            2 if read_only else 3
-                        )
+                        last_section = len(active_view.items) + (2 if read_only else 3)
                     viewer_section["index"] = max(
                         0,
                         min(viewer_section["index"] + delta, last_section),
@@ -1080,12 +1356,33 @@ def run_resolution_workbench_shell(
         move(-1)
         event.app.invalidate()
 
+    @bindings.add("pagedown", filter=~has_focus(input_area))
+    def _page_down(event) -> None:
+        # Once results are independent sections, a page step advances several
+        # short result blocks instead of trying to display one 234-result
+        # monolith. Down still advances one block at a time.
+        move(8)
+        event.app.invalidate()
+
+    @bindings.add("pageup", filter=~has_focus(input_area))
+    def _page_up(event) -> None:
+        move(-8)
+        event.app.invalidate()
+
+    @bindings.add("end", filter=~has_focus(input_area))
+    def _end(event) -> None:
+        move(1_000_000)
+        event.app.invalidate()
+
+    @bindings.add("home", filter=~has_focus(input_area))
+    def _home(event) -> None:
+        move(-1_000_000)
+        event.app.invalidate()
+
     @bindings.add("right", filter=~has_focus(input_area))
     def _right(event) -> None:
         if split_viewer_items:
             if split_kind() == "RESOLVE_ALL" and global_strategies:
-                if review_and_apply and viewer_content["kind"] == "REVIEW":
-                    viewer_section["index"] = 1
                 strategy["index"] = min(
                     strategy["index"] + 1,
                     len(global_strategies) - 1,
@@ -1103,8 +1400,6 @@ def run_resolution_workbench_shell(
     def _left(event) -> None:
         if split_viewer_items:
             if split_kind() == "RESOLVE_ALL" and global_strategies:
-                if review_and_apply and viewer_content["kind"] == "REVIEW":
-                    viewer_section["index"] = 1
                 strategy["index"] = max(strategy["index"] - 1, 0)
             elif split_kind() == "ITEM":
                 move_split_option(-1)
@@ -1162,17 +1457,18 @@ def run_resolution_workbench_shell(
                         set_status(f"Selected · {selected_option.label}")
             elif not global_strategies:
                 set_status("No whole-set strategies are available.")
-            elif review_and_apply and viewer_content["kind"] != "REVIEW":
-                save_draft()
-                viewer_content["kind"] = "REVIEW"
-                viewer_section["index"] = 0
-                pane_focus["value"] = "viewer"
-                event.app.layout.focus(body_control)
-                set_status("")
             elif review_and_apply:
+                save_draft()
+                if active_view.accept_enabled:
+                    action = semantic_action("ACCEPT")
+                    if action is not None:
+                        event.app.exit(result=action)
+                    event.app.invalidate()
+                    return
                 selected_strategy = global_strategies[strategy["index"]]
-                lines = ["Use these reviewed conflict resolutions:"]
-                unresolved: list[str] = []
+                lines = ["Use these reviewed issue resolutions:"]
+                unresolved_counts: dict[str, int] = {}
+                unresolved_required: list[str] = []
                 for item in active_view.items:
                     option_uid, comment = local_drafts.get(
                         item.uid,
@@ -1189,13 +1485,29 @@ def run_resolution_workbench_shell(
                             f"- {item.title}: Other direction: {comment.strip()}"
                         )
                     else:
-                        unresolved.append(item.title)
-                if unresolved:
+                        unresolved_counts[item.priority] = (
+                            unresolved_counts.get(item.priority, 0) + 1
+                        )
+                        if item.priority == "REQUIRED":
+                            unresolved_required.append(item.title)
+                if unresolved_counts:
+                    counts = ", ".join(
+                        f"{priority} {count}"
+                        for priority, count in (
+                            ("REQUIRED", unresolved_counts.get("REQUIRED", 0)),
+                            ("HELPFUL", unresolved_counts.get("HELPFUL", 0)),
+                        )
+                        if count
+                    )
                     lines.append(
-                        "For unresolved conflicts ("
-                        + "; ".join(unresolved)
+                        "For remaining items ("
+                        + counts
                         + "), apply this policy: "
                         + selected_strategy.comment
+                    )
+                if unresolved_required:
+                    lines.append(
+                        "Still-required issue titles: " + "; ".join(unresolved_required)
                     )
                 action = semantic_action("SUBMIT_ALL", comment="\n".join(lines))
                 if action is not None:
@@ -1454,14 +1766,20 @@ def run_resolution_workbench_shell(
         item = current_navigation.current_item(active_view)
         if split_viewer_items and split_kind() == "REPORT":
             navigation_help = (
-                " ↑/↓ section/item  Tab switch  Enter inspect  Esc close "
+                " ↑/↓ block  PgUp/PgDn page  End last  Tab switch  "
+                "Enter inspect  Esc close "
                 if read_only
-                else " ↑/↓ section/item  Tab switch  Enter open  Esc/Q close "
+                else " ↑/↓ block  PgUp/PgDn page  End last  Tab switch  "
+                "Enter open  Esc/Q close "
             )
         elif split_viewer_items and split_kind() == "RESOLVE_ALL":
             navigation_help = (
-                " ↑/↓ review section  Tab switch  ←/→ unresolved policy  "
-                "Enter continue  Esc report "
+                (
+                    " ↑/↓ section/item  Tab switch  Enter apply  Esc report "
+                    if active_view.accept_enabled
+                    else " ↑/↓ section/item  Tab switch  ←/→ policy  "
+                    "Enter materialize  Esc report "
+                )
                 if review_and_apply
                 else " ↑/↓ section/item  Tab switch  ←/→ strategy  "
                 "Enter open/run  C custom  Esc report "
@@ -1570,6 +1888,7 @@ def run_resolution_workbench_shell(
                             "option-card.focused": "fg:#8bd5ff bold",
                             "option-card.selected": "fg:#a6da95 bold",
                             "option-card.other": "fg:#c6a0f6 bold",
+                            "selection-badge": "fg:#8bd5ff bold",
                         }
                     ),
                 ]

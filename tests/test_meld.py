@@ -35,22 +35,32 @@ from memcommit.comparison_store import (
     save_comparison_analysis,
 )
 from memcommit.context import Context, Memory, MemoryRef
+from memcommit.commands.compare import render_comparison
 from memcommit.commands.meld import render_meld_session
 from memcommit.commands.meld_shell import (
+    _comparison_issue_resolution_badges,
     _line,
     _screen_text,
     run_meld_shell,
+)
+from memcommit.commands.resolution_workbench_shell import (
+    ResolutionGlobalStrategy,
+    _seeded_report_lines,
+    _seeded_report_sections,
+    resolution_seeded_report_fragments,
 )
 from memcommit.meld import (
     MeldError,
     MeldSession,
     meld_canonical_digest,
+    meld_accounting,
 )
 from memcommit.meld_provider import (
     MELD_PAYLOAD_MARKER,
     assess_meld_turn,
     meld_output_schema,
 )
+from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.provenance import build_trace
 from memcommit.store import (
     ConcurrentContextUpdateError,
@@ -280,6 +290,61 @@ class Task2CompareProvider:
                                     "as separately scoped rules."
                                 ),
                             },
+                        ],
+                    }
+                ],
+            }
+        )
+
+
+class PriorityCompareProvider:
+    """One REQUIRED conflict followed by one HELPFUL materialization choice."""
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "compare_contexts"
+        payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+        left = payload["frames"][0]["memories"]
+        right = payload["frames"][1]["memories"]
+        return json.dumps(
+            {
+                "overview": "One decision conflicts and one pair can coexist.",
+                "reports": {
+                    "both": "Both sources contain writing guidance.",
+                    "differences": "One pair conflicts while one can coexist.",
+                    "reference_only": "",
+                    "compared_only": "",
+                },
+                "relations": [
+                    {
+                        "relation_key": "conflict",
+                        "reference_memory_ids": [left[0]["memory_id"]],
+                        "compared_memory_ids": [right[0]["memory_id"]],
+                        "kind": "CONFLICT",
+                        "status": "UNRESOLVED",
+                        "summary": "The directives conflict.",
+                        "reason": "Both cannot govern the same sentence.",
+                    },
+                    {
+                        "relation_key": "compatible",
+                        "reference_memory_ids": [left[1]["memory_id"]],
+                        "compared_memory_ids": [right[1]["memory_id"]],
+                        "kind": "COMPATIBLE",
+                        "status": "RESOLVED",
+                        "summary": "The guidance can coexist.",
+                        "reason": "Each source addresses a separate detail.",
+                    },
+                ],
+                "issues": [
+                    {
+                        "issue_key": "conflict_issue",
+                        "relation_keys": ["conflict"],
+                        "priority": "REQUIRED",
+                        "title": "Choose the governing directive",
+                        "question": "Which directive should govern?",
+                        "why_it_matters": "The target cannot apply both.",
+                        "options": [
+                            {"label": "Reference", "text": "Use reference."},
+                            {"label": "Compared", "text": "Use compared."},
                         ],
                     }
                 ],
@@ -524,6 +589,222 @@ def _zero_change_directional_contexts(store: MemoryStore):
     return incoming, baseline, memory
 
 
+def test_compare_seed_adds_stable_helpful_materialization_after_required():
+    left = ops.init("left/priorities")
+    ops.add(left, "Use the short opening.")
+    ops.add(left, "Show the workflow as a diagram.")
+    right = ops.init("right/priorities")
+    ops.add(right, "Use the long opening.")
+    ops.add(right, "List the workflow steps in order.")
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        PriorityCompareProvider(),
+    )
+
+    first = MeldSession.create_symmetric_from_comparison(
+        comparison,
+        ops.init("target/priorities-one"),
+    )
+    second = MeldSession.create_symmetric_from_comparison(
+        comparison,
+        ops.init("target/priorities-two"),
+    )
+
+    issues = first.current_assessment.issues
+    assert [issue.priority for issue in issues] == ["REQUIRED", "HELPFUL"]
+    assert issues[0].uid == comparison.issues[0].uid
+    assert issues[1].relation_uids == (comparison.relations[1].uid,)
+    assert [option.label for option in issues[1].options] == [
+        "Keep separately",
+        "Combine if lossless",
+    ]
+    assert issues[1].uid == second.current_assessment.issues[1].uid
+    assert meld_accounting(first).required_issues == 1
+    assert meld_accounting(first).helpful_issues == 1
+    assert "[HELPFUL] Compatible · The guidance can coexist." in (
+        render_meld_session(first)
+    )
+
+    legacy_value = first.to_dict()
+    legacy_value["schema_version"] = 2
+    legacy_value["turns"][0]["assessment"]["issues"] = [
+        issue.to_dict() for issue in comparison.issues
+    ]
+    restored_legacy = MeldSession.from_dict(legacy_value)
+    assert restored_legacy.schema_version == 2
+    assert [issue.uid for issue in restored_legacy.current_assessment.issues] == [
+        issue.uid for issue in comparison.issues
+    ]
+
+
+def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
+    left = ops.init("left/report-cards")
+    ops.add(left, "Use the short opening.")
+    right = ops.init("right/report-cards")
+    ops.add(right, "Use the long opening.")
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(
+        comparison,
+        ops.init("target/report-cards"),
+    )
+    view = MeldResolutionWorkbenchAdapter(session).view()
+    item = view.items[0]
+    report = render_comparison(
+        comparison,
+        reused=True,
+        durable=True,
+    ).partition("\nThe complete source-linked relation ledger")[0]
+
+    fragments = resolution_seeded_report_fragments(
+        view,
+        report,
+        strategies=(
+            ResolutionGlobalStrategy(
+                label="Preserve remaining helpful items",
+                action_kind="SUBMIT_ALL",
+                comment="Preserve the remaining helpful items.",
+            ),
+        ),
+        drafts={item.uid: (item.options[0].uid, "")},
+        focused_section=2,
+        review_and_apply=True,
+    )
+    rendered = "".join(text for _style, text in fragments)
+
+    assert "╭─ MEM COMPARE · SYMMETRIC PEERS" in rendered
+    assert "╭─ WHAT MEM UNDERSTOOD" in rendered
+    assert "╭─ POTENTIAL CONFLICTS · 1 → 1" in rendered
+    assert "│   CONFLICT 1" in rendered
+    assert "│ ╭─ CONFLICT 1" not in rendered
+    assert "SELECTED · Keep all supported options" in rendered
+    assert "POLICY · Preserve remaining helpful items" in rendered
+    assert any(
+        style == "class:selection-badge" and "SELECTED ·" in text
+        for style, text in fragments
+    )
+
+    resolved_fragments = resolution_seeded_report_fragments(
+        view,
+        report,
+        report_item_badges=(
+            "KEPT BOTH · Keep all supported options + Preserve scoped alternatives",
+        ),
+        report_conflicts_remaining=0,
+        review_and_apply=True,
+    )
+    resolved = "".join(text for _style, text in resolved_fragments)
+    assert "POTENTIAL CONFLICTS · 1 → 0" in resolved
+    assert "KEPT BOTH · Keep all supported options + Preserve scoped" in resolved
+    assert "alternatives" in resolved
+    assert any(
+        style == "class:selection-badge" and "KEPT BOTH ·" in text
+        for style, text in resolved_fragments
+    )
+
+
+def test_resolution_badges_show_direct_and_synthesized_content():
+    def ready_session(comment: str) -> MeldSession:
+        left = ops.init(f"left/badge-{len(comment)}")
+        ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+        right = ops.init(f"right/badge-{len(comment)}")
+        ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+        comparison = analyze_comparison(
+            ComparisonInput.from_contexts(left, right),
+            Task2CompareProvider(),
+        )
+        session = MeldSession.create_symmetric_from_comparison(
+            comparison,
+            ops.init(f"target/badge-{len(comment)}"),
+        )
+        issue_uid = session.current_assessment.issues[0].uid
+        turn = session.start_turn(
+            comment,
+            scope="ISSUE",
+            issue_uids=(issue_uid,),
+        )
+        session.record_assessment(
+            turn.uid,
+            assess_meld_turn(session, Task2Provider()),
+        )
+        return session
+
+    direct = ready_session(
+        "Keep all supported details while maintaining the original word count."
+    )
+    assert _comparison_issue_resolution_badges(direct) == (
+        "OTHER DIRECTION · Keep all supported details while maintaining the original word count.",
+    )
+
+    synthesized = ready_session("Keep all supported details.")
+    synthesized.turns = synthesized.turns[:-1] + (
+        replace(synthesized.turns[-1], issue_uids=()),
+    )
+    assert _comparison_issue_resolution_badges(synthesized) == (
+        "COMBINED · Participant compensation may be paid in cash, by e-transfer, or with an…",
+    )
+
+
+def test_v3_rejects_cross_relation_thematic_compression():
+    left = ops.init("left/no-compression")
+    ops.add(left, "Use the short opening.")
+    ops.add(left, "Show the workflow as a diagram.")
+    right = ops.init("right/no-compression")
+    ops.add(right, "Use the long opening.")
+    ops.add(right, "List the workflow steps in order.")
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        PriorityCompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(
+        comparison,
+        ops.init("target/no-compression"),
+    )
+    session.start_turn(
+        "Use one broad result for all writing guidance.",
+        scope="ALL",
+    )
+
+    class CompressedProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            relations = payload["previous"]["relations"]
+            source_ids = [
+                memory["memory_id"]
+                for frame in payload["frames"]
+                for memory in frame["memories"]
+            ]
+            return json.dumps(
+                {
+                    "overview": "All guidance is compressed into one result.",
+                    "relations": [
+                        {**relation, "status": "RESOLVED"} for relation in relations
+                    ],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": "compressed",
+                            "disposition": "SYNTHESIZE",
+                            "content": "Use concise text and a clear workflow.",
+                            "reason": "The themes concern proposal writing.",
+                            "relation_keys": [
+                                relation["relation_key"] for relation in relations
+                            ],
+                            "source_memory_ids": source_ids,
+                            "grounded_turn_ids": [payload["current_turn"]["turn_id"]],
+                        }
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    assessment = assess_meld_turn(session, CompressedProvider())
+    with pytest.raises(MeldError, match="exactly one primary relation"):
+        session.record_assessment(session.current_turn.uid, assessment)
+
+
 def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     isolated_store,
     monkeypatch,
@@ -599,6 +880,21 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     assert "e-transfer" in grounded.output
     assert "gift card" in grounded.output
     assert store._context_file(target.name).read_bytes() == target_before
+    ready_session = store.load_meld_session(target.uid)
+    assert _comparison_issue_resolution_badges(ready_session) == (
+        "CHOSEN · Keep all supported options",
+    )
+    ready_view = MeldResolutionWorkbenchAdapter(ready_session).view()
+    ready_report = render_comparison(
+        comparison,
+        reused=True,
+        durable=True,
+    ).partition("\nThe complete source-linked relation ledger")[0]
+    ready_sections = _seeded_report_sections(
+        _seeded_report_lines(ready_view, ready_report, (), True, False)
+    )
+    assert sum(key.startswith("RESULT:") for _offset, key in ready_sections) == 2
+    assert ready_sections[-1][1] == "RESOLVE_ALL"
 
     applied = runner.invoke(
         app,
@@ -733,7 +1029,7 @@ def test_seeded_meld_schema_round_trips_and_rejects_tampering(
     value = session.to_dict()
     restored = MeldSession.from_dict(value)
 
-    assert value["schema_version"] == 2
+    assert value["schema_version"] == 3
     assert restored.to_dict() == value
     legacy = MeldSession.create_symmetric(left, right, target).to_dict()
     assert legacy["schema_version"] == 1
@@ -1306,7 +1602,7 @@ def test_revision_flags_require_a_semantic_comment_or_choice(
     assert "require a comment or choice" in result.output
 
 
-def test_preserve_all_is_one_semantic_round_and_remains_non_applying(
+def test_v3_preserve_all_materializes_provider_free_and_remains_non_applying(
     isolated_store,
     monkeypatch,
 ):
@@ -1394,10 +1690,11 @@ def test_preserve_all_is_one_semantic_round_and_remains_non_applying(
     )
 
     assert result.exit_code == 0, result.output
-    assert len(provider.payloads) == 1
-    assert provider.payloads[-1]["current_turn"]["scope"] == "REMAINING"
+    assert len(provider.payloads) == 0
     assert "READY_TO_APPLY" in result.output
     assert result.output.count("[PRESERVE]") == 2
+    assert "Source coverage: 2/2" in result.output
+    assert "Cross-relation results: 0" in result.output
     assert store._context_file(target.name).read_bytes() == before
 
 
@@ -2113,6 +2410,46 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     assert comparison.issues[0].title in action.comment
 
 
+def test_ready_meld_applies_from_report_without_separate_review_screen():
+    left = ops.init("left/report-apply")
+    ops.add(left, "Cash compensation includes travel time.")
+    right = ops.init("right/report-apply")
+    ops.add(right, "Use e-transfer or a gift card.")
+    target = ops.init("target/report-apply")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    provider = Task2Provider()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, provider),
+    )
+    issue_uid = session.current_assessment.issues[0].uid
+    session.start_turn(
+        "Keep all supported details.",
+        scope="ISSUE",
+        issue_uids=(issue_uid,),
+    )
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, provider),
+    )
+    assert session.state == "READY_TO_APPLY"
+
+    with create_pipe_input() as pipe_input:
+        # REPORT -> REVIEW & APPLY; Enter returns ACCEPT directly instead of
+        # replacing the Viewer with a separate review surface.
+        pipe_input.send_text("\x1b[B\r")
+        action = run_meld_shell(
+            session,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action is not None
+    assert action.kind == "ACCEPT"
+
+
 def test_meld_framed_composer_matches_ground_send_and_newline_contract():
     left = ops.init("left/dialogue-input")
     ops.add(left, "Cash compensation includes travel time.")
@@ -2249,7 +2586,7 @@ def test_meld_resolve_all_can_choose_broadest_scope_without_applying():
     with create_pipe_input() as pipe_input:
         # REPORT -> every conflict -> RESOLVE ALL; Right moves from preserve
         # all to the broadest-applicable whole-set strategy.
-        pipe_input.send_text("\x1b[B" * (issue_count + 1) + "\r\x1b[C\r")
+        pipe_input.send_text("\x1b[B" * (issue_count + 1) + "\x1b[C" * 3 + "\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,

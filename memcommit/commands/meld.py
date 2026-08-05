@@ -32,9 +32,12 @@ from memcommit.granted_comparison_store import (
     recursive_comparison_projection,
 )
 from memcommit.meld import (
+    MELD_SCHEMA_VERSION,
     MeldError,
     MeldIssue,
     MeldSession,
+    materialize_preservation_assessment,
+    meld_accounting,
     meld_canonical_digest,
 )
 from memcommit.meld_provider import (
@@ -226,10 +229,14 @@ def _issue_selector(
     assessment = session.current_assessment
     if assessment is None:
         raise MeldCommandError("The meld has no assessed issues.")
+    ordered_issues = sorted(
+        assessment.issues,
+        key=lambda item: 0 if item.priority == "REQUIRED" else 1,
+    )
     if selector.isdigit():
         index = int(selector)
-        if 1 <= index <= len(assessment.issues):
-            return assessment.issues[index - 1]
+        if 1 <= index <= len(ordered_issues):
+            return ordered_issues[index - 1]
     matches = [issue for issue in assessment.issues if issue.uid.startswith(selector)]
     if len(matches) == 1:
         return matches[0]
@@ -255,6 +262,7 @@ def render_meld_session(
     if assessment is None:
         lines.extend(["", "Analysis is pending."])
         return "\n".join(lines)
+    accounting = meld_accounting(session)
     lines.extend(
         [
             "",
@@ -266,6 +274,28 @@ def render_meld_session(
                 f"ISSUES · {len(assessment.issues)}  "
                 f"RESULTS · {len(assessment.proposals)}"
             ),
+            "",
+            "ACCOUNTING",
+            (
+                f"  Source coverage: {accounting.represented_sources}/"
+                f"{accounting.source_memories}"
+            ),
+            (
+                f"  Relation coverage: {accounting.represented_relations}/"
+                f"{accounting.primary_relations}"
+            ),
+            (
+                f"  Final Memories: {accounting.final_memories} · "
+                f"PRESERVE {accounting.preserve_results} · "
+                f"COALESCE {accounting.coalesce_results} · "
+                f"SYNTHESIZE {accounting.synthesize_results} · "
+                f"USER_ADD {accounting.user_add_results}"
+            ),
+            (
+                f"  Open issues: REQUIRED {accounting.required_issues} · "
+                f"HELPFUL {accounting.helpful_issues}"
+            ),
+            f"  Cross-relation results: {accounting.cross_relation_results}",
         ]
     )
     for index, relation in enumerate(assessment.relations, start=1):
@@ -287,11 +317,19 @@ def render_meld_session(
     }
     if not assessment.issues:
         lines.append("  (none)")
-    for index, issue in enumerate(assessment.issues, start=1):
+    ordered_issues = sorted(
+        assessment.issues,
+        key=lambda item: 0 if item.priority == "REQUIRED" else 1,
+    )
+    for index, issue in enumerate(ordered_issues, start=1):
         expanded = issue.uid == expanded_issue_uid
         pointer = "▾" if expanded else "›"
+        issue_title = issue.title
+        if issue.priority == "HELPFUL" and len(issue.relation_uids) == 1:
+            relation = relation_by_uid[issue.relation_uids[0]]
+            issue_title = f"{relation.kind.title()} · {relation.summary}"
         lines.append(
-            f"{pointer} {index:>2}. [{issue.priority}] {_single_line(issue.title)}"
+            f"{pointer} {index:>2}. [{issue.priority}] {_single_line(issue_title)}"
         )
         lines.append(f"      WHY · {_single_line(issue.why_it_matters)}")
         for option_index, option in enumerate(issue.options, start=1):
@@ -541,6 +579,27 @@ def _assess_and_save(
     assessment = assess_meld_turn(session, provider)
     # Provider latency creates a real race window. Rebind every source and the
     # target after the call before persisting a claim about them.
+    left, right, target = _load_bound_contexts(store, session)
+    _assert_source_bindings(session, left, right)
+    _assert_unapplied_target(session, target)
+    current = session.current_turn
+    assert current is not None
+    session.record_assessment(current.uid, assessment)
+    store.save_meld_session(
+        session,
+        expected_session_digest=expected_session_digest,
+    )
+    return session
+
+
+def _materialize_preservation_and_save(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    expected_session_digest: str | None,
+) -> MeldSession:
+    """Materialize an exact symmetric preserve-all turn without a provider."""
+    assessment = materialize_preservation_assessment(session)
     left, right, target = _load_bound_contexts(store, session)
     _assert_source_bindings(session, left, right)
     _assert_unapplied_target(session, target)
@@ -828,6 +887,16 @@ def _run_interactive(
                 _preserve_all_guidance(session),
                 scope="REMAINING",
             )
+            if (
+                session.mode == "SYMMETRIC"
+                and session.schema_version >= MELD_SCHEMA_VERSION
+            ):
+                session = _materialize_preservation_and_save(
+                    store=store,
+                    session=session,
+                    expected_session_digest=expected,
+                )
+                continue
         elif action.kind == "COMMENT_ALL":
             session.start_turn(action.comment, scope="ALL")
         elif action.kind == "COMMENT_ISSUE":
@@ -1680,12 +1749,22 @@ def cmd(
                 _preserve_all_guidance(session),
                 scope="REMAINING",
             )
-            session = _assess_and_save(
-                store=store,
-                session=session,
-                provider_factory=connect_codex_chatgpt_provider,
-                expected_session_digest=expected_session_digest,
-            )
+            if (
+                session.mode == "SYMMETRIC"
+                and session.schema_version >= MELD_SCHEMA_VERSION
+            ):
+                session = _materialize_preservation_and_save(
+                    store=store,
+                    session=session,
+                    expected_session_digest=expected_session_digest,
+                )
+            else:
+                session = _assess_and_save(
+                    store=store,
+                    session=session,
+                    provider_factory=connect_codex_chatgpt_provider,
+                    expected_session_digest=expected_session_digest,
+                )
             typer.echo(render_meld_session(session))
             return
 

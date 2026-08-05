@@ -8,11 +8,13 @@ conversation history, acceptance, and application receipts.
 Meld is always batch-shaped.  Selecting one issue narrows the scope of a turn;
 it does not switch to a second "atomic" execution model.
 """
+
 from __future__ import annotations
 
 import hashlib
 import json
 import uuid
+from collections import Counter, defaultdict
 from dataclasses import dataclass, replace
 from typing import Iterable, Literal
 
@@ -25,7 +27,8 @@ from memcommit.context import Context, Memory
 from memcommit.store import context_record_digest
 
 
-MELD_SCHEMA_VERSION = 2
+MELD_SCHEMA_VERSION = 3
+MELD_COMPARISON_SCHEMA_VERSION = 2
 MELD_LEGACY_SCHEMA_VERSION = 1
 MELD_TEXT_LIMIT = 20_000
 MELD_NAME_LIMIT = 500
@@ -213,9 +216,7 @@ def validate_meld_turn_lineage(
     elif revision == "INITIAL":
         raise MeldError("Only the first meld turn can be INITIAL.")
     if revision in {"CORRECT", "RETRACT"} and not revises:
-        raise MeldError(
-            "CORRECT and RETRACT meld turns must identify revised turns."
-        )
+        raise MeldError("CORRECT and RETRACT meld turns must identify revised turns.")
     if len(revises) != len(set(revises)) or not set(revises) <= known:
         raise MeldError("A meld turn revises an unknown or future turn.")
 
@@ -264,9 +265,10 @@ class MeldMemory:
                 "meld Memory content digest",
             ),
         )
-        if result.content_digest != hashlib.sha256(
-            result.content.encode("utf-8")
-        ).hexdigest():
+        if (
+            result.content_digest
+            != hashlib.sha256(result.content.encode("utf-8")).hexdigest()
+        ):
             raise MeldError("Meld Memory content digest does not match.")
         return result
 
@@ -290,9 +292,7 @@ class MeldFrame:
         if not isinstance(ctx, Context):
             raise MeldError("Meld source must be a Context.")
         non_memories = [
-            uid
-            for uid, item in ctx.iter_entries()
-            if not isinstance(item, Memory)
+            uid for uid, item in ctx.iter_entries() if not isinstance(item, Memory)
         ]
         if non_memories:
             raise MeldError(
@@ -307,9 +307,7 @@ class MeldFrame:
             if isinstance(item, Memory)
         )
         if not memories:
-            raise MeldError(
-                f"Source Context '{ctx.name}' has no direct Memories."
-            )
+            raise MeldError(f"Source Context '{ctx.name}' has no direct Memories.")
         return cls.from_dict(
             {
                 "uid": str(uuid.uuid4()),
@@ -352,8 +350,7 @@ class MeldFrame:
         if (
             not memories
             or len({memory.uid for memory in memories}) != len(memories)
-            or [memory.position for memory in memories]
-            != list(range(len(memories)))
+            or [memory.position for memory in memories] != list(range(len(memories)))
         ):
             raise MeldError("Invalid meld frame Memory order.")
         return cls(
@@ -626,9 +623,7 @@ class MeldProposal:
             "content": self.content,
             "reason": self.reason,
             "relation_uids": list(self.relation_uids),
-            "source_members": [
-                member.to_dict() for member in self.source_members
-            ],
+            "source_members": [member.to_dict() for member in self.source_members],
             "grounded_by_turn_uids": list(self.grounded_by_turn_uids),
         }
 
@@ -710,13 +705,9 @@ class MeldAssessment:
     def to_dict(self) -> dict[str, object]:
         return {
             "overview": self.overview,
-            "relations": [
-                relation.to_dict() for relation in self.relations
-            ],
+            "relations": [relation.to_dict() for relation in self.relations],
             "issues": [issue.to_dict() for issue in self.issues],
-            "proposals": [
-                proposal.to_dict() for proposal in self.proposals
-            ],
+            "proposals": [proposal.to_dict() for proposal in self.proposals],
             "ready_to_apply": self.ready_to_apply,
         }
 
@@ -738,8 +729,7 @@ class MeldAssessment:
             for item in _array(data["relations"], "meld relations")
         )
         issues = tuple(
-            MeldIssue.from_dict(item)
-            for item in _array(data["issues"], "meld issues")
+            MeldIssue.from_dict(item) for item in _array(data["issues"], "meld issues")
         )
         proposals = tuple(
             MeldProposal.from_dict(item)
@@ -758,21 +748,15 @@ class MeldAssessment:
         if any(
             not set(issue.relation_uids) <= relation_uids for issue in issues
         ) or any(
-            not set(proposal.relation_uids) <= relation_uids
-            for proposal in proposals
+            not set(proposal.relation_uids) <= relation_uids for proposal in proposals
         ):
-            raise MeldError(
-                "Meld issue or proposal references an unknown relation."
-            )
+            raise MeldError("Meld issue or proposal references an unknown relation.")
         if data["ready_to_apply"] and (
             any(issue.priority == "REQUIRED" for issue in issues)
-            or any(
-                relation.status == "UNRESOLVED" for relation in relations
-            )
+            or any(relation.status == "UNRESOLVED" for relation in relations)
         ):
             raise MeldError(
-                "A ready meld assessment cannot retain required or unresolved "
-                "work."
+                "A ready meld assessment cannot retain required or unresolved work."
             )
         return cls(
             overview=_string(data["overview"], "meld assessment overview"),
@@ -804,9 +788,7 @@ class MeldTurn:
             "comment": self.comment,
             "revises_turn_uids": list(self.revises_turn_uids),
             "assessment": (
-                self.assessment.to_dict()
-                if self.assessment is not None
-                else None
+                self.assessment.to_dict() if self.assessment is not None else None
             ),
         }
 
@@ -858,9 +840,7 @@ class MeldTurn:
                 uuids=True,
             ),
             assessment=(
-                None
-                if assessment is None
-                else MeldAssessment.from_dict(assessment)
+                None if assessment is None else MeldAssessment.from_dict(assessment)
             ),
         )
 
@@ -907,9 +887,7 @@ class MeldChangeSet:
                 {"turn_uid": turn_uid, "digest": digest}
                 for turn_uid, digest in self.turn_digests
             ],
-            "proposals": [
-                proposal.to_dict() for proposal in self.proposals
-            ],
+            "proposals": [proposal.to_dict() for proposal in self.proposals],
         }
 
     @classmethod
@@ -940,9 +918,7 @@ class MeldChangeSet:
             "turn_digests": [
                 {
                     "turn_uid": turn.uid,
-                    "digest": meld_canonical_digest(
-                        meld_turn_evidence_payload(turn)
-                    ),
+                    "digest": meld_canonical_digest(meld_turn_evidence_payload(turn)),
                 }
                 for turn in turns
             ],
@@ -1036,16 +1012,12 @@ class MeldChangeSet:
             or len({uid for uid, _ in source_frame_digests})
             != len(source_frame_digests)
             or not turn_digests
-            or len({uid for uid, _ in turn_digests})
-            != len(turn_digests)
+            or len({uid for uid, _ in turn_digests}) != len(turn_digests)
             or (
                 mode == "SYMMETRIC"
                 and (
                     not proposals
-                    or any(
-                        proposal.operation != "ADD"
-                        for proposal in proposals
-                    )
+                    or any(proposal.operation != "ADD" for proposal in proposals)
                 )
             )
         ):
@@ -1073,9 +1045,7 @@ class MeldChangeSet:
             proposals=proposals,
             digest=_digest(data["digest"], "meld change-set digest"),
         )
-        frame_uids = {
-            frame_uid for frame_uid, _ in result.source_frame_digests
-        }
+        frame_uids = {frame_uid for frame_uid, _ in result.source_frame_digests}
         turn_uids = {turn_uid for turn_uid, _ in result.turn_digests}
         if (
             result.turn_uid not in turn_uids
@@ -1089,13 +1059,11 @@ class MeldChangeSet:
                 for proposal in result.proposals
             )
             or any(
-                proposal.disposition == "USER_ADD"
-                and proposal.source_members
+                proposal.disposition == "USER_ADD" and proposal.source_members
                 for proposal in result.proposals
             )
             or any(
-                proposal.disposition != "USER_ADD"
-                and not proposal.source_members
+                proposal.disposition != "USER_ADD" and not proposal.source_members
                 for proposal in result.proposals
             )
         ):
@@ -1164,14 +1132,11 @@ class MeldComparisonSeed:
         restored = ComparisonAnalysis.from_dict(analysis.to_dict())
         if restored.ruleset_version != COMPARISON_RULESET_VERSION:
             raise MeldError(
-                "Meld requires a comparison from the current relation "
-                "ruleset."
+                "Meld requires a comparison from the current relation ruleset."
             )
         return cls.from_dict(
             {
-                "analysis_digest": comparison_canonical_digest(
-                    restored.to_dict()
-                ),
+                "analysis_digest": comparison_canonical_digest(restored.to_dict()),
                 "analysis": restored.to_dict(),
             }
         )
@@ -1203,9 +1168,7 @@ class MeldComparisonSeed:
         if result.analysis_digest != comparison_canonical_digest(
             result.analysis.to_dict()
         ):
-            raise MeldError(
-                "Meld comparison seed digest does not match its analysis."
-            )
+            raise MeldError("Meld comparison seed digest does not match its analysis.")
         return result
 
 
@@ -1221,9 +1184,7 @@ def _comparison_meld_frames(
                 "context_name": frame.context_name,
                 "context_digest": frame.context_digest,
                 "role": "PEER",
-                "memories": [
-                    memory.to_dict() for memory in frame.memories
-                ],
+                "memories": [memory.to_dict() for memory in frame.memories],
             }
         )
         for frame in analysis.frames
@@ -1233,15 +1194,76 @@ def _comparison_meld_frames(
 
 def _comparison_meld_assessment(
     analysis: ComparisonAnalysis,
+    *,
+    include_materialization_review: bool = True,
 ) -> MeldAssessment:
     """Import read-only Compare semantics without inventing target results."""
+    imported_issues = [issue.to_dict() for issue in analysis.issues]
+    if include_materialization_review:
+        already_reviewed_relations = {
+            relation_uid
+            for issue in analysis.issues
+            for relation_uid in issue.relation_uids
+        }
+        for relation in analysis.relations:
+            if (
+                relation.kind not in {"COMPATIBLE", "SCOPED"}
+                or relation.uid in already_reviewed_relations
+            ):
+                continue
+            issue_uid = str(
+                uuid.uuid5(
+                    uuid.UUID(relation.uid),
+                    "memcommit.meld.materialization-review.v1",
+                )
+            )
+            scoped = relation.kind == "SCOPED"
+            imported_issues.append(
+                {
+                    "uid": issue_uid,
+                    "relation_uids": [relation.uid],
+                    "priority": "HELPFUL",
+                    "title": (
+                        "Scoped guidance materialization"
+                        if scoped
+                        else "Compatible guidance materialization"
+                    ),
+                    "question": (
+                        "Should these source Memories remain separately editable, "
+                        "or can they become one independently revisable Memory "
+                        "without losing any supported detail?"
+                    ),
+                    "why_it_matters": (
+                        "Keeping them separate preserves independent revision; "
+                        "combining them reduces repetition only when every scope "
+                        "and condition remains explicit."
+                    ),
+                    "options": [
+                        {
+                            "uid": str(uuid.uuid5(uuid.UUID(issue_uid), "preserve")),
+                            "label": "Keep separately",
+                            "text": (
+                                "Preserve each independently useful source Memory "
+                                "as its own target Memory."
+                            ),
+                        },
+                        {
+                            "uid": str(uuid.uuid5(uuid.UUID(issue_uid), "combine")),
+                            "label": "Combine if lossless",
+                            "text": (
+                                "Combine these members only if one atomic target "
+                                "Memory retains every supported condition, scope, "
+                                "audience, modality, rate, and exception."
+                            ),
+                        },
+                    ],
+                }
+            )
     return MeldAssessment.from_dict(
         {
             "overview": analysis.overview,
-            "relations": [
-                relation.to_dict() for relation in analysis.relations
-            ],
-            "issues": [issue.to_dict() for issue in analysis.issues],
+            "relations": [relation.to_dict() for relation in analysis.relations],
+            "issues": imported_issues,
             "proposals": [],
             # Compare has no mutation authority. Even an entirely resolved
             # ledger needs a later explicit Meld materialization turn.
@@ -1275,9 +1297,7 @@ class MeldSession:
             left.name,
             right.name,
         }:
-            raise MeldError(
-                "Symmetric meld target must differ from both sources."
-            )
+            raise MeldError("Symmetric meld target must differ from both sources.")
         session = cls(
             uid=str(uuid.uuid4()),
             mode="SYMMETRIC",
@@ -1301,9 +1321,7 @@ class MeldSession:
         if target.uid in {frame.context_uid for frame in frames} or (
             target.name in {frame.context_name for frame in frames}
         ):
-            raise MeldError(
-                "Symmetric meld target must differ from both sources."
-            )
+            raise MeldError("Symmetric meld target must differ from both sources.")
         session = cls(
             uid=str(uuid.uuid4()),
             mode="SYMMETRIC",
@@ -1327,13 +1345,9 @@ class MeldSession:
         baseline: Context,
     ) -> "MeldSession":
         """Bind one incoming Context to an authoritative mutable baseline."""
-        if (
-            incoming.uid == baseline.uid
-            or incoming.name == baseline.name
-        ):
+        if incoming.uid == baseline.uid or incoming.name == baseline.name:
             raise MeldError(
-                "Directional meld requires distinct INCOMING and BASELINE "
-                "Contexts."
+                "Directional meld requires distinct INCOMING and BASELINE Contexts."
             )
         session = cls(
             uid=str(uuid.uuid4()),
@@ -1356,12 +1370,10 @@ class MeldSession:
             "state": self.state,
             "turns": [turn.to_dict() for turn in self.turns],
             "application": (
-                self.application.to_dict()
-                if self.application is not None
-                else None
+                self.application.to_dict() if self.application is not None else None
             ),
         }
-        if self.schema_version == MELD_SCHEMA_VERSION:
+        if self.schema_version >= MELD_COMPARISON_SCHEMA_VERSION:
             result["comparison_seed"] = (
                 self.comparison_seed.to_dict()
                 if self.comparison_seed is not None
@@ -1374,11 +1386,11 @@ class MeldSession:
         if not isinstance(value, dict):
             raise MeldError("Invalid meld session.")
         schema_version = value.get("schema_version")
-        if (
-            isinstance(schema_version, bool)
-            or schema_version
-            not in {MELD_LEGACY_SCHEMA_VERSION, MELD_SCHEMA_VERSION}
-        ):
+        if isinstance(schema_version, bool) or schema_version not in {
+            MELD_LEGACY_SCHEMA_VERSION,
+            MELD_COMPARISON_SCHEMA_VERSION,
+            MELD_SCHEMA_VERSION,
+        }:
             raise MeldError("Unsupported meld session schema version.")
         keys = {
             "schema_version",
@@ -1390,7 +1402,7 @@ class MeldSession:
             "turns",
             "application",
         }
-        if schema_version == MELD_SCHEMA_VERSION:
+        if schema_version >= MELD_COMPARISON_SCHEMA_VERSION:
             keys.add("comparison_seed")
         data = _exact_dict(
             value,
@@ -1408,7 +1420,7 @@ class MeldSession:
         raw_application = data["application"]
         raw_comparison_seed = (
             data["comparison_seed"]
-            if schema_version == MELD_SCHEMA_VERSION
+            if schema_version >= MELD_COMPARISON_SCHEMA_VERSION
             else None
         )
         session = cls(
@@ -1487,9 +1499,7 @@ class MeldSession:
         if self.current_turn is None or self.current_turn.assessment is None:
             raise MeldError("The prior meld turn has not been assessed.")
         parsed_issue_uids = tuple(issue_uids)
-        current_issue_uids = {
-            issue.uid for issue in self.current_assessment.issues
-        }
+        current_issue_uids = {issue.uid for issue in self.current_assessment.issues}
         if scope == "ISSUE":
             if (
                 not parsed_issue_uids
@@ -1499,9 +1509,7 @@ class MeldSession:
                     "Issue-scoped meld turn names an unknown current issue."
                 )
         elif parsed_issue_uids:
-            raise MeldError(
-                "Only an issue-scoped meld turn may name issue uids."
-            )
+            raise MeldError("Only an issue-scoped meld turn may name issue uids.")
         turn = MeldTurn.from_dict(
             {
                 "uid": str(uuid.uuid4()),
@@ -1535,11 +1543,7 @@ class MeldSession:
             *self.turns[:-1],
             replace(self.current_turn, assessment=assessment),
         )
-        self.state = (
-            "READY_TO_APPLY"
-            if assessment.ready_to_apply
-            else "AWAITING_REPLY"
-        )
+        self.state = "READY_TO_APPLY" if assessment.ready_to_apply else "AWAITING_REPLY"
         self._validate()
 
     def prepare_changes(self) -> MeldChangeSet:
@@ -1577,9 +1581,7 @@ class MeldSession:
     ) -> None:
         change_set = self.prepare_changes()
         if change_set.digest != change_set_digest:
-            raise MeldError(
-                "Applied meld change-set digest does not match."
-            )
+            raise MeldError("Applied meld change-set digest does not match.")
         result_uids = tuple(result_memory_uids)
         if result_uids != tuple(
             proposal.memory_uid for proposal in change_set.proposals
@@ -1598,6 +1600,7 @@ class MeldSession:
     def _validate(self) -> None:
         if self.schema_version not in {
             MELD_LEGACY_SCHEMA_VERSION,
+            MELD_COMPARISON_SCHEMA_VERSION,
             MELD_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
@@ -1607,19 +1610,14 @@ class MeldSession:
                     "A legacy meld session cannot contain a comparison seed."
                 )
         elif self.comparison_seed is None:
-            raise MeldError(
-                "A current meld session requires a comparison seed."
-            )
+            raise MeldError("A current meld session requires a comparison seed.")
         if len(self.frames) != 2:
             raise MeldError("Context meld requires exactly two source frames.")
         if len({frame.uid for frame in self.frames}) != len(self.frames):
             raise MeldError("Duplicate meld frame identity.")
-        if (
-            len({frame.context_uid for frame in self.frames})
-            != len(self.frames)
-            or len({frame.context_name for frame in self.frames})
-            != len(self.frames)
-        ):
+        if len({frame.context_uid for frame in self.frames}) != len(self.frames) or len(
+            {frame.context_name for frame in self.frames}
+        ) != len(self.frames):
             raise MeldError("Duplicate meld source Context.")
         if self.mode == "SYMMETRIC":
             if self.target.context_uid in {
@@ -1627,24 +1625,16 @@ class MeldSession:
             } or self.target.context_name in {
                 frame.context_name for frame in self.frames
             }:
-                raise MeldError(
-                    "Symmetric meld target overlaps a source Context."
-                )
+                raise MeldError("Symmetric meld target overlaps a source Context.")
             if any(frame.role != "PEER" for frame in self.frames):
                 raise MeldError("Symmetric meld requires two PEER frames.")
         else:
             if self.comparison_seed is not None:
-                raise MeldError(
-                    "Directional meld cannot use a peer comparison seed."
-                )
+                raise MeldError("Directional meld cannot use a peer comparison seed.")
             incoming, baseline = self.frames
-            if (
-                incoming.role != "INCOMING"
-                or baseline.role != "BASELINE"
-            ):
+            if incoming.role != "INCOMING" or baseline.role != "BASELINE":
                 raise MeldError(
-                    "Directional meld requires ordered INCOMING and BASELINE "
-                    "frames."
+                    "Directional meld requires ordered INCOMING and BASELINE frames."
                 )
             if (
                 self.target.context_uid != baseline.context_uid
@@ -1652,8 +1642,7 @@ class MeldSession:
                 or self.target.context_digest != baseline.context_digest
             ):
                 raise MeldError(
-                    "Directional meld target must exactly match its BASELINE "
-                    "frame."
+                    "Directional meld target must exactly match its BASELINE frame."
                 )
             if (
                 self.target.context_uid == incoming.context_uid
@@ -1667,13 +1656,12 @@ class MeldSession:
             analysis = self.comparison_seed.analysis
             if analysis.ruleset_version != COMPARISON_RULESET_VERSION:
                 raise MeldError(
-                    "Meld comparison seed uses an unsupported relation "
-                    "ruleset."
+                    "Meld comparison seed uses an unsupported relation ruleset."
                 )
             expected_frames = _comparison_meld_frames(analysis)
-            if tuple(
-                frame.to_dict() for frame in self.frames
-            ) != tuple(frame.to_dict() for frame in expected_frames):
+            if tuple(frame.to_dict() for frame in self.frames) != tuple(
+                frame.to_dict() for frame in expected_frames
+            ):
                 raise MeldError(
                     "Meld source frames do not match their comparison seed."
                 )
@@ -1703,9 +1691,7 @@ class MeldSession:
             if turn.assessment is None:
                 seen_pending = True
                 if sequence != len(self.turns) - 1:
-                    raise MeldError(
-                        "Only the latest meld turn may await assessment."
-                    )
+                    raise MeldError("Only the latest meld turn may await assessment.")
             elif seen_pending:
                 raise MeldError("An assessed meld turn follows a pending turn.")
             else:
@@ -1719,18 +1705,16 @@ class MeldSession:
             and self.turns[0].assessment is not None
             and self.turns[0].assessment.to_dict()
             != _comparison_meld_assessment(
-                self.comparison_seed.analysis
+                self.comparison_seed.analysis,
+                include_materialization_review=(
+                    self.schema_version >= MELD_SCHEMA_VERSION
+                ),
             ).to_dict()
         ):
-            raise MeldError(
-                "Meld turn zero does not match its imported comparison."
-            )
+            raise MeldError("Meld turn zero does not match its imported comparison.")
 
         if not self.turns:
-            if (
-                self.state != "PENDING_ANALYSIS"
-                or self.application is not None
-            ):
+            if self.state != "PENDING_ANALYSIS" or self.application is not None:
                 raise MeldError("Invalid empty meld session state.")
             return
         latest = self.current_turn
@@ -1744,9 +1728,7 @@ class MeldSession:
             }:
                 raise MeldError("Pending meld turn has an invalid state.")
         elif self.state == "PENDING_ANALYSIS":
-            raise MeldError(
-                "An assessed meld turn cannot remain PENDING_ANALYSIS."
-            )
+            raise MeldError("An assessed meld turn cannot remain PENDING_ANALYSIS.")
         elif self.state == "READY_TO_APPLY" and not assessment.ready_to_apply:
             raise MeldError("READY meld state has a non-ready assessment.")
         elif self.state == "AWAITING_REPLY" and assessment.ready_to_apply:
@@ -1770,10 +1752,7 @@ class MeldSession:
             if (
                 self.application.change_set_digest != expected.digest
                 or self.application.result_memory_uids
-                != tuple(
-                    proposal.memory_uid
-                    for proposal in expected.proposals
-                )
+                != tuple(proposal.memory_uid for proposal in expected.proposals)
             ):
                 raise MeldError(
                     "Applied meld receipt does not match its exact proposal."
@@ -1784,24 +1763,15 @@ class MeldSession:
     def _validate_assessment(self, turn: MeldTurn) -> None:
         assessment = turn.assessment
         assert assessment is not None
-        incoming_frame = (
-            self.frames[0] if self.mode == "DIRECTIONAL" else None
-        )
-        baseline_frame = (
-            self.frames[1] if self.mode == "DIRECTIONAL" else None
-        )
+        incoming_frame = self.frames[0] if self.mode == "DIRECTIONAL" else None
+        baseline_frame = self.frames[1] if self.mode == "DIRECTIONAL" else None
         baseline_memory_by_uid = (
-            {
-                memory.uid: memory
-                for memory in baseline_frame.memories
-            }
+            {memory.uid: memory for memory in baseline_frame.memories}
             if baseline_frame is not None
             else {}
         )
         source_memory_uids = {
-            memory.uid
-            for frame in self.frames
-            for memory in frame.memories
+            memory.uid for frame in self.frames for memory in frame.memories
         }
         memory_keys = {
             (frame.uid, memory.uid)
@@ -1810,18 +1780,14 @@ class MeldSession:
         }
         relation_member_keys: list[tuple[str, str]] = []
         relation_members_by_uid: dict[str, set[tuple[str, str]]] = {}
+        relation_by_uid = {relation.uid: relation for relation in assessment.relations}
         for relation in assessment.relations:
             members = {
-                (member.frame_uid, member.memory_uid)
-                for member in relation.members
+                (member.frame_uid, member.memory_uid) for member in relation.members
             }
             if not members <= memory_keys:
-                raise MeldError(
-                    "Meld relation references an unknown source Memory."
-                )
-            member_frame_uids = {
-                member.frame_uid for member in relation.members
-            }
+                raise MeldError("Meld relation references an unknown source Memory.")
+            member_frame_uids = {member.frame_uid for member in relation.members}
             if relation.kind == "DISTINCT" and len(member_frame_uids) != 1:
                 raise MeldError(
                     "A DISTINCT meld relation must belong to one source frame."
@@ -1834,13 +1800,11 @@ class MeldSession:
             relation_members_by_uid[relation.uid] = members
         # One primary group per source prevents a hidden Cartesian pair list
         # while still allowing one-to-many and many-to-one relations.
-        if (
-            set(relation_member_keys) != memory_keys
-            or len(relation_member_keys) != len(memory_keys)
+        if set(relation_member_keys) != memory_keys or len(relation_member_keys) != len(
+            memory_keys
         ):
             raise MeldError(
-                "Every source Memory must appear in exactly one primary meld "
-                "relation."
+                "Every source Memory must appear in exactly one primary meld relation."
             )
         required_relation_uids = {
             relation_uid
@@ -1855,80 +1819,60 @@ class MeldSession:
         }
         if not unresolved_relation_uids <= required_relation_uids:
             raise MeldError(
-                "Every unresolved meld relation requires a visible REQUIRED "
-                "issue."
+                "Every unresolved meld relation requires a visible REQUIRED issue."
             )
         known_turn_uids = {
-            prior.uid
-            for prior in self.turns
-            if prior.sequence <= turn.sequence
+            prior.uid for prior in self.turns if prior.sequence <= turn.sequence
         }
         actual_user_turn_uids = {
-            prior.uid
-            for prior in self.turns
-            if 0 < prior.sequence <= turn.sequence
+            prior.uid for prior in self.turns if 0 < prior.sequence <= turn.sequence
         }
         proposed_source_keys: set[tuple[str, str]] = set()
         proposed_relation_uids: set[str] = set()
+        proposals_by_relation: dict[str, list[MeldProposal]] = defaultdict(list)
         for proposal in assessment.proposals:
             source_keys = {
                 (member.frame_uid, member.memory_uid)
                 for member in proposal.source_members
             }
             if not source_keys <= memory_keys:
-                raise MeldError(
-                    "Meld proposal cites an unknown source Memory."
-                )
+                raise MeldError("Meld proposal cites an unknown source Memory.")
             linked_keys = {
                 key
                 for relation_uid in proposal.relation_uids
                 for key in relation_members_by_uid[relation_uid]
             }
             if source_keys and not source_keys <= linked_keys:
-                raise MeldError(
-                    "Meld proposal source is outside its linked relation."
-                )
+                raise MeldError("Meld proposal source is outside its linked relation.")
             if not set(proposal.grounded_by_turn_uids) <= known_turn_uids:
-                raise MeldError(
-                    "Meld proposal cites an unknown or future user turn."
-                )
-            if (
-                proposal.disposition == "USER_ADD"
-                and (
-                    proposal.source_members
-                    or not (
-                        set(proposal.grounded_by_turn_uids)
-                        & actual_user_turn_uids
-                    )
-                )
+                raise MeldError("Meld proposal cites an unknown or future user turn.")
+            if proposal.disposition == "USER_ADD" and (
+                proposal.source_members
+                or not (set(proposal.grounded_by_turn_uids) & actual_user_turn_uids)
             ):
                 raise MeldError(
                     "A user-added meld proposal must cite a user turn and "
                     "must not claim PEER source evidence."
                 )
-            if (
-                proposal.disposition != "USER_ADD"
-                and not proposal.source_members
-            ):
+            if proposal.disposition != "USER_ADD" and not proposal.source_members:
                 raise MeldError(
-                    "A source-derived meld proposal must cite source Memory "
-                    "evidence."
+                    "A source-derived meld proposal must cite source Memory evidence."
                 )
             if proposal.disposition != "USER_ADD":
                 proposed_source_keys.update(source_keys)
                 proposed_relation_uids.update(proposal.relation_uids)
+                for relation_uid in proposal.relation_uids:
+                    proposals_by_relation[relation_uid].append(proposal)
             if self.mode == "SYMMETRIC":
                 if proposal.operation != "ADD":
                     raise MeldError(
-                        "Symmetric Context meld may only ADD to its empty "
-                        "target."
+                        "Symmetric Context meld may only ADD to its empty target."
                     )
                 continue
 
             assert incoming_frame is not None and baseline_frame is not None
             incoming_evidence = any(
-                frame_uid == incoming_frame.uid
-                for frame_uid, _ in source_keys
+                frame_uid == incoming_frame.uid for frame_uid, _ in source_keys
             )
             if proposal.disposition == "USER_ADD":
                 if proposal.operation != "ADD":
@@ -1937,13 +1881,10 @@ class MeldSession:
                     )
             elif not incoming_evidence:
                 raise MeldError(
-                    "A directional meld change must cite INCOMING Memory "
-                    "evidence."
+                    "A directional meld change must cite INCOMING Memory evidence."
                 )
             if proposal.operation == "EDIT":
-                target_memory = baseline_memory_by_uid.get(
-                    proposal.memory_uid
-                )
+                target_memory = baseline_memory_by_uid.get(proposal.memory_uid)
                 if (
                     target_memory is None
                     or (
@@ -1953,18 +1894,80 @@ class MeldSession:
                     not in source_keys
                 ):
                     raise MeldError(
-                        "A directional EDIT must target and cite one BASELINE "
-                        "Memory."
+                        "A directional EDIT must target and cite one BASELINE Memory."
                     )
                 if proposal.content == target_memory.content:
                     raise MeldError(
-                        "A directional EDIT must materially change its "
-                        "BASELINE Memory."
+                        "A directional EDIT must materially change its BASELINE Memory."
                     )
             elif proposal.memory_uid in source_memory_uids:
+                raise MeldError("A directional ADD must use a fresh Memory uid.")
+        if (
+            self.schema_version >= MELD_SCHEMA_VERSION
+            and self.mode == "SYMMETRIC"
+            and assessment.ready_to_apply
+        ):
+            if any(
+                proposal.disposition != "USER_ADD" and len(proposal.relation_uids) != 1
+                for proposal in assessment.proposals
+            ):
                 raise MeldError(
-                    "A directional ADD must use a fresh Memory uid."
+                    "A preservation-first symmetric result must belong to "
+                    "exactly one primary relation."
                 )
+            for relation_uid, relation in relation_by_uid.items():
+                relation_proposals = proposals_by_relation.get(relation_uid, [])
+                relation_members = relation_members_by_uid[relation_uid]
+                if not relation_proposals:
+                    raise MeldError(
+                        "Every resolved symmetric relation requires a material result."
+                    )
+                if relation.kind == "EQUIVALENT":
+                    if (
+                        len(relation_proposals) != 1
+                        or relation_proposals[0].disposition != "COALESCE"
+                        or {
+                            (member.frame_uid, member.memory_uid)
+                            for member in relation_proposals[0].source_members
+                        }
+                        != relation_members
+                    ):
+                        raise MeldError(
+                            "An EQUIVALENT relation must produce exactly one "
+                            "complete COALESCE result."
+                        )
+                    continue
+                for proposal in relation_proposals:
+                    proposal_sources = {
+                        (member.frame_uid, member.memory_uid)
+                        for member in proposal.source_members
+                    }
+                    if len(proposal_sources) == 1:
+                        if proposal.disposition != "PRESERVE":
+                            raise MeldError(
+                                "A single-source symmetric result must preserve "
+                                "one independently useful source Memory."
+                            )
+                    elif relation.kind in {"COMPATIBLE", "SCOPED"}:
+                        if proposal.disposition != "SYNTHESIZE" or not (
+                            set(proposal.grounded_by_turn_uids) & actual_user_turn_uids
+                        ):
+                            raise MeldError(
+                                "Combining COMPATIBLE or SCOPED Memories "
+                                "requires an explicit user-grounded SYNTHESIZE "
+                                "result."
+                            )
+                if relation.kind == "DISTINCT" and (
+                    len(relation_proposals) != len(relation_members)
+                    or any(
+                        len(proposal.source_members) != 1
+                        for proposal in relation_proposals
+                    )
+                ):
+                    raise MeldError(
+                        "A DISTINCT relation must preserve every source Memory "
+                        "as its own result."
+                    )
         if (
             self.mode == "SYMMETRIC"
             and assessment.ready_to_apply
@@ -1978,3 +1981,156 @@ class MeldSession:
                 "A ready symmetric meld must represent every source Memory "
                 "and primary relation in its exact result proposal."
             )
+
+
+@dataclass(frozen=True)
+class MeldAccounting:
+    """Host-computed source-to-result accounting for one current assessment."""
+
+    source_memories: int
+    represented_sources: int
+    primary_relations: int
+    represented_relations: int
+    final_memories: int
+    preserve_results: int
+    coalesce_results: int
+    synthesize_results: int
+    user_add_results: int
+    required_issues: int
+    helpful_issues: int
+    cross_relation_results: int
+
+
+def meld_accounting(session: MeldSession) -> MeldAccounting:
+    """Compute exact accounting without trusting provider-authored counts."""
+    if not isinstance(session, MeldSession):
+        raise TypeError("Expected a MeldSession.")
+    assessment = session.current_assessment
+    source_count = sum(len(frame.memories) for frame in session.frames)
+    if assessment is None:
+        return MeldAccounting(
+            source_memories=source_count,
+            represented_sources=0,
+            primary_relations=0,
+            represented_relations=0,
+            final_memories=0,
+            preserve_results=0,
+            coalesce_results=0,
+            synthesize_results=0,
+            user_add_results=0,
+            required_issues=0,
+            helpful_issues=0,
+            cross_relation_results=0,
+        )
+    represented_sources = {
+        (member.frame_uid, member.memory_uid)
+        for proposal in assessment.proposals
+        for member in proposal.source_members
+    }
+    represented_relations = {
+        relation_uid
+        for proposal in assessment.proposals
+        for relation_uid in proposal.relation_uids
+    }
+    dispositions = Counter(proposal.disposition for proposal in assessment.proposals)
+    priorities = Counter(issue.priority for issue in assessment.issues)
+    return MeldAccounting(
+        source_memories=source_count,
+        represented_sources=len(represented_sources),
+        primary_relations=len(assessment.relations),
+        represented_relations=len(represented_relations),
+        final_memories=len(assessment.proposals),
+        preserve_results=dispositions["PRESERVE"],
+        coalesce_results=dispositions["COALESCE"],
+        synthesize_results=dispositions["SYNTHESIZE"],
+        user_add_results=dispositions["USER_ADD"],
+        required_issues=priorities["REQUIRED"],
+        helpful_issues=priorities["HELPFUL"],
+        cross_relation_results=sum(
+            proposal.disposition != "USER_ADD" and len(proposal.relation_uids) != 1
+            for proposal in assessment.proposals
+        ),
+    )
+
+
+def materialize_preservation_assessment(session: MeldSession) -> MeldAssessment:
+    """Build an exact provider-free preserve-all result for symmetric v3 Meld."""
+    if not isinstance(session, MeldSession):
+        raise TypeError("Expected a MeldSession.")
+    if session.mode != "SYMMETRIC" or session.schema_version < MELD_SCHEMA_VERSION:
+        raise MeldError(
+            "Provider-free preservation requires a symmetric schema v3 meld."
+        )
+    turn = session.current_turn
+    if turn is None or turn.assessment is not None or len(session.turns) < 2:
+        raise MeldError(
+            "Provider-free preservation requires one pending user meld turn."
+        )
+    prior = session.turns[-2].assessment
+    if prior is None:
+        raise MeldError("Provider-free preservation requires a prior assessment.")
+
+    memory_by_key = {
+        (frame.uid, memory.uid): memory
+        for frame in session.frames
+        for memory in frame.memories
+    }
+    proposals: list[MeldProposal] = []
+    namespace = uuid.UUID(session.uid)
+    for relation in prior.relations:
+        member_groups = (
+            (relation.members,)
+            if relation.kind == "EQUIVALENT"
+            else tuple((member,) for member in relation.members)
+        )
+        for member_index, members in enumerate(member_groups, start=1):
+            first = members[0]
+            memory = memory_by_key[(first.frame_uid, first.memory_uid)]
+            result_key = f"preserve:{turn.uid}:{relation.uid}:{member_index}"
+            proposals.append(
+                MeldProposal.from_dict(
+                    {
+                        "uid": str(uuid.uuid5(namespace, f"proposal:{result_key}")),
+                        "operation": "ADD",
+                        "disposition": (
+                            "COALESCE" if relation.kind == "EQUIVALENT" else "PRESERVE"
+                        ),
+                        "memory_uid": str(
+                            uuid.uuid5(namespace, f"memory:{result_key}")
+                        ),
+                        # Preservation is a copy operation. It deliberately
+                        # avoids a second semantic rewrite that could omit a
+                        # relation while appearing to cover it in prose.
+                        "content": memory.content,
+                        "reason": (
+                            "Equivalent source Memories were coalesced without "
+                            "changing their supported claim."
+                            if relation.kind == "EQUIVALENT"
+                            else "The user requested that this supported source "
+                            "distinction remain independently revisable."
+                        ),
+                        "relation_uids": [relation.uid],
+                        "source_members": [member.to_dict() for member in members],
+                        "grounded_by_turn_uids": (
+                            [turn.uid] if relation.kind == "CONFLICT" else []
+                        ),
+                    }
+                )
+            )
+
+    return MeldAssessment.from_dict(
+        {
+            "overview": (
+                "Every supported source distinction is preserved in a "
+                "relation-local target Memory, while equivalent Memories are "
+                "coalesced without a semantic rewrite."
+            ),
+            "relations": [
+                {**relation.to_dict(), "status": "RESOLVED"}
+                for relation in prior.relations
+            ],
+            "issues": [],
+            "proposals": [proposal.to_dict() for proposal in proposals],
+            "ready_to_apply": True,
+        }
+    )

@@ -7,7 +7,7 @@ surface enough exact, UID-addressed data to render the current revision.
 
 from __future__ import annotations
 
-from memcommit.meld import MeldProposal, MeldSession
+from memcommit.meld import MeldProposal, MeldSession, meld_accounting
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
     ResolutionItem,
@@ -72,8 +72,8 @@ class MeldResolutionWorkbenchAdapter:
             else f"{session.state}:NO_TURN"
         )
         relation_count = len(assessment.relations) if assessment else 0
-        issue_count = len(assessment.issues) if assessment else 0
         proposal_count = len(assessment.proposals) if assessment else 0
+        accounting = meld_accounting(session)
 
         if assessment is None:
             items: tuple[ResolutionItem, ...] = ()
@@ -94,7 +94,11 @@ class MeldResolutionWorkbenchAdapter:
                 for memory in frame.memories
             }
             projected_items: list[ResolutionItem] = []
-            for issue in assessment.issues:
+            ordered_issues = sorted(
+                assessment.issues,
+                key=lambda issue: 0 if issue.priority == "REQUIRED" else 1,
+            )
+            for issue in ordered_issues:
                 seen_members: set[tuple[str, str]] = set()
                 source_lines: list[str] = []
                 relation_lines: list[str] = []
@@ -142,13 +146,17 @@ class MeldResolutionWorkbenchAdapter:
                     affected_lines.append(
                         "No target Memory is proposed for these relations yet."
                     )
+                issue_title = issue.title
+                if issue.priority == "HELPFUL" and len(issue.relation_uids) == 1:
+                    relation = relation_by_uid[issue.relation_uids[0]]
+                    issue_title = f"{relation.kind.title()} · {relation.summary}"
                 projected_items.append(
                     ResolutionItem(
                         uid=issue.uid,
                         kind=" / ".join(relation_kinds) or "MELD",
                         status="OPEN",
                         priority=issue.priority,
-                        title=issue.title,
+                        title=issue_title,
                         summary=issue.why_it_matters,
                         question=issue.question,
                         options=tuple(
@@ -186,7 +194,22 @@ class MeldResolutionWorkbenchAdapter:
                 )
                 for proposal in assessment.proposals
             )
-            overview = assessment.overview
+            overview = (
+                f"{assessment.overview}\n\n"
+                "ACCOUNTING\n"
+                f"Source coverage · {accounting.represented_sources}/"
+                f"{accounting.source_memories}\n"
+                f"Relation coverage · {accounting.represented_relations}/"
+                f"{accounting.primary_relations}\n"
+                f"Final Memories · {accounting.final_memories} "
+                f"(PRESERVE {accounting.preserve_results} · "
+                f"COALESCE {accounting.coalesce_results} · "
+                f"SYNTHESIZE {accounting.synthesize_results} · "
+                f"USER_ADD {accounting.user_add_results})\n"
+                f"Open issues · REQUIRED {accounting.required_issues} · "
+                f"HELPFUL {accounting.helpful_issues}\n"
+                f"Cross-relation results · {accounting.cross_relation_results}"
+            )
 
         active = assessment is not None and session.state in {
             "AWAITING_REPLY",
@@ -221,10 +244,20 @@ class MeldResolutionWorkbenchAdapter:
             metrics=(
                 ResolutionMetric("MODE", session.mode),
                 ResolutionMetric("RELATIONS", str(relation_count)),
-                ResolutionMetric("ISSUES", str(issue_count)),
+                ResolutionMetric(
+                    "ISSUES",
+                    (
+                        f"{accounting.required_issues} required + "
+                        f"{accounting.helpful_issues} helpful"
+                    ),
+                ),
                 ResolutionMetric(
                     "CHANGES" if session.mode == "DIRECTIONAL" else "RESULTS",
                     str(proposal_count),
+                ),
+                ResolutionMetric(
+                    "SOURCE COVERAGE",
+                    f"{accounting.represented_sources}/{accounting.source_memories}",
                 ),
             ),
             overview=overview,

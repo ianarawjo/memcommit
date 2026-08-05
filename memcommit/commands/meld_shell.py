@@ -483,6 +483,82 @@ def run_meld_shell(
 _run_legacy_meld_shell = run_meld_shell
 
 
+def _comparison_issue_resolution_badges(session: MeldSession) -> tuple[str, ...]:
+    """Project durable Compare-issue outcomes without inventing a selection."""
+    if session.comparison_seed is None or session.current_assessment is None:
+        return ()
+    assessment = session.current_assessment
+    open_issue_uids = {issue.uid for issue in assessment.issues}
+    proposals_by_relation = {
+        relation_uid: tuple(
+            proposal
+            for proposal in assessment.proposals
+            if relation_uid in proposal.relation_uids
+        )
+        for issue in session.comparison_seed.analysis.issues
+        for relation_uid in issue.relation_uids
+    }
+    badges: list[str] = []
+    for issue in session.comparison_seed.analysis.issues:
+        if issue.uid in open_issue_uids:
+            badges.append("")
+            continue
+        matched_label = ""
+        for turn in reversed(session.user_turns):
+            for option in issue.options:
+                if option.text in turn.comment:
+                    matched_label = f"CHOSEN · {option.label}"
+                    break
+            if matched_label:
+                break
+            marker = f"- {issue.title}: Other direction:"
+            marked_line = next(
+                (
+                    line.partition(marker)[2].strip()
+                    for line in turn.comment.splitlines()
+                    if marker in line
+                ),
+                "",
+            )
+            direct_comment = marked_line or (
+                turn.comment.strip()
+                if issue.uid in turn.issue_uids
+                and not turn.comment.startswith("Choose this reading:")
+                else ""
+            )
+            if direct_comment:
+                matched_label = f"OTHER DIRECTION · {_line(direct_comment, 72)}"
+                break
+        if matched_label:
+            badges.append(matched_label)
+            continue
+        related = tuple(
+            proposal
+            for relation_uid in issue.relation_uids
+            for proposal in proposals_by_relation.get(relation_uid, ())
+        )
+        dispositions = {proposal.disposition for proposal in related}
+        if related and dispositions == {"PRESERVE"}:
+            option_labels = " + ".join(option.label for option in issue.options)
+            badges.append(f"KEPT BOTH · {option_labels}")
+        elif "SYNTHESIZE" in dispositions:
+            synthesized = tuple(
+                proposal for proposal in related if proposal.disposition == "SYNTHESIZE"
+            )
+            detail = _line(synthesized[0].content, 72)
+            if len(synthesized) > 1:
+                detail += f" + {len(synthesized) - 1} more"
+            badges.append(f"COMBINED · {detail}")
+        elif "COALESCE" in dispositions:
+            coalesced = next(
+                proposal for proposal in related if proposal.disposition == "COALESCE"
+            )
+            badges.append(f"COALESCED · {_line(coalesced.content, 72)}")
+        else:
+            badges.append("RESOLVED")
+    return tuple(badges)
+
+
 def run_meld_shell(
     session: MeldSession,
     *,
@@ -529,7 +605,32 @@ def run_meld_shell(
             .partition("\nThe complete source-linked relation ledger")[0]
             .rstrip()
         )
+    report_badges = _comparison_issue_resolution_badges(session)
+    report_conflicts_remaining = sum(not badge for badge in report_badges)
     global_strategies = (
+        ResolutionGlobalStrategy(
+            label="Preserve all HELPFUL compatible/scoped items separately",
+            action_kind="SUBMIT_ALL",
+            comment=(
+                "Keep every remaining HELPFUL COMPATIBLE or SCOPED relation "
+                "at the preservation-first default: copy each independently "
+                "useful source Memory as its own target Memory. Apply this "
+                "below the REQUIRED priority threshold without changing any "
+                "still-required conflict decision."
+            ),
+        ),
+        ResolutionGlobalStrategy(
+            label="Combine HELPFUL items only when one atomic result is lossless",
+            action_kind="SUBMIT_ALL",
+            comment=(
+                "For remaining HELPFUL COMPATIBLE or SCOPED relations, combine "
+                "members only when one independently revisable Memory retains "
+                "every rate, condition, audience, modality, exception, and "
+                "source-specific scope. Otherwise preserve the members "
+                "separately. Apply the same rationale to later related issues, "
+                "but do not resolve any REQUIRED conflict by this strategy."
+            ),
+        ),
         ResolutionGlobalStrategy(
             label="Preserve every unresolved distinction",
             action_kind="SUBMIT_ALL",
@@ -579,6 +680,8 @@ def run_meld_shell(
         split_viewer_items=True,
         global_strategies=global_strategies,
         split_report_text=compare_report,
+        split_report_item_badges=report_badges,
+        split_report_conflicts_remaining=report_conflicts_remaining,
         review_and_apply=not read_only,
         read_only=read_only,
     )

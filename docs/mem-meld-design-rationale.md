@@ -708,12 +708,15 @@ difference between accepting a supplied answer and proposing another one.
 In the two-pane Meld shell these responses are now staged per conflict rather
 than sent to the provider immediately. `Enter` visibly selects a supplied
 answer and a second `Enter` clears it; an Other-direction submission returns to
-the same workbench as a staged response. The final item is `REVIEW & APPLY
-MELD`, which lists every staged answer, marks blanks as unresolved, and requires
-one explicit policy for those blanks. Continuing sends one combined semantic
-turn. It does not bypass the existing readiness checkpoint: the resulting
-target Memories are shown again, and only the readiness-gated apply action may
-write them.
+the same workbench as a staged response. There is no separate Review Viewer.
+The Report itself is the review surface: its conflict cards show staged choices
+and its final card shows the current whole-set policy. Before exact target
+Memories exist, the last item is `MATERIALIZE REVIEW`; activating it sends one
+combined semantic turn and returns to the updated Report. Once the assessment
+is `READY_TO_APPLY`, the same row becomes `REVIEW & APPLY MELD`; activating it
+returns the exact `ACCEPT` action directly. Thus application remains gated by a
+ready exact proposal, but the person never leaves the Report for a redundant
+second rendering of the same decisions.
 
 The one-shot Meld item bound is 500 source Memories. The canonical Task 2
 topology contains 150 Memories from each Advisor, so the former total bound of
@@ -736,6 +739,59 @@ overlap still fails closed, because locally guessing a provider-intended split
 or regrouping would change provenance. Exact once-only coverage is rechecked
 after this conservative carry-forward step.
 
+## Preservation-first materialization and priority flow
+
+Meld is a merge-like materialization, not a thematic summary. The canonical
+Task 2 run demonstrated the failure mode: all 300 source Memories and all 109
+relations were technically cited, yet 14 broad synthesized Memories collapsed
+independently revisable guidance. Coverage alone therefore does not establish
+an acceptable result count or granularity.
+
+New symmetric sessions use schema version 3 and assign every source-derived
+result to exactly one primary relation. `EQUIVALENT` yields one coalesced
+result, `DISTINCT` preserves each member, and `COMPATIBLE` or `SCOPED` preserves
+each source Memory unless a user-grounded decision explicitly permits a
+lossless synthesis. A conflict may produce the reviewed result or results, but
+cannot absorb unrelated relations. Older schema version 1 and 2 sessions remain
+readable so an already reviewed or applied study artifact is not retroactively
+invalidated by the stronger materialization contract.
+
+The review queue has two priority bands. Compare's unresolved questions remain
+`REQUIRED` and are shown first. Every otherwise resolved `COMPATIBLE` or
+`SCOPED` relation that lacks an existing question receives a deterministic
+`HELPFUL` materialization question: preserve the members separately or combine
+them only when the resulting Memory remains atomic and retains every condition,
+scope, audience, modality, rate, and exception. Deterministic identifiers keep
+that queue stable across repeated starts from the same Compare artifact.
+
+An earlier issue comment is reusable evidence, not an automatic wildcard. On
+the next semantic turn the provider recomputes the full ledger and may apply
+that rationale to later `COMPATIBLE`, `SCOPED`, or `CONFLICT` issues only when
+the same stated reason materially governs them; resulting proposals cite the
+originating turn. This lets one decision settle related lower-priority work
+without silently broadening a local answer. The whole-set strategies then act
+as a priority threshold: they may preserve or conditionally combine remaining
+`HELPFUL` items, but do not decide an outstanding `REQUIRED` conflict.
+
+The host renders an accounting block computed from identities rather than
+provider-authored prose: source Memories represented, primary relations
+represented, final Memory count by disposition, required/helpful issue counts,
+and cross-relation result count. This exposes both omission and over-compression
+before apply. It intentionally does not impose one universal final count;
+equivalence, explicit synthesis, and reviewed conflicts can legitimately alter
+that count while the relation-local invariants remain checkable.
+
+For symmetric schema version 3, `--preserve-all` is provider-free after the
+relation ledger exists. The host copies each non-equivalent relation member as
+one independently revisable `PRESERVE` result and coalesces each `EQUIVALENT`
+relation once, using deterministic result identities and the exact source text.
+This operation also resolves conflict members as explicitly retained scoped
+alternatives. A 300-Memory provider response proved unreliable even after the
+prompt prohibited cross-relation compression: it marked all relations resolved
+while omitting material results. Local materialization removes that unnecessary
+generation step, while the existing target CAS, source coverage, relation
+coverage, readiness review, and separate `--accept` boundary remain intact.
+
 When both symmetric sources come from a `RETAINED` granted Compare artifact,
 application validates that immutable artifact and does not try to reopen its
 public aliases as ordinary local Contexts. The final write still holds target
@@ -752,6 +808,40 @@ Compare navigation footer that would tell the user to start Meld again, then
 appends its current proposed target Memories and whole-set strategy section.
 Directional Meld has no Compare seed and therefore keeps its authority-specific
 report projection.
+
+Inside the Meld Viewer, each ordinary seeded report section is rendered as a
+smaller bordered card. Potential conflicts instead use separated indented
+paragraphs inside one outer group; repeating an inner border around every long
+conflict made the dense text harder to scan. This changes only presentation:
+the saved Compare prose remains the displayed body. The focused block retains
+the shared blue focus treatment. When a conflict option or an
+other-direction response is staged, that conflict card gains a blue selection
+badge; the whole-set card similarly shows the currently selected policy. These
+badges are process-local review state and do not become source evidence or
+durable decisions until the normal reviewed semantic turn is submitted.
+
+Potential conflicts are visually one group rather than an empty heading card
+followed by unrelated siblings. The outer card reports the immutable Compare
+count and the current unresolved count as `original → remaining`; blank lines
+separate its individually focusable conflicts. After a semantic turn, a blue outcome badge
+is reconstructed only from durable evidence: an option text recorded in a user
+turn, an explicit Other-direction turn, or the relation-local proposal
+dispositions. User-facing badges expose the actual decision rather than only
+its disposition: `CHOSEN · LABEL` for one recorded option and `KEPT BOTH ·
+LABEL A + LABEL B` for preserved alternatives. A direct custom resolution
+shows a compact excerpt of the durable user instruction after `OTHER
+DIRECTION`, while a synthesized or coalesced outcome shows compact proposed
+Memory content instead of a generic `APPLIED` or `SYNTHESIZED` status. This
+keeps the review surface meaningful without asking the provider to summarize
+the decision a second time. An open or merely staged issue is not counted as
+resolved.
+
+Proposed target Memories are not one giant Viewer section. Each result is an
+independently focusable, indented block containing its disposition, complete
+Memory text, and reason. Up and Down therefore advance by one short result
+block, Page Up and Page Down advance eight blocks, and End reaches the final
+materialize/apply section directly. This prevents a hundreds-result proposal
+from hiding `REVIEW & APPLY MELD` below one unscrollable block.
 
 There is no permanently visible `MESSAGE` frame. `C` on an opened conflict
 opens a temporary `COMMENT ON SELECTED CONFLICT` section inside the
