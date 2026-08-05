@@ -403,7 +403,11 @@ def _context_parts(
             or command in {"checkpoint", "init"}
             or not owned
             or before is None
-            or before == snapshot
+            # A zero-change Meld still changes its durable session from READY
+            # to APPLIED. Keep that checkpoint in the command stack so Undo
+            # and Redo restore the complete operation rather than only visible
+            # Context bytes.
+            or (before == snapshot and command != "meld")
         ):
             continue
         originals.append(

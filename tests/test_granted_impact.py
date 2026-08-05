@@ -18,6 +18,7 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
+from memcommit.commands.compare_sessions import comparison_session_entries
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.derived_policy import analysis_retention, authorize_analysis_save
 from memcommit.granted_comparison_store import (
@@ -843,6 +844,9 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     artifact = load_granted_comparison_artifact(active, source.uid, wiki.uid)
     assert artifact is not None
     assert artifact.retention == "RETAINED"
+    saved_entries = comparison_session_entries(active)
+    assert [entry.key for entry in saved_entries] == [artifact.analysis.uid]
+    assert saved_entries[0].title == f"{source.name} ↔ {wiki.name}"
 
     target = ops.init("participant-meld")
     active.save(target)
@@ -1096,7 +1100,10 @@ def test_switch_to_read_grant_makes_it_current_without_materializing_copy(
     assert "On context: campus-wiki" in status.output
     assert "Granted view: read only" in status.output
     assert contexts.exit_code == 0, contexts.output
-    assert "* campus-wiki  [grant READ]" in contexts.output
+    assert (
+        "* campus-wiki  [grant READ · RATIONALE SUBTREE + TRACE BLOCKED]"
+        in contexts.output
+    )
     assert profile_current.exit_code == 0, profile_current.output
     assert "Current Context: campus-wiki" in profile_current.output
     assert switched_child.exit_code == 0, switched_child.output
@@ -1264,7 +1271,7 @@ def test_granted_diff_marks_authority_drift_stale_but_keeps_receipts(
     tmp_path,
     monkeypatch,
 ):
-    _active, authority, source, wiki, _grant = _setup_granted_target(
+    active, authority, source, wiki, _grant = _setup_granted_target(
         isolated_store,
         tmp_path,
         monkeypatch,
@@ -1393,7 +1400,7 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
     tmp_path,
     monkeypatch,
 ):
-    _active, authority, source, wiki, _grant = _setup_granted_target(
+    active, authority, source, wiki, _grant = _setup_granted_target(
         isolated_store,
         tmp_path,
         monkeypatch,
@@ -1430,6 +1437,9 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
         authority.load_direct("campus-wiki/services").to_dict()
         == services_before
     )
+    undone_session = active.load_staged_update()
+    assert undone_session.status == "undone"
+    assert undone_session.application is not None
 
     redone = runner.invoke(app, ["redo"])
 
@@ -1441,6 +1451,9 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
         authority.load_direct("campus-wiki/services").to_dict()
         == services_after
     )
+    redone_session = active.load_staged_update()
+    assert redone_session.status == "applied"
+    assert redone_session.application == undone_session.application
 
 
 def test_granted_update_checks_create_permission_before_first_write(

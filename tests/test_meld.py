@@ -44,6 +44,8 @@ from memcommit.commands.meld_shell import (
     run_meld_shell,
 )
 from memcommit.commands.resolution_workbench_shell import (
+    _NavigationAccelerator,
+    _viewer_focus_fragments,
     ResolutionGlobalStrategy,
     _seeded_report_lines,
     _seeded_report_sections,
@@ -657,6 +659,13 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
         reused=True,
         durable=True,
     ).partition("\nThe complete source-linked relation ledger")[0]
+    conflict_section = next(
+        index
+        for index, (_offset, key) in enumerate(
+            _seeded_report_sections(_seeded_report_lines(view, report, (), True, False))
+        )
+        if key == "ITEM:0"
+    )
 
     fragments = resolution_seeded_report_fragments(
         view,
@@ -669,7 +678,7 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
             ),
         ),
         drafts={item.uid: (item.options[0].uid, "")},
-        focused_section=2,
+        focused_section=conflict_section,
         review_and_apply=True,
     )
     rendered = "".join(text for _style, text in fragments)
@@ -683,6 +692,10 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
     assert "POLICY · Preserve remaining helpful items" in rendered
     assert any(
         style == "class:selection-badge" and "SELECTED ·" in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:detail-card.focused" and "compensation" in text.lower()
         for style, text in fragments
     )
 
@@ -745,6 +758,135 @@ def test_resolution_badges_show_direct_and_synthesized_content():
     assert _comparison_issue_resolution_badges(synthesized) == (
         "COMBINED · Participant compensation may be paid in cash, by e-transfer, or with an…",
     )
+
+
+def test_result_rows_share_tree_prefix_and_keep_apply_card_fully_anchored():
+    left = ops.init("left/result-tree-row")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("right/result-tree-row")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(
+        comparison,
+        ops.init("target/result-tree-row"),
+    )
+    issue_uid = session.current_assessment.issues[0].uid
+    turn = session.start_turn(
+        "Keep all supported details.",
+        scope="ISSUE",
+        issue_uids=(issue_uid,),
+    )
+    session.record_assessment(turn.uid, assess_meld_turn(session, Task2Provider()))
+    view = MeldResolutionWorkbenchAdapter(session).view()
+    report = render_comparison(
+        comparison,
+        reused=True,
+        durable=True,
+    ).partition("\nThe complete source-linked relation ledger")[0]
+    sections = _seeded_report_sections(
+        _seeded_report_lines(view, report, (), True, False)
+    )
+    result_section = next(
+        index for index, (_offset, key) in enumerate(sections) if key == "RESULT:0"
+    )
+    result_fragments = resolution_seeded_report_fragments(
+        view,
+        report,
+        focused_section=result_section,
+        review_and_apply=True,
+    )
+    assert any(
+        style == "class:viewer-section" and "›     +" in text and "[PRESERVE]" in text
+        for style, text in result_fragments
+    )
+    assert any(
+        style == "class:viewer-section" and "WHY ·" in text
+        for style, text in result_fragments
+    )
+    result_anchor = next(
+        index
+        for index, (style, _text) in enumerate(result_fragments)
+        if style == "[SetCursorPosition]"
+    )
+    result_body_end = max(
+        index
+        for index, (style, _text) in enumerate(result_fragments)
+        if style == "class:viewer-section"
+    )
+    assert result_anchor > result_body_end
+
+    apply_fragments = resolution_seeded_report_fragments(
+        view,
+        report,
+        strategies=(
+            ResolutionGlobalStrategy(
+                label="This materialization policy is no longer actionable",
+                action_kind="SUBMIT_ALL",
+                comment="Preserve remaining results.",
+            ),
+        ),
+        focused_section=len(sections) - 1,
+        review_and_apply=True,
+    )
+    anchor_index = next(
+        index
+        for index, (style, _text) in enumerate(apply_fragments)
+        if style == "[SetCursorPosition]"
+    )
+    apply_bottom = max(
+        index for index, (_style, text) in enumerate(apply_fragments) if "╰" in text
+    )
+    assert anchor_index > apply_bottom
+    assert all(
+        "This materialization policy is no longer actionable" not in text
+        for _style, text in apply_fragments
+    )
+
+
+def test_result_navigation_accelerates_only_after_deliberate_taps():
+    accelerator = _NavigationAccelerator()
+    assert [accelerator.step(1, now=index / 10) for index in range(13)] == [
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+    ]
+    assert accelerator.step(-1, now=1.4) == 1
+    assert accelerator.step(-1, now=2.0) == 1
+
+
+def test_viewer_position_is_blue_only_while_viewer_has_focus():
+    fragments = [
+        ("[SetCursorPosition]", ""),
+        ("class:viewer-section", "MEM COMPARE"),
+        ("class:detail-card.focused", "Focused conflict"),
+        ("class:option-card.focused", "Option cursor"),
+        ("class:option-card.other", "Other-direction cursor"),
+        ("class:selection-badge", "CHOSEN · Two sentences"),
+        ("class:option-card.selected", "Durable selected option"),
+    ]
+    assert _viewer_focus_fragments(fragments, focused=True) is fragments
+    assert _viewer_focus_fragments(fragments, focused=False) == [
+        ("[SetCursorPosition]", ""),
+        ("class:section", "MEM COMPARE"),
+        ("class:detail-card", "Focused conflict"),
+        ("class:option-card", "Option cursor"),
+        ("class:option-card", "Other-direction cursor"),
+        ("class:selection-badge", "CHOSEN · Two sentences"),
+        ("class:option-card.selected", "Durable selected option"),
+    ]
 
 
 def test_v3_rejects_cross_relation_thematic_compression():
@@ -938,6 +1080,62 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     assert "no duplicate checkpoint" in second_accept.output
     assert len(store.list_checkpoints(target.name)) == 1
     assert len(provider.payloads) == 1
+
+
+def test_undo_and_redo_restore_meld_application_state_as_one_operation(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+    provider = Task2Provider()
+    _patch_provider(monkeypatch, provider)
+
+    assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
+    grounded = runner.invoke(
+        app,
+        [
+            "meld",
+            left.name,
+            right.name,
+            "--issue",
+            "1",
+            "--choice",
+            "1",
+            "--comment",
+            "Keep all supported details.",
+        ],
+    )
+    assert grounded.exit_code == 0, grounded.output
+    applied = runner.invoke(app, ["meld", left.name, right.name, "--accept"])
+    assert applied.exit_code == 0, applied.output
+    applied_session = store.load_meld_session(target.uid)
+    assert applied_session.state == "APPLIED"
+    assert applied_session.application is not None
+    original_checkpoint_uid = applied_session.application.checkpoint_uid
+    assert len(store.load_direct(target.name).memories) == 2
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert "Undid command: mem meld" in undone.output
+    assert not store.load_direct(target.name).memories
+    undone_session = store.load_meld_session(target.uid)
+    assert undone_session.state == "READY_TO_APPLY"
+    assert undone_session.application is None
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert "Redid command: mem meld" in redone.output
+    assert len(store.load_direct(target.name).memories) == 2
+    redone_session = store.load_meld_session(target.uid)
+    assert redone_session.state == "APPLIED"
+    assert redone_session.application is not None
+    assert redone_session.application.checkpoint_uid == original_checkpoint_uid
+
+    undone_again = runner.invoke(app, ["undo"])
+    assert undone_again.exit_code == 0, undone_again.output
+    assert not store.load_direct(target.name).memories
+    assert store.load_meld_session(target.uid).state == "READY_TO_APPLY"
 
 
 def test_symmetric_meld_requires_saved_compare_before_provider_connection(
@@ -1189,6 +1387,21 @@ def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
     assert len(store.list_checkpoints(baseline.name)) == 1
     assert len(provider.payloads) == 1
 
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert store.load_meld_session(baseline.uid).state == "READY_TO_APPLY"
+    assert [
+        memory.content
+        for memory in store.load_direct(baseline.name).memories.values()
+    ] == [
+        "The underground-parking stairwell is closed.",
+        "The Campus Store remains open during construction.",
+    ]
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert store.load_meld_session(baseline.uid).state == "APPLIED"
+
 
 def test_directional_accept_recovers_after_receipt_save_failure(
     isolated_store,
@@ -1292,6 +1505,18 @@ def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
     assert "no duplicate checkpoint" in repeated.output
     assert len(store.list_checkpoints(baseline.name)) == 1
     assert len(provider.payloads) == 1
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert store.load_meld_session(baseline.uid).state == "READY_TO_APPLY"
+    assert [
+        memory.content
+        for memory in store.load_direct(baseline.name).memories.values()
+    ] == ["The Campus Store remains open during construction."]
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert store.load_meld_session(baseline.uid).state == "APPLIED"
 
 
 def test_zero_change_directional_meld_recovers_checkpoint_after_receipt_failure(

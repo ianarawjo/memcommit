@@ -18,7 +18,7 @@ UPDATE_OPERATION_LIMIT = 200
 UPDATE_SOURCE_REFS_PER_OPERATION = 50
 UPDATE_REASON_CHAR_LIMIT = 1_000
 UPDATE_SCHEMA_VERSION = 5
-UpdateStatus = Literal["impact", "staged", "applied"]
+UpdateStatus = Literal["impact", "staged", "applied", "undone"]
 
 
 class UpdateError(RuntimeError):
@@ -707,6 +707,13 @@ class UpdateSession:
             application=application,
         )
 
+    def with_restored_application(self, *, applied: bool) -> UpdateSession:
+        """Project one exact retained receipt across command Undo or Redo."""
+        expected = "undone" if applied else "applied"
+        if self.status != expected or self.application is None:
+            raise ValueError("Update application is not in the expected restore state.")
+        return replace(self, status="applied" if applied else "undone")
+
     def to_dict(self) -> dict[str, object]:
         schema_version = (
             UPDATE_SCHEMA_VERSION
@@ -795,9 +802,9 @@ class UpdateSession:
         else:
             raise ValueError("Unsupported update session schema version.")
         status = data["status"]
-        if status not in {"impact", "staged", "applied"}:
+        if status not in {"impact", "staged", "applied", "undone"}:
             raise ValueError("Invalid update session status.")
-        if (status == "applied") != (application is not None):
+        if (status in {"applied", "undone"}) != (application is not None):
             raise ValueError("Invalid update application state.")
 
         source_keys = {"uid", "name", "digest", "contexts"}

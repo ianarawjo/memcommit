@@ -162,6 +162,14 @@ def cmd(
             )
             raise typer.Exit(1)
 
+    if existing is not None and existing.status == "undone" and not replace_stage:
+        render_plan(existing, applied=False)
+        typer.echo(
+            "This update was undone. Run 'mem redo' to restore the exact "
+            "application, or use '--replace-stage' to discard this receipt."
+        )
+        return
+
     if (
         existing is not None
         and existing.status == "impact"

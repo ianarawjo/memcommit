@@ -20,7 +20,7 @@ def cmd() -> None:
             restore_granted_update(store, session, "redo")
             if (
                 session is not None
-                and session.status == "applied"
+                and session.status in {"applied", "undone"}
                 and session.granted_target is not None
             )
             else store.restore_recent_context_command("redo")

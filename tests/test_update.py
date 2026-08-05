@@ -1,4 +1,5 @@
 """Directional semantic impact and local update application contracts."""
+
 from __future__ import annotations
 
 import json
@@ -9,6 +10,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.provenance import build_trace
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.update import (
     AddOperation,
@@ -26,7 +28,7 @@ runner = CliRunner(mix_stderr=False)
 SECRET = "The concealed contractor budget is 4.2 million dollars."
 TASK1_SOURCE = "participant/construction-updates"
 TASK1_SOURCE_CHILD = f"{TASK1_SOURCE}/building-access"
-TASK1_TARGET = "participant/campus-wiki-fork"
+TASK1_TARGET = "campus-wiki"
 TASK1_TARGET_CHILD = f"{TASK1_TARGET}/buildings"
 
 
@@ -45,11 +47,7 @@ class PlanProvider:
         # untouched so strict parser tests still exercise the real boundary.
         if isinstance(response, dict) and set(response) == {"edits", "additions"}:
             response = {**response, "removals": []}
-        return (
-            response
-            if isinstance(response, str)
-            else json.dumps(response)
-        )
+        return response if isinstance(response, str) else json.dumps(response)
 
 
 def _one_edit_response(prompt):
@@ -94,7 +92,7 @@ def _edit_and_root_add_response(prompt):
                 "target_context_id": root["context_id"],
                 "new_content": "Construction visitor guidance is in effect.",
                 "source_ids": [source_id],
-                "reason": "The local fork needs an overview notice.",
+                "reason": "The campus wiki needs an overview notice.",
             }
         ],
     }
@@ -113,7 +111,7 @@ def _make_nested_pair():
     target.add(
         QueryContextRef(
             uid="11111111-1111-4111-8111-111111111111",
-            name="campus-wiki",
+            name="construction-details",
             target_source_uid="22222222-2222-4222-8222-222222222222",
             provider="codex_chatgpt",
         )
@@ -196,10 +194,9 @@ def test_collect_update_inputs_terminates_cycles_and_shared_contexts():
 
     inputs = collect_update_inputs(source, target)
 
-    assert [
-        candidate.memory_uid
-        for candidate in inputs.source_candidates
-    ] == [shared_memory.uid]
+    assert [candidate.memory_uid for candidate in inputs.source_candidates] == [
+        shared_memory.uid
+    ]
     assert len(inputs.source_contexts) == 4
 
 
@@ -215,10 +212,10 @@ def test_same_memory_uid_in_distinct_source_contexts_is_not_deduped():
 
     inputs = collect_update_inputs(source, target)
 
-    assert [
-        candidate.content
-        for candidate in inputs.source_candidates
-    ] == ["first version", "second version"]
+    assert [candidate.content for candidate in inputs.source_candidates] == [
+        "first version",
+        "second version",
+    ]
 
 
 def test_resolved_source_ref_is_evidence_and_target_refs_are_not_writable():
@@ -529,13 +526,9 @@ def test_empty_target_still_allows_addition_to_root():
             "edits": [],
             "additions": [
                 {
-                    "target_context_id": payload["target"]["contexts"][0][
-                        "context_id"
-                    ],
+                    "target_context_id": payload["target"]["contexts"][0]["context_id"],
                     "new_content": "novel fact",
-                    "source_ids": [
-                        payload["source"]["memories"][0]["source_id"]
-                    ],
+                    "source_ids": [payload["source"]["memories"][0]["source_id"]],
                     "reason": "Target is empty.",
                 }
             ],
@@ -687,8 +680,7 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     source_bytes_before = {
         path: path.read_bytes()
         for path in (
-            isolated_store / "contexts" / "participant"
-            / "construction-updates"
+            isolated_store / "contexts" / "participant" / "construction-updates"
         ).rglob("context.json")
     }
     state_before = (isolated_store / "state.json").read_bytes()
@@ -701,21 +693,14 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     assert "1 edit, 0 additions" in impact.output
     assert "No changes applied." in impact.output
     assert update.exit_code == 0, update.output
-    assert (
-        f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}"
-        in update.output
-    )
+    assert f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}" in update.output
     assert f"Updated local working copy {TASK1_TARGET}." in update.output
     assert "No shared origin was changed." in update.output
     assert connections == ["connected"]
     assert len(provider.calls) == 1
 
-    impact_data = json.loads(
-        (isolated_store / "impact-plan.json").read_text()
-    )
-    staged_data = json.loads(
-        (isolated_store / "staged-update.json").read_text()
-    )
+    impact_data = json.loads((isolated_store / "impact-plan.json").read_text())
+    staged_data = json.loads((isolated_store / "staged-update.json").read_text())
     assert impact_data["uid"] == staged_data["uid"]
     assert impact_data["status"] == "impact"
     assert staged_data["status"] == "applied"
@@ -724,8 +709,7 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
 
     updated_child = store.load_direct(TASK1_TARGET_CHILD)
     assert updated_child.memories[target_memory.uid].content == (
-        "The Main Building south entrance is open and provides "
-        "step-free access."
+        "The Main Building south entrance is open and provides step-free access."
     )
     checkpoints = store.list_checkpoints(TASK1_TARGET_CHILD)
     assert len(checkpoints) == 1
@@ -735,30 +719,80 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     assert checkpoint["args"]["update_session_uid"] == staged_data["uid"]
     assert checkpoint["args"]["target_context_name"] == TASK1_TARGET
     assert checkpoint["args"]["owner_context_uid"] == updated_child.uid
-    assert checkpoint["args"]["operation_memory_uids"] == [
-        target_memory.uid
-    ]
+    assert checkpoint["args"]["operation_memory_uids"] == [target_memory.uid]
     assert staged_data["application"]["checkpoints"][0] == {
         "context_uid": updated_child.uid,
         "context_name": TASK1_TARGET_CHILD,
         "checkpoint_uid": checkpoint["uid"],
     }
     fork_root = store.load_direct(TASK1_TARGET)
-    origin_pointer = fork_root.memories[
-        "11111111-1111-4111-8111-111111111111"
-    ]
+    origin_pointer = fork_root.memories["11111111-1111-4111-8111-111111111111"]
     assert isinstance(origin_pointer, QueryContextRef)
-    assert origin_pointer.name == "campus-wiki"
-    assert not store.context_exists("campus-wiki")
+    assert origin_pointer.name == "construction-details"
+    assert not store.context_exists("construction-details")
     assert {
         path: path.read_bytes()
         for path in (
-            isolated_store / "contexts" / "participant"
-            / "construction-updates"
+            isolated_store / "contexts" / "participant" / "construction-updates"
         ).rglob("context.json")
     } == source_bytes_before
     assert (isolated_store / "state.json").read_bytes() == state_before
     assert store.current_context_name() == TASK1_SOURCE
+
+
+def test_update_undo_and_redo_follow_the_affected_target_not_current_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _, target_memory = _persist_pair(store)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    original = store.load_direct(TASK1_TARGET_CHILD).memories[target_memory.uid].content
+
+    update = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+
+    assert update.exit_code == 0, update.output
+    assert store.current_context_name() == TASK1_SOURCE
+    assert (
+        store.load_direct(TASK1_TARGET_CHILD).memories[target_memory.uid].content
+        != original
+    )
+
+    undo = runner.invoke(app, ["undo"])
+
+    assert undo.exit_code == 0, undo.output
+    assert "Undid command: mem update" in undo.output
+    assert f"Affected Context: {TASK1_TARGET_CHILD}" in undo.output
+    assert store.current_context_name() == TASK1_SOURCE
+    assert (
+        store.load_direct(TASK1_TARGET_CHILD).memories[target_memory.uid].content
+        == original
+    )
+    undone_session = store.load_staged_update()
+    assert undone_session.status == "undone"
+    assert undone_session.application is not None
+    undone_diff = runner.invoke(app, ["diff"])
+    assert undone_diff.exit_code == 0, undone_diff.output
+    assert "Undone update" in undone_diff.output
+
+    redo = runner.invoke(app, ["redo"])
+
+    assert redo.exit_code == 0, redo.output
+    assert "Redid command: mem update" in redo.output
+    assert f"Affected Context: {TASK1_TARGET_CHILD}" in redo.output
+    assert store.current_context_name() == TASK1_SOURCE
+    assert store.load_direct(TASK1_TARGET_CHILD).memories[
+        target_memory.uid
+    ].content == (
+        "The Main Building south entrance is open and provides step-free access."
+    )
+    redone_session = store.load_staged_update()
+    assert redone_session.status == "applied"
+    assert redone_session.application == undone_session.application
 
 
 def test_impact_then_update_resolve_relative_existing_target(
@@ -779,11 +813,11 @@ def test_impact_then_update_resolve_relative_existing_target(
 
     impact = runner.invoke(
         app,
-        ["impact", "--to", "../campus-wiki-fork"],
+        ["impact", "--to", "../../campus-wiki"],
     )
     update = runner.invoke(
         app,
-        ["update", "--to", "../campus-wiki-fork"],
+        ["update", "--to", "../../campus-wiki"],
     )
 
     assert impact.exit_code == 0, impact.output
@@ -826,10 +860,7 @@ def test_impact_then_update_accept_from_with_current_target(
     assert impact.exit_code == 0, impact.output
     assert update.exit_code == 0, update.output
     assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
-    assert (
-        f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}"
-        in update.output
-    )
+    assert f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}" in update.output
     assert store.current_context_name() == TASK1_TARGET
     assert len(provider.calls) == 1
 
@@ -907,10 +938,7 @@ def test_explicit_from_and_to_work_without_current_context(
     assert impact.exit_code == 0, impact.output
     assert update.exit_code == 0, update.output
     assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
-    assert (
-        f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}"
-        in update.output
-    )
+    assert f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}" in update.output
     assert store.current_context_name() is None
     assert len(provider.calls) == 1
 
@@ -938,7 +966,7 @@ def test_from_and_to_relative_locators_share_one_current_snapshot(
         "--from",
         "../construction-updates",
         "--to",
-        "../campus-wiki-fork",
+        "../../campus-wiki",
     ]
     impact = runner.invoke(app, ["impact", *endpoints])
     update = runner.invoke(app, ["update", *endpoints])
@@ -946,10 +974,7 @@ def test_from_and_to_relative_locators_share_one_current_snapshot(
     assert impact.exit_code == 0, impact.output
     assert update.exit_code == 0, update.output
     assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
-    assert (
-        f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}"
-        in update.output
-    )
+    assert f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}" in update.output
     assert len(provider.calls) == 1
 
 
@@ -1046,12 +1071,12 @@ def test_task1_query_only_origin_cannot_be_an_update_target(
         lambda: pytest.fail("provider should not connect"),
     )
 
-    result = runner.invoke(app, ["update", "--to", "campus-wiki"])
+    result = runner.invoke(app, ["update", "--to", "construction-details"])
 
     assert result.exit_code == 1
-    assert "Context 'campus-wiki' not found" in result.stderr
+    assert "Context 'construction-details' not found" in result.stderr
     assert not (isolated_store / "staged-update.json").exists()
-    assert not store.context_exists("campus-wiki")
+    assert not store.context_exists("construction-details")
 
 
 def test_repeated_update_is_idempotent_and_does_not_reconnect(
@@ -1168,6 +1193,186 @@ def test_update_applies_multiple_owners_with_one_checkpoint_each(
         )
 
 
+def test_multi_context_update_is_one_atomic_undo_and_redo_unit(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _, target_memory = _persist_pair(store)
+    provider = PlanProvider(_edit_and_root_add_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    root_before = store.load_direct(TASK1_TARGET).to_dict()
+    child_before = store.load_direct(TASK1_TARGET_CHILD).to_dict()
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--to", TASK1_TARGET],
+        ).exit_code
+        == 0
+    )
+    root_after = store.load_direct(TASK1_TARGET).to_dict()
+    child_after = store.load_direct(TASK1_TARGET_CHILD).to_dict()
+
+    undo = runner.invoke(app, ["undo"])
+
+    assert undo.exit_code == 0, undo.output
+    assert "Undid command: mem update" in undo.output
+    assert "Affected Contexts: 2" in undo.output
+    assert store.load_direct(TASK1_TARGET).to_dict() == root_before
+    assert store.load_direct(TASK1_TARGET_CHILD).to_dict() == child_before
+
+    redo = runner.invoke(app, ["redo"])
+
+    assert redo.exit_code == 0, redo.output
+    assert "Redid command: mem update" in redo.output
+    assert "Affected Contexts: 2" in redo.output
+    assert store.load_direct(TASK1_TARGET).to_dict() == root_after
+    assert store.load_direct(TASK1_TARGET_CHILD).to_dict() == child_after
+    assert (
+        store.load_direct(TASK1_TARGET_CHILD)
+        .memories[target_memory.uid]
+        .content.startswith("The Main Building south entrance is open")
+    )
+
+    trace = build_trace(
+        store,
+        store.load_direct(TASK1_TARGET_CHILD),
+        target_memory.uid,
+    )
+    restorations = [
+        event for event in trace.events if event.command in {"undo", "redo"}
+    ]
+    update_event = next(event for event in trace.events if event.command == "update")
+
+    assert [event.command for event in restorations] == ["undo", "redo"]
+    assert update_event.command_operation is not None
+    assert update_event.command_operation.command == "update"
+    assert [context.name for context in update_event.command_operation.contexts] == [
+        TASK1_TARGET,
+        TASK1_TARGET_CHILD,
+    ]
+    assert all(
+        event.command_operation is not None
+        and event.command_operation.source_command == "update"
+        and event.command_operation.source_uid == update_event.command_operation.uid
+        and [context.name for context in event.command_operation.contexts]
+        == [TASK1_TARGET, TASK1_TARGET_CHILD]
+        for event in restorations
+    )
+
+    rendered = runner.invoke(
+        app,
+        [
+            "trace",
+            target_memory.uid[:8],
+            "--context",
+            TASK1_TARGET_CHILD,
+            "--verbose",
+        ],
+    )
+
+    assert rendered.exit_code == 0, rendered.output
+    assert "Operation: update" in rendered.output
+    assert rendered.output.count("Source operation: mem update") == 2
+    assert rendered.output.count("Affected Contexts: 2") == 3
+
+
+def test_multi_context_undo_rolls_back_if_second_owner_write_fails(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    provider = PlanProvider(_edit_and_root_add_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--to", TASK1_TARGET],
+        ).exit_code
+        == 0
+    )
+    records_after = {
+        name: store.load_direct(name).to_dict()
+        for name in (TASK1_TARGET, TASK1_TARGET_CHILD)
+    }
+    histories_after = {
+        name: store.list_checkpoints(name)
+        for name in (TASK1_TARGET, TASK1_TARGET_CHILD)
+    }
+    original_save_locked = MemoryStore._save_locked
+    undo_writes = 0
+
+    def fail_second_undo(self, context, auto_checkpoint, **kwargs):
+        nonlocal undo_writes
+        if auto_checkpoint is not None and auto_checkpoint.command == "undo":
+            undo_writes += 1
+            if undo_writes == 2:
+                raise OSError("simulated second-owner failure")
+        return original_save_locked(
+            self,
+            context,
+            auto_checkpoint,
+            **kwargs,
+        )
+
+    monkeypatch.setattr(MemoryStore, "_save_locked", fail_second_undo)
+
+    undo = runner.invoke(app, ["undo"])
+
+    assert undo.exit_code == 1
+    assert "simulated second-owner failure" in undo.stderr
+    for name in (TASK1_TARGET, TASK1_TARGET_CHILD):
+        assert store.load_direct(name).to_dict() == records_after[name]
+        assert store.list_checkpoints(name) == histories_after[name]
+
+
+def test_multi_context_undo_rejects_an_incomplete_update_receipt(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    provider = PlanProvider(_edit_and_root_add_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--to", TASK1_TARGET],
+        ).exit_code
+        == 0
+    )
+    records_after = {
+        name: store.load_direct(name).to_dict()
+        for name in (TASK1_TARGET, TASK1_TARGET_CHILD)
+    }
+    applied = store.load_staged_update()
+    assert applied.application is not None
+    missing = applied.application.checkpoints[-1]
+    checkpoint_path = next(
+        path
+        for path in store._checkpoints_dir(missing.context_name).glob("*.json")
+        if missing.checkpoint_uid[:8] in path.name
+    )
+    checkpoint_path.unlink()
+
+    undo = runner.invoke(app, ["undo"])
+
+    assert undo.exit_code == 1
+    assert "inconsistent checkpoint metadata" in undo.stderr
+    for name in (TASK1_TARGET, TASK1_TARGET_CHILD):
+        assert store.load_direct(name).to_dict() == records_after[name]
+
+
 def test_empty_update_records_applied_receipt_without_context_checkpoint(
     isolated_store,
     monkeypatch,
@@ -1182,8 +1387,7 @@ def test_empty_update_records_applied_receipt_without_context_checkpoint(
     target_bytes_before = {
         path: path.read_bytes()
         for path in (
-            isolated_store / "contexts" / "participant"
-            / "campus-wiki-fork"
+            isolated_store / "contexts" / "campus-wiki"
         ).rglob("context.json")
     }
 
@@ -1199,8 +1403,7 @@ def test_empty_update_records_applied_receipt_without_context_checkpoint(
     assert {
         path: path.read_bytes()
         for path in (
-            isolated_store / "contexts" / "participant"
-            / "campus-wiki-fork"
+            isolated_store / "contexts" / "campus-wiki"
         ).rglob("context.json")
     } == target_bytes_before
     assert store.list_checkpoints(TASK1_TARGET) == []
@@ -1233,10 +1436,7 @@ def test_multi_owner_write_failure_rolls_back_contexts_and_checkpoints(
         expected_context_digest,
         require_new=False,
     ):
-        if (
-            auto_checkpoint is not None
-            and auto_checkpoint.command == "update"
-        ):
+        if auto_checkpoint is not None and auto_checkpoint.command == "update":
             update_writes.append(context.name)
             if len(update_writes) == 2:
                 raise OSError("simulated second owner write failure")

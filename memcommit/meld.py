@@ -1597,6 +1597,24 @@ class MeldSession:
         self.state = "APPLIED"
         self._validate()
 
+    def clear_application(
+        self,
+        *,
+        change_set_digest: str,
+        checkpoint_uid: str,
+    ) -> None:
+        """Return one exact applied session to its reviewed ready state."""
+        if self.state != "APPLIED" or self.application is None:
+            raise MeldError("Meld application is not currently applied.")
+        if (
+            self.application.change_set_digest != change_set_digest
+            or self.application.checkpoint_uid != checkpoint_uid
+        ):
+            raise MeldError("Meld application receipt does not match this undo.")
+        self.application = None
+        self.state = "READY_TO_APPLY"
+        self._validate()
+
     def _validate(self) -> None:
         if self.schema_version not in {
             MELD_LEGACY_SCHEMA_VERSION,

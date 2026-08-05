@@ -153,12 +153,16 @@ def restore_granted_update(
 ) -> CommandRestoreResult:
     """Restore the exact authority command named by a participant receipt."""
 
+    restorable_statuses = {"applied"} if direction == "undo" else {
+        "applied",
+        "undone",
+    }
     if (
-        session.status != "applied"
+        session.status not in restorable_statuses
         or session.granted_target is None
         or session.application is None
     ):
-        raise ValueError("Expected one applied granted UpdateSession.")
+        raise ValueError("Expected one restorable granted UpdateSession.")
     binding = session.granted_target
     expected_unit_uid = (
         f"update:{session.uid}:{session.application.operation_digest}"
@@ -171,6 +175,28 @@ def restore_granted_update(
             direction,
             expected_unit_uid=expected_unit_uid,
         )
+        restored_session = (
+            session.with_restored_application(applied=False)
+            if direction == "undo"
+            else session.with_restored_application(applied=True)
+            if session.status == "undone"
+            else session
+        )
+        if restored_session != session:
+            try:
+                active_store.save_staged_update(
+                    restored_session,
+                    expected_current=session,
+                )
+            except Exception:
+                # The authority command and participant receipt are one
+                # operation. Reverse the just-recorded restoration before
+                # exposing a partial cross-Profile result.
+                access.store.restore_recent_context_command(
+                    "redo" if direction == "undo" else "undo",
+                    expected_unit_uid=expected_unit_uid,
+                )
+                raise
     return _public_restore_result(result, binding)
 
 

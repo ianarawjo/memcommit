@@ -1559,6 +1559,28 @@ class AtomizeGroundingSession:
         self.state = "APPLIED"
         self._validate_history()
 
+    def clear_application(
+        self,
+        *,
+        change_set_digest: str,
+        checkpoint_uid: str,
+    ) -> None:
+        """Return one exact application to its reviewed ready state."""
+        if self.state != "APPLIED" or self.application is None:
+            raise AtomizeGroundingError(
+                "Atomize grounding application is not currently applied."
+            )
+        if (
+            self.application.change_set_digest != change_set_digest
+            or self.application.checkpoint_uid != checkpoint_uid
+        ):
+            raise AtomizeGroundingError(
+                "Atomize grounding receipt does not match this undo."
+            )
+        self.application = None
+        self.state = "READY_TO_APPLY"
+        self._validate_history()
+
     def keep_review_only(self) -> None:
         """Close the dialogue while retaining its evidence without edits."""
         if self.state == "APPLIED":

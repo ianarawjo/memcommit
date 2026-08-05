@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from time import monotonic
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.application.current import get_app
@@ -30,6 +31,7 @@ from memcommit.commands.tui_primitives import (
     bind_focused_frame_style,
     build_framed_multiline_input,
     build_tui_frame,
+    navigable_tree_row_prefix,
     require_interactive_terminal,
     safe_terminal_text,
 )
@@ -48,6 +50,42 @@ class ResolutionGlobalStrategy:
     label: str
     action_kind: str
     comment: str = ""
+
+
+@dataclass
+class _NavigationAccelerator:
+    """Increase held-arrow travel while keeping deliberate taps precise."""
+
+    direction: int = 0
+    streak: int = 0
+    last_at: float | None = None
+
+    def reset(self) -> None:
+        self.direction = 0
+        self.streak = 0
+        self.last_at = None
+
+    def step(self, direction: int, *, now: float | None = None) -> int:
+        if direction not in {-1, 1}:
+            raise ValueError("Navigation direction must be -1 or 1.")
+        observed_at = monotonic() if now is None else now
+        if (
+            self.last_at is None
+            or direction != self.direction
+            or observed_at - self.last_at > 0.4
+        ):
+            self.streak = 1
+        else:
+            self.streak += 1
+        self.direction = direction
+        self.last_at = observed_at
+        if self.streak >= 13:
+            return 10
+        if self.streak >= 8:
+            return 5
+        if self.streak >= 4:
+            return 2
+        return 1
 
 
 def _line(value: str, limit: int = 100) -> str:
@@ -119,6 +157,24 @@ def _boxed_lines(title: str, body: str, *, width: int = 72) -> list[str]:
     )
     lines.append(f"╰{'─' * inner_width}╯")
     return lines
+
+
+def _viewer_focus_fragments(
+    fragments: list[tuple[str, str]],
+    *,
+    focused: bool,
+) -> list[tuple[str, str]]:
+    """Hide positional emphasis when the Viewer is not the active pane."""
+    if focused:
+        return fragments
+    inactive_style = {
+        "class:viewer-section": "class:section",
+        "class:detail-card.focused": "class:detail-card",
+        "class:option-card.focused": "class:option-card",
+        "class:option-card.other": "class:option-card",
+        "class:choice": "",
+    }
+    return [(inactive_style.get(style, style), text) for style, text in fragments]
 
 
 def resolution_workbench_fragments(
@@ -564,9 +620,11 @@ def _seeded_report_lines(
                 ),
             ]
         )
-        lines.extend(
-            f"  {index}. {item.label}" for index, item in enumerate(strategies, start=1)
-        )
+        if not (review_and_apply and view.accept_enabled):
+            lines.extend(
+                f"  {index}. {item.label}"
+                for index, item in enumerate(strategies, start=1)
+            )
     return lines
 
 
@@ -728,8 +786,6 @@ def resolution_seeded_report_fragments(
                 if badge:
                     item_body = [badge, "", *item_body]
                 item_active = section_index == focused_section
-                if item_active:
-                    fragments.append(("[SetCursorPosition]", ""))
                 conflict_heading = f"CONFLICT {item_index + 1}"
                 heading_style = (
                     "class:viewer-section" if item_active else "class:section"
@@ -759,10 +815,18 @@ def resolution_seeded_report_fragments(
                 for body_line in body_visual_lines:
                     fragments.append(
                         (
-                            "class:detail-card",
+                            (
+                                "class:detail-card.focused"
+                                if item_active
+                                else "class:detail-card"
+                            ),
                             f" │     {_visual_pad(body_line, inner_width - 6)} │\n",
                         )
                     )
+                if item_active:
+                    # Anchor after the complete conflict so prompt-toolkit
+                    # scrolls its body into view, not merely its first line.
+                    fragments.append(("[SetCursorPosition]", ""))
                 section_index += 1
                 if section_index < len(sections) and sections[section_index][
                     1
@@ -775,21 +839,37 @@ def resolution_seeded_report_fragments(
 
         if key.startswith("RESULT:"):
             active = section_index == focused_section
-            if active:
-                fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:viewer-section" if active else "class:section",
-                    f" {safe_terminal_text(title)}\n",
-                )
+            result_index = int(key.split(":", 1)[1])
+            result = view.results[result_index]
+            style = "class:viewer-section" if active else "class:detail-card"
+            prefix = navigable_tree_row_prefix(
+                selected=active,
+                depth=1,
+                branch=result.marker,
             )
-            result_body = list(lines[start + 1 : end])
-            while result_body and not result_body[-1].strip():
-                result_body.pop()
-            for result_line in result_body:
-                fragments.append(
-                    ("class:detail-card", f" {safe_terminal_text(result_line)}\n")
-                )
+            identity = f"{result_index + 1:>3}. [{safe_terminal_text(result.label)}] "
+            content_indent = " " * _visual_width(prefix + identity)
+            content_width = max(12, 76 - _visual_width(prefix + identity))
+            wrapped_content = _visual_wrap(result.text, content_width)
+            for line_index, content_line in enumerate(wrapped_content):
+                lead = prefix + identity if line_index == 0 else content_indent
+                fragments.append((style, f" {lead}{content_line}\n"))
+            if result.reason:
+                reason_prefix = " " * _visual_width(prefix) + "    WHY · "
+                reason_width = max(12, 76 - _visual_width(reason_prefix))
+                for line_index, reason_line in enumerate(
+                    _visual_wrap(result.reason, reason_width)
+                ):
+                    lead = (
+                        reason_prefix
+                        if line_index == 0
+                        else " " * _visual_width(reason_prefix)
+                    )
+                    fragments.append((style, f" {lead}{reason_line}\n"))
+            if active:
+                # A trailing anchor keeps the complete wrapped Memory and WHY
+                # visible whenever this independently focusable block fits.
+                fragments.append(("[SetCursorPosition]", ""))
             if section_index < len(sections) - 1:
                 fragments.append(("", "\n"))
             section_index += 1
@@ -833,7 +913,11 @@ def resolution_seeded_report_fragments(
                     badge = f"SELECTED · {item.option(option_uid).label}"
                 elif comment.strip():
                     badge = "OTHER DIRECTION · STAGED"
-        elif key == "RESOLVE_ALL" and strategies:
+        elif (
+            key == "RESOLVE_ALL"
+            and strategies
+            and not (review_and_apply and view.accept_enabled)
+        ):
             policy_index = max(0, min(selected_strategy_index, len(strategies) - 1))
             badge = f"POLICY · {strategies[policy_index].label}"
         if badge:
@@ -843,14 +927,18 @@ def resolution_seeded_report_fragments(
 
         active = section_index == focused_section
         card_lines = _boxed_lines(title, "\n".join(body_lines))
-        if active:
-            fragments.append(("[SetCursorPosition]", ""))
+        anchor_at_end = active
         badge_line_count = len(_visual_wrap(badge, 68)) if badge else 0
         for card_line_index, card_line in enumerate(card_lines):
             style = "class:detail-card.focused" if active else "class:detail-card"
             if badge and 1 <= card_line_index <= badge_line_count:
                 style = "class:selection-badge"
             fragments.append((style, f" {safe_terminal_text(card_line)}\n"))
+        if anchor_at_end:
+            # A block-end anchor exposes the complete card when it fits. This
+            # is especially important for the terminal apply boundary after a
+            # long result list, but applies equally to ordinary report cards.
+            fragments.append(("[SetCursorPosition]", ""))
         if section_index < len(sections) - 1:
             fragments.append(("", "\n"))
         section_index += 1
@@ -1000,40 +1088,52 @@ def run_resolution_workbench_shell(
     def split_view_fragments():
         active_view = current_view()
         if viewer_content["kind"] == "REVIEW":
-            return resolution_review_fragments(
-                active_view,
-                local_drafts,
-                global_strategies,
-                strategy["index"],
-                viewer_section["index"],
+            return _viewer_focus_fragments(
+                resolution_review_fragments(
+                    active_view,
+                    local_drafts,
+                    global_strategies,
+                    strategy["index"],
+                    viewer_section["index"],
+                ),
+                focused=pane_focus["value"] == "viewer",
             )
         if viewer_content["kind"] == "REPORT":
             if split_report_text is not None:
-                return resolution_seeded_report_fragments(
+                return _viewer_focus_fragments(
+                    resolution_seeded_report_fragments(
+                        active_view,
+                        split_report_text,
+                        strategies=global_strategies,
+                        drafts=local_drafts,
+                        report_item_badges=split_report_item_badges,
+                        report_conflicts_remaining=split_report_conflicts_remaining,
+                        selected_strategy_index=strategy["index"],
+                        focused_section=viewer_section["index"],
+                        review_and_apply=review_and_apply,
+                        read_only=read_only,
+                    ),
+                    focused=pane_focus["value"] == "viewer",
+                )
+            return _viewer_focus_fragments(
+                resolution_report_fragments(
                     active_view,
-                    split_report_text,
                     strategies=global_strategies,
-                    drafts=local_drafts,
-                    report_item_badges=split_report_item_badges,
-                    report_conflicts_remaining=split_report_conflicts_remaining,
-                    selected_strategy_index=strategy["index"],
                     focused_section=viewer_section["index"],
                     review_and_apply=review_and_apply,
                     read_only=read_only,
-                )
-            return resolution_report_fragments(
-                active_view,
-                strategies=global_strategies,
-                focused_section=viewer_section["index"],
-                review_and_apply=review_and_apply,
-                read_only=read_only,
+                ),
+                focused=pane_focus["value"] == "viewer",
             )
-        return resolution_viewer_fragments(
-            active_view,
-            current_navigation,
-            focused_section=viewer_section["index"],
-            other_direction_focused=other_direction["focused"],
-            other_direction_editing=other_direction_editor["open"],
+        return _viewer_focus_fragments(
+            resolution_viewer_fragments(
+                active_view,
+                current_navigation,
+                focused_section=viewer_section["index"],
+                other_direction_focused=other_direction["focused"],
+                other_direction_editing=other_direction_editor["open"],
+            ),
+            focused=pane_focus["value"] == "viewer",
         )
 
     bindings = KeyBindings()
@@ -1044,6 +1144,7 @@ def run_resolution_workbench_shell(
     strategy = {"index": 0}
     viewer_content = {"kind": "REPORT"}
     viewer_section = {"index": 0}
+    navigation_accelerator = _NavigationAccelerator()
     other_direction = {"focused": False}
     other_direction_editor = {"open": False}
     input_heading = {"value": "COMMENT ON SELECTED CONFLICT"}
@@ -1290,6 +1391,31 @@ def run_resolution_workbench_shell(
         composer.frame.title = "MESSAGE"
         set_status("")
 
+    def arrow_delta(direction: int) -> int:
+        """Accelerate only inside long proposed-result runs."""
+        if not (
+            split_viewer_items
+            and pane_focus["value"] == "viewer"
+            and viewer_content["kind"] == "REPORT"
+            and split_report_text is not None
+        ):
+            navigation_accelerator.reset()
+            return direction
+        sections = _seeded_report_sections(
+            _seeded_report_lines(
+                current_view(),
+                split_report_text,
+                global_strategies,
+                review_and_apply,
+                read_only,
+            )
+        )
+        section_index = max(0, min(viewer_section["index"], len(sections) - 1))
+        if not sections[section_index][1].startswith("RESULT:"):
+            navigation_accelerator.reset()
+            return direction
+        return direction * navigation_accelerator.step(direction)
+
     def move_split_option(delta: int) -> None:
         item = current_navigation.current_item(current_view())
         if item is None or not item.options:
@@ -1348,12 +1474,12 @@ def run_resolution_workbench_shell(
 
     @bindings.add("down", filter=~has_focus(input_area))
     def _down(event) -> None:
-        move(1)
+        move(arrow_delta(1))
         event.app.invalidate()
 
     @bindings.add("up", filter=~has_focus(input_area))
     def _up(event) -> None:
-        move(-1)
+        move(arrow_delta(-1))
         event.app.invalidate()
 
     @bindings.add("pagedown", filter=~has_focus(input_area))
@@ -1361,21 +1487,25 @@ def run_resolution_workbench_shell(
         # Once results are independent sections, a page step advances several
         # short result blocks instead of trying to display one 234-result
         # monolith. Down still advances one block at a time.
+        navigation_accelerator.reset()
         move(8)
         event.app.invalidate()
 
     @bindings.add("pageup", filter=~has_focus(input_area))
     def _page_up(event) -> None:
+        navigation_accelerator.reset()
         move(-8)
         event.app.invalidate()
 
     @bindings.add("end", filter=~has_focus(input_area))
     def _end(event) -> None:
+        navigation_accelerator.reset()
         move(1_000_000)
         event.app.invalidate()
 
     @bindings.add("home", filter=~has_focus(input_area))
     def _home(event) -> None:
+        navigation_accelerator.reset()
         move(-1_000_000)
         event.app.invalidate()
 
@@ -1766,10 +1896,10 @@ def run_resolution_workbench_shell(
         item = current_navigation.current_item(active_view)
         if split_viewer_items and split_kind() == "REPORT":
             navigation_help = (
-                " ↑/↓ block  PgUp/PgDn page  End last  Tab switch  "
+                " ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  "
                 "Enter inspect  Esc close "
                 if read_only
-                else " ↑/↓ block  PgUp/PgDn page  End last  Tab switch  "
+                else " ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  "
                 "Enter open  Esc/Q close "
             )
         elif split_viewer_items and split_kind() == "RESOLVE_ALL":

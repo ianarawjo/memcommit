@@ -73,6 +73,8 @@ def _render_header(session: UpdateSession, *, verbose: bool) -> None:
             else "Applied local update"
         )
         if session.status == "applied"
+        else "Undone update"
+        if session.status == "undone"
         else "Update preview"
     )
     typer.secho(heading, fg=typer.colors.CYAN, bold=True)
@@ -457,7 +459,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    if session.status not in {"staged", "applied"}:
+    if session.status not in {"staged", "applied", "undone"}:
         typer.secho(
             "Diff error: the saved record is not an update result.",
             fg=typer.colors.RED,
@@ -485,6 +487,8 @@ def cmd(
         timing = (
             "after this update was applied"
             if session.status == "applied"
+            else "after this update was undone"
+            if session.status == "undone"
             else "after this update was staged"
         )
         status_label = (

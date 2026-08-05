@@ -546,6 +546,27 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     rationale = build_rationale(store, updated, trace, None)
     assert grounded_event in rationale.recorded_reason_events
 
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert [
+        memory.content for memory in store.load_direct(ctx.name).memories.values()
+    ] == [
+        "Students should be guided to use a physical card or the app.",
+        "The staff-only entrance uses the same NFC.",
+    ]
+    undone_grounding = store.load_atomize_grounding_session(ctx.uid)
+    assert undone_grounding.state == "READY_TO_APPLY"
+    assert undone_grounding.application is None
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    redone_grounding = store.load_atomize_grounding_session(ctx.uid)
+    assert redone_grounding.state == "APPLIED"
+    assert redone_grounding.application is not None
+    assert "app authentication is not accepted" in (
+        store.load_direct(ctx.name).memories[student.uid].content
+    )
+
 
 def test_grounding_carries_selected_reading_and_free_text_into_provider(
     isolated_store,

@@ -836,12 +836,50 @@ keeps the review surface meaningful without asking the provider to summarize
 the decision a second time. An open or merely staged issue is not counted as
 resolved.
 
+Viewer position and durable decision state use separate color semantics. The
+blue focused section, conflict, result, or option cursor appears only while the
+Viewer pane itself owns focus; switching to Items removes that positional
+emphasis so the top `MEM COMPARE` card cannot look active. Blue decision badges
+and selected-option state remain visible because they report saved or staged
+resolution state rather than keyboard focus.
+
 Proposed target Memories are not one giant Viewer section. Each result is an
 independently focusable, indented block containing its disposition, complete
 Memory text, and reason. Up and Down therefore advance by one short result
-block, Page Up and Page Down advance eight blocks, and End reaches the final
-materialize/apply section directly. This prevents a hundreds-result proposal
-from hiding `REVIEW & APPLY MELD` below one unscrollable block.
+block at first, then accelerate through steps of two, five, and ten while the
+same arrow is held; a pause or direction change restores single-step movement.
+Page Up and Page Down advance eight blocks, and End reaches the final
+materialize/apply section directly. Result rows reuse the Switch tree-prefix
+primitive and color the complete focused Memory and rationale, rather than
+only its disposition. The final action card anchors at its bottom so its full
+border and action remain visible after a hundreds-result proposal. Once a
+proposal is ready, this card also omits the now-inapplicable materialization
+strategies; they remain visible only while the proposal still needs to be
+materialized.
+
+Every independently focusable report card, conflict, and proposed Memory uses
+a trailing viewport anchor. An anchor at the first line allowed prompt-toolkit
+to stop scrolling as soon as that one line entered the bottom of the Viewer,
+hiding the selected Memory body and rationale. Anchoring after the block keeps
+the whole block visible whenever its rendered height fits the Viewer; blocks
+larger than the physical pane remain scroll-limited by the terminal itself.
+
+Meld application state participates in command-unit Undo and Redo. The target
+Context checkpoint retains the exact session UID, change-set digest, original
+application checkpoint, and result Memory identities. Under the same global
+command and target locks used for Context restoration, Undo validates that
+receipt and changes the matching session from `APPLIED` back to
+`READY_TO_APPLY`; Redo restores the exact `APPLIED` receipt. If either side is
+stale or belongs to another session, restoration fails before writing. As with
+multi-Context command restoration, exception rollback covers both records;
+machine-crash atomicity still requires a future transaction journal.
+
+The same companion-artifact restoration hook covers atomize-grounding apply:
+its saved dialogue returns from `APPLIED` to `READY_TO_APPLY` on Undo and Redo
+restores the exact checkpoint-bound application receipt. Operations whose
+"applied" view is derived from the live Context history, rather than stored as
+a separate terminal flag, need no companion mutation because restoring the
+Context already changes that projection.
 
 There is no permanently visible `MESSAGE` frame. `C` on an opened conflict
 opens a temporary `COMMENT ON SELECTED CONFLICT` section inside the

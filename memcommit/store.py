@@ -4927,6 +4927,10 @@ class MemoryStore:
             original_records: dict[str, dict[str, object]] = {}
             created_checkpoints: list[tuple[str, Checkpoint]] = []
             written_names: list[str] = []
+            artifact_restore: (
+                tuple[Path, dict[str, object], dict[str, object]] | None
+            ) = None
+            artifact_written = False
             with self._context_graph_lock(exclusive=False):
                 with self._context_write_locks(names):
                     for change in unit.changes:
@@ -4950,6 +4954,11 @@ class MemoryStore:
                                 f"after the command selected for {direction}."
                             )
                         original_records[change.context_name] = current.to_dict()
+
+                    artifact_restore = self._prepare_applied_artifact_restore(
+                        unit,
+                        direction,
+                    )
 
                     try:
                         for change in unit.changes:
@@ -4986,8 +4995,30 @@ class MemoryStore:
                             created_checkpoints.append(
                                 (change.context_name, checkpoint)
                             )
+                        if artifact_restore is not None:
+                            session_path, _session_before, session_after = (
+                                artifact_restore
+                            )
+                            self._write_applied_artifact_restore(
+                                session_path,
+                                expected=_session_before,
+                                value=session_after,
+                            )
+                            artifact_written = True
                     except Exception:
                         rollback_error: Exception | None = None
+                        if artifact_written and artifact_restore is not None:
+                            try:
+                                session_path, session_before, _session_after = (
+                                    artifact_restore
+                                )
+                                self._write_applied_artifact_restore(
+                                    session_path,
+                                    expected=_session_after,
+                                    value=session_before,
+                                )
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
                         for name in written_names:
                             try:
                                 _write_json_atomic(
@@ -5032,10 +5063,251 @@ class MemoryStore:
                 unit=unit,
                 direction=direction,
                 receipt_uid=receipt_uid,
-                checkpoints=tuple(
-                    checkpoint for _, checkpoint in created_checkpoints
-                ),
+                checkpoints=tuple(checkpoint for _, checkpoint in created_checkpoints),
             )
+
+    def _prepare_applied_artifact_restore(
+        self,
+        unit,
+        direction: str,
+    ) -> tuple[Path, dict[str, object], dict[str, object]] | None:
+        """Prepare a saved semantic artifact coupled to one Context command."""
+        if unit.command == "meld":
+            return self._prepare_meld_command_restore(unit, direction)
+        if unit.command == "atomize-grounding":
+            return self._prepare_atomize_grounding_command_restore(unit, direction)
+        if unit.command == "update":
+            return self._prepare_update_command_restore(unit, direction)
+        return None
+
+    def _write_applied_artifact_restore(
+        self,
+        path: Path,
+        *,
+        expected: dict[str, object],
+        value: dict[str, object],
+    ) -> None:
+        """CAS-write one companion artifact inside command restoration."""
+        if path == self.staged_update_file:
+            with self._update_session_write_lock():
+                current = self._load_update_session(path)
+                if current is None or current.to_dict() != expected:
+                    raise ConcurrentContextUpdateError(
+                        "The active Update receipt changed during restoration."
+                    )
+                from memcommit.update import UpdateSession
+
+                self._save_update_session(path, UpdateSession.from_dict(value))
+            return
+        with self.profile_write_guard():
+            if not path.is_file() or path.is_symlink():
+                raise ConcurrentContextUpdateError(
+                    "The applied operation artifact changed during restoration."
+                )
+            with open(path, encoding="utf-8") as file:
+                current = json.load(
+                    file,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            if current != expected:
+                raise ConcurrentContextUpdateError(
+                    "The applied operation artifact changed during restoration."
+                )
+            _write_json_atomic(path, value)
+
+    def _prepare_meld_command_restore(
+        self,
+        unit,
+        direction: str,
+    ) -> tuple[Path, dict[str, object], dict[str, object]] | None:
+        """Prepare the Meld-session half of one Context command restoration."""
+        if unit.command != "meld":
+            return None
+        if len(unit.changes) != 1:
+            raise ValueError("A Meld command must restore exactly one target Context.")
+        change = unit.changes[0]
+        checkpoint = next(
+            (
+                entry
+                for entry in self.list_checkpoints(change.context_name)
+                if entry.get("uid") == change.checkpoint_uid
+            ),
+            None,
+        )
+        args = checkpoint.get("args") if isinstance(checkpoint, dict) else None
+        record = args.get("meld") if isinstance(args, dict) else None
+        if not isinstance(record, dict):
+            raise ValueError("Meld checkpoint has no valid session receipt.")
+        session_uid = record.get("session_uid")
+        change_set_digest = record.get("change_set_digest")
+        raw_results = record.get("results")
+        if (
+            not isinstance(session_uid, str)
+            or not session_uid
+            or not isinstance(change_set_digest, str)
+            or not change_set_digest
+            or not isinstance(raw_results, list)
+        ):
+            raise ValueError("Meld checkpoint session receipt is invalid.")
+        result_uids = tuple(
+            result.get("memory_uid")
+            for result in raw_results
+            if isinstance(result, dict)
+            and isinstance(result.get("memory_uid"), str)
+        )
+        if len(result_uids) != len(raw_results):
+            raise ValueError("Meld checkpoint result identities are invalid.")
+        session = self.load_meld_session(change.context_uid)
+        if (
+            session is None
+            or session.uid != session_uid
+            or session.target.context_uid != change.context_uid
+            or session.target.context_name != change.context_name
+        ):
+            raise ValueError("Meld session does not match the restored command.")
+        before = session.to_dict()
+        if direction == "undo":
+            session.clear_application(
+                change_set_digest=change_set_digest,
+                checkpoint_uid=change.checkpoint_uid,
+            )
+        elif session.state == "READY_TO_APPLY" and session.application is None:
+            session.record_application(
+                change_set_digest=change_set_digest,
+                checkpoint_uid=change.checkpoint_uid,
+                result_memory_uids=result_uids,
+            )
+        elif not (
+            session.state == "APPLIED"
+            and session.application is not None
+            and session.application.change_set_digest == change_set_digest
+            and session.application.checkpoint_uid == change.checkpoint_uid
+            and session.application.result_memory_uids == result_uids
+        ):
+            raise ValueError("Meld session cannot be restored to applied state.")
+        return self._meld_session_path(change.context_uid), before, session.to_dict()
+
+    def _prepare_atomize_grounding_command_restore(
+        self,
+        unit,
+        direction: str,
+    ) -> tuple[Path, dict[str, object], dict[str, object]]:
+        """Prepare the atomize-grounding session half of Undo or Redo."""
+        if len(unit.changes) != 1:
+            raise ValueError(
+                "An atomize-grounding command must restore exactly one Context."
+            )
+        change = unit.changes[0]
+        checkpoint = next(
+            (
+                entry
+                for entry in self.list_checkpoints(change.context_name)
+                if entry.get("uid") == change.checkpoint_uid
+            ),
+            None,
+        )
+        args = checkpoint.get("args") if isinstance(checkpoint, dict) else None
+        record = args.get("grounding") if isinstance(args, dict) else None
+        if not isinstance(record, dict):
+            raise ValueError("Atomize grounding checkpoint has no valid receipt.")
+        session_uid = record.get("session_uid")
+        change_set_digest = record.get("change_set_digest")
+        raw_change_set = record.get("change_set")
+        if (
+            not isinstance(session_uid, str)
+            or not session_uid
+            or not isinstance(change_set_digest, str)
+            or not change_set_digest
+            or not isinstance(raw_change_set, dict)
+        ):
+            raise ValueError("Atomize grounding checkpoint receipt is invalid.")
+        raw_proposals = raw_change_set.get("proposals")
+        proposal_uids = tuple(
+            proposal.get("uid")
+            for proposal in raw_proposals
+            if isinstance(proposal, dict) and isinstance(proposal.get("uid"), str)
+        ) if isinstance(raw_proposals, list) else ()
+        if not isinstance(raw_proposals, list) or len(proposal_uids) != len(
+            raw_proposals
+        ):
+            raise ValueError("Atomize grounding proposal identities are invalid.")
+        session = self.load_atomize_grounding_session(change.context_uid)
+        if (
+            session is None
+            or session.uid != session_uid
+            or session.bindings.context_uid != change.context_uid
+            or session.bindings.context_name != change.context_name
+        ):
+            raise ValueError(
+                "Atomize grounding session does not match the restored command."
+            )
+        before = session.to_dict()
+        if direction == "undo":
+            session.clear_application(
+                change_set_digest=change_set_digest,
+                checkpoint_uid=change.checkpoint_uid,
+            )
+        elif session.state == "READY_TO_APPLY" and session.application is None:
+            session.record_application(
+                change_set_digest=change_set_digest,
+                checkpoint_uid=change.checkpoint_uid,
+            )
+        elif not (
+            session.state == "APPLIED"
+            and session.application is not None
+            and session.application.change_set_digest == change_set_digest
+            and session.application.checkpoint_uid == change.checkpoint_uid
+            and session.application.proposal_uids == proposal_uids
+        ):
+            raise ValueError(
+                "Atomize grounding session cannot be restored to applied state."
+            )
+        return (
+            self._atomize_grounding_session_path(change.context_uid),
+            before,
+            session.to_dict(),
+        )
+
+    def _prepare_update_command_restore(
+        self,
+        unit,
+        direction: str,
+    ) -> tuple[Path, dict[str, object], dict[str, object]] | None:
+        """Prepare the active local Update receipt coupled to its checkpoints."""
+        from memcommit.update import operation_digest
+
+        session = self.load_staged_update()
+        if session is None:
+            # Granted-target Contexts live in the authority Profile; their
+            # participant receipt is coordinated by restore_granted_update.
+            return None
+        digest = operation_digest(session.operations)
+        expected_unit_uid = f"update:{session.uid}:{digest}"
+        if unit.uid != expected_unit_uid:
+            return None
+        if session.application is None:
+            raise ValueError("Update command has no application receipt.")
+        receipt_by_context = {
+            (receipt.context_uid, receipt.context_name): receipt.checkpoint_uid
+            for receipt in session.application.checkpoints
+        }
+        command_by_context = {
+            (change.context_uid, change.context_name): change.checkpoint_uid
+            for change in unit.changes
+        }
+        if (
+            session.application.operation_digest != digest
+            or receipt_by_context != command_by_context
+        ):
+            raise ValueError("Update application receipt does not match this command.")
+        before = session.to_dict()
+        if direction == "undo":
+            session = session.with_restored_application(applied=False)
+        elif session.status == "undone":
+            session = session.with_restored_application(applied=True)
+        elif session.status != "applied":
+            raise ValueError("Update session cannot be restored to applied state.")
+        return self.staged_update_file, before, session.to_dict()
 
     def revert(
         self,

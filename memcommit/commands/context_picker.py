@@ -16,7 +16,10 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
 
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_primitives import (
+    display_escape_text,
+    navigable_tree_row_prefix,
+)
 
 
 _CONTEXT_NAVIGATION_HINT = " ↑↓ move  ←→ expand  "
@@ -24,7 +27,7 @@ _CONTEXT_NAVIGATION_HINT = " ↑↓ move  ←→ expand  "
 
 @dataclass(frozen=True)
 class _ContextTreeRow:
-    """One currently visible Context or grouping namespace."""
+    """One currently visible catalog Context."""
 
     name: str
     depth: int
@@ -54,28 +57,32 @@ def _build_context_tree(
     *,
     materialized_names: AbstractSet[str] | None = None,
 ) -> _ContextTree:
-    """Arrange catalog names under lexical prefixes without inventing targets."""
+    """Arrange only catalog Contexts below their nearest real catalog parent."""
     materialized = frozenset(
         options if materialized_names is None else materialized_names
     )
     if not materialized.issubset(options):
         raise ValueError("Materialized Context names must be in the picker catalog.")
+    ordered_names = tuple(dict.fromkeys(options))
+    option_set = frozenset(ordered_names)
     parent_by_name: dict[str, str | None] = {}
     children: dict[str | None, list[str]] = {None: []}
-    ordered_names: list[str] = []
-    for materialized_name in options:
-        segments = materialized_name.split("/")
-        for length in range(1, len(segments) + 1):
-            name = "/".join(segments[:length])
-            if name in parent_by_name:
-                continue
-            parent = "/".join(segments[: length - 1]) or None
-            parent_by_name[name] = parent
-            children.setdefault(parent, []).append(name)
-            children.setdefault(name, [])
-            ordered_names.append(name)
-    # Missing prefixes are navigation-only rows. They keep legacy/orphaned
-    # descendants collapsible but can never be returned as switch targets.
+    for name in ordered_names:
+        segments = name.split("/")
+        parent = next(
+            (
+                "/".join(segments[:length])
+                for length in range(len(segments) - 1, 0, -1)
+                if "/".join(segments[:length]) in option_set
+            ),
+            None,
+        )
+        parent_by_name[name] = parent
+        children.setdefault(parent, []).append(name)
+        children.setdefault(name, [])
+    # A missing prefix is not a Context and therefore receives no synthetic
+    # navigation row. Callers that need a grouping parent must persist an
+    # ordinary zero-Memory Context and include it in the frozen catalog.
     return _ContextTree(
         roots=tuple(children[None]),
         children_by_name={name: tuple(children[name]) for name in ordered_names},
@@ -151,14 +158,12 @@ def _render_context_options(
             fragments.append(("[SetCursorPosition]", ""))
         is_current = row.name == current
         style = "class:selected" if is_selected else ""
-        pointer = "›" if is_selected else " "
-        active = "*" if is_current else " "
         branch = "▾" if row.expanded else "▸" if row.has_children else "·"
         annotation = (annotations or {}).get(row.name)
         suffix = (
             "  " + annotation
             if annotation is not None
-            else "  [namespace only]"
+            else "  [unavailable]"
             if not row.materialized
             else ""
         )
@@ -167,8 +172,13 @@ def _render_context_options(
         fragments.append(
             (
                 style,
-                f"{pointer} {active} {'  ' * row.depth}{branch} "
-                f"{display_escape_text(row.name)}{suffix}",
+                navigable_tree_row_prefix(
+                    selected=is_selected,
+                    current=is_current,
+                    depth=row.depth,
+                    branch=branch,
+                )
+                + f"{display_escape_text(row.name)}{suffix}",
             )
         )
         if index < len(rows) - 1:

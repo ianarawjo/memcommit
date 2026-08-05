@@ -87,7 +87,13 @@ def _operation_item(
             f"{operation.memory_uid}"
         ),
         kind=kind,
-        status=("APPLIED" if session_status == "applied" else "PLANNED"),
+        status=(
+            "APPLIED"
+            if session_status == "applied"
+            else "UNDONE"
+            if session_status == "undone"
+            else "PLANNED"
+        ),
         priority="PLANNED",
         title=(
             f"{kind} {operation.owner_context_name} "
