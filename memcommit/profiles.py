@@ -3048,6 +3048,126 @@ def import_study_profiles(bundle_root: Path) -> StudyImportResult:
                 shutil.rmtree(staging)
 
 
+def refresh_study_profile(
+    bundle_root: Path,
+    *,
+    replace_edited_baseline: bool = False,
+) -> StudyImportResult:
+    """Replace the registered Study baseline with current fixture packages.
+
+    The baseline remains an intentionally editable intermediate source.  A
+    refresh therefore fails closed when it has diverged from the digest saved
+    at its last import, unless the caller explicitly accepts replacing those
+    edits.
+    """
+
+    packages = _study_packages(bundle_root)
+    _validate_study_package_grants(packages)
+    imported_at = datetime.now(timezone.utc).isoformat()
+    with _registry_lock():
+        registry = load_profile_registry()
+        baseline = registry.by_name(STUDY_BASELINE_PROFILE_NAME)
+        if baseline is None:
+            raise ProfileError(
+                f"Profile {STUDY_BASELINE_PROFILE_NAME!r} does not exist; "
+                "bootstrap it with 'mem profile import-study'."
+            )
+        _study_baseline_tasks(baseline)
+        if any(
+            baseline.uid in {grant.authority_profile_uid, grant.grantee_profile_uid}
+            for grant in registry.grants
+        ):
+            raise ProfileError(
+                f"Study baseline Profile {baseline.name!r} participates in registry "
+                "grants and cannot be refreshed."
+            )
+
+        source = baseline.source
+        assert isinstance(source, dict)
+        initial_digest = source["initial_baseline_sha256"]
+        assert isinstance(initial_digest, str)
+        destination = profile_store_dir(baseline)
+        current_digest = baseline_store_digest(destination)
+        if current_digest != initial_digest and not replace_edited_baseline:
+            raise ProfileError(
+                "Study baseline has local edits. Re-run with "
+                "--replace-edited-baseline to replace them with the generated bundles."
+            )
+
+        staging = profile_stores_dir() / (
+            f".{baseline.uid}.study-refresh-{uuid.uuid4().hex}"
+        )
+        backup = profile_stores_dir() / (
+            f".{baseline.uid}.study-refresh-backup-{uuid.uuid4().hex}"
+        )
+        replacement_visible = False
+        old_store_moved = False
+        registry_published = False
+        try:
+            inspection = _compose_study_baseline_store(packages, staging)
+            refreshed_digest = baseline_store_digest(staging)
+            refreshed = replace(
+                baseline,
+                source=_study_baseline_source_record(
+                    packages,
+                    imported_at=imported_at,
+                    initial_digest=refreshed_digest,
+                ),
+            )
+            updated = replace(
+                registry,
+                generation=max(1, registry.generation + 1),
+                profiles=tuple(
+                    refreshed if profile.uid == baseline.uid else profile
+                    for profile in registry.profiles
+                ),
+            )
+
+            # The stable Profile UID keeps selection and references intact;
+            # the private backup makes the store swap reversible until the
+            # matching provenance record is durably visible.
+            os.replace(destination, backup)
+            old_store_moved = True
+            os.replace(staging, destination)
+            replacement_visible = True
+            try:
+                _write_registry(updated)
+                registry_published = True
+            except Exception as error:
+                try:
+                    registry_published = load_profile_registry() == updated
+                except (OSError, ProfileConfigError, ValueError):
+                    registry_published = False
+                if registry_published:
+                    raise ProfileError(
+                        "Study baseline was refreshed, but registry durability "
+                        "could not be confirmed; the replacement remains visible."
+                    ) from error
+                os.replace(destination, staging)
+                replacement_visible = False
+                os.replace(backup, destination)
+                old_store_moved = False
+                raise
+
+            shutil.rmtree(backup)
+            old_store_moved = False
+            return StudyImportResult(
+                profiles=(refreshed,),
+                inspections=(replace(inspection, root=destination),),
+            )
+        finally:
+            if not registry_published:
+                if replacement_visible and old_store_moved:
+                    os.replace(destination, staging)
+                    replacement_visible = False
+                if old_store_moved:
+                    os.replace(backup, destination)
+                    old_store_moved = False
+            for candidate in (staging, backup):
+                if candidate.exists() and not candidate.is_symlink():
+                    shutil.rmtree(candidate)
+
+
 def _study_baseline_tasks(
     profile: ProfileEntry,
 ) -> dict[int, dict[str, object]]:

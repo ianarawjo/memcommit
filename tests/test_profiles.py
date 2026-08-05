@@ -701,6 +701,153 @@ def test_live_baseline_edits_are_copied_into_the_next_initialized_study(
     assert _tree_digest(bundles / "task-1") == source_digest
 
 
+def test_study_refresh_preserves_profile_identity_and_rebuilds_provenance(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    before = load_profile_registry()
+    baseline_before = before.by_name(STUDY_BASELINE_PROFILE_NAME)
+    assert baseline_before is not None
+
+    result = runner.invoke(
+        app,
+        ["profile", "refresh-study", "--from", str(bundles)],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert "Refreshed editable Study baseline." in result.output
+    after = load_profile_registry()
+    baseline_after = after.by_name(STUDY_BASELINE_PROFILE_NAME)
+    assert baseline_after is not None
+    assert baseline_after.uid == baseline_before.uid
+    assert after.active_uid == before.active_uid
+    assert after.generation == before.generation + 1
+    assert baseline_after.source != baseline_before.source
+    assert baseline_after.source["initial_baseline_sha256"] == (
+        profiles_module.baseline_store_digest(profile_store_dir(baseline_after))
+    )
+
+
+def test_study_refresh_rejects_local_baseline_edits_without_explicit_replace(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    assert runner.invoke(
+        app, ["profile", "use", STUDY_BASELINE_PROFILE_NAME]
+    ).exit_code == 0
+    assert _subprocess_mem(
+        tmp_path, "switch", "task-1/participant/construction-updates"
+    ).returncode == 0
+    marker = "A local baseline edit that must not be replaced implicitly."
+    assert _subprocess_mem(tmp_path, "add", marker).returncode == 0
+    registry_before = load_profile_registry()
+
+    result = runner.invoke(
+        app,
+        ["profile", "refresh-study", "--from", str(bundles)],
+    )
+
+    assert result.exit_code == 1
+    assert "Study baseline has local edits" in result.stderr
+    assert load_profile_registry() == registry_before
+    baseline = registry_before.by_name(STUDY_BASELINE_PROFILE_NAME)
+    assert baseline is not None
+    context = MemoryStore(root=profile_store_dir(baseline), create=False).load(
+        "task-1/participant/construction-updates"
+    )
+    assert marker in [
+        item.content for item in context.iter_items() if isinstance(item, Memory)
+    ]
+
+
+def test_study_refresh_can_explicitly_replace_local_baseline_edits(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    assert runner.invoke(
+        app, ["profile", "use", STUDY_BASELINE_PROFILE_NAME]
+    ).exit_code == 0
+    assert _subprocess_mem(
+        tmp_path, "switch", "task-1/participant/construction-updates"
+    ).returncode == 0
+    marker = "A local baseline edit explicitly replaced by fixture refresh."
+    assert _subprocess_mem(tmp_path, "add", marker).returncode == 0
+
+    result = runner.invoke(
+        app,
+        [
+            "profile",
+            "refresh-study",
+            "--from",
+            str(bundles),
+            "--replace-edited-baseline",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    registry = load_profile_registry()
+    baseline = registry.by_name(STUDY_BASELINE_PROFILE_NAME)
+    assert baseline is not None
+    context = MemoryStore(root=profile_store_dir(baseline), create=False).load(
+        "task-1/participant/construction-updates"
+    )
+    assert marker not in [
+        item.content for item in context.iter_items() if isinstance(item, Memory)
+    ]
+
+
+def test_study_refresh_rolls_back_store_when_registry_publish_fails(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    registry_before = load_profile_registry()
+    baseline = registry_before.by_name(STUDY_BASELINE_PROFILE_NAME)
+    assert baseline is not None
+    digest_before = profiles_module.baseline_store_digest(
+        profile_store_dir(baseline)
+    )
+
+    def fail_registry_write(_registry):
+        raise OSError("simulated refresh registry failure")
+
+    monkeypatch.setattr("memcommit.profiles._write_registry", fail_registry_write)
+    result = runner.invoke(
+        app,
+        ["profile", "refresh-study", "--from", str(bundles)],
+    )
+
+    assert result.exit_code == 1
+    assert "simulated refresh registry failure" in result.stderr
+    assert load_profile_registry() == registry_before
+    assert profiles_module.baseline_store_digest(profile_store_dir(baseline)) == (
+        digest_before
+    )
+
+
 def test_study_import_is_all_or_nothing_when_one_manifest_is_invalid(
     isolated_store,
     tmp_path,

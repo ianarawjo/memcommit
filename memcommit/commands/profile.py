@@ -24,6 +24,7 @@ from memcommit.profiles import (
     import_study_profiles,
     list_authority_grants,
     list_profiles,
+    refresh_study_profile,
     rename_profile,
     study_profile_groups,
     update_authority_grant,
@@ -626,6 +627,53 @@ def import_study_cmd(
         "Clone it as an isolated participant/authority run with: "
         "mem init-study NAME"
     )
+
+
+@app.command("refresh-study")
+def refresh_study_cmd(
+    source: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--from",
+            help=(
+                "Directory containing task-1, task-2, and task-3 packages; "
+                "defaults to this checkout's generated bundles"
+            ),
+        ),
+    ] = None,
+    replace_edited_baseline: Annotated[
+        bool,
+        typer.Option(
+            "--replace-edited-baseline",
+            help="Replace local edits made since the previous Study import",
+        ),
+    ] = False,
+) -> None:
+    """Refresh the editable Study baseline from validated fixture packages."""
+
+    bundle_root = source or default_study_bundle_root()
+    try:
+        result = refresh_study_profile(
+            bundle_root,
+            replace_edited_baseline=replace_edited_baseline,
+        )
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    profile = result.profiles[0]
+    inspection = result.inspections[0]
+    current_label = (
+        display_escape_text(inspection.current_context)
+        if inspection.current_context
+        else "(none)"
+    )
+    typer.secho("Refreshed editable Study baseline.", fg=typer.colors.GREEN)
+    typer.echo(
+        f"  {display_escape_text(profile.name)}: "
+        f"{_inventory_label(inspection)} · current={current_label} · "
+        f"kind={display_escape_text(profile.kind.lower())}"
+    )
+    typer.echo("The Profile identity and active Profile selection were preserved.")
+    typer.echo("New Study runs will use this refreshed baseline.")
 
 
 @app.command("archive-study")

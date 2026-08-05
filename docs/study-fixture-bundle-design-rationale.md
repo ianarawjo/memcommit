@@ -30,6 +30,17 @@ The package boundary remains split because it proves ownership and permission
 contracts. The live authoring boundary is merged because the still-changing
 Study Memory must be selectable, importable, and copyable as one unit.
 
+Generated packages and the registered `study-baseline` are deliberately not
+two automatically synchronized writable copies. `mem profile refresh-study`
+is the explicit bridge: it validates all packages and grant templates, keeps
+the baseline Profile UID stable, and swaps the store plus provenance in one
+registry transaction. By default it compares the live store with the digest
+recorded at import and refuses to overwrite divergence. The explicit
+`--replace-edited-baseline` escape hatch is required when local baseline edits
+have already been transferred to fixture sources or are intentionally being
+discarded. This preserves an editable rehearsal layer without allowing stale
+generated data to silently erase human corrections.
+
 `mem init-study [NAME]` never rereads these generated packages. It snapshots
 the current registered baseline into two run-private Profiles: `NAME` owns the
 three participant Task branches, while `NAME-granted-memory` owns all three

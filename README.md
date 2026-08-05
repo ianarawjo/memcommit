@@ -296,6 +296,19 @@ Profile. It contains `task-1`, `task-2`, and `task-3`, plus
 `granted-memory/task-3`. Continue refining that Profile while the Study
 Memory is unstable.
 
+When the generated fixture packages change, refresh that visible source
+explicitly before starting another run:
+
+```zsh
+mem profile refresh-study --from outputs/study-fixtures
+```
+
+The refresh preserves the `study-baseline` Profile identity and the active
+Profile selection, but atomically replaces its store and frozen grant
+templates. It refuses to replace edits made in the live baseline since its
+last import. Use `--replace-edited-baseline` only after deciding those edits
+are already represented in the fixture sources or may be discarded.
+
 For a fresh repeatable rehearsal or participant run, snapshot the current
 baseline rather than rebuilding from generated fixture files:
 
