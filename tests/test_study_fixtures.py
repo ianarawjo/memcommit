@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 from collections import Counter
 from dataclasses import replace
 from pathlib import Path
@@ -107,7 +108,10 @@ def test_loader_preserves_content_and_normalizes_available_metadata() -> None:
     assert update.purpose == "KB"
     assert update.audiences == (AudienceRole.ALL,)
     assert update.verified is None
-    assert update.content == "공사기간 3층 후문은 일반 통행에 사용할 수 없다."
+    assert update.content == (
+        "campus-wiki/building-access 수정: "
+        "공사기간 3층 후문은 일반 통행에 사용할 수 없다."
+    )
 
     advisor = corpus["task2-advisor1"].records[0]
     assert advisor.fixture_id == "T2-L-001"
@@ -120,6 +124,48 @@ def test_loader_preserves_content_and_normalizes_available_metadata() -> None:
     assert personal.identity_key == "local/personal-memory/2024-01/01"
     assert personal.canonical_locator == "local/personal-memory/2024-01/01"
     assert personal.purpose == "KB"
+
+
+@pytest.mark.parametrize(
+    ("language", "modify", "add"),
+    (("en", "Modify", "Add"), ("ko", "수정", "추가")),
+)
+def test_every_task1_update_memory_names_its_target_and_action(
+    language: str,
+    modify: str,
+    add: str,
+) -> None:
+    fixture_root = Path(__file__).resolve().parents[1] / "docs" / "fixtures"
+    dataset = load_study_fixture_corpus(
+        language=language,
+        root=fixture_root,
+    ).by_name()["task1-construction-updates"]
+    action_path = (
+        fixture_root
+        / language
+        / f"task-1-update-actions-{language}.tsv"
+    )
+    with action_path.open(encoding="utf-8", newline="") as handle:
+        rows = tuple(csv.DictReader(handle, delimiter="\t"))
+
+    routes: dict[str, set[tuple[str, str]]] = {}
+    for row in rows:
+        routes.setdefault(row["source_id"], set()).add(
+            (row["target_location"], row["operation"])
+        )
+
+    assert len(routes) == len(dataset.records) == 75
+    for record in dataset.records:
+        assert record.fixture_id is not None
+        assert len(routes[record.fixture_id]) == 1
+        target, operation = next(iter(routes[record.fixture_id]))
+        if language == "en":
+            prefix = f"{operation} {target}: "
+        else:
+            prefix = f"{target} {operation}: "
+        assert operation in {modify, add}
+        assert record.content.startswith(prefix)
+        assert len(record.content) > len(prefix)
 
 
 def test_english_block_labels_verified_and_compound_audience_are_supported(

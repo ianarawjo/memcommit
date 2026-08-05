@@ -297,6 +297,7 @@ def test_query_only_items_are_excluded_without_opening_hidden_source(
 
     prompt = provider.calls[0][0]
     persisted = json.dumps(session.to_dict())
+    assert "store only the content payload" in prompt
     assert SECRET not in prompt
     assert hidden.uid not in prompt
     assert "codex_chatgpt" not in prompt

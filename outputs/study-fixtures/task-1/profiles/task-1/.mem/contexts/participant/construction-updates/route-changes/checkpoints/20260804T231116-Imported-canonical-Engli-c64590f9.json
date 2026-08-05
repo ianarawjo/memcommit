@@ -1,7 +1,7 @@
 {
-  "uid": "6e20c68e-0ec8-44ed-8bb6-7d9a35c40a31",
+  "uid": "c64590f9-21b8-42b9-a4a1-1c4b597ce01a",
   "message": "Imported canonical English Task 1 fixture Context 'participant/construction-updates/route-changes' into profile 'task-1'.",
-  "timestamp": "2026-08-04T22:47:18.586163",
+  "timestamp": "2026-08-04T23:11:16.657035",
   "snapshot": {
     "uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
     "name": "participant/construction-updates/route-changes",
@@ -9,47 +9,47 @@
       "8017409a-8af8-5a55-a49e-e9ccb44b9f34": {
         "type": "memory",
         "uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34",
-        "content": "The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period."
+        "content": "Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period."
       },
       "dbb3c40c-7699-509d-901d-be9de2f110dc": {
         "type": "memory",
         "uid": "dbb3c40c-7699-509d-901d-be9de2f110dc",
-        "content": "The route from the third-floor rear entrance to the Central Library is closed during the construction period."
+        "content": "Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period."
       },
       "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f": {
         "type": "memory",
         "uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f",
-        "content": "The Outdoor Parking Lot A\u2013Main Building\u2013Central Library route is closed during the construction period."
+        "content": "Add campus-wiki/route-changes: The Outdoor Parking Lot A\u2013Main Building\u2013Central Library route is closed during the construction period."
       },
       "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9": {
         "type": "memory",
         "uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9",
-        "content": "A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the construction period."
+        "content": "Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the construction period."
       },
       "8276ab56-741f-5f60-ab77-79fe6dc0ba55": {
         "type": "memory",
         "uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55",
-        "content": "When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take the accessible route to the left as viewed from the Main Building."
+        "content": "Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take the accessible route to the left as viewed from the Main Building."
       },
       "9af0f95c-0a5e-584e-ba7b-92789e071f7e": {
         "type": "memory",
         "uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e",
-        "content": "During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C\u2013Student Centre accessible entrance\u2013Central Library west entrance."
+        "content": "Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C\u2013Student Centre accessible entrance\u2013Central Library west entrance."
       },
       "fd27f19b-5f2c-51ee-a9b2-7182120163cb": {
         "type": "memory",
         "uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb",
-        "content": "During the construction period, the Central Library west entrance is designated as the official alternative entrance for the closed connecting route through the Main Building."
+        "content": "Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the closed connecting route through the Main Building."
       },
       "638f272f-9fbd-5d1f-bfd8-b01618424065": {
         "type": "memory",
         "uid": "638f272f-9fbd-5d1f-bfd8-b01618424065",
-        "content": "During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A."
+        "content": "Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A."
       },
       "ba9d70f9-02c4-56d9-ac23-f2a532c22488": {
         "type": "memory",
         "uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488",
-        "content": "If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user."
+        "content": "Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user."
       }
     },
     "order": [

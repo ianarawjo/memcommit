@@ -321,6 +321,16 @@ relationship and complete before/after content remains
 `task-1-update-actions-en.tsv`. The current 75 sources produce 77 actual patches,
 and every operation is `edit` or `add`.
 
+Each source Memory now carries its own concise placement contract: the public
+`campus-wiki/...` target Context, an explicit modify or add action, and the
+content to apply. This keeps the participant-visible material approximately
+the same length while preventing the Update provider from having to invent a
+destination or operation. Volatile Memory UIDs and full before text remain in
+the normalized sidecar because they are execution and evaluation anchors, not
+portable source instructions. `T1-U-009` deliberately remains one compact
+instruction whose broad reservation change resolves to three patches in the
+same target Context.
+
 `campus-wiki` uses the same hierarchical Memory Location and five audience
 checkboxes, allowing update and baseline material to be compared on the same
 location, audience, and purpose axes.

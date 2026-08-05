@@ -430,7 +430,8 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert recursive.returncode == 0, recursive.stderr
     assert "task-1/participant" in recursive.stdout
     assert "task-1/participant/construction-updates" in recursive.stdout
-    assert "The indoor route that passed through" in recursive.stdout
+    assert "Add campus-wiki/route-changes:" in recursive.stdout
+    assert "indoor route that passed through" in recursive.stdout
 
     leaf = _subprocess_mem(
         tmp_path,

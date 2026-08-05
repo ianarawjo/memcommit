@@ -271,6 +271,14 @@ source는 최소 한 개의 실제 `수정` 또는 `추가` patch를 만들어�
 권위 있는 sidecar다. 현재 75개 source는 77개의 실제 patch를 만들며 모든
 작업은 `수정` 또는 `추가`다.
 
+각 source Memory는 이제 공개 `campus-wiki/...` 대상 Context, 명시적인
+수정·추가 액션, 반영할 내용을 함께 담은 짧은 placement 계약이다. 참가자에게
+보이는 재료의 길이는 대체로 유지하면서 Update provider가 목적지나 작업을
+새로 만들어 내지 않게 한다. 변할 수 있는 Memory UID와 완전한 before 본문은
+portable source 지시가 아니라 실행·평가 anchor이므로 정규화 sidecar에 남긴다.
+`T1-U-009`는 같은 대상 Context의 예약 변경 세 건으로 해석되는 하나의 짧은
+지시로 의도적으로 유지한다.
+
 `campus-wiki`에도 계층형 Memory 위치와 다섯 열람 대상 체크박스를 적용한다.
 이로써 업데이트 쪽과 기준선 쪽을 같은 키·대상·목적 축으로 비교할 수 있다.
 

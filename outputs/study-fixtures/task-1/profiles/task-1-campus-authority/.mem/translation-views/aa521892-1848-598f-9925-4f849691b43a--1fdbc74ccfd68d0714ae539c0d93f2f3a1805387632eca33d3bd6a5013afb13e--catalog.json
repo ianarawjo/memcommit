@@ -3,8 +3,8 @@
   "context_uid": "aa521892-1848-598f-9925-4f849691b43a",
   "context_name": "campus-wiki/construction-details/dependencies",
   "target_language": "ko",
-  "created_at": "2026-08-05T02:47:18.690688+00:00",
-  "updated_at": "2026-08-05T02:47:18.691058+00:00",
+  "created_at": "2026-08-05T03:11:16.752773+00:00",
+  "updated_at": "2026-08-05T03:11:16.753112+00:00",
   "revision": 8,
   "contract_version": "translate-v2",
   "entries": [
@@ -18,8 +18,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-05T02:47:18.690748+00:00",
-        "updated_at": "2026-08-05T02:47:18.690748+00:00"
+        "created_at": "2026-08-05T03:11:16.752834+00:00",
+        "updated_at": "2026-08-05T03:11:16.752834+00:00"
       }
     },
     {
@@ -32,8 +32,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-05T02:47:18.690805+00:00",
-        "updated_at": "2026-08-05T02:47:18.690805+00:00"
+        "created_at": "2026-08-05T03:11:16.752885+00:00",
+        "updated_at": "2026-08-05T03:11:16.752885+00:00"
       }
     },
     {
@@ -46,8 +46,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-05T02:47:18.690859+00:00",
-        "updated_at": "2026-08-05T02:47:18.690859+00:00"
+        "created_at": "2026-08-05T03:11:16.752932+00:00",
+        "updated_at": "2026-08-05T03:11:16.752932+00:00"
       }
     },
     {
@@ -60,8 +60,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-05T02:47:18.690910+00:00",
-        "updated_at": "2026-08-05T02:47:18.690910+00:00"
+        "created_at": "2026-08-05T03:11:16.752977+00:00",
+        "updated_at": "2026-08-05T03:11:16.752977+00:00"
       }
     },
     {
@@ -74,8 +74,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-05T02:47:18.690960+00:00",
-        "updated_at": "2026-08-05T02:47:18.690960+00:00"
+        "created_at": "2026-08-05T03:11:16.753022+00:00",
+        "updated_at": "2026-08-05T03:11:16.753022+00:00"
       }
     },
     {
@@ -88,8 +88,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-05T02:47:18.691009+00:00",
-        "updated_at": "2026-08-05T02:47:18.691009+00:00"
+        "created_at": "2026-08-05T03:11:16.753067+00:00",
+        "updated_at": "2026-08-05T03:11:16.753067+00:00"
       }
     },
     {
@@ -102,8 +102,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-05T02:47:18.691058+00:00",
-        "updated_at": "2026-08-05T02:47:18.691058+00:00"
+        "created_at": "2026-08-05T03:11:16.753112+00:00",
+        "updated_at": "2026-08-05T03:11:16.753112+00:00"
       }
     }
   ]
