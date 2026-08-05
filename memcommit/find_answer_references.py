@@ -20,7 +20,7 @@ FIND_ANSWER_UID_PREFIX_LENGTH = 8
 _EVIDENCE_ALIAS_PATTERN = re.compile(r"[mcx][1-9][0-9]*\Z")
 _HOST_CITATION_PATTERN = re.compile(r"\[[0-9]+\]")
 
-FindAnswerEvidenceKind = Literal["memory", "ref", "query"]
+FindAnswerEvidenceKind = Literal["memory", "ref", "query", "artifact"]
 
 
 class FindAnswerReferenceError(ValueError):
@@ -65,7 +65,7 @@ class FindAnswerEvidence:
             raise FindAnswerReferenceError(
                 "Evidence alias must look like m1, c1, or x1."
             )
-        if self.kind not in {"memory", "ref", "query"}:
+        if self.kind not in {"memory", "ref", "query", "artifact"}:
             raise FindAnswerReferenceError("Invalid evidence kind.")
         object.__setattr__(self, "alias", alias)
         object.__setattr__(

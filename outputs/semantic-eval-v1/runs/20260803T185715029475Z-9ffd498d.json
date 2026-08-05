@@ -1,0 +1,458 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 4.267243790905923,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 1,
+      "prompt_digest": "49806cb651dbc78d39af8de235d08a4e929da08176e43ffcb6d890136056aa14",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"SINGLE\",\"clarification\":\"NONE\"}",
+      "repetition": 1,
+      "response_bytes": 50,
+      "response_digest": "b10fb8c0b574260530eb34c69ff267193f4f589ae2d418285e111a8f4664e4bb",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 3.555270374752581,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 2,
+      "prompt_digest": "49806cb651dbc78d39af8de235d08a4e929da08176e43ffcb6d890136056aa14",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"SINGLE\",\"clarification\":\"NONE\"}",
+      "repetition": 2,
+      "response_bytes": 50,
+      "response_digest": "b10fb8c0b574260530eb34c69ff267193f4f589ae2d418285e111a8f4664e4bb",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 4.313756499905139,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 3,
+      "prompt_digest": "49806cb651dbc78d39af8de235d08a4e929da08176e43ffcb6d890136056aa14",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"SINGLE\",\"clarification\":\"NONE\"}",
+      "repetition": 3,
+      "response_bytes": 50,
+      "response_digest": "b10fb8c0b574260530eb34c69ff267193f4f589ae2d418285e111a8f4664e4bb",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "dominant-required-entry-permit",
+      "completion_seconds": 6.53750816732645,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 4,
+      "prompt_digest": "5e9276e963aafe432faf8ac7eaadcbce4777b5c536937daded2cb07e9d8e19cd",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"SINGLE\",\"clarification\":\"REQUIRED\"}",
+      "repetition": 1,
+      "response_bytes": 54,
+      "response_digest": "44bab5d369164e19c509c668d94898886119b453ecf886c2d403bd5e333b3e7a",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "dominant-required-entry-permit",
+      "completion_seconds": 4.668436292093247,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 5,
+      "prompt_digest": "5e9276e963aafe432faf8ac7eaadcbce4777b5c536937daded2cb07e9d8e19cd",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"SINGLE\",\"clarification\":\"REQUIRED\"}",
+      "repetition": 2,
+      "response_bytes": 54,
+      "response_digest": "44bab5d369164e19c509c668d94898886119b453ecf886c2d403bd5e333b3e7a",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "dominant-required-entry-permit",
+      "completion_seconds": 4.6888861251063645,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 6,
+      "prompt_digest": "5e9276e963aafe432faf8ac7eaadcbce4777b5c536937daded2cb07e9d8e19cd",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"SINGLE\",\"clarification\":\"REQUIRED\"}",
+      "repetition": 3,
+      "response_bytes": 54,
+      "response_digest": "44bab5d369164e19c509c668d94898886119b453ecf886c2d403bd5e333b3e7a",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "competing-helpful-person-in-charge",
+      "completion_seconds": 5.166766833048314,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 7,
+      "prompt_digest": "51d0134283fc68cc19ae20804474742d17faf34001c958e5ebd29c4b1941fd61",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"DOMINANT\",\"clarification\":\"HELPFUL\"}",
+      "repetition": 1,
+      "response_bytes": 55,
+      "response_digest": "b50b422be7560d384614362c4c27f4ea9f524eb5eb1a87d703442297c937cc93",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "competing-helpful-person-in-charge",
+      "completion_seconds": 5.682255833875388,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 8,
+      "prompt_digest": "51d0134283fc68cc19ae20804474742d17faf34001c958e5ebd29c4b1941fd61",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"DOMINANT\",\"clarification\":\"HELPFUL\"}",
+      "repetition": 2,
+      "response_bytes": 55,
+      "response_digest": "b50b422be7560d384614362c4c27f4ea9f524eb5eb1a87d703442297c937cc93",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "competing-helpful-person-in-charge",
+      "completion_seconds": 5.505993207916617,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 9,
+      "prompt_digest": "51d0134283fc68cc19ae20804474742d17faf34001c958e5ebd29c4b1941fd61",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"interpretation\":\"DOMINANT\",\"clarification\":\"HELPFUL\"}",
+      "repetition": 3,
+      "response_bytes": 55,
+      "response_digest": "b50b422be7560d384614362c4c27f4ea9f524eb5eb1a87d703442297c937cc93",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    }
+  ],
+  "completed_at": "2026-08-03T18:57:59.424183Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "fixture": "ambiguity.json",
+    "fixture_case_count": 10,
+    "fixture_digest": "003654c092e03ea74f72e8f084624438085555e2cedad2c9abed985ae2b3c067",
+    "independent_holdout": false,
+    "operation": "find-ambiguities",
+    "role": "CALIBRATION",
+    "ruleset_version": "ambiguity-v1-draft",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "single-helpful-reception-location",
+      "dominant-required-entry-permit",
+      "competing-helpful-person-in-charge"
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T185715029475Z-9ffd498d.json",
+  "pipeline": {
+    "gate": "exact two-label contract with repeated stability",
+    "id": "ambiguity-classify-v2",
+    "stages": [
+      "CLASSIFY"
+    ],
+    "version": 2
+  },
+  "provider": {
+    "effective_thinking": null,
+    "endpoint": null,
+    "model": "gpt-5.6-luna",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "low",
+    "runtime": "codex-cli"
+  },
+  "run_id": "20260803T185715029475Z-9ffd498d",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": null,
+      "max_output_tokens": null,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 3,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T18:57:15.029475Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 0,
+      "structurally_valid": 9,
+      "total": 9
+    },
+    "campaign_passed": false,
+    "case_results": [
+      {
+        "attempts": 3,
+        "case_id": "single-helpful-reception-location",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 3,
+        "required_count": 2,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 3
+      },
+      {
+        "attempts": 3,
+        "case_id": "dominant-required-entry-permit",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 3,
+        "required_count": 2,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 3
+      },
+      {
+        "attempts": 3,
+        "case_id": "competing-helpful-person-in-charge",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 3,
+        "required_count": 2,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 3
+      }
+    ],
+    "cases": {
+      "failed": 3,
+      "passed": 0,
+      "total": 3
+    },
+    "completion_seconds": {
+      "max": 6.53750816732645,
+      "mean": 4.931790791658892,
+      "median": 4.6888861251063645,
+      "p95": 6.53750816732645
+    },
+    "distributions": {
+      "actual_joint_attempts": {
+        "DOMINANT/HELPFUL": 3,
+        "SINGLE/NONE": 3,
+        "SINGLE/REQUIRED": 3
+      },
+      "case_pass_by_clarification": {
+        "HELPFUL": {
+          "passed": 0,
+          "total": 2
+        },
+        "NONE": {
+          "passed": 0,
+          "total": 0
+        },
+        "REQUIRED": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "case_pass_by_interpretation": {
+        "COMPETING": {
+          "passed": 0,
+          "total": 1
+        },
+        "DOMINANT": {
+          "passed": 0,
+          "total": 1
+        },
+        "SINGLE": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "expected_clarification": {
+        "HELPFUL": 2,
+        "REQUIRED": 1
+      },
+      "expected_interpretation": {
+        "COMPETING": 1,
+        "DOMINANT": 1,
+        "SINGLE": 1
+      },
+      "expected_joint": {
+        "COMPETING/HELPFUL": 1,
+        "DOMINANT/REQUIRED": 1,
+        "SINGLE/HELPFUL": 1
+      }
+    },
+    "failures": {
+      "LABEL_MISMATCH": 9
+    },
+    "tokens": {
+      "completion": 0,
+      "prompt": 0,
+      "reported_attempts": 0
+    }
+  },
+  "timing": {
+    "campaign_seconds": 44.39597620908171,
+    "provider_connection_seconds": 0.05671333288773894,
+    "total_seconds": 44.45268954196945
+  }
+}

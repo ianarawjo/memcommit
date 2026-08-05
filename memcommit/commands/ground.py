@@ -6,7 +6,7 @@ import re
 import sys
 import subprocess
 from dataclasses import replace
-from typing import Annotated, Iterable, Optional
+from typing import Annotated, Iterable, Literal, Optional
 
 import typer
 
@@ -68,6 +68,7 @@ from memcommit.ground_context_catalog import (
     select_ground_context_locators,
 )
 from memcommit.ground_turn_dialogue import (
+    GroundBlockedTarget,
     GroundTurnAction,
     GroundTurnDraft,
     GroundTurnDraftBatch,
@@ -271,7 +272,10 @@ def _run_approved_ground_command(
     )
 
 
-def _run_new_ground_shell(initial_request: str = "") -> None:
+GroundViewExit = Literal["CLOSED", "BACK_TO_PICKER"]
+
+
+def _run_new_ground_shell(initial_request: str = "") -> GroundViewExit:
     store = MemoryStore(create=False)
     locators = discover_ground_context_locators(store)
     # Current is only an at-launch orientation snapshot. It remains local to
@@ -303,6 +307,9 @@ def _run_new_ground_shell(initial_request: str = "") -> None:
     }
     if locators:
         shell_kwargs["context_catalog_count"] = len(locators)
+        shell_kwargs["context_catalog_names"] = tuple(
+            locator.name for locator in locators
+        )
     if initial_request:
         shell_kwargs["initial_request"] = initial_request
     result = run_ground_shell(**shell_kwargs)
@@ -327,12 +334,14 @@ def _run_new_ground_shell(initial_request: str = "") -> None:
             continuation_kwargs["new_context_hint"] = (
                 result.new_context_name_hint
             )
-        _run_existing_ground_shell(
+        return _run_existing_ground_shell(
             session,
             **continuation_kwargs,
         )
-        return
+    if result.status == "BACK_TO_PICKER":
+        return "BACK_TO_PICKER"
     typer.echo("Ground chat cancelled. Nothing was created.")
+    return "CLOSED"
 
 
 def _ground_digest(session: GroundSession) -> str:
@@ -662,19 +671,28 @@ def _ground_action_proposal(
             "Checkpoints: unchanged",
         )
     elif kind == "PROPOSE_RULE":
-        argv = (
+        argv_list = [
             "mem",
             "ground",
             session.contract_name,
             "--propose-rule",
             action.content,
+        ]
+        for target in action.targets:
+            argv_list.extend(["--propose-rule-target", target])
+        argv_list.extend([
             "--rationale",
             action.rationale,
             "--rule-provenance",
             action.rule_provenance,
-        )
+        ])
+        argv = tuple(argv_list)
         effects = (
             "Rules: ADD one PROPOSED Rule",
+            (
+                "Placement targets: "
+                + (", ".join(action.targets) if action.targets else "publication target")
+            ),
             "Acceptance: unchanged; proposal is not approval",
             "Goal and Ground Memories: unchanged",
             "Contexts and Context Memories: unchanged",
@@ -766,6 +784,114 @@ def _ground_rule_draft_proposal(
             content=draft.content,
             rationale=draft.proposal_rationale,
             rule_provenance=draft.rule_provenance,
+            targets=tuple(
+                frame.context_name
+                for frame in session.frames
+                if frame.role == "PUBLICATION_TARGET"
+            ),
+        ),
+    )
+
+
+def _argv_option_values(argv: tuple[str, ...], option: str) -> tuple[str, ...]:
+    return tuple(
+        argv[index + 1]
+        for index, value in enumerate(argv[:-1])
+        if value == option
+    )
+
+
+def _replace_repeatable_argv_option(
+    argv: tuple[str, ...],
+    *,
+    option: str,
+    values: tuple[str, ...],
+    after: str,
+) -> tuple[str, ...]:
+    cleaned: list[str] = []
+    index = 0
+    while index < len(argv):
+        if argv[index] == option:
+            if index + 1 >= len(argv):
+                raise GroundError(f"The reviewed command has an incomplete {option}.")
+            index += 2
+            continue
+        cleaned.append(argv[index])
+        index += 1
+    try:
+        insertion = cleaned.index(after) + 2
+    except ValueError as error:
+        raise GroundError("The reviewed Ground command cannot be retargeted.") from error
+    replacement = [argument for value in values for argument in (option, value)]
+    return tuple((*cleaned[:insertion], *replacement, *cleaned[insertion:]))
+
+
+def _ground_retarget_proposal(
+    session: GroundSession,
+    proposal: GroundCommandProposal,
+    target_name: str,
+) -> GroundCommandProposal:
+    """Bind one locally selected placement to the frozen proposal shape."""
+
+    if proposal.kind == "BIND":
+        argv = proposal.review.argv
+        publication = _argv_option_values(argv, "--publication-target")
+        if len(publication) != 1 or publication[0] == target_name:
+            raise GroundError(
+                "A direct placement target must differ from the publication target."
+            )
+        blocked: list[GroundBlockedTarget] = []
+        for raw in _argv_option_values(argv, "--blocked-target"):
+            name, separator, reason = raw.partition("=")
+            if separator and name in {publication[0], target_name}:
+                blocked.append(GroundBlockedTarget(name, reason))
+        required = {
+            option: _argv_option_values(argv, option)
+            for option in (
+                "--description",
+                "--raw-context",
+                "--derived-context",
+            )
+        }
+        if any(len(values) != 1 for values in required.values()):
+            raise GroundError("The reviewed Ground binding cannot be retargeted.")
+        return _ground_action_proposal(
+            session,
+            GroundTurnAction(
+                kind="BIND",
+                understanding=proposal.understanding,
+                question=proposal.question,
+                description=required["--description"][0],
+                raw_context=required["--raw-context"][0],
+                derived_context=required["--derived-context"][0],
+                publication_target=publication[0],
+                placement_targets=(target_name,),
+                blocked_targets=tuple(blocked),
+            ),
+        )
+    option_and_anchor = {
+        "PROPOSE_RULE": ("--propose-rule-target", "--propose-rule"),
+        "PROPOSE_CASE": ("--propose-target", "--propose-source"),
+    }.get(proposal.kind)
+    if option_and_anchor is None:
+        raise GroundError("This Ground proposal has no placement target.")
+    option, anchor = option_and_anchor
+    argv = _replace_repeatable_argv_option(
+        proposal.review.argv,
+        option=option,
+        values=(target_name,),
+        after=anchor,
+    )
+    effects = tuple(
+        effect
+        for effect in proposal.review.effects
+        if not effect.startswith("Placement targets:")
+    )
+    return replace(
+        proposal,
+        review=ExactCommandReview(
+            argv=argv,
+            effects=(*effects, f"Placement target: {target_name} · direct local selection"),
         ),
     )
 
@@ -1083,7 +1209,13 @@ def _run_existing_ground_shell(
     initial_receipt: str = "",
     context_hints: tuple[str, ...] = (),
     new_context_hint: str | None = None,
-) -> None:
+) -> GroundViewExit:
+    placement_catalog_names = tuple(
+        locator.name
+        for locator in discover_ground_context_locators(
+            MemoryStore(create=False)
+        )
+    )
     def reload_session(contract_name: str) -> GroundSession:
         refreshed = MemoryStore(create=False).load_ground_session(contract_name)
         if refreshed is None:
@@ -1098,11 +1230,15 @@ def _run_existing_ground_shell(
         apply=_apply_named_ground_proposal,
         prepare_rule_draft=_ground_rule_draft_proposal,
         prepare_direct_edit=_ground_direct_edit_proposal,
+        retarget_proposal=_ground_retarget_proposal,
         reload_session=reload_session,
         initial_receipt=initial_receipt,
         context_hints=context_hints,
         new_context_hint=new_context_hint,
+        placement_catalog_names=placement_catalog_names,
     )
+    if result.status == "BACK_TO_PICKER":
+        return "BACK_TO_PICKER"
     typer.echo(
         f"Ground chat closed. {len(result.applied_argvs)} approved "
         "command(s) applied in this named-Ground view."
@@ -1111,6 +1247,7 @@ def _run_existing_ground_shell(
         f"Ground '{result.session.contract_name}' remains saved at "
         f"revision {result.session.revision}."
     )
+    return "CLOSED"
 
 
 def _run_ground_session_picker(
@@ -1118,40 +1255,57 @@ def _run_ground_session_picker(
     *,
     catalog: Sequence[GroundSessionCatalogEntry] | None = None,
 ) -> None:
-    """Open one existing Ground or continue into the unsaved new flow."""
-    frozen_catalog = tuple(
-        list_ground_session_catalog(store) if catalog is None else catalog
-    )
-    by_key = {entry.picker_entry.key: entry for entry in frozen_catalog}
-    receipt = choose_session(
-        tuple(entry.picker_entry for entry in frozen_catalog),
-        title="MEM GROUND · SAVED WORK",
-        new_receipt=SessionNewReceipt(
-            kind="ground",
-            argv=("mem", "ground"),
-        ),
-        initial_sort_mode="recent",
-        initial_group_mode="context",
-        location=ground_session_picker_location(),
-    )
-    if receipt is None:
-        typer.echo("Ground selection cancelled.")
-        return
-    if isinstance(receipt, SessionNewReceipt):
-        if receipt.kind != "ground" or receipt.argv != ("mem", "ground"):
-            raise GroundError("Ground picker returned an invalid new receipt.")
-        _run_new_ground_shell()
-        return
-    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "ground":
-        raise GroundError("Ground picker returned an invalid selection.")
-    entry = by_key.get(receipt.key)
-    if entry is None or receipt.argv != entry.picker_entry.reopen_argv:
-        raise GroundError("Ground picker changed the selected reopen command.")
-    # The picker is only a read-only projection. Re-load by the catalog key and
-    # compare UID, revision, and digest so neither deletion nor replacement can
-    # fall through to the historical create-or-resume path.
-    session = reload_selected_ground_session(store, entry)
-    _run_existing_ground_shell(session)
+    """Loop over refreshed saved work until the person explicitly quits."""
+    next_catalog: Sequence[GroundSessionCatalogEntry] | None = catalog
+    while True:
+        frozen_catalog = tuple(
+            list_ground_session_catalog(store)
+            if next_catalog is None
+            else next_catalog
+        )
+        # A view can mutate the saved Ground before B returns here. Reuse the
+        # optional caller snapshot only for the first picker render; every
+        # later pass rediscovers identities, revisions, digests, and ordering.
+        next_catalog = None
+        by_key = {entry.picker_entry.key: entry for entry in frozen_catalog}
+        receipt = choose_session(
+            tuple(entry.picker_entry for entry in frozen_catalog),
+            title="MEM GROUND · SAVED WORK",
+            new_receipt=SessionNewReceipt(
+                kind="ground",
+                argv=("mem", "ground"),
+            ),
+            initial_sort_mode="recent",
+            initial_group_mode="context",
+            location=ground_session_picker_location(),
+        )
+        if receipt is None:
+            typer.echo("Ground selection cancelled.")
+            return
+        if isinstance(receipt, SessionNewReceipt):
+            if receipt.kind != "ground" or receipt.argv != ("mem", "ground"):
+                raise GroundError(
+                    "Ground picker returned an invalid new receipt."
+                )
+            outcome = _run_new_ground_shell()
+        else:
+            if (
+                not isinstance(receipt, SessionOpenReceipt)
+                or receipt.kind != "ground"
+            ):
+                raise GroundError("Ground picker returned an invalid selection.")
+            entry = by_key.get(receipt.key)
+            if entry is None or receipt.argv != entry.picker_entry.reopen_argv:
+                raise GroundError(
+                    "Ground picker changed the selected reopen command."
+                )
+            # The picker is only a read-only projection. Re-load by the
+            # catalog key and compare UID, revision, and digest so neither
+            # deletion nor replacement can fall through to create-or-resume.
+            session = reload_selected_ground_session(store, entry)
+            outcome = _run_existing_ground_shell(session)
+        if outcome != "BACK_TO_PICKER":
+            return
 
 
 def _count_items(session: GroundSession, kind: str) -> int:
@@ -1843,6 +1997,13 @@ def cmd(
             help="New Rule; may be proposed before any Ground Memory",
         ),
     ] = None,
+    propose_rule_target: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--propose-rule-target",
+            help="Placement target Context for this Rule; repeatable",
+        ),
+    ] = None,
     fit_rule: Annotated[
         Optional[str],
         typer.Option(
@@ -2006,6 +2167,7 @@ def cmd(
         for value in (
             propose_source,
             propose_rule,
+            propose_rule_target,
             fit_rule,
             propose_target,
             expected,
@@ -2117,7 +2279,9 @@ def cmd(
             )
             raise typer.Exit(1)
         if _interactive_terminal():
-            _run_new_ground_shell(initial_request)
+            outcome = _run_new_ground_shell(initial_request)
+            if outcome == "BACK_TO_PICKER":
+                _run_ground_session_picker(MemoryStore(create=False))
         else:
             typer.echo(render_ground_start(initial_request))
         return
@@ -2174,7 +2338,9 @@ def cmd(
                 if catalog or sessions:
                     _run_ground_session_picker(store, catalog=catalog)
                 else:
-                    _run_new_ground_shell()
+                    outcome = _run_new_ground_shell()
+                    if outcome == "BACK_TO_PICKER":
+                        _run_ground_session_picker(store)
             except (GroundError, OSError, TypeError, ValueError) as error:
                 typer.secho(
                     f"Ground error: {error}",
@@ -2435,6 +2601,7 @@ def cmd(
                     rule_provenance=(
                         rule_provenance or "DISTILLED_FROM_GOAL"
                     ).upper(),
+                    target_context_names=tuple(propose_rule_target or ()),
                 )
             else:
                 case_disposition = (disposition or "INCLUDE").upper()
@@ -2593,7 +2760,9 @@ def cmd(
         raise typer.Exit(1)
 
     if plain_named_tui_requested:
-        _run_existing_ground_shell(session)
+        outcome = _run_existing_ground_shell(session)
+        if outcome == "BACK_TO_PICKER":
+            _run_ground_session_picker(store)
         return
 
     if focus_target is not None:

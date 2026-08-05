@@ -1,10 +1,13 @@
-"""State-oriented contracts for ``mem undo``."""
+"""Global command-unit contracts for ``mem undo`` and ``mem redo``."""
+
 from __future__ import annotations
 
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.history import build_history
+from memcommit.provenance import build_trace
 from memcommit.store import MemoryStore
 
 
@@ -23,10 +26,12 @@ def test_undo_restores_the_previous_distinct_context_state(isolated_store):
     result = invoke("undo")
 
     assert result.exit_code == 0
-    assert "Undid the last Context state change" in result.output
+    assert "Undid command: mem add" in result.output
+    assert "Affected Context: notes" in result.output
+    assert "Affected content: 1 Memory removed" in result.output
+    assert 'Memory: "undo me"' in result.output
     contents = [
-        memory.content
-        for memory in MemoryStore().load_current().memories.values()
+        memory.content for memory in MemoryStore().load_current().memories.values()
     ]
     assert contents == ["keep"]
 
@@ -40,6 +45,7 @@ def test_undo_skips_manual_checkpoints_with_the_same_snapshot(isolated_store):
     result = invoke("undo")
 
     assert result.exit_code == 0
+    assert "Undid command: mem add" in result.output
     assert not MemoryStore().load_current().memories
 
 
@@ -54,13 +60,12 @@ def test_undo_after_revert_restores_the_pre_revert_state(isolated_store):
     result = invoke("undo")
 
     assert result.exit_code == 0
+    assert "Undid command: mem revert" in result.output
     restored = store.load_current()
-    assert [memory.content for memory in restored.memories.values()] == [
-        "restore me"
-    ]
+    assert [memory.content for memory in restored.memories.values()] == ["restore me"]
 
 
-def test_undo_restores_newest_checkpoint_from_uncheckpointed_state(
+def test_undo_rejects_unrecorded_change_after_latest_command(
     isolated_store,
 ):
     invoke("init", "notes")
@@ -72,10 +77,12 @@ def test_undo_restores_newest_checkpoint_from_uncheckpointed_state(
 
     result = invoke("undo")
 
-    assert result.exit_code == 0
-    restored = store.load_current()
-    assert [memory.content for memory in restored.memories.values()] == [
-        "saved"
+    assert result.exit_code == 1
+    assert "changed after the command selected for undo" in result.output
+    current = store.load_current()
+    assert [memory.content for memory in current.memories.values()] == [
+        "saved",
+        "not checkpointed",
     ]
 
 
@@ -90,55 +97,10 @@ def test_undo_normalizes_inherited_checkpoint_identity(isolated_store):
     assert result.exit_code == 0
     restored = MemoryStore().load_current()
     assert restored.name == "branch"
-    assert [memory.content for memory in restored.memories.values()] == [
-        "inherited"
-    ]
+    assert [memory.content for memory in restored.memories.values()] == ["inherited"]
 
 
-def test_undo_race_at_locked_revert_preserves_concurrent_state(
-    isolated_store,
-    monkeypatch,
-):
-    invoke("init", "notes")
-    invoke("add", "keep")
-    invoke("add", "undo me")
-    store = MemoryStore()
-    original_revert = MemoryStore.revert
-    state_after_race = {}
-
-    def race_before_locked_revert(
-        self,
-        context_name,
-        uid_prefix,
-        keep_history=False,
-        **expectations,
-    ):
-        concurrent = self.load_direct(context_name)
-        ops.add(concurrent, "concurrent")
-        self.save(concurrent)
-        state_after_race["context"] = self.load_direct(
-            context_name
-        ).to_dict()
-        state_after_race["history"] = self.list_checkpoints(context_name)
-        return original_revert(
-            self,
-            context_name,
-            uid_prefix,
-            keep_history=keep_history,
-            **expectations,
-        )
-
-    monkeypatch.setattr(MemoryStore, "revert", race_before_locked_revert)
-
-    result = invoke("undo")
-
-    assert result.exit_code == 1
-    assert "changed before the reviewed revert" in result.output
-    assert store.load_direct("notes").to_dict() == state_after_race["context"]
-    assert store.list_checkpoints("notes") == state_after_race["history"]
-
-
-def test_undo_fails_without_an_earlier_distinct_state(isolated_store):
+def test_undo_fails_without_a_recorded_context_command(isolated_store):
     store = MemoryStore()
     context = ops.init("bare")
     store.save(context)
@@ -147,11 +109,124 @@ def test_undo_fails_without_an_earlier_distinct_state(isolated_store):
     result = invoke("undo")
 
     assert result.exit_code == 1
-    assert "no earlier distinct state" in result.output
+    assert "no recorded Context command to undo" in result.output
 
 
 def test_undo_fails_without_a_current_context(isolated_store):
     result = invoke("undo")
 
     assert result.exit_code == 1
-    assert "No current context" in result.output
+    assert "no recorded Context command to undo" in result.output
+
+
+def test_undo_and_redo_follow_global_command_order_across_contexts(
+    isolated_store,
+):
+    invoke("init", "first")
+    invoke("add", "first change")
+    invoke("init", "second")
+    invoke("add", "second change")
+    invoke("switch", "first")
+    store = MemoryStore()
+
+    first_undo = invoke("undo")
+
+    assert first_undo.exit_code == 0, first_undo.output
+    assert "Affected Context: second" in first_undo.output
+    assert not store.load_direct("second").memories
+    assert store.load_direct("first").memories
+
+    second_undo = invoke("undo")
+
+    assert second_undo.exit_code == 0, second_undo.output
+    assert "Affected Context: first" in second_undo.output
+    assert not store.load_direct("first").memories
+
+    first_redo = invoke("redo")
+    second_redo = invoke("redo")
+
+    assert first_redo.exit_code == 0, first_redo.output
+    assert "Redid command: mem add" in first_redo.output
+    assert "Affected Context: first" in first_redo.output
+    assert second_redo.exit_code == 0, second_redo.output
+    assert "Affected Context: second" in second_redo.output
+    assert store.load_direct("first").memories
+    assert store.load_direct("second").memories
+
+
+def test_new_command_after_undo_clears_redo_stack(isolated_store):
+    invoke("init", "notes")
+    invoke("add", "first")
+    invoke("add", "discarded")
+    assert invoke("undo").exit_code == 0
+    invoke("add", "replacement")
+
+    result = invoke("redo")
+
+    assert result.exit_code == 1
+    assert "no recorded Context command to redo" in result.output
+
+
+def test_history_and_trace_keep_command_undo_and_redo_operation_boundaries(
+    isolated_store,
+):
+    invoke("init", "notes")
+    invoke("add", "restore through history")
+    store = MemoryStore()
+
+    assert invoke("undo").exit_code == 0
+    assert invoke("redo").exit_code == 0
+    timeline = build_history(store, "notes")
+
+    restoration_commands = [
+        (transition.command, transition.kind, transition.evidence)
+        for transition in timeline.transitions
+        if transition.command in {"undo", "redo"}
+    ]
+    assert restoration_commands == [
+        ("undo", "RESTORED", "RECORDED"),
+        ("redo", "RESTORED", "RECORDED"),
+    ]
+
+    context = store.load_direct("notes")
+    memory = next(iter(context.memories.values()))
+    report = build_trace(store, context, memory.uid)
+    restoration_events = [
+        event for event in report.events if event.command in {"undo", "redo"}
+    ]
+
+    assert [event.kind for event in restoration_events] == [
+        "RESTORED",
+        "RESTORED",
+    ]
+    assert [event.evidence for event in restoration_events] == [
+        "RECORDED",
+        "RECORDED",
+    ]
+    assert [
+        event.command_operation.command
+        for event in restoration_events
+        if event.command_operation is not None
+    ] == ["undo", "redo"]
+    assert all(
+        event.command_operation is not None
+        and event.command_operation.source_command == "add"
+        and [context.name for context in event.command_operation.contexts] == ["notes"]
+        for event in restoration_events
+    )
+
+    rendered = invoke("trace", memory.uid[:8])
+
+    assert rendered.exit_code == 0, rendered.output
+    assert "mem undo ← mem add" in rendered.output
+    assert "mem redo ← mem add" in rendered.output
+    assert rendered.output.index("mem redo ← mem add") < rendered.output.index(
+        "mem undo ← mem add"
+    )
+
+    detailed = invoke("trace", memory.uid[:8], "--verbose")
+    assert detailed.exit_code == 0, detailed.output
+    assert "Operation: undo" in detailed.output
+    assert "Operation: redo" in detailed.output
+    assert detailed.output.count("Source operation: mem add") == 2
+    assert detailed.output.count("Affected Context: notes") == 2

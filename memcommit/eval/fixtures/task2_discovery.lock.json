@@ -1,0 +1,84 @@
+{
+  "kind": "memcommit.semantic-eval.task2-discovery-lock",
+  "schema_version": 1,
+  "operation": "task2-relation-discovery",
+  "corpus_role": "CALIBRATION",
+  "language": "en",
+  "selection": "FIRST_REVIEWED_GROUPS_CALIBRATION",
+  "evaluation_condition": "CONTENT_PLUS_TOPIC",
+  "semantic_evidence_fields": [
+    "content",
+    "topic"
+  ],
+  "corpus_digest": "d98dd2bb55aa81efb692d9cd3e72aec4403d6ff5548437a17f81821c168f6ac9",
+  "sidecar_fixture": "task-2-pair-relations-en.tsv",
+  "sidecar_sha256": "0f6244e75fc739c752105ec02f9c5e9bee6eab8d883169644024f288676bff0c",
+  "full_left_count": 150,
+  "full_right_count": 150,
+  "full_group_count": 138,
+  "slices": [
+    {
+      "group_count": 26,
+      "selected_left_count": 29,
+      "selected_right_count": 27,
+      "input_digest": "90ba30ad9f89dbe0c6c894913c7a786f4b9ccabf53194abb1532563870dcaa1a",
+      "alias_mapping_digest": "96e0c4412de01daa3b16ef3828e052d06d7f8de407861ecfa1141f35f65f1efd",
+      "gold_relations_digest": "f9b629008b668b091ab58d28ad8ad48ca5bbfefa73d1e4fdf14788acbe58ba2f",
+      "band_distribution": {
+        "Compatible Complement": 1,
+        "Conflict": 8,
+        "Context-Dependent Variant": 2,
+        "Near Duplicate": 9,
+        "Same-Principle Variant": 6
+      }
+    },
+    {
+      "group_count": 50,
+      "selected_left_count": 58,
+      "selected_right_count": 56,
+      "input_digest": "ae890afbba0a2aff1927bc9e0ed15a82dc34d61e9e988d151891346fee6ae46a",
+      "alias_mapping_digest": "c693927ecca290836f77aafb8598ecd04f4b3ee07807ff97173977cdfc312df7",
+      "gold_relations_digest": "7e8640164a237e3cb8549dc73a67f5f0cababfb8a61869d5847111d6d5b394b2",
+      "band_distribution": {
+        "Compatible Complement": 2,
+        "Conflict": 8,
+        "Context-Dependent Variant": 5,
+        "Near Duplicate": 27,
+        "Same-Principle Variant": 8
+      }
+    },
+    {
+      "group_count": 100,
+      "selected_left_count": 112,
+      "selected_right_count": 111,
+      "input_digest": "ee384ab503ef6692ab0fc9a0fa5df7fb382dbef2523be31e0244bd1567eca8f5",
+      "alias_mapping_digest": "c221d138349ba7f8e1bb37ada82111d5e509d8a96fea15f7c84fe2e3f90d21ac",
+      "gold_relations_digest": "84983176db014a27190291413d9c04ac19a353fac6f2d5c11af984b2a46ddc10",
+      "band_distribution": {
+        "Compatible Complement": 2,
+        "Conflict": 8,
+        "Context-Dependent Variant": 23,
+        "Near Duplicate": 50,
+        "Same-Principle Variant": 17
+      }
+    },
+    {
+      "group_count": 138,
+      "selected_left_count": 150,
+      "selected_right_count": 150,
+      "input_digest": "50ebd46986c267b1350021f38c9c28159c8cac3443109a3194f02c27ffbff08d",
+      "alias_mapping_digest": "3e99d7da283a440d946438cbf69044099daaecfd65e29a0e96bbe908c54137b1",
+      "gold_relations_digest": "c084005adf02ef17f78bf08da0f689bf795505511842f4eb15e6076c2138ff32",
+      "band_distribution": {
+        "Compatible Complement": 2,
+        "Conflict": 8,
+        "Context-Dependent Variant": 38,
+        "Near Duplicate": 64,
+        "Same-Principle Variant": 26
+      }
+    }
+  ],
+  "frozen_at": "2026-08-04T16:17:36Z",
+  "independent_holdout": false,
+  "consumed_during_optimization": true
+}

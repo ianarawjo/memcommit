@@ -61,8 +61,8 @@ The current corpus contains:
 | --- | ---: | ---: | ---: | ---: |
 | 1 | 75 | 300 | 78 | 453 |
 | 2 | 0 | 300 | 75 | 375 |
-| 3 | 300 | 75 | 75 | 450 |
-| Total | 375 | 675 | 228 | 1,278 |
+| 3 | 300 | 87 | 75 | 462 |
+| Total | 375 | 687 | 228 | 1,290 |
 
 The old Korean XLSX was a smaller intermediate snapshot and is not a build
 input. Spreadsheet views are regenerated from the current parsed corpus.
@@ -76,17 +76,17 @@ task and stable fixture identity, so rebuilds do not silently assign a
 different identity to unchanged fixture records.
 
 Task 3 deliberately keeps its reviewed source locator keys in the historical
-`personal-memory/YYYY-MM/NN` form while mapping them to runtime owners named
-`personal-memory/YYYY/MM`. The builder therefore materializes `2024`, `2025`,
+`local/personal-memory/YYYY-MM/NN` form while mapping them to runtime owners named
+`local/personal-memory/YYYY/MM`. The builder therefore materializes `2024`, `2025`,
 and `2026` as empty structural year Contexts above the 30 monthly Contexts.
 Separating fixture identity from runtime placement lets the live baseline move
 the same monthly Contexts and Memories without rekeying their UIDs merely to
 gain a navigable year level. Only the newly introduced year Contexts receive
 new structural identities; they are organization, not personal Memory claims.
 
-The package may omit a namespace-only prefix that owns no fixture Memory. At
-Study import, the Profile composer fills
-each such gap with a fresh empty ordinary Context. Existing fixture Context
+The package may omit a prefix that owns no fixture Memory. At Study import,
+the Profile composer fills each such gap with a fresh empty ordinary Context;
+the picker never invents a namespace-only row. Existing fixture Context
 and Memory identities remain unchanged, while recursive listing and upward
 navigation obtain a continuous lexical chain. These structural parents are a
 Profile topology guarantee. During `init-study`, Task-side parents remain below
@@ -105,9 +105,13 @@ details condition.
 Task 2 starts at an empty `participant/proposal-workspace` task Context.
 `task-2-proposal-authority` owns `advisor1`, `advisor2`, and
 `proposal-submission-guidelines`; the advisor views are `READ` and guidelines
-are `QUERY+SESSION_LOG`. Task 3 owns `personal-memory`.
-`task-3-healthcare-authority` owns `guardrails` and the healthcare information
-tree; the task receives `READ` and `QUERY+SESSION_LOG` respectively.
+are `QUERY+SESSION_LOG`. Task 3 owns `local/personal-memory` and
+`local/guardrails`. `task-3-healthcare-authority` owns ordinary
+`remote/government/healthcare-agent/info-request/official-guidance` and the
+query-only sibling `questions-and-answers`. Only official guidance receives a
+derived-work READ grant; questions-and-answers receives `QUERY+SESSION_LOG`.
+The real healthcare-agent parent supplies a non-recursive `SHARE` endpoint
+grant under the stable recipient name `government/healthcare-agent`.
 
 Each physical Context gets one fixture-import checkpoint representing its
 preloaded baseline. Import does not simulate hundreds of participant-authored

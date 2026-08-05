@@ -1,0 +1,412 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 6.868023999966681,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 1,
+      "prompt_digest": "19864dd1c56bf29312dd86e0ca5f8be013d6ca90844990386f1a779c125f33d4",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity practical_improvement",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"MULTIPLE_READINGS\":\"{\\\"answer\\\":\\\"NO\\\"}\",\"PRACTICAL_IMPROVEMENT\":\"{\\\"answer\\\":\\\"NO\\\"}\"}",
+      "repetition": 1,
+      "response_bytes": 89,
+      "response_digest": "a4a10fc37df9d0952b80d5c2c82c4dc6db896f86719ad69966a02ddbd7d7d6dc",
+      "schema_digest": "491a981f6f7b3c1e3bdc15be924fdfc1d492eeb930c0a9b79e522a4fc4c6ce4c",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "NO",
+          "completion_seconds": 3.117406957782805,
+          "completion_tokens": null,
+          "prompt_digest": "ec449d2257ad9f768f51ff98d05e477642b8a408097fa16e9f8f03b8bf17ccd0",
+          "prompt_tokens": null,
+          "raw_response": "{\"answer\":\"NO\"}",
+          "response_digest": "c6ab54650e55764a494404be890098b717f41c4e0f9c053f7e953a55857905b0",
+          "schema_digest": "d2988f59139742deb7b1501effb85ff3b844af744bab912c0965c21c0045d1bf",
+          "stage": "MULTIPLE_READINGS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        },
+        {
+          "answer": "NO",
+          "completion_seconds": 3.750232624821365,
+          "completion_tokens": null,
+          "prompt_digest": "9aaf67ac34d831412518e2a6276eff886d0732f53b918520fd2a1e7062712f1e",
+          "prompt_tokens": null,
+          "raw_response": "{\"answer\":\"NO\"}",
+          "response_digest": "c6ab54650e55764a494404be890098b717f41c4e0f9c053f7e953a55857905b0",
+          "schema_digest": "d2988f59139742deb7b1501effb85ff3b844af744bab912c0965c21c0045d1bf",
+          "stage": "PRACTICAL_IMPROVEMENT",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        }
+      ],
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "dominant-required-entry-permit",
+      "completion_seconds": 10.291792083065957,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 2,
+      "prompt_digest": "112dfd4874e9316147c8e32884b488cea6c5ce10f0246e54fe8475c833b7fd81",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity practical_improvement",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"MULTIPLE_READINGS\":\"{\\\"answer\\\":\\\"NO\\\"}\",\"PRACTICAL_IMPROVEMENT\":\"{\\\"answer\\\":\\\"NO\\\"}\"}",
+      "repetition": 1,
+      "response_bytes": 89,
+      "response_digest": "a4a10fc37df9d0952b80d5c2c82c4dc6db896f86719ad69966a02ddbd7d7d6dc",
+      "schema_digest": "491a981f6f7b3c1e3bdc15be924fdfc1d492eeb930c0a9b79e522a4fc4c6ce4c",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "NO",
+          "completion_seconds": 3.9514969578012824,
+          "completion_tokens": null,
+          "prompt_digest": "f54118a3c1dec917d8d099d82b424f95d5b9947e9e136044735e46d0cce5e294",
+          "prompt_tokens": null,
+          "raw_response": "{\"answer\":\"NO\"}",
+          "response_digest": "c6ab54650e55764a494404be890098b717f41c4e0f9c053f7e953a55857905b0",
+          "schema_digest": "d2988f59139742deb7b1501effb85ff3b844af744bab912c0965c21c0045d1bf",
+          "stage": "MULTIPLE_READINGS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        },
+        {
+          "answer": "NO",
+          "completion_seconds": 6.339827166870236,
+          "completion_tokens": null,
+          "prompt_digest": "f69b2ee81da496a3de656cb25f60542d66c3cd1a2752b8e477e8da344bf429f6",
+          "prompt_tokens": null,
+          "raw_response": "{\"answer\":\"NO\"}",
+          "response_digest": "c6ab54650e55764a494404be890098b717f41c4e0f9c053f7e953a55857905b0",
+          "schema_digest": "d2988f59139742deb7b1501effb85ff3b844af744bab912c0965c21c0045d1bf",
+          "stage": "PRACTICAL_IMPROVEMENT",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        }
+      ],
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-helpful-person-in-charge",
+      "completion_seconds": 17.079272791277617,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": null,
+      "ordinal": 3,
+      "prompt_digest": "3fe44742b97f8fca07a142c3a4e6f3d2d78b516e7a1374f757732b526a31810e",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity can_proceed",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"CAN_PROCEED\":\"{\\\"answer\\\":\\\"YES\\\"}\",\"CLEAR_LEADER\":\"{\\\"answer\\\":\\\"NO\\\"}\",\"MULTIPLE_READINGS\":\"{\\\"answer\\\":\\\"YES\\\"}\",\"PRACTICAL_IMPROVEMENT\":\"{\\\"answer\\\":\\\"YES\\\"}\"}",
+      "repetition": 1,
+      "response_bytes": 165,
+      "response_digest": "f6191bef91764a121715c50f6b80ecf01be236e23c4a42008dcc1345dc0de842",
+      "schema_digest": "ddefdd351c6678cc6d051bc9daffaa680e64e85a829a677984e6668f4fa2cf43",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "YES",
+          "completion_seconds": 3.4773377077654004,
+          "completion_tokens": null,
+          "prompt_digest": "0ea29f69a28a3b03c6e370b68ff02e836d4c6e1f4e135cda1e3fae86f2a7c998",
+          "prompt_tokens": null,
+          "raw_response": "{\"answer\":\"YES\"}",
+          "response_digest": "f7b0b154a62daa001c9f54cc5b56a3c0d941107b392213dc4c9a20997ab9d22c",
+          "schema_digest": "d2988f59139742deb7b1501effb85ff3b844af744bab912c0965c21c0045d1bf",
+          "stage": "MULTIPLE_READINGS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        },
+        {
+          "answer": "NO",
+          "completion_seconds": 6.164997207932174,
+          "completion_tokens": null,
+          "prompt_digest": "b143e4e161b3f7b56b6f0abc539a2347d75416f2a84669e68a8f811a8e061e04",
+          "prompt_tokens": null,
+          "raw_response": "{\"answer\":\"NO\"}",
+          "response_digest": "c6ab54650e55764a494404be890098b717f41c4e0f9c053f7e953a55857905b0",
+          "schema_digest": "d2988f59139742deb7b1501effb85ff3b844af744bab912c0965c21c0045d1bf",
+          "stage": "CLEAR_LEADER",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        },
+        {
+          "answer": "YES",
+          "completion_seconds": 3.643544957973063,
+          "completion_tokens": null,
+          "prompt_digest": "1d316d3d5a19e95fce0f5b4e3eb8b7107655648c8bd56ccda1777cc40066d434",
+          "prompt_tokens": null,
+          "raw_response": "{\"answer\":\"YES\"}",
+          "response_digest": "f7b0b154a62daa001c9f54cc5b56a3c0d941107b392213dc4c9a20997ab9d22c",
+          "schema_digest": "d2988f59139742deb7b1501effb85ff3b844af744bab912c0965c21c0045d1bf",
+          "stage": "PRACTICAL_IMPROVEMENT",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        },
+        {
+          "answer": "YES",
+          "completion_seconds": 3.792628041934222,
+          "completion_tokens": null,
+          "prompt_digest": "b14a9740f16659d0f296e4713dabb1b40d63f58fc283735af95015e3d3d0069f",
+          "prompt_tokens": null,
+          "raw_response": "{\"answer\":\"YES\"}",
+          "response_digest": "f7b0b154a62daa001c9f54cc5b56a3c0d941107b392213dc4c9a20997ab9d22c",
+          "schema_digest": "d2988f59139742deb7b1501effb85ff3b844af744bab912c0965c21c0045d1bf",
+          "stage": "CAN_PROCEED",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        }
+      ],
+      "status": "PASS"
+    }
+  ],
+  "completed_at": "2026-08-03T19:03:32.299520Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "fixture": "ambiguity.json",
+    "fixture_case_count": 10,
+    "fixture_digest": "003654c092e03ea74f72e8f084624438085555e2cedad2c9abed985ae2b3c067",
+    "independent_holdout": false,
+    "operation": "find-ambiguities",
+    "role": "CALIBRATION",
+    "ruleset_version": "ambiguity-v1-draft",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "single-helpful-reception-location",
+      "dominant-required-entry-permit",
+      "competing-helpful-person-in-charge"
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T190258055913Z-dd1be549.json",
+  "pipeline": {
+    "gate": "exact two-label contract with repeated stability",
+    "id": "ambiguity-binary-v3",
+    "stages": [
+      "MULTIPLE_READINGS",
+      "CLEAR_LEADER",
+      "PRACTICAL_IMPROVEMENT",
+      "CAN_PROCEED",
+      "PROJECT_LABELS"
+    ],
+    "version": 3
+  },
+  "provider": {
+    "effective_thinking": null,
+    "endpoint": null,
+    "model": "gpt-5.6-luna",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "low",
+    "runtime": "codex-cli"
+  },
+  "run_id": "20260803T190258055913Z-dd1be549",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": null,
+      "max_output_tokens": null,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T19:02:58.055913Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 1,
+      "structurally_valid": 3,
+      "total": 3
+    },
+    "campaign_passed": false,
+    "case_results": [
+      {
+        "attempts": 1,
+        "case_id": "single-helpful-reception-location",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-required-entry-permit",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-helpful-person-in-charge",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      }
+    ],
+    "cases": {
+      "failed": 2,
+      "passed": 1,
+      "total": 3
+    },
+    "completion_seconds": {
+      "max": 17.079272791277617,
+      "mean": 11.413029624770084,
+      "median": 10.291792083065957,
+      "p95": 17.079272791277617
+    },
+    "distributions": {
+      "actual_joint_attempts": {
+        "COMPETING/HELPFUL": 1,
+        "SINGLE/NONE": 2
+      },
+      "case_pass_by_clarification": {
+        "HELPFUL": {
+          "passed": 1,
+          "total": 2
+        },
+        "NONE": {
+          "passed": 0,
+          "total": 0
+        },
+        "REQUIRED": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "case_pass_by_interpretation": {
+        "COMPETING": {
+          "passed": 1,
+          "total": 1
+        },
+        "DOMINANT": {
+          "passed": 0,
+          "total": 1
+        },
+        "SINGLE": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "expected_clarification": {
+        "HELPFUL": 2,
+        "REQUIRED": 1
+      },
+      "expected_interpretation": {
+        "COMPETING": 1,
+        "DOMINANT": 1,
+        "SINGLE": 1
+      },
+      "expected_joint": {
+        "COMPETING/HELPFUL": 1,
+        "DOMINANT/REQUIRED": 1,
+        "SINGLE/HELPFUL": 1
+      }
+    },
+    "failures": {
+      "LABEL_MISMATCH": 2
+    },
+    "stage_completion_seconds": {
+      "CAN_PROCEED": {
+        "max": 3.792628041934222,
+        "mean": 3.792628041934222,
+        "median": 3.792628041934222,
+        "p95": 3.792628041934222
+      },
+      "CLEAR_LEADER": {
+        "max": 6.164997207932174,
+        "mean": 6.164997207932174,
+        "median": 6.164997207932174,
+        "p95": 6.164997207932174
+      },
+      "MULTIPLE_READINGS": {
+        "max": 3.9514969578012824,
+        "mean": 3.515413874449829,
+        "median": 3.4773377077654004,
+        "p95": 3.9514969578012824
+      },
+      "PRACTICAL_IMPROVEMENT": {
+        "max": 6.339827166870236,
+        "mean": 4.577868249888222,
+        "median": 3.750232624821365,
+        "p95": 6.339827166870236
+      }
+    },
+    "tokens": {
+      "completion": 0,
+      "prompt": 0,
+      "reported_attempts": 0,
+      "reported_calls": 0
+    }
+  },
+  "timing": {
+    "campaign_seconds": 34.24463404202834,
+    "provider_connection_seconds": 0.05123970890417695,
+    "total_seconds": 34.295873750932515
+  }
+}

@@ -39,6 +39,22 @@ def run_ground_shell(**kwargs):
     return _run_ground_shell(**kwargs)
 
 
+def test_context_pane_places_direct_tree_entry_below_suggestions() -> None:
+    rendered = render_ground_contexts_pane(
+        proposal_with_contexts().context_suggestions,
+        discovery_complete=True,
+        direct_context_names=(
+            "temp/task-1",
+            "participant/construction-updates",
+        ),
+        candidate_cursor_kind="DIRECT_PICK",
+    )
+
+    assert "MAIN? · temp/task-1" in rendered
+    assert "› DIRECT SELECT · P opens the ordinary Context tree" in rendered
+    assert rendered.index("MAIN? · temp/task-1") < rendered.index("DIRECT SELECT")
+
+
 class SizedDummyOutput(DummyOutput):
     def __init__(self, *, rows: int, columns: int) -> None:
         super().__init__()
@@ -831,6 +847,82 @@ def test_initial_agent_turn_populates_rule_and_memory_panes_before_creation(
     assert "NEW? · ticker-rule-examples · NOT CREATED" in (
         panes["CONTEXTS"].text_area.text
     )
+
+
+def test_initial_results_mark_unseen_panes_until_the_person_visits_one(
+    monkeypatch,
+):
+    original_pane_builder = ground_shell_module.build_scrollable_text_pane
+    notifications = {}
+
+    def capturing_pane(title, *args, **kwargs):
+        notifications[title] = kwargs.get("notification")
+        return original_pane_builder(title, *args, **kwargs)
+
+    monkeypatch.setattr(
+        ground_shell_module,
+        "build_scrollable_text_pane",
+        capturing_pane,
+    )
+    rule = GroundShellRuleDraft(
+        content="Preserve a dot-prefixed share-class suffix.",
+        rationale="Initial hypothesis.",
+        origin="AGENT_SUGGESTED",
+        source_spans=(),
+    )
+    memory = GroundShellMemoryDraft(
+        content="North Star Energy Inc. Class B",
+        expected="NSE.B",
+        rationale="Synthetic boundary example.",
+        case_role="BOUNDARY",
+        disposition="UNRESOLVED",
+        rule_draft_index=1,
+        origin="AGENT_SUGGESTED",
+        source_spans=(),
+    )
+
+    with create_pipe_input() as pipe_input:
+        # The provider automatically focuses Contexts. That must not dismiss
+        # its notification. Tab is an explicit visit to Rules and clears only
+        # that pane before Q closes the read-only preview.
+        pipe_input.send_text("\tq")
+        result = run_ground_shell(
+            interpret=lambda _text: Propose(
+                kind="PROPOSE",
+                understanding="I found a reusable direction.",
+                question="Create this Ground?",
+                ground_name="ticker-rules",
+                goal="Find reusable company-name to ticker Rules.",
+                new_context_suggestions=(
+                    GroundShellNewContextSuggestion(
+                        context_name="ticker-rule-examples",
+                        reason="A dedicated example Context may help.",
+                    ),
+                ),
+                rule_drafts=(rule,),
+                memory_drafts=(memory,),
+            ),
+            apply=lambda *_args: pytest.fail("must not apply"),
+            initial_request="Find a reusable ticker Rule.",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            background_interpretation=False,
+        )
+
+    assert result.status == "CANCELLED"
+    assert set(notifications) == {
+        "GOAL",
+        "CONTEXTS",
+        "RULES",
+        "MEMORIES",
+        "CHAT",
+    }
+    assert notifications["GOAL"]()
+    assert notifications["CONTEXTS"]()
+    assert not notifications["RULES"]()
+    assert notifications["MEMORIES"]()
+    assert notifications["CHAT"]()
 
 
 def test_blank_ground_keeps_every_pane_and_message_body_visible_at_24_rows(
@@ -2493,6 +2585,75 @@ def test_ctrl_j_inserts_a_newline_instead_of_submitting():
         )
 
     assert seen == ["first line\nsecond line"]
+
+
+@pytest.mark.parametrize(
+    ("key", "expected_status"),
+    [("b", "BACK_TO_PICKER"), ("q", "CANCELLED")],
+)
+def test_blank_read_pane_backs_to_picker_or_quits_without_a_turn(
+    key,
+    expected_status,
+):
+    interpreted = []
+    applied = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(f"\t{key}")
+        result = run_ground_shell(
+            interpret=lambda *args: interpreted.append(args),
+            apply=lambda *args: applied.append(args),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == expected_status
+    assert interpreted == []
+    assert applied == []
+
+
+def test_blank_back_discards_pending_creation_without_applying_it():
+    applied = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("Create a Ground.\rb")
+        result = run_ground_shell(
+            interpret=proposal,
+            apply=lambda *args: applied.append(args),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "BACK_TO_PICKER"
+    assert result.proposal is None
+    assert applied == []
+
+
+def test_blank_message_keeps_lowercase_b_and_q_as_user_text():
+    seen = []
+
+    def interpret(text: str):
+        seen.append(text)
+        return Ask(
+            kind="ASK",
+            understanding="The letters are ordinary Message text.",
+            question="Continue?",
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("bring back q safely\r\x03")
+        result = run_ground_shell(
+            interpret=interpret,
+            apply=lambda *_args: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CANCELLED"
+    assert seen == ["bring back q safely"]
 
 
 def test_exact_command_is_quoted_from_structured_fields_not_raw_command():

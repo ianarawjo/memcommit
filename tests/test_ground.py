@@ -54,16 +54,15 @@ from memcommit.store import MemoryStore, ground_session_record_digest
 
 runner = CliRunner()
 
-TASK_1_UPSTREAM_NAME = "campus-wiki"
-TASK_1_LOCAL_WIKI_FORK_NAME = "participant/campus-wiki-fork"
+TASK_1_UPSTREAM_NAME = "construction-details"
+TASK_1_WIKI_NAME = "campus-wiki"
 TASK_1_CHANGE_ROOT_NAME = "participant/construction-updates"
 TASK_1_DESCRIPTION = (
     "Use verified Main Building construction changes from local work memory "
-    "to update every affected part of the participant's local campus-wiki "
-    "fork for later contribution."
+    "to update every affected part of the ordinary campus wiki."
 )
 TASK_1_TARGET_NAMES = (
-    TASK_1_LOCAL_WIKI_FORK_NAME,
+    TASK_1_WIKI_NAME,
     f"{TASK_1_CHANGE_ROOT_NAME}/building-access",
     f"{TASK_1_CHANGE_ROOT_NAME}/event-relocations",
     f"{TASK_1_CHANGE_ROOT_NAME}/temporary-parking",
@@ -80,13 +79,13 @@ TASK_1_TARGET_REQUIREMENTS = tuple(
         ),
         role=(
             "PUBLICATION_TARGET"
-            if name == TASK_1_LOCAL_WIKI_FORK_NAME
+            if name == TASK_1_WIKI_NAME
             else "PLACEMENT_TARGET"
         ),
         blocked_reason=(
             "The provisioned local-fork baseline is absent from this Ground "
             "fixture."
-            if name == TASK_1_LOCAL_WIKI_FORK_NAME
+            if name == TASK_1_WIKI_NAME
             else (
                 "Concrete event-relocation destinations are absent."
                 if name.endswith("/event-relocations")
@@ -169,7 +168,7 @@ def test_empty_ground_session_round_trip_and_method_provenance():
     session = create_ground_session(
         "task-1-fixture",
         goal="Agree on Task 1 wiki and local Memory contents.",
-        scope=(TASK_1_LOCAL_WIKI_FORK_NAME, TASK_1_CHANGE_ROOT_NAME),
+        scope=(TASK_1_WIKI_NAME, TASK_1_CHANGE_ROOT_NAME),
     )
 
     restored = GroundSession.from_dict(session.to_dict())
@@ -334,7 +333,7 @@ def test_cli_creates_resumes_and_snapshots_without_touching_context(
             "--goal",
             "Agree on wiki and local Task 1 Memories.",
             "--scope",
-            TASK_1_LOCAL_WIKI_FORK_NAME,
+            TASK_1_WIKI_NAME,
             "--scope",
             TASK_1_CHANGE_ROOT_NAME,
             "--snapshot",
@@ -501,6 +500,84 @@ def test_cli_ground_tty_picker_reopens_existing_without_creating_state(
     assert picker_options[0]["initial_group_mode"] == "context"
     assert picker_options[0]["location"].store_path == str(isolated_store)
     assert _store_bytes(isolated_store) == before
+
+
+def test_ground_back_reopens_a_fresh_picker_catalog(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore(create=False)
+    first = create_ground_session("first-ground", goal="Open first.")
+    store.save_ground_session(first)
+    picker_titles = []
+    opened = []
+
+    def choose_saved(entries, **_kwargs):
+        titles = tuple(entry.title for entry in entries)
+        picker_titles.append(titles)
+        key = "first-ground" if len(picker_titles) == 1 else "second-ground"
+        return ground_command.SessionOpenReceipt(
+            kind="ground",
+            key=key,
+            argv=("mem", "ground", key),
+        )
+
+    def open_ground(session, **_kwargs):
+        opened.append(session.contract_name)
+        if session.contract_name == "first-ground":
+            store.save_ground_session(
+                create_ground_session("second-ground", goal="Open second.")
+            )
+            return "BACK_TO_PICKER"
+        return "CLOSED"
+
+    monkeypatch.setattr(ground_command, "choose_session", choose_saved)
+    monkeypatch.setattr(
+        ground_command,
+        "_run_existing_ground_shell",
+        open_ground,
+    )
+
+    ground_command._run_ground_session_picker(store)
+
+    assert picker_titles == [
+        ("first-ground",),
+        ("first-ground", "second-ground"),
+    ]
+    assert opened == ["first-ground", "second-ground"]
+
+
+@pytest.mark.parametrize(
+    ("shell_outcome", "picker_calls"),
+    [("BACK_TO_PICKER", 1), ("CLOSED", 0)],
+)
+def test_direct_named_ground_back_opens_picker_but_quit_does_not(
+    isolated_store,
+    monkeypatch,
+    shell_outcome,
+    picker_calls,
+):
+    store = MemoryStore(create=False)
+    store.save_ground_session(
+        create_ground_session("saved-ground", goal="Resume this Ground.")
+    )
+    reopened = []
+    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        ground_command,
+        "_run_existing_ground_shell",
+        lambda *_args, **_kwargs: shell_outcome,
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_ground_session_picker",
+        lambda selected_store, **_kwargs: reopened.append(selected_store),
+    )
+
+    result = runner.invoke(app, ["ground", "saved-ground"])
+
+    assert result.exit_code == 0, result.output
+    assert len(reopened) == picker_calls
 
 
 def test_cli_ground_tty_picker_new_receipt_keeps_new_flow_explicit(
@@ -837,6 +914,7 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
         raw_context=raw.name,
         derived_context=derived.name,
         publication_target=targets[0].name,
+        placement_targets=(targets[1].name,),
     )
     bind_proposal = ground_command._ground_action_proposal(session, bind)
     assert bind_proposal.review.argv[:3] == (
@@ -854,7 +932,7 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
         if value == "--if-context-version"
     ] == [
         ground_command._context_version_token(context)
-        for context in (raw, derived, targets[0])
+        for context in (raw, derived, targets[0], targets[1])
     ]
     description_index = bind_proposal.review.argv.index("--description")
     assert bind_proposal.review.argv[description_index:] == (
@@ -866,6 +944,8 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
         derived.name,
         "--publication-target",
         targets[0].name,
+        "--placement-target",
+        targets[1].name,
     )
     bound, _output = ground_command._apply_named_ground_proposal(
         session,
@@ -884,6 +964,15 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
     )
     rule_proposal = ground_command._ground_action_proposal(bound, rule)
     assert "--propose-rule" in rule_proposal.review.argv
+    rule_proposal = ground_command._ground_retarget_proposal(
+        bound,
+        rule_proposal,
+        targets[1].name,
+    )
+    assert ground_command._argv_option_values(
+        rule_proposal.review.argv,
+        "--propose-rule-target",
+    ) == (targets[1].name,)
     with_rule, _output = ground_command._apply_named_ground_proposal(
         bound,
         rule_proposal,
@@ -891,6 +980,7 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
     assert with_rule.revision == 1
     assert with_rule.items[0].kind == "RULE"
     assert with_rule.items[0].status == "PROPOSED"
+    assert with_rule.items[0].target_context_uids == (targets[1].uid,)
 
     accept = GroundTurnAction(
         kind="REVIEW_ITEM",
@@ -1716,7 +1806,7 @@ def test_target_focus_renders_one_compact_read_only_ground_screen(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=("participant/campus-wiki-fork",),
+        target_context_names=("campus-wiki",),
         expected="Record the supported entrance closure.",
         rationale="The source supports one affected wiki entry.",
         current_contexts=contexts,
@@ -1724,7 +1814,7 @@ def test_target_focus_renders_one_compact_read_only_ground_screen(
 
     rendered = render_ground_focus(
         proposed,
-        "participant/campus-wiki-fork",
+        "campus-wiki",
         contexts,
     )
 
@@ -1733,7 +1823,7 @@ def test_target_focus_renders_one_compact_read_only_ground_screen(
         in rendered
     )
     assert "Revision: 1" in rendered
-    assert "FOCUS · participant/campus-wiki-fork" in rendered
+    assert "FOCUS · campus-wiki" in rendered
     assert "GOAL\n" in rendered
     assert "BOUND MATERIAL" in rendered
     assert "RAW         temp/task-1 · 51 Memories" in rendered
@@ -1741,7 +1831,7 @@ def test_target_focus_renders_one_compact_read_only_ground_screen(
         "CANDIDATES  temp/task-1-atomized · 54 Memories"
         in rendered
     )
-    assert "TARGET      participant/campus-wiki-fork · 0 Memories" in rendered
+    assert "TARGET      campus-wiki · 0 Memories" in rendered
     assert "MEM UNDERSTANDS" in rendered
     assert "[BLOCKED]" in rendered
     assert "SUPPORTED SLICE" in rendered
@@ -1799,11 +1889,11 @@ def test_cli_focus_target_is_read_only_and_can_render_one_action_result(
                 "ground",
                 "task-1-focus-cli",
                 "--focus-target",
-                "participant/campus-wiki-fork",
+                "campus-wiki",
             ],
         )
     assert focused.exit_code == 0, focused.output
-    assert "FOCUS · participant/campus-wiki-fork" in focused.output
+    assert "FOCUS · campus-wiki" in focused.output
     assert ground_path.read_bytes() == ground_before
     assert _non_ground_store_bytes(isolated_store) == non_ground_before
 
@@ -1820,13 +1910,13 @@ def test_cli_focus_target_is_read_only_and_can_render_one_action_result(
             "--change-reason",
             "The bound evidence supports a slice, not a complete baseline.",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
         ],
     )
 
     assert revised.exit_code == 0, revised.output
     assert "Revision: 1" in revised.output
-    assert "FOCUS · participant/campus-wiki-fork" in revised.output
+    assert "FOCUS · campus-wiki" in revised.output
     assert "Ground supported local-fork Memories first" in revised.output
     restored = store.load_ground_session("task-1-focus-cli")
     assert restored is not None
@@ -1885,7 +1975,7 @@ def test_cli_focus_target_rejects_missing_unbound_and_competing_views(
             "ground",
             "focus-errors",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
             "--snapshot",
         ],
     )
@@ -1895,7 +1985,7 @@ def test_cli_focus_target_rejects_missing_unbound_and_competing_views(
             "ground",
             "focus-does-not-exist",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
         ],
     )
     bind_and_focus = runner.invoke(
@@ -1906,7 +1996,7 @@ def test_cli_focus_target_rejects_missing_unbound_and_competing_views(
             "--description",
             "Do not rebind while focusing.",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
         ],
     )
     unsupported_action = runner.invoke(
@@ -1917,7 +2007,7 @@ def test_cli_focus_target_rejects_missing_unbound_and_competing_views(
             "--select",
             "1",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
         ],
     )
     hidden_target_revision = runner.invoke(
@@ -1926,7 +2016,7 @@ def test_cli_focus_target_rejects_missing_unbound_and_competing_views(
             "ground",
             "focus-errors",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
             "--revise-target",
             "participant/construction-updates/building-access",
             "--requirement-text",
@@ -1977,18 +2067,18 @@ def test_target_focus_reports_stale_frames_and_sanitizes_text(
     )
     store.save_ground_session(session)
     campus = next(
-        context for context in targets if context.name == "participant/campus-wiki-fork"
+        context for context in targets if context.name == "campus-wiki"
     )
     campus.add("A changed target Memory.")
     store.save(campus)
     ground_path = isolated_store / "ground-sessions" / "focus-stale.json"
-    context_path = store._context_file("participant/campus-wiki-fork")
+    context_path = store._context_file("campus-wiki")
     ground_before = ground_path.read_bytes()
     context_before = context_path.read_bytes()
 
     rendered = render_ground_focus(
         session,
-        "participant/campus-wiki-fork",
+        "campus-wiki",
         contexts,
     )
 
@@ -1997,7 +2087,7 @@ def test_target_focus_reports_stale_frames_and_sanitizes_text(
     assert "OPEN · STALE" in rendered
     assert "0 bound · 1 current Memories" in rendered
     assert "STALE BOUND MATERIAL" in rendered
-    assert "participant/campus-wiki-fork" in rendered
+    assert "campus-wiki" in rendered
     assert "before changing Goal, Rules, or Memories" in rendered
     assert "SUPPORTED SLICE" not in rendered
 
@@ -2007,7 +2097,7 @@ def test_target_focus_reports_stale_frames_and_sanitizes_text(
             "ground",
             "focus-stale",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
         ],
     )
     revision = runner.invoke(
@@ -2020,7 +2110,7 @@ def test_target_focus_reports_stale_frames_and_sanitizes_text(
             "--change-reason",
             "The bound target changed.",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
         ],
     )
 
@@ -2085,7 +2175,7 @@ def test_focus_requirement_uid_prefix_is_exact_or_unambiguous(
             "ground",
             "focus-prefix",
             "--focus-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
         ],
     )
 
@@ -2094,7 +2184,7 @@ def test_focus_requirement_uid_prefix_is_exact_or_unambiguous(
     assert ambiguous_action.exit_code == 1
     assert "missing or ambiguous" in ambiguous_action.output
     assert exact_name.exit_code == 0, exact_name.output
-    assert "FOCUS · participant/campus-wiki-fork" in exact_name.output
+    assert "FOCUS · campus-wiki" in exact_name.output
     assert path.read_bytes() == before
 
     overlap_payload = session.to_dict()
@@ -2150,7 +2240,7 @@ def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
         target_context_names=(
-            "participant/campus-wiki-fork",
+            "campus-wiki",
             "participant/construction-updates/building-access",
         ),
         expected=(
@@ -2182,7 +2272,7 @@ def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
     assert tuple(
         target_name_by_uid[uid] for uid in case.target_context_uids
     ) == (
-        "participant/campus-wiki-fork",
+        "campus-wiki",
         "participant/construction-updates/building-access",
     )
     assert case.expected.startswith("Keep one atomic")
@@ -2200,7 +2290,7 @@ def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
     assert "output: Keep one atomic" in round_snapshot
     assert "notes: The candidate is a verified" in round_snapshot
     assert candidate.content in round_snapshot
-    assert "participant/campus-wiki-fork" in round_snapshot
+    assert "campus-wiki" in round_snapshot
     assert "participant/construction-updates/building-access" in round_snapshot
 
     accepted_memory = review_ground_item(
@@ -2282,7 +2372,7 @@ def test_ground_round_refuses_a_stale_bound_frame_and_preserves_saved_revision(
             case=candidate.content,
             source_context_uid=derived.uid,
             source_memory_uid=candidate.uid,
-            target_context_names=("participant/campus-wiki-fork",),
+            target_context_names=("campus-wiki",),
             expected="No result is saved.",
             rationale="The complete bound frame changed.",
             current_contexts=(raw, derived, *targets),
@@ -2482,7 +2572,7 @@ def test_cli_binds_proposes_accepts_and_revises_goal_in_named_workbench(
     raw, derived, targets, candidate = _task_1_workbench(store)
     target_by_name = {target.name: target for target in targets}
     selected_targets = (
-        target_by_name["participant/campus-wiki-fork"],
+        target_by_name["campus-wiki"],
         target_by_name["participant/construction-updates/building-access"],
     )
     context_bytes_before = {
@@ -2508,12 +2598,12 @@ def test_cli_binds_proposes_accepts_and_revises_goal_in_named_workbench(
             "--derived-context",
             derived.name,
             "--publication-target",
-            "participant/campus-wiki-fork",
+            "campus-wiki",
             "--placement-target",
             "participant/construction-updates/building-access",
             "--blocked-target",
             (
-                "participant/campus-wiki-fork=The provisioned local-fork "
+                "campus-wiki=The provisioned local-fork "
                 "baseline is absent from this Ground fixture."
             ),
             "--snapshot",
@@ -2952,7 +3042,7 @@ def test_legacy_representative_case_loads_as_fit(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=("participant/campus-wiki-fork",),
+        target_context_names=("campus-wiki",),
         expected="Materialize the supported closure.",
         rationale="The case predates the FIT label.",
         current_contexts=(raw, derived, *targets),
@@ -3015,7 +3105,7 @@ def test_forged_case_text_or_source_reference_marks_workbench_stale(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=("participant/campus-wiki-fork",),
+        target_context_names=("campus-wiki",),
         expected="Materialize the supported closure.",
         rationale="The case must remain content-addressed.",
         current_contexts=contexts,
@@ -3169,7 +3259,7 @@ def test_load_requires_a_user_accept_decision_for_each_accepted_item(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=("participant/campus-wiki-fork",),
+        target_context_names=("campus-wiki",),
         expected="Materialize the supported closure.",
         rationale="This needs explicit approval.",
         current_contexts=contexts,

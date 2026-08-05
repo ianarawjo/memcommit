@@ -127,6 +127,55 @@ def test_snapshot_exposes_chat_state_without_searching_or_mutating():
     assert "interactive input not shown" in snapshot
 
 
+def test_snapshot_separates_related_fallback_from_primary_matches():
+    related = FindChatResult(
+        alias="m1",
+        context_name="task-3/personal-memory/2024/03",
+        kind="memory",
+        uid="9c9a8333",
+        content="The instructions describe an evening medication time.",
+        relevance="related",
+    )
+    state = FindChatState(
+        context_name="task-3",
+        current_query="health insurance memories",
+        results=(related,),
+        related_query="health and healthcare memories",
+        status="NO PRIMARY MATCHES · SHOWING RELATED RESULTS",
+    )
+
+    snapshot = render_find_chat_snapshot(state)
+
+    assert "PRIMARY MATCHES 0 · RELATED 1 · KEPT 0" in snapshot
+    assert "PRIMARY MATCHES\n  (none)" in snapshot
+    assert (
+        "RELATED RESULTS · BROADER SEARCH · health and healthcare memories"
+        in snapshot
+    )
+    assert "Related items do not satisfy the original query." in snapshot
+    assert "[m1 related memory" in snapshot
+
+
+def test_related_results_require_one_query_and_cannot_mix_with_primary():
+    related = FindChatResult(
+        alias="m2",
+        context_name="task-3",
+        kind="memory",
+        uid="related-one",
+        content="Related content",
+        relevance="related",
+    )
+    with pytest.raises(ValueError, match="require one related query"):
+        FindChatState(context_name="task-3", results=(related,))
+
+    with pytest.raises(ValueError, match="cannot mix"):
+        FindChatState(
+            context_name="task-3",
+            results=(TASK_1_CAFE_RESULTS[0], related),
+            related_query="broader topic",
+        )
+
+
 def test_interactive_view_opens_at_the_first_ranked_result():
     content = FormattedTextControl(
         _result_text(_state())
@@ -422,6 +471,73 @@ def test_failed_controller_turn_preserves_results_in_same_application():
     assert result.state.status == "TURN FAILED · RESULTS UNCHANGED"
     assert result.state.messages[-1].role == "STATUS"
     assert "provider unavailable" in result.state.messages[-1].text
+
+
+def test_busy_indicator_cycles_dot_frames_until_the_turn_finishes(monkeypatch):
+    original_label = find_chat_shell_module._processing_find_turn_label
+    rendered_frames: set[str] = set()
+    all_frames_rendered = threading.Event()
+    handler_started = threading.Event()
+    release_handler = threading.Event()
+    feeder_errors = []
+
+    def capture_label(frame_index: int) -> str:
+        label = original_label(frame_index)
+        rendered_frames.add(label)
+        if len(rendered_frames) == 3:
+            all_frames_rendered.set()
+        return label
+
+    monkeypatch.setattr(
+        find_chat_shell_module,
+        "_processing_find_turn_label",
+        capture_label,
+    )
+    monkeypatch.setattr(
+        find_chat_shell_module,
+        "_FIND_BUSY_INTERVAL_SECONDS",
+        0.01,
+    )
+
+    def handle_turn(state: FindChatState, _text: str) -> FindChatState:
+        handler_started.set()
+        if not release_handler.wait(2):
+            raise RuntimeError("test did not release handler")
+        return replace(state, status="REFINED")
+
+    with create_pipe_input() as pipe_input:
+        def close_after_animation() -> None:
+            try:
+                pipe_input.send_text("healthcare\r")
+                if not handler_started.wait(2):
+                    raise AssertionError("handler did not start")
+                if not all_frames_rendered.wait(2):
+                    raise AssertionError("busy indicator did not animate")
+                pipe_input.send_text("\x03")
+                release_handler.set()
+            except Exception as error:  # pragma: no cover - assertion relay
+                feeder_errors.append(error)
+                release_handler.set()
+
+        feeder = threading.Thread(target=close_after_animation)
+        feeder.start()
+        result = run_find_chat_session(
+            _state(),
+            handle_turn=handle_turn,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert feeder_errors == []
+    assert not feeder.is_alive()
+    assert rendered_frames == {
+        " PROCESSING FIND TURN .",
+        " PROCESSING FIND TURN ..",
+        " PROCESSING FIND TURN …",
+    }
+    assert result.state.status == "REFINED"
 
 
 def test_busy_turn_stays_visible_and_blocks_parallel_submission(monkeypatch):

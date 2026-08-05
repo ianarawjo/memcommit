@@ -8,18 +8,37 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.find import (
+    _collect_find_frame_candidates,
+    _load_find_frame_roots,
+)
+from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
 from memcommit.commands.tui_primitives import (
     display_escape_text,
     safe_terminal_text,
 )
 from memcommit.context import QueryContextRef
+from memcommit.find_answer_dialogue import (
+    FindAnswerCorpusTooLarge,
+    synthesize_find_answer,
+)
+from memcommit.find_answer_references import render_find_answer_references
+from memcommit.find_scope_evidence import (
+    compact_artifact_references,
+    compact_reference_content,
+    visible_result_evidence,
+)
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import (
     ProfileError,
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )
-from memcommit.query_provider import QueryProviderError, connect_query_provider
+from memcommit.query_provider import (
+    QueryProviderError,
+    connect_codex_chatgpt_provider,
+    connect_query_provider,
+)
 from memcommit.query_sessions import (
     AuthorityQuerySource,
     AuthorityQueryCatalogEntry,
@@ -33,9 +52,83 @@ from memcommit.query_sessions import (
     validate_query_session_name,
 )
 from memcommit.store import MemoryStore
+from memcommit.search import FindError, rank_candidates
 
 
 _QUERY_MEMORY_SUFFIX = re.compile(r"(?P<view>.+)#(?P<handle>q-[0-9a-f]{12})\Z")
+
+
+def _query_ordinary_context(
+    store: MemoryStore,
+    *,
+    context_name: str,
+    question: str,
+) -> None:
+    """Answer from the same frozen searchable frame used by ordinary Find."""
+    access = resolve_context_access(
+        store,
+        context_name,
+        current_name=store.current_context_name(),
+        required_permission="READ",
+    )
+    read_store = GrantedReadStore(access) if access.is_granted else store
+    root = read_store.load(access.display_name)
+    roots = _load_find_frame_roots(
+        read_store,
+        root,
+        recursive=True,
+        resolve_embeds=True,
+    )
+    candidates = _collect_find_frame_candidates(
+        store,
+        roots,
+        recursive=True,
+        # READ grants expose authority Memories, not the authority Profile's
+        # private session, checkpoint, trace, or rationale stores.
+        include_artifacts=not access.is_granted,
+    )
+    provider = connect_codex_chatgpt_provider()
+    matches = rank_candidates(
+        question,
+        list(candidates),
+        provider,
+        limit=8,
+    )
+    primary = tuple(
+        match.candidate for match in matches if match.relevance == "primary"
+    )
+    if not primary:
+        typer.secho(display_escape_text(root.name), bold=True)
+        typer.echo("  (no grounded answer found)")
+        return
+    visible = visible_result_evidence(primary)
+    # One-shot Query answers from semantically selected evidence only. Find's
+    # interactive answer can deliberately widen to the rest of the Context;
+    # Query should remain concise and must not turn one question into a dump of
+    # every readable Memory or artifact in the frame.
+    remainder = ()
+    answer = synthesize_find_answer(
+        question,
+        visible,
+        remainder,
+        (),
+        "NOT_REQUESTED",
+        provider,
+        interpreted_request=question,
+    )
+    typer.echo(
+        safe_terminal_text(
+            render_find_answer_references(
+                compact_reference_content(
+                    compact_artifact_references(
+                        (*visible, *remainder),
+                        candidates,
+                    )
+                ),
+                answer.sentences,
+            )
+        )
+    )
 
 
 def _select_relevant_descendant_views(
@@ -164,8 +257,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Query-only Context name, optional #HANDLE, or legacy "
-                "reference UID/prefix"
+                "Question for the selected ordinary Context, or a query-only "
+                "Context name, optional #HANDLE, or legacy reference UID/prefix"
             )
         ),
     ] = None,
@@ -173,8 +266,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Question to answer; omit it to browse opaque Memory handles "
-                "in an authority-granted view"
+                "Question for a query-only view; omit it to ask SELECTOR as "
+                "a question of ordinary data or browse a recognized opaque view"
             )
         ),
     ] = None,
@@ -183,7 +276,10 @@ def cmd(
         typer.Option(
             "--context",
             "-c",
-            help="Parent context containing the query-only reference",
+            help=(
+                "Ordinary Context to answer from, or parent Context containing "
+                "the query-only reference"
+            ),
         ),
     ] = None,
     language: Annotated[
@@ -436,6 +532,46 @@ def cmd(
         )
         raise typer.Exit(1)
     if not routed_grants:
+        if question is None:
+            if session_name is not None:
+                typer.secho(
+                    "Error: --session currently applies only to a "
+                    "query-only view.",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
+            if language != "en":
+                typer.secho(
+                    "Error: --language applies only to a query-only view.",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
+            try:
+                _query_ordinary_context(
+                    store,
+                    context_name=selected_name,
+                    question=selector,
+                )
+            except (
+                FileNotFoundError,
+                FindAnswerCorpusTooLarge,
+                FindError,
+                OSError,
+                ProfileConfigError,
+                ProfileError,
+                QueryProviderError,
+                RuntimeError,
+                ValueError,
+            ) as error:
+                typer.secho(
+                    f"Query error: {display_escape_text(str(error))}",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
+            return
         message = (
             str(resolution_error)
             if resolution_error is not None

@@ -1,0 +1,108 @@
+{
+  "uid": "d03cb567-6030-4e9b-bb7f-da95a6f7c904",
+  "message": "Imported canonical English Task 3 fixture Context 'remote/government/healthcare-agent/info-request/questions-and-answers/hospital-stays' into profile 'task-3-healthcare-authority'.",
+  "timestamp": "2026-08-04T22:47:19.080218",
+  "snapshot": {
+    "uid": "cb58440a-abad-5406-953f-8dad331ecc1c",
+    "name": "remote/government/healthcare-agent/info-request/questions-and-answers/hospital-stays",
+    "memories": {
+      "cbc4a7e8-8edc-5344-a77b-6a074fb3ce02": {
+        "type": "memory",
+        "uid": "cbc4a7e8-8edc-5344-a77b-6a074fb3ce02",
+        "content": "Explain a low-noise rest environment, an experience of difficulty standing for a long time, and mobility and explanation preferences as examples of environmental-support information that may be transmitted to the government healthcare institution system."
+      },
+      "6a77083a-551d-567d-9938-43f5f7ac4c55": {
+        "type": "memory",
+        "uid": "6a77083a-551d-567d-9938-43f5f7ac4c55",
+        "content": "Explain a family member's role, current contact details, and convenient contact times and methods as examples of support-contact information that may be transmitted to the government healthcare institution system."
+      },
+      "ca878cd2-778f-5143-9487-cbce6b03fc07": {
+        "type": "memory",
+        "uid": "ca878cd2-778f-5143-9487-cbce6b03fc07",
+        "content": "Explain that the healthcare Q&A agent cannot send a family member's contact information on the user's behalf or contact the family member, and that submitting contact information to the institution does not by itself grant that family member access to personal Memories."
+      },
+      "5fc0c327-6c2f-5599-9bb3-cfc378803005": {
+        "type": "memory",
+        "uid": "5fc0c327-6c2f-5599-9bb3-cfc378803005",
+        "content": "Explain that private events giving rise to rest, noise, or mobility preferences are not subjects the healthcare Q&A agent asks about, and that if the user actually sends them through the government healthcare institution system's transmission screen, they are included in the consented sharing unit."
+      },
+      "8ec1001d-a58f-5cf7-a2f6-f78623e8b032": {
+        "type": "memory",
+        "uid": "8ec1001d-a58f-5cf7-a2f6-f78623e8b032",
+        "content": "Explain that which services may use ordinary meal, sleep, noise, or mobility preferences depends on the type of information supplied and cannot be identified by the healthcare Q&A agent."
+      },
+      "bfa96d9c-3c9e-5eef-86a8-f718d66f395f": {
+        "type": "memory",
+        "uid": "bfa96d9c-3c9e-5eef-86a8-f718d66f395f",
+        "content": "An instruction remaining in personal Memory to take a medication after the evening meal is not the same information as the medication directions that currently apply."
+      },
+      "3be9f1c4-6884-542b-b873-b60ae9d52020": {
+        "type": "memory",
+        "uid": "3be9f1c4-6884-542b-b873-b60ae9d52020",
+        "content": "The healthcare Q&A agent cannot access past medication instructions in personal Memories, verify whether the medication is still taken or at what time, or retain medication information outside the current conversation record."
+      },
+      "e90850dd-5aa6-53e5-b2ab-0e1846ccd3d0": {
+        "type": "memory",
+        "uid": "e90850dd-5aa6-53e5-b2ab-0e1846ccd3d0",
+        "content": "An external payment or billing agent may mistake this healthcare Q&A endpoint for a payment or refund API and demand that it execute a transaction."
+      },
+      "bf296e55-7ce9-5f95-8fcb-3056b30f95c1": {
+        "type": "memory",
+        "uid": "bf296e55-7ce9-5f95-8fcb-3056b30f95c1",
+        "content": "An external contact-management agent may wrongly expect this endpoint to transmit or update a family member's contact information to the institution on the user's behalf."
+      },
+      "651aea7f-3155-5f1d-a61d-c526efefef69": {
+        "type": "memory",
+        "uid": "651aea7f-3155-5f1d-a61d-c526efefef69",
+        "content": "The numbers in an emergency-contact list and whether those contacts are actually reachable may change later, and the local Memory is not updated automatically."
+      },
+      "d4e29dd4-4972-59f5-bfa8-d99bb4917580": {
+        "type": "memory",
+        "uid": "d4e29dd4-4972-59f5-bfa8-d99bb4917580",
+        "content": "Explain that payment, billing, and refunds are unrelated to information-sharing guidance and that the healthcare Q&A agent cannot inspect an amount or execute a transaction; do not handle the request."
+      },
+      "b37c0849-2827-5a90-a65f-7a22b403697c": {
+        "type": "memory",
+        "uid": "b37c0849-2827-5a90-a65f-7a22b403697c",
+        "content": "For a request to determine current medication continuation, medication timing, or the need for a follow-up visit from past personal Memories alone, respond that the healthcare Q&A agent cannot verify it and that it is outside the information-sharing guidance scope; do not handle the request."
+      }
+    },
+    "order": [
+      "cbc4a7e8-8edc-5344-a77b-6a074fb3ce02",
+      "6a77083a-551d-567d-9938-43f5f7ac4c55",
+      "ca878cd2-778f-5143-9487-cbce6b03fc07",
+      "5fc0c327-6c2f-5599-9bb3-cfc378803005",
+      "8ec1001d-a58f-5cf7-a2f6-f78623e8b032",
+      "bfa96d9c-3c9e-5eef-86a8-f718d66f395f",
+      "3be9f1c4-6884-542b-b873-b60ae9d52020",
+      "e90850dd-5aa6-53e5-b2ab-0e1846ccd3d0",
+      "bf296e55-7ce9-5f95-8fcb-3056b30f95c1",
+      "651aea7f-3155-5f1d-a61d-c526efefef69",
+      "d4e29dd4-4972-59f5-bfa8-d99bb4917580",
+      "b37c0849-2827-5a90-a65f-7a22b403697c"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3-healthcare-authority",
+    "context_uid": "cb58440a-abad-5406-953f-8dad331ecc1c",
+    "memory_uids": [
+      "cbc4a7e8-8edc-5344-a77b-6a074fb3ce02",
+      "6a77083a-551d-567d-9938-43f5f7ac4c55",
+      "ca878cd2-778f-5143-9487-cbce6b03fc07",
+      "5fc0c327-6c2f-5599-9bb3-cfc378803005",
+      "8ec1001d-a58f-5cf7-a2f6-f78623e8b032",
+      "bfa96d9c-3c9e-5eef-86a8-f718d66f395f",
+      "3be9f1c4-6884-542b-b873-b60ae9d52020",
+      "e90850dd-5aa6-53e5-b2ab-0e1846ccd3d0",
+      "bf296e55-7ce9-5f95-8fcb-3056b30f95c1",
+      "651aea7f-3155-5f1d-a61d-c526efefef69",
+      "d4e29dd4-4972-59f5-bfa8-d99bb4917580",
+      "b37c0849-2827-5a90-a65f-7a22b403697c"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'remote/government/healthcare-agent/info-request/questions-and-answers/hospital-stays' into profile 'task-3-healthcare-authority'.",
+  "auto": true
+}

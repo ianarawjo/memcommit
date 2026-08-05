@@ -204,6 +204,32 @@ def test_complete_writes_output_schema_only_inside_temporary_directory():
     assert not captured["schema_path"].exists()
 
 
+def test_complete_pins_explicit_codex_model_and_reasoning():
+    captured = {}
+
+    def runner(args, **kwargs):
+        captured["args"] = args
+        return _completed(args, stdout="READY")
+
+    provider = CodexChatGPTProvider(
+        binary=Path("/working/codex"),
+        env={},
+        model="gpt-5.6-luna",
+        reasoning_effort="low",
+        _runner=runner,
+    )
+
+    assert provider.complete("prompt", operation="probe") == "READY"
+
+    args = captured["args"]
+    assert args[args.index("--model") + 1] == "gpt-5.6-luna"
+    assert 'model_reasoning_effort="low"' in args
+    assert provider.identity.model == "gpt-5.6-luna"
+    assert provider.identity.reasoning_effort == "low"
+    assert provider.last_run is not None
+    assert provider.last_run.upstream_model == "gpt-5.6-luna"
+
+
 def test_query_failure_does_not_expose_prompt_or_stderr():
     secret = "DO NOT EXPOSE THIS"
 

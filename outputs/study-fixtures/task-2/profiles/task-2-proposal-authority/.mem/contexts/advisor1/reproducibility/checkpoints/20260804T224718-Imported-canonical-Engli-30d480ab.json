@@ -1,0 +1,52 @@
+{
+  "uid": "30d480ab-8e91-4474-ab40-25ccc74300cf",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/reproducibility' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T22:47:18.749118",
+  "snapshot": {
+    "uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+    "name": "advisor1/reproducibility",
+    "memories": {
+      "fb400759-63ed-568a-b94e-5f0c2fe94b67": {
+        "type": "memory",
+        "uid": "fb400759-63ed-568a-b94e-5f0c2fe94b67",
+        "content": "HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed."
+      },
+      "e52e8470-6419-5306-9ddd-00a86003dcf3": {
+        "type": "memory",
+        "uid": "e52e8470-6419-5306-9ddd-00a86003dcf3",
+        "content": "Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them."
+      },
+      "8f4edf8c-491d-56fe-bde4-d9ce25d6de50": {
+        "type": "memory",
+        "uid": "8f4edf8c-491d-56fe-bde4-d9ce25d6de50",
+        "content": "Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications."
+      },
+      "87662a7e-ffc7-521a-a06c-7db8184377e8": {
+        "type": "memory",
+        "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8",
+        "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed."
+      }
+    },
+    "order": [
+      "fb400759-63ed-568a-b94e-5f0c2fe94b67",
+      "e52e8470-6419-5306-9ddd-00a86003dcf3",
+      "8f4edf8c-491d-56fe-bde4-d9ce25d6de50",
+      "87662a7e-ffc7-521a-a06c-7db8184377e8"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+    "memory_uids": [
+      "fb400759-63ed-568a-b94e-5f0c2fe94b67",
+      "e52e8470-6419-5306-9ddd-00a86003dcf3",
+      "8f4edf8c-491d-56fe-bde4-d9ce25d6de50",
+      "87662a7e-ffc7-521a-a06c-7db8184377e8"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/reproducibility' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

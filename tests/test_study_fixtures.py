@@ -44,11 +44,11 @@ EXPECTED_DATASETS = {
     ),
     "task2-advisor1": (
         150,
-        {"KB": 10, "PP": 95, "SM": 8, "UM": 8, "WM": 8, "OM": 21},
+        {"KB": 9, "PP": 96, "SM": 5, "UM": 8, "WM": 8, "OM": 24},
     ),
     "task2-advisor2": (
         150,
-        {"KB": 10, "PP": 95, "SM": 8, "UM": 8, "WM": 8, "OM": 21},
+        {"KB": 10, "PP": 96, "SM": 4, "UM": 8, "WM": 8, "OM": 24},
     ),
     "task2-proposal-guidelines": (
         75,
@@ -69,9 +69,13 @@ EXPECTED_DATASETS = {
         75,
         {"KB": 8, "PP": 47, "SM": 4, "WM": 5, "OM": 11},
     ),
-    "task3-healthcare-info-request": (
+    "task3-healthcare-qna": (
         75,
         {"KB": 5, "PP": 42, "SM": 8, "WM": 7, "OM": 13},
+    ),
+    "task3-healthcare-public-guidance": (
+        12,
+        {"KB": 7, "PP": 5},
     ),
 }
 
@@ -113,8 +117,8 @@ def test_loader_preserves_content_and_normalizes_available_metadata() -> None:
 
     personal = corpus["task3-personal-memory"].records[0]
     assert personal.fixture_id is None
-    assert personal.identity_key == "personal-memory/2024-01/01"
-    assert personal.canonical_locator == "personal-memory/2024-01/01"
+    assert personal.identity_key == "local/personal-memory/2024-01/01"
+    assert personal.canonical_locator == "local/personal-memory/2024-01/01"
     assert personal.purpose == "KB"
 
 
@@ -232,7 +236,7 @@ def test_translation_pairing_exposes_one_uid_key_and_rejects_drift() -> None:
 
     assert len(pairs) == 75
     assert pairs[0].uid_key == (
-        "task3-guardrails:guardrails/purpose-and-scope/01"
+        "task3-guardrails:local/guardrails/purpose-and-scope/01"
     )
     assert pairs[0].canonical.content.startswith("EN: ")
     assert pairs[0].translation.content.startswith("사용자가")

@@ -1,0 +1,83 @@
+{
+  "uid": "67dac06f-952e-4859-a74c-510d5cff344a",
+  "message": "Imported canonical English Task 2 fixture Context 'proposal-submission-guidelines' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T22:47:18.795364",
+  "snapshot": {
+    "uid": "a2e4662e-4938-578b-b206-36addad1fbe7",
+    "name": "proposal-submission-guidelines",
+    "memories": {
+      "38053f6c-ad04-5c5c-8a98-62714249eedc": {
+        "type": "context_ref",
+        "uid": "38053f6c-ad04-5c5c-8a98-62714249eedc",
+        "name": "proposal-submission-guidelines/submission"
+      },
+      "7fe9fd43-0d6d-54b3-aa7d-06b6ad8dd0d1": {
+        "type": "context_ref",
+        "uid": "7fe9fd43-0d6d-54b3-aa7d-06b6ad8dd0d1",
+        "name": "proposal-submission-guidelines/format"
+      },
+      "39fdd628-fb74-59ab-b7aa-87eefa412339": {
+        "type": "context_ref",
+        "uid": "39fdd628-fb74-59ab-b7aa-87eefa412339",
+        "name": "proposal-submission-guidelines/summary"
+      },
+      "fc469c19-05c5-5e15-9793-cca3ad277e50": {
+        "type": "context_ref",
+        "uid": "fc469c19-05c5-5e15-9793-cca3ad277e50",
+        "name": "proposal-submission-guidelines/background"
+      },
+      "beb9059e-15c3-52d5-8805-70aecbb5da7f": {
+        "type": "context_ref",
+        "uid": "beb9059e-15c3-52d5-8805-70aecbb5da7f",
+        "name": "proposal-submission-guidelines/objectives"
+      },
+      "1d564cdb-1892-5b2e-8e51-fdb7113a1163": {
+        "type": "context_ref",
+        "uid": "1d564cdb-1892-5b2e-8e51-fdb7113a1163",
+        "name": "proposal-submission-guidelines/methods"
+      },
+      "a3229f2e-43d1-5629-9104-2d49292b7a75": {
+        "type": "context_ref",
+        "uid": "a3229f2e-43d1-5629-9104-2d49292b7a75",
+        "name": "proposal-submission-guidelines/outcomes"
+      },
+      "ec1c8f65-117d-5b4d-a311-96a29e91bacf": {
+        "type": "context_ref",
+        "uid": "ec1c8f65-117d-5b4d-a311-96a29e91bacf",
+        "name": "proposal-submission-guidelines/workplan-budget"
+      },
+      "568a8a75-b96d-5600-be81-a47dfe6841a9": {
+        "type": "context_ref",
+        "uid": "568a8a75-b96d-5600-be81-a47dfe6841a9",
+        "name": "proposal-submission-guidelines/ethics-data-access"
+      },
+      "a8cb8b9b-bab0-57be-817b-255b1c10d918": {
+        "type": "context_ref",
+        "uid": "a8cb8b9b-bab0-57be-817b-255b1c10d918",
+        "name": "proposal-submission-guidelines/review"
+      }
+    },
+    "order": [
+      "38053f6c-ad04-5c5c-8a98-62714249eedc",
+      "7fe9fd43-0d6d-54b3-aa7d-06b6ad8dd0d1",
+      "39fdd628-fb74-59ab-b7aa-87eefa412339",
+      "fc469c19-05c5-5e15-9793-cca3ad277e50",
+      "beb9059e-15c3-52d5-8805-70aecbb5da7f",
+      "1d564cdb-1892-5b2e-8e51-fdb7113a1163",
+      "a3229f2e-43d1-5629-9104-2d49292b7a75",
+      "ec1c8f65-117d-5b4d-a311-96a29e91bacf",
+      "568a8a75-b96d-5600-be81-a47dfe6841a9",
+      "a8cb8b9b-bab0-57be-817b-255b1c10d918"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "a2e4662e-4938-578b-b206-36addad1fbe7",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'proposal-submission-guidelines' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

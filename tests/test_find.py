@@ -28,6 +28,7 @@ from memcommit.search import (
     SearchCandidate,
     SearchMatch,
     collect_candidates,
+    collect_candidates_from_roots,
     rank_candidates,
 )
 from memcommit.store import MemoryStore
@@ -56,7 +57,13 @@ class KeywordProvider:
             ).casefold()
             if query in searchable:
                 matches.append({"candidate_id": candidate["candidate_id"]})
-        return json.dumps({"matches": matches[: payload["limit"]]})
+        return json.dumps(
+            {
+                "matches": matches[: payload["limit"]],
+                "related_query": "",
+                "related_matches": [],
+            }
+        )
 
 
 def _candidate(
@@ -90,6 +97,17 @@ def test_collect_candidates_is_recursive_by_default_and_direct_when_requested():
         child_memory,
     ]
     assert [candidate.item for candidate in direct] == [root_memory]
+
+
+def test_collect_candidates_from_roots_deduplicates_namespace_and_embed():
+    root = ops.init("task-3")
+    child = ops.init("task-3/personal-memory")
+    memory = ops.add(child, "Healthcare preparation detail")
+    ops.embed(child, root)
+
+    candidates = collect_candidates_from_roots((root, child))
+
+    assert [candidate.item for candidate in candidates] == [memory]
 
 
 def test_collect_candidates_terminates_cycles_and_visits_shared_context_once():
@@ -237,7 +255,9 @@ def test_rank_candidates_preserves_model_order_and_dedupes_repeats():
                         {"candidate_id": "c000002"},
                         {"candidate_id": "c000002"},
                         {"candidate_id": "c000001"},
-                    ]
+                    ],
+                    "related_query": "",
+                    "related_matches": [],
                 }
             )
 
@@ -247,6 +267,45 @@ def test_rank_candidates_preserves_model_order_and_dedupes_repeats():
         match.candidate.candidate_id
         for match in matches
     ] == ["c000002", "c000001"]
+    assert all(match.relevance == "primary" for match in matches)
+
+
+def test_rank_candidates_returns_related_fallback_only_after_no_primary_match():
+    candidates = [
+        _candidate("c000001", content="clinic appointment"),
+        _candidate("c000002", content="dental checkup"),
+    ]
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert "they do not satisfy the original query" in prompt
+            assert output_schema["properties"]["related_matches"]["maxItems"] == 5
+            return json.dumps(
+                {
+                    "matches": [],
+                    "related_query": "health and healthcare memories",
+                    "related_matches": [
+                        {"candidate_id": "c000002"},
+                        {"candidate_id": "c000001"},
+                    ],
+                }
+            )
+
+    matches = rank_candidates(
+        "health insurance memories",
+        candidates,
+        Provider(),
+        limit=5,
+    )
+
+    assert [match.candidate.candidate_id for match in matches] == [
+        "c000002",
+        "c000001",
+    ]
+    assert all(match.relevance == "related" for match in matches)
+    assert {match.related_query for match in matches} == {
+        "health and healthcare memories"
+    }
 
 
 @pytest.mark.parametrize(
@@ -277,6 +336,45 @@ def test_rank_candidates_rejects_malformed_or_unknown_output(raw):
     class Provider:
         def complete(self, prompt, *, operation, output_schema=None):
             return raw
+
+    with pytest.raises(FindError):
+        rank_candidates("query", [_candidate()], Provider())
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        {
+            "matches": [{"candidate_id": "c000001"}],
+            "related_query": "broader topic",
+            "related_matches": [{"candidate_id": "c000001"}],
+        },
+        {
+            "matches": [],
+            "related_query": "broader topic",
+            "related_matches": [],
+        },
+        {
+            "matches": [],
+            "related_query": "",
+            "related_matches": [{"candidate_id": "c000001"}],
+        },
+        {
+            "matches": [],
+            "related_query": "broader topic",
+            "related_matches": [{"candidate_id": "unknown"}],
+        },
+        {
+            "matches": [],
+            "related_query": "broader topic\nspoofed heading",
+            "related_matches": [{"candidate_id": "c000001"}],
+        },
+    ],
+)
+def test_rank_candidates_rejects_incompatible_related_tiers(response):
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            return json.dumps(response)
 
     with pytest.raises(FindError):
         rank_candidates("query", [_candidate()], Provider())
@@ -339,6 +437,114 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     assert "Temporary parking" not in direct.output
 
 
+def test_find_cli_searches_materialized_namespace_descendants_by_default(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("task-3")
+    store.save(root)
+    child = ops.init("task-3/personal-memory")
+    memory = ops.add(
+        child,
+        "The user checks healthcare appointment instructions twice.",
+    )
+    store.save(child)
+    sibling = ops.init("task-30/personal-memory")
+    sibling_memory = ops.add(
+        sibling,
+        "Healthcare material outside the selected namespace.",
+    )
+    store.save(sibling)
+    store.set_current(root.name)
+    provider = KeywordProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(app, ["find", "healthcare"])
+
+    assert result.exit_code == 0, result.output
+    assert "task-3/personal-memory\n" in result.output
+    assert f"[memory  {memory.uid[:8]}]" in result.output
+    payload = json.loads(
+        provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1]
+    )
+    candidate_text = json.dumps(payload["candidates"])
+    assert memory.content in candidate_text
+    assert sibling_memory.content not in candidate_text
+
+    direct = runner.invoke(app, ["find", "healthcare", "--direct"])
+
+    assert direct.exit_code == 0
+    assert direct.output == "task-3\n  (no matching items)\n"
+    assert len(provider.calls) == 1
+
+
+def test_find_cli_labels_related_fallback_when_primary_matches_are_empty(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("task-3")
+    clinic = ops.add(root, "The user checks medication instructions.")
+    ops.add(root, "The parking permit expires next month.")
+    store.save(root)
+    store.set_current(root.name)
+
+    class RelatedProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            selected = next(
+                candidate["candidate_id"]
+                for candidate in payload["candidates"]
+                if "medication" in candidate.get("content", "").casefold()
+            )
+            return json.dumps(
+                {
+                    "matches": [],
+                    "related_query": "health and healthcare memories",
+                    "related_matches": [{"candidate_id": selected}],
+                }
+            )
+
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: RelatedProvider(),
+    )
+
+    result = runner.invoke(app, ["find", "health insurance memories"])
+
+    assert result.exit_code == 0, result.output
+    assert "task-3\n  (no primary matches)" in result.output
+    assert "RELATED RESULTS" in result.output
+    assert "Broader search: health and healthcare memories" in result.output
+    assert "Related items do not satisfy the original query." in result.output
+    assert f"[related memory {clinic.uid[:8]}]" in result.output
+    assert "parking permit" not in result.output
+
+
+def test_initial_chat_state_preserves_related_tier_and_broader_query():
+    candidate = _candidate(content="clinic appointment")
+    state = _initial_chat_state(
+        "task-3",
+        "health insurance memories",
+        [
+            SearchMatch(
+                candidate=candidate,
+                relevance="related",
+                related_query="health and healthcare memories",
+            )
+        ],
+    )
+
+    assert state.related_query == "health and healthcare memories"
+    assert state.results[0].relevance == "related"
+    assert state.status == "NO PRIMARY MATCHES · SHOWING RELATED RESULTS"
+    assert "I found no primary matches" in state.messages[-1].text
+
+
 def test_find_cli_tty_opens_chat_with_stable_result_aliases(
     isolated_store,
     monkeypatch,
@@ -381,6 +587,184 @@ def test_find_cli_tty_opens_chat_with_stable_result_aliases(
     assert state.results[0].content == memory.content
     assert callable(captured["handle_turn"])
     assert "Find dialogue closed with 1 visible result" in result.output
+
+
+def test_find_cli_tty_keeps_namespace_descendants_in_the_follow_up_frame(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("task-3")
+    store.save(root)
+    child = ops.init("task-3/personal-memory")
+    memory = ops.add(child, "Healthcare appointment preparation")
+    store.save(child)
+    store.set_current(root.name)
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: KeywordProvider(),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find._interactive_terminal",
+        lambda: True,
+    )
+
+    def fake_session(state, *, handle_turn):
+        assert [result.uid for result in state.results] == [memory.uid]
+        assert [ctx.name for ctx in handle_turn.frame_roots] == [
+            "task-3",
+            "task-3/personal-memory",
+        ]
+        assert [
+            candidate.search_text
+            for candidate in handle_turn.frame_candidates
+        ] == [memory.content]
+        return FindChatSessionResult(status="CLOSED", state=state)
+
+    monkeypatch.setattr(
+        "memcommit.commands.find.run_find_chat_session",
+        fake_session,
+    )
+
+    result = runner.invoke(app, ["find", "healthcare"])
+
+    assert result.exit_code == 0, result.output
+    assert "Find dialogue closed with 1 visible result" in result.output
+
+
+def test_zero_result_follow_up_refines_and_replaces_search_results(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("task-3")
+    store.save(root)
+    child = ops.init("task-3/personal-memory")
+    healthcare = ops.add(
+        child,
+        "The user checks medication instructions after a clinic visit.",
+    )
+    ops.add(child, "The parking permit expires next month.")
+    store.save(child)
+    state = _initial_chat_state(
+        root.name,
+        "건강보험 관련 메모리",
+        [],
+    )
+
+    class RefineProvider:
+        def __init__(self):
+            self.operations = []
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            self.operations.append(operation)
+            if operation == "find turn":
+                assert output_schema["properties"]["kind"]["enum"] == [
+                    "ASK",
+                    "REFINE",
+                ]
+                return json.dumps(
+                    {
+                        "kind": "REFINE",
+                        "understanding": (
+                            "You broadened the search to healthcare and medicine."
+                        ),
+                        "question": "",
+                        "query": "healthcare medicine medication clinic",
+                        "selector": "",
+                        "scope": "CONTEXT",
+                    }
+                )
+            assert operation == "find"
+            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            selected = next(
+                candidate["candidate_id"]
+                for candidate in payload["candidates"]
+                if "medication" in candidate.get("content", "").casefold()
+            )
+            return json.dumps(
+                {
+                    "matches": [{"candidate_id": selected}],
+                    "related_query": "",
+                    "related_matches": [],
+                }
+            )
+
+    provider = RefineProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    updated = _handle_find_turn(
+        state,
+        "related to health/healthcare/medicine",
+    )
+
+    assert updated.current_query == "healthcare medicine medication clinic"
+    assert [result.uid for result in updated.results] == [healthcare.uid]
+    assert updated.results[0].context_name == child.name
+    assert updated.status == "RESULTS READY · REFINED"
+    assert updated.messages[-2] == FindChatMessage(
+        role="USER",
+        text="related to health/healthcare/medicine",
+    )
+    assert "I found 1 matching Memory" in updated.messages[-1].text
+    assert provider.operations == ["find turn", "find"]
+
+
+def test_refine_can_replace_zero_results_with_a_labeled_related_fallback(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("task-3")
+    clinic = ops.add(root, "The user checks medication instructions.")
+    store.save(root)
+    state = _initial_chat_state(root.name, "insurance paperwork", [])
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            if operation == "find turn":
+                return json.dumps(
+                    {
+                        "kind": "REFINE",
+                        "understanding": "You asked for health insurance memories.",
+                        "question": "",
+                        "query": "health insurance memories",
+                        "selector": "",
+                        "scope": "CONTEXT",
+                    }
+                )
+            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            selected = next(
+                candidate["candidate_id"]
+                for candidate in payload["candidates"]
+                if "medication" in candidate.get("content", "").casefold()
+            )
+            return json.dumps(
+                {
+                    "matches": [],
+                    "related_query": "health and healthcare memories",
+                    "related_matches": [{"candidate_id": selected}],
+                }
+            )
+
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+
+    updated = _handle_find_turn(state, "health insurance memories")
+
+    assert [result.uid for result in updated.results] == [clinic.uid]
+    assert updated.results[0].relevance == "related"
+    assert updated.related_query == "health and healthcare memories"
+    assert (
+        updated.status
+        == "NO PRIMARY MATCHES · SHOWING RELATED RESULTS · REFINED"
+    )
+    assert "I found no primary matches" in updated.messages[-1].text
 
 
 def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
@@ -480,6 +864,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
                             "You are asking how long the garage will be closed."
                         ),
                         "question": "",
+                        "query": "",
                         "selector": "",
                         "scope": "CONTEXT",
                     }
@@ -575,6 +960,7 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
                             "You want the other Contexts checked as well."
                         ),
                         "question": "",
+                        "query": "",
                         "selector": "",
                         "scope": "ALL_CONTEXTS",
                     }
@@ -666,6 +1052,7 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
                     "kind": "ANSWER",
                     "understanding": "Check every stored Context.",
                     "question": "",
+                    "query": "",
                     "selector": "",
                     "scope": "ALL_CONTEXTS",
                 }
@@ -771,7 +1158,9 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
                         {"candidate_id": by_content[first_child.content]},
                         {"candidate_id": by_content[root_memory.content]},
                         {"candidate_id": by_content[second_child.content]},
-                    ]
+                    ],
+                    "related_query": "",
+                    "related_matches": [],
                 }
             )
 

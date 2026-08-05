@@ -1,0 +1,94 @@
+{
+  "uid": "a0a0c287-fe3e-432c-a605-32e6e5eddf59",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/05' into profile 'task-3'.",
+  "timestamp": "2026-08-04T22:47:18.933863",
+  "snapshot": {
+    "uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+    "name": "local/personal-memory/2025/05",
+    "memories": {
+      "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d": {
+        "type": "memory",
+        "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d",
+        "content": "The user keeps two potted herbs beside a south-facing window."
+      },
+      "95978183-0070-5b12-b117-be39bb343a5e": {
+        "type": "memory",
+        "uid": "95978183-0070-5b12-b117-be39bb343a5e",
+        "content": "During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow."
+      },
+      "8c610ce5-1eb7-52e5-ad81-e8062d23cd19": {
+        "type": "memory",
+        "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19",
+        "content": "During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves."
+      },
+      "3f886c0c-071b-5f2d-adad-da01345d702f": {
+        "type": "memory",
+        "uid": "3f886c0c-071b-5f2d-adad-da01345d702f",
+        "content": "On a day the user left the window open for a long time, strong wind knocked over one pot."
+      },
+      "afe855b8-f5ad-559c-a63f-6f655ba371a2": {
+        "type": "memory",
+        "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2",
+        "content": "The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over."
+      },
+      "384c4f5f-b15c-5742-ac79-20106d0dd30b": {
+        "type": "memory",
+        "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b",
+        "content": "The user put a plant-name label in a small pot received from their maternal aunt."
+      },
+      "48dc89af-ed9d-51a5-a4b1-b809fd818143": {
+        "type": "memory",
+        "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143",
+        "content": "The user confused the care instructions for an unlabeled pot with those for another plant."
+      },
+      "a2426820-65d6-5c78-ac50-0f32b366ae47": {
+        "type": "memory",
+        "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47",
+        "content": "The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it."
+      },
+      "efd51196-ed48-5699-a0f4-c5b8e149d11c": {
+        "type": "memory",
+        "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c",
+        "content": "Before creating a plant-care reminder, check each plant's name and most recent watering date."
+      },
+      "4c93eeff-566e-5a1a-afb9-035c97fb9c73": {
+        "type": "memory",
+        "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73",
+        "content": "The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight."
+      }
+    },
+    "order": [
+      "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d",
+      "95978183-0070-5b12-b117-be39bb343a5e",
+      "8c610ce5-1eb7-52e5-ad81-e8062d23cd19",
+      "3f886c0c-071b-5f2d-adad-da01345d702f",
+      "afe855b8-f5ad-559c-a63f-6f655ba371a2",
+      "384c4f5f-b15c-5742-ac79-20106d0dd30b",
+      "48dc89af-ed9d-51a5-a4b1-b809fd818143",
+      "a2426820-65d6-5c78-ac50-0f32b366ae47",
+      "efd51196-ed48-5699-a0f4-c5b8e149d11c",
+      "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+    "memory_uids": [
+      "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d",
+      "95978183-0070-5b12-b117-be39bb343a5e",
+      "8c610ce5-1eb7-52e5-ad81-e8062d23cd19",
+      "3f886c0c-071b-5f2d-adad-da01345d702f",
+      "afe855b8-f5ad-559c-a63f-6f655ba371a2",
+      "384c4f5f-b15c-5742-ac79-20106d0dd30b",
+      "48dc89af-ed9d-51a5-a4b1-b809fd818143",
+      "a2426820-65d6-5c78-ac50-0f32b366ae47",
+      "efd51196-ed48-5699-a0f4-c5b8e149d11c",
+      "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/05' into profile 'task-3'.",
+  "auto": true
+}

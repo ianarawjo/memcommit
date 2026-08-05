@@ -12,6 +12,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.atomize import (
+    ATOMIZE_LEGACY_RULESET_VERSION,
     AtomizeAnalysisSession,
     AtomizeImpactError,
     AtomizeQualityIssue,
@@ -38,7 +39,13 @@ from memcommit.commands.atomize_workbench_shell import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
+from memcommit.commands.atomize_sessions import (
+    atomize_session_entries,
+    choose_atomize_session,
+    revalidate_saved_atomize_analysis,
+)
 from memcommit.commands.review_shell import RESPONSE_LABEL
+from memcommit.commands.session_picker import SessionOpenReceipt
 from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.store import MemoryStore
 
@@ -417,6 +424,214 @@ def test_cli_reuses_one_analysis_across_impact_atomize_and_review(
     assert resumed.uid == workbench.uid
     assert store._context_file(ctx.name).read_bytes() == context_before
     assert store.list_checkpoints(ctx.name) == checkpoints_before
+
+
+def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx, _ = _init_context(store)
+    provider = AggregateProvider()
+    _patch_provider(monkeypatch, provider)
+    created = runner.invoke(app, ["impact", "atomize"])
+    assert created.exit_code == 0, created.output
+    analysis = store.load_atomize_analysis(ctx.uid)
+    assert analysis is not None
+
+    entries = atomize_session_entries(store)
+    assert len(entries) == 1
+    entry = entries[0]
+    assert entry.key == analysis.uid
+    assert entry.title == ctx.name
+    assert entry.group == ctx.name
+    assert entry.status == "CURRENT"
+    assert entry.reopen_argv == (
+        "mem",
+        "atomize",
+        "--context",
+        ctx.name,
+    )
+    assert "not executed by the picker" in entry.detail
+
+    other = ops.init("unrelated/current")
+    ops.add(other, "Unrelated Memory.")
+    store.save(other)
+    store.set_current(other.name)
+    before = store._context_file(ctx.name).read_bytes()
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.choose_atomize_session",
+        lambda _store, *, show_all: SessionOpenReceipt(
+            kind="atomize",
+            key=entry.key,
+            argv=entry.reopen_argv,
+        ),
+    )
+
+    def provider_must_not_connect():
+        raise AssertionError("saved selection must be provider-free")
+
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        provider_must_not_connect,
+    )
+    resumed = runner.invoke(app, ["atomize", "--sessions"])
+
+    assert resumed.exit_code == 0, resumed.output
+    assert "Resumed; the provider was not called." in resumed.output
+    assert store.current_context_name() == other.name
+    assert store._context_file(ctx.name).read_bytes() == before
+    assert len(provider.payloads) == 1
+
+
+def test_atomize_sessions_empty_and_forged_receipts_fail_closed(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    monkeypatch.setattr(
+        "memcommit.commands.atomize_sessions.choose_session",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("empty catalog must not open the picker")
+        ),
+    )
+
+    assert choose_atomize_session(store) is None
+    empty = runner.invoke(app, ["atomize", "--sessions"])
+    assert empty.exit_code == 0, empty.output
+    assert "Atomize selection ended; no analysis was opened." in empty.output
+
+    ctx, _ = _init_context(store)
+    opened = open_or_create_atomize_workbench(
+        store=store,
+        ctx=ctx,
+        provider_factory=AggregateProvider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize_sessions.choose_session",
+        lambda *_args, **_kwargs: SessionOpenReceipt(
+            kind="atomize",
+            key=opened.analysis.uid,
+            argv=("mem", "atomize", "--save"),
+        ),
+    )
+
+    with pytest.raises(ValueError, match="forged receipt"):
+        choose_atomize_session(store)
+
+
+def test_atomize_session_selection_rechecks_persisted_identity(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx, _ = _init_context(store)
+    opened = open_or_create_atomize_workbench(
+        store=store,
+        ctx=ctx,
+        provider_factory=AggregateProvider,
+    )
+    entry = atomize_session_entries(store)[0]
+
+    def remove_selected(_store, *, show_all):
+        store.delete_atomize_workbench(ctx.uid)
+        store.delete_atomize_analysis(ctx.uid)
+        return SessionOpenReceipt(
+            kind="atomize",
+            key=opened.analysis.uid,
+            argv=entry.reopen_argv,
+        )
+
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.choose_atomize_session",
+        remove_selected,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("missing selection must not refresh")
+        ),
+    )
+
+    result = runner.invoke(app, ["atomize", "--sessions"])
+
+    assert result.exit_code == 1
+    assert "is no longer available" in result.output
+    assert store.load_atomize_analysis(ctx.uid) is None
+
+
+def test_atomize_sessions_refuse_legacy_ruleset_without_provider_call(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx, _ = _init_context(store)
+    opened = open_or_create_atomize_workbench(
+        store=store,
+        ctx=ctx,
+        provider_factory=AggregateProvider,
+    )
+    legacy = replace(
+        opened.analysis,
+        ruleset_version=ATOMIZE_LEGACY_RULESET_VERSION,
+    )
+    store.save_atomize_analysis(legacy)
+    entry = atomize_session_entries(store)[0]
+    assert entry.status == "STALE"
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.choose_atomize_session",
+        lambda _store, *, show_all: SessionOpenReceipt(
+            kind="atomize",
+            key=legacy.uid,
+            argv=entry.reopen_argv,
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("legacy selection must not refresh")
+        ),
+    )
+
+    result = runner.invoke(app, ["atomize", "--sessions"])
+
+    assert result.exit_code == 1
+    assert "older semantic ruleset" in result.output
+    saved = store.load_atomize_analysis(ctx.uid)
+    assert saved is not None
+    assert saved.uid == legacy.uid
+    assert saved.ruleset_version == ATOMIZE_LEGACY_RULESET_VERSION
+
+
+def test_atomize_sessions_mark_a_legacy_ruleset_stale(isolated_store):
+    store = MemoryStore()
+    ctx, _ = _init_context(store)
+    opened = open_or_create_atomize_workbench(
+        store=store,
+        ctx=ctx,
+        provider_factory=AggregateProvider,
+    )
+    legacy_data = opened.analysis.to_dict()
+    legacy_data["schema_version"] = 1
+    legacy_data["ruleset_version"] = "atomize-v1-draft"
+    for field in (
+        "declared_frames",
+        "source_review_uid",
+        "source_review_digest",
+        "overview",
+        "quality_issues",
+    ):
+        legacy_data.pop(field)
+    for item in legacy_data["items"]:
+        for child in item["children"]:
+            child.pop("frame_spans")
+    legacy = AtomizeAnalysisSession.from_dict(legacy_data)
+    store.delete_atomize_workbench(ctx.uid)
+    store.save_atomize_analysis(legacy)
+
+    assert atomize_session_entries(store)[0].status == "STALE"
+    with pytest.raises(ValueError, match="older semantic ruleset"):
+        revalidate_saved_atomize_analysis(store, legacy)
 
 
 def test_refresh_rolls_back_analysis_if_workbench_save_fails(

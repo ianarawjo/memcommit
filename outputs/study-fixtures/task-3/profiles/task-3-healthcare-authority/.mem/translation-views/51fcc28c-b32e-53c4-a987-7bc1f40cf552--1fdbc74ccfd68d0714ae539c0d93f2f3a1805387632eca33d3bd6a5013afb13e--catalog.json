@@ -1,0 +1,194 @@
+{
+  "schema_version": 2,
+  "context_uid": "51fcc28c-b32e-53c4-a987-7bc1f40cf552",
+  "context_name": "remote/government/healthcare-agent/info-request/questions-and-answers/scheduling-and-continuity",
+  "target_language": "ko",
+  "created_at": "2026-08-05T02:47:19.105619+00:00",
+  "updated_at": "2026-08-05T02:47:19.106336+00:00",
+  "revision": 14,
+  "contract_version": "translate-v2",
+  "entries": [
+    {
+      "source_uid": "164fc16c-b735-597c-bb89-f4ef89236cd4",
+      "provider": null,
+      "curated": {
+        "source_sha256": "6cbda9887a9ebd1def1898bb7344a346490893a0b376c0a422418646b6e38761",
+        "translated_content": "\uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uc2dc\uc2a4\ud15c\uc5d0 \uc804\uc1a1\ub420 \uc218 \uc788\ub294 \uc77c\uc815 \uc815\ubcf4\uc758 \uc608\ub85c \uc8fc\ubcc4 \uac00\ub2a5 \uc2dc\uac04\u00b7\ubc18\ubcf5 \uc2dc\uac04\ub300 \uc120\ud638\u00b7\uc608\uc57d \uc804\ub0a0 \uc54c\ub9bc \uc120\ud638\ub97c \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.105679+00:00",
+        "updated_at": "2026-08-05T02:47:19.105679+00:00"
+      }
+    },
+    {
+      "source_uid": "0047b543-e8df-503c-a290-78d548ec4f90",
+      "provider": null,
+      "curated": {
+        "source_sha256": "87335017013ebbf46c852c95d975b23e334c947bbb57d2c388656d1ac282d4ce",
+        "translated_content": "\uac00\ub2a5 \uc2dc\uac04\uc774 \uc790\uc8fc \ubc14\ub010\ub2e4\ub294 \uc0ac\uc2e4\uacfc \ud2b9\uc815 \uc8fc\uc5d0 \uc2e4\uc81c\ub85c \uac00\ub2a5\ud55c \uc2dc\uac04\ub300\ub294 \uc11c\ub85c \ub2e4\ub978 \uc815\ubcf4\ub77c\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.105741+00:00",
+        "updated_at": "2026-08-05T02:47:19.105741+00:00"
+      }
+    },
+    {
+      "source_uid": "041bcf07-75f1-570c-9803-293f6a39d91a",
+      "provider": null,
+      "curated": {
+        "source_sha256": "ad6a7d0e6fb5c7a59d1e0fa09d032b0917d16c4d129766e5b93a9adea79e9bf4",
+        "translated_content": "\ubc18\ubcf5\ub418\ub294 \uacfc\uac70 \uc2dc\uac04\ub300 \uc120\ud638\uc640 \ud2b9\uc815 \uc8fc\uc758 \uc2e4\uc81c \uac00\ub2a5 \uc2dc\uac04\uc740 \uc11c\ub85c \ub2e4\ub978 \uc815\ubcf4\uc774\uba70, \uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\ub294 \uc5b4\ub290 \uc815\ubcf4\uac00 \ud604\uc7ac \ub9de\ub294\uc9c0 \ud655\uc778\ud560 \uc218 \uc5c6\ub2e4\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.105798+00:00",
+        "updated_at": "2026-08-05T02:47:19.105798+00:00"
+      }
+    },
+    {
+      "source_uid": "f9121f89-fcee-5868-a80e-b1677b13eb17",
+      "provider": null,
+      "curated": {
+        "source_sha256": "800911760b2493f590cd6ea54a3569d66aa545fd62144713f4f3412e4affce08",
+        "translated_content": "\uc774\uc6a9\ud560 \uc218 \uc5c6\ub294 \uc2dc\uac04\uc758 \uc0ac\uc801\uc778 \uc774\uc720\ub294 \uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\uac00 \uc9c8\ubb38\ud558\ub294 \ub300\uc0c1\uc774 \uc544\ub2c8\uba70, \uc0ac\uc6a9\uc790\uac00 \uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uc2dc\uc2a4\ud15c\uc758 \uc804\uc1a1 \ud654\uba74\uc5d0\uc11c \uc2e4\uc81c\ub85c \ubcf4\ub0b4\uba74 \uadf8 \ub0b4\uc6a9\ub3c4 \uacf5\uc720 \ub3d9\uc758 \ub2e8\uc704\uc5d0 \ud3ec\ud568\ub41c\ub2e4\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.105855+00:00",
+        "updated_at": "2026-08-05T02:47:19.105855+00:00"
+      }
+    },
+    {
+      "source_uid": "3ad69204-ca57-5985-a90c-6168e12ab06f",
+      "provider": null,
+      "curated": {
+        "source_sha256": "a4b5c42701fa0cb62bd2948fb7a698366d15a3d37adcaea8fe35483a62e20eca",
+        "translated_content": "\uce98\ub9b0\ub354 \ucd08\ub300\uc5d0 \uc801\ud78c \uc0ac\uc801\uc778 \uc77c\uc815 \ubcc0\uacbd \uc774\uc720\ub97c \uc774 \ub300\ud654\uc5d0 \uc785\ub825\ud574\ub3c4 \uae30\uad00 \uc804\uc1a1\uc774 \uc544\ub2c8\uba70, \uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\ub294 \uc774\ub97c \uc120\ud0dd\u00b7\uc0ad\uc81c\u00b7\uc804\uc1a1\ud560 \uc218 \uc5c6\ub2e4\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.105912+00:00",
+        "updated_at": "2026-08-05T02:47:19.105912+00:00"
+      }
+    },
+    {
+      "source_uid": "ca59f275-77e3-5c60-ba4f-7669c74fd288",
+      "provider": null,
+      "curated": {
+        "source_sha256": "3738327acf0a1aa01f16535ba6ff69f21531ed3ea56689cf2f7fdaeda48c167a",
+        "translated_content": "\uac00\uc7a5 \ube60\ub978 \uc608\uc57d\uc744 \uc6d0\ud558\ub294 \uc120\ud638\uc640 \ud2b9\uc815 \uc8fc\uc5d0 \uc2e4\uc81c\ub85c \uac00\ub2a5\ud55c \uc2dc\uac04\uc740 \uc11c\ub85c \ub2e4\ub978 \uc815\ubcf4\ub77c\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.105964+00:00",
+        "updated_at": "2026-08-05T02:47:19.105964+00:00"
+      }
+    },
+    {
+      "source_uid": "b657a583-eed5-508c-b09a-836a54d68b0f",
+      "provider": null,
+      "curated": {
+        "source_sha256": "db2ed8e7ba9b2078ffbb0cb9d713d09ff889cfeffdf19a4662dae2a5a5823754",
+        "translated_content": "\uc0ac\uc801\uc778 \uc77c\uc815 \ubcc0\uacbd \uc774\uc720\ub098 \uac00\uc871 \ubc29\ubb38 \uc0ac\uc720\ub294 \uc77c\ubc18\uc801\uc73c\ub85c \uc608\uc57d \uc6b0\uc120\uc21c\uc704\ub098 \ub354 \uc774\ub978 \uc2dc\uac01 \ubc30\uc815\uc758 \uadfc\uac70\uac00 \uc544\ub2c8\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.106014+00:00",
+        "updated_at": "2026-08-05T02:47:19.106014+00:00"
+      }
+    },
+    {
+      "source_uid": "34688e60-49ea-58c4-b5f6-dc11d31b7584",
+      "provider": null,
+      "curated": {
+        "source_sha256": "a5cde69b56a778de7cd908e3c1087c61f2df5af4c0e5d3d6480db8093c88ef17",
+        "translated_content": "\uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\ub294 \uc0ac\uc6a9\uc790\uc758 \uce98\ub9b0\ub354\ub098 \ud604\uc7ac \uc8fc\uc758 \uac00\ub2a5 \uc2dc\uac04\uc5d0 \uc811\uadfc\ud560 \uc218 \uc5c6\uace0, \ud604\uc7ac \ub300\ud654 \uae30\ub85d \ubc16\uc5d0 \uc77c\uc815 \uc815\ubcf4\ub97c \ubcf4\uad00\ud558\uac70\ub098 \uc608\uc57d\uc744 \uc870\ud68c\u00b7\ubcc0\uacbd\ud560 \uc218 \uc5c6\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.106066+00:00",
+        "updated_at": "2026-08-05T02:47:19.106066+00:00"
+      }
+    },
+    {
+      "source_uid": "b21b4c63-eec2-5bba-a92e-947794265299",
+      "provider": null,
+      "curated": {
+        "source_sha256": "3a36fdfc2929507524773cfc74905e3da37154c75504fc012300c61cbbeb2527",
+        "translated_content": "\uc678\ubd80 \uc77c\uc815 \uad00\ub9ac \uc5d0\uc774\uc804\ud2b8\ub294 \uacfc\uac70 \ubc18\ubcf5 \uc2dc\uac04\ub300 \uc120\ud638\ub97c \ud604\uc7ac \uc8fc\uc758 \uac00\ub2a5 \uc2dc\uac04\uc73c\ub85c \uac04\uc8fc\ud574 \uc758\ub8cc Q&A \uc5d4\ub4dc\ud3ec\uc778\ud2b8\uc5d0 \uc608\uc57d \uc2e4\ud589\uc744 \uc694\uad6c\ud560 \uc218 \uc788\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.106122+00:00",
+        "updated_at": "2026-08-05T02:47:19.106122+00:00"
+      }
+    },
+    {
+      "source_uid": "43b20db6-1f97-543c-8a48-dc3006b2098f",
+      "provider": null,
+      "curated": {
+        "source_sha256": "986b0a3d1dc756c8d4b5e35127a982faf0940b915ed67cd7f66244ddd1b7fbe4",
+        "translated_content": "\uc608\uc57d \uc804\ub0a0 \uc54c\ub9bc \uc120\ud638\uac00 \uc788\uc5b4\ub3c4 \uc2e4\uc81c \uc608\uc57d \uc2dc\uac01\uc774\ub098 \uc0ac\uc6a9\uc790\uc758 \uc774\ubc88 \uc8fc \uac00\ub2a5 \uc2dc\uac04\uc740 \uc790\ub3d9\uc73c\ub85c \uc815\ud574\uc9c0\uc9c0 \uc54a\ub294\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.106175+00:00",
+        "updated_at": "2026-08-05T02:47:19.106175+00:00"
+      }
+    },
+    {
+      "source_uid": "61bf19df-0073-5b3f-8869-d6bba863166e",
+      "provider": null,
+      "curated": {
+        "source_sha256": "bc76f82ac2e45e89fa422d1e4201e217d9c92c843b22ed9be766cde006040422",
+        "translated_content": "\uc0ac\uc6a9\uc790\uac00 \uac00\ub2a5 \uc2dc\uac04\u00b7\uc608\uc57d \uc804\ub0a0 \uc54c\ub9bc \uc120\ud638\u00b7\uc5f0\uc18d\uc131 \uc120\ud638\ub098 \uc0ac\uc801\uc778 \uc77c\uc815 \uc774\uc720\ub97c \uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uc2dc\uc2a4\ud15c\uc758 \uc804\uc1a1 \ud654\uba74\uc5d0\uc11c \ubcf4\ub0b4\uba74 \uc804\uc1a1\ub41c \ubaa8\ub4e0 \ud56d\ubaa9\uc758 \uacf5\uc720\uc5d0 \ub3d9\uc758\ud55c \uac83\uc73c\ub85c \uac04\uc8fc\ub41c\ub2e4\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.106228+00:00",
+        "updated_at": "2026-08-05T02:47:19.106228+00:00"
+      }
+    },
+    {
+      "source_uid": "139bb5fd-b1d9-592c-a23f-ff9b22700c25",
+      "provider": null,
+      "curated": {
+        "source_sha256": "af70d3f82af5bc664809e9d576da0cbef0884191951cb2fe5d4f439f5fb966ca",
+        "translated_content": "\uc608\uc57d\u00b7\ubcc0\uacbd\u00b7\ucde8\uc18c \uc2e4\ud589\uc744 \uc694\uccad\ubc1b\uc73c\uba74 \uc815\ubcf4 \uacf5\uc720 \uc548\ub0b4 \ubc94\uc704 \ubc16\uc774\ub77c\uace0 \uc124\uba85\ud558\uace0, \uc2e4\ud589\ud558\uac70\ub098 \ub2e4\ub978 \uacbd\ub85c\ub97c \uc548\ub0b4\ud558\uc9c0 \ub9d0\uace0 \ucc98\ub9ac\ud558\uc9c0 \ub9c8\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.106283+00:00",
+        "updated_at": "2026-08-05T02:47:19.106283+00:00"
+      }
+    },
+    {
+      "source_uid": "80d9048a-1ccf-5b5b-80d9-f4c6940e89a0",
+      "provider": null,
+      "curated": {
+        "source_sha256": "9c3262569401b9b42b65b11e47e3024985065756577be68f6b42cc208b74641a",
+        "translated_content": "\uc608\uc57d \uc2e4\ud589\uc6a9 \uc678\ubd80 \uc5d0\uc774\uc804\ud2b8\ub294 \uc774 \uc758\ub8cc Q&A \uc5d4\ub4dc\ud3ec\uc778\ud2b8\ub97c \uc608\uc57d API\ub85c \uc624\uc778\ud574 \uc870\ud68c\u00b7\ubcc0\uacbd \uc694\uccad\uc744 \ubc18\ubcf5\ud560 \uc218 \uc788\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.106336+00:00",
+        "updated_at": "2026-08-05T02:47:19.106336+00:00"
+      }
+    }
+  ]
+}

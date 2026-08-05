@@ -8,7 +8,7 @@
   "current_context": "participant/construction-updates",
   "ordinary_count": 453,
   "query_only_count": 0,
-  "query_view_count": 78,
+  "query_view_count": 378,
   "profiles": [
     {
       "profile_name": "task-1",
@@ -9623,9 +9623,17 @@
       },
       "public_name": "campus-wiki",
       "permissions": [
-        "READ",
         "CREATE",
-        "UPDATE"
+        "READ",
+        "UPDATE",
+        "DELETE",
+        "QUERY",
+        "DERIVE",
+        "COMBINE",
+        "EXPORT",
+        "ACCEPT_DERIVED",
+        "SAVE_BOUND_ANALYSIS",
+        "SAVE_ANALYSIS"
       ],
       "recursive": true,
       "excluded_contexts": [
@@ -9633,7 +9641,8 @@
           "uid": "b5756b95-5cd1-55da-b881-5fcdc95f140e",
           "name": "campus-wiki/construction-details"
         }
-      ]
+      ],
+      "provider": "codex_chatgpt"
     },
     {
       "schema_version": 1,

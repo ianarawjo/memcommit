@@ -18,12 +18,19 @@ visible local items
 → temporary Codex ranking
 → strict ID validation
 → canonical local rendering
+→ optional same-frame follow-up reranking
 ```
 
 Model-generated content, names, explanations, and replacement text are never
 accepted as find results. A generated follow-up answer is dialogue, not a
 result, and carries locally validated scope aliases that the host turns into
 numbered references to local source contents.
+
+When no candidate materially satisfies the query, the same ranking completion
+may return a separate related tier. The CLI keeps the primary count at zero,
+labels the fallback as a broader search, and renders only canonical local
+items. Related items aid discovery; they are not evidence that the original
+query was satisfied.
 
 ## CLI contract
 
@@ -34,9 +41,30 @@ mem find "parking changes" --limit 5
 mem find "parking changes" --direct
 ```
 
-The default search descends through explicitly embedded Context references.
-It does not infer parent-child relationships from slash-prefixed Context
-names. `--direct` searches only direct items in the selected Context.
+The default search frame contains the selected Context, every materialized
+ordinary Context whose canonical name begins with `SELECTED/`, and every
+explicitly embedded Context reachable from any of those roots. The ordinary
+Context catalog is frozen once for the invocation. A namespace descendant
+that is also explicitly embedded is visited once by Context UID, and no
+missing prefix is synthesized as a Context. `--direct` searches only direct
+items in the selected Context and excludes both namespace descendants and
+embedded Contexts.
+
+This scope makes Find agree with the hierarchy a person can inspect through
+`mem ls -R`. In particular, an intentionally empty topology root such as
+`task-3` can search materialized descendants such as
+`task-3/local/personal-memory` without requiring the import process to persist a
+redundant embed solely for Find. The rejected alternative was to repair only
+Study Profile imports with synthetic embeds: that would leave the same empty
+result for ordinary namespaced Contexts and would conflate lexical navigation
+with persisted composition differently in each importer.
+
+The broader default is also a provider-disclosure boundary. Invoking Find on
+a namespace root may send ordinary Memory content from that entire materialized
+subtree, plus its explicit embeds, to the ranking provider. A person who wants
+the former narrow scope can use `--direct`. Query-only sources remain outside
+the ordinary catalog and are never opened; only a QueryContextRef's public name
+can become a candidate.
 
 `--context` selects a search root without changing the active Context.
 `--limit` accepts values from 1 through 20 and defaults to 5.
@@ -47,13 +75,14 @@ view keeps one full-screen Application alive, assigns local result aliases,
 and accepts repeated natural-language turns. A controller turn runs in the
 background while that same view displays a busy state, then applies the
 completed state in place rather than returning to the terminal between turns.
-The view supports two read-only outcomes: answer an ordinary question from
-visible and same-frame content, optionally extend that answer to explicitly
-requested other Contexts, or inspect one visible result through an allowlisted,
-explicit-Context `mem show` command. Generated answers carry validated
-provenance and a host-rendered reference list. The show command is constructed
-and executed locally; neither answer provider turn receives durable UID or
-command authority.
+The view supports three read-only outcomes: refine the query and replace the
+visible results by reranking the same frozen frame; answer an ordinary question
+from visible and same-frame content, optionally extending that answer to
+explicitly requested other Contexts; or inspect one visible result through an
+allowlisted, explicit-Context `mem show` command. Generated answers carry
+validated provenance and a host-rendered reference list. The show command is
+constructed and executed locally; neither answer provider turn receives
+durable UID or command authority.
 
 Outside a TTY, Find retains its ordinary grouped stdout so it can be redirected
 or copied by the shell. That output is a presentation format, not a durable or
@@ -68,6 +97,14 @@ order. This presentation deliberately gathers interleaved results from the
 same Context, so the rendered order across different Contexts is group-oriented
 rather than one flat global ranking. Memory content begins on the same line as
 its type and UID; later content lines align beneath the first.
+
+Primary and related relevance are deliberately separate from `--direct`.
+`--direct` controls which Contexts enter the candidate frame; `PRIMARY MATCH`
+describes relevance to the query. When the primary tier is empty and a
+defensible fallback exists, non-interactive output first prints
+`(no primary matches)`, then a `RELATED RESULTS` section with the provider's
+bounded broader query and rows labeled `related`. If neither tier has results,
+the established `(no matching items)` output remains.
 
 ## Searchable item types
 
@@ -88,7 +125,8 @@ candidate.
 
 The Context object itself is not a result. Its searchable descendants are
 visited recursively. Context UIDs prevent infinite traversal and repeated
-visits through cycles or diamond-shaped graphs.
+visits through cycles, diamond-shaped graphs, or a Context reached through
+both a namespace root and an explicit embed.
 
 ### QueryContextRef
 
@@ -113,6 +151,56 @@ copies remain distinct candidates even when a Memory UID was inherited.
 Repeated occurrences of one logical candidate retain their visible Context
 names as provenance.
 
+## Same-frame follow-up refinement
+
+A natural-language follow-up that supplies a concrete new topic, keywords,
+constraints, or a broader or narrower description returns a strict `REFINE`
+plan with one standalone query. This includes a concrete follow-up after an
+initial zero-result search; for example, “related to health, healthcare, or
+medicine” is a search refinement rather than an ambiguous request that needs a
+clarifying question.
+
+The host sends that query through the ordinary ranking contract again, using
+the same candidate frame frozen when the interactive view opened and the same
+`--limit`. It validates returned candidate IDs locally, replaces the visible
+results and their process-local `mN` aliases, updates the displayed query, and
+resets the process-local kept count. It does not enumerate or load a new
+Context, expand to other Contexts, mutate storage, or create a checkpoint.
+Failure leaves the prior committed query and results visible through the
+shell's ordinary failed-turn receipt.
+
+This extra ranking completion sends the same already-disclosed ordinary
+candidate projections to the provider again. Query-only candidates continue to
+expose only their public names and labels. The design deliberately rejects
+using a follow-up phrase as answer text or letting the intent provider return
+results directly: the ranking response must still pass the existing opaque-ID
+allowlist validation.
+
+## Related-result fallback
+
+The ranker returns one of three locally enforced states:
+
+1. one or more primary matches, with no related query or related matches;
+2. no primary matches plus one nonblank broader query and one or more related
+   matches; or
+3. neither primary nor defensible related matches.
+
+It cannot mix tiers. Related candidates must come from the same frozen
+candidate frame, use the same opaque-ID allowlist, and are limited to the
+smaller of the requested result limit and five. They may share a broader topic,
+workflow, or domain, but the prompt explicitly says they do not satisfy the
+original query and must not be forced merely to avoid an empty screen. The
+broader query is provider-authored presentation text, bounded to 2,000
+characters and terminal-escaped; it is not executed automatically.
+
+Interactive related rows retain local `mN` aliases so the person can inspect
+one through the proven read-only `SHOW_RESULT` path. They may also submit a
+`REFINE` turn that reranks the frame and can promote items into a new primary
+tier. `ANSWER` is absent from the allowed plan schema while only related rows
+are visible, and the controller independently refuses answer synthesis from a
+related tier. This prevents a clinic, medication, or sleep Memory shown near a
+health-insurance query from becoming evidence about insurance.
+
 ## Evidence-backed interactive answers
 
 An ordinary follow-up question uses two isolated provider completions around
@@ -120,13 +208,13 @@ host-side evidence collection:
 
 ```text
 user follow-up
-→ strict ASK / ANSWER(scope) / SHOW_RESULT plan
+→ strict ASK / REFINE(query) / ANSWER(scope) / SHOW_RESULT plan
 → local scope collection
 → strict three-part synthesis using temporary aliases
 → host-owned citation numbering and reference rendering
 ```
 
-The initial candidate corpus and visible matches are frozen when the
+The initial candidate corpus and visible primary matches are frozen when the
 interactive view opens. `ANSWER(CONTEXT)` uses:
 
 - `mN` for the visible ranked results; and
@@ -195,6 +283,20 @@ limit, and visible candidates. It receives an output schema that permits only:
 {
   "matches": [
     {"candidate_id": "c000001"}
+  ],
+  "related_query": "",
+  "related_matches": []
+}
+```
+
+Or, only when the primary array is empty:
+
+```json
+{
+  "matches": [],
+  "related_query": "health and healthcare memories",
+  "related_matches": [
+    {"candidate_id": "c000014"}
   ]
 }
 ```
@@ -202,10 +304,13 @@ limit, and visible candidates. It receives an output schema that permits only:
 The schema enumerates candidate IDs created for that invocation. Local
 validation additionally requires:
 
-- exactly one top-level `matches` field;
-- an array no longer than the requested limit;
+- exactly the three documented top-level fields;
+- a primary array no longer than the requested limit and a related array no
+  longer than the smaller of that limit and five;
 - records containing only one string `candidate_id`;
-- exact membership in the local candidate allowlist.
+- exact membership in the local candidate allowlist;
+- no related query or related records when a primary match exists; and
+- a nonblank bounded related query exactly when related records exist.
 
 Duplicate valid IDs are collapsed while preserving model order in the validated
 match sequence. The CLI then applies the Context grouping described above.
@@ -221,14 +326,18 @@ The intent completion returns only:
   "kind": "ANSWER",
   "understanding": "The user is asking when the closure ends.",
   "question": "",
+  "query": "",
   "selector": "",
   "scope": "CONTEXT"
 }
 ```
 
 `ASK` and `SHOW_RESULT` require `scope: "NONE"`; `SHOW_RESULT` may select only
-an enumerated visible alias. `ANSWER` has no answer text at this stage and may
-select only `CONTEXT` or `ALL_CONTEXTS`.
+an enumerated visible alias. `REFINE` requires a nonblank `query`, empty
+`question` and `selector`, and `scope: "CONTEXT"`. `ANSWER` has no answer text
+at this stage and may select only `CONTEXT` or `ALL_CONTEXTS`. With no visible
+results, only `ASK` and `REFINE` are valid. With related results but no primary
+match, `SHOW_RESULT` is additionally valid, while `ANSWER` remains unavailable.
 
 The synthesis completion then returns only:
 
@@ -256,8 +365,10 @@ directory, receives the prompt through standard input, and exposes no inherited
 environment variables to model-proposed shell commands.
 
 Ordinary searchable Memory content is sent to OpenAI for ranking and consumes
-the user's ChatGPT Codex allowance. On an ordinary answer turn, all visible and
-same-frame remainder projections are also sent to the synthesis completion.
+the user's ChatGPT Codex allowance. A `REFINE` turn consumes an intent
+completion followed by another ranking completion over that same frozen
+candidate content. On an ordinary answer turn, all visible and same-frame
+remainder projections are also sent to the synthesis completion.
 After an `ALL_CONTEXTS` plan receives the separate exact confirmation, direct
 ordinary content collected from other stored Contexts is sent as well.
 Query-only evidence remains limited to its public name and label; its concealed

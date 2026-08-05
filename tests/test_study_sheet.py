@@ -10,16 +10,16 @@ def test_bilingual_workbook_spec_pairs_every_fixture() -> None:
     assert spec.canonical_language == "en"
     assert spec.translation_language == "ko"
     assert (spec.ordinary_count, spec.query_only_count, spec.total_count) == (
-        1_050,
+        1_062,
         228,
-        1_278,
+        1_290,
     )
-    assert len(spec.sheets) == 18
+    assert len(spec.sheets) == 20
 
     by_dataset_language = {
         (sheet.dataset, sheet.language): sheet for sheet in spec.sheets
     }
-    assert len(by_dataset_language) == 18
+    assert len(by_dataset_language) == 20
     for dataset in {sheet.dataset for sheet in spec.sheets}:
         korean = by_dataset_language[(dataset, "ko")]
         english = by_dataset_language[(dataset, "en")]

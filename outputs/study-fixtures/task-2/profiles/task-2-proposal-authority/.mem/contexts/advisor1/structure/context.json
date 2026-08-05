@@ -65,7 +65,7 @@
     "8ecaec22-7c25-5a39-a85b-56db9c3b607e": {
       "type": "memory",
       "uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
-      "content": "This advisor has repeatedly seen readers decide what a proposal is about from its first two sentences before scanning the rest of the page."
+      "content": "Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page."
     },
     "a4536b84-40f2-57db-84e4-024c97c9fecb": {
       "type": "memory",
@@ -85,7 +85,7 @@
     "b77fe6ec-676b-5bb9-9119-45aefea2aa27": {
       "type": "memory",
       "uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27",
-      "content": "This advisor has repeatedly seen readers scan section labels before deciding which paragraph to read closely."
+      "content": "Readers often scan section labels before deciding which paragraph to read closely."
     }
   },
   "order": [

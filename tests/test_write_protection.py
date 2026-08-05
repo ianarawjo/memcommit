@@ -2,14 +2,20 @@
 from __future__ import annotations
 
 import json
+import uuid
 
 import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.ground import create_ground_session
+from memcommit.query_sessions import (
+    QuerySession,
+    QuerySessionBinding,
+    QuerySessionStore,
+)
 from memcommit.store import MemoryStore, context_record_digest
 from memcommit.write_protection import (
     WriteProtectionError,
@@ -168,11 +174,41 @@ def test_profile_lock_blocks_non_context_profile_artifacts(isolated_store):
         )
     with pytest.raises(WriteProtectionError, match="Profile is locked"):
         store.create_query_source("locked-source", "must not persist")
+    binding = QuerySessionBinding(
+        grant_uid=str(uuid.uuid4()),
+        grant_revision=1,
+        grant_digest="0" * 64,
+        grantee_profile_uid=str(uuid.uuid4()),
+        authority_profile_uid=str(uuid.uuid4()),
+        attachment_context_uid=str(uuid.uuid4()),
+        attachment_context_name="attachment",
+        resource_uid=str(uuid.uuid4()),
+        resource_name="resource",
+        public_name="public",
+        requested_name="requested",
+        language="en",
+        source_digest="1" * 64,
+    )
+    query_session = QuerySession(
+        uid=str(uuid.uuid4()),
+        revision=0,
+        name="locked-query",
+        binding=binding,
+        turns=(),
+    )
+    with pytest.raises(WriteProtectionError, match="Profile is locked"):
+        QuerySessionStore(isolated_store).append_turn(
+            query_session,
+            expected_record_digest=None,
+            question="Should this persist?",
+            answer="No.",
+        )
 
     # The failed guard runs before validation or storage creation.
     assert not (isolated_store / "impact-plan.json").exists()
     assert not (isolated_store / "ground-sessions").exists()
     assert not (isolated_store / "query-sources").exists()
+    assert not (isolated_store / "query-sessions").exists()
 
 
 def test_v1_registry_remains_readable_and_upgrades_on_next_change(
@@ -380,6 +416,29 @@ def test_context_lock_blocks_cli_undo_of_an_earlier_command(isolated_store):
     undone = invoke("undo")
     assert undone.exit_code == 1
     assert "locked against changes" in _all_output(undone)
+
+
+def test_protection_registry_is_scoped_to_each_profile_store(tmp_path):
+    first_store = MemoryStore(root=tmp_path / "first")
+    second_store = MemoryStore(root=tmp_path / "second")
+    first = Context(uid="first-context", name="shared-name")
+    second = Context(uid="second-context", name="shared-name")
+    first_store.save(first)
+    second_store.save(second)
+    first_store.set_context_write_protection(
+        first.name,
+        protected=True,
+        expected_context_uid=first.uid,
+        expected_context_digest=context_record_digest(first),
+    )
+
+    editable = second_store.load_direct(second.name)
+    editable.add("only the second Profile changes")
+    second_store.save(editable)
+
+    assert first_store.write_protection_state().context_is_protected(first.uid)
+    assert second_store.write_protection_state().is_empty
+    assert len(second_store.load_direct(second.name).memories) == 1
 
 
 def test_invalid_registry_fails_closed_with_a_cli_error(isolated_store):

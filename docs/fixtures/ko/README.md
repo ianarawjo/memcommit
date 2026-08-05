@@ -13,8 +13,13 @@
 | --- | ---: | ---: | ---: |
 | Task 1 | `construction-updates` 75 + `campus-wiki` 300 = 375 | `campus-wiki · construction-details` 78 | 453 |
 | Task 2 | `advisor1` 150 + `advisor2` 150 = 300 | `proposal-submission-guidelines` 75 | 375 |
-| Task 3 | `personal-memory` 300 + `guardrails` 75 = 375 | `government/healthcare-agent/information-request` 75 | 450 |
-| 전체 | 1,050 | 228 | 1,278 |
+| Task 3 | `local/personal-memory` 300 + `local/guardrails` 75 + 공개 의료 가이던스 12 = 387 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 462 |
+| 전체 | 1,062 | 228 | 1,290 |
+
+`일반 열람`과 `질의 전용`은 participant 상호작용을 뜻한다. 물리적으로는
+1,290개 모두 ordinary Memory이며, task-local 자료는 task Profile에, grant
+자료는 task별 authority Profile에 저장한다. 생성된 연구 패키지에서는 특수
+source file이 아니라 `QUERY` grant가 질의 전용 view를 만든다.
 
 개수는 문장을 기계적으로 잘게 자르기 위한 목표가 아니다. 각 Memory 후보는
 독립적으로 검색·검증·수정·승인할 수 있는 명제나 실행 규칙 하나를 담는다.
@@ -115,9 +120,10 @@ Memory별 ACL이나 사용자 인증이 아니며 현재 프로토타입이 집�
   - [목적 sidecar](task-2-memory-purpose-ko.tsv)
 - Task 3
   - [참가자용 설명 초안](task-3-study-brief-ko.md)
-  - [`personal-memory` 300개](task-3-personal-memory-ko.md)
-  - [일반 열람 `guardrails` 75개](task-3-guardrails-ko.md)
-  - [질의 전용 `government/healthcare-agent/information-request` 75개](task-3-healthcare-information-request-ko.md)
+  - [`local/personal-memory` 300개](task-3-personal-memory-ko.md)
+  - [일반 열람 `local/guardrails` 75개](task-3-guardrails-ko.md)
+  - [일반 열람 `remote/government/healthcare-agent/info-request/official-guidance` 12개](task-3-healthcare-public-guidance-ko.md)
+  - [질의 전용 `remote/government/healthcare-agent/info-request/questions-and-answers` 75개](task-3-healthcare-information-request-ko.md)
   - [목적 sidecar](task-3-memory-purpose-ko.tsv)
 - [전체 설계 근거](fixture-corpus-design-rationale-ko.md)
 
@@ -159,11 +165,11 @@ accessible route처럼 일반 공개 캠퍼스 안내에 가까운 배경을 제
 이용하거나 그쪽으로 향하는 상황에는 이용할 수 없음을 먼저 알리고, 확인된
 대체 경로가 있을 때 함께 안내하는 정책을 별도 Memory로 둔다.
 
-`construction-details`는 ordinary `campus-wiki` Context에 직접 붙는
-query-only source다. 검수 소속은 `campus-wiki · construction-details`로
-표시할 수 있으며, 현재 명시적 질의 형태는
-`mem query construction-details ... --context campus-wiki`다. 일반 Memory
-목록에 세부 공사 내용을 복사해 우회 공개하지 않는다.
+`task-1-campus-authority`가 ordinary `campus-wiki`와
+`campus-wiki/construction-details` Context tree를 소유한다. task에는
+읽기·편집 가능한 wiki view와 그보다 좁은 query-only details view를 grant한다.
+명시적 질의 형태는 `mem query campus-wiki/construction-details ...`이며,
+세부 공사 내용을 task Profile로 복사해 우회 공개하지 않는다.
 
 ### Task 2
 
@@ -203,10 +209,10 @@ advisor의 차이를 대신 풀어 주는 제3의 advisor나 정답지가 아니
 
 ### Task 3
 
-`personal-memory` 300개의 source key는 주제별 묶음이 아니라 `2024-01`부터
+`local/personal-memory` 300개의 source key는 주제별 묶음이 아니라 `2024-01`부터
 `2026-06`까지 월별로 열 개씩 유지한다. 생성된 Study Profile에서는
-`personal-memory/2024` 같은 구조용 연도 Context와
-`personal-memory/2024/01` 같은 연도/월 Context로 이를 노출한다. 각 월에는
+`local/personal-memory/2024` 같은 구조용 연도 Context와
+`local/personal-memory/2024/01` 같은 연도/월 Context로 이를 노출한다. 각 월에는
 구체적인 사용자 경험을
 나타내는 `UM`을 중심으로 두어 전체 184개가 사용자 모델이 되게 한다. Memory는
 “~라고 적었다/기록했다”처럼 출처를 다시 설명하지 않고 사건·행동·선호를 직접
@@ -221,27 +227,30 @@ advisor의 차이를 대신 풀어 주는 제3의 advisor나 정답지가 아니
 사람·기관의 기대·선호·판단이나 예상 반응을 나타내는 `OM`도 하나씩 두며, 전체로는 여섯
 목적을 모두 포함한다.
 
-`guardrails` 75개는 일반 열람 Context로서 선택 공유의 목적 제한, 제삼자
+`local/guardrails` 75개는 일반 열람 Context로서 선택 공유의 목적 제한, 제삼자
 보호, 불확실성, 승인, 전달과 철회뿐 아니라 수신자 권한, 최소화와 가림,
 채널과 형식, 하류 사용, 감사와 복구를 다룬다. 연결된 query-only Context의
 Guardrails에는 참가자의 공유 선호를 미리 규정하는 `UM`을 두지 않는다. 그런
 문장은 실험 중 선택을 유도할 수 있으므로 외부 데이터 흐름 조건인 `WM`과
 수신자·조직의 예상 해석인 `OM`으로 대체한다.
 
-연결된 query-only Context의 canonical locator는
-`government/healthcare-agent/information-request`다. 75개 Memory는 어떤 개인
+ordinary Context `remote/government/healthcare-agent/info-request/official-guidance`에는 배포 가능한 상위
+수준 검토 원칙 12개가 있다. 해당 grant는 읽기·파생·결합·반출·분석 보존을
+허용하므로 Sever의 하나뿐인 Criteria Context로 사용하거나 Meld를 통해 다른
+기준과 결합할 수 있다. 연결된 query-only Context의 canonical locator는
+`remote/government/healthcare-agent/info-request/questions-and-answers`다. 75개 Memory는 어떤 개인
 Memory 범주가 정부 의료기관 시스템으로 실제 전송되었을 때의 동의·이용·공유
 결과를 설명한다. 개인 기록 속 특정 사건을 정답처럼 지목하거나 정보를 직접
 요청하지 않고, 기능적 지원·일정·환경·설명 선호 같은 일반 범주와 예시를 한
 번에 안내한다. 전송 화면에서 실제로 보낸 전체 내용은 하나의 공유 동의 단위로
 간주되며, 제공 정보 종류에 따라 의료 목적의 관련 제삼자에게 제공되거나 서비스
 개선에 이용될 수 있다. 정확한 서비스·수신자·제삼자 범위는 이 에이전트가
-특정하지 않는다. 정보 요청 에이전트의 능력 한계와 함께, 이 엔드포인트를
+특정하지 않는다. 의료 Q&A 에이전트의 능력 한계와 함께, 이 엔드포인트를
 전송·예약·삭제·권한·결제 API로 오인한 외부 클라이언트, 과잉 요청자,
 프롬프트 주입·숨은 지시 추출·동작 distillation·반복 변형 질의를 시도하는
 자동화 요청자를 `OM`으로 다룬다. 정부 기관 내부의 하류 행위자는 이 에이전트와
 상호작용하거나 관찰되는 행위자가 아니므로 이 자료군의 `OM`으로 만들지 않는다.
-정보 요청 에이전트는 저장된 개인 Memory나 기관 기록에 접근하지 않고 현재 대화
+의료 Q&A 에이전트는 저장된 개인 Memory나 기관 기록에 접근하지 않고 현재 대화
 기록 밖에 정보를 보관하지 않으며, 정보를 선택·포함·제외·수정·전송·삭제하거나
 기관의 수신·보존·내부 공유·후처리·열람 권한을 통제하지 않는다. 예약·결제·
 가족 연락 전송도 실행하지 않는다. 현재 대화에서 개인 Memory 내용을 언급하는

@@ -20,7 +20,7 @@
     "87662a7e-ffc7-521a-a06c-7db8184377e8": {
       "type": "memory",
       "uid": "87662a7e-ffc7-521a-a06c-7db8184377e8",
-      "content": "The agent must be able to trace which observations each prototype version reflects in order to review the process of deriving design knowledge."
+      "content": "The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed."
     }
   },
   "order": [

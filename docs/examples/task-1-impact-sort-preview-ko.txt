@@ -229,10 +229,10 @@ Concealed source collection:
 
   위 13개 항목은 participant의 `mem ls`, `mem show`, `impact`, `update`에
   나타나지 않는다. 참가자는
-  `mem query construction-details ... --context campus-wiki`를 통해서만
-  답을 받을 수 있다. 현재 프로토타입은 query-only 원본을 하나의
-  concealed source document로 저장하므로, 위 memory 표시는 의도한
-  논리 단위와 출처를 검토하기 위한 fixture 표기다.
+  `mem query campus-wiki/construction-details ...`를 통해서만 답을 받을 수
+  있다. 원본은 `task-1-campus-authority`의 ordinary Context tree에 있고,
+  task Profile에는 `QUERY` view만 있으므로 위 memory 표시는 의도한 논리
+  단위와 출처를 검토하기 위한 fixture 표기다.
 
 ABSENT BY DESIGN · NOT MEMORIES
 

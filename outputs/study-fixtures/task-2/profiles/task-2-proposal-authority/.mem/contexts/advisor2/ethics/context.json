@@ -50,12 +50,12 @@
     "885d1cf3-8bcd-513c-9591-a548fcbd3992": {
       "type": "memory",
       "uid": "885d1cf3-8bcd-513c-9591-a548fcbd3992",
-      "content": "The agent cannot adequately assess the risk of withdrawal without a safe alternative procedure for field tasks."
+      "content": "The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks."
     },
     "520b4c9f-306e-5749-83b5-2218c97f89e6": {
       "type": "memory",
       "uid": "520b4c9f-306e-5749-83b5-2218c97f89e6",
-      "content": "The user writing this proposal tends to assume that a short session also entails little burden from work interruption and exposure to a manager."
+      "content": "The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager."
     }
   },
   "order": [

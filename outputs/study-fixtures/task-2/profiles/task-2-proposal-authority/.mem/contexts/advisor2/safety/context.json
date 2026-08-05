@@ -25,7 +25,7 @@
     "342e4697-873f-56a8-b4a4-896efe910144": {
       "type": "memory",
       "uid": "342e4697-873f-56a8-b4a4-896efe910144",
-      "content": "The agent cannot judge the feasibility of a stop plan without identifying who has authority to order recovery and who is responsible for carrying it out."
+      "content": "The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out."
     },
     "6c4e9175-4590-5689-ae2b-678f0eb930b9": {
       "type": "memory",

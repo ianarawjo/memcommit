@@ -24,6 +24,10 @@ Result text comes from typed
 `FindChatResult` values supplied by the local controller, not from generated
 provider prose. Dialogue and results use separate scrollable panels so a
 growing transcript cannot hide the ranked result set after a follow-up turn.
+Each result also carries host-validated `primary` or `related` relevance. A
+related-only view renders `PRIMARY MATCHES 0`, the bounded broader query, and a
+separate `RELATED RESULTS` heading; it never folds fallback rows into the
+primary count.
 The production session keeps one full-screen `Application` alive from initial
 results through repeated follow-up turns. A focused one-turn wrapper can still
 return a typed `SUBMIT` or `CLOSE` action for input-only callers and tests. The
@@ -49,7 +53,10 @@ task runs the synchronous controller in an executor thread. Only after awaiting
 that work does the event-loop thread replace the committed state and update the
 read-only result and dialogue `Document` values. The `Application`, widgets,
 alternate screen, and result scroll position therefore remain alive throughout
-the turn.
+the turn. While it runs, the input heading cycles through
+`PROCESSING FIND TURN .`, `..`, and `…` on an event-loop timer. The animation
+only invalidates the prompt-toolkit view; it does not poll, restart, or duplicate
+provider work.
 
 Only one controller turn may be in flight. A failed turn preserves the
 previous committed results, appends a visible failure receipt in the same
@@ -64,7 +71,7 @@ the latest line, and supports arrow and page scrolling. Long numbered
 references therefore remain inspectable instead of disappearing above a
 cursorless eight-line viewport.
 
-## Agent-mediated answers and `SHOW_RESULT`
+## Agent-mediated refinement, answers, and `SHOW_RESULT`
 
 The first command-backed follow-up action is deliberately narrow:
 
@@ -86,9 +93,24 @@ replayed. The provider does not receive durable Memory UIDs or command
 authority. Query-only results expose only their already-public name and
 `query-only` label, never their concealed source.
 
-The strict first response is a plan union containing `ASK`, `ANSWER`, and
-`SHOW_RESULT`. `ANSWER` does not contain answer prose. It requests a separate
-host-controlled evidence turn and selects either `CONTEXT` or `ALL_CONTEXTS`.
+The strict first response is a plan union containing `ASK`, `REFINE`, `ANSWER`,
+and `SHOW_RESULT`. `REFINE` carries one bounded standalone query and asks the
+host to rerank the same frozen candidate frame. It replaces the visible result
+set, resets process-local kept count, and updates the displayed query; it does
+not load another Context or mutate stored data. A concrete topic, keyword set,
+constraint, or broader/narrower description is a refinement. In particular,
+when zero results are visible, a concrete phrase such as “related to healthcare”
+must trigger `REFINE` rather than an unnecessary `ASK`.
+
+A related fallback is still a visible result for read-only inspection, so its
+alias may be selected by `SHOW_RESULT`. It is not evidence that the original
+query was satisfied. When every visible row is related, the strict plan schema
+offers `ASK`, `REFINE`, and `SHOW_RESULT` but omits `ANSWER`. The controller
+also checks this invariant before synthesis so malformed or bypassed intent
+output cannot turn a broader-topic row into an answer about the original query.
+
+`ANSWER` does not contain answer prose. It requests a separate host-controlled
+evidence turn and selects either `CONTEXT` or `ALL_CONTEXTS`.
 The latter is valid only when the person explicitly asks to inspect other
 Contexts. `ASK` is reserved for an ambiguous request. `SHOW_RESULT` requires
 exactly one alias enumerated in the current schema. Unknown aliases, extra
@@ -109,10 +131,13 @@ For `ANSWER`, the controller constructs three evidence scopes:
 
 The second scope is checked automatically because it remains inside the
 selected search frame. The third is collected only after an `ALL_CONTEXTS`
-plan and the separate exact confirmation turn. A recursive Find treats
-embedded descendants as part of the frame; with `--direct`, an embedded child
-is outside that frame. Slash characters in a Context name do not imply either
-relationship.
+plan and the separate exact confirmation turn. A recursive Find treats every
+materialized Context below the selected canonical `NAME/` prefix, together
+with reachable explicit embeds, as part of the frame. With `--direct`, both
+namespace descendants and embedded children are outside that frame. The
+namespace-root set is frozen before initial ranking and reused for the
+interactive controller, so a result cannot disappear merely because it was
+reached lexically rather than through an embed.
 
 A second strict provider completion receives those temporary aliases and their
 local projections, but no durable UIDs. It returns exactly one bounded text
@@ -153,10 +178,11 @@ Query-only items contribute only their displayed public name and `query-only`
 label in every scope and reference. Their concealed source is neither loaded
 nor transmitted. An `ANSWER` turn executes no command and changes no Context,
 checkpoint, result, or current-Context state.
-`ASK` and `SHOW_RESULT` use one provider completion. A same-frame `ANSWER` uses
-the intent completion and then the separate synthesis completion. An
-other-Context answer pauses between those completions for the exact
-confirmation turn.
+`ASK` and `SHOW_RESULT` use one provider completion. `REFINE` uses the intent
+completion and then one validated ranking completion over the already frozen
+frame. A same-frame `ANSWER` uses the intent completion and then the separate
+synthesis completion. An other-Context answer pauses between those completions
+for the exact confirmation turn.
 
 The host creates an immutable `ExactCommandReview` only after resolving the
 alias locally. Here it is used as an injectively escaped command/effect receipt,
@@ -177,8 +203,10 @@ recheck frozen source versions before execution.
 
 The current in-process view supplies:
 
-1. locally validated ranked results with stable local aliases;
-2. repeated ASK, three-scope grounded ANSWER, or read-only SHOW turns;
+1. locally validated primary or explicitly related ranked results with stable
+   local aliases and separate counts;
+2. repeated same-frame REFINE, ASK, three-scope grounded ANSWER, or read-only
+   SHOW turns;
 3. actual command output and failure receipts;
 4. result, dialogue, and input panes in reading order; and
 5. stable widget identity and scroll state across completed follow-up turns.
@@ -188,9 +216,9 @@ or is converted into a visible failure receipt. `THINKING` and a requested
 close are transient view states. While a turn is in flight, the composer is
 read-only and a second turn cannot be queued against stale state.
 
-It intentionally does not yet provide durable resume, semantic re-ranking,
-keep/unkeep, clipboard export, or materialization. The original search frame is
-frozen in process, but an explicitly requested other-Context collection reads
+It intentionally does not yet provide durable resume, keep/unkeep, clipboard
+export, or materialization. Reranking is process-local and never expands the
+frozen initial frame. An explicitly requested other-Context collection reads
 multiple current Context records without one store-wide atomic snapshot. Its
 answer must therefore describe what this scan found rather than assert a
 timeless global absence. Durable selections and later mutations require a
@@ -198,9 +226,13 @@ persisted `FindSession` with source versions and a separate exact-command
 approval. This vertical slice establishes the agent-to-CLI orchestration
 pattern without pretending those later contracts already exist.
 
-The current answer path also requires at least one visible initial result.
-When ranking returns no results, the first-turn schema permits only `ASK`; it
-does not use the broader evidence scopes to manufacture an answer.
+The answer path requires at least one primary result. The show path may inspect
+either tier because it renders one canonical local item without treating it as
+support for the query. When ranking returns neither primary nor related
+results, the first-turn schema permits `ASK` or `REFINE`: a concrete new search
+description reranks the frozen frame, while a genuinely ambiguous turn may
+still ask one question. It does not use broader evidence scopes to manufacture
+an answer.
 The pending other-Context request and its confirmation exist only in this
 in-process view; they are not a durable or resumable approval.
 

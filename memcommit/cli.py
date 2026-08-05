@@ -40,8 +40,11 @@ from memcommit.commands import (
     remove,
     review,
     revert,
+    share,
+    sever,
     shell_init,
     status,
+    summarize,
     switch,
     trace,
     translate,
@@ -52,7 +55,9 @@ from memcommit.commands import (
 from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
 from memcommit.commands.dev import app as dev_app
+from memcommit.commands.semantic_eval import eval_app
 from memcommit.commands.profile import app as profile_app
+from memcommit.commands.provider import app as provider_app
 from memcommit.commands.root_group import MemCommandGroup
 
 app = typer.Typer(
@@ -65,7 +70,7 @@ app = typer.Typer(
 app.command("init",           help="Initialize a new context and switch to it.")(init.cmd)
 app.command(
     "import",
-    help="Import a clean MemoryStore baseline as a new isolated Profile.",
+    help="Import a Profile, Context tree, or Memory while preserving identity.",
 )(import_profile.cmd)
 app.command(
     "init-study",
@@ -73,6 +78,12 @@ app.command(
 )(init_study.cmd)
 app.command("add",            help="Add one or more memories to the current context.")(add.cmd)
 app.command("status",         help="Show current context and recent memories.")(status.cmd)
+app.command(
+    "summarize",
+    help=(
+        "Show what Mem understands from a Context's visible ordinary Memories."
+    ),
+)(summarize.cmd)
 app.command(
     "list",
     help="List child Contexts and direct items in the current (or given) Context.",
@@ -105,8 +116,8 @@ app.command(
 app.command(
     "compare",
     help=(
-        "Compare the active Context with an equal-authority PEER; save no "
-        "target changes."
+        "Browse saved comparisons with no target, or compare the active "
+        "Context with an equal-authority PEER; save no target changes."
     ),
 )(compare.cmd)
 
@@ -124,16 +135,19 @@ app.command(
 app.command(
     "meld",
     help=(
-        "Interactively combine two equal-authority Contexts into the current "
-        "empty Context, or meld INCOMING into an existing BASELINE with "
-        "--into."
+        "Browse saved Meld work with no operands, combine two equal-authority "
+        "Contexts into the current empty Context, or directionally use "
+        "INCOMING --into BASELINE; --from INCOMING uses the current BASELINE."
     ),
 )(meld.cmd)
 app.command("embed",          help="Embed one context inside another.")(embed.cmd)
 app.command("reference",      help="Add a read-only live reference to a memory.")(reference.cmd)
 app.command(
     "query",
-    help="Ask a query-only Context; the question and answer are not saved.",
+    help=(
+        "Ask visible Context knowledge or a concealed query-only view; explicit "
+        "query-only sessions retain only visible Q/A when permitted."
+    ),
 )(query.cmd)
 
 # --- Editing ---
@@ -144,7 +158,8 @@ app.command(
     "atomize",
     help=(
         "Create or resume atomization; --evaluate runs its issue-scoped "
-        "directional meld, with changes only after explicit acceptance."
+        "directional meld, changes require explicit acceptance, and "
+        "--sessions browses saved work."
     ),
 )(atomize.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
@@ -194,6 +209,20 @@ app.command(
     help="Stage ambiguity or atomize-workbench responses without editing Memories.",
 )(review.cmd)
 app.command(
+    "sever",
+    help=(
+        "Review one Source root against one scoped Criteria root and "
+        "create a local outbound draft; never transmit it."
+    ),
+)(sever.cmd)
+app.command(
+    "share",
+    help=(
+        "Deliver one unchanged applied Sever output through a grant-backed "
+        "receiver endpoint."
+    ),
+)(share.cmd)
+app.command(
     "ground",
     help=(
         "Browse saved Grounds or revise one Goal–Rules–Memories workbench; "
@@ -211,7 +240,17 @@ app.command(
 )(update.cmd)
 
 # --- Sub-apps ---
+app.add_typer(
+    eval_app,
+    name="eval",
+    help="Run and inspect staged semantic evaluation campaigns.",
+)
 app.add_typer(config_app, name="config", help="Read and write global configuration.")
+app.add_typer(
+    provider_app,
+    name="provider",
+    help="Select and verify Codex, Ollama, or OpenRouter semantic execution.",
+)
 app.add_typer(
     profile_app,
     name="profile",

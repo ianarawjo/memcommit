@@ -119,7 +119,7 @@ and publishes two managed Profiles plus their grants in one registry generation:
 
 ```text
 pilot-001                 Contexts 47 owned + 52 granted · Memories 375 owned + 675 granted
-pilot-001-granted-memory  Contexts 82 owned + 0 granted · Memories 903 owned + 0 granted
+pilot-001-granted-memory  Contexts 85 owned + 0 granted · Memories 915 owned + 0 granted
 ```
 
 The participant target is named exactly `NAME`; its run-private authority is

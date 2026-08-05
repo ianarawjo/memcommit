@@ -1,0 +1,376 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "relation": "EXACT"
+      },
+      "case_id": "exact-identical-content",
+      "completion_seconds": 4.650000482797623e-05,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "relation": "EXACT"
+      },
+      "failure_category": null,
+      "ordinal": 1,
+      "prompt_digest": "cf30ccb8392fab2b078da36458117b987d07c2d2477de5ba175207702f18ec07",
+      "provider_run": null,
+      "raw_response": "{\"relation\":\"EXACT\"}",
+      "repetition": 1,
+      "response_bytes": 20,
+      "response_digest": "f1bfe9daae8a1ae876ef666620546ba84a7db68e45a52e05356b3605484e7ba3",
+      "schema_digest": "e11419974f069fdad32fb2b34507cb9c62c18dcfebf91da999bc8b5407b63399",
+      "stage": "HOST_EXACT",
+      "stage_runs": [],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "relation": "SURFACE_EQUIVALENT"
+      },
+      "case_id": "surface-equivalent-whitespace",
+      "completion_seconds": 5.320832133293152e-05,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "relation": "SURFACE_EQUIVALENT"
+      },
+      "failure_category": null,
+      "ordinal": 2,
+      "prompt_digest": "a141e454bd429de3af04ec474d468b7bea8add8c26839e1543650b67178cf420",
+      "provider_run": null,
+      "raw_response": "{\"relation\":\"SURFACE_EQUIVALENT\"}",
+      "repetition": 1,
+      "response_bytes": 33,
+      "response_digest": "7f5e18cac5e96afde908a8e973b64c92e524ee7c7c9afbd31eb20128efb4ff6c",
+      "schema_digest": "e87f7f1dd4252ab9df550b879829d0f16af87d919da608f9785ca978449fb806",
+      "stage": "HOST_SURFACE_EQUIVALENT",
+      "stage_runs": [],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "relation": "SEMANTIC_EQUIVALENT"
+      },
+      "case_id": "semantic-equivalent-paraphrase",
+      "completion_seconds": 4.746643874794245,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "relation": "SEMANTIC_EQUIVALENT"
+      },
+      "failure_category": null,
+      "ordinal": 3,
+      "prompt_digest": "92804ee3c884d04d0c505af032011d66e6d8cb7ccf9a1665f06ee732d1f400ee",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "duplicate relation classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-sol",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"relation\":\"SEMANTIC_EQUIVALENT\"}",
+      "repetition": 1,
+      "response_bytes": 34,
+      "response_digest": "6ded0db2752c9290055819fd1a7f3b0d7ff3a5f9f99ea7859e1f1e7b3748c4ba",
+      "schema_digest": "0d053c5f5170968bef09e2d44d918b566321b18206fb2b7dca0ec8eafe083bd0",
+      "stage": "SEMANTIC_RELATION",
+      "stage_runs": [],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "relation": "OVERLAP"
+      },
+      "case_id": "overlap-extra-cause",
+      "completion_seconds": 3.081900666002184,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "relation": "OVERLAP"
+      },
+      "failure_category": null,
+      "ordinal": 4,
+      "prompt_digest": "a53e0d685d825094c359d165f4e3cdc9870d996f9dff245a94b7f6cd060fab60",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "duplicate relation classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-sol",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"relation\":\"OVERLAP\"}",
+      "repetition": 1,
+      "response_bytes": 22,
+      "response_digest": "a3cbd4107841faf235bf948e8e9203450871a94bdc7e97e5006c7cae3926d343",
+      "schema_digest": "0d053c5f5170968bef09e2d44d918b566321b18206fb2b7dca0ec8eafe083bd0",
+      "stage": "SEMANTIC_RELATION",
+      "stage_runs": [],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "relation": "UNKNOWN"
+      },
+      "case_id": "unknown-unspecified-entrance",
+      "completion_seconds": 5.254247083328664,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "relation": "UNKNOWN"
+      },
+      "failure_category": null,
+      "ordinal": 5,
+      "prompt_digest": "a81ce6307d18f6274d2e87b706479eb7eee5d91aa358983bfcf1f341c5e6c90e",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "duplicate relation classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-sol",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"relation\":\"UNKNOWN\"}",
+      "repetition": 1,
+      "response_bytes": 22,
+      "response_digest": "9d490f462ad6451f89e73d2a0046bf3e4c9f20897707e35cdc07ea0eb8e7a132",
+      "schema_digest": "0d053c5f5170968bef09e2d44d918b566321b18206fb2b7dca0ec8eafe083bd0",
+      "stage": "SEMANTIC_RELATION",
+      "stage_runs": [],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "relation": "DISTINCT"
+      },
+      "case_id": "distinct-vehicle-and-pedestrian-access",
+      "completion_seconds": 3.0265042912214994,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "relation": "DISTINCT"
+      },
+      "failure_category": null,
+      "ordinal": 6,
+      "prompt_digest": "c5814fc97fd26720cb26e1dfe89fd4b0fbf2f5c39819c05cbbca717722421bd0",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "duplicate relation classification",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-sol",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"relation\":\"DISTINCT\"}",
+      "repetition": 1,
+      "response_bytes": 23,
+      "response_digest": "879e170a2f070a6d19811360b7f45ee4aa3302aadfe480b106563d6d307a3e1f",
+      "schema_digest": "0d053c5f5170968bef09e2d44d918b566321b18206fb2b7dca0ec8eafe083bd0",
+      "stage": "SEMANTIC_RELATION",
+      "stage_runs": [],
+      "status": "PASS"
+    }
+  ],
+  "completed_at": "2026-08-03T20:46:14.386323Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "fixture": "duplicates.json",
+    "fixture_case_count": 6,
+    "fixture_digest": "ea94cf68c8d5f8c33e6578f90fae599586ebc8bb8650a8e8a420e49fd9b8d7df",
+    "independent_holdout": false,
+    "operation": "find-duplicates",
+    "role": "CALIBRATION",
+    "ruleset_version": "duplicates-v1-draft",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "exact-identical-content",
+      "surface-equivalent-whitespace",
+      "semantic-equivalent-paraphrase",
+      "overlap-extra-cause",
+      "unknown-unspecified-entrance",
+      "distinct-vehicle-and-pedestrian-access"
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T204558268459Z-95ce6405.json",
+  "pipeline": {
+    "gate": "exact relation contract with repeated stability",
+    "id": "duplicate-relation-v1",
+    "stages": [
+      "HOST_EXACT",
+      "HOST_SURFACE_EQUIVALENT",
+      "SEMANTIC_RELATION"
+    ],
+    "version": 1
+  },
+  "provider": {
+    "effective_thinking": null,
+    "endpoint": null,
+    "model": "gpt-5.6-sol",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "high",
+    "runtime": "codex-cli"
+  },
+  "run_id": "20260803T204558268459Z-95ce6405",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": null,
+      "max_output_tokens": null,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T20:45:58.268459Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 6,
+      "structurally_valid": 6,
+      "total": 6
+    },
+    "campaign_passed": true,
+    "case_results": [
+      {
+        "attempts": 1,
+        "case_id": "exact-identical-content",
+        "exact_matches": 1,
+        "expected": {
+          "relation": "EXACT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "surface-equivalent-whitespace",
+        "exact_matches": 1,
+        "expected": {
+          "relation": "SURFACE_EQUIVALENT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "semantic-equivalent-paraphrase",
+        "exact_matches": 1,
+        "expected": {
+          "relation": "SEMANTIC_EQUIVALENT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "overlap-extra-cause",
+        "exact_matches": 1,
+        "expected": {
+          "relation": "OVERLAP"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "unknown-unspecified-entrance",
+        "exact_matches": 1,
+        "expected": {
+          "relation": "UNKNOWN"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "distinct-vehicle-and-pedestrian-access",
+        "exact_matches": 1,
+        "expected": {
+          "relation": "DISTINCT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      }
+    ],
+    "cases": {
+      "failed": 0,
+      "passed": 6,
+      "total": 6
+    },
+    "completion_seconds": {
+      "max": 5.254247083328664,
+      "mean": 2.6848992706121257,
+      "median": 3.054202478611842,
+      "p95": 5.254247083328664
+    },
+    "distributions": {
+      "actual_relation_attempts": {
+        "DISTINCT": 1,
+        "EXACT": 1,
+        "OVERLAP": 1,
+        "SEMANTIC_EQUIVALENT": 1,
+        "SURFACE_EQUIVALENT": 1,
+        "UNKNOWN": 1
+      },
+      "expected_relation": {
+        "DISTINCT": 1,
+        "EXACT": 1,
+        "OVERLAP": 1,
+        "SEMANTIC_EQUIVALENT": 1,
+        "SURFACE_EQUIVALENT": 1,
+        "UNKNOWN": 1
+      }
+    },
+    "failures": {},
+    "stage_completion_seconds": {
+      "HOST_EXACT": {
+        "max": 4.650000482797623e-05,
+        "mean": 4.650000482797623e-05,
+        "median": 4.650000482797623e-05,
+        "p95": 4.650000482797623e-05
+      },
+      "HOST_SURFACE_EQUIVALENT": {
+        "max": 5.320832133293152e-05,
+        "mean": 5.320832133293152e-05,
+        "median": 5.320832133293152e-05,
+        "p95": 5.320832133293152e-05
+      },
+      "SEMANTIC_RELATION": {
+        "max": 5.254247083328664,
+        "mean": 4.027323978836648,
+        "median": 3.9142722703982145,
+        "p95": 5.254247083328664
+      }
+    },
+    "tokens": {
+      "completion": 0,
+      "prompt": 0,
+      "reported_attempts": 0,
+      "reported_calls": 0
+    }
+  },
+  "timing": {
+    "campaign_seconds": 16.117871415801346,
+    "provider_connection_seconds": 0.05473541608080268,
+    "total_seconds": 16.17260683188215
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "uid": "7dc81029-5329-455a-8018-9f1925bcc8c3",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/03' into profile 'task-3'.",
+  "timestamp": "2026-08-04T22:47:18.930644",
+  "snapshot": {
+    "uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+    "name": "local/personal-memory/2025/03",
+    "memories": {
+      "5d989bab-c471-5de9-bb73-29cabc4753dd": {
+        "type": "memory",
+        "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd",
+        "content": "The user stores prepared meals on the second shelf of the freezer."
+      },
+      "d1725ae4-3fd3-5250-92b3-73d84d9152a7": {
+        "type": "memory",
+        "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+        "content": "The user went to the market without a shopping list and bought onions that were already at home."
+      },
+      "904ff225-26df-5424-8a82-23d733649106": {
+        "type": "memory",
+        "uid": "904ff225-26df-5424-8a82-23d733649106",
+        "content": "On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase."
+      },
+      "67a003c7-648a-59dc-8e82-03f9e452ffce": {
+        "type": "memory",
+        "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce",
+        "content": "On a day the user made a spicy stew, they left part of one bowl uneaten."
+      },
+      "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9": {
+        "type": "memory",
+        "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+        "content": "The next time the user cooked it, they used half as much chili powder and finished the meal."
+      },
+      "64bf4401-e972-5d15-a526-21ca901a6a9f": {
+        "type": "memory",
+        "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f",
+        "content": "When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice."
+      },
+      "57e09ea5-54ff-5fce-aada-68daffbacc8b": {
+        "type": "memory",
+        "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+        "content": "The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier."
+      },
+      "0a5d054f-94bd-5955-bdb7-9b5427e2260b": {
+        "type": "memory",
+        "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+        "content": "When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance."
+      },
+      "1f94b78b-1635-551c-b90c-bea2a67ca595": {
+        "type": "memory",
+        "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595",
+        "content": "The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient."
+      },
+      "f64ef6c4-7665-5574-9d58-fc124b0bfe3f": {
+        "type": "memory",
+        "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f",
+        "content": "The condition of frozen prepared food may vary with its packaging and storage duration."
+      }
+    },
+    "order": [
+      "5d989bab-c471-5de9-bb73-29cabc4753dd",
+      "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+      "904ff225-26df-5424-8a82-23d733649106",
+      "67a003c7-648a-59dc-8e82-03f9e452ffce",
+      "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+      "64bf4401-e972-5d15-a526-21ca901a6a9f",
+      "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+      "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+      "1f94b78b-1635-551c-b90c-bea2a67ca595",
+      "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+    "memory_uids": [
+      "5d989bab-c471-5de9-bb73-29cabc4753dd",
+      "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+      "904ff225-26df-5424-8a82-23d733649106",
+      "67a003c7-648a-59dc-8e82-03f9e452ffce",
+      "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+      "64bf4401-e972-5d15-a526-21ca901a6a9f",
+      "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+      "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+      "1f94b78b-1635-551c-b90c-bea2a67ca595",
+      "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/03' into profile 'task-3'.",
+  "auto": true
+}

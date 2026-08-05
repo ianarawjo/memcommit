@@ -363,7 +363,7 @@ view because it would request precisely the history that READ does not expose.
 Trace is always rejected for a granted view.
 
 Within a composed participant Study run, local Trace is additionally limited
-to the `task-3` subtree. Task 3 deliberately studies personal-memory history;
+to the `task-3` subtree. Task 3 deliberately studies local/personal-memory history;
 Tasks 1 and 2 do not. Normal authoring stores retain Trace. `mem ls` and the
 Switch picker render `RATIONALE SUBTREE` together with `TRACE ALLOWED` or
 `TRACE BLOCKED` so the difference is visible before a participant selects an

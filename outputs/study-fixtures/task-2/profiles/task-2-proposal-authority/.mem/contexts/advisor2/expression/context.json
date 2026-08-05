@@ -35,7 +35,7 @@
     "939ee3d0-b611-574a-a25b-82708394bd5e": {
       "type": "memory",
       "uid": "939ee3d0-b611-574a-a25b-82708394bd5e",
-      "content": "This advisor finds sequence tables easy to check step by step but less immediate for seeing the overall branching shape."
+      "content": "Readers can check sequence tables step by step but may find the overall branching shape less immediate."
     }
   },
   "order": [

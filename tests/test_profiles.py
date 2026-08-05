@@ -374,8 +374,8 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
 
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
-    assert "study-baseline: Contexts 130 owned + 0 granted" in result.output
-    assert "Memories 1278 owned + 0 granted" in result.output
+    assert "study-baseline: Contexts 135 owned + 0 granted" in result.output
+    assert "Memories 1290 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -407,18 +407,19 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
         "granted-memory/task-1",
         "granted-memory/task-2",
         "granted-memory/task-3",
-        "granted-memory/task-3/government",
-        "granted-memory/task-3/government/healthcare-agent",
+        "granted-memory/task-3/remote",
+        "granted-memory/task-3/remote/government",
+        "granted-memory/task-3/remote/government/healthcare-agent",
     }.issubset(names)
     assert "task-1/participant/construction-updates" in names
     assert "granted-memory/task-1/campus-wiki" in names
     assert "task-2/participant/proposal-workspace" in names
     assert "granted-memory/task-2/advisor1" in names
-    assert "task-3/personal-memory" in names
-    assert "task-3/personal-memory/2024" in names
-    assert "task-3/personal-memory/2024/01" in names
-    assert "task-3/personal-memory/2024-01" not in names
-    assert "granted-memory/task-3/guardrails" in names
+    assert "task-3/local/personal-memory" in names
+    assert "task-3/local/personal-memory/2024" in names
+    assert "task-3/local/personal-memory/2024/01" in names
+    assert "task-3/local/personal-memory/2024-01" not in names
+    assert "task-3/local/guardrails" in names
 
     selected = runner.invoke(
         app,
@@ -461,8 +462,8 @@ def test_profile_use_selects_the_initialized_complete_profile(
 
     assert selected.exit_code == 0, selected.output
     assert "Selected profile 'profile-view'." in selected.output
-    assert "Contexts 47 owned + 52 granted" in selected.output
-    assert "Memories 375 owned + 675 granted" in selected.output
+    assert "Contexts 59 owned + 43 granted" in selected.output
+    assert "Memories 450 owned + 612 granted" in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
     assert "* task-1" in contexts.stdout
@@ -605,7 +606,7 @@ def test_profile_use_selects_the_initialized_complete_profile(
     assert profile_list.exit_code == 0
     assert "* profile-view" in profile_list.output
     assert "profile-view-granted-memory" in profile_list.output
-    assert "52 granted" in profile_list.output
+    assert "43 granted" in profile_list.output
     assert "STUDY profile-view" not in profile_list.output
     assert "authoring" in profile_list.output
 
@@ -977,8 +978,8 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Baseline Profile: study-baseline" in result.output
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
-    assert "Contexts 47 · Memories 375" in result.output
-    assert "Granted Contexts 52 · Granted Memories 675" in result.output
+    assert "Contexts 59 · Memories 450" in result.output
+    assert "Granted Contexts 43 · Granted Memories 612" in result.output
     assert "Active Profile unchanged: authoring" in result.output
     assert "Use it with: mem profile pilot-001" in result.output
     assert _tree_digest(bundle_root) == source_digest
@@ -991,7 +992,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
         "pilot-001",
         "pilot-001-granted-memory",
     ]
-    assert len(registry.grants) == 7
+    assert len(registry.grants) == 8
     assert study_profile_groups(registry.profiles) == ()
     baseline = registry.by_name("study-baseline")
     copied = registry.by_name("pilot-001")
@@ -1016,8 +1017,8 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     baseline_store = MemoryStore(root=baseline_root, create=False)
     copied_store = MemoryStore(root=copied_root, create=False)
     authority_store = MemoryStore(root=authority_root, create=False)
-    assert len(copied_store.list_context_names()) == 47
-    assert len(authority_store.list_context_names()) == 82
+    assert len(copied_store.list_context_names()) == 59
+    assert len(authority_store.list_context_names()) == 75
     assert copied_store.current_context_name() == (
         "task-1/participant/construction-updates"
     )
@@ -1085,15 +1086,15 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
     profile_line = next(
         line for line in result.output.splitlines() if "pilot-002" in line
     )
-    assert "Contexts 47 owned + 52 granted" in profile_line
-    assert "Memories 375 owned + 675 granted" in profile_line
+    assert "Contexts 59 owned + 43 granted" in profile_line
+    assert "Memories 450 owned + 612 granted" in profile_line
     authority_line = next(
         line
         for line in result.output.splitlines()
         if "pilot-002-granted-memory" in line
     )
-    assert "Contexts 82 owned + 0 granted" in authority_line
-    assert "Memories 903 owned + 0 granted" in authority_line
+    assert "Contexts 75 owned + 0 granted" in authority_line
+    assert "Memories 840 owned + 0 granted" in authority_line
     assert "STUDY pilot-002" not in result.output
     assert "pilot-002-task-" not in result.output
     assert "Authority 1" not in result.output
@@ -1234,7 +1235,7 @@ def test_init_study_preserves_a_store_after_visible_registry_replacement(
                 if grant.grantee_profile_uid == published.uid
             ]
         )
-        == 7
+        == 8
     )
     assert registry.active.name == "authoring"
 
@@ -1324,7 +1325,7 @@ def test_repeated_init_study_run_pairs_are_independent(
         )
         == 5
     )
-    assert len(registry.grants) == 14
+    assert len(registry.grants) == 16
     assert study_profile_groups(registry.profiles) == ()
 
     baseline_root = profile_store_dir(baseline)

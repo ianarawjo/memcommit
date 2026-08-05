@@ -227,6 +227,62 @@ def test_named_goal_inline_direct_edit_freezes_one_command_before_apply():
     assert len(result.applied_argvs) == 1
 
 
+def test_applied_goal_change_marks_goal_and_chat_as_unseen(monkeypatch):
+    session = replace(
+        create_ground_session(
+            "fixture-ground",
+            goal="Build one verified fixture.",
+        ),
+        schema_version=GROUND_SCHEMA_VERSION,
+    )
+    original_pane_builder = (
+        ground_named_shell_module.build_scrollable_text_pane
+    )
+    notifications = {}
+
+    def capturing_pane(title, *args, **kwargs):
+        notifications[title] = kwargs.get("notification")
+        return original_pane_builder(title, *args, **kwargs)
+
+    monkeypatch.setattr(
+        ground_named_shell_module,
+        "build_scrollable_text_pane",
+        capturing_pane,
+    )
+
+    def prepare(current, _target, _selector, edited, _comment):
+        return proposal(current, edited, kind="REVISE_GOAL")
+
+    def apply(current, _frozen):
+        return (
+            replace(
+                current,
+                goal="Build one verified fixture. Revised.",
+                revision=current.revision + 1,
+            ),
+            "revised",
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\te Revised.\ra\x03")
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda *_args: pytest.fail("must not interpret"),
+            prepare_direct_edit=prepare,
+            apply=apply,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.session.goal == "Build one verified fixture. Revised."
+    assert notifications["GOAL"]()
+    assert notifications["CHAT"]()
+    assert not notifications["CONTEXTS"]()
+    assert not notifications["RULES"]()
+    assert not notifications["MEMORIES"]()
+
+
 def test_named_goal_inline_comment_is_a_focused_agent_turn_not_an_edit():
     seen = []
     prepared = []
@@ -1344,6 +1400,80 @@ def test_named_approval_down_arrow_stays_in_focused_memories(monkeypatch):
     assert "EFFECTS · ONE COMMAND" not in dialogue
 
 
+@pytest.mark.parametrize(
+    ("key", "expected_status"),
+    [("b", "BACK_TO_PICKER"), ("q", "CLOSED")],
+)
+def test_named_read_pane_backs_to_picker_or_quits_without_a_turn(
+    key,
+    expected_status,
+):
+    interpreted = []
+    applied = []
+
+    with create_pipe_input() as pipe_input:
+        # The general Message composer keeps ordinary letters. One Tab enters
+        # a collapsed read pane where B/Q become navigation commands.
+        pipe_input.send_text(f"\t{key}")
+        result = run_named_ground_shell(
+            create_ground_session("fixture-ground"),
+            interpret=lambda *args: interpreted.append(args),
+            apply=lambda *args: applied.append(args),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == expected_status
+    assert interpreted == []
+    assert applied == []
+
+
+def test_named_back_discards_pending_receipt_without_applying_it():
+    applied = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("Propose one Rule.\rb")
+        result = run_named_ground_shell(
+            create_ground_session("fixture-ground"),
+            interpret=lambda current, text, _source: proposal(current, text),
+            apply=lambda *args: applied.append(args),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "BACK_TO_PICKER"
+    assert result.applied_argvs == ()
+    assert applied == []
+
+
+def test_named_message_keeps_lowercase_b_and_q_as_user_text():
+    seen = []
+
+    def interpret(_current, _dialogue, source_text):
+        seen.append(source_text)
+        return Ask(
+            kind="ASK",
+            understanding="The letters are ordinary Message text.",
+            question="Continue?",
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("bring back q safely\r\x03")
+        result = run_named_ground_shell(
+            create_ground_session("fixture-ground"),
+            interpret=interpret,
+            apply=lambda *_args: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CLOSED"
+    assert seen == ["bring back q safely"]
+
+
 def test_named_focused_comment_key_is_disabled_during_approval():
     session = session_with_rule_and_case()
     interpreted = []
@@ -1983,6 +2113,63 @@ def test_comment_is_classified_once_and_one_ready_rule_is_proposed(
         and "d1 [FACT · STALE]" in rendered
         for rendered in rendered_rules
     )
+
+
+def test_named_draft_result_marks_rules_and_chat_until_explicit_visit(
+    monkeypatch,
+):
+    original_pane_builder = (
+        ground_named_shell_module.build_scrollable_text_pane
+    )
+    notifications = {}
+
+    def capturing_pane(title, *args, **kwargs):
+        notifications[title] = kwargs.get("notification")
+        return original_pane_builder(title, *args, **kwargs)
+
+    monkeypatch.setattr(
+        ground_named_shell_module,
+        "build_scrollable_text_pane",
+        capturing_pane,
+    )
+    rule = GroundTurnDraft(
+        kind="RULE",
+        status="READY",
+        content="Keep share-class suffixes visible.",
+        classification_reason="This is one independently reviewable Rule.",
+        source_spans=("Keep share-class suffixes visible.",),
+        proposal_rationale="The person stated this boundary.",
+        rule_provenance="USER_STATED",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # The draft batch programmatically focuses Rules. Up is the person's
+        # first explicit interaction with that pane, so only its dot clears.
+        pipe_input.send_text(
+            "Keep share-class suffixes visible.\r\x1b[A\x03"
+        )
+        result = run_named_ground_shell(
+            create_ground_session("fixture-ground"),
+            interpret=lambda *_args: draft_batch(rule),
+            apply=lambda *_args: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.applied_argvs == ()
+    assert set(notifications) == {
+        "GOAL",
+        "CONTEXTS",
+        "RULES",
+        "MEMORIES",
+        "CHAT",
+    }
+    assert not notifications["GOAL"]()
+    assert not notifications["CONTEXTS"]()
+    assert not notifications["RULES"]()
+    assert not notifications["MEMORIES"]()
+    assert notifications["CHAT"]()
 
 
 def test_ready_rule_review_detaches_message_during_exact_approval(

@@ -50,7 +50,7 @@
     "4f35fd0c-005a-56a7-b33a-d74bde2d65eb": {
       "type": "memory",
       "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb",
-      "content": "The agent cannot assess deployment readiness without visible dependencies on external services and field personnel."
+      "content": "The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible."
     },
     "3b96bf66-59e4-5dbf-98d3-937402abc67b": {
       "type": "memory",

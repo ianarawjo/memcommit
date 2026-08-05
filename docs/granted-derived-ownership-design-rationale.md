@@ -80,8 +80,9 @@ New `init-study` runs upgrade copied baseline templates rather than mutating
 the baseline. Task 1 campus-wiki permits derivation, combination, export,
 acceptance, grant-bound analysis, and retained analysis in addition to its
 existing content effects.
-Task 2 advisor grants and Task 3 guardrails permit source-side derivation,
-combination, export, grant-bound analysis, and retained analysis. Query-only sources remain
+Task 2 advisor grants and Task 3 official healthcare guidance permit source-side
+derivation, combination, export, grant-bound analysis, and retained analysis.
+Task 3 guardrails are participant-owned local data, not a grant. Query-only sources remain
 `QUERY + SESSION_LOG`; they do not silently become READ or derivative grants.
 
 ## `mem ls` disclosure

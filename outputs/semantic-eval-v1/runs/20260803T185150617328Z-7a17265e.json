@@ -1,0 +1,347 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 0.5738580841571093,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 1,
+      "prompt_digest": "fc5fd65f6a37232e65416d848819f571567b73ae3758866278bb05998b173081",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 919,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"SINGLE\",\n  \"clarification\": \"NONE\"\n}",
+      "repetition": 1,
+      "response_bytes": 59,
+      "response_digest": "c4c8d5e1ef77bd720f6d028c913cba765f6fd3094cc1f937bbd6957076db73b8",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 0.4986190418712795,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 2,
+      "prompt_digest": "fc5fd65f6a37232e65416d848819f571567b73ae3758866278bb05998b173081",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 919,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"SINGLE\",\n  \"clarification\": \"NONE\"\n}",
+      "repetition": 2,
+      "response_bytes": 59,
+      "response_digest": "c4c8d5e1ef77bd720f6d028c913cba765f6fd3094cc1f937bbd6957076db73b8",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 0.5120436251163483,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 3,
+      "prompt_digest": "fc5fd65f6a37232e65416d848819f571567b73ae3758866278bb05998b173081",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 919,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"SINGLE\",\n  \"clarification\": \"NONE\"\n}",
+      "repetition": 3,
+      "response_bytes": 59,
+      "response_digest": "c4c8d5e1ef77bd720f6d028c913cba765f6fd3094cc1f937bbd6957076db73b8",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-none-no-way",
+      "completion_seconds": 0.5618630833923817,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 4,
+      "prompt_digest": "d19adb87921103395e50fabe66a175c64ddc9bf273919f040403411d363f5399",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 921,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"COMPETING\",\n  \"clarification\": \"REQUIRED\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "60fe21212cbab97ee350b0ee4379fe3a26bfff4c88f2f623f6659c54fea1c876",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-none-no-way",
+      "completion_seconds": 0.5055104591883719,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 5,
+      "prompt_digest": "d19adb87921103395e50fabe66a175c64ddc9bf273919f040403411d363f5399",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 921,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"COMPETING\",\n  \"clarification\": \"REQUIRED\"\n}",
+      "repetition": 2,
+      "response_bytes": 66,
+      "response_digest": "60fe21212cbab97ee350b0ee4379fe3a26bfff4c88f2f623f6659c54fea1c876",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-none-no-way",
+      "completion_seconds": 0.5057633332908154,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 6,
+      "prompt_digest": "d19adb87921103395e50fabe66a175c64ddc9bf273919f040403411d363f5399",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 921,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"COMPETING\",\n  \"clarification\": \"REQUIRED\"\n}",
+      "repetition": 3,
+      "response_bytes": 66,
+      "response_digest": "60fe21212cbab97ee350b0ee4379fe3a26bfff4c88f2f623f6659c54fea1c876",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    }
+  ],
+  "completed_at": "2026-08-03T18:51:53.780288Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "fixture": "ambiguity.json",
+    "fixture_case_count": 10,
+    "fixture_digest": "003654c092e03ea74f72e8f084624438085555e2cedad2c9abed985ae2b3c067",
+    "independent_holdout": false,
+    "operation": "find-ambiguities",
+    "role": "CALIBRATION",
+    "ruleset_version": "ambiguity-v1-draft",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "single-helpful-reception-location",
+      "competing-none-no-way"
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T185150617328Z-7a17265e.json",
+  "pipeline": {
+    "gate": "exact two-label contract with repeated stability",
+    "id": "ambiguity-classify-v1",
+    "stages": [
+      "CLASSIFY"
+    ],
+    "version": 1
+  },
+  "provider": {
+    "effective_thinking": false,
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen3.6:35b-a3b",
+    "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "provider": "ollama",
+    "reasoning_effort": null,
+    "runtime": "ollama/0.30.10"
+  },
+  "run_id": "20260803T185150617328Z-7a17265e",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": 65536,
+      "max_output_tokens": 16384,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 3,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T18:51:50.617328Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 0,
+      "structurally_valid": 6,
+      "total": 6
+    },
+    "campaign_passed": false,
+    "case_results": [
+      {
+        "attempts": 3,
+        "case_id": "single-helpful-reception-location",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 3,
+        "required_count": 2,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 3
+      },
+      {
+        "attempts": 3,
+        "case_id": "competing-none-no-way",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 3,
+        "required_count": 2,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 3
+      }
+    ],
+    "cases": {
+      "failed": 2,
+      "passed": 0,
+      "total": 2
+    },
+    "completion_seconds": {
+      "max": 0.5738580841571093,
+      "mean": 0.5262762711693844,
+      "median": 0.5089034792035818,
+      "p95": 0.5738580841571093
+    },
+    "distributions": {
+      "actual_joint_attempts": {
+        "COMPETING/REQUIRED": 3,
+        "SINGLE/NONE": 3
+      },
+      "case_pass_by_clarification": {
+        "HELPFUL": {
+          "passed": 0,
+          "total": 1
+        },
+        "NONE": {
+          "passed": 0,
+          "total": 1
+        },
+        "REQUIRED": {
+          "passed": 0,
+          "total": 0
+        }
+      },
+      "case_pass_by_interpretation": {
+        "COMPETING": {
+          "passed": 0,
+          "total": 1
+        },
+        "DOMINANT": {
+          "passed": 0,
+          "total": 0
+        },
+        "SINGLE": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "expected_clarification": {
+        "HELPFUL": 1,
+        "NONE": 1
+      },
+      "expected_interpretation": {
+        "COMPETING": 1,
+        "SINGLE": 1
+      },
+      "expected_joint": {
+        "COMPETING/NONE": 1,
+        "SINGLE/HELPFUL": 1
+      }
+    },
+    "failures": {
+      "LABEL_MISMATCH": 6
+    },
+    "tokens": {
+      "completion": 138,
+      "prompt": 5520,
+      "reported_attempts": 6
+    }
+  },
+  "timing": {
+    "campaign_seconds": 3.163194917142391,
+    "provider_connection_seconds": 0.03134879097342491,
+    "total_seconds": 3.194543708115816
+  }
+}

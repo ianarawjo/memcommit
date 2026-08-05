@@ -1,0 +1,94 @@
+{
+  "uid": "f945670a-bfbd-4be5-aa6a-8d2729f47d13",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/09' into profile 'task-3'.",
+  "timestamp": "2026-08-04T22:47:18.940037",
+  "snapshot": {
+    "uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+    "name": "local/personal-memory/2025/09",
+    "memories": {
+      "3d3f7960-daf5-5a51-98b3-14261c5aa66c": {
+        "type": "memory",
+        "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+        "content": "The user keeps the book they are reading and a note-taking notebook on a small living-room desk."
+      },
+      "28714a4e-bc14-5703-b594-126471ae0585": {
+        "type": "memory",
+        "uid": "28714a4e-bc14-5703-b594-126471ae0585",
+        "content": "While reading in the living room with the television on, the user read the same paragraph three times."
+      },
+      "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df": {
+        "type": "memory",
+        "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+        "content": "The next day, after turning off the television, the user read 40 pages without interruption."
+      },
+      "1b1c9f90-2561-53d5-88fe-d54618450143": {
+        "type": "memory",
+        "uid": "1b1c9f90-2561-53d5-88fe-d54618450143",
+        "content": "On a day the phone was on the desk, the user stopped taking notes each time they checked a notification."
+      },
+      "076a7caa-5dcf-5f9d-8bee-efc952652efa": {
+        "type": "memory",
+        "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+        "content": "During the next reading period, the user left the phone in another room and did not check it for an hour."
+      },
+      "1dad71ec-6a5d-550e-89d2-a86dc3dacb11": {
+        "type": "memory",
+        "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+        "content": "A note attached to a paper book fell out, and the user had to find their place again."
+      },
+      "58494743-fc7f-59e9-8e17-80b8a644470a": {
+        "type": "memory",
+        "uid": "58494743-fc7f-59e9-8e17-80b8a644470a",
+        "content": "With the next book, the user recorded the page number in the notebook and resumed reading immediately."
+      },
+      "cce66589-892c-5d73-bdbc-2c6e94e0992e": {
+        "type": "memory",
+        "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+        "content": "The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate."
+      },
+      "20b2a27f-908f-5ed7-a288-f7c1030674fc": {
+        "type": "memory",
+        "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+        "content": "The local agent can summarize past reading environments and interruption records but cannot predict the next reading time."
+      },
+      "310f4cfc-b117-5511-8e13-2bd2ebec9fe5": {
+        "type": "memory",
+        "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5",
+        "content": "The user feels that repeated notifications interrupt their flow of concentration."
+      }
+    },
+    "order": [
+      "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+      "28714a4e-bc14-5703-b594-126471ae0585",
+      "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+      "1b1c9f90-2561-53d5-88fe-d54618450143",
+      "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+      "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+      "58494743-fc7f-59e9-8e17-80b8a644470a",
+      "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+      "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+      "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+    "memory_uids": [
+      "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+      "28714a4e-bc14-5703-b594-126471ae0585",
+      "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+      "1b1c9f90-2561-53d5-88fe-d54618450143",
+      "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+      "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+      "58494743-fc7f-59e9-8e17-80b8a644470a",
+      "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+      "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+      "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/09' into profile 'task-3'.",
+  "auto": true
+}

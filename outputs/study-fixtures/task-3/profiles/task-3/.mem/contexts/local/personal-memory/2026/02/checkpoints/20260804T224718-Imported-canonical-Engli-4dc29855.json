@@ -1,0 +1,94 @@
+{
+  "uid": "4dc29855-f3b3-4d92-8e76-ad38c701817b",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2026/02' into profile 'task-3'.",
+  "timestamp": "2026-08-04T22:47:18.947710",
+  "snapshot": {
+    "uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+    "name": "local/personal-memory/2026/02",
+    "memories": {
+      "7d3daf76-a21e-5117-a534-6175ab2d2861": {
+        "type": "memory",
+        "uid": "7d3daf76-a21e-5117-a534-6175ab2d2861",
+        "content": "The user keeps basic repair tools in a box beneath the sink."
+      },
+      "70a6d9f5-180f-5174-b247-690e10baa23e": {
+        "type": "memory",
+        "uid": "70a6d9f5-180f-5174-b247-690e10baa23e",
+        "content": "On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well."
+      },
+      "9fcd922c-147c-517b-82b3-180fdfb13f33": {
+        "type": "memory",
+        "uid": "9fcd922c-147c-517b-82b3-180fdfb13f33",
+        "content": "After sending a photo to building management, the user finalized the time for a repair visit."
+      },
+      "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5": {
+        "type": "memory",
+        "uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5",
+        "content": "Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately."
+      },
+      "2bc97de2-e486-5f16-ae2e-d73d78d53a65": {
+        "type": "memory",
+        "uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65",
+        "content": "On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late."
+      },
+      "1e2fa0c2-4563-549e-8349-d4606f45af3a": {
+        "type": "memory",
+        "uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a",
+        "content": "For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance."
+      },
+      "9925ffe3-d63b-522c-b5c7-ea6e48652441": {
+        "type": "memory",
+        "uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441",
+        "content": "After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there."
+      },
+      "02d6c448-e597-5e8a-a95e-98425b4f3bdd": {
+        "type": "memory",
+        "uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd",
+        "content": "The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request."
+      },
+      "4716a67b-8602-564c-9e89-85cd4ee158f9": {
+        "type": "memory",
+        "uid": "4716a67b-8602-564c-9e89-85cd4ee158f9",
+        "content": "Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit."
+      },
+      "1186c8b1-b27c-5db4-bd17-25c9c757917c": {
+        "type": "memory",
+        "uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c",
+        "content": "A multi-unit residential building's repair schedule may change because of emergency work or parts availability."
+      }
+    },
+    "order": [
+      "7d3daf76-a21e-5117-a534-6175ab2d2861",
+      "70a6d9f5-180f-5174-b247-690e10baa23e",
+      "9fcd922c-147c-517b-82b3-180fdfb13f33",
+      "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5",
+      "2bc97de2-e486-5f16-ae2e-d73d78d53a65",
+      "1e2fa0c2-4563-549e-8349-d4606f45af3a",
+      "9925ffe3-d63b-522c-b5c7-ea6e48652441",
+      "02d6c448-e597-5e8a-a95e-98425b4f3bdd",
+      "4716a67b-8602-564c-9e89-85cd4ee158f9",
+      "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+    "memory_uids": [
+      "7d3daf76-a21e-5117-a534-6175ab2d2861",
+      "70a6d9f5-180f-5174-b247-690e10baa23e",
+      "9fcd922c-147c-517b-82b3-180fdfb13f33",
+      "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5",
+      "2bc97de2-e486-5f16-ae2e-d73d78d53a65",
+      "1e2fa0c2-4563-549e-8349-d4606f45af3a",
+      "9925ffe3-d63b-522c-b5c7-ea6e48652441",
+      "02d6c448-e597-5e8a-a95e-98425b4f3bdd",
+      "4716a67b-8602-564c-9e89-85cd4ee158f9",
+      "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2026/02' into profile 'task-3'.",
+  "auto": true
+}

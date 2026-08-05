@@ -3,8 +3,8 @@
   "context_uid": "20687b71-88fd-57cf-a70e-05713eaba698",
   "context_name": "campus-wiki/construction-details/material-control",
   "target_language": "ko",
-  "created_at": "2026-08-03T16:23:41.166396+00:00",
-  "updated_at": "2026-08-03T16:23:41.166791+00:00",
+  "created_at": "2026-08-05T02:47:18.694608+00:00",
+  "updated_at": "2026-08-05T02:47:18.695042+00:00",
   "revision": 10,
   "contract_version": "translate-v2",
   "entries": [
@@ -18,8 +18,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166439+00:00",
-        "updated_at": "2026-08-03T16:23:41.166439+00:00"
+        "created_at": "2026-08-05T02:47:18.694659+00:00",
+        "updated_at": "2026-08-05T02:47:18.694659+00:00"
       }
     },
     {
@@ -32,8 +32,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166485+00:00",
-        "updated_at": "2026-08-03T16:23:41.166485+00:00"
+        "created_at": "2026-08-05T02:47:18.694712+00:00",
+        "updated_at": "2026-08-05T02:47:18.694712+00:00"
       }
     },
     {
@@ -46,8 +46,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166529+00:00",
-        "updated_at": "2026-08-03T16:23:41.166529+00:00"
+        "created_at": "2026-08-05T02:47:18.694759+00:00",
+        "updated_at": "2026-08-05T02:47:18.694759+00:00"
       }
     },
     {
@@ -60,8 +60,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166570+00:00",
-        "updated_at": "2026-08-03T16:23:41.166570+00:00"
+        "created_at": "2026-08-05T02:47:18.694803+00:00",
+        "updated_at": "2026-08-05T02:47:18.694803+00:00"
       }
     },
     {
@@ -74,8 +74,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166612+00:00",
-        "updated_at": "2026-08-03T16:23:41.166612+00:00"
+        "created_at": "2026-08-05T02:47:18.694850+00:00",
+        "updated_at": "2026-08-05T02:47:18.694850+00:00"
       }
     },
     {
@@ -88,8 +88,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166656+00:00",
-        "updated_at": "2026-08-03T16:23:41.166656+00:00"
+        "created_at": "2026-08-05T02:47:18.694894+00:00",
+        "updated_at": "2026-08-05T02:47:18.694894+00:00"
       }
     },
     {
@@ -102,8 +102,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166700+00:00",
-        "updated_at": "2026-08-03T16:23:41.166700+00:00"
+        "created_at": "2026-08-05T02:47:18.694949+00:00",
+        "updated_at": "2026-08-05T02:47:18.694949+00:00"
       }
     },
     {
@@ -116,8 +116,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166745+00:00",
-        "updated_at": "2026-08-03T16:23:41.166745+00:00"
+        "created_at": "2026-08-05T02:47:18.694995+00:00",
+        "updated_at": "2026-08-05T02:47:18.694995+00:00"
       }
     },
     {
@@ -130,8 +130,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "54827893571ac092e51ba4a45b17b3f4e7ee13c3a626718f807b19d5c17c7af3",
-        "created_at": "2026-08-03T16:23:41.166791+00:00",
-        "updated_at": "2026-08-03T16:23:41.166791+00:00"
+        "created_at": "2026-08-05T02:47:18.695042+00:00",
+        "updated_at": "2026-08-05T02:47:18.695042+00:00"
       }
     }
   ]

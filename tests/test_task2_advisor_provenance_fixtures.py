@@ -96,9 +96,9 @@ def test_eight_conflicts_are_identical_in_english_and_korean_sidecars() -> None:
             rows = tuple(csv.DictReader(stream, delimiter="\t"))
         distribution = Counter(row["relationship_band"] for row in rows)
         assert distribution == {
-            "Near Duplicate": 64,
+            "Near Duplicate": 65,
             "Same-Principle Variant": 26,
-            "Context-Dependent Variant": 38,
+            "Context-Dependent Variant": 37,
             "Conflict": 8,
             "Compatible Complement": 2,
         }
@@ -123,3 +123,44 @@ def test_five_new_choices_have_non_rule_support_in_the_same_context_subtree() ->
                 # parent-scoped Rationale useful without inventing provenance.
                 assert len({memory.locator.split("/", 1)[0] for memory in memories}) == 1
                 assert any(memory.purpose != "PP" for memory in memories)
+
+
+def test_advisor_memory_voice_matches_reader_user_and_self_perspectives() -> None:
+    english_left = _records("en", "task2-advisor1")
+    english_right = _records("en", "task2-advisor2")
+    korean_left = _records("ko", "task2-advisor1")
+    korean_right = _records("ko", "task2-advisor2")
+
+    for records in (english_left, english_right):
+        assert not any(
+            memory.content.startswith(
+                ("This advisor", "The agent", "The user writing this proposal")
+            )
+            for memory in records.values()
+        )
+    for records in (korean_left, korean_right):
+        assert not any(
+            memory.content.startswith(
+                ("이 advisor는", "the agent는", "이 제안서를 작성하는 사용자는")
+            )
+            for memory in records.values()
+        )
+
+    assert english_left["T2-L-057"].content.startswith(
+        "When a commitment is phrased passively"
+    )
+    assert korean_left["T2-L-057"].content.startswith("약속을 수동태로 표현하면")
+    assert english_left["T2-L-107"].purpose == "PP"
+    assert english_right["T2-R-105"].purpose == "PP"
+    assert "should not alternate between “I” and “we”" in english_left[
+        "T2-L-107"
+    ].content
+    assert "should not mix them" in english_right["T2-R-105"].content
+    assert english_left["T2-L-034"].purpose == "OM"
+    assert english_right["T2-R-034"].purpose == "OM"
+    assert english_left["T2-L-105"].content.startswith("The user")
+    assert korean_left["T2-L-105"].content.startswith("사용자는")
+    for records in (english_left, english_right):
+        assert not any(memory.content.startswith("I ") for memory in records.values())
+    for records in (korean_left, korean_right):
+        assert not any(memory.content.startswith("나는 ") for memory in records.values())

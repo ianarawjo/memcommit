@@ -35,7 +35,7 @@
     "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1": {
       "type": "memory",
       "uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1",
-      "content": "The agent can approve contribution labels such as principles, models, or guidelines only if they align with the abstraction level of the actual deliverables."
+      "content": "The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables."
     },
     "82ad9fe2-4063-5e89-9097-c975aa2920cb": {
       "type": "memory",

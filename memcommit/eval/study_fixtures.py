@@ -17,7 +17,7 @@ from typing import Iterable, Mapping
 
 
 PURPOSE_CODES = frozenset({"KB", "PP", "SM", "UM", "WM", "OM"})
-EXPECTED_CORPUS_COUNT = 1_278
+EXPECTED_CORPUS_COUNT = 1_290
 _PURPOSE_NAMES = {
     "Knowledge Base": "KB",
     "Procedural Policy": "PP",
@@ -233,11 +233,11 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         file_stem="task-3-personal-memory",
         expected_count=300,
         syntax=FixtureSyntax.TASK3_INLINE,
-        context_name="personal-memory",
+        context_name="local/personal-memory",
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=450,
+        purpose_sidecar_count=462,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
-        sidecar_prefix="personal-memory/",
+        sidecar_prefix="local/personal-memory/",
         fixture_ids_required=False,
     ),
     "task3-guardrails": StudyFixtureSpec(
@@ -246,28 +246,47 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         file_stem="task-3-guardrails",
         expected_count=75,
         syntax=FixtureSyntax.TASK3_INLINE,
-        context_name="guardrails",
+        context_name="local/guardrails",
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=450,
+        purpose_sidecar_count=462,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
-        sidecar_prefix="guardrails/",
+        sidecar_prefix="local/guardrails/",
         fixture_ids_required=False,
     ),
-    "task3-healthcare-info-request": StudyFixtureSpec(
-        name="task3-healthcare-info-request",
+    "task3-healthcare-qna": StudyFixtureSpec(
+        name="task3-healthcare-qna",
         task=3,
         file_stem="task-3-healthcare-information-request",
         expected_count=75,
         syntax=FixtureSyntax.TASK3_INLINE,
-        context_name="government/healthcare-agent/information-request",
+        context_name=(
+            "remote/government/healthcare-agent/info-request/questions-and-answers"
+        ),
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=450,
+        purpose_sidecar_count=462,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix=(
-            "government/healthcare-agent/information-request/"
+            "remote/government/healthcare-agent/info-request/questions-and-answers/"
         ),
         fixture_ids_required=False,
         query_only=True,
+    ),
+    "task3-healthcare-public-guidance": StudyFixtureSpec(
+        name="task3-healthcare-public-guidance",
+        task=3,
+        file_stem="task-3-healthcare-public-guidance",
+        expected_count=12,
+        syntax=FixtureSyntax.TASK3_INLINE,
+        context_name=(
+            "remote/government/healthcare-agent/info-request/official-guidance"
+        ),
+        purpose_sidecar_stem="task-3-memory-purpose",
+        purpose_sidecar_count=462,
+        purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
+        sidecar_prefix=(
+            "remote/government/healthcare-agent/info-request/official-guidance/"
+        ),
+        fixture_ids_required=False,
     ),
 }
 

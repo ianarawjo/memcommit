@@ -1,6 +1,7 @@
 import shlex
 import subprocess
 import sys
+from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from typing import Annotated, Optional
 
@@ -42,6 +43,7 @@ from memcommit.find_answer_references import (
 )
 from memcommit.find_scope_evidence import (
     collect_outside_context_evidence,
+    compact_artifact_references,
     context_remainder_evidence,
     frame_context_uids,
     visible_result_evidence,
@@ -50,6 +52,7 @@ from memcommit.find_turn_dialogue import (
     FindTurnAction,
     FindTurnAnswer,
     FindTurnAsk,
+    FindTurnRefine,
     interpret_find_turn,
 )
 from memcommit.history import HistoryError, build_history
@@ -65,10 +68,14 @@ from memcommit.query_provider import (
 )
 from memcommit.search import (
     FindError,
+    SearchArtifact,
     SearchCandidate,
     SearchMatch,
-    collect_candidates,
+    append_artifact_candidates,
+    collect_candidates_from_roots,
+    rank_candidates,
 )
+from memcommit.search_artifacts import collect_search_artifacts
 from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
@@ -132,19 +139,23 @@ class FindTurnController:
 
     store: MemoryStore
     root_context: Context
+    frame_roots: tuple[Context, ...]
     recursive: bool
+    limit: int
     frame_candidates: tuple[SearchCandidate, ...]
-    visible_candidates: tuple[SearchCandidate, ...]
 
     def __call__(
         self,
         state: FindChatState,
         text: str,
     ) -> FindChatState:
+        self._visible_candidates(state)
         if state.pending_answer is not None:
             return self._handle_scope_confirmation(state, text)
         provider = connect_codex_chatgpt_provider()
         turn = interpret_find_turn(state, text, provider)
+        if isinstance(turn, FindTurnRefine):
+            return self._refine(state, text, turn, provider)
         if isinstance(turn, FindTurnAnswer):
             pending_clarification = _pending_find_clarification(state)
             if turn.scope == "ALL_CONTEXTS":
@@ -188,10 +199,71 @@ class FindTurnController:
                 status="WAITING FOR CLARIFICATION · RESULTS UNCHANGED",
             )
         proposal = _show_result_proposal(state, turn, text)
+        if proposal.result.kind == "artifact":
+            return _apply_artifact_show_result(state, proposal)
         # The submitted natural-language turn is the authority for this proven
         # read-only action. Mutating actions will require a separate
         # exact-command approval rather than sharing this execution path.
         return _apply_show_result(state, proposal)
+
+    def _visible_candidates(
+        self,
+        state: FindChatState,
+    ) -> tuple[SearchCandidate, ...]:
+        """Resolve the current visible aliases against the frozen frame."""
+        visible: list[SearchCandidate] = []
+        for result in state.results:
+            candidates = [
+                candidate
+                for candidate in self.frame_candidates
+                if candidate.context_name == result.context_name
+                and candidate.item.uid == result.uid
+            ]
+            if len(candidates) != 1:
+                raise FindError(
+                    "The visible Find result no longer matches its evidence frame."
+                )
+            visible.append(candidates[0])
+        return tuple(visible)
+
+    def _refine(
+        self,
+        state: FindChatState,
+        submitted_text: str,
+        turn: FindTurnRefine,
+        provider: FindAnswerProvider,
+    ) -> FindChatState:
+        """Replace visible results by reranking the same frozen frame."""
+        matches = rank_candidates(
+            turn.query,
+            list(self.frame_candidates),
+            provider,
+            limit=self.limit,
+        )
+        related_query = _related_query_for_matches(matches)
+        return replace(
+            state,
+            current_query=turn.query,
+            messages=(
+                *state.messages,
+                FindChatMessage(role="USER", text=submitted_text),
+                FindChatMessage(
+                    role="MEM",
+                    text=(
+                        f"{turn.understanding}\n\n"
+                        + _find_result_message(matches, refined=True)
+                    ),
+                ),
+            ),
+            results=tuple(
+                _chat_result(match, index)
+                for index, match in enumerate(matches, start=1)
+            ),
+            related_query=related_query,
+            kept_count=0,
+            status=_find_result_status(matches, refined=True),
+            pending_answer=None,
+        )
 
     def _handle_scope_confirmation(
         self,
@@ -261,10 +333,21 @@ class FindTurnController:
         complete = getattr(provider, "complete", None)
         if not callable(complete):
             raise FindError("Find answer provider is not available.")
-        visible = visible_result_evidence(self.visible_candidates)
+        if not state.results or any(
+            result.relevance != "primary" for result in state.results
+        ):
+            # Related fallbacks aid discovery but are not evidence that the
+            # original query was satisfied. A REFINE turn must promote them
+            # through a fresh primary ranking before answer synthesis.
+            raise FindError(
+                "Related Find results cannot answer the original query. "
+                "Refine the Find first."
+            )
+        visible_candidates = self._visible_candidates(state)
+        visible = visible_result_evidence(visible_candidates)
         context = context_remainder_evidence(
             self.frame_candidates,
-            self.visible_candidates,
+            visible_candidates,
         )
         outside = ()
         outside_status: FindOutsideStatus = "NOT_REQUESTED"
@@ -274,6 +357,7 @@ class FindTurnController:
                 excluded_context_uids=frame_context_uids(
                     self.root_context,
                     recursive=self.recursive,
+                    additional_roots=self.frame_roots[1:],
                 ),
                 excluded_candidates=self.frame_candidates,
             )
@@ -309,7 +393,10 @@ class FindTurnController:
                 pending_clarification=pending_clarification,
             )
         rendered = render_find_answer_references(
-            (*visible, *context, *outside),
+            compact_artifact_references(
+                (*visible, *context, *outside),
+                self.frame_candidates,
+            ),
             answer.sentences,
         )
         return replace(
@@ -328,13 +415,62 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def _history_context_names(
+def _load_find_frame_roots(
     store: MemoryStore,
     root: Context,
     *,
     recursive: bool,
+    resolve_embeds: bool,
+) -> tuple[Context, ...]:
+    """Freeze the selected Context plus every materialized namespace descendant."""
+    if not recursive:
+        return (root,)
+
+    prefix = root.name + "/"
+    load = store.load if resolve_embeds else store.load_direct
+    roots = [root]
+    seen_uids = {root.uid}
+    # Namespace scope is determined once per Find. It is a provider boundary:
+    # every ordinary Context below this canonical prefix may contribute content
+    # to ranking, while query-only sources remain outside the ordinary catalog.
+    for name in store.list_context_names():
+        if not name.startswith(prefix):
+            continue
+        descendant = load(name)
+        if descendant.uid in seen_uids:
+            continue
+        seen_uids.add(descendant.uid)
+        roots.append(descendant)
+    return tuple(roots)
+
+
+def _collect_find_frame_candidates(
+    store: MemoryStore,
+    frame_roots: Sequence[Context],
+    *,
+    recursive: bool,
+    include_artifacts: bool,
+) -> tuple[SearchCandidate, ...]:
+    """Freeze ordinary items and permitted profile-local activity evidence."""
+    candidates = collect_candidates_from_roots(
+        frame_roots,
+        recursive=recursive,
+    )
+    if include_artifacts:
+        candidates = append_artifact_candidates(
+            candidates,
+            collect_search_artifacts(store, frame_roots),
+        )
+    return tuple(candidates)
+
+
+def _history_context_names(
+    store: MemoryStore,
+    roots: Sequence[Context],
+    *,
+    recursive: bool,
 ) -> tuple[str, ...]:
-    """Collect only the currently visible embedded Context graph."""
+    """Collect histories from namespace roots and their embedded graphs."""
     names: list[str] = []
     visited: set[str] = set()
 
@@ -352,13 +488,14 @@ def _history_context_names(
                 # MemoryRef targets and query-only sources stay unopened.
                 visit(store.load_direct(item.name))
 
-    visit(root)
+    for root in roots:
+        visit(root)
     return tuple(names)
 
 
 def _temporal_find_results(
     store: MemoryStore,
-    root: Context,
+    roots: Sequence[Context],
     query: str,
     *,
     recursive: bool,
@@ -368,7 +505,7 @@ def _temporal_find_results(
         build_history(store, name)
         for name in _history_context_names(
             store,
-            root,
+            roots,
             recursive=recursive,
         )
     ]
@@ -432,13 +569,21 @@ def _render_match(match: SearchMatch) -> None:
     item = candidate.item
     if isinstance(item, Memory):
         _render_labeled_content(
-            f"[memory  {item.uid[:8]}]",
+            (
+                f"[related memory {item.uid[:8]}]"
+                if match.relevance == "related"
+                else f"[memory  {item.uid[:8]}]"
+            ),
             item.content,
         )
     elif isinstance(item, MemoryRef):
         label = (
-            f"[ref     {item.uid[:8]}] "
-            f"-> {display_escape_text(item.target_context_name)}#"
+            (
+                f"[related ref {item.uid[:8]}] "
+                if match.relevance == "related"
+                else f"[ref     {item.uid[:8]}] "
+            )
+            + f"-> {display_escape_text(item.target_context_name)}#"
             f"{display_escape_text(item.target_memory_uid[:8])}"
         )
         if item.target is not None:
@@ -446,7 +591,11 @@ def _render_match(match: SearchMatch) -> None:
         else:
             typer.echo(label)
     elif isinstance(item, QueryContextRef):
-        label = f"[query   {item.uid[:8]}]"
+        label = (
+            f"[related query {item.uid[:8]}]"
+            if match.relevance == "related"
+            else f"[query   {item.uid[:8]}]"
+        )
         typer.echo(f"{label} {display_escape_text(item.name)} (query-only)")
         command = shlex.join(
             [
@@ -459,6 +608,14 @@ def _render_match(match: SearchMatch) -> None:
             ]
         )
         typer.echo(f"{' ' * (len(label) + 1)}Ask with: {display_escape_text(command)}")
+    elif isinstance(item, SearchArtifact):
+        label = (
+            f"[related {item.artifact_kind} {item.uid[:8]}]"
+            if match.relevance == "related"
+            else f"[{item.artifact_kind} {item.uid[:8]}]"
+        )
+        summary = item.summary.strip() or item.title
+        _render_labeled_content(label, f"{item.title} · {summary}")
 
 
 def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
@@ -472,6 +629,8 @@ def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
         )
     elif isinstance(item, QueryContextRef):
         content = f"{item.name} (query-only)"
+    elif isinstance(item, SearchArtifact):
+        content = f"{item.title}\n{item.content}"
     else:  # pragma: no cover - SearchMatch validates the result union
         raise FindError("Find returned an unsupported result type.")
     return FindChatResult(
@@ -481,10 +640,63 @@ def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
             "memory": "memory",
             "memory_ref": "ref",
             "query_context": "query",
+            "artifact": "artifact",
         }[candidate.kind],
         uid=item.uid,
         content=content,
+        relevance=match.relevance,
     )
+
+
+def _related_query_for_matches(matches: Sequence[SearchMatch]) -> str:
+    """Return one common related query while rejecting mixed local tiers."""
+    related_queries = {
+        match.related_query
+        for match in matches
+        if match.relevance == "related"
+    }
+    primary_count = sum(match.relevance == "primary" for match in matches)
+    related_count = sum(match.relevance == "related" for match in matches)
+    if primary_count and related_count:
+        raise FindError("Find cannot mix primary and related results.")
+    if related_count:
+        if len(related_queries) != 1 or None in related_queries:
+            raise FindError("Related Find results require one broader query.")
+        return next(iter(related_queries)) or ""
+    return ""
+
+
+def _find_result_message(
+    matches: Sequence[SearchMatch],
+    *,
+    refined: bool = False,
+) -> str:
+    related_query = _related_query_for_matches(matches)
+    count = len(matches)
+    noun = "Memory" if count == 1 else "Memories"
+    suffix = " after refining the Find" if refined else ""
+    if related_query:
+        return (
+            "I found no primary matches. "
+            f"I am showing {count} related {noun}{suffix} for the broader "
+            f"search: {related_query}."
+        )
+    return f"I found {count} matching {noun}{suffix}."
+
+
+def _find_result_status(
+    matches: Sequence[SearchMatch],
+    *,
+    refined: bool = False,
+) -> str:
+    related_query = _related_query_for_matches(matches)
+    if related_query:
+        status = "NO PRIMARY MATCHES · SHOWING RELATED RESULTS"
+    elif matches:
+        status = "RESULTS READY"
+    else:
+        status = "NO MATCHING RESULTS"
+    return status + (" · REFINED" if refined else "")
 
 
 def _initial_chat_state(
@@ -492,8 +704,7 @@ def _initial_chat_state(
     query: str,
     matches: list[SearchMatch],
 ) -> FindChatState:
-    count = len(matches)
-    noun = "Memory" if count == 1 else "Memories"
+    related_query = _related_query_for_matches(matches)
     return FindChatState(
         context_name=context_name,
         current_query=query,
@@ -501,13 +712,14 @@ def _initial_chat_state(
             FindChatMessage(role="USER", text=query),
             FindChatMessage(
                 role="MEM",
-                text=f"I found {count} matching {noun}.",
+                text=_find_result_message(matches),
             ),
         ),
         results=tuple(
             _chat_result(match, index) for index, match in enumerate(matches, start=1)
         ),
-        status=("RESULTS READY" if matches else "NO MATCHING RESULTS"),
+        related_query=related_query,
+        status=_find_result_status(matches),
     )
 
 
@@ -543,6 +755,33 @@ def _show_result_proposal(
         result=selected,
         review=review,
         submitted_text=submitted_text,
+    )
+
+
+def _apply_artifact_show_result(
+    state: FindChatState,
+    proposal: FindShowProposal,
+) -> FindChatState:
+    """Inspect a frozen artifact without pretending it is an ordinary Memory."""
+    action = proposal.action
+    return replace(
+        state,
+        messages=(
+            *state.messages,
+            FindChatMessage(role="USER", text=proposal.submitted_text),
+            FindChatMessage(
+                role="MEM",
+                text=(
+                    f"{action.understanding}\n\n{action.question}\n\n"
+                    f"{proposal.result.content}"
+                ),
+            ),
+            FindChatMessage(
+                role="STATUS",
+                text="READ-ONLY ARTIFACT · SHOWN · Find results unchanged.",
+            ),
+        ),
+        status=f"SHOWED {proposal.result.alias} · RESULTS UNCHANGED",
     )
 
 
@@ -626,45 +865,59 @@ def _handle_find_turn(
     text: str,
 ) -> FindChatState:
     store = MemoryStore()
-    root = store.load(state.context_name)
-    frame_candidates = tuple(collect_candidates(root, recursive=True))
-    visible_candidates: list[SearchCandidate] = []
-    for result in state.results:
-        candidates = [
-            candidate
-            for candidate in frame_candidates
-            if candidate.context_name == result.context_name
-            and candidate.item.uid == result.uid
-        ]
-        if len(candidates) != 1:
-            raise FindError(
-                "The visible Find result no longer matches its evidence frame."
-            )
-        visible_candidates.append(candidates[0])
-    return FindTurnController(
-        store=store,
-        root_context=root,
+    access = resolve_context_access(
+        store,
+        state.context_name,
+        current_name=store.current_context_name(),
+        required_permission="READ",
+    )
+    read_store = GrantedReadStore(access) if access.is_granted else store
+    root = read_store.load(access.display_name)
+    frame_roots = _load_find_frame_roots(
+        read_store,
+        root,
         recursive=True,
+        resolve_embeds=True,
+    )
+    frame_candidates = _collect_find_frame_candidates(
+        store,
+        frame_roots,
+        recursive=True,
+        include_artifacts=not access.is_granted,
+    )
+    return FindTurnController(
+        store=read_store,
+        root_context=root,
+        frame_roots=frame_roots,
+        recursive=True,
+        limit=5,
         frame_candidates=frame_candidates,
-        visible_candidates=tuple(visible_candidates),
     )(state, text)
 
 
 def _run_interactive_find(
     store: MemoryStore,
     root_context: Context,
+    frame_roots: tuple[Context, ...],
     query: str,
     matches: list[SearchMatch],
     *,
     recursive: bool,
+    limit: int,
 ) -> FindChatSessionResult:
-    frame_candidates = tuple(collect_candidates(root_context, recursive=recursive))
+    frame_candidates = _collect_find_frame_candidates(
+        store,
+        frame_roots,
+        recursive=recursive,
+        include_artifacts=isinstance(store, MemoryStore),
+    )
     controller = FindTurnController(
         store=store,
         root_context=root_context,
+        frame_roots=frame_roots,
         recursive=recursive,
+        limit=limit,
         frame_candidates=frame_candidates,
-        visible_candidates=tuple(match.candidate for match in matches),
     )
     result = run_find_chat_session(
         _initial_chat_state(root_context.name, query, matches),
@@ -702,7 +955,10 @@ def cmd(
         bool,
         typer.Option(
             "--direct",
-            help="Search direct items only; do not descend embedded Contexts",
+            help=(
+                "Search only direct items in the selected Context; exclude "
+                "namespace descendants and embedded Contexts"
+            ),
         ),
     ] = False,
 ) -> None:
@@ -734,6 +990,13 @@ def cmd(
         raise typer.Exit(1)
 
     temporal = is_temporal_query(query)
+    if not 1 <= limit <= 20:
+        typer.secho(
+            "Find error: Find limit must be between 1 and 20.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
     try:
         if temporal and access.is_granted:
             raise RuntimeError(
@@ -745,7 +1008,18 @@ def cmd(
             ctx = read_store.load_direct(access.display_name)
         else:
             ctx = read_store.load(access.display_name)
-    except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
+        frame_roots = _load_find_frame_roots(
+            read_store,
+            ctx,
+            recursive=not direct,
+            resolve_embeds=not temporal,
+        )
+    except (
+        FileNotFoundError,
+        OSError,
+        RuntimeError,
+        ValueError,
+    ) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
@@ -756,8 +1030,8 @@ def cmd(
     if temporal:
         try:
             history_results = _temporal_find_results(
-                store,
-                ctx,
+                read_store,
+                frame_roots,
                 query,
                 recursive=not direct,
                 limit=limit,
@@ -795,11 +1069,17 @@ def cmd(
         return
 
     try:
-        matches = ops.find(
-            ctx,
-            query,
-            connect_codex_chatgpt_provider,
+        frame_candidates = _collect_find_frame_candidates(
+            store,
+            frame_roots,
             recursive=not direct,
+            include_artifacts=not access.is_granted,
+        )
+        provider = connect_codex_chatgpt_provider()
+        matches = rank_candidates(
+            query,
+            list(frame_candidates),
+            provider,
             limit=limit,
         )
     except (FindError, QueryProviderError) as error:
@@ -814,9 +1094,11 @@ def cmd(
         _run_interactive_find(
             read_store,
             ctx,
+            frame_roots,
             query,
             matches,
             recursive=not direct,
+            limit=limit,
         )
         return
 
@@ -824,6 +1106,17 @@ def cmd(
         typer.secho(display_escape_text(ctx.name), bold=True)
         typer.echo("  (no matching items)")
         return
+
+    related_query = _related_query_for_matches(matches)
+    if related_query:
+        typer.secho(display_escape_text(ctx.name), bold=True)
+        typer.echo("  (no primary matches)")
+        typer.echo()
+        typer.secho("RELATED RESULTS", bold=True)
+        typer.echo(
+            "  Broader search: " + display_escape_text(related_query)
+        )
+        typer.echo("  Related items do not satisfy the original query.")
 
     # Grouping makes the owning Context legible without repeating it on every
     # row. Dict insertion order keeps the model's first Context appearance,
@@ -837,7 +1130,7 @@ def cmd(
         grouped.setdefault(owner, []).append(match)
 
     for group_index, ((_, owner_name), owner_matches) in enumerate(grouped.items()):
-        if group_index:
+        if group_index or related_query:
             typer.echo()
         typer.secho(display_escape_text(owner_name), bold=True)
         for match in owner_matches:

@@ -1,0 +1,147 @@
+"""Contracts for the simultaneous three-pane Sever setup view."""
+
+from __future__ import annotations
+
+from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.output import DummyOutput
+
+from memcommit.commands.sever_setup_shell import (
+    SeverSetupReceipt,
+    choose_sever_setup,
+)
+
+
+def test_three_pane_setup_stacks_roles_and_supplies_a_default_output() -> None:
+    with create_pipe_input() as pipe_input:
+        # Both trees begin on current. Confirm Source, move Criteria to the
+        # other root, confirm it, then submit the prefilled Output field.
+        pipe_input.send_text("\r\x1b[B\r\r")
+        result = choose_sever_setup(
+            ("personal-memory", "public-guidance"),
+            current="personal-memory",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result == SeverSetupReceipt(
+        source_name="personal-memory",
+        criteria_name="public-guidance",
+        output_name="personal-memory/severed",
+    )
+
+
+def test_query_only_row_is_visible_but_cannot_be_selected_as_criteria() -> None:
+    with create_pipe_input() as pipe_input:
+        # Move from current to the government namespace, expand and enter its
+        # query-only child, and verify Enter cannot select it. Collapse back,
+        # move to public guidance, select it, then submit the default Output.
+        pipe_input.send_text(
+            "\r\x1b[B\x1b[C\x1b[C\r\x1b[D\x1b[D\x1b[B\r\r"
+        )
+        result = choose_sever_setup(
+            ("personal-memory",),
+            current="personal-memory",
+            virtual_names=("government/qna", "public-guidance"),
+            selectable_virtual_names=frozenset({"public-guidance"}),
+            annotations={
+                "government/qna": "[grant QUERY + SAVE QUERY SESSION]",
+                "public-guidance": "[grant READ + DERIVE]",
+            },
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert result.criteria_name == "public-guidance"
+
+
+def test_output_pane_rejects_an_existing_context_name() -> None:
+    with create_pipe_input() as pipe_input:
+        # The first name submission remains in the editor because it already
+        # exists. Ctrl-U replaces it with a fresh exact name.
+        pipe_input.send_text(
+            "\r\x1b[B\r\x15personal-memory\r\x15healthcare-draft\r"
+        )
+        result = choose_sever_setup(
+            ("personal-memory", "public-guidance"),
+            current="personal-memory",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert result.output_name == "healthcare-draft"
+
+
+def test_each_context_pane_has_an_independent_descendant_scope_toggle() -> None:
+    with create_pipe_input() as pipe_input:
+        # Up from the first Context enters Scope; Left chooses exact-only and
+        # Down returns to the tree. Repeat independently in Criteria.
+        pipe_input.send_text(
+            "\x1b[A\x1b[D\x1b[B\r"
+            "\x1b[A\x1b[D\x1b[B\x1b[B\r\r"
+        )
+        result = choose_sever_setup(
+            ("personal-memory", "public-guidance"),
+            current="personal-memory",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert not result.source_descendants
+    assert not result.criteria_descendants
+
+
+def test_default_output_uses_a_fresh_suffix_when_the_first_name_exists() -> None:
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r\x1b[B\r\r")
+        result = choose_sever_setup(
+            (
+                "personal-memory",
+                "personal-memory/severed",
+                "public-guidance",
+            ),
+            current="personal-memory",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert result.output_name == "personal-memory/severed-2"
+
+
+def test_left_and_right_reuse_switch_tree_navigation_for_nested_criteria() -> None:
+    with create_pipe_input() as pipe_input:
+        # Confirm Source, move to the collapsed criteria namespace, expand it,
+        # enter its child, select that exact Context, and submit Output.
+        pipe_input.send_text("\r\x1b[B\x1b[C\x1b[C\r\r")
+        result = choose_sever_setup(
+            ("personal-memory", "criteria/nested"),
+            current="personal-memory",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert result.criteria_name == "criteria/nested"
+
+
+def test_three_pane_setup_can_be_cancelled_without_a_receipt() -> None:
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        result = choose_sever_setup(
+            ("personal-memory", "public-guidance"),
+            current="personal-memory",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is None

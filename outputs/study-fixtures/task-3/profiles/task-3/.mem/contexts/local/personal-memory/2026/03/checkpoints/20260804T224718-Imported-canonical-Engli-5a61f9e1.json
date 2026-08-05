@@ -1,0 +1,94 @@
+{
+  "uid": "5a61f9e1-f1d7-46e5-a668-cc322cffdc19",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2026/03' into profile 'task-3'.",
+  "timestamp": "2026-08-04T22:47:18.949084",
+  "snapshot": {
+    "uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+    "name": "local/personal-memory/2026/03",
+    "memories": {
+      "4b4ace0a-623b-5897-8fbc-85bfac28e393": {
+        "type": "memory",
+        "uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393",
+        "content": "The user stores tax-related receipts in digital folders by year."
+      },
+      "5a53cbc8-6e6d-571a-9ebd-bdb077626878": {
+        "type": "memory",
+        "uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878",
+        "content": "The user found three paper receipts late and recalculated the expense total already prepared."
+      },
+      "ff436ea5-1b3e-55df-8302-bd8a96740671": {
+        "type": "memory",
+        "uid": "ff436ea5-1b3e-55df-8302-bd8a96740671",
+        "content": "Starting the next month, the user photographed receipts on the day they were received and reduced omissions."
+      },
+      "53faabad-0e32-52a8-b089-ef48ba2a8e9e": {
+        "type": "memory",
+        "uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e",
+        "content": "The user named every file with only the photo date and spent a long time looking for a needed receipt."
+      },
+      "89d6fa9a-b795-59df-be34-1c05a9861d35": {
+        "type": "memory",
+        "uid": "89d6fa9a-b795-59df-be34-1c05a9861d35",
+        "content": "The user later included the expense category in the filename and found the receipt immediately through search."
+      },
+      "945562ec-8998-5d1e-b7ea-2bcf874876f2": {
+        "type": "memory",
+        "uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2",
+        "content": "While reviewing documents just before submission, the user discovered one blank signature field."
+      },
+      "5551622f-66cf-5542-8c47-1cddadab5c02": {
+        "type": "memory",
+        "uid": "5551622f-66cf-5542-8c47-1cddadab5c02",
+        "content": "Before submitting an administrative document, the user checks the signature field as the final item on the checklist."
+      },
+      "70a9ef78-af41-5d15-8ea1-4e9c727de07f": {
+        "type": "memory",
+        "uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f",
+        "content": "Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo."
+      },
+      "1d278d8b-cc5c-5635-af71-e7d2a6e81094": {
+        "type": "memory",
+        "uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094",
+        "content": "The local agent can organize receipts by date and category but cannot determine whether an expense is deductible."
+      },
+      "de398064-3179-590b-8c62-effb17060115": {
+        "type": "memory",
+        "uid": "de398064-3179-590b-8c62-effb17060115",
+        "content": "The accepted scope and submission deadlines for administrative documents may vary under that year's guidance."
+      }
+    },
+    "order": [
+      "4b4ace0a-623b-5897-8fbc-85bfac28e393",
+      "5a53cbc8-6e6d-571a-9ebd-bdb077626878",
+      "ff436ea5-1b3e-55df-8302-bd8a96740671",
+      "53faabad-0e32-52a8-b089-ef48ba2a8e9e",
+      "89d6fa9a-b795-59df-be34-1c05a9861d35",
+      "945562ec-8998-5d1e-b7ea-2bcf874876f2",
+      "5551622f-66cf-5542-8c47-1cddadab5c02",
+      "70a9ef78-af41-5d15-8ea1-4e9c727de07f",
+      "1d278d8b-cc5c-5635-af71-e7d2a6e81094",
+      "de398064-3179-590b-8c62-effb17060115"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+    "memory_uids": [
+      "4b4ace0a-623b-5897-8fbc-85bfac28e393",
+      "5a53cbc8-6e6d-571a-9ebd-bdb077626878",
+      "ff436ea5-1b3e-55df-8302-bd8a96740671",
+      "53faabad-0e32-52a8-b089-ef48ba2a8e9e",
+      "89d6fa9a-b795-59df-be34-1c05a9861d35",
+      "945562ec-8998-5d1e-b7ea-2bcf874876f2",
+      "5551622f-66cf-5542-8c47-1cddadab5c02",
+      "70a9ef78-af41-5d15-8ea1-4e9c727de07f",
+      "1d278d8b-cc5c-5635-af71-e7d2a6e81094",
+      "de398064-3179-590b-8c62-effb17060115"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2026/03' into profile 'task-3'.",
+  "auto": true
+}

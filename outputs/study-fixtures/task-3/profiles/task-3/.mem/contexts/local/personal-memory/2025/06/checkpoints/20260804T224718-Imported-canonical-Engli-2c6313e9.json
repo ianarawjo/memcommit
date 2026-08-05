@@ -1,0 +1,94 @@
+{
+  "uid": "2c6313e9-72db-41b2-a9a8-00ba1f47d7ce",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/06' into profile 'task-3'.",
+  "timestamp": "2026-08-04T22:47:18.935554",
+  "snapshot": {
+    "uid": "870f7336-726a-5d9c-bae4-12585311463e",
+    "name": "local/personal-memory/2025/06",
+    "memories": {
+      "853a158c-edf9-578a-8e75-3d5daff6e4db": {
+        "type": "memory",
+        "uid": "853a158c-edf9-578a-8e75-3d5daff6e4db",
+        "content": "The user keeps a portable fan charger on a living-room shelf."
+      },
+      "f7d5ebdc-0cae-5e07-a060-e129b5a05570": {
+        "type": "memory",
+        "uid": "f7d5ebdc-0cae-5e07-a060-e129b5a05570",
+        "content": "On a hot day, the user worked with only the window open and lost focus in the afternoon."
+      },
+      "99e5c522-535b-5015-8617-06f645147f8b": {
+        "type": "memory",
+        "uid": "99e5c522-535b-5015-8617-06f645147f8b",
+        "content": "In the room where the user closed the curtains the next morning, the temperature rose less."
+      },
+      "7b3bf50c-63aa-5a1e-9a53-7befea25a468": {
+        "type": "memory",
+        "uid": "7b3bf50c-63aa-5a1e-9a53-7befea25a468",
+        "content": "The user took the portable fan out without charging it, and it turned off after an hour."
+      },
+      "ca8de091-afb2-537f-a83a-09769056879d": {
+        "type": "memory",
+        "uid": "ca8de091-afb2-537f-a83a-09769056879d",
+        "content": "Before the next outing, the user charged it the night before and used the fan throughout the trip."
+      },
+      "4a0604fb-10b4-5132-a6de-ab6a229ff2be": {
+        "type": "memory",
+        "uid": "4a0604fb-10b4-5132-a6de-ab6a229ff2be",
+        "content": "On a hot weekend, the user was eating lunch in their father's yard and moved indoors."
+      },
+      "1f90941e-776f-5cba-9783-c392983dd72c": {
+        "type": "memory",
+        "uid": "1f90941e-776f-5cba-9783-c392983dd72c",
+        "content": "When the user returned to the yard in the evening, shade and wind led them to stay another hour."
+      },
+      "63391d26-7417-5ea6-ac0a-460af7489963": {
+        "type": "memory",
+        "uid": "63391d26-7417-5ea6-ac0a-460af7489963",
+        "content": "The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high."
+      },
+      "31502797-1379-5ec4-bd1b-a2e1515fa56e": {
+        "type": "memory",
+        "uid": "31502797-1379-5ec4-bd1b-a2e1515fa56e",
+        "content": "The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record."
+      },
+      "68f85c30-62c4-579d-97cd-9f401c686e63": {
+        "type": "memory",
+        "uid": "68f85c30-62c4-579d-97cd-9f401c686e63",
+        "content": "A room with a west-facing window can warm rapidly in the late afternoon."
+      }
+    },
+    "order": [
+      "853a158c-edf9-578a-8e75-3d5daff6e4db",
+      "f7d5ebdc-0cae-5e07-a060-e129b5a05570",
+      "99e5c522-535b-5015-8617-06f645147f8b",
+      "7b3bf50c-63aa-5a1e-9a53-7befea25a468",
+      "ca8de091-afb2-537f-a83a-09769056879d",
+      "4a0604fb-10b4-5132-a6de-ab6a229ff2be",
+      "1f90941e-776f-5cba-9783-c392983dd72c",
+      "63391d26-7417-5ea6-ac0a-460af7489963",
+      "31502797-1379-5ec4-bd1b-a2e1515fa56e",
+      "68f85c30-62c4-579d-97cd-9f401c686e63"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "870f7336-726a-5d9c-bae4-12585311463e",
+    "memory_uids": [
+      "853a158c-edf9-578a-8e75-3d5daff6e4db",
+      "f7d5ebdc-0cae-5e07-a060-e129b5a05570",
+      "99e5c522-535b-5015-8617-06f645147f8b",
+      "7b3bf50c-63aa-5a1e-9a53-7befea25a468",
+      "ca8de091-afb2-537f-a83a-09769056879d",
+      "4a0604fb-10b4-5132-a6de-ab6a229ff2be",
+      "1f90941e-776f-5cba-9783-c392983dd72c",
+      "63391d26-7417-5ea6-ac0a-460af7489963",
+      "31502797-1379-5ec4-bd1b-a2e1515fa56e",
+      "68f85c30-62c4-579d-97cd-9f401c686e63"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/06' into profile 'task-3'.",
+  "auto": true
+}

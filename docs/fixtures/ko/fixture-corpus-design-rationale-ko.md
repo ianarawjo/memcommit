@@ -6,8 +6,8 @@
 
 - Task 1: 일반 열람 375개, 질의 전용 78개
 - Task 2: 일반 열람 300개, 질의 전용 75개
-- Task 3: 일반 열람 375개, 질의 전용 75개
-- 전체: 일반 열람 1,050개, 질의 전용 228개, 합계 1,278개
+- Task 3: 일반 열람 387개, 질의 전용 75개
+- 전체: 일반 열람 1,062개, 질의 전용 228개, 합계 1,290개
 
 영어 번역과 실제 Context 설치는 한국어 내용 검수 뒤의 별도 단계다. 수량은
 목표가 아니라 결과다. 충분한 검색·비교·충돌·업데이트 사례를 제공하되,
@@ -66,7 +66,7 @@ dataset/directory/leaf
 
 예시는 `construction-updates/building-access/03-hours`,
 `campus-wiki/route-changes/17`, `advisor1/methods/question-evidence-analysis`,
-`personal-memory/2024-06/03`이다. 이 구조는 같은 주제의 Memory를 함께 탐색할
+`local/personal-memory/2024-06/03`이다. 이 구조는 같은 주제의 Memory를 함께 탐색할
 수 있게 하면서, 별도의 `분류` 열이 목적과 사실상 같은 라벨을 반복하는 문제를
 없앤다.
 
@@ -276,13 +276,12 @@ source는 최소 한 개의 실제 `수정` 또는 `추가` patch를 만들어�
 
 ### query-only construction details
 
-`construction-details`는 별도 ordinary Context가 아니라 ordinary
-`campus-wiki`에 직접 붙는 query-only source다. 검수 화면에서는 소속을
-`campus-wiki · construction-details`로 표시하되, 현재 명시적 질의 형태는
-`mem query construction-details ... --context campus-wiki`다. slash를 검수
-표시명에 사용하면 ordinary Context namespace로 오해할 수 있어 가운데점을
-사용한다. 일반 `campus-wiki` Memory에 세부 공사 내용을 복사하여 query-only
-경계를 우회하지 않는다.
+`construction-details`는 `task-1-campus-authority`가 소유한 ordinary
+Context subtree이며 task Profile의 ordinary Context는 아니다. task에서는
+더 좁은 `campus-wiki/construction-details` `QUERY` grant로만 보인다. 검수
+표시는 `campus-wiki · construction-details`를 유지할 수 있고, 명시적 질의
+형태는 `mem query campus-wiki/construction-details ...`다. 세부 공사 내용은
+task 소유 Memory로 복사하지 않는다.
 
 ## Task 2
 
@@ -308,9 +307,21 @@ source는 최소 한 개의 실제 `수정` 또는 `추가` patch를 만들어�
 
 | 자료군 | KB | PP | SM | UM | WM | OM | 합계 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `advisor1` | 10 | 95 | 8 | 8 | 8 | 21 | 150 |
-| `advisor2` | 10 | 95 | 8 | 8 | 8 | 21 | 150 |
+| `advisor1` | 9 | 96 | 5 | 8 | 8 | 24 | 150 |
+| `advisor2` | 10 | 96 | 4 | 8 | 8 | 24 | 150 |
 | `proposal-submission-guidelines` | 2 | 57 | 2 | 2 | 2 | 10 | 75 |
+
+Memory의 문체는 Advisor를 외부에서 지칭하지 않고 실제로 모델링하는 주체를
+따른다. 독자 행동은 `독자는...`, 작성 습관은 `사용자는...`, 실제 Advisor의
+능력 경계도 단독 Memory에서 1인칭 `나`의 지시 대상이 모호하지 않도록
+명시적인 `사용자는...` 관점으로 다시 쓴다. 목적 메타데이터도 같은 구분을 따라,
+독자의 반응은 `OM`으로 두고 실제 1인칭 능력·검토 한계만 `SM`으로 남긴다.
+
+두 Advisor 모두 1인칭 대명사 일관성 규칙을 가진다. 한쪽은 같은 작성자 역할에
+`I`와 `we`를 번갈아 쓰지 말라고 하고, 다른 쪽은 개인 작성자에게 `I`, 명시된
+팀에게 `we`를 선택하게 한다. 두 Memory는 덜 중요한 문체 보조 Memory를
+대체하며 검토된 `Near Duplicate` 쌍을 이룬다. 이는 공유된 작성 규칙을 거짓
+충돌로 만들지 않으면서 책임 주체를 안정적으로 유지한다.
 
 엄격한 원자화 뒤에도 의미 대응 단위는 안정적인 관계 그룹으로 보존한다.
 sidecar의 `pair_id`는 호환성을 위한 기존 이름이고,
@@ -373,12 +384,12 @@ query-only `proposal-submission-guidelines`는 75개, 10개 directory로 구성�
 
 ## Task 3
 
-### 월별 personal-memory
+### 월별 local/personal-memory
 
-`personal-memory` 300개의 안정적인 source key는 `2024-01`부터 `2026-06`까지
+`local/personal-memory` 300개의 안정적인 source key는 `2024-01`부터 `2026-06`까지
 30개 월 묶음으로 유지하며 월마다 열 개를 둔다. 생성된 Study Profile에서는
 같은 레코드를 실제 연도 Context 세 개 아래에 배치하므로 runtime 경로는
-`personal-memory/2024-01`이 아니라 `personal-memory/2024/01`이다. 이 topology
+`local/personal-memory/2024-01`이 아니라 `local/personal-memory/2024/01`이다. 이 topology
 정리만으로 fixture와 Memory identity가 바뀌지 않도록 source key는 유지한다.
 주제별 category는 생활 기록이 시간에 따라 누적되는 모습을 지우고, 사용자가
 언제 알게 됐는지 보려면 다시 별도 시간 축이 필요하므로 채택하지 않았다.
@@ -414,9 +425,9 @@ query-only `proposal-submission-guidelines`는 75개, 10개 directory로 구성�
 발언, 희귀한 사건 조합, 병명과 node ID를 제거하고 합성 문장으로 다시 썼다.
 따라서 실제 개인의 완전하거나 권위 있는 프로필이 아니다.
 
-### guardrails와 의료 정보 요청 명세
+### guardrails, 공개 의료 가이던스와 의료 Q&A
 
-일반 열람 `guardrails`는 75개다. 선택 공유의 목적·범위, 제삼자 보호,
+일반 열람 `local/guardrails`는 75개다. 선택 공유의 목적·범위, 제삼자 보호,
 근거·불확실성, 승인·전달, 보존·철회뿐 아니라 수신자 권한, 최소화·가림,
 채널·형식, 하류 사용과 감사·복구를 다룬다. Guardrails에는 `UM`을 두지 않는다.
 “사용자는 직접 검토하기를 원한다” 같은 선호를 가드레일 안에 미리 넣으면
@@ -424,14 +435,20 @@ query-only `proposal-submission-guidelines`는 75개, 10개 directory로 구성�
 이는 실험 행동을 priming할 수 있으므로, 사용자 선호 대신 사본·전송·동기화
 같은 외부 조건을 `WM`으로, 수신자·조직의 예상 해석을 `OM`으로 모델링한다.
 
+일반 열람 `remote/government/healthcare-agent/info-request/official-guidance` 자료군에는 authority가 공개한
+상위 수준 원칙 12개가 있다. 이 Memory들은 읽기와 반출이 가능하도록 의도적으로
+발행되므로 Sever의 하나뿐인 Criteria Context로 사용하거나 Meld를 통해 권한이
+있는 다른 기준과 결합할 수 있다. 공개 여부는 authority 쪽의 선별 결정이며,
+Sever가 query-only 내용을 이 Context로 승격하지 않는다.
+
 query-only 외부 Context의 canonical locator는
-`government/healthcare-agent/information-request`이며 75개다. 이 자료는 의료
+`remote/government/healthcare-agent/info-request/questions-and-answers`이며 75개다. 이 자료는 의료
 지원 결과를 직접 결정하거나 전송본을 만드는 규칙이 아니라, 사용자가 정부
 의료기관 시스템으로 정보를 실제로 보냈을 때 생기는 동의·이용·공유 결과를
-설명하는 명세다. 특정 personal-memory 사건을 그대로 가리키면 참가자에게
-정답을 노출하므로, personal-memory에 실제로 있는 이동·대기·accessible entrance,
+설명하는 명세다. 특정 local/personal-memory 사건을 그대로 가리키면 참가자에게
+정답을 노출하므로, local/personal-memory에 실제로 있는 이동·대기·accessible entrance,
 주별 가능 시간·알림, 가족 연락, 질문·체크리스트·한 줄 설명, 과거 복약 안내의
-일반 범주까지만 예로 든다. 정보 요청 에이전트의 능력 한계는 `SM`으로, 이
+일반 범주까지만 예로 든다. 의료 Q&A 에이전트의 능력 한계는 `SM`으로, 이
 엔드포인트에 실제로 요청을 보낼 수 있는 외부 요청자·오접속 클라이언트·자동화
 에이전트의 기대와 요청 전략은 `OM`으로 분리한다. 가족 연락처는 공유 가능한
 정보 범주의 예로 남기지만, 가족이 사용자를 대신해 접속하거나 제출하는 별도
@@ -454,8 +471,8 @@ fixture에서는 제삼자로 세지 않는다. 실제 법률상 제삼자의 �
 보편적인 법률 주장으로 사용하지 않는다.
 
 정보 요청 명세의 `SM`–`OM` 대비는 하류 서비스의 내부 상태를 추측하기 위한 것이
-아니다. `SM`은 이 에이전트가 personal-memory·캘린더·예약·기관 수신 상태를
-조회하거나 검증할 수 없음을 기록한다. personal-memory가 provider 입력에 포함되지
+아니다. `SM`은 이 에이전트가 local/personal-memory·캘린더·예약·기관 수신 상태를
+조회하거나 검증할 수 없음을 기록한다. local/personal-memory가 provider 입력에 포함되지
 않으므로 이 에이전트에서 개인 Memory 원문을 탈취하는 공격은 구조적으로 성립하지
 않는다. `OM`은 대신 외부 요청자가 이 화면을 전송·예약·삭제·권한·결제 API로
 오인하거나, 대량의 변형 호출로 관찰 가능한 응답 규칙·거절 경계·숨은 지시를
@@ -463,22 +480,22 @@ fixture에서는 제삼자로 세지 않는다. 실제 법률상 제삼자의 �
 기관 내부의 하류 행위자와 상호작용하거나 그 판단을 관찰할 권한이 없으므로,
 그들의 내부 해석을 이 자료군의 `OM`으로 만들지 않는다.
 
-이 설계는 로컬 공유 결정과 정보 요청 에이전트의 설명 권한을 분리한다.
-`sever`·`share`와 `guardrails`는 참가자가 어떤 로컬 Memory를 전송할지 검토하는
-별도 흐름이고, 정보 요청 에이전트는 그 선택을 대신하거나 최종 전송본을 볼 수
+이 설계는 로컬 공유 결정과 의료 Q&A 에이전트의 설명 권한을 분리한다.
+`sever`·`share`와 `local/guardrails`는 참가자가 어떤 로컬 Memory를 전송할지 검토하는
+별도 흐름이고, 의료 Q&A 에이전트는 그 선택을 대신하거나 최종 전송본을 볼 수
 없다. 반대로 정부 의료기관 시스템의 전송 화면에서 실제로 보낸 뒤에는, 보낸
 전체 내용이 공유에 동의한 단위라는 결과를 설명한다. 항목별로 승인되지 않은
 부분을 이 에이전트가 찾아 제외한다는 중간 상태는 두지 않는다.
 
-현재 대화에서 personal-memory 내용을 언급하는 것과 기관에 전송하는 것도
+현재 대화에서 local/personal-memory 내용을 언급하는 것과 기관에 전송하는 것도
 분리한다. 과거 복약 안내·진료 방문·이동 경험을 이 에이전트에게 말해도 해당
 내용이 현재 유효한지 확인되거나 정부 의료기관 시스템에 전송되는 것은 아니다.
-에이전트는 저장된 personal-memory나 기관 기록을 열람하지 못하고, 현재 대화 기록
+에이전트는 저장된 local/personal-memory나 기관 기록을 열람하지 못하고, 현재 대화 기록
 밖에 정보를 보관할 권한도 없다. 대화·기관 기록을 선택·수정·삭제하거나 기존
 사본의 삭제를 요청하고 열람 권한을 변경하거나 예약·결제·가족 연락 전송을
 실행할 수도 없다. 기관이 별도로 검증한 대리 제출 요건이 없는 제출은 계정
 사용자가 직접 한 것으로 취급한다는 것은 합성 시나리오의 운영 가정일 뿐,
-정보 요청 에이전트가 신원이나 대리 권한을 확인한다는 뜻이 아니다.
+의료 Q&A 에이전트가 신원이나 대리 권한을 확인한다는 뜻이 아니다.
 
 접근성 정보에서는 편의 선호·일시적 상태·지속적인 기능 제약·필수 지원을
 분리한다. 한 번 오래 서 있어 불편했다는 경험은 설명 예시일 뿐 지속적 지원
@@ -490,7 +507,7 @@ fixture에서는 제삼자로 세지 않는다. 실제 법률상 제삼자의 �
 
 소수의 경계 사례에서는 제공 정보 종류에 따라 구체적인 서비스·수신자·제삼자
 범위가 달라진다는 점을 남긴다. 이는 보낸 항목의 동의 단위를 모호하게 만들기
-위한 장치가 아니라, 정보 요청 에이전트가 알 수 없는 하류 처리 범위를 정직하게
+위한 장치가 아니라, 의료 Q&A 에이전트가 알 수 없는 하류 처리 범위를 정직하게
 표현하기 위한 것이다. 반면 개인 Memory의 선별·수정·전송, 예약 실행,
 인증정보·숨은 지시·응답 규칙의 추출, 대량 자동 요청은 현재 스터디 범위 밖이라고
 분명히 설명하고 처리하지 않는다. query provider가 one-shot이므로 중대한 정책
@@ -502,15 +519,16 @@ gateway가 필요한 비목표다.
 
 | 자료군 | KB | PP | SM | UM | WM | OM | 합계 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `personal-memory` | 30 | 20 | 20 | 184 | 16 | 30 | 300 |
-| `guardrails` | 8 | 47 | 4 | 0 | 5 | 11 | 75 |
-| `government/healthcare-agent/information-request` | 5 | 42 | 8 | 0 | 7 | 13 | 75 |
+| `local/personal-memory` | 30 | 20 | 20 | 184 | 16 | 30 | 300 |
+| `local/guardrails` | 8 | 47 | 4 | 0 | 5 | 11 | 75 |
+| `remote/government/healthcare-agent/info-request/official-guidance` | 7 | 5 | 0 | 0 | 0 | 0 | 12 |
+| `remote/government/healthcare-agent/info-request/questions-and-answers` | 5 | 42 | 8 | 0 | 7 | 13 | 75 |
 
-정책을 주축으로 하되 공유 범주에 관한 지식, 정보 요청 에이전트의 한계,
+정책을 주축으로 하되 공유 범주에 관한 지식, 의료 Q&A 에이전트의 한계,
 외부 전송·서비스 조건과 직접 요청을 보내는 외부 행위자의 예상 행동을 구분한다.
 두 외부 자료군 모두 현재 사용자의 선호를 미리 가정하지 않는다. 외부 요청이
 어떤 정보를 원해도 로컬 guardrails와 참가자의 별도 검토가 실제 공유 여부를
-제한하며, 정보 요청 에이전트가 그 결정을 수행하지 않는다.
+제한하며, 의료 Q&A 에이전트가 그 결정을 수행하지 않는다.
 
 명세 자체에는 실험 명령이나 화면 흐름을 설명하는 문장을 넣지 않는다. 대신
 전송될 수 있는 정보 범주, 일반적인 이용 목적, 관련 제삼자 제공과 서비스 개선

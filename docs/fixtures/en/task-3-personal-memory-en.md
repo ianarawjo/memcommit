@@ -18,7 +18,7 @@ older sister, younger brother, maternal aunt, and maternal uncle, while actual
 names, institutions, addresses, and diagnoses are omitted. All dates and events
 are synthetic research data.
 
-`YYYY-MM/NN` is a hierarchical Memory location beneath the `personal-memory`
+`YYYY-MM/NN` is a hierarchical Memory location beneath the `local/personal-memory`
 Context. Each location identifies a monthly Context and one Memory within that
 month. Generated Study Profiles preserve that source locator as the stable
 fixture key while exposing the ordinary Context through `YYYY/MM`, including a

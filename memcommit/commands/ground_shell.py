@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from functools import partial
 from typing import Literal, Protocol
 
-from prompt_toolkit.application import Application
+from prompt_toolkit.application import Application, run_in_terminal
 from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -37,6 +37,7 @@ from memcommit.commands.exact_command_review import (
     render_exact_command_blocks,
     render_exact_command_review,
 )
+from memcommit.commands.context_picker import choose_context
 from memcommit.commands.tui_primitives import (
     InFrameInputManager,
     InFrameInputSection,
@@ -178,6 +179,7 @@ class _GroundShellContextRow:
     kind: Literal[
         "EXISTING",
         "NEW_SUGGESTION",
+        "DIRECT_PICK",
         "ADD_NEW",
         "CONTINUE_EMPTY",
     ]
@@ -227,7 +229,7 @@ async def _interpret_from_daemon_thread(
 class GroundShellResult:
     """Terminal outcome of one blank-Ground shell."""
 
-    status: Literal["APPLIED", "CANCELLED"]
+    status: Literal["APPLIED", "CANCELLED", "BACK_TO_PICKER"]
     proposal: GroundShellProposal | None = None
     actual_output: str | None = None
     submitted_turns: tuple[str, ...] = ()
@@ -347,6 +349,7 @@ def render_ground_contexts_pane(
     selected_context_names: Sequence[str] = (),
     local_new_context_name: str = "",
     selection_finished: bool = False,
+    direct_context_names: Sequence[str] = (),
 ) -> str:
     """Render name-only Context choices without implying a binding."""
 
@@ -378,10 +381,11 @@ def render_ground_contexts_pane(
         item.context_name: item
         for item in suggestions
     }
+    selectable_names = set(suggestion_by_name) | set(direct_context_names)
     selected_names = tuple(
         name
         for name in dict.fromkeys(selected_context_names)
-        if name in suggestion_by_name
+        if name in selectable_names
     )
     selected_set = set(selected_names)
 
@@ -450,14 +454,17 @@ def render_ground_contexts_pane(
         )
         for name in selected_names:
             item = suggestion_by_name.get(name)
-            if item is None:
-                continue
-            lines.append(
-                candidate_line(
-                    item,
-                    current=name == current_context_name,
+            if item is not None:
+                lines.append(
+                    candidate_line(
+                        item,
+                        current=name == current_context_name,
+                    )
                 )
-            )
+            else:
+                lines.append(
+                    f"DIRECT · {one_line(name)} · SELECTED · NOT BOUND"
+                )
         if local_new_context_name:
             lines.append(
                 "NEW CONTEXT · "
@@ -527,6 +534,11 @@ def render_ground_contexts_pane(
                 "NEW CONTEXT · "
                 f"{one_line(local_new_context_name)} · "
                 "LOCAL ONLY · NOT CREATED"
+            )
+        if direct_context_names:
+            lines.append(
+                planning_prefix("DIRECT_PICK")
+                + "DIRECT SELECT · P opens the ordinary Context tree"
             )
         if discovery_complete:
             lines.append(
@@ -1064,6 +1076,7 @@ def run_ground_shell(
     initial_request: str = "",
     current_context_name: str | None = None,
     context_catalog_count: int = 0,
+    context_catalog_names: Sequence[str] = (),
     validate_new_context: Callable[[str], str] = validate_context_name,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -1133,6 +1146,25 @@ def run_ground_shell(
     error_message = {"value": ""}
     status_message = {"value": ""}
     last_submission = {"value": working_goal}
+    # A badge means that this process received a new result for a pane after
+    # the person's last explicit visit. It deliberately does not mean that a
+    # Ground layer is complete or agreed: Ground has no implicit completion
+    # criterion, and focus chosen by the program must not dismiss a result.
+    pane_notifications = {
+        "GOAL": False,
+        "CONTEXTS": False,
+        "RULES": False,
+        "MEMORIES": False,
+        "CHAT": False,
+    }
+
+    def mark_pane_updates(*layers: str) -> None:
+        for layer in layers:
+            pane_notifications[layer] = True
+
+    def acknowledge_pane(layer: str) -> None:
+        pane_notifications[layer] = False
+
     submitted_turns: list[str] = []
     conversation: list[str] = (
         [
@@ -1226,6 +1258,8 @@ def run_ground_shell(
             for item in new_context_suggestions["value"]
         )
         if context_discovery_complete["value"]:
+            if context_catalog_names:
+                rows.append(_GroundShellContextRow(kind="DIRECT_PICK"))
             rows.append(_GroundShellContextRow(kind="ADD_NEW"))
             if not suggestions:
                 rows.append(
@@ -1267,6 +1301,7 @@ def run_ground_shell(
         render_ground_goal_pane(working_goal=editable_goal["value"]),
         buffer_name="ground-new-goal",
         height=GROUND_GOAL_FRAME_HEIGHT,
+        notification=lambda: pane_notifications["GOAL"],
     )
     contexts_pane = build_scrollable_text_pane(
         "CONTEXTS",
@@ -1278,18 +1313,21 @@ def run_ground_shell(
         ),
         buffer_name="ground-new-contexts",
         height=GROUND_CONTEXTS_FRAME_HEIGHT,
+        notification=lambda: pane_notifications["CONTEXTS"],
     )
     rules_pane = build_scrollable_text_pane(
         "RULES",
         render_ground_rules_pane(),
         buffer_name="ground-new-rules",
         height=pane_height,
+        notification=lambda: pane_notifications["RULES"],
     )
     cases_pane = build_scrollable_text_pane(
         "MEMORIES",
         render_ground_memories_pane(),
         buffer_name="ground-new-cases",
         height=pane_height,
+        notification=lambda: pane_notifications["MEMORIES"],
     )
     # LIST preserves wrapped cards. TABLE uses logical rows and lets the
     # selected-cell cursor drive horizontal scrolling like a spreadsheet.
@@ -1336,6 +1374,7 @@ def run_ground_shell(
         conversation_text(),
         buffer_name="ground-new-dialogue",
         height=pane_height,
+        notification=lambda: pane_notifications["CHAT"],
     )
     composer = build_framed_multiline_input(
         "MESSAGE",
@@ -1358,7 +1397,7 @@ def run_ground_shell(
         Window(
             FormattedTextControl(
                 "CHAT: ←/↑ cmd · →/↓ fx\n"
-                "A approve · E refine · Q/Esc"
+                "A approve · E refine · B/Q"
             ),
             wrap_lines=True,
         ),
@@ -1368,7 +1407,7 @@ def run_ground_shell(
     error_panel = Frame(
         Window(
             FormattedTextControl(
-                "R retry · E refine · Q/Esc"
+                "R retry · E refine · B/Q"
             ),
             wrap_lines=True,
         ),
@@ -1378,7 +1417,7 @@ def run_ground_shell(
     apply_error_panel = Frame(
         Window(
             FormattedTextControl(
-                "E refine · Q/Esc"
+                "E refine · B/Q"
             ),
             wrap_lines=True,
         ),
@@ -1434,7 +1473,7 @@ def run_ground_shell(
         ):
             return (
                 " CONTEXTS: Enter talk here    F edit selection    "
-                "Tab/Shift-Tab · pane"
+                "B · Grounds    Q · quit"
             )
         if status_message["value"]:
             return f" {status_message['value']}"
@@ -1442,21 +1481,21 @@ def run_ground_shell(
             tail = (
                 "A · exact approval"
                 if active_mode == "APPROVAL"
-                else "Tab/Shift-Tab · pane"
+                else "Enter · talk here"
             )
             if memory_view["value"] == "TABLE":
                 return (
                     " MEMORIES · TABLE: ↑/↓ row · ←/→ column · "
-                    f"V · list    Enter · talk here    {tail}"
+                    f"V · list    {tail}    B · Grounds    Q · quit"
                 )
             return (
                 " MEMORIES · LIST: ↑/↓ scroll · V · table    "
-                f"Enter · talk here    {tail}"
+                f"{tail}    B · Grounds    Q · quit"
             )
         if active_mode == "INTERPRETING":
             return (
                 f" Thinking{current_thinking_suffix()} · ranking Context "
-                "names; Current stays local    Esc / Ctrl-C · cancel"
+                "names; Current stays local    B · Grounds    Q · quit"
             )
         if (
             active_mode in {"INPUT", "CONTEXT_SELECTION"}
@@ -1466,13 +1505,13 @@ def run_ground_shell(
         ):
             return (
                 " CONTEXTS: ↑/↓ move · Space select · F finish · "
-                "N exact new name · Enter talk"
+                "P direct tree · N exact name · B Grounds · Q quit"
             )
         if active_mode in {"INPUT", "CONTEXT_SELECTION"}:
             if input_focused:
                 return (
                     " Enter · send    Ctrl-J · newline    "
-                    "Tab/Shift-Tab · pane    PgUp/PgDn · scroll"
+                    "Tab · panes (B Grounds · Q quit)"
                 )
             if (
                 active_mode == "INPUT"
@@ -1480,12 +1519,11 @@ def run_ground_shell(
             ):
                 return (
                     " Enter · talk here    E · edit Goal    "
-                    "Tab/Shift-Tab · pane    PgUp/PgDn · scroll"
+                    "B · Grounds    Q · quit"
                 )
             return (
                 " Enter · talk in this pane    C · same action    "
-                "Tab/Shift-Tab · pane    "
-                "PgUp/PgDn · scroll"
+                "B · Grounds    Q · quit"
             )
         if active_mode == "APPROVAL":
             row = context_cursor_row()
@@ -1497,9 +1535,12 @@ def run_ground_shell(
             ):
                 return (
                     " CONTEXTS: N · add a local NOT CREATED name    "
-                    "A remains exact approval"
+                    "A approve · B Grounds · Q quit"
                 )
-            return " No command runs without A · exact approval"
+            return (
+                " No command runs without A · exact approval    "
+                "B · Grounds    Q · quit"
+            )
         if active_mode == "APPLY_ERROR":
             return " The exact command will not be applied again"
         return " The failed interpretation cannot change Ground state"
@@ -1657,6 +1698,7 @@ def run_ground_shell(
             selected_context_names=selected_context_names["value"],
             local_new_context_name=local_new_context_name["value"],
             selection_finished=context_selection_finished["value"],
+            direct_context_names=context_catalog_names,
         )
         contexts_pane.set_text(
             rendered,
@@ -1786,6 +1828,17 @@ def run_ground_shell(
         new_context_suggestions["value"] = frozen_new_contexts
         rule_drafts["value"] = frozen_rule_drafts
         memory_drafts["value"] = frozen_memory_drafts
+        # Discovery completion is itself new Context information, even when
+        # it reports no candidate. Rule/Memory badges appear only when the
+        # provider produced reviewable previews; Chat always received a new
+        # response. A proposed creation also changes the visible Goal state.
+        mark_pane_updates("CONTEXTS", "CHAT")
+        if frozen_rule_drafts:
+            mark_pane_updates("RULES")
+        if frozen_memory_drafts:
+            mark_pane_updates("MEMORIES")
+        if kind != "ASK":
+            mark_pane_updates("GOAL")
         selected_memory_index["value"] = 0
         selected_memory_column["value"] = 0
         reset_context_candidate_cursor()
@@ -1868,6 +1921,7 @@ def run_ground_shell(
             f"{type(error).__name__}: {error}"
         )
         status_message["value"] = ""
+        mark_pane_updates("CONTEXTS", "CHAT")
         mode["value"] = "ERROR"
         sync_input_host()
         sync_panes(dialogue_anchor="end")
@@ -2062,6 +2116,7 @@ def run_ground_shell(
     ) -> None:
         if mode["value"] not in {"INPUT", "CONTEXT_SELECTION"}:
             return
+        acknowledge_pane(target)
         if target == "CHAT":
             # Chat already contains the ordinary Message field. Entering it
             # changes focus only and adds no synthetic FOCUS marker.
@@ -2181,6 +2236,7 @@ def run_ground_shell(
     def open_inline_context(*, prefill: str) -> None:
         if mode["value"] not in {"INPUT", "CONTEXT_SELECTION"}:
             return
+        acknowledge_pane("CONTEXTS")
         inline_context_original["value"] = prefill
         suspended_message["value"] = input_area.text
         input_area.text = ""
@@ -2265,6 +2321,7 @@ def run_ground_shell(
     def open_inline_goal() -> None:
         if mode["value"] != "INPUT":
             return
+        acknowledge_pane("GOAL")
         original = editable_goal["value"]
         inline_goal_original["value"] = original
         suspended_message["value"] = input_area.text
@@ -2368,9 +2425,6 @@ def run_ground_shell(
     action_mode = Condition(
         lambda: mode["value"] in {"APPROVAL", "ERROR", "APPLY_ERROR"}
     )
-    context_selection_action = (
-        context_selection_mode & ~has_focus(input_area) & ~inline_edit_mode
-    )
     read_panes = (
         goal_pane.text_area,
         contexts_pane.text_area,
@@ -2397,6 +2451,20 @@ def run_ground_shell(
         has_focus(direct_edit_area) | has_focus(input_area)
     )
     focus_order = (input_area, *read_panes)
+    focus_layers = {
+        id(input_area): "CHAT",
+        id(goal_pane.text_area): "GOAL",
+        id(contexts_pane.text_area): "CONTEXTS",
+        id(rules_pane.text_area): "RULES",
+        id(cases_pane.text_area): "MEMORIES",
+        id(dialogue_pane.text_area): "CHAT",
+    }
+
+    def acknowledge_focused_read_pane() -> None:
+        for pane in read_panes:
+            if application.layout.has_focus(pane):
+                acknowledge_pane(focus_layers[id(pane)])
+                return
     context_candidate_focus = (
         navigation_mode
         & has_focus(contexts_pane.text_area)
@@ -2433,9 +2501,9 @@ def run_ground_shell(
             ),
             0,
         )
-        application.layout.focus(
-            focus_order[(current_index + step) % len(focus_order)]
-        )
+        target = focus_order[(current_index + step) % len(focus_order)]
+        application.layout.focus(target)
+        acknowledge_pane(focus_layers[id(target)])
         application.invalidate()
 
     def cycle_read_focus(step: int) -> None:
@@ -2447,9 +2515,9 @@ def run_ground_shell(
             ),
             len(read_panes) - 1,
         )
-        application.layout.focus(
-            read_panes[(current_index + step) % len(read_panes)]
-        )
+        target = read_panes[(current_index + step) % len(read_panes)]
+        application.layout.focus(target)
+        acknowledge_pane(focus_layers[id(target)])
         application.invalidate()
 
     @bindings.add("tab", filter=navigation_mode, eager=True)
@@ -2491,10 +2559,12 @@ def run_ground_shell(
 
     @bindings.add(Keys.PageDown, filter=read_pane_focus, eager=True)
     def _page_down(event) -> None:
+        acknowledge_focused_read_pane()
         scroll_wrapped_page(event, direction=1)
 
     @bindings.add(Keys.PageUp, filter=read_pane_focus, eager=True)
     def _page_up(event) -> None:
+        acknowledge_focused_read_pane()
         scroll_wrapped_page(event, direction=-1)
 
     def focused_comment_target() -> tuple[str, str] | None:
@@ -2525,6 +2595,7 @@ def run_ground_shell(
     def toggle_memory_view() -> None:
         if not memory_drafts["value"]:
             return
+        acknowledge_pane("MEMORIES")
         if memory_view["value"] == "LIST":
             selected_memory_index["value"] = (
                 cases_pane.text_area.buffer.document.cursor_position_row
@@ -2536,6 +2607,7 @@ def run_ground_shell(
         application.invalidate()
 
     def move_memory_table_cell(*, row_step: int = 0, column_step: int = 0) -> None:
+        acknowledge_pane("MEMORIES")
         row, column = clamp_table_position(
             row_count=len(memory_drafts["value"]),
             column_count=len(_BLANK_MEMORY_TABLE_COLUMNS),
@@ -2571,6 +2643,7 @@ def run_ground_shell(
         candidates = ordered_context_rows()
         if not candidates:
             return
+        acknowledge_pane("CONTEXTS")
         context_candidate_index["value"] = max(
             0,
             min(
@@ -2591,6 +2664,7 @@ def run_ground_shell(
 
     @bindings.add(" ", filter=context_candidate_focus, eager=True)
     def _toggle_context_candidate(event) -> None:
+        acknowledge_pane("CONTEXTS")
         row = context_cursor_row()
         if row is None:
             return
@@ -2599,8 +2673,12 @@ def run_ground_shell(
                 "Press F to continue without a Context plan."
                 if row.kind == "CONTINUE_EMPTY"
                 else (
+                    "Press P to open the direct ordinary Context tree."
+                    if row.kind == "DIRECT_PICK"
+                else (
                     "Press N to edit this new Context name; Space "
                     "selects existing Contexts only."
+                )
                 )
             )
             event.app.invalidate()
@@ -2621,6 +2699,44 @@ def run_ground_shell(
         )
         event.app.invalidate()
 
+    @bindings.add("p", filter=context_candidate_focus, eager=True)
+    @bindings.add("P", filter=context_candidate_focus, eager=True)
+    def _direct_context_picker(event) -> None:
+        if not context_catalog_names:
+            status_message["value"] = "No ordinary Context names are available."
+            event.app.invalidate()
+            return
+
+        async def choose() -> None:
+            selected = selected_context_names["value"]
+            result = await run_in_terminal(
+                lambda: choose_context(
+                    tuple(context_catalog_names),
+                    current=(
+                        selected[-1]
+                        if selected and selected[-1] in context_catalog_names
+                        else current_context_name
+                    ),
+                    app_input=app_input,
+                    app_output=app_output,
+                    require_tty=require_tty,
+                )
+            )
+            if result is None:
+                status_message["value"] = "Direct Context selection cancelled."
+            else:
+                names = list(selected_context_names["value"])
+                if result not in names:
+                    names.append(result)
+                selected_context_names["value"] = tuple(names)
+                status_message["value"] = (
+                    f"{len(names)} Context(s) selected locally · NOT BOUND."
+                )
+                sync_contexts_pane(align_candidate=True)
+            application.invalidate()
+
+        event.app.create_background_task(choose())
+
     @bindings.add("n", filter=context_candidate_focus, eager=True)
     def _edit_context_name_plan(event) -> None:
         row = context_cursor_row()
@@ -2640,6 +2756,7 @@ def run_ground_shell(
 
     @bindings.add("f", filter=context_candidate_focus, eager=True)
     def _finish_context_selection(_event) -> None:
+        acknowledge_pane("CONTEXTS")
         row = context_cursor_row()
         if row is not None and row.kind == "CONTINUE_EMPTY":
             local_new_context_name["value"] = ""
@@ -2740,6 +2857,7 @@ def run_ground_shell(
             event.app.invalidate()
             return
         status_message["value"] = ""
+        acknowledge_pane("CHAT")
         last_submission["value"] = text
         input_area.text = ""
         begin_interpretation(text, append_user=True)
@@ -2792,6 +2910,7 @@ def run_ground_shell(
                 )
             )
             error_message["value"] = ""
+            mark_pane_updates("CHAT")
             mode["value"] = "APPLY_ERROR"
             sync_panes(dialogue_anchor="end")
             focus_conversation()
@@ -2815,6 +2934,7 @@ def run_ground_shell(
     def _show_command(event) -> None:
         if mode["value"] != "APPROVAL":
             return
+        acknowledge_pane("CHAT")
         review_view["value"] = "COMMAND"
         sync_panes(dialogue_anchor="end")
         event.app.invalidate()
@@ -2824,6 +2944,7 @@ def run_ground_shell(
     def _show_effects(event) -> None:
         if mode["value"] != "APPROVAL":
             return
+        acknowledge_pane("CHAT")
         review_view["value"] = "EFFECTS"
         sync_panes(dialogue_anchor="end")
         event.app.invalidate()
@@ -2910,9 +3031,20 @@ def run_ground_shell(
             )
         )
 
-    @bindings.add("q", filter=action_mode, eager=True)
-    @bindings.add("q", filter=context_selection_action, eager=True)
-    def _cancel_from_action(event) -> None:
+    @bindings.add("b", filter=read_pane_focus, eager=True)
+    def _back_to_picker(event) -> None:
+        # This navigation result never carries or applies the pending Ground
+        # creation receipt. The caller must rediscover the saved catalog.
+        shell_closed["value"] = True
+        event.app.exit(
+            result=GroundShellResult(
+                status="BACK_TO_PICKER",
+                submitted_turns=tuple(submitted_turns),
+            )
+        )
+
+    @bindings.add("q", filter=read_pane_focus, eager=True)
+    def _quit_ground(event) -> None:
         cancel(event)
 
     @bindings.add("escape", eager=True)

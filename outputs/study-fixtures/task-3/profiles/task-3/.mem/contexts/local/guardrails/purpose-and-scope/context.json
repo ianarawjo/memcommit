@@ -1,0 +1,56 @@
+{
+  "uid": "900828d4-48ca-5a05-9807-620165233930",
+  "name": "local/guardrails/purpose-and-scope",
+  "memories": {
+    "c971c24d-2543-5874-91e3-b97aec8bc77a": {
+      "type": "memory",
+      "uid": "c971c24d-2543-5874-91e3-b97aec8bc77a",
+      "content": "Include only Memories needed for the current sharing purpose confirmed by the user."
+    },
+    "3d3749df-7036-548b-b939-7b6b32c79af6": {
+      "type": "memory",
+      "uid": "3d3749df-7036-548b-b939-7b6b32c79af6",
+      "content": "Do not reuse a Memory approved once for a different purpose."
+    },
+    "75944d44-d6e7-52fc-a68a-676b0df123ed": {
+      "type": "memory",
+      "uid": "75944d44-d6e7-52fc-a68a-676b0df123ed",
+      "content": "Exclude details not needed for the current purpose from the sharing candidate."
+    },
+    "78bba4e2-c5d0-5df3-8f81-6641515e4875": {
+      "type": "memory",
+      "uid": "78bba4e2-c5d0-5df3-8f81-6641515e4875",
+      "content": "If the sharing purpose is not specific, ask the user to clarify it before creating candidates."
+    },
+    "e0133c8a-5382-50d2-9d9a-74e3ff700f69": {
+      "type": "memory",
+      "uid": "e0133c8a-5382-50d2-9d9a-74e3ff700f69",
+      "content": "The recipient scope of sharing approval is limited to the reviewed recipients."
+    },
+    "58850532-c154-5e64-87cb-91c81d3e5ca5": {
+      "type": "memory",
+      "uid": "58850532-c154-5e64-87cb-91c81d3e5ca5",
+      "content": "The purpose scope of sharing approval is limited to the reviewed purposes."
+    },
+    "05953013-6bb7-5f2c-8024-23ef357161fa": {
+      "type": "memory",
+      "uid": "05953013-6bb7-5f2c-8024-23ef357161fa",
+      "content": "The item scope of sharing approval is limited to the reviewed items."
+    },
+    "b5618dee-42df-583f-a839-e8e611ccdabd": {
+      "type": "memory",
+      "uid": "b5618dee-42df-583f-a839-e8e611ccdabd",
+      "content": "Unless a separate restriction is conveyed, a receiving agent may judge that it is free to use received material within the requested scope."
+    }
+  },
+  "order": [
+    "c971c24d-2543-5874-91e3-b97aec8bc77a",
+    "3d3749df-7036-548b-b939-7b6b32c79af6",
+    "75944d44-d6e7-52fc-a68a-676b0df123ed",
+    "78bba4e2-c5d0-5df3-8f81-6641515e4875",
+    "e0133c8a-5382-50d2-9d9a-74e3ff700f69",
+    "58850532-c154-5e64-87cb-91c81d3e5ca5",
+    "05953013-6bb7-5f2c-8024-23ef357161fa",
+    "b5618dee-42df-583f-a839-e8e611ccdabd"
+  ]
+}

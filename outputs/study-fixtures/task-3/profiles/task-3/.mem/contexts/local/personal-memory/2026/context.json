@@ -1,0 +1,44 @@
+{
+  "uid": "03415050-dcfb-519c-8666-1b35d3d84253",
+  "name": "local/personal-memory/2026",
+  "memories": {
+    "e48e6eac-20f7-599d-9f76-4238bd9dd96d": {
+      "type": "context_ref",
+      "uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+      "name": "local/personal-memory/2026/01"
+    },
+    "7ffcbc10-1703-54b0-9545-99742b51d333": {
+      "type": "context_ref",
+      "uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+      "name": "local/personal-memory/2026/02"
+    },
+    "97d36150-4792-5a5c-9332-5eb1de8bcf04": {
+      "type": "context_ref",
+      "uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+      "name": "local/personal-memory/2026/03"
+    },
+    "16e860a8-7a90-5b7a-adc3-1c487ef97e03": {
+      "type": "context_ref",
+      "uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+      "name": "local/personal-memory/2026/04"
+    },
+    "fd476504-4d4e-54d9-80b8-3dc2b18555d8": {
+      "type": "context_ref",
+      "uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+      "name": "local/personal-memory/2026/05"
+    },
+    "f2e6c2e0-886a-52d8-98d4-03009ea37991": {
+      "type": "context_ref",
+      "uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+      "name": "local/personal-memory/2026/06"
+    }
+  },
+  "order": [
+    "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+    "7ffcbc10-1703-54b0-9545-99742b51d333",
+    "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+    "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+    "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+    "f2e6c2e0-886a-52d8-98d4-03009ea37991"
+  ]
+}

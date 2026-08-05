@@ -1,0 +1,17 @@
+{
+  "kind": "memcommit.semantic-eval.composite-corpus-lock",
+  "schema_version": 1,
+  "operation": "operation-gates",
+  "corpus_role": "CALIBRATION",
+  "base_fixture": "operation_gates.json",
+  "base_fixture_sha256": "ec580a4fe3ef8c158997930c413a813a2df790e58bb383d21fff62e92f865a91",
+  "extension_fixture": "operation_gates_v2.json",
+  "extension_fixture_sha256": "c1116cd7b3f3b0441d1eea8d47d2b653025a51d26c696e0b92e0865f628c3222",
+  "composite_sha256": "241cf4c1f2224e35f5e886da3ef7b8d734f241aa962e17157c3f99ba660ab0dd",
+  "case_count": 75,
+  "base_case_count": 37,
+  "case_limit": 200,
+  "frozen_at": "2026-08-03T21:22:46Z",
+  "independent_holdout": false,
+  "consumed_during_optimization": true
+}

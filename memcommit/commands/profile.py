@@ -334,7 +334,7 @@ def grant_create_cmd(
             help=(
                 "Permission to grant; repeat CREATE, READ, UPDATE/EDIT, "
                 "DELETE, QUERY, SESSION_LOG, DERIVE, COMBINE, EXPORT, "
-                "ACCEPT_DERIVED, SAVE_BOUND_ANALYSIS, or SAVE_ANALYSIS"
+                "ACCEPT_DERIVED, SAVE_BOUND_ANALYSIS, SAVE_ANALYSIS, or SHARE"
             ),
         ),
     ],
@@ -350,7 +350,7 @@ def grant_create_cmd(
         ),
     ] = False,
 ) -> None:
-    """Grant one frozen ordinary Context-tree view to another Profile."""
+    """Grant a frozen Context view or SHARE delivery endpoint."""
 
     try:
         registry, grant = create_authority_grant(

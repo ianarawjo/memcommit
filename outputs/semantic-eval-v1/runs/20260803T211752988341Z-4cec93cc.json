@@ -1,0 +1,1239 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "label": "PRESERVED"
+      },
+      "case_id": "translate-short-preserved",
+      "completion_seconds": 1.1295947502367198,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "PRESERVED"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "translate",
+      "ordinal": 1,
+      "prompt_digest": "8c262646d7f4b01bac05281700b869ba6d7471300849c7e6862463a0378c1c71",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 935,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"PRESERVED\",\n  \"source_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "a01da667bc4459fb3da63b57d7228c501783557d1288784b380badf09f0eba98",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "LOSSY"
+      },
+      "case_id": "translate-short-lossy",
+      "completion_seconds": 1.0843892497941852,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "LOSSY"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "translate",
+      "ordinal": 2,
+      "prompt_digest": "55a9eabfd86ec09a15dc312a48ff913c59b22708da0f47c06589f706c20de809",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 935,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"LOSSY\",\n  \"source_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "b578c9204d0022fdd91312e0f5b380214f2021eb207d7a099e823ed461f5ce54",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "CONTRADICTED"
+      },
+      "case_id": "translate-short-contradicted",
+      "completion_seconds": 1.131979875266552,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "CONTRADICTED"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "translate",
+      "ordinal": 3,
+      "prompt_digest": "43d1fad8a88fb22d1050aaf10c9ed141686322a57e00bbbe2960716c2c985bfe",
+      "provider_run": {
+        "completion_tokens": 28,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 932,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"CONTRADICTED\",\n  \"source_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 73,
+      "response_digest": "c24136624f0740fba77babab85fbf14326fc86432fd5c1eb273558764902bc38",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "PRESERVED"
+      },
+      "case_id": "translate-long-task1",
+      "completion_seconds": 1.0962788332253695,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "PRESERVED"
+      },
+      "failure_category": null,
+      "length_tier": "LONG",
+      "operation": "translate",
+      "ordinal": 4,
+      "prompt_digest": "594e4b38ce2bc80749ca20a42a1abb30c9f7240f4648738777c81a7b2db67bb0",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 935,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"PRESERVED\",\n  \"source_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "a01da667bc4459fb3da63b57d7228c501783557d1288784b380badf09f0eba98",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "EQUIVALENT"
+      },
+      "case_id": "compare-short-equivalent",
+      "completion_seconds": 1.1339029157534242,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "EQUIVALENT"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "compare",
+      "ordinal": 5,
+      "prompt_digest": "58de0a7ef190231cc464c50b57a57ad165e30e1d2675b9b12cb00dfaa96c184b",
+      "provider_run": {
+        "completion_tokens": 28,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 922,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"EQUIVALENT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "bbc5933e5fb4edf1ad3fa9fdb886a527f56806a060bb1da5f1ce9de0192e26fa",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "COMPATIBLE"
+      },
+      "case_id": "compare-short-compatible",
+      "completion_seconds": 1.1045917081646621,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "COMPATIBLE"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "compare",
+      "ordinal": 6,
+      "prompt_digest": "7e195aba27aac3def81d9bc3299c34c9cb140ec36d548c99fe1e6338daa607a7",
+      "provider_run": {
+        "completion_tokens": 26,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 924,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"COMPATIBLE\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "90d271155e68a1eb69d987c0e24a23be01db321b89a4374f472e18b0ec40b3c6",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "DISTINCT"
+      },
+      "case_id": "compare-short-distinct",
+      "completion_seconds": 1.0938668749295175,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "DISTINCT"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "compare",
+      "ordinal": 7,
+      "prompt_digest": "5b8d6322897c9df09ca0bc9644fc9997d22b6c42db007a8997f9b3b9477a83c6",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 925,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"DISTINCT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 68,
+      "response_digest": "5c42da735949ab082c22f29e74d019a27deda9d6919783e4c30c87d8f7b4a631",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 3
+    },
+    {
+      "actual": {
+        "label": "EQUIVALENT"
+      },
+      "case_id": "compare-long-task2",
+      "completion_seconds": 1.1799922920763493,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "EQUIVALENT"
+      },
+      "failure_category": null,
+      "length_tier": "LONG",
+      "operation": "compare",
+      "ordinal": 8,
+      "prompt_digest": "83c00785c9da61f407f9ba779c03d42e4dfe48c4a4fe4a802445b4190db892c3",
+      "provider_run": {
+        "completion_tokens": 28,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 922,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"EQUIVALENT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "bbc5933e5fb4edf1ad3fa9fdb886a527f56806a060bb1da5f1ce9de0192e26fa",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "EQUIVALENT"
+      },
+      "case_id": "meld-short-equivalent",
+      "completion_seconds": 1.1159610827453434,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "EQUIVALENT"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "meld",
+      "ordinal": 9,
+      "prompt_digest": "e1d4cd82d92ebd34a84d4768fb62206ab3f6342ac135ee6cb330c1cceac02f52",
+      "provider_run": {
+        "completion_tokens": 28,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 875,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"EQUIVALENT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "bbc5933e5fb4edf1ad3fa9fdb886a527f56806a060bb1da5f1ce9de0192e26fa",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "CONFLICT"
+      },
+      "case_id": "meld-short-conflict",
+      "completion_seconds": 1.0704000419937074,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "CONFLICT"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "meld",
+      "ordinal": 10,
+      "prompt_digest": "366bdf3ec140c72a1d5e78f4a1dba17216c0d887b482bcbf15abf8410f237f4f",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 878,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"CONFLICT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 68,
+      "response_digest": "86eaf7f72b04c741e1d0d790c13ea14fa5ff988c8428526443e6a7d6d1fe032c",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "COMPATIBLE"
+      },
+      "case_id": "meld-short-compatible",
+      "completion_seconds": 1.0671093328855932,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "COMPATIBLE"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "meld",
+      "ordinal": 11,
+      "prompt_digest": "eaa6ea1e0731472452c20ed55d4bb0bc90465d7bd55593f6697bdcefaaab23a5",
+      "provider_run": {
+        "completion_tokens": 26,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 877,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"COMPATIBLE\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "90d271155e68a1eb69d987c0e24a23be01db321b89a4374f472e18b0ec40b3c6",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "EQUIVALENT"
+      },
+      "case_id": "meld-long-task2",
+      "completion_seconds": 1.1360343326814473,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "EQUIVALENT"
+      },
+      "failure_category": null,
+      "length_tier": "LONG",
+      "operation": "meld",
+      "ordinal": 12,
+      "prompt_digest": "2e958fd4d33588dacc2433ad6aaea393ed14c28afb93ca2ef814e42a7040b9fe",
+      "provider_run": {
+        "completion_tokens": 28,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 875,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"EQUIVALENT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "bbc5933e5fb4edf1ad3fa9fdb886a527f56806a060bb1da5f1ce9de0192e26fa",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "PRESERVED"
+      },
+      "case_id": "translate-v2-preserved-modality",
+      "completion_seconds": 1.1577787906862795,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "PRESERVED"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "translate",
+      "ordinal": 13,
+      "prompt_digest": "006e8ec64f57447bb4ddafe57c9ae33910acf8c872d30e126ad14d3344e0732e",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 935,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"PRESERVED\",\n  \"source_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "a01da667bc4459fb3da63b57d7228c501783557d1288784b380badf09f0eba98",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "LOSSY"
+      },
+      "case_id": "translate-v2-lossy-time",
+      "completion_seconds": 1.0925664999522269,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "LOSSY"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "translate",
+      "ordinal": 14,
+      "prompt_digest": "b86f47fc3c78bc99b0222ac29fe09c662fa9460047dbd807cf083725cc934268",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 935,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"LOSSY\",\n  \"source_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "b578c9204d0022fdd91312e0f5b380214f2021eb207d7a099e823ed461f5ce54",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "CONTRADICTED"
+      },
+      "case_id": "translate-v2-contradicted-approval",
+      "completion_seconds": 1.1241871248930693,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "CONTRADICTED"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "translate",
+      "ordinal": 15,
+      "prompt_digest": "32aa076e1c6d3c7e729bdd13c6a43d68437f0e9e237a3d492a7cf39f608113d5",
+      "provider_run": {
+        "completion_tokens": 28,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 932,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"CONTRADICTED\",\n  \"source_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 73,
+      "response_digest": "c24136624f0740fba77babab85fbf14326fc86432fd5c1eb273558764902bc38",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 3
+    },
+    {
+      "actual": {
+        "label": "UNKNOWN"
+      },
+      "case_id": "translate-v2-unknown-source",
+      "completion_seconds": 1.143446832895279,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "UNKNOWN"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "translate",
+      "ordinal": 16,
+      "prompt_digest": "c44a67e00e4146f8a413c5fe1bbe1cecfde2eede6f2f5ec120608ac54e030e15",
+      "provider_run": {
+        "completion_tokens": 29,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 936,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"CONTRADICTED\",\n  \"source_resolution\": \"UNRESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 75,
+      "response_digest": "e79cdb582ba6a5b3344e6476668c94a6e3570c66a0e4a0b2a022df241629ee9f",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 3
+    },
+    {
+      "actual": {
+        "label": "LOSSY"
+      },
+      "case_id": "translate-v2-long-task3-lossy",
+      "completion_seconds": 1.084022041875869,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "LOSSY"
+      },
+      "failure_category": null,
+      "length_tier": "LONG",
+      "operation": "translate",
+      "ordinal": 17,
+      "prompt_digest": "6a092082bb6c6d6facdfe2d328491e5c5bfa16f26160f45e0bba1743565ed80c",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 935,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"LOSSY\",\n  \"source_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "b578c9204d0022fdd91312e0f5b380214f2021eb207d7a099e823ed461f5ce54",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 3
+    },
+    {
+      "actual": {
+        "label": "CONFLICT"
+      },
+      "case_id": "compare-v2-conflict-primary-question",
+      "completion_seconds": 1.0825676657259464,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "CONFLICT"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "compare",
+      "ordinal": 18,
+      "prompt_digest": "356fe8bbbd15cd790ff8afa62dc867d264bd08b12b3bc29fd79279a05ae55ec9",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 925,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"CONFLICT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 68,
+      "response_digest": "86eaf7f72b04c741e1d0d790c13ea14fa5ff988c8428526443e6a7d6d1fe032c",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "UNKNOWN"
+      },
+      "case_id": "compare-v2-unknown-referent",
+      "completion_seconds": 1.0792827080003917,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "UNKNOWN"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "compare",
+      "ordinal": 19,
+      "prompt_digest": "440ca1902accf2d5a77381792ce4e2a1693348e2ee7de792f6ec9530bf4b4f62",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 926,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"UNKNOWN\",\n  \"scope_resolution\": \"UNRESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 69,
+      "response_digest": "153cd4c5307a1213495ff45724c11efdd44e2a8c16fb0c1fb8286268c9a7b595",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "COMPATIBLE"
+      },
+      "case_id": "compare-v2-compatible-methods",
+      "completion_seconds": 1.08932995935902,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "COMPATIBLE"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "compare",
+      "ordinal": 20,
+      "prompt_digest": "309c2141bc3ed23ee15d5844f127ffeccfc87e86d0818438ab683220efef5434",
+      "provider_run": {
+        "completion_tokens": 26,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 924,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"COMPATIBLE\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "90d271155e68a1eb69d987c0e24a23be01db321b89a4374f472e18b0ec40b3c6",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "EQUIVALENT"
+      },
+      "case_id": "compare-v2-equivalent-hours",
+      "completion_seconds": 1.116514291614294,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "EQUIVALENT"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "compare",
+      "ordinal": 21,
+      "prompt_digest": "70415a0b670810d197339920001dd7d1c76e71b17d8c9710ae6b9059294441f0",
+      "provider_run": {
+        "completion_tokens": 28,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 922,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"EQUIVALENT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "bbc5933e5fb4edf1ad3fa9fdb886a527f56806a060bb1da5f1ce9de0192e26fa",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "DISTINCT"
+      },
+      "case_id": "compare-v2-long-task3-distinct",
+      "completion_seconds": 1.074138790834695,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "DISTINCT"
+      },
+      "failure_category": null,
+      "length_tier": "LONG",
+      "operation": "compare",
+      "ordinal": 22,
+      "prompt_digest": "fa9c1166430af29f15dc36c3a151ad9d5074f391b62594affab9fe0351aa36fa",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "compare semantic gate",
+        "prompt_tokens": 925,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"DISTINCT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 68,
+      "response_digest": "5c42da735949ab082c22f29e74d019a27deda9d6919783e4c30c87d8f7b4a631",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 3
+    },
+    {
+      "actual": {
+        "label": "DISTINCT"
+      },
+      "case_id": "meld-v2-distinct-domain",
+      "completion_seconds": 1.0517287501133978,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "DISTINCT"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "meld",
+      "ordinal": 23,
+      "prompt_digest": "7374b7584f4a0c736cbb7c90c71d276bae3be614979d745abf4cb393260b7052",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 878,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"DISTINCT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 68,
+      "response_digest": "5c42da735949ab082c22f29e74d019a27deda9d6919783e4c30c87d8f7b4a631",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 3
+    },
+    {
+      "actual": {
+        "label": "UNKNOWN"
+      },
+      "case_id": "meld-v2-unknown-entrance",
+      "completion_seconds": 1.0373424580320716,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "UNKNOWN"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "meld",
+      "ordinal": 24,
+      "prompt_digest": "e7801b9f573556b807b5cfaae2735485748d764267ef3dd09676b2e1191a0ac2",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 879,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"UNKNOWN\",\n  \"scope_resolution\": \"UNRESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 69,
+      "response_digest": "153cd4c5307a1213495ff45724c11efdd44e2a8c16fb0c1fb8286268c9a7b595",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "UNKNOWN"
+      },
+      "case_id": "meld-v2-unknown-desk",
+      "completion_seconds": 1.0369167500175536,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "UNKNOWN"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "meld",
+      "ordinal": 25,
+      "prompt_digest": "784f97605a3dbcc3fe4b512805a059db87ba9792b207e49fc833f5cb60b67169",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 879,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"UNKNOWN\",\n  \"scope_resolution\": \"UNRESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 69,
+      "response_digest": "153cd4c5307a1213495ff45724c11efdd44e2a8c16fb0c1fb8286268c9a7b595",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "CONFLICT"
+      },
+      "case_id": "meld-v2-long-task2-conflict",
+      "completion_seconds": 1.0416432502679527,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "CONFLICT"
+      },
+      "failure_category": null,
+      "length_tier": "LONG",
+      "operation": "meld",
+      "ordinal": 26,
+      "prompt_digest": "5d829d1535eb21a0195aecacc27c10cd6004d32de1dcd382f80b8d859a670518",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 878,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"CONFLICT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 68,
+      "response_digest": "86eaf7f72b04c741e1d0d790c13ea14fa5ff988c8428526443e6a7d6d1fe032c",
+      "schema_digest": "24e69f1b8eba0810e84c6ea625a77305e35f012fabf3af01b24b92edde1170d2",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    }
+  ],
+  "completed_at": "2026-08-03T21:18:21.583319Z",
+  "corpus": {
+    "base_case_count": 37,
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "case_limit": 200,
+    "fixture": "operation_gates_v2.json",
+    "fixture_case_count": 75,
+    "fixture_digest": "241cf4c1f2224e35f5e886da3ef7b8d734f241aa962e17157c3f99ba660ab0dd",
+    "independent_holdout": false,
+    "operation": "operation-gates",
+    "role": "CALIBRATION",
+    "ruleset_version": "operation-gates-v4-75-pilot",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "translate-short-preserved",
+      "translate-short-lossy",
+      "translate-short-contradicted",
+      "translate-long-task1",
+      "compare-short-equivalent",
+      "compare-short-compatible",
+      "compare-short-distinct",
+      "compare-long-task2",
+      "meld-short-equivalent",
+      "meld-short-conflict",
+      "meld-short-compatible",
+      "meld-long-task2",
+      "translate-v2-preserved-modality",
+      "translate-v2-lossy-time",
+      "translate-v2-contradicted-approval",
+      "translate-v2-unknown-source",
+      "translate-v2-long-task3-lossy",
+      "compare-v2-conflict-primary-question",
+      "compare-v2-unknown-referent",
+      "compare-v2-compatible-methods",
+      "compare-v2-equivalent-hours",
+      "compare-v2-long-task3-distinct",
+      "meld-v2-distinct-domain",
+      "meld-v2-unknown-entrance",
+      "meld-v2-unknown-desk",
+      "meld-v2-long-task2-conflict"
+    ],
+    "selected_layer": "ALL",
+    "selected_length_tiers": [
+      "LONG",
+      "SHORT"
+    ],
+    "selected_operations": [
+      "compare",
+      "meld",
+      "translate"
+    ],
+    "selected_tasks": [
+      1,
+      2,
+      3
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T211752988341Z-4cec93cc.json",
+  "pipeline": {
+    "gate": "exact operation label with leave-one-out calibration",
+    "id": "operation-gate-v1",
+    "stages": [
+      "SEMANTIC_GATE"
+    ],
+    "version": 1
+  },
+  "provider": {
+    "effective_thinking": false,
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen3.6:35b-a3b",
+    "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "provider": "ollama",
+    "reasoning_effort": null,
+    "runtime": "ollama/0.30.10"
+  },
+  "run_id": "20260803T211752988341Z-4cec93cc",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": 65536,
+      "max_output_tokens": 16384,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T21:17:52.988341Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 26,
+      "structurally_valid": 26,
+      "total": 26
+    },
+    "campaign_passed": true,
+    "case_results": [
+      {
+        "case_id": "translate-short-preserved",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "translate-short-lossy",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "translate-short-contradicted",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "translate-long-task1",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-short-equivalent",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-short-compatible",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-short-distinct",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-long-task2",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-short-equivalent",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-short-conflict",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-short-compatible",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-long-task2",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "translate-v2-preserved-modality",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "translate-v2-lossy-time",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "translate-v2-contradicted-approval",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "translate-v2-unknown-source",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "translate-v2-long-task3-lossy",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-v2-conflict-primary-question",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-v2-unknown-referent",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-v2-compatible-methods",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-v2-equivalent-hours",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "compare-v2-long-task3-distinct",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-v2-distinct-domain",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-v2-unknown-entrance",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-v2-unknown-desk",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-v2-long-task2-conflict",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      }
+    ],
+    "cases": {
+      "failed": 0,
+      "passed": 26,
+      "total": 26
+    },
+    "completion_seconds": {
+      "max": 1.1799922920763493,
+      "mean": 1.0982910463084967,
+      "median": 1.0932166874408722,
+      "p95": 1.1577787906862795
+    },
+    "distributions": {
+      "by_length_tier": {
+        "LONG": {
+          "passed": 6,
+          "total": 6
+        },
+        "SHORT": {
+          "passed": 20,
+          "total": 20
+        }
+      },
+      "by_operation": {
+        "compare": {
+          "passed": 9,
+          "total": 9
+        },
+        "meld": {
+          "passed": 8,
+          "total": 8
+        },
+        "translate": {
+          "passed": 9,
+          "total": 9
+        }
+      },
+      "by_task": {
+        "task-1": {
+          "passed": 10,
+          "total": 10
+        },
+        "task-2": {
+          "passed": 10,
+          "total": 10
+        },
+        "task-3": {
+          "passed": 6,
+          "total": 6
+        }
+      },
+      "expected_label": {
+        "COMPATIBLE": 3,
+        "CONFLICT": 3,
+        "CONTRADICTED": 2,
+        "DISTINCT": 3,
+        "EQUIVALENT": 5,
+        "LOSSY": 3,
+        "PRESERVED": 3,
+        "UNKNOWN": 4
+      }
+    },
+    "failures": {},
+    "operation_completion_seconds": {
+      "compare": {
+        "max": 1.1799922920763493,
+        "mean": 1.106020800717589,
+        "median": 1.0938668749295175,
+        "p95": 1.1799922920763493
+      },
+      "meld": {
+        "max": 1.1360343326814473,
+        "mean": 1.0696419998421334,
+        "median": 1.0594190414994955,
+        "p95": 1.1360343326814473
+      },
+      "translate": {
+        "max": 1.1577787906862795,
+        "mean": 1.1160271109806166,
+        "median": 1.1241871248930693,
+        "p95": 1.1577787906862795
+      }
+    },
+    "stage_completion_seconds": {
+      "SEMANTIC_GATE": {
+        "max": 1.1799922920763493,
+        "mean": 1.0982910463084967,
+        "median": 1.0932166874408722,
+        "p95": 1.1577787906862795
+      }
+    }
+  },
+  "timing": {
+    "campaign_seconds": 28.594780291896313,
+    "provider_connection_seconds": 0.015230792108923197,
+    "total_seconds": 28.610011084005237
+  }
+}

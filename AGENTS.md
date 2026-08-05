@@ -117,7 +117,11 @@ boundary and the agent as the conversational orchestrator.
   selections. Selection order makes the first checked existing name the local
   Main and later names additional hints. Finishing the picker collapses it to
   selected existing names plus any separate `NOT CREATED` name plan. This
-  state must not load or validate an existing Context, switch to one, transmit
+  picker also renders `DIRECT SELECT · P` below provider-ranked suggestions.
+  `P` opens the same name-only namespace tree as `mem switch`; its choice may
+  join the process-local existing-name plan, but must not open Context records,
+  bind anything, or enter the Ground-creation argv. This state must not load or
+  validate an existing Context, switch to one, transmit
   it, or persist it; validating a proposed new name's syntax and read-only
   creatability does not create or bind it. Existing selections may continue
   process-locally into the newly created named-Ground view as visible
@@ -160,6 +164,12 @@ boundary and the agent as the conversational orchestrator.
   before proposing durable Rules or Ground Memories; read-only first-turn
   previews do not relax this boundary. Never infer binding from the current
   directory or current Context.
+  `P` on Contexts, Rules, or Memories opens the same Context namespace tree.
+  Before binding it uses only the frozen name catalog; after binding it is
+  restricted to the frozen publication and placement target frames. The
+  choice changes only the next reviewed BIND, Rule, or Ground Memory proposal.
+  Newly proposed Rules retain their selected target UIDs; legacy Rules with
+  empty target lists remain readable.
 - A named-Ground semantic turn may send the saved Goal, Rules, Ground
   Memories, local item aliases, revision, and bound Context names to the
   provider. It must not load or send live Context projections, durable UIDs,
@@ -217,6 +227,14 @@ boundary and the agent as the conversational orchestrator.
   read-only Goal, Contexts, Rules, Memories, and Chat panes. The Message
   composer must remain unavailable, and browsing must not alter or imply
   approval of the frozen argv.
+- In a collapsed read pane, `B` leaves the current Ground view and opens a
+  freshly discovered saved-Ground picker; `Q` leaves `mem ground` entirely.
+  Neither key applies a pending exact command, and returning with `B` must
+  refresh identities, revisions, digests, and ordering before another Ground
+  can open. Lowercase `b` and `q` remain ordinary text in Message, pane
+  comments, direct edits, and exact-name fields, so a person starts from the
+  general composer with `Tab` before using either navigation key. `C` remains
+  the pane-comment compatibility alias and `Ctrl-C` remains immediate exit.
 - In normal input mode, Chat always contains the general `MESSAGE` composer
   inside its own outer frame. `Enter` on Goal, Contexts, Rules, or Memories
   moves that same buffer into the focused pane and displays it there as

@@ -2,10 +2,12 @@
 
 ## Decision
 
-Cross-Profile access is a permissioned **view**, not a fork, merge, copy, or
-embedded Context. Ordinary source data remains physically owned by one
-switchable authority Profile. A task Profile receives a registry grant that
-projects a public Context path into one existing task Context.
+Cross-Profile authority is expressed as a registry capability grant. Ordinary
+source access remains a permissioned **view**, not a fork, merge, copy, or
+embedded Context: source data stays physically owned by one switchable
+authority Profile and a task Profile receives a public projection. A `SHARE`
+grant is the deliberate asymmetric exception: its public name is a write-only
+delivery endpoint and an approved consent unit becomes a receiver-owned copy.
 
 ```text
 task Profile                         task-specific authority Profile
@@ -27,7 +29,8 @@ The registry control plane stores each grant's stable UUID and revision,
 authority and grantee Profile UIDs, attachment Context UID and name, authority
 root Context UID and name, public path, permissions, and a frozen allowlist of
 exact authority Context UID/name pairs. Context data and checkpoints are not
-copied into the registry or grantee store.
+copied into the registry or grantee store. `SHARE` payloads are written only to
+the authority-owned receiver store; the registry remains capability metadata.
 
 ## Permission contract
 
@@ -41,6 +44,7 @@ Permissions are independent capabilities:
 | `DELETE` | remove a direct item; requires `READ` |
 | `QUERY` | browse opaque Memory shapes/handles and ask a provider without reading source text |
 | `SESSION_LOG` | retain and replay visible query Q/A; requires `QUERY` |
+| `SHARE` | deliver one unchanged applied Sever output as a receiver-owned consent unit; grants no receiver read access |
 
 These permissions currently govern direct items inside existing Contexts.
 They do not delegate Context lifecycle operations such as `init`, `rename`,
@@ -96,7 +100,7 @@ each newly initialized run.
 | --- | --- | --- | --- |
 | 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE+DELETE+QUERY`; nested details `QUERY+SESSION_LOG` |
 | 2 | `participant/proposal-workspace` | `task-2-proposal-authority`: `advisor1`, `advisor2`, submission guidelines | advisors `READ`; guidelines `QUERY+SESSION_LOG` |
-| 3 | `personal-memory` | `task-3-healthcare-authority`: `guardrails`, healthcare information guidance | guardrails `READ`; information request `QUERY+SESSION_LOG` |
+| 3 | `local/personal-memory`, `local/guardrails` | `task-3-healthcare-authority`: `remote/government/healthcare-agent/info-request/official-guidance`, `questions-and-answers` | healthcare agent `SHARE`; official guidance `READ+DERIVE+COMBINE+EXPORT+SAVE_BOUND_ANALYSIS+SAVE_ANALYSIS`; questions-and-answers `QUERY+SESSION_LOG` |
 
 `task-1-campus-authority` is intentionally task-specific. A future shared
 campus authority may be appropriate for a different experiment, but this

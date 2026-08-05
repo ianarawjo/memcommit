@@ -1,0 +1,20 @@
+{
+  "uid": "8bb25b60-a255-5642-a8d6-5d218c7f3627",
+  "name": "remote/government/healthcare-agent/info-request",
+  "memories": {
+    "30a315bc-6e51-520c-877a-6db163e4c6a5": {
+      "type": "context_ref",
+      "uid": "30a315bc-6e51-520c-877a-6db163e4c6a5",
+      "name": "remote/government/healthcare-agent/info-request/official-guidance"
+    },
+    "5f7d5077-b48e-57ea-970c-7f605d91906a": {
+      "type": "context_ref",
+      "uid": "5f7d5077-b48e-57ea-970c-7f605d91906a",
+      "name": "remote/government/healthcare-agent/info-request/questions-and-answers"
+    }
+  },
+  "order": [
+    "30a315bc-6e51-520c-877a-6db163e4c6a5",
+    "5f7d5077-b48e-57ea-970c-7f605d91906a"
+  ]
+}

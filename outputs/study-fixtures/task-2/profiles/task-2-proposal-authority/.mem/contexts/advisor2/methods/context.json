@@ -35,7 +35,7 @@
     "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d": {
       "type": "memory",
       "uid": "251a4b3c-58fd-5d66-b5bc-74dcbeaa7a0d",
-      "content": "This advisor cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost."
+      "content": "Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost."
     },
     "f150891e-7635-5c35-b986-d369bc630ef4": {
       "type": "memory",

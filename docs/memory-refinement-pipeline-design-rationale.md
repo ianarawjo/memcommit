@@ -138,11 +138,14 @@ and checkpoints. A single `clean up everything` command would make it hard to
 tell whether a Memory disappeared because it was a duplicate, was classified
 for an audience, was normalized, or was moved to another category.
 
-## `mem ingest` as a pipeline orchestrator
+## Future `mem ingest` as a pipeline orchestrator
 
 `mem add` remains the low-level intake operation: it stores one Memory or a
 batch of raw line-based Memory candidates and stops. The working design for
-`mem ingest` is a higher-level envelope around the refinement pipeline:
+`mem ingest` is a proposed higher-level envelope around the refinement pipeline.
+The `mem import` name now belongs to identity-preserving Profile, Context, and
+Memory resource transfer, whose history and authority boundaries are documented
+separately:
 
 ```text
 source intake
@@ -490,7 +493,7 @@ important than final CLI spelling.
 
 | Stage | Working operation | Primary output | Mutation boundary |
 |---|---|---|---|
-| Envelope | `mem ingest` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
+| Envelope | future `mem ingest` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
 | 1 | `mem impact atomize`; `mem atomize --save`; `mem atomize --save-as NAME` | exhaustive classifications, ordered split proposals, and recorded source-to-child lineage | preview saves a Context-scoped analysis but no Context checkpoint; in-place apply creates one checkpoint; save-as creates an init-like baseline and atomize checkpoint in a fresh Context |
 | 2 | `mem find-duplicates` | positive pair evidence discovered from the whole direct Context | read-only; no checkpoint |
 | 2a | future `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed groups apply as one checkpoint |
@@ -572,7 +575,7 @@ important than final CLI spelling.
   UID action, and navigation layer. Meld uses its dynamic interactive adapter;
   Update exposes exact planned changes read-only. This is not a shared
   provider, persistence, or mutation engine, and Update semantic issue turns
-  remain future work. `reconcile`, `distill`, and `sever` remain future or
+  remain future work. `reconcile` and `distill` remain future or
   design-only contracts. Symmetric and public Context-directional `mem meld`
   are implemented through the bounded Context workbench.
 

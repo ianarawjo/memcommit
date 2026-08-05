@@ -1,0 +1,115 @@
+{
+  "uid": "067cec12-6735-4ff5-86bb-0be7b3730bbd",
+  "message": "Imported canonical English Task 1 fixture Context 'participant/construction-updates/shop-updates' into profile 'task-1'.",
+  "timestamp": "2026-08-04T22:47:18.587491",
+  "snapshot": {
+    "uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+    "name": "participant/construction-updates/shop-updates",
+    "memories": {
+      "37113bd0-5194-521b-9d9e-48903d819520": {
+        "type": "memory",
+        "uid": "37113bd0-5194-521b-9d9e-48903d819520",
+        "content": "The ATM on the first floor of the Main Building is closed during the construction period."
+      },
+      "741db845-9a4e-5281-825c-e046801b8be5": {
+        "type": "memory",
+        "uid": "741db845-9a4e-5281-825c-e046801b8be5",
+        "content": "The 24-hour unattended store on the first floor of the Main Building is closed during the construction period."
+      },
+      "b49d48fb-d2d9-55b8-bc87-b8e0066541f8": {
+        "type": "memory",
+        "uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8",
+        "content": "During the construction period, direct users of the Main Building ATM to the ATM on the first floor of the West Complex."
+      },
+      "3094e271-3bb6-57cf-ae78-c67eeac30d94": {
+        "type": "memory",
+        "uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94",
+        "content": "During the construction period, direct users of the Main Building's 24-hour store to the Campus Store in the Engineering Building between 7:00 a.m. and 11:00 p.m."
+      },
+      "c88880dc-ebfa-5847-89d2-692cd22406d5": {
+        "type": "memory",
+        "uid": "c88880dc-ebfa-5847-89d2-692cd22406d5",
+        "content": "Explain that after 11:00 p.m. there is no alternative on-campus store to replace the 24-hour unattended store in the Main Building."
+      },
+      "9e0d0ca2-362c-5498-9560-a217d74eaaab": {
+        "type": "memory",
+        "uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab",
+        "content": "The Campus Store on the first floor of the Main Building is closed during the construction period."
+      },
+      "9c623c17-1942-52a6-bf3d-ebc25d6ad078": {
+        "type": "memory",
+        "uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078",
+        "content": "During the construction period, the Campus Store in the Engineering Building operates from 7:00 a.m. to 11:00 p.m."
+      },
+      "048d155c-f81b-5293-b493-44fbce424662": {
+        "type": "memory",
+        "uid": "048d155c-f81b-5293-b493-44fbce424662",
+        "content": "The cafe on the first floor of the Main Building does not operate during the construction period."
+      },
+      "80d1e21d-3839-5515-b235-e1c1282599e5": {
+        "type": "memory",
+        "uid": "80d1e21d-3839-5515-b235-e1c1282599e5",
+        "content": "During the cafe closure, instruct only staff to use the coffee machine inside the first-floor Innovation Hub."
+      },
+      "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f": {
+        "type": "memory",
+        "uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f",
+        "content": "A student who used the Main Building ATM in the evening may expect to be able to withdraw cash at the same location during the construction period, come to the Main Building, and then have to find the West Complex ATM."
+      },
+      "e7b747cf-a1d2-571a-af5b-e1d3514434f1": {
+        "type": "memory",
+        "uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1",
+        "content": "During the construction period, the amenities guidance agent may exclude the closed Main Building ATM, unattended store, Campus Store, and cafe from recommendations and provide guidance only to posted alternative facilities."
+      },
+      "b8300d7e-381c-5bce-81e7-fbb8a00eac9d": {
+        "type": "memory",
+        "uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d",
+        "content": "During the construction period, the route for ATM use changes from the first floor of the Main Building to the first floor of the West Complex without passing through the Main Building construction zone."
+      },
+      "50be93d9-d0da-542c-beab-be56adde4ee2": {
+        "type": "memory",
+        "uid": "50be93d9-d0da-542c-beab-be56adde4ee2",
+        "content": "The concessionaire operating the Campus Store in the Engineering Building may expect more alternative users because of the closure of Main Building facilities and seek to increase evening staffing and inventory above normal levels during the construction period."
+      }
+    },
+    "order": [
+      "37113bd0-5194-521b-9d9e-48903d819520",
+      "741db845-9a4e-5281-825c-e046801b8be5",
+      "b49d48fb-d2d9-55b8-bc87-b8e0066541f8",
+      "3094e271-3bb6-57cf-ae78-c67eeac30d94",
+      "c88880dc-ebfa-5847-89d2-692cd22406d5",
+      "9e0d0ca2-362c-5498-9560-a217d74eaaab",
+      "9c623c17-1942-52a6-bf3d-ebc25d6ad078",
+      "048d155c-f81b-5293-b493-44fbce424662",
+      "80d1e21d-3839-5515-b235-e1c1282599e5",
+      "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f",
+      "e7b747cf-a1d2-571a-af5b-e1d3514434f1",
+      "b8300d7e-381c-5bce-81e7-fbb8a00eac9d",
+      "50be93d9-d0da-542c-beab-be56adde4ee2"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 1,
+    "profile": "task-1",
+    "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+    "memory_uids": [
+      "37113bd0-5194-521b-9d9e-48903d819520",
+      "741db845-9a4e-5281-825c-e046801b8be5",
+      "b49d48fb-d2d9-55b8-bc87-b8e0066541f8",
+      "3094e271-3bb6-57cf-ae78-c67eeac30d94",
+      "c88880dc-ebfa-5847-89d2-692cd22406d5",
+      "9e0d0ca2-362c-5498-9560-a217d74eaaab",
+      "9c623c17-1942-52a6-bf3d-ebc25d6ad078",
+      "048d155c-f81b-5293-b493-44fbce424662",
+      "80d1e21d-3839-5515-b235-e1c1282599e5",
+      "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f",
+      "e7b747cf-a1d2-571a-af5b-e1d3514434f1",
+      "b8300d7e-381c-5bce-81e7-fbb8a00eac9d",
+      "50be93d9-d0da-542c-beab-be56adde4ee2"
+    ]
+  },
+  "description": "Imported canonical English Task 1 fixture Context 'participant/construction-updates/shop-updates' into profile 'task-1'.",
+  "auto": true
+}

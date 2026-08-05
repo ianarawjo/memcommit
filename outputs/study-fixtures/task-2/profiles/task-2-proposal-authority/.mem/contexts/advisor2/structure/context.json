@@ -60,7 +60,7 @@
     "0ac685f9-e338-5549-bf91-32078cf36f15": {
       "type": "memory",
       "uid": "0ac685f9-e338-5549-bf91-32078cf36f15",
-      "content": "This advisor has repeatedly seen readers misinterpret a compressed opening when the person, setting, or consequence is only implied."
+      "content": "Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied."
     },
     "5567fb3c-de90-5363-af1b-62fb5b8e0bb1": {
       "type": "memory",
@@ -85,7 +85,7 @@
     "1fb62d5b-532b-5664-842c-57622e3c8b9d": {
       "type": "memory",
       "uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d",
-      "content": "This advisor has repeatedly seen very short headed sections read like an outline because each new label interrupts the connection to the previous paragraph."
+      "content": "Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph."
     }
   },
   "order": [

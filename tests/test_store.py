@@ -1,4 +1,6 @@
 """Tests for MemoryStore — disk persistence layer (uses isolated_store fixture)."""
+import json
+from pathlib import Path
 import uuid
 
 import pytest
@@ -7,6 +9,7 @@ import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.store import (
     ConcurrentContextUpdateError,
+    ContextDeletionCommittedError,
     MemoryStore,
     checkpoint_history_digest,
     context_record_digest,
@@ -148,6 +151,79 @@ def test_context_does_not_exist_before_save(isolated_store):
     assert not store.context_exists("ghost")
 
 
+def test_context_storage_root_symlink_fails_closed_for_all_record_paths(
+    isolated_store,
+):
+    store = MemoryStore()
+    contexts_root = isolated_store / "contexts"
+    contexts_root.rmdir()
+    outside_root = isolated_store.parent / "outside-contexts"
+    outside_context = outside_root / "external"
+    outside_context.mkdir(parents=True)
+    outside_file = outside_context / "context.json"
+    outside_file.write_text(
+        json.dumps(ops.init("external").to_dict()),
+        encoding="utf-8",
+    )
+    contexts_root.symlink_to(outside_root, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="storage root.*symbolic link"):
+        store.context_exists("external")
+    with pytest.raises(ValueError, match="storage root.*symbolic link"):
+        store.list_context_names()
+    with pytest.raises(ValueError, match="storage root.*symbolic link"):
+        store.load("external")
+    with pytest.raises(ValueError, match="storage root.*symbolic link"):
+        store.save(ops.init("new"))
+    with pytest.raises(ValueError, match="storage root.*symbolic link"):
+        store.delete("external")
+
+    assert outside_file.is_file()
+
+
+def test_tolerant_context_catalog_preserves_typed_omission_diagnostics(
+    isolated_store,
+):
+    store = MemoryStore()
+    store.save(ops.init("valid"))
+    malformed = isolated_store / "contexts" / "malformed" / "context.json"
+    malformed.parent.mkdir()
+    malformed.write_text("{not-json", encoding="utf-8")
+    outside = isolated_store.parent / "linked-contexts"
+    outside.mkdir()
+    (isolated_store / "contexts" / "linked").symlink_to(
+        outside,
+        target_is_directory=True,
+    )
+
+    catalog = store.scan_context_catalog()
+
+    assert catalog.names == ("valid",)
+    assert not catalog.complete
+    assert {
+        (diagnostic.code, diagnostic.relative_path)
+        for diagnostic in catalog.diagnostics
+    } == {
+        ("INVALID_JSON", "malformed/context.json"),
+        ("UNSAFE_ENTRY", "linked"),
+    }
+    # Human navigation retains its tolerant header-valid projection.
+    assert store.list_context_names() == ["valid"]
+
+
+def test_strict_direct_context_graph_rejects_any_catalog_omission(
+    isolated_store,
+):
+    store = MemoryStore()
+    store.save(ops.init("valid"))
+    malformed = isolated_store / "contexts" / "malformed" / "context.json"
+    malformed.parent.mkdir()
+    malformed.write_text("{not-json", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="malformed.*invalid JSON"):
+        store.load_direct_context_graph_strict()
+
+
 def test_create_context_never_overwrites_an_existing_context(isolated_store):
     store = MemoryStore()
     existing = ops.init("owned")
@@ -222,11 +298,339 @@ def test_list_context_names_returns_all(isolated_store):
 def test_delete_removes_context(isolated_store):
     store = MemoryStore()
     ctx = ops.init("to-delete")
-    store.save(ctx)
-    assert store.context_exists("to-delete")
+    memory = ops.add(ctx, "private body must not enter the lifecycle ledger")
+    from memcommit.context import AutoCheckpoint
 
-    store.delete("to-delete")
+    store.save(
+        ctx,
+        AutoCheckpoint(
+            command="add",
+            args={"memory_uids": [memory.uid]},
+            description="Added private test body",
+        ),
+    )
+    assert store.context_exists("to-delete")
+    previous_checkpoint = store.list_checkpoints(ctx.name)[0]
+
+    event = store.delete("to-delete")
+
     assert not store.context_exists("to-delete")
+    assert event.kind == "CONTEXT_DELETED"
+    assert event.context_uid == ctx.uid
+    assert event.last_context_name == ctx.name
+    assert event.last_context_digest == context_record_digest(ctx)
+    assert event.previous_checkpoint_uid == previous_checkpoint["uid"]
+    assert event.previous_checkpoint_status == "RECORDED"
+    assert event.previous_checkpoint_digest == store_module._canonical_json_digest(
+        previous_checkpoint
+    )
+    assert event.descendants_preserved is True
+    assert store.list_context_lifecycle_events() == [event]
+
+    event_path = isolated_store / "ledger" / "context-events" / (
+        event.event_uid + ".json"
+    )
+    serialized = json.loads(event_path.read_text(encoding="utf-8"))
+    assert serialized == event.to_dict()
+    assert "private body" not in json.dumps(serialized)
+    assert "snapshot" not in serialized
+    assert "memories" not in serialized
+
+
+def test_delete_without_checkpoint_records_absent_checkpoint_metadata(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("no-history")
+    store.save(context)
+
+    event = store.delete(context.name)
+
+    assert event.previous_checkpoint_status == "NONE"
+    assert event.previous_checkpoint_uid is None
+    assert event.previous_checkpoint_digest is None
+
+
+def test_delete_with_unreadable_checkpoint_records_unknown_history(
+    isolated_store,
+):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    context = ops.init("unreadable-history")
+    store.save(
+        context,
+        AutoCheckpoint(command="init", args={}, description="setup"),
+    )
+    checkpoint_dir = isolated_store / "contexts" / context.name / "checkpoints"
+    (checkpoint_dir / "corrupt.json").write_text("{not-json", encoding="utf-8")
+
+    event = store.delete(context.name)
+
+    assert not store.context_exists(context.name)
+    assert event.previous_checkpoint_status == "UNREADABLE"
+    assert event.previous_checkpoint_uid is None
+    assert event.previous_checkpoint_digest is None
+
+
+def test_delete_recreate_same_name_retains_distinct_context_lifetimes(
+    isolated_store,
+):
+    store = MemoryStore()
+    first = ops.init("reused")
+    store.save(first)
+    first_event = store.delete(first.name)
+
+    second = ops.init("reused")
+    store.save(second)
+    second_event = store.delete(second.name)
+
+    assert first.uid != second.uid
+    assert first_event.context_uid == first.uid
+    assert second_event.context_uid == second.uid
+    assert first_event.event_uid != second_event.event_uid
+    assert first_event.operation_id != second_event.operation_id
+    assert {
+        event.context_uid
+        for event in store.list_context_lifecycle_events(context_name="reused")
+    } == {first.uid, second.uid}
+
+
+def test_context_lifecycle_events_support_recursive_namespace_filter(
+    isolated_store,
+):
+    store = MemoryStore()
+    parent = ops.init("tree")
+    child = ops.init("tree/child")
+    store.save(parent)
+    store.save(child)
+
+    parent_event = store.delete(parent.name)
+    assert store.context_exists(child.name)
+    child_event = store.delete(child.name)
+
+    assert store.list_context_lifecycle_events(context_name="tree") == [
+        parent_event
+    ]
+    assert set(
+        store.list_context_lifecycle_events(
+            context_name="tree",
+            recursive=True,
+        )
+    ) == {parent_event, child_event}
+
+
+def test_delete_ledger_write_failure_restores_context_and_history(
+    isolated_store,
+    monkeypatch,
+):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    context = ops.init("ledger-write-failure")
+    ops.add(context, "must survive")
+    store.save(
+        context,
+        AutoCheckpoint(command="add", args={}, description="setup"),
+    )
+    store.set_current(context.name)
+    history_before = store.list_checkpoints(context.name)
+
+    def fail_ledger_write(event):
+        raise OSError("injected lifecycle ledger failure")
+
+    monkeypatch.setattr(store, "_write_context_lifecycle_event", fail_ledger_write)
+
+    with pytest.raises(OSError, match="injected lifecycle ledger failure"):
+        store.delete(context.name)
+
+    assert store.load_direct(context.name).to_dict() == context.to_dict()
+    assert store.list_checkpoints(context.name) == history_before
+    assert store.current_context_name() == context.name
+    assert store.list_context_lifecycle_events() == []
+
+
+@pytest.mark.parametrize("symlink_target", ["ledger", "context-events"])
+def test_delete_refuses_symlinked_lifecycle_storage_and_restores_context(
+    isolated_store,
+    monkeypatch,
+    symlink_target,
+):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    context = ops.init("unsafe-ledger")
+    ops.add(context, "must remain inside the Context")
+    store.save(
+        context,
+        AutoCheckpoint(command="add", args={}, description="setup"),
+    )
+    store.set_current(context.name)
+    history_before = store.list_checkpoints(context.name)
+    outside = isolated_store.parent / f"outside-{symlink_target}"
+    outside.mkdir()
+    sentinel = outside / "sentinel.txt"
+    sentinel.write_text("untouched", encoding="utf-8")
+    ledger_dir = isolated_store / "ledger"
+    if symlink_target == "ledger":
+        ledger_dir.symlink_to(outside, target_is_directory=True)
+    else:
+        ledger_dir.mkdir()
+        (ledger_dir / "context-events").symlink_to(
+            outside,
+            target_is_directory=True,
+        )
+
+    with pytest.raises(ValueError, match="symbolic link"):
+        store.delete(context.name)
+
+    assert store.load_direct(context.name).to_dict() == context.to_dict()
+    assert store.list_checkpoints(context.name) == history_before
+    assert store.current_context_name() == context.name
+    assert sentinel.read_text(encoding="utf-8") == "untouched"
+    assert list(outside.iterdir()) == [sentinel]
+
+
+def test_event_directory_fsync_failure_removes_event_and_restores_context(
+    isolated_store,
+    monkeypatch,
+):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    context = ops.init("ledger-fsync-failure")
+    store.save(
+        context,
+        AutoCheckpoint(command="init", args={}, description="setup"),
+    )
+    store.set_current(context.name)
+    history_before = store.list_checkpoints(context.name)
+    original_fsync_directory = store_module._fsync_directory
+    injected = False
+
+    def fail_event_publication_once(path):
+        nonlocal injected
+        if path.name == "context-events" and not injected:
+            injected = True
+            raise OSError("injected lifecycle directory fsync failure")
+        return original_fsync_directory(path)
+
+    monkeypatch.setattr(store_module, "_fsync_directory", fail_event_publication_once)
+
+    with pytest.raises(
+        OSError,
+        match="injected lifecycle directory fsync failure",
+    ):
+        store.delete(context.name)
+
+    assert injected
+    assert store.load_direct(context.name).to_dict() == context.to_dict()
+    assert store.list_checkpoints(context.name) == history_before
+    assert store.current_context_name() == context.name
+    events_dir = isolated_store / "ledger" / "context-events"
+    assert list(events_dir.iterdir()) == []
+
+
+def test_primary_delete_unlink_failure_rolls_back_lifecycle_event(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("unlink-failure")
+    store.save(context)
+    original_unlink = Path.unlink
+
+    def fail_primary_unlink(path, *args, **kwargs):
+        if path.name.startswith(".context.json.delete-"):
+            raise OSError("injected primary unlink failure")
+        return original_unlink(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "unlink", fail_primary_unlink)
+
+    with pytest.raises(OSError, match="injected primary unlink failure"):
+        store.delete(context.name)
+
+    assert store.context_exists(context.name)
+    assert store.load_direct(context.name).uid == context.uid
+    assert store.list_context_lifecycle_events() == []
+
+
+def test_post_unlink_cleanup_failure_keeps_committed_lifecycle_event(
+    isolated_store,
+    monkeypatch,
+):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    context = ops.init("cleanup-failure")
+    ops.add(context, "private checkpoint content must still be removed")
+    store.save(
+        context,
+        AutoCheckpoint(command="add", args={}, description="setup"),
+    )
+    store.set_current(context.name)
+
+    def fail_state_write(state):
+        raise OSError("injected post-unlink state failure")
+
+    monkeypatch.setattr(store, "_write_state", fail_state_write)
+
+    with pytest.raises(
+        ContextDeletionCommittedError,
+        match="injected post-unlink state failure",
+    ) as captured:
+        store.delete(context.name)
+
+    assert not store.context_exists(context.name)
+    events = store.list_context_lifecycle_events(context_uid=context.uid)
+    assert len(events) == 1
+    assert events[0].kind == "CONTEXT_DELETED"
+    assert captured.value.event == events[0]
+    context_dir = isolated_store / "contexts" / context.name
+    assert not context_dir.exists()
+
+
+def test_internal_creation_rollback_does_not_record_deletion_event(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    first = ops.init("rollback/first")
+    second = ops.init("rollback/second")
+    original_save_locked = store._save_locked
+
+    def fail_second(context, *args, **kwargs):
+        if context.name == second.name:
+            raise OSError("injected batch creation failure")
+        return original_save_locked(context, *args, **kwargs)
+
+    monkeypatch.setattr(store, "_save_locked", fail_second)
+
+    with pytest.raises(OSError, match="injected batch creation failure"):
+        store.create_missing_contexts(((first, None), (second, None)))
+
+    assert not store.context_exists(first.name)
+    assert not store.context_exists(second.name)
+    assert store.list_context_lifecycle_events() == []
+
+
+def test_context_lifecycle_events_are_scoped_to_profile_store(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("profile-bound")
+    store.save(context)
+    event = store.delete(context.name)
+    original_store_dir = store_module.STORE_DIR
+
+    other_profile_dir = isolated_store.parent / "other-profile"
+    monkeypatch.setattr(store_module, "STORE_DIR", other_profile_dir)
+    assert store.list_context_lifecycle_events() == []
+    assert not (other_profile_dir / "ledger").exists()
+
+    monkeypatch.setattr(store_module, "STORE_DIR", original_store_dir)
+    assert store.list_context_lifecycle_events() == [event]
 
 
 def test_delete_clears_current_if_active(isolated_store):
@@ -251,9 +655,10 @@ def test_delete_supports_legacy_non_uuid_context_identity(isolated_store):
     ctx.uid = "legacy-context-identity"
     store.save(ctx)
 
-    store.delete(ctx.name)
+    event = store.delete(ctx.name)
 
     assert not store.context_exists(ctx.name)
+    assert event.context_uid == "legacy-context-identity"
 
 
 def test_delete_removes_context_scoped_analysis_and_matching_review(

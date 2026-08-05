@@ -1,10 +1,11 @@
 """
-    MemoryStore manages all persistence for mem contexts.
-    Single source of truth for reading/writing ~/.mem/.
+MemoryStore manages all persistence for mem contexts.
+Single source of truth for reading/writing ~/.mem/.
 
-    Serialization is delegated to Context.to_dict() / Context.from_dict().
-    All disk I/O is explicit: callers must call store.save(ctx) to persist mutations.
+Serialization is delegated to Context.to_dict() / Context.from_dict().
+All disk I/O is explicit: callers must call store.save(ctx) to persist mutations.
 """
+
 from __future__ import annotations
 
 import copy
@@ -23,6 +24,12 @@ from pathlib import Path
 from typing import Callable, Iterable, Iterator, Optional
 
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
+from memcommit.context_lifecycle import (
+    ContextLifecycleEvent,
+    PREVIOUS_CHECKPOINT_NONE,
+    PREVIOUS_CHECKPOINT_RECORDED,
+    PREVIOUS_CHECKPOINT_UNREADABLE,
+)
 from memcommit.context_catalog import (
     ContextCatalogDiagnostic,
     ContextCatalogDiagnosticCode,
@@ -79,6 +86,15 @@ def _write_json_atomic(path: Path, data: object) -> None:
             temporary.unlink()
 
 
+def _fsync_directory(path: Path) -> None:
+    """Persist a directory-entry change at a multi-file commit boundary."""
+    descriptor = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
 def canonical_context_record(
     value: Context | dict[str, object],
 ) -> dict[str, object]:
@@ -130,14 +146,32 @@ def checkpoint_history_digest(entries: list[dict]) -> str:
             sort_keys=True,
         ).encode("utf-8")
     except (TypeError, ValueError) as error:
-        raise ValueError(
-            "Checkpoint history contains invalid data."
-        ) from error
+        raise ValueError("Checkpoint history contains invalid data.") from error
     return hashlib.sha256(encoded).hexdigest()
 
 
 class ConcurrentContextUpdateError(RuntimeError):
     """A Context changed after a caller captured its expected record."""
+
+
+class ContextDeletionCommittedError(RuntimeError):
+    """Deletion committed, but one or more post-commit cleanups failed."""
+
+    def __init__(
+        self,
+        event: ContextLifecycleEvent,
+        failures: tuple[tuple[str, Exception], ...],
+    ) -> None:
+        if not failures:
+            raise ValueError("A committed deletion error requires a failure.")
+        self.event = event.validated()
+        self.failures = failures
+        label, failure = failures[0]
+        super().__init__(
+            "Context deletion committed as lifecycle event "
+            f"'{event.event_uid}', but {label} cleanup was incomplete: "
+            f"{failure}"
+        )
 
 
 class ConcurrentGroundUpdateError(RuntimeError):
@@ -227,11 +261,7 @@ def _context_name_parts(name: str) -> tuple[str, ...]:
         raise ValueError(
             f"Invalid context name '{name}': '.' and '..' segments are not allowed."
         )
-    reserved = [
-        part
-        for part in parts
-        if part.casefold() in RESERVED_CONTEXT_SEGMENTS
-    ]
+    reserved = [part for part in parts if part.casefold() in RESERVED_CONTEXT_SEGMENTS]
     if reserved:
         raise ValueError(
             f"Invalid context name '{name}': '{reserved[0]}' is reserved for "
@@ -444,9 +474,7 @@ def _validate_context_header(data: object, expected_name: str) -> dict:
             f"('{data.get('name')}')."
         )
     if not isinstance(data.get("uid"), str) or not data["uid"]:
-        raise ValueError(
-            f"Context file for '{expected_name}' has no valid uid."
-        )
+        raise ValueError(f"Context file for '{expected_name}' has no valid uid.")
     if not isinstance(data.get("memories"), dict):
         raise ValueError(
             f"Context file for '{expected_name}' has no valid memories object."
@@ -572,9 +600,7 @@ def _query_source_entry_uid(value: object) -> str:
     try:
         parsed = uuid.UUID(value)
     except (AttributeError, TypeError, ValueError) as error:
-        raise ValueError(
-            "Query source entry uid must be a canonical UUID."
-        ) from error
+        raise ValueError("Query source entry uid must be a canonical UUID.") from error
     canonical = str(parsed)
     if value != canonical:
         raise ValueError("Query source entry uid must be a canonical UUID.")
@@ -656,7 +682,13 @@ def _query_source_entry_from_record(
 
 
 def _profile_write_guarded(method: Callable):
-    """Hold Profile policy stable through one non-Context artifact write."""
+    """Hold the Profile policy generation across one non-Context write.
+
+    Context mutations use the global command lock before checking Profile
+    policy. Session and derived-artifact stores do not participate in command
+    history, so they instead retain the registry's shared lock through their
+    complete persistence boundary.
+    """
 
     @wraps(method)
     def guarded(self, *args, **kwargs):
@@ -667,7 +699,6 @@ def _profile_write_guarded(method: Callable):
 
 
 class MemoryStore:
-
     def __init__(
         self,
         *,
@@ -816,10 +847,7 @@ class MemoryStore:
 
     @staticmethod
     def _protected_context_message(name: str) -> str:
-        return (
-            f"Context '{name}' is locked against changes. Unlock that Context "
-            "first."
-        )
+        return f"Context '{name}' is locked against changes. Unlock that Context first."
 
     @staticmethod
     def _protected_memory_message(name: str, memory_uid: str) -> str:
@@ -835,7 +863,13 @@ class MemoryStore:
         *,
         state: WriteProtectionState | None = None,
     ) -> None:
-        """Reject a persisted record change crossing a protection boundary."""
+        """Reject a persisted record change that crosses a protection boundary.
+
+        Callers already hold the affected Context write lock.  This order is
+        intentional: lock/unlock takes that same Context lock before changing
+        the registry, so a writer cannot validate one policy generation and
+        publish after a concurrent protection change.
+        """
         before_record = canonical_context_record(before)
         after_record = canonical_context_record(after)
         if before_record == after_record:
@@ -846,17 +880,13 @@ class MemoryStore:
             raise ValueError("A Context save cannot replace its stable identity.")
         protection = state if state is not None else self.write_protection_state()
         if protection.context_is_protected(context_uid):
-            raise WriteProtectionError(
-                self._protected_context_message(context_name)
-            )
+            raise WriteProtectionError(self._protected_context_message(context_name))
 
         before_memories = before_record["memories"]
         after_memories = after_record["memories"]
         assert isinstance(before_memories, dict)
         assert isinstance(after_memories, dict)
-        for memory_uid in sorted(
-            protection.protected_memory_uids(context_uid)
-        ):
+        for memory_uid in sorted(protection.protected_memory_uids(context_uid)):
             before_memory = before_memories.get(memory_uid)
             if (
                 not isinstance(before_memory, dict)
@@ -873,14 +903,11 @@ class MemoryStore:
                 )
 
     def _assert_context_deletion_allowed(self, context: Context) -> None:
+        """Deletion changes every protected direct record, regardless of CAS."""
         protection = self.write_protection_state()
         if protection.context_is_protected(context.uid):
-            raise WriteProtectionError(
-                self._protected_context_message(context.name)
-            )
-        locked_memories = sorted(
-            protection.protected_memory_uids(context.uid)
-        )
+            raise WriteProtectionError(self._protected_context_message(context.name))
+        locked_memories = sorted(protection.protected_memory_uids(context.uid))
         if locked_memories:
             memory_uid = locked_memories[0]
             item = context.memories.get(memory_uid)
@@ -946,17 +973,21 @@ class MemoryStore:
         *,
         protected: bool,
     ) -> tuple[int, int]:
-        """Atomically change current members of one lexical Context subtree."""
+        """Atomically change current members of one lexical Context subtree.
+
+        ``--recursive`` has snapshot semantics like a recursive filesystem
+        operation: it changes the root and descendants that exist in the
+        reviewed catalog, while later descendants receive no implicit policy.
+        The Profile lock is the persistent choice when future writes and new
+        Contexts must also be blocked.
+        """
         validate_context_name(root_name)
         expected = tuple(sorted(expected_contexts))
-        if not expected or len({name for name, _, _ in expected}) != len(
-            expected
-        ):
+        if not expected or len({name for name, _, _ in expected}) != len(expected):
             raise ValueError("Invalid recursive Context protection target set.")
         prefix = root_name + "/"
         if any(
-            name != root_name and not name.startswith(prefix)
-            for name, _, _ in expected
+            name != root_name and not name.startswith(prefix) for name, _, _ in expected
         ):
             raise ValueError("Invalid recursive Context protection target set.")
 
@@ -971,8 +1002,7 @@ class MemoryStore:
                             context_record_digest(context),
                         )
                         for context in graph
-                        if context.name == root_name
-                        or context.name.startswith(prefix)
+                        if context.name == root_name or context.name.startswith(prefix)
                     )
                 )
                 if current != expected:
@@ -988,18 +1018,22 @@ class MemoryStore:
                     )
                 )
                 changed = len(
-                    before.context_uids.symmetric_difference(
-                        after.context_uids
-                    )
+                    before.context_uids.symmetric_difference(after.context_uids)
                 )
                 return len(current), changed
 
     def set_profile_write_protection(self, *, protected: bool) -> bool:
-        """Change the active Profile's upper write barrier."""
-        before, after = self.write_protection_registry.update(
-            lambda state: state.with_profile(protected=protected)
-        )
-        return before != after
+        """Change the active Profile's upper write barrier.
+
+        Context and Memory policies are intentionally retained. Unlocking the
+        Profile therefore restores the narrower policy state instead of
+        silently widening permissions.
+        """
+        with self._command_write_lock():
+            before, after = self.write_protection_registry.update(
+                lambda state: state.with_profile(protected=protected)
+            )
+            return before != after
 
     def set_memory_write_protection(
         self,
@@ -1073,9 +1107,7 @@ class MemoryStore:
         _context_name_parts(name)
         lock_dir = self.store_dir / "context-write-locks"
         if lock_dir.is_symlink():
-            raise ValueError(
-                "Refusing to use a symbolic-link Context lock directory."
-            )
+            raise ValueError("Refusing to use a symbolic-link Context lock directory.")
         lock_dir.mkdir(parents=True, exist_ok=True)
         lock_path = lock_dir / (
             hashlib.sha256(name.encode("utf-8")).hexdigest() + ".lock"
@@ -1168,7 +1200,7 @@ class MemoryStore:
     @contextmanager
     def _update_session_write_lock(self) -> Iterator[None]:
         """Serialize promotion and application of the one active update."""
-        lock_path = STORE_DIR / "update-session-write.lock"
+        lock_path = self.store_dir / "update-session-write.lock"
         if lock_path.is_symlink():
             raise ValueError("Refusing to use a symbolic-link update lock.")
         flags = os.O_RDWR | os.O_CREAT
@@ -1198,23 +1230,16 @@ class MemoryStore:
         from memcommit.ground import validate_ground_contract_name
 
         canonical = validate_ground_contract_name(contract_name)
-        if GROUND_SESSIONS_DIR.is_symlink():
-            raise ValueError(
-                "Grounding session storage cannot be a symbolic link."
-            )
-        if (
-            GROUND_SESSIONS_DIR.exists()
-            and not GROUND_SESSIONS_DIR.is_dir()
-        ):
+        if self.ground_sessions_dir.is_symlink():
+            raise ValueError("Grounding session storage cannot be a symbolic link.")
+        if self.ground_sessions_dir.exists() and not self.ground_sessions_dir.is_dir():
             raise ValueError("Grounding session storage is invalid.")
-        GROUND_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+        self.ground_sessions_dir.mkdir(parents=True, exist_ok=True)
         # Keep coordination artifacts within the Ground storage boundary so
         # Ground-only work does not create unrelated top-level store state.
-        lock_dir = GROUND_SESSIONS_DIR / ".locks"
+        lock_dir = self.ground_sessions_dir / ".locks"
         if lock_dir.is_symlink():
-            raise ValueError(
-                "Refusing to use a symbolic-link Ground lock directory."
-            )
+            raise ValueError("Refusing to use a symbolic-link Ground lock directory.")
         lock_dir.mkdir(parents=True, exist_ok=True)
         lock_path = lock_dir / (
             hashlib.sha256(canonical.encode("utf-8")).hexdigest() + ".lock"
@@ -1289,8 +1314,7 @@ class MemoryStore:
                 target = self.load_direct(name)
                 if (
                     target.uid != expected_context_uid
-                    or context_record_digest(target)
-                    != expected_context_digest
+                    or context_record_digest(target) != expected_context_digest
                 ):
                     raise ConcurrentContextUpdateError(
                         f"Context '{name}' changed before it could be selected."
@@ -1299,8 +1323,7 @@ class MemoryStore:
                     state = self._read_state()
                     if state.get("current") != expected_current:
                         raise ConcurrentContextUpdateError(
-                            "The current Context changed before it could be "
-                            "switched."
+                            "The current Context changed before it could be switched."
                         )
                     state["current"] = name
                     self._write_state(state)
@@ -1367,25 +1390,23 @@ class MemoryStore:
         except ValueError as error:
             raise ValueError("Semantic update session is invalid.") from error
         if restored != session:
-            raise ValueError(
-                "Semantic update session changed during validation."
-            )
+            raise ValueError("Semantic update session changed during validation.")
         if path.exists() and (not path.is_file() or path.is_symlink()):
             raise ValueError("Semantic update session storage is invalid.")
         _write_json_atomic(path, data)
 
     def load_impact_plan(self):
         """Return the cached impact plan, or None when no plan exists."""
-        return self._load_update_session(IMPACT_PLAN_FILE)
+        return self._load_update_session(self.impact_plan_file)
 
     @_profile_write_guarded
     def save_impact_plan(self, session) -> None:
         """Atomically cache a non-mutating impact plan."""
-        self._save_update_session(IMPACT_PLAN_FILE, session)
+        self._save_update_session(self.impact_plan_file, session)
 
     def load_staged_update(self):
         """Return the active staged/applied update record, if one exists."""
-        return self._load_update_session(STAGED_UPDATE_FILE)
+        return self._load_update_session(self.staged_update_file)
 
     @_profile_write_guarded
     def save_staged_update(
@@ -1397,15 +1418,20 @@ class MemoryStore:
         """Atomically save the active update, optionally using record CAS."""
         with self._update_session_write_lock():
             if expected_current is not _NO_UPDATE_SESSION_EXPECTATION:
-                current = self._load_update_session(STAGED_UPDATE_FILE)
+                current = self._load_update_session(self.staged_update_file)
                 if current != expected_current:
                     raise ConcurrentContextUpdateError(
-                        "The active update record changed before it could be "
-                        "saved."
+                        "The active update record changed before it could be saved."
                     )
-            self._save_update_session(STAGED_UPDATE_FILE, session)
+            self._save_update_session(self.staged_update_file, session)
 
     def apply_staged_update(self, session):
+        """Apply one staged Update as one globally ordered command."""
+        with self._command_write_lock():
+            self._assert_profile_write_allowed()
+            return self._apply_staged_update_command_locked(session)
+
+    def _apply_staged_update_command_locked(self, session):
         """Apply one exact staged plan to its local target Context graph.
 
         Every owner is preflighted before the first write. Cooperative Context
@@ -1456,22 +1482,18 @@ class MemoryStore:
         )
 
         with self._update_session_write_lock():
-            current = self._load_update_session(STAGED_UPDATE_FILE)
+            current = self._load_update_session(self.staged_update_file)
             if current != session:
                 raise ConcurrentContextUpdateError(
                     "The active staged update changed before application."
                 )
 
-            with (
-                self._context_write_locks(lock_names),
-                self.profile_write_guard(),
-            ):
+            with self._context_write_locks(lock_names):
                 source = self.load(session.source_name)
                 target = self.load(session.target_name)
                 if not session_matches(session, source, target):
                     raise ConcurrentContextUpdateError(
-                        "The update source or local fork changed before "
-                        "application."
+                        "The update source or local fork changed before application."
                     )
 
                 result = prepare_update_application(session, target)
@@ -1507,14 +1529,10 @@ class MemoryStore:
                         raise UpdateError(
                             "Update application changed an owner identity."
                         )
-                    original_records[owner.owner_context_name] = (
-                        direct.to_dict()
-                    )
+                    original_records[owner.owner_context_name] = direct.to_dict()
                     expected_digests[owner.owner_context_name] = base.digest
 
-                created_checkpoints: list[
-                    tuple[str, str]
-                ] = []
+                created_checkpoints: list[tuple[str, str]] = []
                 written_owner_names: list[str] = []
                 try:
                     operation_hash = operation_digest(session.operations)
@@ -1522,10 +1540,7 @@ class MemoryStore:
                         owner_operations = [
                             operation
                             for operation in session.operations
-                            if (
-                                operation.owner_context_uid
-                                == owner.owner_context_uid
-                            )
+                            if (operation.owner_context_uid == owner.owner_context_uid)
                         ]
                         checkpoint = self._save_locked(
                             owner.post_image,
@@ -1538,12 +1553,17 @@ class MemoryStore:
                                     "source_context_name": session.source_name,
                                     "target_context_uid": session.target_uid,
                                     "target_context_name": session.target_name,
-                                    "owner_context_uid": (
-                                        owner.owner_context_uid
-                                    ),
+                                    "owner_context_uid": (owner.owner_context_uid),
                                     "operation_memory_uids": [
                                         operation.memory_uid
                                         for operation in owner_operations
+                                    ],
+                                    "command_contexts": [
+                                        {
+                                            "uid": affected.owner_context_uid,
+                                            "name": affected.owner_context_name,
+                                        }
+                                        for affected in result.affected_owners
                                     ],
                                 },
                                 description=(
@@ -1560,9 +1580,7 @@ class MemoryStore:
                             raise RuntimeError(
                                 "Update application created no checkpoint."
                             )
-                        written_owner_names.append(
-                            owner.owner_context_name
-                        )
+                        written_owner_names.append(owner.owner_context_name)
                         created_checkpoints.append(
                             (
                                 owner.owner_context_name,
@@ -1581,9 +1599,7 @@ class MemoryStore:
                         applied_at=datetime.now().astimezone().isoformat(),
                         operation_digest=operation_hash,
                         target_digest=inputs_after.target_digest,
-                        target_contexts=(
-                            inputs_after.target_context_fingerprints
-                        ),
+                        target_contexts=(inputs_after.target_context_fingerprints),
                         checkpoints=tuple(
                             UpdateCheckpointReceipt(
                                 context_uid=owner.owner_context_uid,
@@ -1605,7 +1621,7 @@ class MemoryStore:
                             "Applied local fork does not match its receipt."
                         )
                     self._save_update_session(
-                        STAGED_UPDATE_FILE,
+                        self.staged_update_file,
                         applied,
                     )
                 except Exception:
@@ -1629,9 +1645,7 @@ class MemoryStore:
                                 with open(path, encoding="utf-8") as file:
                                     value = json.load(
                                         file,
-                                        object_pairs_hook=(
-                                            _reject_duplicate_json_keys
-                                        ),
+                                        object_pairs_hook=(_reject_duplicate_json_keys),
                                     )
                                 if value.get("uid") == checkpoint_uid:
                                     path.unlink()
@@ -1671,9 +1685,7 @@ class MemoryStore:
                     object_pairs_hook=_reject_duplicate_json_keys,
                 )
         except (json.JSONDecodeError, ValueError) as error:
-            raise ValueError(
-                "Semantic review session is invalid JSON."
-            ) from error
+            raise ValueError("Semantic review session is invalid JSON.") from error
         try:
             return ReviewSession.from_dict(data)
         except (ReviewError, TypeError) as error:
@@ -1681,7 +1693,7 @@ class MemoryStore:
 
     def load_review_session(self):
         """Return the active semantic review, or None when none exists."""
-        return self._load_review_session(REVIEW_SESSION_FILE)
+        return self._load_review_session(self.review_session_file)
 
     @_profile_write_guarded
     def save_review_session(self, session) -> None:
@@ -1690,9 +1702,9 @@ class MemoryStore:
 
         if not isinstance(session, ReviewSession):
             raise TypeError("Expected a ReviewSession.")
-        if REVIEW_SESSION_FILE.exists() and (
-            not REVIEW_SESSION_FILE.is_file()
-            or REVIEW_SESSION_FILE.is_symlink()
+        if self.review_session_file.exists() and (
+            not self.review_session_file.is_file()
+            or self.review_session_file.is_symlink()
         ):
             raise ValueError("Semantic review session storage is invalid.")
         data = session.to_dict()
@@ -1702,26 +1714,20 @@ class MemoryStore:
             ReviewSession.from_dict(data)
         except (ReviewError, TypeError) as error:
             raise ValueError("Semantic review session is invalid.") from error
-        _write_json_atomic(REVIEW_SESSION_FILE, data)
+        _write_json_atomic(self.review_session_file, data)
 
     # --- Common-grounding sessions ---
 
-    @staticmethod
-    def _ground_session_path(contract_name: str) -> Path:
+    def _ground_session_path(self, contract_name: str) -> Path:
         """Resolve one portable contract ID without creating active state."""
         from memcommit.ground import validate_ground_contract_name
 
         canonical = validate_ground_contract_name(contract_name)
-        if GROUND_SESSIONS_DIR.is_symlink():
-            raise ValueError(
-                "Grounding session storage cannot be a symbolic link."
-            )
-        if (
-            GROUND_SESSIONS_DIR.exists()
-            and not GROUND_SESSIONS_DIR.is_dir()
-        ):
+        if self.ground_sessions_dir.is_symlink():
+            raise ValueError("Grounding session storage cannot be a symbolic link.")
+        if self.ground_sessions_dir.exists() and not self.ground_sessions_dir.is_dir():
             raise ValueError("Grounding session storage is invalid.")
-        return GROUND_SESSIONS_DIR / f"{canonical}.json"
+        return self.ground_sessions_dir / f"{canonical}.json"
 
     def load_ground_session(self, contract_name: str):
         """Return one named grounding session, or None when it does not exist."""
@@ -1777,12 +1783,10 @@ class MemoryStore:
             raise TypeError("Expected a GroundSession.")
         if not isinstance(verify_bound_frames, bool):
             raise ValueError("Ground frame verification flag is invalid.")
-        # Avoid creating Ground lock storage when the Profile is already
-        # read-only. The later shared guard closes the concurrent-lock race.
-        if self.write_protection_state().profile_is_protected():
-            raise WriteProtectionError(
-                "Profile is locked against writes. Unlock that Profile first."
-            )
+        # Fail before Ground lock storage is created when the Profile is
+        # already read-only. The later shared guard is still authoritative
+        # against a concurrent Profile lock.
+        self._assert_profile_write_allowed()
         path = self._ground_session_path(session.contract_name)
         expected_values = (
             expected_uid,
@@ -1793,8 +1797,7 @@ class MemoryStore:
             value is None for value in expected_values
         ):
             raise ValueError(
-                "Expected Ground uid, revision, and digest must be supplied "
-                "together."
+                "Expected Ground uid, revision, and digest must be supplied together."
             )
         if expected_uid is not None:
             try:
@@ -1812,10 +1815,7 @@ class MemoryStore:
         if expected_digest is not None and (
             not isinstance(expected_digest, str)
             or len(expected_digest) != 64
-            or any(
-                character not in "0123456789abcdef"
-                for character in expected_digest
-            )
+            or any(character not in "0123456789abcdef" for character in expected_digest)
         ):
             raise ValueError("Expected Ground digest is invalid.")
         data = session.to_dict()
@@ -1833,14 +1833,11 @@ class MemoryStore:
                 # namespace scan. An unbound Ground has no Context locator and
                 # retains its deliberate ability to exist without ~/.mem
                 # Context state.
-                locks.enter_context(
-                    self._context_graph_lock(exclusive=False)
-                )
+                locks.enter_context(self._context_graph_lock(exclusive=False))
             if verify_bound_frames:
                 if not session.frames:
                     raise ValueError(
-                        "Bound Ground frame verification requires a bound "
-                        "Ground."
+                        "Bound Ground frame verification requires a bound Ground."
                     )
                 # Context locks always precede the Ground lock. Future
                 # operations that need both must retain this order.
@@ -1849,16 +1846,16 @@ class MemoryStore:
                         frame.context_name for frame in session.frames
                     )
                 )
-            locks.enter_context(
-                self._ground_session_write_lock(session.contract_name)
-            )
+            locks.enter_context(self._ground_session_write_lock(session.contract_name))
+            # Keep the existing graph -> Context -> artifact -> registry lock
+            # order. Context lock/unlock also takes Context before registry.
             locks.enter_context(self.profile_write_guard())
-            if GROUND_SESSIONS_DIR.exists() and (
-                not GROUND_SESSIONS_DIR.is_dir()
-                or GROUND_SESSIONS_DIR.is_symlink()
+            if self.ground_sessions_dir.exists() and (
+                not self.ground_sessions_dir.is_dir()
+                or self.ground_sessions_dir.is_symlink()
             ):
                 raise ValueError("Grounding session storage is invalid.")
-            GROUND_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+            self.ground_sessions_dir.mkdir(parents=True, exist_ok=True)
             if path.exists() and (not path.is_file() or path.is_symlink()):
                 raise ValueError("Grounding session storage is invalid.")
             if verify_bound_frames:
@@ -1876,20 +1873,14 @@ class MemoryStore:
                 if (
                     existing.uid != expected_uid
                     or existing.revision != expected_revision
-                    or ground_session_record_digest(existing)
-                    != expected_digest
+                    or ground_session_record_digest(existing) != expected_digest
                 ):
                     raise ConcurrentGroundUpdateError(
                         "The named Ground changed before it could be saved."
                     )
-            elif (
-                existing is not None
-                and not replace
-                and existing.uid != session.uid
-            ):
+            elif existing is not None and not replace and existing.uid != session.uid:
                 raise ValueError(
-                    "A different grounding session already uses this "
-                    "contract name."
+                    "A different grounding session already uses this contract name."
                 )
             _write_json_atomic(path, data)
 
@@ -1908,9 +1899,7 @@ class MemoryStore:
             if (
                 context.uid != frame.context_uid
                 or context_frame_digest(context) != frame.context_digest
-                or sum(
-                    isinstance(item, Memory) for item in direct_items
-                )
+                or sum(isinstance(item, Memory) for item in direct_items)
                 != frame.direct_memory_count
                 or len(direct_items) != frame.direct_item_count
             ):
@@ -1921,22 +1910,18 @@ class MemoryStore:
 
     # --- Context-to-Context meld sessions ---
 
-    @staticmethod
-    def _meld_session_path(target_context_uid: str) -> Path:
+    def _meld_session_path(self, target_context_uid: str) -> Path:
         try:
             canonical = str(uuid.UUID(target_context_uid))
         except (AttributeError, TypeError, ValueError) as error:
             raise ValueError("Invalid meld target Context uid.") from error
         if canonical != target_context_uid:
             raise ValueError("Invalid meld target Context uid.")
-        if MELD_SESSIONS_DIR.is_symlink():
+        if self.meld_sessions_dir.is_symlink():
             raise ValueError("Meld session storage cannot be a symbolic link.")
-        if (
-            MELD_SESSIONS_DIR.exists()
-            and not MELD_SESSIONS_DIR.is_dir()
-        ):
+        if self.meld_sessions_dir.exists() and not self.meld_sessions_dir.is_dir():
             raise ValueError("Meld session storage is invalid.")
-        return MELD_SESSIONS_DIR / f"{canonical}.json"
+        return self.meld_sessions_dir / f"{canonical}.json"
 
     def load_meld_session(self, target_context_uid: str):
         """Return the saved meld for one target Context, if present."""
@@ -1995,12 +1980,12 @@ class MemoryStore:
         # replies from silently replacing one another.
         with self._context_write_lock(session.target.context_name):
             with self.profile_write_guard():
-                if MELD_SESSIONS_DIR.exists() and (
-                    not MELD_SESSIONS_DIR.is_dir()
-                    or MELD_SESSIONS_DIR.is_symlink()
+                if self.meld_sessions_dir.exists() and (
+                    not self.meld_sessions_dir.is_dir()
+                    or self.meld_sessions_dir.is_symlink()
                 ):
                     raise ValueError("Meld session storage is invalid.")
-                MELD_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+                self.meld_sessions_dir.mkdir(parents=True, exist_ok=True)
                 if path.exists() and (not path.is_file() or path.is_symlink()):
                     raise ValueError("Meld session storage is invalid.")
                 if path.exists():
@@ -2110,24 +2095,21 @@ class MemoryStore:
 
     # --- Saved semantic analyses ---
 
-    @staticmethod
-    def _atomize_analysis_path(context_uid: str) -> Path:
+    def _atomize_analysis_path(self, context_uid: str) -> Path:
         try:
             canonical = str(uuid.UUID(context_uid))
         except (AttributeError, TypeError, ValueError) as error:
             raise ValueError("Invalid atomize analysis Context uid.") from error
         if canonical != context_uid:
             raise ValueError("Invalid atomize analysis Context uid.")
-        if ATOMIZE_ANALYSES_DIR.is_symlink():
-            raise ValueError(
-                "Atomize analysis storage cannot be a symbolic link."
-            )
+        if self.atomize_analyses_dir.is_symlink():
+            raise ValueError("Atomize analysis storage cannot be a symbolic link.")
         if (
-            ATOMIZE_ANALYSES_DIR.exists()
-            and not ATOMIZE_ANALYSES_DIR.is_dir()
+            self.atomize_analyses_dir.exists()
+            and not self.atomize_analyses_dir.is_dir()
         ):
             raise ValueError("Atomize analysis storage is invalid.")
-        return ATOMIZE_ANALYSES_DIR / f"{canonical}.json"
+        return self.atomize_analyses_dir / f"{canonical}.json"
 
     def load_atomize_analysis(self, context_uid: str):
         """Return one Context's latest saved atomize preview, or None."""
@@ -2172,12 +2154,12 @@ class MemoryStore:
         if not isinstance(session, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
         path = self._atomize_analysis_path(session.context_uid)
-        if ATOMIZE_ANALYSES_DIR.exists() and (
-            not ATOMIZE_ANALYSES_DIR.is_dir()
-            or ATOMIZE_ANALYSES_DIR.is_symlink()
+        if self.atomize_analyses_dir.exists() and (
+            not self.atomize_analyses_dir.is_dir()
+            or self.atomize_analyses_dir.is_symlink()
         ):
             raise ValueError("Atomize analysis storage is invalid.")
-        ATOMIZE_ANALYSES_DIR.mkdir(parents=True, exist_ok=True)
+        self.atomize_analyses_dir.mkdir(parents=True, exist_ok=True)
         if path.exists() and (not path.is_file() or path.is_symlink()):
             raise ValueError("Atomize analysis storage is invalid.")
         data = session.to_dict()
@@ -2198,26 +2180,21 @@ class MemoryStore:
 
     # --- Context-bound atomize workbenches ---
 
-    @staticmethod
-    def _atomize_workbench_path(context_uid: str) -> Path:
+    def _atomize_workbench_path(self, context_uid: str) -> Path:
         try:
             canonical = str(uuid.UUID(context_uid))
         except (AttributeError, TypeError, ValueError) as error:
-            raise ValueError(
-                "Invalid atomize workbench Context uid."
-            ) from error
+            raise ValueError("Invalid atomize workbench Context uid.") from error
         if canonical != context_uid:
             raise ValueError("Invalid atomize workbench Context uid.")
-        if ATOMIZE_WORKBENCHES_DIR.is_symlink():
-            raise ValueError(
-                "Atomize workbench storage cannot be a symbolic link."
-            )
+        if self.atomize_workbenches_dir.is_symlink():
+            raise ValueError("Atomize workbench storage cannot be a symbolic link.")
         if (
-            ATOMIZE_WORKBENCHES_DIR.exists()
-            and not ATOMIZE_WORKBENCHES_DIR.is_dir()
+            self.atomize_workbenches_dir.exists()
+            and not self.atomize_workbenches_dir.is_dir()
         ):
             raise ValueError("Atomize workbench storage is invalid.")
-        return ATOMIZE_WORKBENCHES_DIR / f"{canonical}.json"
+        return self.atomize_workbenches_dir / f"{canonical}.json"
 
     def load_atomize_workbench(self, analysis):
         """Load mutable state only against one exact saved analysis."""
@@ -2273,12 +2250,12 @@ class MemoryStore:
         if not isinstance(session, AtomizeWorkbenchSession):
             raise TypeError("Expected an AtomizeWorkbenchSession.")
         path = self._atomize_workbench_path(session.context_uid)
-        if ATOMIZE_WORKBENCHES_DIR.exists() and (
-            not ATOMIZE_WORKBENCHES_DIR.is_dir()
-            or ATOMIZE_WORKBENCHES_DIR.is_symlink()
+        if self.atomize_workbenches_dir.exists() and (
+            not self.atomize_workbenches_dir.is_dir()
+            or self.atomize_workbenches_dir.is_symlink()
         ):
             raise ValueError("Atomize workbench storage is invalid.")
-        ATOMIZE_WORKBENCHES_DIR.mkdir(parents=True, exist_ok=True)
+        self.atomize_workbenches_dir.mkdir(parents=True, exist_ok=True)
         if path.exists() and (not path.is_file() or path.is_symlink()):
             raise ValueError("Atomize workbench storage is invalid.")
         data = session.to_dict()
@@ -2297,9 +2274,7 @@ class MemoryStore:
             context_digest=analysis.context_digest,
             issues=atomize_workbench_issue_projection(analysis),
         ):
-            raise ValueError(
-                "Atomize workbench does not match the saved analysis."
-            )
+            raise ValueError("Atomize workbench does not match the saved analysis.")
         _write_json_atomic(path, data)
 
     @_profile_write_guarded
@@ -2313,71 +2288,56 @@ class MemoryStore:
 
     # --- Conversational atomize grounding sessions ---
 
-    @staticmethod
-    def _atomize_grounding_session_path(context_uid: str) -> Path:
+    def _atomize_grounding_session_path(self, context_uid: str) -> Path:
         """Resolve one Context-bound dialogue without trusting path text."""
         try:
             canonical = str(uuid.UUID(context_uid))
         except (AttributeError, TypeError, ValueError) as error:
-            raise ValueError(
-                "Invalid atomize grounding Context uid."
-            ) from error
+            raise ValueError("Invalid atomize grounding Context uid.") from error
         if canonical != context_uid:
             raise ValueError("Invalid atomize grounding Context uid.")
-        if ATOMIZE_GROUNDING_SESSIONS_DIR.is_symlink():
-            raise ValueError(
-                "Atomize grounding storage cannot be a symbolic link."
-            )
+        if self.atomize_grounding_sessions_dir.is_symlink():
+            raise ValueError("Atomize grounding storage cannot be a symbolic link.")
         if (
-            ATOMIZE_GROUNDING_SESSIONS_DIR.exists()
-            and not ATOMIZE_GROUNDING_SESSIONS_DIR.is_dir()
+            self.atomize_grounding_sessions_dir.exists()
+            and not self.atomize_grounding_sessions_dir.is_dir()
         ):
             raise ValueError("Atomize grounding storage is invalid.")
-        return ATOMIZE_GROUNDING_SESSIONS_DIR / f"{canonical}.json"
+        return self.atomize_grounding_sessions_dir / f"{canonical}.json"
 
-    @staticmethod
-    def _atomize_grounding_history_dir(context_uid: str) -> Path:
+    def _atomize_grounding_history_dir(self, context_uid: str) -> Path:
         """Resolve one Context's immutable terminal-dialogue archive."""
         try:
             canonical = str(uuid.UUID(context_uid))
         except (AttributeError, TypeError, ValueError) as error:
-            raise ValueError(
-                "Invalid atomize grounding Context uid."
-            ) from error
+            raise ValueError("Invalid atomize grounding Context uid.") from error
         if canonical != context_uid:
             raise ValueError("Invalid atomize grounding Context uid.")
-        if ATOMIZE_GROUNDING_HISTORY_DIR.is_symlink():
-            raise ValueError(
-                "Atomize grounding history cannot be a symbolic link."
-            )
+        if self.atomize_grounding_history_dir.is_symlink():
+            raise ValueError("Atomize grounding history cannot be a symbolic link.")
         if (
-            ATOMIZE_GROUNDING_HISTORY_DIR.exists()
-            and not ATOMIZE_GROUNDING_HISTORY_DIR.is_dir()
+            self.atomize_grounding_history_dir.exists()
+            and not self.atomize_grounding_history_dir.is_dir()
         ):
             raise ValueError("Atomize grounding history is invalid.")
-        directory = ATOMIZE_GROUNDING_HISTORY_DIR / canonical
-        if directory.is_symlink() or (
-            directory.exists() and not directory.is_dir()
-        ):
+        directory = self.atomize_grounding_history_dir / canonical
+        if directory.is_symlink() or (directory.exists() and not directory.is_dir()):
             raise ValueError("Atomize grounding history is invalid.")
         return directory
 
-    @classmethod
     def _atomize_grounding_history_path(
-        cls,
+        self,
         context_uid: str,
         session_uid: str,
     ) -> Path:
         try:
             canonical_session = str(uuid.UUID(session_uid))
         except (AttributeError, TypeError, ValueError) as error:
-            raise ValueError(
-                "Invalid atomize grounding session uid."
-            ) from error
+            raise ValueError("Invalid atomize grounding session uid.") from error
         if canonical_session != session_uid:
             raise ValueError("Invalid atomize grounding session uid.")
         return (
-            cls._atomize_grounding_history_dir(context_uid)
+            self._atomize_grounding_history_dir(context_uid)
             / f"{canonical_session}.json"
         )
 
@@ -2411,9 +2371,7 @@ class MemoryStore:
             AtomizeGroundingError,
             ValueError,
         ) as error:
-            raise ValueError(
-                "Saved atomize grounding session is invalid."
-            ) from error
+            raise ValueError("Saved atomize grounding session is invalid.") from error
 
     @_profile_write_guarded
     def save_atomize_grounding_session(self, session) -> None:
@@ -2425,32 +2383,25 @@ class MemoryStore:
 
         if not isinstance(session, AtomizeGroundingSession):
             raise TypeError("Expected an AtomizeGroundingSession.")
-        path = self._atomize_grounding_session_path(
-            session.bindings.context_uid
-        )
-        if ATOMIZE_GROUNDING_SESSIONS_DIR.exists() and (
-            not ATOMIZE_GROUNDING_SESSIONS_DIR.is_dir()
-            or ATOMIZE_GROUNDING_SESSIONS_DIR.is_symlink()
+        path = self._atomize_grounding_session_path(session.bindings.context_uid)
+        if self.atomize_grounding_sessions_dir.exists() and (
+            not self.atomize_grounding_sessions_dir.is_dir()
+            or self.atomize_grounding_sessions_dir.is_symlink()
         ):
             raise ValueError("Atomize grounding storage is invalid.")
-        ATOMIZE_GROUNDING_SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+        self.atomize_grounding_sessions_dir.mkdir(parents=True, exist_ok=True)
         if path.exists() and (not path.is_file() or path.is_symlink()):
             raise ValueError("Atomize grounding storage is invalid.")
         data = session.to_dict()
         try:
             restored = AtomizeGroundingSession.from_dict(data)
         except AtomizeGroundingError as error:
-            raise ValueError(
-                "Atomize grounding session is invalid."
-            ) from error
+            raise ValueError("Atomize grounding session is invalid.") from error
         if (
             restored.uid != session.uid
-            or restored.bindings.context_uid
-            != session.bindings.context_uid
+            or restored.bindings.context_uid != session.bindings.context_uid
         ):
-            raise ValueError(
-                "Atomize grounding identity changed during save."
-            )
+            raise ValueError("Atomize grounding identity changed during save.")
         if session.state in {"APPLIED", "KEPT_REVIEW_ONLY"}:
             # Terminal conversations are evidence, not disposable UI state.
             # Archive them before replacing the latest slot so a subsequent
@@ -2460,7 +2411,7 @@ class MemoryStore:
                 session.uid,
             )
             history_dir = history_path.parent
-            ATOMIZE_GROUNDING_HISTORY_DIR.mkdir(
+            self.atomize_grounding_history_dir.mkdir(
                 parents=True,
                 exist_ok=True,
             )
@@ -2474,9 +2425,7 @@ class MemoryStore:
                         object_pairs_hook=_reject_duplicate_json_keys,
                     )
                 if archived != data:
-                    raise ValueError(
-                        "Atomize grounding history is immutable."
-                    )
+                    raise ValueError("Atomize grounding history is immutable.")
             else:
                 _write_json_atomic(history_path, data)
         _write_json_atomic(path, data)
@@ -2510,9 +2459,7 @@ class MemoryStore:
                 AtomizeGroundingError,
                 ValueError,
             ) as error:
-                raise ValueError(
-                    "Atomize grounding history is invalid."
-                ) from error
+                raise ValueError("Atomize grounding history is invalid.") from error
             if (
                 session.bindings.context_uid != context_uid
                 or session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}
@@ -2533,9 +2480,7 @@ class MemoryStore:
         later load/write enforce the same storage boundary.
         """
         if self.contexts_dir.is_symlink():
-            raise ValueError(
-                "Context storage root cannot be a symbolic link."
-            )
+            raise ValueError("Context storage root cannot be a symbolic link.")
         if not self.contexts_dir.exists():
             return False
         if not self.contexts_dir.is_dir():
@@ -2605,8 +2550,7 @@ class MemoryStore:
                                 entry,
                                 context_name=None,
                                 message=(
-                                    "Context storage contains a symbolic-link "
-                                    "entry."
+                                    "Context storage contains a symbolic-link entry."
                                 ),
                             )
                         )
@@ -2619,8 +2563,7 @@ class MemoryStore:
                                     entry,
                                     context_name=None,
                                     message=(
-                                        "Context record path is not a regular "
-                                        "file."
+                                        "Context record path is not a regular file."
                                     ),
                                 )
                             )
@@ -2635,8 +2578,7 @@ class MemoryStore:
                                     entry,
                                     context_name=None,
                                     message=(
-                                        "Context storage contains a special "
-                                        "entry."
+                                        "Context storage contains a special entry."
                                     ),
                                 )
                             )
@@ -2647,9 +2589,7 @@ class MemoryStore:
                                 "UNSAFE_ENTRY",
                                 entry,
                                 context_name=None,
-                                message=(
-                                    "Context record path is not a regular file."
-                                ),
+                                message=("Context record path is not a regular file."),
                             )
                         )
                         continue
@@ -2763,8 +2703,7 @@ class MemoryStore:
         path = self._context_dir(name) / "checkpoints"
         if path.is_symlink():
             raise ValueError(
-                f"Refusing to access checkpoints for '{name}' through a "
-                "symbolic link."
+                f"Refusing to access checkpoints for '{name}' through a symbolic link."
             )
         contexts_root = self.contexts_dir.resolve()
         resolved = path.resolve(strict=False)
@@ -2774,6 +2713,158 @@ class MemoryStore:
                 "context store."
             )
         return path
+
+    def _context_lifecycle_events_dir(self) -> Path:
+        """Return the active Profile's ledger path without creating it."""
+        ledger_dir = self.store_dir / "ledger"
+        events_dir = ledger_dir / "context-events"
+        for path, label in (
+            (ledger_dir, "Context lifecycle ledger"),
+            (events_dir, "Context lifecycle event storage"),
+        ):
+            if path.is_symlink():
+                raise ValueError(f"{label} cannot be a symbolic link.")
+            if path.exists() and not path.is_dir():
+                raise ValueError(f"{label} must be a directory.")
+        return events_dir
+
+    def _ensure_context_lifecycle_events_dir(self) -> Path:
+        events_dir = self._context_lifecycle_events_dir()
+        ledger_dir = events_dir.parent
+        ledger_created = not ledger_dir.exists()
+        ledger_dir.mkdir(exist_ok=True, mode=0o700)
+        if ledger_created:
+            _fsync_directory(self.store_dir)
+        events_created = not events_dir.exists()
+        events_dir.mkdir(exist_ok=True, mode=0o700)
+        if events_created:
+            _fsync_directory(ledger_dir)
+        return events_dir
+
+    @contextmanager
+    def _context_lifecycle_ledger_lock(
+        self,
+        *,
+        exclusive: bool,
+    ) -> Iterator[None]:
+        """Hide provisional event publication from concurrent ledger readers."""
+        lock_path = self.store_dir / "context-lifecycle-ledger.lock"
+        if lock_path.is_symlink():
+            raise ValueError("Refusing to use a symbolic-link lifecycle lock.")
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(
+                    lock_file.fileno(),
+                    fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH,
+                )
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
+    def _write_context_lifecycle_event(
+        self,
+        event: ContextLifecycleEvent,
+    ) -> Path:
+        """Publish one immutable Profile-ledger event before destructive work."""
+        event.validated()
+        _context_name_parts(event.last_context_name)
+        events_dir = self._ensure_context_lifecycle_events_dir()
+        path = events_dir / f"{event.event_uid}.json"
+        if path.exists() or path.is_symlink():
+            raise FileExistsError("Context lifecycle event already exists.")
+        try:
+            _write_json_atomic(path, event.to_dict())
+            _fsync_directory(events_dir)
+        except Exception:
+            if path.exists() and not path.is_symlink():
+                path.unlink()
+                _fsync_directory(events_dir)
+            raise
+        return path
+
+    @staticmethod
+    def _remove_context_lifecycle_event(path: Path) -> None:
+        """Roll back an event when deletion fails before its commit boundary."""
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("Context lifecycle event rollback path is unsafe.")
+        path.unlink()
+        _fsync_directory(path.parent)
+
+    def list_context_lifecycle_events(
+        self,
+        *,
+        context_name: str | None = None,
+        context_uid: str | None = None,
+        recursive: bool = False,
+    ) -> list[ContextLifecycleEvent]:
+        """Read Profile-ledger events, optionally filtering one namespace."""
+        if context_name is not None:
+            _context_name_parts(context_name)
+        if context_uid is not None and (
+            not isinstance(context_uid, str) or not context_uid
+        ):
+            raise ValueError("Context lifecycle Context uid must be non-empty.")
+        events_dir = self._context_lifecycle_events_dir()
+        if not events_dir.exists():
+            # An absent ledger has no publication to coordinate with. Returning
+            # here also keeps read-only inspection from creating a lock file.
+            return []
+        with self._context_lifecycle_ledger_lock(exclusive=False):
+            events_dir = self._context_lifecycle_events_dir()
+            if not events_dir.exists():
+                return []
+            events: list[ContextLifecycleEvent] = []
+            for path in events_dir.iterdir():
+                if path.is_symlink() or not path.is_file() or path.suffix != ".json":
+                    raise ValueError("Context lifecycle event storage is invalid.")
+                try:
+                    with open(path, encoding="utf-8") as file:
+                        data = json.load(
+                            file,
+                            object_pairs_hook=_reject_duplicate_json_keys,
+                        )
+                    event = ContextLifecycleEvent.from_dict(data)
+                except (
+                    OSError,
+                    UnicodeError,
+                    json.JSONDecodeError,
+                    ValueError,
+                ) as error:
+                    raise ValueError(
+                        f"Context lifecycle event '{path.name}' is invalid."
+                    ) from error
+                if path.name != f"{event.event_uid}.json":
+                    raise ValueError(
+                        "Context lifecycle event filename does not match its uid."
+                    )
+                _context_name_parts(event.last_context_name)
+                if context_uid is not None and event.context_uid != context_uid:
+                    continue
+                if context_name is not None:
+                    in_scope = event.last_context_name == context_name
+                    if recursive:
+                        in_scope = in_scope or event.last_context_name.startswith(
+                            context_name + "/"
+                        )
+                    if not in_scope:
+                        continue
+                events.append(event)
+            return sorted(
+                events,
+                key=lambda event: datetime.fromisoformat(event.timestamp),
+                reverse=True,
+            )
 
     def context_exists(self, name: str) -> bool:
         if not self._assert_context_storage_root():
@@ -2927,10 +3018,7 @@ class MemoryStore:
         ctx = self.load(name)
         for uid, expected_name in direct_context_refs.items():
             item = ctx.memories.get(uid)
-            if (
-                not isinstance(item, Context)
-                or item.name != expected_name
-            ):
+            if not isinstance(item, Context) or item.name != expected_name:
                 raise ValueError(
                     f"Context '{name}' contains an unavailable embedded "
                     f"Context reference '{expected_name}'. Refusing to save "
@@ -2980,9 +3068,7 @@ class MemoryStore:
                         object_pairs_hook=_reject_duplicate_json_keys,
                     )
             except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as error:
-                raise ValueError(
-                    f"Context '{name}' is invalid JSON."
-                ) from error
+                raise ValueError(f"Context '{name}' is invalid JSON.") from error
             record = _validate_context_header(raw, name)
             # Parse without loaders so strict graph discovery never opens an
             # embedded Context, MemoryRef target, or query-only source.
@@ -3002,8 +3088,7 @@ class MemoryStore:
             previous = uid_owners.get(uid)
             if previous is not None:
                 raise ValueError(
-                    "Ordinary Context uid is duplicated by "
-                    f"'{previous}' and '{name}'."
+                    f"Ordinary Context uid is duplicated by '{previous}' and '{name}'."
                 )
             uid_owners[uid] = name
             records[name] = record
@@ -3109,12 +3194,9 @@ class MemoryStore:
         validate_context_name(new_name)
         if old_name == new_name:
             raise ValueError(
-                "source and destination Context namespaces are the same: "
-                f"'{old_name}'."
+                f"source and destination Context namespaces are the same: '{old_name}'."
             )
-        if old_name.startswith(new_name + "/") or new_name.startswith(
-            old_name + "/"
-        ):
+        if old_name.startswith(new_name + "/") or new_name.startswith(old_name + "/"):
             raise ValueError(
                 "source and destination Context namespaces overlap: "
                 f"'{old_name}' → '{new_name}'."
@@ -3134,19 +3216,23 @@ class MemoryStore:
                     "renames are not supported."
                 )
         except OSError as error:
-            raise ValueError("Context namespace paths cannot be resolved safely.") from error
+            raise ValueError(
+                "Context namespace paths cannot be resolved safely."
+            ) from error
 
         mapped_names = {
             mapped
             for name in records
-            if (mapped := _mapped_context_name(name, old_name, new_name))
-            is not None
+            if (mapped := _mapped_context_name(name, old_name, new_name)) is not None
         }
-        occupied = mapped_names & (set(records) - {
-            name
-            for name in records
-            if _mapped_context_name(name, old_name, new_name) is not None
-        })
+        occupied = mapped_names & (
+            set(records)
+            - {
+                name
+                for name in records
+                if _mapped_context_name(name, old_name, new_name) is not None
+            }
+        )
         if occupied:
             raise FileExistsError(
                 f"destination Context namespace '{new_name}' is already occupied."
@@ -3190,14 +3276,17 @@ class MemoryStore:
 
     def _ground_contract_names_for_rename(self) -> tuple[str, ...]:
         """Return every named Ground whose file must join rename freshness."""
-        if not GROUND_SESSIONS_DIR.exists():
-            if GROUND_SESSIONS_DIR.is_symlink():
+        if not self.ground_sessions_dir.exists():
+            if self.ground_sessions_dir.is_symlink():
                 raise ValueError("Grounding session storage is invalid.")
             return ()
-        if not GROUND_SESSIONS_DIR.is_dir() or GROUND_SESSIONS_DIR.is_symlink():
+        if (
+            not self.ground_sessions_dir.is_dir()
+            or self.ground_sessions_dir.is_symlink()
+        ):
             raise ValueError("Grounding session storage is invalid.")
         names: list[str] = []
-        for path in sorted(GROUND_SESSIONS_DIR.iterdir()):
+        for path in sorted(self.ground_sessions_dir.iterdir()):
             if path.name == ".locks" and path.is_dir() and not path.is_symlink():
                 continue
             if path.is_symlink() or not path.is_file() or path.suffix != ".json":
@@ -3238,8 +3327,7 @@ class MemoryStore:
         return records
 
     @staticmethod
-    def _read_translation_records_for_rename(
-    ) -> dict[str, dict[str, object]]:
+    def _read_translation_records_for_rename() -> dict[str, dict[str, object]]:
         from memcommit.translation_view import (
             TranslationCatalog,
             TranslationView,
@@ -3358,8 +3446,7 @@ class MemoryStore:
                     + "."
                 )
             post_name = (
-                _mapped_context_name(owner_name, old_name, new_name)
-                or owner_name
+                _mapped_context_name(owner_name, old_name, new_name) or owner_name
             )
             _validate_context_header(post, post_name)
             try:
@@ -3391,19 +3478,17 @@ class MemoryStore:
                     raise ValueError(
                         f"Renaming would make checkpoint '{filename}' in "
                         f"'{owner_name}' ambiguous with query-only child "
-                        + ", ".join(
-                            repr(name) for name in sorted(introduced)
-                        )
+                        + ", ".join(repr(name) for name in sorted(introduced))
                         + "."
                     )
                 next_entries[filename] = post
                 checkpoint_reference_count += count
             post_checkpoints[owner_name] = next_entries
 
-        if STATE_FILE.is_symlink() or not STATE_FILE.is_file():
+        if self.state_file.is_symlink() or not self.state_file.is_file():
             raise ValueError("Context state storage is invalid.")
         try:
-            with open(STATE_FILE, encoding="utf-8") as file:
+            with open(self.state_file, encoding="utf-8") as file:
                 raw_state = json.load(
                     file,
                     object_pairs_hook=_reject_duplicate_json_keys,
@@ -3444,16 +3529,12 @@ class MemoryStore:
             for uid, record in post_record_by_uid.items()
         }
         post_name_by_uid = {
-            str(record["uid"]): str(record["name"])
-            for record in post_records.values()
+            str(record["uid"]): str(record["name"]) for record in post_records.values()
         }
-        changed_uids = {
-            str(records[name]["uid"])
-            for name in changed_owner_names
-        }
-        # Rename rewrites moved headers and inbound-reference owners. Validate
-        # every changed record against one policy generation while the graph
-        # and complete Context lock set remain held.
+        changed_uids = {str(records[name]["uid"]) for name in changed_owner_names}
+        # Rename rewrites both moved Context headers and inbound Context/Memory
+        # reference owners. Validate every changed owner against one frozen
+        # policy snapshot while all graph Context locks are still held.
         protection = self.write_protection_state()
         for owner_name in changed_owner_names:
             self._assert_context_record_change_allowed(
@@ -3462,9 +3543,7 @@ class MemoryStore:
                 state=protection,
             )
 
-        ground_records = self._read_ground_records_for_rename(
-            ground_contract_names
-        )
+        ground_records = self._read_ground_records_for_rename(ground_contract_names)
         post_ground_records: dict[str, dict[str, object]] = {}
         ground_frame_count = 0
         from memcommit.ground import GroundError, GroundSession
@@ -3515,8 +3594,7 @@ class MemoryStore:
                 post["context_name"] = post_name_by_uid[context_uid]
                 if (
                     "context_digest" in post
-                    and post.get("context_digest")
-                    == pre_digest_by_uid[context_uid]
+                    and post.get("context_digest") == pre_digest_by_uid[context_uid]
                 ):
                     post["context_digest"] = post_digest_by_uid[context_uid]
                 if post != before_artifact:
@@ -3577,8 +3655,7 @@ class MemoryStore:
         names.update(
             mapped
             for name in records
-            if (mapped := _mapped_context_name(name, old_name, new_name))
-            is not None
+            if (mapped := _mapped_context_name(name, old_name, new_name)) is not None
         )
         # Lock the exact requested destination even when the source scan is
         # corrupt or empty so a cooperative creator cannot claim it between
@@ -3622,9 +3699,7 @@ class MemoryStore:
         as for the existing multi-Context update transaction.
         """
         plan = prepared.plan
-        name_mapping = {
-            binding.old_name: binding.new_name for binding in plan.bindings
-        }
+        name_mapping = {binding.old_name: binding.new_name for binding in plan.bindings}
         source_dir = self._context_dir(plan.old_name)
         destination_dir = self._context_dir(plan.new_name)
         destination_parent = destination_dir.parent
@@ -3651,16 +3726,14 @@ class MemoryStore:
                 if after == before:
                     continue
                 before_path = self._checkpoints_dir(owner_name) / filename
-                after_path = (
-                    self._checkpoints_dir(live_name(owner_name)) / filename
-                )
+                after_path = self._checkpoints_dir(live_name(owner_name)) / filename
                 restore_files[after_path] = before_path.read_bytes()
                 changed_checkpoint_paths.append((after_path, after))
         for filename, before in prepared.ground_records.items():
             after = prepared.post_ground_records[filename]
             if after == before:
                 continue
-            path = GROUND_SESSIONS_DIR / filename
+            path = self.ground_sessions_dir / filename
             restore_files[path] = path.read_bytes()
             changed_ground_paths.append((path, after))
         if prepared.translation_records:
@@ -3675,7 +3748,7 @@ class MemoryStore:
                 restore_files[path] = path.read_bytes()
                 changed_translation_paths.append((path, after))
         if prepared.post_state != prepared.state:
-            restore_files[STATE_FILE] = STATE_FILE.read_bytes()
+            restore_files[self.state_file] = self.state_file.read_bytes()
 
         timestamp = datetime.now()
         checkpoint_paths: list[Path] = []
@@ -3696,9 +3769,7 @@ class MemoryStore:
                 "uid": checkpoint_uid,
                 "message": description,
                 "timestamp": timestamp.isoformat(),
-                "snapshot": canonical_context_record(
-                    prepared.post_records[owner_name]
-                ),
+                "snapshot": canonical_context_record(prepared.post_records[owner_name]),
                 "command": "rename",
                 "args": {
                     "old_name": plan.old_name,
@@ -3750,7 +3821,7 @@ class MemoryStore:
                     )
                 _write_json_atomic(path, record)
             if prepared.post_state != prepared.state:
-                _write_json_atomic(STATE_FILE, prepared.post_state)
+                _write_json_atomic(self.state_file, prepared.post_state)
 
             for binding in plan.bindings:
                 if self.context_exists(binding.old_name):
@@ -3763,9 +3834,7 @@ class MemoryStore:
                         f"Renamed Context '{binding.new_name}' changed identity."
                     )
             for owner_name in plan.changed_owner_names:
-                expected = canonical_context_record(
-                    prepared.post_records[owner_name]
-                )
+                expected = canonical_context_record(prepared.post_records[owner_name])
                 actual = canonical_context_record(
                     self.load_direct(live_name(owner_name))
                 )
@@ -3823,6 +3892,15 @@ class MemoryStore:
         self,
         plan: ContextRenamePlan,
     ) -> ContextRenameResult:
+        """Apply one namespace rename outside concurrent command restores."""
+        with self._command_write_lock():
+            self._assert_profile_write_allowed()
+            return self._rename_contexts_command_locked(plan)
+
+    def _rename_contexts_command_locked(
+        self,
+        plan: ContextRenamePlan,
+    ) -> ContextRenameResult:
         """Apply exactly one previously reviewed Context namespace plan."""
         if not isinstance(plan, ContextRenamePlan):
             raise TypeError("Expected a ContextRenamePlan.")
@@ -3843,7 +3921,6 @@ class MemoryStore:
                             grounds.enter_context(
                                 self._ground_session_write_lock(contract_name)
                             )
-                        grounds.enter_context(self.profile_write_guard())
                         prepared = self._prepare_context_rename_locked(
                             plan.old_name,
                             plan.new_name,
@@ -3857,6 +3934,21 @@ class MemoryStore:
                         return self._commit_context_rename_locked(prepared)
 
     def save(
+        self,
+        ctx: Context,
+        auto_checkpoint: Optional[AutoCheckpoint] = None,
+        *,
+        expected_context_digest: str | None = None,
+    ) -> Checkpoint | None:
+        """Persist one Context inside the global command-order boundary."""
+        with self._command_write_lock():
+            return self._save_command_locked(
+                ctx,
+                auto_checkpoint,
+                expected_context_digest=expected_context_digest,
+            )
+
+    def _save_command_locked(
         self,
         ctx: Context,
         auto_checkpoint: Optional[AutoCheckpoint] = None,
@@ -3889,6 +3981,23 @@ class MemoryStore:
         return checkpoint
 
     def save_meld_target(
+        self,
+        ctx: Context,
+        auto_checkpoint: AutoCheckpoint,
+        *,
+        expected_context_digest: str,
+        source_bindings: Iterable[tuple[str, str, str]],
+    ) -> Checkpoint | None:
+        """Save one Meld result as one globally ordered command."""
+        with self._command_write_lock():
+            return self._save_meld_target_command_locked(
+                ctx,
+                auto_checkpoint,
+                expected_context_digest=expected_context_digest,
+                source_bindings=source_bindings,
+            )
+
+    def _save_meld_target_command_locked(
         self,
         ctx: Context,
         auto_checkpoint: AutoCheckpoint,
@@ -3934,7 +4043,7 @@ class MemoryStore:
         """Save a target only while every source receipt is still exact.
 
         A target digest cannot detect a rename or replacement of a separate
-        source that supplied a persisted locator. Keep every source and the
+        source that supplied a persisted locator.  Keep every source and the
         target locked from final validation through the target write so a
         successful command cannot reintroduce stale source names.
         """
@@ -3942,14 +4051,15 @@ class MemoryStore:
         source_names = tuple(name for name, _, _ in bindings)
         if not bindings or len(source_names) != len(set(source_names)):
             raise ValueError("Invalid Context source lock set.")
-        with self._context_graph_lock(exclusive=False):
-            with self._context_write_locks((*source_names, ctx.name)):
-                self._assert_source_bindings_locked(bindings)
-                checkpoint = self._save_locked(
-                    ctx,
-                    auto_checkpoint,
-                    expected_context_digest=expected_context_digest,
-                )
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_locks((*source_names, ctx.name)):
+                    self._assert_source_bindings_locked(bindings)
+                    checkpoint = self._save_locked(
+                        ctx,
+                        auto_checkpoint,
+                        expected_context_digest=expected_context_digest,
+                    )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
@@ -3984,16 +4094,44 @@ class MemoryStore:
         auto_checkpoint: Optional[AutoCheckpoint] = None,
     ) -> Checkpoint | None:
         """Create one new Context without overwriting a concurrent owner."""
-        with self._context_graph_lock(exclusive=False):
-            with self._context_write_lock(ctx.name):
-                checkpoint = self._save_locked(
-                    ctx,
-                    auto_checkpoint,
-                    expected_context_digest=None,
-                    require_new=True,
-                )
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_lock(ctx.name):
+                    checkpoint = self._save_locked(
+                        ctx,
+                        auto_checkpoint,
+                        expected_context_digest=None,
+                        require_new=True,
+                    )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
+
+    @contextmanager
+    def locked_context_snapshot(
+        self,
+        name: str,
+        *,
+        expected_uid: str,
+        expected_digest: str,
+    ) -> Iterator[Context]:
+        """Hold one exact read snapshot across an authorized external publish.
+
+        Cross-store delivery cannot rely on a UI-time freshness check. Keeping
+        the source write lock held until the receiver commit completes makes a
+        successful receipt describe the exact bytes that were transmitted.
+        """
+
+        with self._command_write_lock():
+            with self._context_write_lock(name):
+                current = self.load_direct(name)
+                if (
+                    current.uid != expected_uid
+                    or context_record_digest(current) != expected_digest
+                ):
+                    raise ConcurrentContextUpdateError(
+                        f"Context '{name}' changed before it could be published."
+                    )
+                yield current
 
     def create_context_with_sources(
         self,
@@ -4004,7 +4142,7 @@ class MemoryStore:
     ) -> Checkpoint | None:
         """Publish a new Context from exact source snapshots.
 
-        The source recheck and require-new write share one lock set. This is
+        The source recheck and require-new write share one lock set.  This is
         the creation counterpart of ``save_context_with_sources`` and prevents
         both stale locators and a concurrent owner from reaching the new path.
         """
@@ -4016,15 +4154,16 @@ class MemoryStore:
             or ctx.name in source_names
         ):
             raise ValueError("Invalid Context creation source lock set.")
-        with self._context_graph_lock(exclusive=False):
-            with self._context_write_locks((*source_names, ctx.name)):
-                self._assert_source_bindings_locked(bindings)
-                checkpoint = self._save_locked(
-                    ctx,
-                    auto_checkpoint,
-                    expected_context_digest=None,
-                    require_new=True,
-                )
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_locks((*source_names, ctx.name)):
+                    self._assert_source_bindings_locked(bindings)
+                    checkpoint = self._save_locked(
+                        ctx,
+                        auto_checkpoint,
+                        expected_context_digest=None,
+                        require_new=True,
+                    )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
@@ -4041,7 +4180,7 @@ class MemoryStore:
         """Create, inherit history, and select one exact branch atomically.
 
         Cooperative writers cannot observe a gap between source validation,
-        target publication, history copy, and current-state CAS. A failure is
+        target publication, history copy, and current-state CAS.  A failure is
         rolled back while the exact target lock is still held, so cleanup can
         never delete a replacement or another writer's completed update.
         """
@@ -4052,81 +4191,96 @@ class MemoryStore:
             expected_source_uid,
             expected_source_digest,
         )
-        with self._context_graph_lock(exclusive=False):
-            with self._context_write_locks((source_name, ctx.name)):
-                self._assert_source_bindings_locked((binding,))
-                history = self.list_checkpoints(source_name)
-                if checkpoint_history_digest(history) != expected_history_digest:
-                    raise ConcurrentContextUpdateError(
-                        f"Checkpoint history for '{source_name}' changed "
-                        "before the branch could be created."
-                    )
-                source_checkpoints = self._checkpoints_dir(source_name)
-                checkpoint_files: tuple[Path, ...] = ()
-                if source_checkpoints.exists():
-                    checkpoint_files = tuple(
-                        sorted(source_checkpoints.glob("*.json"))
-                    )
-                    if any(
-                        path.is_symlink() or not path.is_file()
-                        for path in checkpoint_files
-                    ):
-                        raise ValueError(
-                            f"Checkpoint history for '{source_name}' is unsafe."
-                        )
-
-                created = False
-                branch_error: Exception | None = None
-                with self._state_write_lock():
-                    state = self._read_state()
-                    if state.get("current") != expected_current:
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_locks((source_name, ctx.name)):
+                    self._assert_source_bindings_locked((binding,))
+                    history = self.list_checkpoints(source_name)
+                    if checkpoint_history_digest(history) != expected_history_digest:
                         raise ConcurrentContextUpdateError(
-                            "The current Context changed before the branch "
-                            "could be created."
+                            f"Checkpoint history for '{source_name}' changed "
+                            "before the branch could be created."
                         )
-                    try:
-                        self._save_locked(
-                            ctx,
-                            None,
-                            expected_context_digest=None,
-                            require_new=True,
+                    source_checkpoints = self._checkpoints_dir(source_name)
+                    checkpoint_files: tuple[Path, ...] = ()
+                    if source_checkpoints.exists():
+                        checkpoint_files = tuple(
+                            sorted(source_checkpoints.glob("*.json"))
                         )
-                        created = True
-                        target_checkpoints = self._checkpoints_dir(ctx.name)
-                        for source_path in checkpoint_files:
-                            destination = target_checkpoints / source_path.name
-                            if destination.is_symlink():
-                                raise ValueError(
-                                    f"Refusing to copy checkpoint to "
-                                    f"'{ctx.name}' through a symbolic link."
-                                )
-                            _write_bytes_atomic(
-                                destination,
-                                source_path.read_bytes(),
+                        if any(
+                            path.is_symlink() or not path.is_file()
+                            for path in checkpoint_files
+                        ):
+                            raise ValueError(
+                                f"Checkpoint history for '{source_name}' is unsafe."
                             )
-                        state["current"] = ctx.name
-                        self._write_state(state)
-                    except Exception as error:
-                        branch_error = error
-                if branch_error is not None:
-                    if created:
+
+                    created = False
+                    branch_error: Exception | None = None
+                    with self._state_write_lock():
+                        state = self._read_state()
+                        if state.get("current") != expected_current:
+                            raise ConcurrentContextUpdateError(
+                                "The current Context changed before the branch "
+                                "could be created."
+                            )
                         try:
-                            self._delete_locked(ctx.name)
-                        except Exception as rollback_error:
-                            raise RuntimeError(
-                                "Branch creation failed and its exact new "
-                                "Context could not be rolled back."
-                            ) from rollback_error
-                    raise branch_error
+                            self._save_locked(
+                                ctx,
+                                None,
+                                expected_context_digest=None,
+                                require_new=True,
+                            )
+                            created = True
+                            target_checkpoints = self._checkpoints_dir(ctx.name)
+                            for source_path in checkpoint_files:
+                                destination = target_checkpoints / source_path.name
+                                if destination.is_symlink():
+                                    raise ValueError(
+                                        f"Refusing to copy checkpoint to "
+                                        f"'{ctx.name}' through a symbolic link."
+                                    )
+                                _write_bytes_atomic(
+                                    destination,
+                                    source_path.read_bytes(),
+                                )
+                            state["current"] = ctx.name
+                            self._write_state(state)
+                        except Exception as error:
+                            branch_error = error
+                    if branch_error is not None:
+                        if created:
+                            try:
+                                self._delete_locked(ctx.name)
+                            except Exception as rollback_error:
+                                raise RuntimeError(
+                                    "Branch creation failed and its exact new "
+                                    "Context could not be rolled back."
+                                ) from rollback_error
+                        raise branch_error
         ctx._store_digest = context_record_digest(ctx)
 
     def create_missing_contexts(
         self,
-        entries: Iterable[
-            tuple[Context, Optional[AutoCheckpoint]]
-        ],
+        entries: Iterable[tuple[Context, Optional[AutoCheckpoint]]],
         *,
         make_current: str | None = None,
+        require_all_new: bool = False,
+    ) -> tuple[Context, ...]:
+        """Create one namespace batch inside the command-order boundary."""
+        with self._command_write_lock():
+            return self._create_missing_contexts_command_locked(
+                entries,
+                make_current=make_current,
+                require_all_new=require_all_new,
+            )
+
+    def _create_missing_contexts_command_locked(
+        self,
+        entries: Iterable[tuple[Context, Optional[AutoCheckpoint]]],
+        *,
+        make_current: str | None = None,
+        require_all_new: bool = False,
     ) -> tuple[Context, ...]:
         """Create a validated batch and optionally select one batch Context.
 
@@ -4136,6 +4290,10 @@ class MemoryStore:
         which a command-level rollback might then wrongly delete. Selection
         stays inside the same boundary so a new leaf cannot be deleted or
         replaced between its creation and the state write.
+
+        ``require_all_new`` is used by identity-preserving import: silently
+        reusing one existing name would turn a reviewed all-new batch into a
+        partial merge with different collision semantics.
         """
         records = tuple(entries)
         if not records:
@@ -4148,9 +4306,7 @@ class MemoryStore:
         if len(names) != len(set(names)):
             raise ValueError("Context batch contains duplicate names.")
         if make_current is not None and make_current not in names:
-            raise ValueError(
-                "Selected Context must be part of the creation batch."
-            )
+            raise ValueError("Selected Context must be part of the creation batch.")
 
         with self._context_graph_lock(exclusive=False):
             with self._context_write_locks(names):
@@ -4163,6 +4319,12 @@ class MemoryStore:
                         existing.add(name)
                     else:
                         self._assert_context_storage_available(name)
+
+                if require_all_new and existing:
+                    raise FileExistsError(
+                        "Context import destination already exists: "
+                        + ", ".join(sorted(existing))
+                    )
 
                 created: list[Context] = []
                 try:
@@ -4198,7 +4360,6 @@ class MemoryStore:
                     raise error
         return tuple(created)
 
-    @_profile_write_guarded
     def _save_locked(
         self,
         ctx: Context,
@@ -4208,6 +4369,7 @@ class MemoryStore:
         require_new: bool = False,
     ) -> Checkpoint | None:
         """Save while holding this Context's cooperative process lock."""
+        self._assert_profile_write_allowed()
         ctx_dir = self._context_dir(ctx.name)
         context_file = self._context_file(ctx.name)
         if context_file.is_symlink():
@@ -4229,12 +4391,9 @@ class MemoryStore:
                 ctx.name,
             )
         if expected_context_digest is not None:
-            if (
-                len(expected_context_digest) != 64
-                or any(
-                    character not in "0123456789abcdef"
-                    for character in expected_context_digest
-                )
+            if len(expected_context_digest) != 64 or any(
+                character not in "0123456789abcdef"
+                for character in expected_context_digest
             ):
                 raise ValueError("Expected Context digest is invalid.")
             if not context_preexisting:
@@ -4275,9 +4434,7 @@ class MemoryStore:
             if created_checkpoint is not None:
                 try:
                     matches = list(
-                        checkpoints_dir.glob(
-                            f"*-{created_checkpoint.uid[:8]}.json"
-                        )
+                        checkpoints_dir.glob(f"*-{created_checkpoint.uid[:8]}.json")
                     )
                     for path in matches:
                         if path.is_symlink() or not path.is_file():
@@ -4322,12 +4479,12 @@ class MemoryStore:
 
     def _query_source_dir(self, source_uid: str) -> Path:
         canonical = self._canonical_query_source_uid(source_uid)
-        if QUERY_SOURCES_DIR.is_symlink():
+        if self.query_sources_dir.is_symlink():
             raise ValueError("Query source storage cannot be a symbolic link.")
-        source_dir = QUERY_SOURCES_DIR / canonical
+        source_dir = self.query_sources_dir / canonical
         if source_dir.is_symlink():
             raise ValueError("Query source directory cannot be a symbolic link.")
-        root = QUERY_SOURCES_DIR.resolve()
+        root = self.query_sources_dir.resolve()
         resolved = source_dir.resolve(strict=False)
         if root not in resolved.parents:
             raise ValueError("Query source path escapes query source storage.")
@@ -4391,10 +4548,10 @@ class MemoryStore:
             raise ValueError("Query source entry uids must be unique.")
         if len(entry_keys) != len(set(entry_keys)):
             raise ValueError("Query source entry keys must be unique.")
-        if QUERY_SOURCES_DIR.is_symlink():
+        if self.query_sources_dir.is_symlink():
             raise ValueError("Query source storage cannot be a symbolic link.")
-        QUERY_SOURCES_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
-        os.chmod(QUERY_SOURCES_DIR, 0o700)
+        self.query_sources_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+        os.chmod(self.query_sources_dir, 0o700)
 
         source = QuerySource(
             uid=str(uuid.uuid4()),
@@ -4458,9 +4615,7 @@ class MemoryStore:
             field="Query source language",
         )
         if not isinstance(fallback_to_canonical, bool):
-            raise ValueError(
-                "Query source fallback_to_canonical must be a boolean."
-            )
+            raise ValueError("Query source fallback_to_canonical must be a boolean.")
         source_file = self._query_source_file(source_uid)
         if not source_file.is_file():
             raise FileNotFoundError("Query source is unavailable.")
@@ -4528,10 +4683,7 @@ class MemoryStore:
                 raise ValueError("Query source entry keys must be unique.")
         else:
             raise ValueError("Query source identity or structure is invalid.")
-        if (
-            data.get("uid") != canonical_source_uid
-            or data.get("name") != expected_name
-        ):
+        if data.get("uid") != canonical_source_uid or data.get("name") != expected_name:
             raise ValueError("Query source identity or structure is invalid.")
 
         # Resolve the full source now so an absent translation fails before a
@@ -4561,10 +4713,60 @@ class MemoryStore:
         source_file.unlink()
         source_dir.rmdir()
 
-    def delete(self, name: str) -> None:
-        """Delete one Context while preserving descendant Context namespaces."""
-        with self._context_write_lock(name):
-            self._delete_locked(name)
+    def _context_deletion_event_locked(
+        self,
+        name: str,
+        *,
+        current: Context | None = None,
+    ) -> ContextLifecycleEvent:
+        """Freeze deletion metadata while the exact Context lock is held."""
+        context = current if current is not None else self.load_direct(name)
+        if context.name != name:
+            raise ValueError("Context deletion metadata names the wrong Context.")
+        try:
+            checkpoints = self.list_checkpoints(name)
+        except (KeyError, OSError, TypeError, ValueError):
+            # Deletion removes the complete history directory regardless. A
+            # malformed non-checkpoint artifact must not retarget or prevent
+            # an exact-identity deletion; it only means the optional lifecycle
+            # ledger cannot name a trustworthy previous checkpoint.
+            checkpoints = []
+            previous_status = PREVIOUS_CHECKPOINT_UNREADABLE
+        else:
+            previous_status = (
+                PREVIOUS_CHECKPOINT_RECORDED
+                if checkpoints
+                else PREVIOUS_CHECKPOINT_NONE
+            )
+        if checkpoints:
+            previous = checkpoints[0]
+            previous_uid = previous.get("uid")
+            if not isinstance(previous_uid, str) or not previous_uid:
+                raise ValueError(
+                    "Latest Context checkpoint has no valid uid for deletion."
+                )
+            previous_digest = _canonical_json_digest(previous)
+        else:
+            previous_uid = None
+            previous_digest = None
+        return ContextLifecycleEvent.deleted(
+            context_uid=context.uid,
+            last_context_name=context.name,
+            last_context_digest=context_record_digest(context),
+            previous_checkpoint_status=previous_status,
+            previous_checkpoint_uid=previous_uid,
+            previous_checkpoint_digest=previous_digest,
+        )
+
+    def delete(self, name: str) -> ContextLifecycleEvent:
+        """Delete one Context and retain metadata in its Profile ledger."""
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_lock(name):
+                with self.profile_write_guard():
+                    event = self._context_deletion_event_locked(name)
+                    recorded = self._delete_locked(name, lifecycle_event=event)
+                    assert recorded is event
+                    return event
 
     def delete_context_if(
         self,
@@ -4572,33 +4774,54 @@ class MemoryStore:
         *,
         expected_context_uid: str,
         expected_context_digest: str,
-    ) -> None:
-        """Delete only the exact Context identity that was reviewed."""
+    ) -> ContextLifecycleEvent:
+        """Delete only the exact Context identity that was previously reviewed."""
         with self._context_graph_lock(exclusive=False):
             with self._context_write_lock(name):
-                try:
-                    current = self.load_direct(name)
-                except FileNotFoundError as error:
-                    raise ConcurrentContextUpdateError(
-                        f"Context '{name}' no longer exists."
-                    ) from error
-                if (
-                    current.uid != expected_context_uid
-                    or context_record_digest(current) != expected_context_digest
-                ):
-                    raise ConcurrentContextUpdateError(
-                        f"Context '{name}' changed after deletion was reviewed."
+                with self.profile_write_guard():
+                    try:
+                        current = self.load_direct(name)
+                    except FileNotFoundError as error:
+                        raise ConcurrentContextUpdateError(
+                            f"Context '{name}' no longer exists."
+                        ) from error
+                    if (
+                        current.uid != expected_context_uid
+                        or context_record_digest(current) != expected_context_digest
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            f"Context '{name}' changed after deletion was reviewed."
+                        )
+                    event = self._context_deletion_event_locked(
+                        name,
+                        current=current,
                     )
-                self._delete_locked(name)
+                    recorded = self._delete_locked(name, lifecycle_event=event)
+                    assert recorded is event
+                    return event
 
-    @_profile_write_guarded
-    def _delete_locked(self, name: str) -> None:
-        """Delete one Context while its cooperative write lock is held."""
+    def _delete_locked(
+        self,
+        name: str,
+        *,
+        lifecycle_event: ContextLifecycleEvent | None = None,
+    ) -> ContextLifecycleEvent | None:
+        """Delete one Context; internal creation rollback passes no event."""
         if not self.context_exists(name):
             raise FileNotFoundError(f"Context '{name}' not found.")
         current_context = self.load_direct(name)
-        self._assert_context_deletion_allowed(current_context)
         context_uid = current_context.uid
+        if lifecycle_event is not None:
+            self._assert_context_deletion_allowed(current_context)
+        if lifecycle_event is not None and (
+            lifecycle_event.context_uid != context_uid
+            or lifecycle_event.last_context_name != name
+            or lifecycle_event.last_context_digest
+            != context_record_digest(current_context)
+        ):
+            raise ConcurrentContextUpdateError(
+                "Context changed before its deletion event could be committed."
+            )
         # Validate the derived-artifact path before deleting the primary
         # Context so a malformed analysis store cannot turn cleanup into a
         # surprising partial operation.
@@ -4614,6 +4837,10 @@ class MemoryStore:
             delete_translation_view_paths,
             translation_view_paths_for_context,
         )
+        from memcommit.rationale_cache import (
+            delete_rationale_inference_paths,
+            rationale_inference_paths_for_context,
+        )
 
         # Compare artifacts snapshot both sources and derived explanations.
         # Their privacy lifetime therefore ends when either bound source is
@@ -4625,6 +4852,11 @@ class MemoryStore:
         )
         translation_view_paths = (
             translation_view_paths_for_context(context_uid)
+            if canonical_context_uid == context_uid
+            else ()
+        )
+        rationale_inference_paths = (
+            rationale_inference_paths_for_context(context_uid)
             if canonical_context_uid == context_uid
             else ()
         )
@@ -4669,9 +4901,7 @@ class MemoryStore:
             grounding_history_dir is not None
             and grounding_history_dir.exists()
             and any(
-                child.is_symlink()
-                or not child.is_file()
-                or child.suffix != ".json"
+                child.is_symlink() or not child.is_file() or child.suffix != ".json"
                 for child in grounding_history_dir.iterdir()
             )
         ):
@@ -4703,61 +4933,155 @@ class MemoryStore:
             if checkpoints_dir.exists():
                 checkpoints_dir.rename(staged_checkpoints)
                 checkpoints_staged = True
-        except OSError:
-            staged_context.rename(context_file)
-            raise
-
-        try:
-            staged_context.unlink()
+            _fsync_directory(ctx_dir)
         except OSError:
             if checkpoints_staged:
                 staged_checkpoints.rename(checkpoints_dir)
             staged_context.rename(context_file)
+            _fsync_directory(ctx_dir)
             raise
 
-        with self._state_write_lock():
-            state = self._read_state()
-            if state.get("current") == name:
-                state["current"] = None
-                self._write_state(state)
+        ledger_guard = ExitStack()
+        try:
+            if lifecycle_event is not None:
+                ledger_guard.enter_context(
+                    self._context_lifecycle_ledger_lock(exclusive=True)
+                )
+        except Exception:
+            if checkpoints_staged:
+                staged_checkpoints.rename(checkpoints_dir)
+            staged_context.rename(context_file)
+            _fsync_directory(ctx_dir)
+            raise
+
+        lifecycle_event_path: Path | None = None
+        # A final event is provisional until the primary unlink succeeds.
+        # Readers share this lock, so they can never observe an event that a
+        # normal pre-commit rollback subsequently removes.
+        with ledger_guard:
+            try:
+                if lifecycle_event is not None:
+                    lifecycle_event_path = self._write_context_lifecycle_event(
+                        lifecycle_event
+                    )
+            except Exception:
+                if checkpoints_staged:
+                    staged_checkpoints.rename(checkpoints_dir)
+                staged_context.rename(context_file)
+                _fsync_directory(ctx_dir)
+                raise
+
+            try:
+                staged_context.unlink()
+            except OSError as error:
+                rollback_error: Exception | None = None
+                if lifecycle_event_path is not None:
+                    try:
+                        self._remove_context_lifecycle_event(lifecycle_event_path)
+                    except Exception as candidate:
+                        rollback_error = candidate
+                try:
+                    if checkpoints_staged:
+                        staged_checkpoints.rename(checkpoints_dir)
+                    staged_context.rename(context_file)
+                    _fsync_directory(ctx_dir)
+                except Exception as candidate:
+                    rollback_error = rollback_error or candidate
+                if rollback_error is not None:
+                    raise RuntimeError(
+                        "Context deletion failed before commit and its staged "
+                        "Context or lifecycle event could not be restored."
+                    ) from rollback_error
+                raise error
+
+        cleanup_failures: list[tuple[str, Exception]] = []
+
+        def attempt_cleanup(label: str, action: Callable[[], None]) -> None:
+            try:
+                action()
+            except Exception as error:
+                # Primary deletion is already committed. Continue independent
+                # privacy cleanup so one sidecar failure cannot retain all
+                # remaining Context-owned content.
+                cleanup_failures.append((label, error))
+
+        attempt_cleanup(
+            "Context directory durability",
+            lambda: _fsync_directory(ctx_dir),
+        )
         if checkpoints_staged:
-            shutil.rmtree(staged_checkpoints)
+
+            def remove_checkpoint_history() -> None:
+                shutil.rmtree(staged_checkpoints)
+                _fsync_directory(ctx_dir)
+
+            attempt_cleanup("checkpoint history", remove_checkpoint_history)
         if analysis_path is not None and analysis_path.exists():
-            analysis_path.unlink()
+            attempt_cleanup("Atomize analysis", analysis_path.unlink)
         if workbench_path is not None and workbench_path.exists():
             # Workbench responses may contain free-form user context. They are
             # scoped to the deleted Context and must not survive it.
-            workbench_path.unlink()
+            attempt_cleanup("Atomize workbench", workbench_path.unlink)
         if grounding_path is not None and grounding_path.exists():
             # Grounding turns retain the reviewer's words verbatim. Keeping
             # them after their exact Context is gone would be both misleading
             # state and an avoidable privacy leak.
-            grounding_path.unlink()
+            attempt_cleanup("Atomize grounding", grounding_path.unlink)
         if meld_path is not None and meld_path.exists():
             # Meld dialogue may retain both source text and verbatim user
             # comments. Its privacy and validity lifetime is the target.
-            meld_path.unlink()
-        delete_comparison_paths(comparison_paths)
+            attempt_cleanup("Meld session", meld_path.unlink)
+        attempt_cleanup(
+            "Compare analyses",
+            lambda: delete_comparison_paths(comparison_paths),
+        )
         # Translation views retain provider-derived copies of source content.
         # Their privacy and validity lifetime therefore ends with the source.
-        delete_translation_view_paths(translation_view_paths)
-        if (
-            grounding_history_dir is not None
-            and grounding_history_dir.exists()
-        ):
+        attempt_cleanup(
+            "translation views",
+            lambda: delete_translation_view_paths(translation_view_paths),
+        )
+        # A contextual explanation is derived from the deleted direct frame,
+        # so its cache shares that Context's privacy lifetime.
+        attempt_cleanup(
+            "rationale inference cache",
+            lambda: delete_rationale_inference_paths(rationale_inference_paths),
+        )
+        if grounding_history_dir is not None and grounding_history_dir.exists():
             # Terminal dialogues contain the same verbatim local evidence as
             # the latest slot and share the deleted Context's privacy lifetime.
-            shutil.rmtree(grounding_history_dir)
-            try:
-                ATOMIZE_GROUNDING_HISTORY_DIR.rmdir()
-            except OSError:
-                pass
-        if delete_review_session and REVIEW_SESSION_FILE.exists():
+            def remove_grounding_history() -> None:
+                shutil.rmtree(grounding_history_dir)
+                _fsync_directory(grounding_history_dir.parent)
+                try:
+                    self.atomize_grounding_history_dir.rmdir()
+                except OSError:
+                    pass
+
+            attempt_cleanup("Atomize grounding history", remove_grounding_history)
+        if delete_review_session and self.review_session_file.exists():
             # Review answers may contain user-supplied local context. Once
             # their exact Context is deleted, retaining that global artifact
             # would be both misleading state and an avoidable privacy leak.
-            REVIEW_SESSION_FILE.unlink()
+            attempt_cleanup("review session", self.review_session_file.unlink)
+
+        def clear_current_pointer() -> None:
+            with self._state_write_lock():
+                state = self._read_state()
+                if state.get("current") == name:
+                    state["current"] = None
+                    self._write_state(state)
+
+        attempt_cleanup("current pointer", clear_current_pointer)
         self._prune_empty_namespace_dirs(ctx_dir)
+        if cleanup_failures:
+            if lifecycle_event is not None:
+                raise ContextDeletionCommittedError(
+                    lifecycle_event,
+                    tuple(cleanup_failures),
+                ) from cleanup_failures[0][1]
+            raise cleanup_failures[0][1]
+        return lifecycle_event
 
     # --- Checkpoints ---
 
@@ -4780,40 +5104,38 @@ class MemoryStore:
         auto: bool = False,
     ) -> Checkpoint:
         """Save a persisted Context snapshot under its cooperative write lock."""
-        with self._context_write_lock(ctx.name):
-            if not self.context_exists(ctx.name):
-                raise FileNotFoundError(
-                    f"Context '{ctx.name}' must be saved before checkpointing."
+        with self._command_write_lock():
+            with self._context_write_lock(ctx.name):
+                if not self.context_exists(ctx.name):
+                    raise FileNotFoundError(
+                        f"Context '{ctx.name}' must be saved before checkpointing."
+                    )
+                current = self.load_direct(ctx.name)
+                expected_digest = getattr(ctx, "_store_digest", None)
+                current_digest = context_record_digest(current)
+                if current.uid != ctx.uid or (
+                    expected_digest is not None and current_digest != expected_digest
+                ):
+                    # A checkpoint is part of the same serial history as saves and
+                    # reverts. Never append a stale caller's snapshot after a
+                    # concurrent state change.
+                    raise ConcurrentContextUpdateError(
+                        f"Context '{ctx.name}' changed before it could be checkpointed."
+                    )
+                if context_record_digest(ctx) != current_digest:
+                    raise ValueError(
+                        f"Context '{ctx.name}' has unsaved changes; save it "
+                        "before checkpointing."
+                    )
+                return self._checkpoint_locked(
+                    ctx,
+                    message=message,
+                    command=command,
+                    args=args,
+                    description=description,
+                    auto=auto,
                 )
-            current = self.load_direct(ctx.name)
-            expected_digest = getattr(ctx, "_store_digest", None)
-            current_digest = context_record_digest(current)
-            if current.uid != ctx.uid or (
-                expected_digest is not None
-                and current_digest != expected_digest
-            ):
-                # A checkpoint is part of the same serial history as saves and
-                # reverts. Never append a stale caller's snapshot after a
-                # concurrent state change.
-                raise ConcurrentContextUpdateError(
-                    f"Context '{ctx.name}' changed before it could be "
-                    "checkpointed."
-                )
-            if context_record_digest(ctx) != current_digest:
-                raise ValueError(
-                    f"Context '{ctx.name}' has unsaved changes; save it "
-                    "before checkpointing."
-                )
-            return self._checkpoint_locked(
-                ctx,
-                message=message,
-                command=command,
-                args=args,
-                description=description,
-                auto=auto,
-            )
 
-    @_profile_write_guarded
     def _checkpoint_locked(
         self,
         ctx: Context,
@@ -4837,7 +5159,11 @@ class MemoryStore:
             auto=auto,
         )
         ts = cp.timestamp.strftime("%Y%m%dT%H%M%S")
-        slug = message[:24].replace(" ", "-").replace("/", "-") if message else (command or "checkpoint")
+        slug = (
+            message[:24].replace(" ", "-").replace("/", "-")
+            if message
+            else (command or "checkpoint")
+        )
         cp_dir = self._checkpoints_dir(ctx.name)
         cp_dir.mkdir(parents=True, exist_ok=True)
         cp_file = cp_dir / f"{ts}-{slug}-{cp.uid[:8]}.json"
@@ -4906,10 +5232,7 @@ class MemoryStore:
                     f"There is no recorded Context command to {direction}."
                 )
             unit = candidates[-1]
-            if (
-                expected_unit_uid is not None
-                and unit.uid != expected_unit_uid
-            ):
+            if expected_unit_uid is not None and unit.uid != expected_unit_uid:
                 # Granted recovery names one exact authority command from the
                 # participant-side receipt. Never substitute a newer, unrelated
                 # authority mutation merely because it is currently on top.
@@ -4944,11 +5267,9 @@ class MemoryStore:
                         expected = (
                             change.after if direction == "undo" else change.before
                         )
-                        if (
-                            current.uid != change.context_uid
-                            or context_record_digest(current)
-                            != context_record_digest(expected)
-                        ):
+                        if current.uid != change.context_uid or context_record_digest(
+                            current
+                        ) != context_record_digest(expected):
                             raise ConcurrentContextUpdateError(
                                 f"Affected Context '{change.context_name}' changed "
                                 f"after the command selected for {direction}."
@@ -4963,9 +5284,7 @@ class MemoryStore:
                     try:
                         for change in unit.changes:
                             target_record = (
-                                change.before
-                                if direction == "undo"
-                                else change.after
+                                change.before if direction == "undo" else change.after
                             )
                             restored = Context.from_dict(target_record)
                             expected_digest = context_record_digest(
@@ -5356,10 +5675,7 @@ class MemoryStore:
         # Context record. Do not resolve MemoryRef targets or embedded
         # Contexts merely to decide whether a reviewed frame is still fresh.
         ctx = self.load_direct(ctx_name)
-        if (
-            expected_context_uid is not None
-            and ctx.uid != expected_context_uid
-        ):
+        if expected_context_uid is not None and ctx.uid != expected_context_uid:
             raise ConcurrentContextUpdateError(
                 "Context identity changed before the reviewed revert."
             )
@@ -5372,8 +5688,7 @@ class MemoryStore:
             )
         if (
             expected_history_digest is not None
-            and checkpoint_history_digest(entries)
-            != expected_history_digest
+            and checkpoint_history_digest(entries) != expected_history_digest
         ):
             raise ConcurrentContextUpdateError(
                 "Checkpoint history changed before the reviewed revert."
@@ -5408,9 +5723,7 @@ class MemoryStore:
                     f"Checkpoint history for '{ctx_name}' is invalid."
                 ) from error
             if not isinstance(record, dict):
-                raise ValueError(
-                    f"Checkpoint history for '{ctx_name}' is invalid."
-                )
+                raise ValueError(f"Checkpoint history for '{ctx_name}' is invalid.")
             physical_records[path.name] = record
 
         # Strip nested log snapshots so the recovery frame remains bounded.
@@ -5428,9 +5741,7 @@ class MemoryStore:
                 }
             thin_entries.append(entry)
 
-        message = (
-            f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo"
-        )
+        message = f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo"
         pre_cp = Checkpoint(
             uid=str(uuid.uuid4()),
             message=message,
@@ -5479,10 +5790,7 @@ class MemoryStore:
                     uid = entry.get("uid")
                     if not isinstance(uid, str) or not uid:
                         raise ValueError("Checkpoint log snapshot is invalid.")
-                    filename = (
-                        f"{timestamp.strftime('%Y%m%dT%H%M%S')}-"
-                        f"{uid[:8]}.json"
-                    )
+                    filename = f"{timestamp.strftime('%Y%m%dT%H%M%S')}-{uid[:8]}.json"
                     if filename in desired_records:
                         raise ValueError(
                             "Checkpoint log snapshot contains duplicate entries."

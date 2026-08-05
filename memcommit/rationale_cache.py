@@ -158,6 +158,16 @@ class CachedRationaleInference:
         )
 
 
+@dataclass(frozen=True)
+class StoredRationaleInference:
+    """One validated latest rationale projection discovered for search."""
+
+    context_uid: str
+    selected_memory_uid: str
+    input_digest: str
+    inference: CachedRationaleInference
+
+
 def rationale_inferences_dir() -> Path:
     """Resolve the cache root at call time for profile/test isolation."""
     return store_module.STORE_DIR / "rationale-inferences"
@@ -420,6 +430,59 @@ def rationale_inference_paths_for_context(
             raise ValueError("Rationale inference cache storage is invalid.")
         paths.append(path)
     return tuple(sorted(paths))
+
+
+def list_rationale_inferences(
+    context_uid: str,
+) -> tuple[StoredRationaleInference, ...]:
+    """Read every validated final rationale slot for one owned Context.
+
+    Search needs the already-saved inference, not the original provider prompt
+    or a newly inferred rationale. Atomic scratch files are deliberately
+    ignored; malformed final records fail closed through the normal loader.
+    """
+    context = _canonical_uuid(
+        context_uid,
+        "rationale inference Context uid",
+    )
+    records: list[StoredRationaleInference] = []
+    for path in rationale_inference_paths_for_context(context):
+        if _ATOMIC_TEMP_NAME.fullmatch(path.name) is not None:
+            continue
+        try:
+            with open(path, encoding="utf-8") as file:
+                value = json.load(file, object_pairs_hook=_strict_json_object)
+        except (json.JSONDecodeError, OSError, UnicodeError, ValueError) as error:
+            raise ValueError("Saved rationale inference is invalid.") from error
+        if not isinstance(value, dict) or set(value) != {
+            "schema_version",
+            "inference_contract",
+            "provider_contract",
+            "context_uid",
+            "selected_memory_uid",
+            "input_digest",
+            "inference",
+        }:
+            raise ValueError("Saved rationale inference is invalid.")
+        selected = _memory_uid(
+            value["selected_memory_uid"],
+            "stored rationale inference selected Memory uid",
+        )
+        digest = _input_digest(value["input_digest"])
+        inference = load_rationale_inference(context, selected, digest)
+        if inference is None:
+            # Old contracts are safe cache misses for Rationale and equally
+            # unsuitable as current searchable evidence.
+            continue
+        records.append(
+            StoredRationaleInference(
+                context_uid=context,
+                selected_memory_uid=selected,
+                input_digest=digest,
+                inference=inference,
+            )
+        )
+    return tuple(records)
 
 
 def delete_rationale_inference_paths(paths: tuple[Path, ...]) -> None:

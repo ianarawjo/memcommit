@@ -54,6 +54,31 @@ mem review atomize --respond-to UID --response TEXT  # save without a TUI
 mem impact atomize --refresh             # explicit unframed reanalysis
 ```
 
+## Planned saved-Review selector
+
+`mem review` does **not** receive the saved-work picker in this slice. Ground,
+Meld, Atomize, and Compare have enumerable named, Context-bound, or
+ordered-pair artifacts. The older ambiguity Review instead still occupies one
+global latest slot, while Atomize Review is already resumed through its
+Context-scoped Atomize workbench. Presenting those as a list today would imply
+multiple independently resumable Review records that do not exist.
+
+After Review has an enumerable persistence model with stable per-record
+identity and a provider-free exact reopen boundary, it should adopt the same
+interaction grammar:
+
+```text
+mem review --sessions
+```
+
+The future adapter should project each saved Review into the common picker,
+sort recent-first, allow Context grouping and filtering, freeze one selected
+record identity, and revalidate its finder result, Context frame, and revision
+before rendering. It must not rescan, replace a review, call a provider, or
+promote staged evidence merely because a row was selected. Blank/bare Review
+behavior should be reconsidered only after that multi-record model exists;
+this note is a plan, not an implemented command contract.
+
 Bare `mem review` resumes the Context's atomize workbench only when the older
 global review slot is empty; an existing global ambiguity review keeps
 precedence for backward compatibility.
@@ -61,7 +86,7 @@ precedence for backward compatibility.
 Standalone conflict and update have existing semantic producers but no
 dedicated adapter in this shell yet. Conflict issues produced inside an
 atomize analysis are reviewable in the atomize workbench, but their pairwise
-responses remain staged. `reconcile`, `distill`, and `sever` remain future or
+responses remain staged. `reconcile` and `distill` remain future or
 design-only operations. The separate `mem meld` workbench now reuses this
 list/detail/comment/accept interaction grammar while retaining its own
 Context-to-Context relation ledger and mutation contract.
@@ -344,9 +369,9 @@ global review when that artifact names the deleted Context, while preserving a
 global review for another Context. This avoids retaining a freeform comment
 after its interpretation frame has been removed.
 
-References, embedded Contexts, and query-only sources remain outside the
-direct-Memory review boundary. In particular, review never opens
-`~/.mem/query-sources/`.
+References, embedded Contexts, and query-only views remain outside the
+direct-Memory review boundary. Review never opens legacy `query-sources/` or
+authority Contexts reachable only through a `QUERY` grant.
 
 The global ambiguity adapter remains a one-session concurrency limitation.
 Atomize workbenches are isolated by Context UID but still have one latest slot
@@ -404,7 +429,7 @@ response contract:
 | distill | design-only | summary claim and supporting Memories |
 | meld | implemented shared Resolution Workbench adapter | two direct-Memory peer Contexts and one empty result target |
 | Context-directional meld | implemented shared Resolution Workbench adapter | INCOMING and BASELINE Context frames |
-| sever | Task 3 design-only | disclosure boundary |
+| sever | implemented partial adapter | one Source × one Criteria disclosure boundary |
 
 The Update projection consumes the existing `impact-plan.json` and
 `staged-update.json` contracts rather than creating a competing generic source
@@ -548,7 +573,7 @@ workbench themselves do not:
 - infer true creation chronology;
 - archive multiple atomize analysis revisions or lock concurrent writers to one
   Context; or
-- implement standalone conflict, update, reconcile, distill, or sever
+- implement standalone conflict, update, reconcile, or distill
   adapters. Context meld is implemented in its own workbench rather than
   pretending its peer relation ledger is an ambiguity-review artifact.
 

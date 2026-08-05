@@ -40,7 +40,17 @@ from memcommit.commands.tui_primitives import (
 
 FindChatRole = Literal["USER", "MEM", "STATUS"]
 FindChatActionKind = Literal["SUBMIT", "CLOSE"]
-FindChatResultKind = Literal["memory", "ref", "query"]
+FindChatResultKind = Literal["memory", "ref", "query", "artifact"]
+FindChatRelevance = Literal["primary", "related"]
+_FIND_BUSY_FRAMES = (".", "..", "…")
+_FIND_BUSY_INTERVAL_SECONDS = 0.35
+
+
+def _processing_find_turn_label(frame_index: int) -> str:
+    """Render one deterministic frame of the in-process busy indicator."""
+    return " PROCESSING FIND TURN " + _FIND_BUSY_FRAMES[
+        frame_index % len(_FIND_BUSY_FRAMES)
+    ]
 
 
 @dataclass(frozen=True)
@@ -66,6 +76,7 @@ class FindChatResult:
     kind: FindChatResultKind
     uid: str
     content: str
+    relevance: FindChatRelevance = "primary"
 
     def __post_init__(self) -> None:
         if (
@@ -77,12 +88,14 @@ class FindChatResult:
             raise ValueError("Find chat results require an alias like m1.")
         if not isinstance(self.context_name, str) or not self.context_name.strip():
             raise ValueError("Find chat results require a Context name.")
-        if self.kind not in {"memory", "ref", "query"}:
+        if self.kind not in {"memory", "ref", "query", "artifact"}:
             raise ValueError("Invalid Find chat result kind.")
         if not isinstance(self.uid, str) or not self.uid.strip():
             raise ValueError("Find chat results require an item UID.")
         if not isinstance(self.content, str) or not self.content.strip():
             raise ValueError("Find chat results require nonblank content.")
+        if self.relevance not in {"primary", "related"}:
+            raise ValueError("Invalid Find chat result relevance.")
 
 
 @dataclass(frozen=True)
@@ -120,6 +133,7 @@ class FindChatState:
     current_query: str = ""
     messages: tuple[FindChatMessage, ...] = ()
     results: tuple[FindChatResult, ...] = ()
+    related_query: str = ""
     kept_count: int = 0
     status: str = "READY"
     pending_answer: FindPendingAnswerRequest | None = None
@@ -150,6 +164,22 @@ class FindChatState:
         if len(set(aliases)) != len(aliases):
             raise ValueError("Find chat result aliases must be unique.")
         object.__setattr__(self, "results", results)
+        if not isinstance(self.related_query, str):
+            raise ValueError("Find chat related query must be text.")
+        related_query = self.related_query.strip()
+        related = tuple(
+            result for result in results if result.relevance == "related"
+        )
+        primary = tuple(
+            result for result in results if result.relevance == "primary"
+        )
+        if primary and related:
+            raise ValueError("Find chat cannot mix primary and related results.")
+        if bool(related_query) != bool(related):
+            raise ValueError(
+                "Related Find chat results require one related query."
+            )
+        object.__setattr__(self, "related_query", related_query)
         if (
             type(self.kept_count) is not int
             or self.kept_count < 0
@@ -210,6 +240,14 @@ class FindChatSessionResult:
 def render_find_chat_header(state: FindChatState) -> str:
     """Render the stable portion of the Find chat frame."""
     query = state.current_query.strip() or "(not asked yet)"
+    related_count = sum(
+        result.relevance == "related" for result in state.results
+    )
+    result_summary = (
+        f"PRIMARY MATCHES 0 · RELATED {related_count} · KEPT {state.kept_count}"
+        if related_count
+        else f"RESULTS {len(state.results)} · KEPT {state.kept_count}"
+    )
     return "\n".join(
         [
             (
@@ -217,7 +255,7 @@ def render_find_chat_header(state: FindChatState) -> str:
                 f"{safe_terminal_text(state.context_name)}"
             ),
             f"QUERY · {safe_terminal_text(query)}",
-            f"RESULTS {len(state.results)} · KEPT {state.kept_count}",
+            result_summary,
             f"STATUS · {safe_terminal_text(state.status)}",
         ]
     )
@@ -234,10 +272,16 @@ def _message_block(message: FindChatMessage) -> str:
 
 
 def _render_result(result: FindChatResult) -> str:
-    label = (
-        f"[{safe_terminal_text(result.alias)} "
-        f"{result.kind:<7} {safe_terminal_text(result.uid[:8])}]"
-    )
+    if result.relevance == "related":
+        label = (
+            f"[{safe_terminal_text(result.alias)} related "
+            f"{result.kind:<7} {safe_terminal_text(result.uid[:8])}]"
+        )
+    else:
+        label = (
+            f"[{safe_terminal_text(result.alias)} "
+            f"{result.kind:<7} {safe_terminal_text(result.uid[:8])}]"
+        )
     lines = safe_terminal_text(result.content).splitlines() or [""]
     rendered = [f"{label} {lines[0]}"]
     continuation = " " * (len(label) + 1)
@@ -250,10 +294,27 @@ def _result_blocks(state: FindChatState) -> tuple[str, ...]:
     for result in state.results:
         grouped.setdefault(result.context_name, []).append(result)
     blocks: list[str] = []
+    related = any(
+        result.relevance == "related" for result in state.results
+    )
     for index, (context_name, results) in enumerate(grouped.items()):
         lines = []
         if index == 0:
-            lines.append("SEARCH RESULTS")
+            if related:
+                lines.extend(
+                    [
+                        "PRIMARY MATCHES",
+                        "  (none)",
+                        "",
+                        (
+                            "RELATED RESULTS · BROADER SEARCH · "
+                            + safe_terminal_text(state.related_query)
+                        ),
+                        "  Related items do not satisfy the original query.",
+                    ]
+                )
+            else:
+                lines.append("SEARCH RESULTS")
         lines.append(safe_terminal_text(context_name))
         lines.extend(_render_result(result) for result in results)
         blocks.append("\n".join(lines))
@@ -347,6 +408,7 @@ def _run_find_chat_application(
     display_state = initial_state
     submitted_turns: list[str] = []
     busy = False
+    busy_frame = {"index": 0}
     close_requested = False
     status_message = {"value": ""}
     bindings = KeyBindings()
@@ -396,7 +458,7 @@ def _run_find_chat_application(
             Window(
                 FormattedTextControl(
                     lambda: (
-                        " PROCESSING FIND TURN"
+                        _processing_find_turn_label(busy_frame["index"])
                         if busy
                         else " ASK OR REFINE THE FIND"
                     )
@@ -515,6 +577,15 @@ def _run_find_chat_application(
         application.layout.focus(input_area)
         application.invalidate()
 
+    async def animate_busy_indicator() -> None:
+        """Repaint only while one controller turn owns the busy state."""
+        while busy:
+            await asyncio.sleep(_FIND_BUSY_INTERVAL_SECONDS)
+            if not busy:
+                return
+            busy_frame["index"] += 1
+            application.invalidate()
+
     @bindings.add("enter", filter=has_focus(input_area), eager=True)
     def _submit(event) -> None:
         nonlocal busy
@@ -535,6 +606,7 @@ def _run_find_chat_application(
         submitted_turns.append(text)
         input_area.buffer.set_document(Document("", cursor_position=0))
         busy = True
+        busy_frame["index"] = 0
         status_message["value"] = ""
         refresh(
             replace(
@@ -547,6 +619,7 @@ def _run_find_chat_application(
             )
         )
         event.app.layout.focus(conversation_control)
+        event.app.create_background_task(animate_busy_indicator())
         event.app.create_background_task(process_turn(base_state, text))
         event.app.invalidate()
 

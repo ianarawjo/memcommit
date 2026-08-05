@@ -23,6 +23,12 @@ from memcommit.result_workbench import (
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
 from memcommit.review import direct_context_digest
+from memcommit.understanding import (
+    UnderstandingError,
+    UnderstandingSummary,
+    parse_source_linked_understanding,
+    source_linked_understanding_schema,
+)
 
 
 ATOMIZE_INPUT_CHAR_LIMIT = 200_000
@@ -197,18 +203,8 @@ class AtomizeChild:
     frame_spans: tuple[str, ...] = ()
 
 
-@dataclass(frozen=True)
-class AtomizeOverviewSection:
-    """One short, source-linked explanation preserved with an analysis."""
-
-    text: str
-    source_uids: tuple[str, ...] = ()
-
-    def to_dict(self) -> dict[str, object]:
-        return {
-            "text": self.text,
-            "source_uids": list(self.source_uids),
-        }
+class AtomizeOverviewSection(UnderstandingSummary):
+    """Compatibility name for Atomize-specific outcome report sections."""
 
     @classmethod
     def from_dict(cls, value: object) -> "AtomizeOverviewSection":
@@ -237,7 +233,7 @@ class AtomizeOverviewSection:
 class AtomizeOverview:
     """The compact comprehension and transformation signal shown first."""
 
-    understood: AtomizeOverviewSection
+    understood: UnderstandingSummary
     changed: AtomizeOverviewSection
     unresolved: AtomizeOverviewSection
 
@@ -1769,32 +1765,12 @@ def _output_schema(
         candidate.candidate_id
         for candidate in candidates
     ]
-    overview_section = {
-        "type": "object",
-        "properties": {
-            "text": {
-                "type": "string",
-                "maxLength": ATOMIZE_OVERVIEW_CHAR_LIMIT,
-                "description": (
-                    "One short English natural-language report paragraph "
-                    "using complete sentences, or an empty string when the "
-                    "bounded analysis has honestly nothing to report. Do not "
-                    "use bullets, numbered lists, headings, key-value records, "
-                    "or telegraphic keyword sequences."
-                ),
-            },
-            "source_ids": {
-                "type": "array",
-                "maxItems": len(candidates),
-                "items": {
-                    "type": "string",
-                    "enum": candidate_ids,
-                },
-            },
-        },
-        "required": ["text", "source_ids"],
-        "additionalProperties": False,
-    }
+    overview_section = source_linked_understanding_schema(
+        tuple(candidate_ids),
+        limit=ATOMIZE_OVERVIEW_CHAR_LIMIT,
+        empty=True,
+        require_sources=False,
+    )
     quality_issue = {
         "type": "object",
         "properties": {
@@ -2137,6 +2113,30 @@ def _parse_overview(
         {"understood", "changed", "unresolved"},
     )
 
+    source_uid_by_id = {
+        candidate_id: candidate.memory.uid
+        for candidate_id, candidate in candidate_by_id.items()
+    }
+
+    def parse_understood(raw: object) -> UnderstandingSummary:
+        try:
+            if (
+                isinstance(raw, dict)
+                and raw.get("text") == ""
+                and raw.get("source_ids") == []
+            ):
+                return UnderstandingSummary(text="")
+            return parse_source_linked_understanding(
+                raw,
+                source_uid_by_id=source_uid_by_id,
+                limit=ATOMIZE_OVERVIEW_CHAR_LIMIT,
+            )
+        except UnderstandingError as error:
+            raise AtomizeImpactError(
+                "Codex atomize impact returned an invalid source-linked "
+                "natural-language report paragraph."
+            ) from error
+
     def parse_section(raw: object) -> AtomizeOverviewSection:
         section = _exact_dict(raw, {"text", "source_ids"})
         raw_text = section["text"]
@@ -2180,7 +2180,7 @@ def _parse_overview(
         )
 
     return AtomizeOverview(
-        understood=parse_section(record["understood"]),
+        understood=parse_understood(record["understood"]),
         changed=parse_section(record["changed"]),
         unresolved=parse_section(record["unresolved"]),
     )

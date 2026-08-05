@@ -10,24 +10,27 @@
 관리에 관한 구체적 사건뿐 아니라, 여러 사건에서 도출된 선호와 로컬 에이전트가
 따라 온 개인 규칙도 함께 들어 있다.
 
-`government/healthcare-agent/information-request`를 확인해 일반적인 정보 범주와
-전송 결과를 파악하라. 그런 다음 정보 요청 에이전트와 별개인 로컬 검토 과정에서
-`personal-memory` 중 실제로 보낼 정보를 결정하라. 구체적 사건을 그대로 보낼지,
+`remote/government/healthcare-agent/info-request/official-guidance`에서 배포 가능한 상위 수준 공유 기준을
+읽고, 상세 질문이 남을 때만 `remote/government/healthcare-agent/info-request/questions-and-answers`를 별도로 질의하라.
+그런 다음 의료 Q&A 에이전트와 별개인 로컬 검토 과정에서
+`local/personal-memory` 중 실제로 보낼 정보를 결정하라. 구체적 사건을 그대로 보낼지,
 조건을 보존한 요약·선호·정책을 보낼지, 또는 보내지 않을지는 각 후보의 필요성과
 민감성을 바탕으로 참가자가 판단한다. 정부 의료기관 시스템의 전송 화면에서
 실제로 보낸 전체 내용은 하나의 공유 동의 단위로 간주된다.
 
 ## 시작 상태
 
-- `personal-memory`: 300개의 비식별 합성 개인 Memory
-- `guardrails`: 로컬 발신 공유에 자동 적용되는 사전 검토 정책
-- `government/healthcare-agent/information-request`: 75개의 질의 전용 정보 공유
+- `local/personal-memory`: 300개의 비식별 합성 개인 Memory
+- `local/guardrails`: 로컬 발신 공유에 자동 적용되는 사전 검토 정책
+- `remote/government/healthcare-agent/info-request/official-guidance`: 읽기·파생 사용 가능한 상위 수준 정보
+  공유 가이던스 Memory 12개
+- `remote/government/healthcare-agent/info-request/questions-and-answers`: 75개의 질의 전용 정보 공유
   안내 Memory
 
-`information-request`는 의료 지원에 도움이 될 수 있는 일반적인 정보 범주와
+`의료 Q&A`는 의료 지원에 도움이 될 수 있는 일반적인 정보 범주와
 실제 전송 뒤의 이용 결과를 설명한다. 전송된 정보는 정보 종류에 따라 의료
 목적의 관련 제삼자에게 제공되거나 서비스 개선에 이용될 수 있다. 정확한 서비스·
-수신자·제삼자의 범위는 정보 종류에 따라 달라지며 정보 요청 에이전트는 이를
+수신자·제삼자의 범위는 정보 종류에 따라 달라지며 의료 Q&A 에이전트는 이를
 특정할 수 없다.
 
 이 에이전트는 정보를 직접 요청하거나 전송 후보를 준비하지 않으며, 저장된 개인
@@ -37,25 +40,28 @@ Memory나 기관 기록에 접근하지 않고 어떤 Memory도 선택·포함·
 진료 방문·이동 경험이 대화 중 제시돼도 그 현재성이나 정확성을 확인하거나 기관
 기록으로 바꾸지 않으며, 물리적으로 삭제하거나 전송할 수도 없다. 실제 수신·
 보존·내부 공유·후처리는 정부 의료기관 시스템이 담당한다.
-`guardrails`는 이 합성 상황에 맞게 사전 검토된 것으로 가정하며,
+`local/guardrails`는 이 합성 상황에 맞게 사전 검토된 것으로 가정하며,
 참가자는 이를 수정하거나 평가할 필요가 없다.
 
 ## 예상 흐름
 
-1. 질의 전용 정보 공유 안내를 확인해 일반적인 정보 범주와 실제 전송의 결과를 이해한다.
-2. `personal-memory`에서 관련 후보와 그 조건을 찾는다.
-3. 로컬 도구인 `mem sever --to government/healthcare-agent/information-request --save ...`로
-   공유 후보와 로컬 rationale을 만든다. 정보 요청 에이전트는 이 명령을 수행하거나 후보를 선택하지 않는다.
+1. 공개 의료 가이던스를 읽고, 필요한 상세 질문은 질의 전용 Q&A view에서 별도로 확인한다.
+2. `local/personal-memory`에서 관련 후보와 그 조건을 찾는다.
+3. `mem sever --source SOURCE --criteria CRITERIA --save-as OUTPUT` 또는 동일한
+   인터랙티브 picker로 공유 후보와 로컬 rationale을 만든다. 한 Sever pass에는
+   ordinary Criteria Context 하나만 사용한다. 두 기준을 동등하게 고려하려면 먼저
+   `mem meld`를 사용하고, 순서가 있는 두 번째 정제를 원하면 Sever를 다시 실행한다.
+   의료 Q&A 에이전트는 Sever를 수행하거나 후보를 선택하지 않는다.
 4. 후보를 검토하고, 필요하면 `mem rationale`과 source trace로 사건·요약·정책의
    근거와 누락된 조건을 확인한다.
 5. 최종 검토한 항목을 `mem share --to government/healthcare-agent`로 정부 의료기관
-   수신 시스템에 전달한다. 이 locator는 정보 요청 에이전트의 저장소가 아니라
+   수신 시스템에 전달한다. 이 locator는 의료 Q&A 에이전트의 저장소가 아니라
    연구 fixture 안의 기관 수신 대상을 나타낸다. 실제로 보낸 전체 내용은 하나의
    공유 동의 단위로 간주된다.
 
 공유하지 않은 원문과 로컬 rationale은 로컬에 남는다. 실제 전송 전의 후보
-범위는 로컬 `guardrails`와 참가자가 결정하며, 정보 요청 에이전트는 이에
+범위는 로컬 `local/guardrails`와 참가자가 결정하며, 의료 Q&A 에이전트는 이에
 관여하지 않는다. 질의 중 정보를 말한 것만으로 기관에 전송되지는 않는다.
 반대로 기관 전송 화면에서 실제로 보낸 뒤에는 그 전체 내용이 동의된 공유
 단위이며, 정보 종류에 따라 의료 목적의 관련 제삼자 제공이나 서비스 개선 이용이
-발생할 수 있다. 정확한 서비스·수신자 범위는 정보 요청 에이전트가 특정할 수 없다.
+발생할 수 있다. 정확한 서비스·수신자 범위는 의료 Q&A 에이전트가 특정할 수 없다.

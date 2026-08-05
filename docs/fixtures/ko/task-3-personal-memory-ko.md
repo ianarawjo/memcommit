@@ -13,7 +13,7 @@ World Model은 사람의 마음과 독립적인 물리·제도·환경 조건만
 가족 관계는 엄마, 아빠, 누나, 남동생, 이모, 외삼촌처럼 명시하되 실제 이름,
 기관, 주소, 병명은 포함하지 않는다. 모든 날짜와 사건은 연구용 합성 자료다.
 
-`YYYY-MM/NN`은 `personal-memory` Context 아래의 계층형 Memory 위치다. 각
+`YYYY-MM/NN`은 `local/personal-memory` Context 아래의 계층형 Memory 위치다. 각
 위치는 월 단위 Context와 월 안의 개별 Memory를 나타낸다. 생성된 Study
 Profile은 이 source locator를 안정적인 fixture key로 보존하면서, ordinary
 Context는 구조용 `YYYY` 부모를 포함한 `YYYY/MM` 경로로 노출한다. 대괄호의 두

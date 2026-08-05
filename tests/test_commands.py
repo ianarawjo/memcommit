@@ -423,12 +423,25 @@ class TestList:
 
         short_result = invoke("ls", "-R", "parent")
         long_result = invoke("ls", "--recursive", "parent")
+        beginner_result = invoke("ls", "--expand", "parent")
         canonical_result = invoke("list", "-R", "parent")
+        canonical_beginner_result = invoke("list", "--expand", "parent")
+        help_result = invoke("ls", "--help")
 
         assert short_result.exit_code == 0
         assert long_result.exit_code == 0
+        assert beginner_result.exit_code == 0
         assert canonical_result.exit_code == 0
-        assert short_result.output == long_result.output == canonical_result.output
+        assert canonical_beginner_result.exit_code == 0
+        assert help_result.exit_code == 0
+        assert "--expand" in help_result.output
+        assert (
+            short_result.output
+            == long_result.output
+            == beginner_result.output
+            == canonical_result.output
+            == canonical_beginner_result.output
+        )
 
     def test_recursive_list_terminates_for_persisted_indirect_cycle(
         self,
@@ -767,9 +780,35 @@ class TestDelete:
         invoke("init", "keep")
         result = invoke("delete", "to-delete", "--force")
         assert result.exit_code == 0
+        assert "ledger [" in result.output
 
         store = MemoryStore()
         assert not store.context_exists("to-delete")
+        event = store.list_context_lifecycle_events(context_name="to-delete")[0]
+        assert f"ledger [{event.event_uid[:8]}]" in result.output
+
+    def test_post_commit_cleanup_failure_reports_deletion_as_committed(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        invoke("init", "to-delete")
+
+        def fail_state_write(self, state):
+            raise OSError("injected state cleanup failure")
+
+        monkeypatch.setattr(MemoryStore, "_write_state", fail_state_write)
+
+        result = invoke("delete", "to-delete", "--force")
+
+        assert result.exit_code == 1
+        assert "Deleted context 'to-delete'" in result.stderr
+        assert "post-delete cleanup was incomplete" in result.stderr
+        store = MemoryStore()
+        assert not store.context_exists("to-delete")
+        assert len(
+            store.list_context_lifecycle_events(context_name="to-delete")
+        ) == 1
 
     def test_delete_fails_for_nonexistent_context(self, isolated_store):
         result = invoke("delete", "ghost", "--force")

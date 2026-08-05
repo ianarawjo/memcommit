@@ -1,0 +1,273 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 0.5694514997303486,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 1,
+      "prompt_digest": "fc5fd65f6a37232e65416d848819f571567b73ae3758866278bb05998b173081",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 919,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"SINGLE\",\n  \"clarification\": \"NONE\"\n}",
+      "repetition": 1,
+      "response_bytes": 59,
+      "response_digest": "c4c8d5e1ef77bd720f6d028c913cba765f6fd3094cc1f937bbd6957076db73b8",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "dominant-none-access-card",
+      "completion_seconds": 0.5379609996452928,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": null,
+      "ordinal": 2,
+      "prompt_digest": "e5540dbf108d0e938b3ccd08abc2785324752c37c35a57dc5f52e4c07ece8151",
+      "provider_run": {
+        "completion_tokens": 24,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 920,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"DOMINANT\",\n  \"clarification\": \"NONE\"\n}",
+      "repetition": 1,
+      "response_bytes": 61,
+      "response_digest": "7e9d1cefbbbadd0b7b0a445f642b874141fb2cff9ee40d9bc27621c4a1ed7ff3",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-required-hotel-216",
+      "completion_seconds": 0.8208682080730796,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": null,
+      "ordinal": 3,
+      "prompt_digest": "91005c3670fd379564bfef71b33bc7a3908223edec6ed2e2cac7716e0545bd85",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 917,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"COMPETING\",\n  \"clarification\": \"REQUIRED\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "60fe21212cbab97ee350b0ee4379fe3a26bfff4c88f2f623f6659c54fea1c876",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    }
+  ],
+  "completed_at": "2026-08-03T18:49:13.472241Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "fixture": "ambiguity.json",
+    "fixture_case_count": 10,
+    "fixture_digest": "003654c092e03ea74f72e8f084624438085555e2cedad2c9abed985ae2b3c067",
+    "independent_holdout": false,
+    "operation": "find-ambiguities",
+    "role": "CALIBRATION",
+    "ruleset_version": "ambiguity-v1-draft",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "single-helpful-reception-location",
+      "dominant-none-access-card",
+      "competing-required-hotel-216"
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T184911540545Z-40fd1460.json",
+  "pipeline": {
+    "gate": "exact two-label contract with repeated stability",
+    "id": "ambiguity-classify-v1",
+    "stages": [
+      "CLASSIFY"
+    ],
+    "version": 1
+  },
+  "provider": {
+    "effective_thinking": false,
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen3.6:35b-a3b",
+    "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "provider": "ollama",
+    "reasoning_effort": null,
+    "runtime": "ollama/0.30.10"
+  },
+  "run_id": "20260803T184911540545Z-40fd1460",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": 65536,
+      "max_output_tokens": 16384,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T18:49:11.540545Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 2,
+      "structurally_valid": 3,
+      "total": 3
+    },
+    "campaign_passed": false,
+    "case_results": [
+      {
+        "attempts": 1,
+        "case_id": "single-helpful-reception-location",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-none-access-card",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-required-hotel-216",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      }
+    ],
+    "cases": {
+      "failed": 1,
+      "passed": 2,
+      "total": 3
+    },
+    "completion_seconds": {
+      "max": 0.8208682080730796,
+      "mean": 0.6427602358162403,
+      "median": 0.5694514997303486,
+      "p95": 0.8208682080730796
+    },
+    "distributions": {
+      "actual_joint_attempts": {
+        "COMPETING/REQUIRED": 1,
+        "DOMINANT/NONE": 1,
+        "SINGLE/NONE": 1
+      },
+      "case_pass_by_clarification": {
+        "HELPFUL": {
+          "passed": 0,
+          "total": 1
+        },
+        "NONE": {
+          "passed": 1,
+          "total": 1
+        },
+        "REQUIRED": {
+          "passed": 1,
+          "total": 1
+        }
+      },
+      "case_pass_by_interpretation": {
+        "COMPETING": {
+          "passed": 1,
+          "total": 1
+        },
+        "DOMINANT": {
+          "passed": 1,
+          "total": 1
+        },
+        "SINGLE": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "expected_clarification": {
+        "HELPFUL": 1,
+        "NONE": 1,
+        "REQUIRED": 1
+      },
+      "expected_interpretation": {
+        "COMPETING": 1,
+        "DOMINANT": 1,
+        "SINGLE": 1
+      },
+      "expected_joint": {
+        "COMPETING/REQUIRED": 1,
+        "DOMINANT/NONE": 1,
+        "SINGLE/HELPFUL": 1
+      }
+    },
+    "failures": {
+      "LABEL_MISMATCH": 1
+    },
+    "tokens": {
+      "completion": 70,
+      "prompt": 2756,
+      "reported_attempts": 3
+    }
+  },
+  "timing": {
+    "campaign_seconds": 1.931925083976239,
+    "provider_connection_seconds": 0.021048791706562042,
+    "total_seconds": 1.952973875682801
+  }
+}

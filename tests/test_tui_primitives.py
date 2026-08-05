@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+import asyncio
 import shlex
 from types import SimpleNamespace
 
 import pytest
-from prompt_toolkit.layout import FormattedTextControl, Window
+from prompt_toolkit.application import Application
+from prompt_toolkit.data_structures import Size
+from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.layout import FormattedTextControl, Layout, Window
+from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.exact_command_review import (
     ExactCommandReview,
@@ -39,6 +44,59 @@ class _RecordingApp:
 
     def invalidate(self) -> None:
         self.invalidations += 1
+
+
+class _SizedDummyOutput(DummyOutput):
+    def __init__(self, *, rows: int, columns: int) -> None:
+        super().__init__()
+        self._size = Size(rows=rows, columns=columns)
+
+    def get_size(self) -> Size:
+        return self._size
+
+
+def _render_pane_top_row(*, active: bool, columns: int) -> str:
+    pane = build_scrollable_text_pane(
+        "GOAL",
+        "one Goal",
+        height=3,
+        notification=lambda: active,
+    )
+    captured: list[str] = []
+
+    with create_pipe_input() as pipe_input:
+        application = Application(
+            layout=Layout(pane.container),
+            full_screen=True,
+            input=pipe_input,
+            output=_SizedDummyOutput(rows=3, columns=columns),
+            style=MEMCOMMIT_TUI_STYLE,
+        )
+
+        async def capture_after_render() -> None:
+            for _attempt in range(100):
+                await asyncio.sleep(0.01)
+                screen = application.renderer.last_rendered_screen
+                if screen is not None:
+                    captured.append(
+                        "".join(
+                            screen.data_buffer[0][column].char or " "
+                            for column in range(columns)
+                        )
+                    )
+                    application.exit()
+                    return
+            application.exit(
+                exception=AssertionError("pane was not rendered")
+            )
+
+        application.run(
+            pre_run=lambda: application.create_background_task(
+                capture_after_render()
+            )
+        )
+
+    return captured[0]
 
 
 def test_shared_exact_command_review_preserves_argv_and_effect_boundary():
@@ -164,11 +222,25 @@ def test_scrollable_panes_have_distinct_read_only_buffers_and_equal_heights():
     assert rules.text_area.window.vertical_scroll == 0
 
 
+def test_scrollable_pane_notification_is_optional_and_right_anchored():
+    inactive = _render_pane_top_row(active=False, columns=30)
+    active = _render_pane_top_row(active=True, columns=30)
+    resized = _render_pane_top_row(active=True, columns=40)
+
+    assert "●" not in inactive
+    assert active.index("●") == 27
+    assert resized.index("●") == 37
+    assert active.endswith("●─┐")
+    assert resized.endswith("●─┐")
+    assert "| GOAL |" in active
+
+
 def test_focus_style_highlights_only_frame_chrome_and_keeps_base_style():
     pane = build_scrollable_text_pane(
         "RULES",
         "one Rule",
         frame_style="class:custom-frame",
+        notification=lambda: True,
     )
     focused = {"value": False}
     bind_focused_frame_style(
@@ -179,6 +251,7 @@ def test_focus_style_highlights_only_frame_chrome_and_keeps_base_style():
     assert pane.frame.container.style() == (
         "class:frame class:custom-frame"
     )
+    assert pane.container is not pane.frame
     focused["value"] = True
     assert pane.frame.container.style() == (
         "class:frame class:custom-frame class:memcommit.focused"
@@ -253,7 +326,9 @@ def test_in_frame_inputs_share_the_pane_frame_and_restore_base_layout():
         "RULES",
         "read-only Rules",
         height=base_height,
+        notification=lambda: True,
     )
+    presentation_container = pane.container
     original_body = pane.frame.body
     message = build_framed_multiline_input("MESSAGE")
     editor = build_framed_multiline_input("EDIT")
@@ -284,6 +359,7 @@ def test_in_frame_inputs_share_the_pane_frame_and_restore_base_layout():
     assert pane.frame.body.children[2].children[0] is editor.text_area.window
     assert pane.frame.body.children[4].children[0] is message.text_area.window
     assert pane.frame.container.height is expanded_height
+    assert pane.container is presentation_container
 
     manager.clear()
 
@@ -291,6 +367,7 @@ def test_in_frame_inputs_share_the_pane_frame_and_restore_base_layout():
     assert manager.active_sections == ()
     assert pane.frame.body is original_body
     assert pane.frame.container.height is base_height
+    assert pane.container is presentation_container
 
 
 def test_in_frame_input_moves_one_shared_composer_between_live_panes():

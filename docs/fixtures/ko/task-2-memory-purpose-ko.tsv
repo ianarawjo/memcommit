@@ -15,7 +15,7 @@ T2-L-054	Other Model
 T2-L-080	Other Model
 T2-L-095	Procedural Policy
 T2-L-096	Procedural Policy
-T2-L-097	Self Model
+T2-L-097	Other Model
 T2-L-003	Procedural Policy
 T2-L-051	Procedural Policy
 T2-L-013	Procedural Policy
@@ -44,7 +44,7 @@ T2-L-020	Procedural Policy
 T2-L-052	Procedural Policy
 T2-L-057	Other Model
 T2-L-106	Procedural Policy
-T2-L-107	Knowledge Base
+T2-L-107	Procedural Policy
 T2-L-108	User Model
 T2-L-006	Procedural Policy
 T2-L-021	Procedural Policy
@@ -59,7 +59,7 @@ T2-L-081	Knowledge Base
 T2-L-059	Other Model
 T2-L-112	Knowledge Base
 T2-L-113	Knowledge Base
-T2-L-114	Self Model
+T2-L-114	Other Model
 T2-L-007	Procedural Policy
 T2-L-014	Procedural Policy
 T2-L-074	Procedural Policy
@@ -68,7 +68,7 @@ T2-L-075	Procedural Policy
 T2-L-022	Procedural Policy
 T2-L-028	Procedural Policy
 T2-L-076	Procedural Policy
-T2-L-034	Self Model
+T2-L-034	Other Model
 T2-L-036	World Model
 T2-L-086	World Model
 T2-L-060	Other Model
@@ -196,7 +196,7 @@ T2-R-075	Procedural Policy
 T2-R-022	Procedural Policy
 T2-R-028	Procedural Policy
 T2-R-076	Procedural Policy
-T2-R-034	Self Model
+T2-R-034	Other Model
 T2-R-036	World Model
 T2-R-084	World Model
 T2-R-060	Other Model
@@ -244,7 +244,7 @@ T2-R-092	Other Model
 T2-R-093	Procedural Policy
 T2-R-094	Procedural Policy
 T2-R-095	Knowledge Base
-T2-R-096	Self Model
+T2-R-096	Other Model
 T2-R-097	Procedural Policy
 T2-R-098	Procedural Policy
 T2-R-099	User Model
@@ -253,14 +253,14 @@ T2-R-101	Procedural Policy
 T2-R-102	Knowledge Base
 T2-R-103	World Model
 T2-R-104	Procedural Policy
-T2-R-105	Self Model
+T2-R-105	Procedural Policy
 T2-R-106	World Model
 T2-R-107	Procedural Policy
 T2-R-108	Knowledge Base
 T2-R-109	User Model
 T2-R-110	Procedural Policy
 T2-R-111	Knowledge Base
-T2-R-112	Self Model
+T2-R-112	Other Model
 T2-R-113	Procedural Policy
 T2-R-114	Procedural Policy
 T2-R-115	Procedural Policy

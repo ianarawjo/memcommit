@@ -1,0 +1,80 @@
+{
+  "uid": "4f85b587-5040-4896-ab82-82ed2104065d",
+  "message": "Imported canonical English Task 3 fixture Context 'local/guardrails/audit-and-recovery' into profile 'task-3'.",
+  "timestamp": "2026-08-04T22:47:18.956697",
+  "snapshot": {
+    "uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+    "name": "local/guardrails/audit-and-recovery",
+    "memories": {
+      "c0ce508e-2777-54e3-806d-632adbdb9073": {
+        "type": "memory",
+        "uid": "c0ce508e-2777-54e3-806d-632adbdb9073",
+        "content": "Record the source Memory locator for approved sharing."
+      },
+      "a0b32950-42b4-58a6-b1af-dd4638086d3d": {
+        "type": "memory",
+        "uid": "a0b32950-42b4-58a6-b1af-dd4638086d3d",
+        "content": "Record the recipient of approved sharing."
+      },
+      "620a1dee-b131-586f-a838-64d853c44a92": {
+        "type": "memory",
+        "uid": "620a1dee-b131-586f-a838-64d853c44a92",
+        "content": "Record the purpose of approved sharing."
+      },
+      "26256211-0509-5c26-a54c-e83b4bde5a4e": {
+        "type": "memory",
+        "uid": "26256211-0509-5c26-a54c-e83b4bde5a4e",
+        "content": "Record the approval time."
+      },
+      "0d377136-da0b-570b-8deb-c662bee5bcbb": {
+        "type": "memory",
+        "uid": "0d377136-da0b-570b-8deb-c662bee5bcbb",
+        "content": "If a transmission error occurs, inform the user of the failure state."
+      },
+      "d26befa6-62a2-5923-a31b-71e73a31e164": {
+        "type": "memory",
+        "uid": "d26befa6-62a2-5923-a31b-71e73a31e164",
+        "content": "The local agent can reconstruct its own approval and transmission records but cannot trace unrecorded external processing."
+      },
+      "d5d34316-4878-53d9-9ba8-d4d4d3d13752": {
+        "type": "memory",
+        "uid": "d5d34316-4878-53d9-9ba8-d4d4d3d13752",
+        "content": "A copy conveyed to an external system may not automatically synchronize with a later correction to the local Memory."
+      },
+      "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220": {
+        "type": "memory",
+        "uid": "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220",
+        "content": "If a user's local record conflicts with an external system's audit record, an external system operator may place greater trust in its own audit record."
+      }
+    },
+    "order": [
+      "c0ce508e-2777-54e3-806d-632adbdb9073",
+      "a0b32950-42b4-58a6-b1af-dd4638086d3d",
+      "620a1dee-b131-586f-a838-64d853c44a92",
+      "26256211-0509-5c26-a54c-e83b4bde5a4e",
+      "0d377136-da0b-570b-8deb-c662bee5bcbb",
+      "d26befa6-62a2-5923-a31b-71e73a31e164",
+      "d5d34316-4878-53d9-9ba8-d4d4d3d13752",
+      "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+    "memory_uids": [
+      "c0ce508e-2777-54e3-806d-632adbdb9073",
+      "a0b32950-42b4-58a6-b1af-dd4638086d3d",
+      "620a1dee-b131-586f-a838-64d853c44a92",
+      "26256211-0509-5c26-a54c-e83b4bde5a4e",
+      "0d377136-da0b-570b-8deb-c662bee5bcbb",
+      "d26befa6-62a2-5923-a31b-71e73a31e164",
+      "d5d34316-4878-53d9-9ba8-d4d4d3d13752",
+      "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/guardrails/audit-and-recovery' into profile 'task-3'.",
+  "auto": true
+}

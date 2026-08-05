@@ -2,16 +2,17 @@
 
 ## Decision
 
-Task 1 uses a top-level ordinary `campus-wiki` Context. The Task Profile is
-already the isolation boundary, so adding `participant/` and `-fork` to the
-wiki locator repeats ownership and publication concepts that the participant
-does not need in order to browse or update the fixture.
+Task 1's task Profile sees a top-level `campus-wiki` **view** sourced from the
+switchable `task-1-campus-authority` Profile. The task is already the
+experimental boundary, so `-fork` would incorrectly imply a divergent copy
+and publication workflow.
 
 | Role | Canonical identifier | Kind and authority |
 | --- | --- | --- |
-| writable campus wiki | `campus-wiki` | ordinary readable and writable Context graph |
-| concealed construction detail | `construction-details` | query-only child represented by a direct `QueryContextRef` in `campus-wiki` |
-| verified change source | `participant/construction-updates` | ordinary readable local Context graph |
+| campus authority Profile | `task-1-campus-authority` | owns the ordinary campus source trees and can be selected for full CRUD |
+| editable campus view | `campus-wiki` | task-side `READ+CREATE+UPDATE` grant over the authority Context graph |
+| construction detail view | `campus-wiki/construction-details` | narrower task-side `QUERY+SESSION_LOG` grant; no `READ` |
+| verified change source | `participant/construction-updates` | ordinary task-owned Context graph and task attachment |
 | person in English prose | `the participant` | role label, not a personal name |
 
 `participant` remains a literal, stable pseudonymous namespace for the
@@ -21,43 +22,41 @@ campus reference collection, not the person who happens to update it.
 
 ## Task 1 object boundary
 
-The fixture contains one readable wiki with one narrower concealed source:
+The fixture separates local evidence from authority data and derives two
+task-side views:
 
 ```text
-participant/construction-updates
-    verified local change evidence
-
-campus-wiki
-    ordinary readable and writable Memories
-    └── QueryContextRef: construction-details
-        concealed construction details; query access only
+task-1 Profile                         task-1-campus-authority Profile
+participant/construction-updates      campus-wiki (ordinary source)
+    └── campus-wiki view ────────────>├── readable/editable wiki tree
+        └── construction-details      └── construction-details tree
+            query-only view
 ```
 
 The current explicit query command remains:
 
 ```bash
-mem query construction-details \
-  "What work is planned for the Main Building?" \
-  --context campus-wiki
+mem profile use task-1
+mem query campus-wiki/construction-details \
+  "What work is planned for the Main Building?"
 ```
 
-This change establishes the data topology only. Relative composite query
-locators and a no-argument interactive query entry point are deferred to the
-query UX implementation. The query-only pointer is not an ordinary Context:
-it cannot be selected, traversed, or used as an `impact` or `update` target.
+The query view is not an ordinary task-owned Context. It cannot be selected,
+traversed, or used as an `impact` or `update` target. Its source is ordinary
+only inside the authority Profile.
 
 The participant performs directional operations against the ordinary wiki:
 
 ```bash
 mem switch participant/construction-updates
-mem impact --to campus-wiki
-mem update --to campus-wiki
-mem diff
+mem ls campus-wiki
+mem add "..." --context campus-wiki
+mem edit MEMORY "..." --context campus-wiki
 ```
 
-There is no separate `fork` object in this study fixture. Any later
-publication or synchronization workflow is a separate design concern and
-must not be implied by the Context name.
+There is no separate `fork` object in this study fixture. The task command
+writes the single authority-owned wiki through a revalidated grant. Any later
+publication or synchronization workflow remains a separate design concern.
 
 ## Why this is a repository contract, not a Memory
 
@@ -74,10 +73,9 @@ neutral names such as `facilities-reference`; they should not repurpose
 
 ## Current prototype boundary
 
-The query-only implementation can preserve and query the
-`construction-details` pointer, and `update` can apply a validated plan to the
-already-provisioned ordinary `campus-wiki`. Query-only remains a research UI
-concealment boundary rather than operating-system access control. The current
-prototype does not refresh an already imported editable Task Profile when a
-generated bundle changes, so bundle regeneration and installed-Profile
-migration must be reviewed separately.
+The implementation can list and directly edit granted wiki Memories and query
+the narrower construction detail view. Context lifecycle, `impact`, and
+`update` do not yet accept granted targets. Query-only remains a research UI
+authority boundary rather than operating-system access control. Generated
+bundle changes do not refresh already imported Profiles, so regeneration and
+installed-Profile migration must be reviewed separately.

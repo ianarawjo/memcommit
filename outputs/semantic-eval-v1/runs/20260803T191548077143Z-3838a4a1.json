@@ -1,0 +1,993 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-none-main-entrance-hours",
+      "completion_seconds": 9.217588542029262,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": null,
+      "ordinal": 1,
+      "prompt_digest": "e8c67fcc9e9265a077d5b2963d2565aa52aa6918554ebafe70b3ac58900f7720",
+      "provider_run": {
+        "completion_tokens": 21,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1022,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n \\\"effect\\\": \\\"NO_IMPROVEMENT\\\",\\n \\\"missing_detail\\\": \\\"\\\"\\n}\",\"READING_CENSUS\":\"{\\n\\\"primary_reading\\\": \\\"The main entrance closes at 5 p.m.\\\",\\n\\\"alternative_reading\\\": \\\"\\\",\\n\\\"structure\\\": \\\"ONE\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 234,
+      "response_digest": "61e1abeb48a865051bb1632d35d747fc58d37a222a008a52fa2e77274fa2c9d7",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "ONE",
+          "completion_seconds": 8.107076750136912,
+          "completion_tokens": 33,
+          "evidence": {
+            "alternative_reading": "",
+            "primary_reading": "The main entrance closes at 5 p.m.",
+            "structure": "ONE"
+          },
+          "prompt_digest": "1ea300d07f494a8a27c082929c43b334f160b8db433c76666afebc4f01f80ff4",
+          "prompt_tokens": 1199,
+          "raw_response": "{\n\"primary_reading\": \"The main entrance closes at 5 p.m.\",\n\"alternative_reading\": \"\",\n\"structure\": \"ONE\"\n}",
+          "response_digest": "f052e1712e0b73c809d392dfbc54ebf3a2801a8aecb37f20d92c8dc7ce20e114",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "NO_IMPROVEMENT",
+          "completion_seconds": 1.1097395000979304,
+          "completion_tokens": 21,
+          "evidence": {
+            "effect": "NO_IMPROVEMENT",
+            "missing_detail": ""
+          },
+          "prompt_digest": "41ea750dde42b45cabfdbcc0594acb4649caf28ca7901774edf0bc1398b4a19c",
+          "prompt_tokens": 1022,
+          "raw_response": "{\n \"effect\": \"NO_IMPROVEMENT\",\n \"missing_detail\": \"\"\n}",
+          "response_digest": "1141c02f512b9d3f7d2e749694ac554277b50e29b46ae7c7abc1f9be1a6ab661",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-none-context-resolved-time",
+      "completion_seconds": 2.5355431251227856,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": null,
+      "ordinal": 2,
+      "prompt_digest": "3a786d167b60df5b7e94264b4886036bdfdfee98bed94d0f24afdc1863de54d6",
+      "provider_run": {
+        "completion_tokens": 21,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1023,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n \\\"effect\\\": \\\"NO_IMPROVEMENT\\\",\\n \\\"missing_detail\\\": \\\"\\\"\\n}\",\"READING_CENSUS\":\"{\\n  \\\"primary_reading\\\": \\\"A student card is required.\\\",\\n  \\\"alternative_reading\\\": \\\"\\\",\\n  \\\"structure\\\": \\\"ONE\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 233,
+      "response_digest": "96c9b263be25676fb23f47051e533d68911690014ba48598bba9caf10cabe388",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "ONE",
+          "completion_seconds": 1.4454371249303222,
+          "completion_tokens": 32,
+          "evidence": {
+            "alternative_reading": "",
+            "primary_reading": "A student card is required.",
+            "structure": "ONE"
+          },
+          "prompt_digest": "06d7f3c4c99bcd1ec4c8a71702fbbb5c9bdb7c9e62bb2dc9d211f8146a205bce",
+          "prompt_tokens": 1194,
+          "raw_response": "{\n  \"primary_reading\": \"A student card is required.\",\n  \"alternative_reading\": \"\",\n  \"structure\": \"ONE\"\n}",
+          "response_digest": "c4fe0d711923e7159b5b1182b38431bab7050cf84f2050ac3408115187d118ea",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "NO_IMPROVEMENT",
+          "completion_seconds": 1.0896816672757268,
+          "completion_tokens": 21,
+          "evidence": {
+            "effect": "NO_IMPROVEMENT",
+            "missing_detail": ""
+          },
+          "prompt_digest": "9d855c88051269e0b99f397584246ad464624fcfd63e60b5e580c9f38a64bd39",
+          "prompt_tokens": 1023,
+          "raw_response": "{\n \"effect\": \"NO_IMPROVEMENT\",\n \"missing_detail\": \"\"\n}",
+          "response_digest": "1141c02f512b9d3f7d2e749694ac554277b50e29b46ae7c7abc1f9be1a6ab661",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 2.81117729190737,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": null,
+      "ordinal": 3,
+      "prompt_digest": "c1a24da371a6a0207e2bd767df5abefb3b9b845cb9397df416938cf1fad6ec02",
+      "provider_run": {
+        "completion_tokens": 34,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1017,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n  \\\"effect\\\": \\\"MINOR_FRICTION\\\",\\n  \\\"missing_detail\\\": \\\"The exact location or contact route for the reception desk.\\\"\\n}\",\"READING_CENSUS\":\"{\\n  \\\"primary_reading\\\": \\\"Visitors should check in at the reception desk.\\\",\\n  \\\"alternative_reading\\\": \\\"\\\",\\n  \\\"structure\\\": \\\"ONE\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 314,
+      "response_digest": "009480f8c8906e294e49e61a7303318a620421a3a10074122a63da770587e978",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "ONE",
+          "completion_seconds": 1.4862920828163624,
+          "completion_tokens": 36,
+          "evidence": {
+            "alternative_reading": "",
+            "primary_reading": "Visitors should check in at the reception desk.",
+            "structure": "ONE"
+          },
+          "prompt_digest": "f42e8ff05ee5f4add5030ffb029331d2fc7d2705b80e046352ab54930139ed73",
+          "prompt_tokens": 1199,
+          "raw_response": "{\n  \"primary_reading\": \"Visitors should check in at the reception desk.\",\n  \"alternative_reading\": \"\",\n  \"structure\": \"ONE\"\n}",
+          "response_digest": "5b43a6ad6de9d995f86780169c2dbb24e5054353477f36b63c4edcf51fb90393",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "MINOR_FRICTION",
+          "completion_seconds": 1.3245218750089407,
+          "completion_tokens": 34,
+          "evidence": {
+            "effect": "MINOR_FRICTION",
+            "missing_detail": "The exact location or contact route for the reception desk."
+          },
+          "prompt_digest": "aaacc1cda8a348a617366d51d11b6d96ce8224eb5c9e0cddc42a7098dd5d207b",
+          "prompt_tokens": 1017,
+          "raw_response": "{\n  \"effect\": \"MINOR_FRICTION\",\n  \"missing_detail\": \"The exact location or contact route for the reception desk.\"\n}",
+          "response_digest": "2e97daad153120f7dad2b5907b0f8e8aafc5a3a4158c19841475527e9058adee",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-required-coordinator-contact",
+      "completion_seconds": 2.812084041070193,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": null,
+      "ordinal": 4,
+      "prompt_digest": "cfe6f6b9277c29d223ef953db0c689d4ebb9df05f4d57a1f3428b6d0b997c9e2",
+      "provider_run": {
+        "completion_tokens": 35,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1015,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n  \\\"effect\\\": \\\"BLOCKS_OR_MATERIAL_RISK\\\",\\n  \\\"missing_detail\\\": \\\"The event coordinator's phone number or specific contact method\\\"\\n}\",\"READING_CENSUS\":\"{\\n  \\\"primary_reading\\\": \\\"Visitors must call the event coordinator before entering.\\\",\\n  \\\"alternative_reading\\\": \\\"\\\",\\n  \\\"structure\\\": \\\"ONE\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 337,
+      "response_digest": "330f1b9a55da231ade0e6abd0d89ecba1780ccbaf3b0068a7945e049edb28895",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "ONE",
+          "completion_seconds": 1.515653541777283,
+          "completion_tokens": 36,
+          "evidence": {
+            "alternative_reading": "",
+            "primary_reading": "Visitors must call the event coordinator before entering.",
+            "structure": "ONE"
+          },
+          "prompt_digest": "bda1e2f1b74da6beb755dcdec67f5a70ed7ea5342721e79e00500484f4c560c4",
+          "prompt_tokens": 1201,
+          "raw_response": "{\n  \"primary_reading\": \"Visitors must call the event coordinator before entering.\",\n  \"alternative_reading\": \"\",\n  \"structure\": \"ONE\"\n}",
+          "response_digest": "a173eed1837326776dd1e39e8f5cdf92aae0ad7dbac692db29b7eaca49c4d0ce",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "BLOCKS_OR_MATERIAL_RISK",
+          "completion_seconds": 1.2961797080934048,
+          "completion_tokens": 35,
+          "evidence": {
+            "effect": "BLOCKS_OR_MATERIAL_RISK",
+            "missing_detail": "The event coordinator's phone number or specific contact method"
+          },
+          "prompt_digest": "10d1a2de477d9dabb2cf2ad085286d70a33759bd1f0dd12444a7547b99413874",
+          "prompt_tokens": 1015,
+          "raw_response": "{\n  \"effect\": \"BLOCKS_OR_MATERIAL_RISK\",\n  \"missing_detail\": \"The event coordinator's phone number or specific contact method\"\n}",
+          "response_digest": "958ff5ced6e31c52bc7d2a7a8f0ee64be785ed5d50b26b71f91355dbe51c9d5f",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "dominant-none-access-card",
+      "completion_seconds": 2.609006874728948,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": null,
+      "ordinal": 5,
+      "prompt_digest": "3d244c73696bd4269b7601291aeba794f290a94f526859b4c684ba208e9a616f",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1024,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n  \\\"effect\\\": \\\"NO_IMPROVEMENT\\\",\\n  \\\"missing_detail\\\": \\\"\\\"\\n}\",\"READING_CENSUS\":\"{\\n  \\\"primary_reading\\\": \\\"Present a valid physical or electronic access credential to the electronic reader.\\\",\\n  \\\"alternative_reading\\\": \\\"Use a credit/debit card for payment at the entrance.\\\",\\n  \\\"structure\\\": \\\"MULTIPLE_WITH_LEADER\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 359,
+      "response_digest": "2675e28f114842eac02932f46cdff4c34dc8c9285ba0290c9cb148dc79ff1531",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "MULTIPLE_WITH_LEADER",
+          "completion_seconds": 1.740842499770224,
+          "completion_tokens": 55,
+          "evidence": {
+            "alternative_reading": "Use a credit/debit card for payment at the entrance.",
+            "primary_reading": "Present a valid physical or electronic access credential to the electronic reader.",
+            "structure": "MULTIPLE_WITH_LEADER"
+          },
+          "prompt_digest": "114394c000dd5dc4fde70ff3985369b165687326cb94fd33522c9141d581badc",
+          "prompt_tokens": 1186,
+          "raw_response": "{\n  \"primary_reading\": \"Present a valid physical or electronic access credential to the electronic reader.\",\n  \"alternative_reading\": \"Use a credit/debit card for payment at the entrance.\",\n  \"structure\": \"MULTIPLE_WITH_LEADER\"\n}",
+          "response_digest": "2412a93d7320eb0b000432da6f0fd4bcfef3d6dd2244a99e35716dabe69fc2e9",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "NO_IMPROVEMENT",
+          "completion_seconds": 0.8679694579914212,
+          "completion_tokens": 23,
+          "evidence": {
+            "effect": "NO_IMPROVEMENT",
+            "missing_detail": ""
+          },
+          "prompt_digest": "6981bbbffba52903c93d05ae6835376b71cb307d5be76b530ef034793bc9e9bc",
+          "prompt_tokens": 1024,
+          "raw_response": "{\n  \"effect\": \"NO_IMPROVEMENT\",\n  \"missing_detail\": \"\"\n}",
+          "response_digest": "d63ca47a19e3e217e799aad14f65e6aacec7aaff15d2b9b073fbd0db3eff3751",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "dominant-helpful-pharmacy-prescription",
+      "completion_seconds": 2.209149249829352,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": null,
+      "ordinal": 6,
+      "prompt_digest": "892016cb9158771ad04c4e833b3a103b27e1ffdb02a6085afb5df6e74a004a0c",
+      "provider_run": {
+        "completion_tokens": 31,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1009,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n  \\\"effect\\\": \\\"MINOR_FRICTION\\\",\\n  \\\"missing_detail\\\": \\\"Which specific pharmacy location should be used?\\\"\\n}\",\"READING_CENSUS\":\"{\\n  \\\"primary_reading\\\": \\\"Retrieve the medication prescribed by a doctor from the local drugstore.\\\",\\n  \\\"alternative_reading\\\": \\\"Obtain the written prescription document itself from the pharmacy counter.\\\",\\n  \\\"structure\\\": \\\"MULTIPLE_WITH_LEADER\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 419,
+      "response_digest": "62437ab52fe16a4c93f4763563d8ef83d8c13ba27745410aaea2230367851b0c",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "MULTIPLE_WITH_LEADER",
+          "completion_seconds": 1.2787602907046676,
+          "completion_tokens": 55,
+          "evidence": {
+            "alternative_reading": "Obtain the written prescription document itself from the pharmacy counter.",
+            "primary_reading": "Retrieve the medication prescribed by a doctor from the local drugstore.",
+            "structure": "MULTIPLE_WITH_LEADER"
+          },
+          "prompt_digest": "5bb2e73e5c0d8f89a3ecc3799b3490bbb4804c53a97a9ffb753c80294ee4968c",
+          "prompt_tokens": 1182,
+          "raw_response": "{\n  \"primary_reading\": \"Retrieve the medication prescribed by a doctor from the local drugstore.\",\n  \"alternative_reading\": \"Obtain the written prescription document itself from the pharmacy counter.\",\n  \"structure\": \"MULTIPLE_WITH_LEADER\"\n}",
+          "response_digest": "cdf1716da4204e0cb2b1931de88a90cfeabc59ab3371ae81b0d041a18694ee90",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "MINOR_FRICTION",
+          "completion_seconds": 0.9302077498286963,
+          "completion_tokens": 31,
+          "evidence": {
+            "effect": "MINOR_FRICTION",
+            "missing_detail": "Which specific pharmacy location should be used?"
+          },
+          "prompt_digest": "34121a82619030ce7fb860d878b15e58766da242ffe8b64d8446092a122d0d28",
+          "prompt_tokens": 1009,
+          "raw_response": "{\n  \"effect\": \"MINOR_FRICTION\",\n  \"missing_detail\": \"Which specific pharmacy location should be used?\"\n}",
+          "response_digest": "33e81b3c762c0d1351d2f77835bba990583e821ed2e7da03c4a7796824883e14",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "dominant-required-entry-permit",
+      "completion_seconds": 2.3688181252218783,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": null,
+      "ordinal": 7,
+      "prompt_digest": "95bac8035bc6585f6359d27f3d4eb42b8de0a5f10a7cb5fa94c783951bc919fd",
+      "provider_run": {
+        "completion_tokens": 37,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1004,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n  \\\"effect\\\": \\\"BLOCKS_OR_MATERIAL_RISK\\\",\\n  \\\"missing_detail\\\": \\\"Which specific border crossing or entry point does this instruction apply to?\\\"\\n}\",\"READING_CENSUS\":\"{\\n  \\\"primary_reading\\\": \\\"Present the physical entry permit document to the border officer.\\\",\\n  \\\"alternative_reading\\\": \\\"Demonstrate possession of valid entry status (e.g., via electronic verification or digital record) to the border officer.\\\",\\n  \\\"structure\\\": \\\"MULTIPLE_WITH_LEADER\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 497,
+      "response_digest": "c2cb1281ddc6a52dc3b256e14e6026f9d40453ea442245f3d3af39dbde8be138",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "MULTIPLE_WITH_LEADER",
+          "completion_seconds": 1.370326125063002,
+          "completion_tokens": 64,
+          "evidence": {
+            "alternative_reading": "Demonstrate possession of valid entry status (e.g., via electronic verification or digital record) to the border officer.",
+            "primary_reading": "Present the physical entry permit document to the border officer.",
+            "structure": "MULTIPLE_WITH_LEADER"
+          },
+          "prompt_digest": "d2eb77033095a92dbd39324a87ad3a09d6e8d525ad38b4c879b0c341f85563f7",
+          "prompt_tokens": 1177,
+          "raw_response": "{\n  \"primary_reading\": \"Present the physical entry permit document to the border officer.\",\n  \"alternative_reading\": \"Demonstrate possession of valid entry status (e.g., via electronic verification or digital record) to the border officer.\",\n  \"structure\": \"MULTIPLE_WITH_LEADER\"\n}",
+          "response_digest": "f84dfd7205027caf531fdca6520d775b0cfecd7e7b2975c8d9482c99ff4dd52e",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "BLOCKS_OR_MATERIAL_RISK",
+          "completion_seconds": 0.9982349160127342,
+          "completion_tokens": 37,
+          "evidence": {
+            "effect": "BLOCKS_OR_MATERIAL_RISK",
+            "missing_detail": "Which specific border crossing or entry point does this instruction apply to?"
+          },
+          "prompt_digest": "b25a887beb868de4c5bdaccbb27e0b73b0c384e66573cb469180349232cb47cb",
+          "prompt_tokens": 1004,
+          "raw_response": "{\n  \"effect\": \"BLOCKS_OR_MATERIAL_RISK\",\n  \"missing_detail\": \"Which specific border crossing or entry point does this instruction apply to?\"\n}",
+          "response_digest": "fe048c43a253adf7844e9cc644fb6991cc77396c6bf5afdbb4d30341dd52b716",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "competing-none-no-way",
+      "completion_seconds": 1.7757805408909917,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 8,
+      "prompt_digest": "301a8c86ba13643945b3f38298d4c8b774e9bd341b8ca376a642254d8e834e66",
+      "provider_run": {
+        "completion_tokens": 21,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1024,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n \\\"effect\\\": \\\"NO_IMPROVEMENT\\\",\\n \\\"missing_detail\\\": \\\"\\\"\\n}\",\"READING_CENSUS\":\"{\\n  \\\"primary_reading\\\": \\\"It is impossible.\\\",\\n  \\\"alternative_reading\\\": \\\"\\\",\\n  \\\"structure\\\": \\\"ONE\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 223,
+      "response_digest": "cd62fdb2a5d93ba37902f25bd650e103c08ec0e4ba15f0ed4b16d460e2321557",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "ONE",
+          "completion_seconds": 0.9404287082143128,
+          "completion_tokens": 30,
+          "evidence": {
+            "alternative_reading": "",
+            "primary_reading": "It is impossible.",
+            "structure": "ONE"
+          },
+          "prompt_digest": "68651326a23f1abd8c507f56b249a08fc9b87a7380fe08bd8a00b206fc3dfc7d",
+          "prompt_tokens": 1194,
+          "raw_response": "{\n  \"primary_reading\": \"It is impossible.\",\n  \"alternative_reading\": \"\",\n  \"structure\": \"ONE\"\n}",
+          "response_digest": "d4f6016bd61e3314cbec97df8eee95b5ed73ed10e75872cb7d3191480843a0c6",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "NO_IMPROVEMENT",
+          "completion_seconds": 0.8349528331309557,
+          "completion_tokens": 21,
+          "evidence": {
+            "effect": "NO_IMPROVEMENT",
+            "missing_detail": ""
+          },
+          "prompt_digest": "fc01e635e0e753e7c36d6c3def8b8538c8f36d758567544ae1cbaa17956e3af8",
+          "prompt_tokens": 1024,
+          "raw_response": "{\n \"effect\": \"NO_IMPROVEMENT\",\n \"missing_detail\": \"\"\n}",
+          "response_digest": "1141c02f512b9d3f7d2e749694ac554277b50e29b46ae7c7abc1f9be1a6ab661",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-helpful-person-in-charge",
+      "completion_seconds": 2.232652791775763,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": null,
+      "ordinal": 9,
+      "prompt_digest": "e941a644c42a989213d328721c844424f2bb5e913f2b591fbf4f7732b84dd3ea",
+      "provider_run": {
+        "completion_tokens": 36,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1005,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n  \\\"effect\\\": \\\"MINOR_FRICTION\\\",\\n  \\\"missing_detail\\\": \\\"Who is the person in charge for this specific venue or department?\\\"\\n}\",\"READING_CENSUS\":\"{\\n  \\\"primary_reading\\\": \\\"Speak with the individual who has authority over the situation.\\\",\\n  \\\"alternative_reading\\\": \\\"Speak with the person responsible for managing the venue's operations.\\\",\\n  \\\"structure\\\": \\\"MULTIPLE_BALANCED\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 421,
+      "response_digest": "74f46bc84a718fa59fb33d6dbb93b9e97d20d7058639f8d401903b594fc9128d",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "MULTIPLE_BALANCED",
+          "completion_seconds": 1.2341199172660708,
+          "completion_tokens": 52,
+          "evidence": {
+            "alternative_reading": "Speak with the person responsible for managing the venue's operations.",
+            "primary_reading": "Speak with the individual who has authority over the situation.",
+            "structure": "MULTIPLE_BALANCED"
+          },
+          "prompt_digest": "ee54975d7853f1dd4d19a4bb6d589f2baf31c904b9f0323a6c5f44165f122655",
+          "prompt_tokens": 1190,
+          "raw_response": "{\n  \"primary_reading\": \"Speak with the individual who has authority over the situation.\",\n  \"alternative_reading\": \"Speak with the person responsible for managing the venue's operations.\",\n  \"structure\": \"MULTIPLE_BALANCED\"\n}",
+          "response_digest": "99cf4c6b97f09a6a6eaa582081049a994688a4b8500f8228acf71ef621b7ba1c",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "MINOR_FRICTION",
+          "completion_seconds": 0.9982752501964569,
+          "completion_tokens": 36,
+          "evidence": {
+            "effect": "MINOR_FRICTION",
+            "missing_detail": "Who is the person in charge for this specific venue or department?"
+          },
+          "prompt_digest": "aa9f9473e3b99f4decb31bd467c19904febc77f3ddc0d787c7ad64b80c43264c",
+          "prompt_tokens": 1005,
+          "raw_response": "{\n  \"effect\": \"MINOR_FRICTION\",\n  \"missing_detail\": \"Who is the person in charge for this specific venue or department?\"\n}",
+          "response_digest": "a34e9f9fcf5a2bc54bd45a6e028645b9d37418a4195af685c8688a0ee24ee1e2",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-required-hotel-216",
+      "completion_seconds": 2.259162917267531,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": null,
+      "ordinal": 10,
+      "prompt_digest": "96b0af442d18db461c4a136b4b317059fb3a31df7b2619dd5e0fc7d7c4f2814a",
+      "provider_run": {
+        "completion_tokens": 46,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": 1000,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\n  \\\"effect\\\": \\\"BLOCKS_OR_MATERIAL_RISK\\\",\\n  \\\"missing_detail\\\": \\\"What does the number 216 refer to (e.g., room number, price, code)?\\\"\\n}\",\"READING_CENSUS\":\"{\\n\\\"primary_reading\\\": \\\"The room number is 216.\\\",\\n\\\"alternative_reading\\\": \\\"The year is 216 AD/BC.\\\",\\n\\\"structure\\\": \\\"MULTIPLE_BALANCED\\\"\\n}\"}",
+      "repetition": 1,
+      "response_bytes": 337,
+      "response_digest": "07cf26f2b84be10b30e25baead8f3f9b15096a25c507c0ff5963ed4b162e18b3",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "MULTIPLE_BALANCED",
+          "completion_seconds": 1.1305588339455426,
+          "completion_tokens": 46,
+          "evidence": {
+            "alternative_reading": "The year is 216 AD/BC.",
+            "primary_reading": "The room number is 216.",
+            "structure": "MULTIPLE_BALANCED"
+          },
+          "prompt_digest": "1bc54703dbe21233906de4e8428f48b716cf68b886133a0cc00d6e5b27e91c2f",
+          "prompt_tokens": 1184,
+          "raw_response": "{\n\"primary_reading\": \"The room number is 216.\",\n\"alternative_reading\": \"The year is 216 AD/BC.\",\n\"structure\": \"MULTIPLE_BALANCED\"\n}",
+          "response_digest": "089a16a23e8fe10509402b609a9a28cc78a7c9ee9eea8606b36b3b628357d9d6",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        },
+        {
+          "answer": "BLOCKS_OR_MATERIAL_RISK",
+          "completion_seconds": 1.1284150830470026,
+          "completion_tokens": 46,
+          "evidence": {
+            "effect": "BLOCKS_OR_MATERIAL_RISK",
+            "missing_detail": "What does the number 216 refer to (e.g., room number, price, code)?"
+          },
+          "prompt_digest": "f5a0f305984ea9335978eb3febcc466387298eaa02ded08fa1273d34d952c429",
+          "prompt_tokens": 1000,
+          "raw_response": "{\n  \"effect\": \"BLOCKS_OR_MATERIAL_RISK\",\n  \"missing_detail\": \"What does the number 216 refer to (e.g., room number, price, code)?\"\n}",
+          "response_digest": "89832401677c4b84e6853d1e03f0499ff6a5a8663712abc7b7cf6b8a743204e2",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "qwen3.6:35b-a3b",
+          "upstream_provider": "ollama"
+        }
+      ],
+      "status": "PASS"
+    }
+  ],
+  "completed_at": "2026-08-03T19:16:18.926465Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "fixture": "ambiguity.json",
+    "fixture_case_count": 10,
+    "fixture_digest": "003654c092e03ea74f72e8f084624438085555e2cedad2c9abed985ae2b3c067",
+    "independent_holdout": false,
+    "operation": "find-ambiguities",
+    "role": "CALIBRATION",
+    "ruleset_version": "ambiguity-v1-draft",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "single-none-main-entrance-hours",
+      "single-none-context-resolved-time",
+      "single-helpful-reception-location",
+      "single-required-coordinator-contact",
+      "dominant-none-access-card",
+      "dominant-helpful-pharmacy-prescription",
+      "dominant-required-entry-permit",
+      "competing-none-no-way",
+      "competing-helpful-person-in-charge",
+      "competing-required-hotel-216"
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T191548077143Z-3838a4a1.json",
+  "pipeline": {
+    "gate": "exact two-label contract with repeated stability",
+    "id": "ambiguity-rules-v6",
+    "stages": [
+      "READING_CENSUS",
+      "CLARIFICATION_CENSUS",
+      "PROJECT_LABELS"
+    ],
+    "version": 6
+  },
+  "provider": {
+    "effective_thinking": false,
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen3.6:35b-a3b",
+    "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "provider": "ollama",
+    "reasoning_effort": null,
+    "runtime": "ollama/0.30.10"
+  },
+  "run_id": "20260803T191548077143Z-3838a4a1",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": 65536,
+      "max_output_tokens": 16384,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T19:15:48.077143Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 9,
+      "structurally_valid": 10,
+      "total": 10
+    },
+    "campaign_passed": false,
+    "case_results": [
+      {
+        "attempts": 1,
+        "case_id": "single-none-main-entrance-hours",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "single-none-context-resolved-time",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "single-helpful-reception-location",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "single-required-coordinator-contact",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-none-access-card",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-helpful-pharmacy-prescription",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-required-entry-permit",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-none-no-way",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-helpful-person-in-charge",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-required-hotel-216",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      }
+    ],
+    "cases": {
+      "failed": 1,
+      "passed": 9,
+      "total": 10
+    },
+    "completion_seconds": {
+      "max": 9.217588542029262,
+      "mean": 3.0830963499844075,
+      "median": 2.452180625172332,
+      "p95": 9.217588542029262
+    },
+    "distributions": {
+      "actual_joint_attempts": {
+        "COMPETING/HELPFUL": 1,
+        "COMPETING/REQUIRED": 1,
+        "DOMINANT/HELPFUL": 1,
+        "DOMINANT/NONE": 1,
+        "DOMINANT/REQUIRED": 1,
+        "SINGLE/HELPFUL": 1,
+        "SINGLE/NONE": 3,
+        "SINGLE/REQUIRED": 1
+      },
+      "case_pass_by_clarification": {
+        "HELPFUL": {
+          "passed": 3,
+          "total": 3
+        },
+        "NONE": {
+          "passed": 3,
+          "total": 4
+        },
+        "REQUIRED": {
+          "passed": 3,
+          "total": 3
+        }
+      },
+      "case_pass_by_interpretation": {
+        "COMPETING": {
+          "passed": 2,
+          "total": 3
+        },
+        "DOMINANT": {
+          "passed": 3,
+          "total": 3
+        },
+        "SINGLE": {
+          "passed": 4,
+          "total": 4
+        }
+      },
+      "expected_clarification": {
+        "HELPFUL": 3,
+        "NONE": 4,
+        "REQUIRED": 3
+      },
+      "expected_interpretation": {
+        "COMPETING": 3,
+        "DOMINANT": 3,
+        "SINGLE": 4
+      },
+      "expected_joint": {
+        "COMPETING/HELPFUL": 1,
+        "COMPETING/NONE": 1,
+        "COMPETING/REQUIRED": 1,
+        "DOMINANT/HELPFUL": 1,
+        "DOMINANT/NONE": 1,
+        "DOMINANT/REQUIRED": 1,
+        "SINGLE/HELPFUL": 1,
+        "SINGLE/NONE": 2,
+        "SINGLE/REQUIRED": 1
+      }
+    },
+    "failures": {
+      "LABEL_MISMATCH": 1
+    },
+    "stage_completion_seconds": {
+      "CLARIFICATION_CENSUS": {
+        "max": 1.3245218750089407,
+        "mean": 1.057817804068327,
+        "median": 1.0439784587360919,
+        "p95": 1.3245218750089407
+      },
+      "READING_CENSUS": {
+        "max": 8.107076750136912,
+        "mean": 2.02494958746247,
+        "median": 1.4078816249966621,
+        "p95": 8.107076750136912
+      }
+    },
+    "tokens": {
+      "completion": 744,
+      "prompt": 22049,
+      "reported_attempts": 10,
+      "reported_calls": 20
+    }
+  },
+  "timing": {
+    "campaign_seconds": 30.850140542257577,
+    "provider_connection_seconds": 0.029620165936648846,
+    "total_seconds": 30.879760708194226
+  }
+}

@@ -20,7 +20,7 @@
     "4e1e1201-94b8-5a7a-8737-edc4c62881ff": {
       "type": "memory",
       "uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff",
-      "content": "This advisor has seen readers question a proposed priority when its cost cannot be checked on the same page as the claimed benefit."
+      "content": "Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit."
     },
     "2f5f9039-e038-51c1-8af0-21a78772c512": {
       "type": "memory",
@@ -35,7 +35,7 @@
     "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4": {
       "type": "memory",
       "uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4",
-      "content": "The user writing this proposal tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity."
+      "content": "The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity."
     }
   },
   "order": [

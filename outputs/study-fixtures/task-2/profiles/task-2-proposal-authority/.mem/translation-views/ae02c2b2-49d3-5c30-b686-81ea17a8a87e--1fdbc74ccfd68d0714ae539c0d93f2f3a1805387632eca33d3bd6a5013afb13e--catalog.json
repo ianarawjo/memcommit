@@ -3,8 +3,8 @@
   "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
   "context_name": "advisor2/budget",
   "target_language": "ko",
-  "created_at": "2026-08-04T16:18:29.182073+00:00",
-  "updated_at": "2026-08-04T16:18:29.182406+00:00",
+  "created_at": "2026-08-05T02:47:18.852675+00:00",
+  "updated_at": "2026-08-05T02:47:18.853025+00:00",
   "revision": 8,
   "contract_version": "translate-v2",
   "entries": [
@@ -17,9 +17,9 @@
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "71a78b5ef68b7411814fffcb9ecb25c57c48f941b0ebe92dc57626d5dd0cb46e",
-        "created_at": "2026-08-04T16:18:29.182116+00:00",
-        "updated_at": "2026-08-04T16:18:29.182116+00:00"
+        "evidence_sha256": "37d77862fb60216b809f58f2b7f90376edbc679c2fb18339338dbcf4e1e17075",
+        "created_at": "2026-08-05T02:47:18.852726+00:00",
+        "updated_at": "2026-08-05T02:47:18.852726+00:00"
       }
     },
     {
@@ -31,9 +31,9 @@
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "71a78b5ef68b7411814fffcb9ecb25c57c48f941b0ebe92dc57626d5dd0cb46e",
-        "created_at": "2026-08-04T16:18:29.182165+00:00",
-        "updated_at": "2026-08-04T16:18:29.182165+00:00"
+        "evidence_sha256": "37d77862fb60216b809f58f2b7f90376edbc679c2fb18339338dbcf4e1e17075",
+        "created_at": "2026-08-05T02:47:18.852780+00:00",
+        "updated_at": "2026-08-05T02:47:18.852780+00:00"
       }
     },
     {
@@ -45,23 +45,23 @@
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "71a78b5ef68b7411814fffcb9ecb25c57c48f941b0ebe92dc57626d5dd0cb46e",
-        "created_at": "2026-08-04T16:18:29.182215+00:00",
-        "updated_at": "2026-08-04T16:18:29.182215+00:00"
+        "evidence_sha256": "37d77862fb60216b809f58f2b7f90376edbc679c2fb18339338dbcf4e1e17075",
+        "created_at": "2026-08-05T02:47:18.852831+00:00",
+        "updated_at": "2026-08-05T02:47:18.852831+00:00"
       }
     },
     {
       "source_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677",
       "provider": null,
       "curated": {
-        "source_sha256": "6271f0c1d338cbb6e8aa8da7243bab4f71090ae017e4b898be89dc3957d425f6",
-        "translated_content": "\uc774 advisor\ub294 \ub3c5\uc790\uac00 \uc0b0\ubb38\uc5d0 \ud769\uc5b4\uc9c4 \uae08\uc561\ubcf4\ub2e4 \uc77c\uc815\ud55c \ud45c\uc5d0\uc11c \uacc4\uc0b0\uc744 \ud655\uc778\ud558\uace0 \ubc94\uc8fc\ub97c \ub354 \ube68\ub9ac \ube44\uad50\ud558\ub294 \ubaa8\uc2b5\uc744 \ubcf4\uc558\ub2e4.",
+        "source_sha256": "1dc966a0ade3af3bc636cb99d456edbdb918c2a23efd4a5792db9f8ede061195",
+        "translated_content": "\ub3c5\uc790\ub294 \uc0b0\ubb38\uc5d0 \ud769\uc5b4\uc9c4 \uae08\uc561\ubcf4\ub2e4 \uc77c\uc815\ud55c \ud45c\uc5d0\uc11c \uacc4\uc0b0\uc744 \ud655\uc778\ud558\uace0 \ubc94\uc8fc\ub97c \ub354 \ube68\ub9ac \ube44\uad50\ud560 \uc218 \uc788\ub2e4.",
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "71a78b5ef68b7411814fffcb9ecb25c57c48f941b0ebe92dc57626d5dd0cb46e",
-        "created_at": "2026-08-04T16:18:29.182262+00:00",
-        "updated_at": "2026-08-04T16:18:29.182262+00:00"
+        "evidence_sha256": "37d77862fb60216b809f58f2b7f90376edbc679c2fb18339338dbcf4e1e17075",
+        "created_at": "2026-08-05T02:47:18.852881+00:00",
+        "updated_at": "2026-08-05T02:47:18.852881+00:00"
       }
     },
     {
@@ -73,9 +73,9 @@
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "71a78b5ef68b7411814fffcb9ecb25c57c48f941b0ebe92dc57626d5dd0cb46e",
-        "created_at": "2026-08-04T16:18:29.182308+00:00",
-        "updated_at": "2026-08-04T16:18:29.182308+00:00"
+        "evidence_sha256": "37d77862fb60216b809f58f2b7f90376edbc679c2fb18339338dbcf4e1e17075",
+        "created_at": "2026-08-05T02:47:18.852930+00:00",
+        "updated_at": "2026-08-05T02:47:18.852930+00:00"
       }
     },
     {
@@ -87,23 +87,23 @@
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "71a78b5ef68b7411814fffcb9ecb25c57c48f941b0ebe92dc57626d5dd0cb46e",
-        "created_at": "2026-08-04T16:18:29.182360+00:00",
-        "updated_at": "2026-08-04T16:18:29.182360+00:00"
+        "evidence_sha256": "37d77862fb60216b809f58f2b7f90376edbc679c2fb18339338dbcf4e1e17075",
+        "created_at": "2026-08-05T02:47:18.852977+00:00",
+        "updated_at": "2026-08-05T02:47:18.852977+00:00"
       }
     },
     {
       "source_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e",
       "provider": null,
       "curated": {
-        "source_sha256": "3799ca5a92988393c2d0f7d33f40501606ab7a28088e7c15de778baab55b4722",
-        "translated_content": "\uc774 \uc81c\uc548\uc11c\ub97c \uc791\uc131\ud558\ub294 \uc0ac\uc6a9\uc790\ub294 \ubcc4\ub3c4 \uc608\uc0b0\ud45c\uac00 \uc5c6\uc73c\uba74 \uae34 \ube44\uc6a9 \ub098\uc5f4\ub85c \ub17c\uc99d\uc758 \ud750\ub984\uc744 \ub04a\ub294 \uacbd\ud5a5\uc774 \uc788\ub2e4.",
+        "source_sha256": "2c0715ec3cfa247a35c3acc854b0716dca764619050aa635c0c242a5b56aa2f1",
+        "translated_content": "\uc0ac\uc6a9\uc790\ub294 \ubcc4\ub3c4 \uc608\uc0b0\ud45c\uac00 \uc5c6\uc73c\uba74 \uae34 \ube44\uc6a9 \ub098\uc5f4\ub85c \ub17c\uc99d\uc758 \ud750\ub984\uc744 \ub04a\ub294 \uacbd\ud5a5\uc774 \uc788\ub2e4.",
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "71a78b5ef68b7411814fffcb9ecb25c57c48f941b0ebe92dc57626d5dd0cb46e",
-        "created_at": "2026-08-04T16:18:29.182406+00:00",
-        "updated_at": "2026-08-04T16:18:29.182406+00:00"
+        "evidence_sha256": "37d77862fb60216b809f58f2b7f90376edbc679c2fb18339338dbcf4e1e17075",
+        "created_at": "2026-08-05T02:47:18.853025+00:00",
+        "updated_at": "2026-08-05T02:47:18.853025+00:00"
       }
     }
   ]

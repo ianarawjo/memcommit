@@ -148,10 +148,12 @@ new locator could falsely imply that it was revalidated.
 
 ## Query-only boundary
 
-Rename operates only on the ordinary Context store. It does not open, inspect,
-move, copy, or rewrite query-only source files, and it does not change a
-`QueryContextRef`. In particular, the command cannot convert an ordinary
-Context into Task 1's query-only `construction-details` source.
+Rename operates only on the selected Profile's ordinary Context store. It
+does not open or rewrite legacy query-source files or `QueryContextRef`
+records. New study query data is ordinary inside its authority Profile, so an
+authority owner can rename it there; the old frozen grant then fails its
+UID/name check and must be explicitly revoked and recreated. Rename never
+rewrites cross-Profile grants implicitly.
 
 An ordinary destination is not globally rejected merely because an opaque
 query-only source uses the same public name: these are separate authority

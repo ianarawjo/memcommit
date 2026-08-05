@@ -124,10 +124,12 @@ def test_non_temporal_find_keeps_the_existing_current_state_path(
         *,
         recursive,
         limit,
+        additional_roots,
     ):
         observed["query"] = query
         observed["recursive"] = recursive
         observed["limit"] = limit
+        observed["additional_roots"] = additional_roots
         return []
 
     monkeypatch.setattr("memcommit.commands.find.ops.find", current_find)
@@ -145,10 +147,11 @@ def test_non_temporal_find_keeps_the_existing_current_state_path(
         "query": "parking information",
         "recursive": True,
         "limit": 5,
+        "additional_roots": (),
     }
 
 
-def test_temporal_find_descends_only_the_visible_embedded_context_graph(
+def test_temporal_find_also_descends_the_visible_embedded_context_graph(
     isolated_store,
     monkeypatch,
 ):
@@ -172,6 +175,37 @@ def test_temporal_find_descends_only_the_visible_embedded_context_graph(
     assert result.exit_code == 0
     assert "transport" in result.output
     assert "Parking is in Lot B." in result.output
+
+
+def test_temporal_find_searches_materialized_namespace_descendants_by_default(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "task-3")
+    invoke("init", "task-3/personal-memory")
+    invoke("add", "The clinic appointment is at 9 a.m.")
+    from memcommit.store import MemoryStore
+
+    store = MemoryStore()
+    uid = next(iter(store.load_current().memories))
+    invoke("edit", uid[:8], "The clinic appointment is at 10 a.m.")
+    invoke("switch", "task-3")
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: LatestEditProvider(),
+    )
+
+    result = invoke("find", "the last updated Memory")
+
+    assert result.exit_code == 0, result.output
+    assert "task-3/personal-memory" in result.output
+    assert "The clinic appointment is at 10 a.m." in result.output
+
+    direct = invoke("find", "the last updated Memory", "--direct")
+
+    assert direct.exit_code == 0, direct.output
+    assert "task-3/personal-memory" not in direct.output
+    assert "no matching historical items" in direct.output
 
 
 def test_temporal_find_does_not_resolve_memory_refs_or_query_sources(

@@ -1,0 +1,4547 @@
+{
+  "contract_valid": false,
+  "corpus": {
+    "alias_mapping_digest": "06c2332d5c87dee97b6c13a3ccb2c548cc9dddda896cffbdbc3b67a90c08cf0d",
+    "digest": "0ef2c5a8dea6627999133ad283e3b1989da479f6b612b0a70d2f396b3bd0dde4",
+    "full_group_count": 138,
+    "full_left_count": 150,
+    "full_right_count": 150,
+    "input_digest": "fd7723958a1eb53cb1e93a0e021e8a6bc1b72af44c5c2e4df0da5bb38afba8ea",
+    "language": "en",
+    "selected_group_count": 138,
+    "selected_left_count": 150,
+    "selected_right_count": 150,
+    "selection": "FIRST_REVIEWED_GROUPS_CALIBRATION"
+  },
+  "effective_thinking": null,
+  "expected_relations": [
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-001"
+      ],
+      "pair_id": "T2-001",
+      "right_fixture_ids": [
+        "T2-R-001"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-002"
+      ],
+      "pair_id": "T2-002",
+      "right_fixture_ids": [
+        "T2-R-002"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-003"
+      ],
+      "pair_id": "T2-003",
+      "right_fixture_ids": [
+        "T2-R-003"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-004"
+      ],
+      "pair_id": "T2-004",
+      "right_fixture_ids": [
+        "T2-R-004"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-005"
+      ],
+      "pair_id": "T2-005",
+      "right_fixture_ids": [
+        "T2-R-005"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-006"
+      ],
+      "pair_id": "T2-006",
+      "right_fixture_ids": [
+        "T2-R-006"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-007"
+      ],
+      "pair_id": "T2-007",
+      "right_fixture_ids": [
+        "T2-R-007"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-008"
+      ],
+      "pair_id": "T2-008",
+      "right_fixture_ids": [
+        "T2-R-008"
+      ]
+    },
+    {
+      "band": "Conflict",
+      "left_fixture_ids": [
+        "T2-L-009",
+        "T2-L-085"
+      ],
+      "pair_id": "T2-009",
+      "right_fixture_ids": [
+        "T2-R-009"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-010"
+      ],
+      "pair_id": "T2-010",
+      "right_fixture_ids": [
+        "T2-R-010"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-011"
+      ],
+      "pair_id": "T2-011",
+      "right_fixture_ids": [
+        "T2-R-011"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-012"
+      ],
+      "pair_id": "T2-012",
+      "right_fixture_ids": [
+        "T2-R-012"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-013"
+      ],
+      "pair_id": "T2-013",
+      "right_fixture_ids": [
+        "T2-R-013"
+      ]
+    },
+    {
+      "band": "Conflict",
+      "left_fixture_ids": [
+        "T2-L-014"
+      ],
+      "pair_id": "T2-014",
+      "right_fixture_ids": [
+        "T2-R-014"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-015"
+      ],
+      "pair_id": "T2-015",
+      "right_fixture_ids": [
+        "T2-R-015"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-016"
+      ],
+      "pair_id": "T2-016",
+      "right_fixture_ids": [
+        "T2-R-016"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-017"
+      ],
+      "pair_id": "T2-017",
+      "right_fixture_ids": [
+        "T2-R-017"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-018",
+        "T2-L-083",
+        "T2-L-084"
+      ],
+      "pair_id": "T2-018",
+      "right_fixture_ids": [
+        "T2-R-018",
+        "T2-R-083"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-019"
+      ],
+      "pair_id": "T2-019",
+      "right_fixture_ids": [
+        "T2-R-019"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-020"
+      ],
+      "pair_id": "T2-020",
+      "right_fixture_ids": [
+        "T2-R-020"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-021"
+      ],
+      "pair_id": "T2-021",
+      "right_fixture_ids": [
+        "T2-R-021"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-022"
+      ],
+      "pair_id": "T2-022",
+      "right_fixture_ids": [
+        "T2-R-022"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-023"
+      ],
+      "pair_id": "T2-023",
+      "right_fixture_ids": [
+        "T2-R-023"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-024"
+      ],
+      "pair_id": "T2-024",
+      "right_fixture_ids": [
+        "T2-R-024"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-025"
+      ],
+      "pair_id": "T2-025",
+      "right_fixture_ids": [
+        "T2-R-025"
+      ]
+    },
+    {
+      "band": "Conflict",
+      "left_fixture_ids": [
+        "T2-L-026"
+      ],
+      "pair_id": "T2-026",
+      "right_fixture_ids": [
+        "T2-R-026"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-027"
+      ],
+      "pair_id": "T2-027",
+      "right_fixture_ids": [
+        "T2-R-027"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-028"
+      ],
+      "pair_id": "T2-028",
+      "right_fixture_ids": [
+        "T2-R-028"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-029"
+      ],
+      "pair_id": "T2-029",
+      "right_fixture_ids": [
+        "T2-R-029"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-030"
+      ],
+      "pair_id": "T2-030",
+      "right_fixture_ids": [
+        "T2-R-030"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-031"
+      ],
+      "pair_id": "T2-031",
+      "right_fixture_ids": [
+        "T2-R-031"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-032"
+      ],
+      "pair_id": "T2-032",
+      "right_fixture_ids": [
+        "T2-R-032"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-033"
+      ],
+      "pair_id": "T2-033",
+      "right_fixture_ids": [
+        "T2-R-033"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-034"
+      ],
+      "pair_id": "T2-034",
+      "right_fixture_ids": [
+        "T2-R-034"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-035"
+      ],
+      "pair_id": "T2-035",
+      "right_fixture_ids": [
+        "T2-R-035"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-036",
+        "T2-L-086"
+      ],
+      "pair_id": "T2-036",
+      "right_fixture_ids": [
+        "T2-R-036",
+        "T2-R-084"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-037"
+      ],
+      "pair_id": "T2-037",
+      "right_fixture_ids": [
+        "T2-R-037"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-038"
+      ],
+      "pair_id": "T2-038",
+      "right_fixture_ids": [
+        "T2-R-038"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-039",
+        "T2-L-087",
+        "T2-L-088"
+      ],
+      "pair_id": "T2-039",
+      "right_fixture_ids": [
+        "T2-R-039",
+        "T2-R-085",
+        "T2-R-086"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-040",
+        "T2-L-091",
+        "T2-L-092"
+      ],
+      "pair_id": "T2-040",
+      "right_fixture_ids": [
+        "T2-R-040",
+        "T2-R-089",
+        "T2-R-090"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-041"
+      ],
+      "pair_id": "T2-041",
+      "right_fixture_ids": [
+        "T2-R-041"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-042"
+      ],
+      "pair_id": "T2-042",
+      "right_fixture_ids": [
+        "T2-R-042"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-043"
+      ],
+      "pair_id": "T2-043",
+      "right_fixture_ids": [
+        "T2-R-043"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-044"
+      ],
+      "pair_id": "T2-044",
+      "right_fixture_ids": [
+        "T2-R-044"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-045"
+      ],
+      "pair_id": "T2-045",
+      "right_fixture_ids": [
+        "T2-R-045"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-046"
+      ],
+      "pair_id": "T2-046",
+      "right_fixture_ids": [
+        "T2-R-046"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-047"
+      ],
+      "pair_id": "T2-047",
+      "right_fixture_ids": [
+        "T2-R-047"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-048"
+      ],
+      "pair_id": "T2-048",
+      "right_fixture_ids": [
+        "T2-R-048"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-049"
+      ],
+      "pair_id": "T2-049",
+      "right_fixture_ids": [
+        "T2-R-049"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-050"
+      ],
+      "pair_id": "T2-050",
+      "right_fixture_ids": [
+        "T2-R-050"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-051"
+      ],
+      "pair_id": "T2-051",
+      "right_fixture_ids": [
+        "T2-R-051"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-052"
+      ],
+      "pair_id": "T2-052",
+      "right_fixture_ids": [
+        "T2-R-052"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-053"
+      ],
+      "pair_id": "T2-053",
+      "right_fixture_ids": [
+        "T2-R-053"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-054"
+      ],
+      "pair_id": "T2-054",
+      "right_fixture_ids": [
+        "T2-R-054"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-055"
+      ],
+      "pair_id": "T2-055",
+      "right_fixture_ids": [
+        "T2-R-055"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-056"
+      ],
+      "pair_id": "T2-056",
+      "right_fixture_ids": [
+        "T2-R-056"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-057"
+      ],
+      "pair_id": "T2-057",
+      "right_fixture_ids": [
+        "T2-R-057"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-058"
+      ],
+      "pair_id": "T2-058",
+      "right_fixture_ids": [
+        "T2-R-058"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-059"
+      ],
+      "pair_id": "T2-059",
+      "right_fixture_ids": [
+        "T2-R-059"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-060"
+      ],
+      "pair_id": "T2-060",
+      "right_fixture_ids": [
+        "T2-R-060"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-061"
+      ],
+      "pair_id": "T2-061",
+      "right_fixture_ids": [
+        "T2-R-061"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-062"
+      ],
+      "pair_id": "T2-062",
+      "right_fixture_ids": [
+        "T2-R-062"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-063"
+      ],
+      "pair_id": "T2-063",
+      "right_fixture_ids": [
+        "T2-R-063"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-064"
+      ],
+      "pair_id": "T2-064",
+      "right_fixture_ids": [
+        "T2-R-064"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-065",
+        "T2-L-089",
+        "T2-L-090"
+      ],
+      "pair_id": "T2-065",
+      "right_fixture_ids": [
+        "T2-R-065",
+        "T2-R-087",
+        "T2-R-088"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-066"
+      ],
+      "pair_id": "T2-066",
+      "right_fixture_ids": [
+        "T2-R-066"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-067"
+      ],
+      "pair_id": "T2-067",
+      "right_fixture_ids": [
+        "T2-R-067"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-068",
+        "T2-L-093",
+        "T2-L-094"
+      ],
+      "pair_id": "T2-068",
+      "right_fixture_ids": [
+        "T2-R-068",
+        "T2-R-091",
+        "T2-R-092"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-069"
+      ],
+      "pair_id": "T2-069",
+      "right_fixture_ids": [
+        "T2-R-069"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-070"
+      ],
+      "pair_id": "T2-070",
+      "right_fixture_ids": [
+        "T2-R-070"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-071"
+      ],
+      "pair_id": "T2-071",
+      "right_fixture_ids": [
+        "T2-R-071"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-072"
+      ],
+      "pair_id": "T2-072",
+      "right_fixture_ids": [
+        "T2-R-072"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-073"
+      ],
+      "pair_id": "T2-073",
+      "right_fixture_ids": [
+        "T2-R-073"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-074"
+      ],
+      "pair_id": "T2-074",
+      "right_fixture_ids": [
+        "T2-R-074"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-075"
+      ],
+      "pair_id": "T2-075",
+      "right_fixture_ids": [
+        "T2-R-075"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-076"
+      ],
+      "pair_id": "T2-076",
+      "right_fixture_ids": [
+        "T2-R-076"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-077"
+      ],
+      "pair_id": "T2-077",
+      "right_fixture_ids": [
+        "T2-R-077"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-078"
+      ],
+      "pair_id": "T2-078",
+      "right_fixture_ids": [
+        "T2-R-078"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-079"
+      ],
+      "pair_id": "T2-079",
+      "right_fixture_ids": [
+        "T2-R-079"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-080"
+      ],
+      "pair_id": "T2-080",
+      "right_fixture_ids": [
+        "T2-R-080"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-081"
+      ],
+      "pair_id": "T2-081",
+      "right_fixture_ids": [
+        "T2-R-081"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-082"
+      ],
+      "pair_id": "T2-082",
+      "right_fixture_ids": [
+        "T2-R-082"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-095"
+      ],
+      "pair_id": "T2-083",
+      "right_fixture_ids": [
+        "T2-R-093"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-096"
+      ],
+      "pair_id": "T2-084",
+      "right_fixture_ids": [
+        "T2-R-095"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-097"
+      ],
+      "pair_id": "T2-085",
+      "right_fixture_ids": [
+        "T2-R-094",
+        "T2-R-096"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-098"
+      ],
+      "pair_id": "T2-086",
+      "right_fixture_ids": [
+        "T2-R-097"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-099"
+      ],
+      "pair_id": "T2-087",
+      "right_fixture_ids": [
+        "T2-R-098"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-100"
+      ],
+      "pair_id": "T2-088",
+      "right_fixture_ids": [
+        "T2-R-117"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-101"
+      ],
+      "pair_id": "T2-089",
+      "right_fixture_ids": [
+        "T2-R-099"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-102"
+      ],
+      "pair_id": "T2-090",
+      "right_fixture_ids": [
+        "T2-R-100"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-103"
+      ],
+      "pair_id": "T2-091",
+      "right_fixture_ids": [
+        "T2-R-102"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-104"
+      ],
+      "pair_id": "T2-092",
+      "right_fixture_ids": [
+        "T2-R-103"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-105"
+      ],
+      "pair_id": "T2-093",
+      "right_fixture_ids": [
+        "T2-R-101"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-106"
+      ],
+      "pair_id": "T2-094",
+      "right_fixture_ids": [
+        "T2-R-104"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-107"
+      ],
+      "pair_id": "T2-095",
+      "right_fixture_ids": [
+        "T2-R-106"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-108"
+      ],
+      "pair_id": "T2-096",
+      "right_fixture_ids": [
+        "T2-R-105"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-109"
+      ],
+      "pair_id": "T2-097",
+      "right_fixture_ids": [
+        "T2-R-107"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-110"
+      ],
+      "pair_id": "T2-098",
+      "right_fixture_ids": [
+        "T2-R-108"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-111"
+      ],
+      "pair_id": "T2-099",
+      "right_fixture_ids": [
+        "T2-R-109"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-112"
+      ],
+      "pair_id": "T2-100",
+      "right_fixture_ids": [
+        "T2-R-110"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-113"
+      ],
+      "pair_id": "T2-101",
+      "right_fixture_ids": [
+        "T2-R-111"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-114"
+      ],
+      "pair_id": "T2-102",
+      "right_fixture_ids": [
+        "T2-R-112"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-115"
+      ],
+      "pair_id": "T2-103",
+      "right_fixture_ids": [
+        "T2-R-114"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-116"
+      ],
+      "pair_id": "T2-104",
+      "right_fixture_ids": [
+        "T2-R-115"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-117"
+      ],
+      "pair_id": "T2-105",
+      "right_fixture_ids": [
+        "T2-R-113",
+        "T2-R-116"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-118"
+      ],
+      "pair_id": "T2-106",
+      "right_fixture_ids": [
+        "T2-R-118"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-119"
+      ],
+      "pair_id": "T2-107",
+      "right_fixture_ids": [
+        "T2-R-119"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-120"
+      ],
+      "pair_id": "T2-108",
+      "right_fixture_ids": [
+        "T2-R-120"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-121"
+      ],
+      "pair_id": "T2-109",
+      "right_fixture_ids": [
+        "T2-R-121"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-122"
+      ],
+      "pair_id": "T2-110",
+      "right_fixture_ids": [
+        "T2-R-124"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-123"
+      ],
+      "pair_id": "T2-111",
+      "right_fixture_ids": [
+        "T2-R-122"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-124"
+      ],
+      "pair_id": "T2-112",
+      "right_fixture_ids": [
+        "T2-R-125"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-125"
+      ],
+      "pair_id": "T2-113",
+      "right_fixture_ids": [
+        "T2-R-128"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-126"
+      ],
+      "pair_id": "T2-114",
+      "right_fixture_ids": [
+        "T2-R-127"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-127"
+      ],
+      "pair_id": "T2-115",
+      "right_fixture_ids": [
+        "T2-R-126"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-128"
+      ],
+      "pair_id": "T2-116",
+      "right_fixture_ids": [
+        "T2-R-129"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-129"
+      ],
+      "pair_id": "T2-117",
+      "right_fixture_ids": [
+        "T2-R-130"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-130"
+      ],
+      "pair_id": "T2-118",
+      "right_fixture_ids": [
+        "T2-R-131"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-131"
+      ],
+      "pair_id": "T2-119",
+      "right_fixture_ids": [
+        "T2-R-132"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-132"
+      ],
+      "pair_id": "T2-120",
+      "right_fixture_ids": [
+        "T2-R-133"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-133"
+      ],
+      "pair_id": "T2-121",
+      "right_fixture_ids": [
+        "T2-R-134"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-134"
+      ],
+      "pair_id": "T2-122",
+      "right_fixture_ids": [
+        "T2-R-136"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-135"
+      ],
+      "pair_id": "T2-123",
+      "right_fixture_ids": [
+        "T2-R-138"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-136"
+      ],
+      "pair_id": "T2-124",
+      "right_fixture_ids": [
+        "T2-R-137"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-137"
+      ],
+      "pair_id": "T2-125",
+      "right_fixture_ids": [
+        "T2-R-139"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-138"
+      ],
+      "pair_id": "T2-126",
+      "right_fixture_ids": [
+        "T2-R-140"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-139"
+      ],
+      "pair_id": "T2-127",
+      "right_fixture_ids": [
+        "T2-R-135"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-140"
+      ],
+      "pair_id": "T2-128",
+      "right_fixture_ids": [
+        "T2-R-141"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-141"
+      ],
+      "pair_id": "T2-129",
+      "right_fixture_ids": [
+        "T2-R-143"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-142"
+      ],
+      "pair_id": "T2-130",
+      "right_fixture_ids": [
+        "T2-R-142"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-143"
+      ],
+      "pair_id": "T2-131",
+      "right_fixture_ids": [
+        "T2-R-144"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-144"
+      ],
+      "pair_id": "T2-132",
+      "right_fixture_ids": [
+        "T2-R-145"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-145"
+      ],
+      "pair_id": "T2-133",
+      "right_fixture_ids": [
+        "T2-R-146"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-146"
+      ],
+      "pair_id": "T2-134",
+      "right_fixture_ids": [
+        "T2-R-147"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-147"
+      ],
+      "pair_id": "T2-135",
+      "right_fixture_ids": [
+        "T2-R-123"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-148"
+      ],
+      "pair_id": "T2-136",
+      "right_fixture_ids": [
+        "T2-R-148"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-149"
+      ],
+      "pair_id": "T2-137",
+      "right_fixture_ids": [
+        "T2-R-149"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-150"
+      ],
+      "pair_id": "T2-138",
+      "right_fixture_ids": [
+        "T2-R-150"
+      ]
+    }
+  ],
+  "kind": "memcommit.semantic-eval.task2-discovery",
+  "ledger_path": "outputs/semantic-eval-v1/task2-discovery/20260803T215029469386Z-codex_chatgpt.json",
+  "pipeline": "task2-relation-discovery-v1",
+  "predicted_relations": [
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-055"
+      ],
+      "right_fixture_ids": [
+        "T2-R-055"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-019",
+        "T2-L-057"
+      ],
+      "right_fixture_ids": [
+        "T2-R-019",
+        "T2-R-057",
+        "T2-R-104",
+        "T2-R-105"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-103",
+        "T2-L-117"
+      ],
+      "right_fixture_ids": [
+        "T2-R-120"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-136"
+      ],
+      "right_fixture_ids": [
+        "T2-R-137"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-048"
+      ],
+      "right_fixture_ids": [
+        "T2-R-048"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-064"
+      ],
+      "right_fixture_ids": [
+        "T2-R-064"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-040"
+      ],
+      "right_fixture_ids": [
+        "T2-R-040"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-113"
+      ],
+      "right_fixture_ids": [
+        "T2-R-111"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-095",
+        "T2-L-100"
+      ],
+      "right_fixture_ids": [
+        "T2-R-095"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-041"
+      ],
+      "right_fixture_ids": [
+        "T2-R-041"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-063"
+      ],
+      "right_fixture_ids": [
+        "T2-R-063"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-101"
+      ],
+      "right_fixture_ids": [
+        "T2-R-099"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-058"
+      ],
+      "right_fixture_ids": [
+        "T2-R-058"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-053"
+      ],
+      "right_fixture_ids": [
+        "T2-R-053"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-034"
+      ],
+      "right_fixture_ids": [
+        "T2-R-034"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-143"
+      ],
+      "right_fixture_ids": [
+        "T2-R-144"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-018",
+        "T2-L-083",
+        "T2-L-084"
+      ],
+      "right_fixture_ids": [
+        "T2-R-018",
+        "T2-R-083"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-074"
+      ],
+      "right_fixture_ids": [
+        "T2-R-113"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-059"
+      ],
+      "right_fixture_ids": [
+        "T2-R-059"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-011"
+      ],
+      "right_fixture_ids": [
+        "T2-R-011"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-093"
+      ],
+      "right_fixture_ids": [
+        "T2-R-091"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-039",
+        "T2-L-087",
+        "T2-L-088"
+      ],
+      "right_fixture_ids": [
+        "T2-R-039",
+        "T2-R-085",
+        "T2-R-086",
+        "T2-R-150"
+      ]
+    },
+    {
+      "band": "Conflict",
+      "left_fixture_ids": [
+        "T2-L-009",
+        "T2-L-085"
+      ],
+      "right_fixture_ids": [
+        "T2-R-009"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-091"
+      ],
+      "right_fixture_ids": [
+        "T2-R-089"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-004"
+      ],
+      "right_fixture_ids": [
+        "T2-R-004"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-062"
+      ],
+      "right_fixture_ids": [
+        "T2-R-062"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-072"
+      ],
+      "right_fixture_ids": [
+        "T2-R-072"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-023"
+      ],
+      "right_fixture_ids": [
+        "T2-R-023",
+        "T2-R-146"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-122",
+        "T2-L-129"
+      ],
+      "right_fixture_ids": [
+        "T2-R-130"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-146"
+      ],
+      "right_fixture_ids": [
+        "T2-R-147"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-013",
+        "T2-L-073"
+      ],
+      "right_fixture_ids": [
+        "T2-R-013",
+        "T2-R-073"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-137"
+      ],
+      "right_fixture_ids": [
+        "T2-R-139"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-102"
+      ],
+      "right_fixture_ids": [
+        "T2-R-100"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-003"
+      ],
+      "right_fixture_ids": [
+        "T2-R-003"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-140"
+      ],
+      "right_fixture_ids": [
+        "T2-R-140"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-046"
+      ],
+      "right_fixture_ids": [
+        "T2-R-046"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-139"
+      ],
+      "right_fixture_ids": [
+        "T2-R-135"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-090"
+      ],
+      "right_fixture_ids": [
+        "T2-R-088"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-017"
+      ],
+      "right_fixture_ids": [
+        "T2-R-017"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-052"
+      ],
+      "right_fixture_ids": [
+        "T2-R-052"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-097"
+      ],
+      "right_fixture_ids": [
+        "T2-R-094",
+        "T2-R-096"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-138"
+      ],
+      "right_fixture_ids": [
+        "T2-R-141"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-025",
+        "T2-L-099"
+      ],
+      "right_fixture_ids": [
+        "T2-R-025"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-112"
+      ],
+      "right_fixture_ids": [
+        "T2-R-110"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-133"
+      ],
+      "right_fixture_ids": [
+        "T2-R-134"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-067"
+      ],
+      "right_fixture_ids": [
+        "T2-R-067"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-106",
+        "T2-L-107",
+        "T2-L-108"
+      ],
+      "right_fixture_ids": [
+        "T2-R-106"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-126"
+      ],
+      "right_fixture_ids": [
+        "T2-R-128"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-043"
+      ],
+      "right_fixture_ids": [
+        "T2-R-043"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-128"
+      ],
+      "right_fixture_ids": [
+        "T2-R-129"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-121"
+      ],
+      "right_fixture_ids": [
+        "T2-R-121"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-124"
+      ],
+      "right_fixture_ids": [
+        "T2-R-125",
+        "T2-R-127"
+      ]
+    },
+    {
+      "band": "Conflict",
+      "left_fixture_ids": [
+        "T2-L-022"
+      ],
+      "right_fixture_ids": [
+        "T2-R-022"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-094"
+      ],
+      "right_fixture_ids": [
+        "T2-R-092"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-089"
+      ],
+      "right_fixture_ids": [
+        "T2-R-087"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-115",
+        "T2-L-116"
+      ],
+      "right_fixture_ids": [
+        "T2-R-103"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-078"
+      ],
+      "right_fixture_ids": [
+        "T2-R-078"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-015"
+      ],
+      "right_fixture_ids": [
+        "T2-R-015"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-142"
+      ],
+      "right_fixture_ids": [
+        "T2-R-142"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-110"
+      ],
+      "right_fixture_ids": [
+        "T2-R-108"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-130"
+      ],
+      "right_fixture_ids": [
+        "T2-R-118",
+        "T2-R-131"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-145"
+      ],
+      "right_fixture_ids": [
+        "T2-R-047"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-105"
+      ],
+      "right_fixture_ids": [
+        "T2-R-101"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-065"
+      ],
+      "right_fixture_ids": [
+        "T2-R-065"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-109"
+      ],
+      "right_fixture_ids": [
+        "T2-R-122"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-032"
+      ],
+      "right_fixture_ids": [
+        "T2-R-032"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-148"
+      ],
+      "right_fixture_ids": [
+        "T2-R-148"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-132"
+      ],
+      "right_fixture_ids": [
+        "T2-R-114",
+        "T2-R-133"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-086"
+      ],
+      "right_fixture_ids": [
+        "T2-R-084"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-104",
+        "T2-L-150"
+      ],
+      "right_fixture_ids": [
+        "T2-R-074",
+        "T2-R-124"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-060"
+      ],
+      "right_fixture_ids": [
+        "T2-R-060"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-028"
+      ],
+      "right_fixture_ids": [
+        "T2-R-028"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-149"
+      ],
+      "right_fixture_ids": [
+        "T2-R-149"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-111"
+      ],
+      "right_fixture_ids": [
+        "T2-R-107"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-079"
+      ],
+      "right_fixture_ids": [
+        "T2-R-079"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-081"
+      ],
+      "right_fixture_ids": [
+        "T2-R-081"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-008"
+      ],
+      "right_fixture_ids": [
+        "T2-R-008"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-098"
+      ],
+      "right_fixture_ids": [
+        "T2-R-097"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-045"
+      ],
+      "right_fixture_ids": [
+        "T2-R-045"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-044"
+      ],
+      "right_fixture_ids": [
+        "T2-R-044"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-037"
+      ],
+      "right_fixture_ids": [
+        "T2-R-037"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-119",
+        "T2-L-123"
+      ],
+      "right_fixture_ids": [
+        "T2-R-115",
+        "T2-R-119"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-120"
+      ],
+      "right_fixture_ids": [
+        "T2-R-102",
+        "T2-R-116",
+        "T2-R-117",
+        "T2-R-123"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-036"
+      ],
+      "right_fixture_ids": [
+        "T2-R-036"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-056"
+      ],
+      "right_fixture_ids": [
+        "T2-R-056"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-006"
+      ],
+      "right_fixture_ids": [
+        "T2-R-006"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-027"
+      ],
+      "right_fixture_ids": [
+        "T2-R-027"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-076"
+      ],
+      "right_fixture_ids": [
+        "T2-R-076"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-038"
+      ],
+      "right_fixture_ids": [
+        "T2-R-038"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-070",
+        "T2-L-080"
+      ],
+      "right_fixture_ids": [
+        "T2-R-070",
+        "T2-R-080"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-020"
+      ],
+      "right_fixture_ids": [
+        "T2-R-020"
+      ]
+    },
+    {
+      "band": "Conflict",
+      "left_fixture_ids": [
+        "T2-L-014"
+      ],
+      "right_fixture_ids": [
+        "T2-R-014"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-051"
+      ],
+      "right_fixture_ids": [
+        "T2-R-051"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-134"
+      ],
+      "right_fixture_ids": [
+        "T2-R-136",
+        "T2-R-138"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-001",
+        "T2-L-054"
+      ],
+      "right_fixture_ids": [
+        "T2-R-001",
+        "T2-R-054"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-024"
+      ],
+      "right_fixture_ids": [
+        "T2-R-024"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-002"
+      ],
+      "right_fixture_ids": [
+        "T2-R-002"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-068"
+      ],
+      "right_fixture_ids": [
+        "T2-R-068"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-035"
+      ],
+      "right_fixture_ids": [
+        "T2-R-035"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-031"
+      ],
+      "right_fixture_ids": [
+        "T2-R-031"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-016"
+      ],
+      "right_fixture_ids": [
+        "T2-R-016"
+      ]
+    },
+    {
+      "band": "Conflict",
+      "left_fixture_ids": [
+        "T2-L-026"
+      ],
+      "right_fixture_ids": [
+        "T2-R-026"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-131"
+      ],
+      "right_fixture_ids": [
+        "T2-R-132"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-047",
+        "T2-L-050"
+      ],
+      "right_fixture_ids": [
+        "T2-R-050"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-118",
+        "T2-L-135"
+      ],
+      "right_fixture_ids": [
+        "T2-R-098"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-021"
+      ],
+      "right_fixture_ids": [
+        "T2-R-021"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-069"
+      ],
+      "right_fixture_ids": [
+        "T2-R-069"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-077"
+      ],
+      "right_fixture_ids": [
+        "T2-R-077"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-012"
+      ],
+      "right_fixture_ids": [
+        "T2-R-012"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-075"
+      ],
+      "right_fixture_ids": [
+        "T2-R-075"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-092"
+      ],
+      "right_fixture_ids": [
+        "T2-R-090"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-030"
+      ],
+      "right_fixture_ids": [
+        "T2-R-030"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-049"
+      ],
+      "right_fixture_ids": [
+        "T2-R-049"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-010"
+      ],
+      "right_fixture_ids": [
+        "T2-R-010"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-066"
+      ],
+      "right_fixture_ids": [
+        "T2-R-066"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-125",
+        "T2-L-144"
+      ],
+      "right_fixture_ids": [
+        "T2-R-145"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-114"
+      ],
+      "right_fixture_ids": [
+        "T2-R-112"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-007",
+        "T2-L-147"
+      ],
+      "right_fixture_ids": [
+        "T2-R-007"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-033"
+      ],
+      "right_fixture_ids": [
+        "T2-R-033"
+      ]
+    },
+    {
+      "band": "Compatible Complement",
+      "left_fixture_ids": [
+        "T2-L-127"
+      ],
+      "right_fixture_ids": [
+        "T2-R-126"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-061"
+      ],
+      "right_fixture_ids": [
+        "T2-R-061"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-141"
+      ],
+      "right_fixture_ids": [
+        "T2-R-143"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-029"
+      ],
+      "right_fixture_ids": [
+        "T2-R-029"
+      ]
+    },
+    {
+      "band": "Context-Dependent Variant",
+      "left_fixture_ids": [
+        "T2-L-005"
+      ],
+      "right_fixture_ids": [
+        "T2-R-005"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-082"
+      ],
+      "right_fixture_ids": [
+        "T2-R-082"
+      ]
+    },
+    {
+      "band": "Same-Principle Variant",
+      "left_fixture_ids": [
+        "T2-L-042"
+      ],
+      "right_fixture_ids": [
+        "T2-R-042",
+        "T2-R-109"
+      ]
+    },
+    {
+      "band": "Near Duplicate",
+      "left_fixture_ids": [
+        "T2-L-071"
+      ],
+      "right_fixture_ids": [
+        "T2-R-071"
+      ]
+    }
+  ],
+  "prompt_digest": "62dc5f415105dd8d43f38a5ba77f14adc1f05347e914edbedbbee87349e93b4b",
+  "provider": {
+    "endpoint": null,
+    "model": "gpt-5.6-sol",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "high",
+    "runtime": "codex-cli"
+  },
+  "provider_run": {
+    "completion_tokens": null,
+    "identity": {
+      "endpoint": null,
+      "model": "gpt-5.6-sol",
+      "model_digest": null,
+      "provider": "codex_chatgpt",
+      "reasoning_effort": "high",
+      "runtime": "codex-cli"
+    },
+    "operation": "task2 relation discovery",
+    "prompt_tokens": null,
+    "upstream_model": "gpt-5.6-sol",
+    "upstream_provider": "openai-codex"
+  },
+  "raw_response": "{\"relations\":[{\"left_ids\":[\"a70de9228fb53\"],\"right_ids\":[\"b8fe9d74e681c\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"aeffa0e6c2be4\",\"a66d086f705e8\"],\"right_ids\":[\"b6167c15ae9a6\",\"b7d67da9d5003\",\"b9d72fd0a2041\",\"babb723f8096a\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ae4f9e63a09d8\",\"a0b0b59ff5618\"],\"right_ids\":[\"b480cd253b1ba\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"ae71ea4a012d3\"],\"right_ids\":[\"ba6756c789616\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a420bc1866425\"],\"right_ids\":[\"b01695b4d346d\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"af743446fe0da\"],\"right_ids\":[\"b1e67449c3409\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a172239133676\"],\"right_ids\":[\"b465664e68796\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"aaca495b7edd7\"],\"right_ids\":[\"b5df3122e054d\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a9d74665e1f7e\",\"a7a66aefde566\"],\"right_ids\":[\"b8ee040467e76\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"ad1350e946fc7\"],\"right_ids\":[\"bd3042d47350e\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a6fa815c0f24c\"],\"right_ids\":[\"b1ba510e310b4\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a730a130503b0\"],\"right_ids\":[\"bc4b84e26b88e\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a47a0138b261e\"],\"right_ids\":[\"bbe2b1a05aab5\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a83791108ad25\"],\"right_ids\":[\"bbd59ffd6b16d\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a9ebb7cf80dca\"],\"right_ids\":[\"bb860b994b31d\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"afe04fa36acfe\"],\"right_ids\":[\"bcb9d2ec66633\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a301dc51d32af\",\"afaca94811bd0\",\"a6708d310e472\"],\"right_ids\":[\"b5ba6b51817eb\",\"b3964101e23e1\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a9c261494ea3a\"],\"right_ids\":[\"b7fa3cead274c\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ad1256063c455\"],\"right_ids\":[\"b4c944992eac9\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a74a5aad309d0\"],\"right_ids\":[\"bb4463ade6322\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a478ef9449868\"],\"right_ids\":[\"bd44cff5ec44c\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a679b220dc606\",\"acc8bcf7a722d\",\"a65efbf26c118\"],\"right_ids\":[\"b4c201d04093c\",\"be00671990b36\",\"b729613279f59\",\"b7b6b9368983b\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a5daa7d68fac8\",\"af22b3793ed55\"],\"right_ids\":[\"b6c94b95fc487\"],\"band\":\"Conflict\"},{\"left_ids\":[\"a244d0471c676\"],\"right_ids\":[\"b5d2ce38ff976\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a93ad5ee53c40\"],\"right_ids\":[\"b04f8a4036a9f\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a41072c6ce2a5\"],\"right_ids\":[\"bf905f0fd8104\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a644351995927\"],\"right_ids\":[\"bbe2a1d1c62aa\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a8abac8cdf5da\"],\"right_ids\":[\"b49549ca4c71a\",\"b2bbe6ed48797\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"a82ac6191bb5f\",\"a1a9626f80510\"],\"right_ids\":[\"b8d08aa10d490\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a951eb6728cd8\"],\"right_ids\":[\"b2ed0a881c795\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"aadbad4b3b4b2\",\"a6cf24270e597\"],\"right_ids\":[\"b408f63a4ff88\",\"bbbff909a81c7\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a69adeeba6f19\"],\"right_ids\":[\"b94cb101d21cd\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a0aad3f2d6257\"],\"right_ids\":[\"b1bd24fb82ff1\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"aba567a463ae7\"],\"right_ids\":[\"b63085fdb727a\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a78f423eb0636\"],\"right_ids\":[\"b644e6261c37c\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a2c50be05dbe9\"],\"right_ids\":[\"b0a9bf115891d\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a61f714cd2208\"],\"right_ids\":[\"bbee34790942b\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a990923197bd5\"],\"right_ids\":[\"befe6b191ca71\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a4afa22f97af5\"],\"right_ids\":[\"b2fcbecd8647d\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"af3ee9bdcca1f\"],\"right_ids\":[\"bc1c42e9ee3d6\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a4ed42f1d46dc\"],\"right_ids\":[\"bf1ac684cf14e\",\"bcb541c0f7aea\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a62587a2fb9e5\"],\"right_ids\":[\"b23dd3d8d7a8c\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a53a6bbe1b56c\",\"a38933fb4e7fe\"],\"right_ids\":[\"b51137822af04\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a11ef1c5b6126\"],\"right_ids\":[\"bf572abfcc3fa\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ad79089c91c12\"],\"right_ids\":[\"bde8e24dd07f0\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"abbf1fe53ad08\"],\"right_ids\":[\"b4b021f1bde4f\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a6683618e3285\",\"a61d3b192fb3d\",\"ab551ca2b5dd5\"],\"right_ids\":[\"b322409d8aa96\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a7bbf9447235a\"],\"right_ids\":[\"b4e54f9b08040\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a1d155743796a\"],\"right_ids\":[\"b3a160d36d6b5\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a9bf7bcbe7051\"],\"right_ids\":[\"b93b72ba4bc1b\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"aa88af51481ee\"],\"right_ids\":[\"bb448babc8f58\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a69c26fbc4a7e\"],\"right_ids\":[\"b3bf6ccd98290\",\"b58819b2d6aa5\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"a6726af3e1c7f\"],\"right_ids\":[\"b42490fc05c21\"],\"band\":\"Conflict\"},{\"left_ids\":[\"a179b7fe53475\"],\"right_ids\":[\"b76931c15dfed\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"ab2b6d182f0d9\"],\"right_ids\":[\"b6c14b43c5d3d\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"ad91fab8287a6\",\"a065409b3448a\"],\"right_ids\":[\"b0393bffda908\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a7b5ddad8a2f0\"],\"right_ids\":[\"bd09a1e8ce17f\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a4b0b09aa1892\"],\"right_ids\":[\"b6aa8ea3390be\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a62bb9e570c59\"],\"right_ids\":[\"bd6af4f7497ba\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a58f33903afb3\"],\"right_ids\":[\"b5d1791f79bd8\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"ac841b022b9dc\"],\"right_ids\":[\"b8a41ff31c7ca\",\"b99c10608ac66\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"a4c3b176a3568\"],\"right_ids\":[\"b4b8653b9aa9a\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a40f46cc306da\"],\"right_ids\":[\"b6b4f6155fde0\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"ac3340fb72f01\"],\"right_ids\":[\"b6dbc879509e3\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a9a32f671fdaf\"],\"right_ids\":[\"b3a9fd445f66b\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"ab7587d705558\"],\"right_ids\":[\"bf5ea715e9712\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a0355c423da9d\"],\"right_ids\":[\"b2a4bd059e5d2\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a9d2d2e5e7699\"],\"right_ids\":[\"bafa821cafc6d\",\"ba7d1b094afa3\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ae18db623e37e\"],\"right_ids\":[\"bc17f3c5b579d\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a945e8a660a6f\",\"adf1211ea4221\"],\"right_ids\":[\"b07d29974abed\",\"b9c8da716a9ce\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"abd3323d5d80e\"],\"right_ids\":[\"b6d4ba3537657\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"ac69dadffa62f\"],\"right_ids\":[\"b8e973066fd2c\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ab958d57a8516\"],\"right_ids\":[\"b6dce6a6a4e5b\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"a1f1b867d6298\"],\"right_ids\":[\"ba7713d5e5dcd\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"aaa90e0e92598\"],\"right_ids\":[\"b63e74a61dcbf\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a9a1bd2b88f5b\"],\"right_ids\":[\"ba56cc75c5d38\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a84f5068527a8\"],\"right_ids\":[\"b3f0ce9faae53\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a76635902edc5\"],\"right_ids\":[\"b0d3732fe9f17\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a07e697c435aa\"],\"right_ids\":[\"b4eddc772fd0e\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a1cbdcb280efa\"],\"right_ids\":[\"b4f514d2f4563\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a2098f58cdc9c\"],\"right_ids\":[\"b52458c78368e\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a9c26ef2d3093\",\"acbd87ae1686e\"],\"right_ids\":[\"bdbfa375673b5\",\"bd3b39097da14\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a352ebe2efff6\"],\"right_ids\":[\"b4982970b9e5a\",\"b58a9f408d130\",\"bba0a9c102c7a\",\"be7ea41a7f615\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"ac62f929d0d07\"],\"right_ids\":[\"be2d082f47de0\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"aa10e2c4a2518\"],\"right_ids\":[\"bd229cf6cb1eb\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a00ae1c99ac1c\"],\"right_ids\":[\"b340c76b383df\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"aa403bb199d68\"],\"right_ids\":[\"b98155e294b30\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ab571d06d178b\"],\"right_ids\":[\"ba92b0d8f0f5e\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ad8eabe23a1e6\"],\"right_ids\":[\"b140038b09b33\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"ac253bfd49faf\",\"ae05cb5307342\"],\"right_ids\":[\"b726a22cf3dee\",\"ba026f281e9b0\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"aab6f36053098\"],\"right_ids\":[\"be9bb5cba4112\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a8e458ec1baf1\"],\"right_ids\":[\"b61c2803e88ed\"],\"band\":\"Conflict\"},{\"left_ids\":[\"adab14a1d5dcf\"],\"right_ids\":[\"ba4d096fb2168\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a26f14a0a38ef\"],\"right_ids\":[\"b4c982d83c226\",\"b168eb575f632\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a4ae86c33819f\",\"a5c5468ca0429\"],\"right_ids\":[\"bd7ac4085c038\",\"b6af5bae92126\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a8ef6e1008016\"],\"right_ids\":[\"b456cc00fa32b\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a28c7568042a2\"],\"right_ids\":[\"b53c1e31d856a\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a20f666f0182a\"],\"right_ids\":[\"ba1583258d24d\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"afcf66ac7ed92\"],\"right_ids\":[\"bda7a1963e4d0\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a7019b896803f\"],\"right_ids\":[\"b22be846ce8f3\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ad405607effd7\"],\"right_ids\":[\"b96d385eb3df2\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a7c286e12da4d\"],\"right_ids\":[\"b42b40e30ea8c\"],\"band\":\"Conflict\"},{\"left_ids\":[\"ade23c4c06106\"],\"right_ids\":[\"b19bdaad2e089\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"aa47216e913df\",\"a03a4add49f7a\"],\"right_ids\":[\"b0433eebb4f5b\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"aedbc9acc19a4\",\"a315199a34ec2\"],\"right_ids\":[\"bf19b4f15f053\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a3072f6ddc220\"],\"right_ids\":[\"b92eac49fe515\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"afd10be06dc9b\"],\"right_ids\":[\"b7416188c9fd3\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a62a267d2d441\"],\"right_ids\":[\"b381a63c0d278\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a4ccb21ba6299\"],\"right_ids\":[\"bf816b6c0e389\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a33e68f65e183\"],\"right_ids\":[\"b8b1bcb85378f\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a65775c74bb6b\"],\"right_ids\":[\"be2577d0f2f4f\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a750aea32dec3\"],\"right_ids\":[\"b2d97c28b708d\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a6f312449b017\"],\"right_ids\":[\"b2b5a08b32ce6\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"aad4cefc2626f\"],\"right_ids\":[\"bc0805fe11682\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a7af2e8d1c1fe\"],\"right_ids\":[\"bd4a6a94574fd\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"ae73c031a5f3d\",\"accc386e829f9\"],\"right_ids\":[\"bf8661bb4e8f7\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"a460e02f8ee5a\"],\"right_ids\":[\"b319d9f22d279\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a8d074bc81577\",\"a9b5baf4fb5e3\"],\"right_ids\":[\"b778304faaeba\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"a86b8d000a1dc\"],\"right_ids\":[\"b2fe7384a98c7\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a46500da80586\"],\"right_ids\":[\"b158883ba3c13\"],\"band\":\"Compatible Complement\"},{\"left_ids\":[\"a790928be5699\"],\"right_ids\":[\"ba6ad80bc816c\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"afa4bbbec2ac5\"],\"right_ids\":[\"b1a62846952a6\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a2c40bfcd335e\"],\"right_ids\":[\"b150622847e48\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a8d56bac1ad6a\"],\"right_ids\":[\"b3e19b10f07d0\"],\"band\":\"Context-Dependent Variant\"},{\"left_ids\":[\"a1d2d9887c04a\"],\"right_ids\":[\"b0a9c7e770b45\"],\"band\":\"Near Duplicate\"},{\"left_ids\":[\"a33a1c81670f9\"],\"right_ids\":[\"bd7ab9f722e51\",\"bab267133d0b7\"],\"band\":\"Same-Principle Variant\"},{\"left_ids\":[\"a77bf47928add\"],\"right_ids\":[\"b7e75e0f4ba43\"],\"band\":\"Near Duplicate\"}]}",
+  "response_digest": "7da0a0a39d703b398ccdd04c88c5294bd8392a164aa50f0a8d757126179fccdd",
+  "run_id": "20260803T215029469386Z",
+  "schema_digest": "3795e1a5232b235c64c9e0b511cf674d6c074ec53f817ae233cbe17a98e7ad91",
+  "schema_version": 1,
+  "score": {
+    "band_accuracy_on_exact_structures": 0.38823529411764707,
+    "coassignment_precision": 0.5967078189300411,
+    "coassignment_recall": 0.677570093457944,
+    "exact_band_groups": 33,
+    "exact_band_groups_by_label": {
+      "Conflict": 3,
+      "Context-Dependent Variant": 5,
+      "Near Duplicate": 20,
+      "Same-Principle Variant": 5
+    },
+    "exact_complete_match": false,
+    "exact_structure_groups": 85,
+    "expected_band_distribution": {
+      "Compatible Complement": 2,
+      "Conflict": 3,
+      "Context-Dependent Variant": 22,
+      "Near Duplicate": 77,
+      "Same-Principle Variant": 34
+    },
+    "expected_groups": 138,
+    "extra_predicted_groups": [
+      [
+        [
+          "T2-L-001",
+          "T2-L-054"
+        ],
+        [
+          "T2-R-001",
+          "T2-R-054"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-002"
+        ],
+        [
+          "T2-R-002"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-005"
+        ],
+        [
+          "T2-R-005"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-006"
+        ],
+        [
+          "T2-R-006"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-007",
+          "T2-L-147"
+        ],
+        [
+          "T2-R-007"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-008"
+        ],
+        [
+          "T2-R-008"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-011"
+        ],
+        [
+          "T2-R-011"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-013",
+          "T2-L-073"
+        ],
+        [
+          "T2-R-013",
+          "T2-R-073"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-015"
+        ],
+        [
+          "T2-R-015"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-017"
+        ],
+        [
+          "T2-R-017"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-019",
+          "T2-L-057"
+        ],
+        [
+          "T2-R-019",
+          "T2-R-057",
+          "T2-R-104",
+          "T2-R-105"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-020"
+        ],
+        [
+          "T2-R-020"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-021"
+        ],
+        [
+          "T2-R-021"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-022"
+        ],
+        [
+          "T2-R-022"
+        ],
+        "Conflict"
+      ],
+      [
+        [
+          "T2-L-023"
+        ],
+        [
+          "T2-R-023",
+          "T2-R-146"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-024"
+        ],
+        [
+          "T2-R-024"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-025",
+          "T2-L-099"
+        ],
+        [
+          "T2-R-025"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-027"
+        ],
+        [
+          "T2-R-027"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-028"
+        ],
+        [
+          "T2-R-028"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-029"
+        ],
+        [
+          "T2-R-029"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-031"
+        ],
+        [
+          "T2-R-031"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-032"
+        ],
+        [
+          "T2-R-032"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-033"
+        ],
+        [
+          "T2-R-033"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-035"
+        ],
+        [
+          "T2-R-035"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-036"
+        ],
+        [
+          "T2-R-036"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-039",
+          "T2-L-087",
+          "T2-L-088"
+        ],
+        [
+          "T2-R-039",
+          "T2-R-085",
+          "T2-R-086",
+          "T2-R-150"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-040"
+        ],
+        [
+          "T2-R-040"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-042"
+        ],
+        [
+          "T2-R-042",
+          "T2-R-109"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-043"
+        ],
+        [
+          "T2-R-043"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-044"
+        ],
+        [
+          "T2-R-044"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-045"
+        ],
+        [
+          "T2-R-045"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-046"
+        ],
+        [
+          "T2-R-046"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-047",
+          "T2-L-050"
+        ],
+        [
+          "T2-R-050"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-051"
+        ],
+        [
+          "T2-R-051"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-052"
+        ],
+        [
+          "T2-R-052"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-059"
+        ],
+        [
+          "T2-R-059"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-061"
+        ],
+        [
+          "T2-R-061"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-062"
+        ],
+        [
+          "T2-R-062"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-063"
+        ],
+        [
+          "T2-R-063"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-065"
+        ],
+        [
+          "T2-R-065"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-066"
+        ],
+        [
+          "T2-R-066"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-068"
+        ],
+        [
+          "T2-R-068"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-070",
+          "T2-L-080"
+        ],
+        [
+          "T2-R-070",
+          "T2-R-080"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-074"
+        ],
+        [
+          "T2-R-113"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-075"
+        ],
+        [
+          "T2-R-075"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-076"
+        ],
+        [
+          "T2-R-076"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-077"
+        ],
+        [
+          "T2-R-077"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-079"
+        ],
+        [
+          "T2-R-079"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-081"
+        ],
+        [
+          "T2-R-081"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-086"
+        ],
+        [
+          "T2-R-084"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-089"
+        ],
+        [
+          "T2-R-087"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-090"
+        ],
+        [
+          "T2-R-088"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-091"
+        ],
+        [
+          "T2-R-089"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-092"
+        ],
+        [
+          "T2-R-090"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-093"
+        ],
+        [
+          "T2-R-091"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-094"
+        ],
+        [
+          "T2-R-092"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-095",
+          "T2-L-100"
+        ],
+        [
+          "T2-R-095"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-098"
+        ],
+        [
+          "T2-R-097"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-101"
+        ],
+        [
+          "T2-R-099"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-103",
+          "T2-L-117"
+        ],
+        [
+          "T2-R-120"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-104",
+          "T2-L-150"
+        ],
+        [
+          "T2-R-074",
+          "T2-R-124"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-105"
+        ],
+        [
+          "T2-R-101"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-106",
+          "T2-L-107",
+          "T2-L-108"
+        ],
+        [
+          "T2-R-106"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-109"
+        ],
+        [
+          "T2-R-122"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-110"
+        ],
+        [
+          "T2-R-108"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-111"
+        ],
+        [
+          "T2-R-107"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-112"
+        ],
+        [
+          "T2-R-110"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-114"
+        ],
+        [
+          "T2-R-112"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-115",
+          "T2-L-116"
+        ],
+        [
+          "T2-R-103"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-118",
+          "T2-L-135"
+        ],
+        [
+          "T2-R-098"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-119",
+          "T2-L-123"
+        ],
+        [
+          "T2-R-115",
+          "T2-R-119"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-120"
+        ],
+        [
+          "T2-R-102",
+          "T2-R-116",
+          "T2-R-117",
+          "T2-R-123"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-121"
+        ],
+        [
+          "T2-R-121"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-122",
+          "T2-L-129"
+        ],
+        [
+          "T2-R-130"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-124"
+        ],
+        [
+          "T2-R-125",
+          "T2-R-127"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-125",
+          "T2-L-144"
+        ],
+        [
+          "T2-R-145"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-126"
+        ],
+        [
+          "T2-R-128"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-127"
+        ],
+        [
+          "T2-R-126"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-128"
+        ],
+        [
+          "T2-R-129"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-130"
+        ],
+        [
+          "T2-R-118",
+          "T2-R-131"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-131"
+        ],
+        [
+          "T2-R-132"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-132"
+        ],
+        [
+          "T2-R-114",
+          "T2-R-133"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-133"
+        ],
+        [
+          "T2-R-134"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-134"
+        ],
+        [
+          "T2-R-136",
+          "T2-R-138"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-136"
+        ],
+        [
+          "T2-R-137"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-137"
+        ],
+        [
+          "T2-R-139"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-138"
+        ],
+        [
+          "T2-R-141"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-140"
+        ],
+        [
+          "T2-R-140"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-141"
+        ],
+        [
+          "T2-R-143"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-142"
+        ],
+        [
+          "T2-R-142"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-143"
+        ],
+        [
+          "T2-R-144"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-145"
+        ],
+        [
+          "T2-R-047"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-146"
+        ],
+        [
+          "T2-R-147"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-149"
+        ],
+        [
+          "T2-R-149"
+        ],
+        "Compatible Complement"
+      ]
+    ],
+    "group_band_accuracy": 0.2391304347826087,
+    "group_structure_precision": 0.6692913385826772,
+    "group_structure_recall": 0.6159420289855072,
+    "member_counterpart_exact": 190,
+    "member_counterpart_exact_accuracy": 0.6333333333333333,
+    "member_counterpart_macro_jaccard": 0.7152777777777778,
+    "member_counterpart_total": 300,
+    "missing_gold_groups": [
+      [
+        [
+          "T2-L-001"
+        ],
+        [
+          "T2-R-001"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-002"
+        ],
+        [
+          "T2-R-002"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-005"
+        ],
+        [
+          "T2-R-005"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-006"
+        ],
+        [
+          "T2-R-006"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-007"
+        ],
+        [
+          "T2-R-007"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-008"
+        ],
+        [
+          "T2-R-008"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-011"
+        ],
+        [
+          "T2-R-011"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-013"
+        ],
+        [
+          "T2-R-013"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-015"
+        ],
+        [
+          "T2-R-015"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-017"
+        ],
+        [
+          "T2-R-017"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-019"
+        ],
+        [
+          "T2-R-019"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-020"
+        ],
+        [
+          "T2-R-020"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-021"
+        ],
+        [
+          "T2-R-021"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-022"
+        ],
+        [
+          "T2-R-022"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-023"
+        ],
+        [
+          "T2-R-023"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-024"
+        ],
+        [
+          "T2-R-024"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-025"
+        ],
+        [
+          "T2-R-025"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-027"
+        ],
+        [
+          "T2-R-027"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-028"
+        ],
+        [
+          "T2-R-028"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-029"
+        ],
+        [
+          "T2-R-029"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-031"
+        ],
+        [
+          "T2-R-031"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-032"
+        ],
+        [
+          "T2-R-032"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-033"
+        ],
+        [
+          "T2-R-033"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-035"
+        ],
+        [
+          "T2-R-035"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-036",
+          "T2-L-086"
+        ],
+        [
+          "T2-R-036",
+          "T2-R-084"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-039",
+          "T2-L-087",
+          "T2-L-088"
+        ],
+        [
+          "T2-R-039",
+          "T2-R-085",
+          "T2-R-086"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-040",
+          "T2-L-091",
+          "T2-L-092"
+        ],
+        [
+          "T2-R-040",
+          "T2-R-089",
+          "T2-R-090"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-042"
+        ],
+        [
+          "T2-R-042"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-043"
+        ],
+        [
+          "T2-R-043"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-044"
+        ],
+        [
+          "T2-R-044"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-045"
+        ],
+        [
+          "T2-R-045"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-046"
+        ],
+        [
+          "T2-R-046"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-047"
+        ],
+        [
+          "T2-R-047"
+        ],
+        "Compatible Complement"
+      ],
+      [
+        [
+          "T2-L-050"
+        ],
+        [
+          "T2-R-050"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-051"
+        ],
+        [
+          "T2-R-051"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-052"
+        ],
+        [
+          "T2-R-052"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-054"
+        ],
+        [
+          "T2-R-054"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-057"
+        ],
+        [
+          "T2-R-057"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-059"
+        ],
+        [
+          "T2-R-059"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-061"
+        ],
+        [
+          "T2-R-061"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-062"
+        ],
+        [
+          "T2-R-062"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-063"
+        ],
+        [
+          "T2-R-063"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-065",
+          "T2-L-089",
+          "T2-L-090"
+        ],
+        [
+          "T2-R-065",
+          "T2-R-087",
+          "T2-R-088"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-066"
+        ],
+        [
+          "T2-R-066"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-068",
+          "T2-L-093",
+          "T2-L-094"
+        ],
+        [
+          "T2-R-068",
+          "T2-R-091",
+          "T2-R-092"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-070"
+        ],
+        [
+          "T2-R-070"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-073"
+        ],
+        [
+          "T2-R-073"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-074"
+        ],
+        [
+          "T2-R-074"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-075"
+        ],
+        [
+          "T2-R-075"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-076"
+        ],
+        [
+          "T2-R-076"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-077"
+        ],
+        [
+          "T2-R-077"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-079"
+        ],
+        [
+          "T2-R-079"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-080"
+        ],
+        [
+          "T2-R-080"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-081"
+        ],
+        [
+          "T2-R-081"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-095"
+        ],
+        [
+          "T2-R-093"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-096"
+        ],
+        [
+          "T2-R-095"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-098"
+        ],
+        [
+          "T2-R-097"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-099"
+        ],
+        [
+          "T2-R-098"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-100"
+        ],
+        [
+          "T2-R-117"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-101"
+        ],
+        [
+          "T2-R-099"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-103"
+        ],
+        [
+          "T2-R-102"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-104"
+        ],
+        [
+          "T2-R-103"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-105"
+        ],
+        [
+          "T2-R-101"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-106"
+        ],
+        [
+          "T2-R-104"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-107"
+        ],
+        [
+          "T2-R-106"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-108"
+        ],
+        [
+          "T2-R-105"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-109"
+        ],
+        [
+          "T2-R-107"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-110"
+        ],
+        [
+          "T2-R-108"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-111"
+        ],
+        [
+          "T2-R-109"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-112"
+        ],
+        [
+          "T2-R-110"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-114"
+        ],
+        [
+          "T2-R-112"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-115"
+        ],
+        [
+          "T2-R-114"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-116"
+        ],
+        [
+          "T2-R-115"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-117"
+        ],
+        [
+          "T2-R-113",
+          "T2-R-116"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-118"
+        ],
+        [
+          "T2-R-118"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-119"
+        ],
+        [
+          "T2-R-119"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-120"
+        ],
+        [
+          "T2-R-120"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-121"
+        ],
+        [
+          "T2-R-121"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-122"
+        ],
+        [
+          "T2-R-124"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-123"
+        ],
+        [
+          "T2-R-122"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-124"
+        ],
+        [
+          "T2-R-125"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-125"
+        ],
+        [
+          "T2-R-128"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-126"
+        ],
+        [
+          "T2-R-127"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-127"
+        ],
+        [
+          "T2-R-126"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-128"
+        ],
+        [
+          "T2-R-129"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-129"
+        ],
+        [
+          "T2-R-130"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-130"
+        ],
+        [
+          "T2-R-131"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-131"
+        ],
+        [
+          "T2-R-132"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-132"
+        ],
+        [
+          "T2-R-133"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-133"
+        ],
+        [
+          "T2-R-134"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-134"
+        ],
+        [
+          "T2-R-136"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-135"
+        ],
+        [
+          "T2-R-138"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-136"
+        ],
+        [
+          "T2-R-137"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-137"
+        ],
+        [
+          "T2-R-139"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-138"
+        ],
+        [
+          "T2-R-140"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-140"
+        ],
+        [
+          "T2-R-141"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-141"
+        ],
+        [
+          "T2-R-143"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-142"
+        ],
+        [
+          "T2-R-142"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-143"
+        ],
+        [
+          "T2-R-144"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-144"
+        ],
+        [
+          "T2-R-145"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-145"
+        ],
+        [
+          "T2-R-146"
+        ],
+        "Context-Dependent Variant"
+      ],
+      [
+        [
+          "T2-L-146"
+        ],
+        [
+          "T2-R-147"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-147"
+        ],
+        [
+          "T2-R-123"
+        ],
+        "Same-Principle Variant"
+      ],
+      [
+        [
+          "T2-L-149"
+        ],
+        [
+          "T2-R-149"
+        ],
+        "Near Duplicate"
+      ],
+      [
+        [
+          "T2-L-150"
+        ],
+        [
+          "T2-R-150"
+        ],
+        "Same-Principle Variant"
+      ]
+    ],
+    "predicted_band_distribution": {
+      "Compatible Complement": 11,
+      "Conflict": 4,
+      "Context-Dependent Variant": 60,
+      "Near Duplicate": 28,
+      "Same-Principle Variant": 24
+    },
+    "predicted_groups": 127
+  },
+  "started_at": "2026-08-03T21:50:29.469386Z",
+  "status": "INVALID_OUTPUT",
+  "timing": {
+    "campaign_seconds": 364.5184238748625,
+    "corpus_preparation_seconds": 0.003992792218923569,
+    "prompt_preparation_seconds": 0.0002669999375939369,
+    "provider_completion_seconds": 364.51224587485194,
+    "provider_connection_seconds": 0.05771116726100445,
+    "response_validation_seconds": 0.0004816250875592232,
+    "scoring_seconds": 0.0011857086792588234,
+    "total_seconds": 364.5761350421235
+  },
+  "validation_error": "Task 2 discovery did not partition every left Memory once."
+}

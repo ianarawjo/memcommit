@@ -15,8 +15,14 @@ reconstruction for user research.
 | --- | ---: | ---: | ---: |
 | Task 1 | `construction-updates` 75 + `campus-wiki` 300 = 375 | `campus-wiki · construction-details` 78 | 453 |
 | Task 2 | `advisor1` 150 + `advisor2` 150 = 300 | `proposal-submission-guidelines` 75 | 375 |
-| Task 3 | `personal-memory` 300 + `guardrails` 75 = 375 | `government/healthcare-agent/information-request` 75 | 450 |
-| Total | 1,050 | 228 | 1,278 |
+| Task 3 | `local/personal-memory` 300 + `local/guardrails` 75 + public healthcare guidance 12 = 387 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 462 |
+| Total | 1,062 | 228 | 1,290 |
+
+`Ordinary material` and `Query-only material` describe participant
+interaction. Physically, all 1,290 records are ordinary Memories: task-local
+records live in task Profiles, and granted material lives in task-specific
+authority Profiles. A `QUERY` grant, rather than a special source file,
+enforces the query-only view in the generated study packages.
 
 The counts are not targets for mechanically fragmenting sentences. Each Memory
 candidate contains one proposition or action rule that can be independently
@@ -132,9 +138,10 @@ confidentiality.
   - [Purpose sidecar](task-2-memory-purpose-en.tsv)
 - Task 3
   - [Participant brief draft](task-3-study-brief-en.md)
-  - [300 `personal-memory` Memories](task-3-personal-memory-en.md)
-  - [75 ordinary `guardrails`](task-3-guardrails-en.md)
-  - [75 query-only `government/healthcare-agent/information-request` Memories](task-3-healthcare-information-request-en.md)
+  - [300 `local/personal-memory` Memories](task-3-personal-memory-en.md)
+  - [75 ordinary `local/guardrails`](task-3-guardrails-en.md)
+  - [12 ordinary `remote/government/healthcare-agent/info-request/official-guidance` Memories](task-3-healthcare-public-guidance-en.md)
+  - [75 query-only `remote/government/healthcare-agent/info-request/questions-and-answers` Memories](task-3-healthcare-information-request-en.md)
   - [Purpose sidecar](task-3-memory-purpose-en.tsv)
 - [Complete design rationale](fixture-corpus-design-rationale-en.md)
 
@@ -183,12 +190,11 @@ toward the third-floor rear-entrance route connecting to the library, a separate
 Memory requires advance notice that the route is unavailable and, when a
 verified alternative exists, guidance to that alternative.
 
-`construction-details` is the query-only source attached directly to the
-ordinary `campus-wiki` Context. Its review affiliation may be displayed as
-`campus-wiki · construction-details`, while the current explicit query form is
-`mem query construction-details ... --context campus-wiki`. Detailed
-construction content is not copied into the ordinary Memory list to
-circumvent this boundary.
+`task-1-campus-authority` owns ordinary `campus-wiki` and
+`campus-wiki/construction-details` Context trees. The task receives a readable
+and editable wiki view plus a narrower query-only details view. Its explicit
+query form is `mem query campus-wiki/construction-details ...`. Detailed
+construction content is not copied into the task Profile.
 
 ### Task 2
 
@@ -239,10 +245,10 @@ two advisors' differences nor an answer key.
 
 ### Task 3
 
-The 300 `personal-memory` Memories retain source keys for ten Memories per month
+The 300 `local/personal-memory` Memories retain source keys for ten Memories per month
 from `2024-01` through `2026-06`, rather than using topic keys. Generated Study
 Profiles expose them through year/month Contexts such as
-`personal-memory/2024/01`, including the structural `personal-memory/2024`
+`local/personal-memory/2024/01`, including the structural `local/personal-memory/2024`
 parent. Concrete
 user experiences dominate the `UM` purpose, producing 184 User Models overall.
 Memories state events, actions, and preferences directly instead of explaining
@@ -263,7 +269,7 @@ contains one `OM` describing the expectations, preferences, judgments, or
 anticipated responses of a person or institution other than the current user,
 and the complete set contains all six purposes.
 
-The 75 `guardrails` form an ordinary Context covering purpose limitations for
+The 75 `local/guardrails` form an ordinary Context covering purpose limitations for
 selective sharing, protection of third parties, uncertainty, approval, delivery,
 and revocation, as well as recipient authority, minimization and redaction,
 channel and format, downstream use, auditing, and recovery. Neither the
@@ -273,8 +279,12 @@ choices during the experiment; they are replaced with `WM` statements about
 external data-flow conditions and `OM` statements about anticipated recipient
 or organization interpretations.
 
-The connected query-only Context has canonical locator
-`government/healthcare-agent/information-request`. Its 75 Memories explain the
+The ordinary Context `remote/government/healthcare-agent/info-request/official-guidance` contains 12
+distributable high-level review principles. Its grant permits reading,
+derivation, combination, export, and retained analysis, so it can serve as the
+one Criteria Context of Sever or be combined with another criterion through
+Meld. The connected query-only Context has canonical locator
+`remote/government/healthcare-agent/info-request/questions-and-answers`. Its 75 Memories explain the
 consent, use, and sharing consequences when categories of personal Memory are
 actually transmitted to a government healthcare institution system. They do not
 identify particular events in the personal record as correct answers or request
@@ -286,7 +296,7 @@ provided to relevant third parties for healthcare purposes or used for service
 improvement. The agent does not identify the exact services, recipients, or
 scope of third parties.
 
-Alongside the information-request agent's capability limits, `OM` covers
+Alongside the healthcare Q&A agent's capability limits, `OM` covers
 external clients that mistake this endpoint for a transmission, scheduling,
 deletion, permissions, or payment API; excessive requesters; and automated
 requesters attempting prompt injection, hidden-instruction extraction, behavior
@@ -294,7 +304,7 @@ distillation, or repeatedly varied queries. Downstream actors inside the
 government institution neither interact with nor are observed by this agent, so
 they are not made `OM` actors in this dataset.
 
-The information-request agent does not access stored personal Memories or
+The healthcare Q&A agent does not access stored personal Memories or
 institution records and does not retain information outside the current
 conversation record. It cannot select, include, exclude, modify, transmit, or
 delete information; control the institution's receipt, retention, internal
@@ -312,7 +322,7 @@ limiting is implemented.
 ## Synthetic, De-identification, and Query Boundaries
 
 - The Task 1 and 2 people, institutions, construction, and policies, and the
-  Task 3 guardrails and healthcare information-request specification, are
+  Task 3 guardrails and healthcare healthcare Q&A specification, are
   entirely synthetic research material.
 - Task 1 spaces draw only shallowly on facility relationships possible at an
   urban comprehensive university; they do not use a real school name, building
@@ -333,8 +343,9 @@ limiting is implemented.
    omissions, and expected outcomes by task.
 3. Review the approved Korean source and English translation for semantic
    preservation.
-4. Import the generated packages with `mem profile import-study`, which composes
+4. Import the generated packages with `mem profile import-study`, which imports
    task and authority Context baselines, translation catalogs, and grant
    templates into one editable `study-baseline` without changing `authoring`.
    Use `mem init-study NAME` to make one complete clean Profile copy after
-   reviewing that merged topology.
+   reviewing that merged topology. Authoring checkpoints and other run
+   artifacts stay outside both the baseline and initialized copy.

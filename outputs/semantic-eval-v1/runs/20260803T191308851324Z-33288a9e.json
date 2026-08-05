@@ -1,0 +1,398 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 8.435025500133634,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": null,
+      "ordinal": 1,
+      "prompt_digest": "c1a24da371a6a0207e2bd767df5abefb3b9b845cb9397df416938cf1fad6ec02",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\\"missing_detail\\\":\\\"Where is the reception desk located?\\\",\\\"effect\\\":\\\"MINOR_FRICTION\\\"}\",\"READING_CENSUS\":\"{\\\"primary_reading\\\":\\\"Visitors should register at the venue's single reception desk.\\\",\\\"alternative_reading\\\":\\\"\\\",\\\"structure\\\":\\\"ONE\\\"}\"}",
+      "repetition": 1,
+      "response_bytes": 277,
+      "response_digest": "2b17346f5d6d2c4d84a1fe9483fcd67a85262d43255e80a745246d112eee436b",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "ONE",
+          "completion_seconds": 4.959495292045176,
+          "completion_tokens": null,
+          "evidence": {
+            "alternative_reading": "",
+            "primary_reading": "Visitors should register at the venue's single reception desk.",
+            "structure": "ONE"
+          },
+          "prompt_digest": "f42e8ff05ee5f4add5030ffb029331d2fc7d2705b80e046352ab54930139ed73",
+          "prompt_tokens": null,
+          "raw_response": "{\"primary_reading\":\"Visitors should register at the venue's single reception desk.\",\"alternative_reading\":\"\",\"structure\":\"ONE\"}",
+          "response_digest": "de766de70b77d6793d2e3931083e5a5afbd56000a599d7899b0c507d809d53ef",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        },
+        {
+          "answer": "MINOR_FRICTION",
+          "completion_seconds": 3.4748269161209464,
+          "completion_tokens": null,
+          "evidence": {
+            "effect": "MINOR_FRICTION",
+            "missing_detail": "Where is the reception desk located?"
+          },
+          "prompt_digest": "aaacc1cda8a348a617366d51d11b6d96ce8224eb5c9e0cddc42a7098dd5d207b",
+          "prompt_tokens": null,
+          "raw_response": "{\"missing_detail\":\"Where is the reception desk located?\",\"effect\":\"MINOR_FRICTION\"}",
+          "response_digest": "34d97fb133aa27554fb697fb8dfa69a6c831ea3345fecd7c471a79a656a3aa47",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "dominant-required-entry-permit",
+      "completion_seconds": 10.553764584008604,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": null,
+      "ordinal": 2,
+      "prompt_digest": "95bac8035bc6585f6359d27f3d4eb42b8de0a5f10a7cb5fa94c783951bc919fd",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\\"missing_detail\\\":\\\"Which specific entry permit is accepted and what validity requirements apply?\\\",\\\"effect\\\":\\\"BLOCKS_OR_MATERIAL_RISK\\\"}\",\"READING_CENSUS\":\"{\\\"primary_reading\\\":\\\"The traveller must possess a valid entry permit and present the permit document to the border-control officer on arrival.\\\",\\\"alternative_reading\\\":\\\"The traveller must have valid entry-permit status and show an accepted electronic or alternate proof of that status to the officer.\\\",\\\"structure\\\":\\\"MULTIPLE_WITH_LEADER\\\"}\"}",
+      "repetition": 1,
+      "response_bytes": 534,
+      "response_digest": "5550035f9a0d74b09bcc8826871e4ab855b68e6b891ad658f56d89888fb501c4",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "MULTIPLE_WITH_LEADER",
+          "completion_seconds": 6.060062124859542,
+          "completion_tokens": null,
+          "evidence": {
+            "alternative_reading": "The traveller must have valid entry-permit status and show an accepted electronic or alternate proof of that status to the officer.",
+            "primary_reading": "The traveller must possess a valid entry permit and present the permit document to the border-control officer on arrival.",
+            "structure": "MULTIPLE_WITH_LEADER"
+          },
+          "prompt_digest": "d2eb77033095a92dbd39324a87ad3a09d6e8d525ad38b4c879b0c341f85563f7",
+          "prompt_tokens": null,
+          "raw_response": "{\"primary_reading\":\"The traveller must possess a valid entry permit and present the permit document to the border-control officer on arrival.\",\"alternative_reading\":\"The traveller must have valid entry-permit status and show an accepted electronic or alternate proof of that status to the officer.\",\"structure\":\"MULTIPLE_WITH_LEADER\"}",
+          "response_digest": "07245e2de7c4b770abdff4268db191ee1aed57d96d9b29d5f0129bfd581d93da",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        },
+        {
+          "answer": "BLOCKS_OR_MATERIAL_RISK",
+          "completion_seconds": 4.493016041815281,
+          "completion_tokens": null,
+          "evidence": {
+            "effect": "BLOCKS_OR_MATERIAL_RISK",
+            "missing_detail": "Which specific entry permit is accepted and what validity requirements apply?"
+          },
+          "prompt_digest": "b25a887beb868de4c5bdaccbb27e0b73b0c384e66573cb469180349232cb47cb",
+          "prompt_tokens": null,
+          "raw_response": "{\"missing_detail\":\"Which specific entry permit is accepted and what validity requirements apply?\",\"effect\":\"BLOCKS_OR_MATERIAL_RISK\"}",
+          "response_digest": "11c5d848de31c2a87b8869779363c5bb5825a287c11ce7748a02208a24654ba7",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-helpful-person-in-charge",
+      "completion_seconds": 11.925863791722804,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": null,
+      "ordinal": 3,
+      "prompt_digest": "e941a644c42a989213d328721c844424f2bb5e913f2b591fbf4f7732b84dd3ea",
+      "provider_run": {
+        "completion_tokens": null,
+        "operation": "ambiguity clarification_census",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"CLARIFICATION_CENSUS\":\"{\\\"missing_detail\\\":\\\"Which specific desk or contact route should the visitor use to report the room problem?\\\",\\\"effect\\\":\\\"MINOR_FRICTION\\\"}\",\"READING_CENSUS\":\"{\\\"primary_reading\\\":\\\"Ask the responsible person who has authority to handle the room problem.\\\",\\\"alternative_reading\\\":\\\"Ask either the event-team representative or a facilities staff member.\\\",\\\"structure\\\":\\\"MULTIPLE_BALANCED\\\"}\"}",
+      "repetition": 1,
+      "response_bytes": 422,
+      "response_digest": "99022ccddbc616c4ab22caa2bd4e3f6699211f571947b25ec69b187a14494cdd",
+      "schema_digest": "825ed1d776c0526b2428248079baa83117c743f2d5f269cf446805dbc40c59df",
+      "stage": "CLASSIFY",
+      "stage_runs": [
+        {
+          "answer": "MULTIPLE_BALANCED",
+          "completion_seconds": 5.506010124925524,
+          "completion_tokens": null,
+          "evidence": {
+            "alternative_reading": "Ask either the event-team representative or a facilities staff member.",
+            "primary_reading": "Ask the responsible person who has authority to handle the room problem.",
+            "structure": "MULTIPLE_BALANCED"
+          },
+          "prompt_digest": "ee54975d7853f1dd4d19a4bb6d589f2baf31c904b9f0323a6c5f44165f122655",
+          "prompt_tokens": null,
+          "raw_response": "{\"primary_reading\":\"Ask the responsible person who has authority to handle the room problem.\",\"alternative_reading\":\"Ask either the event-team representative or a facilities staff member.\",\"structure\":\"MULTIPLE_BALANCED\"}",
+          "response_digest": "99fdd82f1c3ae323faf0d4587819c459af2f6f22a108631dbc01ac0b18f51850",
+          "schema_digest": "3506599b7baceedeb380a92310f3ca6b36ca12c3232506e41c6be5e5545576ae",
+          "stage": "READING_CENSUS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        },
+        {
+          "answer": "MINOR_FRICTION",
+          "completion_seconds": 6.41905516711995,
+          "completion_tokens": null,
+          "evidence": {
+            "effect": "MINOR_FRICTION",
+            "missing_detail": "Which specific desk or contact route should the visitor use to report the room problem?"
+          },
+          "prompt_digest": "aa9f9473e3b99f4decb31bd467c19904febc77f3ddc0d787c7ad64b80c43264c",
+          "prompt_tokens": null,
+          "raw_response": "{\"missing_detail\":\"Which specific desk or contact route should the visitor use to report the room problem?\",\"effect\":\"MINOR_FRICTION\"}",
+          "response_digest": "305269daa7b77d1bae5eb6592cdbc1b610912afdddc0d14418f2e3f7923d9362",
+          "schema_digest": "38fe99f81de1ccd1ab78bf9fccfae8ce02394f3c5aec75351901a60f956de097",
+          "stage": "CLARIFICATION_CENSUS",
+          "upstream_model": "gpt-5.6-luna",
+          "upstream_provider": "openai-codex"
+        }
+      ],
+      "status": "PASS"
+    }
+  ],
+  "completed_at": "2026-08-03T19:13:39.771472Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "fixture": "ambiguity.json",
+    "fixture_case_count": 10,
+    "fixture_digest": "003654c092e03ea74f72e8f084624438085555e2cedad2c9abed985ae2b3c067",
+    "independent_holdout": false,
+    "operation": "find-ambiguities",
+    "role": "CALIBRATION",
+    "ruleset_version": "ambiguity-v1-draft",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "single-helpful-reception-location",
+      "dominant-required-entry-permit",
+      "competing-helpful-person-in-charge"
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T191308851324Z-33288a9e.json",
+  "pipeline": {
+    "gate": "exact two-label contract with repeated stability",
+    "id": "ambiguity-rules-v6",
+    "stages": [
+      "READING_CENSUS",
+      "CLARIFICATION_CENSUS",
+      "PROJECT_LABELS"
+    ],
+    "version": 6
+  },
+  "provider": {
+    "effective_thinking": null,
+    "endpoint": null,
+    "model": "gpt-5.6-luna",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "low",
+    "runtime": "codex-cli"
+  },
+  "run_id": "20260803T191308851324Z-33288a9e",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": null,
+      "max_output_tokens": null,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T19:13:08.851324Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 3,
+      "structurally_valid": 3,
+      "total": 3
+    },
+    "campaign_passed": true,
+    "case_results": [
+      {
+        "attempts": 1,
+        "case_id": "single-helpful-reception-location",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-required-entry-permit",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-helpful-person-in-charge",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      }
+    ],
+    "cases": {
+      "failed": 0,
+      "passed": 3,
+      "total": 3
+    },
+    "completion_seconds": {
+      "max": 11.925863791722804,
+      "mean": 10.304884625288347,
+      "median": 10.553764584008604,
+      "p95": 11.925863791722804
+    },
+    "distributions": {
+      "actual_joint_attempts": {
+        "COMPETING/HELPFUL": 1,
+        "DOMINANT/REQUIRED": 1,
+        "SINGLE/HELPFUL": 1
+      },
+      "case_pass_by_clarification": {
+        "HELPFUL": {
+          "passed": 2,
+          "total": 2
+        },
+        "NONE": {
+          "passed": 0,
+          "total": 0
+        },
+        "REQUIRED": {
+          "passed": 1,
+          "total": 1
+        }
+      },
+      "case_pass_by_interpretation": {
+        "COMPETING": {
+          "passed": 1,
+          "total": 1
+        },
+        "DOMINANT": {
+          "passed": 1,
+          "total": 1
+        },
+        "SINGLE": {
+          "passed": 1,
+          "total": 1
+        }
+      },
+      "expected_clarification": {
+        "HELPFUL": 2,
+        "REQUIRED": 1
+      },
+      "expected_interpretation": {
+        "COMPETING": 1,
+        "DOMINANT": 1,
+        "SINGLE": 1
+      },
+      "expected_joint": {
+        "COMPETING/HELPFUL": 1,
+        "DOMINANT/REQUIRED": 1,
+        "SINGLE/HELPFUL": 1
+      }
+    },
+    "failures": {},
+    "stage_completion_seconds": {
+      "CLARIFICATION_CENSUS": {
+        "max": 6.41905516711995,
+        "mean": 4.795632708352059,
+        "median": 4.493016041815281,
+        "p95": 6.41905516711995
+      },
+      "READING_CENSUS": {
+        "max": 6.060062124859542,
+        "mean": 5.508522513943414,
+        "median": 5.506010124925524,
+        "p95": 6.060062124859542
+      }
+    },
+    "tokens": {
+      "completion": 0,
+      "prompt": 0,
+      "reported_attempts": 0,
+      "reported_calls": 0
+    }
+  },
+  "timing": {
+    "campaign_seconds": 30.92108641611412,
+    "provider_connection_seconds": 0.05013675009831786,
+    "total_seconds": 30.97122316621244
+  }
+}

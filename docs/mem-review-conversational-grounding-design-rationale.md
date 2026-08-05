@@ -576,3 +576,15 @@ exact-command lifecycle. The current separation remains explicit:
 
 The common frontend decision and its dynamic-list rules are recorded in
 [`semantic-resolution-workbench-design-rationale.md`](semantic-resolution-workbench-design-rationale.md).
+
+## Future saved Review launcher
+
+The current ambiguity Review still has one global overwrite slot, so it cannot
+truthfully present a list of prior Review sessions. After Review is migrated to
+independent Context- and kind-bound durable records with stable identity,
+status, and timestamps, it should adopt the operation-neutral saved-work
+picker already used by Ground, Meld, Atomize, and Compare. The required
+storage migration, replacement/archive policy, and concurrency contract must
+precede that UI; a picker must not imply history that the singleton model does
+not retain. See
+[`mem-session-picker-design-rationale.md`](mem-session-picker-design-rationale.md).

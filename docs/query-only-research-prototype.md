@@ -2,16 +2,40 @@
 
 ## Decision
 
-Some study information should be visible as an available Context without
-being readable through `mem ls`, `mem show`, `mem switch`, or ordinary Context
-files. Participants should be able to ask questions of that information and
-receive only an answer.
+Some study information should be visible as an available view without being
+readable through `mem ls`, `mem show`, or `mem switch`. Participants can ask
+questions and receive only an answer.
 
-The prototype represents this with a distinct `QueryContextRef`. It does not
-change the existing `context_ref`: an ordinary `context_ref` remains a live,
-readable reference to another Context.
+New study bundles implement that interaction as a `QUERY` authority grant.
+The source is an ordinary Context tree in a separate, switchable task-specific
+authority Profile; the task Profile contains no source copy. A grant is a
+view permission, not a fork or a special storage kind. The older
+`QueryContextRef` plus `query-sources/` representation remains supported for
+legacy and developer fixtures.
 
-## Data model
+## Authority-granted data model
+
+The Profile registry records the public view, authority and grantee Profile
+UIDs, task attachment Context UID, source root Context UID, permission set,
+and a frozen exact Context scope. With only `QUERY`, ordinary task-side
+listing renders the view name and `(query-only)` mode but never loads the
+authority Memories. Selecting the authority Profile gives its owner normal
+Context and Memory CRUD.
+
+Task 1 therefore has this physical and projected topology:
+
+```text
+task-1 Profile                         task-1-campus-authority Profile
+participant/construction-updates      campus-wiki
+  └── campus-wiki [READ+CREATE+UPDATE]  ├── readable wiki Contexts
+      └── construction-details [QUERY]   └── construction-details Contexts
+```
+
+The narrower query grant overrides the broader wiki read grant. `mem ls
+campus-wiki -R` can list the readable wiki while rendering the details link
+without traversing its ordinary authority Contexts.
+
+## Legacy `QueryContextRef` data model
 
 A parent Context stores only this pointer record:
 
@@ -77,28 +101,30 @@ outside the store should obtain a source through `MemoryStore` and consume
 `content` or `contents`, rather than constructing or serializing this internal
 record itself.
 
-## Task 1 visible wiki and concealed detail collection
+## Task 1 visible wiki and query-only detail view
 
-Task 1 keeps the ordinary wiki and its concealed construction details as
-different objects with different operations. Their canonical identifiers
-follow
+Task 1 keeps its participant workspace and authority-owned campus data in
+different Profiles. Their canonical identifiers follow
 [`task-1-naming-contract.md`](task-1-naming-contract.md):
 
 ```text
-participant/construction-updates    verified local change source
-campus-wiki                         ordinary readable and writable wiki
-└── construction-details            direct query-only child
+participant/construction-updates       task-owned change source
+campus-wiki                            granted readable/editable view
+└── construction-details               narrower granted query-only view
 ```
 
-`campus-wiki` contains direct, readable Memories for the participant's task
-and one `QueryContextRef` named `construction-details`. Ordinary traversal,
-`impact`, and `update` operate only on the direct ordinary material and must
-not open the concealed pointer. The top-level wiki name is sufficient because
-the selected Task Profile already supplies isolation; `participant/` and
-`-fork` would duplicate that boundary and imply a publication workflow that
-the prototype does not implement.
+The authority Profile contains both trees as ordinary data. The task receives
+no persisted `QueryContextRef` or Context copy; registry grants derive both
+views at command time. `-fork` is deliberately absent because no divergent
+copy or publication workflow exists.
 
 ## Commands
+
+`mem query` also accepts one unrecognized operand as a natural-language
+question for the selected ordinary Context. That path shares Find's visible
+Memory and activity-artifact search frame; it does not weaken or replace the
+query-only routing contract below. A recognized query-only selector continues
+to take precedence.
 
 The researcher installs a fixture with the hidden developer command:
 
@@ -125,26 +151,29 @@ Mode: query-only research prototype
 Content: concealed from mem ls and mem show
 ```
 
-Questions use:
+Legacy pointer questions use:
 
 ```bash
 mem query contractor-agreements \
   "May contractors enter the building on weekends?"
 ```
 
-A bilingual study source can be queried in its complete Korean view without
-exposing it through Translate:
+A Task 1 authority view can be queried in its complete Korean view without
+exposing it through ordinary list or Translate:
 
 ```bash
-mem query construction-details \
+mem query campus-wiki/construction-details \
   "공사기간 후문을 이용할 수 있나요?" \
-  --context campus-wiki \
   --language ko
 ```
 
-`mem query` resolves only a direct `QueryContextRef`. It does not save the
-question, answer, or a checkpoint. Language selection occurs only after
-provider authentication and inside the query-source loading boundary.
+`mem query` resolves either a direct legacy `QueryContextRef` or an effective
+`QUERY` grant. One-shot questions and answers are not saved. An explicit
+`--session NAME` stores only visible Q/A in the task Profile when the grant
+also includes `SESSION_LOG`; `mem query --sessions` and `--show-session NAME`
+inspect that chat log without reopening the authority source. Language
+selection occurs only after provider authentication and inside the authority
+source-loading boundary.
 
 ## Temporary Codex provider
 
@@ -183,7 +212,8 @@ enforcement:
   preserve the public `QueryContextRef` pointer, but concealed source text is
   not a candidate, provider input, trace source, or copied Memory. This is a
   tested command-path invariant, not an operating-system security boundary;
-- the local operating-system user can still open `~/.mem/query-sources`;
+- the local operating-system user can still open legacy `query-sources/` or
+  managed authority-Profile files directly;
 - the source is sent to the selected model provider;
 - a model can still produce an over-broad answer despite the prompt;
 - the one-shot Codex process still has a tool surface, and its read-only
@@ -198,10 +228,11 @@ service, and return only policy-filtered answers.
 
 ## Provider replacement
 
-`QueryContextRef.provider` is an allowlisted provider key, not a command or
-executable path. The provider adapter separates Context storage from answer
-generation, so a later MCP, internal-network, or Claude implementation can
-replace `codex_chatgpt` without changing the pointer model or public command.
+The legacy `QueryContextRef.provider` and the study grant template's provider
+are allowlisted keys, not commands or executable paths. The provider adapter
+separates authority storage from answer generation, so a later MCP or
+internal-network implementation can replace `codex_chatgpt` without changing
+the public view or query-session contract.
 
 As checked on 2026-07-27, Claude Code also supports a one-shot
 `claude -p` mode and can use an individual Claude subscription login. Its

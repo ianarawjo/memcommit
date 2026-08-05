@@ -2,8 +2,9 @@
 
 - Status: Implemented
 - Scope: the co-equal `mem list` and `mem ls` spellings, immediate namespace
-  child navigation, recursive listing with `-R`, and dual text/structured
-  `--copy` and `--paste`
+  child navigation, recursive listing with `-R`, `--recursive`, or the
+  beginner-facing `--expand` alias, and dual text/structured `--copy` and
+  `--paste`
 
 ## 1. Purpose
 
@@ -36,6 +37,7 @@ mem ls [context]
 mem list -R [context]
 mem ls -R [context]
 mem ls --recursive [context]
+mem ls --expand [context]
 mem ls [context] [-R] --copy [--with-ids]
 mem ls --paste
 ```
@@ -47,6 +49,14 @@ drift, but the implementation detail does not make either spelling
 subordinate in participant-facing documentation.
 
 When no Context is supplied, the current Context is used.
+
+`--expand` is an exact alias for `--recursive`, not a separate traversal
+mode. `recursive` preserves the conventional shell vocabulary and `-R`
+preserves its compact spelling; `expand` describes the visible result for a
+person who does not already know that convention. No `-e` alias is added:
+another short spelling would add recall cost without making the scope clearer.
+All three forms remain rooted at the selected Context and do not mean
+"every Memory in the Profile" or cross a query-only boundary.
 
 ## 3. Default Listing Is Direct, Not Recursive
 
@@ -311,8 +321,8 @@ The intended conceptual split is:
 
 - `mem ls`: compact immediate namespace navigation and hanging-indent Memory
   rows whose selectors remain beside their content;
-- `mem ls -R`: recursive navigation through namespace children and embedded
-  Contexts;
+- `mem ls -R`, `mem ls --recursive`, or `mem ls --expand`: recursive
+  navigation through namespace children and embedded Contexts;
 - `mem show <selector>`: full detail for one selected Memory, MemoryRef, or
   embedded Context.
 
@@ -447,7 +457,7 @@ The implementation is covered by tests for:
 - namespace recursion and explicit-embed deduplication;
 - relative existing-Context locators such as `mem ls ../sibling`;
 - recursion through two or more Context levels;
-- parity among `list -R`, `ls -R`, and `ls --recursive`;
+- parity among `list -R`, `ls -R`, `ls --recursive`, and `ls --expand`;
 - finite output for an indirect persisted cycle;
 - repeated traversal of a shared Context along both sides of a diamond;
 - resolved MemoryRef content and provenance;

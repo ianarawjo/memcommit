@@ -34,6 +34,7 @@ GRANT_PERMISSIONS = frozenset(
         "ACCEPT_DERIVED",
         "SAVE_BOUND_ANALYSIS",
         "SAVE_ANALYSIS",
+        "SHARE",
     }
 )
 _GRANT_PERMISSION_ORDER = (
@@ -49,6 +50,7 @@ _GRANT_PERMISSION_ORDER = (
     "ACCEPT_DERIVED",
     "SAVE_BOUND_ANALYSIS",
     "SAVE_ANALYSIS",
+    "SHARE",
 )
 
 

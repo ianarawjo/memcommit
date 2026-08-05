@@ -798,7 +798,7 @@ def _parse_turn(
     if kind == "PROPOSE_RULE":
         _require_blank_fields(
             value,
-            except_fields={"content", "rationale", "rule_provenance"},
+            except_fields={"content", "rationale", "rule_provenance", "targets"},
         )
         provenance = value["rule_provenance"]
         if provenance not in {
@@ -813,6 +813,7 @@ def _parse_turn(
             **common,
             content=_bounded_text(value["content"], "Rule"),
             rationale=_bounded_text(value["rationale"], "Rule rationale"),
+            targets=_string_list(value["targets"], "Rule targets"),
             rule_provenance=provenance,
         )
     if kind == "PROPOSE_CASE":
@@ -956,7 +957,8 @@ def _build_prompt(
         "targets are optional; never infer them from a current directory.\n"
         "REVISE_GOAL requires replacement content no longer than "
         f"{GROUND_GOAL_WORD_LIMIT} words and a reason. "
-        "PROPOSE_RULE requires Rule content, rationale, and provenance. "
+        "PROPOSE_RULE requires Rule content, rationale, provenance, and one "
+        "or more listed target Context names. "
         "PROPOSE_CASE proposes one Ground Memory and requires a listed Rule "
         "id, a locally supplied source alias from the visible turn, listed "
         "target names, rationale, role, disposition, and expected output for "

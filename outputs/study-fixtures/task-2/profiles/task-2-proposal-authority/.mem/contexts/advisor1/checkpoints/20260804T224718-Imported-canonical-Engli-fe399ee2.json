@@ -1,0 +1,119 @@
+{
+  "uid": "fe399ee2-6521-4d64-adfd-3bf94620ccb5",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-04T22:47:18.792795",
+  "snapshot": {
+    "uid": "fdc991fe-01c0-5949-85b3-1937c4ea1fbe",
+    "name": "advisor1",
+    "memories": {
+      "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd": {
+        "type": "context_ref",
+        "uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+        "name": "advisor1/structure"
+      },
+      "6f253a9e-f504-53bf-a1d1-de2c4532171e": {
+        "type": "context_ref",
+        "uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+        "name": "advisor1/emphasis"
+      },
+      "a759f597-4f26-5782-828b-55f1c90076bf": {
+        "type": "context_ref",
+        "uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+        "name": "advisor1/style"
+      },
+      "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf": {
+        "type": "context_ref",
+        "uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+        "name": "advisor1/claim-evidence"
+      },
+      "39a6f298-c511-5c21-a106-998c1df9d951": {
+        "type": "context_ref",
+        "uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+        "name": "advisor1/expression"
+      },
+      "7699c7c5-e48b-5548-b0aa-256d793c6c06": {
+        "type": "context_ref",
+        "uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+        "name": "advisor1/terminology"
+      },
+      "d2f78b99-5dcf-5876-89a9-1058bceca333": {
+        "type": "context_ref",
+        "uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+        "name": "advisor1/methods"
+      },
+      "30568e2f-ce17-50ce-a25b-1cc4bdb94689": {
+        "type": "context_ref",
+        "uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+        "name": "advisor1/evaluation"
+      },
+      "5cdea05f-b6ec-586d-a87f-5347d1d51f96": {
+        "type": "context_ref",
+        "uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+        "name": "advisor1/ethics"
+      },
+      "6db29abe-5784-5eec-acaa-060bac0e11f1": {
+        "type": "context_ref",
+        "uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+        "name": "advisor1/scope"
+      },
+      "cd6c1fab-786a-52ea-9437-9a4d209ba419": {
+        "type": "context_ref",
+        "uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+        "name": "advisor1/safety"
+      },
+      "52db6b06-e86a-556a-913e-30e45f7e9529": {
+        "type": "context_ref",
+        "uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+        "name": "advisor1/feasibility"
+      },
+      "7d293f75-52b6-5f27-99c4-54f2be3d8e59": {
+        "type": "context_ref",
+        "uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+        "name": "advisor1/reproducibility"
+      },
+      "d6d3ee9e-eb0f-5c28-9463-7a680d53b470": {
+        "type": "context_ref",
+        "uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+        "name": "advisor1/budget"
+      },
+      "7ba75d6b-cef6-5c8b-9b17-d3901e168d24": {
+        "type": "context_ref",
+        "uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+        "name": "advisor1/compensation"
+      },
+      "57ec8c37-1a0a-5f3b-82e9-51adad82677c": {
+        "type": "context_ref",
+        "uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+        "name": "advisor1/review"
+      }
+    },
+    "order": [
+      "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+      "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+      "a759f597-4f26-5782-828b-55f1c90076bf",
+      "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+      "39a6f298-c511-5c21-a106-998c1df9d951",
+      "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+      "d2f78b99-5dcf-5876-89a9-1058bceca333",
+      "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+      "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+      "6db29abe-5784-5eec-acaa-060bac0e11f1",
+      "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+      "52db6b06-e86a-556a-913e-30e45f7e9529",
+      "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
+      "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+      "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+      "57ec8c37-1a0a-5f3b-82e9-51adad82677c"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "fdc991fe-01c0-5949-85b3-1937c4ea1fbe",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

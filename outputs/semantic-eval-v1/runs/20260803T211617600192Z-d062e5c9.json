@@ -1,0 +1,238 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "label": "UNKNOWN"
+      },
+      "case_id": "translate-v2-unknown-source",
+      "completion_seconds": 1.2151049580425024,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "UNKNOWN"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "translate",
+      "ordinal": 1,
+      "prompt_digest": "c44a67e00e4146f8a413c5fe1bbe1cecfde2eede6f2f5ec120608ac54e030e15",
+      "provider_run": {
+        "completion_tokens": 29,
+        "operation": "translate semantic gate",
+        "prompt_tokens": 936,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"CONTRADICTED\",\n  \"source_resolution\": \"UNRESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 75,
+      "response_digest": "e79cdb582ba6a5b3344e6476668c94a6e3570c66a0e4a0b2a022df241629ee9f",
+      "schema_digest": "a6ea231572252fb80216aa4948824baefd66527a44802d5ba1d4053e42512ab0",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 3
+    },
+    {
+      "actual": {
+        "label": "DISTINCT"
+      },
+      "case_id": "meld-v2-unknown-entrance",
+      "completion_seconds": 1.1008407077752054,
+      "diagnostic": "The label must exactly match the reviewed gate contract.",
+      "error_type": null,
+      "expected": {
+        "label": "UNKNOWN"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "length_tier": "SHORT",
+      "operation": "meld",
+      "ordinal": 2,
+      "prompt_digest": "9f3a425de2d7f83c0d44091697b3ef8701fc178c757ee19b70888e9925edf1f0",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "meld semantic gate",
+        "prompt_tokens": 852,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"resolved_label\": \"DISTINCT\",\n  \"scope_resolution\": \"RESOLVED\"\n}",
+      "repetition": 1,
+      "response_bytes": 68,
+      "response_digest": "5c42da735949ab082c22f29e74d019a27deda9d6919783e4c30c87d8f7b4a631",
+      "schema_digest": "be7da93511d0c2e961147748efe474117f1f5ebe17cea5d36eb1a19f9ca6894d",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "FAIL",
+      "task": 1
+    }
+  ],
+  "completed_at": "2026-08-03T21:16:19.918338Z",
+  "corpus": {
+    "base_case_count": 37,
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "case_limit": 200,
+    "fixture": "operation_gates_v2.json",
+    "fixture_case_count": 75,
+    "fixture_digest": "f18252505ef524359feaf4eeab96ade84b4d32601b953b732e3d4604a3805573",
+    "independent_holdout": false,
+    "operation": "operation-gates",
+    "role": "CALIBRATION",
+    "ruleset_version": "operation-gates-v3-75-pilot",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "translate-v2-unknown-source",
+      "meld-v2-unknown-entrance"
+    ],
+    "selected_layer": "ALL",
+    "selected_length_tiers": [
+      "LONG",
+      "SHORT"
+    ],
+    "selected_operations": [
+      "atomize",
+      "compare",
+      "conflict",
+      "forget",
+      "ground",
+      "integrate",
+      "meld",
+      "translate",
+      "update"
+    ],
+    "selected_tasks": [
+      1,
+      2,
+      3
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T211617600192Z-d062e5c9.json",
+  "pipeline": {
+    "gate": "exact operation label with leave-one-out calibration",
+    "id": "operation-gate-v1",
+    "stages": [
+      "SEMANTIC_GATE"
+    ],
+    "version": 1
+  },
+  "provider": {
+    "effective_thinking": false,
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen3.6:35b-a3b",
+    "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "provider": "ollama",
+    "reasoning_effort": null,
+    "runtime": "ollama/0.30.10"
+  },
+  "run_id": "20260803T211617600192Z-d062e5c9",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": 65536,
+      "max_output_tokens": 16384,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T21:16:17.600192Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 1,
+      "structurally_valid": 2,
+      "total": 2
+    },
+    "campaign_passed": false,
+    "case_results": [
+      {
+        "case_id": "translate-v2-unknown-source",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "meld-v2-unknown-entrance",
+        "exact_matches": 0,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "FAIL"
+      }
+    ],
+    "cases": {
+      "failed": 1,
+      "passed": 1,
+      "total": 2
+    },
+    "completion_seconds": {
+      "max": 1.2151049580425024,
+      "mean": 1.1579728329088539,
+      "median": 1.1579728329088539,
+      "p95": 1.2151049580425024
+    },
+    "distributions": {
+      "by_length_tier": {
+        "SHORT": {
+          "passed": 1,
+          "total": 2
+        }
+      },
+      "by_operation": {
+        "meld": {
+          "passed": 0,
+          "total": 1
+        },
+        "translate": {
+          "passed": 1,
+          "total": 1
+        }
+      },
+      "by_task": {
+        "task-1": {
+          "passed": 0,
+          "total": 1
+        },
+        "task-3": {
+          "passed": 1,
+          "total": 1
+        }
+      },
+      "expected_label": {
+        "UNKNOWN": 2
+      }
+    },
+    "failures": {
+      "LABEL_MISMATCH": 1
+    },
+    "operation_completion_seconds": {
+      "meld": {
+        "max": 1.1008407077752054,
+        "mean": 1.1008407077752054,
+        "median": 1.1008407077752054,
+        "p95": 1.1008407077752054
+      },
+      "translate": {
+        "max": 1.2151049580425024,
+        "mean": 1.2151049580425024,
+        "median": 1.2151049580425024,
+        "p95": 1.2151049580425024
+      }
+    },
+    "stage_completion_seconds": {
+      "SEMANTIC_GATE": {
+        "max": 1.2151049580425024,
+        "mean": 1.1579728329088539,
+        "median": 1.1579728329088539,
+        "p95": 1.2151049580425024
+      }
+    }
+  },
+  "timing": {
+    "campaign_seconds": 2.318132750224322,
+    "provider_connection_seconds": 0.017877624835819006,
+    "total_seconds": 2.336010375060141
+  }
+}

@@ -55,7 +55,7 @@
     "ec54ce10-07db-5ae3-94a5-8f3621fed4a9": {
       "type": "memory",
       "uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9",
-      "content": "The agent cannot approve explanations as conceptual contributions if they are not falsifiable with observable data."
+      "content": "The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data."
     }
   },
   "order": [

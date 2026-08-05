@@ -1,0 +1,80 @@
+{
+  "uid": "b4b176a8-fd68-53fb-a0d4-225ed09242c3",
+  "name": "remote/government/healthcare-agent/info-request/official-guidance/disclosure-principles",
+  "memories": {
+    "cb5ba2cd-4df5-5bde-b13a-f7b40e88b552": {
+      "type": "memory",
+      "uid": "cb5ba2cd-4df5-5bde-b13a-f7b40e88b552",
+      "content": "Include only information necessary for the healthcare-support purpose being considered, and leave unrelated personal details out of the outbound draft."
+    },
+    "383fcfde-ec9e-5fe0-a735-5b1802a297f5": {
+      "type": "memory",
+      "uid": "383fcfde-ec9e-5fe0-a735-5b1802a297f5",
+      "content": "All content actually transmitted through the government healthcare institution system's transmission screen is treated as one submitted unit for which sharing was consented."
+    },
+    "46eb3045-c6a7-5cfb-95f5-00b93bf86364": {
+      "type": "memory",
+      "uid": "46eb3045-c6a7-5cfb-95f5-00b93bf86364",
+      "content": "Prefer a condition-preserving summary or preference over a private causal event when the event itself is not necessary for the healthcare-support purpose."
+    },
+    "37437bb3-2afe-502c-9779-a4d7b075ff29": {
+      "type": "memory",
+      "uid": "37437bb3-2afe-502c-9779-a4d7b075ff29",
+      "content": "Preserve material conditions, exceptions, time bounds, and uncertainty when converting a personal event into a summary, preference, or policy."
+    },
+    "c87d8588-1814-5782-87f1-209c82f48266": {
+      "type": "memory",
+      "uid": "c87d8588-1814-5782-87f1-209c82f48266",
+      "content": "Treat historical medication instructions, availability, contact information, and functional experiences as potentially stale unless their current status has been separately verified."
+    },
+    "23332492-3bb6-5745-b1f2-bf2860a6a56b": {
+      "type": "memory",
+      "uid": "23332492-3bb6-5745-b1f2-bf2860a6a56b",
+      "content": "Depending on the information type, transmitted content may be provided to relevant third parties for healthcare purposes."
+    },
+    "dea430f3-442c-5bfc-aa2b-b09a2d13df62": {
+      "type": "memory",
+      "uid": "dea430f3-442c-5bfc-aa2b-b09a2d13df62",
+      "content": "Depending on the information type, transmitted content may be used for service improvement."
+    },
+    "e9bbe8ec-452d-5115-970a-c2791189114a": {
+      "type": "memory",
+      "uid": "e9bbe8ec-452d-5115-970a-c2791189114a",
+      "content": "The exact services, recipients, third-party scope, retention period, and downstream use can vary with the information supplied and may not be known during local review."
+    },
+    "a9f67b47-abd1-5eef-95c3-f38c1ef51ee0": {
+      "type": "memory",
+      "uid": "a9f67b47-abd1-5eef-95c3-f38c1ef51ee0",
+      "content": "Review the exact initial recipient and transmission channel before approving an outbound draft."
+    },
+    "106405d1-07b6-50e5-9a8f-8930474c8b22": {
+      "type": "memory",
+      "uid": "106405d1-07b6-50e5-9a8f-8930474c8b22",
+      "content": "Mentioning personal information in a local review or query conversation does not by itself transmit that information to the government healthcare institution system."
+    },
+    "d4154b99-794b-549d-ba20-b3a934238454": {
+      "type": "memory",
+      "uid": "d4154b99-794b-549d-ba20-b3a934238454",
+      "content": "A locally saved Sever output is a review artifact and is not evidence that any information was transmitted or received."
+    },
+    "9df68a22-4020-5fa5-ad8a-2a863e70a927": {
+      "type": "memory",
+      "uid": "9df68a22-4020-5fa5-ad8a-2a863e70a927",
+      "content": "Preparing, reviewing, and transmitting information are separate actions; actual transmission requires its own explicit approval."
+    }
+  },
+  "order": [
+    "cb5ba2cd-4df5-5bde-b13a-f7b40e88b552",
+    "383fcfde-ec9e-5fe0-a735-5b1802a297f5",
+    "46eb3045-c6a7-5cfb-95f5-00b93bf86364",
+    "37437bb3-2afe-502c-9779-a4d7b075ff29",
+    "c87d8588-1814-5782-87f1-209c82f48266",
+    "23332492-3bb6-5745-b1f2-bf2860a6a56b",
+    "dea430f3-442c-5bfc-aa2b-b09a2d13df62",
+    "e9bbe8ec-452d-5115-970a-c2791189114a",
+    "a9f67b47-abd1-5eef-95c3-f38c1ef51ee0",
+    "106405d1-07b6-50e5-9a8f-8930474c8b22",
+    "d4154b99-794b-549d-ba20-b3a934238454",
+    "9df68a22-4020-5fa5-ad8a-2a863e70a927"
+  ]
+}

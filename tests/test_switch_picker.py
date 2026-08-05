@@ -154,27 +154,18 @@ def test_picker_pins_all_root_names_above_a_scrolled_current_branch():
     )
 
 
-def test_picker_groups_a_context_below_nonselectable_missing_parents():
+def test_picker_does_not_invent_missing_namespace_parents():
     tree = _build_context_tree(("missing/parent/leaf", "root"))
 
     rows = _visible_context_rows(tree, set())
 
     assert [(row.name, row.depth) for row in rows] == [
-        ("missing", 0),
+        ("missing/parent/leaf", 0),
         ("root", 0),
     ]
-    assert rows[0].materialized is False
-    expanded_rows = _visible_context_rows(
-        tree,
-        {"missing", "missing/parent"},
-    )
-    expanded_state = [(row.name, row.depth, row.materialized) for row in expanded_rows]
-    assert expanded_state == [
-        ("missing", 0, False),
-        ("missing/parent", 1, False),
-        ("missing/parent/leaf", 2, True),
-        ("root", 0, True),
-    ]
+    assert all(row.materialized for row in rows)
+    assert "missing" not in tree.parent_by_name
+    assert "missing/parent" not in tree.parent_by_name
 
 
 def test_picker_renders_granted_views_below_owned_task_without_selecting_them():
@@ -217,14 +208,13 @@ def test_picker_renders_granted_views_below_owned_task_without_selecting_them():
         "[grant CREATE + READ + UPDATE + DELETE + QUERY]"
         in rendered
     )
-    assert "[namespace only]" not in rendered
+    assert "[unavailable]" not in rendered
     assert "task-1/campus-wiki" not in tree.materialized_names
 
 
-def test_picker_enter_opens_a_namespace_only_row_without_switching_to_it():
+def test_picker_can_select_an_orphaned_real_context_without_virtual_parents():
     with create_pipe_input() as pipe_input:
-        # leaf -> virtual parent -> virtual root -> collapse -> root -> switch
-        pipe_input.send_text("\x1b[A\x1b[A\r\x1b[B\r")
+        pipe_input.send_text("\r")
         selected = choose_context(
             ("missing/parent/leaf", "root"),
             current="missing/parent/leaf",
@@ -233,7 +223,7 @@ def test_picker_enter_opens_a_namespace_only_row_without_switching_to_it():
             require_tty=False,
         )
 
-    assert selected == "root"
+    assert selected == "missing/parent/leaf"
 
 
 def test_picker_enter_selects_a_read_granted_virtual_context():

@@ -61,7 +61,9 @@ class UpdatePlanProvider:
         )
 
 
-def test_trace_follows_add_and_multiple_edits_in_order(isolated_store):
+def test_trace_shows_newest_operation_first_with_forward_row_arrows(
+    isolated_store,
+):
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "draft").exit_code == 0
     store = MemoryStore()
@@ -76,12 +78,23 @@ def test_trace_follows_add_and_multiple_edits_in_order(isolated_store):
     result = invoke("trace", memory.uid[:8])
 
     assert result.exit_code == 0
-    assert result.output.index("CREATED") < result.output.index("EDITED")
-    assert result.output.count("EDITED") == 2
-    assert "draft" in result.output
-    assert "revision one" in result.output
-    assert "revision two" in result.output
-    assert "CURRENT" in result.output
+    rows = [
+        line
+        for line in result.output.splitlines()
+        if len(line) >= 4 and line[:4].isdigit()
+    ]
+    assert [
+        next(kind for kind in ("EDITED", "CREATED") if kind in row)
+        for row in rows
+    ] == ["EDITED", "EDITED", "CREATED"]
+    assert "revision one” →" in rows[0]
+    assert "revision two" in rows[0]
+    assert "draft” →" in rows[1]
+    assert "revision one" in rows[1]
+    assert "∅ →" in rows[2]
+    assert "LATEST FIRST" in result.output
+    assert "NOW ·" in result.output
+    assert "Checkpoint:" not in result.output
 
 
 def test_trace_resolves_removed_historical_memory(isolated_store):
@@ -100,7 +113,8 @@ def test_trace_resolves_removed_historical_memory(isolated_store):
     assert result.exit_code == 0
     assert "CREATED" in result.output
     assert "REMOVED" in result.output
-    assert "no descendant from this lineage is currently present" in result.output
+    assert "temporary” → ∅" in result.output
+    assert "NOW · ∅ (lineage absent from current Context)" in result.output
 
 
 def test_trace_reconstructs_legacy_chunk_lineage_both_directions(
@@ -134,9 +148,9 @@ def test_trace_reconstructs_legacy_chunk_lineage_both_directions(
 
     for result in (from_parent, from_child):
         assert result.exit_code == 0
-        assert "SPLIT  RECONSTRUCTED" in result.output
-        assert "First block." in result.output
-        assert "Second block." in result.output
+        assert "SPLIT" in result.output
+        assert "RECONSTRUCTED" in result.output
+        assert r"First block.\n\nSecond block." in result.output
         assert parent.uid[:8] in result.output
 
 
@@ -405,10 +419,12 @@ def test_trace_reads_current_state_after_revert(isolated_store):
     result = invoke("trace", memory.uid[:8])
 
     assert result.exit_code == 0
-    assert "RESTORED  RECORDED" in result.output
-    current_section = result.output.split("\nCURRENT\n", 1)[1]
-    assert "keep" in current_section
-    assert "later" not in current_section
+    assert "RESTORED/CHANGED" in result.output
+    now_line = next(
+        line for line in result.output.splitlines() if line.startswith("NOW ·")
+    )
+    assert "keep" in now_line
+    assert "later" not in now_line
 
 
 def test_trace_does_not_claim_uncheckpointed_current_state_as_origin(
@@ -698,7 +714,7 @@ def test_rationale_excludes_stale_review_and_uses_no_provider_when_requested(
     assert "CURRENT CONTEXT WINDOW" in result.output
 
 
-def test_rationale_never_opens_query_only_source_and_is_read_only(
+def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
     isolated_store,
     monkeypatch,
 ):
@@ -717,6 +733,8 @@ def test_rationale_never_opens_query_only_source_and_is_read_only(
         path.relative_to(isolated_store): path.read_bytes()
         for path in isolated_store.rglob("*")
         if path.is_file()
+        and "rationale-inferences"
+        not in path.relative_to(isolated_store).parts
     }
 
     def forbidden(*args, **kwargs):
@@ -745,11 +763,21 @@ def test_rationale_never_opens_query_only_source_and_is_read_only(
         path.relative_to(isolated_store): path.read_bytes()
         for path in isolated_store.rglob("*")
         if path.is_file()
+        and "rationale-inferences"
+        not in path.relative_to(isolated_store).parts
     }
+    cache_files = list(
+        (isolated_store / "rationale-inferences").rglob("*.json")
+    )
 
     assert result.exit_code == 0
     assert "DO NOT DISCLOSE" not in result.output
     assert "DO NOT DISCLOSE" not in json.dumps(provider.calls)
+    assert cache_files
+    assert all(
+        b"DO NOT DISCLOSE" not in path.read_bytes()
+        for path in cache_files
+    )
     assert before == after
 
 

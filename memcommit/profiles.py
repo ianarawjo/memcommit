@@ -168,6 +168,18 @@ class GrantedContextView:
     authority_root: Path
 
 
+@dataclass(frozen=True)
+class ShareEndpoint:
+    """One grant-backed cross-Profile delivery target."""
+
+    grant: AuthorityGrant
+    authority: ProfileEntry
+    sender: ProfileEntry
+    public_name: str
+    receiver_context_name: str
+    receiver_root: Path
+
+
 def default_study_bundle_root() -> Path:
     """Return the editable-checkout fixture location when it is available."""
 
@@ -1611,6 +1623,65 @@ def resolve_granted_context_view(
         requested_name=requested_name,
         authority_context_name=authority_name,
         authority_root=authority_root,
+    )
+
+
+def resolve_share_endpoint(
+    public_name: str,
+    *,
+    registry: ProfileRegistry | None = None,
+) -> ShareEndpoint:
+    """Resolve an exact SHARE grant without projecting receiver contents.
+
+    SHARE is deliberately an endpoint capability rather than a readable view.
+    The sender can address the public grant name, but learns no receiver data
+    and cannot redirect delivery to an arbitrary Profile or Context path.
+    """
+
+    registry = registry or load_profile_registry()
+    canonical = validate_grant_resource_name(public_name)
+    sender = registry.active
+    candidates = [
+        grant
+        for grant in registry.grants
+        if grant.grantee_profile_uid == sender.uid
+        and grant.public_name == canonical
+        and "SHARE" in grant.permissions
+    ]
+    if not candidates:
+        raise ProfileError(f"Share endpoint {canonical!r} does not exist.")
+    if len(candidates) != 1:
+        raise ProfileError(f"Share endpoint {canonical!r} is ambiguous.")
+    grant = candidates[0]
+
+    attachment = _context_record_at(
+        profile_store_dir(sender),
+        grant.attachment_context_name,
+    )
+    if attachment is None or attachment.uid != grant.attachment_context_uid:
+        raise ProfileError("Share endpoint attachment Context identity changed.")
+
+    authority = next(
+        profile
+        for profile in registry.profiles
+        if profile.uid == grant.authority_profile_uid
+    )
+    receiver_root = profile_store_dir(authority)
+    receiver = _context_record_at(receiver_root, grant.resource_name)
+    if receiver is None or receiver.uid != grant.resource_uid:
+        raise ProfileError("Share endpoint receiver Context identity changed.")
+    if not any(
+        binding.uid == receiver.uid and binding.name == receiver.name
+        for binding in grant.contexts
+    ):
+        raise ProfileError("Share endpoint grant does not contain its receiver root.")
+    return ShareEndpoint(
+        grant=grant,
+        authority=authority,
+        sender=sender,
+        public_name=canonical,
+        receiver_context_name=receiver.name,
+        receiver_root=receiver_root,
     )
 
 
@@ -3231,7 +3302,6 @@ def _prefix_study_grant_template(
     elif key in {
         "task-2-advisor1-view",
         "task-2-advisor2-view",
-        "task-3-guardrails-view",
     }:
         permissions = result.get("permissions")
         if isinstance(permissions, list):

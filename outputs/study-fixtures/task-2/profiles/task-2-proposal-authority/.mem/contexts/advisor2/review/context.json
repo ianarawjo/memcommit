@@ -55,7 +55,7 @@
     "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c": {
       "type": "memory",
       "uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c",
-      "content": "The agent cannot distinguish remaining execution risks if unconfirmed field partners and equipment are presented as finalized."
+      "content": "The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed."
     }
   },
   "order": [

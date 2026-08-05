@@ -14,7 +14,6 @@ from memcommit.atomize import (
     ATOMIZE_CLASSIFICATIONS,
     AtomizeAnalysisItem,
     AtomizeAnalysisSession,
-    AtomizeOverviewSection,
     AtomizeQualityIssue,
 )
 from memcommit.result_workbench import (
@@ -26,6 +25,7 @@ from memcommit.result_workbench import (
     ResultSection,
     ResultWorkbenchView,
 )
+from memcommit.understanding import UnderstandingSummary
 
 
 _LEGACY_UNDERSTOOD = (
@@ -226,7 +226,7 @@ class AtomizeResultWorkbenchAdapter:
 
     def _source_refs(
         self,
-        section: AtomizeOverviewSection,
+        section: UnderstandingSummary,
     ) -> tuple[ResultRef, ...]:
         return tuple(_source_ref(uid) for uid in section.source_uids)
 

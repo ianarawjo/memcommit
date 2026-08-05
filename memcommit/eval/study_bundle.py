@@ -260,34 +260,64 @@ TASK_SPECS = {
         task_profile=BundleProfileSpec(
             name="task-3",
             role="TASK",
-            current_context="personal-memory",
+            current_context="local/personal-memory",
+            initial_contexts=("local",),
             datasets=(
                 BundleDatasetSpec(
                     "task3-personal-memory",
-                    "personal-memory",
+                    "local/personal-memory",
                     year_month_hierarchy=True,
+                ),
+                BundleDatasetSpec(
+                    "task3-guardrails",
+                    "local/guardrails",
                 ),
             ),
         ),
         authority_profile=BundleProfileSpec(
             name="task-3-healthcare-authority",
             role="AUTHORITY",
-            current_context="guardrails",
+            current_context=(
+                "remote/government/healthcare-agent/info-request/official-guidance"
+            ),
+            initial_contexts=(
+                "remote",
+                "remote/government",
+                "remote/government/healthcare-agent",
+                "remote/government/healthcare-agent/info-request",
+            ),
             datasets=(
-                BundleDatasetSpec("task3-guardrails", "guardrails"),
                 BundleDatasetSpec(
-                    "task3-healthcare-info-request",
-                    "government/healthcare-agent/information-request",
+                    "task3-healthcare-public-guidance",
+                    "remote/government/healthcare-agent/info-request/official-guidance",
+                ),
+                BundleDatasetSpec(
+                    "task3-healthcare-qna",
+                    "remote/government/healthcare-agent/info-request/questions-and-answers",
                 ),
             ),
         ),
         grant_templates=(
             BundleGrantTemplate(
-                key="task-3-guardrails-view",
+                key="task-3-healthcare-receiver-endpoint",
                 authority_profile="task-3-healthcare-authority",
                 grantee_profile="task-3",
-                authority_context="guardrails",
-                public_name="guardrails",
+                authority_context="remote/government/healthcare-agent",
+                public_name="government/healthcare-agent",
+                permissions=("SHARE",),
+                grantee_parent_context="local/personal-memory",
+                recursive=False,
+            ),
+            BundleGrantTemplate(
+                key="task-3-healthcare-official-guidance-view",
+                authority_profile="task-3-healthcare-authority",
+                grantee_profile="task-3",
+                authority_context=(
+                    "remote/government/healthcare-agent/info-request/official-guidance"
+                ),
+                public_name=(
+                    "remote/government/healthcare-agent/info-request/official-guidance"
+                ),
                 permissions=(
                     "READ",
                     "DERIVE",
@@ -296,16 +326,20 @@ TASK_SPECS = {
                     "SAVE_BOUND_ANALYSIS",
                     "SAVE_ANALYSIS",
                 ),
-                grantee_parent_context="personal-memory",
+                grantee_parent_context="local/personal-memory",
             ),
             BundleGrantTemplate(
-                key="task-3-healthcare-information-query",
+                key="task-3-healthcare-questions-and-answers-query",
                 authority_profile="task-3-healthcare-authority",
                 grantee_profile="task-3",
-                authority_context=("government/healthcare-agent/information-request"),
-                public_name=("government/healthcare-agent/information-request"),
+                authority_context=(
+                    "remote/government/healthcare-agent/info-request/questions-and-answers"
+                ),
+                public_name=(
+                    "remote/government/healthcare-agent/info-request/questions-and-answers"
+                ),
                 permissions=("QUERY", "SESSION_LOG"),
-                grantee_parent_context="personal-memory",
+                grantee_parent_context="local/personal-memory",
                 provider="codex_chatgpt",
             ),
         ),
@@ -810,6 +844,17 @@ def _build_profile_contents(
                     korean_by_owner=korean_by_owner,
                 )
             )
+        # Only real zero-Memory Contexts provide structural namespace rows.
+        # Link any explicitly materialized direct parent after all datasets
+        # are loaded; the picker itself never invents a missing prefix.
+        for child_name in sorted(contexts, key=lambda name: (name.count("/"), name)):
+            parent_name, separator, _leaf = child_name.rpartition("/")
+            if not separator or parent_name not in contexts:
+                continue
+            parent = contexts[parent_name]
+            child = contexts[child_name]
+            if child.uid not in parent.memories:
+                parent.add(child)
         if profile_spec.current_context not in contexts:
             raise StudyBundleError(
                 f"Current Context {profile_spec.current_context!r} was not "

@@ -53,9 +53,8 @@ is expanded.
   A second `A` restores that state. If the person selected a descendant that
   was hidden in the snapshot, its ancestors remain expanded so selection does
   not jump or disappear.
-- Enter accepts a materialized Context. On a namespace-only grouping row it
-  recursively expands or collapses that grouping subtree without creating a
-  Context.
+- Enter accepts the selected Context. Every displayed row comes from the
+  frozen real or granted Context catalog.
 - Escape, `q`, or Ctrl-C cancel without changing current state.
 - The list body expands to the terminal's available height. When visible rows
   exceed it, prompt-toolkit scrolls around the selected row and displays a
@@ -82,13 +81,11 @@ always knows the complete switchable catalog and `A` changes only its current
 presentation. Keeping the toggle inside the picker also lets a person inspect
 both compact and expanded views without restarting the command.
 
-Every slash prefix becomes a tree node so legacy names remain grouped even
-when an exact parent Context is absent. Such a prefix is visibly marked
-`[namespace only]`; it is neither loaded nor synthesized as a Context and
-cannot be returned as a switch target. This read-only fallback prevents an
-orphaned namespace from flattening many descendants back into the top-level
-view. Profile creation may separately materialize empty parents, but opening
-the picker never repairs or mutates storage.
+Only catalog Contexts become tree nodes. A Context is placed below its nearest
+real catalog ancestor; if none exists, its complete name is shown as a root.
+The picker never synthesizes missing slash prefixes. Profile creation may
+separately materialize empty parents when a continuous hierarchy is desired,
+but opening the picker never repairs or mutates storage.
 
 The picker returns a name but never writes store state. The common switch path
 reloads and validates that name after the picker closes and only then updates

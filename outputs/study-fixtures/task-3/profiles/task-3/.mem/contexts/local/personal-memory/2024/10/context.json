@@ -1,0 +1,68 @@
+{
+  "uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+  "name": "local/personal-memory/2024/10",
+  "memories": {
+    "04711182-acef-52a9-bd58-7fe98a54854a": {
+      "type": "memory",
+      "uid": "04711182-acef-52a9-bd58-7fe98a54854a",
+      "content": "The user renewed their local library membership in October 2024."
+    },
+    "0229d0b1-750c-521b-a126-22c9d9d001c4": {
+      "type": "memory",
+      "uid": "0229d0b1-750c-521b-a126-22c9d9d001c4",
+      "content": "On an evening walk, the user saw an unlit street and took a detour along a main road."
+    },
+    "e310fe87-8cde-5399-be00-9f8d7ec44e94": {
+      "type": "memory",
+      "uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94",
+      "content": "On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual."
+    },
+    "4f37306b-08cd-512a-b92e-ca6761da1a5b": {
+      "type": "memory",
+      "uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b",
+      "content": "On a day the user sat by the library window, they heard vehicle noise with every page they read."
+    },
+    "5897ffa4-cfc6-5012-8931-15420ec5cf7c": {
+      "type": "memory",
+      "uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c",
+      "content": "On the next visit, the user sat farther inside and did not move for an hour."
+    },
+    "ce38bd13-3d51-5bff-9eba-ed70a8217356": {
+      "type": "memory",
+      "uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356",
+      "content": "The user wrote the due date of a borrowed book on paper and then lost the paper."
+    },
+    "a304315b-bc0a-591b-b8c2-7eea5145819d": {
+      "type": "memory",
+      "uid": "a304315b-bc0a-591b-b8c2-7eea5145819d",
+      "content": "After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag."
+    },
+    "ef060b89-6c54-5c20-86be-c07766a35daa": {
+      "type": "memory",
+      "uid": "ef060b89-6c54-5c20-86be-c07766a35daa",
+      "content": "Library staff expect a person requesting a replacement membership card to bring identity-verification material."
+    },
+    "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f": {
+      "type": "memory",
+      "uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f",
+      "content": "Check recent lighting and pedestrian conditions before proposing an evening walking route."
+    },
+    "e96f7007-5814-5986-b121-4ce3b22506e1": {
+      "type": "memory",
+      "uid": "e96f7007-5814-5986-b121-4ce3b22506e1",
+      "content": "The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions."
+    }
+  },
+  "order": [
+    "04711182-acef-52a9-bd58-7fe98a54854a",
+    "0229d0b1-750c-521b-a126-22c9d9d001c4",
+    "e310fe87-8cde-5399-be00-9f8d7ec44e94",
+    "4f37306b-08cd-512a-b92e-ca6761da1a5b",
+    "5897ffa4-cfc6-5012-8931-15420ec5cf7c",
+    "ce38bd13-3d51-5bff-9eba-ed70a8217356",
+    "a304315b-bc0a-591b-b8c2-7eea5145819d",
+    "ef060b89-6c54-5c20-86be-c07766a35daa",
+    "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f",
+    "e96f7007-5814-5986-b121-4ce3b22506e1"
+  ]
+}

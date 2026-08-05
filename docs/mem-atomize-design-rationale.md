@@ -26,6 +26,53 @@ quality finding reads all direct Memories in the selected Context as a local
 interpretation frame. The reason for that asymmetry is documented in
 [`memory-quality-judgment-theory-and-decision-history.md`](memory-quality-judgment-theory-and-decision-history.md).
 
+### Saved-work selection
+
+The saved-work selector adds a separate discovery route:
+
+```text
+mem atomize --sessions
+```
+
+Bare `mem atomize` deliberately keeps its earlier create-or-resume behavior.
+It is already the first-analysis entry point, so changing it into a picker
+would remove the shortest path for starting Atomize and make an empty catalog
+ambiguous. `--sessions` instead means “choose existing work only.” It never
+creates an analysis, creates missing workbench state, refreshes a stale
+analysis, calls the semantic provider, switches the current Context, changes
+a Memory, or creates a checkpoint.
+
+The selector uses the shared saved-work picker and shows one latest Atomize
+analysis per source Context. Recent-first sorting uses the latest durable
+analysis, workbench, or open-grounding file modification time; grouping is by
+the exact Context name because Atomize has no separate project metadata. Name
+sorting, Context grouping, filtering, cancellation, and `--all` presentation
+come from the common picker grammar.
+
+Selection freezes the analysis UID process-locally. Before rendering, Atomize
+loads that exact UID again, checks the persisted source Context identity and
+digest and current Atomize ruleset, and requires its matching saved workbench.
+The exact recognized
+post-application checkpoint is also reopenable as `APPLIED`; an unrelated
+source edit is `STALE` and fails closed. An open issue-scoped grounding is
+revalidated against the same source, analysis, and workbench before its saved
+screen is rendered. These checks occur after selection so deletion,
+replacement, or source mutation while the picker is open cannot fall through
+to the ordinary create-or-resume path.
+
+The analysis UID is frozen, while its workbench and grounding dialogue are
+mutable subordinate state. If another process records a valid turn while the
+picker is open, selection resumes that latest binding-valid subordinate state;
+the status or issue count shown in the frozen row may therefore be older than
+the reopened screen. Exact historical workbench revisions are not retained.
+
+The common picker currently requires an argv-shaped presentation field. The
+Atomize adapter displays the nearest ordinary public route,
+`mem atomize --context NAME`, but labels it as a route hint that the picker
+does not execute. The frozen analysis UID, not that hint, is authoritative for
+the current selection. A public UID-based reopen command and archived
+analysis revisions remain intentional non-goals of this slice.
+
 ## Decision
 
 An atomic Memory is one **focal-commitment occurrence** together with every

@@ -50,12 +50,12 @@ EXPECTED_PROFILES = {
         ),
     },
     3: {
-        "task-3": ("TASK", 300, 34, "personal-memory"),
+        "task-3": ("TASK", 375, 46, "local/personal-memory"),
         "task-3-healthcare-authority": (
             "AUTHORITY",
-            150,
-            18,
-            "guardrails",
+            87,
+            13,
+            "remote/government/healthcare-agent/info-request/official-guidance",
         ),
     },
 }
@@ -118,8 +118,9 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
     else:
         assert entries_by_dataset == {
             "task3-personal-memory": {"task-3"},
-            "task3-guardrails": {"task-3-healthcare-authority"},
-            "task3-healthcare-info-request": {"task-3-healthcare-authority"},
+            "task3-guardrails": {"task-3"},
+            "task3-healthcare-qna": {"task-3-healthcare-authority"},
+            "task3-healthcare-public-guidance": {"task-3-healthcare-authority"},
         }
         task_contexts = _stored_context_names(
             manifest_path,
@@ -129,18 +130,35 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
             manifest_path,
             profile_records["task-3-healthcare-authority"],
         )
-        assert "guardrails" not in task_contexts
-        assert "guardrails" in authority_contexts
-        assert "government/healthcare-agent/information-request" in authority_contexts
         assert {
-            "personal-memory/2024",
-            "personal-memory/2024/01",
-            "personal-memory/2025",
-            "personal-memory/2025/12",
-            "personal-memory/2026",
-            "personal-memory/2026/06",
+            "local",
+            "local/personal-memory",
+            "local/guardrails",
         }.issubset(task_contexts)
-        assert "personal-memory/2024-01" not in task_contexts
+        assert "local/guardrails" not in authority_contexts
+        assert {
+            "remote",
+            "remote/government",
+            "remote/government/healthcare-agent",
+            "remote/government/healthcare-agent/info-request",
+        }.issubset(authority_contexts)
+        assert (
+            "remote/government/healthcare-agent/info-request/questions-and-answers"
+            in authority_contexts
+        )
+        assert (
+            "remote/government/healthcare-agent/info-request/official-guidance"
+            in authority_contexts
+        )
+        assert {
+            "local/personal-memory/2024",
+            "local/personal-memory/2024/01",
+            "local/personal-memory/2025",
+            "local/personal-memory/2025/12",
+            "local/personal-memory/2026",
+            "local/personal-memory/2026/06",
+        }.issubset(task_contexts)
+        assert "local/personal-memory/2024-01" not in task_contexts
 
         personal_entries = [
             entry
@@ -150,10 +168,10 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
         january = next(
             entry
             for entry in personal_entries
-            if entry["canonical_locator"] == "personal-memory/2024-01/01"
+            if entry["canonical_locator"] == "local/personal-memory/2024-01/01"
         )
-        assert january["fixture_key"] == "personal-memory/2024-01/01"
-        assert january["runtime_context"] == "personal-memory/2024/01"
+        assert january["fixture_key"] == "local/personal-memory/2024-01/01"
+        assert january["runtime_context"] == "local/personal-memory/2024/01"
         assert january["memory_uid"] == bundle_module._stable_uid(
             "task-3",
             "memory",
@@ -164,24 +182,24 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
         assert isinstance(store_path, str)
         with _isolated_store_root(manifest_path.parent / store_path):
             store = MemoryStore(create=False)
-            root = store.load_direct("personal-memory")
+            root = store.load_direct("local/personal-memory")
             assert [
                 item.name for item in root.iter_items() if isinstance(item, Context)
             ] == [
-                "personal-memory/2024",
-                "personal-memory/2025",
-                "personal-memory/2026",
+                "local/personal-memory/2024",
+                "local/personal-memory/2025",
+                "local/personal-memory/2026",
             ]
             assert [
                 item.name
-                for item in store.load_direct("personal-memory/2024").iter_items()
+                for item in store.load_direct("local/personal-memory/2024").iter_items()
                 if isinstance(item, Context)
-            ] == [f"personal-memory/2024/{month:02d}" for month in range(1, 13)]
-            assert store.load_direct("personal-memory/2024/01").uid == (
+            ] == [f"local/personal-memory/2024/{month:02d}" for month in range(1, 13)]
+            assert store.load_direct("local/personal-memory/2024/01").uid == (
                 bundle_module._stable_uid(
                     "task-3",
                     "context",
-                    "personal-memory/2024-01",
+                    "local/personal-memory/2024-01",
                 )
             )
 
@@ -199,8 +217,9 @@ def _assert_grant_templates(task, manifest, context_uids):
             "task-2-proposal-guidelines-query",
         },
         3: {
-            "task-3-guardrails-view",
-            "task-3-healthcare-information-query",
+            "task-3-healthcare-receiver-endpoint",
+            "task-3-healthcare-official-guidance-view",
+            "task-3-healthcare-questions-and-answers-query",
         },
     }[task]
     assert set(grants) == expected_keys
@@ -210,7 +229,9 @@ def _assert_grant_templates(task, manifest, context_uids):
             grant["authority_context"]["name"],
         )
         assert grant["authority_context"]["uid"] == context_uids[authority_key]
-        assert grant["recursive"] is True
+        assert grant["recursive"] is (
+            grant["key"] != "task-3-healthcare-receiver-endpoint"
+        )
         attachment = grant["attachment"]
         if attachment["kind"] == "GRANTEE_CONTEXT":
             grantee_key = (
@@ -276,7 +297,14 @@ def _assert_grant_templates(task, manifest, context_uids):
             grant["attachment"]["context"]["name"] for grant in grants.values()
         } == {"participant/proposal-workspace"}
     else:
-        assert grants["task-3-guardrails-view"]["permissions"] == [
+        receiver = grants["task-3-healthcare-receiver-endpoint"]
+        assert receiver["permissions"] == ["SHARE"]
+        assert receiver["recursive"] is False
+        assert receiver["public_name"] == "government/healthcare-agent"
+        healthcare = grants["task-3-healthcare-questions-and-answers-query"]
+        assert healthcare["permissions"] == ["QUERY", "SESSION_LOG"]
+        assert healthcare["provider"] == "codex_chatgpt"
+        assert grants["task-3-healthcare-official-guidance-view"]["permissions"] == [
             "READ",
             "DERIVE",
             "COMBINE",
@@ -284,12 +312,9 @@ def _assert_grant_templates(task, manifest, context_uids):
             "SAVE_BOUND_ANALYSIS",
             "SAVE_ANALYSIS",
         ]
-        healthcare = grants["task-3-healthcare-information-query"]
-        assert healthcare["permissions"] == ["QUERY", "SESSION_LOG"]
-        assert healthcare["provider"] == "codex_chatgpt"
         assert {
             grant["attachment"]["context"]["name"] for grant in grants.values()
-        } == {"personal-memory"}
+        } == {"local/personal-memory"}
 
 
 def test_builds_task_and_authority_profiles_with_grant_templates(

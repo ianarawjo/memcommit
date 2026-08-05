@@ -1,0 +1,80 @@
+{
+  "uid": "e16d1b0a-cb28-49bb-940e-fc3cae5ae836",
+  "message": "Imported canonical English Task 3 fixture Context 'local/guardrails/recipient-and-authority' into profile 'task-3'.",
+  "timestamp": "2026-08-04T22:47:18.966858",
+  "snapshot": {
+    "uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+    "name": "local/guardrails/recipient-and-authority",
+    "memories": {
+      "f3fb4551-f2b4-5a94-96ee-866bb001c620": {
+        "type": "memory",
+        "uid": "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+        "content": "Verify the recipient's exact account or address before approval."
+      },
+      "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3": {
+        "type": "memory",
+        "uid": "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3",
+        "content": "For a system recipient rather than a person, display the service name as well."
+      },
+      "7bd3b376-95ae-58bb-b8c5-adb3431e31ed": {
+        "type": "memory",
+        "uid": "7bd3b376-95ae-58bb-b8c5-adb3431e31ed",
+        "content": "Do not infer sharing authority from the recipient's role alone."
+      },
+      "fe9c1c24-9eb4-5e5d-a233-14ce425164ab": {
+        "type": "memory",
+        "uid": "fe9c1c24-9eb4-5e5d-a233-14ce425164ab",
+        "content": "If there is a proxy recipient, separately confirm the actual delivery target."
+      },
+      "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7": {
+        "type": "memory",
+        "uid": "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+        "content": "Require new verification if the basis for the recipient's authority has expired."
+      },
+      "c2036232-1c1a-5a48-b465-8f1b503dffd8": {
+        "type": "memory",
+        "uid": "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+        "content": "A recipient's identity and authority to receive are separate review items."
+      },
+      "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef": {
+        "type": "memory",
+        "uid": "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef",
+        "content": "The local agent can compare presented recipient identifiers, but those identifiers alone cannot guarantee actual authority to receive."
+      },
+      "bd834d39-cdba-5742-b76c-5ede06d26852": {
+        "type": "memory",
+        "uid": "bd834d39-cdba-5742-b76c-5ede06d26852",
+        "content": "An intermediary service operator may regard transforming input before final delivery as permitted processing."
+      }
+    },
+    "order": [
+      "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+      "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3",
+      "7bd3b376-95ae-58bb-b8c5-adb3431e31ed",
+      "fe9c1c24-9eb4-5e5d-a233-14ce425164ab",
+      "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+      "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+      "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef",
+      "bd834d39-cdba-5742-b76c-5ede06d26852"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+    "memory_uids": [
+      "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+      "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3",
+      "7bd3b376-95ae-58bb-b8c5-adb3431e31ed",
+      "fe9c1c24-9eb4-5e5d-a233-14ce425164ab",
+      "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+      "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+      "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef",
+      "bd834d39-cdba-5742-b76c-5ede06d26852"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/guardrails/recipient-and-authority' into profile 'task-3'.",
+  "auto": true
+}

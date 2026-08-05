@@ -756,7 +756,6 @@ class GroundItem:
         if self.kind == "RULE":
             if (
                 self.source_refs
-                or self.target_context_uids
                 or self.case_role
                 or self.disposition
                 or self.expected
@@ -1493,6 +1492,7 @@ def propose_ground_rule(
     rationale: str,
     current_contexts: Iterable[Context],
     rule_provenance: GroundRuleProvenance = "DISTILLED_FROM_GOAL",
+    target_context_names: tuple[str, ...] = (),
 ) -> GroundSession:
     """Propose one reusable Rule without manufacturing a Ground Memory."""
     _proposal_contexts(session, current_contexts)
@@ -1507,6 +1507,23 @@ def propose_ground_rule(
             "legacy INDUCED_FROM_CASES (the persisted token for Memories); "
             "JOINTLY_REVISED is created by review."
         )
+    target_frame_by_name = {
+        frame.context_name: frame
+        for frame in session.frames
+        if frame.role in _TARGET_FRAME_ROLES
+    }
+    if not target_context_names:
+        target_context_names = tuple(
+            frame.context_name
+            for frame in session.frames
+            if frame.role == "PUBLICATION_TARGET"
+        )
+    if (
+        not target_context_names
+        or len(set(target_context_names)) != len(target_context_names)
+        or any(name not in target_frame_by_name for name in target_context_names)
+    ):
+        raise GroundError("Grounding Rule names an invalid target Context.")
     iteration = session.revision + 1
     proposed_rule = GroundItem(
         uid=str(uuid.uuid4()),
@@ -1518,6 +1535,10 @@ def propose_ground_rule(
         origin=("USER" if rule_provenance == "USER_STATED" else "AGENT"),
         iteration=iteration,
         related_uids=(),
+        target_context_uids=tuple(
+            target_frame_by_name[name].context_uid
+            for name in target_context_names
+        ),
         rule_provenance=rule_provenance,
     )
     result = replace(
@@ -1741,6 +1762,10 @@ def propose_ground_round(
         origin=("USER" if rule_provenance == "USER_STATED" else "AGENT"),
         iteration=iteration,
         related_uids=(case_uid,),
+        target_context_uids=tuple(
+            target_frame_by_name[name].context_uid
+            for name in target_context_names
+        ),
         rule_provenance=rule_provenance,
     )
     proposed_case = GroundItem(

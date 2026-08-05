@@ -1,16 +1,18 @@
 # 과제 3 일반 선택 공유 가드레일
 
 이 문서는 Task 3의 향후 `sever` 단계에서 로컬 발신 공유 후보에 적용할
-사전 검토 가드레일 75개를 담은 완전한 합성 자료다. `guardrails`는 일반 열람
+사전 검토 가드레일 75개를 담은 완전한 합성 자료다. `local/guardrails`는 일반 열람
 Context이며, 연결된 의료 안내 에이전트의 질의 전용 자료와 분리한다. 기존의
 목적·프라이버시·근거·승인·보존 경계를 유지하면서 수신자 권한, 최소화,
 전달 채널, 후속 이용, 감사와 복구까지 검토 범위를 확장한다. Guardrails에는
 사용자의 공유 선호를 미리 가정하는 User Model을 두지 않는다. 그런 가정은
 참가자의 선택을 유도해 연구 행동을 오염시킬 수 있기 때문이다. 그 자리는 외부
 데이터 흐름 조건인 World Model과 수신자·조직의 예상 해석인 Other Model로
-채운다. 현재 저장소에는 `mem sever`가 아직 구현되지 않았다.
+채운다. `mem sever`는 pass마다 ordinary Criteria Context 하나를 받는다. 이
+guardrails를 그 기준으로 사용하거나, 먼저 `mem meld`로 권한이 있는 다른 기준과
+결합할 수 있다.
 
-각 `directory/NN` 표시는 `guardrails` 아래의 계층형 Memory 위치다. 대괄호의
+각 `directory/NN` 표시는 `local/guardrails` 아래의 계층형 Memory 위치다. 대괄호의
 두 글자 목적 ticker는 제작·검수용 sidecar이며 실제 Memory 본문이 아니다.
 실제 Memory 후보는 ticker 뒤의 문장뿐이다. `PP`는 에이전트가 취할 행동을
 명령형으로 표현한다. `KB`는 확인된 공유·보안 지식, `SM`은 로컬 에이전트의

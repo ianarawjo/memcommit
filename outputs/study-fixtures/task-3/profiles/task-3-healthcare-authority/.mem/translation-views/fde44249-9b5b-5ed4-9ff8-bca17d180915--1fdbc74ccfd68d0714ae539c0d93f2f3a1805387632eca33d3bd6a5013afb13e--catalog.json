@@ -1,0 +1,180 @@
+{
+  "schema_version": 2,
+  "context_uid": "fde44249-9b5b-5ed4-9ff8-bca17d180915",
+  "context_name": "remote/government/healthcare-agent/info-request/questions-and-answers/request-manifest",
+  "target_language": "ko",
+  "created_at": "2026-08-05T02:47:19.099820+00:00",
+  "updated_at": "2026-08-05T02:47:19.100546+00:00",
+  "revision": 13,
+  "contract_version": "translate-v2",
+  "entries": [
+    {
+      "source_uid": "510d3b9c-d27c-591e-b5be-94d79382aa83",
+      "provider": null,
+      "curated": {
+        "source_sha256": "ae2a19f477ba31dba14b7f3590dec7b8dbc0fd861ee31a5939fb86ce24291056",
+        "translated_content": "\uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\ub294 \uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uc2dc\uc2a4\ud15c\uc73c\ub85c \uc815\ubcf4\uac00 \uc804\uc1a1\ub420 \ub54c\uc758 \uc774\uc6a9\u00b7\uacf5\uc720 \uacb0\uacfc\ub9cc \uc124\uba85\ud560 \uc218 \uc788\uc73c\uba70, \uc815\ubcf4\ub97c \uc120\ud0dd\u00b7\ud3ec\ud568\u00b7\uc81c\uc678\u00b7\ud3b8\uc9d1\u00b7\uc804\uc1a1\u00b7\uc0ad\uc81c\ud558\uac70\ub098 \uae30\uad00\uc758 \ud6c4\uc18d \ucc98\ub9ac\ub97c \uc218\ud589\ud560 \uc218 \uc5c6\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.099893+00:00",
+        "updated_at": "2026-08-05T02:47:19.099893+00:00"
+      }
+    },
+    {
+      "source_uid": "d394e85a-b3c1-5b80-9bbe-b7f00fa64e4c",
+      "provider": null,
+      "curated": {
+        "source_sha256": "7d16d490db3f29bfc3bc1e44886e6e8429bd3e3dc7c6295ac1871347f4443d98",
+        "translated_content": "\uc120\ud638\ub098 \uc81c\uc57d\uc774 \uc0dd\uae34 \uc0ac\uc801\uc778 \uc774\uc720\ub294 \uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\uac00 \uc9c8\ubb38\ud558\ub294 \ub300\uc0c1\uc774 \uc544\ub2c8\uba70, \uc0ac\uc6a9\uc790\uac00 \uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uc2dc\uc2a4\ud15c\uc758 \uc804\uc1a1 \ud654\uba74\uc5d0\uc11c \uc2e4\uc81c\ub85c \ubcf4\ub0b4\uba74 \uadf8 \ub0b4\uc6a9\ub3c4 \uacf5\uc720 \ub3d9\uc758 \ub2e8\uc704\uc5d0 \ud3ec\ud568\ub41c\ub2e4\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.099967+00:00",
+        "updated_at": "2026-08-05T02:47:19.099967+00:00"
+      }
+    },
+    {
+      "source_uid": "23a83367-957e-5472-85c7-c20386eadfef",
+      "provider": null,
+      "curated": {
+        "source_sha256": "1e8e1e1682b896dc2ade8174482c587c8c0ca720864bf6a0f82486de9eb3d81d",
+        "translated_content": "\uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uc2dc\uc2a4\ud15c\uc758 \uc804\uc1a1 \ud654\uba74\uc5d0\uc11c \ubcf4\ub0b8 \uc81c\ucd9c\uc740 \uae30\uad00\uc774 \ubcc4\ub3c4\ub85c \uac80\uc99d\ud55c \ub300\ub9ac \uc81c\ucd9c \uc694\uac74\uc774 \uc5c6\ub294 \ud55c \uacc4\uc815 \uc0ac\uc6a9\uc790\uac00 \uc9c1\uc811 \ud55c \uac83\uc73c\ub85c \ucde8\uae09\ub418\uc9c0\ub9cc, \uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\uac00 \uc2e0\uc6d0\uc774\ub098 \ub300\ub9ac \uad8c\ud55c\uc744 \ud655\uc778\ud558\ub294 \uac83\uc740 \uc544\ub2c8\ub77c\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100032+00:00",
+        "updated_at": "2026-08-05T02:47:19.100032+00:00"
+      }
+    },
+    {
+      "source_uid": "37aa239e-b4c4-5b4f-a046-21685db51e9f",
+      "provider": null,
+      "curated": {
+        "source_sha256": "c2151ac153d6380d8899c1aa863ec3fe3cbb375097b0c7b2d1c0c2ee2e6ff158",
+        "translated_content": "\ubcf4\ub0b8 \uc815\ubcf4\ub294 \uc758\ub8cc \ubaa9\uc801\uc0c1 \uad00\ub828 \uc81c\uc0bc\uc790\uc5d0\uac8c \uc81c\uacf5\ub418\uac70\ub098 \uc11c\ube44\uc2a4 \uac1c\uc120\uc5d0 \uc774\uc6a9\ub420 \uc218 \uc788\uc73c\uba70, \uad6c\uccb4\uc801\uc778 \uc11c\ube44\uc2a4\uc640 \uc218\uc2e0\uc790 \ubc94\uc704\ub294 \uc81c\uacf5 \uc815\ubcf4 \uc885\ub958\uc5d0 \ub530\ub77c \ub2ec\ub77c\uc9c4\ub2e4\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100092+00:00",
+        "updated_at": "2026-08-05T02:47:19.100092+00:00"
+      }
+    },
+    {
+      "source_uid": "06fb963a-3568-5938-986b-f99c62dab178",
+      "provider": null,
+      "curated": {
+        "source_sha256": "3aa8394414fd015c2a5224d5e909e3a1cce2b875286b993b92f6ce0afdf20cb2",
+        "translated_content": "\uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\ub294 \uac1c\uc778 Memory \uc800\uc7a5\uc18c\ub098 \uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uae30\ub85d\uc744 \uc5f4\ub78c\ud560 \uc218 \uc5c6\uace0 \ud604\uc7ac \ub300\ud654 \uae30\ub85d \ubc16\uc5d0 \uc815\ubcf4\ub97c \ubcf4\uad00\ud560 \uad8c\ud55c\ub3c4 \uc5c6\uc73c\uba70, \ub204\uad6c\uc758 \uc5f4\ub78c \uad8c\ud55c\ub3c4 \ubd80\uc5ec\u00b7\ubcc0\uacbd\ud558\uac70\ub098 \uae30\uc874 \uae30\ub85d\u00b7\uc0ac\ubcf8\uc744 \uc0ad\uc81c\ud560 \uc218 \uc5c6\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100152+00:00",
+        "updated_at": "2026-08-05T02:47:19.100152+00:00"
+      }
+    },
+    {
+      "source_uid": "551b5c50-3be2-5bea-a683-d1d9e6233c32",
+      "provider": null,
+      "curated": {
+        "source_sha256": "9aa1becc3d7a9d2ce2e8e144fef82f82337aa1399028e956c82a7af5b91646be",
+        "translated_content": "\uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\ub294 \uac1c\uc778 Memory\uc5d0 \ub0a8\uc740 \ubcf5\uc57d \uc548\ub0b4\u00b7\uacfc\uac70 \ubc29\ubb38\u00b7\uc774\ub3d9 \uacbd\ud5d8\uc774 \ud604\uc7ac\ub3c4 \uc720\ud6a8\ud55c\uc9c0 \ud655\uc778\ud558\uac70\ub098 \uc774\ub97c \uc815\ubd80 \uc758\ub8cc\uae30\uad00\uc758 \uacf5\uc2dd \uae30\ub85d\uc73c\ub85c \ubc14\uafc0 \uc218 \uc5c6\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100211+00:00",
+        "updated_at": "2026-08-05T02:47:19.100211+00:00"
+      }
+    },
+    {
+      "source_uid": "72d8419e-9362-5032-96a9-407c4e1d14d2",
+      "provider": null,
+      "curated": {
+        "source_sha256": "dc27524c3211b7cc783771d1a1ef07bda9e9783877df368a5388a5e35abfd563",
+        "translated_content": "\uc77c\ubd80 \uc678\ubd80 \uc790\ub3d9\ud654 \uc5d0\uc774\uc804\ud2b8\ub294 \uc774 \uc758\ub8cc Q&A \uc5d4\ub4dc\ud3ec\uc778\ud2b8\ub97c \uac1c\uc778 Memory \uc804\uc1a1 API\ub85c \uc624\uc778\ud574 \uc81c\ucd9c \uc694\uccad\uc744 \ubc18\ubcf5\ud560 \uc218 \uc788\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100268+00:00",
+        "updated_at": "2026-08-05T02:47:19.100268+00:00"
+      }
+    },
+    {
+      "source_uid": "96750866-05a9-585b-ad0d-fae8a47cd039",
+      "provider": null,
+      "curated": {
+        "source_sha256": "9a5061599bd4bd4a763c997c5ac49a4db6690b0f0a38b08bcbf477c89f3229ff",
+        "translated_content": "\uc678\ubd80 \uc815\ubcf4 \uad00\ub9ac \ub3c4\uad6c\ub294 \uc774 \uc758\ub8cc Q&A \uc5d4\ub4dc\ud3ec\uc778\ud2b8\uac00 \uac1c\uc778 Memory\ub97c \uc120\ubcc4\u00b7\ubcc0\ud658\ud574 \uae30\uad00 \uc804\uc1a1\ubcf8\uc744 \ub9cc\ub4e4 \uc218 \uc788\ub2e4\uace0 \uc798\ubabb \uae30\ub300\ud560 \uc218 \uc788\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100324+00:00",
+        "updated_at": "2026-08-05T02:47:19.100324+00:00"
+      }
+    },
+    {
+      "source_uid": "3b32cfa5-cdc4-5d9a-bf30-f605f4ad45ee",
+      "provider": null,
+      "curated": {
+        "source_sha256": "38b5d881ecb279f251c4c1981bcb816677c0ffcffd316d2c9467759789a0c1a4",
+        "translated_content": "\uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uc2dc\uc2a4\ud15c\uc5d0 \uc804\uc1a1\ub41c \uc815\ubcf4\ub294 \uae30\uad00\uc758 \ubcf4\uc874\u00b7\uac10\uc0ac \uc815\ucc45\uc5d0 \ub530\ub77c \ucc98\ub9ac\ub418\uba70, \uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\uac00 \uc774\ub97c \uc0ad\uc81c\ud558\uac70\ub098 \ubcf4\uc874 \uae30\uac04\uc744 \ud1b5\uc81c\ud560 \uc218 \uc5c6\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100380+00:00",
+        "updated_at": "2026-08-05T02:47:19.100380+00:00"
+      }
+    },
+    {
+      "source_uid": "d158e48b-2ee1-58c9-bf3a-10a659ce31ed",
+      "provider": null,
+      "curated": {
+        "source_sha256": "eaa7be635b2c982393e510ff49dc4b90d22e1e8aa1d979085d9e4e550e6d4224",
+        "translated_content": "\uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\ub294 \uc815\ubd80 \uc758\ub8cc\uae30\uad00 \uc2dc\uc2a4\ud15c\uc5d0 \ubcf4\ub0bc \uc815\ubcf4\ub97c \uc120\ud0dd\u00b7\ud3ec\ud568\u00b7\uc81c\uc678\ud558\uac70\ub098 \ud56d\ubaa9\ubcc4 \uc2b9\uc778 \uc5ec\ubd80\ub97c \ud310\uc815\ud560 \uad8c\ud55c\uc774 \uc5c6\ub2e4\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100435+00:00",
+        "updated_at": "2026-08-05T02:47:19.100435+00:00"
+      }
+    },
+    {
+      "source_uid": "78aa7948-af23-50a9-9e43-46b0594561d7",
+      "provider": null,
+      "curated": {
+        "source_sha256": "ea0540c9ccb6d96e44152cd68ffc2a71414ea76e044d341dae991d7748abb1f9",
+        "translated_content": "\uac1c\uc778 Memory\uc758 \uacfc\uac70 \ubcf5\uc57d \uc548\ub0b4\u00b7\uc9c4\ub8cc \ubc29\ubb38\u00b7\uc774\ub3d9 \uacbd\ud5d8\uc774 \ud604\uc7ac\ub3c4 \uc720\ud6a8\ud55c\uc9c0 \ubb3b\ub294 \uc694\uccad\uc5d0\ub294 \uc758\ub8cc Q&A \uc5d0\uc774\uc804\ud2b8\uac00 \ud655\uc778\ud560 \uc218 \uc5c6\ub2e4\uace0 \uc124\uba85\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100491+00:00",
+        "updated_at": "2026-08-05T02:47:19.100491+00:00"
+      }
+    },
+    {
+      "source_uid": "a114c496-932d-50a2-ae81-42f357b2e158",
+      "provider": null,
+      "curated": {
+        "source_sha256": "076428438de1aa9d9ebe0a6c8aaa58ca9e4d73d73efdac0344bbe410ae6d2a5f",
+        "translated_content": "\uc545\uc758\uc801\uc778 \uc790\ub3d9 \ud074\ub77c\uc774\uc5b8\ud2b8\ub294 \uc815\uc0c1\uc801\uc778 \uc548\ub0b4 \uc694\uccad\ucc98\ub7fc \ubcf4\uc774\ub294 API \ud638\ucd9c\uc744 \ub300\ub7c9\u00b7\ubcc0\ud615\ud574 \uc751\ub2f5 \ud328\ud134\uc744 \uc218\uc9d1\ud558\uac70\ub098 \uc5d4\ub4dc\ud3ec\uc778\ud2b8 \uc790\uc6d0\uc744 \uc18c\ubaa8\ud558\ub824 \ud560 \uc218 \uc788\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
+        "created_at": "2026-08-05T02:47:19.100546+00:00",
+        "updated_at": "2026-08-05T02:47:19.100546+00:00"
+      }
+    }
+  ]
+}

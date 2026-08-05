@@ -1,0 +1,68 @@
+{
+  "uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+  "name": "local/personal-memory/2026/01",
+  "memories": {
+    "4eca74d0-4413-5339-a8fa-6b6fa3515409": {
+      "type": "memory",
+      "uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409",
+      "content": "The user keeps gloves and scarves in a basket inside the entrance."
+    },
+    "22632e75-6b0f-58f3-ad9c-20b253d4d4e5": {
+      "type": "memory",
+      "uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5",
+      "content": "On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus."
+    },
+    "a11f0943-8ee1-5305-87fb-64982fb36f82": {
+      "type": "memory",
+      "uid": "a11f0943-8ee1-5305-87fb-64982fb36f82",
+      "content": "Before the next outing, the user put the gloves in the entrance basket the night before and left on time."
+    },
+    "f623f245-cdd5-5080-8869-b52cf2914076": {
+      "type": "memory",
+      "uid": "f623f245-cdd5-5080-8869-b52cf2914076",
+      "content": "On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow."
+    },
+    "17ac56f1-1302-5350-99d5-b95ef7feb768": {
+      "type": "memory",
+      "uid": "17ac56f1-1302-5350-99d5-b95ef7feb768",
+      "content": "The next day, the user took a cleared sidewalk along the main road and avoided slippery sections."
+    },
+    "96988fa9-44b1-511e-8c99-4372f902cfe3": {
+      "type": "memory",
+      "uid": "96988fa9-44b1-511e-8c99-4372f902cfe3",
+      "content": "The user fell asleep with the heat turned up, became too warm before dawn, and woke twice."
+    },
+    "b628acaa-50da-552c-8665-244dc4ab8263": {
+      "type": "memory",
+      "uid": "b628acaa-50da-552c-8665-244dc4ab8263",
+      "content": "The next night, the user turned down the heat and used one additional thin blanket."
+    },
+    "08dfb937-7b28-55b5-801c-c0da00cbd414": {
+      "type": "memory",
+      "uid": "08dfb937-7b28-55b5-801c-c0da00cbd414",
+      "content": "On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure."
+    },
+    "be55eacc-6c19-5ced-8b25-bc1fac07ba5d": {
+      "type": "memory",
+      "uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d",
+      "content": "Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances."
+    },
+    "802c4031-57de-592a-9bc8-6ee3d54921c8": {
+      "type": "memory",
+      "uid": "802c4031-57de-592a-9bc8-6ee3d54921c8",
+      "content": "The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone."
+    }
+  },
+  "order": [
+    "4eca74d0-4413-5339-a8fa-6b6fa3515409",
+    "22632e75-6b0f-58f3-ad9c-20b253d4d4e5",
+    "a11f0943-8ee1-5305-87fb-64982fb36f82",
+    "f623f245-cdd5-5080-8869-b52cf2914076",
+    "17ac56f1-1302-5350-99d5-b95ef7feb768",
+    "96988fa9-44b1-511e-8c99-4372f902cfe3",
+    "b628acaa-50da-552c-8665-244dc4ab8263",
+    "08dfb937-7b28-55b5-801c-c0da00cbd414",
+    "be55eacc-6c19-5ced-8b25-bc1fac07ba5d",
+    "802c4031-57de-592a-9bc8-6ee3d54921c8"
+  ]
+}

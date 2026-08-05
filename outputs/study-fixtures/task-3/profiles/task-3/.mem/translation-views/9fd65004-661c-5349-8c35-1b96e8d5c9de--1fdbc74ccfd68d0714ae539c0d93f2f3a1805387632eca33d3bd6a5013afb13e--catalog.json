@@ -1,0 +1,96 @@
+{
+  "schema_version": 2,
+  "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+  "context_name": "local/guardrails/retention-and-revocation",
+  "target_language": "ko",
+  "created_at": "2026-08-05T02:47:19.049579+00:00",
+  "updated_at": "2026-08-05T02:47:19.049833+00:00",
+  "revision": 7,
+  "contract_version": "translate-v2",
+  "entries": [
+    {
+      "source_uid": "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+      "provider": null,
+      "curated": {
+        "source_sha256": "030cecb7ecd45d1eb89ce5ed86bc74c7a6dc180f37c493af5c431b16d36ff667",
+        "translated_content": "\uacf5\uc720 \ucd08\uc548\uc740 \uc0ac\uc6a9\uc790 \uac80\ud1a0\uc5d0 \ud544\uc694\ud55c \ub3d9\uc548\ub9cc \uc784\uc2dc\ub85c \uc720\uc9c0\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "4903587ad433784d7fd395d58b666c8fee17d2cc72d228ae472dea2a0967d236",
+        "created_at": "2026-08-05T02:47:19.049620+00:00",
+        "updated_at": "2026-08-05T02:47:19.049620+00:00"
+      }
+    },
+    {
+      "source_uid": "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+      "provider": null,
+      "curated": {
+        "source_sha256": "443fae0fe9f338e9d26b9709bdbed6f24aa5cbe848d2b214c39c850d97a4e95f",
+        "translated_content": "\uc0ac\uc6a9\uc790\uac00 \uac70\uc808\ud55c \ucd08\uc548\uc740 \uc7ac\uc0ac\uc6a9 \uac00\ub2a5\ud55c \uc791\uc5c5 \uc0c1\ud0dc\uc5d0\uc11c \uc81c\uac70\ud558\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "4903587ad433784d7fd395d58b666c8fee17d2cc72d228ae472dea2a0967d236",
+        "created_at": "2026-08-05T02:47:19.049666+00:00",
+        "updated_at": "2026-08-05T02:47:19.049666+00:00"
+      }
+    },
+    {
+      "source_uid": "4004ad20-547d-5588-a4d5-2bceff66005f",
+      "provider": null,
+      "curated": {
+        "source_sha256": "983de67c3cc4a3635fe98a2fb18eba916a2a4a9cc44412a41892c7e436d3f970",
+        "translated_content": "\uc81c\uc678\ud55c Memory \ubcf8\ubb38\uc744 \uc218\uc2e0\uc790\uc5d0\uac8c \uc804\ub2ec\ud558\uc9c0 \ub9c8\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "4903587ad433784d7fd395d58b666c8fee17d2cc72d228ae472dea2a0967d236",
+        "created_at": "2026-08-05T02:47:19.049708+00:00",
+        "updated_at": "2026-08-05T02:47:19.049708+00:00"
+      }
+    },
+    {
+      "source_uid": "38256d79-12a4-5f38-aca9-357056cab7ce",
+      "provider": null,
+      "curated": {
+        "source_sha256": "c0c4e81d8d62a68fc1294d30c6300d667f26ecbe82164b48ef5a4ff4a0ebc365",
+        "translated_content": "\ucde8\uc18c\ub41c \uacf5\uc720 \ud56d\ubaa9\uc744 \ud6c4\uc18d \uc804\uc1a1\uc5d0 \uc7ac\uc0ac\uc6a9\ud558\uc9c0 \ub9c8\ub77c.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "4903587ad433784d7fd395d58b666c8fee17d2cc72d228ae472dea2a0967d236",
+        "created_at": "2026-08-05T02:47:19.049748+00:00",
+        "updated_at": "2026-08-05T02:47:19.049748+00:00"
+      }
+    },
+    {
+      "source_uid": "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+      "provider": null,
+      "curated": {
+        "source_sha256": "d503d750238bc11d729a6bcdfe06d9cd212f39680e6c570d6b4b776b3a0b2def",
+        "translated_content": "\uacf5\uc720 \ucd08\uc548\uc744 \uc81c\uac70\ud574\ub3c4 \uc6d0\ubcf8 \ub85c\uceec Memory\ub294 \uc0ad\uc81c\ub418\uc9c0 \uc54a\ub294\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "4903587ad433784d7fd395d58b666c8fee17d2cc72d228ae472dea2a0967d236",
+        "created_at": "2026-08-05T02:47:19.049789+00:00",
+        "updated_at": "2026-08-05T02:47:19.049789+00:00"
+      }
+    },
+    {
+      "source_uid": "044511b2-40d0-55cb-912c-49c4ec0874fc",
+      "provider": null,
+      "curated": {
+        "source_sha256": "b6dfcbcab0d3e536aae426210dbfb4a198021858358a1d2edcecc371c904b26c",
+        "translated_content": "\ucca0\ud68c \ud1b5\uc9c0\ub97c \ubc1b\uc9c0 \ubabb\ud55c \uc218\uc2e0\uc790\ub294 \uc774\uc804 \uc2b9\uc778\uc774 \uc5ec\uc804\ud788 \uc720\ud6a8\ud558\ub2e4\uace0 \ud310\ub2e8\ud560 \uc218 \uc788\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "4903587ad433784d7fd395d58b666c8fee17d2cc72d228ae472dea2a0967d236",
+        "created_at": "2026-08-05T02:47:19.049833+00:00",
+        "updated_at": "2026-08-05T02:47:19.049833+00:00"
+      }
+    }
+  ]
+}

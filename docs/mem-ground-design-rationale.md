@@ -12,7 +12,7 @@ mem ground \
 
 mem ground task-1-fixture \
   --goal "Agree on the wiki and local Task 1 Memory contents." \
-  --scope participant/campus-wiki-fork \
+  --scope campus-wiki \
   --scope participant/construction-updates \
   --snapshot
 
@@ -22,7 +22,7 @@ mem ground task-1-fixture \
   --description "Use verified Main Building changes to update the local wiki fork." \
   --raw-context temp/task-1 \
   --derived-context temp/task-1-atomized \
-  --publication-target participant/campus-wiki-fork \
+  --publication-target campus-wiki \
   --placement-target participant/construction-updates/building-access \
   --snapshot
 ```
@@ -186,6 +186,19 @@ Instead, the frame border and label become bold light blue. This keeps panel
 identity stable while providing both weight and color cues; prompt-toolkit's
 built-in Frame has no safe per-instance heavy-border glyph set, so true
 double-width border characters remain a non-goal.
+
+Each of the five semantic frames may also show a one-cell `●` near its upper
+right corner. This is an unseen-update notification, not a completion,
+validity, or agreement marker: Ground has no implicit completion criterion.
+It appears only when a provider response, saved mutation, or reload produces
+new visible information for that pane after the person's last explicit visit.
+Programmatic focus does not clear it, because the shell routinely focuses
+Contexts or Chat to present a result; `Tab`/`Shift-Tab` navigation or an action
+inside the pane does. The badge is process-local presentation state and never
+enters Ground JSON, provider input, Context binding state, or an exact command
+receipt. It is rendered as a right-anchored float instead of title padding so
+terminal resizing and wide Korean glyphs cannot displace it. Shape as well as
+color carries the cue, and the underlying pane text remains authoritative.
 
 Arrow and page-navigation keys normally scroll the focused read-only viewport.
 During provisional Context selection, `Up` and `Down` instead move among the
@@ -454,9 +467,18 @@ validity, ownership, or operational-role claim. The first-turn provider
 question may therefore ask only about the Goal and portable Ground name, not
 treat any selected or planned Context name as part of creation approval.
 
-A later binding picker still needs to inspect validated Contexts and ask the
-person to assign operational roles rather than merely choose this starting
-name:
+The Context pane now places `DIRECT SELECT · P` below provider-ranked
+suggestions. `P` opens the same namespace tree as `mem switch`; its direct
+choice is process-local and still `NOT BOUND`. In the continuing named-Ground
+view, the Contexts, Rules, and Memories panes each expose `P · placement`.
+The picker is limited to frozen bound publication/placement targets after
+binding, while an unbound Ground uses the name-only ordinary catalog. A local
+choice rewrites only the placement operand of the next matching exact BIND,
+Rule, or Ground Memory proposal. It never applies a command or changes a
+Context by itself.
+
+The binding action still asks the person to distinguish operational roles
+rather than treating one starting name as every frame:
 
 - raw evidence;
 - derived or atomized candidates;
@@ -470,14 +492,22 @@ Contexts. The organizational wiki may be shown as a query-only authority, but
 it cannot be opened by the picker or silently substituted for a writable local
 target.
 
-After that later role assignment the host constructs one exact `mem ground`
+After that role assignment the host constructs one exact `mem ground`
 binding argv locally, states which frames will be fingerprinted and saved, and
 waits for the existing dedicated approval action. Candidate ranking may use
 the weak signals above, but no Context is bound from terminal location, the
 active Context, name similarity, recency, the provisional Goal, or the local
 Main marker. This keeps a helpful “start from nothing” path compatible with
 the privacy, multi-Context, and one-command approval boundaries. Context
-loading, role editing, and the binding picker remain future work.
+loading and role assignment remain subject to the exact binding review.
+
+Rules now retain placement target Context UIDs in the same serialized field
+already used by Ground Memories. Legacy Rules with an empty target list remain
+readable; newly proposed Rules default to the publication target unless the
+person or a validated proposal selects another bound target. Ground Memories
+continue to require at least one explicit target. This makes Context, Rule,
+and Memory placement visible without migrating compatibility tokens or writing
+the selected content into a target Context.
 
 Existing Rules and Ground Memories are also intentionally not copied into this
 first turn. Ground-session filenames can eventually be discovered without
@@ -896,7 +926,7 @@ interpretation outside the Ground persistence engine. A target-focused,
 read-only view is available as:
 
 ```bash
-mem ground task-1-fixture --focus-target participant/campus-wiki-fork
+mem ground task-1-fixture --focus-target campus-wiki
 ```
 
 The screen focuses one bound target, restates the saved Goal and target
@@ -1172,7 +1202,7 @@ has read the source.
 ## Named-session identity
 
 Grounding is not bound to the global current Context. A Task 1 Ground may
-cover `participant/campus-wiki-fork` plus several local construction-update Contexts, while a
+cover `campus-wiki` plus several local construction-update Contexts, while a
 different agent works on Task 2. Therefore sessions are named and independent:
 
 ```text
@@ -1207,6 +1237,23 @@ reloaded through an existing-only path after the picker closes; it never falls
 through to create-or-resume if the file disappeared. The launcher sorts by
 physical last-saved time or name and groups by bound Context, without creating
 an active Ground pointer. Ground rename and archive remain future CLI work.
+
+An open Ground view is not a dead end. From any collapsed read pane, `B`
+returns to the saved-work launcher and `Q` exits `mem ground`; a person who is
+currently typing in the general Message composer presses `Tab` first. The
+restriction to read panes is deliberate: ordinary lowercase `b` and `q` must
+remain writable message, comment, direct-edit, and exact-name text. `C` stays
+the pane-comment alias, while `Ctrl-C` stays the immediate exit path.
+
+Returning with `B` performs no Ground mutation and does not approve a pending
+command. The launcher rediscovers the catalog instead of reusing the previous
+screen's snapshot, then rechecks the chosen Ground's UID, revision, and digest
+through the existing-only reopen path. This makes newly created sessions and
+the latest saved revisions visible without introducing an active-Ground
+pointer. It also means an unapproved proposal is abandoned when navigating
+away; only `A` can cross the exact-command boundary. The same navigation is
+available from the unsaved blank Ground so entering New never traps the user
+in a screen that must be killed and restarted.
 
 The initial Ground view is `BY CONTEXT · RECENT FIRST`: Context groups use
 case-insensitive name order with an exact-name tie breaker, and sessions within
@@ -1276,27 +1323,26 @@ references, invalid names, and symbolic links.
 
 ## Task 1 runtime authority revision
 
-The runtime update design now separates the organizational wiki authority from
-the participant's writable materialization target:
+The runtime update design separates the ordinary wiki from its concealed
+construction-detail source:
 
 ```text
-campus-wiki                         query-only organizational origin
-participant/campus-wiki-fork        provisioned writable local scope
-participant/construction-updates    verified change evidence
+participant/construction-updates       task-owned change evidence
+campus-wiki                            granted read/edit view
+└── construction-details               narrower query-only view
 ```
 
-`impact` and `update` target the local fork. The organizational origin may be
-queried through an opaque pointer and is only a future publication target.
-Query access does not grant traversal or mutation authority.
+The authority owner stores both campus trees as ordinary Contexts. The task
+can directly read/edit the wiki grant and query its narrower details grant;
+query access does not grant traversal or mutation authority.
 
-The Ground fixture follows that authority split: it binds the writable
-`participant/campus-wiki-fork` and the
-`participant/construction-updates/*` hierarchy as ordinary Context frames.
-It never binds `campus-wiki`, loads its query-only contents, or presents it as
-a Ground Memory destination.
+Ground currently binds only ordinary Contexts owned by its selected Profile,
+so the task Ground binds `participant/construction-updates/*` and treats the
+granted wiki as an unbound proposed target. It never binds or loads the
+query-only details view. Grant-aware Ground binding is a separate rollout.
 
 One adapter name remains intentionally behind the runtime model. Ground's
-version-2 schema and CLI still call the fork frame `PUBLICATION_TARGET` and
+version-2 schema and CLI still call the wiki frame `PUBLICATION_TARGET` and
 `--publication-target`. For Task 1 those labels mean “the local
 materialization target from which a later contribution may be prepared”; they
 do not mean that the shared origin is bound or that publication occurs.
@@ -1305,14 +1351,10 @@ schema migration. A future Ground version should represent the writable
 materialization target and query-only upstream publication authority as
 separate fields.
 
-The local fork is assumed to be a current, researcher-provisioned snapshot of
-the participant's complete authorized candidate scope, with no concurrent
-upstream change during Task 1. It must not contain only pages already known to
-change, because doing so would answer the impact-scope question during setup.
-These are scenario assumptions until origin revisions, refresh, remote
-divergence checks, and publication are implemented.
+The ordinary wiki must not contain only pages already known to change, because
+doing so would answer the impact-scope question during setup.
 
-The small Ground regression fixture still initializes that bound fork with
+The small Ground regression fixture still initializes that bound wiki with
 zero Memories so it can exercise an explicit `BLOCKED` criterion. That
 synthetic absence tests Ground behavior; it is not the participant-facing
 Task 1 dataset and must not be read as permission to invent an upstream
@@ -1346,7 +1388,7 @@ currently missing, which decisions have been approved, and which gaps remain.
 It contains:
 
 - the fixed Task 1 source brief and editable Goal;
-- the expected `participant/campus-wiki-fork` baseline and local
+- the expected `campus-wiki` baseline and local
   materialization role;
 - the six required local destination slots;
 - each slot's ledger-derived `EMPTY`, `PARTIAL`, or `COVERED` state, or its
@@ -1366,7 +1408,7 @@ participant/construction-updates/route-changes
 ```
 
 The synthetic Ground regression fixture initializes
-`participant/campus-wiki-fork` and all six local Contexts with zero direct
+`campus-wiki` and all six local Contexts with zero direct
 Memories. The participant-facing scenario instead assumes a provisioned local
 fork of the extensive organizational source. The regression session records
 an explicit `BLOCKED` reason for its deliberately absent local-fork baseline;
@@ -1408,10 +1450,10 @@ Rule, and accept, refine, defer, or reject it. `REFINE` currently
 changes Rule wording or a Ground Memory's expected output; changing a Ground
 Memory's targets,
 role, disposition, rationale, or raw provenance remains follow-up work. A
-proposed placement may name `participant/campus-wiki-fork`, one of the six
+proposed placement may name `campus-wiki`, one of the six
 local slots, or both when their distinct source-of-change and materialization
-roles justify the duplication. It may not name the query-only `campus-wiki`
-origin.
+roles justify the duplication. It may not name the query-only
+`construction-details` source.
 
 The upper Ground must not be mixed into the lower candidate list. The top
 answers “what are we trying to achieve, what rules currently express it, and
@@ -1510,7 +1552,7 @@ Revision: 0
 GOAL
   Agree on the wiki and local Task 1 Memory contents.
 
-SCOPE  participant/campus-wiki-fork, participant/construction-updates
+SCOPE  campus-wiki, participant/construction-updates
 RULES 0 · MEMORIES 0 · UNRESOLVED 0 · DECISIONS 0
 
 No grounding material has been recorded.
@@ -1540,7 +1582,7 @@ Reviewing a placement, promoting a proposal to a golden Ground Memory,
 changing an upper-region status, or even marking the Ground `GROUNDED`
 changes only the named Ground artifact. It must not add, edit, or delete a
 Memory in
-`participant/campus-wiki-fork`, `participant/construction-updates`, or either
+`campus-wiki`, `participant/construction-updates`, or either
 temporary source Context, and must not create a target checkpoint.
 Materializing approved decisions into target Contexts is a separate, explicit
 future action with its own preview and checkpoint boundary. The query-only
@@ -1561,13 +1603,12 @@ report for the approved revision. A provider cannot set this status by itself.
 ## Task 1 use
 
 The first named Ground is `task-1-fixture`. Its Goal is to establish which
-Memories belong in the local `participant/campus-wiki-fork` fixture and which
-belong in the six `participant/construction-updates/*` Contexts. The local
-fork and verified change hierarchy have different materialization and
+Memories belong in the ordinary `campus-wiki` fixture and which
+belong in the six `participant/construction-updates/*` Contexts. The wiki
+and verified change hierarchy have different materialization and
 source-placement roles, so an explicitly justified fact may appear in both;
 identical content is not automatically an accidental duplicate. The
-query-only `campus-wiki` origin remains outside this Ground and becomes
-relevant only at a later contribution boundary.
+query-only `campus-wiki/construction-details` view remains outside this Ground.
 
 Within a future retrieval- and regression-enhanced review loop, the workbench
 should submit one
@@ -1602,7 +1643,7 @@ candidates, and whole-Ground approval remain future work. The process-local
 - Treating the 51 raw Memories and 54 candidates as the target Ground was
   rejected because evidence availability and fixture requirements answer
   different questions.
-- Inferring a plausible `participant/campus-wiki-fork` baseline was rejected because it would
+- Inferring a plausible `campus-wiki` baseline was rejected because it would
   conceal the target fixture's current absence and make before/after update
   behavior impossible to audit.
 - Writing approved ground decisions directly into target Contexts was rejected

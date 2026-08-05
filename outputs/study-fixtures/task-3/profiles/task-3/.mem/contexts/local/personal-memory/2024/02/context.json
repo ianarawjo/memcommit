@@ -1,0 +1,68 @@
+{
+  "uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+  "name": "local/personal-memory/2024/02",
+  "memories": {
+    "1c627e4c-c393-5bd3-a5ae-b3318821be73": {
+      "type": "memory",
+      "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73",
+      "content": "The user's maternal aunt keeps one spare key to the user's home."
+    },
+    "e80936de-87af-5dbb-ab94-d456bbfaab0a": {
+      "type": "memory",
+      "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a",
+      "content": "If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management."
+    },
+    "7c26cf33-0630-5138-910a-6d37d6ed2b63": {
+      "type": "memory",
+      "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63",
+      "content": "When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait."
+    },
+    "c3f0f26c-8d89-55e3-8bf3-398271e417e7": {
+      "type": "memory",
+      "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7",
+      "content": "The user feels at ease only after returning a borrowed spare key in person on the same day."
+    },
+    "7d7d00a3-c5af-5441-bb50-9631fbfd7979": {
+      "type": "memory",
+      "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979",
+      "content": "The user feels uneasy about writing down a new entrance passcode on paper."
+    },
+    "2e0df581-bd54-54f5-94ef-b719427fc88c": {
+      "type": "memory",
+      "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c",
+      "content": "The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately."
+    },
+    "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d": {
+      "type": "memory",
+      "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d",
+      "content": "On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo."
+    },
+    "76fb9115-a3f2-5ce3-a445-c3d1e38e4253": {
+      "type": "memory",
+      "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253",
+      "content": "The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key."
+    },
+    "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd": {
+      "type": "memory",
+      "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd",
+      "content": "Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information."
+    },
+    "b18ff5b4-4f0d-5b93-8c41-439e5b15c710": {
+      "type": "memory",
+      "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710",
+      "content": "The management office of a multi-unit residential building does not hold a unit key without verifying identity."
+    }
+  },
+  "order": [
+    "1c627e4c-c393-5bd3-a5ae-b3318821be73",
+    "e80936de-87af-5dbb-ab94-d456bbfaab0a",
+    "7c26cf33-0630-5138-910a-6d37d6ed2b63",
+    "c3f0f26c-8d89-55e3-8bf3-398271e417e7",
+    "7d7d00a3-c5af-5441-bb50-9631fbfd7979",
+    "2e0df581-bd54-54f5-94ef-b719427fc88c",
+    "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d",
+    "76fb9115-a3f2-5ce3-a445-c3d1e38e4253",
+    "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd",
+    "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+  ]
+}

@@ -1,0 +1,605 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-none-main-entrance-hours",
+      "completion_seconds": 0.5606952500529587,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": null,
+      "ordinal": 1,
+      "prompt_digest": "548ae263a93a7b200bf7261fce1922a9865b5d54c32d121ca05d67e1f294f57b",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 919,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"SINGLE\",\n  \"clarification\": \"NONE\"\n}",
+      "repetition": 1,
+      "response_bytes": 59,
+      "response_digest": "c4c8d5e1ef77bd720f6d028c913cba765f6fd3094cc1f937bbd6957076db73b8",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-none-context-resolved-time",
+      "completion_seconds": 0.5376002080738544,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": null,
+      "ordinal": 2,
+      "prompt_digest": "4185ecf01a318120cc1376641939f21523efa787e0af8fe45c22524407b61c1c",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 920,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"clarification\": \"NONE\",\n  \"interpretation\": \"SINGLE\"\n}",
+      "repetition": 1,
+      "response_bytes": 59,
+      "response_digest": "9fd688ddd7ba88bcce308f4eaf01b8fb3910e217611c00bb39fc7cbb6eb04b53",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-helpful-reception-location",
+      "completion_seconds": 0.5433920831419528,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 3,
+      "prompt_digest": "fc5fd65f6a37232e65416d848819f571567b73ae3758866278bb05998b173081",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 919,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"SINGLE\",\n  \"clarification\": \"NONE\"\n}",
+      "repetition": 1,
+      "response_bytes": 59,
+      "response_digest": "c4c8d5e1ef77bd720f6d028c913cba765f6fd3094cc1f937bbd6957076db73b8",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "SINGLE"
+      },
+      "case_id": "single-required-coordinator-contact",
+      "completion_seconds": 0.5263408329337835,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "SINGLE"
+      },
+      "failure_category": null,
+      "ordinal": 4,
+      "prompt_digest": "fc1e1fb58c5b030d200ca4b2f1c7329f43d0c96b32fbb3f84a522b386e67fe22",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 921,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"SINGLE\",\n  \"clarification\": \"REQUIRED\"\n}",
+      "repetition": 1,
+      "response_bytes": 63,
+      "response_digest": "dacd9c5d8499caf5b329f8dd6ab2f7246f8db2b73b70e16149fd94cbd6a395f7",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "NONE",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "dominant-none-access-card",
+      "completion_seconds": 0.9125145836733282,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": null,
+      "ordinal": 5,
+      "prompt_digest": "e5540dbf108d0e938b3ccd08abc2785324752c37c35a57dc5f52e4c07ece8151",
+      "provider_run": {
+        "completion_tokens": 24,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 920,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"DOMINANT\",\n  \"clarification\": \"NONE\"\n}",
+      "repetition": 1,
+      "response_bytes": 61,
+      "response_digest": "7e9d1cefbbbadd0b7b0a445f642b874141fb2cff9ee40d9bc27621c4a1ed7ff3",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "dominant-helpful-pharmacy-prescription",
+      "completion_seconds": 0.8265060838311911,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": null,
+      "ordinal": 6,
+      "prompt_digest": "5909f26d8b63e996e62d2accaaceb7e53968794693c3a5c38538b4dcd44b5734",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 916,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"DOMINANT\",\n  \"clarification\": \"HELPFUL\"\n}",
+      "repetition": 1,
+      "response_bytes": 64,
+      "response_digest": "6d84c72135123b7ba45293c021ed2bf89accb4b734e0c7ef9a785c83c460655c",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "case_id": "dominant-required-entry-permit",
+      "completion_seconds": 0.8296157498843968,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "DOMINANT"
+      },
+      "failure_category": null,
+      "ordinal": 7,
+      "prompt_digest": "f57304f38476a6b4496747e26e931a83a009db1a966f2bf49b47a41c61fbab55",
+      "provider_run": {
+        "completion_tokens": 24,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 919,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"DOMINANT\",\n  \"clarification\": \"REQUIRED\"\n}",
+      "repetition": 1,
+      "response_bytes": 65,
+      "response_digest": "3f0dee8fe323e544d4efed7ab5f3271d73d69600c966ce4d6809037694211ef1",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-none-no-way",
+      "completion_seconds": 0.8260846668854356,
+      "diagnostic": "Both labels must exactly match the reviewed calibration contract.",
+      "error_type": null,
+      "expected": {
+        "clarification": "NONE",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "ordinal": 8,
+      "prompt_digest": "d19adb87921103395e50fabe66a175c64ddc9bf273919f040403411d363f5399",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 921,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"COMPETING\",\n  \"clarification\": \"REQUIRED\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "60fe21212cbab97ee350b0ee4379fe3a26bfff4c88f2f623f6659c54fea1c876",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "FAIL"
+    },
+    {
+      "actual": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-helpful-person-in-charge",
+      "completion_seconds": 0.8208085838705301,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "HELPFUL",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": null,
+      "ordinal": 9,
+      "prompt_digest": "cf9e9421ed940fdfb2638c2c216f7bb3ced4eb765bf84264d5cb69ed2785ca41",
+      "provider_run": {
+        "completion_tokens": 24,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 917,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"COMPETING\",\n  \"clarification\": \"HELPFUL\"\n}",
+      "repetition": 1,
+      "response_bytes": 65,
+      "response_digest": "59beb0950520fe990b5a9fea0e0bc3370bf415291e60bcba3fa7d1b39be05838",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    },
+    {
+      "actual": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "case_id": "competing-required-hotel-216",
+      "completion_seconds": 0.844775625038892,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "clarification": "REQUIRED",
+        "interpretation": "COMPETING"
+      },
+      "failure_category": null,
+      "ordinal": 10,
+      "prompt_digest": "91005c3670fd379564bfef71b33bc7a3908223edec6ed2e2cac7716e0545bd85",
+      "provider_run": {
+        "completion_tokens": 23,
+        "operation": "ambiguity classification",
+        "prompt_tokens": 917,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"interpretation\": \"COMPETING\",\n  \"clarification\": \"REQUIRED\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "60fe21212cbab97ee350b0ee4379fe3a26bfff4c88f2f623f6659c54fea1c876",
+      "schema_digest": "355d3bb243c2ab95143d40b1b4f1ab28a3706ef51e595e751ffbb85db339c775",
+      "stage": "CLASSIFY",
+      "status": "PASS"
+    }
+  ],
+  "completed_at": "2026-08-03T18:49:28.947013Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "fixture": "ambiguity.json",
+    "fixture_case_count": 10,
+    "fixture_digest": "003654c092e03ea74f72e8f084624438085555e2cedad2c9abed985ae2b3c067",
+    "independent_holdout": false,
+    "operation": "find-ambiguities",
+    "role": "CALIBRATION",
+    "ruleset_version": "ambiguity-v1-draft",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "single-none-main-entrance-hours",
+      "single-none-context-resolved-time",
+      "single-helpful-reception-location",
+      "single-required-coordinator-contact",
+      "dominant-none-access-card",
+      "dominant-helpful-pharmacy-prescription",
+      "dominant-required-entry-permit",
+      "competing-none-no-way",
+      "competing-helpful-person-in-charge",
+      "competing-required-hotel-216"
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "outputs/semantic-eval-v1/runs/20260803T184921706507Z-916f8009.json",
+  "pipeline": {
+    "gate": "exact two-label contract with repeated stability",
+    "id": "ambiguity-classify-v1",
+    "stages": [
+      "CLASSIFY"
+    ],
+    "version": 1
+  },
+  "provider": {
+    "effective_thinking": false,
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen3.6:35b-a3b",
+    "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "provider": "ollama",
+    "reasoning_effort": null,
+    "runtime": "ollama/0.30.10"
+  },
+  "run_id": "20260803T184921706507Z-916f8009",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": 65536,
+      "max_output_tokens": 16384,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T18:49:21.706507Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 8,
+      "structurally_valid": 10,
+      "total": 10
+    },
+    "campaign_passed": false,
+    "case_results": [
+      {
+        "attempts": 1,
+        "case_id": "single-none-main-entrance-hours",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "single-none-context-resolved-time",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "single-helpful-reception-location",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "single-required-coordinator-contact",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "SINGLE"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-none-access-card",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-helpful-pharmacy-prescription",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "dominant-required-entry-permit",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "DOMINANT"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-none-no-way",
+        "exact_matches": 0,
+        "expected": {
+          "clarification": "NONE",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "FAIL",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-helpful-person-in-charge",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "HELPFUL",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      },
+      {
+        "attempts": 1,
+        "case_id": "competing-required-hotel-216",
+        "exact_matches": 1,
+        "expected": {
+          "clarification": "REQUIRED",
+          "interpretation": "COMPETING"
+        },
+        "majority_count": 1,
+        "required_count": 1,
+        "stability": 1.0,
+        "status": "PASS",
+        "structurally_valid": 1
+      }
+    ],
+    "cases": {
+      "failed": 2,
+      "passed": 8,
+      "total": 10
+    },
+    "completion_seconds": {
+      "max": 0.9125145836733282,
+      "mean": 0.7228333667386323,
+      "median": 0.8234466253779829,
+      "p95": 0.9125145836733282
+    },
+    "distributions": {
+      "actual_joint_attempts": {
+        "COMPETING/HELPFUL": 1,
+        "COMPETING/REQUIRED": 2,
+        "DOMINANT/HELPFUL": 1,
+        "DOMINANT/NONE": 1,
+        "DOMINANT/REQUIRED": 1,
+        "SINGLE/NONE": 3,
+        "SINGLE/REQUIRED": 1
+      },
+      "case_pass_by_clarification": {
+        "HELPFUL": {
+          "passed": 2,
+          "total": 3
+        },
+        "NONE": {
+          "passed": 3,
+          "total": 4
+        },
+        "REQUIRED": {
+          "passed": 3,
+          "total": 3
+        }
+      },
+      "case_pass_by_interpretation": {
+        "COMPETING": {
+          "passed": 2,
+          "total": 3
+        },
+        "DOMINANT": {
+          "passed": 3,
+          "total": 3
+        },
+        "SINGLE": {
+          "passed": 3,
+          "total": 4
+        }
+      },
+      "expected_clarification": {
+        "HELPFUL": 3,
+        "NONE": 4,
+        "REQUIRED": 3
+      },
+      "expected_interpretation": {
+        "COMPETING": 3,
+        "DOMINANT": 3,
+        "SINGLE": 4
+      },
+      "expected_joint": {
+        "COMPETING/HELPFUL": 1,
+        "COMPETING/NONE": 1,
+        "COMPETING/REQUIRED": 1,
+        "DOMINANT/HELPFUL": 1,
+        "DOMINANT/NONE": 1,
+        "DOMINANT/REQUIRED": 1,
+        "SINGLE/HELPFUL": 1,
+        "SINGLE/NONE": 2,
+        "SINGLE/REQUIRED": 1
+      }
+    },
+    "failures": {
+      "LABEL_MISMATCH": 2
+    },
+    "tokens": {
+      "completion": 235,
+      "prompt": 9189,
+      "reported_attempts": 10
+    }
+  },
+  "timing": {
+    "campaign_seconds": 7.2408285001292825,
+    "provider_connection_seconds": 0.020152541808784008,
+    "total_seconds": 7.2609810419380665
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+  "name": "local/guardrails/channel-and-format",
+  "memories": {
+    "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e": {
+      "type": "memory",
+      "uid": "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e",
+      "content": "Use only the delivery channel approved by the user."
+    },
+    "c11769a3-cb4c-589d-91fc-48a7fc5f4b28": {
+      "type": "memory",
+      "uid": "c11769a3-cb4c-589d-91fc-48a7fc5f4b28",
+      "content": "Verify the format supported by the receiving channel before transmission."
+    },
+    "d75604e1-1e25-5c2b-8316-3db4224965bf": {
+      "type": "memory",
+      "uid": "d75604e1-1e25-5c2b-8316-3db4224965bf",
+      "content": "Ensure that document metadata does not retain unnecessary identifying information."
+    },
+    "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20": {
+      "type": "memory",
+      "uid": "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20",
+      "content": "Apply an approved protection method to sensitive items."
+    },
+    "b40d9699-8a5f-552e-97db-1a9ae59a9c34": {
+      "type": "memory",
+      "uid": "b40d9699-8a5f-552e-97db-1a9ae59a9c34",
+      "content": "If transmission fails, do not automatically retransmit the same content through another channel."
+    },
+    "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff": {
+      "type": "memory",
+      "uid": "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff",
+      "content": "Access restrictions on one channel do not automatically apply to another channel."
+    },
+    "69e95464-217e-5620-8ffc-c5d0f20afc46": {
+      "type": "memory",
+      "uid": "69e95464-217e-5620-8ffc-c5d0f20afc46",
+      "content": "The local agent can record the selected channel and transmission format but cannot inspect an external channel's actual retention method."
+    },
+    "f9492eaf-c1e8-5adc-9987-e58fcf527ed6": {
+      "type": "memory",
+      "uid": "f9492eaf-c1e8-5adc-9987-e58fcf527ed6",
+      "content": "If format markers are not clearly distinguished, a recipient organization may be unable to tell whether content is an instruction, body text, or a quotation."
+    }
+  },
+  "order": [
+    "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e",
+    "c11769a3-cb4c-589d-91fc-48a7fc5f4b28",
+    "d75604e1-1e25-5c2b-8316-3db4224965bf",
+    "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20",
+    "b40d9699-8a5f-552e-97db-1a9ae59a9c34",
+    "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff",
+    "69e95464-217e-5620-8ffc-c5d0f20afc46",
+    "f9492eaf-c1e8-5adc-9987-e58fcf527ed6"
+  ]
+}

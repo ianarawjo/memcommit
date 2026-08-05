@@ -38,7 +38,7 @@ protected target must be explicitly unlocked first.
 | --- | --- | --- |
 | Context | Any change to that exact Context record, namespace rename that rewrites it, and deletion | Read commands, switching, checkpoint creation, using it as a read-only source, and branching to a new Context identity |
 | Memory | Editing or removing that directly owned Memory occurrence, including whole-Context clear, deletion, revert, Undo, or Redo that would replace or remove it | Adding or changing other direct items and metadata-only Context rename |
-| Profile | Durable writes anywhere inside the active Profile store, including new or changed Contexts, checkpoints, query-only sources, Ground/workflow sessions, and derived analyses | Reads, one-shot unsaved queries, current-Context switching, active-Profile switching, and protection policy changes |
+| Profile | Durable writes anywhere inside the active Profile store, including new or changed Contexts, checkpoints, query-only sources, Ground/workflow sessions, derived analyses, and saved query transcripts | Reads, one-shot unsaved queries, current-Context switching, active-Profile switching, and protection policy changes |
 
 A Context lock applies to one exact Context identity, not its lexical
 descendants unless `--recursive` is supplied. Recursive mode freezes the root
@@ -101,12 +101,13 @@ every changed owner record, including moved Context headers and inbound
 reference owners, while the complete graph lock set is held.
 
 Profile locking is a persistent upper barrier, not an enumeration of current
-Context UIDs. Context and artifact writers hold the registry lock shared from
-their final policy check through publication, after any affected Context
-locks; `lock profile` takes it exclusively. Therefore a write admitted under
-an older policy generation cannot publish after `mem lock profile` has
-returned. Unlocking the Profile changes only the upper boolean: explicit
-Context and Memory locks remain in place.
+Context UIDs. Profile-level Context commands serialize through the existing
+global command lock. Non-Context artifacts hold the registry lock shared from
+their final policy check through publication; `lock profile` takes it
+exclusively. Therefore a write admitted under an older policy generation
+cannot publish after `mem lock profile` has returned. Unlocking the Profile
+changes only the upper boolean: explicit Context and Memory locks remain in
+place.
 
 This store-level boundary is intentional. Individual commands must not each
 implement their own incomplete list of protected operations. Consequently,
@@ -124,8 +125,8 @@ file. Removing the final policy removes the empty registry file.
 The Profile target means the active Profile's durable store, not every global
 control plane that can route to it. It freezes ordinary Contexts, checkpoints,
 query-only sources, Ground/Meld/review/update/atomize sessions, translations,
-and comparisons. It also blocks new Context identities, so it protects future
-names without requiring enumeration.
+comparisons, rationale caches, and saved query transcripts. It also blocks new
+Context identities, so it protects future names without requiring enumeration.
 
 It does not prevent selecting a current Context or switching to another
 Profile. Those pointers are navigation state needed to inspect or leave a

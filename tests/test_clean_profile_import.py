@@ -96,6 +96,6 @@ def test_init_study_imports_an_isolated_pair_with_empty_history(
         "clean-study",
         "clean-study-granted-memory",
     ]
-    assert len(registry.grants) == 7
+    assert len(registry.grants) == 8
     assert not any(profile_store_dir(profile).rglob("checkpoints/*.json"))
     assert not any(profile_store_dir(authority).rglob("checkpoints/*.json"))

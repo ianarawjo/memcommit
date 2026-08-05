@@ -6,8 +6,8 @@ The Korean source fixtures use the following scale:
 
 - Task 1: 375 ordinary Memories and 78 query-only Memories
 - Task 2: 300 ordinary Memories and 75 query-only Memories
-- Task 3: 375 ordinary Memories and 75 query-only Memories
-- Total: 1,050 ordinary Memories, 228 query-only Memories, and 1,278 overall
+- Task 3: 387 ordinary Memories and 75 query-only Memories
+- Total: 1,062 ordinary Memories, 228 query-only Memories, and 1,290 overall
 
 In the original workflow, English translation and installation into actual
 Contexts are separate stages after review of the Korean content. Counts are an
@@ -76,7 +76,7 @@ dataset/directory/leaf
 Examples are `construction-updates/building-access/03-hours`,
 `campus-wiki/route-changes/17`,
 `advisor1/methods/question-evidence-analysis`, and
-`personal-memory/2024-06/03`. This structure supports browsing Memories on the
+`local/personal-memory/2024-06/03`. This structure supports browsing Memories on the
 same topic while eliminating a separate `Category` column that would largely
 repeat the purpose label.
 
@@ -327,14 +327,12 @@ location, audience, and purpose axes.
 
 ### Query-only construction details
 
-`construction-details` is not a separate ordinary Context. It is the direct
-query-only source attached to the ordinary `campus-wiki` Context. The review
-view displays it as `campus-wiki · construction-details` so its affiliation is
-clear, but the current explicit query form is
-`mem query construction-details ... --context campus-wiki`. A middle dot is
-used because a slash in the review label could be mistaken for an ordinary
-Context namespace. Detailed construction content is not copied into ordinary
-`campus-wiki` Memories to circumvent the query-only boundary.
+`construction-details` is an ordinary Context subtree owned by
+`task-1-campus-authority`, not by the task Profile. The task sees it only
+through the narrower `campus-wiki/construction-details` `QUERY` grant. The
+review label may remain `campus-wiki · construction-details`, while the
+explicit command is `mem query campus-wiki/construction-details ...`.
+Detailed content is not copied into task-owned Memories.
 
 ## Task 2
 
@@ -363,9 +361,24 @@ The purpose distribution is:
 
 | Dataset | KB | PP | SM | UM | WM | OM | Total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `advisor1` | 10 | 95 | 8 | 8 | 8 | 21 | 150 |
-| `advisor2` | 10 | 95 | 8 | 8 | 8 | 21 | 150 |
+| `advisor1` | 9 | 96 | 5 | 8 | 8 | 24 | 150 |
+| `advisor2` | 10 | 96 | 4 | 8 | 8 | 24 | 150 |
 | `proposal-submission-guidelines` | 2 | 57 | 2 | 2 | 2 | 10 | 75 |
+
+Memory voice follows the modeled subject instead of referring to an Advisor
+from outside. Reader behavior uses `Readers...`, author habits use `The
+user...`, and Advisor capability boundaries are restated from the explicit
+`The user...` perspective so a standalone Memory cannot leave the referent of
+first-person `I` ambiguous.
+The purpose metadata follows the same distinction: reader reactions are `OM`,
+while only actual capability or review limits remain `SM`.
+
+Both Advisors also carry an explicit first-person-pronoun consistency rule.
+One states that the same authorial role must not alternate between `I` and
+`we`; the other chooses `I` for an individual author and `we` for a named team.
+These two Memories replace less important style support and form a reviewed
+`Near Duplicate` pair. This keeps responsibility attribution stable without
+turning a shared writing rule into a false conflict.
 
 Even after strict atomization, semantic correspondence is preserved as stable
 relationship groups. `pair_id` is an existing compatibility name in the
@@ -454,13 +467,13 @@ apply only to research for which they are relevant.
 
 ## Task 3
 
-### Monthly personal-memory
+### Monthly local/personal-memory
 
-The 300 `personal-memory` Memories retain stable source keys in 30 monthly
+The 300 `local/personal-memory` Memories retain stable source keys in 30 monthly
 buckets from `2024-01` through `2026-06`, with ten Memories per month. Generated
 Study Profiles place those same records under three materialized year Contexts,
-so the runtime path is `personal-memory/2024/01` rather than
-`personal-memory/2024-01`. The source key remains unchanged to preserve fixture
+so the runtime path is `local/personal-memory/2024/01` rather than
+`local/personal-memory/2024-01`. The source key remains unchanged to preserve fixture
 and Memory identity across this topology-only refinement. Topic categories were
 rejected because they would erase how daily-life records accumulate over time
 and require a separate time axis to recover when the user learned something.
@@ -503,9 +516,9 @@ which names, institutions, projects, real locations and dates, third-party
 statements, rare event combinations, diagnoses, and node IDs were removed. It
 is therefore not a complete or authoritative profile of any real person.
 
-### Guardrails and healthcare information-request specification
+### Guardrails, public healthcare guidance, and healthcare Q&A
 
-The ordinary `guardrails` dataset contains 75 Memories. It covers the purpose
+The ordinary `local/guardrails` dataset contains 75 Memories. It covers the purpose
 and scope of selective sharing, protection of third parties, evidence and
 uncertainty, approval and delivery, and retention and revocation, as well as
 recipient authority, minimization and redaction, channel and format, downstream
@@ -517,17 +530,24 @@ conditions such as copies, transmission, and synchronization are modeled as
 `WM`, and anticipated recipient or organization interpretations as `OM`, in
 place of user preferences.
 
+The ordinary `remote/government/healthcare-agent/info-request/official-guidance` dataset contains 12
+authority-published high-level principles. These Memories are deliberately
+readable and exportable, so one may be used as Sever's sole Criteria Context or
+combined with another authorized criterion through Meld. Publication is an
+authority-side curation decision; Sever never promotes query-only content into
+this Context.
+
 The canonical locator of the query-only external Context is
-`government/healthcare-agent/information-request`, which contains 75 Memories.
+`remote/government/healthcare-agent/info-request/questions-and-answers`, which contains 75 Memories.
 This material is not a set of rules that directly decides healthcare-support
 outcomes or constructs a transmission copy. It is a specification explaining
 the consent, use, and sharing consequences when a user actually sends
 information to a government healthcare institution system. Pointing directly
-to a particular `personal-memory` event would reveal an answer to participants,
+to a particular `local/personal-memory` event would reveal an answer to participants,
 so examples stop at general categories actually represented in
-`personal-memory`: mobility, waiting, accessible entrances, weekly availability
+`local/personal-memory`: mobility, waiting, accessible entrances, weekly availability
 and reminders, family contact, questions, checklists, one-line explanations, and
-past medication instructions. Capability limits of the information-request
+past medication instructions. Capability limits of the healthcare Q&A
 agent are separated as `SM`; expectations and request strategies of external
 requesters, misrouted clients, and automated agents that can actually send
 requests to this endpoint are `OM`. Family contact remains an example of an
@@ -555,10 +575,10 @@ of third parties and permitted bases for provision under real law may vary by
 jurisdiction, institutional relationship, contract, and purpose, so this
 definition is not used as a universal legal claim.
 
-The `SM`–`OM` contrast in the information-request specification is not intended
+The `SM`–`OM` contrast in the healthcare Q&A specification is not intended
 to speculate about the internal state of downstream services. `SM` records that
-this agent cannot inspect or verify `personal-memory`, the user's calendar,
-appointments, or institutional receipt status. Because `personal-memory` is not
+this agent cannot inspect or verify `local/personal-memory`, the user's calendar,
+appointments, or institutional receipt status. Because `local/personal-memory` is not
 included in provider input, an attack that extracts source personal Memory text
 from this agent is structurally unavailable. `OM` instead records that an
 external requester may mistake this screen for a transmission, scheduling,
@@ -569,21 +589,21 @@ authority to interact with downstream actors inside the government institution
 or observe their judgments, so their internal interpretations are not turned
 into `OM` records in this dataset.
 
-This design separates the local sharing decision from the information-request
-agent's explanatory authority. `sever`, `share`, and `guardrails` form a
+This design separates the local sharing decision from the healthcare Q&A
+agent's explanatory authority. `sever`, `share`, and `local/guardrails` form a
 separate flow in which a participant reviews which local Memories to transmit.
-The information-request agent neither substitutes for that choice nor sees the
+The healthcare Q&A agent neither substitutes for that choice nor sees the
 final transmission copy. Conversely, after content is actually sent through the
 government healthcare institution system's transmission screen, the agent
 explains the consequence that all sent content is a unit for which sharing was
 consented. There is no intermediate state in which this agent identifies and
 excludes portions that were not approved item by item.
 
-Mentioning `personal-memory` content in the current conversation is also kept
+Mentioning `local/personal-memory` content in the current conversation is also kept
 separate from transmission to the institution. Telling this agent about past
 medication instructions, care visits, or mobility experiences neither verifies
 that they remain current nor transmits them to the government healthcare
-institution system. The agent cannot inspect stored `personal-memory` or
+institution system. The agent cannot inspect stored `local/personal-memory` or
 institution records and has no authority to retain information outside the
 current conversation record. It also cannot select, modify, or delete
 conversation or institution records; request deletion of existing copies;
@@ -591,7 +611,7 @@ change access permissions; or execute scheduling, payment, or transmission of
 family contact information. Treating a submission without separate
 institution-verified proxy-submission requirements as made directly by the
 account user is only an operating assumption in the synthetic scenario; it does
-not mean the information-request agent verifies identity or proxy authority.
+not mean the healthcare Q&A agent verifies identity or proxy authority.
 
 Accessibility information separates a convenience preference, temporary state,
 persistent functional limitation, and required support. One experience of
@@ -607,7 +627,7 @@ create appointment priority or an earlier time.
 A small number of boundary cases retain the fact that exact services,
 recipients, and third-party scope vary by the type of information supplied. This
 does not make the consent unit for sent items ambiguous; it honestly represents
-downstream processing that the information-request agent cannot know. In
+downstream processing that the healthcare Q&A agent cannot know. In
 contrast, the agent clearly states that selecting, modifying, or transmitting
 personal Memories; executing appointments; extracting credentials, hidden
 instructions, or response rules; and making bulk automated requests are outside
@@ -621,17 +641,18 @@ The purpose distribution is:
 
 | Dataset | KB | PP | SM | UM | WM | OM | Total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `personal-memory` | 30 | 20 | 20 | 184 | 16 | 30 | 300 |
-| `guardrails` | 8 | 47 | 4 | 0 | 5 | 11 | 75 |
-| `government/healthcare-agent/information-request` | 5 | 42 | 8 | 0 | 7 | 13 | 75 |
+| `local/personal-memory` | 30 | 20 | 20 | 184 | 16 | 30 | 300 |
+| `local/guardrails` | 8 | 47 | 4 | 0 | 5 | 11 | 75 |
+| `remote/government/healthcare-agent/info-request/official-guidance` | 7 | 5 | 0 | 0 | 0 | 0 | 12 |
+| `remote/government/healthcare-agent/info-request/questions-and-answers` | 5 | 42 | 8 | 0 | 7 | 13 | 75 |
 
 Policies remain the main axis, but knowledge about sharing categories,
-information-request agent limitations, external transmission and service
+healthcare Q&A agent limitations, external transmission and service
 conditions, and anticipated behavior of external actors who directly send
 requests remain distinct. Neither external dataset presumes current user
 preferences. No matter what information an external request seeks, local
 guardrails and the participant's separate review constrain whether sharing
-actually occurs; the information-request agent does not make that decision.
+actually occurs; the healthcare Q&A agent does not make that decision.
 
 The specification itself contains no sentences explaining experimental
 commands or screen flow. It instead explains categories of information that may
@@ -655,7 +676,7 @@ actions and misuse possibilities of real information-sharing guidance.
 ## Synthetic and De-identification Boundary
 
 - Task 1 and 2 institutions, people, construction, and policies, and the Task 3
-  guardrails and healthcare information-request specification, are synthetic
+  guardrails and healthcare healthcare Q&A specification, are synthetic
   material created for user research.
 - Task 1 spaces draw only shallowly on facility relationships possible in a
   multi-building urban comprehensive university. They do not use a real school
@@ -674,7 +695,7 @@ contaminating retrieval content.
 ## Query-Only Boundary
 
 Task 1 detailed construction material, Task 2 proposal-submission guidance, and
-the Task 3 government healthcare information-request specification assume a
+the Task 3 government healthcare healthcare Q&A specification assume a
 research condition in which the required scope is obtained through questions
 rather than by reading a direct list.
 

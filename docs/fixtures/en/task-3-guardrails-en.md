@@ -1,8 +1,8 @@
 # Task 3 General Selective-Sharing Guardrails
 
 This document contains a complete synthetic set of 75 pre-review guardrails for
-local outbound sharing candidates in Task 3's future `sever` stage.
-`guardrails` is an ordinary Context, separate from the connected healthcare
+local outbound sharing candidates in Task 3's `sever` stage.
+`local/guardrails` is an ordinary Context, separate from the connected healthcare
 guidance agent's query-only material. While retaining the existing boundaries
 for purpose, privacy, evidence, approval, and retention, it extends the review
 scope to recipient authority, minimization, delivery channels, downstream use,
@@ -10,10 +10,11 @@ auditing, and recovery. The guardrails contain no User Model that presumes the
 user's sharing preferences, because such assumptions could steer participant
 choices and contaminate study behavior. World Models for external data-flow
 conditions and Other Models for anticipated recipient or organization
-interpretations fill those positions instead. `mem sever` is not yet implemented
-in the current repository.
+interpretations fill those positions instead. `mem sever` now accepts one
+ordinary Criteria Context per pass; these guardrails can fill that role or be
+combined with another authorized criterion through `mem meld` first.
 
-Each `directory/NN` denotes a hierarchical Memory location under `guardrails`.
+Each `directory/NN` denotes a hierarchical Memory location under `local/guardrails`.
 The two-letter purpose ticker in brackets is an authoring and review sidecar, not
 part of the Memory content. Only the sentence following the ticker is a Memory
 candidate. `PP` states an action the agent should take in the imperative. `KB`

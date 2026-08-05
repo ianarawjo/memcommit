@@ -143,8 +143,11 @@ mem find "셔틀 공지가 있을 때 마지막으로 업데이트된 메모리"
 A non-temporal query keeps the existing current-state Find behavior and
 privacy boundary. A temporal query may return versioned direct Memory states
 or direct Memory transitions as well as checkpoints when the wording asks for
-one. History results must identify their Context, checkpoint or transition
-boundary, relation to the anchor, and whether they are restorable.
+one. Both paths use the selected Context plus every materialized ordinary
+namespace descendant and reachable explicit embed by default; `--direct`
+limits either path to the selected Context. History results must identify their
+Context, checkpoint or transition boundary, relation to the anchor, and
+whether they are restorable.
 
 In a TTY, temporal results are inspectable with the shared history
 presentation. Enter inspects a selected result; it never changes the Context.
@@ -201,20 +204,102 @@ cannot change the reviewed frame between validation and mutation.
 
 ### `mem undo`
 
-`mem undo` is a state-oriented shortcut, not “reverse the newest log row.”
-Starting from the live direct Context snapshot, it scans the active,
-directly-restorable checkpoints newest-first for the first checkpoint whose
-normalized Context state is different.
-Repeated manual checkpoints and no-op operation checkpoints with identical
-snapshots are skipped. An uncheckpointed live change therefore returns to the
-newest distinct saved state; if the live state already equals the newest
-checkpoint, Undo moves to the next distinct state.
+```text
+mem undo
+mem redo
+```
 
-Undo delegates the actual write, locking, truncation policy, and recovery
-checkpoint to the same store path as `mem revert`. It changes one Context and
-one checkpoint state at a time. It does not partially reverse individual
-Memory changes tied in one checkpoint, and it does not yet atomically undo a
-multi-Context update session.
+Undo and Redo are global command-oriented shortcuts, not aliases for “restore
+the current Context's adjacent checkpoint.” Navigation does not change their
+target. For example, `mem update --to ../to` may leave the current pointer on
+the source while changing one or more target owners. The next `mem undo`
+selects that Update command and restores its target owners; it does not inspect
+the current source merely because a later `mem switch` selected it.
+
+The stack is reconstructed from retained direct-Context checkpoints. One
+ordinary automatic checkpoint is one command unit. Checkpoints created by the
+same semantic Update share `update_session_uid` and `operation_digest`, so all
+of its affected owner Contexts form one unit even though each Context retains
+its own checkpoint. New Update checkpoints also repeat the complete
+`command_contexts` membership list, so a missing owner receipt fails closed
+instead of making a partial Update look like a smaller valid command.
+Inherited branch checkpoints establish the branch's base state but do not
+become newly entered commands. Initialization, manual/no-op checkpoints, and
+checkpoints whose direct state did not change are likewise not placed on the
+stack.
+
+New automatic checkpoints retain a top-level `command_before` direct snapshot.
+This makes the exact pre-image available even when a programmatic caller had
+no earlier baseline checkpoint. Older histories remain usable: their pre-image
+is reconstructed from the preceding effective state, including the implicit
+target state of a retained Revert receipt. The post-image remains the ordinary
+checkpoint snapshot. Neither image resolves MemoryRefs, embedded Contexts, or
+query-only sources.
+
+Every successful Undo or Redo writes an automatic checkpoint in each affected
+Context. Those checkpoints share a restoration receipt UID, direction, source
+command-unit UID, source command name, and the complete affected Context
+identity list. Replaying original-command and restoration receipts in time
+order yields conventional LIFO undo and redo stacks. A newly entered recorded
+command clears the redo stack; another Undo does not. `mem redo` therefore
+reapplies the most recently undone unit, including all owners of an Update,
+without rerunning a provider or regenerating a semantic plan.
+
+Future checkpoint-producing commands take one store-wide command-order lock
+outside their Context locks. Undo/Redo holds that lock while rebuilding the
+stack, then takes every affected Context lock in deterministic name order. It
+rechecks each stable Context UID and exact expected pre/post digest before the
+first write. If any ordinary owner write fails, already-written Context files
+and newly created restoration checkpoints are rolled back before the error is
+reported. This provides exception atomicity for multi-Context Update undo and
+redo, while retaining the prototype's documented lack of crash atomicity
+across several files.
+
+An uncheckpointed or externally modified Context is not silently swept into a
+command Undo. If it no longer equals the selected command's expected post-image
+(or pre-image for Redo), restoration fails without changing any affected
+Context. This is preferable to undoing an older unrelated command or
+overwriting an unrecorded concurrent change.
+
+### Restoration receipts
+
+The success receipt is action- and impact-oriented. A checkpoint UID and time
+alone identify a storage boundary but do not tell a person what was reversed
+or which local information changed. `mem undo` and `mem redo` therefore name
+the recorded command (for example, `mem update`, `mem add`, or `mem revert`),
+its bounded recorded description when present, the number and canonical names
+of affected Contexts, and each direct-item difference in restoration direction.
+`mem revert` names its one affected Context, the command that recorded the
+selected target state, and the same directional difference. Receipt and exact
+checkpoint identifiers remain secondary history/recovery details rather than
+the primary explanation.
+
+Impact is reconstructed from the two local direct-Context snapshots, not from
+command arguments. This makes the receipt work for older checkpoints and for
+commands whose metadata does not enumerate every change. A retained UID is
+reported as added, edited, or removed in the direction the restoration just
+performed. Direct Memory edits show `before → restored`; MemoryRef and Context
+reference changes show pointer metadata without resolving or reading their
+targets. Relative order is compared only among surviving direct items, so an
+insertion or removal does not falsely report every shifted item as reordered.
+
+`mem trace` remains a separate read-only Memory-lineage view over these
+operations. Its default terminal projection groups shared receipts into
+newest-first one-line command rows and links a restoration to its source
+operation. It is not used to choose or authorize Undo/Redo: restoration still
+requires the complete command-unit pre/post frames described above, whereas a
+Trace intentionally contains only the selected lineage's local effect.
+
+Receipts remain bounded terminal output: at most twelve changed direct items
+are expanded, content and descriptions have per-field preview limits, and the
+exact total counts remain visible. Newlines, terminal controls, bidi controls,
+and backslashes in stored names or content are display-escaped so content
+cannot imitate another receipt heading. This is intentionally a useful local
+confirmation, not a complete diff or immutable audit record. It neither opens
+embedded Contexts nor resolves MemoryRefs or query-only sources. A future
+unbounded or machine-readable restoration diff should be a separate explicit
+command or output mode rather than silently making every Undo/Revert receipt
+arbitrarily large.
 
 ## Restoration and recoverability
 
@@ -275,10 +360,16 @@ available and selected under ordinary access rules.
   operation can still leave a partial local result.
 - Checkpoint timestamps do not establish a causal total order across
   Contexts. Same-checkpoint changes are tied, and cross-Context ties require
-  explicit shared operation metadata.
-- `mem undo` is intentionally one-step and one-Context. Semantic requests for
-  a particular past condition belong to `mem revert "…"`, followed by explicit
-  candidate selection.
+  explicit shared operation metadata. Future commands share a global ordering
+  lock; retained older histories whose multi-Context intervals overlap fail
+  closed rather than guessing an order.
+- Command Undo/Redo currently covers checkpoint-producing changes to existing
+  ordinary Context direct state, including grouped semantic Updates and exact
+  Reverts. It does not reverse Context lifecycle/navigation commands such as
+  `init`, `branch`, `rename`, `delete`, or `switch`, and it does not roll back
+  Ground/session artifacts or shared publication. Semantic requests for a
+  particular historical condition still belong to `mem revert "…"`, followed
+  by explicit candidate selection.
 
 These boundaries keep the first implementation useful for the study scenario
 without presenting a local snapshot prototype as a complete version-control

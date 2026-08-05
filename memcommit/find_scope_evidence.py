@@ -1,12 +1,12 @@
 """Local evidence projections for three-scope interactive Find answers."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Hashable, Literal, Sequence
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.find_answer_references import FindAnswerEvidence
-from memcommit.search import SearchCandidate, collect_candidates
+from memcommit.search import SearchArtifact, SearchCandidate, collect_candidates
 from memcommit.store import MemoryStore
 
 
@@ -44,6 +44,8 @@ def candidate_logical_identity(
             item.provider,
             item.target_source_uid,
         )
+    if isinstance(item, SearchArtifact):
+        return ("artifact", candidate.context_uid, item.uid)
     raise FindScopeEvidenceError("Unsupported Find evidence candidate.")
 
 
@@ -66,6 +68,9 @@ def candidate_to_evidence(
     elif isinstance(item, QueryContextRef):
         kind = "query"
         content = f"{item.name} (query-only)"
+    elif isinstance(item, SearchArtifact):
+        kind = "artifact"
+        content = f"{item.title}\n{item.content}"
     else:  # pragma: no cover - SearchCandidate validates this union
         raise FindScopeEvidenceError("Unsupported Find evidence candidate.")
     return FindAnswerEvidence(
@@ -107,12 +112,59 @@ def context_remainder_evidence(
     )
 
 
+def compact_artifact_references(
+    evidence: Sequence[FindAnswerEvidence],
+    candidates: Sequence[SearchCandidate],
+) -> tuple[FindAnswerEvidence, ...]:
+    """Use artifact summaries in citations while retaining full answer input."""
+    summaries = {
+        (candidate.context_name, candidate.item.uid): (
+            f"{candidate.item.title}\n"
+            f"{candidate.item.summary.strip() or candidate.item.title}"
+        )
+        for candidate in candidates
+        if isinstance(candidate.item, SearchArtifact)
+    }
+    return tuple(
+        replace(
+            item,
+            content=summaries.get(
+                (item.context_name, item.uid),
+                item.content,
+            ),
+        )
+        for item in evidence
+    )
+
+
+def compact_reference_content(
+    evidence: Sequence[FindAnswerEvidence],
+    *,
+    limit: int = 600,
+) -> tuple[FindAnswerEvidence, ...]:
+    """Bound chat-style Query citations without changing synthesis evidence."""
+    if limit < 80:
+        raise ValueError("Reference excerpt limit is too small.")
+    return tuple(
+        replace(
+            item,
+            content=(
+                item.content
+                if len(item.content) <= limit
+                else item.content[: limit - 1].rstrip() + "…"
+            ),
+        )
+        for item in evidence
+    )
+
+
 def frame_context_uids(
     root: Context,
     *,
     recursive: bool,
+    additional_roots: Sequence[Context] = (),
 ) -> frozenset[str]:
-    """Return loaded Context identities reachable in the selected Find frame."""
+    """Return Context identities reachable from all selected Find roots."""
     seen: set[str] = set()
 
     def visit(ctx: Context) -> None:
@@ -126,6 +178,8 @@ def frame_context_uids(
                 visit(item)
 
     visit(root)
+    for additional_root in additional_roots:
+        visit(additional_root)
     return frozenset(seen)
 
 

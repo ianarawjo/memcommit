@@ -88,7 +88,8 @@ _TAB_NAMES: Mapping[str, str] = {
     "task2-proposal-guidelines": "T2 guidelines",
     "task3-personal-memory": "T3 personal",
     "task3-guardrails": "T3 guardrails",
-    "task3-healthcare-info-request": "T3 healthcare",
+    "task3-healthcare-qna": "T3 healthcare Q&A",
+    "task3-healthcare-public-guidance": "T3 public guidance",
 }
 
 
@@ -165,7 +166,10 @@ def _source_file(record: FixtureMemory) -> str:
 
 def _section(record: FixtureMemory) -> str:
     parts = record.canonical_locator.split("/")
-    if record.dataset == "task3-healthcare-info-request":
+    if record.dataset in {
+        "task3-healthcare-qna",
+        "task3-healthcare-public-guidance",
+    }:
         root_len = 3
     else:
         root_len = 1
@@ -406,7 +410,7 @@ def _task3_columns(language: str) -> tuple[SheetColumn, ...]:
 def build_study_workbook_spec(
     fixture_root: Path | None = None,
 ) -> StudyWorkbookSpec:
-    """Return the fully paired 18-sheet data specification."""
+    """Return the fully paired bilingual data specification."""
 
     root = fixture_root or default_fixture_root()
     corpora = {

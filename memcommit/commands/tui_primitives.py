@@ -13,6 +13,7 @@ from itertools import count
 from typing import Callable, Literal
 
 from prompt_toolkit.document import Document
+from prompt_toolkit.filters import Condition
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.key_binding.bindings.scroll import (
     scroll_page_down,
@@ -20,6 +21,9 @@ from prompt_toolkit.key_binding.bindings.scroll import (
 )
 from prompt_toolkit.layout import (
     AnyDimension,
+    ConditionalContainer,
+    Float,
+    FloatContainer,
     FormattedTextControl,
     HSplit,
     Window,
@@ -45,6 +49,7 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
     {
         "memcommit.focused frame.border": "fg:#8bd5ff bold",
         "memcommit.focused frame.label": "fg:#8bd5ff bold",
+        "memcommit.notification": "fg:#f5a97f bold",
         "memcommit.table.selected": "reverse bold",
     }
 )
@@ -75,11 +80,12 @@ class ScrollableTextPane:
     frame: Frame
     text_area: TextArea
     scrollbar_margin: WrappedScrollbarMargin | None = None
+    presentation_container: AnyContainer | None = None
 
     @property
-    def container(self) -> Frame:
+    def container(self) -> AnyContainer:
         """Return the presentation container used in a layout."""
-        return self.frame
+        return self.presentation_container or self.frame
 
     def set_text(self, text: str, *, anchor: ScrollAnchor = "preserve") -> None:
         """Safely replace visible text using the requested viewport anchor."""
@@ -428,6 +434,7 @@ def build_scrollable_text_pane(
     focusable: bool = True,
     style: str = "",
     frame_style: str = "",
+    notification: Callable[[], bool] | None = None,
 ) -> ScrollableTextPane:
     """Build one independently scrollable, read-only framed component."""
     text_area = TextArea(
@@ -449,10 +456,39 @@ def build_scrollable_text_pane(
         style=frame_style,
         height=height if height is not None else equal_pane_height(),
     )
+    presentation_container: AnyContainer | None = None
+    if notification is not None:
+        # Frame centers its title between flexible border fills. A one-cell
+        # float keeps the notification at the physical right edge without
+        # padding the title, so terminal resizes and wide glyphs cannot move
+        # it. The semantic unread state remains owned by the calling shell.
+        badge = ConditionalContainer(
+            Window(
+                FormattedTextControl([("class:memcommit.notification", "●")]),
+                width=Dimension.exact(1),
+                height=Dimension.exact(1),
+                dont_extend_width=True,
+                dont_extend_height=True,
+            ),
+            filter=Condition(notification),
+        )
+        presentation_container = FloatContainer(
+            content=frame,
+            floats=[
+                Float(
+                    content=badge,
+                    top=0,
+                    right=2,
+                    width=1,
+                    height=1,
+                )
+            ],
+        )
     return ScrollableTextPane(
         frame=frame,
         text_area=text_area,
         scrollbar_margin=scrollbar_margin,
+        presentation_container=presentation_container,
     )
 
 
