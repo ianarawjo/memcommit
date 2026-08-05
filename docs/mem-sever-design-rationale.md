@@ -130,6 +130,9 @@ exactly once. `SEND_AS_WRITTEN` must be byte-for-byte equal to the source;
 `DO_NOT_SEND` must have empty outbound content; every other disposition must
 have standalone nonempty content. Criteria citations must use supplied aliases.
 Malformed, incomplete, duplicate, or invented identifiers fail closed.
+The structured-output schema bounds citations to those aliases, while citation
+uniqueness is checked after decoding because the Codex response-schema subset
+does not accept JSON Schema's `uniqueItems` keyword.
 
 ## Alternatives considered
 

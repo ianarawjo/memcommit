@@ -189,6 +189,51 @@ def test_query_only_reference_is_never_a_source_memory(isolated_store, monkeypat
     assert "qna" not in json.dumps(provider.payloads[0])
 
 
+def test_provider_schema_avoids_unsupported_unique_items_and_rejects_duplicates(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store, "source", "Source")
+    _context(store, "criteria", "Criterion")
+
+    class DuplicateCriterionProvider(SeverProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert "uniqueItems" not in json.dumps(output_schema)
+            value = json.loads(
+                super().complete(
+                    prompt,
+                    operation=operation,
+                    output_schema=output_schema,
+                )
+            )
+            refs = value["candidates"][0]["criterion_memory_ids"]
+            value["candidates"][0]["criterion_memory_ids"] = [refs[0], refs[0]]
+            return json.dumps(value)
+
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: DuplicateCriterionProvider(),
+    )
+    result = runner.invoke(
+        app,
+        [
+            "sever",
+            "--source",
+            "source",
+            "--criteria",
+            "criteria",
+            "--save-as",
+            "draft",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "cited a criterion more than once" in result.stderr
+    assert not store.context_exists("draft")
+
+
 def test_source_and_criteria_descendant_scopes_are_independent(
     isolated_store,
     monkeypatch,

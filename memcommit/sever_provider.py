@@ -47,7 +47,6 @@ def sever_output_schema(source_ids: tuple[str, ...], criterion_ids: tuple[str, .
                         "criterion_memory_ids": {
                             "type": "array",
                             "items": {"type": "string", "enum": list(criterion_ids)},
-                            "uniqueItems": True,
                         },
                     },
                 },
@@ -163,6 +162,11 @@ def analyze_sever(
             ref_uids = tuple(by_criterion_alias[item] for item in refs)
         except (KeyError, TypeError) as error:
             raise SeverProviderError("The provider cited an unavailable criterion.") from error
+        # Codex structured output supports the bounded alias enum but not the
+        # JSON Schema uniqueItems keyword. Enforce uniqueness at this trusted
+        # local boundary instead of weakening the citation invariant.
+        if len(ref_uids) != len(set(ref_uids)):
+            raise SeverProviderError("The provider cited a criterion more than once.")
         source_uid = by_source_alias[alias]
         if raw_record["decision"] == "SEND_AS_WRITTEN" and raw_record["proposed_content"] != source_by_uid[source_uid].content:
             raise SeverProviderError("SEND_AS_WRITTEN did not preserve exact source text.")
