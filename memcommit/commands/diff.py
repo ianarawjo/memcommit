@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import difflib
 import json
+import sys
 from typing import Annotated
 
 import typer
@@ -14,6 +15,10 @@ from memcommit.memory_diff import (
     memory_diff_lines,
     update_operation_change,
 )
+from memcommit.commands.update_checkpoint_history import (
+    choose_update_checkpoint_history,
+)
+from memcommit.commands.update_render import render_plan
 from memcommit.update import (
     AddOperation,
     EditOperation,
@@ -23,6 +28,10 @@ from memcommit.update import (
     count_operations,
     session_matches,
 )
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def _short_uid_map(session: UpdateSession) -> dict[str, str]:
@@ -351,6 +360,14 @@ def render_diff(
     verbose: bool = False,
 ) -> None:
     """Render one validated staged or locally applied session."""
+    if not raw and not stat and not verbose:
+        render_plan(
+            session,
+            staged=session.status == "staged",
+            applied=session.status == "applied",
+            undone=session.status == "undone",
+        )
+        return
     _render_header(session, verbose=verbose)
     if stat:
         return
@@ -468,12 +485,23 @@ def cmd(
             bold=True,
             err=True,
         )
-    render_diff(
-        session,
-        raw=raw,
-        stat=stat,
-        verbose=verbose,
-    )
+    if (
+        not raw
+        and not stat
+        and not verbose
+        and _interactive_terminal()
+    ):
+        if session.operations:
+            choose_update_checkpoint_history(session)
+        else:
+            render_diff(session)
+    else:
+        render_diff(
+            session,
+            raw=raw,
+            stat=stat,
+            verbose=verbose,
+        )
     if not fresh:
         guidance = (
             "The recorded diff remains inspectable, but it cannot be treated "

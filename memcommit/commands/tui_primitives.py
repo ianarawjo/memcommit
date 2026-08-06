@@ -130,6 +130,11 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
 # implying that one operation also owns another operation's semantics.
 SEMANTIC_VIEWER_STYLE = Style.from_dict(
     {
+        # Report chrome and explanatory prose stay neutral across semantic and
+        # history viewers.  Screens should reuse these roles rather than copy
+        # palette values into operation-specific style dictionaries.
+        "report-neutral": "fg:#f4f5f7",
+        "report-label": "fg:#f4f5f7 bold",
         "viewer-section": "fg:#8bd5ff bold",
         "detail-card": "fg:#ffffff",
         "detail-card.focused": "fg:#8bd5ff bold",
@@ -152,13 +157,15 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "impact.custom.focused": "fg:#eed49f bold",
         "impact.other": "fg:#cad3f5 bold",
         "impact.other.focused": "fg:#cad3f5 bold",
-        # Located Impact transitions share mem diff's before/after semantics.
-        "impact.diff.remove": "fg:#ed8796",
-        "impact.diff.remove.changed": "fg:#ed8796 bold",
-        "impact.diff.add": "fg:#a6da95",
-        "impact.diff.add.changed": "fg:#a6da95 bold",
-        "impact.diff.equal": "fg:#cad3f5",
-        "impact.diff.equal.changed": "fg:#cad3f5 bold",
+        # Direction is the semantic signal: the complete old line is red and
+        # the complete new line is green. Bold may emphasize changed spans,
+        # but blue focus and underlining must not compete with -/+ meaning.
+        "memory-diff.remove": "fg:#ed8796",
+        "memory-diff.remove.changed": "fg:#ed8796 bold",
+        "memory-diff.add": "fg:#a6da95",
+        "memory-diff.add.changed": "fg:#a6da95 bold",
+        "memory-diff.equal": "fg:#d8dee9",
+        "memory-diff.equal.changed": "fg:#d8dee9 bold",
         "option-card": "fg:#ffffff",
         # Resolution choices are rows, not nested cards. Underline belongs
         # only to the navigation cursor and disappears when focus moves away.

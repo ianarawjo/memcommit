@@ -1265,11 +1265,11 @@ def resolution_report_fragments(
                             if line_index == 0
                             else " " * _visual_width(diff_prefix)
                         )
-                        fragments.append((f"class:impact.diff.{style_key}", f" {lead}"))
+                        fragments.append((f"class:memory-diff.{style_key}", f" {lead}"))
                         for content_text, changed in content_spans:
                             fragments.append(
                                 (
-                                    f"class:impact.diff.{style_key}"
+                                    f"class:memory-diff.{style_key}"
                                     + (".changed" if changed else ""),
                                     content_text,
                                 )

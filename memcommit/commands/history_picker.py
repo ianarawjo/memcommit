@@ -9,7 +9,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Literal, Protocol, runtime_checkable
+from typing import Callable, Literal, Protocol, runtime_checkable
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.filters import Condition
@@ -24,9 +24,14 @@ from prompt_toolkit.layout import (
 )
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
-from prompt_toolkit.styles import Style
+from prompt_toolkit.styles import merge_styles
+from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_primitives import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+    display_escape_text,
+)
 
 
 HistoryPickerMode = Literal["log", "revert"]
@@ -161,6 +166,9 @@ def choose_history(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
+    initial_details_open: bool | None = None,
+    detail_renderer: Callable[[HistoryPickerItem], StyleAndTextTuples] | None = None,
+    empty_message: str | None = None,
 ) -> HistorySelectionReceipt | None:
     """Inspect history or return one exact checkpoint selection.
 
@@ -173,7 +181,7 @@ def choose_history(
         raise ValueError("History selection requires a Context name.")
     if mode not in {"log", "revert"}:
         raise ValueError("History picker mode must be 'log' or 'revert'.")
-    if not options:
+    if not options and (mode != "log" or not empty_message):
         raise ValueError("No history entries are available to select.")
     if any(not isinstance(entry, HistoryPickerItem) for entry in options):
         raise ValueError("History selection received an invalid entry.")
@@ -191,6 +199,8 @@ def choose_history(
                 )
     if len({entry.uid for entry in options}) != len(options):
         raise ValueError("History selection received duplicate entry UIDs.")
+    if detail_renderer is not None and not callable(detail_renderer):
+        raise ValueError("History detail renderer must be callable.")
     if require_tty and (
         not sys.stdin.isatty() or not sys.stdout.isatty()
     ):
@@ -201,11 +211,17 @@ def choose_history(
 
     state = _PickerState(
         selected_index=0,
-        details_open=mode == "revert",
+        details_open=(
+            mode == "revert"
+            if initial_details_open is None
+            else initial_details_open
+        ),
     )
     bindings = KeyBindings()
 
     def render_entries() -> list[tuple[str, str]]:
+        if not options:
+            return [("class:report-neutral", f"  {display_escape_text(empty_message or '')}")]
         start, end = _visible_bounds(state.selected_index, len(options))
         fragments: list[tuple[str, str]] = []
         for index in range(start, end):
@@ -221,7 +237,7 @@ def choose_history(
             )
             fragments.append(
                 (
-                    "class:selected" if selected else "",
+                    "class:memcommit.table.selected" if selected else "",
                     (
                         f"{pointer} {_compact_timestamp(entry.timestamp):<16}  "
                         f"{command:<12}  "
@@ -233,10 +249,19 @@ def choose_history(
                 fragments.append(("", "\n"))
         return fragments
 
-    def render_detail() -> str:
-        return _render_detail(options[state.selected_index])
+    def render_detail() -> str | StyleAndTextTuples:
+        if not options:
+            return ""
+        entry = options[state.selected_index]
+        return (
+            detail_renderer(entry)
+            if detail_renderer is not None
+            else _render_detail(entry)
+        )
 
     def render_footer() -> str:
+        if not options:
+            return " Esc/q close  ·  0/0"
         position = f"{state.selected_index + 1}/{len(options)}"
         if mode == "revert":
             action = "Enter revert to exact UID"
@@ -263,16 +288,22 @@ def choose_history(
 
     @bindings.add("down")
     def _next_checkpoint(event) -> None:
+        if not options:
+            return
         _move(state, 1, len(options))
         event.app.invalidate()
 
     @bindings.add("up")
     def _previous_checkpoint(event) -> None:
+        if not options:
+            return
         _move(state, -1, len(options))
         event.app.invalidate()
 
     @bindings.add("enter")
     def _enter(event) -> None:
+        if not options:
+            return
         result = _activate(
             state,
             mode=mode,
@@ -341,11 +372,7 @@ def choose_history(
         erase_when_done=True,
         input=app_input,
         output=app_output,
-        style=Style.from_dict(
-            {
-                "selected": "reverse bold",
-            }
-        ),
+        style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
     )
     try:
         return app.run()

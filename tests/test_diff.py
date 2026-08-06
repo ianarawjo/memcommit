@@ -103,33 +103,34 @@ def test_diff_renders_readable_semantic_edit_addition_and_provenance(
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 0, result.output
-    assert "Update preview" in result.output
+    assert "Staged update:" in result.output
     assert (
-        "participant/construction-updates → "
+        "SOURCE participant/construction-updates → TARGET "
         "campus-wiki"
         in result.output
     )
-    assert "2 changes · 1 edited · 1 added" in result.output
+    assert "STAGED · 1 EDITS · 1 ADDITIONS · 0 REMOVALS · 2 CHANGES" in result.output
+    assert "PLANNED CHANGES" in result.output
+    assert "EXACT PLANNED CHANGE DETAILS" in result.output
     assert (
-        f"EDIT  campus-wiki  "
-        f"[{target_memory.uid[:8]}]"
+        f"EDIT campus-wiki Memory [{target_memory.uid}]"
         in result.output
     )
-    assert "  - Visitor parking is available in Lot A." in result.output
-    assert "  + Visitor parking is available in Lot C." in result.output
-    assert "    Hours remain unchanged." in result.output
+    assert "BEFORE\n    Visitor parking is available in Lot A." in result.output
+    assert "AFTER\n    Visitor parking is available in Lot C." in result.output
+    assert "Hours remain unchanged." in result.output
     assert (
-        "ADD   campus-wiki  "
-        f"[new:{addition.memory_uid[:8]}]"
+        f"ADD campus-wiki Memory [{addition.memory_uid}]"
         in result.output
     )
-    assert "  + Follow temporary parking signs." in result.output
+    assert "Follow temporary parking signs." in result.output
     assert (
-        "Source  participant/construction-updates "
-        f"[{source_memory.uid[:8]}]"
+        "Context participant/construction-updates "
+        f"[{session.source_uid}]"
         in result.output
     )
-    assert "Reason  The verified update changes the visitor lot." in result.output
+    assert f"Memory [{source_memory.uid}]" in result.output
+    assert "REASON\n    The verified update changes the visitor lot." in result.output
     assert "--- " not in result.output
     assert "@@ " not in result.output
     assert "\\ No newline at end of file" not in result.output
@@ -182,17 +183,16 @@ def test_diff_raw_preserves_exact_unified_diff(isolated_store):
     )
 
 
-def test_diff_color_palette_is_present_for_a_terminal(isolated_store):
+def test_diff_snapshot_uses_the_plain_common_update_structure(isolated_store):
     store = MemoryStore()
     _stage(store)
 
     result = runner.invoke(app, ["diff"], color=True)
 
     assert result.exit_code == 0
-    assert "\x1b[31m" in result.output
-    assert "\x1b[32m" in result.output
-    assert "\x1b[33m" in result.output
-    assert "\x1b[36m" in result.output
+    assert "\x1b[" not in result.output
+    assert "PLANNED CHANGES" in result.output
+    assert "EXACT PLANNED CHANGE DETAILS" in result.output
 
 
 def test_diff_is_read_only_and_does_not_depend_on_current_context(
@@ -218,12 +218,35 @@ def test_diff_is_read_only_and_does_not_depend_on_current_context(
     }
     assert result.exit_code == 0
     assert (
-        "participant/construction-updates → "
+        "SOURCE participant/construction-updates → TARGET "
         "campus-wiki"
         in result.output
     )
     assert store.current_context_name() == "unrelated-current"
     assert after == before
+
+
+def test_diff_opens_location_then_checkpoint_history_in_a_tty(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    session, _, _, _ = _stage(store)
+    opened = []
+    monkeypatch.setattr(
+        "memcommit.commands.diff._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.diff.choose_update_checkpoint_history",
+        opened.append,
+    )
+
+    result = runner.invoke(app, ["diff"])
+
+    assert result.exit_code == 0, result.output
+    assert opened == [session]
+    assert "Update preview" not in result.output
 
 
 def test_diff_renders_empty_fresh_stage(isolated_store):
@@ -233,9 +256,9 @@ def test_diff_renders_empty_fresh_stage(isolated_store):
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 0
-    assert "0 changes · 0 edited · 0 added" in result.output
-    assert "No staged changes." in result.output
-    assert "EDIT  " not in result.output
+    assert "0 EDITS · 0 ADDITIONS · 0 REMOVALS · 0 CHANGES" in result.output
+    assert "(no changes needed)" in result.output
+    assert "EXACT PLANNED CHANGE DETAILS" not in result.output
 
 
 def test_diff_renders_applied_local_update_from_recorded_base_read_only(
@@ -300,8 +323,8 @@ def test_diff_shows_captured_content_but_fails_when_target_is_stale(
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 1
-    assert "  - Visitor parking is available in Lot A." in result.output
-    assert "  + Visitor parking is available in Lot C." in result.output
+    assert "BEFORE\n    Visitor parking is available in Lot A." in result.output
+    assert "AFTER\n    Visitor parking is available in Lot C." in result.output
     assert "STALE — source or target changed" in result.stderr
     assert (
         "Review the local fork and re-run impact/update before contributing."
@@ -320,7 +343,7 @@ def test_diff_fails_stale_when_source_is_missing_but_still_renders(
 
     assert result.exit_code == 1
     assert (
-        "participant/construction-updates → "
+        "SOURCE participant/construction-updates → TARGET "
         "campus-wiki"
         in result.output
     )
@@ -340,7 +363,7 @@ def test_diff_rejects_an_impact_plan_saved_in_the_update_slot(isolated_store):
 
 
 def test_diff_rejects_invalid_staged_session_json(isolated_store):
-    store = MemoryStore()
+    MemoryStore()
     (isolated_store / "staged-update.json").write_text(
         '{"status": "staged", "status": "impact"}'
     )
@@ -387,7 +410,8 @@ def test_diff_renders_a_terminal_newline_only_change(isolated_store):
     raw = runner.invoke(app, ["diff", "--raw"])
 
     assert semantic.exit_code == 0
-    assert "terminal newline added" in semantic.output
+    assert "BEFORE\n    same text" in semantic.output
+    assert "AFTER\n    same text" in semantic.output
     assert "\\ No newline at end of file" not in semantic.output
     assert raw.exit_code == 0
     assert f"--- a/target#{target_memory.uid}" in raw.output

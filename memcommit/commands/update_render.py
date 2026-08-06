@@ -26,13 +26,24 @@ def _view(
     *,
     staged: bool,
     applied: bool,
+    undone: bool = False,
 ):
+    if sum((staged, applied, undone)) > 1:
+        raise ValueError("An Update view can have only one lifecycle status.")
     heading = (
         "Applied update"
         if applied
+        else "Undone update"
+        if undone
         else ("Staged update" if staged else "Impact")
     )
-    status = "APPLIED" if applied else ("STAGED" if staged else "IMPACT")
+    status = (
+        "APPLIED"
+        if applied
+        else "UNDONE"
+        if undone
+        else ("STAGED" if staged else "IMPACT")
+    )
     return replace(
         UpdateResolutionWorkbenchAdapter(session).view(),
         title=f"{heading}: {session.source_name} -> {session.target_name}",
@@ -105,12 +116,13 @@ def render_plan(
     *,
     staged: bool = False,
     applied: bool = False,
+    undone: bool = False,
 ) -> None:
     """Render a canonical local plan without trusting model-formatted prose."""
-    if staged and applied:
-        raise ValueError("A plan cannot be both staged and applied.")
+    if sum((staged, applied, undone)) > 1:
+        raise ValueError("A plan can have only one lifecycle status.")
     edits, additions, removals = count_operations(session)
-    view = _view(session, staged=staged, applied=applied)
+    view = _view(session, staged=staged, applied=applied, undone=undone)
     typer.echo(render_resolution_workbench_snapshot(view))
     typer.echo(
         "\nSUMMARY · "
@@ -160,5 +172,9 @@ def render_plan(
             )
     elif staged:
         typer.echo(f"Shared {session.target_name} is unchanged.")
+    elif undone:
+        typer.echo(
+            f"The recorded Update to {session.target_name} remains undone."
+        )
     else:
         typer.echo("No changes applied.")

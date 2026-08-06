@@ -7,6 +7,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.resolution_workbench_shell import (
+    RESOLUTION_WORKBENCH_STYLE,
     _seeded_report_lines,
     resolution_report_fragments,
     run_resolution_workbench_shell,
@@ -134,15 +135,37 @@ def test_located_memory_changes_render_as_compact_before_after_diff():
 
     fragments = resolution_report_fragments(view, impact_controller=impact)
     assert next(style for style, text in fragments if text == "north") == (
-        "class:impact.diff.remove.changed"
+        "class:memory-diff.remove.changed"
     )
     assert next(style for style, text in fragments if text == "south") == (
-        "class:impact.diff.add.changed"
+        "class:memory-diff.add.changed"
     )
     assert any(
-        style == "class:impact.diff.remove" and text == "Use the "
+        style == "class:memory-diff.remove" and text == "Use the "
         for style, text in fragments
     )
+
+    for side in ("remove", "add"):
+        neutral_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+            f"class:memory-diff.{side}"
+        )
+        changed_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+            f"class:memory-diff.{side}.changed"
+        )
+        assert neutral_style.color == (
+            "ed8796" if side == "remove" else "a6da95"
+        )
+        assert neutral_style.underline is False
+        assert changed_style.color == (
+            "ed8796" if side == "remove" else "a6da95"
+        )
+        assert changed_style.bold is True
+        assert changed_style.underline is False
+
+    equal_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:memory-diff.equal"
+    )
+    assert equal_style.color == "d8dee9"
 
 
 def test_impact_treatment_uid_content_and_detail_columns_align():
