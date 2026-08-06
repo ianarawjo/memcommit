@@ -1,4 +1,4 @@
-"""Interactive exact-name editor for a newly initialized Study run."""
+"""Compact inline TUI for naming a newly initialized Study run."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import Dimension, FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
-from prompt_toolkit.widgets import Dialog, Frame, Label, TextArea
+from prompt_toolkit.widgets import Frame, TextArea
 
 from memcommit.commands.tui_primitives import MEMCOMMIT_TUI_STYLE, display_escape_text
 from memcommit.profile_config import ProfileConfigError, validate_profile_name
@@ -24,7 +24,7 @@ STUDY_NAME_STYLE = merge_styles(
         Style.from_dict(
             {
                 "study-name-field frame.border": "fg:#8bd5ff",
-                "study-name-field frame.label": "fg:#8bd5ff bold",
+                "study-name-label": "fg:#8bd5ff bold",
                 "study-name-input": "fg:#cad3f5 bg:#24273a",
                 "error": "fg:#ed8796 bold",
             }
@@ -40,7 +40,7 @@ def choose_study_profile_name(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> str | None:
-    """Return an exact edited Profile name, or ``None`` when cancelled."""
+    """Return an edited name from a five-line TUI, or ``None`` on cancel."""
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError("Interactive Study naming requires a terminal.")
 
@@ -54,12 +54,12 @@ def choose_study_profile_name(
         style="class:study-name-input",
         name="study-profile-name",
     )
-    # TextArea initializes a prefilled buffer at column zero. Study names are
-    # normally edited at the unique suffix, so start the visible caret at the
-    # end while preserving ordinary Left/Right and deletion behavior.
+    # The compact editor is primarily for replacing or refining the generated
+    # suffix, so expose a real caret at the end without selecting the value.
     name_input.buffer.cursor_position = len(default_name)
 
-    def submit(event) -> None:
+    @bindings.add("enter", filter=has_focus(name_input), eager=True)
+    def _submit(event) -> None:
         try:
             selected = validate_profile_name(name_input.text)
         except (ProfileConfigError, ValueError) as error:
@@ -68,52 +68,48 @@ def choose_study_profile_name(
             return
         event.app.exit(result=selected)
 
-    @bindings.add("enter", filter=has_focus(name_input), eager=True)
-    def _submit(event) -> None:
-        submit(event)
-
     @bindings.add("escape", eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:
         event.app.exit(result=None)
 
-    def render_status() -> FormattedText:
+    def render_footer() -> FormattedText:
         if status["value"]:
             return FormattedText([("class:error", status["value"])])
         return FormattedText(
-            [("", "Edit directly · Ctrl-U clear · Enter create · Esc cancel")]
+            [("", " Edit directly · Ctrl-U clear · Enter create · Esc cancel")]
         )
 
     name_frame = Frame(
         name_input,
-        title="EDIT NAME",
         style="class:study-name-field",
         height=Dimension.exact(3),
     )
-
-    body = HSplit(
+    root = HSplit(
         [
-            Label("Study Profile name", dont_extend_height=True),
+            Window(
+                FormattedTextControl(
+                    FormattedText([("class:study-name-label", " STUDY NAME")])
+                ),
+                height=Dimension.exact(1),
+                dont_extend_height=True,
+            ),
             name_frame,
             Window(
-                FormattedTextControl(render_status),
+                FormattedTextControl(render_footer),
                 height=Dimension.exact(1),
                 dont_extend_height=True,
             ),
         ],
-        padding=1,
-    )
-    dialog = Dialog(
-        title="NEW STUDY",
-        body=body,
-        width=Dimension(min=48, preferred=72, max=88),
-        with_background=True,
+        height=Dimension.exact(5),
     )
     app: Application[str | None] = Application(
-        layout=Layout(dialog, focused_element=name_input),
+        layout=Layout(root, focused_element=name_input),
         key_bindings=bindings,
-        full_screen=True,
-        mouse_support=True,
+        # Keep the normal terminal transcript visible; only these five rows
+        # participate in prompt-toolkit rendering.
+        full_screen=False,
+        mouse_support=False,
         style=STUDY_NAME_STYLE,
         input=app_input,
         output=app_output,

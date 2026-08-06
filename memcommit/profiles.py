@@ -187,6 +187,20 @@ def default_study_bundle_root() -> Path:
 
 
 _STUDY_TASKS = (1, 2, 3)
+_STUDY_PRACTICE_ROOT = "practice"
+_STUDY_PRACTICE_DESCRIPTION = "practice/description"
+_STUDY_PRACTICE_DESCRIPTION_CONTENT = (
+    "MemLab is a research prototype that provides command-line and terminal "
+    "user interfaces (CLI/TUI) for managing agent memory and supporting "
+    "collaboration among people and agents. Through MemLab's operations and "
+    "structural concepts—including Memories, Contexts, Profiles, Grants, and "
+    "Sessions—you can manage agent memories as they are collected, organized, "
+    "and propagated among people and agents. In this study, you will use "
+    "MemLab in three different situations, each involving a different context, "
+    "goal, and kind of memory. Before beginning, this practice session will "
+    "introduce MemLab's basic controls and structure by guiding you through "
+    "atomizing a short practice description."
+)
 STUDY_BASELINE_PROFILE_NAME = "study-baseline"
 _STUDY_BASELINE_SOURCE_KIND = "STUDY_BASELINE"
 _STUDY_BASELINE_SCHEMA_VERSION = 1
@@ -2744,6 +2758,42 @@ def _study_baseline_branch(task: int, *, authority: bool) -> str:
     return f"{_STUDY_BASELINE_GRANTED_ROOT}/{task_name}" if authority else task_name
 
 
+def _study_practice_contexts() -> tuple[Context, Context]:
+    """Return the stable participant-only Atomize rehearsal fixture."""
+
+    root = Context(
+        uid=str(uuid.uuid5(uuid.NAMESPACE_URL, "memcommit:study:practice")),
+        name=_STUDY_PRACTICE_ROOT,
+    )
+    description = Context(
+        uid=str(
+            uuid.uuid5(
+                uuid.NAMESPACE_URL,
+                "memcommit:study:practice/description",
+            )
+        ),
+        name=_STUDY_PRACTICE_DESCRIPTION,
+    )
+    description.add(
+        Memory(
+            uid=str(
+                uuid.uuid5(
+                    uuid.NAMESPACE_URL,
+                    "memcommit:study:practice/description:memory",
+                )
+            ),
+            content=_STUDY_PRACTICE_DESCRIPTION_CONTENT,
+        )
+    )
+    return root, description
+
+
+def _is_study_practice_name(name: str) -> bool:
+    return name == _STUDY_PRACTICE_ROOT or name.startswith(
+        _STUDY_PRACTICE_ROOT + "/"
+    )
+
+
 def _remap_context_records(
     contexts: dict[str, Context],
     mapping: dict[str, str],
@@ -2893,6 +2943,7 @@ def _compose_study_baseline_store(
         *(f"{_STUDY_BASELINE_GRANTED_ROOT}/task-{task}" for task in _STUDY_TASKS),
     ]
     contexts = [Context(uid=str(uuid.uuid4()), name=name) for name in structural_names]
+    contexts.extend(_study_practice_contexts())
     catalogs: list[TranslationCatalog] = []
     seen_context_uids = {context.uid for context in contexts}
     for task in _STUDY_TASKS:
@@ -3304,7 +3355,15 @@ def _snapshot_study_baseline(
         _STUDY_BASELINE_GRANTED_ROOT,
         *(f"{_STUDY_BASELINE_GRANTED_ROOT}/task-{task}" for task in _STUDY_TASKS),
     }
+    practice_names = {
+        _STUDY_PRACTICE_ROOT,
+        _STUDY_PRACTICE_DESCRIPTION,
+    }
+    present_practice_names = practice_names.intersection(contexts)
+    if present_practice_names and present_practice_names != practice_names:
+        raise ProfileError("Study baseline practice topology is incomplete.")
     expected = set(structural)
+    expected.update(present_practice_names)
     for task in _STUDY_TASKS:
         for authority in (False, True):
             branch = _study_baseline_branch(task, authority=authority)
@@ -3339,9 +3398,29 @@ def _snapshot_study_baseline(
                 for name, context in contexts.items()
                 if name.startswith(branch + "/")
             }
+            if task == 1 and not authority:
+                practice = (
+                    {
+                        name: contexts[name]
+                        for name in sorted(present_practice_names)
+                    }
+                    if present_practice_names
+                    else {
+                        context.name: context
+                        for context in _study_practice_contexts()
+                    }
+                )
+                selected.update(practice)
             if not selected:
                 raise ProfileError(f"Study baseline branch {branch!r} is empty.")
-            mapping = {name: name[len(branch) + 1 :] for name in selected}
+            mapping = {
+                name: (
+                    name
+                    if _is_study_practice_name(name)
+                    else name[len(branch) + 1 :]
+                )
+                for name in selected
+            }
             remapped = _remap_context_records(selected, mapping)
             branch_catalogs = tuple(
                 replace(catalog, context_name=mapping[name])
@@ -3482,7 +3561,16 @@ def _compose_study_run_pair(
             source_contexts, query_refs = _context_records(source.store)
             if query_refs:
                 raise ProfileError("Study run sources cannot contain query pointers.")
-            mapping = {name: f"task-{task}/{name}" for name in source_contexts}
+            mapping = {
+                name: (
+                    name
+                    if task == 1
+                    and not authority
+                    and _is_study_practice_name(name)
+                    else f"task-{task}/{name}"
+                )
+                for name in source_contexts
+            }
             remapped = _remap_context_records(source_contexts, mapping)
             catalogs = _remap_translation_catalogs(source.store, mapping)
             if authority:
@@ -3630,7 +3718,10 @@ def _publish_study_run_pair(
         authority_inspection = inspect_store(authority_staging)
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
+            # init-study mirrors init: the complete participant/authority pair
+            # and grants become visible in the same generation that selects
+            # the participant side. The authority Profile is never selected.
+            active_uid=participant.uid,
             profiles=(*registry.profiles, participant, authority),
             grants=(*registry.grants, *grants),
         )
@@ -3680,7 +3771,7 @@ def _publish_study_run_pair(
                 root=profile_store_dir(authority),
             ),
             baseline_profile_name=baseline.name,
-            active_profile_name=registry.active.name,
+            active_profile_name=participant.name,
         )
     except Exception:
         if not committed:

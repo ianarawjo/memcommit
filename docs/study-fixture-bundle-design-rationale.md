@@ -22,6 +22,7 @@ without moving legacy `~/.mem`:
 
 ```text
 study-baseline
+├── practice/description
 ├── task-{1,2,3}/description
 ├── task-{1,2,3}/...
 └── granted-memory/task-{1,2,3}/...
@@ -76,10 +77,41 @@ The current corpus contains:
 | 3 | 301 | 100 | 75 | 476 |
 | Total | 378 | 700 | 228 | 1,306 |
 
+The editable baseline additionally contains one participant-only rehearsal
+Memory under `practice/description`, bringing the composed baseline to 1,307
+ordinary Memories. It is not part of any Task corpus or authority package and
+therefore does not change the reviewed Task counts above.
+
 The old Korean XLSX was a smaller intermediate snapshot and is not a build
 input. Spreadsheet views are regenerated from the current parsed corpus.
 
 ## Ordinary Context mapping
+
+Every `init-study` participant Profile receives `practice/description` as a
+separate local Context with one four-sentence composite Memory explaining Mem,
+Memories, Contexts, impact preview, and reviewed saving. It exists solely for
+the onboarding Atomize exercise. Keeping it outside `task-1`, `task-2`, and
+`task-3` prevents rehearsal analyses, workbenches, and any accidental later
+application from contaminating measured Task material. The run-private
+granted-memory Profile never receives this Context and no Grant references it.
+The Context and Memory identities are deterministic across runs. A baseline
+created before this fixture existed is still accepted by `init-study`; the
+new run receives the canonical practice fixture without mutating that older
+baseline.
+
+The canonical rehearsal Memory is deliberately one composite record rather
+than four pre-split Memories:
+
+```text
+MemLab is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents.
+Through MemLab's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents.
+In this study, you will use MemLab in three different situations, each involving a different context, goal, and kind of memory.
+Before beginning, this practice session will introduce MemLab's basic controls and structure by guiding you through atomizing a short practice description.
+```
+
+The four claims introduce the vocabulary used by the tutorial while giving
+Atomize a small, legible decomposition target. They avoid claims about any
+Study Task, participant, or granted source.
 
 Each Task Profile also owns one participant-facing description Memory directly
 under `description`. Its English body is the previously authored Task

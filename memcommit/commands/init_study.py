@@ -87,7 +87,4 @@ def cmd(
         "Operational history starts empty; checkpoints, sessions, caches, locks, "
         "and run logs were not imported."
     )
-    typer.echo(
-        "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
-    )
-    typer.echo("Use it with: mem profile " + display_escape_text(result.profile.name))
+    typer.echo("Active Profile: " + display_escape_text(result.active_profile_name))

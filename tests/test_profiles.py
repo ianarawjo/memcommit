@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import uuid
@@ -374,8 +375,8 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
 
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
-    assert "study-baseline: Contexts 138 owned + 0 granted" in result.output
-    assert "Memories 1306 owned + 0 granted" in result.output
+    assert "study-baseline: Contexts 140 owned + 0 granted" in result.output
+    assert "Memories 1307 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -420,6 +421,14 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert "task-3/local/personal-memory/2024/01" in names
     assert "task-3/local/personal-memory/2024-01" not in names
     assert "task-3/local/guardrails" in names
+    practice = store.load_direct("practice/description")
+    practice_memories = [
+        item for item in practice.iter_items() if isinstance(item, Memory)
+    ]
+    assert len(practice_memories) == 1
+    assert practice_memories[0].content == (
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_CONTENT
+    )
 
     selected = runner.invoke(
         app,
@@ -446,7 +455,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert "task-1/participant'" in second_parent.stdout
 
 
-def test_profile_use_selects_the_initialized_complete_profile(
+def test_init_study_selects_the_initialized_complete_profile(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -462,9 +471,7 @@ def test_profile_use_selects_the_initialized_complete_profile(
     selected = runner.invoke(app, ["profile", "use", "profile-view"])
 
     assert selected.exit_code == 0, selected.output
-    assert "Selected profile 'profile-view'." in selected.output
-    assert "Contexts 62 owned + 43 granted" in selected.output
-    assert "Memories 453 owned + 625 granted" in selected.output
+    assert "Already using profile 'profile-view'." in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
     assert "* task-1" in contexts.stdout
@@ -1126,14 +1133,13 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Baseline Profile: study-baseline" in result.output
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
-    assert "Contexts 62 · Memories 453" in result.output
+    assert "Contexts 64 · Memories 454" in result.output
     assert "Granted Contexts 43 · Granted Memories 625" in result.output
-    assert "Active Profile unchanged: authoring" in result.output
-    assert "Use it with: mem profile pilot-001" in result.output
+    assert "Active Profile: pilot-001" in result.output
     assert _tree_digest(bundle_root) == source_digest
 
     registry = load_profile_registry()
-    assert registry.active.name == "authoring"
+    assert registry.active.name == "pilot-001"
     assert [profile.name for profile in registry.profiles] == [
         "authoring",
         "study-baseline",
@@ -1165,7 +1171,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     baseline_store = MemoryStore(root=baseline_root, create=False)
     copied_store = MemoryStore(root=copied_root, create=False)
     authority_store = MemoryStore(root=authority_root, create=False)
-    assert len(copied_store.list_context_names()) == 62
+    assert len(copied_store.list_context_names()) == 64
     assert len(authority_store.list_context_names()) == 75
     assert copied_store.current_context_name() == (
         "task-1/participant/construction-updates"
@@ -1173,6 +1179,17 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert authority_store.current_context_name() == "task-1/campus-wiki"
     assert "granted-memory/task-1/campus-wiki" in baseline_store.list_context_names()
     assert "task-1/campus-wiki" in authority_store.list_context_names()
+    assert "practice" in copied_store.list_context_names()
+    assert "practice/description" in copied_store.list_context_names()
+    assert "practice" not in authority_store.list_context_names()
+    practice = copied_store.load_direct("practice/description")
+    practice_memories = [
+        item for item in practice.iter_items() if isinstance(item, Memory)
+    ]
+    assert len(practice_memories) == 1
+    assert practice_memories[0].content == (
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_CONTENT
+    )
     public_guidance = authority_store.load_direct(
         "task-3/remote/government/healthcare-agent/info-request/"
         "transmission-guidance/public-guidance"
@@ -1193,6 +1210,37 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     )
     assert not any(copied_root.rglob("checkpoints/*.json"))
     assert not any(authority_root.rglob("checkpoints/*.json"))
+
+
+def test_init_study_adds_practice_description_to_an_older_baseline(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    baseline = load_profile_registry().by_name(STUDY_BASELINE_PROFILE_NAME)
+    assert baseline is not None
+    practice_root = profile_store_dir(baseline) / "contexts" / "practice"
+    shutil.rmtree(practice_root)
+
+    result = runner.invoke(app, ["init-study", "legacy-practice-run"])
+
+    assert result.exit_code == 0, result.stderr or result.output
+    participant = load_profile_registry().by_name("legacy-practice-run")
+    assert participant is not None
+    store = MemoryStore(root=profile_store_dir(participant), create=False)
+    practice = store.load_direct("practice/description")
+    memories = [
+        item for item in practice.iter_items() if isinstance(item, Memory)
+    ]
+    assert len(memories) == 1
+    assert memories[0].content == (
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_CONTENT
+    )
 
 
 def test_init_study_without_name_generates_unique_timestamped_name(
@@ -1288,8 +1336,8 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
     profile_line = next(
         line for line in result.output.splitlines() if "pilot-002" in line
     )
-    assert "Contexts 62 owned + 43 granted" in profile_line
-    assert "Memories 453 owned + 625 granted" in profile_line
+    assert "Contexts 64 owned + 43 granted" in profile_line
+    assert "Memories 454 owned + 625 granted" in profile_line
     authority_line = next(
         line
         for line in result.output.splitlines()
@@ -1320,7 +1368,7 @@ def test_initialized_study_picker_shows_participant_and_authority_profiles(
     observed: list[tuple[str, str | None]] = []
 
     def select(entries, *, current):
-        assert current == "authoring"
+        assert current == "pilot-picker"
         observed.extend((entry.name, entry.study_role) for entry in entries)
         return "pilot-picker"
 
@@ -1439,7 +1487,7 @@ def test_init_study_preserves_a_store_after_visible_registry_replacement(
         )
         == 8
     )
-    assert registry.active.name == "authoring"
+    assert registry.active.name == "durability-visible"
 
 
 def test_init_study_is_all_or_nothing_when_source_store_is_invalid(
