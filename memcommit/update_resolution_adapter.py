@@ -94,11 +94,12 @@ def _operation_item(
             if session_status == "undone"
             else "PLANNED"
         ),
-        priority="PLANNED",
-        title=(
-            f"{kind} {operation.owner_context_name} "
-            f"Memory [{operation.memory_uid}]"
-        ),
+        # Update changes have no REQUIRED/OPTIONAL issue priority. ``CHANGE``
+        # keeps the generic detail header distinct from lifecycle status.
+        priority="CHANGE",
+        # The common Items and Viewer rows already render ``kind``. Keeping it
+        # out of the title avoids labels such as ``ADD 73 · ADD …``.
+        title=f"{operation.owner_context_name} Memory [{operation.memory_uid}]",
         summary=operation.reason,
         blocks=tuple(blocks),
     )
@@ -130,6 +131,37 @@ class UpdateResolutionWorkbenchAdapter:
             isinstance(operation, RemoveOperation)
             for operation in session.operations
         )
+        locations = tuple(
+            dict.fromkeys(operation.owner_context_name for operation in session.operations)
+        )
+        location_text = (
+            "no target Context locations"
+            if not locations
+            else (
+                f"the target Context {locations[0]}"
+                if len(locations) == 1
+                else f"{len(locations)} target Context locations"
+            )
+        )
+        overview = {
+            "impact": (
+                "Mem matched the verified Source against the Target and planned "
+                "only the exact target Memory changes shown below. Nothing has "
+                "been applied."
+            ),
+            "staged": (
+                "The exact target Memory changes are staged and bound to this "
+                "Source and Target revision. Apply remains separate."
+            ),
+            "applied": (
+                "The exact target Memory changes shown below were applied to the "
+                "recorded Target revision."
+            ),
+            "undone": (
+                "The recorded target Memory changes were undone; this artifact "
+                "still describes the exact reversible transition."
+            ),
+        }.get(session.status, "This Update records exact target Memory changes.")
         return ResolutionWorkbenchView(
             operation="UPDATE",
             artifact_uid=session.uid,
@@ -143,10 +175,7 @@ class UpdateResolutionWorkbenchAdapter:
                 ResolutionMetric("REMOVALS", str(remove_count)),
                 ResolutionMetric("CHANGES", str(len(items))),
             ),
-            overview=(
-                "This saved Update artifact records exact planned changes. "
-                "It is not an issue-resolution assessment."
-            ),
+            overview=overview,
             list_label="PLANNED CHANGES",
             items=items,
             empty_message="No planned changes are recorded in this Update artifact.",
@@ -155,6 +184,15 @@ class UpdateResolutionWorkbenchAdapter:
             capabilities=frozenset(),
             accept_enabled=False,
             input_locked=False,
+            report_items_summary=ResolutionDetailBlock(
+                heading="WHAT WILL CHANGE",
+                text=(
+                    f"{len(items)} exact target Memory changes in {location_text}: "
+                    f"{edit_count} EDIT, {add_count} ADD, and {remove_count} REMOVE. "
+                    "Impact shows each located before/after transition once; exact "
+                    "reason and source provenance remain inspectable in Items."
+                ),
+            ),
         )
 
 

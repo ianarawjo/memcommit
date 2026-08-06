@@ -51,7 +51,10 @@ from memcommit.sever import (
     sever_record_digest,
 )
 from memcommit.sever_provider import SeverProviderError, analyze_sever
-from memcommit.sever_resolution_adapter import SeverResolutionWorkbenchAdapter
+from memcommit.sever_resolution_adapter import (
+    SeverResolutionWorkbenchAdapter,
+    sever_memory_changes,
+)
 from memcommit.sever_store import SeverSessionStore
 from memcommit.store import MemoryStore, context_record_digest, validate_context_name
 
@@ -490,16 +493,20 @@ def _run_workbench(
             review_view = sever_review_report(session).report().view
             if review_view is None:
                 raise SeverCommandError("Sever Review report has no interactive view.")
-        impact_controller = ImpactController.from_resolution(
-            review_view if review_view is not None else adapter.view,
+        active_view = review_view if review_view is not None else adapter.view()
+        impact_controller = ImpactController.from_memory_changes(
+            operation=active_view.operation,
+            artifact_uid=active_view.artifact_uid,
+            revision=active_view.revision,
             title="IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED",
             summary=(
                 "This is the exact local result that Apply would materialize. "
                 "The Source Context remains unchanged."
             ),
+            changes=sever_memory_changes(session),
         )
         action = run_resolution_workbench_shell(
-            review_view if review_view is not None else adapter.view,
+            active_view,
             navigation=navigation,
             terminal_label="Interactive Sever",
             snapshot_hint="Run 'mem sever --resume SESSION' outside a TTY for a snapshot.",

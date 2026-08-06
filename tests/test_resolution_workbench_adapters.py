@@ -449,6 +449,13 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
 
     assert view.list_label == "PLANNED CHANGES"
     assert [item.kind for item in view.items] == ["EDIT", "ADD", "REMOVE"]
+    assert view.items[1].title == (
+        f"campus-wiki/buildings Memory [{add_uid}]"
+    )
+    assert not view.items[1].title.startswith("ADD ")
+    assert view.report_items_summary is not None
+    assert "3 exact target Memory changes" in view.report_items_summary.text
+    assert "1 EDIT, 1 ADD, and 1 REMOVE" in view.report_items_summary.text
     assert view.capabilities == frozenset()
     assert view.accept_enabled is False
     assert "unresolved" not in (view.overview + view.empty_message).lower()

@@ -6,6 +6,7 @@ from dataclasses import replace
 import typer
 
 from memcommit.impact_controller import ImpactController
+from memcommit.memory_diff import update_operation_change
 from memcommit.commands.resolution_workbench_shell import (
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,
@@ -39,6 +40,19 @@ def _view(
     )
 
 
+def _impact_controller(view, session: UpdateSession, *, summary: str) -> ImpactController:
+    """Keep Update Impact aligned with the same changes rendered by mem diff."""
+
+    return ImpactController.from_memory_changes(
+        operation=view.operation,
+        artifact_uid=view.artifact_uid,
+        revision=view.revision,
+        title="IMPACT · UPDATE",
+        summary=summary,
+        changes=tuple(update_operation_change(item) for item in session.operations),
+    )
+
+
 def run_update_workbench(session: UpdateSession) -> None:
     """Open provider-free drill-down over one already-saved Impact plan."""
     view = _view(session, staged=False, applied=False)
@@ -51,9 +65,9 @@ def run_update_workbench(session: UpdateSession) -> None:
         ),
         split_viewer_items=True,
         read_only=True,
-        impact_controller=ImpactController.from_resolution(
+        impact_controller=_impact_controller(
             view,
-            title="IMPACT · UPDATE",
+            session,
             summary="These are the exact planned target changes. Nothing is applied.",
         ),
     )
@@ -74,9 +88,9 @@ def review_update_application(session: UpdateSession) -> bool:
         ),
         split_viewer_items=True,
         review_and_apply=True,
-        impact_controller=ImpactController.from_resolution(
+        impact_controller=_impact_controller(
             view,
-            title="IMPACT · UPDATE",
+            session,
             summary=(
                 "These exact target changes are staged. Apply remains a separate "
                 "explicit action."
@@ -121,7 +135,9 @@ def render_plan(
     if view.items:
         typer.echo("\nEXACT PLANNED CHANGE DETAILS")
     for item in view.items:
-        typer.echo(f"\n{item.title}")
+        # ``title`` deliberately omits the kind because common interactive
+        # rows supply it. The deterministic snapshot must add it once too.
+        typer.echo(f"\n{item.kind} {item.title}")
         for block in item.blocks:
             typer.echo(f"  {block.heading}")
             for line in block.text.splitlines():

@@ -114,7 +114,8 @@ def test_update_existing_change_blocks_are_preserved_as_review_report():
 
     rendered = render_review_report_snapshot(report)
 
-    assert "ADD task-1/campus-wiki/temporary-parking Memory" in rendered
+    assert "task-1/campus-wiki/temporary-parking Memory" in rendered
+    assert "ADD 1 · ADD" not in rendered
     assert "OWNER" in rendered
     assert "MEMORY UID" in rendered
     assert "AFTER" in rendered
@@ -132,7 +133,8 @@ def test_mem_review_update_prints_saved_exact_change_report(isolated_store):
 
     assert result.exit_code == 0, result.output
     assert "MEM REVIEW · UPDATE" in result.output
-    assert "ADD task-1/campus-wiki/temporary-parking Memory" in result.output
+    assert "task-1/campus-wiki/temporary-parking Memory" in result.output
+    assert "ADD 1 · ADD" not in result.output
     assert "SOURCE REFERENCES" in result.output
     assert "REVIEW & APPLY" not in result.output
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from memcommit.memory_diff import MemoryChange
 from memcommit.resolution_workbench import ResolutionWorkbenchView
 
 
@@ -18,6 +19,9 @@ class ImpactEntry:
     reason: str = ""
     uid: str = ""
     rules: tuple[str, ...] = ()
+    location: str = ""
+    before: str | None = None
+    after: str | None = None
 
     def __post_init__(self) -> None:
         for label, value in (
@@ -31,6 +35,16 @@ class ImpactEntry:
             raise ValueError("Impact reason must be text.")
         if not isinstance(self.uid, str):
             raise ValueError("Impact uid must be text.")
+        if not isinstance(self.location, str):
+            raise ValueError("Impact location must be text.")
+        if self.before is not None and not isinstance(self.before, str):
+            raise ValueError("Impact before value must be text or None.")
+        if self.after is not None and not isinstance(self.after, str):
+            raise ValueError("Impact after value must be text or None.")
+        if bool(self.location) != (self.before is not None or self.after is not None):
+            raise ValueError(
+                "A diff-style Impact entry requires both a location and a change."
+            )
         if not isinstance(self.rules, tuple) or any(
             not isinstance(rule, str) or not rule.strip() for rule in self.rules
         ):
@@ -48,6 +62,7 @@ class ImpactView:
     summary: str
     detail: str = ""
     entries: tuple[ImpactEntry, ...] = ()
+    replaces_results: bool = False
 
     def __post_init__(self) -> None:
         for label, value in (
@@ -61,6 +76,8 @@ class ImpactView:
                 raise ValueError(f"{label} must be nonempty text.")
         if not isinstance(self.detail, str):
             raise ValueError("Impact detail must be text.")
+        if not isinstance(self.replaces_results, bool):
+            raise ValueError("Impact result replacement flag must be boolean.")
         if not isinstance(self.entries, tuple) or any(
             not isinstance(entry, ImpactEntry) for entry in self.entries
         ):
@@ -164,5 +181,58 @@ class ImpactController:
                 title=title,
                 summary=summary,
                 detail=detail,
+            )
+        )
+
+    @classmethod
+    def from_memory_changes(
+        cls,
+        *,
+        operation: str,
+        artifact_uid: str,
+        revision: str,
+        title: str,
+        summary: str,
+        changes: tuple[MemoryChange, ...],
+        detail: str = "",
+        replaces_results: bool = True,
+    ) -> "ImpactController":
+        """Render exact located transitions using the shared Memory diff shape."""
+
+        if not isinstance(changes, tuple) or any(
+            not isinstance(change, MemoryChange) for change in changes
+        ):
+            raise TypeError("Impact changes must be a tuple of MemoryChange values.")
+        return cls(
+            lambda: ImpactView(
+                operation=operation,
+                artifact_uid=artifact_uid,
+                revision=revision,
+                title=title,
+                summary=summary,
+                detail=detail,
+                entries=tuple(
+                    ImpactEntry(
+                        marker=change.marker,
+                        label=change.treatment,
+                        # Retain a compact Memory value for non-diff consumers;
+                        # interactive and snapshot renderers use before/after.
+                        text=(
+                            change.after
+                            if change.after is not None
+                            else change.before
+                            if change.before is not None
+                            else ""
+                        ),
+                        reason=change.reason,
+                        uid=change.memory_uid,
+                        rules=change.rules,
+                        location=change.location,
+                        before=change.before,
+                        after=change.after,
+                    )
+                    for change in changes
+                ),
+                replaces_results=replaces_results,
             )
         )

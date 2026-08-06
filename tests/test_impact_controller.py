@@ -12,6 +12,7 @@ from memcommit.commands.resolution_workbench_shell import (
     run_resolution_workbench_shell,
 )
 from memcommit.impact_controller import ImpactController
+from memcommit.memory_diff import MemoryChange
 from memcommit.resolution_workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
@@ -84,6 +85,52 @@ def test_resolution_impact_is_rendered_immediately_before_operation_apply():
     )
     assert "RULE · Retain reviewed additions." in expanded
     assert "WHY · It passed the operation-owned review." in expanded
+
+
+def test_located_memory_changes_render_as_compact_before_after_diff():
+    view = replace(_view(operation="UPDATE"), results=())
+    impact = ImpactController.from_memory_changes(
+        operation=view.operation,
+        artifact_uid=view.artifact_uid,
+        revision=view.revision,
+        title="IMPACT · UPDATE",
+        summary="Exact located changes.",
+        changes=(
+            MemoryChange(
+                marker="~",
+                treatment="EDIT",
+                location="campus-wiki/route-changes",
+                memory_uid="12345678-1234-4234-8234-123456789abc",
+                before="Use the north route.",
+                after="Use the south route.",
+                reason="The verified route changed.",
+            ),
+            MemoryChange(
+                marker="+",
+                treatment="ADD",
+                location="campus-wiki/route-changes",
+                memory_uid="abcdefab-1234-4234-8234-123456789abc",
+                before=None,
+                after="Follow the temporary signs.",
+            ),
+        ),
+    )
+
+    rendered = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            impact_controller=impact,
+        )
+    )
+
+    assert "APPLICATION · 0" not in rendered
+    assert "[EDIT] campus-wiki/route-changes [12345678]" in rendered
+    assert "- Use the north route." in rendered
+    assert "+ Use the south route." in rendered
+    assert "[ADD]  campus-wiki/route-changes [abcdefab]" in rendered
+    assert "+ Follow the temporary signs." in rendered
+    assert "The verified route changed." not in rendered
 
 
 def test_impact_treatment_uid_content_and_detail_columns_align():

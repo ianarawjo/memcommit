@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 
+from memcommit.memory_diff import MemoryChange
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
     ResolutionIssueEvidence,
@@ -37,6 +38,49 @@ def _effective_treatment(candidate) -> str:
     if candidate.selection == "FORGET":
         return "FORGET"
     return "CUSTOM"
+
+
+def sever_memory_changes(session: SeverSession) -> tuple[MemoryChange, ...]:
+    """Compare each Source Memory with its reviewed Result representation.
+
+    The location is directional because Sever never edits or deletes Source.
+    A missing ``after`` value means omission from the new Result Context, not
+    removal from the named Source Context.
+    """
+
+    criteria_by_uid = {memory.uid: memory for memory in session.criteria.memories}
+    changes: list[MemoryChange] = []
+    for candidate in session.candidates:
+        source = session.source_memory(candidate.source_memory_uid)
+        treatment = _effective_treatment(candidate)
+        if treatment == "FORGET":
+            after = None
+            marker = "−"
+        elif candidate.selection == "AS_WRITTEN":
+            after = source.content
+            marker = "="
+        elif candidate.selection == "CUSTOM":
+            after = candidate.custom_content
+            marker = "~"
+        else:
+            after = candidate.proposed_content
+            marker = "=" if after == source.content else "~"
+        changes.append(
+            MemoryChange(
+                marker=marker,
+                treatment=_TREATMENT_DISPLAY_LABELS[treatment],
+                location=f"{source.context_name} → {session.output_name}",
+                memory_uid=source.uid,
+                before=source.content,
+                after=after,
+                reason=candidate.rationale,
+                rules=tuple(
+                    criteria_by_uid[uid].content
+                    for uid in candidate.criterion_memory_uids
+                ),
+            )
+        )
+    return tuple(changes)
 
 
 def _excerpt(text: str, *, limit: int = 90) -> str:

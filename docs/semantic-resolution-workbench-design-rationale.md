@@ -44,6 +44,15 @@ the resting list; Enter on the focused Impact Memory toggles that entry's
 This expansion is process-local presentation state and never changes the
 artifact, selection, Impact projection, or Apply readiness.
 
+Located mutation Impact uses the semantic `mem diff` shape instead of the
+single-result hanging row. Its header names the treatment, owning Context
+location, and actual Memory UID; its body renders the frozen transition as
+`- before` and `+ after`. ADD has only `+ after`, REMOVE has only `- before`,
+and an unchanged cross-Context projection uses one `= value` line. Exact
+rationale and Rules remain collapsed until Enter. Update names the target
+owner it will mutate. Sever instead names `Source → Result`, because it creates
+a new Result and never deletes or rewrites Source.
+
 Interactive Resolution rendering derives its content width from the current
 terminal on every projection. Viewer report rows, nested option boxes, seeded
 Compare/Meld cards, final-review cards, and the Items hanging rows wrap against
@@ -257,6 +266,13 @@ before/after content, reason, and source-reference digests.  It exposes no
 comment or accept capability and explicitly does not claim that no unresolved
 issue exists.
 
+The report overview summarizes those planned items rather than enumerating
+them a second time. Items remains the navigation hub for exact owner,
+provenance, reason, and full before/after inspection. Impact is the single
+effect ledger and uses the same located transition contract as `mem diff`.
+The operation kind belongs to the shared row prefix, so an Update title does
+not repeat it as `ADD n · ADD …`.
+
 `mem impact --to` uses the common interactive drill-down in a terminal and a
 deterministic snapshot outside one. In a TTY, `mem update --to` stages the
 ready plan, embeds that same exact Impact projection, and requires a distinct
@@ -286,6 +302,11 @@ output is never transmitted by the Sever operation.
 The embedded Sever Impact is the exact proposed local Result and is explicitly
 labelled `SOURCE UNCHANGED`; Apply materializes a new Context without editing
 the Source.
+It compares every Source Memory with its reviewed Result representation. KEEP
+renders one equality line; redaction, summary, reframe, and custom wording
+render a two-sided transition; FORGET renders only the Source-side `-` line.
+The directional location makes clear that FORGET omits material from Result
+while Source remains unchanged.
 
 ### Save location before Apply
 

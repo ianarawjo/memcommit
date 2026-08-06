@@ -31,7 +31,10 @@ from memcommit.resolution_workbench import (
 )
 from memcommit.sever import SEVER_SCHEMA_VERSION, SeverSession, sever_record_digest
 from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
-from memcommit.sever_resolution_adapter import SeverResolutionWorkbenchAdapter
+from memcommit.sever_resolution_adapter import (
+    SeverResolutionWorkbenchAdapter,
+    sever_memory_changes,
+)
 from memcommit.sever_store import SeverSessionStore
 from memcommit.store import MemoryStore
 
@@ -682,10 +685,13 @@ def test_sever_report_lists_large_result_only_once_when_impact_is_present(
         provider_factory=lambda: SeverProvider(),
     )
     view = SeverResolutionWorkbenchAdapter(session).view()
-    impact = ImpactController.from_resolution(
-        view,
+    impact = ImpactController.from_memory_changes(
+        operation=view.operation,
+        artifact_uid=view.artifact_uid,
+        revision=view.revision,
         title="IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED",
         summary="The exact local result.",
+        changes=sever_memory_changes(session),
     )
 
     report = "".join(
@@ -699,8 +705,11 @@ def test_sever_report_lists_large_result_only_once_when_impact_is_present(
 
     assert "LOCAL RESULT DRAFT · SOURCE UNCHANGED" not in report
     assert report.count("Needs step-free access at appointments.") == 1
+    assert "source → result" in report
+    assert "- A uniquely identifiable Source Memory" in report
+    assert "+ Needs step-free access at appointments." in report
     assert "[SUMMARIZE]" in report
-    assert "[SUMMARIZE] [" in report
+    assert "[SUMMARIZE] source → result [" in report
     assert "RULE · Criterion" not in report
     assert "WHY · The criterion requires necessity and minimization." not in report
 

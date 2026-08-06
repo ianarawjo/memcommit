@@ -114,6 +114,12 @@ staged and all target owners unchanged. Non-TTY explicit update retains the
 existing scriptable application behavior; adding an interactive approval to a
 pipeline would make the command unusable rather than safer.
 
+The embedded Impact is a located Memory diff. Each change names its exact
+target owner and Memory UID, then uses the same frozen `- before` / `+ after`
+contract as semantic `mem diff`. The Viewer summarizes the planned-change set
+once instead of repeating every Item before the Impact ledger; Items remains
+available for full reason and source-reference inspection.
+
 The same saved `UpdateSession` also supplies `mem review update`. Review keeps
 the existing detailed ADD/EDIT/REMOVE presentation, including OWNER, Memory
 UID, BEFORE/AFTER, REASON, and SOURCE REFERENCES. It is a read-only explanation

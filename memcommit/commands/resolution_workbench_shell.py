@@ -210,11 +210,20 @@ def _impact_repeats_results(
 ) -> bool:
     return (
         impact is not None
-        and len(impact.entries) == len(view.results)
-        and all(
-            (entry.marker, entry.label, entry.text)
-            == (result.marker, result.label, result.text)
-            for entry, result in zip(impact.entries, view.results, strict=True)
+        and (
+            impact.replaces_results
+            or (
+                len(impact.entries) == len(view.results)
+                and all(
+                    (entry.marker, entry.label, entry.text)
+                    == (result.marker, result.label, result.text)
+                    for entry, result in zip(
+                        impact.entries,
+                        view.results,
+                        strict=True,
+                    )
+                )
+            )
         )
     )
 
@@ -229,6 +238,26 @@ def _impact_lines(impact: ImpactView) -> list[str]:
     if impact.detail:
         lines.extend(["", impact.detail])
     for index, entry in enumerate(impact.entries, start=1):
+        if entry.location:
+            lines.extend(
+                [
+                    "",
+                    (
+                        f"  {entry.marker} {index}. [{entry.label}] "
+                        f"{entry.location} [{entry.uid}]"
+                    ),
+                ]
+            )
+            if entry.before == entry.after and entry.before is not None:
+                lines.append(f"      = {entry.before}")
+            else:
+                if entry.before is not None:
+                    lines.append(f"      - {entry.before}")
+                if entry.after is not None:
+                    lines.append(f"      + {entry.after}")
+            if entry.reason:
+                lines.append(f"      WHY · {entry.reason}")
+            continue
         lines.extend(
             [
                 "",
@@ -1142,15 +1171,19 @@ def resolution_report_fragments(
             )
             treatment = f"[{safe_terminal_text(entry.label)}]"
             treatment_field = _visual_pad(treatment, treatment_width)
-            uid_field = f"[{safe_terminal_text(entry.uid[:8] or str(index))}] "
+            uid_field = f"[{safe_terminal_text(entry.uid[:8] or str(index))}]"
             identity = (
                 f"{treatment_field} "
-                f"{uid_field}"
+                + (
+                    f"{safe_terminal_text(entry.location)} {uid_field}"
+                    if entry.location
+                    else f"{uid_field} "
+                )
             )
-            content_indent = " " * _visual_width(prefix + identity)
+            content_indent = " " * (_visual_width(prefix) + 2)
             row_content_width = max(
                 12,
-                content_width - _visual_width(prefix + identity) - 1,
+                content_width - _visual_width(content_indent) - 3,
             )
             treatment_style = _impact_treatment_style(
                 entry.label,
@@ -1165,20 +1198,64 @@ def resolution_report_fragments(
                 if active
                 else "class:memory-object"
             )
-            for line_index, content_line in enumerate(
-                _visual_wrap(entry.text, row_content_width)
-            ):
-                if line_index == 0:
-                    fragments.extend(
-                        [
-                            (treatment_style, f" {prefix}{treatment_field} "),
-                            (style, f"{uid_field}{content_line}\n"),
-                        ]
+            if entry.location:
+                fragments.extend(
+                    [
+                        (treatment_style, f" {prefix}{treatment_field} "),
+                        (style, f"{safe_terminal_text(entry.location)} {uid_field}\n"),
+                    ]
+                )
+                diff_lines = (
+                    (("=", entry.before),)
+                    if entry.before == entry.after and entry.before is not None
+                    else tuple(
+                        (marker, value)
+                        for marker, value in (
+                            ("-", entry.before),
+                            ("+", entry.after),
+                        )
+                        if value is not None
                     )
-                else:
-                    fragments.append(
-                        (style, f" {content_indent}{content_line}\n")
-                    )
+                )
+                for marker, value in diff_lines:
+                    diff_prefix = f"{content_indent}{marker} "
+                    diff_style = {
+                        "-": "class:impact.diff.remove",
+                        "+": "class:impact.diff.add",
+                        "=": "class:impact.diff.equal",
+                    }[marker]
+                    for line_index, content_line in enumerate(
+                        _visual_wrap(value, row_content_width)
+                    ):
+                        lead = (
+                            diff_prefix
+                            if line_index == 0
+                            else " " * _visual_width(diff_prefix)
+                        )
+                        fragments.append(
+                            (diff_style, f" {lead}{content_line}\n")
+                        )
+            else:
+                legacy_indent = " " * _visual_width(prefix + identity)
+                legacy_width = max(
+                    12,
+                    content_width - _visual_width(prefix + identity) - 1,
+                )
+                content_indent = legacy_indent
+                for line_index, content_line in enumerate(
+                    _visual_wrap(entry.text, legacy_width)
+                ):
+                    if line_index == 0:
+                        fragments.extend(
+                            [
+                                (treatment_style, f" {prefix}{treatment_field} "),
+                                (style, f"{uid_field} {content_line}\n"),
+                            ]
+                        )
+                    else:
+                        fragments.append(
+                            (style, f" {content_indent}{content_line}\n")
+                        )
             expanded = expanded_impact_section_uid == entry_section_uid
             if expanded:
                 for rule in entry.rules:

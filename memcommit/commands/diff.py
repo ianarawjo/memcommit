@@ -10,6 +10,7 @@ import typer
 
 from memcommit.store import MemoryStore
 from memcommit.granted_update_application import inspect_granted_update
+from memcommit.memory_diff import update_operation_change
 from memcommit.update import (
     AddOperation,
     EditOperation,
@@ -162,9 +163,9 @@ def _styled_word_diff(old_line: str, new_line: str) -> tuple[str, str]:
     return "".join(old_parts), "".join(new_parts)
 
 
-def _render_semantic_edit(operation: EditOperation) -> None:
-    old_lines = operation.old_content.splitlines() or [""]
-    new_lines = operation.new_content.splitlines() or [""]
+def _render_semantic_edit(before: str, after: str) -> None:
+    old_lines = before.splitlines() or [""]
+    new_lines = after.splitlines() or [""]
     matcher = difflib.SequenceMatcher(
         None,
         old_lines,
@@ -197,8 +198,8 @@ def _render_semantic_edit(operation: EditOperation) -> None:
             for line in new_lines[new_start:new_end]:
                 typer.secho(f"  + {line}", fg=typer.colors.GREEN)
 
-    old_terminal_newline = operation.old_content.endswith(("\n", "\r"))
-    new_terminal_newline = operation.new_content.endswith(("\n", "\r"))
+    old_terminal_newline = before.endswith(("\n", "\r"))
+    new_terminal_newline = after.endswith(("\n", "\r"))
     if old_terminal_newline != new_terminal_newline:
         change = "added" if new_terminal_newline else "removed"
         typer.secho(f"    terminal newline {change}", dim=True)
@@ -225,33 +226,37 @@ def _render_semantic_operation(
     *,
     verbose: bool,
 ) -> None:
+    change = update_operation_change(operation)
     shown_uid = _shown_uid(
-        operation.memory_uid,
+        change.memory_uid,
         prefixes,
         verbose=verbose,
     )
     if isinstance(operation, EditOperation):
         typer.secho(
-            f"EDIT  {operation.owner_context_name}  [{shown_uid}]",
+            f"EDIT  {change.location}  [{shown_uid}]",
             fg=typer.colors.YELLOW,
             bold=True,
         )
-        _render_semantic_edit(operation)
+        assert change.before is not None and change.after is not None
+        _render_semantic_edit(change.before, change.after)
     elif isinstance(operation, AddOperation):
         typer.secho(
-            f"ADD   {operation.owner_context_name}  [new:{shown_uid}]",
+            f"ADD   {change.location}  [new:{shown_uid}]",
             fg=typer.colors.GREEN,
             bold=True,
         )
-        for line in operation.new_content.splitlines() or [""]:
+        assert change.after is not None
+        for line in change.after.splitlines() or [""]:
             typer.secho(f"  + {line}", fg=typer.colors.GREEN)
     else:
         typer.secho(
-            f"REMOVE {operation.owner_context_name}  [{shown_uid}]",
+            f"REMOVE {change.location}  [{shown_uid}]",
             fg=typer.colors.RED,
             bold=True,
         )
-        for line in operation.old_content.splitlines() or [""]:
+        assert change.before is not None
+        for line in change.before.splitlines() or [""]:
             typer.secho(f"  - {line}", fg=typer.colors.RED)
     typer.echo()
     _render_metadata(operation, prefixes, verbose=verbose)
