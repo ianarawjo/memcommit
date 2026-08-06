@@ -3,8 +3,8 @@
   "context_uid": "7d293f75-52b6-5f27-99c4-54f2be3d8e59",
   "context_name": "advisor1/reproducibility",
   "target_language": "ko",
-  "created_at": "2026-08-05T02:47:18.819530+00:00",
-  "updated_at": "2026-08-05T02:47:18.819754+00:00",
+  "created_at": "2026-08-06T14:12:31.688731+00:00",
+  "updated_at": "2026-08-06T14:12:31.688905+00:00",
   "revision": 5,
   "contract_version": "translate-v2",
   "entries": [
@@ -18,8 +18,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.819590+00:00",
-        "updated_at": "2026-08-05T02:47:18.819590+00:00"
+        "created_at": "2026-08-06T14:12:31.688769+00:00",
+        "updated_at": "2026-08-06T14:12:31.688769+00:00"
       }
     },
     {
@@ -32,8 +32,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.819648+00:00",
-        "updated_at": "2026-08-05T02:47:18.819648+00:00"
+        "created_at": "2026-08-06T14:12:31.688817+00:00",
+        "updated_at": "2026-08-06T14:12:31.688817+00:00"
       }
     },
     {
@@ -46,8 +46,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.819701+00:00",
-        "updated_at": "2026-08-05T02:47:18.819701+00:00"
+        "created_at": "2026-08-06T14:12:31.688861+00:00",
+        "updated_at": "2026-08-06T14:12:31.688861+00:00"
       }
     },
     {
@@ -60,8 +60,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.819754+00:00",
-        "updated_at": "2026-08-05T02:47:18.819754+00:00"
+        "created_at": "2026-08-06T14:12:31.688905+00:00",
+        "updated_at": "2026-08-06T14:12:31.688905+00:00"
       }
     }
   ]

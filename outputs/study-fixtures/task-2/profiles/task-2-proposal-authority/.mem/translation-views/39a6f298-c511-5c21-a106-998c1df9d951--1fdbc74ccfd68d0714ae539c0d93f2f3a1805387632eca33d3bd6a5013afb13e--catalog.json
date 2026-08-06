@@ -3,8 +3,8 @@
   "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
   "context_name": "advisor1/expression",
   "target_language": "ko",
-  "created_at": "2026-08-05T02:47:18.804973+00:00",
-  "updated_at": "2026-08-05T02:47:18.805371+00:00",
+  "created_at": "2026-08-06T14:12:31.676758+00:00",
+  "updated_at": "2026-08-06T14:12:31.677110+00:00",
   "revision": 9,
   "contract_version": "translate-v2",
   "entries": [
@@ -18,8 +18,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.805022+00:00",
-        "updated_at": "2026-08-05T02:47:18.805022+00:00"
+        "created_at": "2026-08-06T14:12:31.676797+00:00",
+        "updated_at": "2026-08-06T14:12:31.676797+00:00"
       }
     },
     {
@@ -32,8 +32,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.805078+00:00",
-        "updated_at": "2026-08-05T02:47:18.805078+00:00"
+        "created_at": "2026-08-06T14:12:31.676845+00:00",
+        "updated_at": "2026-08-06T14:12:31.676845+00:00"
       }
     },
     {
@@ -46,8 +46,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.805131+00:00",
-        "updated_at": "2026-08-05T02:47:18.805131+00:00"
+        "created_at": "2026-08-06T14:12:31.676890+00:00",
+        "updated_at": "2026-08-06T14:12:31.676890+00:00"
       }
     },
     {
@@ -60,8 +60,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.805179+00:00",
-        "updated_at": "2026-08-05T02:47:18.805179+00:00"
+        "created_at": "2026-08-06T14:12:31.676933+00:00",
+        "updated_at": "2026-08-06T14:12:31.676933+00:00"
       }
     },
     {
@@ -74,8 +74,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.805227+00:00",
-        "updated_at": "2026-08-05T02:47:18.805227+00:00"
+        "created_at": "2026-08-06T14:12:31.676976+00:00",
+        "updated_at": "2026-08-06T14:12:31.676976+00:00"
       }
     },
     {
@@ -88,8 +88,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.805274+00:00",
-        "updated_at": "2026-08-05T02:47:18.805274+00:00"
+        "created_at": "2026-08-06T14:12:31.677020+00:00",
+        "updated_at": "2026-08-06T14:12:31.677020+00:00"
       }
     },
     {
@@ -102,8 +102,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.805323+00:00",
-        "updated_at": "2026-08-05T02:47:18.805323+00:00"
+        "created_at": "2026-08-06T14:12:31.677066+00:00",
+        "updated_at": "2026-08-06T14:12:31.677066+00:00"
       }
     },
     {
@@ -116,8 +116,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "e863368ea3d36af5d43b775564bcf55a72d47adbe7f5ff95e6fd79093165a931",
-        "created_at": "2026-08-05T02:47:18.805371+00:00",
-        "updated_at": "2026-08-05T02:47:18.805371+00:00"
+        "created_at": "2026-08-06T14:12:31.677110+00:00",
+        "updated_at": "2026-08-06T14:12:31.677110+00:00"
       }
     }
   ]

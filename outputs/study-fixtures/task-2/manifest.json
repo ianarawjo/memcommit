@@ -6,7 +6,7 @@
     "ko"
   ],
   "current_context": "participant/proposal-workspace",
-  "ordinary_count": 375,
+  "ordinary_count": 376,
   "query_only_count": 0,
   "query_view_count": 75,
   "profiles": [
@@ -15,10 +15,32 @@
       "role": "TASK",
       "store_path": "profiles/task-2/.mem",
       "current_context": "participant/proposal-workspace",
-      "context_count": 1,
-      "ordinary_count": 0,
-      "datasets": [],
-      "entries": []
+      "context_count": 2,
+      "ordinary_count": 1,
+      "datasets": [
+        "task2-description"
+      ],
+      "entries": [
+        {
+          "task": 2,
+          "owner_profile": "task-2",
+          "dataset": "task2-description",
+          "fixture_key": "T2-D-001",
+          "canonical_locator": "description/task-2",
+          "runtime_context": "description",
+          "memory_uid": "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2",
+          "query_only": false,
+          "purpose": "PP",
+          "audiences": [],
+          "verified": null,
+          "english_sha256": "ebe5a5a64d111a2c14a3f894ac56f8d7b67f571e6da6b321e74949a2a612530c",
+          "korean_sha256": "ddac716e17508d3091e0a519f6bbdcab556e8a9d401f4e3d65386257f81c57df",
+          "translation_origin": "IMPORTED",
+          "translation_review_status": "UNREVIEWED",
+          "source_english": "en/task-2-description-en.md",
+          "source_korean": "ko/task-2-description-ko.md"
+        }
+      ]
     },
     {
       "profile_name": "task-2-proposal-authority",
@@ -7248,6 +7270,25 @@
     }
   ],
   "entries": [
+    {
+      "task": 2,
+      "owner_profile": "task-2",
+      "dataset": "task2-description",
+      "fixture_key": "T2-D-001",
+      "canonical_locator": "description/task-2",
+      "runtime_context": "description",
+      "memory_uid": "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2",
+      "query_only": false,
+      "purpose": "PP",
+      "audiences": [],
+      "verified": null,
+      "english_sha256": "ebe5a5a64d111a2c14a3f894ac56f8d7b67f571e6da6b321e74949a2a612530c",
+      "korean_sha256": "ddac716e17508d3091e0a519f6bbdcab556e8a9d401f4e3d65386257f81c57df",
+      "translation_origin": "IMPORTED",
+      "translation_review_status": "UNREVIEWED",
+      "source_english": "en/task-2-description-en.md",
+      "source_korean": "ko/task-2-description-ko.md"
+    },
     {
       "task": 2,
       "owner_profile": "task-2-proposal-authority",

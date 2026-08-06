@@ -1,0 +1,31 @@
+{
+  "uid": "f8eb1ba4-2bdd-4c6e-8798-82ffd776e061",
+  "message": "Imported canonical English Task 2 fixture Context 'description' into profile 'task-2'.",
+  "timestamp": "2026-08-06T10:12:31.593178",
+  "snapshot": {
+    "uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+    "name": "description",
+    "memories": {
+      "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2": {
+        "type": "memory",
+        "uid": "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2",
+        "content": "Imagine that you are a graduate student preparing a two-page research proposal with two co-advisors who have equal authority. Each advisor has provided an agent memory store containing their writing policies on structure, emphasis, claims and evidence, tone, and terminology. Both sets of guidance are useful, but they are not identical: some policies apply in different contexts, some conflict with one another, and others express the same underlying idea in different ways. Your task is to combine the stores without favoring either advisor by consolidating duplicates, clarifying contexts, and either reconciling conflicts or preserving them with explanations."
+      }
+    },
+    "order": [
+      "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2",
+    "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+    "memory_uids": [
+      "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'description' into profile 'task-2'.",
+  "auto": true
+}

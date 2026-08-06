@@ -1,0 +1,94 @@
+{
+  "uid": "b2c69a63-893d-4894-af80-9c9127457193",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2024/08' into profile 'task-3'.",
+  "timestamp": "2026-08-06T10:12:31.780235",
+  "snapshot": {
+    "uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+    "name": "local/personal-memory/2024/08",
+    "memories": {
+      "5f80c7ec-e294-5905-abab-91027c9d827b": {
+        "type": "memory",
+        "uid": "5f80c7ec-e294-5905-abab-91027c9d827b",
+        "content": "The user has set a monthly limit in their budget record for spending other than living expenses."
+      },
+      "2428ab2c-37ce-5de1-84dc-abcdfc8ce062": {
+        "type": "memory",
+        "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062",
+        "content": "In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice."
+      },
+      "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7": {
+        "type": "memory",
+        "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7",
+        "content": "The following week, the user completed both errands in one outing and reduced travel time."
+      },
+      "442672e1-2188-5aa3-ad38-5e9c16f25bd5": {
+        "type": "memory",
+        "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5",
+        "content": "When a bill alert arrived on the due date, the user postponed payment until after a meeting."
+      },
+      "c7385cce-ec43-5902-973c-5b8af54c3557": {
+        "type": "memory",
+        "uid": "c7385cce-ec43-5902-973c-5b8af54c3557",
+        "content": "In a month when the user received an alert three days before the deadline, they finished payment before dinner."
+      },
+      "d926c45c-ea49-589c-a7e4-491c9a1514f8": {
+        "type": "memory",
+        "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8",
+        "content": "The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month."
+      },
+      "9433523f-8c4e-5424-b370-d325ba5154d1": {
+        "type": "memory",
+        "uid": "9433523f-8c4e-5424-b370-d325ba5154d1",
+        "content": "After recording one large expense, the user ate out two fewer times that week."
+      },
+      "d9531336-ac5f-5ba0-bf26-9c69c854578f": {
+        "type": "memory",
+        "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f",
+        "content": "The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash."
+      },
+      "9941d390-8b40-5fee-8bcf-df6f36befcb0": {
+        "type": "memory",
+        "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0",
+        "content": "Confirm the amount and account with the user before creating an automatic payment schedule."
+      },
+      "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08": {
+        "type": "memory",
+        "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08",
+        "content": "The timing of payment processing and late-payment recording may differ by billing institution."
+      }
+    },
+    "order": [
+      "5f80c7ec-e294-5905-abab-91027c9d827b",
+      "2428ab2c-37ce-5de1-84dc-abcdfc8ce062",
+      "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7",
+      "442672e1-2188-5aa3-ad38-5e9c16f25bd5",
+      "c7385cce-ec43-5902-973c-5b8af54c3557",
+      "d926c45c-ea49-589c-a7e4-491c9a1514f8",
+      "9433523f-8c4e-5424-b370-d325ba5154d1",
+      "d9531336-ac5f-5ba0-bf26-9c69c854578f",
+      "9941d390-8b40-5fee-8bcf-df6f36befcb0",
+      "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+    "memory_uids": [
+      "5f80c7ec-e294-5905-abab-91027c9d827b",
+      "2428ab2c-37ce-5de1-84dc-abcdfc8ce062",
+      "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7",
+      "442672e1-2188-5aa3-ad38-5e9c16f25bd5",
+      "c7385cce-ec43-5902-973c-5b8af54c3557",
+      "d926c45c-ea49-589c-a7e4-491c9a1514f8",
+      "9433523f-8c4e-5424-b370-d325ba5154d1",
+      "d9531336-ac5f-5ba0-bf26-9c69c854578f",
+      "9941d390-8b40-5fee-8bcf-df6f36befcb0",
+      "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2024/08' into profile 'task-3'.",
+  "auto": true
+}

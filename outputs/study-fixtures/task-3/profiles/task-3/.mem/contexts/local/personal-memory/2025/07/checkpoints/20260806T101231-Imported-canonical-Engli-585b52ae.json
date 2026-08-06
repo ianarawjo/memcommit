@@ -1,0 +1,94 @@
+{
+  "uid": "585b52ae-ed47-46cf-8658-070c4adb1b66",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/07' into profile 'task-3'.",
+  "timestamp": "2026-08-06T10:12:31.794763",
+  "snapshot": {
+    "uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+    "name": "local/personal-memory/2025/07",
+    "memories": {
+      "447bfd8d-1490-5404-a2b4-13b4587e6aba": {
+        "type": "memory",
+        "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba",
+        "content": "The user keeps a travel power bank in the first drawer beneath the desk."
+      },
+      "3ab0326a-a006-51ea-9348-7ada19a23bce": {
+        "type": "memory",
+        "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce",
+        "content": "The user packed three pairs of shoes for a two-night trip but wore only one pair."
+      },
+      "ef467ab6-8ba6-5f81-8f12-578ec1824e09": {
+        "type": "memory",
+        "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09",
+        "content": "For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight."
+      },
+      "aa4defc3-2b65-5688-accb-aaa49f2430b6": {
+        "type": "memory",
+        "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6",
+        "content": "On a trip when the user forgot a charging cable, they bought a new one after arrival."
+      },
+      "2d937b4b-d73d-5382-abbe-3cd4e596b3a5": {
+        "type": "memory",
+        "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5",
+        "content": "Before the next trip, the user checked charging items against a photo and packed all of them."
+      },
+      "0be8b327-0a06-5241-b98d-daa6b0a4aa50": {
+        "type": "memory",
+        "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50",
+        "content": "The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place."
+      },
+      "90059fcc-436d-5453-98f0-a9b23a08faf1": {
+        "type": "memory",
+        "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1",
+        "content": "The next time, the user closed the bag the night before and departed on time."
+      },
+      "12ef03f9-8cda-5ed7-be83-891b4702f872": {
+        "type": "memory",
+        "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872",
+        "content": "The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems."
+      },
+      "54136935-a460-573d-ac40-f5edb0ca7e6c": {
+        "type": "memory",
+        "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c",
+        "content": "When creating a travel preparation list, confirm the trip length and actual activities with the user."
+      },
+      "029c0777-bdbb-5d48-9309-1b1e6c7d88f4": {
+        "type": "memory",
+        "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4",
+        "content": "The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone."
+      }
+    },
+    "order": [
+      "447bfd8d-1490-5404-a2b4-13b4587e6aba",
+      "3ab0326a-a006-51ea-9348-7ada19a23bce",
+      "ef467ab6-8ba6-5f81-8f12-578ec1824e09",
+      "aa4defc3-2b65-5688-accb-aaa49f2430b6",
+      "2d937b4b-d73d-5382-abbe-3cd4e596b3a5",
+      "0be8b327-0a06-5241-b98d-daa6b0a4aa50",
+      "90059fcc-436d-5453-98f0-a9b23a08faf1",
+      "12ef03f9-8cda-5ed7-be83-891b4702f872",
+      "54136935-a460-573d-ac40-f5edb0ca7e6c",
+      "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+    "memory_uids": [
+      "447bfd8d-1490-5404-a2b4-13b4587e6aba",
+      "3ab0326a-a006-51ea-9348-7ada19a23bce",
+      "ef467ab6-8ba6-5f81-8f12-578ec1824e09",
+      "aa4defc3-2b65-5688-accb-aaa49f2430b6",
+      "2d937b4b-d73d-5382-abbe-3cd4e596b3a5",
+      "0be8b327-0a06-5241-b98d-daa6b0a4aa50",
+      "90059fcc-436d-5453-98f0-a9b23a08faf1",
+      "12ef03f9-8cda-5ed7-be83-891b4702f872",
+      "54136935-a460-573d-ac40-f5edb0ca7e6c",
+      "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/07' into profile 'task-3'.",
+  "auto": true
+}

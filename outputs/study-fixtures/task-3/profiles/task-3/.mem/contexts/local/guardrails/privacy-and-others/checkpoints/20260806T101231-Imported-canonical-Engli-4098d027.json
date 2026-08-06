@@ -1,0 +1,66 @@
+{
+  "uid": "4098d027-c687-47fa-92de-0609be88fa95",
+  "message": "Imported canonical English Task 3 fixture Context 'local/guardrails/privacy-and-others' into profile 'task-3'.",
+  "timestamp": "2026-08-06T10:12:31.821815",
+  "snapshot": {
+    "uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+    "name": "local/guardrails/privacy-and-others",
+    "memories": {
+      "67035ffd-3709-592a-9d42-601fffb9ff79": {
+        "type": "memory",
+        "uid": "67035ffd-3709-592a-9d42-601fffb9ff79",
+        "content": "Exclude a third party's contact information unless it is essential to the current purpose."
+      },
+      "47174c75-1951-5f0f-be2f-e79315d88b91": {
+        "type": "memory",
+        "uid": "47174c75-1951-5f0f-be2f-e79315d88b91",
+        "content": "Share content authored by a third party only after confirming the scope of consent."
+      },
+      "73411861-8d89-5bf4-9987-f7757e403089": {
+        "type": "memory",
+        "uid": "73411861-8d89-5bf4-9987-f7757e403089",
+        "content": "Do not infer sensitive traits from fragmentary behavior records."
+      },
+      "4af0efc1-3442-580c-b2da-7725249adbbd": {
+        "type": "memory",
+        "uid": "4af0efc1-3442-580c-b2da-7725249adbbd",
+        "content": "Generalize rare combinations of details that could enable re-identification before sharing."
+      },
+      "5cd7bde0-0d4f-5946-a551-65836f41cb3e": {
+        "type": "memory",
+        "uid": "5cd7bde0-0d4f-5946-a551-65836f41cb3e",
+        "content": "If one Memory mixes information about the user and a third party, sharing the item unchanged also conveys the third party's information."
+      },
+      "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad": {
+        "type": "memory",
+        "uid": "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad",
+        "content": "A third party may not expect their information to be conveyed to an external agent."
+      }
+    },
+    "order": [
+      "67035ffd-3709-592a-9d42-601fffb9ff79",
+      "47174c75-1951-5f0f-be2f-e79315d88b91",
+      "73411861-8d89-5bf4-9987-f7757e403089",
+      "4af0efc1-3442-580c-b2da-7725249adbbd",
+      "5cd7bde0-0d4f-5946-a551-65836f41cb3e",
+      "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+    "memory_uids": [
+      "67035ffd-3709-592a-9d42-601fffb9ff79",
+      "47174c75-1951-5f0f-be2f-e79315d88b91",
+      "73411861-8d89-5bf4-9987-f7757e403089",
+      "4af0efc1-3442-580c-b2da-7725249adbbd",
+      "5cd7bde0-0d4f-5946-a551-65836f41cb3e",
+      "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/guardrails/privacy-and-others' into profile 'task-3'.",
+  "auto": true
+}

@@ -1,0 +1,101 @@
+{
+  "uid": "a471ed59-b4cc-4123-be28-5b72d42d1ff6",
+  "message": "Imported canonical English Task 2 fixture Context 'advisor1/feasibility' into profile 'task-2-proposal-authority'.",
+  "timestamp": "2026-08-06T10:12:31.625692",
+  "snapshot": {
+    "uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+    "name": "advisor1/feasibility",
+    "memories": {
+      "b150c774-27f6-5ec8-8cb9-9a00be19ce9b": {
+        "type": "memory",
+        "uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b",
+        "content": "Mark unverified schedule assumptions as such."
+      },
+      "6c7d14ed-67e5-56ff-befb-7648b95aa7a3": {
+        "type": "memory",
+        "uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3",
+        "content": "Mark unverified recruitment assumptions as such."
+      },
+      "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7": {
+        "type": "memory",
+        "uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7",
+        "content": "Mark unverified technical assumptions as such."
+      },
+      "3ae97c88-7537-5733-b48d-e02c9283f486": {
+        "type": "memory",
+        "uid": "3ae97c88-7537-5733-b48d-e02c9283f486",
+        "content": "Clarify which stage of prototype fabrication or user study each requested resource is used for."
+      },
+      "e2b5c1f0-97c2-5d46-af80-993d8d5606c9": {
+        "type": "memory",
+        "uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9",
+        "content": "Operations reviewers judge feasibility based on the personnel assigned to each procedure."
+      },
+      "f636b400-d3a2-5873-bf5b-c990b0f7ea42": {
+        "type": "memory",
+        "uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42",
+        "content": "Operations reviewers judge feasibility based on the equipment assigned to each procedure."
+      },
+      "49385488-2315-51bc-bea0-749a1aea52f1": {
+        "type": "memory",
+        "uid": "49385488-2315-51bc-bea0-749a1aea52f1",
+        "content": "Operations reviewers judge feasibility based on the time allocated to each procedure."
+      },
+      "f1c22a48-9d8d-5e82-9837-690d66e719db": {
+        "type": "memory",
+        "uid": "f1c22a48-9d8d-5e82-9837-690d66e719db",
+        "content": "Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources."
+      },
+      "4d69f030-0dc0-5df7-a153-0b595a3f68de": {
+        "type": "memory",
+        "uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de",
+        "content": "Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype."
+      },
+      "152f8621-f5fb-5c5e-a961-1fde77ed0bb3": {
+        "type": "memory",
+        "uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3",
+        "content": "The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations."
+      },
+      "1877a138-31f6-59a5-b666-ae57985f540d": {
+        "type": "memory",
+        "uid": "1877a138-31f6-59a5-b666-ae57985f540d",
+        "content": "Delays in participant recruitment can compress the time available for prototype modification between formative evaluations."
+      }
+    },
+    "order": [
+      "b150c774-27f6-5ec8-8cb9-9a00be19ce9b",
+      "6c7d14ed-67e5-56ff-befb-7648b95aa7a3",
+      "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7",
+      "3ae97c88-7537-5733-b48d-e02c9283f486",
+      "e2b5c1f0-97c2-5d46-af80-993d8d5606c9",
+      "f636b400-d3a2-5873-bf5b-c990b0f7ea42",
+      "49385488-2315-51bc-bea0-749a1aea52f1",
+      "f1c22a48-9d8d-5e82-9837-690d66e719db",
+      "4d69f030-0dc0-5df7-a153-0b595a3f68de",
+      "152f8621-f5fb-5c5e-a961-1fde77ed0bb3",
+      "1877a138-31f6-59a5-b666-ae57985f540d"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2-proposal-authority",
+    "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+    "memory_uids": [
+      "b150c774-27f6-5ec8-8cb9-9a00be19ce9b",
+      "6c7d14ed-67e5-56ff-befb-7648b95aa7a3",
+      "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7",
+      "3ae97c88-7537-5733-b48d-e02c9283f486",
+      "e2b5c1f0-97c2-5d46-af80-993d8d5606c9",
+      "f636b400-d3a2-5873-bf5b-c990b0f7ea42",
+      "49385488-2315-51bc-bea0-749a1aea52f1",
+      "f1c22a48-9d8d-5e82-9837-690d66e719db",
+      "4d69f030-0dc0-5df7-a153-0b595a3f68de",
+      "152f8621-f5fb-5c5e-a961-1fde77ed0bb3",
+      "1877a138-31f6-59a5-b666-ae57985f540d"
+    ]
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'advisor1/feasibility' into profile 'task-2-proposal-authority'.",
+  "auto": true
+}

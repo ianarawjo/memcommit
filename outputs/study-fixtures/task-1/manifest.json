@@ -6,7 +6,7 @@
     "ko"
   ],
   "current_context": "participant/construction-updates",
-  "ordinary_count": 453,
+  "ordinary_count": 454,
   "query_only_count": 0,
   "query_view_count": 378,
   "profiles": [
@@ -15,12 +15,32 @@
       "role": "TASK",
       "store_path": "profiles/task-1/.mem",
       "current_context": "participant/construction-updates",
-      "context_count": 7,
-      "ordinary_count": 75,
+      "context_count": 8,
+      "ordinary_count": 76,
       "datasets": [
+        "task1-description",
         "task1-construction-updates"
       ],
       "entries": [
+        {
+          "task": 1,
+          "owner_profile": "task-1",
+          "dataset": "task1-description",
+          "fixture_key": "T1-D-001",
+          "canonical_locator": "description/task-1",
+          "runtime_context": "description",
+          "memory_uid": "2db26309-b11b-5963-87ff-497f135eb150",
+          "query_only": false,
+          "purpose": "PP",
+          "audiences": [],
+          "verified": null,
+          "english_sha256": "a3ef98780e9dcb30b1b7a3a9150ebeb802a645c0feadd8e9b1f015573985c58e",
+          "korean_sha256": "09222dda62a47ed9d4b444c0095b07f47d2e63157227bfc6df13e89afe25a7c0",
+          "translation_origin": "IMPORTED",
+          "translation_review_status": "UNREVIEWED",
+          "source_english": "en/task-1-description-en.md",
+          "source_korean": "ko/task-1-description-ko.md"
+        },
         {
           "task": 1,
           "owner_profile": "task-1",
@@ -9670,6 +9690,25 @@
     }
   ],
   "entries": [
+    {
+      "task": 1,
+      "owner_profile": "task-1",
+      "dataset": "task1-description",
+      "fixture_key": "T1-D-001",
+      "canonical_locator": "description/task-1",
+      "runtime_context": "description",
+      "memory_uid": "2db26309-b11b-5963-87ff-497f135eb150",
+      "query_only": false,
+      "purpose": "PP",
+      "audiences": [],
+      "verified": null,
+      "english_sha256": "a3ef98780e9dcb30b1b7a3a9150ebeb802a645c0feadd8e9b1f015573985c58e",
+      "korean_sha256": "09222dda62a47ed9d4b444c0095b07f47d2e63157227bfc6df13e89afe25a7c0",
+      "translation_origin": "IMPORTED",
+      "translation_review_status": "UNREVIEWED",
+      "source_english": "en/task-1-description-en.md",
+      "source_korean": "ko/task-1-description-ko.md"
+    },
     {
       "task": 1,
       "owner_profile": "task-1",

@@ -1,0 +1,35 @@
+{
+  "uid": "a96afb2e-0478-4329-8e99-6479297fb9cf",
+  "message": "Imported canonical English Task 3 fixture Context 'local' into profile 'task-3'.",
+  "timestamp": "2026-08-06T10:12:31.834335",
+  "snapshot": {
+    "uid": "0f514d5f-1e47-5a33-a9ee-0125528a5129",
+    "name": "local",
+    "memories": {
+      "10c1e5b1-4d4b-566c-bf14-c385523c344e": {
+        "type": "context_ref",
+        "uid": "10c1e5b1-4d4b-566c-bf14-c385523c344e",
+        "name": "local/guardrails"
+      },
+      "33ffd77c-a567-5239-b4a0-25503553d5f0": {
+        "type": "context_ref",
+        "uid": "33ffd77c-a567-5239-b4a0-25503553d5f0",
+        "name": "local/personal-memory"
+      }
+    },
+    "order": [
+      "10c1e5b1-4d4b-566c-bf14-c385523c344e",
+      "33ffd77c-a567-5239-b4a0-25503553d5f0"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "0f514d5f-1e47-5a33-a9ee-0125528a5129",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local' into profile 'task-3'.",
+  "auto": true
+}

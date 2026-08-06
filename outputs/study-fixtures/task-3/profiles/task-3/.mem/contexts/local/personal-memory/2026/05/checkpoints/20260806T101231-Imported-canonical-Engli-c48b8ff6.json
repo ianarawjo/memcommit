@@ -1,0 +1,94 @@
+{
+  "uid": "c48b8ff6-77e4-47ce-8616-8fb24c1fd9dc",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2026/05' into profile 'task-3'.",
+  "timestamp": "2026-08-06T10:12:31.809975",
+  "snapshot": {
+    "uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+    "name": "local/personal-memory/2026/05",
+    "memories": {
+      "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227": {
+        "type": "memory",
+        "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227",
+        "content": "The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet."
+      },
+      "fa2735e1-f4af-57d3-a18c-795715b6715b": {
+        "type": "memory",
+        "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b",
+        "content": "On a day the user went to the riverside, they sat in a place without shade and moved after an hour."
+      },
+      "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a": {
+        "type": "memory",
+        "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a",
+        "content": "At the next outdoor meal, the user chose a place near a large tree and stayed for two hours."
+      },
+      "c7c4b494-39a6-5f5c-b37f-51c5061ac926": {
+        "type": "memory",
+        "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926",
+        "content": "On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing."
+      },
+      "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075": {
+        "type": "memory",
+        "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075",
+        "content": "On the next outing, the user brought two small bottles of water after freezing them."
+      },
+      "2ed2a41c-f6ae-54d6-875c-a195d8fdacee": {
+        "type": "memory",
+        "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee",
+        "content": "When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes."
+      },
+      "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3": {
+        "type": "memory",
+        "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3",
+        "content": "For the next meeting, the user sent a photo of the entrance sign, and they met at the same place."
+      },
+      "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e": {
+        "type": "memory",
+        "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e",
+        "content": "For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area."
+      },
+      "70277b86-d5db-5b58-8a94-e77372d15a4c": {
+        "type": "memory",
+        "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c",
+        "content": "When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain."
+      },
+      "5a54437b-9b0e-5103-860d-d878be70b3ef": {
+        "type": "memory",
+        "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef",
+        "content": "Some park restrooms and drinking fountains may be closed seasonally."
+      }
+    },
+    "order": [
+      "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227",
+      "fa2735e1-f4af-57d3-a18c-795715b6715b",
+      "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a",
+      "c7c4b494-39a6-5f5c-b37f-51c5061ac926",
+      "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075",
+      "2ed2a41c-f6ae-54d6-875c-a195d8fdacee",
+      "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3",
+      "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e",
+      "70277b86-d5db-5b58-8a94-e77372d15a4c",
+      "5a54437b-9b0e-5103-860d-d878be70b3ef"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+    "memory_uids": [
+      "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227",
+      "fa2735e1-f4af-57d3-a18c-795715b6715b",
+      "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a",
+      "c7c4b494-39a6-5f5c-b37f-51c5061ac926",
+      "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075",
+      "2ed2a41c-f6ae-54d6-875c-a195d8fdacee",
+      "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3",
+      "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e",
+      "70277b86-d5db-5b58-8a94-e77372d15a4c",
+      "5a54437b-9b0e-5103-860d-d878be70b3ef"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2026/05' into profile 'task-3'.",
+  "auto": true
+}

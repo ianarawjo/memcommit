@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+  "context_name": "description",
+  "target_language": "ko",
+  "created_at": "2026-08-06T14:12:31.835546+00:00",
+  "updated_at": "2026-08-06T14:12:31.835630+00:00",
+  "revision": 2,
+  "contract_version": "translate-v2",
+  "entries": [
+    {
+      "source_uid": "77ea44c9-0a6f-5ab2-b20d-07341e978b87",
+      "provider": null,
+      "curated": {
+        "source_sha256": "b1bdbd41c74444a9513ff95733bc6fa86201535819016bf3198ef13569990386",
+        "translated_content": "\uc815\ubd80\uac00 \uc758\ub8cc \uc11c\ube44\uc2a4 \uacfc\uc815\uc758 \ub300\ubd80\ubd84 \ub2e8\uacc4\ub97c \uc9c0\uc6d0\ud560 \uc218 \uc788\ub294 \uc0c8\ub85c\uc6b4 AI \uc758\ub8cc \uc5d0\uc774\uc804\ud2b8\ub97c \uc81c\uacf5\ud55c\ub2e4\uace0 \uac00\uc815\ud574 \ubcf4\uc2ed\uc2dc\uc624. \ub354 \uc720\uc6a9\ud55c \uc9c0\uc6d0\uc744 \uc81c\uacf5\ud558\uae30 \uc704\ud574 \uc774 \uc5d0\uc774\uc804\ud2b8\ub294 \ub2f9\uc2e0\uc758 \ub85c\uceec \uc5d0\uc774\uc804\ud2b8\uac00 \uc774\uc804\ubd80\ud130 \uc0ac\uc6a9\ud574 \uc628 \uac1c\uc778 Memory\uc5d0 \ub300\ud55c \uc811\uadfc\uc744 \uc694\uccad\ud569\ub2c8\ub2e4. \uc774 Memory\uc5d0\ub294 \ub2e4\ub978 \uc5d0\uc774\uc804\ud2b8\ub4e4\uacfc \ub098\ub208 \uacfc\uac70 \ub300\ud654\ubfd0 \uc544\ub2c8\ub77c \ub2f9\uc2e0\uc758 \uc0b6 \uac70\uc758 \ubaa8\ub4e0 \uc601\uc5ed\uc5d0 \uad00\ud55c \uc815\ubcf4\uac00 \ud3ec\ud568\ub418\uc5b4 \uc788\uc2b5\ub2c8\ub2e4. \uc5b4\ub5a4 \uc815\ubcf4\ub97c \uc81c\uacf5\ud558\uace0 \uc5b4\ub5a4 \uc815\ubcf4\ub97c \uc81c\uc678\ud560\uc9c0 \uacb0\uc815\ud55c \ub4a4, \uc120\ud0dd\ud55c \uc815\ubcf4\ub9cc \uc804\uc1a1\ud574\uc57c \ud569\ub2c8\ub2e4.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "7a331885af248eaef5707997996b2badd2152b05d7580500f2ad9d61cf87bf64",
+        "created_at": "2026-08-06T14:12:31.835630+00:00",
+        "updated_at": "2026-08-06T14:12:31.835630+00:00"
+      }
+    }
+  ]
+}

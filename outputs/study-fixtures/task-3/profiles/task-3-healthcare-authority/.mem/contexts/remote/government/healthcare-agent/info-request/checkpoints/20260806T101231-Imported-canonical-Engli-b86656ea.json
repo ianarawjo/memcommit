@@ -1,0 +1,35 @@
+{
+  "uid": "b86656ea-c04a-4167-b00c-a04e5aab9e15",
+  "message": "Imported canonical English Task 3 fixture Context 'remote/government/healthcare-agent/info-request' into profile 'task-3-healthcare-authority'.",
+  "timestamp": "2026-08-06T10:12:31.940098",
+  "snapshot": {
+    "uid": "8bb25b60-a255-5642-a8d6-5d218c7f3627",
+    "name": "remote/government/healthcare-agent/info-request",
+    "memories": {
+      "5f7d5077-b48e-57ea-970c-7f605d91906a": {
+        "type": "context_ref",
+        "uid": "5f7d5077-b48e-57ea-970c-7f605d91906a",
+        "name": "remote/government/healthcare-agent/info-request/questions-and-answers"
+      },
+      "1ed7cefe-167c-59fb-acb7-fcf3cbbdad46": {
+        "type": "context_ref",
+        "uid": "1ed7cefe-167c-59fb-acb7-fcf3cbbdad46",
+        "name": "remote/government/healthcare-agent/info-request/transmission-guidance"
+      }
+    },
+    "order": [
+      "5f7d5077-b48e-57ea-970c-7f605d91906a",
+      "1ed7cefe-167c-59fb-acb7-fcf3cbbdad46"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3-healthcare-authority",
+    "context_uid": "8bb25b60-a255-5642-a8d6-5d218c7f3627",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'remote/government/healthcare-agent/info-request' into profile 'task-3-healthcare-authority'.",
+  "auto": true
+}

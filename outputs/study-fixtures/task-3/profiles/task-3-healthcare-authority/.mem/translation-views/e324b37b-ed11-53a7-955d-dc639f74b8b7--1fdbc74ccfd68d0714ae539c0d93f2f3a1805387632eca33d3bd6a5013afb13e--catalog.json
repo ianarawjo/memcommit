@@ -3,8 +3,8 @@
   "context_uid": "e324b37b-ed11-53a7-955d-dc639f74b8b7",
   "context_name": "remote/government/healthcare-agent/info-request/questions-and-answers/care-access",
   "target_language": "ko",
-  "created_at": "2026-08-05T02:47:19.102670+00:00",
-  "updated_at": "2026-08-05T02:47:19.103595+00:00",
+  "created_at": "2026-08-06T14:12:31.951055+00:00",
+  "updated_at": "2026-08-06T14:12:31.951768+00:00",
   "revision": 14,
   "contract_version": "translate-v2",
   "entries": [
@@ -18,8 +18,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.102754+00:00",
-        "updated_at": "2026-08-05T02:47:19.102754+00:00"
+        "created_at": "2026-08-06T14:12:31.951109+00:00",
+        "updated_at": "2026-08-06T14:12:31.951109+00:00"
       }
     },
     {
@@ -32,8 +32,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.102829+00:00",
-        "updated_at": "2026-08-05T02:47:19.102829+00:00"
+        "created_at": "2026-08-06T14:12:31.951174+00:00",
+        "updated_at": "2026-08-06T14:12:31.951174+00:00"
       }
     },
     {
@@ -46,8 +46,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.102895+00:00",
-        "updated_at": "2026-08-05T02:47:19.102895+00:00"
+        "created_at": "2026-08-06T14:12:31.951236+00:00",
+        "updated_at": "2026-08-06T14:12:31.951236+00:00"
       }
     },
     {
@@ -60,8 +60,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.102962+00:00",
-        "updated_at": "2026-08-05T02:47:19.102962+00:00"
+        "created_at": "2026-08-06T14:12:31.951297+00:00",
+        "updated_at": "2026-08-06T14:12:31.951297+00:00"
       }
     },
     {
@@ -74,8 +74,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103023+00:00",
-        "updated_at": "2026-08-05T02:47:19.103023+00:00"
+        "created_at": "2026-08-06T14:12:31.951356+00:00",
+        "updated_at": "2026-08-06T14:12:31.951356+00:00"
       }
     },
     {
@@ -88,8 +88,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103081+00:00",
-        "updated_at": "2026-08-05T02:47:19.103081+00:00"
+        "created_at": "2026-08-06T14:12:31.951411+00:00",
+        "updated_at": "2026-08-06T14:12:31.951411+00:00"
       }
     },
     {
@@ -102,8 +102,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103136+00:00",
-        "updated_at": "2026-08-05T02:47:19.103136+00:00"
+        "created_at": "2026-08-06T14:12:31.951460+00:00",
+        "updated_at": "2026-08-06T14:12:31.951460+00:00"
       }
     },
     {
@@ -116,8 +116,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103251+00:00",
-        "updated_at": "2026-08-05T02:47:19.103251+00:00"
+        "created_at": "2026-08-06T14:12:31.951510+00:00",
+        "updated_at": "2026-08-06T14:12:31.951510+00:00"
       }
     },
     {
@@ -130,8 +130,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103344+00:00",
-        "updated_at": "2026-08-05T02:47:19.103344+00:00"
+        "created_at": "2026-08-06T14:12:31.951559+00:00",
+        "updated_at": "2026-08-06T14:12:31.951559+00:00"
       }
     },
     {
@@ -144,8 +144,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103407+00:00",
-        "updated_at": "2026-08-05T02:47:19.103407+00:00"
+        "created_at": "2026-08-06T14:12:31.951610+00:00",
+        "updated_at": "2026-08-06T14:12:31.951610+00:00"
       }
     },
     {
@@ -158,8 +158,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103472+00:00",
-        "updated_at": "2026-08-05T02:47:19.103472+00:00"
+        "created_at": "2026-08-06T14:12:31.951664+00:00",
+        "updated_at": "2026-08-06T14:12:31.951664+00:00"
       }
     },
     {
@@ -172,8 +172,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103537+00:00",
-        "updated_at": "2026-08-05T02:47:19.103537+00:00"
+        "created_at": "2026-08-06T14:12:31.951718+00:00",
+        "updated_at": "2026-08-06T14:12:31.951718+00:00"
       }
     },
     {
@@ -186,8 +186,8 @@
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
         "evidence_sha256": "03f3e608e838ce4ca02a245455de6068b196b69c27d64cd8372bb073e4749877",
-        "created_at": "2026-08-05T02:47:19.103595+00:00",
-        "updated_at": "2026-08-05T02:47:19.103595+00:00"
+        "created_at": "2026-08-06T14:12:31.951768+00:00",
+        "updated_at": "2026-08-06T14:12:31.951768+00:00"
       }
     }
   ]

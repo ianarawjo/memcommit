@@ -1,0 +1,66 @@
+{
+  "uid": "ac167575-0af1-4f32-a545-cc894fcaf991",
+  "message": "Imported canonical English Task 3 fixture Context 'local/guardrails/evidence-and-uncertainty' into profile 'task-3'.",
+  "timestamp": "2026-08-06T10:12:31.819155",
+  "snapshot": {
+    "uid": "136dface-67b3-5116-86e2-b70449b30366",
+    "name": "local/guardrails/evidence-and-uncertainty",
+    "memories": {
+      "aff10a17-19e9-5e2e-b082-4971c8ac5b2f": {
+        "type": "memory",
+        "uid": "aff10a17-19e9-5e2e-b082-4971c8ac5b2f",
+        "content": "Mark the most recent verification time on content that changes over time."
+      },
+      "3f8f3387-8c2a-5059-8b4f-4b1478f5076a": {
+        "type": "memory",
+        "uid": "3f8f3387-8c2a-5059-8b4f-4b1478f5076a",
+        "content": "Mark uncertain content as uncertain."
+      },
+      "aa806a1b-9eaa-5964-98a6-ed787d57887b": {
+        "type": "memory",
+        "uid": "aa806a1b-9eaa-5964-98a6-ed787d57887b",
+        "content": "Do not establish either side of an unresolved Memory conflict as the current fact."
+      },
+      "b59b39e5-f099-5111-9ce9-8eaef8472cc8": {
+        "type": "memory",
+        "uid": "b59b39e5-f099-5111-9ce9-8eaef8472cc8",
+        "content": "Keep the local Memories supporting each sharing candidate traceable."
+      },
+      "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea": {
+        "type": "memory",
+        "uid": "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea",
+        "content": "If a fact changes after a Memory is recorded but the source Memory is not updated, the sharing candidate retains the earlier state."
+      },
+      "587c2393-0105-5905-813e-c188b5a976f4": {
+        "type": "memory",
+        "uid": "587c2393-0105-5905-813e-c188b5a976f4",
+        "content": "A receiving agent may interpret unmarked uncertainty as a verified fact."
+      }
+    },
+    "order": [
+      "aff10a17-19e9-5e2e-b082-4971c8ac5b2f",
+      "3f8f3387-8c2a-5059-8b4f-4b1478f5076a",
+      "aa806a1b-9eaa-5964-98a6-ed787d57887b",
+      "b59b39e5-f099-5111-9ce9-8eaef8472cc8",
+      "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea",
+      "587c2393-0105-5905-813e-c188b5a976f4"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+    "memory_uids": [
+      "aff10a17-19e9-5e2e-b082-4971c8ac5b2f",
+      "3f8f3387-8c2a-5059-8b4f-4b1478f5076a",
+      "aa806a1b-9eaa-5964-98a6-ed787d57887b",
+      "b59b39e5-f099-5111-9ce9-8eaef8472cc8",
+      "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea",
+      "587c2393-0105-5905-813e-c188b5a976f4"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/guardrails/evidence-and-uncertainty' into profile 'task-3'.",
+  "auto": true
+}

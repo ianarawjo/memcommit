@@ -1,0 +1,94 @@
+{
+  "uid": "15d16fbe-8cab-47fa-9aba-448d18970e23",
+  "message": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/04' into profile 'task-3'.",
+  "timestamp": "2026-08-06T10:12:31.790779",
+  "snapshot": {
+    "uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+    "name": "local/personal-memory/2025/04",
+    "memories": {
+      "a1c67646-6a75-504a-9508-d69e1d04b3e5": {
+        "type": "memory",
+        "uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5",
+        "content": "The user keeps the shared laundry-room access card in an entrance drawer."
+      },
+      "9479e799-95d7-50d2-af62-d1e0914a389b": {
+        "type": "memory",
+        "uid": "9479e799-95d7-50d2-af62-d1e0914a389b",
+        "content": "The user went downstairs 25 minutes after the laundry finished and received a note from another household."
+      },
+      "528cb5ea-8c36-5206-beaa-19432250ec4d": {
+        "type": "memory",
+        "uid": "528cb5ea-8c36-5206-beaa-19432250ec4d",
+        "content": "For the next load, the user set a reminder five minutes before the end and removed the laundry immediately."
+      },
+      "85fb1639-2176-5329-b490-3325ff030db4": {
+        "type": "memory",
+        "uid": "85fb1639-2176-5329-b490-3325ff030db4",
+        "content": "The user washed light-colored clothes with new jeans, and color transferred onto white socks."
+      },
+      "431d170a-863f-596d-97c0-0c9634524ee5": {
+        "type": "memory",
+        "uid": "431d170a-863f-596d-97c0-0c9634524ee5",
+        "content": "The user later washed the new jeans separately, and the color of the other clothes did not change."
+      },
+      "4df33adc-cfba-50f2-b141-e2ebed38b81c": {
+        "type": "memory",
+        "uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c",
+        "content": "On a day the user did not check the dryer filter, the clothes needed another drying cycle."
+      },
+      "ba7daae9-938d-55a1-af20-21cd10d395d8": {
+        "type": "memory",
+        "uid": "ba7daae9-938d-55a1-af20-21cd10d395d8",
+        "content": "On the next use, after emptying the filter, the user finished drying in one cycle."
+      },
+      "abbf8742-38e3-5810-b222-fe91e3340962": {
+        "type": "memory",
+        "uid": "abbf8742-38e3-5810-b222-fe91e3340962",
+        "content": "The building manager judges that not leaving finished laundry for a long time is fair to other households."
+      },
+      "06273d22-0b42-5c55-9d70-eda14084219a": {
+        "type": "memory",
+        "uid": "06273d22-0b42-5c55-9d70-eda14084219a",
+        "content": "When creating a shared laundry-room reminder, base it on the end time of the machine the user started."
+      },
+      "03ac930e-d745-5c29-8c24-5ced669817f9": {
+        "type": "memory",
+        "uid": "03ac930e-d745-5c29-8c24-5ced669817f9",
+        "content": "Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available."
+      }
+    },
+    "order": [
+      "a1c67646-6a75-504a-9508-d69e1d04b3e5",
+      "9479e799-95d7-50d2-af62-d1e0914a389b",
+      "528cb5ea-8c36-5206-beaa-19432250ec4d",
+      "85fb1639-2176-5329-b490-3325ff030db4",
+      "431d170a-863f-596d-97c0-0c9634524ee5",
+      "4df33adc-cfba-50f2-b141-e2ebed38b81c",
+      "ba7daae9-938d-55a1-af20-21cd10d395d8",
+      "abbf8742-38e3-5810-b222-fe91e3340962",
+      "06273d22-0b42-5c55-9d70-eda14084219a",
+      "03ac930e-d745-5c29-8c24-5ced669817f9"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3",
+    "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+    "memory_uids": [
+      "a1c67646-6a75-504a-9508-d69e1d04b3e5",
+      "9479e799-95d7-50d2-af62-d1e0914a389b",
+      "528cb5ea-8c36-5206-beaa-19432250ec4d",
+      "85fb1639-2176-5329-b490-3325ff030db4",
+      "431d170a-863f-596d-97c0-0c9634524ee5",
+      "4df33adc-cfba-50f2-b141-e2ebed38b81c",
+      "ba7daae9-938d-55a1-af20-21cd10d395d8",
+      "abbf8742-38e3-5810-b222-fe91e3340962",
+      "06273d22-0b42-5c55-9d70-eda14084219a",
+      "03ac930e-d745-5c29-8c24-5ced669817f9"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'local/personal-memory/2025/04' into profile 'task-3'.",
+  "auto": true
+}

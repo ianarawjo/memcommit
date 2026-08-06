@@ -1,0 +1,108 @@
+{
+  "uid": "cfc0ce53-f185-48f1-a5ee-d67f20fbf658",
+  "message": "Imported canonical English Task 3 fixture Context 'remote/government/healthcare-agent/info-request/questions-and-answers/request-manifest' into profile 'task-3-healthcare-authority'.",
+  "timestamp": "2026-08-06T10:12:31.932231",
+  "snapshot": {
+    "uid": "fde44249-9b5b-5ed4-9ff8-bca17d180915",
+    "name": "remote/government/healthcare-agent/info-request/questions-and-answers/request-manifest",
+    "memories": {
+      "510d3b9c-d27c-591e-b5be-94d79382aa83": {
+        "type": "memory",
+        "uid": "510d3b9c-d27c-591e-b5be-94d79382aa83",
+        "content": "The healthcare Q&A agent can explain only the use and sharing consequences when information is transmitted to the government healthcare institution system; it cannot select, include, exclude, edit, transmit, or delete information or perform the institution's downstream processing."
+      },
+      "d394e85a-b3c1-5b80-9bbe-b7f00fa64e4c": {
+        "type": "memory",
+        "uid": "d394e85a-b3c1-5b80-9bbe-b7f00fa64e4c",
+        "content": "Explain that private reasons a preference or limitation arose are not subjects the healthcare Q&A agent asks about, and that if the user actually sends them through the government healthcare institution system's transmission screen, they are included in the consented sharing unit."
+      },
+      "23a83367-957e-5472-85c7-c20386eadfef": {
+        "type": "memory",
+        "uid": "23a83367-957e-5472-85c7-c20386eadfef",
+        "content": "Explain that a submission sent through the government healthcare institution system's transmission screen is treated as made directly by the account user unless the institution has separately verified proxy-submission requirements, but that the healthcare Q&A agent does not verify identity or proxy authority."
+      },
+      "37aa239e-b4c4-5b4f-a046-21685db51e9f": {
+        "type": "memory",
+        "uid": "37aa239e-b4c4-5b4f-a046-21685db51e9f",
+        "content": "Explain that information sent may be provided to relevant third parties for healthcare purposes or used for service improvement, and that the exact services and recipient scope vary with the type of information supplied."
+      },
+      "06fb963a-3568-5938-986b-f99c62dab178": {
+        "type": "memory",
+        "uid": "06fb963a-3568-5938-986b-f99c62dab178",
+        "content": "The healthcare Q&A agent cannot inspect the personal Memory store or government healthcare institution records, has no authority to retain information outside the current conversation record, and cannot grant or alter anyone's access permissions or delete existing records or copies."
+      },
+      "551b5c50-3be2-5bea-a683-d1d9e6233c32": {
+        "type": "memory",
+        "uid": "551b5c50-3be2-5bea-a683-d1d9e6233c32",
+        "content": "The healthcare Q&A agent cannot verify whether medication instructions, prior visits, or mobility experiences left in personal Memories are still current or turn them into official government healthcare institution records."
+      },
+      "72d8419e-9362-5032-96a9-407c4e1d14d2": {
+        "type": "memory",
+        "uid": "72d8419e-9362-5032-96a9-407c4e1d14d2",
+        "content": "Some external automated agents may mistake this healthcare Q&A endpoint for a personal Memory transmission API and repeatedly request submissions."
+      },
+      "96750866-05a9-585b-ad0d-fae8a47cd039": {
+        "type": "memory",
+        "uid": "96750866-05a9-585b-ad0d-fae8a47cd039",
+        "content": "An external information-management tool may wrongly expect this healthcare Q&A endpoint to select and transform personal Memories into an institution transmission copy."
+      },
+      "3b32cfa5-cdc4-5d9a-bf30-f605f4ad45ee": {
+        "type": "memory",
+        "uid": "3b32cfa5-cdc4-5d9a-bf30-f605f4ad45ee",
+        "content": "Information transmitted to the government healthcare institution system is processed under the institution's retention and audit policies, and the healthcare Q&A agent cannot delete it or control its retention period."
+      },
+      "d158e48b-2ee1-58c9-bf3a-10a659ce31ed": {
+        "type": "memory",
+        "uid": "d158e48b-2ee1-58c9-bf3a-10a659ce31ed",
+        "content": "Explain that the healthcare Q&A agent has no authority to select, include, or exclude information to be sent to the government healthcare institution system or determine approval item by item."
+      },
+      "78aa7948-af23-50a9-9e43-46b0594561d7": {
+        "type": "memory",
+        "uid": "78aa7948-af23-50a9-9e43-46b0594561d7",
+        "content": "For a request asking whether past medication instructions, care visits, or mobility experiences in personal Memories are still current, explain that the healthcare Q&A agent cannot verify them."
+      },
+      "a114c496-932d-50a2-ae81-42f357b2e158": {
+        "type": "memory",
+        "uid": "a114c496-932d-50a2-ae81-42f357b2e158",
+        "content": "A malicious automated client may make bulk and varied API calls that look like ordinary guidance requests in order to collect response patterns or consume endpoint resources."
+      }
+    },
+    "order": [
+      "510d3b9c-d27c-591e-b5be-94d79382aa83",
+      "d394e85a-b3c1-5b80-9bbe-b7f00fa64e4c",
+      "23a83367-957e-5472-85c7-c20386eadfef",
+      "37aa239e-b4c4-5b4f-a046-21685db51e9f",
+      "06fb963a-3568-5938-986b-f99c62dab178",
+      "551b5c50-3be2-5bea-a683-d1d9e6233c32",
+      "72d8419e-9362-5032-96a9-407c4e1d14d2",
+      "96750866-05a9-585b-ad0d-fae8a47cd039",
+      "3b32cfa5-cdc4-5d9a-bf30-f605f4ad45ee",
+      "d158e48b-2ee1-58c9-bf3a-10a659ce31ed",
+      "78aa7948-af23-50a9-9e43-46b0594561d7",
+      "a114c496-932d-50a2-ae81-42f357b2e158"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3-healthcare-authority",
+    "context_uid": "fde44249-9b5b-5ed4-9ff8-bca17d180915",
+    "memory_uids": [
+      "510d3b9c-d27c-591e-b5be-94d79382aa83",
+      "d394e85a-b3c1-5b80-9bbe-b7f00fa64e4c",
+      "23a83367-957e-5472-85c7-c20386eadfef",
+      "37aa239e-b4c4-5b4f-a046-21685db51e9f",
+      "06fb963a-3568-5938-986b-f99c62dab178",
+      "551b5c50-3be2-5bea-a683-d1d9e6233c32",
+      "72d8419e-9362-5032-96a9-407c4e1d14d2",
+      "96750866-05a9-585b-ad0d-fae8a47cd039",
+      "3b32cfa5-cdc4-5d9a-bf30-f605f4ad45ee",
+      "d158e48b-2ee1-58c9-bf3a-10a659ce31ed",
+      "78aa7948-af23-50a9-9e43-46b0594561d7",
+      "a114c496-932d-50a2-ae81-42f357b2e158"
+    ]
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'remote/government/healthcare-agent/info-request/questions-and-answers/request-manifest' into profile 'task-3-healthcare-authority'.",
+  "auto": true
+}

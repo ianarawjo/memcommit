@@ -1,0 +1,14 @@
+{
+  "uid": "1ed7cefe-167c-59fb-acb7-fcf3cbbdad46",
+  "name": "remote/government/healthcare-agent/info-request/transmission-guidance",
+  "memories": {
+    "ef17277c-75d8-5462-a77e-2ca1f9f0b028": {
+      "type": "context_ref",
+      "uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+      "name": "remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance"
+    }
+  },
+  "order": [
+    "ef17277c-75d8-5462-a77e-2ca1f9f0b028"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "uid": "f7871cea-98cc-4819-b663-ae9a1737b340",
+  "message": "Imported canonical English Task 2 fixture Context 'participant/proposal-workspace' into profile 'task-2'.",
+  "timestamp": "2026-08-06T10:12:31.591540",
+  "snapshot": {
+    "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+    "name": "participant/proposal-workspace",
+    "memories": {},
+    "order": []
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 2,
+    "profile": "task-2",
+    "context_uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 2 fixture Context 'participant/proposal-workspace' into profile 'task-2'.",
+  "auto": true
+}

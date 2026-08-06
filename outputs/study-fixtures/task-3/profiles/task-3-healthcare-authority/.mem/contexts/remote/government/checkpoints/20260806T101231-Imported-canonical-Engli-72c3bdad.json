@@ -1,0 +1,29 @@
+{
+  "uid": "72c3bdad-bfe7-4f29-a46c-c376ea442891",
+  "message": "Imported canonical English Task 3 fixture Context 'remote/government' into profile 'task-3-healthcare-authority'.",
+  "timestamp": "2026-08-06T10:12:31.942521",
+  "snapshot": {
+    "uid": "e73fb145-6486-5151-b3a1-6dc310fc6e9b",
+    "name": "remote/government",
+    "memories": {
+      "323cea4e-1e29-507e-a17a-43be1da0b0a9": {
+        "type": "context_ref",
+        "uid": "323cea4e-1e29-507e-a17a-43be1da0b0a9",
+        "name": "remote/government/healthcare-agent"
+      }
+    },
+    "order": [
+      "323cea4e-1e29-507e-a17a-43be1da0b0a9"
+    ]
+  },
+  "command": "fixture-import",
+  "args": {
+    "schema_version": 2,
+    "task": 3,
+    "profile": "task-3-healthcare-authority",
+    "context_uid": "e73fb145-6486-5151-b3a1-6dc310fc6e9b",
+    "memory_uids": []
+  },
+  "description": "Imported canonical English Task 3 fixture Context 'remote/government' into profile 'task-3-healthcare-authority'.",
+  "auto": true
+}
