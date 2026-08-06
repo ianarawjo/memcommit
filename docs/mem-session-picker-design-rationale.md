@@ -89,11 +89,29 @@ ordered Compare analysis and the existing reviewed result-target picker.
 
 ### Atomize
 
-Bare `mem atomize` retains its current-Context create-or-resume behavior.
-`mem atomize --sessions` is the cross-Context browser. Selection may render or
-resume only a still-current saved analysis/workbench/grounding artifact; it
-must not silently regenerate stale work or switch the current Context.
-`N` chooses an ordinary Context and hands it to the same create-or-resume path.
+In an interactive terminal, bare `mem atomize` and
+`mem atomize --sessions` open the cross-Context session launcher. A person
+chooses an existing session or the pinned New Session row instead of being
+dropped directly into the current Context's result. Explicit
+`mem atomize --context INPUT` remains the direct create-or-resume route, and
+non-TTY bare invocation retains that stable automation-compatible behavior.
+Saved selection may render or resume only a still-current
+analysis/workbench/grounding artifact; it must not silently regenerate stale
+work or switch the current Context.
+`N` opens the common role-based setup as `INPUT A → OUTPUT B`. Input is an
+ordinary local Context. Output is either that same Context for in-place
+application or a validated new exact name that preserves Input. The typed
+receipt then hands both names to the normal create-or-resume path; it does not
+create Output or apply the proposal.
+
+Like Ground, Atomize supplies the shared launcher with the frozen process
+profile and store root. The profile label is derived by matching the already
+frozen store root against the registry, not by rereading a mutable active
+profile pointer. New and reopened Atomize sessions therefore remain visibly
+scoped to the storage namespace that actually owns them. The Atomize adapter
+also enumerates analyses from that exact store boundary, so a session in any
+other profile is not a catalog entry and cannot be selected by UID through the
+launcher.
 
 ### Compare
 
@@ -118,7 +136,12 @@ launcher before the first receipt exists. `N` collects distinct ordinary
 source and target Contexts and then invokes the normal explicit-endpoint
 Update path; provider planning, replacement checks, application, and receipts
 remain authoritative there. Opening a saved row reloads the singleton and
-requires its complete serialized value to remain unchanged before rendering.
+requires its complete serialized value to remain unchanged before opening the
+same state-aware interactive Impact Workbench used by saved Update inspection.
+Applied and undone receipts reopen read-only; impact and staged receipts may
+offer only a handoff back through Update's normal endpoint, authority,
+freshness, and exact application review boundary. The launcher never replaces
+the Workbench with a long static operation dump in a TTY.
 
 ### Sever
 
