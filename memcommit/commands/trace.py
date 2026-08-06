@@ -10,9 +10,15 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.command_attempts import annotate_memory_report_attempt
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.granted_context import resolve_context_access
 from memcommit.commands.memory_picker import choose_memory
+from memcommit.commands.memory_report_recents import (
+    MemoryReportRecentSelection,
+    MemoryReportSelectAction,
+    choose_memory_report_recent,
+)
 from memcommit.commands.read_only_viewer import (
     interactive_report_terminal,
     run_read_only_viewer,
@@ -561,6 +567,18 @@ def cmd(
     store = MemoryStore(create=False)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
+        if selector is None and as_json:
+            raise ProvenanceError("JSON output requires an explicit Memory UID.")
+        if selector is None and interactive_report_terminal():
+            launch = choose_memory_report_recent(store, operation="trace")
+            if launch is None:
+                typer.echo("Trace cancelled.")
+                return
+            if isinstance(launch, MemoryReportRecentSelection):
+                context_name = launch.context_name
+                selector = launch.memory_uid
+            elif not isinstance(launch, MemoryReportSelectAction):
+                raise ProvenanceError("Trace launcher returned an invalid action.")
         name = context_snapshot.resolve_or_current(context_name)
         if not name:
             raise ProvenanceError(
@@ -581,8 +599,6 @@ def cmd(
         )
         ctx = store.load_direct(access.context_name)
         if selector is None:
-            if as_json:
-                raise ProvenanceError("JSON output requires an explicit Memory UID.")
             selector = choose_memory(
                 collect_trace_candidates(store, ctx),
                 context_name=name,
@@ -596,6 +612,11 @@ def cmd(
             # so the rendered report never mixes old live state with new history.
             ctx = store.load_direct(access.context_name)
         report = build_trace(store, ctx, selector)
+        annotate_memory_report_attempt(
+            operation="trace",
+            context_name=name,
+            memory_uid=report.selected_uid,
+        )
     except (
         FileNotFoundError,
         OSError,

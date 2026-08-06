@@ -127,11 +127,23 @@ class SessionNewReceipt:
 
     kind: str
     argv: tuple[str, ...]
+    action_label: str | None = None
+    action_description: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.kind, str) or not self.kind:
             raise ValueError("new receipt kind must be non-empty text.")
         _validate_argv(self.argv, label="new receipt argv")
+        for label, value in (
+            ("new receipt action label", self.action_label),
+            ("new receipt action description", self.action_description),
+        ):
+            if value is not None and (
+                not isinstance(value, str)
+                or not value
+                or any(character in value for character in "\r\n")
+            ):
+                raise ValueError(f"{label} must be non-empty single-line text.")
 
 
 SessionPickerReceipt: TypeAlias = SessionOpenReceipt | SessionNewReceipt
@@ -362,6 +374,8 @@ def _render_location(location: SessionPickerLocation) -> str:
 def _new_session_label(receipt: SessionNewReceipt) -> str:
     """Return the operation-specific label for the pinned launcher row."""
 
+    if receipt.action_label is not None:
+        return display_escape_text(receipt.action_label)
     operation = receipt.kind.replace("_", " ").replace("-", " ").title()
     return f"Add new {display_escape_text(operation)} session"
 
@@ -374,8 +388,17 @@ def _render_new_detail(receipt: SessionNewReceipt) -> str:
     return "\n".join(
         (
             f" {_new_session_label(receipt)}",
-            " Leave saved-session browsing and enter operation-specific setup.",
-            " Exact new-session route · NOT EXECUTED",
+            " "
+            + (
+                display_escape_text(receipt.action_description)
+                if receipt.action_description is not None
+                else "Leave saved-session browsing and enter operation-specific setup."
+            ),
+            (
+                " Exact action route · NOT EXECUTED"
+                if receipt.action_label is not None
+                else " Exact new-session route · NOT EXECUTED"
+            ),
             *argv_lines,
         )
     )
@@ -389,6 +412,7 @@ def choose_session(
     location: SessionPickerLocation | None = None,
     initial_sort_mode: SessionSortMode = "recent",
     initial_group_mode: SessionGroupMode = "all",
+    catalog_label: str = "saved sessions",
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -415,6 +439,12 @@ def choose_session(
         raise ValueError("Session picker received an invalid initial sort mode.")
     if initial_group_mode not in ("all", "context"):
         raise ValueError("Session picker received an invalid initial group mode.")
+    if (
+        not isinstance(catalog_label, str)
+        or not catalog_label
+        or any(character in catalog_label for character in "\r\n")
+    ):
+        raise ValueError("Session picker catalog label must be non-empty text.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive session selection requires a terminal. "
@@ -509,9 +539,9 @@ def choose_session(
             )
         if not projected:
             message = (
-                "No saved sessions yet."
+                f"No {display_escape_text(catalog_label)} yet."
                 if not options and not search_area.text
-                else "No matching saved sessions."
+                else f"No matching {display_escape_text(catalog_label)}."
             )
             if fragments:
                 fragments.append(("", "\n"))
@@ -583,13 +613,16 @@ def choose_session(
         if not projected:
             if not options and not search_area.text:
                 suffix = (
-                    " Press N to start a new session."
+                    f" Press N to {_new_session_label(new_receipt)}."
                     if new_receipt is not None
                     else " Start one with this operation's explicit operands."
                 )
-                return " No saved sessions are available.\n" + suffix
+                return (
+                    f" No {display_escape_text(catalog_label)} are available.\n"
+                    + suffix
+                )
             return (
-                " No saved session matches the current filter.\n"
+                f" No {display_escape_text(catalog_label)} match the current filter.\n"
                 " Clear or revise the filter, or press N when New is enabled."
             )
         return _render_detail(projected[state.selected_index])
@@ -609,7 +642,11 @@ def choose_session(
             position = f"{state.selected_index + 1 + offset}/{total}"
         else:
             position = "0/0"
-        new_hint = "  N add new session" if new_receipt is not None else ""
+        new_hint = (
+            f"  N {_new_session_label(new_receipt)}"
+            if new_receipt is not None
+            else ""
+        )
         query_hint = (
             f"  · filter: {display_escape_text(search_area.text)}"
             if search_area.text and not state.search_active

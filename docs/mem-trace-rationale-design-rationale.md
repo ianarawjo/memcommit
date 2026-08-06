@@ -32,14 +32,28 @@ semantic analyses, proposals, or active state. `mem rationale` may update a
 replaceable provider-inference cache after a successful validated inference;
 `mem trace` and `mem rationale --recorded-only` remain storage-read-only.
 
-In an interactive terminal, omitting `MEMORY` opens the common read-only
-Context/Memory tree selector rather than a trace/rationale-specific flat list.
-It begins on the command's current or explicitly scoped Context row, including
-when that row has no direct Memory. Rationale places every eligible Memory
-beneath its actual owner in the readable public hierarchy; a Grant attachment
-is never treated as a hierarchy edge. Trace retains its single-Context scope.
-Context rows browse or collapse the tree, while only an exact Memory row can
-complete selection.
+In an interactive terminal, omitting `MEMORY` first opens the common session
+picker as a Recents launcher. Recent rows are scoped to the current operation,
+ordered newest first, and deduplicated by public Context name plus Memory UID.
+The pinned `SELECT A MEMORY` action then opens the common read-only
+Context/Memory tree. This keeps repeated inspection quick without replacing
+the complete namespace route needed for a new target.
+
+Recents are derived only from completed command-attempt records. A record
+stores the operation, public or scoped Context name, and Memory UID; it never
+copies Memory content, inferred rationale, Grant material, or provider data.
+Failed and cancelled attempts are not offered. Selecting a recent row freezes
+and revalidates its command-attempt receipt, then enters the ordinary command
+path, where current Context existence, UID resolution, and effective
+permissions are checked again. A recent row is therefore navigation history,
+not retained read authority or a report snapshot.
+
+The Context/Memory tree begins on the command's current or explicitly scoped
+Context row, including when that row has no direct Memory. Rationale places
+every eligible Memory beneath its actual owner in the readable public
+hierarchy; a Grant attachment is never treated as a hierarchy edge. Trace
+retains its single-Context scope. Context rows browse or collapse the tree,
+while only an exact Memory row can complete selection.
 
 Each eligible UID appears once: currently present Memories first in canonical
 Context order, followed by historical-only Memories using their last retained
@@ -64,12 +78,13 @@ interpretation. This shared first-stage picker is the interactive boundary for
 choosing a Memory; it does not silently choose an operation subrange.
 
 Rationale renders its complete interactive report inside the common framed,
-wrapped, read-only `VIEWER`, whether its Memory was selected interactively or
-passed explicitly. Bare Trace continues from the common selector into that
-same Viewer so the no-operand interaction is one coherent flow; explicit Trace
-remains a direct stdout report for shell inspection and piping. The Viewer
-shares Up/Down, PageUp/PageDown, Home/End, and Escape/Backspace/Q close
-behavior. Non-TTY and JSON output retain their stable non-full-screen forms.
+wrapped, read-only `VIEWER`, whether its Memory came from Recents, the tree, or
+an explicit operand. Bare Trace likewise continues from either launcher route
+into that same Viewer so the no-operand interaction is one coherent flow;
+explicit Trace remains a direct stdout report for shell inspection and piping.
+The Viewer shares Up/Down, PageUp/PageDown, Home/End, and Escape/Backspace/Q
+close behavior. Non-TTY and JSON output retain their stable non-full-screen
+forms.
 
 Outside a TTY, omission fails instead of silently selecting the first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an

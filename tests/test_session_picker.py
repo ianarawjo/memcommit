@@ -306,6 +306,21 @@ def test_add_new_label_and_detail_are_operation_specific_and_nonexecuting():
     assert _new_session_label(unsafe) == "Add new Meld\\nFake session"
 
 
+def test_pinned_action_can_name_selection_instead_of_a_new_session():
+    receipt = SessionNewReceipt(
+        kind="trace-select",
+        argv=("mem", "trace"),
+        action_label="SELECT A MEMORY",
+        action_description="Choose from the common Memory tree.",
+    )
+
+    assert _new_session_label(receipt) == "SELECT A MEMORY"
+    detail = _render_new_detail(receipt)
+    assert "SELECT A MEMORY" in detail
+    assert "Choose from the common Memory tree." in detail
+    assert "Exact action route · NOT EXECUTED" in detail
+
+
 @pytest.mark.parametrize("key", ["q", "\x1b", "\x03"])
 def test_cancel_keys_return_none(key: str):
     with create_pipe_input() as pipe_input:

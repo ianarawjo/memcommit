@@ -6,6 +6,10 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.commands.memory_report_recents import (
+    MemoryReportRecentSelection,
+    MemoryReportSelectAction,
+)
 from memcommit.context import Memory, MemoryRef, QueryContextRef
 from memcommit.provenance import collect_trace_candidates
 from memcommit.store import MemoryStore
@@ -180,6 +184,10 @@ def test_only_bare_interactive_trace_continues_into_common_viewer(
         "memcommit.commands.trace.choose_memory",
         lambda items, *, context_name, operation: target.uid,
     )
+    monkeypatch.setattr(
+        "memcommit.commands.trace.choose_memory_report_recent",
+        lambda store, *, operation: MemoryReportSelectAction(),
+    )
 
     bare = invoke("trace")
     explicit = invoke("trace", target.uid)
@@ -190,6 +198,80 @@ def test_only_bare_interactive_trace_continues_into_common_viewer(
     assert viewed[0].startswith("TRACE REPORT\n")
     assert "portable note" in viewed[0]
     assert "portable note" in explicit.output
+
+
+def test_bare_trace_recent_reopens_without_context_memory_selector(
+    isolated_store,
+    monkeypatch,
+):
+    assert invoke("init", "notes").exit_code == 0
+    assert invoke("add", "portable note").exit_code == 0
+    target = _direct_memories(MemoryStore())[0]
+    viewed: list[str] = []
+    monkeypatch.setattr(
+        "memcommit.commands.trace.interactive_report_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.trace.choose_memory_report_recent",
+        lambda store, *, operation: MemoryReportRecentSelection(
+            context_name="notes",
+            memory_uid=target.uid,
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.trace.choose_memory",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("a recent receipt must bypass fresh selection")
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.trace.run_read_only_viewer",
+        lambda text, *, title: viewed.append(text),
+    )
+
+    result = invoke("trace")
+
+    assert result.exit_code == 0, result.output
+    assert len(viewed) == 1
+    assert "portable note" in viewed[0]
+
+
+def test_bare_rationale_recent_reopens_its_recorded_scope(
+    isolated_store,
+    monkeypatch,
+):
+    assert invoke("init", "notes").exit_code == 0
+    assert invoke("add", "portable note").exit_code == 0
+    target = _direct_memories(MemoryStore())[0]
+    viewed: list[str] = []
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.interactive_report_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.choose_memory_report_recent",
+        lambda store, *, operation: MemoryReportRecentSelection(
+            context_name="notes",
+            memory_uid=target.uid,
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.choose_memory",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("a recent receipt must bypass fresh selection")
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.run_read_only_viewer",
+        lambda text, *, title: viewed.append(text),
+    )
+
+    result = invoke("rationale", "--recorded-only")
+
+    assert result.exit_code == 0, result.output
+    assert len(viewed) == 1
+    assert "portable note" in viewed[0]
 
 
 def test_bare_rationale_cancel_never_connects_provider(

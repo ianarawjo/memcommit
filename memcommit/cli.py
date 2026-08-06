@@ -253,15 +253,16 @@ app.command(
 app.command(
     "trace",
     help=(
-        "Enter the interactive Memory picker when no Memory is given, or trace "
-        "one retained origin through its current descendants."
+        "Enter interactive recent reports or the Memory picker when no Memory "
+        "is given, or trace one retained origin through its current descendants."
     ),
 )(trace.cmd)
 app.command(
     "rationale",
     help=(
-        "Enter the interactive Memory picker when no Memory is given, or show "
-        "recorded evidence and optional labeled contextual inference; no Context changes."
+        "Enter interactive recent reports or the Memory picker when no Memory "
+        "is given, or show recorded evidence and optional labeled contextual "
+        "inference; no Context changes."
     ),
 )(rationale.cmd)
 app.command(

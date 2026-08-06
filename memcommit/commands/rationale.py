@@ -9,9 +9,15 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.command_attempts import annotate_memory_report_attempt
 from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_picker import ScopedMemoryPickerItem, choose_memory
+from memcommit.commands.memory_report_recents import (
+    MemoryReportRecentSelection,
+    MemoryReportSelectAction,
+    choose_memory_report_recent,
+)
 from memcommit.commands.read_only_viewer import (
     interactive_report_terminal,
     run_read_only_viewer,
@@ -420,6 +426,18 @@ def cmd(
         if recorded_only and refresh:
             raise RationaleError("--refresh cannot be combined with --recorded-only.")
         context_snapshot = ContextOperandSnapshot.capture(store)
+        if selector is None and as_json:
+            raise RationaleError("JSON output requires an explicit Memory UID.")
+        if selector is None and interactive_report_terminal():
+            launch = choose_memory_report_recent(store, operation="rationale")
+            if launch is None:
+                typer.echo("Rationale cancelled.")
+                return
+            if isinstance(launch, MemoryReportRecentSelection):
+                context_name = launch.context_name
+                selector = launch.memory_uid
+            elif not isinstance(launch, MemoryReportSelectAction):
+                raise RationaleError("Rationale launcher returned an invalid action.")
         name = context_snapshot.resolve_or_current(context_name)
         if not name:
             raise RationaleError(
@@ -431,8 +449,6 @@ def cmd(
             current_name=context_snapshot.current_name,
         )
         if selector is None:
-            if as_json:
-                raise RationaleError("JSON output requires an explicit Memory UID.")
             candidates, owners = rationale_candidates(scope)
             selector = choose_memory(
                 tuple(
@@ -498,6 +514,11 @@ def cmd(
                     inference_scope_name=scope.root_name,
                     recorded_evidence_available=not target.access.is_granted,
                 )
+        annotate_memory_report_attempt(
+            operation="rationale",
+            context_name=scope.root_name,
+            memory_uid=report.trace.selected_uid,
+        )
     except (
         FileNotFoundError,
         OSError,
