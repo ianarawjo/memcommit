@@ -1,0 +1,1408 @@
+=== PAGE 1 ===
+Metaphors for Memory: Charting a Design Space of AI Memory
+Tools and Interfaces
+Munyeong Kim Michalis Famelis Ian Arawjo
+Montréal HCI DIRO Montréal HCI
+Université de Montréal Université de Montréal Université de Montréal
+Montréal, Quebec, Canada Montréal, Quebec, Canada Montréal, Quebec, Canada
+kim.munyeong@umontreal.ca famelis@iro.umontreal.ca ian.arawjo@umontreal.ca
+Abstract can retrieve, read, and modify [4]. Across these varied implemen-
+tations, memory serves common purposes—chiefly to
+AI memory is becoming central to AI systems that aim to support remember
+intent, preferences, and details of past interactions, whether with
+personal and professional work. Yet, designing interfaces for AI
+the user, or of agents themselves.
+memory is not well understood. How should we design for user
+Alongside this influx of attention to memory, primarily from
+interaction with AI memories—for instance, what kinds of opera-
+industry, there has been little attention paid to the corresponding
+tions might users want to perform on memory, either now or in
+decisions around AI memory. AI memory is not
+the future? We survey the design of tools and interfaces around “AI interface design
+merelyatechnicalproblembutan forusercontrol,trans-
+memory” to chart a design space of common design patterns, ar- affordance
+parency, and explainability over agent decision-making. Different
+chitectures, and operations, and identify dominant metaphors and
+choices of technical architectures for memory present different af-
+gaps in the space. Then, we apply generative metaphorical design
+fordances and constraints for designing interfaces for users to read
+toexpandthedesignspaceforAImemory,exploringless-dominant
+and modify that memory—for instance, storing memories by fine-
+metaphors of software version control, Zettelkasten, requirements,
+tuning the model makes later inspection near-impossible, whereas
+personal diaries, community archives, cultural probes, and science
+storing memories as a flat list of preferences is more auditable by
+fiction. Our work offers rich opportunities for gaps and emergent
+users,butmayleadtoperformancedropsasdetailsarelost.Accord-
+needs that future interfaces for AI memory might address.
+ingly, AI memory design necessarily involves a rich design space
+of architectural, operational, and interaction design choices, all of
+CCS Concepts
+which can affect one another.
+• Computing methodologies → Intelligent agents ; • Human-
+From a human-AI interaction standpoint, however, we still lack
+centered computing → Natural language interfaces ; HCI theory,
+a systematic account of these design choices. While the functional
+; .
+concepts and models Collaborative interaction
+and technical aspects of AI memory have been studied [49, 93], an
+interaction-oriented breakdown of the design of memory remains
+Keywords
+comparatively underexplored. What design space exists across
+memory, human-AI interaction, language models, design space, AI
+memory architectures, operations, and interaction mechanisms,
+agents
+and where do current AI memory systems fall short of what future
+interactive AI memory could provide? What are the downstream
+ACMReferenceFormat:
+Munyeong Kim, Michalis Famelis, and Ian Arawjo. 2026. Metaphors for implications of memory structure, including how structural and
+Memory:Charting aDesignSpace ofAIMemoryToolsand Interfaces.In operational constraints shape later decisions and affect interaction
+Designing Interactive Systems Conference (DIS ’26), June 13–17, 2026, Sin- quality, agent capability, and temporal or computational costs?
+gapore,Singapore.ACM,NewYork,NY,USA,17pages.https://doi.org/10.
+To address these questions, we conducted a review of current AI
+1145/3800645.3812979
+memory tools and interfaces to arrive at a design space [14, 54] for
+AI memory, including how AI’s memory is represented and struc-
+1 Introduction
+tured, how these choices on AI memory design shape interaction,
+Agentic AI systems, characterized by a large language model cou- and what trade-offs they introduce. Using this design space as an
+pled with the ability to call programmatic functions (“tools”), in- analytic lens, we then show how existing systems instantiate these
+creasingly have “memory” components. However, the consistency design choices, identify dominant patterns and metaphors, and dis-
+of “AI memory,” both in its implementation and its linguistic defini- cuss gaps that remain. Finally, we draw on generative metaphorical
+tion, are in flux. “AI memory” is now used to refer to everything design [50, 74] to propose new, lesser-used metaphors for AI mem-
+from in-context storage of past interactions, to pre-written user ory to spark ideas for addressing these gaps, and discuss how such
+directives injected into system prompts, to databases of user prefer- metaphors could inform future AI memory systems.
+ences[75],toMarkdownfilesstoredonthefile-systemthatanagent
+2 Background
+ThisworkislicensedunderaCreativeCommonsAttribution4.0InternationalLicense. Here we provide a brief introduction to the history of AI memory,
+DIS’26,Singapore,Singapore an overview of the current space of AI memory, and conceptual
+©2026Copyrightheldbytheowner/author(s).
+frameworks from communication theory that are increasingly em-
+ACMISBN979-8-4007-2563-0/26/06
+https://doi.org/10.1145/3800645.3812979 ployed to describe the problem of human-AI grounding [75, 83].
+
+=== PAGE 2 ===
+DIS’26,June13–17,2026,Singapore,Singapore Kimetal.
+2.1 A brief history of AI “memory” memories as data objects, so users can treat “what the agent re-
+members now and how it sees things” as a shared context they
+What “memory” means in AI systems and agent design has shifted
+can adjust. Semantic Commit [83] supports updating a natural-
+over time. In early NLP, a model’s “memory” was mostly under-
+language specification of user intent in long-running projects by
+stoodasinternalrecurrentstateorweight-encodedrepresentations
+helpingdetectandresolvenon-localimpactsandsemanticconflicts,
+(e.g. LSTM [37])—that is, something closer to the term implicit
+enabling users and agents to jointly track intent changes and man-
+memory [49, 72] in its current meaning, rather than a separate
+ageasharedinformationspace.Recently,Knollframesmemoriesas
+memory architecture. Later, with higher-capability LLMs such as
+knowledge bases that are transferrable across agents [94], similar
+GPT-4 [1] and techniques such as Chain-of-Thought (CoT) [87], re-
+to Anthropic’s later plug-n-play notion of “Skills” [4].
+trieval augmented generation (RAG) [48], and tool-use frameworks
+Even though HCI work on human–AI collaboration does not
+like CoALA [79], alongside concepts like the context window, sys-
+explicitly frame its contribution as “AI memory,” many such sys-
+tem prompts, and prompt engineering [12, 17, 33, 63], “memory”
+tems also grapple with related interaction challenges. Systems like
+expanded toinclude explicit,external datastorage anda clearerdis-
+CollaborativeGym [76] explore how to visualize and manage an in-
+tinction between implicit and explicit, yet these “memories” were
+formation space that humans and agents can jointly ground in, and
+often spoken of as run-time auxiliary inputs rather than as the
+how, within that space, a user and an agent might jointly navigate,
+agent’s enduring memory (e.g., injecting a list of user preferences
+connect ideas, and iteratively build a shared body of knowledge.
+as the “memory” to a system prompt, upon every call). More re-
+GhostWriter [90] likewise externalizes style and context as editable
+cently, LLM-based coding agents [5, 25, 31, 32, 61], enabled by
+documents that users can inspect and iteratively refine, helping
+larger context windows and stronger reasoning models (e.g., GPT-
+ground generated text in user-provided context and better align it
+5 [62], Claude Sonnet/Opus 4.5 [6, 7], and Gemini 2.5 Pro [29]),
+with the user’s voice over time. Sensemaking tools such as Sense-
+increasingly control how external memory is written, updated, and
+cape [78], systems designed to support human memory such as
+reorganized, shifting memory management from human curation
+Graphologue [39], and writing assistants such as TaleBrush [19]
+to agent-driven workspace maintenance, with users primarily su-
+can all serve as relevant reference points for designing AI memory
+pervising [67]. However, how to build external memory
+long-term
+systems’ interfaces and supported operations.
+at roughly human (or superhuman) levels remains relatively under-
+explored [49].
+Meanwhile, there have also been attempts to systematically sur-
+vey the technical components of AI agent memory in the emerging
+2.3 Conceptual Perspectives on
+landscape. CoALA [79] draws on cognitive science and symbolic
+Communication, Context, and Memory
+AI to describe modular memory components for language agents,
+In addition to mapping the design space of memory systems, re-
+classifying memory into short-term versus long-term and further
+searchers draw on perspectives from communication that can help
+dividing long-term memory into procedural [22, 34], semantic [13],
+in building interactive agent memory systems. Vaithilingam et
+and episodic [80] types. Liu et al. [49] systematically analyze AI
+al. [82] envision how a future AI game-design assistant might col-
+agentsbydecomposingtheirmemory-relatedcomponentsandmap-
+laborate in design work and gradually build dynamic ground with
+ping them to human cognitive and perceptual functions. Zhang et
+a user over time, while Ma et al. [53] propose a Human-AI delibera-
+al.[93]surveymemorymechanismsinLLM-basedagents,covering
+tion approach, derived from deliberation theory, in which humans
+both the structural design of memory modules and their evaluation.
+and AI elicit each other’s opinions through ongoing discussion and
+Rolls [69] compares and reviews the human brain and generative
+continually update decisions toward agreement.
+artificial intelligence from a neuroscience perspective, highlighting
+Recent work in human-AI communication [11, 75, 82, 83] has
+differences in the structure and operations of their respective mem-
+applied the framing of “common ground” and “grounding” from
+ory systems. While these works clarify how AI memory systems
+Clark & Brennan [20, 21] towards the creation of agent systems
+are designed at an architectural level, AI memory from an inter-
+that maintain analogous common ground between humans and
+action and design perspective—such as how architectural choices
+AI. Common ground refers to the mutual understanding (intents,
+systematically shape an interactive system’s affordances and thus
+context, details) accumulated over time between communicating
+the overall interaction patterns users encounter, and what sets of
+parties, such as when working together on a project [20]. Similar
+architectural and operational design choices are required to enable
+to a human actor, an AI agent must infer the user’s intent and its
+intended user interactions and meet desired design goals—remains
+context solely from the user’s expression, and then make decisions
+comparatively less studied, if at all remarked upon.
+and act accordingly; if the agent infers this incorrectly, it will fail to
+carry out what the user expects in the appropriate context. There-
+fore, it is important during interaction to verify that the agent’s
+2.2 Interfaces for AI memory in HCI
+interpretation is aligned with the user’s intent and context, and to
+Several HCI studies offer useful inspiration for designing the inter- adjust it when necessary. Moreover, to avoid the repeated cost of
+actionandoperationsofAImemoryinterfaces.Memolet[91]reifies grounding, maintaining common ground formed across multiple
+“memories” from prior conversations into reusable objects, and lets sessions in a persistent and coherently connected form requires
+usersexplicitlyspecifyandmanipulateamemoryspacewhereboth recording relevant knowledge in an additional memory store and
+the user and the agent can work with shared, groundable memory continuously updating it, which is important from the perspec-
+units. Memory Sandbox [38] visualizes an agent’s conversational tive of long-term interaction. This knowledge store, like human
+
+=== PAGE 3 ===
+MetaphorsforMemory: ChartingaDesignSpaceofAIMemoryToolsandInterfaces DIS’26,June13–17,2026,Singapore,Singapore
+grounding, must remain consistent and aligned to the other parties’ distinct subsystems were sometimes treated separately when they
+current understandings. exposeddifferentmemoryroles,interfaces,oraffordances.Thefirst
+Over long-horizon interaction, such iterative cycles can help the authorledthecodingprocess,whilethecoauthorsreviewedemerg-
+agent sustain a more stable context, enabling the agent to “learn” ing categories, discussed ambiguous cases, and provided feedback
+about the world through interaction with it. However, this process on changes to the scheme. Categories changed whenever recur-
+cannot operate reliably without an appropriately designed agent ring cases no longer fit the existing scheme cleanly or became too
+memory system. It may fail, for example, when the design cannot internally complex to be adequately described as a single option.
+support the required level of relational network structure, or when Whenever an axis or its options changed, we revisited and updated
+it lacks the manipulable operations needed to sustain the feedback the affected codes to keep the corpus consistent. We iterated this
+loops that arise in interaction. Therefore, designing interactive AI process until the axes and option sets stabilized, that is, until ad-
+memory systems requires considering the structural aspects of ditional cases could be placed within the existing axes and option
+memory, the operations it affords, and how these will be used in sets without requiring further changes to them.
+interaction, so that memories can be recorded, revised, connected, Our corpus was assembled through snowballing from a small
+and validated during interaction. set of seed systems, well-known in the space (e.g., LangGraph [44],
+Building on these concepts, industrial products and academic Claude Code [5], Mem0 [18]), rather than defined as an exhaustive
+systemsincreasinglyaimtosupportagent’sbuildinganunderstand- survey. We intentionally focused on tools and APIs, rather than
+ing of user intent over time. Chat-based agents like ChatGPT [60] academic texts, which often lag behind industry and, in HCI, do
+support custom memory that allows users, or the agent itself au- not correspond to widely-used systems; among HCI systems, we
+tonomously, to add context and persist information across sessions. preferred those whose designs are sufficiently well-documented,
+Code agents like Claude Code [5] similarly support persistent in- for example publications that describe the underlying structure in
+structions via CLAUDE.md and allow users to extend behavior detailoraccessiblecode-bases.Foreachcase,wereliedprimarilyon
+through Agent Skills [4] and subagents, which can be invoked in papers, documentation, and publicly accessible repositories, gener-
+their own scoped memory context. On the research side, PAIL [92] allyprioritizingdirectlyinspectableimplementationsorAPIswhen
+explicitlysurfacesusers’requirementsinsoftwaredevelopmentand available. When later product evolution had introduced features
+support the process of refining and updating them over time, while not present at the time of publication, however, we prioritized the
+Semantic Commit [83] shows how users and agents can collabo- paper’s description and the implementation state corresponding to
+ratively address emerging conflicts around user intent and revise that publication period.
+their grounding as those intents are established and updated. Fi- In the architectural survey, we included systems in which mem-
+nally, GUM [75] envisions that an AI agent, watching the user as ory was a substantive design target and excluded cases whose
+they work, will accumulate knowledge about the user over time architectures were not publicly available enough to analyze reli-
+that systems can use to ground and tailor later AI outputs. In what ably, such as ChatGPT [60]. In the operational survey, we included
+follows, we will outline this landscape more comprehensively. additional cases beyond those in the architectural analysis whose
+operationaffordancesareobservablethroughexplicitspecifications
+or publicly accessible platforms. For systems that combine multiple
+3 Mapping the Current Design Space of AI
+layers yet assign them clearly distinct roles and layer-specific inter-
+memory
+actions (e.g., LangGraph [44]/LangMem [45], or Claude Code [5]’s
+Here we examine the design space of AI memory—how different workspace, agent.md, and chat-memory layers), we analyzed the
+AI memory systems, shaped by their goals, intended interaction operations of each layer separately.1 In our operation analysis, we
+patterns, and practical constraints (e.g., LLM capability and cost, la- excluded cases that do not have independent operations of their
+tency,anddeploymentsetting),makestructuralchoicesandthereby own, such as Claude’s Agent Skills [4] and subagents [8].
+afford specific operations to both agents and users. Under recur- In total, we conducted an architectural analysis of 14 distinct
+ring combinations of goals and technical constraints, systems often systems and an operational analysis of 15 distinct systems (22 sub-
+converge on dominant patterns and the trade-offs they implicitly systems in total). Based on these results, we constructed the design-
+accept, alongside atypical but meaningful exceptions. Our goal is spacefigure(Figure1)andthecorrespondingtablesthatsummarize
+to help designers of interactive AI agent systems make purpose-fit each system’s observed architectural (Table 1) and operational (Ta-
+choices under their goals and constraints, and to help researchers ble 2) design choices.
+identify gaps that motivate new interaction designs.
+WeconductedtwosurveysonAImemorysystems’designchoices,
+one focused on architectural design choices (Section 3.1; Table 1)
+and the other on operational design choices (Section 3.2; Table 2),
+and then derived the design space from these results (Figure 1).
+To establish the axes of the design space and the options within
+each axis, we began with a set of seed axes, derived from a provi-
+sional framing of architectural choices, interaction patterns, and
+provided operations, and refined them during coding as needed.
+1In contrast, we did not separate Mem0 and Mem0g [18] because, in the current
+In the architectural survey, coding was conducted at the level of
+implementation,Mem0g’sfunctionalityisnotexposedviaindependentendpointsbut
+the memory system as a whole, whereas in the operational survey, istoggledwithinMem0’sexistingAPIsurface.
+
+=== PAGE 4 ===
+DIS’26,June13–17,2026,Singapore,Singapore Kimetal.
+Design space of 
+AI memory systems and interfaces
+Purpose of Memory systems
+Knowledge Base Agent memory Workspace
+Knowledge Base Self-model User model Shared mental model Workspace
+personal/group notes and memos, Instruction/role specification, user profile/preferences, shared goals/plans, Workspace state/progress log,
+docs/wiki/policies, Policy/constraints, propositions from history, common grounds, artifacts/outputs,
+logs and traces, Agent state, population/audience priors intent specification, project instruction/directive,
+observability data, Tools/skills shared domain/world knowledge project requirements/rationale,
+domain/world knowledge temporary notes/artifacts
+Architectural Design Space (Structural)
+(a) memory substrate (b) Memory relations / structure
+You are a helpfulÉ
+# Instructions
+* Only outputÉ
+* Your responseÉ
+## Examples
+Implicit Context System Workspace External List Multiple Set Tree Graph Vector File
+/ parametric window prompt (working memory / timeline lists space
+memory repository) / timelines
+(c) Structuredness of each memory entry (d) Basic memory unit scale
+Lorem ipsum You are a
+dolor sit amet, helpfulÉ ÒembeddingÓ:
+consectetur # Instructions console.log( [0.0124, The Quick Brown fox, brown, quick,
+adipiscing elit, * Only outputÉ "Hello, - 0 0 . . 0 0 0 0 0 4 1 8 , , Fox Jumps Over jump over, dog,
+sed do eiusmod * Your World!"); -0.0180] The Lazy Dog lazy
+tempor incididunt responseÉ
+ut labore ## Examples Not fixed Parameter Token
+Word
+(in-weights) / morpheme
+Unstructured Semi-structured Structured / phrase
+- Lorem ipsum dolor sit amet.
+(Markdown/YAML
+- Consectetur adipiscing elit.
+format, etc.) Lorem ipsum dolor sit
+- Sed do eiusmod tempor amet, consectetur Q: How many cups of
+(e) Node and edge payload incididunt ut labore et dolore adipiscing elit, sed do coffee did you drink
+magna aliqua. eiusmod tempor today? THESIS
+- Ut enim ad minim veniam. A: Five.
+incididunt ut labore et
+Number Text - Quis nostrud exercitation
+dolore magna aliqua. Ut
+ullamco laboris nisi ut aliquip Q: How many hours did
+enim ad minim veniam,
+ex ea commodo consequat. you sleep yesterday?
+1, 2, 3, 4, 5, 6, 7, 8, 9,10 memory, human-AI interaction, quis nostrud exercitation
+A: [Conversation ends.]
+Count language model, design space, Sentence ullamco laboris nisi ut
+AI agents / list entry aliquip ex ea commodo Episode Ñ Q&A pair, Document
+0.123, 0.333, 0.557, 0.053 Keyword / tag / idea unit consequat. query-response pair,
+Score / weight Passage event cycle,
+Semantic / Episodic / Procedural / paragraph conversation cycle,
+[1], [3]. [6]. [2,1], [8,7], [4,5,6] Category etc.
+Order
+/ position index This paper surveys the design of
+tools and interfaces around AI
+memory to chart a design..
+2024-08-03 00:00 UTC+9 Metaphors for memory: 
+Description / rationale
+Timestamp
+Charting a Design Space of 
+AI Memory Tools and Interfaces
+93a72469 reÞne wording and
+refresh rendering
+Log / diff / history
+(g) Retrieval justification method
+(f) Retrieval mechanisms
+we design for BM25
+user with AI
+memoriesÑfor tf-idf
+instance, w Filter LLM judgement
+Graph-based Filter (e.g., Lexical Sparse LLM-based Vector
+traversal by timeframe, (string-based) retrieval retrieval embedding- Importance:
+1 | 2 | 3 | 4 | 5
+ranking (e.g., by score) search ranking (e.g., / selection based search
+DFS/BFS, BM25, tf-idf) / reranking
+PageRank) Top-K Score
+Figure 1: Design space of AI memory systems and interfaces
+
+=== PAGE 5 ===
+MetaphorsforMemory: ChartingaDesignSpaceofAIMemoryToolsandInterfaces DIS’26,June13–17,2026,Singapore,Singapore
+Architectural Design Space (Interface and Interaction)
+(h) Main interaction pattern (i) User interface
+User requests, User inputs, User acts,
+API / library CLI Text editor / IDE Chat
+system acts system uses system supports
+System acts, Agent acts, Agents interact, List / table UI Search Canvas / graph Simulation
+system observes user user observes user observes / inspect panels / spatial UI / game-like
+interface
+Operational Design Space
+1-6. Memory item operation 7-8. Relations between memories 9. Query / Retrieval
+1. Edit authority 2-5. Item actions 6. Export/ 7. Edit relations 8. Construct and 9. Query / Retrieve
+(a) User edit memory directly 2. Add item share memory Add relation maintain a network from the memory store
+(b) System edit with approval 3. Edit item (partial/full). Edit relation of relations over
+(c) System edit without approval4. Hide / soft-delete item Hide / soft-delete relations time
+5. Hard-delete item. Hard-delete relations.
+10-12. (System) Detection 13-14. (System) Interaction / provenance
+10. Duplicate detection 11. Temporal conflict / 12. Semantic conflict / 13. Use memory in interaction 14. Show provenance /
+contradiction detection contradiction detection evidence of used memory
+15. Visibility
+Permission Controls (generalized from 1. Edit authority)
+& isolation controls
+15. Visibility & isolation Approval mode (system) import/ System access/edit Permission
+controls (system) Needs user approval export permission scope configurability
+(a) User owns -> system (system) No need for user approval No import or export, Selected item(s) Fixed
+can/can't view (system) Needs other system approval Import but no export Current workspace Changeable
+(b) System owns -> user (system) No need for other system approval Export but no import Selected locations
+can/can't view (user) Needs system approval Both import and export Entire file system
+(c) System owns -> other (user) No need for system approval
+systems can/can't view
+16-17. Memory generation
+18-20. Higher transformation 21-23. History / version control
+from observation
+16. Observation 17. Observation 18. Consolidate / 19. Sensitive- 20. Infer higher- 21. Track memory 22. Revert to a 23. Merge/split/
+and generation and generation summarize info audit level knowledge history / diff specific version branch memory
+from user from environment memory (suggest and (more than
+apply) summary) from
+existing memory
+and add it
+Figure 1: Design space of AI memory systems and interfaces (continued)
+
+=== PAGE 6 ===
+DIS’26,June13–17,2026,Singapore,Singapore Kimetal.
+Figure1providesanoverviewoftheresultingAImemorydesign operations are mostly mediated by the LLM and thus prioritizing
+spacebysynthesizingthedimensionsidentifiedinourarchitectural malleability over strict schema enforcement.
+(Table 1) and operational (Table 2) surveys. The figure is organized
+into three parts: Purpose of Memory Systems, Architectural Design 3.1.4 Basicmemoryunitscale(if(semi-)structured)(Table1,column
+The scale of the memory unit varies by purpose. For storing
+Space, and Operational Design Space. We present it upfront as an (d)).
+full logs, most systems kept each memory item as a whole (at the
+index and map to the dimensions that are later unpacked in Sec-
+document level). For interaction or editing, they tended to use
+tion 3.1 and Section 3.2. In the architectural part, the labels (a)–(i)
+smaller granularities (e.g. passages, episodes, or ideas) sometimes
+correspond to the dimensions later instantiated in Table 1. In the
+combining multiple units. Most additional retrieval layers operate
+operationalpart,thenumbersandnumberrangescorrespondtothe
+at the word level.
+operational rows and grouped ranges in Table 2. We place Purpose
+of Memory Systems first because it is important for understanding
+Node and edge
+3.1.5 Node and edge payload (Table 1, column (e)).
+the overall AI memory design space, but do not present it as a
+payload depend heavily on the memory structure a system chooses.
+separate system-level survey because these purposes did not form
+Compared to graph-based systems, list-based and hierarchy-based
+clear system-level distinctions and were typically pursued simulta-
+systems have limited relational structure, which constrains pay-
+neously within the same systems. Gray cells indicate theoretically
+loads to minimal signals such as scores or timestamps. However, in
+relevant options that were retained in the design space even when
+our analysis, graphs in those graph-based systems largely took the
+they were not directly instantiated in the surveyed corpus.
+form of triple-based knowledge graphs, so edge payloads were lim-
+ited to keywords. In vector-embedding stores (e.g., Memolet [91]),
+3.1 Architecture
+theembeddingspaceitselffunctionsasthepredeterminedrelational
+Table 1 summarizes the architectural design choices of the memory
+structure.Therefore,thereareconstraintsonarbitrarilyaddingaddi-
+systems in our corpus. Rows correspond to systems, and columns
+tional edge payloads, making this design option limited in practice.
+correspond to key design dimensions. Each cell lists the option(s)
+adopted by a system; multiple items within a cell are separated Retrieval mecha-
+3.1.6 Retrieval mechanisms (Table 1, column (f)).
+by line breaks. When multiple items are listed, all of them are nismsalsodependheavilyontheprecedingdesignchoices.Systems
+present in the system (often serving different roles or appearing thatinclude keywords,timeframes, orscoresoften providefiltering
+in different parts of the system); however, earlier items typically orsearchfunctionsbasedonthosefields.Graph-basedsystemssim-
+reflect the system’s most central or emphasized design choices, ilarlytendtosupportgraphtraversal(e.g.,DFS/BFS).Anotablecase
+while later items tend to play supporting roles. For example, in isHippoRAG[40],whichperformsPersonalizedPageRank[36]over
+HippoRAG [40]’s “Basic memory unit scale,” we list the retrieval- aknowledgegraphforretrieval.Mosttoolsalsoadoptcontent-level
+level unit (word) before the storage-level unit (document), since the retrieval over each memory unit, including lexical search, vector
+system’s central design emphasis lies in the retrieval layer. A dash embedding search, BM25 [68], and/or LLM query-based retrieval.
+(–) indicates that the system does not include any corresponding
+structure or mechanism for that dimension. 3.1.7 Retrieval justification method (Table 1, column (g)). While
+retrieval mechanisms and retrieval justification methods are not
+All of the analyzed
+3.1.1 Memory substrate (Table 1, column (a)). strictly paired, they tended to co-vary in our corpus. Systems using
+systems include external memory as a main memory substrate.
+deterministic retrieval usually also relied on deterministic justifica-
+In addition, systems may provide a workspace, context window,
+tion criteria, such as filters, scores, and top-k cutoffs [2, 18, 40, 44,
+and/or a system prompt, depending on what the system aims to
+64, 66, 88, 91]. By contrast, systems that involved LLMs in retrieval
+demonstrate. However, even external-memory-only systems often
+typically used LLM judgment as an additional basis for justifica-
+propose end-to-end workflows that help users fully leverage the
+tion, for example by assigning importance scores [65], reranking
+memory substrate design space with other systems.
+retrieved candidates [75], or applying a final filtering step after an
+initial deterministic retrieval [83].
+Systems
+3.1.2 Memory relations / structure (Table 1, column (b)).
+whose core contributions are in memory structure generally adopt
+Dominant
+3.1.8 Main interaction pattern (Table 1, column (h)).
+graph-based structures [18, 40, 66, 88]. In contrast, systems whose
+interaction patterns fell into four types: (1) users request actions
+core contributions are not in structure but in interaction typically
+and the system performs memory operations [18, 40, 66, 88]; (2)
+adopt simpler forms, such as a temporal list [38, 64, 65, 75] or
+users act and the system supports memory work [38, 83, 91]; (3)
+embedding-vector-based grouping [91]. Semantic Commit [83] is
+agents autonomously observe and interact with the environment
+anexceptionalcase,althoughitsmaincontributionisininteraction,
+while accumulating memory, and users mostly observe [2, 65];
+it identifies the limitations of list- or embedding-based approaches
+or (4) users input memory into the store for agents’ later use [4,
+as a problem and introduces an additional graph structure.
+8, 44]. A distinctive case is the General User Model [75], where
+memory operations are driven primarily through observing the
+3.1.3 Structuredness of each memory entry (Table 1, column (c)).
+While early systems (e.g. MemGPT [64], Memory Sandbox [38]) user and the user is positioned as the observed subject rather than
+stored memories as unstructured strings, most systems adopted the observer of an acting agent, unlike the other systems where
+schema-basedentries(e.g.,JSON)toattachmetadata.Claude’sagent memory operations are typically initiated by users through some
+skills [4] and subagents [8], meanwhile, use Markdown with a instruction, data, or initial environmental conditions and users are
+YAML front matter header, reflecting an assumption that memory more often positioned to observe and evaluate the agent.
+
+=== PAGE 7 ===
+MetaphorsforMemory: ChartingaDesignSpaceofAIMemoryToolsandInterfaces DIS’26,June13–17,2026,Singapore,Singapore
+The interface was most write-time deduplication and handle duplicates by skipping, replac-
+3.1.9 User interface (Table 1, column (i)).
+often provided in API and library. When GUIs were provided, mem- ing, or grouping entries. In parallel, Zep [66] supports temporal-
+ories were typically displayed as sequential (table) lists or chat logs, conflict detection to catch temporal inconsistencies across memory
+often with extra panels (e.g., inspector panel). Two distinctive cases contents. Separately, Zep [66], Mem0 [18], Arigraph [2], and Se-
+are Memolet [91]’s 2D card-grid canvas and Generative Agent’s mantic Commit [83] provide LLM-based semantic contradiction
+simulation-game-like UI.2 detection.
+While most
+3.2 Operations 3.2.5 Interaction and Provenance (Table 2, rows 13-14).
+AI memory tools were ultimately designed to operate as part of a
+Table 2 enumerates the memory operations supported by each
+user–agentoragent–agentinteractionpipeline,whetherinteraction-
+system. The columns list the memory systems, grouped by layer,
+related operations were implemented in-system depended on the
+while the rows list operations together with the actor responsible
+scope the system aimed to cover. Among them, Semantic Com-
+for each operation. Each cell is coded as Yes (¸) when the system
+mit [83], Memolet [91], and the chat interfaces of Chatgpt [60] and
+provides the capability and No ( - ) otherwise. For edge cases, we
+◦ Claude [5] also provided provenance about which memories the
+use a circle ( ) when the operation is not supported as a specified
+agent referenced during interaction.Some systems do not explicitly
+feature but can still be achieved indirectly (e.g., via LLM calls or
+show evidence or provenance for interactions, but it is still possible
+workaroundworkflows),andweuseatriangle(△)tomarkpartially
+to see which memories were retrieved at that point through logs or
+supported cases where the operation is implied by the system’s
+return values. We treated it as partially supported in such cases.
+definition or data model but is incomplete in practice (e.g., General
+UserModel[75]isappend-onlywithtimestamps,somemoryentries
+Therewerefewcases
+3.2.6 VisibilityandIsolation(Table2,row15).
+themselves form a rudimentary history, but it would be a stretch to
+wherein-systemoperationsallowedcontrolleddifferentialvisibility
+say it supports “history tracking” as an explicit operation).
+or memory isolation between users and agents, aside from Memory
+Sandbox[38]’sselectiveuseofmemoriesinchatandChatGPT[60]/
+Memory-manipulation
+3.2.1 Item Operation (Table 2, rows 1-6).
+Claude Code [5] instruction prompts that are visible only to the
+authority tended to follow the dominant interaction pattern of the
+agent and selectively disclosed to the user.
+system. User-led systems gave users more control over memory
+operationswhileagentauthoritywasoftenmorelimited.Agent-led
+Systems often allowed agents
+systems tended to have reversed pattern. User-approved edits were 3.2.7 Observe (Table 2, rows 16-17).
+to observe and record user behavior to build long-term memory
+rare. When agents could edit memory autonomously, edits usually
+without manual user curation. In simulation settings, observing
+occurred without user consent. Soft delete/hide was absent in most
+andrecordingexternalenvironmentsandinteractionswasessential
+systems except Memolet [91] and Memory Sandbox [38]. Beyond
+for agents to perceive, judge, and act autonomously.
+ChatGPT [60]’s chat sharing, we did not observe any in-system
+export/sharing features for memory. In most cases, users had to
+download memories or implement sharing themselves. We found 3.2.8 Higher-level Memory Transformation (Table 2, rows 18–20).
+Higher-level memory transformations beyond atomic edits became
+no systems that allow agents to autonomously export or share
+more common as agents gained greater memory-control author-
+memory.
+ity. Consolidation mainly served to streamline memory stores, ei-
+3.2.2 Relations between Memories (Table 2, rows 7-8). Where ex- ther compressing memory store (Zep [66], ChatGPT [60], Claude
+plicit relationships and edges do exist, systems often allowed some Code [5]) or producing more readable memory sets for users (Mem-
+relationship editing; however, in most cases this meant either users olet [91], Memory Sandbox [38]). Auditing appeared where sensi-
+manuallyeditingedgesonebyoneoragentsautomaticallyupdating tive disclosure is likely (General User Model [75], ChatGPT [60]),
+edges during their update process. We did not observe any systems but in both systems the rule set was predetermined and not user-
+that support user-approved relationship edits. Meanwhile, it was configurable. Inference supported autonomous action (Generative
+notable that most graph-based memory systems aim to construct Agents [65], Arigraph [2]) or proposition extraction from observed
+and maintain a network of relations over time. user interactions (General User Model [75], SpecStory [16], Chat-
+GPT [60]).
+Most systems provided
+3.2.3 Query and Retrieval (Table 2, row 9).
+query authority to both users and agents. Even when query func-
+In
+3.2.9 HistoryTrackingandVersionControl(Table2,rows21–23).
+tionality was absent for the user and/or the agent, in most cases it
+our analysis, even when systems supported memory deletion, sup-
+was because queries were not necessary under the system require-
+port for version control or history was rare. Append-only memory
+ments rather than due to structural limitations.
+systems were coded as partial support, since the current state func-
+tions as de facto versioning even without explicit history/version-
+Some systems provided ad-
+3.2.4 Detection (Table 2, rows 10-12).
+control features. For this reason, most tools did not support higher-
+ditional detection operations beyond basic querying. Zep [66],
+level version-control operations such as reverting, merging, split-
+Mem0 [18], Arigraph [2], and the General User Model [75] support
+ting, or branching memory. Claude Code [5] can perform these
+operations by executing Git commands, but they are not supported
+via in-system operations; we coded this as supported only via a
+2Note,however,thatinGenerativeAgentstheprimarypurposeoftheUIwastodisplay
+thesimulationthanthememoryitself. workaround.
+
+=== PAGE 8 ===
+DIS’26,June13–17,2026,Singapore,Singapore Kimetal.
+Table 1: Architectural design choices across AI memory systems
+System (a)Memory (b)Memory (c)Structuredness (d)Basic (e)Nodeand (f)Retrieval (g)Retrieval (h)Maininteraction (i)Userinterface
+substrate relations/ ofeachmemory memoryunit edgepayload mechanisms justification pattern
+structure entry scale method
+MemGPT[64] Contextwindow Timeline Unstructured Document Timestamp Timeframefilter Filters Userrequests, API/Library,
+Systemprompt Passage Lexicalsearch Top-K systemacts Inspector
+Externalmemory Vectorembedding panel+chat+list
+LangGraph Externalmemory Tree Structured Notfixed Category Lexicalsearch Top-K Userinputs, API/Library
+(BaseStore)[44] Timestamp Filters systemuses
+HippoRAG[40] Externalmemory Graph Structured Word Count PersonalizedPageRank Top-K Userrequests, API/Library
+Document Keyword systemacts
+Zep/Graphiti[66]Externalmemory Multitimeline Structured Word Keyword Vectorembedding Top-K Userrequests, API/Library
+Graph Sentence Timestamp BM25 Filters systemacts
+Episode Graph(BFS/DFS)
+Timeframefilter
+A-MEM[88] Externalmemory Graph Structured Sentence Keyword Vectorembedding Top-K Userrequests, API/Library
+Graph(BFS/DFS) systemacts
+Mem0/ Externalmemory Timeline Structured Document Keyword Vectorembedding Top-K Userrequests, Table
+Mem0g[18] Graph Episode BM25 systemacts
+Sentence Graph(BFS/DFS)
+Word
+AriGraph[2] Contextwindow Timeline Structured Document Keyword Vectorembedding Top-K Agentacts, Textgame
+Externalmemory Graph Episode Graph(BFS/DFS) userobserves interface
+Sentence
+Word
+Generative Contextwindow Multitimeline Structured Word Score Lexicalsearch Filters Agentsinteract, Sims-like
+Agents[65] Systemprompt Sentence Weights ScoreFilter LLM userobserves observational
+Externalmemory Timestamp judgement interface
+Scores
+Top-K
+GeneralUser Workspace List Structured Sentence Timestamp BM25 Top-K Systemacts, API/Library
+Model[75] Externalmemory Timeline Episode Score LLM LLM systemobservesuser
+Weights judgement
+Semantic Workspace List Structured Word Keyword LLM LLM Useracts, Centerlistwith
+Commit[83] Externalmemory Graph Sentence PersonalizedPageRank judgement systemsupports search/inspect
+panels
+Memolet[91] Contextwindow Vectorspace Structured Document - Vectorembedding Top-K Useracts, Chatandcard-grid
+Workspace Set Episode systemsupports canvas
+Externalmemory
+Memory Contextwindow List Unstructured Document - - - Useracts, Chat
+Sandbox[38] Systemprompt Sentence systemsupports
+ClaudeAgent Externalmemory Tree Semi-structured Document - - - Userinputs, -
+Skills[4] Contextwindow systemuses
+ClaudeCode Externalmemory Singlefile Semi-structured Document - - - Userinputs, CLIandIDE
+Subagents[8] Systemprompt systemuses
+Contextwindow
+Note.Eachentryliststheadoptedoptionsforasystem;withinacell,earlieritemsindicaterelativelyhigherimportance.
+3.3 Implications of architectural decisions of AI reasoning or provenance behind a response. Explicit memory can
+beslower,butitiscomparativelyeasiertoedit,delete,orscope,and
+memory
+it better supports tracing which stored information contributed to
+Across these analyses, we derived several implications about how
+a given output. Explicit memory also makes it easier to construct
+specific design choices in AI memory systems shape interaction-
+context-dependent responses by retrieving different combinations
+level affordances and trade-offs, while also identifying several gaps
+of memories depending on the situation and inferred intent.
+in current dominant design patterns. Sections 3.3 and 3.4 briefly
+In practice, the choice often comes down to whether memory
+discuss these implications and gaps.
+is meant to enable reflex-like behavior (implicit) or to preserve
+inspectable context and rationale (explicit). For example, when
+Designers’ decisions about
+3.3.1 Implicit versus explicit memory.
+memory updates are rare (e.g., language rules, basic mathemat-
+whether information should live in implicit or an explicit memory
+ics, general programming knowledge), personalization is minimal
+can be clarified by analogy to human implicit versus explicit mem-
+(e.g., systems targeting large, heterogeneous user groups), speed
+ory. Implicit memory corresponds to knowledge we want to sur-
+is critical, and provenance is not strongly required, encoding the
+face reflexively and immediately through training, whereas explicit
+knowledge into implicit memory can be beneficial. Conversely,
+memory corresponds to a knowledge network that is accumulated
+whenmemoryupdatesarefrequent,personalizationmatters,prove-
+over time and kept in a form that can be inspected and edited. The
+nance during reasoning is important, or the same question requires
+two approaches involve a familiar set of trade-offs. Implicit mem-
+ory is fast, but difficult to update, and it is often hard to trace the
+
+=== PAGE 9 ===
+MetaphorsforMemory: ChartingaDesignSpaceofAIMemoryToolsandInterfaces DIS’26,June13–17,2026,Singapore,Singapore
+Table 2: Operational design choices across AI memory systems
+LangGraph[44] Zep[66] ChatGPT[60] ClaudeCode[5]
+Genera General
+Mem Lang Hippo -tive User Semantic Memo Memory Spec
+GPT Base Mem RAG Zep Graph A-MEM Mem0 AriGraph agents Model Commit let Sandbox Story Instruc Project Work CLAUDE
+Operation [64] Store [45] [40] (cloud) iti [88] [18] [2] [65] [75] [83] [91] [38] [16] tion Memory files Chats space .md Chats
+1-6.Memoryitem
+operation
+1.Editauthority
+(a)usereditmemory ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸ - ¸ - ¸ ¸ ¸ - ¸ ¸ ¸ ¸ ¸ ¸ ¸
+directly
+(b)systemcaneditunder - - - - - - - - - - - ¸ - - - - - - - ¸ ¸ -
+userapproval
+(c)systemcaneditwithout ¸ - ¸ ¸ ¸ ¸ - ¸ ¸ ¸ ¸ - ¸ ¸ - - ¸ - - ¸ ¸ -
+userapproval
+2.Additem
+(a)user ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸ - ¸ - ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸
+(b)systemwithapproval - - - - - - - - - - - ¸ ¸ - - - - - ¸ ¸ ¸ -
+(c)systemwithoutapproval ¸ - ¸ - - ¸ - ¸ ¸ ¸ ¸ - ¸ △ ¸ - ¸ - - ¸ ¸ ¸
+3.Edititem
+(a)user △ ¸ ¸ - - ¸ ¸ ¸ - - - ¸ - ¸ ¸ - - - - - - -
+(b)systemwithapproval - - - - - - - - - - - ¸ - - - ¸ - - ¸ ¸ ¸ -
+(c)systemwithoutapproval △ - ¸ - - - - ¸ ¸ - - - - - - - - - ¸ ¸ ¸ -
+4.Hide/soft-deleteitem
+(a)user - - - - -* - - - - - - - ¸ ¸ - - - - - - - -
+(b)systemwithapproval - - - - - - - - - - - - - △ - - - - - - - -
+(c)systemwithoutapproval - - - - - - - - - - - - - - - - - - - - - -
+5.Hard-deleteitem
+(a)user ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸ - - - ¸ - ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸ -
+(b)systemwithapproval - - - - - - - - - - - ¸ - - - - - - - ¸ ¸ -
+(c)systemwithoutapproval △ - ¸ - - ¸ - ¸ ¸ - - - - - - - ¸ - - ¸ ¸ -
+6.Export/sharememory
+(partial/full)
+(a)user - - - - - - - - - - - - - - - - - - ¸ - - -
+(b)systemwithapproval - - - - - - - - - - - - - - - - - - - - - -
+(c)systemwithoutapproval - - - - - - - - - - - - - - - - - - - - - -
+7-8.Relationsbetween
+memories
+7.Editrelations
+(add/delete/update;single
+ormultiplerelations)
+(a)user - △ - - ¸ ¸ ¸ - - - - - ¸ - - - - - - - - -
+(b)systemwithapproval - - - - - - - - - - - - - - - - - - - - - -
+(c)systemwithoutapproval - - - - - - ¸ ¸ ¸ - - ¸ ¸ - - - - - - - - -
+8.(system)Constructand - - - ¸ ¸ ¸ ¸ ¸ ¸ - - ¸ ¸ - - - - - - - - -
+maintainanetworkof
+relationsovertime
+9.Query/Retrieval
+9.Query/retrievefromthe
+memorystore
+(a)user ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸ - ¸ ¸ - ¸ △ ¸ ¸ ¸ ¸ ¸ ¸ ¸ ¸
+(b)systemwithapproval - - - - - - - - - - - - - - - - - - - ¸ ¸ -
+(c)systemwithoutapproval ¸ - ¸ ¸ - ¸ - ¸ ¸ ¸ ¸ - ¸ △ - ¸ ¸ ¸ ¸ ¸ ¸ -
+10-12.Detection
+10.(system)Duplicate - - ¸ △ ¸ ¸ - ¸ ¸ - ¸ - - - - - - - - ◦ ◦ -
+detection
+11.(system)Temporal - - - - ¸ ¸ - - △ - - - - - - - - - - ◦ ◦ -
+conflict/contradiction
+detection
+◦ ◦
+12.(system)Semantic - - ¸ - ¸ ¸ - ¸ ¸ - - ¸ - - - - - - - -
+conflict/contradiction
+detection
+13-14.Interaction&
+provenance
+13.(system)Usememoryin ¸ - ¸ ¸ - - - ¸ ¸ ¸ - ¸ ¸ ¸ - - - - ¸ - - ¸
+interaction
+14.(system)Show △ - - ¸ - - - - △ - - ¸ ¸ - - - - - ¸ - - ¸
+provenance/evidenceof
+usedmemory
+15.Visibility&isolation
+15.Visibility&isolation
+controls
+(a)Userowns→system - - - - - - - - - - - - - ¸ - - - - - - - -
+can/can’tview
+(b)systemowns→user - - - - - - - - - - - - - - - ¸ - - - - - ¸
+can/can’tview
+(c)systemowns→other - - - - - - - - - - - - - - - - - - - - - -
+systemscan/can’tview
+Legend:¸=Yes;-=No; ◦ =Workaround(notabuilt-infeature;achievableviaLLMcallsusingthesystem’ssupportedfunctions);△=Partiallyyes(yesinprinciple,butlimitedimplementation)
+*LegacyZepsoft-deletewasremovedinthecurrentrelease.
+
+=== PAGE 10 ===
+DIS’26,June13–17,2026,Singapore,Singapore Kimetal.
+Table 2: Operational design choices across AI memory systems (continued)
+LangGraph[44] Zep[66] ChatGPT[60] ClaudeCode[5]
+Genera General
+Mem Lang Hippo -tive User Semantic Memo Memory Spec
+GPT Base Mem RAG Zep Graph A-MEM Mem0 AriGraph agents Model Commit let Sandbox Story Instruc Project Work CLAUDE
+Operation [64] Store [45] [40] (cloud) iti [88] [18] [2] [65] [75] [83] [91] [38] [16] tion Memory files Chats space .md Chats
+16-17.(system)Memory
+generationfrom
+observation
+16.Observationand ¸ - ¸ - - - - - - - ¸ - - - ¸ - ¸ - - - - -
+generationfromuser
+17.Observationand - - - - - - - - ¸ ¸ - - - - - - - - - - - -
+generationfrom
+environment
+18-20.Higher
+transformation
+18.Consolidate/
+summarizememory
+◦ ◦ ◦
+(a)systemwithuser - - - - - - - - - - - - ¸ ¸ - - - - -
+approval
+(b)systemwithoutuser - - - - ¸ ¸ - - - - - - - - - - ¸ - - - - ¸
+approval
+19.Sensitive-infoaudit
+(suggestandapply)
+◦ ◦ ◦
+(a)systemwithuser - - - - - - - - - - - - - - - - - - -
+approval
+(b)systemwithoutuser - - - - - - - - - - ¸ - - - - - ¸ - ¸ - - -
+approval
+20.Inferhigher-level
+knowledge(morethan
+summary)fromexisting
+memoryandaddit
+◦ ◦ ◦
+(a)systemwithuser - - - - - - - - - - - - - - - - - - ¸
+approval
+(b)systemwithoutuser - - ¸ - - - - - △ ¸ ¸ - - - ¸ - - - ¸ - - -
+approval
+21-23.History/version
+control
+21.(system)Trackmemory - - - - - - - ¸ ¸ △ △ - - - - - ¸ - - ◦ ◦ ¸
+history/diff
+22.Revertmemorytoa
+specificversion
+(a)user - - - - - - - - - - - - - - - - ¸ - - ◦ ◦ △
+◦ ◦
+(b)systemwithapproval - - - - - - - - - - - - - - - - - - - -
+◦ ◦
+(c)systemwithoutapproval - - - - - - - - - - - - - - - - - - - -
+23.Merge/split/branch
+memory
+◦ ◦
+(a)user - - - - - - - - - - - - - - - - - - - -
+◦ ◦
+(b)systemwithapproval - - - - - - - - - - - - - - - - - - - -
+◦ ◦
+(c)systemwithoutapproval - - - - - - - - - - - - - - - - - - - -
+Legend:¸=Yes;-=No; ◦ =Workaround(notabuilt-infeature;achievableviaLLMcallsusingthesystem’ssupportedfunctions);△=Partiallyyes(yesinprinciple,butlimitedimplementation)
+different answers depending on context and intent, it can be advan- as needed to compose responses. At the same time, users typically
+tageous to store the relevant knowledge in an explicit layer as an wantmorethanaQ&Ainterface:theywanttheagenttounderstand
+editable network, as long as the latency cost remains acceptable. the workspace they are operating in as if it were “looking at it
+together” with them, and to retain task context so it can bring in
+As Fig-
+3.3.2 How should we scope and target memory substrates?
+the right information at the right time. In other words, even if one
+ure1andTable1suggest,evenwhenasystemusesexplicitmemory,
+build just a database, users will still expect the system to connect
+there are multiple places where memory can be situated and ma-
+that store with documents, chats, workspace artifacts, and traces
+nipulated. The same information can live in the system prompt,
+used in other context windows in a coherent way. Similarly, even
+in an external store, or in a shared workspace where humans and
+if one develops only one part of the interaction pipeline, it is not
+an AI co-produce artifacts. Alternatively, a system may rely on
+enough to focus solely on the system-prompt instructions, and
+additional agents with independent context windows, as in Claude
+users will want the system to integrate with external stores and
+Code subagents [8]. In practice, an agent ends up using all of these
+workspaces.
+substrates. Even if a particular system covers only a subset of them,
+Ignoring these connections may not break the system imme-
+designers should still consider how it connects to the rest.
+diately, and the problem may not be visible at first, but it almost
+For example, suppose a memory system is designed as a work-
+inevitably creates friction over time. For instance, if two incom-
+oriented database that both the agent and users can reference. In
+patible systems exist, one strong at storage and another strong at
+real use, the agent will not rely on the database alone, but will act
+dialogue, reasoning, or tool instructions, users end up switching
+within its context window under a system prompt that specifies
+back and forth and manually copy-pasting, or they eventually give
+roles, rules, and instructions, and it will retrieve from the database
+
+=== PAGE 11 ===
+MetaphorsforMemory: ChartingaDesignSpaceofAIMemoryToolsandInterfaces DIS’26,June13–17,2026,Singapore,Singapore
+upononeofthem.Therefore,evenwhendesigningasinglesystem, salientin human–AIcollaborationsettings, where humanattention
+itisworthkeepingtheentireagentpipelineinmind,includinghow and reading speed are far slower than agent-side processing.
+userswillactuallyinteractwithitandhownaturallyitinteroperates To mitigate these trade-offs, some systems stack multiple layers
+with other tools, stores, and workspaces. rather than committing to a single structure, for example, adding a
+timeline- and keyword-oriented graph layer over list-like memory
+When de-
+3.3.3 Granularity and density of memory components.
+entries [18], or overlapping multiple lists and timelines to compen-
+signing structures to hold and manage knowledge, there is an in-
+sate for sparsity in any one view [65, 66, 75]. Because these struc-
+herenttrade-offbetweenfidelityandusability:largermemoryunits
+tural choices are difficult to revert once a system is implemented
+preserve more context but are less likely to be read, while smaller
+and populated with data, it is important to clarify the intended
+units are easier to scan but make faithful reconstruction harder.
+goals and interaction scope early, and to select a representation
+The same trade-off applies to relations: simple edges (e.g., scalar
+that matches the expected update and retrieval workflows.
+weights) are easy to process but carry little explanatory content,
+whereas richer edges (e.g., predicates, keywords, short rationales) Retrieval mechanisms intro-
+3.3.5 Choice of retrieval mechanisms.
+preserve “why” at higher processing cost. The trade-off is similar duceanadditionallayeroftrade-offsandareoftencombinedacross
+in terms of relational density: sparse structures (e.g., lists and inde- layers.Systemscommonlypairdeterministicmethods—suchaslexi-
+pendent notes) are easy to navigate but cannot explicitly encode calsearch,time-basedfiltering,orgraphtraversal(e.g.,BFS/DFS)—with
+complex, long-range relations. In contrast, denser structures (e.g., additional retrieval layers, including embedding-based retrieval,
+trees and graphs) can capture such relations but make navigation BM25-style lexical retrieval, and/or LLM-mediated query interpre-
+more difficult. tation and reranking. External vector embeddings often have lower
+Thesegranularity-anddensity-relatedprocessingtrade-offsalso build and per-query costs than knowledge-graph approaches, but
+apply to users, but in a somewhat different way. In general, people their induced relational structure is difficult to update. Therefore,
+are accustomed to reading text at the sentence level, consuming for example, even when a user believes A should be closer to C
+information one unit at a time and largely in a single direction, than to B, the system cannot easily “edit” that relationship if it is
+and they also tend to avoid overly long texts. Therefore, when determined by a fixed embedding space. Embeddings also struggle
+designing memory systems that humans are expected to consult with context-dependent meaning, such as name disambiguation or
+directly alongside agents, one must consider not only what kinds indirect references (e.g., “you know who”), where explicit relational
+of data an agent can process well, but also how humans actually representations can be more reliable.
+read. For example, ontology-style knowledge graphs expressed as Whencontextsensitivityandcontrollablerelationsarecentralto
+noun–verbtriplesoftendonotmakeitclearhowthecontentshould a system’s goals, paying the higher construction and maintenance
+beread,theirtraversaldirectionisnotconsistent,andeachunitmay costs of graph-based structures may be justified. In such settings,
+contain only one or two words, which makes it hard for humans to using an LLM to construct and operate over the graph can help
+reconstructtheunderlyingmeaning.Forsimilarreasons,presenting produce relations that better reflect intended meaning and context.
+toomuchinformationatoncecanalsoincreasecognitiveworkload, However, designers must anticipate higher and more variable costs
+especially when the content is not written in a form that is easy to (and often less predictable latency) when LLMs are in the loop.
+read.
+Impor-
+3.3.6 Interdependence between architecture and operations.
+Designing agent tantly, some operations and interaction patterns are contingent
+3.3.4 Representing relations among memories.
+memory is not only about expanding what can be stored, but also on earlier architectural choices. For example, traversing a relation
+about how memories and their relations are represented so that the graph and expanding a memory network is not feasible in a list
+agent can later reconstruct context. Stored information becomes structure because there are no explicit edges to traverse. Likewise,
+useless if retrieval or relational inference fails, and such retrieval as noted earlier, editing edges is not possible in a list-based struc-
+cannot work well without making the relations among memory ture or when relying on precomputed vector embeddings. More
+fragments explicit. broadly, higher-level capabilities depend on whether nodes and
+From this perspective, the choice of relational structure intro- edges carry appropriate payloads: tracing and basic versioning are
+ducesdownstreamtrade-offsinretrieval,interaction-timeinference, prerequisites for higher-level version-control operations such as
+and update workflows. List- or timeline-based memories can be the merge, branch, and revert.
+easiesttonavigatebecausetheirrelationalexpressivenessislargely Missing capabilities can also implicitly discourage desirable user
+confined to ordering, but they offer limited support for preserving behavior.Withoutadequateversioning,usersmaybecomereluctant
+richer contextuallinks acrossentries. Hierarchical folderstructures to delete memories, causing the store to grow without pruning.
+or grouped sets offer more freedom than flat lists, yet they force Without appropriate visibility controls, isolation, and mechanisms
+eachitemintoasingleclassification,makingnuanced,cross-cutting for managing links between memories, users may instead create
+relations hard to represent and misclassifications costly to recover. private, disconnected stores that never get incorporated into the
+Graph-based structures, by contrast, offer the greatest flexibility shared memory, leading to fragmentation and lower overall utility.
+for representing relations, and a well-maintained graph can en- Similarly, users may want to share a specific part of the memory
+able highly efficient retrieval by traversing explicitly encoded links. storebutfailtofinditduetoweakqueryfunctionality.Intheworst
+However, graph construction and maintenance are expensive, and case,thesystemdevolvesintoaworkflowwhereusersrelyonafew
+in practice graphs are often difficult to keep clean enough to real- retrieved snippets and reconstruct the rest in their heads, negating
+ize their theoretical advantages. This overhead becomes especially the intended benefits of external memory. In many cases, poor
+
+=== PAGE 12 ===
+DIS’26,June13–17,2026,Singapore,Singapore Kimetal.
+queryperformanceisitselfdownstreamofstructuraloroperational should still be able to distinguish higher- and lower-importance
+issues, such as an ill-organized internal representation. memoriesandmovelessimportantonesintoalower-saliencespace
+Becausethesebottlenecksoftenarisefromtheinterplaybetween for retrieval only when necessary.
+architecture and operations, designing an interactive memory sys-
+Most systems do not support
+3.4.5 Lack of selective access control.
+temrequiresanticipatingtheinteractionflowsandoperationsusers
+selective access control for specific memories across different user
+will actually perform, and then choosing architectures and oper-
+or agent groups, which becomes a limitation when they are used
+ations that best support those flows. This also means considering
+in collaborative settings. Unless access-control features are added
+trade-offs holistically, since the effects of each design choice can
+externally, members may end up keeping their own versions of the
+compound across the system. It is often valuable to explore multi-
+same memory system, preventing memory from accumulating as
+ple design directions and iterate, rather than committing early to a
+a unified team resource. This can interrupt shared accumulation
+single representation.
+and reuse, and increase the later cost of gathering and reconciling
+information across individual memory stores. If a system aims to
+3.4 Gaps in Current Dominant Design Choices
+support organization-wide memory, it should therefore support
+3.4.1 Underappreciated coupling between architecture and oper- access-control features at multiple levels.
+Some operations in our corpus are not fully supported by
+ation.
+the underlying architecture, so they may not produce the inter- 3.4.6 Lack of approval control over memory operations. Many sys-
+actions users expect. For example, in Memolet [91], grouping or tems provide little support for finely configuring the scope of au-
+interpolation may seem to affect retrieval, but these interactions thority between users and agents over memory operations. As a
+primarily reorganize interface-level state while memories remain result, users are often pushed either into unnecessarily handling
+anchored to fixed vector embeddings. This matters because when memory operations manually or into granting the agent too much
+user manipulations do not translate into system operations, users authorityovermemoryoperations.Inthiscase,usersmayavoidup-
+maymisreadadesignmismatchaspoorperformanceoralimitation keep under excessive manual workload, or allow unintended agent
+of the AI technology itself. Therefore, designers should recognize actions by granting more authority than they actually intended
+that choices of memory architecture and operations involve clear to delegate. Memory operations should therefore be paired with
+trade-offs that shape user interactions. richer permission controls so that users can flexibly configure what
+an agent is allowed to do, under what conditions, and with what
+Many sys-
+3.4.2 Gap in recording relationships among memories. oversight.
+tems in our corpus provide limited support for recording and main-
+Since system architecture, af-
+taining relations between memories, though such relations are 3.4.7 Gray zone in NLP and HCI.
+forded operations, and resulting interaction patterns are tightly
+essential for later context reconstruction. For example, triple-based
+interdependent, interactive AI memory design requires balanced
+knowledgegraphs[18,40]mayloseneededrelationsbecausesubject-
+attention to all three. Yet NLP-oriented work often under-specifies
+predicate-object encoding strips away nuances in the original ex-
+users’ interactional needs, while HCI-oriented work may under-
+pression. Once lost, these cues must be reconstructed at each use,
+specify the structural and performance conditions needed to sup-
+causing repeated inference costs while risking distortion. When
+port those interactions robustly. For example, strong retrieval per-
+constraints allow, designers should preserve richer contextual links
+formancedoesnotguaranteeagoodmemorysystemifuserscannot
+within the memory network.
+inspect provenance or judge reliability. Conversely, compelling in-
+Many systems
+3.4.3 Lack of user-agent common grounding steps. teractionconceptscanstillfailwithoutsufficientstructuralsupport.
+also lack a process for checking whether the memories and con-
+Because failure on either side can undermine the whole system,
+textual relations inferred by the agent align with what the user
+designing memory systems for interactive AI agents requires atten-
+actually means. For example, in General User Model [75, p. 16],
+tion from both sides.
+participants expressed a need for clarification when the system
+turned observations into propositions or suggestions with low con-
+4 Metaphors for AI memory
+fidence. Without this clarification and grounding step, users may
+4.1 Dominant Metaphors on AI Memory and
+remain uncertain whether the agent’s interpretation matches their
+intent, and the agent may act in ways that conflict with it. Inter- Their Gaps
+active agent memory systems should incorporate clarification and Notably, systems in our corpus repeatedly draw on three dominant
+grounding steps into human-AI collaboration workflows to prevent metaphorical framings: memory as records in a database, mem-
+misalignment. ory as human cognition, and memory as a set of skills and tools.
+As metaphors shape how designers conceptualize what “memory”
+Most systems
+3.4.4 Accumulate-only lifecycle with no versioning.
+should be and should do, and can thereby influence downstream
+in our corpus do not support history tracking or version-control
+architectural and operational choices [42, 56], we introduce these
+operations, and instead adopt a single-version memory lifecycle
+dominant metaphors and show how their framings are reflected in
+thatislargelyaccumulate-only,withlimitededitabilityand,atmost,
+systems’ design choices and rationales.
+hard deletion. In such settings, users may focus only on accumulat-
+ing data while avoiding edits to the memory network to prevent One dominant
+4.1.1 Records, repositories, and database systems.
+irreversible loss, which can gradually degrade its overall quality. framing of AI memory systems is to view them as repositories or
+Although any memory might become useful at some point, users database systems that collect and organize records. This framing is
+
+=== PAGE 13 ===
+MetaphorsforMemory: ChartingaDesignSpaceofAIMemoryToolsandInterfaces DIS’26,June13–17,2026,Singapore,Singapore
+commonpartlybecauseAImemorysystemsarebuiltusingexisting manipulation. For these metaphors, it is therefore important to re-
+abstractions for computers’ memory and persistent storage (e.g., flect on their bounds and assumptions, what featuresof AI memory
+databases, file systems). Some systems adopt this metaphor explic- they center and marginalize, and what possibilities they open up
+itly. Mem0 [18] and Memolet [91] directly invoke note- and memo- or constrain for both designers and users [56, pp. 6–8].
+based metaphors, and MemGPT [64] conceptualizes an agent’s
+memory by analogy to a computer’s virtual memory. Not limited to
+4.2 Exploring less-used metaphors
+these examples, building a reliable repository or database through
+the long-term accumulation of records is one of the goals of most To seed a design space of actions we might perform on memory,
+AI memory systems. we adopt generative metaphor [74] as a design tool [50] to imag-
+ine what future AI memory systems could be like. In this chapter,
+4.1.2 Neurobiology of human cognition. Another dominant fram- we introduce seven less-used metaphors for AI memory as a way
+ing treats AI memory through metaphors of human cognition. This of “connecting previously disassociated domains to generate new
+is unsurprising since Turing’s foundational work on machine in- ideas”[50],focusingonless-usedframingsandtheirimplicationsto
+telligence framed the problem explicitly in human terms, “Can expand the space beyond dominant metaphors, with a set of design
+machines think?” [81], and later efforts have often defined and implications derived from our metaphors.
+evaluated AI using criteria based on how well it can imitate human Thesealternativemetaphorsweregeneratedandrefinedthrough
+cognitive capacities. Just as AI capabilities are often anthropomor- a researcher-led iterative design process conducted over approx-
+phized [57, 70] and common terms such as learning and training imately three months. All authors participated in proposing, dis-
+borrow from human ability, AI memory systems and their opera- cussing, and refining candidate metaphors throughout the broader
+tions are frequently described using human memory operations, research process, alongside the work of mapping the design space
+such as learning, memorizing, forgetting, and recalling. The im- and completing the architectural and operational surveys. We re-
+plicitandexplicitmemory-storemetaphorwehaveusedthroughout peated this process through regular weekly meetings, as well as
+draws on cognitive accounts of human implicit and explicit mem- additional ad hoc meetings and chat-based discussions.
+ory [72], and similar moves recur in AI memory research, where During these iterations, we considered which metaphors to in-
+system design is often grounded in analogies to components of clude, exclude, merge, rescope, or further elaborate, and which
+human cognition. For example, HippoRAG [40] frames its memory properties of AI memory each metaphor most productively fore-
+indexing mechanism by analogy to the hippocampus. grounded. Across these iterations, we refined both the metaphors
+themselves and the specific properties and implications associated
+4.1.3 Skillsandtools. Buildingonthetwomajormetaphorlineages with them, aiming to identify metaphors that foregrounded distinct
+that frame AI in terms of machine memory and human cognition, and useful qualities of AI memory, could inspire concrete design
+recent work increasingly characterizes agent memory as skills or directions, and did not substantially overlap with the dominant
+tools that can be equipped and swapped. As LLM capability im- metaphors already shaping the space.
+proves and system/context engineering matures, such memories Somecandidatemetaphors,suchassoftwareversioncontrol[77],
+are treated more as modular, actionable packages consisting of pro- Zettelkasten[51,52],requirements[84],andsciencefictiontales/games,
+cedures, rules, and tool-usage know-how that reconfigure what were already part of our early framing of AI memory and had rec-
+the same base model can do. Systems that adopt this metaphor ognizable, if non-dominant, precedents in adjacent research and
+often appear to merge machine and human framings. They manage practice. Software version control, for example, has long informed
+skills like machine components that are durable, controllable, and workspacemanagementinagenticcodingsystems[3,24,59],evenif
+swappable on demand, while describing their ongoing creation, ithasnottypicallybeenframedasametaphorforAImemoryitself.
+maintenance, and use in more human terms, such as “learning” Requirementslikewisesharesimportantaffinitieswithpromptengi-
+new skills or “holding” different tools. ReAct [89] and Anthropic’s neering [17, 63], context engineering, and intent specification [83].
+Agent Skills [9] provide clear examples of this tool/skill-oriented Zettelkasten also had precedent in the space, including in systems
+metaphor for agent memory. such as A-MEM [88] that draw on it directly as a metaphor for its
+memory system. Science-fictional framings, while not commonly
+These metaphors help us define and make sense of AI memory, used as metaphors for AI memory itself, have often been used to
+and we also draw on them throughout this paper to explain many imagine AI agents, their roles, and their interaction settings more
+concepts. However, they also shape how AI memory is imagined broadly.Othermetaphors,includingpersonaldiaryandrecord[47],
+and constituted in practice by “centring particular ideas” while and community archive [27], and cultural probes [28], were newly
+“marginalising others” [56]. When memory is fixed as a record or proposed here as metaphors for AI memory and were further de-
+repository, “the agent” is often reduced to the LLM alone and exter- veloped through this iterative process by extending adjacent dis-
+nal memory becomes an auxiliary store rather than a component cussions in HCI.
+of the agent system, which can limit the interactive benefits of Candidates were excluded when they overlapped too heavily
+explicit memory, such as on-the-fly updates and long-horizon con- with other metaphors, were too broad or too narrow to be genera-
+text structuring. Conversely, when designers focus too narrowly tively useful, or led to implications that felt overly speculative or
+on reproducing human memory, they may overlook non-human insufficiently actionable. For instance, an early metaphor framing
+but useful properties of AI memory, such as persistence without AI memory as a library was not retained as a final metaphor be-
+forgetting and richer, user- or community-driven forms of memory causeitsdesignimplicationscouldbemoreclearlyandproductively
+
+=== PAGE 14 ===
+DIS’26,June13–17,2026,Singapore,Singapore Kimetal.
+distributed across memory as records, repositories, and database ZettelkastenisusefulwhenanAImemorysystem
+Implications.
+systems and memory as a community archive. needs to preserve rich, reconstructible context across many loosely
+Wealsoadjustedthescopeofcandidatemetaphorswhenneeded. connected ideas. This would require representing memory as at-
+Forexample,ametaphorinitiallyframedaroundGit[30]wasbroad- omized nodes with richer node and edge payloads, together with
+ened to software version control to avoid an overly narrow associa- operationsforediting,linking,scoping,andtraversingthenetwork.
+tion with one specific tool, while a broader framing around fiction Such a structure can better preserve contextual relations while re-
+was narrowed to science fiction novels and games to better match maining more readable and editable for both users and agents than
+the intended design implications and reduce ambiguity. The final highly flattened or overly granular representations. At the same
+set was selected based on whether each metaphor (1) foregrounded time, designers should consider that exposing too much of such
+a distinct and useful property of AI memory, (2) was appropriately dense memory structures at once could easily overwhelm users.
+scoped for design discussion, (3) generated concrete interaction or Useful inspiration may come from wiki-like or recommendation-
+design implications, and (4) was not overly redundant with either basedinterfacesthatrevealonlythemostrelevantlinkedideasfirst
+dominant existing metaphors or other candidates. and let surrounding context be expanded on demand.
+Requirements [84] describe what functions a
+The version control systems (VCS), 4.2.3 Requirements.
+4.2.1 Software version control.
+systemshouldperform,agreed-uponconstraints,itsnon-functional
+such as git, used to track a project’s commit history [77] are crucial
+priorities, and the scope and assumptions under which it should
+repositories of memory about the project’s evolution [23, 41] that
+operate. Depending on the intended audience, requirements can
+can be leveraged for a huge variety of tasks [35].
+be expressed at different degrees of formality [15] to negotiate,
+• Higher-levelmemorymanipulation. Versioningenableshigher- develop, and document shared understanding. They are also used
+level operations over AI memory, such as diffing, merging,
+as run-time components in self-adaptive systems [71].
+branching, reverting, and rebasing.
+• Shared grounding and interpretability. Requirements should
+• Revertibility. Versioning makes memory revertible, lowering
+be clear, legible, and consistently interpretable by relevant
+the friction to experiment with different approaches.
+stakeholders at an appropriate level of abstraction.
+• Traceability and accountability. Versioning improves trans-
+• Reducing redundancy and ambiguity. Requirements aim to
+parencyandaccountabilitybyrecordingwhodidwhat,when,
+minimize ambiguity and unnecessary duplication.
+and why.
+• Verifiability. Verifiability should be treated seriously from
+Implications. Software version control is useful not only for the start when defining requirements.
+coding but also for many tasks that require iterative refinement, • Normative reference. Well-formed requirements aim to be a
+such as writing, design, and planning. Memory systems can sup- stable reference that can later govern decisions.
+port this process by adding version-control operations such as diff, • Conflict-free. Requirements should not conflict with one an-
+branch, merge, and revert. By reducing users’ fear of information other.
+losswhenmemoryismodified,thesefeaturescanhelpthemexplore • Providing rationale. Requirements should capture not only
+more alternatives and collaborate with the agent system more con- is required but also .
+what why
+fidently. Directly adopting version-control systems is one strong
+Requirementscanserveasaproductivemetaphor
+Implications.
+option, but for broader users, drawing on save, versioning, and
+for collaborative situations in which memory is meant to guide or
+history-tracking interfaces familiar from operating systems, cloud
+constrain later agent behavior. Supporting this direction would
+services, and commercial tools may also be a good option.
+require list- or table-based requirement items plus semantic opera-
+tions for checking conflict, satisfaction, and rationale, along with
+TheZettelkasten(“slip-box”)isapersonalknowl-
+4.2.2 Zettelkasten.
+retrieval and reasoning support for reconstructing relevant context.
+edge management method developed by Niklas Luhmann [51, 52].
+This requirements-based treatment of memory can make user in-
+Each day, he captured atomic thoughts on slips, assigned unique
+tentions and expectations more explicit, inspectable, and revisable.
+IDs, linked them to related notes, and filed them into a growing
+Useful interfaces include table-based views that support compari-
+network.
+son, matching, and verification. Evaluation tools for prompts, mem-
+• Atomicity of unit thoughts. Each slip should capture a single ories, or policies, such as ChainForge [10], Semantic Commit [83],
+atomic idea, so later citations point unambiguously to one and Policy Maps [43], may likewise offer useful interface ideas.
+claim [73, p. 203, 306].
+AI agents are often used as a
+• Looseness. The network stays deliberately loose, tolerating 4.2.4 Personal diary and record.
+confidant for thoughts, secrets, or emotions that users would not
+overlap that later reveals each entry’s value [73, p. 300].
+easily disclose to others [47]. In such cases, AI agents and their
+• Human-in-the-loop. Notes are staged and placed manually to
+memory systems should have different interaction and operational
+vet atomicity and preserve long-term quality [73, p. 300] [51,
+characteristics than when dealing with public information.
+52].
+• Tangibility and spatial manipulability. Physical notes enable • Honesty and privacy. Because diaries presume no external
+hand-to-hand manipulation, retrieval, storage, and sharing. audience,theyinvitecandorbutdemandstricterprivacyand
+• Reproducibility. Zettelkasten externalizes connections be- disclosure controls.
+tween ideas, keeping their context retrievable and recon- • Entanglementoftheprivateandthepublic. Diaryentriesoften
+structible over time. interweave private details with public and social contexts,
+
+=== PAGE 15 ===
+MetaphorsforMemory: ChartingaDesignSpaceofAIMemoryToolsandInterfaces DIS’26,June13–17,2026,Singapore,Singapore
+making shareability audience- and context-dependent and • Creativity as a generative process. Creativity often arises by
+shifting over time. recombining new stimuli with prior knowledge [55].
+• Personal record for later reflection. Diaries create a persistent Cultural probes are useful for ideation settings
+Implications.
+record of an “observed self” that can be revisited for reflec-
+in which an agent must generate outputs that respond to the user’s
+tion,sometimesrevealingaspectsthatdifferfromone’susual
+contextual constraints, avoid merely repeating what already exists,
+self-concept.
+and still become meaningfully novel. This requires richer contex-
+Implications. An agent working with external systems while tualmemory,strongretrievalandreasoning,andenoughautonomy
+holding a user’s sensitive memory is like someone entrusted with to maintain evolving context, identify underexplored areas, and
+the user’s diary and discretion over what to share. Such an agent surface directions worth testing. Under these conditions, sugges-
+wouldneedstrongeraccessseparation,selectivedisclosurecontrols, tions can act as probe-like stimuli for users, for the agent itself,
+and richer memory representations that preserve the contextual or even across multiple agents catalyzing one another. Therefore,
+nuance needed to keep its judgments aligned with the user’s intent. to let users perceive and inspect this process, interfaces should
+With these conditions, users could ground deeper information in exposeprovenance,reasoningpaths,andcitation-likelinkswithout
+memory and delegate higher-stakes tasks more confidently. They making these relations too abstract or overly dense.
+wouldthenneedinterfacesforinspectingrepresentations,checking
+AI agents and their memory can
+context-dependent privacy boundaries, and tracing downstream 4.2.7 Science fiction tales/games.
+alsobeframedthroughsciencefictionandgames,sincemanyagent
+effectsasmemorieschange.Usefulinterfacedirectionsmayinclude
+settings contain partly fictional elements that should be considered
+compare views, policy panels, and impact-analysis workflows.
+in their design.
+AI memory itself can be metaphorically
+4.2.5 Community archive.
+• Fictionality. Inexplicitlyfictionalsettings,anagent’smemory
+framed as a community archive [27] because contributions to an
+and actions need not mirror real-world facts [85].
+agent’s memory are not bound to a single user and can instead
+• Verisimilitude within the world. Even if not realistic, events
+be formed through interactions and contributions from multiple
+should remain plausible within the world’s internal logic to
+participants.
+keep the setting coherent [58].
+• Transmission and re-access/reconstruction. Archives preserve • Narrative coherence and justification. Narrative coherence
+records for future members and enable ongoing return, rein-
+matters more than factual completeness. Interactions should
+terpretation, and reconstruction over time.
+maintain context and provide “why” to sustain immersion.
+• Voluntary participation and production. Community archives • Theworld’scontinuity. Long-runninginteractionsshouldpre-
+are driven from within the community, requiring member
+serve continuity, coherence, and the world’s verisimilitude
+participation, control, and ownership in what gets docu-
+over time.
+mented [26, p. 153].
+Fiction metaphors are useful not only in fictional
+• Cross-referencing and knowledge networks. As records accu- Implications.
+settings but also in partially fictionalized real-world domains such
+mulate, they increasingly cross-reference and link to one
+as branding and storytelling. Sustaining such narratives over time
+another, forming a contextualized knowledge network.
+requires long-lived, extensible memory that preserves links across
+Treating memory as a community archive is use-
+Implications.
+entities, events, and temporal phases while remaining navigable as
+ful in group settings where relevant traces are scattered across
+these accumulate. It also requires operations for tracking narrative
+people and places, yet the group still needs a durable shared record.
+change, detecting and repairing inconsistency, and supporting re-
+Meanwhile, building such an archive requires not only a collective
+framing as the narrative evolves through internal development or
+space but also clearly bounded structures so that personal and col-
+externalintervention.Thishelpssustainadistinctivenarrativeover
+lective memory do not become unintentionally conflated. It also
+time without letting it fracture through serious inconsistency. Use-
+requiresoperationsforsemanticduplicatedetectionandevaluation
+ful interfaces may therefore include timelines, key-event chronolo-
+of the usefulness of new contributions. This can shift more manual
+gies, time-based graphs, and entity- or keyword-centered wiki-like
+filing and retrieval work to the agent, letting members focus more
+views for inspecting narrative change over time.
+on meaningful contribution to and use of the archive. Such archive
+interfaces may range from more conventional shared repositories
+5 Conclusion
+with attached editors, discussion views, or terminal panels to forms
+This study investigated the design space and metaphors employed
+embedded closer to group activity, such as chat-integrated agents
+by current AI memory systems to enable more effective human-
+in Social-RAG [86] and CHOIR [46].
+AI interaction. We proposed a design space account of interactive
+Cultural Probes [28] is a method for cat-
+4.2.6 Cultural Probes. AI memory systems across architecture, operations, and interface.
+alyzing design ideation. Rather than asking direct needs-based
+Using this framework as an analytic lens, we examined how exist-
+questions, it uses ambiguous, indirect cues that leave room for
+ing systems instantiate memory design choices, highlighted domi-
+interpretation.
+nant patterns, and surfaced gaps that constrain interaction capabil-
+• Fragmentary cues as catalysts. Cultural probes use fragments ities or introduce practical trade-offs. We also applied generative
+to spark recall and ideation. metaphoricaldesigntowidenwhat“AImemory”canimply,propos-
+• Subjectivity of uptake and interpretation. The same cue can ing alternative less-used metaphors that suggest new directions for
+be interpreted differently across people and over time. designing future interactive memory systems.
+
+=== PAGE 16 ===
+DIS’26,June13–17,2026,Singapore,Singapore Kimetal.
+Our work can help practitioners design interactive AI memory ComputingMachinery,NewYork,NY,USA,Article209,19pages. doi:10.1145/
+systems by making appropriate design choices that fit their in- 3491102.3501819
+[20] HerbertHClark.1996. Usinglanguage. CambridgeUniversityPress.
+tended goals. For those analyzing and improving existing tools,
+[21] HerbertHClarkandSusanEBrennan.1991. Groundingincommunication.
+our approach can also clarify the implications of specific design [22] Neal J Cohen and Larry R Squire. 1980. Preserved learning and retention of
+choices and make gaps more visible. For researchers spanning HCI pattern-analyzingskillinamnesia:Dissociationofknowinghowandknowing
+that. Science210,4466(1980),207–210.
+and NLP, our account offers a shared vocabulary for recognizing
+[23] D. Cubranic, G.C. Murphy, J. Singer, and K.S. Booth. 2005. Hipikat: a project
+this gray zone and for reasoning about memory as a system-level memoryforsoftwaredevelopment. IEEETransactionsonSoftwareEngineering
+31,6(2005),446–465. doi:10.1109/TSE.2005.71
+design problem, which can in turn seed new research ideas.
+[24] Cursor. [n.d.]. Git. https://cursor.com/help/integrations/git. Cursor Docs.
+Interactive AI memory system design remains at an early stage, Accessed:2026-03-30.
+with new techniques and ideas continuing to emerge. As this area [25] Cursor.2023. Cursor. https://cursor.com/. Accessed:2025-12-12.
+[26] AndrewFlinn.2007. Communityhistories,communityarchives:Someopportu-
+develops, we expect the design space to be explored in broader
+nitiesandchallenges. JournaloftheSocietyofArchivists28,2(2007),151–176.
+ways than what we articulated here. We hope this work helps open [27] AndrewFlinn.2015. CommunityArchives. InEncyclopediaofArchivalScience,
+further possibilities and new discussions about how agent memory LucianaDurantiandPatriciaC.Franks(Eds.).Rowman&Littlefield,Lanham,
+MD,145–149.
+should be designed, governed, and experienced.
+[28] BillGaver,TonyDunne,andElenaPacenti.1999. Design:culturalprobes. inter-
+actions6,1(1999),21–29.
+[29] GeminiTeam.2025. Gemini2.5:PushingtheFrontierwithAdvancedReasoning,
+References
+Multimodality,LongContext,andNextGenerationAgenticCapabilities. Techni-
+[1] JoshAchiam,StevenAdler,SandhiniAgarwal,LamaAhmad,IlgeAkkaya,Floren- calReport.Google. https://storage.googleapis.com/deepmind-media/gemini/
+ciaLeoniAleman,DiogoAlmeida,JankoAltenschmidt,SamAltman,Shyamal gemini_v2_5_report.pdf Technicalreport..
+Anadkat, et al. 2023. Gpt-4 technical report. arXiv preprint arXiv:2303.08774 [30] GitProject.[n.d.]. Git. https://git-scm.com/. Officialwebsite.Accessed:2026-03-
+(2023). 30.
+[2] Petr Anokhin, Nikita Semenov, Artyom Sorokin, Dmitry Evseev, Andrey [31] GitHub.2022. GitHubCopilot. https://github.com/features/copilot. Accessed:
+Kravchenko,MikhailBurtsev,andEvgenyBurnaev.2024. Arigraph:Learning 2025-12-12.
+knowledge graph world models with episodic memory for llm agents. arXiv [32] GoogleCloud.2025. GeminiCLI. https://docs.cloud.google.com/gemini/docs/
+preprintarXiv:2407.04363(2024). codeassist/gemini-cli. Lastupdated:2025-12-11(UTC).Accessed:2025-12-12.
+[3] Anthropic. [n.d.]. Claude Code Overview. https://code.claude.com/docs/en/ [33] Google for Developers. 2025. Prompt Engineering for Generative AI. https:
+overview. ClaudeCodeDocs.Accessed:2026-03-30. //developers.google.com/machine-learning/resources/prompt-eng. Lastupdated:
+[4] Anthropic.2025. AgentSkills. ClaudeCodeDocs. https://code.claude.com/docs/ 2025-08-25(UTC).Accessed:2025-12-12.
+en/skills Accessed:2026-01-13. [34] PrahladGuptaandNealJCohen.2002. Theoreticalandcomputationalanalysisof
+[5] Anthropic.2025. ClaudeCode. https://claude.com/product/claude-code. Ac- skilllearning,repetitionpriming,andproceduralmemory. Psychologicalreview
+cessed:2025-12-12. 109,2(2002),401.
+[6] Anthropic. 2025. Claude Opus 4.5 System Card. Technical Report. An- [35] AhmedE.Hassan.2008. TheroadaheadforMiningSoftwareRepositories.In
+thropic. https://assets.anthropic.com/m/64823ba7485345a7/Claude-Opus-4-5- 2008FrontiersofSoftwareMaintenance.48–57. doi:10.1109/FOSM.2008.4659248
+System-Card.pdf Systemcard.DatedNovember2025.. [36] TaherHHaveliwala.2002. Topic-sensitivepagerank.InProceedingsofthe11th
+[7] Anthropic. 2025. Claude Sonnet 4.5 System Card. Technical Report. An- internationalconferenceonWorldWideWeb.517–526.
+thropic. https://assets.anthropic.com/m/12f214efcc2f457a/original/Claude- [37] SeppHochreiterandJürgenSchmidhuber.1997.Longshort-termmemory.Neural
+Sonnet-4-5-System-Card.pdf Systemcard.DatedSeptember2025.. computation9,8(1997),1735–1780.
+[8] Anthropic. 2025. Create custom subagents (Claude Code Docs). https://code. [38] ZihengHuang,SebastianGutierrez,HemanthKamana,andStephenMacNeil.
+claude.com/docs/en/sub-agents. Accessed:2026-01-16. 2023. Memorysandbox:Transparentandinteractivememorymanagementfor
+[9] Anthropic. 2025. Equipping Agents for the Real World with Agent Skills. conversationalagents.InAdjunctProceedingsofthe36thAnnualACMSymposium
+Anthropic Engineering blog post. https://www.anthropic.com/engineering/ onUserInterfaceSoftwareandTechnology.1–3.
+equipping-agents-for-the-real-world-with-agent-skills Published:2025-10-16; [39] PeilingJiang,JudeRayan,StevenPDow,andHaijunXia.2023. Graphologue:
+Accessed:2026-01-15. Exploringlargelanguagemodelresponseswithinteractivediagrams.InProceed-
+[10] Ian Arawjo, Chelse Swoopes, Priyan Vaithilingam, Martin Wattenberg, and ingsofthe36thannualACMsymposiumonuserinterfacesoftwareandtechnology.
+ElenaLGlassman.2024. Chainforge:Avisualtoolkitforpromptengineering 1–20.
+andllmhypothesistesting.InProceedingsofthe2024CHIConferenceonHuman [40] BernalJimenezGutierrez,YihengShu,YuGu,MichihiroYasunaga,andYuSu.
+FactorsinComputingSystems.1–18. 2024.Hipporag:Neurobiologicallyinspiredlong-termmemoryforlargelanguage
+[11] GaganBansal,JenniferWortmanVaughan,SaleemaAmershi,EricHorvitz,Adam models. Advances in Neural Information Processing Systems 37 (2024), 59532–
+Fourney,HusseinMozannar,VictorDibia,andDanielSWeld.2024. Challenges 59569.
+inhuman-agentcommunication. arXivpreprintarXiv:2412.10380 (2024). [41] SunghunKim,KaiPan,andE.E.JamesWhitehead.2006.Memoriesofbugfixes.In
+[12] DaveBergmann.2024. WhatisaContextWindow? IBMThink. https://www. Proceedingsofthe14thACMSIGSOFTInternationalSymposiumonFoundationsof
+ibm.com/think/topics/context-window Accessed:2025-12-12. SoftwareEngineering (Portland,Oregon,USA)(SIGSOFT’06/FSE-14).Association
+[13] JeffreyRBinderandRutvikHDesai.2011.Theneurobiologyofsemanticmemory. for Computing Machinery, New York, NY, USA, 35–45. doi:10.1145/1181775.
+Trendsincognitivesciences15,11(2011),527–536. 1181781
+[14] MichaelMoseBiskjaer,PeterDalsgaard,andKimHalskov.2014. Aconstraint- [42] George Lakoff and Mark Johnson. 2003. Metaphors We Live By. University
+basedunderstandingofdesignspaces.InProceedingsofthe2014conferenceon of Chicago Press, Chicago. Originally published 1980; updated edition with
+Designinginteractivesystems.453–462. afterword.
+[15] Jean-MichelBruel,SophieEbersold,FlorianGalinier,ManuelMazzara,Alexandr [43] MichelleS.Lam,FredHohman,DominikMoritz,JeffreyPBigham,KennethHol-
+Naumchev, and Bertrand Meyer. 2021. The Role of Formalism in System stein,andMaryBethKery.2025. PolicyMaps:ToolsforGuidingtheUnbounded
+Requirements. ACM Comput. Surv. 54, 5, Article 93 (May 2021), 36 pages. SpaceofLLMBehaviors.InProceedingsofthe38thAnnualACMSymposiumon
+doi:10.1145/3448975 UserInterfaceSoftwareandTechnology(UIST’25).AssociationforComputingMa-
+[16] Greg Ceccarelli. 2024. SpecStory Launch. SpecStory Blog. https://specstory. chinery,NewYork,NY,USA,Article178,24pages. doi:10.1145/3746059.3747680
+com/blog/specstory-launch Published:2024-12-16.Accessed:2026-01-15. [44] LangChain.2024. LangGraphoverview. https://docs.langchain.com/oss/python/
+[17] Boris Cherny. 2025. Claude Code: Best practices for agentic coding. https: langgraph/overview. Accessed:2025-12-12.
+//www.anthropic.com/engineering/claude-code-best-practices. Published:2025- [45] LangChain-AI.2025. LangMem. https://langchain-ai.github.io/langmem/. Ac-
+04-18.Accessed:2025-12-12. cessed:2025-12-12.
+[18] Prateek Chhikara, Dev Khant, Saket Aryan, Taranjeet Singh, and Deshraj Ya- [46] SangwookLee,AdnanAbbas,YanChen,Young-HoKim,andSangWonLee.2026.
+dav.2025. Mem0:Buildingproduction-readyaiagentswithscalablelong-term CHOIR:AChatbot-mediatedOrganizationalMemoryLeveragingCommunica-
+memory. arXivpreprintarXiv:2504.19413(2025). tioninUniversityResearchLabs.InProceedingsofthe2026CHIConferenceon
+[19] John Joon Young Chung, Wooseok Kim, Kang Min Yoo, Hwaran Lee, Eytan HumanFactorsinComputingSystems.AssociationforComputingMachinery.
+Adar,andMinsukChang.2022. TaleBrush:SketchingStorieswithGenerative doi:10.1145/3772318.3791314 Toappear.
+PretrainedLanguageModels.InProceedingsofthe2022CHIConferenceonHuman [47] Yi-ChiehLee,NaomiYamashita,YunHuang,andWaiFu.2020. "IHearYou,I
+FactorsinComputingSystems(NewOrleans,LA,USA)(CHI’22).Associationfor FeelYou":EncouragingDeepSelf-disclosurethroughaChatbot.InProceedings
+
+=== PAGE 17 ===
+MetaphorsforMemory: ChartingaDesignSpaceofAIMemoryToolsandInterfaces DIS’26,June13–17,2026,Singapore,Singapore
+ofthe2020CHIConferenceonHumanFactorsinComputingSystems(Honolulu, ManagementEvolutioninEarlyModernEurope.Vol.53.
+HI,USA)(CHI’20).AssociationforComputingMachinery,NewYork,NY,USA, [74] DonaldASchön.1979. Generativemetaphor:Aperspectiveonproblem-setting
+1–12. doi:10.1145/3313831.3376175 insocialpolicy. Metaphorandthought 2(1979),137–163.
+[48] PatrickLewis,EthanPerez,AleksandraPiktus,FabioPetroni,VladimirKarpukhin, [75] OmarShaikh,ShardulSapkota,ShanRizvi,EricHorvitz,JoonSungPark,Diyi
+Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, Yang,andMichaelSBernstein.2025.Creatinggeneralusermodelsfromcomputer
+etal.2020. Retrieval-augmentedgenerationforknowledge-intensivenlptasks. use.InProceedingsofthe38thAnnualACMSymposiumonUserInterfaceSoftware
+Advancesinneuralinformationprocessingsystems33(2020),9459–9474. andTechnology.1–23.
+[49] BangLiu,XinfengLi,JiayiZhang,JinlinWang,TanjinHe,SiruiHong,Hongzhang [76] YijiaShao,VinaySamuel,YuchengJiang,JohnYang,andDiyiYang.2024.Collabo-
+Liu,ShaokunZhang,KaitaoSong,KunlunZhu,etal.2025. Advancesandchal- rativegym:Aframeworkforenablingandevaluatinghuman-agentcollaboration.
+lengesinfoundationagents:Frombrain-inspiredintelligencetoevolutionary, arXivpreprintarXiv:2412.15701(2024).
+collaborative,andsafesystems. arXivpreprintarXiv:2504.01990 (2025),20. [77] D.Spinellis.2005. Versioncontrolsystems. IEEESoftware22,5(2005),108–109.
+[50] Nick Logler, Daisy Yoo, and Batya Friedman. 2018. Metaphor Cards: A How- doi:10.1109/MS.2005.140
+to-GuideforMakingandUsingaGenerativeMetaphoricalDesignToolkit.In [78] Sangho Suh, Bryan Min, Srishti Palani, and Haijun Xia. 2023. Sensecape: En-
+Proceedings of the 2018 Designing Interactive Systems Conference (Hong Kong, ablingmultilevelexplorationandsensemakingwithlargelanguagemodels.In
+China) (DIS ’18). Association for Computing Machinery, New York, NY, USA, Proceedingsofthe36thannualACMsymposiumonuserinterfacesoftwareand
+1373–1386. doi:10.1145/3196709.3196811 technology.1–18.
+[51] NiklasLuhmann.1981. KommunikationmitZettelkästen:EinErfahrungsbericht. [79] TheodoreSumers,ShunyuYao,KarthikRNarasimhan,andThomasLGriffiths.
+In Öffentliche Meinung und sozialer Wandel/Public Opinion and Social Change. 2023. Cognitive architectures for language agents. Transactions on Machine
+Springer,222–228. LearningResearch(2023).
+[52] NiklasLuhmann.2023. CommunicatingwithSlipBoxes:AnEmpiricalAccount. [80] EndelTulving.2002. Episodicmemory:Frommindtobrain. Annualreviewof
+https://zettelkasten.de/communications-with-zettelkastens/ Englishtranslation psychology 53,1(2002),1–25.
+ofLuhmann(1981),availableonline. [81] A.M.Turing.1950. ComputingMachineryandIntelligence. Mind 59,236(Oct.
+[53] ShuaiMa,QiaoyiChen,XinruWang,ChengboZheng,ZhenhuiPeng,MingYin, 1950),433–460. doi:10.1093/mind/LIX.236.433
+andXiaojuanMa.2025. Towardshuman-aideliberation:Designandevaluation [82] Priyan Vaithilingam, Ian Arawjo, and Elena L Glassman. 2024. Imagining a
+ofllm-empowereddeliberativeaiforai-assisteddecision-making.InProceedings futureofdesigningwithai:Dynamicgrounding,constructivenegotiation,and
+ofthe2025CHIConferenceonHumanFactorsinComputingSystems.1–23. sustainable motivation. In Proceedings of the 2024 ACM Designing Interactive
+[54] AllanMacLean,RichardM.Young,VictoriaM.E.Bellotti,andThomasP.Moran. SystemsConference.289–300.
+1991. Questions, Options, and Criteria: Elements of Design Space Analysis. [83] PriyanVaithilingam,MunyeongKim,Frida-CeciliaAcosta-Parenteau,DanielLee,
+Human–ComputerInteraction6,3-4(1991),201–250. doi:10.1080/07370024.1991. AmineMhedhbi,ElenaLGlassman,andIanArawjo.2025. SemanticCommit:
+9667168 HelpingUsersUpdateIntentSpecificationsforAIMemoryatScale.InProceedings
+[55] SarnoffMednick.1962.Theassociativebasisofthecreativeprocess.Psychological ofthe38thAnnualACMSymposiumonUserInterfaceSoftwareandTechnology.
+review 69,3(1962),220. 1–18.
+[56] DaveMurray-Rust,IohannaNicenboim,andDanLockton.2022. Metaphorsfor [84] AxelVanLamsweerde.2009. Requirementsengineering:FromsystemgoalstoUML
+designersworkingwithAI. DRS2022:Bilbao(2022). modelstosoftware.Vol.10. Chichester,UK:JohnWiley&Sons.
+[57] CliffordNass,JonathanSteuer,andEllenRTauber.1994. Computersaresocial [85] Kendall L Walton. 1993. Mimesis as make-believe: On the foundations of the
+actors.InProceedingsoftheSIGCHIconferenceonHumanfactorsincomputing representationalarts. HarvardUniversityPress.
+systems.72–78. [86] RuotongWang,XinyiZhou,LinQiu,JosephCheeChang,JonathanBragg,and
+[58] Graham Oddie and Gustavo Cevolani. 2022. Truthlikeness. In The Stanford AmyX.Zhang.2025. Social-RAG:RetrievingfromGroupInteractionstoSocially
+EncyclopediaofPhilosophy(Winter2022ed.),EdwardN.ZaltaandUriNodelman Ground AI Generation. In Proceedings of the 2025 CHI Conference on Human
+(Eds.).MetaphysicsResearchLab,StanfordUniversity. FactorsinComputingSystems(CHI’25).AssociationforComputingMachinery,
+[59] OpenAI. [n.d.]. Use Codex in GitHub. https://developers.openai.com/codex/ NewYork,NY,USA,Article162,25pages. doi:10.1145/3706598.3713749
+integrations/github. OpenAIDevelopers.Accessed:2026-03-30. [87] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi,
+[60] OpenAI.2022. ChatGPT|AIChatbottoDiscover,Learn&Create. Webpage. QuocVLe,DennyZhou,etal.2022.Chain-of-thoughtpromptingelicitsreasoning
+https://openai.com/chatgpt/overview/ Accessed:2025-12-12. inlargelanguagemodels. Advancesinneuralinformationprocessingsystems35
+[61] OpenAI.2025. Codex. https://openai.com/codex/. Accessed:2025-12-12. (2022),24824–24837.
+[62] OpenAI.2025.GPT-5SystemCard.TechnicalReport.OpenAI. https://cdn.openai. [88] WujiangXu,ZujieLiang,KaiMei,HangGao,JuntaoTan,andYongfengZhang.
+com/gpt-5-system-card.pdf Systemcard.PublishedAugust13,2025.. 2025. A-mem:Agenticmemoryforllmagents. arXivpreprintarXiv:2502.12110
+[63] OpenAI. 2026. Best practices for prompt engineering with the OpenAI (2025).
+API. https://help.openai.com/en/articles/6654000-best-practices-for-prompt- [89] ShunyuYao,JeffreyZhao,DianYu,NanDu,IzhakShafran,KarthikRNarasimhan,
+engineering-with-the-openai-api. Accessed:2026-04-06. and Yuan Cao. 2023. ReAct: Synergizing Reasoning and Acting in Language
+[64] Charles Packer, Zeyuan Sun, Max Goldstein, Avishkar Basu, Soham Choud- Models. In The Eleventh International Conference on Learning Representations.
+hury,AmogKamsettyPasarkar,EmmaStrubell,andAndrewMcCallum.2023. https://openreview.net/forum?id=WE_vluYUL-X
+MemGPT:TowardsLLMsasOperatingSystems. arXivpreprintarXiv:2310.08560 [90] CatherineYeh,GonzaloRamos,RachelNg,AndyHuntington,andRichardBanks.
+(2023). https://arxiv.org/abs/2310.08560 2024. Ghostwriter: Augmenting collaborative human-ai writing experiences
+[65] JoonSungPark,JosephO’Brien,CarrieJunCai,MeredithRingelMorris,Percy throughpersonalizationandagency. arXivpreprintarXiv:2402.08855 (2024).
+Liang,andMichaelSBernstein.2023. Generativeagents:Interactivesimulacra [91] RyanYenandJianZhao.2024. Memolet:Reifyingthereuseofuser-aiconver-
+of human behavior. In Proceedings of the 36th annual acm symposium on user sationalmemories.InProceedingsofthe37thAnnualACMSymposiumonUser
+interfacesoftwareandtechnology.1–22. InterfaceSoftwareandTechnology.1–22.
+[66] Preston Rasmussen, Pavlo Paliychuk, Travis Beauvais, Jack Ryan, and Daniel [92] JDZamfirescu-Pereira,EuniceJun,MichaelTerry,QianYang,andBjörnHart-
+Chalef.2025. Zep:atemporalknowledgegrapharchitectureforagentmemory. mann.2025. Beyondcodegeneration:Llm-supportedexplorationoftheprogram
+arXivpreprintarXiv:2501.13956(2025). design space. In Proceedings of the 2025 CHI Conference on Human Factors in
+[67] ParthaPratimRay.2025. AReviewonVibeCoding:Fundamentals,State-of-the- ComputingSystems.1–17.
+art,ChallengesandFutureDirections. AuthoreaPreprints(2025). [93] ZeyuZhang,QuanyuDai,XiaoheBo,ChenMa,RuiLi,XuChen,JiemingZhu,
+[68] StephenRobertsonandHugoZaragoza.2009. Theprobabilisticrelevanceframe- ZhenhuaDong,andJi-RongWen.2025. Asurveyonthememorymechanismof
+work:BM25andbeyond.Vol.4. NowPublishersInc. largelanguagemodel-basedagents. ACMTransactionsonInformationSystems
+[69] EdmundTRolls.2024. Thememorysystemsofthehumanbrainandgenerative 43,6(2025),1–47.
+artificialintelligence. Heliyon10,11(2024). [94] DoraZhao,DiyiYang,andMichaelSBernstein.2025.Knoll:Creatingaknowledge
+[70] ArleenSalles,KathinkaEvers,andMicheleFarisco.2020. Anthropomorphismin ecosystem for large language models. In Proceedings of the 38th Annual ACM
+AI. AJOBneuroscience11,2(2020),88–95. SymposiumonUserInterfaceSoftwareandTechnology.1–23.
+[71] PeteSawyer,NellyBencomo,JonWhittle,EmmanuelLetier,andAnthonyFinkel-
+stein.2010. Requirements-AwareSystems:AResearchAgendaforREforSelf-
+adaptiveSystems.In201018thIEEEInternationalRequirementsEngineeringCon-
+ference.95–103. doi:10.1109/RE.2010.21
+[72] DanielL.Schacter.1987. ImplicitMemory:HistoryandCurrentStatus. Journalof
+ExperimentalPsychology:Learning,Memory,andCognition13,3(1987),501–518.
+doi:10.1037/0278-7393.13.3.501
+[73] JohannesSchmidt.2016. NiklasLuhmann‘sCardIndex:ThinkingTool,Com-
+munication Partner, Publication Machine. In Forgetting Machines. Knowledge
