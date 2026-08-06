@@ -350,15 +350,25 @@ therefore visible at their public hierarchy position and carry an explicit
 `GRANTED · READ SOURCE` annotation. The Grant attachment is not rendered as a
 semantic parent. Query-only routes are absent because Meld has no query-source
 contract and must not substitute hidden query output for a reviewed source
-frame. C remains a local empty or newly created Context. The current
-directional implementation also requires local A and B; the setup validates
-that boundary explicitly instead of silently hiding Grant sources needed by
-symmetric mode.
+frame. C remains a local empty or newly created Context. Directional A and B
+may each be local or READ-granted. The session freezes each granted endpoint's
+exact Profile, attachment, Grant revision, resource, public name, and authority
+mapping; a public name by itself is not durable authority.
+
+The same setup shell also owns optional, default-off descendant controls, but
+each Meld authority mode enables only scopes it can materialize safely.
+Symmetric Meld enables A and B independently because it writes a separate C;
+it consumes only a saved ordered Compare whose two scope flags match exactly.
+Directional Meld enables descendants for incoming A only. Its B is the
+authoritative mutation target, so widening B today could flatten child-owned
+Memories into the root baseline. B therefore remains direct and the CLI
+rejects `--right-descendants` in directional mode until owner-aware target
+materialization exists.
 
 | Mode | Inputs | Authority contract | Target | Representative case | Current status |
 | --- | --- | --- | --- | --- | --- |
-| **Directional** | Prepared incoming evidence plus an existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
-| **Symmetric** | Two independent Context frames treated as peers | Neither source wins by default; source-specific scope and unresolved differences remain visible | A distinct new result Context | Two co-advisors' proposal-writing policies | Implemented for two direct-Memory Contexts |
+| **Directional** | Prepared incoming evidence, optionally including its readable lexical descendants, plus one direct existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
+| **Symmetric** | Two independent Context frames, each optionally including its readable lexical descendants, treated as peers | Neither source wins by default; source-specific scope and unresolved differences remain visible | A distinct new result Context | Two co-advisors' proposal-writing policies | Implemented through an exact saved ordered Compare basis |
 
 `atomic` and `batch` are not additional modes. The semantic call always
 receives one complete bounded batch. What changes during interaction is the
@@ -779,6 +789,12 @@ cannot absorb unrelated relations. Older schema version 1 and 2 sessions remain
 readable so an already reviewed or applied study artifact is not retroactively
 invalidated by the stronger materialization contract.
 
+New directional sessions use schema version 4. It preserves the same relation
+and proposal model while adding optional frozen Grant bindings for INCOMING
+and BASELINE. Local-only directional sessions also use version 4 with null
+bindings so one current decoder covers restart and mixed local/granted routes;
+legacy version 1 directional sessions remain readable and resumable.
+
 The review queue has two priority bands. Compare's unresolved questions remain
 `REQUIRED` and are shown first. Every otherwise resolved `COMPATIBLE` or
 `SCOPED` relation that lacks an existing question receives a deterministic
@@ -893,8 +909,15 @@ resolution state rather than keyboard focus.
 Proposed target Memories are not one giant Viewer section. Each result is an
 independently focusable, indented block containing its disposition, complete
 Memory text, and reason. Up and Down therefore advance by one short result
-block at first, then accelerate through steps of two, five, and ten while the
-same arrow is held; a pause or direction change restores single-step movement.
+block for every discrete tap, including rapid repeated taps. Rate acceleration
+to two and then five times the terminal repeat cadence begins only after the
+initial auto-repeat delay and sustained short cadence identify a held arrow;
+an interrupted cadence or direction change restores single-step movement.
+Every intermediate result block is separately visited and rendered rather than
+being skipped. This timing and animation comes from the shared TUI
+`NavigationAccelerator`, which Switch and the Trace/Rationale picker also use
+for read-only Memory viewport stops; each surface continues to own the meaning
+of one navigation unit.
 Page Up and Page Down advance eight blocks, and End reaches the final
 materialize/apply section directly. Result rows reuse the Switch tree-prefix
 primitive and color the complete focused Memory and rationale, rather than
@@ -1091,7 +1114,15 @@ independent semantic regression remain separate trust layers.
    Symmetric version 1 holds the two source locks and target lock in stable
    order across the final source recheck and target checkpoint/write.
    Directional version 1 similarly locks the read-only incoming source and
-   uses target compare-and-swap for the baseline snapshot.
+   uses target compare-and-swap for the baseline snapshot. For granted
+   endpoints, the registry snapshot and exact authority records remain locked
+   through the write. A granted BASELINE is updated in its authority Profile,
+   not copied into the participant Profile; failure to persist the participant
+   receipt rolls back the authority record and checkpoint.
+   Ordinary exceptions are therefore atomic across the authority Context and
+   participant session. As with granted Update, a process crash between those
+   two durable stores still needs a future cross-Profile transaction journal;
+   the authority checkpoint supports exact retry recovery in the meantime.
 9. Each accepted single-target meld creates one operation checkpoint in its
    authorized target. This includes a resolved directional proposal with zero
    material changes: the checkpoint records the accepted semantic decision

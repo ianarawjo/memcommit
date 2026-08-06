@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import shlex
 import sys
+from contextlib import ExitStack
 from typing import Annotated, Optional
 
 import typer
@@ -16,14 +17,20 @@ from memcommit.comparison import (
 )
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.context_scope import load_context_scope
 from memcommit.context_locator import resolve_context_locator
 from memcommit.commands.granted_context import (
     ContextAccess,
     GrantedReadStore,
+    freeze_granted_context_binding,
+    revalidate_granted_context_binding,
     resolve_context_access,
 )
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.endpoint_setup_flows import choose_meld_setup
 from memcommit.derived_policy import (
+    analysis_retention,
+    authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,
 )
@@ -66,10 +73,13 @@ from memcommit.query_provider import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
+from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.granted_update_application import _remove_checkpoint
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
+    _write_json_atomic,
     context_record_digest,
     validate_context_name,
 )
@@ -94,11 +104,20 @@ def _comparison_prerequisite_error(
     refresh: bool,
     reason: str,
     create_target: bool = False,
+    include_descendants: tuple[bool, bool] = (False, False),
 ) -> MeldCommandError:
     compare_argv = ["mem", "compare", "--to", right.name]
+    if include_descendants[0]:
+        compare_argv.append("--reference-descendants")
+    if include_descendants[1]:
+        compare_argv.append("--compared-descendants")
     if refresh:
         compare_argv.append("--refresh")
     rerun_argv = ["mem", "meld", left.name, right.name]
+    if include_descendants[0]:
+        rerun_argv.append("--left-descendants")
+    if include_descendants[1]:
+        rerun_argv.append("--right-descendants")
     if create_target:
         rerun_argv.extend(("--to", target.name))
     lines = [
@@ -119,6 +138,7 @@ def _load_symmetric_comparison(
     right: Context,
     target: Context,
     create_target: bool = False,
+    include_descendants: tuple[bool, bool] = (False, False),
 ) -> ComparisonAnalysis:
     """Load the exact reviewed LEFT→RIGHT basis; never use a reverse slot."""
     try:
@@ -138,6 +158,7 @@ def _load_symmetric_comparison(
             refresh=True,
             reason="The saved ordered Compare analysis is invalid.",
             create_target=create_target,
+            include_descendants=include_descendants,
         ) from error
     if analysis is None:
         raise _comparison_prerequisite_error(
@@ -150,9 +171,11 @@ def _load_symmetric_comparison(
                 f"'{left.name}' → '{right.name}'."
             ),
             create_target=create_target,
+            include_descendants=include_descendants,
         )
     if (
         not analysis.matches(left, right)
+        or analysis.include_descendants != include_descendants
         or analysis.ruleset_version != COMPARISON_RULESET_VERSION
     ):
         raise _comparison_prerequisite_error(
@@ -165,18 +188,24 @@ def _load_symmetric_comparison(
                 f"'{right.name}' is stale."
             ),
             create_target=create_target,
+            include_descendants=include_descendants,
         )
     return analysis
 
 
 def _session_command(session: MeldSession) -> str:
     """Return one explicit, portable command prefix for this saved meld."""
+    left, right = session.frames
+    parts = ["mem", "meld", left.context_name]
+    if left.include_descendants:
+        parts.append("--left-descendants")
     if session.mode == "DIRECTIONAL":
-        return (
-            f"mem meld {session.frames[0].context_name} "
-            f"--into {session.frames[1].context_name}"
-        )
-    return f"mem meld {session.frames[0].context_name} {session.frames[1].context_name}"
+        parts.extend(("--into", right.context_name))
+    else:
+        parts.append(right.context_name)
+        if right.include_descendants:
+            parts.append("--right-descendants")
+    return shlex.join(parts)
 
 
 def _session_route(session: MeldSession) -> str:
@@ -190,6 +219,21 @@ def _session_route(session: MeldSession) -> str:
         f"{session.frames[1].context_name} → "
         f"{session.target.context_name}"
     )
+
+
+def _session_scope(session: MeldSession) -> str:
+    left, right = session.frames
+    left_label = (
+        "SELECTED + ALL DESCENDANTS"
+        if left.include_descendants
+        else "SELECTED GRAPH ONLY"
+    )
+    right_label = (
+        "SELECTED + ALL DESCENDANTS"
+        if right.include_descendants
+        else "SELECTED GRAPH ONLY"
+    )
+    return f"SCOPE · A {left_label} · B {right_label}"
 
 
 def _preserve_all_guidance(session: MeldSession) -> str:
@@ -257,6 +301,7 @@ def render_meld_session(
     lines = [
         f"MEM MELD · {session.mode}",
         _session_route(session),
+        _session_scope(session),
     ]
     if session.comparison_seed is not None:
         lines.append(f"Compare: {session.comparison_seed.analysis.uid[:8]} · IMPORTED")
@@ -439,10 +484,55 @@ def render_meld_session(
 def _load_bound_contexts(
     store: MemoryStore,
     session: MeldSession,
+    *,
+    registry=None,
 ) -> tuple[Context, Context, Context]:
+    if session.mode == "DIRECTIONAL" and (
+        session.granted_incoming is not None
+        or session.granted_target is not None
+    ):
+        bindings = (session.granted_incoming, session.granted_target)
+        loaded = []
+        for frame, binding in zip(session.frames, bindings, strict=True):
+            if binding is None:
+                access = ContextAccess(
+                    store=store,
+                    context_name=frame.context_name,
+                    display_name=frame.context_name,
+                    attachment_name=None,
+                    permission="READ",
+                )
+            else:
+                access = revalidate_granted_context_binding(
+                    binding,
+                    registry=registry,
+                )
+            loaded.append(
+                _load_meld_source(
+                    access,
+                    include_descendants=bool(frame.include_descendants),
+                )
+            )
+        left, right = loaded
+        # Directional BASELINE is the target. Loading it through the frozen
+        # endpoint preserves its public identity while reading authority data.
+        return left, right, right
     try:
-        left = store.load_direct(session.frames[0].context_name)
-        right = store.load_direct(session.frames[1].context_name)
+        loaded: list[Context] = []
+        for frame in session.frames:
+            context = (
+                recursive_comparison_projection(
+                    load_context_scope(
+                        store,
+                        frame.context_name,
+                        include_descendants=bool(frame.include_descendants),
+                    )
+                )
+                if frame.include_descendants
+                else store.load_direct(frame.context_name)
+            )
+            loaded.append(context)
+        left, right = loaded
     except FileNotFoundError:
         if session.mode != "SYMMETRIC" or session.comparison_seed is None:
             raise
@@ -474,13 +564,42 @@ def _resolve_meld_source(
     )
 
 
-def _load_meld_source(access: ContextAccess) -> Context:
-    context = (
-        GrantedReadStore(access).load(access.display_name)
-        if access.is_granted
-        else access.store.load_direct(access.context_name)
-    )
+def _load_meld_source(
+    access: ContextAccess,
+    *,
+    include_descendants: bool = False,
+) -> Context:
+    if include_descendants:
+        reader = GrantedReadStore(access) if access.is_granted else access.store
+        context = load_context_scope(
+            reader,
+            access.display_name if access.is_granted else access.context_name,
+            include_descendants=True,
+        )
+    else:
+        context = (
+            GrantedReadStore(access).load(access.display_name)
+            if access.is_granted
+            else access.store.load_direct(access.context_name)
+        )
     return recursive_comparison_projection(context)
+
+
+def _load_local_meld_source(
+    store: MemoryStore,
+    name: str,
+    *,
+    include_descendants: bool,
+) -> Context:
+    if not include_descendants:
+        return store.load_direct(name)
+    return recursive_comparison_projection(
+        load_context_scope(
+            store,
+            name,
+            include_descendants=True,
+        )
+    )
 
 
 def _assert_source_bindings(
@@ -563,10 +682,15 @@ def _target_save_source_bindings(
             return ()
     return tuple(
         (frame.context_name, frame.context_uid, frame.context_digest)
-        for frame in session.frames
+        for index, frame in enumerate(session.frames)
         if (
             frame.context_uid != session.target.context_uid
             or frame.context_name != session.target.context_name
+        )
+        and not (
+            session.mode == "DIRECTIONAL"
+            and index == 0
+            and session.granted_incoming is not None
         )
     )
 
@@ -578,8 +702,14 @@ def _assess_and_save(
     provider_factory,
     expected_session_digest: str | None,
 ) -> MeldSession:
-    provider = _connect_meld_provider(provider_factory)
-    assessment = assess_meld_turn(session, provider)
+    with CommandProgress(
+        "MELD",
+        "connecting provider",
+        total=2,
+    ) as progress:
+        provider = _connect_meld_provider(provider_factory)
+        progress.update("analyzing meld turn", step=2)
+        assessment = assess_meld_turn(session, provider)
     # Provider latency creates a real race window. Rebind every source and the
     # target after the call before persisting a claim about them.
     left, right, target = _load_bound_contexts(store, session)
@@ -587,6 +717,18 @@ def _assess_and_save(
     _assert_unapplied_target(session, target)
     current = session.current_turn
     assert current is not None
+    if session.granted_target is not None:
+        required = {
+            "UPDATE" if proposal.operation == "EDIT" else "CREATE"
+            for proposal in assessment.proposals
+        }
+        missing = sorted(required - set(session.granted_target.permissions))
+        if missing:
+            raise ProfileError(
+                "The BASELINE Grant does not authorize "
+                + " + ".join(missing)
+                + " required by the proposed Meld changes."
+            )
     session.record_assessment(current.uid, assessment)
     store.save_meld_session(
         session,
@@ -713,6 +855,8 @@ def _recover_application(
     session: MeldSession,
     target: Context,
     change_set,
+    checkpoint_store: MemoryStore | None = None,
+    checkpoint_context_name: str | None = None,
 ) -> tuple[str, tuple[str, ...]] | None:
     if (
         target.uid != session.target.context_uid
@@ -733,7 +877,9 @@ def _recover_application(
         memory.content for memory in expected_memories
     ):
         return None
-    for checkpoint in reversed(store.list_checkpoints(target.name)):
+    receipt_store = checkpoint_store or store
+    receipt_name = checkpoint_context_name or target.name
+    for checkpoint in reversed(receipt_store.list_checkpoints(receipt_name)):
         if checkpoint.get("command") != "meld":
             continue
         args = checkpoint.get("args")
@@ -748,12 +894,230 @@ def _recover_application(
     return None
 
 
-def _accept(
+def _required_directional_target_permissions(change_set) -> tuple[str, ...]:
+    required = {
+        "UPDATE" if proposal.operation == "EDIT" else "CREATE"
+        for proposal in change_set.proposals
+    }
+    return tuple(sorted(required))
+
+
+def _accept_granted_directional(
     *,
     store: MemoryStore,
     session: MeldSession,
     expected_session_digest: str,
 ) -> tuple[bool, str, int]:
+    """Apply a directional Meld to the authority-owned BASELINE.
+
+    The participant owns the review session, while the authority owns the
+    mutable Context and checkpoint.  Keep the Grant registry and all source
+    and target records frozen until the authority write is verified; if the
+    participant receipt cannot be saved, restore that write before returning.
+    """
+
+    binding = session.granted_target
+    if session.mode != "DIRECTIONAL" or binding is None:
+        raise ValueError("Expected a granted directional Meld target.")
+    change_set = session.prepare_changes()
+    required_permissions = _required_directional_target_permissions(change_set)
+
+    with authority_grant_snapshot_lock() as registry:
+        target_access = revalidate_granted_context_binding(
+            binding,
+            registry=registry,
+        )
+        authority_source = target_access.view.authority.source or {}
+        if (
+            target_access.view.authority.name.casefold() == "study-baseline"
+            or authority_source.get("kind") == "STUDY_BASELINE"
+        ):
+            raise MeldCommandError(
+                "The fixed study-baseline Profile cannot be updated."
+            )
+        for permission in required_permissions:
+            revalidate_granted_context_binding(
+                binding,
+                required_permission=permission,
+                registry=registry,
+            )
+        source_access = (
+            revalidate_granted_context_binding(
+                session.granted_incoming,
+                registry=registry,
+            )
+            if session.granted_incoming is not None
+            else ContextAccess(
+                store=store,
+                context_name=session.frames[0].context_name,
+                display_name=session.frames[0].context_name,
+                attachment_name=None,
+                permission="READ",
+            )
+        )
+        authority_store = target_access.store
+        source_store = source_access.store
+        source_lock_name = source_access.context_name
+        target_lock_name = target_access.context_name
+
+        with ExitStack() as locks:
+            if source_store.store_dir != authority_store.store_dir:
+                locks.enter_context(
+                    source_store._context_write_lock(source_lock_name)
+                )
+            locks.enter_context(authority_store._command_write_lock())
+            authority_store._assert_profile_write_allowed()
+            authority_names = {target_lock_name}
+            if source_store.store_dir == authority_store.store_dir:
+                authority_names.add(source_lock_name)
+            locks.enter_context(
+                authority_store._context_write_locks(authority_names)
+            )
+
+            left, right, public_target = _load_bound_contexts(
+                store,
+                session,
+                registry=registry,
+            )
+            _assert_non_target_source_bindings(session, left, right)
+            recovered = _recover_application(
+                store=store,
+                session=session,
+                target=public_target,
+                change_set=change_set,
+                checkpoint_store=authority_store,
+                checkpoint_context_name=target_lock_name,
+            )
+            if session.state == "APPLIED":
+                assert session.application is not None
+                if (
+                    recovered is None
+                    or recovered[0] != session.application.checkpoint_uid
+                    or recovered[1] != session.application.result_memory_uids
+                ):
+                    raise MeldCommandError(
+                        "The applied granted Meld receipt no longer matches "
+                        "the authority BASELINE and checkpoint."
+                    )
+                return True, recovered[0], len(recovered[1])
+            if recovered is not None:
+                checkpoint_uid, result_uids = recovered
+                session.record_application(
+                    change_set_digest=change_set.digest,
+                    checkpoint_uid=checkpoint_uid,
+                    result_memory_uids=result_uids,
+                )
+                store.save_meld_session(
+                    session,
+                    expected_session_digest=expected_session_digest,
+                )
+                return True, checkpoint_uid, len(result_uids)
+            _assert_unapplied_target(session, public_target)
+
+            direct = authority_store.load_direct(target_lock_name)
+            original = direct.to_dict()
+            post_image = Context.from_dict(direct.to_dict())
+            post_image._store_digest = direct._store_digest
+            for proposal in change_set.proposals:
+                memory = Memory(uid=proposal.memory_uid, content=proposal.content)
+                if proposal.operation == "EDIT":
+                    post_image.replace(memory)
+                else:
+                    post_image.add(memory)
+            checkpoint = None
+            try:
+                checkpoint = authority_store._save_locked(
+                    post_image,
+                    AutoCheckpoint(
+                        command="meld",
+                        args={
+                            "meld": _meld_checkpoint_record(session, change_set),
+                            "authority_target_context_name": target_lock_name,
+                            "authority_grant": binding.to_dict(),
+                        },
+                        description=(
+                            f"Melded INCOMING '{session.frames[0].context_name}' "
+                            f"into granted BASELINE '{session.target.context_name}': "
+                            f"{len(change_set.proposals)} changes"
+                        ),
+                    ),
+                    expected_context_digest=context_record_digest(direct),
+                )
+                if checkpoint is None:
+                    raise MeldCommandError(
+                        "Granted Meld application created no checkpoint."
+                    )
+                result_uids = tuple(
+                    proposal.memory_uid for proposal in change_set.proposals
+                )
+                session.record_application(
+                    change_set_digest=change_set.digest,
+                    checkpoint_uid=checkpoint.uid,
+                    result_memory_uids=result_uids,
+                )
+                store.save_meld_session(
+                    session,
+                    expected_session_digest=expected_session_digest,
+                )
+            except Exception:
+                rollback_error = None
+                if checkpoint is not None:
+                    try:
+                        _write_json_atomic(
+                            authority_store._context_file(target_lock_name),
+                            original,
+                        )
+                    except Exception as candidate:
+                        rollback_error = candidate
+                    try:
+                        _remove_checkpoint(
+                            authority_store,
+                            target_lock_name,
+                            checkpoint.uid,
+                        )
+                    except Exception as candidate:
+                        rollback_error = rollback_error or candidate
+                if rollback_error is not None:
+                    raise RuntimeError(
+                        "Granted Meld failed and its authority BASELINE could "
+                        "not be fully rolled back."
+                    ) from rollback_error
+                raise
+    assert checkpoint is not None
+    return False, checkpoint.uid, len(result_uids)
+
+
+def _accept(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    expected_session_digest: str,
+    _granted_source_locked: bool = False,
+) -> tuple[bool, str, int]:
+    if session.mode == "DIRECTIONAL" and session.granted_target is not None:
+        return _accept_granted_directional(
+            store=store,
+            session=session,
+            expected_session_digest=expected_session_digest,
+        )
+    if session.granted_incoming is not None and not _granted_source_locked:
+        # A granted read source must remain byte-identical from final
+        # revalidation through the participant target checkpoint.  The local
+        # save path cannot name an authority Context in its source lock set.
+        with authority_grant_snapshot_lock() as registry:
+            source_access = revalidate_granted_context_binding(
+                session.granted_incoming,
+                registry=registry,
+            )
+            with source_access.store._context_write_lock(
+                source_access.context_name
+            ):
+                return _accept(
+                    store=store,
+                    session=session,
+                    expected_session_digest=expected_session_digest,
+                    _granted_source_locked=True,
+                )
     change_set = session.prepare_changes()
     left, right, direct_target = _load_bound_contexts(store, session)
     # After a directional application the BASELINE frame intentionally differs
@@ -1035,8 +1399,14 @@ def start_reviewed_symmetric_meld(
         current_name=current_name,
     )
     authorize_combination((left_access, right_access))
-    left_ctx = _load_meld_source(left_access)
-    right_ctx = _load_meld_source(right_access)
+    left_ctx = _load_meld_source(
+        left_access,
+        include_descendants=analysis.include_descendants[0],
+    )
+    right_ctx = _load_meld_source(
+        right_access,
+        include_descendants=analysis.include_descendants[1],
+    )
 
     if create_target:
         store.assert_context_creatable(target_name)
@@ -1068,6 +1438,7 @@ def start_reviewed_symmetric_meld(
         right=right_ctx,
         target=target,
         create_target=create_target,
+        include_descendants=analysis.include_descendants,
     )
     if reviewed.uid != analysis.uid:
         raise MeldCommandError(
@@ -1218,7 +1589,12 @@ def _start_new_meld_from_picker(store: MemoryStore) -> None:
     left = receipt.left_name
     right = receipt.right_name
     if receipt.mode == "directional":
-        cmd(left=left, into=right)
+        cmd(
+            left=left,
+            into=right,
+            left_descendants=receipt.left_descendants,
+            right_descendants=False,
+        )
         return
 
     if receipt.target_name is None:
@@ -1234,8 +1610,14 @@ def _start_new_meld_from_picker(store: MemoryStore) -> None:
         right,
         current_name=current_name,
     )
-    left_ctx = _load_meld_source(left_access)
-    right_ctx = _load_meld_source(right_access)
+    left_ctx = _load_meld_source(
+        left_access,
+        include_descendants=receipt.left_descendants,
+    )
+    right_ctx = _load_meld_source(
+        right_access,
+        include_descendants=receipt.right_descendants,
+    )
     target = (
         ops.init(receipt.target_name)
         if receipt.create_target
@@ -1246,6 +1628,10 @@ def _start_new_meld_from_picker(store: MemoryStore) -> None:
         right=right_ctx,
         target=target,
         create_target=receipt.create_target,
+        include_descendants=(
+            receipt.left_descendants,
+            receipt.right_descendants,
+        ),
     )
     session = start_reviewed_symmetric_meld(
         store=store,
@@ -1384,11 +1770,25 @@ def cmd(
         bool,
         typer.Option(
             "--sessions",
-            help="Browse and reopen an existing saved Meld session",
+            help="Enter the interactive Meld session launcher",
+        ),
+    ] = False,
+    left_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--left-descendants/--left-only",
+            help="Include all readable descendants under PEER or INCOMING A",
+        ),
+    ] = False,
+    right_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--right-descendants/--right-only",
+            help="Include all readable descendants under symmetric PEER B",
         ),
     ] = False,
 ) -> None:
-    """Meld peers, or directionally use --into/--from Context roles."""
+    """Meld peers, or directionally update an authoritative BASELINE."""
     action_count = sum(
         (
             comment is not None or choice is not None,
@@ -1450,6 +1850,14 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if right_descendants and (into is not None or from_ is not None):
+        typer.secho(
+            "Meld error: directional BASELINE descendants are not supported; "
+            "B is the direct mutation target.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if from_ is not None and (left is not None or right is not None):
         typer.secho(
             "Meld error: --from supplies INCOMING and cannot be combined "
@@ -1472,6 +1880,8 @@ def cmd(
         and not defer_all
         and not accept
         and not restart
+        and not left_descendants
+        and not right_descendants
         and revision is None
         and not revises_turn
         and expand is None
@@ -1563,6 +1973,22 @@ def cmd(
             target_name = right_name
             start_command = shlex.join(["mem", "meld", left_name, "--into", right_name])
 
+        if requested_mode == "DIRECTIONAL":
+            start_parts = ["mem", "meld", left_name]
+            if left_descendants:
+                start_parts.append("--left-descendants")
+            start_parts.extend(("--into", right_name))
+        else:
+            start_parts = ["mem", "meld", left_name]
+            if left_descendants:
+                start_parts.append("--left-descendants")
+            start_parts.append(right_name)
+            if right_descendants:
+                start_parts.append("--right-descendants")
+            if create_target:
+                start_parts.extend(("--to", target_name))
+        start_command = shlex.join(start_parts)
+
         if left_name == right_name:
             if requested_mode == "DIRECTIONAL":
                 raise MeldCommandError(
@@ -1576,6 +2002,32 @@ def cmd(
             raise MeldCommandError(
                 "The two PEER sources and active target must be distinct Contexts."
             )
+        left_access: ContextAccess | None = None
+        right_access: ContextAccess | None = None
+        if requested_mode == "DIRECTIONAL":
+            left_access = _resolve_meld_source(
+                store,
+                left_name,
+                current_name=current_name,
+            )
+            right_access = _resolve_meld_source(
+                store,
+                right_name,
+                current_name=current_name,
+            )
+            authorize_combination((left_access, right_access))
+            authorize_derived_transfer(left_access, right_access)
+            retention = analysis_retention((left_access, right_access))
+            if retention is None:
+                raise ProfileError(
+                    "The directional Meld cannot save analysis under the "
+                    "available Grants."
+                )
+            authorize_analysis_save(
+                (left_access, right_access),
+                retention=retention,
+            )
+
         if create_target:
             if store.context_exists(target_name):
                 raise MeldCommandError(
@@ -1586,10 +2038,12 @@ def cmd(
             target = ops.init(target_name)
             session = None
         else:
-            target = store.load_direct(target_name)
+            target = (
+                _load_meld_source(right_access)
+                if requested_mode == "DIRECTIONAL" and right_access is not None
+                else store.load_direct(target_name)
+            )
             session = store.load_meld_session(target.uid)
-        left_access: ContextAccess | None = None
-        right_access: ContextAccess | None = None
         if requested_mode == "SYMMETRIC" and session is None:
             left_access = _resolve_meld_source(
                 store,
@@ -1625,15 +2079,6 @@ def cmd(
             authorize_combination((left_access, right_access))
             authorize_derived_transfer(left_access, target_access)
             authorize_derived_transfer(right_access, target_access)
-        elif requested_mode == "DIRECTIONAL":
-            if not store.context_exists(left_name):
-                raise MeldCommandError(
-                    f"INCOMING Context '{left_name}' does not exist."
-                )
-            if not store.context_exists(right_name):
-                raise MeldCommandError(
-                    f"BASELINE Context '{right_name}' does not exist."
-                )
         if session is None:
             if any(
                 (
@@ -1649,19 +2094,45 @@ def cmd(
                     f"Start the meld with a plain '{start_command}' first."
                 )
             left_ctx = (
-                _load_meld_source(left_access)
+                _load_meld_source(
+                    left_access,
+                    include_descendants=left_descendants,
+                )
                 if left_access is not None
-                else store.load_direct(left_name)
+                else _load_local_meld_source(
+                    store,
+                    left_name,
+                    include_descendants=left_descendants,
+                )
             )
             right_ctx = (
-                _load_meld_source(right_access)
+                _load_meld_source(
+                    right_access,
+                    include_descendants=right_descendants,
+                )
                 if right_access is not None
-                else store.load_direct(right_name)
+                else _load_local_meld_source(
+                    store,
+                    right_name,
+                    include_descendants=right_descendants,
+                )
             )
             if requested_mode == "DIRECTIONAL":
                 session = MeldSession.create_directional(
                     left_ctx,
                     right_ctx,
+                    incoming_descendants=left_descendants,
+                    baseline_descendants=False,
+                    granted_incoming=(
+                        freeze_granted_context_binding(left_access)
+                        if left_access is not None and left_access.is_granted
+                        else None
+                    ),
+                    granted_target=(
+                        freeze_granted_context_binding(right_access)
+                        if right_access is not None and right_access.is_granted
+                        else None
+                    ),
                 )
                 session.start_initial_analysis()
                 session = _assess_and_save(
@@ -1676,6 +2147,10 @@ def cmd(
                     right=right_ctx,
                     target=target,
                     create_target=create_target,
+                    include_descendants=(
+                        left_descendants,
+                        right_descendants,
+                    ),
                 )
                 session = MeldSession.create_symmetric_from_comparison(
                     comparison,
@@ -1751,23 +2226,55 @@ def cmd(
                     restart_right_access,
                     restart_target_access,
                 )
-                left_ctx = _load_meld_source(restart_left_access)
-                right_ctx = _load_meld_source(restart_right_access)
+                left_ctx = _load_meld_source(
+                    restart_left_access,
+                    include_descendants=left_descendants,
+                )
+                right_ctx = _load_meld_source(
+                    restart_right_access,
+                    include_descendants=right_descendants,
+                )
             else:
                 left_ctx = (
-                    _load_meld_source(left_access)
+                    _load_meld_source(
+                        left_access,
+                        include_descendants=left_descendants,
+                    )
                     if left_access is not None
-                    else store.load_direct(left_name)
+                    else _load_local_meld_source(
+                        store,
+                        left_name,
+                        include_descendants=left_descendants,
+                    )
                 )
                 right_ctx = (
-                    _load_meld_source(right_access)
+                    _load_meld_source(
+                        right_access,
+                        include_descendants=right_descendants,
+                    )
                     if right_access is not None
-                    else store.load_direct(right_name)
+                    else _load_local_meld_source(
+                        store,
+                        right_name,
+                        include_descendants=right_descendants,
+                    )
                 )
             if requested_mode == "DIRECTIONAL":
                 replacement = MeldSession.create_directional(
                     left_ctx,
                     right_ctx,
+                    incoming_descendants=left_descendants,
+                    baseline_descendants=False,
+                    granted_incoming=(
+                        freeze_granted_context_binding(left_access)
+                        if left_access is not None and left_access.is_granted
+                        else None
+                    ),
+                    granted_target=(
+                        freeze_granted_context_binding(right_access)
+                        if right_access is not None and right_access.is_granted
+                        else None
+                    ),
                 )
                 replacement.start_initial_analysis()
                 session = _assess_and_save(
@@ -1781,6 +2288,10 @@ def cmd(
                     left=left_ctx,
                     right=right_ctx,
                     target=target,
+                    include_descendants=(
+                        left_descendants,
+                        right_descendants,
+                    ),
                 )
                 replacement = MeldSession.create_symmetric_from_comparison(
                     comparison,
@@ -1817,6 +2328,9 @@ def cmd(
             if requested_mode == "DIRECTIONAL"
             else set(saved_names) == {left_name, right_name}
         )
+        sources_match = sources_match and tuple(
+            bool(frame.include_descendants) for frame in session.frames
+        ) == (left_descendants, right_descendants)
         if not sources_match:
             raise MeldCommandError(
                 "The target already has a meld from different sources. Use "

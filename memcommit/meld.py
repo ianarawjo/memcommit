@@ -20,14 +20,17 @@ from typing import Iterable, Literal
 
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,
+    COMPARISON_SCHEMA_VERSION,
     ComparisonAnalysis,
     comparison_canonical_digest,
 )
 from memcommit.context import Context, Memory
 from memcommit.store import context_record_digest
+from memcommit.update import GrantedUpdateTarget
 
 
 MELD_SCHEMA_VERSION = 3
+MELD_GRANTED_SCHEMA_VERSION = 4
 MELD_COMPARISON_SCHEMA_VERSION = 2
 MELD_LEGACY_SCHEMA_VERSION = 1
 MELD_TEXT_LIMIT = 20_000
@@ -281,6 +284,7 @@ class MeldFrame:
     context_digest: str
     role: MeldRole
     memories: tuple[MeldMemory, ...]
+    include_descendants: bool | None = None
 
     @classmethod
     def from_context(
@@ -288,6 +292,7 @@ class MeldFrame:
         ctx: Context,
         *,
         role: MeldRole,
+        include_descendants: bool | None = None,
     ) -> "MeldFrame":
         if not isinstance(ctx, Context):
             raise MeldError("Meld source must be a Context.")
@@ -308,8 +313,7 @@ class MeldFrame:
         )
         if not memories:
             raise MeldError(f"Source Context '{ctx.name}' has no direct Memories.")
-        return cls.from_dict(
-            {
+        value: dict[str, object] = {
                 "uid": str(uuid.uuid4()),
                 "context_uid": ctx.uid,
                 "context_name": ctx.name,
@@ -317,10 +321,12 @@ class MeldFrame:
                 "role": role,
                 "memories": [memory.to_dict() for memory in memories],
             }
-        )
+        if include_descendants is not None:
+            value["include_descendants"] = include_descendants
+        return cls.from_dict(value)
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "uid": self.uid,
             "context_uid": self.context_uid,
             "context_name": self.context_name,
@@ -328,21 +334,23 @@ class MeldFrame:
             "role": self.role,
             "memories": [memory.to_dict() for memory in self.memories],
         }
+        if self.include_descendants is not None:
+            result["include_descendants"] = self.include_descendants
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "MeldFrame":
-        data = _exact_dict(
-            value,
-            {
+        keys = {
                 "uid",
                 "context_uid",
                 "context_name",
                 "context_digest",
                 "role",
                 "memories",
-            },
-            "meld frame",
-        )
+            }
+        if isinstance(value, dict) and "include_descendants" in value:
+            keys.add("include_descendants")
+        data = _exact_dict(value, keys, "meld frame")
         memories = tuple(
             MeldMemory.from_dict(item)
             for item in _array(data["memories"], "meld frame Memories")
@@ -353,6 +361,9 @@ class MeldFrame:
             or [memory.position for memory in memories] != list(range(len(memories)))
         ):
             raise MeldError("Invalid meld frame Memory order.")
+        include_descendants = data.get("include_descendants")
+        if include_descendants is not None and type(include_descendants) is not bool:
+            raise MeldError("Invalid meld frame descendant scope.")
         return cls(
             uid=_canonical_uuid(data["uid"], "meld frame uid"),
             context_uid=_canonical_uuid(
@@ -370,6 +381,7 @@ class MeldFrame:
             ),
             role=_literal(data["role"], _ROLES, "meld frame role"),  # type: ignore[arg-type]
             memories=memories,
+            include_descendants=include_descendants,  # type: ignore[arg-type]
         )
 
 
@@ -1176,9 +1188,9 @@ def _comparison_meld_frames(
     analysis: ComparisonAnalysis,
 ) -> tuple[MeldFrame, MeldFrame]:
     """Project ordered Compare frames without changing durable identities."""
-    frames = tuple(
-        MeldFrame.from_dict(
-            {
+    frames: list[MeldFrame] = []
+    for index, frame in enumerate(analysis.frames):
+        value: dict[str, object] = {
                 "uid": frame.uid,
                 "context_uid": frame.context_uid,
                 "context_name": frame.context_name,
@@ -1186,9 +1198,9 @@ def _comparison_meld_frames(
                 "role": "PEER",
                 "memories": [memory.to_dict() for memory in frame.memories],
             }
-        )
-        for frame in analysis.frames
-    )
+        if analysis.schema_version == COMPARISON_SCHEMA_VERSION:
+            value["include_descendants"] = analysis.include_descendants[index]
+        frames.append(MeldFrame.from_dict(value))
     return frames[0], frames[1]
 
 
@@ -1280,6 +1292,8 @@ class MeldSession:
     target: MeldTarget
     schema_version: int = MELD_LEGACY_SCHEMA_VERSION
     comparison_seed: MeldComparisonSeed | None = None
+    granted_incoming: GrantedUpdateTarget | None = None
+    granted_target: GrantedUpdateTarget | None = None
     state: MeldState = "PENDING_ANALYSIS"
     turns: tuple[MeldTurn, ...] = ()
     application: MeldApplication | None = None
@@ -1343,6 +1357,11 @@ class MeldSession:
         cls,
         incoming: Context,
         baseline: Context,
+        *,
+        incoming_descendants: bool | None = None,
+        baseline_descendants: bool | None = None,
+        granted_incoming: GrantedUpdateTarget | None = None,
+        granted_target: GrantedUpdateTarget | None = None,
     ) -> "MeldSession":
         """Bind one incoming Context to an authoritative mutable baseline."""
         if incoming.uid == baseline.uid or incoming.name == baseline.name:
@@ -1353,10 +1372,23 @@ class MeldSession:
             uid=str(uuid.uuid4()),
             mode="DIRECTIONAL",
             frames=(
-                MeldFrame.from_context(incoming, role="INCOMING"),
-                MeldFrame.from_context(baseline, role="BASELINE"),
+                MeldFrame.from_context(
+                    incoming,
+                    role="INCOMING",
+                    include_descendants=incoming_descendants,
+                ),
+                MeldFrame.from_context(
+                    baseline,
+                    role="BASELINE",
+                    include_descendants=baseline_descendants,
+                ),
             ),
             target=MeldTarget.from_baseline_context(baseline),
+            # Directional schema four freezes authorization independently for
+            # each endpoint.  Public names alone are not stable authority.
+            schema_version=MELD_GRANTED_SCHEMA_VERSION,
+            granted_incoming=granted_incoming,
+            granted_target=granted_target,
         )
         return cls.from_dict(session.to_dict())
 
@@ -1379,6 +1411,17 @@ class MeldSession:
                 if self.comparison_seed is not None
                 else None
             )
+        if self.schema_version >= MELD_GRANTED_SCHEMA_VERSION:
+            result["granted_incoming"] = (
+                None
+                if self.granted_incoming is None
+                else self.granted_incoming.to_dict()
+            )
+            result["granted_target"] = (
+                None
+                if self.granted_target is None
+                else self.granted_target.to_dict()
+            )
         return result
 
     @classmethod
@@ -1390,6 +1433,7 @@ class MeldSession:
             MELD_LEGACY_SCHEMA_VERSION,
             MELD_COMPARISON_SCHEMA_VERSION,
             MELD_SCHEMA_VERSION,
+            MELD_GRANTED_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         keys = {
@@ -1404,6 +1448,8 @@ class MeldSession:
         }
         if schema_version >= MELD_COMPARISON_SCHEMA_VERSION:
             keys.add("comparison_seed")
+        if schema_version >= MELD_GRANTED_SCHEMA_VERSION:
+            keys.update({"granted_incoming", "granted_target"})
         data = _exact_dict(
             value,
             keys,
@@ -1437,6 +1483,18 @@ class MeldSession:
                 None
                 if raw_comparison_seed is None
                 else MeldComparisonSeed.from_dict(raw_comparison_seed)
+            ),
+            granted_incoming=(
+                None
+                if schema_version < MELD_GRANTED_SCHEMA_VERSION
+                or data["granted_incoming"] is None
+                else GrantedUpdateTarget.from_dict(data["granted_incoming"])
+            ),
+            granted_target=(
+                None
+                if schema_version < MELD_GRANTED_SCHEMA_VERSION
+                or data["granted_target"] is None
+                else GrantedUpdateTarget.from_dict(data["granted_target"])
             ),
             state=_literal(
                 data["state"],
@@ -1620,6 +1678,7 @@ class MeldSession:
             MELD_LEGACY_SCHEMA_VERSION,
             MELD_COMPARISON_SCHEMA_VERSION,
             MELD_SCHEMA_VERSION,
+            MELD_GRANTED_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         if self.schema_version == MELD_LEGACY_SCHEMA_VERSION:
@@ -1627,8 +1686,15 @@ class MeldSession:
                 raise MeldError(
                     "A legacy meld session cannot contain a comparison seed."
                 )
-        elif self.comparison_seed is None:
+        elif (
+            self.mode == "SYMMETRIC"
+            and self.comparison_seed is None
+        ):
             raise MeldError("A current meld session requires a comparison seed.")
+        if self.schema_version < MELD_GRANTED_SCHEMA_VERSION and (
+            self.granted_incoming is not None or self.granted_target is not None
+        ):
+            raise MeldError("A legacy meld session cannot contain Grant bindings.")
         if len(self.frames) != 2:
             raise MeldError("Context meld requires exactly two source frames.")
         if len({frame.uid for frame in self.frames}) != len(self.frames):
@@ -1669,6 +1735,14 @@ class MeldSession:
                 raise MeldError(
                     "Directional meld target overlaps its INCOMING Context."
                 )
+            for binding, frame, label in (
+                (self.granted_incoming, incoming, "INCOMING"),
+                (self.granted_target, baseline, "BASELINE"),
+            ):
+                if binding is not None and binding.public_name != frame.context_name:
+                    raise MeldError(
+                        f"Directional {label} Grant binding does not match its frame."
+                    )
 
         if self.comparison_seed is not None:
             analysis = self.comparison_seed.analysis

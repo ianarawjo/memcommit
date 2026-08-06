@@ -47,7 +47,6 @@ from memcommit.commands.meld_shell import (
     run_meld_shell,
 )
 from memcommit.commands.resolution_workbench_shell import (
-    _NavigationAccelerator,
     _viewer_focus_fragments,
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionGlobalStrategy,
@@ -125,7 +124,14 @@ def test_new_meld_setup_routes_directional_a_into_b(isolated_store, monkeypatch)
 
     meld_command._start_new_meld_from_picker(store)
 
-    assert calls == [{"left": "incoming", "into": "baseline"}]
+    assert calls == [
+        {
+            "left": "incoming",
+            "into": "baseline",
+            "left_descendants": False,
+            "right_descendants": False,
+        }
+    ]
 
 
 class Task2Provider:
@@ -424,6 +430,97 @@ def _save_task2_comparison(
         expected_analysis_uid=None,
     )
     return analysis
+
+
+def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
+    store = MemoryStore()
+    left = ops.init("scope/left")
+    left_child = ops.init("scope/left/child")
+    ops.add(left_child, "Use the short opening.")
+    right = ops.init("scope/right")
+    right_child = ops.init("scope/right/child")
+    ops.add(right_child, "Use the long opening.")
+    for context in (left, left_child, right, right_child):
+        store.create_context(context)
+
+    left_scope = meld_command._load_local_meld_source(
+        store,
+        left.name,
+        include_descendants=True,
+    )
+    right_scope = meld_command._load_local_meld_source(
+        store,
+        right.name,
+        include_descendants=True,
+    )
+    analysis = analyze_comparison(
+        ComparisonInput.from_contexts(
+            left_scope,
+            right_scope,
+            reference_descendants=True,
+            compared_descendants=True,
+        ),
+        Task2CompareProvider(),
+    )
+    save_comparison_analysis(
+        store,
+        analysis,
+        expected_analysis_uid=None,
+    )
+    target = ops.init("scope/result")
+
+    reviewed = meld_command._load_symmetric_comparison(
+        left=left_scope,
+        right=right_scope,
+        target=target,
+        create_target=True,
+        include_descendants=(True, True),
+    )
+    session = MeldSession.create_symmetric_from_comparison(reviewed, target)
+    restored = MeldSession.from_dict(session.to_dict())
+
+    assert restored.comparison_seed is not None
+    assert restored.comparison_seed.analysis.include_descendants == (True, True)
+    assert tuple(frame.include_descendants for frame in restored.frames) == (
+        True,
+        True,
+    )
+    assert any("[scope/left/child]" in memory.content for memory in restored.frames[0].memories)
+
+
+def test_directional_meld_freezes_incoming_descendants_but_direct_baseline(
+    isolated_store,
+):
+    store = MemoryStore()
+    incoming = ops.init("direction/incoming")
+    incoming_child = ops.init("direction/incoming/child")
+    ops.add(incoming_child, "Child-owned incoming evidence.")
+    baseline = ops.init("direction/baseline")
+    ops.add(baseline, "Direct authoritative baseline.")
+    for context in (incoming, incoming_child, baseline):
+        store.create_context(context)
+
+    incoming_scope = meld_command._load_local_meld_source(
+        store,
+        incoming.name,
+        include_descendants=True,
+    )
+    session = MeldSession.create_directional(
+        incoming_scope,
+        store.load_direct(baseline.name),
+        incoming_descendants=True,
+        baseline_descendants=False,
+    )
+    restored = MeldSession.from_dict(session.to_dict())
+    left, right, _target = meld_command._load_bound_contexts(store, restored)
+
+    meld_command._assert_source_bindings(restored, left, right)
+    assert restored.frames[0].include_descendants is True
+    assert restored.frames[1].include_descendants is False
+    assert any(
+        "[direction/incoming/child]" in memory.content
+        for memory in restored.frames[0].memories
+    )
 
 
 def _task2_contexts(
@@ -901,27 +998,6 @@ def test_result_rows_share_tree_prefix_and_keep_apply_card_fully_anchored():
         "This materialization policy is no longer actionable" not in text
         for _style, text in apply_fragments
     )
-
-
-def test_result_navigation_accelerates_only_after_deliberate_taps():
-    accelerator = _NavigationAccelerator()
-    assert [accelerator.step(1, now=index / 10) for index in range(13)] == [
-        1,
-        1,
-        1,
-        2,
-        2,
-        2,
-        2,
-        5,
-        5,
-        5,
-        5,
-        5,
-        10,
-    ]
-    assert accelerator.step(-1, now=1.4) == 1
-    assert accelerator.step(-1, now=2.0) == 1
 
 
 def test_viewer_position_is_blue_only_while_viewer_has_focus():

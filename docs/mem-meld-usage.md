@@ -199,6 +199,17 @@ slash-delimited Context namespace, not shell directories or filesystem paths.
 The command snapshots the current Context once and resolves every relative
 operand against that same name.
 
+Both directional endpoints may also be readable Grant names in the active
+Profile. Grant INCOMING remains read-only. A Grant BASELINE is the actual
+mutation target: `--accept` updates its authority Profile when the Grant has
+`ACCEPT_DERIVED` where required and the exact proposal's `CREATE`/`UPDATE`
+permissions. Cross-domain inputs additionally require the normal
+`DERIVE`/`COMBINE`/`EXPORT` permissions. Saved analysis requires an allowed
+retention mode, and every resume or acceptance revalidates the frozen Grant
+revision and mapping. Revocation or drift leaves the participant artifact
+stored but prevents Grant-bound review or mutation; retained-analysis access
+follows the Grant artifact retention rules.
+
 The first invocation performs one bounded semantic analysis, saves a
 non-applying relation ledger and proposal, and opens the interactive
 workbench in a terminal. Repeating the same resolved incoming–baseline command

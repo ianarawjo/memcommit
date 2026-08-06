@@ -69,19 +69,24 @@ def _session_route(session: MeldSession) -> tuple[str, str]:
 
 def _reopen_argv(session: MeldSession) -> tuple[str, ...]:
     left, right = session.frames
+    left_scope = ("--left-descendants",) if left.include_descendants else ()
     if session.mode == "DIRECTIONAL":
         return (
             "mem",
             "meld",
             left.context_name,
+            *left_scope,
             "--into",
             right.context_name,
         )
+    right_scope = ("--right-descendants",) if right.include_descendants else ()
     return (
         "mem",
         "meld",
         left.context_name,
+        *left_scope,
         right.context_name,
+        *right_scope,
     )
 
 
