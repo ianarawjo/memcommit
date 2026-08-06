@@ -243,6 +243,17 @@ class AtomizeResolutionWorkbenchAdapter:
                     issue_presentation=issue_presentation,
                 )
             )
+        # A reviewed reanalysis is the exact proposal boundary. Any response
+        # added to its new workbench makes that proposal provisional again and
+        # must be materialized before Apply can be offered.
+        ready_to_apply = (
+            analysis.source_review_uid is not None
+            and analysis.source_review_digest is not None
+            and workbench.answered_count == 0
+        )
+        capabilities = {"SUBMIT_ITEM", "SUBMIT_ALL"}
+        if ready_to_apply:
+            capabilities.add("ACCEPT")
         return ResolutionWorkbenchView(
             operation="ATOMIZE",
             artifact_uid=workbench.uid,
@@ -251,8 +262,11 @@ class AtomizeResolutionWorkbenchAdapter:
             # analysis and issue projection so detail/option focus survives.
             revision=f"{analysis.uid}:{workbench.issue_digest}",
             title="MEM ATOMIZE",
-            route=f"CONTEXT {analysis.context_name}",
-            status="REVIEWING",
+            route=(
+                f"INPUT {analysis.context_name} → OUTPUT "
+                f"{workbench.output_context_name or analysis.context_name}"
+            ),
+            status="READY_TO_APPLY" if ready_to_apply else "REVIEWING",
             metrics=(
                 ResolutionMetric("SOURCE MEMORIES", str(analysis.memory_count)),
                 ResolutionMetric(
@@ -269,8 +283,8 @@ class AtomizeResolutionWorkbenchAdapter:
             results_label="EXACT RESULTS",
             # Split children are analysis evidence, not an approved mutation.
             results=(),
-            capabilities=frozenset({"SUBMIT_ITEM"}),
-            accept_enabled=False,
+            capabilities=frozenset(capabilities),
+            accept_enabled=ready_to_apply,
             input_locked=False,
         )
 

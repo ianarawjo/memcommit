@@ -19,6 +19,16 @@ mutation controller. It supplies a provider-free immutable effect projection
 bound to the same operation, artifact UID, and revision as the active view.
 The shell renders that projection immediately before the operation-aware
 Apply card and rejects stale or cross-artifact projections.
+The same projection may be opened independently with `mem impact update`,
+`mem impact meld`, or `mem impact sever`. That standalone host keeps its Viewer
+and Items read-only: it reloads the saved operation artifact and renders the
+identical revision-bound Impact ledger without response or mutation
+capabilities. For a nonterminal artifact, To Do additionally shows `APPLY?`.
+This action exits Impact and hands the saved identity to the owning operation;
+it does not authorize mutation. The owning workflow must reload or resolve its
+live inputs, repeat its ordinary authority, freshness, and CAS checks, and
+present its distinct real Apply action. Close still leaves everything
+unchanged, and terminal artifacts expose Close only.
 When an Impact projection repeats the view's result rows exactly, the report
 renders those rows only in Impact. This keeps one authoritative full list and
 avoids doubling potentially hundreds of rows; the operation's overview or
@@ -49,15 +59,26 @@ single-result hanging row. Its header names the treatment, owning Context
 location, and actual Memory UID; its body renders the frozen transition as
 `- before` and `+ after`. ADD has only `+ after`, REMOVE has only `- before`,
 and an unchanged cross-Context projection uses one `= value` line. Exact
-rationale and Rules remain collapsed until Enter. Update names the target
-owner it will mutate. Sever instead names `Source → Result`, because it creates
-a new Result and never deletes or rewrites Source.
+rationale and Rules remain collapsed until Enter; once expanded they use
+neutral report-prose styling rather than inheriting a legacy result-row style.
+Update names the target owner it will mutate. Sever instead names
+`Source → Result`, because it creates a new Result and never deletes or
+rewrites Source.
 
 The shared diff renderer is deliberately mechanical. It derives presentation
 only from the frozen `before` and `after` strings: exact equality becomes `=`,
 a missing side becomes one-sided `+` or `-`, and two unequal sides are aligned
 by deterministic line and whitespace-preserving word-token matching. Equal
-spans retain the base line color while unequal spans receive bold treatment.
+spans and the explicit `-`/`+` markers are white. Unequal Source-only spans are
+red and underlined, while unequal Result-only spans are green and underlined,
+regardless of wrapping or vertical placement.
+Coloring only the changed spans answers what actually disappeared or appeared
+without tinting a whole Memory line. One-sided ADD or REMOVE content is entirely
+unequal and therefore receives the corresponding changed-span treatment.
+The located Context and Memory identity stay lavender, while EDIT, ADD, and
+REMOVE tags use green, blue, and red respectively. This distinguishes updating
+an existing Memory, creating a new one, and removing one without borrowing the
+warning-like yellow treatment.
 Operation labels such as EDIT, KEEP, or SUMMARIZE do not influence hunk
 calculation and the renderer never infers semantic equivalence. Consequently,
 Update continues to reject an exact no-op EDIT before presentation, while
@@ -353,7 +374,8 @@ exists.
 
 - Ground is not a Resolution Workbench adapter.
 - Impact never grants an adapter an Apply capability and never performs an
-  operation mutation itself.
+  operation mutation itself. Its `APPLY?` action is only a transition into the
+  owning operation's separately validated Apply flow.
 - A common view never becomes semantic authority or durable operation state.
 - A full adapter revision is replaced atomically; the shell does not patch
   provider results row by row.

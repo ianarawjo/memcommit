@@ -30,6 +30,7 @@ ResolutionActionKind = Literal[
     "DEFER",
     "ACCEPT",
     "CHANGE_DESTINATION",
+    "HANDOFF",
     "CLOSE",
 ]
 
@@ -40,7 +41,7 @@ _CAPABILITIES = {
     "DEFER",
     "ACCEPT",
 }
-_ACTION_KINDS = {*_CAPABILITIES, "CHANGE_DESTINATION", "CLOSE"}
+_ACTION_KINDS = {*_CAPABILITIES, "CHANGE_DESTINATION", "HANDOFF", "CLOSE"}
 
 
 class ResolutionWorkbenchError(ValueError):

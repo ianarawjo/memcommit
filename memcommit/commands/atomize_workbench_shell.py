@@ -44,7 +44,10 @@ from memcommit.commands.result_workbench_shell import (
 from memcommit.commands.tui_primitives import (
     safe_terminal_text,
 )
-from memcommit.resolution_workbench import ResolutionNavigation
+from memcommit.resolution_workbench import (
+    ResolutionNavigation,
+    ResolutionWorkbenchAction,
+)
 from memcommit.result_workbench import (
     ResultCase,
     ResultCaseDetail,
@@ -194,6 +197,8 @@ def _overview_text(
             "",
             (
                 f"Analysis [{analysis.uid[:8]}] · "
+                f"INPUT {analysis.context_name} → OUTPUT "
+                f"{session.output_context_name or analysis.context_name} · "
                 f"ORDER: {session.sort_mode} · "
                 f"{session.answered_count}/{len(findings)} answered"
             ),
@@ -585,7 +590,8 @@ def run_atomize_workbench_shell(
         FormattedTextControl(
             lambda: (
                 f" mem impact atomize · "
-                f"{safe_terminal_text(analysis.context_name)} · "
+                f"INPUT {safe_terminal_text(analysis.context_name)} → "
+                f"OUTPUT {safe_terminal_text(session.output_context_name or analysis.context_name)} · "
                 f"analysis={analysis.uid[:8]} "
                 f"view={'RESULT' if navigation.result_mode else 'ISSUES'} "
                 f"sort={session.sort_mode} layout={session.layout} "
@@ -897,9 +903,11 @@ def run_atomize_workbench_shell(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> AtomizeWorkbenchSession:
+    workflow_actions: bool = False,
+) -> AtomizeWorkbenchSession | ResolutionWorkbenchAction:
     """Review Atomize findings through the shared resolution workbench."""
     from memcommit.commands.resolution_workbench_shell import (
+        ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
 
@@ -961,6 +969,17 @@ def run_atomize_workbench_shell(
             save_draft_on_close=True,
             toggle_sort=toggle_sort,
             split_viewer_items=True,
+            review_and_apply=workflow_actions,
+            global_strategies=(
+                ResolutionGlobalStrategy(
+                    label="Keep unanswered optional findings as analyzed",
+                    action_kind="SUBMIT_ALL",
+                    comment=(
+                        "Keep unanswered optional findings as analyzed while "
+                        "materializing every saved Atomize response."
+                    ),
+                ),
+            ) if workflow_actions else (),
         )
         first_round = False
         session.cursor_uid = navigation.selected_item_uid
@@ -968,6 +987,8 @@ def run_atomize_workbench_shell(
             if not saved_in_round["value"]:
                 save(session)
             return session
+        if workflow_actions and action.kind in {"SUBMIT_ALL", "ACCEPT"}:
+            return action
         if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
             raise ValueError(
                 f"Unsupported resolution action '{action.kind}' for Atomize."

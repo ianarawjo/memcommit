@@ -37,15 +37,19 @@ class GroundSessionCatalogEntry:
     session_digest: str
 
 
-def ground_session_picker_location() -> SessionPickerLocation:
-    """Identify the frozen process store without trusting live active state.
+def session_picker_location(
+    store: MemoryStore | None = None,
+) -> SessionPickerLocation:
+    """Identify the frozen process profile/store for any session launcher.
 
     ``memcommit.store`` freezes its root at import time. Another process may
     change the registry's active profile while this picker is open, so the
     active UID is not authoritative here. Matching all registered roots keeps
     the label aligned with the store that the catalog actually came from.
     """
-    frozen_root = Path(store_module.STORE_DIR)
+    frozen_root = (
+        store.store_dir if store is not None else Path(store_module.STORE_DIR)
+    )
     profile_name = "(unregistered)"
     try:
         registry = load_profile_registry()
@@ -63,6 +67,12 @@ def ground_session_picker_location() -> SessionPickerLocation:
         profile_name=profile_name,
         store_path=str(frozen_root),
     )
+
+
+def ground_session_picker_location() -> SessionPickerLocation:
+    """Compatibility name for Ground's use of the shared orientation."""
+
+    return session_picker_location()
 
 
 def _ground_primary_context(session: GroundSession) -> str:

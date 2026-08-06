@@ -24,6 +24,7 @@ from memcommit.atomize_workbench import (
     atomize_workbench_response_digest,
     project_atomize_workbench_findings,
 )
+from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.review_shell import visible_ordinal_index
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import AutoCheckpoint, Context, Memory
@@ -285,12 +286,17 @@ def start_grounding(
         ),
     )
     turn = session.start_turn(comment)
-    assessment = assess_atomize_grounding_turn(
-        ctx,
-        analysis,
-        session,
+    with progressing_provider_factory(
+        "ATOMIZE",
+        "grounding selected issue",
         provider_factory,
-    )
+    ) as progressing_factory:
+        assessment = assess_atomize_grounding_turn(
+            ctx,
+            analysis,
+            session,
+            progressing_factory,
+        )
     _assert_persisted_inputs_unchanged(
         store,
         session,
@@ -349,12 +355,17 @@ def reply_to_grounding(
         revision=normalized_revision,  # type: ignore[arg-type]
         revises_turn_uids=revised,
     )
-    assessment = assess_atomize_grounding_turn(
-        ctx,
-        analysis,
-        session,
+    with progressing_provider_factory(
+        "ATOMIZE",
+        "reassessing selected issue",
         provider_factory,
-    )
+    ) as progressing_factory:
+        assessment = assess_atomize_grounding_turn(
+            ctx,
+            analysis,
+            session,
+            progressing_factory,
+        )
     _assert_persisted_inputs_unchanged(
         store,
         session,

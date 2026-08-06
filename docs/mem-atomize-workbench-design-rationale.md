@@ -1016,3 +1016,12 @@ These boxes describe the current implementation and its regression boundary.
 
 The archive/diff UI, measured downstream-effect scoring, and an independent
 semantic validator remain deferred; none is implied by a checked item.
+
+The shared workbench also owns Atomize's process-independent Output plan.
+Schema v2 stores `output_context_name`; schema v1 normalizes to the Input
+Context name, preserving its original in-place behavior. Output routing is
+excluded from the response digest and issue projection because it changes
+where an accepted exact result is materialized, not what the semantic
+analysis or reviewed answers mean. Explicit refresh carries the Output plan
+to the replacement workbench while still replacing issue responses under the
+existing fresh-analysis rule.

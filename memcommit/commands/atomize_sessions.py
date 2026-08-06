@@ -1,4 +1,4 @@
-"""Discover exact saved Atomize analyses for the shared session picker."""
+"""Discover exact saved Atomize work for the shared session launcher."""
 
 from __future__ import annotations
 
@@ -8,7 +8,6 @@ import re
 import sys
 import uuid
 
-import memcommit.store as store_module
 from memcommit.atomize import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisSession,
@@ -19,6 +18,9 @@ from memcommit.commands.session_picker import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
+)
+from memcommit.commands.ground_session_picker import (
+    session_picker_location,
 )
 from memcommit.context import Context
 from memcommit.review import direct_context_digest
@@ -72,8 +74,11 @@ def _artifact_timestamp(
     return timestamp
 
 
-def _analysis_files() -> tuple[tuple[str, Path], ...]:
-    root = store_module.ATOMIZE_ANALYSES_DIR
+def _analysis_files(store: MemoryStore) -> tuple[tuple[str, Path], ...]:
+    # Session discovery must follow the exact store boundary supplied by the
+    # command. Using the process-global active path here could expose the
+    # wrong profile when a caller is operating through an explicit store.
+    root = store.atomize_analyses_dir
     if not root.exists():
         return ()
     if not root.is_dir() or root.is_symlink():
@@ -101,7 +106,7 @@ def iter_saved_atomize_analyses(
 ) -> tuple[tuple[AtomizeAnalysisSession, Path], ...]:
     """Strictly load every latest Context-scoped Atomize analysis."""
     records: list[tuple[AtomizeAnalysisSession, Path]] = []
-    for context_uid, path in _analysis_files():
+    for context_uid, path in _analysis_files(store):
         analysis = store.load_atomize_analysis(context_uid)
         if analysis is None:
             # The exact file may have been removed after enumeration. It is
@@ -109,6 +114,35 @@ def iter_saved_atomize_analyses(
             continue
         records.append((analysis, path))
     return tuple(records)
+
+
+def _canonical_saved_atomize_analyses(
+    store: MemoryStore,
+) -> tuple[tuple[AtomizeAnalysisSession, Path], ...]:
+    """Collapse an applied Output copy into its Input-owned shared session."""
+
+    by_uid: dict[str, list[tuple[AtomizeAnalysisSession, Path]]] = {}
+    for record in iter_saved_atomize_analyses(store):
+        by_uid.setdefault(record[0].uid, []).append(record)
+    canonical: list[tuple[AtomizeAnalysisSession, Path]] = []
+    for records in by_uid.values():
+        if len(records) == 1:
+            canonical.append(records[0])
+            continue
+        owners = [
+            record
+            for record in records
+            if store.load_atomize_workbench(record[0]) is not None
+        ]
+        if len(owners) != 1:
+            raise ValueError(
+                "Saved atomize analysis identity is not uniquely owned by "
+                "one shared workbench session."
+            )
+        canonical.append(owners[0])
+    return tuple(
+        sorted(canonical, key=lambda record: record[0].context_name)
+    )
 
 
 def load_saved_atomize_analysis(
@@ -119,7 +153,7 @@ def load_saved_atomize_analysis(
     expected_uid = _canonical_uuid(analysis_uid, "atomize analysis uid")
     matches = [
         analysis
-        for analysis, _path in iter_saved_atomize_analyses(store)
+        for analysis, _path in _canonical_saved_atomize_analyses(store)
         if analysis.uid == expected_uid
     ]
     if not matches:
@@ -196,6 +230,33 @@ def atomize_analysis_was_applied(
     return False
 
 
+def atomize_planned_output_was_applied(
+    store: MemoryStore,
+    analysis: AtomizeAnalysisSession,
+    output_name: str,
+) -> bool:
+    """Recognize one exact require-new Output without treating its name as identity."""
+
+    if output_name == analysis.context_name:
+        try:
+            context = store.load_direct(output_name)
+        except FileNotFoundError:
+            return False
+        return atomize_analysis_was_applied(store, context, analysis.uid)
+    try:
+        output = store.load_direct(output_name)
+    except FileNotFoundError:
+        return False
+    copied = store.load_atomize_analysis(output.uid)
+    return (
+        copied is not None
+        and copied.uid == analysis.uid
+        and copied.context_uid == output.uid
+        and copied.context_name == output.name
+        and atomize_analysis_was_applied(store, output, analysis.uid)
+    )
+
+
 def atomize_session_entries(
     store: MemoryStore,
     *,
@@ -203,7 +264,7 @@ def atomize_session_entries(
 ) -> tuple[SessionPickerEntry, ...]:
     """Project saved Atomize artifacts without rendering source Memory text."""
     entries: list[SessionPickerEntry] = []
-    for analysis, path in iter_saved_atomize_analyses(store):
+    for analysis, path in _canonical_saved_atomize_analyses(store):
         status = "CURRENT"
         applied = False
         try:
@@ -212,6 +273,23 @@ def atomize_session_entries(
             status = "STALE"
         workbench = store.load_atomize_workbench(analysis)
         grounding = store.load_atomize_grounding_session(analysis.context_uid)
+        output_name = (
+            workbench.output_context_name
+            if workbench is not None
+            else analysis.context_name
+        )
+        if status == "CURRENT" and output_name != analysis.context_name:
+            try:
+                if atomize_planned_output_was_applied(
+                    store,
+                    analysis,
+                    output_name,
+                ):
+                    applied = True
+                elif store.context_exists(output_name):
+                    status = "STALE OUTPUT"
+            except (OSError, ValueError):
+                status = "STALE OUTPUT"
         if status == "CURRENT" and applied:
             status = "APPLIED"
         elif status == "CURRENT" and grounding is not None and grounding.state in {
@@ -232,6 +310,7 @@ def atomize_session_entries(
                 title=analysis.context_name,
                 status=status,
                 subtitle=(
+                    f"{analysis.context_name} → {output_name} · "
                     f"{analysis.memory_count} → "
                     f"{analysis.projected_memory_count} Memories · "
                     f"{issue_count} issues"
@@ -246,7 +325,13 @@ def atomize_session_entries(
                     f"Analysis {analysis.uid}\n"
                     f"Source Context {analysis.context_name} "
                     f"[{analysis.context_uid}]\n"
-                    "Picker selection uses the frozen analysis UID and "
+                    f"Planned Output {output_name}"
+                    + (
+                        " · IN PLACE\n"
+                        if output_name == analysis.context_name
+                        else " · REQUIRE NEW\n"
+                    )
+                    + "Picker selection uses the frozen analysis UID and "
                     "revalidates it without provider or refresh. The shown "
                     "argv is only the nearest public route and is not "
                     "executed by the picker."
@@ -262,14 +347,15 @@ def choose_atomize_session(
     *,
     show_all: bool = False,
 ) -> SessionOpenReceipt | SessionNewReceipt | None:
-    """Return an exact picker receipt; never create Atomize work."""
+    """Return an exact launcher receipt; the picker itself creates nothing."""
     entries = atomize_session_entries(store, show_all=show_all)
     if not entries and not (sys.stdin.isatty() and sys.stdout.isatty()):
         return None
     receipt = choose_session(
         entries,
-        title="MEM ATOMIZE · SAVED ANALYSES",
+        title="MEM ATOMIZE · SESSIONS",
         new_receipt=SessionNewReceipt(kind="atomize", argv=("mem", "atomize")),
+        location=session_picker_location(store),
     )
     if receipt is None:
         return None

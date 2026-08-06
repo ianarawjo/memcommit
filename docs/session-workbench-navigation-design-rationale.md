@@ -64,6 +64,8 @@ The shared interaction grammar is:
   reversing that established cycle. In particular, leaving an opened Viewer
   never skips the adjacent Items frame;
 - `Up` and `Down` move one row or semantic Viewer section in the focused frame;
+  while Viewer has focus, held-arrow repeats use the shared navigation
+  accelerator and still visit every intermediate semantic section;
 - `PageUp` and `PageDown` move eight semantic stops in the focused frame;
 - `Home` and `End` move to the first or last stop;
 - `B`, `Escape`, or `Backspace` unwinds a detail to the report/Items state; and
@@ -80,6 +82,13 @@ border rather than at the heading. This prevents a lower card such as Meld's
 Viewer. When the card fits, navigation exposes the complete box; when it is
 taller than the viewport, the lower portion and closing boundary remain
 reachable instead of falsely implying that the card is empty.
+
+Resolution Viewer bodies use the shared wrapped-row scrollbar margin. Source
+Memories, evidence, and proposed results often wrap one logical line across
+many terminal rows; scrollbar arrows and thumb position therefore follow the
+rendered visual rows rather than reporting a misleading logical-line offset.
+This is a shared Viewer property and must not be reimplemented by Atomize or
+another operation adapter.
 
 An OPTIONS section is a nested navigation layer, not an implicitly active list.
 For actionable quality issues, its clarification or resolution question is
@@ -102,10 +111,12 @@ The same session topology is the default for live resolution review in Meld,
 Sever, and Atomize, and for the Update and adaptive Review projections. Sever
 classifies each outbound treatment as REQUIRED because every source Memory
 needs one inspectable disclosure decision, even though its provider
-recommendation is already staged. Atomize has no whole-set action of its own:
-after all required responses are saved, To Do reports COMPLETE and preserves
-any unanswered optional items for inspection instead of inventing a
-materialization command.
+recommendation is already staged. Atomize uses the shared two-stage terminal
+path: after all required responses are saved, To Do offers MATERIALIZE to
+reanalyze the complete reviewed response set; only the fresh, unedited
+review-bound proposal offers APPLY. Unanswered optional items are counted and
+may be skipped, but a response added to the fresh proposal removes Apply until
+that response is materialized again.
 
 Choosing Other direction or opening an item's ordinary Response keeps the
 current detail and options visible. The writable field appears inline within
@@ -122,11 +133,15 @@ Enter opens a blank field for a new response or restores the current durable
 draft for revision.
 
 The shared style continues to color the focused frame border/label and active
-Viewer section light blue. The active Items row uses the shared reverse-bold
-selection style. Unfocused report cards, explanatory prose, and structural
-labels are neutral white. Light lavender is reserved for individual Memory
-objects, so a Compare report does not visually present every derived paragraph
-as though it were itself a Memory.
+Viewer section light blue. When a focused frame contains more than one Tab
+target, the whole frame keeps that blue chrome while the exact nested control
+adds bold. Persistent selected values retain their blue surface without bold
+after focus leaves, and combine blue with bold only while they own input. The
+active Items row uses the shared reverse-bold selection style. Unfocused report
+cards, explanatory prose, and structural labels are neutral white. Light
+lavender is reserved for individual Memory objects, so a Compare report does
+not visually present every derived paragraph as though it were itself a
+Memory.
 
 ## Operation boundaries
 

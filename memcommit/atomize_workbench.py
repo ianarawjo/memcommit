@@ -22,7 +22,8 @@ if TYPE_CHECKING:
     )
 
 
-ATOMIZE_WORKBENCH_SCHEMA_VERSION = 1
+ATOMIZE_WORKBENCH_SCHEMA_VERSION = 2
+ATOMIZE_WORKBENCH_LEGACY_SCHEMA_VERSION = 1
 ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT = 20_000
 ATOMIZE_WORKBENCH_ID_CHAR_LIMIT = 200
 ATOMIZE_WORKBENCH_CONTEXT_NAME_CHAR_LIMIT = 500
@@ -286,6 +287,8 @@ def atomize_workbench_issue_projection(
 
 def create_atomize_workbench(
     analysis: "AtomizeAnalysisSession",
+    *,
+    output_context_name: str | None = None,
 ) -> "AtomizeWorkbenchSession":
     """Create fresh mutable state pinned to one immutable analysis."""
     return AtomizeWorkbenchSession.create(
@@ -293,6 +296,7 @@ def create_atomize_workbench(
         context_uid=analysis.context_uid,
         context_name=analysis.context_name,
         context_digest=analysis.context_digest,
+        output_context_name=output_context_name or analysis.context_name,
         issues=atomize_workbench_issue_projection(analysis),
     )
 
@@ -494,6 +498,7 @@ class AtomizeWorkbenchSession:
     context_digest: str
     issue_digest: str
     cursor_uid: str | None
+    output_context_name: str | None = None
     sort_mode: AtomizeWorkbenchSort = "SOURCE"
     layout: AtomizeWorkbenchLayout = "SPLIT"
     responses: dict[str, AtomizeWorkbenchResponse] = field(
@@ -505,6 +510,18 @@ class AtomizeWorkbenchSession:
         compare=False,
     )
 
+    def __post_init__(self) -> None:
+        # Schema v1 had no destination plan because Atomize was introduced as
+        # an in-place operation. Normalize old and directly constructed state
+        # to that exact A → A route so every resumed workbench has an Output.
+        if self.output_context_name is None:
+            self.output_context_name = self.context_name
+        _string(
+            self.output_context_name,
+            "atomize workbench output Context name",
+            limit=ATOMIZE_WORKBENCH_CONTEXT_NAME_CHAR_LIMIT,
+        )
+
     @classmethod
     def create(
         cls,
@@ -513,6 +530,7 @@ class AtomizeWorkbenchSession:
         context_uid: str,
         context_name: str,
         context_digest: str,
+        output_context_name: str | None = None,
         issues: Iterable[AtomizeWorkbenchIssue],
     ) -> "AtomizeWorkbenchSession":
         """Create a fresh workbench for one exact analysis issue projection."""
@@ -537,6 +555,11 @@ class AtomizeWorkbenchSession:
                 context_digest,
                 "atomize workbench Context digest",
             ),
+            output_context_name=_string(
+                output_context_name or context_name,
+                "atomize workbench output Context name",
+                limit=ATOMIZE_WORKBENCH_CONTEXT_NAME_CHAR_LIMIT,
+            ),
             issue_digest=atomize_workbench_issue_digest(parsed_issues),
             cursor_uid=source_ordered[0].uid if source_ordered else None,
             _issues=parsed_issues,
@@ -555,6 +578,7 @@ class AtomizeWorkbenchSession:
                 "name": self.context_name,
                 "digest": self.context_digest,
             },
+            "output_context_name": self.output_context_name,
             "issue_digest": self.issue_digest,
             "cursor_uid": self.cursor_uid,
             "sort": self.sort_mode,
@@ -574,9 +598,14 @@ class AtomizeWorkbenchSession:
     ) -> "AtomizeWorkbenchSession":
         """Restore state only against the exact selected analysis issues."""
         parsed_issues = normalize_atomize_workbench_issues(issues)
-        data = _exact_dict(
-            value,
-            {
+        if not isinstance(value, dict):
+            raise AtomizeWorkbenchError("Invalid atomize workbench session.")
+        schema_version = value.get("schema_version")
+        if isinstance(schema_version, bool):
+            raise AtomizeWorkbenchError(
+                "Unsupported atomize workbench schema version."
+            )
+        common_keys = {
                 "schema_version",
                 "uid",
                 "analysis_uid",
@@ -586,17 +615,20 @@ class AtomizeWorkbenchSession:
                 "sort",
                 "layout",
                 "responses",
-            },
-            "atomize workbench session",
-        )
-        schema_version = data["schema_version"]
-        if (
-            isinstance(schema_version, bool)
-            or schema_version != ATOMIZE_WORKBENCH_SCHEMA_VERSION
-        ):
+        }
+        if schema_version == ATOMIZE_WORKBENCH_LEGACY_SCHEMA_VERSION:
+            keys = common_keys
+        elif schema_version == ATOMIZE_WORKBENCH_SCHEMA_VERSION:
+            keys = common_keys | {"output_context_name"}
+        else:
             raise AtomizeWorkbenchError(
                 "Unsupported atomize workbench schema version."
             )
+        data = _exact_dict(
+            value,
+            keys,
+            "atomize workbench session",
+        )
         context = _exact_dict(
             data["context"],
             {"uid", "name", "digest"},
@@ -688,6 +720,15 @@ class AtomizeWorkbenchSession:
             ),
             issue_digest=stored_issue_digest,
             cursor_uid=cursor_uid,
+            output_context_name=_string(
+                (
+                    context["name"]
+                    if schema_version == ATOMIZE_WORKBENCH_LEGACY_SCHEMA_VERSION
+                    else data["output_context_name"]
+                ),
+                "atomize workbench output Context name",
+                limit=ATOMIZE_WORKBENCH_CONTEXT_NAME_CHAR_LIMIT,
+            ),
             sort_mode=sort_mode,  # type: ignore[arg-type]
             layout=layout,  # type: ignore[arg-type]
             responses=responses,

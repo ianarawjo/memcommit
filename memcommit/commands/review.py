@@ -18,6 +18,7 @@ from memcommit.atomize_workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import (
     ReviewCancelled,
@@ -379,7 +380,7 @@ def cmd(
             help=(
                 "Open a review report (compare, meld, sever, update, atomize, "
                 "or ambiguities); "
-                "omit to resume the saved review"
+                "omit to enter the interactive Review session"
             )
         ),
     ] = None,
@@ -526,10 +527,15 @@ def cmd(
                 canonical_context_name,
                 current_name=context_snapshot.current_name,
             )
-            report = ops.find_ambiguities(
-                ctx,
-                connect_codex_chatgpt_provider,
-            )
+            with CommandProgress(
+                "REVIEW AMBIGUITIES",
+                "analyzing direct memories",
+                total=1,
+            ):
+                report = ops.find_ambiguities(
+                    ctx,
+                    connect_codex_chatgpt_provider,
+                )
             session = create_ambiguity_review(ctx, report)
             # The semantic report is durable before terminal control begins.
             # A PTY disconnect must not discard the expensive one-shot result.

@@ -72,6 +72,7 @@ def test_create_round_trips_only_mutable_state_bound_to_issue_digest():
         "uid",
         "analysis_uid",
         "context",
+        "output_context_name",
         "issue_digest",
         "cursor_uid",
         "sort",
@@ -79,11 +80,40 @@ def test_create_round_trips_only_mutable_state_bound_to_issue_digest():
         "responses",
     }
     assert data["schema_version"] == ATOMIZE_WORKBENCH_SCHEMA_VERSION
+    assert data["output_context_name"] == "temp/task-1"
     assert data["issue_digest"] == atomize_workbench_issue_digest(issues)
     assert "issues" not in data
     assert restored.to_dict() == data
     assert restored.layout == "STACKED"
     assert restored.answered_count == 1
+
+
+def test_output_plan_round_trips_and_schema_one_defaults_to_in_place():
+    issues = _issues()
+    session = AtomizeWorkbenchSession.create(
+        analysis_uid=str(uuid.uuid4()),
+        context_uid=str(uuid.uuid4()),
+        context_name="atomize/input",
+        context_digest=_digest("context"),
+        output_context_name="atomize/output",
+        issues=issues,
+    )
+
+    assert session.output_context_name == "atomize/output"
+    restored = AtomizeWorkbenchSession.from_dict(
+        session.to_dict(),
+        issues=issues,
+    )
+    assert restored.output_context_name == "atomize/output"
+
+    legacy = session.to_dict()
+    legacy["schema_version"] = 1
+    legacy.pop("output_context_name")
+    restored_legacy = AtomizeWorkbenchSession.from_dict(
+        legacy,
+        issues=issues,
+    )
+    assert restored_legacy.output_context_name == "atomize/input"
 
 
 def test_source_and_priority_order_are_deterministic_and_cursor_is_stable():

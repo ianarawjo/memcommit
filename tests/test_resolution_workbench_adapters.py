@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import uuid
+from dataclasses import replace
 
 from memcommit.atomize import (
     ATOMIZE_RULESET_VERSION,
@@ -22,6 +23,7 @@ from memcommit.atomize_workbench import create_atomize_workbench
 from memcommit.context import Context, Memory
 from memcommit.commands.resolution_workbench_shell import (
     resolution_viewer_fragments,
+    session_todo_view,
 )
 from memcommit.meld import MeldAssessment, MeldSession
 from memcommit.meld_resolution_adapter import (
@@ -326,7 +328,7 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     view = AtomizeResolutionWorkbenchAdapter(analysis, workbench).view()
 
     assert view.list_label == "ACTIONABLE FINDINGS"
-    assert view.capabilities == frozenset({"SUBMIT_ITEM"})
+    assert view.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL"})
     assert view.accept_enabled is False
     assert view.results == ()
     assert [metric.value for metric in view.metrics] == ["2", "3", "2", "1"]
@@ -379,6 +381,55 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     assert split.issue_presentation.evidence[0].sources
     assert "The north door closes." in split_blocks["PROPOSED CHILDREN"]
     assert "The south door remains open." in split_blocks["PROPOSED CHILDREN"]
+
+
+def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() -> None:
+    analysis, _conflict_uid, _composite_uid = _atomize_fixture()
+    reviewed = replace(
+        analysis,
+        source_review_uid=_uid(),
+        source_review_digest=_digest("reviewed-responses"),
+    )
+    workbench = create_atomize_workbench(reviewed)
+
+    ready = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
+
+    assert ready.status == "READY_TO_APPLY"
+    assert ready.accept_enabled is True
+    assert ready.capabilities == frozenset(
+        {"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}
+    )
+
+    workbench.response_for(workbench.ordered_issues()[0].uid).text = "Revise it."
+    edited = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
+
+    assert edited.status == "REVIEWING"
+    assert edited.accept_enabled is False
+    assert "ACCEPT" not in edited.capabilities
+
+
+def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
+    analysis, _conflict_uid, _composite_uid = _atomize_fixture()
+    reviewed = replace(
+        analysis,
+        quality_issues=(),
+        source_review_uid=_uid(),
+        source_review_digest=_digest("reviewed-split"),
+    )
+    workbench = create_atomize_workbench(reviewed)
+    view = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
+
+    todo = session_todo_view(
+        view,
+        {},
+        review_and_apply=True,
+        read_only=False,
+    )
+
+    assert [item.priority for item in view.items] == ["REVIEW"]
+    assert todo.kind == "APPLY"
+    assert todo.label == "Apply Atomize"
+    assert todo.detail.startswith("1 optional item left unanswered.")
 
 
 def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> None:

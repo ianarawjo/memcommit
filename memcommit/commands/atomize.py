@@ -34,13 +34,15 @@ from memcommit.commands.atomize_grounding import (
     reply_to_grounding,
     start_grounding,
 )
+from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.atomize_sessions import (
     atomize_analysis_was_applied,
+    atomize_planned_output_was_applied,
     choose_atomize_session,
     load_saved_atomize_analysis,
     revalidate_saved_atomize_analysis,
 )
-from memcommit.commands.context_picker import choose_context
+from memcommit.commands.endpoint_setup_flows import choose_atomize_setup
 from memcommit.commands.session_picker import SessionNewReceipt
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import ReviewCancelled
@@ -56,6 +58,7 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
+from memcommit.resolution_workbench import ResolutionWorkbenchAction
 
 
 def _interactive_terminal() -> bool:
@@ -134,7 +137,8 @@ def _present_workbench(
     analysis: AtomizeAnalysisSession,
     workbench,
     show_all: bool,
-) -> None:
+    workflow_actions: bool = True,
+) -> ResolutionWorkbenchAction | None:
     if not sys.stdin.isatty() or not sys.stdout.isatty():
         typer.echo(
             render_atomize_workbench_snapshot(
@@ -143,15 +147,68 @@ def _present_workbench(
                 show_all=show_all,
             )
         )
-        return
+        return None
     try:
-        run_atomize_workbench_shell(
+        result = run_atomize_workbench_shell(
             workbench,
             analysis,
             save=store.save_atomize_workbench,
+            workflow_actions=workflow_actions,
         )
+        return result if isinstance(result, ResolutionWorkbenchAction) else None
     except ReviewCancelled:
         typer.echo("Atomize workbench saved. No Memory changes applied.")
+        return None
+
+
+def _materialize_reviewed_workbench(
+    *,
+    store: MemoryStore,
+    context,
+    analysis: AtomizeAnalysisSession,
+    workbench,
+):
+    """Create one reviewed proposal while freezing its response identity."""
+    declared_frames, declared_frame_origins = atomize_workbench_declared_frames(
+        workbench,
+        analysis,
+    )
+    if not declared_frames:
+        raise AtomizeImpactError(
+            "The workbench has no single-Memory response to materialize. "
+            "Pairwise conflict responses remain staged for reconcile."
+        )
+    source_review_uid = workbench.uid
+    source_review_digest = atomize_workbench_response_digest(workbench)
+
+    def validate_before_save() -> None:
+        latest = store.load_atomize_workbench(analysis)
+        if (
+            latest is None
+            or latest.uid != source_review_uid
+            or atomize_workbench_response_digest(latest) != source_review_digest
+        ):
+            raise AtomizeImpactError(
+                "The atomize workbench changed while reviewed materialization "
+                "was running; no proposal was saved."
+            )
+
+    with progressing_provider_factory(
+        "ATOMIZE",
+        "materializing reviewed choices",
+        connect_codex_chatgpt_provider,
+    ) as provider_factory:
+        return open_or_create_atomize_workbench(
+            store=store,
+            ctx=context,
+            provider_factory=provider_factory,
+            refresh=True,
+            declared_frames=declared_frames,
+            declared_frame_origins=declared_frame_origins,
+            source_review_uid=source_review_uid,
+            source_review_digest=source_review_digest,
+            validate_before_save=validate_before_save,
+        )
 
 
 def _resume_selected_atomize(
@@ -186,11 +243,33 @@ def _resume_selected_atomize(
             fg=typer.colors.CYAN,
         )
         return
-    _present_workbench(
+    action = _present_workbench(
         store=store,
         analysis=analysis,
         workbench=workbench,
         show_all=show_all,
+        workflow_actions=not applied,
+    )
+    if action is not None and action.kind == "SUBMIT_ALL":
+        opened = _materialize_reviewed_workbench(
+            store=store,
+            context=context,
+            analysis=analysis,
+            workbench=workbench,
+        )
+        _resume_selected_atomize(
+            store=store,
+            analysis_uid=opened.analysis.uid,
+            show_all=show_all,
+        )
+        return
+    if action is not None and action.kind == "ACCEPT":
+        cmd(save=True, context_name=context.name, show_all=show_all)
+        return
+    applied = applied or atomize_planned_output_was_applied(
+        store,
+        analysis,
+        workbench.output_context_name or analysis.context_name,
     )
     if applied:
         typer.secho(
@@ -340,6 +419,16 @@ def cmd(
             help="Context to inspect or atomize (defaults to current)",
         ),
     ] = None,
+    output_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--output",
+            help=(
+                "Persist the Atomize session's Output Context plan; use the "
+                "Input name for in-place output or a new exact name"
+            ),
+        ),
+    ] = None,
     show_all: Annotated[
         bool,
         typer.Option(
@@ -351,7 +440,7 @@ def cmd(
         bool,
         typer.Option(
             "--sessions",
-            help="Interactively reopen an existing saved atomize analysis",
+            help="Enter the interactive Atomize session launcher",
         ),
     ] = False,
     evaluate: Annotated[
@@ -424,10 +513,19 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if output_name is not None and (save or save_as is not None):
+        typer.secho(
+            "Atomize error: --output plans a shared session; apply that "
+            "session separately with --save (or use --save-as directly).",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if sessions and (
         save
         or save_as is not None
         or context_name is not None
+        or output_name is not None
         or grounding_action_count
         or comment is not None
         or revision is not None
@@ -454,6 +552,13 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if grounding_action_count and output_name is not None:
+        typer.secho(
+            "Atomize error: --output cannot be combined with a grounding action.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if comment is not None and evaluate is None:
         typer.secho(
             "Atomize error: --comment requires --evaluate.",
@@ -471,25 +576,32 @@ def cmd(
 
     store = MemoryStore(create=False)
     try:
-        if sessions:
+        browse_by_default = (
+            _interactive_terminal()
+            and not sessions
+            and not save
+            and save_as is None
+            and context_name is None
+            and output_name is None
+            and grounding_action_count == 0
+            and comment is None
+            and revision is None
+        )
+        if sessions or browse_by_default:
             receipt = choose_atomize_session(store, show_all=show_all)
             if receipt is None:
                 typer.echo("Atomize selection ended; no analysis was opened.")
                 return
             if isinstance(receipt, SessionNewReceipt):
-                names = store.list_context_names()
-                if not names:
-                    raise AtomizeImpactError(
-                        "Starting Atomize requires an ordinary Context."
-                    )
-                selected = choose_context(
-                    names,
-                    current=store.current_context_name(),
-                )
-                if selected is None:
+                setup = choose_atomize_setup(store)
+                if setup is None:
                     typer.echo("New Atomize cancelled; no analysis was opened.")
                     return
-                cmd(context_name=selected, show_all=show_all)
+                cmd(
+                    context_name=setup.input_name,
+                    output_name=setup.output_name,
+                    show_all=show_all,
+                )
                 return
             _resume_selected_atomize(
                 store=store,
@@ -504,6 +616,11 @@ def cmd(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
         direct_ctx = store.load_direct(name)
+        if output_name is not None and output_name != name:
+            # A distinct Atomize Output is require-new. Validate before a
+            # provider can be connected so setup cannot create semantic work
+            # for an impossible or already occupied destination.
+            store.assert_context_creatable(output_name)
         session = store.load_atomize_analysis(direct_ctx.uid)
 
         grounding = store.load_atomize_grounding_session(direct_ctx.uid)
@@ -662,6 +779,7 @@ def cmd(
                     analysis=session,
                     workbench=workbench,
                     show_all=show_all,
+                    workflow_actions=False,
                 )
                 typer.secho(
                     f"Saved analysis [{session.uid[:8]}]: APPLIED.",
@@ -669,35 +787,92 @@ def cmd(
                     bold=True,
                 )
                 return
-            opened = open_or_create_atomize_workbench(
-                store=store,
-                ctx=direct_ctx,
-                provider_factory=connect_codex_chatgpt_provider,
-            )
+            with progressing_provider_factory(
+                "ATOMIZE",
+                "analyzing memory structure",
+                connect_codex_chatgpt_provider,
+            ) as provider_factory:
+                opened = open_or_create_atomize_workbench(
+                    store=store,
+                    ctx=direct_ctx,
+                    provider_factory=provider_factory,
+                    output_context_name=output_name,
+                )
             session = opened.analysis
-            _present_workbench(
-                store=store,
-                analysis=session,
-                workbench=opened.workbench,
-                show_all=show_all,
+            planned_output = opened.workbench.output_context_name or name
+            planned_output_applied = atomize_planned_output_was_applied(
+                store,
+                session,
+                planned_output,
             )
-            typer.secho(
-                (
-                    f"Saved analysis [{session.uid[:8]}]: CURRENT."
-                    if opened.created_analysis
-                    else (
-                        f"Saved analysis [{session.uid[:8]}]: CURRENT. "
-                        "Resumed; the provider was not called."
+            if (
+                planned_output != name
+                and store.context_exists(planned_output)
+                and not planned_output_applied
+            ):
+                raise AtomizeImpactError(
+                    f"Planned atomize Output '{planned_output}' is occupied "
+                    "by an unrelated Context. Choose a new Output before "
+                    "continuing this session."
+                )
+            while True:
+                action = _present_workbench(
+                    store=store,
+                    analysis=session,
+                    workbench=opened.workbench,
+                    show_all=show_all,
+                )
+                if action is None:
+                    break
+                if action.kind == "SUBMIT_ALL":
+                    opened = _materialize_reviewed_workbench(
+                        store=store,
+                        context=direct_ctx,
+                        analysis=session,
+                        workbench=opened.workbench,
                     )
-                ),
-                fg=typer.colors.CYAN,
-            )
-            typer.echo(
-                "Apply in place with: mem atomize --save\n"
-                "Or preserve the source with: "
-                "mem atomize --save-as NEW_CONTEXT"
-            )
-            return
+                    session = opened.analysis
+                    continue
+                if action.kind == "ACCEPT":
+                    save = True
+                    applying = True
+                    break
+                raise AtomizeImpactError(
+                    f"Unsupported Atomize workflow action '{action.kind}'."
+                )
+            if applying:
+                # Continue through the ordinary --save validation and
+                # checkpoint path below; the shared Apply row is its approval.
+                pass
+            else:
+                typer.secho(
+                    (
+                        f"Saved analysis [{session.uid[:8]}]: APPLIED."
+                        if planned_output_applied
+                        else f"Saved analysis [{session.uid[:8]}]: CURRENT."
+                        if opened.created_analysis
+                        else (
+                            f"Saved analysis [{session.uid[:8]}]: CURRENT. "
+                            "Resumed; the provider was not called."
+                        )
+                    ),
+                    fg=typer.colors.CYAN,
+                )
+                if planned_output_applied:
+                    typer.echo(
+                        f"Planned Output '{planned_output}' is already materialized."
+                    )
+                elif planned_output == name:
+                    typer.echo(
+                        "Apply the planned in-place Output with: mem atomize --save"
+                    )
+                else:
+                    typer.echo(
+                        "Apply the planned Output with: mem atomize --save\n"
+                        f"  INPUT  {name}\n"
+                        f"  OUTPUT {planned_output} · NOT CREATED"
+                    )
+                return
 
         if session is None:
             raise AtomizeImpactError(
@@ -730,6 +905,39 @@ def cmd(
                 "Run 'mem impact atomize --refresh' before saving."
             )
         workbench = store.load_atomize_workbench(session)
+        planned_output = (
+            workbench.output_context_name
+            if workbench is not None
+            else name
+        )
+        applying_planned_output = (
+            save and save_as is None and planned_output != name
+        )
+        if applying_planned_output:
+            save_as = planned_output
+        if save_as is not None and store.context_exists(save_as):
+            output_context = store.load_direct(save_as)
+            output_analysis = store.load_atomize_analysis(output_context.uid)
+            if (
+                output_analysis is not None
+                and output_analysis.uid == session.uid
+                and atomize_analysis_was_applied(
+                    store,
+                    output_context,
+                    session.uid,
+                )
+            ):
+                typer.secho(
+                    f"Atomize analysis [{session.uid[:8]}] is already "
+                    f"applied to planned Output '{save_as}'; no new "
+                    "checkpoint was created.",
+                    fg=typer.colors.YELLOW,
+                )
+                return
+            raise AtomizeImpactError(
+                f"Planned atomize Output '{save_as}' already exists and is "
+                "not the exact applied result of this session."
+            )
         workbench_frames = {}
         if workbench is not None and workbench.answered_count:
             (
@@ -796,6 +1004,19 @@ def cmd(
                 )
                 return
             save_as = reviewed_destination
+            if (
+                applying_planned_output
+                and workbench is not None
+                and workbench.output_context_name != save_as
+            ):
+                # The SAVE LOCATION editor is an explicit route correction.
+                # Persist it before applying so every later entry point sees
+                # the same Output even if the Context mutation then fails.
+                workbench = replace(
+                    workbench,
+                    output_context_name=save_as,
+                )
+                store.save_atomize_workbench(workbench)
 
         if save_as is not None:
             applied_session, result = _apply_to_new_context(

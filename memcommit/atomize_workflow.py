@@ -1,7 +1,7 @@
 """Open or explicitly refresh one durable atomize analysis/workbench pair."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Callable
 
 from memcommit.atomize import (
@@ -59,6 +59,7 @@ def open_or_create_atomize_workbench(
     declared_frame_origins: dict[str, AtomizeFrameOrigin] | None = None,
     source_review_uid: str | None = None,
     source_review_digest: str | None = None,
+    output_context_name: str | None = None,
     validate_before_save: Callable[[], None] | None = None,
 ) -> OpenAtomizeWorkbenchResult:
     """Reuse an exact current result; call the provider only at a clear edge."""
@@ -79,7 +80,23 @@ def open_or_create_atomize_workbench(
             )
         workbench = store.load_atomize_workbench(existing)
         if workbench is None:
-            workbench = create_atomize_workbench(existing)
+            workbench = create_atomize_workbench(
+                existing,
+                output_context_name=output_context_name,
+            )
+            store.save_atomize_workbench(workbench)
+        elif (
+            output_context_name is not None
+            and workbench.output_context_name != output_context_name
+        ):
+            # Destination planning is durable workbench state, not semantic
+            # analysis input. Reusing the analysis keeps Impact, Review, and
+            # Atomize on the same session while allowing the launcher to set
+            # an explicit Output without another provider call.
+            workbench = replace(
+                workbench,
+                output_context_name=output_context_name,
+            )
             store.save_atomize_workbench(workbench)
         return OpenAtomizeWorkbenchResult(
             analysis=existing,
@@ -91,6 +108,15 @@ def open_or_create_atomize_workbench(
         store.load_atomize_workbench(existing)
         if existing is not None
         else None
+    )
+    effective_output_name = (
+        output_context_name
+        or (
+            previous_workbench.output_context_name
+            if previous_workbench is not None
+            else None
+        )
+        or ctx.name
     )
     report = impact_atomize(
         ctx,
@@ -113,7 +139,10 @@ def open_or_create_atomize_workbench(
         )
     if validate_before_save is not None:
         validate_before_save()
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_workbench(
+        analysis,
+        output_context_name=effective_output_name,
+    )
     analysis_saved = False
     try:
         store.save_atomize_analysis(analysis)

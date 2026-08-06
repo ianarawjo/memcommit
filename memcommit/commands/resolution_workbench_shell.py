@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from time import monotonic
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.application.current import get_app
@@ -28,11 +27,14 @@ from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
+    NavigationAccelerator,
     SEMANTIC_VIEWER_STYLE,
     TuiRegion,
+    WrappedScrollbarMargin,
     bind_focused_frame_style,
     build_framed_multiline_input,
     build_tui_frame,
+    focused_control_style,
     navigable_tree_row_prefix,
     require_interactive_terminal,
     safe_terminal_text,
@@ -99,6 +101,7 @@ def session_todo_view(
     review_and_apply: bool,
     read_only: bool,
     whole_set_available: bool = True,
+    read_only_handoff: SessionTodoView | None = None,
 ) -> SessionTodoView:
     """Derive one honest next action without creating semantic authority."""
 
@@ -111,6 +114,8 @@ def session_todo_view(
         if not (option_uid or comment.strip()):
             unresolved.append(item)
     if read_only:
+        if read_only_handoff is not None:
+            return read_only_handoff
         return SessionTodoView(
             "READ ONLY",
             "No action available",
@@ -280,42 +285,6 @@ def _impact_lines(impact: ImpactView) -> list[str]:
     return lines
 
 
-@dataclass
-class _NavigationAccelerator:
-    """Increase held-arrow travel while keeping deliberate taps precise."""
-
-    direction: int = 0
-    streak: int = 0
-    last_at: float | None = None
-
-    def reset(self) -> None:
-        self.direction = 0
-        self.streak = 0
-        self.last_at = None
-
-    def step(self, direction: int, *, now: float | None = None) -> int:
-        if direction not in {-1, 1}:
-            raise ValueError("Navigation direction must be -1 or 1.")
-        observed_at = monotonic() if now is None else now
-        if (
-            self.last_at is None
-            or direction != self.direction
-            or observed_at - self.last_at > 0.4
-        ):
-            self.streak = 1
-        else:
-            self.streak += 1
-        self.direction = direction
-        self.last_at = observed_at
-        if self.streak >= 13:
-            return 10
-        if self.streak >= 8:
-            return 5
-        if self.streak >= 4:
-            return 2
-        return 1
-
-
 def _line(value: str, limit: int = 100) -> str:
     normalized = " ".join(safe_terminal_text(value).split())
     if sum(get_cwidth(character) for character in normalized) <= limit:
@@ -424,9 +393,9 @@ def _visual_wrap_diff_spans(
 
 
 def _impact_treatment_style(label: str, *, focused: bool) -> str:
-    # The row body already carries the shared blue focus treatment. Keeping
-    # the compact marker/tag semantic color visible preserves fast scanning
-    # without tinting the whole Memory or report chrome.
+    # The compact marker/tag retains semantic color without tinting the whole
+    # Memory or report chrome. Located mutation identity and content have their
+    # own lavender/white roles; legacy result rows retain treatment focus.
     _ = focused
     token = label.strip().upper()
     key = {
@@ -436,6 +405,9 @@ def _impact_treatment_style(label: str, *, focused: bool) -> str:
         "REFRAME": "reframe",
         "FORGET": "forget",
         "CUSTOM": "custom",
+        "EDIT": "edit",
+        "ADD": "add",
+        "REMOVE": "remove",
     }.get(token, "other")
     return f"class:impact.{key}"
 
@@ -1222,20 +1194,18 @@ def resolution_report_fragments(
                 entry.label,
                 focused=active,
             )
-            # Impact is the one Viewer surface where focus follows the
-            # treatment color. This keeps marker, tag, UID, content, and
-            # expanded basis visually bound without changing the shared blue
-            # focus contract used by ordinary Memory objects elsewhere.
-            style = (
-                f"{treatment_style}.focused"
-                if active
-                else "class:memory-object"
-            )
             if entry.location:
+                # Located diff rationale is explanatory report prose, not a
+                # Memory object. Keep it neutral while the Context/Memory
+                # identity above retains the shared lavender treatment.
+                expanded_detail_style = ""
                 fragments.extend(
                     [
                         (treatment_style, f" {prefix}{treatment_field} "),
-                        (style, f"{safe_terminal_text(entry.location)} {uid_field}\n"),
+                        (
+                            "class:memory-object",
+                            f"{safe_terminal_text(entry.location)} {uid_field}\n",
+                        ),
                     ]
                 )
                 change = MemoryChange(
@@ -1275,7 +1245,20 @@ def resolution_report_fragments(
                                 )
                             )
                         fragments.append(("", "\n"))
+                if change.before is None or change.after is None:
+                    # A one-sided ADD/REMOVE has half the visual body of an
+                    # EDIT. One trailing spacer preserves comparable grouping
+                    # without fabricating a missing before/after line.
+                    fragments.append(("", "\n"))
             else:
+                # Legacy result rows keep treatment-colored focus to bind
+                # their UID, content, and expanded basis together.
+                style = (
+                    f"{treatment_style}.focused"
+                    if active
+                    else "class:memory-object"
+                )
+                expanded_detail_style = style
                 legacy_indent = " " * _visual_width(prefix + identity)
                 legacy_width = max(
                     12,
@@ -1312,7 +1295,9 @@ def resolution_report_fragments(
                             if line_index == 0
                             else " " * _visual_width(rule_prefix)
                         )
-                        fragments.append((style, f" {lead}{rule_line}\n"))
+                        fragments.append(
+                            (expanded_detail_style, f" {lead}{rule_line}\n")
+                        )
             if entry.reason and expanded:
                 reason_prefix = content_indent + "WHY · "
                 reason_width = max(
@@ -1327,7 +1312,9 @@ def resolution_report_fragments(
                         if line_index == 0
                         else " " * _visual_width(reason_prefix)
                     )
-                    fragments.append((style, f" {lead}{reason_line}\n"))
+                    fragments.append(
+                        (expanded_detail_style, f" {lead}{reason_line}\n")
+                    )
             if active:
                 # Anchor after the complete row so wrapped or expanded detail
                 # remains visible as one semantic Impact Memory.
@@ -1920,6 +1907,7 @@ def run_resolution_workbench_shell(
     split_report_conflicts_remaining: int | None = None,
     review_and_apply: bool = False,
     read_only: bool = False,
+    read_only_handoff: SessionTodoView | None = None,
     impact_controller: ImpactController | None = None,
     destination: ResolutionDestination | None = None,
 ) -> ResolutionWorkbenchAction:
@@ -2163,7 +2151,7 @@ def run_resolution_workbench_shell(
     strategy = {"index": 0}
     viewer_content = {"kind": "REPORT"}
     impact_reason_expanded: dict[str, str | None] = {"uid": None}
-    navigation_accelerator = _NavigationAccelerator()
+    navigation_accelerator = NavigationAccelerator()
     option_navigation = {"active": False}
     other_direction = {"focused": False}
     other_direction_editor = {"open": False}
@@ -2203,7 +2191,10 @@ def run_resolution_workbench_shell(
     body = Window(
         body_control,
         wrap_lines=True,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
+        # Resolution details contain long logical lines (source Memories,
+        # evidence, and proposed children). Use the shared visual-row-aware
+        # margin so the thumb and ^/v arrows follow what is actually visible.
+        right_margins=[WrappedScrollbarMargin(display_arrows=True)],
     )
 
     def item_fragments():
@@ -2239,12 +2230,13 @@ def run_resolution_workbench_shell(
             review_and_apply=review_and_apply,
             read_only=read_only,
             whole_set_available=bool(global_strategies),
+            read_only_handoff=read_only_handoff,
         )
         focused = session_navigation.pane == "todo"
         return [
             ("[SetCursorPosition]", "") if focused else ("", ""),
             (
-                "class:memcommit.choice.active" if focused else "",
+                focused_control_style(focused=focused),
                 f"[ {safe_terminal_text(todo.kind)} ]",
             ),
             (
@@ -2388,32 +2380,12 @@ def run_resolution_workbench_shell(
         composer.frame.title = "MESSAGE"
         set_status("")
 
-    def arrow_delta(direction: int) -> int:
-        """Accelerate only inside long proposed-result runs."""
-        if not (
-            split_viewer_items
-            and session_navigation.pane == "viewer"
-            and viewer_content["kind"] == "REPORT"
-            and split_report_text is not None
-        ):
+    def viewer_navigation_accelerates() -> bool:
+        """Use the shared held-arrow movement throughout the active Viewer."""
+        if not (split_viewer_items and session_navigation.pane == "viewer"):
             navigation_accelerator.reset()
-            return direction
-        sections = _seeded_report_sections(
-            _seeded_report_lines(
-                current_view(),
-                split_report_text,
-                global_strategies,
-                review_and_apply,
-                read_only,
-                impact_controller,
-                destination,
-            )
-        )
-        section_index = max(0, min(viewer_section_index(), len(sections) - 1))
-        if not sections[section_index][1].startswith("RESULT:"):
-            navigation_accelerator.reset()
-            return direction
-        return direction * navigation_accelerator.step(direction)
+            return False
+        return True
 
     def move_split_option(delta: int) -> None:
         item = current_navigation.current_item(current_view())
@@ -2532,13 +2504,19 @@ def run_resolution_workbench_shell(
 
     @bindings.add("down", filter=~has_focus(input_area))
     def _down(event) -> None:
-        move(arrow_delta(1))
-        event.app.invalidate()
+        if viewer_navigation_accelerates():
+            navigation_accelerator.move(1, app=event.app, move_one=move)
+        else:
+            move(1)
+            event.app.invalidate()
 
     @bindings.add("up", filter=~has_focus(input_area))
     def _up(event) -> None:
-        move(arrow_delta(-1))
-        event.app.invalidate()
+        if viewer_navigation_accelerates():
+            navigation_accelerator.move(-1, app=event.app, move_one=move)
+        else:
+            move(-1)
+            event.app.invalidate()
 
     @bindings.add("pagedown", filter=~has_focus(input_area))
     def _page_down(event) -> None:
@@ -2701,6 +2679,7 @@ def run_resolution_workbench_shell(
                 review_and_apply=review_and_apply,
                 read_only=read_only,
                 whole_set_available=bool(global_strategies),
+                read_only_handoff=read_only_handoff,
             ).unresolved_item_uids:
                 todo = session_todo_view(
                     active_view,
@@ -2708,16 +2687,27 @@ def run_resolution_workbench_shell(
                     review_and_apply=review_and_apply,
                     read_only=read_only,
                     whole_set_available=bool(global_strategies),
+                    read_only_handoff=read_only_handoff,
                 )
                 open_split_item(todo.unresolved_item_uids[0])
             elif kind == "TODO" and read_only:
-                set_status("This saved session can only be inspected.")
+                if read_only_handoff is None:
+                    set_status("This saved session can only be inspected.")
+                else:
+                    # A standalone result remains immutable here. The handoff
+                    # opens the owning operation, which must independently
+                    # revalidate and obtain its normal Apply confirmation.
+                    event.app.exit(
+                        result=ResolutionWorkbenchAction(kind="HANDOFF")
+                    )
+                    return
             elif kind == "TODO" and session_todo_view(
                 active_view,
                 local_drafts,
                 review_and_apply=review_and_apply,
                 read_only=read_only,
                 whole_set_available=bool(global_strategies),
+                read_only_handoff=read_only_handoff,
             ).kind == "COMPLETE":
                 set_status(
                     "Required review is complete; close or revisit an optional item."
@@ -3085,6 +3075,7 @@ def run_resolution_workbench_shell(
                 review_and_apply=review_and_apply,
                 read_only=read_only,
                 whole_set_available=bool(global_strategies),
+                read_only_handoff=read_only_handoff,
             )
             navigation_help = (
                 " Tab switch  Q close "

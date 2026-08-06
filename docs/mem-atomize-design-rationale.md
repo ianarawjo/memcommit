@@ -14,9 +14,11 @@ deduplication. The intended model combines:
   `clozemaking` project.
 
 This note fixes the semantic contract. `mem impact atomize` creates or resumes
-a Context-scoped analysis and workbench; bare `mem atomize` and
-`mem review atomize` resume that same compatible result without another
-provider call. `mem atomize --save` and `--save-as` explicitly apply the
+a Context-scoped analysis and workbench; explicit
+`mem atomize --context INPUT` and `mem review atomize` resume that same
+compatible result without another provider call. Interactive bare
+`mem atomize` opens the shared session launcher. `mem atomize --save` and
+`--save-as` explicitly apply the
 locally validated proposal. A second, independent semantic validator remains
 future work, so application is a deliberate research-prototype action rather
 than a claim of semantic proof. The later quality-finding stages intentionally
@@ -34,13 +36,24 @@ The saved-work selector adds a separate discovery route:
 mem atomize --sessions
 ```
 
-Bare `mem atomize` deliberately keeps its earlier create-or-resume behavior.
-It is already the first-analysis entry point, so changing it into a picker
-would remove the shortest path for starting Atomize and make an empty catalog
-ambiguous. `--sessions` instead means “choose existing work only.” It never
-creates an analysis, creates missing workbench state, refreshes a stale
-analysis, calls the semantic provider, switches the current Context, changes
-a Memory, or creates a checkpoint.
+In a terminal, bare `mem atomize` and `--sessions` use the shared saved-work
+launcher. The old direct path remains available explicitly through
+`--context INPUT`; non-TTY bare use also retains its stable current-Context
+behavior for automation. Opening a saved row is provider-free and never
+refreshes or mutates it. Its New row opens the shared
+`INPUT A → OUTPUT B` setup and may create a fresh analysis through the normal
+Atomize controller. Setup itself remains process-local: it does not create
+Output, switch the current Context, change a Memory, or create a checkpoint.
+
+The launcher renders the frozen process profile and store root above its
+catalog. It derives the profile by matching that root against registered
+profiles, so a concurrent change to the registry's active pointer cannot make
+the visible profile disagree with the store from which Atomize sessions were
+loaded. Catalog discovery itself is rooted in that same supplied store object;
+it never scans another profile's Atomize directory and then filters the
+results afterward. Sessions owned by other profiles are therefore absent from
+the list, search results, and reopen resolution rather than merely hidden by
+presentation.
 
 The selector uses the shared saved-work picker and shows one latest Atomize
 analysis per source Context. Recent-first sorting uses the latest durable
@@ -72,6 +85,21 @@ Atomize adapter displays the nearest ordinary public route,
 does not execute. The frozen analysis UID, not that hint, is authoritative for
 the current selection. A public UID-based reopen command and archived
 analysis revisions remain intentional non-goals of this slice.
+
+The selected Output is durable mutable workbench state rather than semantic
+analysis input. Workbench schema v2 records its exact Context name. Schema v1
+loads as `INPUT=OUTPUT`, preserving the original in-place contract. A distinct
+Output must still be creatable before provider connection and remains visibly
+not created during review. `mem atomize --save` uses that saved route:
+`INPUT=OUTPUT` applies in place; a distinct Output takes the existing
+require-new save-as path. Reopening through Impact, Review, direct Atomize, or
+the launcher therefore shares one analysis/workbench and one Output plan
+without another provider call. An already materialized exact Output is
+recognized through its copied analysis UID and checkpoint; an occupied but
+unrelated name fails closed. Because save-as copies the immutable analysis UID
+to Output for provenance, the saved-work catalog collapses that copy into the
+single Input-owned workbench session instead of presenting two sessions or
+rejecting UID-based resume as ambiguous.
 
 ## Decision
 
@@ -508,6 +536,16 @@ Eligible unary responses enter semantic analysis only through:
 mem impact atomize --with-review
 ```
 
+The interactive Atomize workbench exposes that same boundary through the
+shared `TO DO` progression. Once every required finding has a saved response,
+`MATERIALIZE` performs the reviewed reanalysis; it does not mutate the
+Context. The resulting fresh workbench becomes `READY_TO_APPLY` only when it
+is bound to the prior response UID/digest and has not itself been edited.
+`APPLY` then enters the ordinary `mem atomize --save` validation and
+checkpoint path. This keeps reviewed semantic materialization and Context
+mutation as two separately visible Enter actions while avoiding a dead-end
+review screen.
+
 That explicit reanalysis sends each eligible response only as the
 `declared_frame` of its own source Memory. If any answered conflict issue is
 present, reviewed reanalysis fails before calling the provider so replacing
@@ -539,11 +577,13 @@ application frames or silently dropped.
 
 ### Saved analysis and explicit prototype application
 
-The current commands separate destination choice from semantic analysis:
+The current commands keep destination choice outside semantic analysis while
+allowing the shared workbench to remember it:
 
 ```text
 mem atomize --save                 # modify the selected Context
 mem atomize --save-as NEW_CONTEXT  # preserve source; create and switch
+mem atomize --context INPUT --output OUTPUT  # plan, but do not create, Output
 ```
 
 In an interactive `--save-as` application, the exact reviewed preview is
@@ -1036,8 +1076,8 @@ Atomization does not:
   explicitly reviewed per-Memory declared frame may supply it for reanalysis;
 - improve wording beyond minimal stand-alone repair;
 - infer audiences or enforce access control;
-- infer or choose a destination Context on the user's behalf (`--save-as`
-  accepts an explicit name);
+- infer or choose a destination Context on the user's behalf (setup and
+  `--output` require an explicit selection/name);
 - read query-only source content;
 - turn questions or headings into asserted facts;
 - use neighboring Memory order as an implicit semantic graph.

@@ -16,7 +16,7 @@
     2. [BOUNDARY] UNCERTAIN · RECONCILE
        The source needs a local authentication reading.
 
-Analysis [<ANALYSIS>] · ORDER: SOURCE · 0/4 answered
+Analysis [<ANALYSIS>] · INPUT temp/grounding → OUTPUT temp/grounding · ORDER: SOURCE · 0/4 answered
 
 ACTIONABLE ISSUES
 ›  1. · AMBIGUITY · COMPETING · REQUIRED  “Students should be guided to use a physical car…”
@@ -56,5 +56,4 @@ REFINE, COMMENT, OR ENTER A DIFFERENT READING
 SOURCE means canonical Context order; Memory creation timestamps are not recorded.
 No Memory changes have been applied. No checkpoint was created.
 Saved analysis [<ANALYSIS>]: CURRENT. Resumed; the provider was not called.
-Apply in place with: mem atomize --save
-Or preserve the source with: mem atomize --save-as NEW_CONTEXT
+Apply the planned in-place Output with: mem atomize --save

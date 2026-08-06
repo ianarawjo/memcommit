@@ -6,10 +6,12 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
+import memcommit.commands.resolution_workbench_shell as resolution_shell_module
 from memcommit.commands.resolution_workbench_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionDestination,
     ResolutionGlobalStrategy,
+    SessionTodoView,
     _session_items_fragments,
     render_resolution_workbench_snapshot,
     resolution_report_fragments,
@@ -19,6 +21,7 @@ from memcommit.commands.resolution_workbench_shell import (
     session_todo_view,
 )
 from memcommit.impact_controller import ImpactController
+from memcommit.memory_diff import MemoryChange
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
     ResolutionIssueEvidence,
@@ -694,6 +697,87 @@ def test_split_viewer_section_navigation_selects_matching_item_row():
     assert navigation.selected_item_uid == "b"
 
 
+def test_atomize_detail_down_uses_shared_viewer_arrow_acceleration(monkeypatch):
+    class TwoSectionAccelerator:
+        def move(self, direction, *, app, move_one):
+            for _ in range(2):
+                move_one(direction)
+                app.invalidate()
+
+        def reset(self):
+            pass
+
+    monkeypatch.setattr(
+        resolution_shell_module,
+        "NavigationAccelerator",
+        TwoSectionAccelerator,
+    )
+    presentation = ResolutionIssuePresentation(
+        evidence=(
+            ResolutionIssueEvidence(
+                heading="SOURCE MEMORY",
+                sources=(
+                    ResolutionIssueSource(
+                        label="SOURCE 1",
+                        context_name="practice/description",
+                        memory_uid="12345678-1111-1111-1111-111111111111",
+                        content="A long source Memory " * 20,
+                        ordinal=1,
+                    ),
+                ),
+                classification="COMPOSITE · 5 CHILDREN",
+                reason_heading="WHY THIS SPLIT",
+                reason="The claims are independently revisable.",
+            ),
+        ),
+        prompt_heading="REVIEW QUESTION",
+        options_heading="PROPOSED RESPONSES",
+        other_option_label="Different direction",
+        response_heading="COMMENT OR ENTER A DIFFERENT DIRECTION",
+    )
+    item = ResolutionItem(
+        uid="atomize-split",
+        kind="ATOMIZE_SPLIT",
+        status="OPEN",
+        priority="REVIEW",
+        title="ATOMIZE SPLIT",
+        summary="The source contains several claims.",
+        blocks=(
+            ResolutionDetailBlock(
+                heading="PROPOSED CHILDREN",
+                text="\n\n".join(
+                    f"{index}. Proposed child {index}." for index in range(1, 6)
+                ),
+            ),
+        ),
+        issue_presentation=presentation,
+    )
+    view = replace(
+        _view(item),
+        operation="ATOMIZE",
+        title="MEM ATOMIZE",
+    )
+    workbench_navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Move from REPORT to the split, open it, then one held-arrow pulse
+        # visits Evidence and Proposed Children through the common accelerator.
+        pipe_input.send_text("\x1b[B\r\x1b[Bq")
+        action = run_resolution_workbench_shell(
+            view,
+            workbench_navigation=workbench_navigation,
+            split_viewer_items=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.section_uid == (
+        "ITEM:atomize-split:BLOCK:0:PROPOSED CHILDREN"
+    )
+
+
 def test_enter_on_report_moves_focus_from_items_into_viewer():
     navigation = ResolutionNavigation()
     view = _view(_item("a"), _item("b"))
@@ -861,6 +945,71 @@ def test_enter_on_impact_memory_opens_rationale_without_leaving_report():
     assert workbench_navigation.section_uid == "REPORT:IMPACT:result-1"
 
 
+def test_expanded_located_update_impact_renders_rule_and_reason_neutrally():
+    view = replace(
+        _view(
+            capabilities=frozenset({"ACCEPT"}),
+            accept_enabled=True,
+        ),
+        operation="UPDATE",
+        artifact_uid="update-1",
+        title="Review staged Update",
+    )
+    memory_uid = "12345678-1111-1111-1111-111111111111"
+    controller = ImpactController.from_memory_changes(
+        operation="UPDATE",
+        artifact_uid=view.artifact_uid,
+        revision=view.revision,
+        title="IMPACT · UPDATE",
+        summary="Exact staged effects.",
+        changes=(
+            MemoryChange(
+                marker="~",
+                treatment="EDIT",
+                location="target/context",
+                memory_uid=memory_uid,
+                before="Earlier content.",
+                after="Updated content.",
+                reason="The source evidence changed.",
+                rules=("Prefer the current evidence.",),
+            ),
+        ),
+    )
+
+    fragments = resolution_report_fragments(
+        view,
+        impact_controller=controller,
+        expanded_impact_section_uid=f"REPORT:IMPACT:{memory_uid}",
+    )
+
+    rule_style = next(style for style, text in fragments if "RULE ·" in text)
+    reason_style = next(style for style, text in fragments if "WHY ·" in text)
+    rendered = "".join(text for _style, text in fragments)
+    assert "Prefer the current evidence." in rendered
+    assert "The source evidence changed." in rendered
+    assert rule_style == ""
+    assert reason_style == ""
+
+    workbench_navigation = SessionWorkbenchNavigation()
+    with create_pipe_input() as pipe_input:
+        # Items → Viewer, then title → understanding → items → impact → the
+        # located Update Memory. Enter must expand its rationale in place.
+        pipe_input.send_text("\t" + "\x1b[B" * 4 + "\rq")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            impact_controller=controller,
+            workbench_navigation=workbench_navigation,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.section_uid == f"REPORT:IMPACT:{memory_uid}"
+
+
 def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
     first = _item(
         "a",
@@ -982,3 +1131,26 @@ def test_todo_derives_conflict_then_materialize_then_apply_states():
     assert complete.kind == "COMPLETE"
     assert complete.label == "Required review is complete"
     assert complete.detail.startswith("1 optional item left unanswered.")
+
+
+def test_read_only_todo_can_return_an_explicit_apply_handoff():
+    handoff = SessionTodoView(
+        "APPLY?",
+        "Continue to Meld Apply",
+        "Open the owning workflow; no change yet.",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Items is the initial hub; Shift-Tab reaches To Do directly.
+        pipe_input.send_text("\x1b[Z\r")
+        action = run_resolution_workbench_shell(
+            _view(_item("a")),
+            split_viewer_items=True,
+            read_only=True,
+            read_only_handoff=handoff,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "HANDOFF"
