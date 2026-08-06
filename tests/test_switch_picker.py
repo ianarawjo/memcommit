@@ -195,6 +195,54 @@ def test_picker_memory_rows_toggle_without_becoming_context_rows():
     assert [row.name for row in state.visible_rows()] == ["alpha"]
 
 
+def test_picker_leaf_uses_expand_marker_for_its_memory_layer():
+    tree = build_context_tree(("alpha",))
+    state = ContextTreeState.create(tree, selected="alpha")
+    memories = {"alpha": (ContextMemoryRow("memory abcdef12", "content"),)}
+
+    hidden = "".join(
+        text
+        for _, text in _render_context_options(
+            state.visible_rows(),
+            selected="alpha",
+            current="alpha",
+            memories_by_context=memories,
+            visible_memory_contexts=frozenset(),
+        )
+    )
+    state.expand_selected(include_leaf_memories=True)
+    shown = "".join(
+        text
+        for _, text in _render_context_options(
+            state.visible_rows(),
+            selected="alpha",
+            current="alpha",
+            memories_by_context=memories,
+            visible_memory_contexts=frozenset({"alpha"}),
+        )
+    )
+
+    assert "▸ alpha" in hidden
+    assert "▾ alpha" in shown
+    assert "[memory abcdef12] content" in shown
+
+    state.collapse_selected(include_leaf_memories=True)
+    assert state.memories_visible_for("alpha") is False
+
+
+def test_picker_leaf_memory_collapse_precedes_moving_to_parent():
+    tree = build_context_tree(("alpha", "alpha/child"))
+    state = ContextTreeState.create(tree, selected="alpha/child")
+    state.show_memories = True
+
+    state.collapse_selected(include_leaf_memories=True)
+    assert state.selected_name == "alpha/child"
+    assert state.memories_visible_for("alpha/child") is False
+
+    state.collapse_selected(include_leaf_memories=True)
+    assert state.selected_name == "alpha"
+
+
 def test_picker_can_toggle_memories_for_only_the_selected_context():
     tree = build_context_tree(("alpha", "beta"))
     state = ContextTreeState.create(tree, selected="alpha")

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 from typing import Annotated, Optional
 
 import typer
@@ -9,15 +10,23 @@ import typer
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.share import ShareError, deliver_context
+from memcommit.share import (
+    ShareError,
+    deliver_context,
+    deliver_prepared_share,
+)
 from memcommit.store import ConcurrentContextUpdateError
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def cmd(
     source: Annotated[
         Optional[str],
         typer.Argument(
-            help="Applied Sever output Context; defaults to the current Context"
+            help="Ordinary Context to send; bare TTY use opens selection"
         ),
     ] = None,
     recipient: Annotated[
@@ -28,13 +37,46 @@ def cmd(
         ),
     ] = "",
 ) -> None:
-    """Copy one reviewed consent unit into its grant-backed receiver Profile."""
+    """Copy one ordinary Context into its grant-backed receiver Profile."""
 
-    if not recipient:
-        typer.secho("Error: --to is required.", fg=typer.colors.RED, err=True)
-        raise typer.Exit(1)
     try:
-        delivery = deliver_context(source, recipient)
+        if source is not None and recipient:
+            # Complete explicit operands retain the compact automation path,
+            # even in a TTY. The bare/incomplete form owns interactive setup.
+            delivery = deliver_context(source, recipient)
+        elif _interactive_terminal():
+            from memcommit.commands.share_flow import (
+                ShareFlowUnavailable,
+                choose_share_preview,
+            )
+            from memcommit.commands.share_viewer import (
+                run_share_unavailable_viewer,
+                run_share_viewer,
+            )
+
+            try:
+                preview = choose_share_preview(source, recipient or None)
+            except ShareFlowUnavailable as unavailable:
+                run_share_unavailable_viewer(str(unavailable))
+                typer.echo("Share closed; nothing was sent.")
+                return
+            if preview is None:
+                typer.echo("Share closed; nothing was sent.")
+                return
+            receipt = run_share_viewer(preview)
+            if receipt.action == "close":
+                typer.echo("Share closed; nothing was sent.")
+                return
+            delivery = deliver_prepared_share(preview)
+        else:
+            missing = []
+            if source is None:
+                missing.append("SOURCE")
+            if not recipient:
+                missing.append("--to ENDPOINT")
+            raise ShareError(
+                "Non-interactive Share requires " + " and ".join(missing) + "."
+            )
     except (
         ConcurrentContextUpdateError,
         FileNotFoundError,
@@ -53,9 +95,9 @@ def cmd(
         raise typer.Exit(1)
 
     if delivery.created:
-        typer.secho("Shared consent unit.", fg=typer.colors.GREEN, bold=True)
+        typer.secho("Shared Context.", fg=typer.colors.GREEN, bold=True)
     else:
-        typer.echo("Consent unit was already shared; no duplicate was created.")
+        typer.echo("Context was already shared; no duplicate was created.")
     typer.echo(f"Share: {delivery.uid}")
     typer.echo("To: " + display_escape_text(delivery.endpoint))
     typer.echo("Memories: " + str(delivery.memory_count))

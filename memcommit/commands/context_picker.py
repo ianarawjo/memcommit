@@ -213,8 +213,8 @@ class ContextTreeState:
             pending.extend((child, depth + 1) for child in children)
         return levels
 
-    def expand_selected(self) -> None:
-        """Reveal one more complete descendant depth below the cursor."""
+    def expand_selected(self, *, include_leaf_memories: bool = False) -> None:
+        """Reveal one more descendant depth or a leaf's Memory layer."""
 
         name = self.selected_name
         children = self.tree.children_by_name[name]
@@ -231,11 +231,24 @@ class ContextTreeState:
             )
         elif children:
             self.selected_name = children[0]
+        elif include_leaf_memories and name in self.tree.materialized_names:
+            # A materialized leaf still has one presentational layer: its
+            # direct Memories. Treating that layer as expandable keeps the
+            # glyph and arrow-key behavior consistent with what ``m`` shows.
+            self.memory_visibility_overrides[name] = True
 
-    def collapse_selected(self) -> None:
-        """Hide the deepest expanded descendant depth below the cursor."""
+    def collapse_selected(self, *, include_leaf_memories: bool = False) -> None:
+        """Hide the deepest descendant depth or a leaf's Memory layer."""
 
         name = self.selected_name
+        if (
+            include_leaf_memories
+            and not self.tree.children_by_name[name]
+            and name in self.tree.materialized_names
+            and self.memories_visible_for(name)
+        ):
+            self.memory_visibility_overrides[name] = False
+            return
         expanded_by_depth = {
             depth: names & self.expanded
             for depth, names in self._expandable_levels(name).items()
@@ -303,7 +316,26 @@ def render_context_options(
             fragments.append(("[SetCursorPosition]", ""))
         is_current = row.name == current
         style = "class:selected" if is_selected else ""
-        branch = "▾" if row.expanded else "▸" if row.has_children else "·"
+        memory_is_visible = (
+            row.name in visible_memory_contexts
+            if visible_memory_contexts is not None
+            else show_memories
+        )
+        # Branch nodes use the marker for Context descendants. A materialized
+        # leaf uses the same marker for its direct-Memory presentation layer;
+        # without this distinction an open leaf misleadingly remains a dot.
+        leaf_has_memory_layer = (
+            not row.has_children
+            and row.materialized
+            and memories_by_context is not None
+        )
+        branch = (
+            "▾"
+            if row.expanded or (leaf_has_memory_layer and memory_is_visible)
+            else "▸"
+            if row.has_children or leaf_has_memory_layer
+            else "·"
+        )
         annotation = (annotations or {}).get(row.name)
         display_name = (display_names or {}).get(row.name, row.name)
         suffix = (
@@ -326,11 +358,6 @@ def render_context_options(
                 )
                 + f"{display_escape_text(display_name)}{suffix}",
             )
-        )
-        memory_is_visible = (
-            row.name in visible_memory_contexts
-            if visible_memory_contexts is not None
-            else show_memories
         )
         if memory_is_visible and row.materialized:
             memories = (memories_by_context or {}).get(row.name, ())
@@ -513,13 +540,13 @@ def choose_context(
 
     @bindings.add("right")
     def _expand_or_enter_context(event) -> None:
-        state.expand_selected()
+        state.expand_selected(include_leaf_memories=memory_loader is not None)
         load_visible_memories()
         event.app.invalidate()
 
     @bindings.add("left")
     def _collapse_or_leave_context(event) -> None:
-        state.collapse_selected()
+        state.collapse_selected(include_leaf_memories=memory_loader is not None)
         event.app.invalidate()
 
     @bindings.add("a")
@@ -547,7 +574,10 @@ def choose_context(
     def _accept_context(event) -> None:
         name = state.selected_name
         if browse_only:
-            if name in state.expanded:
+            if not tree.children_by_name[name] and memory_loader is not None:
+                state.toggle_selected_memories()
+                load_visible_memories()
+            elif name in state.expanded:
                 state.collapse_selected()
             else:
                 state.expand_selected()

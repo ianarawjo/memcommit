@@ -44,7 +44,7 @@ Permissions are independent capabilities:
 | `DELETE` | remove a direct item; requires `READ` |
 | `QUERY` | browse opaque Memory shapes/handles and ask a provider without reading source text |
 | `SESSION_LOG` | retain and replay visible query Q/A; requires `QUERY` |
-| `SHARE` | deliver one unchanged applied Sever output as a receiver-owned consent unit; grants no receiver read access |
+| `SHARE` | deliver one exactly reviewed ordinary Context snapshot as a receiver-owned consent unit; grants no receiver read access |
 
 These permissions currently govern direct items inside existing Contexts.
 They do not delegate Context lifecycle operations such as `init`, `rename`,

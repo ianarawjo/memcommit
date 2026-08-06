@@ -222,8 +222,7 @@ app.command(
 app.command(
     "share",
     help=(
-        "Deliver one unchanged applied Sever output through a grant-backed "
-        "receiver endpoint."
+        "Send one ordinary Context through a grant-backed receiver endpoint."
     ),
 )(share.cmd)
 app.command(

@@ -1,4 +1,4 @@
-"""Grant-authorized cross-Profile delivery of reviewed Sever output."""
+"""Grant-authorized cross-Profile delivery of one selected ordinary Context."""
 
 from __future__ import annotations
 
@@ -19,12 +19,12 @@ from memcommit.store import MemoryStore, context_record_digest
 
 
 class ShareError(RuntimeError):
-    """A reviewed delivery cannot complete without changing its meaning."""
+    """A selected delivery cannot complete without changing its meaning."""
 
 
 @dataclass(frozen=True)
 class ShareDelivery:
-    """Stable receipt for one consent-unit delivery."""
+    """Stable receipt for one Context delivery."""
 
     uid: str
     endpoint: str
@@ -36,28 +36,30 @@ class ShareDelivery:
     created: bool
 
 
-def _reviewed_sever_checkpoint(store: MemoryStore, source: Context) -> dict:
-    checkpoints = store.list_checkpoints(source.name)
-    if not checkpoints:
-        raise ShareError(
-            "Only an applied Sever output can be shared; the source has no checkpoint."
-        )
-    checkpoint = checkpoints[0]
-    args = checkpoint.get("args")
-    sever = args.get("sever") if isinstance(args, dict) else None
-    snapshot = checkpoint.get("snapshot")
-    if (
-        checkpoint.get("command") != "sever"
-        or not isinstance(sever, dict)
-        or sever.get("output") != source.name
-        or not isinstance(snapshot, dict)
-        or context_record_digest(snapshot) != context_record_digest(source)
-    ):
-        raise ShareError(
-            "Only an unchanged applied Sever output can be shared; review the "
-            "current content with Sever again."
-        )
-    return checkpoint
+@dataclass(frozen=True)
+class ShareMemoryPreview:
+    """One immutable Memory row shown before disclosure."""
+
+    uid: str
+    content: str
+
+
+@dataclass(frozen=True)
+class SharePreview:
+    """Frozen Context selection shown by the interactive Share viewer."""
+
+    uid: str
+    endpoint: str
+    endpoint_grant_uid: str
+    endpoint_grant_revision: int
+    sender_profile_uid: str
+    receiver_profile: str
+    receiver_context: str
+    source_context: str
+    source_context_uid: str
+    source_digest: str
+    memories: tuple[ShareMemoryPreview, ...]
+    consent_digest: str
 
 
 def _direct_memories(source: Context) -> tuple[Memory, ...]:
@@ -65,11 +67,11 @@ def _direct_memories(source: Context) -> tuple[Memory, ...]:
     for item in source.iter_items():
         if not isinstance(item, Memory):
             raise ShareError(
-                "A shared consent unit may contain only directly owned Memories."
+                "A shared Context may contain only directly owned Memories."
             )
         memories.append(item)
     if not memories:
-        raise ShareError("An empty Sever output cannot be shared.")
+        raise ShareError("An empty Context cannot be shared.")
     return tuple(memories)
 
 
@@ -157,7 +159,7 @@ def _delivery_context(
             }
         },
         description=(
-            f"Received one {len(memories)}-Memory consent unit from Profile "
+            f"Received one Context with {len(memories)} Memories from Profile "
             f"'{endpoint.sender.name}' through '{endpoint.public_name}'."
         ),
     )
@@ -197,15 +199,25 @@ def _deliver_locked(
     registry: ProfileRegistry,
     source_name: str,
     endpoint_name: str,
+    expected: SharePreview | None = None,
 ) -> ShareDelivery:
     endpoint = resolve_share_endpoint(endpoint_name, registry=registry)
+    if expected is not None and (
+        endpoint.public_name != expected.endpoint
+        or endpoint.grant.uid != expected.endpoint_grant_uid
+        or endpoint.grant.revision != expected.endpoint_grant_revision
+        or endpoint.sender.uid != expected.sender_profile_uid
+        or endpoint.authority.name != expected.receiver_profile
+    ):
+        raise ShareError(
+            "The selected Share endpoint changed; reopen Share before sending."
+        )
     source_store = MemoryStore(
         root=profile_store_dir(registry.active),
         create=False,
     )
     source = source_store.load_direct(source_name)
     source_digest = context_record_digest(source)
-    _reviewed_sever_checkpoint(source_store, source)
     _direct_memories(source)
 
     receiver_store = MemoryStore(root=endpoint.receiver_root, create=False)
@@ -216,7 +228,6 @@ def _deliver_locked(
     ) as frozen:
         # Re-derive the complete payload under the source lock. The earlier
         # validation is only a helpful error boundary, not the publish proof.
-        _reviewed_sever_checkpoint(source_store, frozen)
         memories = _direct_memories(frozen)
         received, checkpoint, share_uid, consent_digest = _delivery_context(
             endpoint=endpoint,
@@ -224,6 +235,24 @@ def _deliver_locked(
             source_digest=source_digest,
             memories=memories,
         )
+        if expected is not None and (
+            frozen.name != expected.source_context
+            or frozen.uid != expected.source_context_uid
+            or source_digest != expected.source_digest
+            or share_uid != expected.uid
+            or received.name != expected.receiver_context
+            or consent_digest != expected.consent_digest
+            or tuple(
+                ShareMemoryPreview(uid=memory.uid, content=memory.content)
+                for memory in memories
+            )
+            != expected.memories
+        ):
+            # Send belongs to the exact Context snapshot and endpoint that
+            # were visible, never merely to resources with the same names.
+            raise ShareError(
+                "The selected Share content changed; reopen Share before sending."
+            )
         if _is_same_delivery(receiver_store, received, share_uid=share_uid):
             created = False
         else:
@@ -243,7 +272,7 @@ def _deliver_locked(
 
 
 def deliver_context(source_locator: str | None, endpoint_name: str) -> ShareDelivery:
-    """Deliver one exact reviewed local Context through a frozen SHARE grant."""
+    """Deliver one exact local Context through a frozen SHARE grant."""
 
     with authority_grant_snapshot_lock() as registry:
         source_store = MemoryStore(
@@ -259,4 +288,103 @@ def deliver_context(source_locator: str | None, endpoint_name: str) -> ShareDeli
             registry=registry,
             source_name=source_name,
             endpoint_name=endpoint_name,
+        )
+
+
+def prepare_share(source_locator: str | None, endpoint_name: str) -> SharePreview:
+    """Freeze one display-safe Share unit without changing receiver state."""
+
+    with authority_grant_snapshot_lock() as registry:
+        endpoint = resolve_share_endpoint(endpoint_name, registry=registry)
+        source_store = MemoryStore(
+            root=profile_store_dir(registry.active),
+            create=False,
+        )
+        current = source_store.current_context_name()
+        raw_source = source_locator if source_locator is not None else current
+        if raw_source is None:
+            raise ShareError("No current Context is available to share.")
+        source_name = resolve_context_locator(raw_source, current=current)
+        source = source_store.load_direct(source_name)
+        source_digest = context_record_digest(source)
+        with source_store.locked_context_snapshot(
+            source.name,
+            expected_uid=source.uid,
+            expected_digest=source_digest,
+        ) as frozen:
+            memories = _direct_memories(frozen)
+            received, _checkpoint, share_uid, consent_digest = _delivery_context(
+                endpoint=endpoint,
+                source=frozen,
+                source_digest=source_digest,
+                memories=memories,
+            )
+            return SharePreview(
+                uid=share_uid,
+                endpoint=endpoint.public_name,
+                endpoint_grant_uid=endpoint.grant.uid,
+                endpoint_grant_revision=endpoint.grant.revision,
+                sender_profile_uid=endpoint.sender.uid,
+                receiver_profile=endpoint.authority.name,
+                receiver_context=received.name,
+                source_context=frozen.name,
+                source_context_uid=frozen.uid,
+                source_digest=source_digest,
+                memories=tuple(
+                    ShareMemoryPreview(uid=memory.uid, content=memory.content)
+                    for memory in memories
+                ),
+                consent_digest=consent_digest,
+            )
+
+
+def deliver_prepared_share(preview: SharePreview) -> ShareDelivery:
+    """Deliver only if the exact unit shown by the viewer is still current."""
+
+    if not isinstance(preview, SharePreview):
+        raise TypeError("Expected a SharePreview.")
+    with authority_grant_snapshot_lock() as registry:
+        return _deliver_locked(
+            registry=registry,
+            source_name=preview.source_context,
+            endpoint_name=preview.endpoint,
+            expected=preview,
+        )
+
+
+def list_share_sources() -> tuple[str | None, tuple[str, ...]]:
+    """List ordinary Context names that Share can copy directly."""
+
+    with authority_grant_snapshot_lock() as registry:
+        store = MemoryStore(root=profile_store_dir(registry.active), create=False)
+        current = store.current_context_name()
+        names: list[str] = []
+        for name in store.list_context_names():
+            try:
+                context = store.load_direct(name)
+                _direct_memories(context)
+            except (FileNotFoundError, OSError, ShareError, RuntimeError, ValueError):
+                continue
+            names.append(context.name)
+        ordered = tuple(sorted(names))
+        return (current if current in ordered else None), ordered
+
+
+def list_share_endpoints() -> tuple[str, ...]:
+    """List exact validated SHARE endpoint names without opening their contents."""
+
+    with authority_grant_snapshot_lock() as registry:
+        names = sorted(
+            {
+                grant.public_name
+                for grant in registry.grants
+                if grant.grantee_profile_uid == registry.active.uid
+                and "SHARE" in grant.permissions
+            }
+        )
+        # Validate the frozen attachment and receiver-root identities now so a
+        # dead endpoint never becomes a selectable disclosure target.
+        return tuple(
+            resolve_share_endpoint(name, registry=registry).public_name
+            for name in names
         )

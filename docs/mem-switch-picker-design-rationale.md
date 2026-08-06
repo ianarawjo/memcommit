@@ -65,6 +65,11 @@ is expanded.
   Contexts are loaded into a process-local cache only when their effective
   visibility is on. Query-only and otherwise unavailable virtual rows remain
   opaque; their source content is never opened for the preview.
+- A materialized Context leaf uses `▸`/`▾` for its direct-Memory presentation
+  layer instead of remaining a `·`. Right opens that layer, Left closes it
+  before moving to the parent, and read-only browse mode also toggles it with
+  Enter. Branch markers continue to describe Context-descendant expansion, so
+  the independent `m` control remains available for their direct Memories.
 - Enter accepts the selected Context. Every displayed row comes from the
   frozen real or granted Context catalog.
 - Escape, `q`, or Ctrl-C cancel without changing current state.
