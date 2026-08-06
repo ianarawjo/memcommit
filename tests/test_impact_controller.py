@@ -132,6 +132,18 @@ def test_located_memory_changes_render_as_compact_before_after_diff():
     assert "+ Follow the temporary signs." in rendered
     assert "The verified route changed." not in rendered
 
+    fragments = resolution_report_fragments(view, impact_controller=impact)
+    assert next(style for style, text in fragments if text == "north") == (
+        "class:impact.diff.remove.changed"
+    )
+    assert next(style for style, text in fragments if text == "south") == (
+        "class:impact.diff.add.changed"
+    )
+    assert any(
+        style == "class:impact.diff.remove" and text == "Use the "
+        for style, text in fragments
+    )
+
 
 def test_impact_treatment_uid_content_and_detail_columns_align():
     view = replace(

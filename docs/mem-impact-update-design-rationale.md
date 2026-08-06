@@ -119,6 +119,11 @@ target owner and Memory UID, then uses the same frozen `- before` / `+ after`
 contract as semantic `mem diff`. The Viewer summarizes the planned-change set
 once instead of repeating every Item before the Impact ledger; Items remains
 available for full reason and source-reference inspection.
+The diff calculation is mechanical rather than provider-authored: identical
+strings render `=`, partial edits retain equal spans and emphasize only changed
+word spans, and additions or removals remain one-sided. Update's validation
+rejects an exact no-op EDIT, so equality is available to shared consumers such
+as Sever without creating a meaningless Update mutation.
 
 The same saved `UpdateSession` also supplies `mem review update`. Review keeps
 the existing detailed ADD/EDIT/REMOVE presentation, including OWNER, Memory

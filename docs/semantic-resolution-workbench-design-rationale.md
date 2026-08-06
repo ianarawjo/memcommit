@@ -53,6 +53,17 @@ rationale and Rules remain collapsed until Enter. Update names the target
 owner it will mutate. Sever instead names `Source → Result`, because it creates
 a new Result and never deletes or rewrites Source.
 
+The shared diff renderer is deliberately mechanical. It derives presentation
+only from the frozen `before` and `after` strings: exact equality becomes `=`,
+a missing side becomes one-sided `+` or `-`, and two unequal sides are aligned
+by deterministic line and whitespace-preserving word-token matching. Equal
+spans retain the base line color while unequal spans receive bold treatment.
+Operation labels such as EDIT, KEEP, or SUMMARIZE do not influence hunk
+calculation and the renderer never infers semantic equivalence. Consequently,
+Update continues to reject an exact no-op EDIT before presentation, while
+Sever may intentionally show `= KEEP` because unchanged inclusion in a newly
+created Result is an operation-owned decision.
+
 Interactive Resolution rendering derives its content width from the current
 terminal on every projection. Viewer report rows, nested option boxes, seeded
 Compare/Meld cards, final-review cards, and the Items hanging rows wrap against

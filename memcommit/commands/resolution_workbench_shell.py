@@ -43,6 +43,7 @@ from memcommit.commands.semantic_detail_renderer import (
     semantic_trace_fragments,
 )
 from memcommit.impact_controller import ImpactController, ImpactView
+from memcommit.memory_diff import MemoryChange, MemoryDiffSpan, memory_diff_lines
 from memcommit.resolution_workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
@@ -248,13 +249,20 @@ def _impact_lines(impact: ImpactView) -> list[str]:
                     ),
                 ]
             )
-            if entry.before == entry.after and entry.before is not None:
-                lines.append(f"      = {entry.before}")
-            else:
-                if entry.before is not None:
-                    lines.append(f"      - {entry.before}")
-                if entry.after is not None:
-                    lines.append(f"      + {entry.after}")
+            change = MemoryChange(
+                marker=entry.marker,
+                treatment=entry.label,
+                location=entry.location,
+                memory_uid=entry.uid or str(index),
+                before=entry.before,
+                after=entry.after,
+                reason=entry.reason,
+                rules=entry.rules,
+            )
+            lines.extend(
+                f"      {line.marker} {''.join(span.text for span in line.spans)}"
+                for line in memory_diff_lines(change)
+            )
             if entry.reason:
                 lines.append(f"      WHY · {entry.reason}")
             continue
@@ -388,6 +396,31 @@ def _visual_wrap(value: str, width: int) -> list[str]:
         if current:
             wrapped.append(leading + current)
     return wrapped or [""]
+
+
+def _visual_wrap_diff_spans(
+    spans: tuple[MemoryDiffSpan, ...],
+    width: int,
+) -> list[list[tuple[str, bool]]]:
+    """Wrap mechanical diff spans without discarding their changed flags."""
+
+    lines: list[list[tuple[str, bool]]] = [[]]
+    current_width = 0
+    for span in spans:
+        for character in safe_terminal_text(span.text):
+            character_width = get_cwidth(character)
+            if lines[-1] and current_width + character_width > width:
+                lines.append([])
+                current_width = 0
+            if lines[-1] and lines[-1][-1][1] == span.changed:
+                prior, changed = lines[-1][-1]
+                lines[-1][-1] = (prior + character, changed)
+            else:
+                lines[-1].append((character, span.changed))
+            current_width += character_width
+    if not lines[-1]:
+        lines[-1].append(("", spans[0].changed))
+    return lines
 
 
 def _impact_treatment_style(label: str, *, focused: bool) -> str:
@@ -1205,36 +1238,43 @@ def resolution_report_fragments(
                         (style, f"{safe_terminal_text(entry.location)} {uid_field}\n"),
                     ]
                 )
-                diff_lines = (
-                    (("=", entry.before),)
-                    if entry.before == entry.after and entry.before is not None
-                    else tuple(
-                        (marker, value)
-                        for marker, value in (
-                            ("-", entry.before),
-                            ("+", entry.after),
-                        )
-                        if value is not None
-                    )
+                change = MemoryChange(
+                    marker=entry.marker,
+                    treatment=entry.label,
+                    location=entry.location,
+                    memory_uid=entry.uid or str(index),
+                    before=entry.before,
+                    after=entry.after,
+                    reason=entry.reason,
+                    rules=entry.rules,
                 )
-                for marker, value in diff_lines:
+                for diff_line in memory_diff_lines(change):
+                    marker = diff_line.marker
                     diff_prefix = f"{content_indent}{marker} "
-                    diff_style = {
-                        "-": "class:impact.diff.remove",
-                        "+": "class:impact.diff.add",
-                        "=": "class:impact.diff.equal",
+                    style_key = {
+                        "-": "remove",
+                        "+": "add",
+                        "=": "equal",
+                        " ": "equal",
                     }[marker]
-                    for line_index, content_line in enumerate(
-                        _visual_wrap(value, row_content_width)
+                    for line_index, content_spans in enumerate(
+                        _visual_wrap_diff_spans(diff_line.spans, row_content_width)
                     ):
                         lead = (
                             diff_prefix
                             if line_index == 0
                             else " " * _visual_width(diff_prefix)
                         )
-                        fragments.append(
-                            (diff_style, f" {lead}{content_line}\n")
-                        )
+                        fragments.append((f"class:impact.diff.{style_key}", f" {lead}"))
+                        for content_text, changed in content_spans:
+                            fragments.append(
+                                (
+                                    f"class:impact.diff.{style_key}"
+                                    + (".changed" if changed else ""),
+                                    content_text,
+                                )
+                            )
+                        fragments.append(("", "\n"))
             else:
                 legacy_indent = " " * _visual_width(prefix + identity)
                 legacy_width = max(

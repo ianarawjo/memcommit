@@ -89,8 +89,11 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "impact.other.focused": "fg:#cad3f5 bold",
         # Located Impact transitions share mem diff's before/after semantics.
         "impact.diff.remove": "fg:#ed8796",
+        "impact.diff.remove.changed": "fg:#ed8796 bold",
         "impact.diff.add": "fg:#a6da95",
+        "impact.diff.add.changed": "fg:#a6da95 bold",
         "impact.diff.equal": "fg:#cad3f5",
+        "impact.diff.equal.changed": "fg:#cad3f5 bold",
         "option-card": "fg:#ffffff",
         # Resolution choices are rows, not nested cards. Underline belongs
         # only to the navigation cursor and disappears when focus moves away.

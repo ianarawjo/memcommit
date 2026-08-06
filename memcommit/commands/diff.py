@@ -3,14 +3,17 @@ from __future__ import annotations
 
 import difflib
 import json
-import re
 from typing import Annotated
 
 import typer
 
 from memcommit.store import MemoryStore
 from memcommit.granted_update_application import inspect_granted_update
-from memcommit.memory_diff import update_operation_change
+from memcommit.memory_diff import (
+    MemoryChange,
+    memory_diff_lines,
+    update_operation_change,
+)
 from memcommit.update import (
     AddOperation,
     EditOperation,
@@ -125,81 +128,34 @@ def _render_header(session: UpdateSession, *, verbose: bool) -> None:
             )
 
 
-def _word_tokens(text: str) -> list[str]:
-    return re.findall(r"\S+|\s+", text)
+def _render_semantic_change(change: MemoryChange) -> None:
+    """Render shared mechanical hunks with CLI-specific ANSI emphasis."""
 
-
-def _styled_word_diff(old_line: str, new_line: str) -> tuple[str, str]:
-    """Color both lines and bold only changed word spans."""
-    old_tokens = _word_tokens(old_line)
-    new_tokens = _word_tokens(new_line)
-    old_parts = [typer.style("  - ", fg=typer.colors.RED)]
-    new_parts = [typer.style("  + ", fg=typer.colors.GREEN)]
-    matcher = difflib.SequenceMatcher(
-        None,
-        old_tokens,
-        new_tokens,
-        autojunk=False,
-    )
-    for tag, old_start, old_end, new_start, new_end in matcher.get_opcodes():
-        old_text = "".join(old_tokens[old_start:old_end])
-        new_text = "".join(new_tokens[new_start:new_end])
-        if old_text:
-            old_parts.append(
-                typer.style(
-                    old_text,
-                    fg=typer.colors.RED,
-                    bold=tag != "equal",
-                )
+    for line in memory_diff_lines(change):
+        color = (
+            typer.colors.RED
+            if line.marker == "-"
+            else typer.colors.GREEN
+            if line.marker == "+"
+            else None
+        )
+        prefix = "    " if line.marker == " " else f"  {line.marker} "
+        parts = [typer.style(prefix, fg=color, dim=line.marker in {" ", "="})]
+        parts.extend(
+            typer.style(
+                span.text,
+                fg=color,
+                bold=span.changed and line.marker in {"-", "+"},
+                dim=line.marker in {" ", "="},
             )
-        if new_text:
-            new_parts.append(
-                typer.style(
-                    new_text,
-                    fg=typer.colors.GREEN,
-                    bold=tag != "equal",
-                )
-            )
-    return "".join(old_parts), "".join(new_parts)
+            for span in line.spans
+        )
+        typer.echo("".join(parts))
 
-
-def _render_semantic_edit(before: str, after: str) -> None:
-    old_lines = before.splitlines() or [""]
-    new_lines = after.splitlines() or [""]
-    matcher = difflib.SequenceMatcher(
-        None,
-        old_lines,
-        new_lines,
-        autojunk=False,
-    )
-    for tag, old_start, old_end, new_start, new_end in matcher.get_opcodes():
-        if tag == "equal":
-            for line in old_lines[old_start:old_end]:
-                typer.secho(f"    {line}", dim=True)
-        elif tag == "replace":
-            old_chunk = old_lines[old_start:old_end]
-            new_chunk = new_lines[new_start:new_end]
-            paired = min(len(old_chunk), len(new_chunk))
-            for index in range(paired):
-                old_output, new_output = _styled_word_diff(
-                    old_chunk[index],
-                    new_chunk[index],
-                )
-                typer.echo(old_output)
-                typer.echo(new_output)
-            for line in old_chunk[paired:]:
-                typer.secho(f"  - {line}", fg=typer.colors.RED)
-            for line in new_chunk[paired:]:
-                typer.secho(f"  + {line}", fg=typer.colors.GREEN)
-        elif tag == "delete":
-            for line in old_lines[old_start:old_end]:
-                typer.secho(f"  - {line}", fg=typer.colors.RED)
-        elif tag == "insert":
-            for line in new_lines[new_start:new_end]:
-                typer.secho(f"  + {line}", fg=typer.colors.GREEN)
-
-    old_terminal_newline = before.endswith(("\n", "\r"))
-    new_terminal_newline = after.endswith(("\n", "\r"))
+    if change.before is None or change.after is None:
+        return
+    old_terminal_newline = change.before.endswith(("\n", "\r"))
+    new_terminal_newline = change.after.endswith(("\n", "\r"))
     if old_terminal_newline != new_terminal_newline:
         change = "added" if new_terminal_newline else "removed"
         typer.secho(f"    terminal newline {change}", dim=True)
@@ -238,26 +194,21 @@ def _render_semantic_operation(
             fg=typer.colors.YELLOW,
             bold=True,
         )
-        assert change.before is not None and change.after is not None
-        _render_semantic_edit(change.before, change.after)
+        _render_semantic_change(change)
     elif isinstance(operation, AddOperation):
         typer.secho(
             f"ADD   {change.location}  [new:{shown_uid}]",
             fg=typer.colors.GREEN,
             bold=True,
         )
-        assert change.after is not None
-        for line in change.after.splitlines() or [""]:
-            typer.secho(f"  + {line}", fg=typer.colors.GREEN)
+        _render_semantic_change(change)
     else:
         typer.secho(
             f"REMOVE {change.location}  [{shown_uid}]",
             fg=typer.colors.RED,
             bold=True,
         )
-        assert change.before is not None
-        for line in change.before.splitlines() or [""]:
-            typer.secho(f"  - {line}", fg=typer.colors.RED)
+        _render_semantic_change(change)
     typer.echo()
     _render_metadata(operation, prefixes, verbose=verbose)
 
