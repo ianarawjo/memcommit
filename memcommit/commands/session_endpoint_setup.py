@@ -32,6 +32,8 @@ from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     bind_focused_frame_style,
     display_escape_text,
+    focused_control_style,
+    focus_in_order,
 )
 from memcommit.store import validate_context_name
 
@@ -76,6 +78,66 @@ class EndpointSetupDraft:
 
 
 DraftValidator = Callable[[EndpointSetupDraft], str | None]
+
+
+def _endpoint_row_styles(
+    *,
+    cursor: bool,
+    chosen: bool,
+    tree_focused: bool,
+) -> tuple[str, str]:
+    """Separate a retained endpoint choice from the live tree cursor."""
+
+    cursor_focused = cursor and tree_focused
+    cursor_style = (
+        "class:memcommit.table.selected" if cursor_focused else ""
+    )
+    value_style = (
+        focused_control_style(
+            focused=cursor_focused,
+            selected=True,
+        )
+        if chosen
+        else cursor_style
+    )
+    return cursor_style, value_style
+
+
+def _new_context_label_style(*, focused: bool) -> str:
+    """Highlight the create-new action only while its editor owns focus."""
+
+    # ``create`` remains the semantic endpoint choice after Tab moves on, but
+    # this label is an action affordance rather than a retained-choice badge.
+    # Keeping its blue surface would falsely imply that it still owns input.
+    return focused_control_style(focused=focused, selected=focused)
+
+
+def _new_context_action_hint(*, focused: bool) -> str:
+    """Describe the key that is safe in the create-new control's mode."""
+
+    return " · ENTER CONFIRM" if focused else ""
+
+
+def _confirmed_new_context_row(
+    name: str,
+    *,
+    anchor: bool,
+) -> list[tuple[str, str]]:
+    """Render one confirmed, process-local endpoint choice in its selector."""
+
+    fragments: list[tuple[str, str]] = []
+    if anchor:
+        fragments.append(("[SetCursorPosition]", ""))
+    fragments.extend(
+        [
+            ("class:memcommit.choice.active", "    + "),
+            (
+                "class:memcommit.choice.active",
+                f"{display_escape_text(name)}  NEW · NOT CREATED",
+            ),
+        ]
+    )
+    return fragments
 
 
 def choose_session_endpoints(
@@ -148,6 +210,10 @@ def choose_session_endpoints(
     }
     selected = {role.uid: role.initial_name for role in role_specs}
     create = {role.uid: role.prefer_new for role in role_specs}
+    confirmed_new_names = {
+        role.uid: role.initial_new_name.strip() if role.prefer_new else ""
+        for role in role_specs
+    }
     mode_state = HorizontalChoiceState(
         tuple(
             HorizontalChoiceOption(mode.uid, mode.label, mode.description)
@@ -180,9 +246,14 @@ def choose_session_endpoints(
         fragments: list[tuple[str, str]] = []
         state = states[uid]
         role = role_by_uid[uid]
+        tree_focused = (
+            app_ref.get("app") is not None
+            and app_ref["app"].layout.has_focus(controls[uid])
+        )
         for index, row in enumerate(state.visible_rows()):
             cursor = row.name == state.selected_name
-            if cursor:
+            confirmed_name = confirmed_new_names[uid]
+            if cursor and (tree_focused or not (create[uid] and confirmed_name)):
                 fragments.append(("[SetCursorPosition]", ""))
             available = row.name in role.selectable_names
             chosen = not create[uid] and selected[uid] == row.name
@@ -192,9 +263,10 @@ def choose_session_endpoints(
             if not available:
                 annotation = annotation or "UNAVAILABLE"
             suffix = f"  {display_escape_text(annotation)}" if annotation else ""
-            cursor_style = "class:memcommit.table.selected" if cursor else ""
-            value_style = (
-                "class:memcommit.choice.active" if chosen else cursor_style
+            cursor_style, value_style = _endpoint_row_styles(
+                cursor=cursor,
+                chosen=chosen,
+                tree_focused=tree_focused,
             )
             fragments.extend(
                 [
@@ -210,6 +282,18 @@ def choose_session_endpoints(
             )
             if index < len(state.visible_rows()) - 1:
                 fragments.append(("", "\n"))
+        if create[uid] and confirmed_name:
+            if fragments:
+                fragments.append(("", "\n"))
+            # Once confirmation advances focus, anchor this retained choice so
+            # it stays visible even when a long namespace would otherwise
+            # keep the old tree cursor in the viewport.
+            fragments.extend(
+                _confirmed_new_context_row(
+                    confirmed_name,
+                    anchor=not tree_focused,
+                )
+            )
         return fragments
 
     for role in role_specs:
@@ -230,15 +314,14 @@ def choose_session_endpoints(
                 lambda uid=role.uid: [
                     ("[SetCursorPosition]", ""),
                     (
-                        (
-                            "class:memcommit.table.selected"
-                            if app_ref.get("app") is not None
-                            and app_ref["app"].layout.has_focus(
-                                descendant_controls[uid]
-                            )
-                            else "class:memcommit.choice.active"
-                            if include_descendants[uid]
-                            else ""
+                        focused_control_style(
+                            focused=(
+                                app_ref.get("app") is not None
+                                and app_ref["app"].layout.has_focus(
+                                    descendant_controls[uid]
+                                )
+                            ),
+                            selected=include_descendants[uid],
                         ),
                         "  ["
                         + ("✓" if include_descendants[uid] else " ")
@@ -284,16 +367,29 @@ def choose_session_endpoints(
                             lambda uid=role.uid: [
                                 ("", "  NEW · "),
                                 (
-                                    (
-                                        "class:memcommit.choice.active"
-                                        if create[uid]
-                                        else ""
+                                    _new_context_label_style(
+                                        focused=(
+                                            app_ref.get("app") is not None
+                                            and app_ref["app"].layout.has_focus(
+                                                new_inputs[uid]
+                                            )
+                                        )
                                     ),
                                     "[ "
                                     f"{display_escape_text(role_by_uid[uid].new_label)}"
                                     " ]",
                                 ),
-                                ("", " · N CREATE NEW CONTEXT"),
+                                (
+                                    "",
+                                    _new_context_action_hint(
+                                        focused=(
+                                            app_ref.get("app") is not None
+                                            and app_ref["app"].layout.has_focus(
+                                                new_inputs[uid]
+                                            )
+                                        )
+                                    ),
+                                ),
                             ]
                         ),
                         height=1,
@@ -350,11 +446,11 @@ def choose_session_endpoints(
         lambda: [
             ("[SetCursorPosition]", ""),
             (
-                (
-                    "class:memcommit.choice.active"
-                    if app_ref.get("app") is not None
-                    and app_ref["app"].layout.has_focus(apply_control)
-                    else ""
+                focused_control_style(
+                    focused=(
+                        app_ref.get("app") is not None
+                        and app_ref["app"].layout.has_focus(apply_control)
+                    ),
                 ),
                 "[ PRESS ENTER TO APPLY ]",
             ),
@@ -383,13 +479,11 @@ def choose_session_endpoints(
             values.append(controls[uid])
             if uid in descendant_controls and role_descendants_active(uid):
                 values.append(descendant_controls[uid])
-            if uid in new_inputs:
-                values.append(new_inputs[uid])
         values.append(apply_control)
         return values
 
     def vertical_focusables():
-        """Return visible read-only surfaces in their top-to-bottom order."""
+        """Return visible controls in their top-to-bottom screen order."""
 
         values: list[object] = []
         if len(mode_specs) > 1:
@@ -398,6 +492,8 @@ def choose_session_endpoints(
             values.append(controls[uid])
             if uid in descendant_controls and role_descendants_active(uid):
                 values.append(descendant_controls[uid])
+            if uid in new_inputs:
+                values.append(new_inputs[uid])
         values.append(apply_control)
         return values
 
@@ -449,7 +545,12 @@ def choose_session_endpoints(
             if create[uid]:
                 if not role.allow_new:
                     raise ValueError(f"{role_title(uid)} cannot create a Context.")
-                name = new_inputs[uid].text.strip()
+                name = confirmed_new_names[uid]
+                if not name:
+                    raise ValueError(
+                        f"{role_title(uid)} new Context name must be confirmed "
+                        "with Enter."
+                    )
                 validate_context_name(name)
                 if name in catalog_set:
                     raise ValueError(
@@ -537,6 +638,18 @@ def choose_session_endpoints(
         status["value"] = ""
         event.app.invalidate()
 
+    @bindings.add("down", filter=new_input_focus, eager=True)
+    def _down_from_new_input(event) -> None:
+        focus_vertical_neighbor(event, 1)
+        status["value"] = ""
+        event.app.invalidate()
+
+    @bindings.add("up", filter=new_input_focus, eager=True)
+    def _up_from_new_input(event) -> None:
+        focus_vertical_neighbor(event, -1)
+        status["value"] = ""
+        event.app.invalidate()
+
     @bindings.add("down", filter=has_focus(mode_control), eager=True)
     def _down_from_mode(event) -> None:
         focus_vertical_neighbor(event, 1)
@@ -607,17 +720,6 @@ def choose_session_endpoints(
         status["value"] = ""
         event.app.invalidate()
 
-    @bindings.add("n", filter=tree_focus, eager=True)
-    @bindings.add("N", filter=tree_focus, eager=True)
-    def _edit_new(event) -> None:
-        uid = focused_role_uid()
-        if uid is None or uid not in new_inputs:
-            return
-        event.app.layout.focus(new_inputs[uid])
-        new_inputs[uid].buffer.cursor_position = len(new_inputs[uid].text)
-        status["value"] = f"Enter one exact {role_title(uid)} name."
-        event.app.invalidate()
-
     for uid, editor in new_inputs.items():
         editor_filter = has_focus(editor)
 
@@ -632,29 +734,32 @@ def choose_session_endpoints(
                 status["value"] = str(error)
                 event.app.invalidate()
                 return
+            confirmed_new_names[role_uid] = name
             create[role_uid] = True
             status["value"] = ""
-            event.app.layout.focus(controls[role_uid])
+            focus_vertical_neighbor(event, 1)
             event.app.invalidate()
 
-    @bindings.add("tab")
-    def _next_focus(event) -> None:
-        focusables = active_focusables()
-        index = next(
-            (i for i, control in enumerate(focusables) if event.app.layout.has_focus(control)),
-            -1,
-        )
-        event.app.layout.focus(focusables[(index + 1) % len(focusables)])
+    @bindings.add("tab", filter=new_input_focus, eager=True)
+    def _next_focus_from_new_input(event) -> None:
+        focus_vertical_neighbor(event, 1)
         event.app.invalidate()
 
-    @bindings.add("s-tab")
+    @bindings.add("s-tab", filter=new_input_focus, eager=True)
+    def _previous_focus_from_new_input(event) -> None:
+        focus_vertical_neighbor(event, -1)
+        event.app.invalidate()
+
+    @bindings.add("tab", filter=~new_input_focus)
+    def _next_focus(event) -> None:
+        focusables = active_focusables()
+        focus_in_order(event.app, focusables, 1, wrap=True)
+        event.app.invalidate()
+
+    @bindings.add("s-tab", filter=~new_input_focus)
     def _previous_focus(event) -> None:
         focusables = active_focusables()
-        index = next(
-            (i for i, control in enumerate(focusables) if event.app.layout.has_focus(control)),
-            0,
-        )
-        event.app.layout.focus(focusables[(index - 1) % len(focusables)])
+        focus_in_order(event.app, focusables, -1, wrap=True)
         event.app.invalidate()
 
     @bindings.add("enter", filter=has_focus(apply_control), eager=True)
@@ -686,7 +791,7 @@ def choose_session_endpoints(
             and uid in new_inputs
             and app_ref["app"].layout.has_focus(new_inputs[uid])
         ):
-            guidance = "Enter use name · Esc back · Tab pane"
+            guidance = "Enter confirm name · Esc back · Tab pane"
             if status["value"]:
                 return f" {display_escape_text(status['value'])} · {guidance}"
             return f" NEW CONTEXT NAME: {guidance}"
@@ -703,7 +808,7 @@ def choose_session_endpoints(
                 " SCOPE: Enter/Space include all descendants · "
                 "↑/↓ move · Tab pane · Q cancel"
             )
-        return " ↑/↓ move · ←/→ tree · Enter/Space choose · N create new Context · Tab pane · Q cancel"
+        return " ↑/↓ move · ←/→ tree · Enter/Space choose · Tab pane · Q cancel"
 
     children: list[object] = []
     if len(mode_specs) > 1:

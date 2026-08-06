@@ -107,6 +107,19 @@ conversation.
 
 ## Terminal color semantics
 
+### Shared terminal interaction mechanics
+
+- Before adding operation-specific TUI state, rendering, focus traversal,
+  scrolling, pointer, or key-navigation code, check the shared components in
+  `memcommit.commands.tui_primitives`, `horizontal_choice`, Context/Memory
+  pickers, and the common session workbench shells. Reuse or extend the
+  narrowest applicable shared component instead of cloning its behavior into
+  one command.
+- Keep semantic meaning and validation in the calling command, but keep common
+  interaction mechanics common. When a missing capability belongs to an
+  existing shared pattern, add it to that shared component and migrate the
+  relevant caller rather than introducing a parallel grammar.
+
 - Keep report structure, explanatory prose, cards, and ordinary labels neutral
   white. Do not tint a whole Compare, Meld, Review, or Impact report merely to
   make it look grouped.

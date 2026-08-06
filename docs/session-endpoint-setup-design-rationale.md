@@ -53,6 +53,7 @@ The other initial configurations are:
 
 | Operation | Visible shape | Endpoint kinds |
 | --- | --- | --- |
+| Atomize | `INPUT A → OUTPUT B` | A is one existing ordinary local Context; B is either the same Context for in-place application or a validated new exact Context name that preserves A |
 | Compare | `A ↔ B → ANALYSIS` | A and B are existing Context trees with independent, default-off descendant checkboxes; the result is a saved analysis, not a Context C |
 | Update | `SOURCE A → TARGET B` | A and B are existing Context trees; each has an independent, default-off descendant checkbox |
 | Meld, directional | `INCOMING A → BASELINE B` | A has a default-off descendant checkbox; B is a direct authoritative mutation target and intentionally has none |
@@ -105,6 +106,13 @@ component later, but that is not required to prove the extraction.
 This boundary avoids making a visual segmented selector responsible for
 review acceptance or durable decisions.
 
+Tab cycling and cross-surface Up/Down transitions use the shared
+`focus_in_order` primitive. The caller supplies the currently visible controls
+in screen order and decides whether movement wraps; the primitive owns only
+focus indexing. Help reuses the same primitive for its VIEW/list topology,
+while endpoint setup continues to derive its active controls from the selected
+operation shape.
+
 ## Grant-aware selector audit
 
 The endpoint omission exposed a broader risk: a shared tree can look
@@ -118,7 +126,7 @@ The audited boundaries are:
 | Sever Source/Criteria | Already projects validated readable Grant rows; Output remains require-new local |
 | Switch, List, Find | Already expose or resolve the readable public namespace according to each command's read contract |
 | `mem contexts` | Now enumerates the active Profile's complete visible Grant catalog rather than only Grants attached to the current Context |
-| Atomize New | Intentionally local because the current implementation loads and may apply a direct local analysis; explicit granted Atomize is not implemented |
+| Atomize Input / Output | Intentionally local because the implementation analyzes one directly owned Input and either mutates it or creates one directly owned Output; explicit granted Atomize is not implemented |
 | Share Source | Intentionally local because Share locks and exports a directly owned active-Profile Context; it does not re-export a granted authority frame |
 | Ground Context plan/placement | Intentionally follows Ground's local name-only discovery and separately reviewed binding contract |
 | Meld Result, Sever Output | Intentionally existing-local-or-new and require-new-local respectively; neither is a readable source selector |
@@ -134,7 +142,12 @@ result target. Symmetric explains that A and B are equal peers, requires their
 saved ordered Compare, and introduces separate result C. Context roles use the
 same blue surface for the retained choice while `›` and reverse video remain
 separate browsing-cursor signals; changing a selection therefore does not move
-an additional `(●)` column through the namespace tree.
+an additional `(●)` column through the namespace tree. A retained blue choice
+is not bold after keyboard focus leaves it. Bold identifies the exact nested
+control that currently owns input, including a selected Context, checked
+descendant scope, mode choice, or Apply control. The containing endpoint frame
+keeps its blue border while Tab moves between its tree and descendant scope,
+so the pane and within-pane focus levels remain visible at the same time.
 
 ## Setup state and mode transitions
 
@@ -144,6 +157,8 @@ The shell owns only a process-local draft:
 - one independent tree state and selected canonical name for each existing
   role;
 - one process-local new-name draft for each creatable role;
+- one separately confirmed new name, so text merely typed into an editor does
+  not become an endpoint choice when focus moves away;
 - whether an existing-or-new role currently names an existing Context or a
   proposed new one; and
 - focus and validation-message presentation.
@@ -171,8 +186,12 @@ saved session, or start an operation.
   row. Reverse navigation enters the preceding tree at its last visible row.
   The same boundary rule applies across Compare, Update, Meld, and Sever
   because it lives in the common setup shell. It stops rather than wrapping at
-  the mode and Apply edges; writable new-name fields remain `N`/Tab targets so
-  arrow navigation cannot unexpectedly enter an editor.
+  the mode and Apply edges. A creatable role's new-name field follows its tree
+  in this same visible run: Down from the tree's last row enters NEW, Up from
+  NEW returns to that tree, and Down from NEW advances to the next control.
+  Tab skips the editor when traversing panes, so Down from the role tree is
+  the only way to enter it. Once inside, Tab or Shift-Tab may still leave the
+  editor without confirming it.
 - `Enter` or `Space` selects the current existing Context row.
 - A mode may opt each readable endpoint into one checkbox below a separator:
   `INCLUDE ALL DESCENDANT CONTEXTS (OWNED OR GRANTED)`. It is off by default;
@@ -180,9 +199,13 @@ saved session, or start an operation.
   in normal Tab order immediately after its Context tree. Compare and Update
   enable it for A and B. Symmetric Meld enables it for both peers; directional
   Meld enables it only for incoming A.
-- `N create new Context` opens a creatable role's one-line exact-name editor.
-  While that editor is focused, its footer explicitly renders `Esc back`;
-  Escape returns to the role tree without canceling the whole setup.
+- Down from a creatable role's final tree row opens its one-line exact-name
+  editor. Once the editor owns focus, the action row shows `ENTER CONFIRM`.
+  Enter validates and confirms the exact name, projects it back into the role
+  selector as `NEW · NOT CREATED`, and advances to the next setup control.
+  Merely typing and leaving with Tab does not confirm the name. While the
+  editor is focused, its footer explicitly renders `Esc back`; Escape returns
+  to the role tree without canceling the whole setup.
 - A dedicated `APPLY` frame follows the endpoint panes in the Tab order. Its
   left-aligned `[ PRESS ENTER TO APPLY ]` control makes the final action
   visually distinct from both the endpoint trees and passive footer guidance. `Enter`
@@ -310,4 +333,5 @@ existing controller and validation boundaries.
 - It does not add a third target to directional Meld.
 - It does not merge Ground's conversational Context planning or frozen exact
   approval protocol into the session setup shell.
-- Atomize remains a later integration target.
+- Atomize does not expose descendant scope in this setup. Its semantic and
+  apply contracts remain bound to the selected Input's direct Memory frame.

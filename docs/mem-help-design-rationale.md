@@ -8,31 +8,43 @@ distinction matters while building the study prototype and when preparing its
 printed cheat sheet.
 
 `mem help` therefore renders one concise inventory line per visible registered
-command, ordered case-insensitively from A to Z:
+command. The interactive browser offers two projections of the same audited
+metadata: `BY KIND` for intent-first discovery and `A–Z` for exact-name lookup.
+The stable non-TTY inventory remains case-insensitive A–Z for scripts and
+captured study output:
 
 ```text
 name [(exception)] - short description
 ```
 
 It reports capabilities; it does not recommend a command sequence or perform
-work for the participant. The alphabetical order is shared by the plain-text
-inventory and interactive selector so the same command has a predictable
-location in either surface; source registration order remains free to group
-related implementation code.
+work for the participant. Source registration order remains free to group
+related implementation code; neither Help projection depends on it.
 
 ## Interactive terminal contract
 
 In an interactive terminal, `mem help` presents the inventory as a
 prompt-toolkit selector:
 
+- A shared horizontal choice at the top selects `BY KIND` or `A–Z`; `BY KIND`
+  is the default. Left and Right change the projection only while that row has
+  focus. Up from the first command reaches VIEW, Down returns to the command
+  list, and Tab/Shift-Tab traverse the same two visible surfaces. A view change
+  retains the selected command by name but closes its Forms because their row
+  offsets belong to the old projection.
+- `BY KIND` assigns each command one primary discovery category and renders
+  nonselectable category headings. Aliases remain separate commands in the
+  same category so the inventory still describes every registered spelling.
 - Up and Down move one command at a time or move among one expanded command's
   forms. Holding one direction reuses the shared `NavigationAccelerator`: it
-  waits for the terminal's initial key-repeat delay, then advances by the same
-  two-, five-, and ten-row steps used by the Context/model selector. Deliberate
-  rapid taps remain one row each, and every non-arrow navigation action resets
-  the acceleration streak.
+  waits for the terminal's initial key-repeat delay, then increases movement to
+  two and five times the terminal repeat cadence, as in the Context/Memory
+  selector. Every intermediate command or Form remains a separately visited
+  row. Deliberate rapid taps remain one row each, and every non-arrow navigation
+  action resets the acceleration streak.
 - Page Up, Page Down, Home, and End move through the longer list.
-- Right expands one command in place and immediately moves the focus bar to its
+- While the command list is focused, Right expands one command in place and
+  immediately moves the focus bar to its
   first `FORM`, matching the newly visible content below the command row. Up
   and Down then inspect the alternative invocations. Left returns from a Form
   to its command row and a second Left collapses the command.

@@ -5,6 +5,7 @@ provider prompts, persistence, or operation-specific key meanings.
 """
 from __future__ import annotations
 
+import asyncio
 import sys
 import unicodedata
 from collections.abc import Sequence
@@ -46,27 +47,65 @@ INLINE_AGENT_COMMENT_TITLE = "COMMENT (FOR THE AGENT)"
 _BUFFER_SERIAL = count(1)
 
 
+def focus_in_order(app, controls: Sequence[object], delta: int, *, wrap: bool) -> bool:
+    """Move focus through one caller-supplied visible screen order.
+
+    Callers retain ownership of which controls are currently visible.  This
+    shared step keeps Tab and cross-surface arrow movement from growing
+    operation-specific indexing and wrap semantics.
+    """
+
+    if delta not in {-1, 1}:
+        raise ValueError("Focus movement direction must be -1 or 1.")
+    values = tuple(controls)
+    if not values:
+        return False
+    index = next(
+        (
+            position
+            for position, control in enumerate(values)
+            if app.layout.has_focus(control)
+        ),
+        -1,
+    )
+    candidate = index + delta
+    if wrap:
+        candidate %= len(values)
+    elif index < 0 or not 0 <= candidate < len(values):
+        return False
+    app.layout.focus(values[candidate])
+    return True
+
+
 @dataclass
 class NavigationAccelerator:
-    """Increase held-arrow travel while keeping deliberate taps precise.
+    """Increase held-arrow rate while keeping deliberate taps precise.
 
-    The stepped schedule is presentation behavior shared by long Memory/result
-    runs. Terminals do not report key-up events, so hold detection requires the
-    characteristic initial repeat delay followed by a sustained short cadence.
-    Rapid taps that begin immediately, a pause, or a direction change retain
-    one-unit navigation in every TUI that adopts it.
+    Every accelerated pulse still visits each intermediate row. Terminals do
+    not report key-up events, so hold detection requires the characteristic
+    initial repeat delay followed by a sustained short cadence. Rapid taps that
+    begin immediately, a pause, or a direction change retain one-unit
+    navigation in every TUI that adopts it.
     """
 
     direction: int = 0
     streak: int = 0
     last_at: float | None = None
     repeat_candidate: bool = False
+    repeat_interval: float = 0.08
+    _animation_generation: int = 0
+    _animation_task: asyncio.Task[None] | None = None
 
     _INITIAL_REPEAT_DELAY_MIN = 0.2
     _INITIAL_REPEAT_DELAY_MAX = 1.2
     _REPEAT_INTERVAL_MAX = 0.16
+    _MIN_FRAME_INTERVAL = 1 / 60
 
     def reset(self) -> None:
+        self._animation_generation += 1
+        if self._animation_task is not None:
+            self._animation_task.cancel()
+            self._animation_task = None
         self.direction = 0
         self.streak = 0
         self.last_at = None
@@ -90,6 +129,7 @@ class NavigationAccelerator:
             self.repeat_candidate = False
         elif self.repeat_candidate and interval <= self._REPEAT_INTERVAL_MAX:
             self.streak += 1
+            self.repeat_interval = interval
         else:
             # A real held key normally emits one delayed first repeat. Fast
             # manual taps start with short intervals, so they never arm the
@@ -101,28 +141,82 @@ class NavigationAccelerator:
             )
             self.streak = 0
 
-        if self.streak >= 14:
-            return 10
         if self.streak >= 9:
             return 5
         if self.streak >= 4:
             return 2
         return 1
 
-# Focus belongs to terminal chrome, not to the semantic panel title. Nested
-# selectors color only the frame border/label and leave its content unchanged.
+    def move(
+        self,
+        direction: int,
+        *,
+        app,
+        move_one: Callable[[int], None],
+        now: float | None = None,
+    ) -> None:
+        """Move now, then animate every additional held-key row in order."""
+
+        multiplier = self.step(direction, now=now)
+        self._animation_generation += 1
+        generation = self._animation_generation
+        if self._animation_task is not None:
+            self._animation_task.cancel()
+            self._animation_task = None
+
+        move_one(direction)
+        app.invalidate()
+        if multiplier == 1:
+            return
+
+        interval = max(
+            self._MIN_FRAME_INTERVAL,
+            self.repeat_interval / multiplier,
+        )
+
+        async def animate_remaining() -> None:
+            try:
+                for _ in range(multiplier - 1):
+                    await asyncio.sleep(interval)
+                    if generation != self._animation_generation:
+                        return
+                    move_one(direction)
+                    app.invalidate()
+            finally:
+                if generation == self._animation_generation:
+                    self._animation_task = None
+
+        self._animation_task = app.create_background_task(animate_remaining())
+
+# Focus belongs to terminal chrome, not to the semantic panel title. A blue
+# surface records a retained selection, while bold records the exact nested
+# control that currently owns keyboard input. Keeping those signals orthogonal
+# makes Tab movement visible without erasing a checked or selected value.
 MEMCOMMIT_TUI_STYLE = Style.from_dict(
     {
         "memcommit.focused frame.border": "fg:#8bd5ff bold",
         "memcommit.focused frame.label": "fg:#8bd5ff bold",
         "memcommit.notification": "fg:#f5a97f bold",
         "memcommit.table.selected": "reverse bold",
-        # A chosen value should remain legible without another moving glyph.
-        # The blue surface is persistent selection; reverse video remains the
-        # separate navigation cursor while a person browses a tree.
-        "memcommit.choice.active": "fg:#10242f bg:#8bd5ff bold",
+        "memcommit.control.focused": "bold",
+        # The blue surface persists after focus leaves. Bold is added only
+        # while that same nested control is the immediate keyboard target.
+        "memcommit.choice.active": "fg:#10242f bg:#8bd5ff",
+        "memcommit.choice.active.focused": "fg:#10242f bg:#8bd5ff bold",
     }
 )
+
+
+def focused_control_style(*, focused: bool, selected: bool = False) -> str:
+    """Return the shared nested-control focus/selection presentation class."""
+
+    if selected:
+        return (
+            "class:memcommit.choice.active.focused"
+            if focused
+            else "class:memcommit.choice.active"
+        )
+    return "class:memcommit.control.focused" if focused else ""
 
 # Semantic workbenches share presentation vocabulary even when their state
 # contracts differ.  A Result viewer is read-only, Compare owns report
@@ -157,15 +251,23 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "impact.custom.focused": "fg:#eed49f bold",
         "impact.other": "fg:#cad3f5 bold",
         "impact.other.focused": "fg:#cad3f5 bold",
-        # Direction is the semantic signal: the complete old line is red and
-        # the complete new line is green. Bold may emphasize changed spans,
-        # but blue focus and underlining must not compete with -/+ meaning.
-        "memory-diff.remove": "fg:#ed8796",
-        "memory-diff.remove.changed": "fg:#ed8796 bold",
-        "memory-diff.add": "fg:#a6da95",
-        "memory-diff.add.changed": "fg:#a6da95 bold",
-        "memory-diff.equal": "fg:#d8dee9",
-        "memory-diff.equal.changed": "fg:#d8dee9 bold",
+        # Located mutation kinds use the same compact semantic-tag grammar as
+        # Sever treatments without tinting their complete Memory bodies.
+        "impact.edit": "fg:#a6da95 bold",
+        "impact.edit.focused": "fg:#a6da95 bold",
+        "impact.add": "fg:#8aadf4 bold",
+        "impact.add.focused": "fg:#8aadf4 bold",
+        "impact.remove": "fg:#ed8796 bold",
+        "impact.remove.focused": "fg:#ed8796 bold",
+        # Long before/after Memory content stays white. Only mechanically
+        # removed or added spans receive directional color and an underline;
+        # their line position never determines whether text is red or green.
+        "memory-diff.remove": "fg:#ffffff",
+        "memory-diff.remove.changed": "fg:#ed8796 underline",
+        "memory-diff.add": "fg:#ffffff",
+        "memory-diff.add.changed": "fg:#a6da95 underline",
+        "memory-diff.equal": "fg:#ffffff",
+        "memory-diff.equal.changed": "fg:#ffffff underline",
         "option-card": "fg:#ffffff",
         # Resolution choices are rows, not nested cards. Underline belongs
         # only to the navigation cursor and disappears when focus moves away.

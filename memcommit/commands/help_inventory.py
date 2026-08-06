@@ -7,6 +7,7 @@ from typing import Annotated
 
 import typer
 from prompt_toolkit.application import Application
+from prompt_toolkit.filters import has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
@@ -17,11 +18,73 @@ from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style
 
 from memcommit.commands.tui_primitives import NavigationAccelerator
+from memcommit.commands.tui_primitives import focus_in_order
+from memcommit.commands.horizontal_choice import (
+    HorizontalChoiceOption,
+    HorizontalChoiceState,
+    render_horizontal_choice,
+)
 
 
 COMMAND_ANNOTATIONS = {
     "config": "legacy",
     "integrate": "legacy",
+}
+
+HELP_CATEGORY_GROUPS = (
+    (
+        "CONTEXTS",
+        (
+            "branch", "checkout", "contexts", "embed", "import", "init",
+            "list", "ls", "reference", "rename", "show", "status", "switch",
+        ),
+    ),
+    (
+        "MEMORIES",
+        (
+            "add", "chunk", "clear", "delete", "edit", "forget",
+            "integrate", "remove",
+        ),
+    ),
+    (
+        "SEARCH & EXPLAIN",
+        (
+            "find", "find-ambiguities", "find-conflicts", "find-duplicates",
+            "query", "rationale", "summarize", "trace",
+        ),
+    ),
+    (
+        "ANALYZE & RESOLVE",
+        (
+            "atomize", "compare", "impact", "meld", "merge", "review",
+            "sever", "translate", "update",
+        ),
+    ),
+    (
+        "HISTORY & RECOVERY",
+        ("checkpoint", "diff", "log", "redo", "revert", "undo"),
+    ),
+    (
+        "GROUND & EVALUATION",
+        ("eval", "ground", "init-study"),
+    ),
+    (
+        "PROFILE & SHARING",
+        ("lock", "profile", "share", "unlock"),
+    ),
+    (
+        "SYSTEM",
+        ("config", "help", "provider", "shell-init"),
+    ),
+)
+
+HELP_CATEGORY_BY_COMMAND = {
+    command_name: category
+    for category, command_names in HELP_CATEGORY_GROUPS
+    for command_name in command_names
+}
+HELP_CATEGORY_ORDER = {
+    category: index for index, (category, _commands) in enumerate(HELP_CATEGORY_GROUPS)
 }
 
 COMMAND_FORMS = {
@@ -71,10 +134,13 @@ COMMAND_FORMS = {
     ),
     "contexts": ("mem contexts (list local Contexts and granted views)",),
     "delete": (
-        "mem delete [context] (delete one Context while preserving descendants)",
+        "mem delete [item] (delete a Context or current direct item)",
+        "mem delete (select a Context or direct item interactively)",
+        "mem delete [item] --context [context] (explicit direct-item scope)",
     ),
     "diff": (
-        "mem diff (render the active local update record)",
+        "mem diff (select a Context, then inspect its checkpoints)",
+        "mem diff [context] (inspect that Context's checkpoints directly)",
         "mem diff --raw (exact unified diff)",
         "mem diff --stat (summary only)",
         "mem diff --verbose (complete UIDs and source/target fingerprints)",
@@ -176,7 +242,7 @@ COMMAND_FORMS = {
         "mem lock profile (lock the active Profile)",
     ),
     "log": (
-        "mem log (enter the interactive checkpoint browser in a TTY; print otherwise)",
+        "mem log (select a Context, then browse its checkpoints in a TTY; print otherwise)",
         'mem log "[query]" (semantic history search)',
         "mem log --operations (Profile command attempts)",
     ),
@@ -253,8 +319,9 @@ COMMAND_FORMS = {
         "mem reference [memory] --from [source_context] --into [target_context]",
     ),
     "remove": (
-        "mem remove [item] (remove one direct item from the current Context)",
-        "mem remove [item] --context [context] (remove from an explicit Context)",
+        "mem remove [item] (delete a Context or current direct item)",
+        "mem remove (select a Context or direct item interactively)",
+        "mem remove [item] --context [context] (explicit direct-item scope)",
     ),
     "rename": (
         "mem rename [existing_context] [new_context]",
@@ -436,13 +503,25 @@ def _visible_commands(ctx: typer.Context) -> list[tuple[str, object]]:
 def _command_entries(root: typer.Context) -> list[CommandEntry]:
     commands = _visible_commands(root)
     visible_names = {name for name, _ in commands}
-    stale = sorted(
-        (COMMAND_ANNOTATIONS.keys() | COMMAND_FORMS.keys()) - visible_names
+    configured_names = (
+        COMMAND_ANNOTATIONS.keys()
+        | COMMAND_FORMS.keys()
+        | HELP_CATEGORY_BY_COMMAND.keys()
     )
+    stale = sorted(configured_names - visible_names)
     if stale:
         typer.secho(
             "Help inventory error: annotated command not registered: "
             + ", ".join(stale),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    uncategorized = sorted(visible_names - HELP_CATEGORY_BY_COMMAND.keys())
+    if uncategorized:
+        typer.secho(
+            "Help inventory error: command category missing: "
+            + ", ".join(uncategorized),
             fg=typer.colors.RED,
             err=True,
         )
@@ -505,6 +584,30 @@ def run_help_selector(
     ):
         raise ValueError("Interactive help requires a terminal.")
 
+    view_state = HorizontalChoiceState(
+        (
+            HorizontalChoiceOption("CATEGORY", "BY KIND"),
+            HorizontalChoiceOption("A_Z", "A–Z"),
+        ),
+        selected_uid="CATEGORY",
+    )
+
+    def ordered_entries() -> list[CommandEntry]:
+        if view_state.selected_uid == "A_Z":
+            return sorted(entries, key=lambda entry: (entry.name.casefold(), entry.name))
+        return sorted(
+            entries,
+            key=lambda entry: (
+                HELP_CATEGORY_ORDER.get(
+                    HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER"),
+                    len(HELP_CATEGORY_ORDER),
+                ),
+                entry.name.casefold(),
+                entry.name,
+            ),
+        )
+
+    visible_entries = {"value": ordered_entries()}
     selected_index = {"value": 0}
     expanded_index: dict[str, int | None] = {"value": None}
     selected_form: dict[str, int | None] = {"value": None}
@@ -514,10 +617,32 @@ def run_help_selector(
     )
     bindings = KeyBindings()
     navigation_accelerator = NavigationAccelerator()
+    app_ref: dict[str, Application[HelpSelection | None]] = {}
+
+    def select_view(delta: int) -> None:
+        selected_name = visible_entries["value"][selected_index["value"]].name
+        if not view_state.move(delta):
+            return
+        visible_entries["value"] = ordered_entries()
+        selected_index["value"] = next(
+            index
+            for index, entry in enumerate(visible_entries["value"])
+            if entry.name == selected_name
+        )
+        expanded_index["value"] = None
+        selected_form["value"] = None
 
     def render_entries():
         fragments: list[tuple[str, str]] = []
-        for index, entry in enumerate(entries):
+        previous_category: str | None = None
+        for index, entry in enumerate(visible_entries["value"]):
+            if view_state.selected_uid == "CATEGORY":
+                category = HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER")
+                if category != previous_category:
+                    if fragments:
+                        fragments.append(("", "\n"))
+                    fragments.append(("class:category", f" {category}\n"))
+                    previous_category = category
             command_selected = (
                 index == selected_index["value"]
                 and selected_form["value"] is None
@@ -555,10 +680,28 @@ def run_help_selector(
                 )
         return fragments
 
+    list_control = FormattedTextControl(
+        text=render_entries,
+        focusable=True,
+        show_cursor=False,
+    )
+    view_control = FormattedTextControl(
+        lambda: render_horizontal_choice(
+            view_state,
+            title="VIEW",
+            focused=(
+                app_ref.get("app") is not None
+                and app_ref["app"].layout.has_focus(view_control)
+            ),
+        ),
+        focusable=True,
+        show_cursor=False,
+    )
+
     def move_one(direction: int) -> None:
         form_index = selected_form["value"]
         if form_index is not None:
-            forms = entries[selected_index["value"]].forms
+            forms = visible_entries["value"][selected_index["value"]].forms
             candidate = form_index + direction
             if candidate < 0:
                 selected_form["value"] = None
@@ -569,7 +712,7 @@ def run_help_selector(
                 expanded_index["value"] = None
                 selected_index["value"] = min(
                     selected_index["value"] + 1,
-                    len(entries) - 1,
+                    len(visible_entries["value"]) - 1,
                 )
             return
         previous = selected_index["value"]
@@ -577,38 +720,53 @@ def run_help_selector(
             0,
             min(
                 selected_index["value"] + direction,
-                len(entries) - 1,
+                len(visible_entries["value"]) - 1,
             ),
         )
         if selected_index["value"] != previous:
             expanded_index["value"] = None
 
-    def move(direction: int) -> None:
-        for _ in range(navigation_accelerator.step(direction)):
-            move_one(direction)
-
-    @bindings.add("down")
+    @bindings.add("down", filter=has_focus(list_control))
     def _next_command(event) -> None:
-        move(1)
-        event.app.invalidate()
+        navigation_accelerator.move(
+            1,
+            app=event.app,
+            move_one=move_one,
+        )
 
-    @bindings.add("up")
+    @bindings.add("up", filter=has_focus(list_control))
     def _previous_command(event) -> None:
-        move(-1)
-        event.app.invalidate()
+        if (
+            selected_index["value"] == 0
+            and selected_form["value"] is None
+        ):
+            navigation_accelerator.reset()
+            focus_in_order(
+                event.app,
+                (view_control, list_control),
+                -1,
+                wrap=False,
+            )
+            event.app.invalidate()
+            return
+        navigation_accelerator.move(
+            -1,
+            app=event.app,
+            move_one=move_one,
+        )
 
-    @bindings.add("pagedown")
+    @bindings.add("pagedown", filter=has_focus(list_control))
     def _next_page(event) -> None:
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
         selected_index["value"] = min(
             selected_index["value"] + 10,
-            len(entries) - 1,
+            len(visible_entries["value"]) - 1,
         )
         event.app.invalidate()
 
-    @bindings.add("pageup")
+    @bindings.add("pageup", filter=has_focus(list_control))
     def _previous_page(event) -> None:
         navigation_accelerator.reset()
         selected_form["value"] = None
@@ -616,7 +774,7 @@ def run_help_selector(
         selected_index["value"] = max(selected_index["value"] - 10, 0)
         event.app.invalidate()
 
-    @bindings.add("home")
+    @bindings.add("home", filter=has_focus(list_control))
     def _first_command(event) -> None:
         navigation_accelerator.reset()
         selected_form["value"] = None
@@ -624,15 +782,15 @@ def run_help_selector(
         selected_index["value"] = 0
         event.app.invalidate()
 
-    @bindings.add("end")
+    @bindings.add("end", filter=has_focus(list_control))
     def _last_command(event) -> None:
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        selected_index["value"] = len(entries) - 1
+        selected_index["value"] = len(visible_entries["value"]) - 1
         event.app.invalidate()
 
-    @bindings.add("enter")
+    @bindings.add("enter", filter=has_focus(list_control))
     def _select_row(event) -> None:
         navigation_accelerator.reset()
         index = selected_index["value"]
@@ -645,15 +803,16 @@ def run_help_selector(
             selected_form["value"] = 0
             event.app.invalidate()
             return
-        command_line = _selectable_form_line(entries[index].forms[form_index])
+        entry = visible_entries["value"][index]
+        command_line = _selectable_form_line(entry.forms[form_index])
         event.app.exit(
             result=HelpSelection(
-                command_name=entries[index].name,
+                command_name=entry.name,
                 command_line=command_line,
             )
         )
 
-    @bindings.add("right")
+    @bindings.add("right", filter=has_focus(list_control))
     def _expand(event) -> None:
         navigation_accelerator.reset()
         index = selected_index["value"]
@@ -664,7 +823,7 @@ def run_help_selector(
             selected_form["value"] = 0
         event.app.invalidate()
 
-    @bindings.add("left")
+    @bindings.add("left", filter=has_focus(list_control))
     def _collapse(event) -> None:
         navigation_accelerator.reset()
         if selected_form["value"] is not None:
@@ -673,10 +832,10 @@ def run_help_selector(
             expanded_index["value"] = None
         event.app.invalidate()
 
-    @bindings.add("h")
+    @bindings.add("h", filter=has_focus(list_control))
     def _open_full_help(event) -> None:
         navigation_accelerator.reset()
-        entry = entries[selected_index["value"]]
+        entry = visible_entries["value"][selected_index["value"]]
         event.app.exit(
             result=HelpSelection(
                 command_name=entry.name,
@@ -685,17 +844,56 @@ def run_help_selector(
             )
         )
 
+    @bindings.add("left", filter=has_focus(view_control), eager=True)
+    def _previous_view(event) -> None:
+        navigation_accelerator.reset()
+        select_view(-1)
+        event.app.invalidate()
+
+    @bindings.add("right", filter=has_focus(view_control), eager=True)
+    def _next_view(event) -> None:
+        navigation_accelerator.reset()
+        select_view(1)
+        event.app.invalidate()
+
+    @bindings.add("down", filter=has_focus(view_control), eager=True)
+    def _leave_view(event) -> None:
+        focus_in_order(
+            event.app,
+            (view_control, list_control),
+            1,
+            wrap=False,
+        )
+        event.app.invalidate()
+
+    @bindings.add("tab")
+    def _next_surface(event) -> None:
+        navigation_accelerator.reset()
+        focus_in_order(
+            event.app,
+            (view_control, list_control),
+            1,
+            wrap=True,
+        )
+        event.app.invalidate()
+
+    @bindings.add("s-tab")
+    def _previous_surface(event) -> None:
+        navigation_accelerator.reset()
+        focus_in_order(
+            event.app,
+            (view_control, list_control),
+            -1,
+            wrap=True,
+        )
+        event.app.invalidate()
+
     @bindings.add("q", eager=True)
     @bindings.add("escape", eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:
         event.app.exit(result=None)
 
-    list_control = FormattedTextControl(
-        text=render_entries,
-        focusable=True,
-        show_cursor=False,
-    )
     header = Window(
         FormattedTextControl(
             [
@@ -710,10 +908,18 @@ def run_help_selector(
         wrap_lines=False,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
+    view = Window(
+        view_control,
+        height=Dimension.exact(1),
+        dont_extend_height=True,
+    )
     footer = Window(
         FormattedTextControl(
             lambda: (
-                " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "
+                " VIEW: ←/→ choose · ↓ list · Tab surface · Q cancel"
+                if app_ref.get("app") is not None
+                and app_ref["app"].layout.has_focus(view_control)
+                else " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "
                 + (
                     "Enter open forms  "
                     if selected_form["value"] is None
@@ -727,7 +933,7 @@ def run_help_selector(
     )
     application: Application[HelpSelection | None] = Application(
         layout=Layout(
-            HSplit([header, body, footer]),
+            HSplit([header, view, body, footer]),
             focused_element=list_control,
         ),
         key_bindings=bindings,
@@ -740,9 +946,11 @@ def run_help_selector(
                 "title": "bold",
                 "selected": "reverse",
                 "form": "fg:#cad3f5",
+                "category": "bold",
             }
         ),
     )
+    app_ref["app"] = application
     try:
         return application.run()
     except (EOFError, KeyboardInterrupt):

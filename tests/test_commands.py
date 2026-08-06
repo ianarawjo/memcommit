@@ -339,9 +339,9 @@ class TestHelp:
         assert selected is not None
         assert selected.command_line == "mem beta"
 
-    def test_selector_clamps_at_first_command_and_can_cancel(self):
+    def test_selector_up_reaches_view_choice_then_down_returns_to_list(self):
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[A\r\r")
+            pipe_input.send_text("\x1b[A\x1b[C\x1b[B\r\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
@@ -360,6 +360,32 @@ class TestHelp:
                 require_tty=False,
             )
         assert cancelled is None
+
+    def test_selector_tab_switches_category_and_a_z_views(self):
+        entries = [
+            CommandEntry(
+                name=name,
+                annotation=None,
+                description=f"{name} description",
+                command=object(),
+                forms=(f"mem {name}",),
+            )
+            for name in ("add", "branch", "find")
+        ]
+        with create_pipe_input() as pipe_input:
+            # BY KIND starts at branch (Contexts); Down reaches add (Memories).
+            # Tab focuses VIEW, Right switches to A-Z while retaining add, and
+            # Tab returns to the list for the normal two-stage selection.
+            pipe_input.send_text("\x1b[B\t\x1b[C\t\r\r")
+            selected = run_help_selector(
+                entries,
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem add"
 
     def test_selector_right_expands_left_collapses_and_enter_enters_forms(self):
         with create_pipe_input() as pipe_input:
@@ -411,9 +437,11 @@ class TestHelp:
 
     def test_selector_reuses_shared_held_arrow_acceleration(self, monkeypatch):
         class FiveStepAccelerator:
-            def step(self, direction):
+            def move(self, direction, *, app, move_one):
                 assert direction == 1
-                return 5
+                for _ in range(5):
+                    move_one(direction)
+                    app.invalidate()
 
             def reset(self):
                 pass
