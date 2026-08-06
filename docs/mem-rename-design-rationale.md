@@ -118,7 +118,7 @@ resurrect an ordinary pointer to a locator that deliberately no longer exists.
 Free text and unrelated command arguments remain historical evidence and are
 not subject to search-and-replace.
 
-## Ground and translation continuity
+## Ground, translation, and unapplied Meld continuity
 
 Two durable derived formats have an explicit, schema-validated migration
 contract because they can contain reviewed work that should survive a
@@ -131,14 +131,22 @@ metadata-only Context move:
   name follows the matching UID. A stored Context digest, where that format
   has one, advances only from an exact pre-rename match. Curated translations,
   provider variants, review state, and source-Memory bindings remain intact.
+- **unapplied Meld sessions:** source frames and the target binding follow the
+  matching Context UIDs. Exact pre-rename digests advance to the metadata-only
+  post-rename records, and a saved Compare seed follows the same source-frame
+  rewrite with a recomputed seed digest. This lets a symmetric Meld relocate
+  its still-empty Result Context from the review workbench without losing its
+  target-bound session. An affected applied Meld is rejected until Undo because
+  its application and checkpoint receipts bind the prior exact change-set
+  digest.
 
 This conditional digest update preserves the distinction between a fresh
 artifact affected only by locator metadata and an artifact that was already
 out of date for an unrelated reason. Rename must not make stale work appear
 fresh merely because it encountered the same Context UID.
 
-Other semantic artifacts—including cached Impact/Update, Meld, Compare,
-Atomize, and Review state—are not rewritten. Their operation-specific
+Other semantic artifacts—including cached Impact/Update, Compare, Atomize,
+and Review state—are not rewritten. Their operation-specific
 Context-name and digest checks remain authoritative; after a relevant rename,
 the owning command must reject, miss, or regenerate stale state according to
 its existing contract. Broadly rewriting every cached provider result was
@@ -166,9 +174,10 @@ the underlying stores are distinct.
 ## Planning, concurrency, and failure behavior
 
 Planning freezes a complete graph digest over ordinary Context records,
-restorable checkpoints, current state, named Ground records, and translation
-artifacts. Application reacquires the graph, Context, current-state, and
-Ground locks; rebuilds the plan; and requires it to equal the reviewed plan.
+restorable checkpoints, current state, named Ground records, translation
+artifacts, and target-keyed Meld sessions. Application reacquires the graph,
+Context, current-state, and Ground locks; rebuilds the plan; and requires it to
+equal the reviewed plan.
 If any participating record, destination claim, or artifact changed after
 review, nothing is renamed and the caller must review a new plan.
 

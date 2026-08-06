@@ -69,8 +69,9 @@ def cmd(
         )
         typer.echo(
             "Ordinary Context references, restorable checkpoint pointers, "
-            "and the current Context pointer will follow the stable UIDs; "
-            "query-only Context references are unchanged."
+            "the current Context pointer, and unapplied Meld bindings will "
+            "follow the stable UIDs; query-only Context references are "
+            "unchanged."
         )
         if not typer.confirm("Continue?", default=False):
             typer.echo("Rename cancelled.")

@@ -328,7 +328,9 @@ resolved target. Direct Memory and MemoryRef rows start visible; lowercase
 operates on all Contexts. Neither makes Memory rows selectable. Enter opens or
 collapses the focused Context, arrows navigate one depth at a time, `A`
 toggles full expansion, and `q` closes without changing any Context or current
-pointer.
+pointer. A Context leaf is still expandable: its `▸`/`▾` marker, Enter, and
+Left/Right keys control its direct-Memory rows rather than leaving it as a
+non-actionable dot.
 
 Plain `mem ls` starts with the target's direct Context children visible.
 `mem ls -R` starts with every descendant occurrence expanded. The browser is
