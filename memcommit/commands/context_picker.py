@@ -953,12 +953,12 @@ def choose_context(
         memory_action = ""
         if memory_loader is not None:
             local_action = (
-                "m hide here"
+                "m hide Memories here"
                 if state.memories_visible_for(state.selected_name)
-                else "m show here"
+                else "m show Memories here"
             )
             global_action = (
-                "M hide all" if state.show_memories else "M show all"
+                "M hide all Memories" if state.show_memories else "M show all Memories"
             )
             memory_action = f"{local_action}  {global_action}  "
         close_action = "q close" if browse_only else "q cancel"
