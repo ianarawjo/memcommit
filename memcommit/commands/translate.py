@@ -9,6 +9,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import (
     AutoCheckpoint,
@@ -220,13 +221,18 @@ def _open_or_create_catalog(
             )
         return existing, True
 
-    plan = ops.translate(
-        ctx,
-        target_language,
+    with progressing_provider_factory(
+        "TRANSLATE",
+        "translating memories",
         connect_codex_chatgpt_provider,
-        selector=selected_memory_uid,
-        allocate_operation_uid=False,
-    )
+    ) as provider_factory:
+        plan = ops.translate(
+            ctx,
+            target_language,
+            provider_factory,
+            selector=selected_memory_uid,
+            allocate_operation_uid=False,
+        )
     if not plan.proposals:
         if existing is not None and seed.requires_save:
             save_translation_catalog(

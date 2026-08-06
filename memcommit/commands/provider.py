@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.config import Config
 from memcommit.provider_types import (
     CODEX_CHATGPT_PROVIDER,
@@ -216,12 +217,18 @@ def provider_probe() -> None:
         "additionalProperties": False,
     }
     try:
-        provider = connect_semantic_provider()
-        raw = provider.complete(
-            "Return the requested synthetic provider probe result.",
-            operation="provider probe",
-            output_schema=schema,
-        )
+        with CommandProgress(
+            "PROVIDER PROBE",
+            "connecting provider",
+            total=2,
+        ) as progress:
+            provider = connect_semantic_provider()
+            progress.update("checking completion", step=2)
+            raw = provider.complete(
+                "Return the requested synthetic provider probe result.",
+                operation="provider probe",
+                output_schema=schema,
+            )
         parsed = json.loads(raw)
         if parsed != {
             "status": "READY",

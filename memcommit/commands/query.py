@@ -7,6 +7,7 @@ from typing import Annotated, Optional, Sequence
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.find import (
     _collect_find_frame_candidates,
@@ -87,35 +88,42 @@ def _query_ordinary_context(
         # private session, checkpoint, trace, or rationale stores.
         include_artifacts=not access.is_granted,
     )
-    provider = connect_codex_chatgpt_provider()
-    matches = rank_candidates(
-        question,
-        list(candidates),
-        provider,
-        limit=8,
-    )
-    primary = tuple(
-        match.candidate for match in matches if match.relevance == "primary"
-    )
-    if not primary:
-        typer.secho(display_escape_text(root.name), bold=True)
-        typer.echo("  (no grounded answer found)")
-        return
-    visible = visible_result_evidence(primary)
-    # One-shot Query answers from semantically selected evidence only. Find's
-    # interactive answer can deliberately widen to the rest of the Context;
-    # Query should remain concise and must not turn one question into a dump of
-    # every readable Memory or artifact in the frame.
-    remainder = ()
-    answer = synthesize_find_answer(
-        question,
-        visible,
-        remainder,
-        (),
-        "NOT_REQUESTED",
-        provider,
-        interpreted_request=question,
-    )
+    with CommandProgress(
+        "QUERY",
+        "connecting provider",
+        total=3,
+    ) as progress:
+        provider = connect_codex_chatgpt_provider()
+        progress.update("selecting grounded evidence", step=2)
+        matches = rank_candidates(
+            question,
+            list(candidates),
+            provider,
+            limit=8,
+        )
+        primary = tuple(
+            match.candidate for match in matches if match.relevance == "primary"
+        )
+        if not primary:
+            progress.close()
+            typer.secho(display_escape_text(root.name), bold=True)
+            typer.echo("  (no grounded answer found)")
+            return
+        visible = visible_result_evidence(primary)
+        # One-shot Query answers from semantically selected evidence only.
+        # Find's interactive answer can deliberately widen to the rest of the
+        # Context; Query stays concise instead of dumping the readable frame.
+        remainder = ()
+        progress.update("drafting grounded answer", step=3)
+        answer = synthesize_find_answer(
+            question,
+            visible,
+            remainder,
+            (),
+            "NOT_REQUESTED",
+            provider,
+            interpreted_request=question,
+        )
     typer.echo(
         safe_terminal_text(
             render_find_answer_references(
@@ -601,9 +609,22 @@ def cmd(
 
     # The temporary authority provider is known before any authority Context
     # is opened. Authentication therefore remains the query-data boundary.
+    progress = (
+        CommandProgress(
+            "QUERY",
+            "connecting provider",
+            total=3,
+        )
+        if question is not None
+        else None
+    )
     try:
+        if progress is not None:
+            progress.start()
         provider = connect_query_provider("codex_chatgpt")
     except QueryProviderError as error:
+        if progress is not None:
+            progress.close()
         typer.secho(
             f"Query error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
@@ -618,6 +639,8 @@ def cmd(
             required_permission=required_permission,
         )
     except (ProfileConfigError, ProfileError) as error:
+        if progress is not None:
+            progress.close()
         if str(error) == f"Granted view {route_selector!r} does not exist.":
             message = f"'{route_selector}' is not a query-only Context."
             prefix = "Error"
@@ -655,6 +678,8 @@ def cmd(
                 _render_query_catalog(route_selector, catalog)
             return
 
+        assert progress is not None
+        progress.update("preparing authorized sources", step=2)
         source = load_authority_query_source(
             view,
             language=language,
@@ -726,11 +751,13 @@ def cmd(
                     ),
                 )
             )
+        progress.update("answering query", step=3)
         answer = provider.query(
             provider_source_name,
             provider_source_content,
             provider_question,
         )
+        progress.close()
 
         # Re-resolve both permission and source after the provider call for
         # saved and one-shot queries. Keep the registry lock through transcript
@@ -800,6 +827,8 @@ def cmd(
         QuerySessionError,
         ValueError,
     ) as error:
+        if progress is not None:
+            progress.close()
         typer.secho(
             f"Query error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
@@ -817,9 +846,16 @@ def _query_legacy(
     """Preserve the original unsaved QueryContextRef provider boundary."""
 
     # Authenticate the provider before opening the concealed local source.
+    progress = CommandProgress(
+        "QUERY",
+        "connecting provider",
+        total=2,
+    )
     try:
+        progress.start()
         provider = connect_query_provider(item.provider)
     except QueryProviderError as error:
+        progress.close()
         typer.secho(
             f"Query error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
@@ -833,12 +869,15 @@ def _query_legacy(
             expected_name=item.name,
             language=language,
         )
+        progress.update("answering query", step=2)
         answer = provider.query(source.name, source.content, question)
+        progress.close()
     except (
         FileNotFoundError,
         ValueError,
         QueryProviderError,
     ) as error:
+        progress.close()
         typer.secho(
             f"Query error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,

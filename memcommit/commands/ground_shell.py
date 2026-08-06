@@ -31,6 +31,10 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame
 
+from memcommit.commands.command_progress import (
+    BUSY_FRAMES,
+    BUSY_INTERVAL_SECONDS,
+)
 from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     format_exact_command,
@@ -81,8 +85,10 @@ GROUND_GOAL_FRAME_HEIGHT = Dimension(min=3, preferred=5, max=5)
 # outer height leaves five body rows, while the shared three-row minimum lets
 # prompt-toolkit compress it to one body row on a conventional 24-row terminal.
 GROUND_CONTEXTS_FRAME_HEIGHT = Dimension(min=3, preferred=7, max=10)
-_THINKING_SUFFIXES = (".", "..", "…")
-_THINKING_INTERVAL_SECONDS = 0.3
+# Compatibility aliases remain patchable by focused shell tests while Ground
+# shares the same liveness vocabulary and cadence as blocking commands.
+_THINKING_SUFFIXES = BUSY_FRAMES
+_THINKING_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
 _CONTEXT_SUGGESTION_ROLES = {
     "MAIN",
     "ALTERNATIVE",

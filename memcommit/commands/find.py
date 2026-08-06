@@ -605,17 +605,24 @@ def _temporal_find_results(
             recursive=recursive,
         )
     ]
-    return search_history(
-        timelines,
-        query,
-        connect_codex_chatgpt_provider(),
-        result_kinds=(
-            "memory_version",
-            "memory_transition",
-            "checkpoint",
-        ),
-        limit=limit,
-    )
+    with CommandProgress(
+        "FIND HISTORY",
+        "connecting provider",
+        total=2,
+    ) as progress:
+        provider = connect_codex_chatgpt_provider()
+        progress.update("searching history", step=2)
+        return search_history(
+            timelines,
+            query,
+            provider,
+            result_kinds=(
+                "memory_version",
+                "memory_transition",
+                "checkpoint",
+            ),
+            limit=limit,
+        )
 
 
 def _render_temporal_find(

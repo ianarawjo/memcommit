@@ -5,6 +5,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.granted_context import (
     GrantedReadStore,
@@ -87,16 +88,17 @@ def cmd(
                 recursive=recursive,
                 registry=registry,
             )
-        provider = (
-            connect_codex_chatgpt_provider()
-            if frame.sources
-            else None
-        )
-        summary = (
-            summarize_frame(frame, provider)
-            if provider is not None
-            else summarize_frame(frame, _UnavailableProvider())
-        )
+        if frame.sources:
+            with CommandProgress(
+                "SUMMARIZE",
+                "connecting provider",
+                total=2,
+            ) as progress:
+                provider = connect_codex_chatgpt_provider()
+                progress.update("summarizing memories", step=2)
+                summary = summarize_frame(frame, provider)
+        else:
+            summary = summarize_frame(frame, _UnavailableProvider())
 
         if binding is not None:
             with authority_grant_snapshot_lock() as registry:
