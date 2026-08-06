@@ -23,29 +23,48 @@ COMMAND_ANNOTATIONS = {
 }
 
 COMMAND_FORMS = {
+    "add": (
+        "mem add [memory] (add one Memory to the current Context)",
+        "mem add --input [file] (add one Memory per non-empty line)",
+        "mem add --paste (paste one or more Memories)",
+        "mem add [memory] --context [context] (add to an explicit Context)",
+    ),
     "atomize": (
         "mem atomize (analyze the current Context)",
         "mem atomize --context [context] (analyze one Context)",
         "mem atomize --sessions (browse saved work)",
         "mem atomize --evaluate [issue] (directional atomic review)",
     ),
+    "branch": (
+        "mem branch [new_context] (branch the current Context)",
+    ),
     "checkout": (
         "mem checkout [context] (switch alias)",
-        "mem checkout -b [name] (branch alias)",
+        "mem checkout -b [new_context] (branch alias)",
     ),
     "compare": (
         "mem compare (interactive saved-work view)",
-        "mem compare --to [peer] (current Context is reference)",
-        "mem compare --from [reference] --to [peer] (explicit peers)",
+        "mem compare --to [context2] (current Context is context1)",
+        "mem compare --from [context1] --to [context2] (explicit Contexts)",
     ),
     "diff": (
         "mem diff (render the active update)",
         "mem diff --raw (exact unified diff)",
         "mem diff --stat (summary only)",
     ),
+    "edit": (
+        "mem edit [memory] [new_content] (replace one direct Memory)",
+        "mem edit --input [file] (replace Memories from a batch file)",
+    ),
+    "embed": (
+        "mem embed [source_context] --into [target_context]",
+    ),
     "find": (
         "mem find [query] (current projection)",
         "mem find --history [query] (retained history)",
+    ),
+    "forget": (
+        "mem forget [memory_description] (select matching Memories)",
     ),
     "ground": (
         "mem ground (interactive Ground picker)",
@@ -54,7 +73,7 @@ COMMAND_FORMS = {
     ),
     "help": ("mem help (interactive command inventory)",),
     "impact": (
-        "mem impact --from [source] --to [target] (directional preview)",
+        "mem impact --from [source_context] --to [target_context] (directional preview)",
         "mem impact atomize --context [context] (atomization preview)",
     ),
     "list": (
@@ -74,10 +93,24 @@ COMMAND_FORMS = {
     ),
     "meld": (
         "mem meld (interactive saved-work view)",
-        "mem meld [left] [right] (symmetric)",
-        "mem meld [left] [right] --to [result] (symmetric new Result)",
-        "mem meld [incoming] --into [baseline] (directional)",
-        "mem meld --from [incoming] (current Context is baseline)",
+        "mem meld [context1] [context2] (symmetric)",
+        "mem meld [context1] [context2] --to [result_context] (symmetric new Result)",
+        "mem meld [incoming_context] --into [baseline_context] (directional)",
+        "mem meld --from [incoming_context] (current Context is baseline)",
+    ),
+    "merge": (
+        "mem merge [source_context] (merge into the current Context)",
+    ),
+    "reference": (
+        "mem reference [memory] --from [source_context] (add to current Context)",
+        "mem reference [memory] --from [source_context] --into [target_context]",
+    ),
+    "remove": (
+        "mem remove [memory] (remove from the current Context)",
+        "mem remove [memory] --context [context] (remove from an explicit Context)",
+    ),
+    "rename": (
+        "mem rename [current_context] [new_context]",
     ),
     "revert": (
         "mem revert (interactive checkpoint picker)",
@@ -91,26 +124,26 @@ COMMAND_FORMS = {
     ),
     "sever": (
         "mem sever (interactive saved-work view)",
-        "mem sever --source [source] --criteria [criteria] --save-as [result]",
+        "mem sever --source [source_context] --criteria [criteria_context] --save-as [result_context]",
         "mem sever --resume [uid] (resume exact saved work)",
     ),
     "share": (
         "mem share (interactive Source and endpoint selection)",
-        "mem share [source] --to [endpoint] (explicit delivery)",
+        "mem share [source_context] --to [endpoint] (explicit delivery)",
     ),
     "switch": (
         "mem switch (interactive Context picker)",
         "mem switch [context] (explicit Context)",
     ),
     "translate": (
-        "mem translate --to [target] (current Context)",
-        "mem translate [memory] --to [target] (one direct Memory)",
-        "mem translate --to [target] --save-as [result] (new translated Context)",
+        "mem translate --to [language] (current Context)",
+        "mem translate [memory] --to [language] (one direct Memory)",
+        "mem translate --to [language] --save-as [result_context] (new translated Context)",
     ),
     "update": (
-        "mem update --from [source] --to [target] (explicit direction)",
-        "mem update --from [source] (current Context is target)",
-        "mem update --to [target] (current Context is source)",
+        "mem update --from [source_context] --to [target_context] (explicit direction)",
+        "mem update --from [source_context] (current Context is target)",
+        "mem update --to [target_context] (current Context is source)",
     ),
 }
 

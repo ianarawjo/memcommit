@@ -70,9 +70,13 @@ generic Click usage line. For example, Meld distinguishes bare saved-work
 browsing, symmetric peers, a require-new symmetric Result, canonical
 `INCOMING --into BASELINE`, and the current-Baseline `--from` convenience form.
 Each form includes a short parenthesized semantic label when the operands alone
-would not explain the route. Bracketed lowercase values such as `[left]`,
-`[baseline]`, and `[result]` are editable placeholders, not literal operands or
-a claim that the corresponding CLI parameter is optional.
+would not explain the route. Bracketed lowercase values such as `[context1]`,
+`[context2]`, and `[result_context]` are editable placeholders. They identify
+both the kind and number of values to replace instead of exposing
+implementation-relative roles such as LEFT and RIGHT; the brackets are not
+literal operands or a claim that the corresponding CLI parameter is optional.
+Memory-facing commands similarly use `[memory]` instead of generic parser
+names such as INFO, SELECTOR, or UID when Memory is the user-facing object.
 
 Simple commands derive one conservative form from their registered positional
 operands. Commands with several semantic entry routes keep an explicit bounded

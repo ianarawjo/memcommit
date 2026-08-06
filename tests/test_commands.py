@@ -107,11 +107,28 @@ class TestHelp:
 
         forms = help_inventory.COMMAND_FORMS["meld"]
         assert "mem meld (interactive saved-work view)" in forms
-        assert "mem meld [left] [right] (symmetric)" in forms
-        assert "mem meld [incoming] --into [baseline] (directional)" in forms
-        assert "mem meld --from [incoming] (current Context is baseline)" in forms
+        assert "mem meld [context1] [context2] (symmetric)" in forms
+        assert (
+            "mem meld [incoming_context] --into [baseline_context] (directional)"
+            in forms
+        )
+        assert (
+            "mem meld --from [incoming_context] (current Context is baseline)"
+            in forms
+        )
         assert help_inventory._selectable_form_line(forms[2]) == (
-            "mem meld [left] [right] --to [result]"
+            "mem meld [context1] [context2] --to [result_context]"
+        )
+
+    def test_forms_name_editable_values_by_semantic_role(self):
+        assert help_inventory.COMMAND_FORMS["add"][0].startswith(
+            "mem add [memory]"
+        )
+        assert help_inventory.COMMAND_FORMS["edit"][0].startswith(
+            "mem edit [memory] [new_content]"
+        )
+        assert help_inventory.COMMAND_FORMS["rename"][0] == (
+            "mem rename [current_context] [new_context]"
         )
 
     def test_selector_moves_down_and_returns_selected_command(self):
