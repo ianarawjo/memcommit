@@ -18,21 +18,98 @@ from prompt_toolkit.styles import Style
 
 
 COMMAND_ANNOTATIONS = {
-    "atomize": "bare → TUI",
-    "compare": "bare → TUI",
     "config": "legacy",
-    "ground": "bare → TUI",
-    "help": "bare → TUI",
     "integrate": "legacy",
-    "list": "bare → TUI",
-    "log": "bare → TUI",
-    "ls": "bare → TUI",
-    "meld": "bare → TUI",
-    "revert": "bare → TUI",
-    "review": "bare → TUI",
-    "sever": "bare → TUI",
-    "share": "bare → TUI",
-    "switch": "bare → TUI",
+}
+
+COMMAND_FORMS = {
+    "atomize": (
+        "mem atomize (analyze the current Context)",
+        "mem atomize CONTEXT (analyze one Context)",
+        "mem atomize --sessions (browse saved work)",
+        "mem atomize --evaluate ISSUE (directional atomic review)",
+    ),
+    "checkout": (
+        "mem checkout CONTEXT (switch alias)",
+        "mem checkout -b NAME (branch alias)",
+    ),
+    "compare": (
+        "mem compare (interactive saved-work view)",
+        "mem compare PEER (compare with the current Context)",
+        "mem compare --from LEFT --to RIGHT (explicit peers)",
+    ),
+    "diff": (
+        "mem diff (render the active update)",
+        "mem diff --raw (exact unified diff)",
+        "mem diff --stat (summary only)",
+    ),
+    "find": (
+        "mem find QUERY (current projection)",
+        "mem find --history QUERY (retained history)",
+    ),
+    "ground": (
+        "mem ground (interactive Ground picker)",
+        "mem ground GROUND_NAME (open or create a named Ground)",
+        "mem ground --request TEXT (start from a natural-language request)",
+    ),
+    "help": ("mem help (interactive command inventory)",),
+    "impact": (
+        "mem impact --from SOURCE --to TARGET (directional preview)",
+        "mem impact atomize --context CONTEXT (atomization preview)",
+    ),
+    "list": (
+        "mem list (interactive current-Context browser)",
+        "mem list CONTEXT [-R] (explicit Context listing)",
+    ),
+    "log": (
+        "mem log (interactive checkpoint history)",
+        "mem log QUERY (semantic history search)",
+        "mem log --operations (Profile command attempts)",
+    ),
+    "ls": (
+        "mem ls (interactive current-Context browser)",
+        "mem ls CONTEXT [-R] (explicit Context listing)",
+    ),
+    "meld": (
+        "mem meld (interactive saved-work view)",
+        "mem meld LEFT RIGHT (symmetric)",
+        "mem meld LEFT RIGHT --to RESULT (symmetric new Result)",
+        "mem meld INCOMING --into BASELINE (directional)",
+        "mem meld --from INCOMING (current Context is BASELINE)",
+    ),
+    "revert": (
+        "mem revert (interactive checkpoint picker)",
+        "mem revert CHECKPOINT (exact UID or prefix)",
+        "mem revert DESCRIPTION (semantic checkpoint lookup)",
+    ),
+    "review": (
+        "mem review (interactive saved-review picker)",
+        "mem review KIND (open an operation report)",
+        "mem review KIND --session UID (exact saved artifact)",
+    ),
+    "sever": (
+        "mem sever (interactive saved-work view)",
+        "mem sever --source SOURCE --criteria CRITERIA --save-as RESULT",
+        "mem sever --resume UID (resume exact saved work)",
+    ),
+    "share": (
+        "mem share (interactive Source and endpoint selection)",
+        "mem share SOURCE --to ENDPOINT (explicit delivery)",
+    ),
+    "switch": (
+        "mem switch (interactive Context picker)",
+        "mem switch CONTEXT (explicit Context)",
+    ),
+    "translate": (
+        "mem translate LANGUAGE (current Context)",
+        "mem translate LANGUAGE CONTEXT (explicit Context)",
+        "mem translate LANGUAGE --save-as RESULT (new translated Context)",
+    ),
+    "update": (
+        "mem update --from SOURCE --to TARGET (explicit direction)",
+        "mem update --from SOURCE (current Context is TARGET)",
+        "mem update --to TARGET (current Context is SOURCE)",
+    ),
 }
 
 
@@ -44,6 +121,28 @@ class CommandEntry:
     annotation: str | None
     description: str
     command: object
+    forms: tuple[str, ...]
+
+
+def _default_command_forms(name: str, command: object) -> tuple[str, ...]:
+    """Build one conservative canonical form from registered operands."""
+    if callable(getattr(command, "list_commands", None)):
+        return (f"mem {name} COMMAND",)
+    operands: list[str] = []
+    for parameter in getattr(command, "params", ()):
+        if getattr(parameter, "param_type_name", "") != "argument":
+            continue
+        label = str(
+            getattr(parameter, "metavar", None)
+            or getattr(parameter, "human_readable_name", "VALUE")
+        ).upper()
+        if getattr(parameter, "nargs", 1) != 1:
+            label += "..."
+        if not getattr(parameter, "required", False):
+            label = f"[{label}]"
+        operands.append(label)
+    suffix = " " + " ".join(operands) if operands else ""
+    return (f"mem {name}{suffix}",)
 
 
 def _visible_commands(ctx: typer.Context) -> list[tuple[str, object]]:
@@ -67,7 +166,9 @@ def _visible_commands(ctx: typer.Context) -> list[tuple[str, object]]:
 def _command_entries(root: typer.Context) -> list[CommandEntry]:
     commands = _visible_commands(root)
     visible_names = {name for name, _ in commands}
-    stale = sorted(COMMAND_ANNOTATIONS.keys() - visible_names)
+    stale = sorted(
+        (COMMAND_ANNOTATIONS.keys() | COMMAND_FORMS.keys()) - visible_names
+    )
     if stale:
         typer.secho(
             "Help inventory error: annotated command not registered: "
@@ -85,6 +186,7 @@ def _command_entries(root: typer.Context) -> list[CommandEntry]:
                 (getattr(command, "help", None) or "No description.").split()
             ),
             command=command,
+            forms=COMMAND_FORMS.get(name, _default_command_forms(name, command)),
         )
         for name, command in commands
     ]
@@ -134,6 +236,8 @@ def run_help_selector(
         raise ValueError("Interactive help requires a terminal.")
 
     selected_index = {"value": 0}
+    expanded_index: dict[str, int | None] = {"value": None}
+    selected_form: dict[str, int | None] = {"value": None}
     name_width = max(
         len(entry.name) + (len(entry.annotation) + 3 if entry.annotation else 0)
         for entry in entries
@@ -143,15 +247,19 @@ def run_help_selector(
     def render_entries():
         fragments: list[tuple[str, str]] = []
         for index, entry in enumerate(entries):
-            selected = index == selected_index["value"]
-            if selected:
+            command_selected = (
+                index == selected_index["value"]
+                and selected_form["value"] is None
+            )
+            expanded = index == expanded_index["value"]
+            if command_selected:
                 # This marker lets prompt-toolkit scroll the long inventory so
                 # the selected row remains visible in short terminals.
                 fragments.append(("[SetCursorPosition]", ""))
             fragments.append(
                 (
-                    "class:selected" if selected else "",
-                    ("› " if selected else "  ")
+                    "class:selected" if command_selected else "",
+                    ("▾ " if expanded else "▸ ")
                     + _entry_line(
                         entry,
                         name_width=name_width,
@@ -159,9 +267,41 @@ def run_help_selector(
                     + "\n",
                 )
             )
+            if not expanded:
+                continue
+            for form_index, form in enumerate(entry.forms):
+                form_selected = (
+                    index == selected_index["value"]
+                    and selected_form["value"] == form_index
+                )
+                if form_selected:
+                    fragments.append(("[SetCursorPosition]", ""))
+                fragments.append(
+                    (
+                        "class:selected" if form_selected else "class:form",
+                        f"    FORM {form_index + 1} · {form}\n",
+                    )
+                )
         return fragments
 
     def move(delta: int) -> None:
+        form_index = selected_form["value"]
+        if form_index is not None:
+            forms = entries[selected_index["value"]].forms
+            candidate = form_index + delta
+            if candidate < 0:
+                selected_form["value"] = None
+            elif candidate < len(forms):
+                selected_form["value"] = candidate
+            else:
+                selected_form["value"] = None
+                expanded_index["value"] = None
+                selected_index["value"] = min(
+                    selected_index["value"] + 1,
+                    len(entries) - 1,
+                )
+            return
+        previous = selected_index["value"]
         selected_index["value"] = max(
             0,
             min(
@@ -169,6 +309,8 @@ def run_help_selector(
                 len(entries) - 1,
             ),
         )
+        if selected_index["value"] != previous:
+            expanded_index["value"] = None
 
     @bindings.add("down")
     def _next_command(event) -> None:
@@ -182,26 +324,65 @@ def run_help_selector(
 
     @bindings.add("pagedown")
     def _next_page(event) -> None:
-        move(10)
+        selected_form["value"] = None
+        expanded_index["value"] = None
+        selected_index["value"] = min(
+            selected_index["value"] + 10,
+            len(entries) - 1,
+        )
         event.app.invalidate()
 
     @bindings.add("pageup")
     def _previous_page(event) -> None:
-        move(-10)
+        selected_form["value"] = None
+        expanded_index["value"] = None
+        selected_index["value"] = max(selected_index["value"] - 10, 0)
         event.app.invalidate()
 
     @bindings.add("home")
     def _first_command(event) -> None:
+        selected_form["value"] = None
+        expanded_index["value"] = None
         selected_index["value"] = 0
         event.app.invalidate()
 
     @bindings.add("end")
     def _last_command(event) -> None:
+        selected_form["value"] = None
+        expanded_index["value"] = None
         selected_index["value"] = len(entries) - 1
         event.app.invalidate()
 
     @bindings.add("enter")
-    def _show_command_help(event) -> None:
+    def _expand_or_open(event) -> None:
+        index = selected_index["value"]
+        if expanded_index["value"] != index:
+            expanded_index["value"] = index
+        elif selected_form["value"] is None:
+            selected_form["value"] = 0
+        else:
+            event.app.exit(result=entries[index].name)
+        event.app.invalidate()
+
+    @bindings.add("right")
+    def _expand(event) -> None:
+        index = selected_index["value"]
+        if expanded_index["value"] != index:
+            expanded_index["value"] = index
+        elif selected_form["value"] is None:
+            selected_form["value"] = 0
+        event.app.invalidate()
+
+    @bindings.add("left")
+    def _collapse(event) -> None:
+        if selected_form["value"] is not None:
+            selected_form["value"] = None
+        elif expanded_index["value"] == selected_index["value"]:
+            expanded_index["value"] = None
+        event.app.invalidate()
+
+    @bindings.add("h")
+    def _open_full_help(event) -> None:
         event.app.exit(result=entries[selected_index["value"]].name)
 
     @bindings.add("q", eager=True)
@@ -231,7 +412,7 @@ def run_help_selector(
     )
     footer = Window(
         FormattedTextControl(
-            " ↑/↓ move  PgUp/PgDn jump  Enter command help  q/Esc cancel "
+            " ↑/↓ move  →/Enter expand  ← back  H full help  q/Esc close "
         ),
         height=Dimension.exact(1),
         dont_extend_height=True,
@@ -250,6 +431,7 @@ def run_help_selector(
             {
                 "title": "bold",
                 "selected": "reverse",
+                "form": "fg:#cad3f5",
             }
         ),
     )

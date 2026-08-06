@@ -22,10 +22,16 @@ work for the participant.
 In an interactive terminal, `mem help` presents the inventory as a
 prompt-toolkit selector:
 
-- Up and Down move one command at a time.
+- Up and Down move one command at a time or move among one expanded command's
+  forms.
 - Page Up, Page Down, Home, and End move through the longer list.
-- Enter closes the selector, prints `Command: mem <name>`, and renders that
-  registered command's syntax help in the ordinary CLI path.
+- Right or the first Enter expands one command in place. The second Enter moves
+  the focus bar to its first `FORM`; Up and Down then inspect the alternative
+  invocations. Left returns from a Form to its command row and then collapses
+  the command.
+- Enter on a focused Form, or `H` from the command row, closes the selector,
+  prints `Command: mem <name>`, and renders that registered command's complete
+  syntax help in the ordinary CLI path.
 - `q`, Escape, and Ctrl-C cancel without selecting or invoking anything.
 
 The selected command's callback is deliberately never invoked. Some commands
@@ -51,12 +57,25 @@ deterministic instead of emitting a terminal-control interface.
 
 Ordinary commands carry no implementation label. Repeating `implemented` on
 nearly every row adds noise without helping a person choose a command. A
-parenthesized annotation is reserved for useful exceptional invocation state:
+parenthesized annotation is reserved for exceptional compatibility state:
 `integrate (legacy)` and `config (legacy)` remain callable but sit outside the
-current workflow, while `(bare → TUI)` says that entering the command without
-operands in an interactive terminal opens its picker, launcher, browser, or
-workbench. It does not promise that the command can proceed when required local
-state, such as a current Context or saved session, is absent.
+current workflow. Ordinary TUI entry is described inside the expanded Forms
+instead of repeating a badge across the inventory.
+
+## Invocation forms
+
+Expansion lists complete meaningful entry forms rather than presenting one
+generic Click usage line. For example, Meld distinguishes bare saved-work
+browsing, symmetric peers, a require-new symmetric Result, canonical
+`INCOMING --into BASELINE`, and the current-Baseline `--from` convenience form.
+Each form includes a short parenthesized semantic label when the operands alone
+would not explain the route.
+
+Simple commands derive one conservative form from their registered positional
+operands. Commands with several semantic entry routes keep an explicit bounded
+form list. This list intentionally omits action flags such as comments,
+responses, snapshots, and acceptance controls; `H` retains the complete
+registered syntax reference. Forms are explanatory and are never executed.
 
 A deliberately bounded command needs no exception annotation when its
 advertised contract is available. For example, `merge` intentionally performs
@@ -78,9 +97,9 @@ column.
 
 Descriptions are read from the same Click/Typer command registrations used by
 `mem --help`; the inventory does not maintain a second description catalog.
-Exceptional annotations are explicit because compatibility status and bare-TTY
-behavior are design judgments rather than properties that can be inferred
-safely from Click registration alone.
+Exceptional annotations and multi-route invocation forms are explicit because
+compatibility status and semantic entry routes cannot be inferred safely from
+Click registration alone.
 
 The renderer fails closed if an annotated command is no longer registered.
 Ordinary new commands need no redundant `implemented` entry.

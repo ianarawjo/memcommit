@@ -39,6 +39,7 @@ class TestHelp:
                 annotation=None,
                 description=f"{name} description",
                 command=object(),
+                forms=(f"mem {name}", f"mem {name} VALUE"),
             )
             for name in ("alpha", "beta", "gamma")
         ]
@@ -76,9 +77,10 @@ class TestHelp:
             for line in lines
         )
         assert any(line.startswith("config (legacy) ") for line in lines)
-        assert any(line.startswith("switch (bare → TUI) ") for line in lines)
-        assert any(line.startswith("share (bare → TUI) ") for line in lines)
-        assert any(line.startswith("help (bare → TUI) ") for line in lines)
+        assert any(line.startswith("switch ") for line in lines)
+        assert any(line.startswith("share ") for line in lines)
+        assert any(line.startswith("help ") for line in lines)
+        assert "bare → TUI" not in result.output
         assert any(
             line.startswith("atomize ")
             and "issue-scoped directional meld" in line
@@ -103,9 +105,15 @@ class TestHelp:
         assert "--into" in meld_help
         assert "authoritative BASELINE" in meld_help
 
+        forms = help_inventory.COMMAND_FORMS["meld"]
+        assert "mem meld (interactive saved-work view)" in forms
+        assert "mem meld LEFT RIGHT (symmetric)" in forms
+        assert "mem meld INCOMING --into BASELINE (directional)" in forms
+        assert "mem meld --from INCOMING (current Context is BASELINE)" in forms
+
     def test_selector_moves_down_and_returns_selected_command(self):
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[B\r")
+            pipe_input.send_text("\x1b[B\r\r\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
@@ -117,7 +125,7 @@ class TestHelp:
 
     def test_selector_clamps_at_first_command_and_can_cancel(self):
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[A\r")
+            pipe_input.send_text("\x1b[A\r\r\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
@@ -135,6 +143,20 @@ class TestHelp:
                 require_tty=False,
             )
         assert cancelled is None
+
+    def test_selector_right_expands_left_collapses_and_enter_enters_forms(self):
+        with create_pipe_input() as pipe_input:
+            # Right expands, Left collapses, then two Enters expand and move
+            # the bar to FORM 1; a third Enter opens ordinary command help.
+            pipe_input.send_text("\x1b[C\x1b[D\r\r\r")
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected == "alpha"
 
     def test_enter_opens_command_help_without_running_command(
         self,
