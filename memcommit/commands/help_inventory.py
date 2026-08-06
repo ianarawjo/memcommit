@@ -24,16 +24,16 @@ COMMAND_ANNOTATIONS = {
 
 COMMAND_FORMS = {
     "add": (
-        "mem add [memory] (add one Memory to the current Context)",
+        'mem add "[memory]" (add one Memory to the current Context)',
         "mem add --input [file] (add one Memory per non-empty line)",
         "mem add --paste (paste one or more Memories)",
-        "mem add [memory] --context [context] (add to an explicit Context)",
+        'mem add "[memory]" --context [context] (add to an explicit Context)',
     ),
     "atomize": (
         "mem atomize (analyze the current Context)",
         "mem atomize --context [context] (analyze one Context)",
         "mem atomize --sessions (browse saved work)",
-        "mem atomize --evaluate [issue] (directional atomic review)",
+        'mem atomize --evaluate "[issue]" (directional atomic review)',
     ),
     "branch": (
         "mem branch [new_context] (branch the current Context)",
@@ -41,6 +41,9 @@ COMMAND_FORMS = {
     "checkout": (
         "mem checkout [context] (switch alias)",
         "mem checkout -b [new_context] (branch alias)",
+    ),
+    "checkpoint": (
+        'mem checkpoint "[message]" (describe the saved checkpoint)',
     ),
     "compare": (
         "mem compare (interactive saved-work view)",
@@ -53,28 +56,31 @@ COMMAND_FORMS = {
         "mem diff --stat (summary only)",
     ),
     "edit": (
-        "mem edit [memory] [new_content] (replace one direct Memory)",
+        'mem edit [memory] "[new_content]" (replace one direct Memory)',
         "mem edit --input [file] (replace Memories from a batch file)",
     ),
     "embed": (
         "mem embed [source_context] --into [target_context]",
     ),
     "find": (
-        "mem find [query] (current projection)",
-        "mem find --history [query] (retained history)",
+        'mem find "[query]" (current projection)',
+        'mem find --history "[query]" (retained history)',
     ),
     "forget": (
-        "mem forget [memory_description] (select matching Memories)",
+        'mem forget "[memory_description]" (select matching Memories)',
     ),
     "ground": (
         "mem ground (interactive Ground picker)",
         "mem ground [ground_name] (open or create a named Ground)",
-        "mem ground --request [text] (start from a natural-language request)",
+        'mem ground --request "[request]" (start from a natural-language request)',
     ),
     "help": ("mem help (interactive command inventory)",),
     "impact": (
         "mem impact --from [source_context] --to [target_context] (directional preview)",
         "mem impact atomize --context [context] (atomization preview)",
+    ),
+    "integrate": (
+        'mem integrate "[memory]" (legacy semantic integration)',
     ),
     "list": (
         "mem list (interactive current-Context browser)",
@@ -83,7 +89,7 @@ COMMAND_FORMS = {
     ),
     "log": (
         "mem log (interactive checkpoint history)",
-        "mem log [query] (semantic history search)",
+        'mem log "[query]" (semantic history search)',
         "mem log --operations (Profile command attempts)",
     ),
     "ls": (
@@ -101,6 +107,12 @@ COMMAND_FORMS = {
     "merge": (
         "mem merge [source_context] (merge into the current Context)",
     ),
+    "query": (
+        'mem query "[question]" (ask the current ordinary Context)',
+        'mem query --context [context] "[question]" (ask an explicit ordinary Context)',
+        'mem query [query_view] "[question]" (ask a query-only view)',
+        "mem query --sessions (list saved query transcripts)",
+    ),
     "reference": (
         "mem reference [memory] --from [source_context] (add to current Context)",
         "mem reference [memory] --from [source_context] --into [target_context]",
@@ -115,7 +127,7 @@ COMMAND_FORMS = {
     "revert": (
         "mem revert (interactive checkpoint picker)",
         "mem revert [checkpoint] (exact UID or prefix)",
-        "mem revert [description] (semantic checkpoint lookup)",
+        'mem revert "[description]" (semantic checkpoint lookup)',
     ),
     "review": (
         "mem review (interactive saved-review picker)",

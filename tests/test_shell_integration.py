@@ -108,7 +108,7 @@ def test_generated_wrapper_prefills_and_delegates(tmp_path):
     executable.write_text(
         """#!/bin/zsh
 if [[ $1 == help && $2 == --emit-selection ]]; then
-  print -r -- 'mem impact --from [source] --to [target]'
+  print -r -- 'mem add "[memory]"'
 else
   print -r -- "delegated:$*"
 fi
@@ -155,5 +155,5 @@ mem status
     output = b"".join(chunks).decode(errors="replace").replace("\r", "")
 
     assert returncode == 0, output
-    assert "buffer=mem impact --from [source] --to [target] " in output
+    assert 'buffer=mem add "[memory]" ' in output
     assert "delegated:status" in output

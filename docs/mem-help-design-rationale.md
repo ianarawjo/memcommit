@@ -77,6 +77,9 @@ implementation-relative roles such as LEFT and RIGHT; the brackets are not
 literal operands or a claim that the corresponding CLI parameter is optional.
 Memory-facing commands similarly use `[memory]` instead of generic parser
 names such as INFO, SELECTOR, or UID when Memory is the user-facing object.
+Free-text placeholders that commonly contain whitespace retain double quotes
+in both the displayed Form and the selected shell template. Structured names,
+UIDs, flags, and paths remain unquoted so their token boundaries stay visible.
 
 Simple commands derive one conservative form from their registered positional
 operands. Commands with several semantic entry routes keep an explicit bounded

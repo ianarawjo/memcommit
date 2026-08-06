@@ -122,14 +122,25 @@ class TestHelp:
 
     def test_forms_name_editable_values_by_semantic_role(self):
         assert help_inventory.COMMAND_FORMS["add"][0].startswith(
-            "mem add [memory]"
+            'mem add "[memory]"'
         )
         assert help_inventory.COMMAND_FORMS["edit"][0].startswith(
-            "mem edit [memory] [new_content]"
+            'mem edit [memory] "[new_content]"'
         )
         assert help_inventory.COMMAND_FORMS["rename"][0] == (
             "mem rename [current_context] [new_context]"
         )
+
+    def test_free_text_placeholders_include_shell_quotes(self):
+        assert help_inventory._selectable_form_line(
+            help_inventory.COMMAND_FORMS["add"][0]
+        ) == 'mem add "[memory]"'
+        assert help_inventory._selectable_form_line(
+            help_inventory.COMMAND_FORMS["find"][0]
+        ) == 'mem find "[query]"'
+        assert help_inventory._selectable_form_line(
+            help_inventory.COMMAND_FORMS["ground"][2]
+        ) == 'mem ground --request "[request]"'
 
     def test_selector_moves_down_and_returns_selected_command(self):
         with create_pipe_input() as pipe_input:
