@@ -8,6 +8,7 @@ import pytest
 from memcommit.commands.command_progress import (
     CommandProgress,
     busy_suffix,
+    progressing_provider_factory,
     render_progress_line,
 )
 
@@ -81,3 +82,59 @@ def test_command_progress_is_silent_for_non_tty_streams():
         pass
 
     assert stream.getvalue() == ""
+
+
+def test_command_progress_can_start_lazily_and_close_without_starting():
+    stream = TTYBuffer()
+    progress = CommandProgress(
+        "update",
+        "connecting provider",
+        total=2,
+        stream=stream,
+        interval=60,
+    )
+
+    progress.close()
+
+    assert stream.getvalue() == ""
+
+
+def test_progressing_provider_factory_starts_only_when_provider_is_requested(
+    monkeypatch,
+):
+    stream = TTYBuffer()
+
+    def build_progress(operation, stage, *, total):
+        return CommandProgress(
+            operation,
+            stage,
+            total=total,
+            stream=stream,
+            interval=60,
+        )
+
+    monkeypatch.setattr(
+        "memcommit.commands.command_progress.CommandProgress",
+        build_progress,
+    )
+    calls = []
+    with progressing_provider_factory(
+        "update",
+        "planning changes",
+        lambda: calls.append("connected") or object(),
+    ):
+        pass
+    assert stream.getvalue() == ""
+    assert calls == []
+
+    with progressing_provider_factory(
+        "update",
+        "planning changes",
+        lambda: calls.append("connected") or object(),
+    ) as connect:
+        connect()
+
+    output = stream.getvalue()
+    assert calls == ["connected"]
+    assert "MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0s" in output
+    assert "MEM UPDATE · 2/2 · PLANNING CHANGES . · 0s" in output

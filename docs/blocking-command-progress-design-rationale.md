@@ -2,11 +2,11 @@
 
 ## Problem
 
-Provider-backed commands can spend tens of seconds inside their first
-synchronous provider call before printing a result or opening a workbench.
-`mem find` previously animated later interactive turns, but its initial search,
-`mem compare`, and the three quality finders left the existing terminal screen
-unchanged. That looked indistinguishable from a stalled process.
+Provider-backed commands can spend tens of seconds inside a synchronous
+provider call before printing a result or reopening a workbench. The first
+progress rollout covered Find, Compare, and the quality finders, but Update and
+several other command controllers still left the terminal unchanged. The same
+wait therefore looked alive in one operation and stalled in another.
 
 ## Contract
 
@@ -25,12 +25,38 @@ MEM COMPARE · 2/2 · ANALYZING RELATIONS … · 18s
   normal output or an error is printed. Redirected output, snapshot contracts,
   and stdout parsing therefore remain stable.
 - Untrusted operation or stage text is terminal-escaped and folded to one line.
+- A provider factory may be wrapped lazily. The progress line starts only when
+  the reusable workflow actually requests a provider, so a valid saved result
+  or cache hit does not flash a false `CONNECTING PROVIDER` state.
 
-The first rollout covers the initial provider wait in `find`, `compare`,
-`find-ambiguities`, `find-conflicts`, and `find-duplicates`. The existing Find
-chat busy indicator shares the same animation frames and interval. Other
-blocking commands can adopt `CommandProgress` without duplicating terminal
-threading or inventing a different liveness vocabulary.
+## Coverage audit
+
+The ordinary user-facing synchronous provider boundaries now use this shared
+contract:
+
+- Update and directional Impact Update planning.
+- Atomize analysis from Atomize or Impact, plus Atomize grounding turns.
+- Meld initial analysis and later issue or whole-set turns, including Review
+  and Compare handoffs that re-enter the same Meld controller.
+- Find, temporal Find, Compare, Compare rationale, the three quality finders,
+  and ambiguity Review creation.
+- Query routing/answering, Translate, Summarize, Rationale, semantic Log and
+  Revert selection, Sever, and Provider Probe.
+
+Find follow-up turns and Ground dialogue turns remain inside their full-screen
+surfaces. They keep those surfaces responsive and animate there instead of
+painting a competing stderr line. Their animation frames and cadence come from
+the same shared `.`, `..`, `…` contract. Saved-session browsing, cached
+Rationale or Translate views, cached Update or Atomize analysis, and other
+provider-free resumes stay silent. Semantic evaluation campaigns retain their
+own durable per-case event output because it is a multi-call experiment log,
+not one blocking command wait.
+
+The progress boundary belongs to command orchestration rather than provider or
+domain modules. This prevents a reusable analysis function from writing to a
+terminal when called by tests, another controller, or an already-visible TUI.
+It also lets each command name only stages it can actually observe, such as
+provider connection, frozen-frame preparation, ranking, or answer generation.
 
 ## Boundaries and alternatives
 
@@ -38,5 +64,7 @@ This is liveness and coarse progress, not cancellation or a completion
 estimate. A stuck provider call will keep animating and its existing timeout
 remains authoritative. Streaming provider events could support richer progress
 later, but changing the provider protocol is intentionally outside this UI
-fix. Rich's generic spinner was not used because it would not establish the
-shared stage contract or preserve the existing `.`, `..`, `…` visual language.
+fix. The wrapper intentionally does not intercept arbitrary provider methods;
+the command that owns the wait also owns when the line closes. Rich's generic
+spinner was not used because it would not establish the shared stage contract
+or preserve the existing `.`, `..`, `…` visual language.

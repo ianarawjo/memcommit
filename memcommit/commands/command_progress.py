@@ -7,17 +7,20 @@ machine-readable command output remain unchanged.
 """
 from __future__ import annotations
 
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 import sys
 import threading
 import time
 from types import TracebackType
-from typing import TextIO
+from typing import TextIO, TypeVar
 
 from memcommit.commands.tui_primitives import display_escape_text
 
 
 BUSY_FRAMES = (".", "..", "…")
 BUSY_INTERVAL_SECONDS = 0.35
+ProviderT = TypeVar("ProviderT")
 
 
 def busy_suffix(frame_index: int) -> str:
@@ -84,6 +87,8 @@ class CommandProgress:
         self._lock = threading.Lock()
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
+        self._started = False
+        self._closed = False
         # Validate eagerly even when rendering is disabled.
         render_progress_line(
             operation,
@@ -95,8 +100,18 @@ class CommandProgress:
         )
 
     def __enter__(self) -> CommandProgress:
+        self.start()
+        return self
+
+    def start(self) -> None:
+        """Begin rendering once, allowing provider factories to start lazily."""
+        if self._closed:
+            raise RuntimeError("Closed command progress cannot be restarted.")
+        if self._started:
+            return
+        self._started = True
         if not self._enabled:
-            return self
+            return
         self._render()
         self._thread = threading.Thread(
             target=self._animate,
@@ -104,7 +119,6 @@ class CommandProgress:
             daemon=True,
         )
         self._thread.start()
-        return self
 
     def __exit__(
         self,
@@ -134,11 +148,14 @@ class CommandProgress:
 
     def close(self) -> None:
         """Stop repainting and remove the transient line."""
+        if self._closed:
+            return
+        self._closed = True
         self._stop.set()
         if self._thread is not None:
             self._thread.join(timeout=max(1.0, self._interval * 2))
             self._thread = None
-        if not self._enabled:
+        if not self._enabled or not self._started:
             return
         with self._lock:
             self._stream.write("\r" + (" " * self._rendered_width) + "\r")
@@ -168,3 +185,38 @@ class CommandProgress:
         self._stream.write("\r" + line + padding)
         self._stream.flush()
         self._rendered_width = len(line)
+
+
+@contextmanager
+def progressing_provider_factory(
+    operation: str,
+    completion_stage: str,
+    provider_factory: Callable[[], ProviderT],
+    *,
+    connection_stage: str = "connecting provider",
+) -> Iterator[Callable[[], ProviderT]]:
+    """Wrap a lazy provider factory in one honest two-stage status line.
+
+    Some command workflows decide inside a reusable domain helper whether a
+    saved result can be reused. Starting only when that helper actually asks
+    for a provider prevents a cache hit from briefly claiming semantic work.
+    The caller-owned context keeps the line alive until the whole provider
+    operation returns, while the wrapped factory advances the stage only
+    after connection succeeds.
+    """
+    progress = CommandProgress(
+        operation,
+        connection_stage,
+        total=2,
+    )
+
+    def connect() -> ProviderT:
+        progress.start()
+        provider = provider_factory()
+        progress.update(completion_stage, step=2)
+        return provider
+
+    try:
+        yield connect
+    finally:
+        progress.close()
