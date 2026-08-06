@@ -146,10 +146,13 @@ primitive also used by semantic result reports. Deliberate arrow taps move one
 Context-or-Memory viewport unit, even when several taps arrive quickly. Because
 a terminal supplies key presses rather than key-up state, acceleration begins
 only after the initial auto-repeat delay and a sustained short repeat cadence
-identify a held arrow. Holding the same direction then accelerates through
-steps of two, five, and ten; an interrupted cadence, direction change, or
-structural action resets the step to one. The shared accelerator owns timing
-only and never makes a Memory selectable or changes the Context receipt.
+identify a held arrow. Holding the same direction then accelerates the movement
+rate to two and five times the terminal repeat cadence. Each intermediate
+Context-or-Memory unit is still visited and invalidated separately;
+acceleration never jumps over a semantic row. An interrupted cadence, direction
+change, or structural action resets the rate to one. The shared accelerator
+owns timing only and never makes a Memory selectable or changes the Context
+receipt.
 
 ## Dependency map and ownership
 

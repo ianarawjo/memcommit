@@ -12,7 +12,6 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
-from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.utils import get_cwidth
@@ -20,6 +19,7 @@ from prompt_toolkit.utils import get_cwidth
 from memcommit.commands.tui_primitives import (
     NavigationAccelerator,
     SEMANTIC_VIEWER_STYLE,
+    WrappedScrollbarMargin,
     display_escape_text,
     navigable_tree_row_prefix,
 )
@@ -54,10 +54,20 @@ class ContextTreeRow:
 
 @dataclass(frozen=True)
 class ContextMemoryRow:
-    """One read-only direct Memory projection below a Context row."""
+    """One read-only projection below a Context row."""
 
     label: str
     content: str
+    style: Literal["memory-object", "report-neutral"] = "memory-object"
+    selector: str | None = None
+
+
+@dataclass(frozen=True)
+class ContextMemorySelection:
+    """Exact selectable direct-item receipt returned by an operation picker."""
+
+    context_name: str
+    selector: str
 
 
 @dataclass(frozen=True)
@@ -67,6 +77,13 @@ class ContextPickerNavigationUnit:
     kind: Literal["CONTEXT", "MEMORY"]
     context_name: str
     memory_index: int | None = None
+
+
+@dataclass(frozen=True)
+class ContextSubtreeSelection:
+    """Explicit alternate receipt for a selected Context's descendants."""
+
+    name: str
 
 
 @dataclass(frozen=True)
@@ -332,6 +349,7 @@ def render_context_options(
     display_names: Mapping[str, str] | None = None,
     wrap_width: int | None = None,
     memory_anchor: tuple[str, int] | None = None,
+    selectable_memories: bool = False,
 ) -> list[tuple[str, str]]:
     """Render visible tree rows and anchor prompt-toolkit at the selection."""
     fragments: list[tuple[str, str]] = []
@@ -399,11 +417,14 @@ def render_context_options(
                 memory_style = (
                     "class:focused"
                     if memory_is_focused
-                    else "class:memory-object"
+                    else f"class:{memory.style}"
+                )
+                memory_pointer = (
+                    "›" if selectable_memories and memory_is_focused else "·"
                 )
                 leading = (
                     "  " * (row.depth + 1)
-                    + f"· [{display_escape_text(memory.label)}] "
+                    + f"{memory_pointer} [{display_escape_text(memory.label)}] "
                 )
                 content_lines = _wrap_memory_preview(
                     display_escape_text(memory.content),
@@ -579,7 +600,9 @@ def choose_context(
     initially_show_memories: bool = False,
     tree_override: ContextTree | None = None,
     display_names: Mapping[str, str] | None = None,
-) -> str | None:
+    descendant_scope_names: AbstractSet[str] = frozenset(),
+    selectable_memories: bool = False,
+) -> str | ContextSubtreeSelection | ContextMemorySelection | None:
     """Return the selected Context name, or ``None`` when cancelled."""
     options = tuple(names)
     virtual = tuple(virtual_names)
@@ -611,8 +634,13 @@ def choose_context(
             "Interactive context selection requires a terminal. "
             "Pass a Context name explicitly."
         )
+    if selectable_memories and memory_loader is None:
+        raise ValueError("Selectable Memories require a Memory loader.")
 
     catalog = (*options, *virtual)
+    subtree_names = frozenset(descendant_scope_names)
+    if not subtree_names <= set(catalog):
+        raise ValueError("Descendant-scope Contexts are outside the catalog.")
     labels = dict(display_names or {})
     if set(labels) - set(catalog) or any(
         not isinstance(label, str) or not label for label in labels.values()
@@ -696,6 +724,7 @@ def choose_context(
             display_names=labels,
             wrap_width=wrap_width,
             memory_anchor=memory_anchor,
+            selectable_memories=selectable_memories,
         )
 
     def navigation_units() -> tuple[ContextPickerNavigationUnit, ...]:
@@ -721,13 +750,12 @@ def choose_context(
                 return candidate
         return ContextPickerNavigationUnit("CONTEXT", state.selected_name)
 
-    def move_navigation(direction: int) -> None:
+    def move_navigation_unit(direction: int) -> None:
         nonlocal memory_anchor
         units = navigation_units()
         current = current_navigation_unit()
         index = units.index(current)
-        delta = direction * navigation_accelerator.step(direction)
-        target = units[max(0, min(index + delta, len(units) - 1))]
+        target = units[max(0, min(index + direction, len(units) - 1))]
         state.selected_name = target.context_name
         memory_anchor = (
             (target.context_name, target.memory_index)
@@ -759,13 +787,19 @@ def choose_context(
 
     @bindings.add("down")
     def _next_context(event) -> None:
-        move_navigation(1)
-        event.app.invalidate()
+        navigation_accelerator.move(
+            1,
+            app=event.app,
+            move_one=move_navigation_unit,
+        )
 
     @bindings.add("up")
     def _previous_context(event) -> None:
-        move_navigation(-1)
-        event.app.invalidate()
+        navigation_accelerator.move(
+            -1,
+            app=event.app,
+            move_one=move_navigation_unit,
+        )
 
     @bindings.add("right")
     def _expand_or_enter_context(event) -> None:
@@ -824,11 +858,31 @@ def choose_context(
     def _accept_context(event) -> None:
         navigation_accelerator.reset()
         if memory_anchor is not None:
-            # A Memory is a viewport stop only. Enter never changes selection
-            # or turns its parent into an implicit receipt.
+            if selectable_memories:
+                context_name, memory_index = memory_anchor
+                memory = memory_cache[context_name][memory_index]
+                if memory.selector is not None:
+                    event.app.exit(
+                        result=ContextMemorySelection(
+                            context_name=context_name,
+                            selector=memory.selector,
+                        )
+                    )
+                    return
+            # By default a Memory remains a viewport stop only. Enter never
+            # changes selection or turns its parent into an implicit receipt.
             event.app.invalidate()
             return
         name = state.selected_name
+        if (
+            name in subtree_names
+            and name not in tree.materialized_names
+        ):
+            # A catalog-only parent has no exact history of its own. Enter can
+            # therefore open the frozen changed descendants without competing
+            # with an exact-Context action; arrows retain tree expansion.
+            event.app.exit(result=ContextSubtreeSelection(name))
+            return
         if browse_only:
             if not tree.children_by_name[name] and memory_loader is not None:
                 state.toggle_selected_memories()
@@ -867,7 +921,7 @@ def choose_context(
         control,
         wrap_lines=True,
         get_line_prefix=continuation_prefix,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
+        right_margins=[WrappedScrollbarMargin(display_arrows=True)],
     )
 
     def render_footer() -> str:
@@ -876,13 +930,20 @@ def choose_context(
         expansion_action = "A restore tree" if state.all_expanded else "A expand all"
         name = state.selected_name
         if memory_anchor is not None:
-            enter_action = "Enter preview only"
+            memory = memory_cache[memory_anchor[0]][memory_anchor[1]]
+            enter_action = (
+                f"Enter {display_escape_text(accept_label)}"
+                if selectable_memories and memory.selector is not None
+                else "Enter preview only"
+            )
         elif name in tree.materialized_names:
             enter_action = (
                 "Enter open/collapse"
                 if browse_only
                 else f"Enter {display_escape_text(accept_label)}"
             )
+        elif name in subtree_names:
+            enter_action = "Enter open changed descendants"
         elif name in annotations:
             enter_action = "Enter unavailable"
         elif name in state.expanded:
@@ -913,7 +974,9 @@ def choose_context(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    app: Application[str | None] = Application(
+    app: Application[
+        str | ContextSubtreeSelection | ContextMemorySelection | None
+    ] = Application(
         layout=Layout(
             HSplit(
                 [

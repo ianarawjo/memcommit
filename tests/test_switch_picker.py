@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.commands.context_picker import (
+    ContextMemorySelection,
     _CONTEXT_NAVIGATION_HINT,
     _CONTEXT_PICKER_STYLE,
     ContextTreeState,
@@ -264,6 +265,62 @@ def test_picker_memory_viewport_anchor_moves_focus_bar_without_selecting():
     )
     focused_style = _CONTEXT_PICKER_STYLE.get_attrs_for_style_str("class:focused")
     assert focused_style.reverse
+
+
+def test_picker_selectable_memory_uses_pointer_and_returns_exact_receipt():
+    memory = ContextMemoryRow(
+        "memory abcdef12",
+        "delete this",
+        selector="abcdef12-1111-1111-1111-111111111111",
+    )
+    tree = build_context_tree(("alpha",))
+    fragments = _render_context_options(
+        _visible_context_rows(tree, set()),
+        selected="alpha",
+        current="alpha",
+        memories_by_context={"alpha": (memory,)},
+        visible_memory_contexts={"alpha"},
+        memory_anchor=("alpha", 0),
+        selectable_memories=True,
+    )
+
+    assert any("› [memory abcdef12] delete this" in text for _, text in fragments)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r")
+        selected = choose_context(
+            ("alpha",),
+            current="alpha",
+            memory_loader=lambda _name: (memory,),
+            initially_show_memories=True,
+            selectable_memories=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ContextMemorySelection(
+        context_name="alpha",
+        selector=memory.selector,
+    )
+
+
+def test_picker_rejects_selectable_memories_without_a_loader():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        try:
+            choose_context(
+                ("alpha",),
+                current="alpha",
+                selectable_memories=True,
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+        except ValueError as error:
+            assert "require a Memory loader" in str(error)
+        else:  # pragma: no cover - assertion aid
+            raise AssertionError("missing Memory loader was accepted")
 
 
 def test_picker_wraps_memory_content_with_a_hanging_selector_indent():

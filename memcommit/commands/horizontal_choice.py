@@ -6,7 +6,10 @@ from dataclasses import dataclass
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_primitives import (
+    display_escape_text,
+    focused_control_style,
+)
 
 
 @dataclass(frozen=True)
@@ -75,7 +78,10 @@ def render_horizontal_choice(
         selected = option.uid == state.selected_uid
         fragments.append(
             (
-                "class:memcommit.choice.active" if selected else "",
+                focused_control_style(
+                    focused=focused and selected,
+                    selected=selected,
+                ),
                 f"[ {display_escape_text(option.label)} ]",
             )
         )

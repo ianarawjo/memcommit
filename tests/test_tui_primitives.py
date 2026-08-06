@@ -34,6 +34,7 @@ from memcommit.commands.tui_primitives import (
     dispatch_tui_back,
     display_escape_text,
     equal_pane_height,
+    focused_control_style,
     safe_terminal_text,
     set_scrollable_pane_text,
 )
@@ -42,9 +43,15 @@ from memcommit.commands.tui_primitives import (
 class _RecordingApp:
     def __init__(self) -> None:
         self.invalidations = 0
+        self.tasks: list[asyncio.Task[None]] = []
 
     def invalidate(self) -> None:
         self.invalidations += 1
+
+    def create_background_task(self, coroutine):
+        task = asyncio.create_task(coroutine)
+        self.tasks.append(task)
+        return task
 
 
 def test_shared_navigation_accelerator_accelerates_only_after_hold_cadence():
@@ -67,7 +74,7 @@ def test_shared_navigation_accelerator_accelerates_only_after_hold_cadence():
         5,
         5,
         5,
-        10,
+        5,
     ]
     assert accelerator.step(1, now=2.0) == 1
     assert accelerator.step(-1, now=2.1) == 1
@@ -89,6 +96,36 @@ def test_shared_navigation_accelerator_resets_on_interrupted_repeat_bursts():
     assert [accelerator.step(1, now=now) for now in interrupted_times] == [
         1
     ] * len(interrupted_times)
+
+
+def test_shared_navigation_accelerator_visits_every_row_at_five_times_rate():
+    async def exercise() -> None:
+        accelerator = NavigationAccelerator(
+            direction=1,
+            streak=8,
+            last_at=1.0,
+            repeat_candidate=True,
+        )
+        app = _RecordingApp()
+        visited: list[int] = []
+
+        def move_one(direction: int) -> None:
+            visited.append((visited[-1] if visited else 0) + direction)
+
+        accelerator.move(
+            1,
+            app=app,
+            move_one=move_one,
+            now=1.08,
+        )
+        assert visited == [1]
+
+        await asyncio.gather(*app.tasks)
+
+        assert visited == [1, 2, 3, 4, 5]
+        assert app.invalidations == 5
+
+    asyncio.run(exercise())
 
 
 class _SizedDummyOutput(DummyOutput):
@@ -346,6 +383,34 @@ def test_focus_style_highlights_only_frame_chrome_and_keeps_base_style():
     assert label.bold
     assert body.color == ""
     assert not body.bold
+
+
+def test_nested_control_focus_is_bold_without_erasing_persistent_selection():
+    assert focused_control_style(focused=False, selected=False) == ""
+    assert focused_control_style(focused=True, selected=False) == (
+        "class:memcommit.control.focused"
+    )
+    assert focused_control_style(focused=False, selected=True) == (
+        "class:memcommit.choice.active"
+    )
+    assert focused_control_style(focused=True, selected=True) == (
+        "class:memcommit.choice.active.focused"
+    )
+
+    focused = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
+        "class:memcommit.control.focused"
+    )
+    selected = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
+        "class:memcommit.choice.active"
+    )
+    selected_and_focused = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
+        "class:memcommit.choice.active.focused"
+    )
+    assert focused.bold
+    assert selected.bgcolor == "8bd5ff"
+    assert not selected.bold
+    assert selected_and_focused.bgcolor == "8bd5ff"
+    assert selected_and_focused.bold
 
 
 def test_scrollable_pane_updates_safely_preserve_or_anchor_viewport():
