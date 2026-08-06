@@ -27,6 +27,7 @@ mem impact atomize --context LOCATOR
 mem atomize --context LOCATOR
 mem clear [LOCATOR]
 mem delete LOCATOR
+mem remove LOCATOR
 mem merge LOCATOR
 mem embed LOCATOR --into LOCATOR
 mem reference SELECTOR --from LOCATOR [--into LOCATOR]
@@ -146,6 +147,9 @@ The resolver must not be applied indiscriminately:
   canonical identifier and must not be reinterpreted as relative input.
 - Memory selectors, embedded-item selectors, requirement targets, and
   query-only source selectors have different namespaces.
+- `mem delete` and `mem remove` deliberately combine the existing-Context and
+  direct-item selector domains. Their ambiguity and explicit `--context`
+  boundary are specified in `unified-delete-selector-design-rationale.md`.
 - Ground frame binding requires a separate approval-aware integration. A raw
   relative argument must never retain a meaning that can change with the
   global active Context after the exact-command receipt is displayed.
