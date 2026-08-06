@@ -1,4 +1,5 @@
 """Interaction and presentation contracts for trace/rationale Memory selection."""
+
 from __future__ import annotations
 
 import io
@@ -8,9 +9,11 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.memory_picker import (
+    ScopedMemoryPickerItem,
     _render_memory_options,
     choose_memory,
 )
+import memcommit.commands.context_picker as context_picker
 from memcommit.provenance import TraceCandidate
 
 
@@ -31,7 +34,9 @@ def candidate(
 def test_picker_returns_the_exact_selected_uid():
     options = (candidate(1), candidate(2, status="HISTORICAL"))
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r")
+        # The common selector starts on the current Context, then visits its
+        # Memory rows in display order.
+        pipe_input.send_text("\x1b[B\x1b[B\r")
         selected = choose_memory(
             options,
             context_name="notes",
@@ -42,6 +47,29 @@ def test_picker_returns_the_exact_selected_uid():
         )
 
     assert selected == options[1].uid
+
+
+def test_scoped_picker_keeps_empty_current_context_as_initial_focus():
+    item = ScopedMemoryPickerItem(
+        context_name="notes/child",
+        uid=candidate(1).uid,
+        content="child Memory",
+        status="CURRENT",
+        catalog_context_names=("notes", "notes/child"),
+    )
+    with create_pipe_input() as pipe_input:
+        # Root Context -> child Context -> child's Memory.
+        pipe_input.send_text("\x1b[B\x1b[B\r")
+        selected = choose_memory(
+            (item,),
+            context_name="notes",
+            operation="rationale",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == item.uid
 
 
 def test_picker_navigation_clamps_and_supports_home_end():
@@ -59,6 +87,40 @@ def test_picker_navigation_clamps_and_supports_home_end():
         )
 
     assert selected == options[1].uid
+
+
+def test_picker_uses_shared_held_arrow_rate_without_skipping_rows(monkeypatch):
+    visited: list[int] = []
+
+    class ThreeRowAccelerator:
+        def move(self, direction, *, app, move_one):
+            for _ in range(3):
+                move_one(direction)
+                visited.append(direction)
+                app.invalidate()
+
+        def reset(self):
+            pass
+
+    monkeypatch.setattr(
+        context_picker,
+        "NavigationAccelerator",
+        ThreeRowAccelerator,
+    )
+    options = tuple(candidate(index) for index in range(1, 6))
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r")
+        selected = choose_memory(
+            options,
+            context_name="notes",
+            operation="rationale",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert visited == [1, 1, 1]
+    assert selected == options[2].uid
 
 
 @pytest.mark.parametrize("key", ["q", "\x1b", "\x03"])

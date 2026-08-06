@@ -1,4 +1,5 @@
 """Bare-command picker contracts for ``mem trace`` and ``mem rationale``."""
+
 from __future__ import annotations
 
 from typer.testing import CliRunner
@@ -99,6 +100,96 @@ def test_bare_recorded_rationale_selects_before_any_provider_call(
     assert result.exit_code == 0, result.output
     assert "Rationale for" in result.output
     assert "portable note" in result.output
+
+
+def test_rationale_picker_groups_memories_under_their_public_context(
+    isolated_store,
+    monkeypatch,
+):
+    assert invoke("init", "notes").exit_code == 0
+    assert invoke("add", "root note").exit_code == 0
+    assert invoke("init", "notes/child").exit_code == 0
+    assert invoke("add", "child note").exit_code == 0
+    child_target = _direct_memories(MemoryStore())[0]
+    assert invoke("switch", "notes").exit_code == 0
+    observed: dict[str, object] = {}
+
+    def select(items, *, context_name, operation):
+        observed["context_name"] = context_name
+        observed["operation"] = operation
+        observed["items"] = [(item.context_name, item.content) for item in items]
+        return child_target.uid
+
+    monkeypatch.setattr("memcommit.commands.rationale.choose_memory", select)
+
+    result = invoke("rationale", "--recorded-only")
+
+    assert result.exit_code == 0, result.output
+    assert observed == {
+        "context_name": "notes",
+        "operation": "rationale",
+        "items": [
+            ("notes", "root note"),
+            ("notes/child", "child note"),
+        ],
+    }
+
+
+def test_interactive_rationale_report_uses_common_viewer(
+    isolated_store,
+    monkeypatch,
+):
+    assert invoke("init", "notes").exit_code == 0
+    assert invoke("add", "portable note").exit_code == 0
+    target = _direct_memories(MemoryStore())[0]
+    observed: dict[str, str] = {}
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.interactive_report_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.run_read_only_viewer",
+        lambda text, *, title: observed.update(text=text, title=title),
+    )
+
+    result = invoke("rationale", target.uid, "--recorded-only")
+
+    assert result.exit_code == 0, result.output
+    assert observed["title"] == "RATIONALE REPORT"
+    assert "Rationale for" in observed["text"]
+    assert "portable note" in observed["text"]
+
+
+def test_only_bare_interactive_trace_continues_into_common_viewer(
+    isolated_store,
+    monkeypatch,
+):
+    assert invoke("init", "notes").exit_code == 0
+    assert invoke("add", "portable note").exit_code == 0
+    target = _direct_memories(MemoryStore())[0]
+    viewed: list[str] = []
+    monkeypatch.setattr(
+        "memcommit.commands.trace.interactive_report_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.trace.run_read_only_viewer",
+        lambda text, *, title: viewed.append(f"{title}\n{text}"),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.trace.choose_memory",
+        lambda items, *, context_name, operation: target.uid,
+    )
+
+    bare = invoke("trace")
+    explicit = invoke("trace", target.uid)
+
+    assert bare.exit_code == 0, bare.output
+    assert explicit.exit_code == 0, explicit.output
+    assert len(viewed) == 1
+    assert viewed[0].startswith("TRACE REPORT\n")
+    assert "portable note" in viewed[0]
+    assert "portable note" in explicit.output
 
 
 def test_bare_rationale_cancel_never_connects_provider(
@@ -212,8 +303,8 @@ def test_command_help_marks_memory_selector_as_optional():
     assert rationale.exit_code == 0
     assert "[SELECTOR]" in trace.output
     assert "[SELECTOR]" in rationale.output
-    assert "omit to choose" in trace.output
-    assert "omit to choose" in rationale.output
+    assert "omit to enter" in trace.output
+    assert "omit to enter" in rationale.output
 
 
 def test_candidate_catalog_never_opens_refs_or_query_only_sources(

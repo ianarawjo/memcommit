@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+from contextlib import redirect_stdout
 from dataclasses import dataclass
+from io import StringIO
 from typing import Annotated, Optional
 
 import typer
@@ -11,6 +13,10 @@ import typer
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.granted_context import resolve_context_access
 from memcommit.commands.memory_picker import choose_memory
+from memcommit.commands.read_only_viewer import (
+    interactive_report_terminal,
+    run_read_only_viewer,
+)
 from memcommit.commands.tui_primitives import (
     display_escape_text,
     safe_terminal_text,
@@ -145,7 +151,7 @@ def _compact_states(states: tuple[MemoryState, ...], *, verbose: bool) -> str:
         (
             f"[{display_escape_text(_uid(state.uid, verbose))}]"
             f"@{state.position + 1} "
-            f'“{_compact(state.content)}”'
+            f"“{_compact(state.content)}”"
         )
         for state in shown
     ]
@@ -193,9 +199,7 @@ def _render_operation_row(row: _OperationRow, *, verbose: bool) -> None:
             "(current)",
         )
     )
-    evidence = "/".join(
-        dict.fromkeys(event.evidence for event in row.events)
-    )
+    evidence = "/".join(dict.fromkeys(event.evidence for event in row.events))
     typer.echo(
         f"{timestamp} · {_row_command(row)} · {_row_effect(row)} · "
         f"{_compact_states(row.before, verbose=verbose)} → "
@@ -513,13 +517,21 @@ def render_trace(report: TraceReport, *, verbose: bool = False) -> None:
     _render_compact_trace(report)
 
 
+def trace_report_text(report: TraceReport, *, verbose: bool = False) -> str:
+    """Render once into neutral text for the common read-only Viewer."""
+    output = StringIO()
+    with redirect_stdout(output):
+        render_trace(report, verbose=verbose)
+    return output.getvalue().rstrip("\n")
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
         typer.Argument(
             help=(
                 "UID (or unambiguous prefix) of a current or historical "
-                "direct Memory; omit to choose interactively"
+                "direct Memory; omit to enter the interactive Memory picker"
             )
         ),
     ] = None,
@@ -545,6 +557,7 @@ def cmd(
     ] = False,
 ) -> None:
     """Show recorded and safely reconstructed content lineage."""
+    opened_picker = selector is None
     store = MemoryStore(create=False)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
@@ -607,6 +620,12 @@ def cmd(
                 ensure_ascii=False,
                 indent=2,
             )
+        )
+        return
+    if opened_picker and interactive_report_terminal():
+        run_read_only_viewer(
+            trace_report_text(report, verbose=verbose),
+            title="TRACE REPORT",
         )
         return
     render_trace(report, verbose=verbose)

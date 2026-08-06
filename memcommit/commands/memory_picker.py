@@ -1,19 +1,20 @@
 """Shared read-only terminal picker for trace/rationale Memory selection."""
+
 from __future__ import annotations
 
 import sys
 from collections.abc import Sequence
+from dataclasses import dataclass
 from typing import Literal, Protocol, runtime_checkable
 
-from prompt_toolkit.application import Application
 from prompt_toolkit.input import Input
-from prompt_toolkit.key_binding import KeyBindings
-from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
-from prompt_toolkit.layout.dimension import Dimension
-from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.styles import Style
 
+from memcommit.commands.context_picker import (
+    ContextMemoryRow,
+    ContextMemorySelection,
+    choose_context,
+)
 from memcommit.commands.tui_primitives import display_escape_text
 
 
@@ -27,6 +28,17 @@ class MemoryPickerItem(Protocol):
     uid: str
     content: str
     status: Literal["CURRENT", "HISTORICAL"]
+
+
+@dataclass(frozen=True)
+class ScopedMemoryPickerItem:
+    """Attach one selectable Memory projection to its public Context row."""
+
+    context_name: str
+    uid: str
+    content: str
+    status: Literal["CURRENT", "HISTORICAL"]
+    catalog_context_names: tuple[str, ...] = ()
 
 
 def _preview(value: str, limit: int = 100) -> str:
@@ -71,7 +83,7 @@ def choose_memory(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> str | None:
-    """Return one exact Memory UID, or ``None`` when selection is cancelled."""
+    """Select one Memory through the shared Context/Memory tree picker."""
     options = tuple(items)
     if operation not in {"trace", "rationale"}:
         raise ValueError("Memory picker operation must be trace or rationale.")
@@ -91,145 +103,64 @@ def choose_memory(
         raise ValueError("Memory selection received an invalid entry.")
     if len({item.uid for item in options}) != len(options):
         raise ValueError("Memory selection received duplicate UIDs.")
-    if require_tty and (
-        not sys.stdin.isatty() or not sys.stdout.isatty()
-    ):
+    if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive Memory selection requires a terminal. "
             "Pass a Memory UID explicitly."
         )
 
-    selected = {"index": 0}
-    bindings = KeyBindings()
-
-    def move(delta: int) -> None:
-        selected["index"] = max(
-            0,
-            min(selected["index"] + delta, len(options) - 1),
+    catalog_names = tuple(
+        dict.fromkeys(
+            name
+            for item in options
+            for name in getattr(item, "catalog_context_names", ())
         )
-
-    def render_options():
-        return _render_memory_options(
-            options,
-            selected=selected["index"],
+    )
+    owner_names = tuple(
+        dict.fromkeys(getattr(item, "context_name", context_name) for item in options)
+    )
+    # Rationale can select from a readable subtree whose current/root Context
+    # has no direct Memory. Retain those empty structural rows so initial focus
+    # still means the command's actual current location.
+    names = tuple(dict.fromkeys((*catalog_names, *owner_names)))
+    items_by_context = {
+        name: tuple(
+            item
+            for item in options
+            if getattr(item, "context_name", context_name) == name
         )
+        for name in names
+    }
 
-    def render_detail() -> str:
-        item = options[selected["index"]]
-        scope = (
-            "full retained lineage · earliest evidence → current Context"
-            if operation == "trace"
-            else "recorded evidence + saved analysis + current interpretation"
-        )
-        return (
-            f" Selected · {item.status} · {display_escape_text(item.uid)}\n"
-            f" Scope · {scope}\n"
-            f" {display_escape_text(item.content)}"
-        )
-
-    control = FormattedTextControl(
-        text=render_options,
-        focusable=True,
-        show_cursor=False,
-    )
-
-    @bindings.add("down")
-    def _next_memory(event) -> None:
-        move(1)
-        event.app.invalidate()
-
-    @bindings.add("up")
-    def _previous_memory(event) -> None:
-        move(-1)
-        event.app.invalidate()
-
-    @bindings.add("pagedown")
-    def _page_down(event) -> None:
-        move(10)
-        event.app.invalidate()
-
-    @bindings.add("pageup")
-    def _page_up(event) -> None:
-        move(-10)
-        event.app.invalidate()
-
-    @bindings.add("home")
-    def _first_memory(event) -> None:
-        selected["index"] = 0
-        event.app.invalidate()
-
-    @bindings.add("end")
-    def _last_memory(event) -> None:
-        selected["index"] = len(options) - 1
-        event.app.invalidate()
-
-    @bindings.add("enter")
-    def _accept_memory(event) -> None:
-        event.app.exit(result=options[selected["index"]].uid)
-
-    @bindings.add("q", eager=True)
-    @bindings.add("escape")
-    @bindings.add("c-c", eager=True)
-    def _cancel(event) -> None:
-        event.app.exit(result=None)
-
-    title = operation.upper()
-    header = Window(
-        FormattedTextControl(
-            f" {title} · SELECT A MEMORY · {display_escape_text(context_name)}"
-        ),
-        height=Dimension.exact(1),
-        dont_extend_height=True,
-    )
-    options_window = Window(
-        control,
-        wrap_lines=False,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
-    )
-    detail = Window(
-        FormattedTextControl(render_detail),
-        height=Dimension(min=2, preferred=4, max=7),
-        wrap_lines=True,
-    )
-    footer = Window(
-        FormattedTextControl(
-            lambda: (
-                " ↑/↓ move  PgUp/PgDn jump  Enter "
-                + (
-                    "full lineage"
-                    if operation == "trace"
-                    else "rationale layers"
-                )
-                + "  Esc/q cancel"
-                + f"  ·  {selected['index'] + 1}/{len(options)}"
+    def memory_rows(name: str) -> tuple[ContextMemoryRow, ...]:
+        return tuple(
+            ContextMemoryRow(
+                f"{item.status.casefold()} {item.uid[:8]}",
+                item.content,
+                selector=item.uid,
             )
+            for item in items_by_context[name]
+        )
+
+    selected = choose_context(
+        names,
+        current=context_name if context_name in names else names[0],
+        title=(
+            f"{operation.upper()} · SELECT A MEMORY · "
+            f"{display_escape_text(context_name)}"
         ),
-        height=Dimension.exact(1),
-        dont_extend_height=True,
+        accept_label=("open lineage" if operation == "trace" else "open rationale"),
+        memory_loader=memory_rows,
+        initially_expand_all=True,
+        initially_show_memories=True,
+        browse_only=True,
+        selectable_memories=True,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
     )
-    app: Application[str | None] = Application(
-        layout=Layout(
-            HSplit(
-                [
-                    header,
-                    Window(height=1, char="─"),
-                    options_window,
-                    Window(height=1, char="─"),
-                    detail,
-                    Window(height=1, char="─"),
-                    footer,
-                ]
-            ),
-            focused_element=control,
-        ),
-        key_bindings=bindings,
-        full_screen=True,
-        erase_when_done=True,
-        input=app_input,
-        output=app_output,
-        style=Style.from_dict({"selected": "reverse bold"}),
-    )
-    try:
-        return app.run()
-    except (EOFError, KeyboardInterrupt):
+    if selected is None:
         return None
+    if not isinstance(selected, ContextMemorySelection):
+        raise ValueError("Memory selection did not return an exact Memory.")
+    return selected.selector

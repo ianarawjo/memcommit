@@ -32,14 +32,23 @@ semantic analyses, proposals, or active state. `mem rationale` may update a
 replaceable provider-inference cache after a successful validated inference;
 `mem trace` and `mem rationale --recorded-only` remain storage-read-only.
 
-In an interactive terminal, omitting `MEMORY` opens one shared read-only
-Memory picker for the selected or current Context. The picker lists each UID
-once: currently present Memories first in canonical Context order, followed by
-historical-only Memories using their last retained content. `HISTORICAL` means
-only that the UID is no longer directly present; it can identify a removed
-Memory, a split parent, or another retained earlier state. Equal text never
-collapses distinct UIDs, and edits of one UID never create multiple picker
-rows.
+In an interactive terminal, omitting `MEMORY` opens the common read-only
+Context/Memory tree selector rather than a trace/rationale-specific flat list.
+It begins on the command's current or explicitly scoped Context row, including
+when that row has no direct Memory. Rationale places every eligible Memory
+beneath its actual owner in the readable public hierarchy; a Grant attachment
+is never treated as a hierarchy edge. Trace retains its single-Context scope.
+Context rows browse or collapse the tree, while only an exact Memory row can
+complete selection.
+
+Each eligible UID appears once: currently present Memories first in canonical
+Context order, followed by historical-only Memories using their last retained
+content. `HISTORICAL` means only that the UID is no longer directly present;
+it can identify a removed Memory, a split parent, or another retained earlier
+state. Equal text never collapses distinct UIDs, and edits of one UID never
+create multiple picker rows. Up/Down, Left/Right, held-arrow acceleration, and
+wrapped scrolling all come from the common Context/Memory selector rather
+than a second operation-specific navigation grammar.
 
 The picker returns the exact full UID and then enters the same command path as
 an explicit selector. It does not perform per-row semantic inference or open
@@ -53,6 +62,14 @@ the full retained lineage from earliest retained evidence through the current
 Context, while Rationale covers recorded evidence, saved analysis, and current
 interpretation. This shared first-stage picker is the interactive boundary for
 choosing a Memory; it does not silently choose an operation subrange.
+
+Rationale renders its complete interactive report inside the common framed,
+wrapped, read-only `VIEWER`, whether its Memory was selected interactively or
+passed explicitly. Bare Trace continues from the common selector into that
+same Viewer so the no-operand interaction is one coherent flow; explicit Trace
+remains a direct stdout report for shell inspection and piping. The Viewer
+shares Up/Down, PageUp/PageDown, Home/End, and Escape/Backspace/Q close
+behavior. Non-TTY and JSON output retain their stable non-full-screen forms.
 
 Outside a TTY, omission fails instead of silently selecting the first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an

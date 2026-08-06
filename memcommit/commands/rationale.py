@@ -3,12 +3,19 @@
 from __future__ import annotations
 
 import json
+from contextlib import redirect_stdout
+from io import StringIO
 from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.memory_picker import choose_memory
+from memcommit.commands.memory_picker import ScopedMemoryPickerItem, choose_memory
+from memcommit.commands.read_only_viewer import (
+    interactive_report_terminal,
+    run_read_only_viewer,
+)
 from memcommit.commands.tui_primitives import (
     display_escape_text,
     safe_terminal_text,
@@ -350,13 +357,25 @@ def render_rationale(
             )
 
 
+def rationale_report_text(
+    report: RationaleReport,
+    *,
+    verbose: bool = False,
+) -> str:
+    """Render once into neutral text for the common read-only Viewer."""
+    output = StringIO()
+    with redirect_stdout(output):
+        render_rationale(report, verbose=verbose)
+    return output.getvalue().rstrip("\n")
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
         typer.Argument(
             help=(
                 "UID (or unambiguous prefix) of a current or historical "
-                "direct Memory; omit to choose interactively"
+                "direct Memory; omit to enter the interactive Memory picker"
             )
         ),
     ] = None,
@@ -414,9 +433,20 @@ def cmd(
         if selector is None:
             if as_json:
                 raise RationaleError("JSON output requires an explicit Memory UID.")
-            candidates, _owners = rationale_candidates(scope)
+            candidates, owners = rationale_candidates(scope)
             selector = choose_memory(
-                candidates,
+                tuple(
+                    ScopedMemoryPickerItem(
+                        context_name=owners[candidate.uid][0].name,
+                        uid=candidate.uid,
+                        content=candidate.content,
+                        status=candidate.status,
+                        catalog_context_names=tuple(
+                            context.name for context in scope.contexts
+                        ),
+                    )
+                    for candidate in candidates
+                ),
                 context_name=scope.root_name,
                 operation="rationale",
             )
@@ -439,17 +469,35 @@ def cmd(
         if not recorded_only:
             authorize_rationale_inference(scope)
         trace = rationale_trace(scope, target)
-        report = build_rationale(
-            target.access.store,
-            target.owner,
-            trace,
-            (None if recorded_only else connect_codex_chatgpt_provider),
-            cache_inference=not recorded_only and not target.access.is_granted,
-            refresh_inference=refresh,
-            inference_contexts=scope.contexts,
-            inference_scope_name=scope.root_name,
-            recorded_evidence_available=not target.access.is_granted,
-        )
+        if recorded_only:
+            report = build_rationale(
+                target.access.store,
+                target.owner,
+                trace,
+                None,
+                cache_inference=False,
+                refresh_inference=refresh,
+                inference_contexts=scope.contexts,
+                inference_scope_name=scope.root_name,
+                recorded_evidence_available=not target.access.is_granted,
+            )
+        else:
+            with progressing_provider_factory(
+                "RATIONALE",
+                "inferring rationale",
+                connect_codex_chatgpt_provider,
+            ) as provider_factory:
+                report = build_rationale(
+                    target.access.store,
+                    target.owner,
+                    trace,
+                    provider_factory,
+                    cache_inference=not target.access.is_granted,
+                    refresh_inference=refresh,
+                    inference_contexts=scope.contexts,
+                    inference_scope_name=scope.root_name,
+                    recorded_evidence_available=not target.access.is_granted,
+                )
     except (
         FileNotFoundError,
         OSError,
@@ -475,6 +523,12 @@ def cmd(
                 ensure_ascii=False,
                 indent=2,
             )
+        )
+        return
+    if interactive_report_terminal():
+        run_read_only_viewer(
+            rationale_report_text(report, verbose=verbose),
+            title="RATIONALE REPORT",
         )
         return
     render_rationale(report, verbose=verbose)
