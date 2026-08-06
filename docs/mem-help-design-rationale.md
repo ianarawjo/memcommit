@@ -51,9 +51,12 @@ deterministic instead of emitting a terminal-control interface.
 
 Ordinary commands carry no implementation label. Repeating `implemented` on
 nearly every row adds noise without helping a person choose a command. A
-parenthesized annotation is reserved for an exceptional compatibility state:
+parenthesized annotation is reserved for useful exceptional invocation state:
 `integrate (legacy)` and `config (legacy)` remain callable but sit outside the
-current workflow.
+current workflow, while `(bare → TUI)` says that entering the command without
+operands in an interactive terminal opens its picker, launcher, browser, or
+workbench. It does not promise that the command can proceed when required local
+state, such as a current Context or saved session, is absent.
 
 A deliberately bounded command needs no exception annotation when its
 advertised contract is available. For example, `merge` intentionally performs
@@ -75,8 +78,9 @@ column.
 
 Descriptions are read from the same Click/Typer command registrations used by
 `mem --help`; the inventory does not maintain a second description catalog.
-Exceptional annotations are explicit because compatibility status is a design
-judgment rather than a property that can be inferred safely from registration.
+Exceptional annotations are explicit because compatibility status and bare-TTY
+behavior are design judgments rather than properties that can be inferred
+safely from Click registration alone.
 
 The renderer fails closed if an annotated command is no longer registered.
 Ordinary new commands need no redundant `implemented` entry.

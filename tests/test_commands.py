@@ -76,6 +76,9 @@ class TestHelp:
             for line in lines
         )
         assert any(line.startswith("config (legacy) ") for line in lines)
+        assert any(line.startswith("switch (bare → TUI) ") for line in lines)
+        assert any(line.startswith("share (bare → TUI) ") for line in lines)
+        assert any(line.startswith("help (bare → TUI) ") for line in lines)
         assert any(
             line.startswith("atomize ")
             and "issue-scoped directional meld" in line

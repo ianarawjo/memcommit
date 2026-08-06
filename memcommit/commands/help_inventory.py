@@ -18,8 +18,21 @@ from prompt_toolkit.styles import Style
 
 
 COMMAND_ANNOTATIONS = {
+    "atomize": "bare → TUI",
+    "compare": "bare → TUI",
     "config": "legacy",
+    "ground": "bare → TUI",
+    "help": "bare → TUI",
     "integrate": "legacy",
+    "list": "bare → TUI",
+    "log": "bare → TUI",
+    "ls": "bare → TUI",
+    "meld": "bare → TUI",
+    "revert": "bare → TUI",
+    "review": "bare → TUI",
+    "sever": "bare → TUI",
+    "share": "bare → TUI",
+    "switch": "bare → TUI",
 }
 
 
