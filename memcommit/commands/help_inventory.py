@@ -388,6 +388,7 @@ def run_help_selector(
         index = selected_index["value"]
         if expanded_index["value"] != index:
             expanded_index["value"] = index
+            selected_form["value"] = 0
         elif selected_form["value"] is None:
             selected_form["value"] = 0
         event.app.invalidate()

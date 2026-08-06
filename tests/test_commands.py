@@ -148,9 +148,9 @@ class TestHelp:
 
     def test_selector_right_expands_left_collapses_and_enter_enters_forms(self):
         with create_pipe_input() as pipe_input:
-            # Right expands, Left collapses, then two Rights expand and move
-            # the bar to FORM 1; Enter selects that exact template.
-            pipe_input.send_text("\x1b[C\x1b[D\x1b[C\x1b[C\r")
+            # One Right expands directly onto FORM 1. Two Lefts return to the
+            # command and collapse it; Right then expands onto FORM 1 again.
+            pipe_input.send_text("\x1b[C\x1b[D\x1b[D\x1b[C\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
@@ -162,7 +162,7 @@ class TestHelp:
         assert selected.command_line == "mem alpha"
 
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[C\x1b[C\x1b[B\r")
+            pipe_input.send_text("\x1b[C\x1b[B\r")
             second_form = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,

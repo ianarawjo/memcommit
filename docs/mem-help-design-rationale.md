@@ -25,9 +25,10 @@ prompt-toolkit selector:
 - Up and Down move one command at a time or move among one expanded command's
   forms.
 - Page Up, Page Down, Home, and End move through the longer list.
-- Right expands one command in place and a second Right moves the focus bar to
-  its first `FORM`; Up and Down then inspect the alternative invocations. Left
-  returns from a Form to its command row and then collapses the command.
+- Right expands one command in place and immediately moves the focus bar to its
+  first `FORM`, matching the newly visible content below the command row. Up
+  and Down then inspect the alternative invocations. Left returns from a Form
+  to its command row and a second Left collapses the command.
 - Enter selects the exact focused row. From the command row it yields only the
   bare `mem <name>` template; from a Form it yields that Form's editable command
   template without the parenthesized explanation. `H` separately opens the
