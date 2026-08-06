@@ -13,13 +13,13 @@ reconstruction for user research.
 
 | Task | Ordinary material | Query-only material | Total |
 | --- | ---: | ---: | ---: |
-| Task 1 | `construction-updates` 75 + `campus-wiki` 300 = 375 | `campus-wiki · construction-details` 78 | 453 |
-| Task 2 | `advisor1` 150 + `advisor2` 150 = 300 | `proposal-submission-guidelines` 75 | 375 |
-| Task 3 | `local/personal-memory` 300 + `local/guardrails` 75 + public healthcare guidance 12 = 387 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 462 |
-| Total | 1,062 | 228 | 1,290 |
+| Task 1 | `description` 1 + `construction-updates` 75 + `campus-wiki` 300 = 376 | `campus-wiki · construction-details` 78 | 454 |
+| Task 2 | `description` 1 + `advisor1` 150 + `advisor2` 150 = 301 | `proposal-submission-guidelines` 75 | 376 |
+| Task 3 | `description` 1 + `local/personal-memory` 300 + `local/guardrails` 75 + public healthcare guidance 25 = 401 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 476 |
+| Total | 1,078 | 228 | 1,306 |
 
 `Ordinary material` and `Query-only material` describe participant
-interaction. Physically, all 1,290 records are ordinary Memories: task-local
+interaction. Physically, all 1,306 records are ordinary Memories: task-local
 records live in task Profiles, and granted material lives in task-specific
 authority Profiles. A `QUERY` grant, rather than a special source file,
 enforces the query-only view in the generated study packages.
@@ -125,18 +125,21 @@ confidentiality.
 ## File List
 
 - Task 1
+  - [Participant description](task-1-description-en.md)
   - [75 `construction-updates`](task-1-construction-updates-en.md)
   - [300 `campus-wiki` Memories](task-1-campus-baseline-en.md)
   - [78 query-only `construction-details` in `campus-wiki`](task-1-campus-wiki-construction-details-en.md)
   - [Update locations, targets, and before/after content](task-1-update-actions-en.tsv)
   - [Purpose sidecar](task-1-memory-purpose-en.tsv)
 - Task 2
+  - [Participant description](task-2-description-en.md)
   - [150 `advisor1` Memories](task-2-advisor1-en.md)
   - [150 `advisor2` Memories](task-2-advisor2-en.md)
   - [75 query-only `proposal-submission-guidelines`](task-2-proposal-submission-guidelines-en.md)
   - [Advisor relation groups](task-2-pair-relations-en.tsv)
   - [Purpose sidecar](task-2-memory-purpose-en.tsv)
 - Task 3
+  - [Participant description](task-3-description-en.md)
   - [Participant brief draft](task-3-study-brief-en.md)
   - [300 `local/personal-memory` Memories](task-3-personal-memory-en.md)
   - [75 ordinary `local/guardrails`](task-3-guardrails-en.md)

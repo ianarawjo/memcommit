@@ -11,13 +11,13 @@
 
 | 과업 | 일반 열람 자료 | 질의 전용 자료 | 합계 |
 | --- | ---: | ---: | ---: |
-| Task 1 | `construction-updates` 75 + `campus-wiki` 300 = 375 | `campus-wiki · construction-details` 78 | 453 |
-| Task 2 | `advisor1` 150 + `advisor2` 150 = 300 | `proposal-submission-guidelines` 75 | 375 |
-| Task 3 | `local/personal-memory` 300 + `local/guardrails` 75 + 공개 의료 가이던스 12 = 387 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 462 |
-| 전체 | 1,062 | 228 | 1,290 |
+| Task 1 | `description` 1 + `construction-updates` 75 + `campus-wiki` 300 = 376 | `campus-wiki · construction-details` 78 | 454 |
+| Task 2 | `description` 1 + `advisor1` 150 + `advisor2` 150 = 301 | `proposal-submission-guidelines` 75 | 376 |
+| Task 3 | `description` 1 + `local/personal-memory` 300 + `local/guardrails` 75 + 공개 의료 가이던스 25 = 401 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 476 |
+| 전체 | 1,078 | 228 | 1,306 |
 
 `일반 열람`과 `질의 전용`은 participant 상호작용을 뜻한다. 물리적으로는
-1,290개 모두 ordinary Memory이며, task-local 자료는 task Profile에, grant
+1,306개 모두 ordinary Memory이며, task-local 자료는 task Profile에, grant
 자료는 task별 authority Profile에 저장한다. 생성된 연구 패키지에서는 특수
 source file이 아니라 `QUERY` grant가 질의 전용 view를 만든다.
 
@@ -107,18 +107,21 @@ Memory별 ACL이나 사용자 인증이 아니며 현재 프로토타입이 집�
 ## 파일 목록
 
 - Task 1
+  - [참가자용 설명](task-1-description-ko.md)
   - [`construction-updates` 75개](task-1-construction-updates-ko.md)
   - [`campus-wiki` 300개](task-1-campus-baseline-ko.md)
   - [`campus-wiki`의 질의 전용 `construction-details` 78개](task-1-campus-wiki-construction-details-ko.md)
   - [업데이트 위치·대상·전후 본문 명세](task-1-update-actions-ko.tsv)
   - [목적 sidecar](task-1-memory-purpose-ko.tsv)
 - Task 2
+  - [참가자용 설명](task-2-description-ko.md)
   - [`advisor1` 150개](task-2-advisor1-ko.md)
   - [`advisor2` 150개](task-2-advisor2-ko.md)
   - [질의 전용 `proposal-submission-guidelines` 75개](task-2-proposal-submission-guidelines-ko.md)
   - [advisor 대응 관계 그룹](task-2-pair-relations-ko.tsv)
   - [목적 sidecar](task-2-memory-purpose-ko.tsv)
 - Task 3
+  - [참가자용 설명](task-3-description-ko.md)
   - [참가자용 설명 초안](task-3-study-brief-ko.md)
   - [`local/personal-memory` 300개](task-3-personal-memory-ko.md)
   - [일반 열람 `local/guardrails` 75개](task-3-guardrails-ko.md)

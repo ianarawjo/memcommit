@@ -80,12 +80,15 @@ class StudyWorkbookSpec:
 
 
 _TAB_NAMES: Mapping[str, str] = {
+    "task1-description": "T1 description",
     "task1-construction-updates": "T1 updates",
     "task1-campus-wiki": "T1 wiki",
     "task1-campus-wiki-details": "T1 details",
+    "task2-description": "T2 description",
     "task2-advisor1": "T2 advisor1",
     "task2-advisor2": "T2 advisor2",
     "task2-proposal-guidelines": "T2 guidelines",
+    "task3-description": "T3 description",
     "task3-personal-memory": "T3 personal",
     "task3-guardrails": "T3 guardrails",
     "task3-healthcare-qna": "T3 healthcare Q&A",

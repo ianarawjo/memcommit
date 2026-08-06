@@ -22,6 +22,7 @@ without moving legacy `~/.mem`:
 
 ```text
 study-baseline
+├── task-{1,2,3}/description
 ├── task-{1,2,3}/...
 └── granted-memory/task-{1,2,3}/...
 ```
@@ -70,15 +71,22 @@ The current corpus contains:
 
 | Task | Task-owned | Authority READ/edit | Authority QUERY | Total ordinary records |
 | --- | ---: | ---: | ---: | ---: |
-| 1 | 75 | 300 | 78 | 453 |
-| 2 | 0 | 300 | 75 | 375 |
-| 3 | 300 | 87 | 75 | 462 |
-| Total | 375 | 687 | 228 | 1,290 |
+| 1 | 76 | 300 | 78 | 454 |
+| 2 | 1 | 300 | 75 | 376 |
+| 3 | 301 | 100 | 75 | 476 |
+| Total | 378 | 700 | 228 | 1,306 |
 
 The old Korean XLSX was a smaller intermediate snapshot and is not a build
 input. Spreadsheet views are regenerated from the current parsed corpus.
 
 ## Ordinary Context mapping
+
+Each Task Profile also owns one participant-facing description Memory directly
+under `description`. Its English body is the previously authored Task
+description and its Korean body is a same-UID translation. Keeping the brief
+inside the Task branch makes it part of every baseline snapshot and
+`init-study` run without treating it as authority-owned evidence or a Grant.
+The operation-specific starting Context remains unchanged.
 
 Each canonical locator's final segment is a Memory leaf. By default, the
 preceding segments become physical ordinary Contexts linked from their parents.

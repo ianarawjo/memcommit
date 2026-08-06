@@ -147,6 +147,7 @@ TASK_SPECS = {
             role="TASK",
             current_context="participant/construction-updates",
             datasets=(
+                BundleDatasetSpec("task1-description", "description"),
                 BundleDatasetSpec(
                     "task1-construction-updates",
                     "participant/construction-updates",
@@ -207,6 +208,9 @@ TASK_SPECS = {
             name="task-2",
             role="TASK",
             current_context="participant/proposal-workspace",
+            datasets=(
+                BundleDatasetSpec("task2-description", "description"),
+            ),
             initial_contexts=("participant/proposal-workspace",),
         ),
         authority_profile=BundleProfileSpec(
@@ -263,6 +267,7 @@ TASK_SPECS = {
             current_context="local/personal-memory",
             initial_contexts=("local",),
             datasets=(
+                BundleDatasetSpec("task3-description", "description"),
                 BundleDatasetSpec(
                     "task3-personal-memory",
                     "local/personal-memory",

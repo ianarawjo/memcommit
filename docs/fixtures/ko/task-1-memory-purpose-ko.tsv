@@ -1,4 +1,5 @@
 fixture_id	Memory 위치	메모리 목적	목적 코드
+T1-D-001	description/task-1	Procedural Policy	PP
 T1-U-001	construction-updates/building-access/01	Knowledge Base	KB
 T1-U-003	construction-updates/building-access/03-hours	Knowledge Base	KB
 T1-U-068	construction-updates/building-access/03-ramp	Knowledge Base	KB

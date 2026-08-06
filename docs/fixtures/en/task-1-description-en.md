@@ -1,0 +1,3 @@
+# Task 1 Description
+
+- T1-D-001 — `description/task-1` — PP — Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work memory. This memory contains confirmed event relocations, temporary parking arrangements, updated shop and facility information, and related changes to nearby routes and facilities. Using this verified local memory, you must update all affected parts of the organizational wiki and contribute the completed update.

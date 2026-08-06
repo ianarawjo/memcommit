@@ -17,7 +17,7 @@ from typing import Iterable, Mapping
 
 
 PURPOSE_CODES = frozenset({"KB", "PP", "SM", "UM", "WM", "OM"})
-EXPECTED_CORPUS_COUNT = 1_303
+EXPECTED_CORPUS_COUNT = 1_306
 _PURPOSE_NAMES = {
     "Knowledge Base": "KB",
     "Procedural Policy": "PP",
@@ -147,6 +147,19 @@ class FixtureTranslationPair:
 
 
 STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
+    "task1-description": StudyFixtureSpec(
+        name="task1-description",
+        task=1,
+        file_stem="task-1-description",
+        expected_count=1,
+        syntax=FixtureSyntax.TASK2_INLINE,
+        context_name="description",
+        purpose_sidecar_stem="task-1-memory-purpose",
+        purpose_sidecar_count=454,
+        purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
+        sidecar_prefix="T1-D-",
+        fixture_ids_required=True,
+    ),
     "task1-construction-updates": StudyFixtureSpec(
         name="task1-construction-updates",
         task=1,
@@ -155,7 +168,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK1_BLOCK,
         context_name="construction-updates",
         purpose_sidecar_stem="task-1-memory-purpose",
-        purpose_sidecar_count=453,
+        purpose_sidecar_count=454,
         purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
         sidecar_prefix="T1-U-",
         fixture_ids_required=True,
@@ -168,7 +181,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK1_BLOCK,
         context_name="campus-wiki",
         purpose_sidecar_stem="task-1-memory-purpose",
-        purpose_sidecar_count=453,
+        purpose_sidecar_count=454,
         purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
         sidecar_prefix="T1-W-",
         fixture_ids_required=True,
@@ -181,11 +194,24 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK1_BLOCK,
         context_name="campus-wiki",
         purpose_sidecar_stem="task-1-memory-purpose",
-        purpose_sidecar_count=453,
+        purpose_sidecar_count=454,
         purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
         sidecar_prefix="T1-Q-",
         fixture_ids_required=True,
         query_only=True,
+    ),
+    "task2-description": StudyFixtureSpec(
+        name="task2-description",
+        task=2,
+        file_stem="task-2-description",
+        expected_count=1,
+        syntax=FixtureSyntax.TASK2_INLINE,
+        context_name="description",
+        purpose_sidecar_stem="task-2-memory-purpose",
+        purpose_sidecar_count=376,
+        purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
+        sidecar_prefix="T2-D-",
+        fixture_ids_required=True,
     ),
     "task2-advisor1": StudyFixtureSpec(
         name="task2-advisor1",
@@ -195,7 +221,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK2_INLINE,
         context_name="advisor1",
         purpose_sidecar_stem="task-2-memory-purpose",
-        purpose_sidecar_count=375,
+        purpose_sidecar_count=376,
         purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
         sidecar_prefix="T2-L-",
         fixture_ids_required=True,
@@ -208,7 +234,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK2_INLINE,
         context_name="advisor2",
         purpose_sidecar_stem="task-2-memory-purpose",
-        purpose_sidecar_count=375,
+        purpose_sidecar_count=376,
         purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
         sidecar_prefix="T2-R-",
         fixture_ids_required=True,
@@ -221,11 +247,24 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK2_INLINE,
         context_name="proposal-submission-guidelines",
         purpose_sidecar_stem="task-2-memory-purpose",
-        purpose_sidecar_count=375,
+        purpose_sidecar_count=376,
         purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
         sidecar_prefix="T2-Q-",
         fixture_ids_required=True,
         query_only=True,
+    ),
+    "task3-description": StudyFixtureSpec(
+        name="task3-description",
+        task=3,
+        file_stem="task-3-description",
+        expected_count=1,
+        syntax=FixtureSyntax.TASK3_INLINE,
+        context_name="description",
+        purpose_sidecar_stem="task-3-memory-purpose",
+        purpose_sidecar_count=476,
+        purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
+        sidecar_prefix="description/",
+        fixture_ids_required=False,
     ),
     "task3-personal-memory": StudyFixtureSpec(
         name="task3-personal-memory",
@@ -235,7 +274,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK3_INLINE,
         context_name="local/personal-memory",
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=475,
+        purpose_sidecar_count=476,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix="local/personal-memory/",
         fixture_ids_required=False,
@@ -248,7 +287,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK3_INLINE,
         context_name="local/guardrails",
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=475,
+        purpose_sidecar_count=476,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix="local/guardrails/",
         fixture_ids_required=False,
@@ -263,7 +302,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
             "remote/government/healthcare-agent/info-request/questions-and-answers"
         ),
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=475,
+        purpose_sidecar_count=476,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix=(
             "remote/government/healthcare-agent/info-request/questions-and-answers/"
@@ -281,7 +320,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
             "remote/government/healthcare-agent/info-request/transmission-guidance"
         ),
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=475,
+        purpose_sidecar_count=476,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix=(
             "remote/government/healthcare-agent/info-request/transmission-guidance/"
@@ -293,7 +332,10 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
 
 _TASK1_HEADING = re.compile(r"^###\s+(T1-[UWQ]-\d{3})\s*$")
 _TASK2_RECORD = re.compile(
-    r"^-\s+(?P<id>T2-[LRQ]-\d{3})\s+—\s+"
+    # Description fixtures reuse the compact inline form even for Task 1.
+    # Keeping the authored task prefix in the ID prevents cross-task identity
+    # collisions while leaving the established Task 2 L/R/Q grammar intact.
+    r"^-\s+(?P<id>T(?:1-D|2-[DLRQ])-\d{3})\s+—\s+"
     r"`(?P<locator>[^`]+)`\s+—\s+"
     r"(?P<purpose>[A-Z]{2})\s+—\s+(?P<content>\S.*)$"
 )

@@ -463,8 +463,8 @@ def test_profile_use_selects_the_initialized_complete_profile(
 
     assert selected.exit_code == 0, selected.output
     assert "Selected profile 'profile-view'." in selected.output
-    assert "Contexts 59 owned + 43 granted" in selected.output
-    assert "Memories 450 owned + 625 granted" in selected.output
+    assert "Contexts 62 owned + 43 granted" in selected.output
+    assert "Memories 453 owned + 625 granted" in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
     assert "* task-1" in contexts.stdout
@@ -1126,7 +1126,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Baseline Profile: study-baseline" in result.output
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
-    assert "Contexts 59 · Memories 450" in result.output
+    assert "Contexts 62 · Memories 453" in result.output
     assert "Granted Contexts 43 · Granted Memories 625" in result.output
     assert "Active Profile unchanged: authoring" in result.output
     assert "Use it with: mem profile pilot-001" in result.output
@@ -1165,7 +1165,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     baseline_store = MemoryStore(root=baseline_root, create=False)
     copied_store = MemoryStore(root=copied_root, create=False)
     authority_store = MemoryStore(root=authority_root, create=False)
-    assert len(copied_store.list_context_names()) == 59
+    assert len(copied_store.list_context_names()) == 62
     assert len(authority_store.list_context_names()) == 75
     assert copied_store.current_context_name() == (
         "task-1/participant/construction-updates"
@@ -1288,8 +1288,8 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
     profile_line = next(
         line for line in result.output.splitlines() if "pilot-002" in line
     )
-    assert "Contexts 59 owned + 43 granted" in profile_line
-    assert "Memories 450 owned + 625 granted" in profile_line
+    assert "Contexts 62 owned + 43 granted" in profile_line
+    assert "Memories 453 owned + 625 granted" in profile_line
     authority_line = next(
         line
         for line in result.output.splitlines()

@@ -24,8 +24,8 @@ EXPECTED_PROFILES = {
     1: {
         "task-1": (
             "TASK",
-            75,
-            7,
+            76,
+            8,
             "participant/construction-updates",
         ),
         "task-1-campus-authority": (
@@ -38,8 +38,8 @@ EXPECTED_PROFILES = {
     2: {
         "task-2": (
             "TASK",
-            0,
             1,
+            2,
             "participant/proposal-workspace",
         ),
         "task-2-proposal-authority": (
@@ -50,7 +50,7 @@ EXPECTED_PROFILES = {
         ),
     },
     3: {
-        "task-3": ("TASK", 375, 46, "local/personal-memory"),
+        "task-3": ("TASK", 376, 47, "local/personal-memory"),
         "task-3-healthcare-authority": (
             "AUTHORITY",
             100,
@@ -90,6 +90,7 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
     }
     if task == 1:
         assert entries_by_dataset == {
+            "task1-description": {"task-1"},
             "task1-construction-updates": {"task-1"},
             "task1-campus-wiki": {"task-1-campus-authority"},
             "task1-campus-wiki-details": {"task-1-campus-authority"},
@@ -107,6 +108,7 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
         assert "campus-wiki/construction-details" in authority_contexts
     elif task == 2:
         assert entries_by_dataset == {
+            "task2-description": {"task-2"},
             "task2-advisor1": {"task-2-proposal-authority"},
             "task2-advisor2": {"task-2-proposal-authority"},
             "task2-proposal-guidelines": {"task-2-proposal-authority"},
@@ -114,9 +116,10 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
         assert _stored_context_names(
             manifest_path,
             profile_records["task-2"],
-        ) == {"participant/proposal-workspace"}
+        ) == {"description", "participant/proposal-workspace"}
     else:
         assert entries_by_dataset == {
+            "task3-description": {"task-3"},
             "task3-personal-memory": {"task-3"},
             "task3-guardrails": {"task-3"},
             "task3-healthcare-qna": {"task-3-healthcare-authority"},
@@ -131,6 +134,7 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
             profile_records["task-3-healthcare-authority"],
         )
         assert {
+            "description",
             "local",
             "local/personal-memory",
             "local/guardrails",

@@ -24,6 +24,7 @@ from memcommit.eval.study_fixtures import (
 
 
 EXPECTED_DATASETS = {
+    "task1-description": (1, {"PP": 1}),
     "task1-construction-updates": (
         75,
         {"KB": 35, "PP": 16, "SM": 8, "UM": 6, "WM": 4, "OM": 6},
@@ -43,6 +44,7 @@ EXPECTED_DATASETS = {
         78,
         {"KB": 34, "PP": 38, "OM": 6},
     ),
+    "task2-description": (1, {"PP": 1}),
     "task2-advisor1": (
         150,
         {"KB": 9, "PP": 96, "SM": 5, "UM": 8, "WM": 8, "OM": 24},
@@ -55,6 +57,7 @@ EXPECTED_DATASETS = {
         75,
         {"KB": 2, "PP": 57, "SM": 2, "UM": 2, "WM": 2, "OM": 10},
     ),
+    "task3-description": (1, {"PP": 1}),
     "task3-personal-memory": (
         300,
         {
@@ -100,6 +103,13 @@ def test_korean_study_corpus_has_expected_counts_and_purposes() -> None:
 
 def test_loader_preserves_content_and_normalizes_available_metadata() -> None:
     corpus = load_study_fixture_corpus(language="ko").by_name()
+
+    description = corpus["task1-description"].records[0]
+    assert description.fixture_id == "T1-D-001"
+    assert description.canonical_locator == "description/task-1"
+    assert description.content.startswith(
+        "대학 구성원, 방문객, AI 에이전트가 사용하는 대학 조직 위키"
+    )
 
     update = corpus["task1-construction-updates"].records[0]
     assert update.fixture_id == "T1-U-001"
