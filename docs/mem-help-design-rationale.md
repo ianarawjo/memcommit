@@ -70,14 +70,17 @@ generic Click usage line. For example, Meld distinguishes bare saved-work
 browsing, symmetric peers, a require-new symmetric Result, canonical
 `INCOMING --into BASELINE`, and the current-Baseline `--from` convenience form.
 Each form includes a short parenthesized semantic label when the operands alone
-would not explain the route.
+would not explain the route. Bracketed lowercase values such as `[left]`,
+`[baseline]`, and `[result]` are editable placeholders, not literal operands or
+a claim that the corresponding CLI parameter is optional.
 
 Simple commands derive one conservative form from their registered positional
 operands. Commands with several semantic entry routes keep an explicit bounded
 form list. This list intentionally omits action flags such as comments,
 responses, snapshots, and acceptance controls; `H` retains the complete
-registered syntax reference. A selected Form is prefilled as editable shell
-text by the opt-in zsh integration; selection never executes it.
+registered syntax reference. A selected Form preserves its bracketed
+placeholders when prefilled as editable shell text by the opt-in zsh
+integration; selection never executes it.
 
 A deliberately bounded command needs no exception annotation when its
 advertised contract is available. For example, `merge` intentionally performs

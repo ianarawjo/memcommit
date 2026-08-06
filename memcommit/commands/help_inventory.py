@@ -25,18 +25,18 @@ COMMAND_ANNOTATIONS = {
 COMMAND_FORMS = {
     "atomize": (
         "mem atomize (analyze the current Context)",
-        "mem atomize CONTEXT (analyze one Context)",
+        "mem atomize --context [context] (analyze one Context)",
         "mem atomize --sessions (browse saved work)",
-        "mem atomize --evaluate ISSUE (directional atomic review)",
+        "mem atomize --evaluate [issue] (directional atomic review)",
     ),
     "checkout": (
-        "mem checkout CONTEXT (switch alias)",
-        "mem checkout -b NAME (branch alias)",
+        "mem checkout [context] (switch alias)",
+        "mem checkout -b [name] (branch alias)",
     ),
     "compare": (
         "mem compare (interactive saved-work view)",
-        "mem compare PEER (compare with the current Context)",
-        "mem compare --from LEFT --to RIGHT (explicit peers)",
+        "mem compare --to [peer] (current Context is reference)",
+        "mem compare --from [reference] --to [peer] (explicit peers)",
     ),
     "diff": (
         "mem diff (render the active update)",
@@ -44,71 +44,73 @@ COMMAND_FORMS = {
         "mem diff --stat (summary only)",
     ),
     "find": (
-        "mem find QUERY (current projection)",
-        "mem find --history QUERY (retained history)",
+        "mem find [query] (current projection)",
+        "mem find --history [query] (retained history)",
     ),
     "ground": (
         "mem ground (interactive Ground picker)",
-        "mem ground GROUND_NAME (open or create a named Ground)",
-        "mem ground --request TEXT (start from a natural-language request)",
+        "mem ground [ground_name] (open or create a named Ground)",
+        "mem ground --request [text] (start from a natural-language request)",
     ),
     "help": ("mem help (interactive command inventory)",),
     "impact": (
-        "mem impact --from SOURCE --to TARGET (directional preview)",
-        "mem impact atomize --context CONTEXT (atomization preview)",
+        "mem impact --from [source] --to [target] (directional preview)",
+        "mem impact atomize --context [context] (atomization preview)",
     ),
     "list": (
         "mem list (interactive current-Context browser)",
-        "mem list CONTEXT [-R] (explicit Context listing)",
+        "mem list [context] (explicit Context listing)",
+        "mem list [context] -R (recursive Context listing)",
     ),
     "log": (
         "mem log (interactive checkpoint history)",
-        "mem log QUERY (semantic history search)",
+        "mem log [query] (semantic history search)",
         "mem log --operations (Profile command attempts)",
     ),
     "ls": (
         "mem ls (interactive current-Context browser)",
-        "mem ls CONTEXT [-R] (explicit Context listing)",
+        "mem ls [context] (explicit Context listing)",
+        "mem ls [context] -R (recursive Context listing)",
     ),
     "meld": (
         "mem meld (interactive saved-work view)",
-        "mem meld LEFT RIGHT (symmetric)",
-        "mem meld LEFT RIGHT --to RESULT (symmetric new Result)",
-        "mem meld INCOMING --into BASELINE (directional)",
-        "mem meld --from INCOMING (current Context is BASELINE)",
+        "mem meld [left] [right] (symmetric)",
+        "mem meld [left] [right] --to [result] (symmetric new Result)",
+        "mem meld [incoming] --into [baseline] (directional)",
+        "mem meld --from [incoming] (current Context is baseline)",
     ),
     "revert": (
         "mem revert (interactive checkpoint picker)",
-        "mem revert CHECKPOINT (exact UID or prefix)",
-        "mem revert DESCRIPTION (semantic checkpoint lookup)",
+        "mem revert [checkpoint] (exact UID or prefix)",
+        "mem revert [description] (semantic checkpoint lookup)",
     ),
     "review": (
         "mem review (interactive saved-review picker)",
-        "mem review KIND (open an operation report)",
-        "mem review KIND --session UID (exact saved artifact)",
+        "mem review [kind] (open an operation report)",
+        "mem review [kind] --session [uid] (exact saved artifact)",
     ),
     "sever": (
         "mem sever (interactive saved-work view)",
-        "mem sever --source SOURCE --criteria CRITERIA --save-as RESULT",
-        "mem sever --resume UID (resume exact saved work)",
+        "mem sever --source [source] --criteria [criteria] --save-as [result]",
+        "mem sever --resume [uid] (resume exact saved work)",
     ),
     "share": (
         "mem share (interactive Source and endpoint selection)",
-        "mem share SOURCE --to ENDPOINT (explicit delivery)",
+        "mem share [source] --to [endpoint] (explicit delivery)",
     ),
     "switch": (
         "mem switch (interactive Context picker)",
-        "mem switch CONTEXT (explicit Context)",
+        "mem switch [context] (explicit Context)",
     ),
     "translate": (
-        "mem translate LANGUAGE (current Context)",
-        "mem translate LANGUAGE CONTEXT (explicit Context)",
-        "mem translate LANGUAGE --save-as RESULT (new translated Context)",
+        "mem translate --to [target] (current Context)",
+        "mem translate [memory] --to [target] (one direct Memory)",
+        "mem translate --to [target] --save-as [result] (new translated Context)",
     ),
     "update": (
-        "mem update --from SOURCE --to TARGET (explicit direction)",
-        "mem update --from SOURCE (current Context is TARGET)",
-        "mem update --to TARGET (current Context is SOURCE)",
+        "mem update --from [source] --to [target] (explicit direction)",
+        "mem update --from [source] (current Context is target)",
+        "mem update --to [target] (current Context is source)",
     ),
 }
 
@@ -136,13 +138,13 @@ class HelpSelection:
 def _selectable_form_line(form: str) -> str:
     """Remove explanatory syntax while retaining an editable command template."""
     command_line = form.partition(" (")[0]
-    return command_line.replace("[", "").replace("]", "")
+    return command_line
 
 
 def _default_command_forms(name: str, command: object) -> tuple[str, ...]:
     """Build one conservative canonical form from registered operands."""
     if callable(getattr(command, "list_commands", None)):
-        return (f"mem {name} COMMAND",)
+        return (f"mem {name} [command]",)
     operands: list[str] = []
     for parameter in getattr(command, "params", ()):
         if getattr(parameter, "param_type_name", "") != "argument":
@@ -150,12 +152,10 @@ def _default_command_forms(name: str, command: object) -> tuple[str, ...]:
         label = str(
             getattr(parameter, "metavar", None)
             or getattr(parameter, "human_readable_name", "VALUE")
-        ).upper()
+        ).lower()
         if getattr(parameter, "nargs", 1) != 1:
             label += "..."
-        if not getattr(parameter, "required", False):
-            label = f"[{label}]"
-        operands.append(label)
+        operands.append(f"[{label}]")
     suffix = " " + " ".join(operands) if operands else ""
     return (f"mem {name}{suffix}",)
 

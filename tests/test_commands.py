@@ -107,9 +107,12 @@ class TestHelp:
 
         forms = help_inventory.COMMAND_FORMS["meld"]
         assert "mem meld (interactive saved-work view)" in forms
-        assert "mem meld LEFT RIGHT (symmetric)" in forms
-        assert "mem meld INCOMING --into BASELINE (directional)" in forms
-        assert "mem meld --from INCOMING (current Context is BASELINE)" in forms
+        assert "mem meld [left] [right] (symmetric)" in forms
+        assert "mem meld [incoming] --into [baseline] (directional)" in forms
+        assert "mem meld --from [incoming] (current Context is baseline)" in forms
+        assert help_inventory._selectable_form_line(forms[2]) == (
+            "mem meld [left] [right] --to [result]"
+        )
 
     def test_selector_moves_down_and_returns_selected_command(self):
         with create_pipe_input() as pipe_input:

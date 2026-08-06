@@ -62,14 +62,14 @@ def test_emit_selection_reserves_stdout_for_one_command(monkeypatch):
         "run_help_selector",
         lambda entries, **kwargs: help_inventory.HelpSelection(
             command_name="impact",
-            command_line="mem impact --from SOURCE --to TARGET",
+            command_line="mem impact --from [source] --to [target]",
         ),
     )
 
     result = runner.invoke(app, ["help", "--emit-selection"])
 
     assert result.exit_code == 0
-    assert result.output == "mem impact --from SOURCE --to TARGET\n"
+    assert result.output == "mem impact --from [source] --to [target]\n"
 
 
 def test_emit_selection_cancel_emits_nothing(monkeypatch):
@@ -108,7 +108,7 @@ def test_generated_wrapper_prefills_and_delegates(tmp_path):
     executable.write_text(
         """#!/bin/zsh
 if [[ $1 == help && $2 == --emit-selection ]]; then
-  print -r -- 'mem impact --from SOURCE --to TARGET'
+  print -r -- 'mem impact --from [source] --to [target]'
 else
   print -r -- "delegated:$*"
 fi
@@ -155,5 +155,5 @@ mem status
     output = b"".join(chunks).decode(errors="replace").replace("\r", "")
 
     assert returncode == 0, output
-    assert "buffer=mem impact --from SOURCE --to TARGET " in output
+    assert "buffer=mem impact --from [source] --to [target] " in output
     assert "delegated:status" in output
