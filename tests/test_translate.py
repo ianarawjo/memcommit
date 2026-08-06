@@ -651,6 +651,27 @@ def test_cli_save_as_overrides_the_derived_context_name(
     ] == ["EN: 원문"]
 
 
+def test_cli_save_as_location_can_be_edited_from_materialization_review(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _saved_context(store, contents=("원문",))
+    _patch_provider(monkeypatch, PayloadProvider())
+
+    result = runner.invoke(
+        app,
+        ["translate", "--save-as", "study/draft"],
+        input="e\nstudy/final\ny\n",
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "SAVE LOCATION" in result.output
+    assert store.current_context_name() == "study/final"
+    assert not store.context_exists("study/draft")
+    assert store.load_direct(source.name).memories
+
+
 def test_cli_save_as_partial_context_replaces_only_the_selected_memory(
     isolated_store,
     monkeypatch,

@@ -949,21 +949,32 @@ def cmd(
             fg=typer.colors.CYAN,
         )
     _render_preview(plan, destination_name=destination_name)
-    if destination_name is None:
-        confirmation = (
-            f"Add {len(plan.proposals)} translated "
-            f"{'copy' if len(plan.proposals) == 1 else 'copies'}?"
-        )
-    else:
-        confirmation = (
-            f"Create translated Context '{destination_name}' and switch to it?"
-        )
-    if not yes and not typer.confirm(confirmation, default=False):
-        typer.echo(
-            "Aborted — the translation view remains saved; "
-            "no Context changes made."
-        )
-        return
+    if not yes:
+        if destination_name is None:
+            confirmation = (
+                f"Add {len(plan.proposals)} translated "
+                f"{'copy' if len(plan.proposals) == 1 else 'copies'}?"
+            )
+            approved = typer.confirm(confirmation, default=False)
+        else:
+            from memcommit.commands.save_location_review import (
+                review_save_location,
+            )
+
+            reviewed_destination = review_save_location(
+                destination_name,
+                validate=store.assert_context_creatable,
+                apply_label="create translated Context",
+            )
+            approved = reviewed_destination is not None
+            if reviewed_destination is not None:
+                destination_name = reviewed_destination
+        if not approved:
+            typer.echo(
+                "Aborted — the translation view remains saved; "
+                "no Context changes made."
+            )
+            return
 
     try:
         if store.current_context_name() != plan.context_name:

@@ -58,6 +58,10 @@ from memcommit.query_provider import (
 )
 
 
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
 def _inbound_split_references(
     store: MemoryStore,
     session: AtomizeAnalysisSession,
@@ -774,6 +778,24 @@ def cmd(
                 "'mem review atomize --replace-review' to explicitly "
                 "replace them before saving."
             )
+
+        if save_as is not None and _interactive_terminal():
+            from memcommit.commands.save_location_review import (
+                review_save_location,
+            )
+
+            reviewed_destination = review_save_location(
+                save_as,
+                validate=store.assert_context_creatable,
+                apply_label="create atomized Context",
+            )
+            if reviewed_destination is None:
+                typer.echo(
+                    "Aborted — the saved atomize analysis remains available; "
+                    "no Context changes made."
+                )
+                return
+            save_as = reviewed_destination
 
         if save_as is not None:
             applied_session, result = _apply_to_new_context(

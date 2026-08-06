@@ -303,6 +303,14 @@ after the normal source and current-Context revalidation. There is no
 automatic language-suffix destination; a person must opt into both
 materialization and its name.
 
+Immediately after the translation preview and before Apply, interactive
+`--save-as` renders the shared `SAVE LOCATION` card. `E` opens a one-line
+direct edit, revalidates the replacement as an exact fresh ordinary Context
+name, and returns to the same apply choice without another provider turn.
+`--yes` deliberately bypasses this review and remains bound to the exact CLI
+operand. In-place translation omits the card because it updates the already
+reviewed source Context rather than creating a distinct result.
+
 The current checkpoint provenance schemas prove a single provider response
 digest. They do not yet describe manual/import evidence, reviewer identity,
 or a materialized mixture assembled from several provider batches. Therefore

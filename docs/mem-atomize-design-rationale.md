@@ -546,6 +546,14 @@ mem atomize --save                 # modify the selected Context
 mem atomize --save-as NEW_CONTEXT  # preserve source; create and switch
 ```
 
+In an interactive `--save-as` application, the exact reviewed preview is
+followed by the shared `SAVE LOCATION` card before mutation. `E` may replace
+the fresh destination name, which is revalidated without reanalysis; Apply
+then uses that final name. Aborting leaves the saved analysis and source
+unchanged. Non-TTY automation keeps the explicit CLI operand as its frozen
+destination, while in-place `--save` has no location editor because it is
+defined to update the selected source Context.
+
 Both require the latest preview to match the Context UID, name, ordered
 direct-Memory digest, and current source contents. `COMPOSITE` sources are
 replaced in place with fresh child UIDs. `ATOMIC`, `UNCERTAIN`, and
