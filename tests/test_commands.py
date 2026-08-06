@@ -113,7 +113,7 @@ class TestHelp:
 
     def test_selector_moves_down_and_returns_selected_command(self):
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[B\r\r\r")
+            pipe_input.send_text("\x1b[B\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
@@ -121,18 +121,20 @@ class TestHelp:
                 require_tty=False,
             )
 
-        assert selected == "beta"
+        assert selected is not None
+        assert selected.command_line == "mem beta"
 
     def test_selector_clamps_at_first_command_and_can_cancel(self):
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[A\r\r\r")
+            pipe_input.send_text("\x1b[A\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
                 app_output=DummyOutput(),
                 require_tty=False,
             )
-        assert selected == "alpha"
+        assert selected is not None
+        assert selected.command_line == "mem alpha"
 
         with create_pipe_input() as pipe_input:
             pipe_input.send_text("q")
@@ -146,9 +148,9 @@ class TestHelp:
 
     def test_selector_right_expands_left_collapses_and_enter_enters_forms(self):
         with create_pipe_input() as pipe_input:
-            # Right expands, Left collapses, then two Enters expand and move
-            # the bar to FORM 1; a third Enter opens ordinary command help.
-            pipe_input.send_text("\x1b[C\x1b[D\r\r\r")
+            # Right expands, Left collapses, then two Rights expand and move
+            # the bar to FORM 1; Enter selects that exact template.
+            pipe_input.send_text("\x1b[C\x1b[D\x1b[C\x1b[C\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
@@ -156,7 +158,19 @@ class TestHelp:
                 require_tty=False,
             )
 
-        assert selected == "alpha"
+        assert selected is not None
+        assert selected.command_line == "mem alpha"
+
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("\x1b[C\x1b[C\x1b[B\r")
+            second_form = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+        assert second_form is not None
+        assert second_form.command_line == "mem alpha VALUE"
 
     def test_enter_opens_command_help_without_running_command(
         self,
@@ -170,7 +184,11 @@ class TestHelp:
         monkeypatch.setattr(
             help_inventory,
             "run_help_selector",
-            lambda entries: "impact",
+            lambda entries: help_inventory.HelpSelection(
+                command_name="impact",
+                command_line="mem impact",
+                show_help=True,
+            ),
         )
 
         result = invoke("help")

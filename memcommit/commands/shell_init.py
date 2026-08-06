@@ -24,13 +24,17 @@ function mem {
     if [[ -z $_mem_selected ]]; then
       return 0
     fi
+    if [[ $_mem_selected != mem && $_mem_selected != 'mem '* ]]; then
+      builtin print -u2 -- 'mem: invalid command selection'
+      return 1
+    fi
     case $_mem_selected in
-      (*[!A-Za-z0-9_-]*)
-        builtin print -u2 -- 'mem: invalid command selection'
+      (*[!A-Za-z0-9_./:=\\ -]*)
+        builtin print -u2 -- 'mem: unsafe command selection'
         return 1
         ;;
     esac
-    builtin print -rz -- "mem ${_mem_selected} "
+    builtin print -rz -- "${_mem_selected} "
     return 0
   fi
   command mem "$@"

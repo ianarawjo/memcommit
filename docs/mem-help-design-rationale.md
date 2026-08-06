@@ -25,13 +25,13 @@ prompt-toolkit selector:
 - Up and Down move one command at a time or move among one expanded command's
   forms.
 - Page Up, Page Down, Home, and End move through the longer list.
-- Right or the first Enter expands one command in place. The second Enter moves
-  the focus bar to its first `FORM`; Up and Down then inspect the alternative
-  invocations. Left returns from a Form to its command row and then collapses
-  the command.
-- Enter on a focused Form, or `H` from the command row, closes the selector,
-  prints `Command: mem <name>`, and renders that registered command's complete
-  syntax help in the ordinary CLI path.
+- Right expands one command in place and a second Right moves the focus bar to
+  its first `FORM`; Up and Down then inspect the alternative invocations. Left
+  returns from a Form to its command row and then collapses the command.
+- Enter selects the exact focused row. From the command row it yields only the
+  bare `mem <name>` template; from a Form it yields that Form's editable command
+  template without the parenthesized explanation. `H` separately opens the
+  registered command's complete syntax help.
 - `q`, Escape, and Ctrl-C cancel without selecting or invoking anything.
 
 The selected command's callback is deliberately never invoked. Some commands
@@ -75,7 +75,8 @@ Simple commands derive one conservative form from their registered positional
 operands. Commands with several semantic entry routes keep an explicit bounded
 form list. This list intentionally omits action flags such as comments,
 responses, snapshots, and acceptance controls; `H` retains the complete
-registered syntax reference. Forms are explanatory and are never executed.
+registered syntax reference. A selected Form is prefilled as editable shell
+text by the opt-in zsh integration; selection never executes it.
 
 A deliberately bounded command needs no exception annotation when its
 advertised contract is available. For example, `merge` intentionally performs

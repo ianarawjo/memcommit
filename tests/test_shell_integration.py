@@ -24,7 +24,7 @@ def test_shell_init_prints_valid_zsh_without_editing_files():
 
     assert result.exit_code == 0
     assert "command mem help --emit-selection" in result.output
-    assert 'print -rz -- "mem ${_mem_selected} "' in result.output
+    assert 'print -rz -- "${_mem_selected} "' in result.output
     assert 'command mem "$@"' in result.output
 
     zsh = shutil.which("zsh")
@@ -60,13 +60,16 @@ def test_emit_selection_reserves_stdout_for_one_command(monkeypatch):
     monkeypatch.setattr(
         help_inventory,
         "run_help_selector",
-        lambda entries, **kwargs: "impact",
+        lambda entries, **kwargs: help_inventory.HelpSelection(
+            command_name="impact",
+            command_line="mem impact --from SOURCE --to TARGET",
+        ),
     )
 
     result = runner.invoke(app, ["help", "--emit-selection"])
 
     assert result.exit_code == 0
-    assert result.output == "impact\n"
+    assert result.output == "mem impact --from SOURCE --to TARGET\n"
 
 
 def test_emit_selection_cancel_emits_nothing(monkeypatch):
@@ -105,7 +108,7 @@ def test_generated_wrapper_prefills_and_delegates(tmp_path):
     executable.write_text(
         """#!/bin/zsh
 if [[ $1 == help && $2 == --emit-selection ]]; then
-  print -r -- 'impact'
+  print -r -- 'mem impact --from SOURCE --to TARGET'
 else
   print -r -- "delegated:$*"
 fi
@@ -152,5 +155,5 @@ mem status
     output = b"".join(chunks).decode(errors="replace").replace("\r", "")
 
     assert returncode == 0, output
-    assert "buffer=mem impact " in output
+    assert "buffer=mem impact --from SOURCE --to TARGET " in output
     assert "delegated:status" in output

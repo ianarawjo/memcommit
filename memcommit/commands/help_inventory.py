@@ -124,6 +124,21 @@ class CommandEntry:
     forms: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class HelpSelection:
+    """One selected command template or request for its complete help."""
+
+    command_name: str
+    command_line: str
+    show_help: bool = False
+
+
+def _selectable_form_line(form: str) -> str:
+    """Remove explanatory syntax while retaining an editable command template."""
+    command_line = form.partition(" (")[0]
+    return command_line.replace("[", "").replace("]", "")
+
+
 def _default_command_forms(name: str, command: object) -> tuple[str, ...]:
     """Build one conservative canonical form from registered operands."""
     if callable(getattr(command, "list_commands", None)):
@@ -226,7 +241,7 @@ def run_help_selector(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> str | None:
+) -> HelpSelection | None:
     """Return the command selected in the terminal, or ``None`` on cancel."""
     if not entries:
         return None
@@ -354,15 +369,19 @@ def run_help_selector(
         event.app.invalidate()
 
     @bindings.add("enter")
-    def _expand_or_open(event) -> None:
+    def _select_row(event) -> None:
         index = selected_index["value"]
-        if expanded_index["value"] != index:
-            expanded_index["value"] = index
-        elif selected_form["value"] is None:
-            selected_form["value"] = 0
+        form_index = selected_form["value"]
+        if form_index is None:
+            command_line = f"mem {entries[index].name}"
         else:
-            event.app.exit(result=entries[index].name)
-        event.app.invalidate()
+            command_line = _selectable_form_line(entries[index].forms[form_index])
+        event.app.exit(
+            result=HelpSelection(
+                command_name=entries[index].name,
+                command_line=command_line,
+            )
+        )
 
     @bindings.add("right")
     def _expand(event) -> None:
@@ -383,7 +402,14 @@ def run_help_selector(
 
     @bindings.add("h")
     def _open_full_help(event) -> None:
-        event.app.exit(result=entries[selected_index["value"]].name)
+        entry = entries[selected_index["value"]]
+        event.app.exit(
+            result=HelpSelection(
+                command_name=entry.name,
+                command_line=f"mem {entry.name}",
+                show_help=True,
+            )
+        )
 
     @bindings.add("q", eager=True)
     @bindings.add("escape", eager=True)
@@ -412,12 +438,12 @@ def run_help_selector(
     )
     footer = Window(
         FormattedTextControl(
-            " ↑/↓ move  →/Enter expand  ← back  H full help  q/Esc close "
+            " ↑/↓ move  → expand/forms  ← back  Enter select  H full help "
         ),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    application: Application[str | None] = Application(
+    application: Application[HelpSelection | None] = Application(
         layout=Layout(
             HSplit([header, body, footer]),
             focused_element=list_control,
@@ -526,23 +552,26 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
-        selected_name = run_help_selector(
+        selection = run_help_selector(
             entries,
             app_output=_selection_output(),
             require_tty=False,
         )
-        if selected_name is not None:
-            typer.echo(selected_name)
+        if selection is not None:
+            typer.echo(selection.command_line)
         return
 
     if not _interactive_terminal():
         _render_plain_inventory(entries)
         return
 
-    selected_name = run_help_selector(entries)
-    if selected_name is None:
+    selection = run_help_selector(entries)
+    if selection is None:
+        return
+    if not selection.show_help:
+        typer.echo(selection.command_line)
         return
     selected = next(
-        entry for entry in entries if entry.name == selected_name
+        entry for entry in entries if entry.name == selection.command_name
     )
     _show_selected_command_help(root, selected)
