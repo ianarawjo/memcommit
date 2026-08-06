@@ -6,6 +6,8 @@ import json
 import uuid
 
 import pytest
+from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.clipboard as clipboard
@@ -23,6 +25,9 @@ from memcommit.commands.compare_sessions import comparison_session_entries
 from memcommit.commands.endpoint_setup_flows import (
     MeldSetupReceipt,
     _meld_source_catalog,
+    _readable_endpoint_catalog,
+    choose_compare_setup,
+    choose_update_setup,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.derived_policy import analysis_retention, authorize_analysis_save
@@ -839,6 +844,51 @@ def test_granted_source_impact_and_update_apply_to_local_target(
     assert authority.load_direct(wiki.name).to_dict() == wiki.to_dict()
 
 
+def test_new_compare_and_update_setup_include_a_granted_target(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    names, first, second, annotations = _readable_endpoint_catalog(active)
+
+    assert first == source.name
+    assert second == wiki.name
+    assert wiki.name in names
+    assert f"{wiki.name}/services" in names
+    assert f"{wiki.name}/construction-details" not in names
+    assert annotations[wiki.name].startswith("GRANTED · ")
+    assert "READ" in annotations[wiki.name]
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\r")
+        compare = choose_compare_setup(
+            active,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\r")
+        update = choose_update_setup(
+            active,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert compare is not None
+    assert compare.reference_name == source.name
+    assert compare.compared_name == wiki.name
+    assert update is not None
+    assert update.source_name == source.name
+    assert update.target_name == wiki.name
+
+
 def test_derived_transfer_permissions_fail_before_provider_or_write(
     isolated_store,
     tmp_path,
@@ -1271,6 +1321,9 @@ def test_switch_to_read_grant_makes_it_current_without_materializing_copy(
     assert (
         "* campus-wiki  [grant READ · RATIONALE SUBTREE + TRACE BLOCKED]"
         in contexts.output
+    )
+    assert "campus-wiki/services  [view read from run-granted-memory]" in (
+        contexts.output
     )
     assert profile_current.exit_code == 0, profile_current.output
     assert "Current Context: campus-wiki" in profile_current.output

@@ -59,6 +59,21 @@ The other initial configurations are:
 | Meld, symmetric | `PEER A + PEER B → RESULT C` | A and B are existing Context trees; C is an eligible empty Context or a validated new exact name |
 | Sever | `SOURCE A × CRITERIA B → OUTPUT C` | A and B are existing Context trees with independent scope controls; C is a new exact name |
 
+Compare and Update freeze A and B from the same unified readable public
+namespace used by other read/source-selection commands. Ordinary local names
+and effective READ-granted public names therefore occupy their semantic public
+hierarchy together; a Grant attachment is authorization metadata, not a tree
+edge. Granted rows display the complete frozen permission set. Query-only
+routes are excluded because neither operation accepts concealed query output as
+an ordinary Context frame.
+
+Showing a readable granted name does not promise that every downstream role is
+authorized. Compare still checks COMBINE and retained-analysis permissions.
+Update still checks DERIVE/EXPORT for its source and ACCEPT_DERIVED plus the
+required mutation permissions for its target before provider inference or
+write. The picker changes discoverability only; normal endpoint resolution,
+frozen Grant receipts, revalidation, and application locks remain authoritative.
+
 “Analysis”, “target”, “result”, and “output” remain distinct terms. The common
 shell must not label every final position as storage, because that would hide
 Compare's targetless artifact and directional Meld's intentional B/result
@@ -89,6 +104,29 @@ component later, but that is not required to prove the extraction.
 
 This boundary avoids making a visual segmented selector responsible for
 review acceptance or durable decisions.
+
+## Grant-aware selector audit
+
+The endpoint omission exposed a broader risk: a shared tree can look
+operation-complete while its caller supplies only `MemoryStore`'s local names.
+The audited boundaries are:
+
+| Surface | Catalog contract |
+| --- | --- |
+| Compare A/B, Update A/B | Local plus effective READ-granted public Contexts; fixed here |
+| Meld A/B | Already uses the readable public catalog; directional mutation still validates its local-baseline restriction |
+| Sever Source/Criteria | Already projects validated readable Grant rows; Output remains require-new local |
+| Switch, List, Find | Already expose or resolve the readable public namespace according to each command's read contract |
+| `mem contexts` | Now enumerates the active Profile's complete visible Grant catalog rather than only Grants attached to the current Context |
+| Atomize New | Intentionally local because the current implementation loads and may apply a direct local analysis; explicit granted Atomize is not implemented |
+| Share Source | Intentionally local because Share locks and exports a directly owned active-Profile Context; it does not re-export a granted authority frame |
+| Ground Context plan/placement | Intentionally follows Ground's local name-only discovery and separately reviewed binding contract |
+| Meld Result, Sever Output | Intentionally existing-local-or-new and require-new-local respectively; neither is a readable source selector |
+
+The common `ContextTreeState` and `choose_context()` utilities remain
+catalog-neutral. Their callers must supply the namespace authorized for the
+specific role; using the shared widget does not make a local-only catalog
+Grant-aware by itself.
 
 The Meld mode selector additionally renders one `MEANING` line for the active
 contract. Directional explains that B remains authoritative and is also the

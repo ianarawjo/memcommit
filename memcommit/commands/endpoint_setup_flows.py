@@ -42,14 +42,42 @@ class MeldSetupReceipt:
     create_target: bool = False
 
 
-def _initial_pair(store: MemoryStore) -> tuple[tuple[str, ...], str, str]:
-    names = tuple(store.list_context_names())
-    if len(names) < 2:
-        raise ValueError("Starting this operation requires two ordinary Contexts.")
+def _readable_endpoint_catalog(
+    store: MemoryStore,
+) -> tuple[tuple[str, ...], str, str, dict[str, str]]:
+    """Freeze local and READ-granted names for two-readable-Context setup."""
+
+    local_names = tuple(store.list_context_names())
+    if not local_names:
+        raise ValueError("Starting this operation requires an ordinary local Context.")
     current = store.current_context_name()
+    root_name = current if current in local_names else local_names[0]
+    root_access = ContextAccess(
+        store=store,
+        context_name=root_name,
+        display_name=root_name,
+        attachment_name=None,
+        permission="READ",
+    )
+    catalog = freeze_readable_context_catalog(
+        store,
+        root_access,
+        include_query_routes=False,
+    )
+    names = tuple(catalog.list_context_names())
+    if len(names) < 2:
+        raise ValueError("Starting this operation requires two readable Contexts.")
     first = current if current in names else names[0]
     second = next(name for name in names if name != first)
-    return names, first, second
+    annotations: dict[str, str] = {}
+    for name in names:
+        access = catalog.access_for(name)
+        if not access.is_granted:
+            continue
+        assert access.view is not None
+        permissions = " + ".join(access.view.grant.permissions)
+        annotations[name] = f"GRANTED · {permissions}"
+    return names, first, second, annotations
 
 
 def _meld_source_catalog(
@@ -102,7 +130,7 @@ def choose_compare_setup(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> CompareSetupReceipt | None:
-    names, first, second = _initial_pair(store)
+    names, first, second, annotations = _readable_endpoint_catalog(store)
     draft = choose_session_endpoints(
         names,
         title="NEW COMPARE · A ↔ B → ANALYSIS",
@@ -119,6 +147,7 @@ def choose_compare_setup(
             EndpointRoleSpec("B", frozenset(names), second),
         ),
         initial_mode_uid="COMPARE",
+        annotations=annotations,
         validate_draft=_distinct_ab,
         app_input=app_input,
         app_output=app_output,
@@ -139,7 +168,7 @@ def choose_update_setup(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> UpdateSetupReceipt | None:
-    names, first, second = _initial_pair(store)
+    names, first, second, annotations = _readable_endpoint_catalog(store)
     draft = choose_session_endpoints(
         names,
         title="NEW UPDATE · A → B",
@@ -156,6 +185,7 @@ def choose_update_setup(
             EndpointRoleSpec("B", frozenset(names), second),
         ),
         initial_mode_uid="UPDATE",
+        annotations=annotations,
         validate_draft=_distinct_ab,
         app_input=app_input,
         app_output=app_output,
