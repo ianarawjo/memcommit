@@ -2,16 +2,16 @@
 
 ## Intent
 
-The default Typer help output proves that a command is registered, but it does
-not distinguish a complete local command contract from a bounded research
-slice, an older semantic path, or an alias. That distinction matters while
-building the study prototype and when preparing its printed cheat sheet.
+The default Typer help output proves that a command is registered, but its
+syntax-first layout is harder to scan as a complete command inventory. That
+distinction matters while building the study prototype and when preparing its
+printed cheat sheet.
 
 `mem help` therefore renders one concise inventory line per visible registered
 command:
 
 ```text
-name - implementation level - short description
+name [(exception)] - short description
 ```
 
 It reports capabilities; it does not recommend a command sequence or perform
@@ -47,40 +47,39 @@ When stdin or stdout is not a TTY, `mem help` retains the stable plain-text
 inventory. This keeps pipes, captured study records, and automated tests
 deterministic instead of emitting a terminal-control interface.
 
-## Levels
+## Exceptional annotations
 
-- `implemented`: the behavior advertised by that command's current short
-  description is available.
-- `partial`: only a deliberately bounded subset of the broader operation is
-  available. For example, `merge` is a structural UID union, `diff` only
-  renders the active stage, `review` currently has only an ambiguity adapter,
-  and `update` stages a plan without applying it to the target.
-- `legacy`: an older configured-LLM path remains callable but is outside the
-  current staged research workflow.
-- `alias`: an alternate spelling delegates to another command.
+Ordinary commands carry no implementation label. Repeating `implemented` on
+nearly every row adds noise without helping a person choose a command. A
+parenthesized annotation is reserved for an exceptional compatibility state:
+`integrate (legacy)` and `config (legacy)` remain callable but sit outside the
+current workflow.
 
-`implemented` is not a production-readiness claim. The repository as a whole
-is a research prototype, and individual commands may still have documented
-permission, provider, concurrency, or remote-persistence boundaries.
+A deliberately bounded command needs no exception annotation when its
+advertised contract is available. For example, `merge` intentionally performs
+structural UID union without semantic reconciliation, and `diff` intentionally
+renders the active update rather than comparing arbitrary Contexts. The
+inventory describes the contract people can actually invoke, not a broader
+operation suggested by the command's name or a production-readiness claim.
+Individual commands may still have documented permission, provider,
+concurrency, or remote-persistence boundaries.
 
 An implementation can expose two co-equal public spellings through one
 internal callback. `mem list` and `mem ls` deliberately have the same
-description and both appear as `implemented`: participants may learn and use
-either spelling without one inventory row redirecting them to the other.
-This differs from a compatibility alias such as `checkout`, whose inventory
-entry exists primarily to point at the canonical operation.
+description: participants may learn and use either spelling. A compatibility
+alias such as `checkout` identifies its canonical `switch` and `branch`
+operations directly in its description instead of adding another status
+column.
 
 ## Consistency boundary
 
 Descriptions are read from the same Click/Typer command registrations used by
 `mem --help`; the inventory does not maintain a second description catalog.
-Implementation levels are explicit because they are design judgments rather
-than properties that can be inferred safely from registration.
+Exceptional annotations are explicit because compatibility status is a design
+judgment rather than a property that can be inferred safely from registration.
 
-The renderer fails closed if a visible command has no level or if a level
-remains for a command that is no longer registered. This makes adding,
-renaming, or removing a command require an intentional maturity decision
-instead of silently presenting it as implemented.
+The renderer fails closed if an annotated command is no longer registered.
+Ordinary new commands need no redundant `implemented` entry.
 
 Only callable visible commands are listed. Proposed but unregistered
 operations are omitted rather than shown as commands a participant could try.

@@ -1,4 +1,4 @@
-"""Browse implementation levels for the top-level CLI."""
+"""Browse the top-level CLI command inventory."""
 from __future__ import annotations
 
 import sys
@@ -17,70 +17,10 @@ from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style
 
 
-IMPLEMENTATION_LEVELS = {
-    "add": "implemented",
-    "atomize": "implemented",
-    "branch": "implemented",
-    "checkout": "alias",
-    "checkpoint": "implemented",
-    "chunk": "implemented",
-    "clear": "implemented",
-    "compare": "implemented",
+COMMAND_ANNOTATIONS = {
     "config": "legacy",
-    "contexts": "implemented",
-    "delete": "implemented",
-    "diff": "partial",
-    "edit": "implemented",
-    "embed": "implemented",
-    "eval": "partial",
-    "find": "implemented",
-    "find-ambiguities": "implemented",
-    "find-conflicts": "implemented",
-    "find-duplicates": "implemented",
-    "forget": "legacy",
-    "ground": "partial",
-    "help": "implemented",
-    "impact": "partial",
-    "import": "implemented",
-    "init": "implemented",
-    "init-study": "implemented",
     "integrate": "legacy",
-    "list": "implemented",
-    "lock": "implemented",
-    "log": "implemented",
-    "ls": "implemented",
-    "meld": "partial",
-    "merge": "partial",
-    "profile": "implemented",
-    "provider": "implemented",
-    "query": "implemented",
-    "rationale": "implemented",
-    "redo": "implemented",
-    "reference": "implemented",
-    "rename": "implemented",
-    "remove": "implemented",
-    "revert": "implemented",
-    "review": "partial",
-    "sever": "partial",
-    "share": "partial",
-    "shell-init": "implemented",
-    "show": "implemented",
-    "status": "implemented",
-    "summarize": "implemented",
-    "switch": "implemented",
-    "trace": "implemented",
-    "translate": "implemented",
-    "undo": "implemented",
-    "unlock": "implemented",
-    "update": "partial",
 }
-
-LEVEL_DESCRIPTIONS = (
-    "implemented = advertised behavior is available",
-    "partial = only a bounded subset is available",
-    "legacy = older path outside the current workflow",
-    "alias = alternate name for another command",
-)
 
 
 @dataclass(frozen=True)
@@ -88,7 +28,7 @@ class CommandEntry:
     """One visible command and the inventory metadata used to present it."""
 
     name: str
-    level: str
+    annotation: str | None
     description: str
     command: object
 
@@ -114,16 +54,11 @@ def _visible_commands(ctx: typer.Context) -> list[tuple[str, object]]:
 def _command_entries(root: typer.Context) -> list[CommandEntry]:
     commands = _visible_commands(root)
     visible_names = {name for name, _ in commands}
-    missing = sorted(visible_names - IMPLEMENTATION_LEVELS.keys())
-    stale = sorted(IMPLEMENTATION_LEVELS.keys() - visible_names)
-    if missing or stale:
-        details = []
-        if missing:
-            details.append("unclassified: " + ", ".join(missing))
-        if stale:
-            details.append("not registered: " + ", ".join(stale))
+    stale = sorted(COMMAND_ANNOTATIONS.keys() - visible_names)
+    if stale:
         typer.secho(
-            "Help inventory error: " + "; ".join(details),
+            "Help inventory error: annotated command not registered: "
+            + ", ".join(stale),
             fg=typer.colors.RED,
             err=True,
         )
@@ -132,7 +67,7 @@ def _command_entries(root: typer.Context) -> list[CommandEntry]:
     return [
         CommandEntry(
             name=name,
-            level=IMPLEMENTATION_LEVELS[name],
+            annotation=COMMAND_ANNOTATIONS.get(name),
             description=" ".join(
                 (getattr(command, "help", None) or "No description.").split()
             ),
@@ -146,28 +81,26 @@ def _entry_line(
     entry: CommandEntry,
     *,
     name_width: int,
-    level_width: int,
 ) -> str:
-    return (
-        f"{entry.name:<{name_width}} - "
-        f"{entry.level:<{level_width}} - "
-        f"{entry.description}"
-    )
+    label = entry.name
+    if entry.annotation:
+        label += f" ({entry.annotation})"
+    return f"{label:<{name_width}} - {entry.description}"
 
 
 def _render_plain_inventory(entries: list[CommandEntry]) -> None:
     typer.secho("mem command inventory", bold=True)
-    typer.echo("Levels: " + "; ".join(LEVEL_DESCRIPTIONS))
     typer.echo()
 
-    name_width = max(len(entry.name) for entry in entries)
-    level_width = max(len(entry.level) for entry in entries)
+    name_width = max(
+        len(entry.name) + (len(entry.annotation) + 3 if entry.annotation else 0)
+        for entry in entries
+    )
     for entry in entries:
         typer.echo(
             _entry_line(
                 entry,
                 name_width=name_width,
-                level_width=level_width,
             )
         )
 
@@ -188,8 +121,10 @@ def run_help_selector(
         raise ValueError("Interactive help requires a terminal.")
 
     selected_index = {"value": 0}
-    name_width = max(len(entry.name) for entry in entries)
-    level_width = max(len(entry.level) for entry in entries)
+    name_width = max(
+        len(entry.name) + (len(entry.annotation) + 3 if entry.annotation else 0)
+        for entry in entries
+    )
     bindings = KeyBindings()
 
     def render_entries():
@@ -207,7 +142,6 @@ def run_help_selector(
                     + _entry_line(
                         entry,
                         name_width=name_width,
-                        level_width=level_width,
                     )
                     + "\n",
                 )
@@ -271,11 +205,10 @@ def run_help_selector(
     header = Window(
         FormattedTextControl(
             [
-                ("class:title", " mem help · command inventory\n"),
-                ("", " implemented · partial · legacy · alias"),
+                ("class:title", " mem help · command inventory"),
             ]
         ),
-        height=Dimension.exact(2),
+        height=Dimension.exact(1),
         dont_extend_height=True,
     )
     body = Window(
@@ -379,7 +312,7 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Browse command levels and open syntax help for a selection."""
+    """Browse commands and open syntax help for a selection."""
     root = ctx.parent
     if root is None:
         typer.secho(

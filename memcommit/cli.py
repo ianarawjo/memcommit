@@ -265,7 +265,7 @@ app.add_typer(dev_app,    name="dev",    help="Developer tools (eval, diagnostic
 
 app.command(
     "help",
-    help="Browse commands with implementation levels and syntax help.",
+    help="Browse commands and open syntax help.",
 )(help_inventory.cmd)
 app.command(
     "shell-init",
@@ -274,7 +274,10 @@ app.command(
 
 
 # checkout: alias for switch, with -b to branch instead
-@app.command("checkout", help="Switch to a context; with -b, branch from the current one.")
+@app.command(
+    "checkout",
+    help="Alias for switch; with -b, alias for branch.",
+)
 def _checkout(
     name: Annotated[str, typer.Argument(help="Context to switch to, or name of new branch")],
     b: Annotated[bool, typer.Option("-b", "--branch", help="Create a new branch from the current context")] = False,

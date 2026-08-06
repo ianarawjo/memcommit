@@ -36,28 +36,27 @@ class TestHelp:
         return [
             CommandEntry(
                 name=name,
-                level="implemented",
+                annotation=None,
                 description=f"{name} description",
                 command=object(),
             )
             for name in ("alpha", "beta", "gamma")
         ]
 
-    def test_lists_commands_with_levels_and_descriptions(self):
+    def test_lists_commands_with_exception_annotations_and_descriptions(self):
         result = invoke("help")
 
         assert result.exit_code == 0
         assert "mem command inventory" in result.output
+        assert "implemented" not in result.output
         lines = result.output.splitlines()
         assert any(
             line.startswith("impact ")
-            and " - partial " in line
             and "no Context changes" in line
             for line in lines
         )
         assert any(
             line.startswith("update ")
-            and " - partial " in line
             and "local target" in line
             and "no shared publication" in line
             for line in lines
@@ -65,18 +64,18 @@ class TestHelp:
         list_row = next(line for line in lines if line.startswith("list "))
         ls_row = next(line for line in lines if line.startswith("ls "))
         assert list_row.split(" - ", 1)[1] == ls_row.split(" - ", 1)[1]
-        assert "implemented" in list_row
         assert "List child Contexts and direct items" in list_row
         assert any(
             line.startswith("checkout ")
-            and " - alias " in line
+            and "Alias for switch" in line
+            and "alias for branch" in line
             for line in lines
         )
         assert any(
-            line.startswith("integrate ")
-            and " - legacy " in line
+            line.startswith("integrate (legacy) ")
             for line in lines
         )
+        assert any(line.startswith("config (legacy) ") for line in lines)
         assert any(
             line.startswith("atomize ")
             and "issue-scoped directional meld" in line
