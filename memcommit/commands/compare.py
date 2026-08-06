@@ -47,7 +47,10 @@ from memcommit.commands.compare_sessions import (
     revalidate_saved_comparison,
 )
 from memcommit.commands.compare_workbench import run_compare_workbench
-from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.command_progress import (
+    CommandProgress,
+    progressing_provider_factory,
+)
 from memcommit.commands.endpoint_setup_flows import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
 from memcommit.commands.session_picker import SessionNewReceipt
@@ -59,6 +62,7 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_scope import load_context_scope
 from memcommit.profile_config import ProfileConfigError
 from memcommit.provenance import ProvenanceError
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
@@ -162,6 +166,20 @@ def _header_lines(
             "(layout only; no authority)"
         ),
         f"Compared:  {display_escape_text(compared.context_name)}",
+        (
+            "SCOPE · REFERENCE "
+            + (
+                "SELECTED + ALL DESCENDANTS"
+                if analysis.include_descendants[0]
+                else "SELECTED GRAPH ONLY"
+            )
+            + " · COMPARED "
+            + (
+                "SELECTED + ALL DESCENDANTS"
+                if analysis.include_descendants[1]
+                else "SELECTED GRAPH ONLY"
+            )
+        ),
         (
             f"Analysis: {analysis.uid[:8]} · "
             f"{'REUSED' if reused else 'NEW'}"
@@ -312,28 +330,24 @@ def render_comparison(
             )
         if analysis.issues:
             lines.extend(_potential_conflict_lines(analysis, numbered))
+        compare_argv = ["mem", "compare", "--to", compared.context_name]
+        meld_argv = [
+            "mem",
+            "meld",
+            reference.context_name,
+            compared.context_name,
+        ]
+        if analysis.include_descendants[0]:
+            compare_argv.append("--reference-descendants")
+            meld_argv.append("--left-descendants")
+        if analysis.include_descendants[1]:
+            compare_argv.append("--compared-descendants")
+            meld_argv.append("--right-descendants")
         ledger_command = display_escape_text(
-            shlex.join(
-                [
-                    "mem",
-                    "compare",
-                    "--to",
-                    compared.context_name,
-                    "--ledger",
-                ]
-            )
+            shlex.join([*compare_argv, "--ledger"])
         )
         meld_command = display_escape_text(
-            shlex.join(
-                [
-                    "mem",
-                    "meld",
-                    reference.context_name,
-                    compared.context_name,
-                    "--to",
-                    "RESULT_CONTEXT",
-                ]
-            )
+            shlex.join([*meld_argv, "--to", "RESULT_CONTEXT"])
         )
         lines.extend(
             [
@@ -492,16 +506,21 @@ def _render_selected_rationale(
     )
     target = resolve_rationale_target(scope, memory_uid)
     trace = rationale_trace(scope, target)
-    report = build_rationale(
-        scope.access.store,
-        target.owner,
-        trace,
+    with progressing_provider_factory(
+        "COMPARE RATIONALE",
+        "inferring rationale",
         connect_codex_chatgpt_provider,
-        cache_inference=not scope.granted,
-        inference_contexts=scope.contexts,
-        inference_scope_name=scope.root_name,
-        recorded_evidence_available=not scope.granted,
-    )
+    ) as provider_factory:
+        report = build_rationale(
+            scope.access.store,
+            target.owner,
+            trace,
+            provider_factory,
+            cache_inference=not scope.granted,
+            inference_contexts=scope.contexts,
+            inference_scope_name=scope.root_name,
+            recorded_evidence_available=not scope.granted,
+        )
     render_rationale(report)
 
 
@@ -599,11 +618,17 @@ def _recursive_compare_projection(root: Context) -> Context:
     return projected
 
 
-def _load_compare_context(access) -> Context:
-    if access.is_granted:
-        context = GrantedReadStore(access).load(access.display_name)
-    else:
-        context = access.store.load(access.context_name)
+def _load_compare_context(
+    access,
+    *,
+    include_descendants: bool = False,
+) -> Context:
+    reader = GrantedReadStore(access) if access.is_granted else access.store
+    context = load_context_scope(
+        reader,
+        access.display_name if access.is_granted else access.context_name,
+        include_descendants=include_descendants,
+    )
     return _recursive_compare_projection(context)
 
 
@@ -653,12 +678,31 @@ def cmd(
         bool,
         typer.Option(
             "--sessions",
-            help="Interactively reopen a saved read-only comparison analysis",
+            help="Enter the interactive Compare session launcher",
+        ),
+    ] = False,
+    reference_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--reference-descendants/--reference-only",
+            help="Include all readable descendants under REFERENCE A",
+        ),
+    ] = False,
+    compared_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--compared-descendants/--compared-only",
+            help="Include all readable descendants under PEER B",
         ),
     ] = False,
 ) -> None:
     """Compare the active Context with one equal-authority PEER Context."""
-    if sessions and (from_ is not None or to is not None):
+    if sessions and (
+        from_ is not None
+        or to is not None
+        or reference_descendants
+        or compared_descendants
+    ):
         typer.secho(
             "Compare error: use either --sessions or --to/explicit endpoints, not both.",
             fg=typer.colors.RED,
@@ -668,6 +712,13 @@ def cmd(
     if from_ is not None and to is None:
         typer.secho(
             "Compare error: --from requires --to.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if to is None and (reference_descendants or compared_descendants):
+        typer.secho(
+            "Compare error: descendant scope flags require an explicit --to Context.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -697,6 +748,8 @@ def cmd(
                     refresh=refresh,
                     ledger=ledger,
                     snapshot=snapshot,
+                    reference_descendants=setup.reference_descendants,
+                    compared_descendants=setup.compared_descendants,
                 )
                 return
             _resume_selected_comparison(
@@ -753,8 +806,14 @@ def cmd(
                     f"Compared Context '{to}'{resolution} does not exist."
                 ) from error
             authorize_combination((reference_access, compared_access))
-            reference = _load_compare_context(reference_access)
-            compared = _load_compare_context(compared_access)
+            reference = _load_compare_context(
+                reference_access,
+                include_descendants=reference_descendants,
+            )
+            compared = _load_compare_context(
+                compared_access,
+                include_descendants=compared_descendants,
+            )
             reference_binding = (
                 freeze_granted_context_binding(reference_access)
                 if reference_access.is_granted
@@ -784,6 +843,8 @@ def cmd(
             existing = load_comparison_analysis(reference.uid, compared.uid)
         if (
             existing is not None
+            and existing.include_descendants
+            == (reference_descendants, compared_descendants)
             and existing.matches(reference, compared)
             and existing.ruleset_version == COMPARISON_RULESET_VERSION
             and not refresh
@@ -805,6 +866,8 @@ def cmd(
         comparison_input = ComparisonInput.from_contexts(
             reference,
             compared,
+            reference_descendants=reference_descendants,
+            compared_descendants=compared_descendants,
         )
         with CommandProgress(
             "COMPARE",
@@ -845,9 +908,13 @@ def cmd(
                     )
                 )
                 current_reference = _load_compare_context(
-                    current_reference_access
+                    current_reference_access,
+                    include_descendants=reference_descendants,
                 )
-                current_compared = _load_compare_context(current_compared_access)
+                current_compared = _load_compare_context(
+                    current_compared_access,
+                    include_descendants=compared_descendants,
+                )
                 if not analysis.matches(current_reference, current_compared):
                     raise ConcurrentComparisonUpdateError(
                         "A granted comparison source changed while Compare was "

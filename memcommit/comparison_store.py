@@ -12,6 +12,8 @@ from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonError,
 )
+from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_scope import load_context_scope
 
 
 class ConcurrentComparisonUpdateError(RuntimeError):
@@ -122,7 +124,7 @@ def save_comparison_analysis(
     *,
     expected_analysis_uid: str | None,
 ) -> None:
-    """CAS-save one analysis while both exact source Contexts stay locked."""
+    """CAS-save one analysis while every frozen local source stays locked."""
     if not isinstance(store, store_module.MemoryStore):
         raise TypeError("Expected a MemoryStore.")
     if not isinstance(analysis, ComparisonAnalysis):
@@ -141,23 +143,45 @@ def save_comparison_analysis(
         reference_frame.context_uid,
         compared_frame.context_uid,
     )
-    # Context locks are sufficient as the ordered pair's cooperative slot
-    # lock because every writer for this pair must hold the same two locks.
-    # The slot UID CAS then prevents a slower provider call from replacing a
-    # newer analysis of the same unchanged pair.
     with ExitStack() as locks:
-        for name in sorted(
-            {
-                reference_frame.context_name,
-                compared_frame.context_name,
-            }
+        if any(analysis.include_descendants):
+            # Freeze namespace membership before enumerating lock names. A
+            # newly created lexical child is semantically part of a checked
+            # scope and must make the provider result stale, not race into it.
+            locks.enter_context(store._context_graph_lock(exclusive=True))
+        lock_names = {
+            reference_frame.context_name,
+            compared_frame.context_name,
+        }
+        catalog = store.list_context_names()
+        for frame, include_descendants in zip(
+            analysis.frames,
+            analysis.include_descendants,
+            strict=True,
         ):
-            locks.enter_context(store._context_write_lock(name))
+            if include_descendants:
+                prefix = frame.context_name + "/"
+                lock_names.update(
+                    name for name in catalog if name.startswith(prefix)
+                )
+        locks.enter_context(store._context_write_locks(lock_names))
         locks.enter_context(store.profile_write_guard())
 
         try:
-            reference = store.load_direct(reference_frame.context_name)
-            compared = store.load_direct(compared_frame.context_name)
+            reference = _comparison_projection(
+                load_context_scope(
+                    store,
+                    reference_frame.context_name,
+                    include_descendants=analysis.include_descendants[0],
+                )
+            )
+            compared = _comparison_projection(
+                load_context_scope(
+                    store,
+                    compared_frame.context_name,
+                    include_descendants=analysis.include_descendants[1],
+                )
+            )
         except FileNotFoundError as error:
             raise ConcurrentComparisonUpdateError(
                 "A comparison source Context no longer exists."
@@ -188,6 +212,40 @@ def save_comparison_analysis(
         if path.exists() and (not path.is_file() or path.is_symlink()):
             raise ValueError("Comparison analysis storage is invalid.")
         store_module._write_json_atomic(path, analysis.to_dict())
+
+
+def _comparison_projection(root: Context) -> Context:
+    """Mirror Compare's recursive projection at the locked save boundary."""
+
+    if not any(isinstance(item, Context) for item in root.iter_items()):
+        return root
+    projected = Context(uid=root.uid, name=root.name)
+    seen: set[str] = set()
+
+    def visit(context: Context) -> None:
+        if context.uid in seen:
+            return
+        seen.add(context.uid)
+        for item in context.iter_items():
+            if isinstance(item, Memory):
+                projected.add(
+                    Memory(
+                        uid=item.uid,
+                        content=f"[{context.name}] {item.content}",
+                    )
+                )
+            elif isinstance(item, Context):
+                visit(item)
+            elif isinstance(item, QueryContextRef):
+                continue
+            elif isinstance(item, MemoryRef):
+                raise ComparisonError(
+                    "Recursive Compare does not copy live Memory references; "
+                    f"unsupported item [{item.uid[:8]}] in {context.name!r}."
+                )
+
+    visit(root)
+    return projected
 
 
 def comparison_paths_for_context(context_uid: str) -> tuple[Path, ...]:

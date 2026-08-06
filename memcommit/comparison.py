@@ -21,7 +21,8 @@ from memcommit.understanding import (
 )
 
 
-COMPARISON_SCHEMA_VERSION = 2
+COMPARISON_SCHEMA_VERSION = 3
+COMPARISON_REPORTS_SCHEMA_VERSION = 2
 COMPARISON_LEGACY_SCHEMA_VERSION = 1
 COMPARISON_RULESET_VERSION = "peer-relations-v3"
 SUPPORTED_COMPARISON_RULESET_VERSIONS = {
@@ -617,12 +618,16 @@ class ComparisonInput:
     created_at: str
     ruleset_version: str
     frames: tuple[ComparisonFrame, ComparisonFrame]
+    include_descendants: tuple[bool, bool] = (False, False)
 
     @classmethod
     def from_contexts(
         cls,
         reference: Context,
         compared: Context,
+        *,
+        reference_descendants: bool = False,
+        compared_descendants: bool = False,
     ) -> "ComparisonInput":
         if (
             reference.uid == compared.uid
@@ -645,6 +650,10 @@ class ComparisonInput:
                     side="COMPARED",
                 ),
             ),
+            include_descendants=(
+                reference_descendants,
+                compared_descendants,
+            ),
         )
         result.validate()
         return result
@@ -652,6 +661,11 @@ class ComparisonInput:
     def validate(self) -> None:
         _canonical_uuid(self.uid, "comparison uid")
         _timestamp(self.created_at, "comparison creation time")
+        if (
+            len(self.include_descendants) != 2
+            or any(type(value) is not bool for value in self.include_descendants)
+        ):
+            raise ComparisonError("Invalid comparison descendant scopes.")
         if (
             self.ruleset_version
             not in SUPPORTED_COMPARISON_RULESET_VERSIONS
@@ -683,6 +697,8 @@ class ComparisonAnalysis:
     reports: ComparisonReports | None
     relations: tuple[ComparisonRelation, ...]
     issues: tuple[ComparisonIssue, ...]
+    include_descendants: tuple[bool, bool] = (False, False)
+    schema_version: int = COMPARISON_SCHEMA_VERSION
 
     @classmethod
     def create(
@@ -716,18 +732,21 @@ class ComparisonAnalysis:
             reports=reports,
             relations=tuple(relations),
             issues=tuple(issues),
+            include_descendants=comparison_input.include_descendants,
+            schema_version=COMPARISON_SCHEMA_VERSION,
         )
         return cls.from_dict(result.to_dict())
 
     def to_dict(self) -> dict[str, object]:
         # A legacy analysis remains serializable without fabricating prose
         # that was never returned by its provider call.
+        schema_version = (
+            self.schema_version
+            if self.reports is not None
+            else COMPARISON_LEGACY_SCHEMA_VERSION
+        )
         result: dict[str, object] = {
-            "schema_version": (
-                COMPARISON_SCHEMA_VERSION
-                if self.reports is not None
-                else COMPARISON_LEGACY_SCHEMA_VERSION
-            ),
+            "schema_version": schema_version,
             "uid": self.uid,
             "created_at": self.created_at,
             "ruleset_version": self.ruleset_version,
@@ -740,6 +759,8 @@ class ComparisonAnalysis:
         }
         if self.reports is not None:
             result["reports"] = self.reports.to_dict()
+        if schema_version == COMPARISON_SCHEMA_VERSION:
+            result["include_descendants"] = list(self.include_descendants)
         return result
 
     @classmethod
@@ -752,6 +773,7 @@ class ComparisonAnalysis:
             or schema_version
             not in {
                 COMPARISON_LEGACY_SCHEMA_VERSION,
+                COMPARISON_REPORTS_SCHEMA_VERSION,
                 COMPARISON_SCHEMA_VERSION,
             }
         ):
@@ -768,8 +790,10 @@ class ComparisonAnalysis:
             "relations",
             "issues",
         }
-        if schema_version == COMPARISON_SCHEMA_VERSION:
+        if schema_version >= COMPARISON_REPORTS_SCHEMA_VERSION:
             keys.add("reports")
+        if schema_version == COMPARISON_SCHEMA_VERSION:
+            keys.add("include_descendants")
         data = _exact_dict(
             value,
             keys,
@@ -794,6 +818,17 @@ class ComparisonAnalysis:
             ComparisonIssue.from_dict(item)
             for item in _array(data["issues"], "comparison issues")
         )
+        raw_descendant_scopes = (
+            data["include_descendants"]
+            if schema_version == COMPARISON_SCHEMA_VERSION
+            else [False, False]
+        )
+        if (
+            not isinstance(raw_descendant_scopes, list)
+            or len(raw_descendant_scopes) != 2
+            or any(type(value) is not bool for value in raw_descendant_scopes)
+        ):
+            raise ComparisonError("Invalid comparison descendant scopes.")
         result = cls(
             uid=_canonical_uuid(data["uid"], "comparison uid"),
             created_at=_timestamp(
@@ -817,11 +852,13 @@ class ComparisonAnalysis:
             ),
             reports=(
                 ComparisonReports.from_dict(data["reports"])
-                if schema_version == COMPARISON_SCHEMA_VERSION
+                if schema_version >= COMPARISON_REPORTS_SCHEMA_VERSION
                 else None
             ),
             relations=relations,
             issues=issues,
+            include_descendants=tuple(raw_descendant_scopes),  # type: ignore[arg-type]
+            schema_version=schema_version,
         )
         result._validate()
         return result
@@ -855,7 +892,21 @@ class ComparisonAnalysis:
             created_at=self.created_at,
             ruleset_version=self.ruleset_version,
             frames=self.frames,
+            include_descendants=self.include_descendants,
         ).validate()
+        if self.schema_version not in {
+            COMPARISON_LEGACY_SCHEMA_VERSION,
+            COMPARISON_REPORTS_SCHEMA_VERSION,
+            COMPARISON_SCHEMA_VERSION,
+        }:
+            raise ComparisonError("Unsupported comparison analysis schema version.")
+        if (
+            self.schema_version < COMPARISON_SCHEMA_VERSION
+            and any(self.include_descendants)
+        ):
+            raise ComparisonError(
+                "Legacy comparison analysis cannot include descendant scopes."
+            )
         if (
             not self.relations
             or len({relation.uid for relation in self.relations})

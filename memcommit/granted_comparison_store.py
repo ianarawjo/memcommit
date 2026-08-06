@@ -16,6 +16,7 @@ from memcommit.commands.granted_context import (
 )
 from memcommit.comparison import ComparisonAnalysis, ComparisonError
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_scope import load_context_scope
 from memcommit.derived_policy import AnalysisRetention, authorize_analysis_save
 from memcommit.store import MemoryStore, _write_json_atomic
 from memcommit.update import GrantedUpdateTarget
@@ -230,17 +231,28 @@ def granted_artifact_contexts(
         return contexts[0], contexts[1]
 
     contexts = []
-    for frame, binding in zip(
+    for frame, binding, include_descendants in zip(
         artifact.analysis.frames,
         artifact.bindings,
+        artifact.analysis.include_descendants,
         strict=True,
     ):
         if binding is None:
-            context = store.load_direct(frame.context_name)
+            context = recursive_comparison_projection(
+                load_context_scope(
+                    store,
+                    frame.context_name,
+                    include_descendants=include_descendants,
+                )
+            )
         else:
             access = revalidate_granted_context_binding(binding)
             context = recursive_comparison_projection(
-                GrantedReadStore(access).load(binding.public_name)
+                load_context_scope(
+                    GrantedReadStore(access),
+                    binding.public_name,
+                    include_descendants=include_descendants,
+                )
             )
         contexts.append(context)
     if not artifact.analysis.matches(contexts[0], contexts[1]):

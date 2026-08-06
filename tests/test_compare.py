@@ -311,6 +311,47 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     assert path.read_bytes() == saved_before
 
 
+def test_compare_descendant_flags_freeze_lexical_child_memories(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference = ops.init("scoped/reference")
+    reference_child = ops.init("scoped/reference/child")
+    ops.add(reference_child, "Reference child policy.")
+    compared = ops.init("scoped/compared")
+    compared_child = ops.init("scoped/compared/child")
+    ops.add(compared_child, "Compared child policy.")
+    for context in (reference, reference_child, compared, compared_child):
+        store.create_context(context)
+    store.set_current(reference.name)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        [
+            "compare",
+            "--to",
+            compared.name,
+            "--reference-descendants",
+            "--compared-descendants",
+            "--snapshot",
+        ],
+    )
+    analysis = load_comparison_analysis(reference.uid, compared.uid)
+
+    assert result.exit_code == 0, result.output
+    assert analysis is not None
+    assert analysis.include_descendants == (True, True)
+    assert "[scoped/reference/child] Reference child policy." in {
+        memory.content for memory in analysis.frames[0].memories
+    }
+    assert "[scoped/compared/child] Compared child policy." in {
+        memory.content for memory in analysis.frames[1].memories
+    }
+
+
 def test_refresh_and_source_change_each_replace_the_ordered_latest_slot(
     isolated_store,
     monkeypatch,
@@ -783,6 +824,7 @@ def test_older_supported_ruleset_is_readable_but_not_reused(
     value["schema_version"] = 1
     value["ruleset_version"] = "peer-relations-v2"
     value.pop("reports")
+    value.pop("include_descendants")
     path.write_text(json.dumps(value))
     older = load_comparison_analysis(reference.uid, compared.uid)
     assert older is not None

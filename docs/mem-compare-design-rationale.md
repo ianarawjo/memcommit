@@ -150,10 +150,26 @@ The schema deliberately omits Meld dispositions and target Memories. Compare
 describes what exists in both, what differs, and what exists on only one side;
 Meld later decides what an accepted target should contain.
 
+### Explicit descendant scope
+
+Each interactive A/B pane shares the role-based setup shell's default-off
+`INCLUDE ALL DESCENDANT CONTEXTS (OWNED OR GRANTED)` control. The matching
+explicit flags are `--reference-descendants` and `--compared-descendants`.
+Checked means the selected Context graph plus every lexical descendant visible
+through that endpoint's same owned store or frozen Grant view; it never treats
+a Grant attachment as a hierarchy edge or opens query-only material.
+
+Schema v3 persists both booleans independently. Cache reuse, post-provider
+revalidation, saved report rendering, and a later symmetric Meld must use that
+exact pair. This makes two momentarily identical projections with different
+future scope contracts distinct analyses and prevents a new descendant from
+silently entering an unchecked analysis.
+
 ## Compare-to-Meld handoff
 
 A new symmetric Meld now requires the exact current ordered Compare slot for
-its two sources. `mem meld LEFT RIGHT` loads only `LEFT → RIGHT`; it never
+its two sources and the exact same descendant-scope pair. `mem meld LEFT RIGHT`
+loads only `LEFT → RIGHT`; it never
 silently substitutes `RIGHT → LEFT`, because the two saved slots deliberately
 retain observable presentation-order effects. A missing, stale, invalid, or
 older-ruleset analysis fails before a Meld provider is connected or a session
