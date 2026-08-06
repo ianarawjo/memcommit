@@ -17,6 +17,7 @@ from memcommit.atomize import (
     sentence_like_segment_count,
 )
 from memcommit.cli import app
+from memcommit.commands.atomize_sessions import revalidate_saved_atomize_analysis
 from memcommit.context import (
     AutoCheckpoint,
     Context,
@@ -808,6 +809,7 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     preview = runner.invoke(app, ["impact", "atomize"])
     assert preview.exit_code == 0, preview.output
     checkpoints_before = len(store.list_checkpoints(ctx.name))
+    context_before_apply = store.load_direct(ctx.name).to_dict()
 
     applied = runner.invoke(app, ["atomize", "--save"])
 
@@ -833,6 +835,7 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     assert checkpoint["args"]["analysis_uid"] == (
         store.load_atomize_analysis(ctx.uid).uid
     )
+    context_after_apply = store.load_direct(ctx.name).to_dict()
     changes = checkpoint["args"]["trace"]["changes"]
     assert [change["kind"] for change in changes] == [
         "KEEP",
@@ -850,6 +853,27 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     assert "SPLIT  RECORDED" in traced.output
     assert "ATOMIZE_PREVIEW  APPLIED" in traced.output
     assert "The store closes." in traced.output
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert store.load_direct(ctx.name).to_dict() == context_before_apply
+    _current, projected_applied = revalidate_saved_atomize_analysis(
+        store,
+        store.load_atomize_analysis(ctx.uid),
+    )
+    assert not projected_applied
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert store.load_direct(ctx.name).to_dict() == context_after_apply
+    _current, projected_applied = revalidate_saved_atomize_analysis(
+        store,
+        store.load_atomize_analysis(ctx.uid),
+    )
+    assert projected_applied
+    assert [
+        entry["command"] for entry in store.list_checkpoints(ctx.name)[:3]
+    ] == ["redo", "undo", "atomize"]
 
 
 def test_atomize_save_as_rejects_conflicts_and_preserves_published_failure(
@@ -1593,6 +1617,10 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
         checkpoint["command"]
         for checkpoint in store.list_checkpoints(destination.name)
     ] == ["atomize", "init"]
+    destination_after_apply = destination.to_dict()
+    destination_before_apply = store.list_checkpoints(destination.name)[1][
+        "snapshot"
+    ]
 
     destination_analysis = store.load_atomize_analysis(destination.uid)
     assert source_analysis is not None
@@ -1621,3 +1649,18 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
     assert "CREATED  RECORDED" in traced.output
     assert "SPLIT  RECORDED" in traced.output
     assert "ATOMIZE_PREVIEW  APPLIED" in traced.output
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert (
+        store.load_direct(destination.name).to_dict()
+        == destination_before_apply
+    )
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert store.load_direct(destination.name).to_dict() == destination_after_apply
+    assert [
+        checkpoint["command"]
+        for checkpoint in store.list_checkpoints(destination.name)[:4]
+    ] == ["redo", "undo", "atomize", "init"]

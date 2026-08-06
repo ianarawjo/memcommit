@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Literal
 
-from memcommit.context import Checkpoint
+from memcommit.context import Checkpoint, Context
 from memcommit.history import HistoryError, flatten_checkpoint_entries
 from memcommit.store import MemoryStore, canonical_context_record
 
@@ -30,8 +30,8 @@ class CommandContextChange:
 
     context_uid: str
     context_name: str
-    before: dict[str, object]
-    after: dict[str, object]
+    before: dict[str, object] | None
+    after: dict[str, object] | None
     checkpoint_uid: str
 
 
@@ -289,12 +289,16 @@ def _command_contexts(
 def _context_parts(
     store: MemoryStore,
     context_name: str,
+    *,
+    archived: tuple[Context, list[dict[str, Any]]] | None = None,
 ) -> tuple[list[_OriginalPart], list[_RestorePart]]:
-    context = store.load_direct(context_name)
+    if archived is None:
+        context = store.load_direct(context_name)
+        raw_entries = store.list_checkpoints(context_name)
+    else:
+        context, raw_entries = archived
     try:
-        entries, _ = flatten_checkpoint_entries(
-            store.list_checkpoints(context_name)
-        )
+        entries, _ = flatten_checkpoint_entries(raw_entries)
     except HistoryError as error:
         raise CommandHistoryError(str(error)) from error
     records = {
@@ -388,6 +392,46 @@ def _context_parts(
             if isinstance(recorded_before, dict)
             else None
         )
+        creation = args.get("context_creation")
+        is_exact_sever_creation = (
+            command == "sever"
+            and isinstance(creation, dict)
+            and set(creation) == {"version", "context_uid", "context_name"}
+            and creation.get("version") == 1
+            and creation.get("context_uid") == context.uid
+            and creation.get("context_name") == context.name
+        )
+        # A Sever-created result has no pre-image only when neither the
+        # checkpoint nor the retained history supplies one.  Test those
+        # sources directly: ``before`` is assigned below for ordinary edits.
+        if (
+            normalized_before is None
+            and effective is None
+            and is_exact_sever_creation
+            and owned
+            and auto
+        ):
+            originals.append(
+                _OriginalPart(
+                    unit_uid=_unit_uid(
+                        checkpoint_uid=uid,
+                        command=command,
+                        args=args,
+                    ),
+                    command=command,
+                    description=description,
+                    timestamp=timestamp,
+                    expected_contexts=None,
+                    change=CommandContextChange(
+                        context_uid=context.uid,
+                        context_name=context.name,
+                        before=None,
+                        after=snapshot,
+                        checkpoint_uid=uid,
+                    ),
+                )
+            )
+            continue
         if (
             effective is not None
             and normalized_before is not None
@@ -542,6 +586,22 @@ def build_command_stacks(store: MemoryStore) -> CommandStacks:
         try:
             originals, restorations = _context_parts(store, name)
         except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
+            raise CommandHistoryError(str(error)) from error
+        original_parts.extend(originals)
+        restore_parts.extend(restorations)
+
+    try:
+        archives = store.list_command_context_archives()
+    except (OSError, RuntimeError, ValueError) as error:
+        raise CommandHistoryError(str(error)) from error
+    for context, entries in archives:
+        try:
+            originals, restorations = _context_parts(
+                store,
+                context.name,
+                archived=(context, entries),
+            )
+        except (OSError, RuntimeError, ValueError) as error:
             raise CommandHistoryError(str(error)) from error
         original_parts.extend(originals)
         restore_parts.extend(restorations)

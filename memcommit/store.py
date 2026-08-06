@@ -199,6 +199,7 @@ class ContextRenamePlan:
     checkpoint_reference_count: int
     ground_frame_count: int
     translation_artifact_count: int
+    meld_session_count: int
     current_before: str | None
     current_after: str | None
     graph_digest: str
@@ -218,6 +219,7 @@ class ContextRenameResult:
     checkpoint_reference_count: int
     ground_frame_count: int
     translation_artifact_count: int
+    meld_session_count: int
     current_context: str | None
 
 
@@ -236,6 +238,8 @@ class _PreparedContextRename:
     post_ground_records: dict[str, dict[str, object]]
     translation_records: dict[str, dict[str, object]]
     post_translation_records: dict[str, dict[str, object]]
+    meld_records: dict[str, dict[str, object]]
+    post_meld_records: dict[str, dict[str, object]]
 
 
 def _context_name_parts(name: str) -> tuple[str, ...]:
@@ -772,6 +776,11 @@ class MemoryStore:
             if self._root_override is not None
             else Path(REVIEW_SESSION_FILE)
         )
+
+    @property
+    def command_context_archives_dir(self) -> Path:
+        """Private retained histories for undo of Context-creation commands."""
+        return self.store_dir / "command-context-archives"
 
     @property
     def atomize_analyses_dir(self) -> Path:
@@ -3246,6 +3255,7 @@ class MemoryStore:
         *,
         ground_records: dict[str, dict[str, object]],
         translation_records: dict[str, dict[str, object]],
+        meld_records: dict[str, dict[str, object]],
     ) -> str:
         return _canonical_json_digest(
             {
@@ -3270,6 +3280,10 @@ class MemoryStore:
                 "translations": [
                     {"file": name, "record": record}
                     for name, record in sorted(translation_records.items())
+                ],
+                "melds": [
+                    {"file": name, "record": record}
+                    for name, record in sorted(meld_records.items())
                 ],
             }
         )
@@ -3383,6 +3397,40 @@ class MemoryStore:
                 raise ValueError(
                     f"Saved translation artifact '{path.name}' is invalid."
                 ) from error
+            records[path.name] = raw
+        return records
+
+    def _read_meld_records_for_rename(self) -> dict[str, dict[str, object]]:
+        """Load every target-keyed Meld artifact into rename freshness."""
+
+        from memcommit.meld import MeldError, MeldSession
+
+        root = self.meld_sessions_dir
+        if not root.exists():
+            if root.is_symlink():
+                raise ValueError("Meld session storage is invalid.")
+            return {}
+        if not root.is_dir() or root.is_symlink():
+            raise ValueError("Meld session storage is invalid.")
+        records: dict[str, dict[str, object]] = {}
+        for path in sorted(root.iterdir()):
+            if path.is_symlink() or not path.is_file() or path.suffix != ".json":
+                raise ValueError("Meld session storage is invalid.")
+            try:
+                with open(path, encoding="utf-8") as file:
+                    raw = json.load(
+                        file,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+                session = MeldSession.from_dict(raw)
+            except (json.JSONDecodeError, MeldError, OSError, ValueError) as error:
+                raise ValueError(
+                    f"Saved Meld session '{path.name}' is invalid."
+                ) from error
+            if path.stem != session.target.context_uid:
+                raise ValueError(
+                    f"Saved Meld session '{path.name}' does not match its file."
+                )
             records[path.name] = raw
         return records
 
@@ -3611,12 +3659,69 @@ class MemoryStore:
                 ) from error
             post_translation_records[filename] = post
 
+        meld_records = self._read_meld_records_for_rename()
+        post_meld_records: dict[str, dict[str, object]] = {}
+        meld_session_count = 0
+        from memcommit.comparison import comparison_canonical_digest
+        from memcommit.meld import MeldError, MeldSession
+
+        def rewrite_meld_binding(binding: object) -> bool:
+            if not isinstance(binding, dict):
+                raise ValueError("Saved Meld session has an invalid Context binding.")
+            context_uid = binding.get("context_uid")
+            if not isinstance(context_uid, str) or context_uid not in changed_uids:
+                return False
+            binding["context_name"] = post_name_by_uid[context_uid]
+            if binding.get("context_digest") == pre_digest_by_uid[context_uid]:
+                binding["context_digest"] = post_digest_by_uid[context_uid]
+            return True
+
+        for filename, record in meld_records.items():
+            post = copy.deepcopy(record)
+            changed = rewrite_meld_binding(post.get("target"))
+            frames = post.get("frames")
+            if not isinstance(frames, list):
+                raise ValueError(f"Saved Meld session '{filename}' has invalid frames.")
+            for frame in frames:
+                changed = rewrite_meld_binding(frame) or changed
+            seed = post.get("comparison_seed")
+            if isinstance(seed, dict):
+                analysis = seed.get("analysis")
+                analysis_frames = (
+                    analysis.get("frames") if isinstance(analysis, dict) else None
+                )
+                if not isinstance(analysis_frames, list):
+                    raise ValueError(
+                        f"Saved Meld session '{filename}' has an invalid Compare seed."
+                    )
+                seed_changed = False
+                for frame in analysis_frames:
+                    seed_changed = rewrite_meld_binding(frame) or seed_changed
+                if seed_changed:
+                    seed["analysis_digest"] = comparison_canonical_digest(analysis)
+                    changed = True
+            if changed and post.get("state") == "APPLIED":
+                raise ValueError(
+                    "An applied Meld target or source cannot be renamed until "
+                    "its application is undone."
+                )
+            try:
+                MeldSession.from_dict(post)
+            except MeldError as error:
+                raise ValueError(
+                    f"Saved Meld session '{filename}' cannot follow this rename."
+                ) from error
+            if changed:
+                meld_session_count += 1
+            post_meld_records[filename] = post
+
         graph_digest = self._context_graph_digest_for_rename(
             records,
             checkpoints,
             raw_state,
             ground_records=ground_records,
             translation_records=translation_records,
+            meld_records=meld_records,
         )
         plan = ContextRenamePlan(
             old_name=old_name,
@@ -3627,6 +3732,7 @@ class MemoryStore:
             checkpoint_reference_count=checkpoint_reference_count,
             ground_frame_count=ground_frame_count,
             translation_artifact_count=translation_artifact_count,
+            meld_session_count=meld_session_count,
             current_before=current_before,
             current_after=current_after,
             graph_digest=graph_digest,
@@ -3643,6 +3749,8 @@ class MemoryStore:
             post_ground_records=post_ground_records,
             translation_records=translation_records,
             post_translation_records=post_translation_records,
+            meld_records=meld_records,
+            post_meld_records=post_meld_records,
         )
 
     @staticmethod
@@ -3712,6 +3820,7 @@ class MemoryStore:
         changed_checkpoint_paths: list[tuple[Path, dict[str, object]]] = []
         changed_ground_paths: list[tuple[Path, dict[str, object]]] = []
         changed_translation_paths: list[tuple[Path, dict[str, object]]] = []
+        changed_meld_paths: list[tuple[Path, dict[str, object]]] = []
 
         for owner_name in plan.changed_owner_names:
             before_path = self._context_file(owner_name)
@@ -3747,6 +3856,13 @@ class MemoryStore:
                 path = translation_root / filename
                 restore_files[path] = path.read_bytes()
                 changed_translation_paths.append((path, after))
+        for filename, before in prepared.meld_records.items():
+            after = prepared.post_meld_records[filename]
+            if after == before:
+                continue
+            path = self.meld_sessions_dir / filename
+            restore_files[path] = path.read_bytes()
+            changed_meld_paths.append((path, after))
         if prepared.post_state != prepared.state:
             restore_files[self.state_file] = self.state_file.read_bytes()
 
@@ -3813,6 +3929,8 @@ class MemoryStore:
                 _write_json_atomic(path, record)
             for path, record in changed_translation_paths:
                 _write_json_atomic(path, record)
+            for path, record in changed_meld_paths:
+                _write_json_atomic(path, record)
             for path, record in checkpoint_writes:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 if path.exists() or path.is_symlink():
@@ -3847,6 +3965,17 @@ class MemoryStore:
                 raise RuntimeError(
                     "Current Context state failed post-rename verification."
                 )
+            for filename, expected in prepared.post_meld_records.items():
+                path = self.meld_sessions_dir / filename
+                with open(path, encoding="utf-8") as file:
+                    actual = json.load(
+                        file,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+                if actual != expected:
+                    raise RuntimeError(
+                        f"Meld session '{filename}' failed post-rename verification."
+                    )
         except Exception as error:
             rollback_error: Exception | None = None
             for path in checkpoint_paths:
@@ -3885,6 +4014,7 @@ class MemoryStore:
             checkpoint_reference_count=plan.checkpoint_reference_count,
             ground_frame_count=plan.ground_frame_count,
             translation_artifact_count=plan.translation_artifact_count,
+            meld_session_count=plan.meld_session_count,
             current_context=plan.current_after,
         )
 
@@ -5200,6 +5330,133 @@ class MemoryStore:
                 entries.append(json.load(f))
         return sorted(entries, key=lambda x: x["timestamp"], reverse=True)
 
+    def _command_context_archive_path(self, checkpoint_uid: str) -> Path:
+        """Resolve one exact creation-command archive without accepting paths."""
+        try:
+            canonical = str(uuid.UUID(checkpoint_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Command archive checkpoint uid is invalid.") from error
+        if canonical != checkpoint_uid:
+            raise ValueError("Command archive checkpoint uid is invalid.")
+        root = self.command_context_archives_dir
+        if root.is_symlink() or (root.exists() and not root.is_dir()):
+            raise ValueError("Command Context archive storage is invalid.")
+        return root / checkpoint_uid
+
+    def _load_command_context_archive(
+        self,
+        checkpoint_uid: str,
+    ) -> tuple[Path, dict[str, object], Context, list[dict[str, object]]]:
+        """Load one absent Context and its retained checkpoint history."""
+        archive = self._command_context_archive_path(checkpoint_uid)
+        if archive.is_symlink() or not archive.is_dir():
+            raise FileNotFoundError("Command Context archive is unavailable.")
+        manifest_path = archive / "manifest.json"
+        context_path = archive / "context.json"
+        checkpoints_path = archive / "checkpoints"
+        for path, label in (
+            (manifest_path, "manifest"),
+            (context_path, "Context record"),
+        ):
+            if path.is_symlink() or not path.is_file():
+                raise ValueError(f"Command Context archive {label} is invalid.")
+        if checkpoints_path.is_symlink() or not checkpoints_path.is_dir():
+            raise ValueError("Command Context archive checkpoints are invalid.")
+        with open(manifest_path, encoding="utf-8") as file:
+            manifest = json.load(
+                file,
+                object_pairs_hook=_reject_duplicate_json_keys,
+            )
+        expected_manifest_fields = {
+            "version",
+            "command",
+            "unit_uid",
+            "context_uid",
+            "context_name",
+            "checkpoint_uid",
+            "session_uid",
+            "application",
+            "reviewing_session_digest",
+        }
+        if (
+            not isinstance(manifest, dict)
+            or set(manifest) != expected_manifest_fields
+            or manifest.get("version") != 1
+            or manifest.get("command") != "sever"
+            or manifest.get("unit_uid") != f"checkpoint:{checkpoint_uid}"
+            or manifest.get("checkpoint_uid") != checkpoint_uid
+        ):
+            raise ValueError("Command Context archive manifest is invalid.")
+        context_name = manifest.get("context_name")
+        context_uid = manifest.get("context_uid")
+        session_uid = manifest.get("session_uid")
+        reviewing_digest = manifest.get("reviewing_session_digest")
+        if (
+            not isinstance(context_name, str)
+            or not context_name
+            or not isinstance(context_uid, str)
+            or not context_uid
+            or not isinstance(session_uid, str)
+            or not session_uid
+            or not isinstance(reviewing_digest, str)
+            or len(reviewing_digest) != 64
+            or any(character not in "0123456789abcdef" for character in reviewing_digest)
+            or not isinstance(manifest.get("application"), dict)
+        ):
+            raise ValueError("Command Context archive manifest is invalid.")
+        _context_name_parts(context_name)
+        with open(context_path, encoding="utf-8") as file:
+            context_record = json.load(
+                file,
+                object_pairs_hook=_reject_duplicate_json_keys,
+            )
+        context = Context.from_dict(
+            _validate_context_header(context_record, context_name)
+        )
+        if context.uid != context_uid:
+            raise ValueError("Command Context archive identity is invalid.")
+        entries: list[dict[str, object]] = []
+        for path in checkpoints_path.iterdir():
+            if path.is_symlink() or not path.is_file() or path.suffix != ".json":
+                raise ValueError("Command Context archive checkpoints are invalid.")
+            with open(path, encoding="utf-8") as file:
+                value = json.load(
+                    file,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            if not isinstance(value, dict):
+                raise ValueError("Command Context archive checkpoint is invalid.")
+            entries.append(value)
+        if not any(entry.get("uid") == checkpoint_uid for entry in entries):
+            raise ValueError("Command Context archive lost its source checkpoint.")
+        return (
+            archive,
+            manifest,
+            context,
+            sorted(entries, key=lambda item: str(item.get("timestamp")), reverse=True),
+        )
+
+    def list_command_context_archives(
+        self,
+    ) -> tuple[tuple[Context, list[dict[str, object]]], ...]:
+        """Return validated absent Context histories used by command Undo/Redo."""
+        root = self.command_context_archives_dir
+        if not root.exists():
+            if root.is_symlink():
+                raise ValueError("Command Context archive storage is invalid.")
+            return ()
+        if root.is_symlink() or not root.is_dir():
+            raise ValueError("Command Context archive storage is invalid.")
+        result: list[tuple[Context, list[dict[str, object]]]] = []
+        for path in root.iterdir():
+            if path.is_symlink() or not path.is_dir():
+                raise ValueError("Command Context archive storage is invalid.")
+            _archive, _manifest, context, entries = (
+                self._load_command_context_archive(path.name)
+            )
+            result.append((context, entries))
+        return tuple(sorted(result, key=lambda item: item[0].name))
+
     def restore_recent_context_command(
         self,
         direction: str,
@@ -5239,6 +5496,14 @@ class MemoryStore:
                 raise CommandHistoryError(
                     "The recorded granted update is not the next Context "
                     f"command to {direction}."
+                )
+            if any(
+                change.before is None or change.after is None
+                for change in unit.changes
+            ):
+                return self._restore_context_creation_command_locked(
+                    unit,
+                    direction,
                 )
             names = tuple(change.context_name for change in unit.changes)
             receipt_uid = str(uuid.uuid4())
@@ -5384,6 +5649,292 @@ class MemoryStore:
                 receipt_uid=receipt_uid,
                 checkpoints=tuple(checkpoint for _, checkpoint in created_checkpoints),
             )
+
+    def _remove_checkpoint_uid_locked(self, name: str, checkpoint_uid: str) -> None:
+        """Remove one exact provisional checkpoint while its Context is locked."""
+        for path in self._checkpoints_dir(name).glob(
+            f"*-{checkpoint_uid[:8]}.json"
+        ):
+            if path.is_symlink() or not path.is_file():
+                continue
+            with open(path, encoding="utf-8") as file:
+                value = json.load(
+                    file,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            if value.get("uid") == checkpoint_uid:
+                path.unlink()
+                return
+        raise RuntimeError("Provisional restoration checkpoint is unavailable.")
+
+    def _restore_context_creation_command_locked(self, unit, direction: str):
+        """Undo/Redo one Sever output creation and its saved review.
+
+        Undo moves the complete Context record and checkpoint directory into a
+        private command archive instead of destroying them. Redo can therefore
+        restore the same identity and history, including every restoration
+        receipt, without copying Memory text into lifecycle metadata.
+        """
+        from memcommit.command_history import (
+            CommandRestoreResult,
+            command_restore_metadata,
+        )
+        from memcommit.sever import SeverApplication, sever_record_digest
+        from memcommit.sever_store import SeverSessionStore
+
+        if (
+            unit.command != "sever"
+            or len(unit.changes) != 1
+            or unit.changes[0].before is not None
+            or unit.changes[0].after is None
+        ):
+            raise ValueError(
+                "Only an exact Sever Context creation can use lifecycle restoration."
+            )
+        change = unit.changes[0]
+        receipt_uid = str(uuid.uuid4())
+        restore_metadata = command_restore_metadata(
+            receipt_uid=receipt_uid,
+            direction=direction,
+            unit=unit,
+        )
+        sessions = SeverSessionStore(self)
+        checkpoint: Checkpoint | None = None
+
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_lock(change.context_name):
+                if direction == "undo":
+                    try:
+                        current = self.load_direct(change.context_name)
+                    except FileNotFoundError as error:
+                        raise ConcurrentContextUpdateError(
+                            f"Affected Context '{change.context_name}' no longer exists."
+                        ) from error
+                    if (
+                        current.uid != change.context_uid
+                        or context_record_digest(current)
+                        != context_record_digest(change.after)
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            f"Affected Context '{change.context_name}' changed "
+                            "after the command selected for undo."
+                        )
+                    self._assert_context_deletion_allowed(current)
+                    source_checkpoint = next(
+                        (
+                            entry
+                            for entry in self.list_checkpoints(change.context_name)
+                            if entry.get("uid") == change.checkpoint_uid
+                        ),
+                        None,
+                    )
+                    args = (
+                        source_checkpoint.get("args")
+                        if isinstance(source_checkpoint, dict)
+                        else None
+                    )
+                    sever_receipt = args.get("sever") if isinstance(args, dict) else None
+                    session_uid = (
+                        sever_receipt.get("session_uid")
+                        if isinstance(sever_receipt, dict)
+                        else None
+                    )
+                    if not isinstance(session_uid, str) or not session_uid:
+                        raise ValueError("Sever checkpoint has no valid session receipt.")
+                    session = sessions.load(session_uid)
+                    application = session.application
+                    if (
+                        session.state != "APPLIED"
+                        or application is None
+                        or session.output_name != change.context_name
+                        or application.output_context_uid != change.context_uid
+                        or application.checkpoint_uid != change.checkpoint_uid
+                        or tuple(current.memories) != application.result_memory_uids
+                    ):
+                        raise ValueError(
+                            "Sever session does not match the restored command."
+                        )
+                    reviewing = session.clear_application(
+                        output_context_uid=change.context_uid,
+                        checkpoint_uid=change.checkpoint_uid,
+                    )
+                    session_before_digest = sever_record_digest(session)
+                    reviewing_digest = sever_record_digest(reviewing)
+                    checkpoint = self._save_locked(
+                        current,
+                        AutoCheckpoint(
+                            command="undo",
+                            args={"command_restore": restore_metadata},
+                            description=(
+                                "Undo command 'mem sever' "
+                                f"[{receipt_uid[:8]}]"
+                            ),
+                        ),
+                        expected_context_digest=context_record_digest(current),
+                    )
+                    if checkpoint is None:
+                        raise RuntimeError(
+                            "Sever restoration created no Undo checkpoint."
+                        )
+                    archive = self._command_context_archive_path(
+                        change.checkpoint_uid
+                    )
+                    root = archive.parent
+                    root.mkdir(parents=True, exist_ok=True, mode=0o700)
+                    if root.is_symlink() or not root.is_dir():
+                        raise ValueError(
+                            "Command Context archive storage is invalid."
+                        )
+                    if archive.exists() or archive.is_symlink():
+                        raise ConcurrentContextUpdateError(
+                            "A Sever command archive already exists."
+                        )
+                    archive.mkdir(mode=0o700)
+                    context_file = self._context_file(change.context_name)
+                    checkpoints_dir = self._checkpoints_dir(change.context_name)
+                    archived_context = archive / "context.json"
+                    archived_checkpoints = archive / "checkpoints"
+                    moved = False
+                    session_saved = False
+                    try:
+                        context_file.rename(archived_context)
+                        checkpoints_dir.rename(archived_checkpoints)
+                        moved = True
+                        _write_json_atomic(
+                            archive / "manifest.json",
+                            {
+                                "version": 1,
+                                "command": "sever",
+                                "unit_uid": unit.uid,
+                                "context_uid": change.context_uid,
+                                "context_name": change.context_name,
+                                "checkpoint_uid": change.checkpoint_uid,
+                                "session_uid": session.uid,
+                                "application": application.to_dict(),
+                                "reviewing_session_digest": reviewing_digest,
+                            },
+                        )
+                        sessions.save(
+                            reviewing,
+                            expected_digest=session_before_digest,
+                        )
+                        session_saved = True
+                        with self._state_write_lock():
+                            state = self._read_state()
+                            if state.get("current") == change.context_name:
+                                state["current"] = None
+                                self._write_state(state)
+                    except Exception:
+                        if session_saved:
+                            sessions.save(
+                                session,
+                                expected_digest=reviewing_digest,
+                            )
+                        if moved:
+                            archived_checkpoints.rename(checkpoints_dir)
+                            archived_context.rename(context_file)
+                            self._remove_checkpoint_uid_locked(
+                                change.context_name,
+                                checkpoint.uid,
+                            )
+                        manifest_path = archive / "manifest.json"
+                        if manifest_path.exists() and not manifest_path.is_symlink():
+                            manifest_path.unlink()
+                        try:
+                            archive.rmdir()
+                            root.rmdir()
+                        except OSError:
+                            pass
+                        raise
+                else:
+                    if self.context_exists(change.context_name):
+                        raise ConcurrentContextUpdateError(
+                            f"Affected Context '{change.context_name}' already exists."
+                        )
+                    archive, manifest, archived_context, _entries = (
+                        self._load_command_context_archive(change.checkpoint_uid)
+                    )
+                    if (
+                        archived_context.uid != change.context_uid
+                        or archived_context.name != change.context_name
+                        or context_record_digest(archived_context)
+                        != context_record_digest(change.after)
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            "The archived Sever result changed before Redo."
+                        )
+                    session_uid = manifest["session_uid"]
+                    assert isinstance(session_uid, str)
+                    session = sessions.load(session_uid)
+                    if sever_record_digest(session) != manifest[
+                        "reviewing_session_digest"
+                    ]:
+                        raise ConcurrentContextUpdateError(
+                            "The Sever session changed before Redo."
+                        )
+                    application = SeverApplication.from_dict(
+                        manifest["application"]
+                    )
+                    applied = session.with_application(application)
+                    session_before_digest = sever_record_digest(session)
+                    self._assert_context_storage_available(change.context_name)
+                    context_dir = self._context_dir(change.context_name)
+                    context_dir.mkdir(parents=True, exist_ok=True)
+                    context_file = self._context_file(change.context_name)
+                    checkpoints_dir = self._checkpoints_dir(change.context_name)
+                    archived_context_file = archive / "context.json"
+                    archived_checkpoints = archive / "checkpoints"
+                    moved = False
+                    try:
+                        archived_context_file.rename(context_file)
+                        archived_checkpoints.rename(checkpoints_dir)
+                        moved = True
+                        checkpoint = self._save_locked(
+                            archived_context,
+                            AutoCheckpoint(
+                                command="redo",
+                                args={"command_restore": restore_metadata},
+                                description=(
+                                    "Redo command 'mem sever' "
+                                    f"[{receipt_uid[:8]}]"
+                                ),
+                            ),
+                            expected_context_digest=context_record_digest(
+                                archived_context
+                            ),
+                        )
+                        if checkpoint is None:
+                            raise RuntimeError(
+                                "Sever restoration created no Redo checkpoint."
+                            )
+                        sessions.save(
+                            applied,
+                            expected_digest=session_before_digest,
+                        )
+                    except Exception:
+                        if moved:
+                            if checkpoint is not None:
+                                self._remove_checkpoint_uid_locked(
+                                    change.context_name,
+                                    checkpoint.uid,
+                                )
+                            checkpoints_dir.rename(archived_checkpoints)
+                            context_file.rename(archived_context_file)
+                        raise
+                    manifest_path = archive / "manifest.json"
+                    manifest_path.unlink()
+                    archive.rmdir()
+                    try:
+                        archive.parent.rmdir()
+                    except OSError:
+                        pass
+        assert checkpoint is not None
+        return CommandRestoreResult(
+            unit=unit,
+            direction=direction,
+            receipt_uid=receipt_uid,
+            checkpoints=(checkpoint,),
+        )
 
     def _prepare_applied_artifact_restore(
         self,

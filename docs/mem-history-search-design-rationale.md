@@ -363,13 +363,15 @@ available and selected under ordinary access rules.
   explicit shared operation metadata. Future commands share a global ordering
   lock; retained older histories whose multi-Context intervals overlap fail
   closed rather than guessing an order.
-- Command Undo/Redo currently covers checkpoint-producing changes to existing
-  ordinary Context direct state, including grouped semantic Updates and exact
-  Reverts. It does not reverse Context lifecycle/navigation commands such as
-  `init`, `branch`, `rename`, `delete`, or `switch`, and it does not roll back
-  Ground/session artifacts or shared publication. Semantic requests for a
-  particular historical condition still belong to `mem revert "…"`, followed
-  by explicit candidate selection.
+- Command Undo/Redo covers checkpoint-producing changes to existing ordinary
+  Context direct state, including grouped semantic Updates and exact Reverts.
+  It additionally covers the narrowly receipted Context creation performed by
+  Sever: the absent Result and its checkpoint history live in a private command
+  archive until Redo. Other lifecycle/navigation commands such as `init`,
+  `branch`, `rename`, `delete`, or `switch` remain outside command Undo, as do
+  unrelated Ground/session artifacts and shared publication. Semantic requests
+  for a particular historical condition still belong to `mem revert "…"`,
+  followed by explicit candidate selection.
 
 These boundaries keep the first implementation useful for the study scenario
 without presenting a local snapshot prototype as a complete version-control

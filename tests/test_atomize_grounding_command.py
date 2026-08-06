@@ -563,6 +563,9 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     redone_grounding = store.load_atomize_grounding_session(ctx.uid)
     assert redone_grounding.state == "APPLIED"
     assert redone_grounding.application is not None
+    assert [
+        entry["command"] for entry in store.list_checkpoints(ctx.name)[:3]
+    ] == ["redo", "undo", "atomize-grounding"]
     assert "app authentication is not accepted" in (
         store.load_direct(ctx.name).memories[student.uid].content
     )

@@ -164,6 +164,141 @@ def test_accept_materializes_only_reviewed_outbound_content(isolated_store, monk
     assert checkpoint["args"]["sever"]["criteria"] == "local/guardrails"
 
 
+def test_sever_undo_and_redo_restore_output_session_and_checkpoint_log(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store, "source", "Source")
+    _context(store, "criteria", "Criterion")
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: SeverProvider(),
+    )
+    applied = runner.invoke(
+        app,
+        [
+            "sever",
+            "--source",
+            "source",
+            "--criteria",
+            "criteria",
+            "--save-as",
+            "result",
+            "--accept",
+        ],
+    )
+    assert applied.exit_code == 0, applied.output
+    result_before = store.load_direct("result").to_dict()
+    applied_session = SeverSessionStore(store).list()[0]
+    assert applied_session.application is not None
+    application = applied_session.application
+
+    undone = runner.invoke(app, ["undo"])
+
+    assert undone.exit_code == 0, undone.output
+    assert "Undid command: mem sever" in undone.output
+    assert not store.context_exists("result")
+    reviewing = SeverSessionStore(store).load(applied_session.uid)
+    assert reviewing.state == "REVIEWING"
+    assert reviewing.application is None
+    [(archived_context, archived_checkpoints)] = (
+        store.list_command_context_archives()
+    )
+    assert archived_context.to_dict() == result_before
+    assert [entry["command"] for entry in archived_checkpoints] == [
+        "undo",
+        "sever",
+    ]
+
+    redone = runner.invoke(app, ["redo"])
+
+    assert redone.exit_code == 0, redone.output
+    assert "Redid command: mem sever" in redone.output
+    assert store.load_direct("result").to_dict() == result_before
+    restored_session = SeverSessionStore(store).load(applied_session.uid)
+    assert restored_session.state == "APPLIED"
+    assert restored_session.application == application
+    assert store.list_command_context_archives() == ()
+    assert [
+        entry["command"] for entry in store.list_checkpoints("result")
+    ] == ["redo", "undo", "sever"]
+    assert runner.invoke(app, ["switch", "result"]).exit_code == 0
+    logged = runner.invoke(app, ["log", "--plain"])
+    assert logged.exit_code == 0, logged.output
+    assert "redo" in logged.output
+    assert "undo" in logged.output
+    assert "sever" in logged.output
+
+    undone_again = runner.invoke(app, ["undo"])
+    assert undone_again.exit_code == 0, undone_again.output
+    assert not store.context_exists("result")
+
+    reapplied = runner.invoke(
+        app,
+        ["sever", "--resume", applied_session.uid, "--accept"],
+    )
+    assert reapplied.exit_code == 0, reapplied.output
+    assert store.load_direct("result").uid != application.output_context_uid
+    cleared_redo = runner.invoke(app, ["redo"])
+    assert cleared_redo.exit_code == 1
+    assert "no recorded Context command to redo" in cleared_redo.stderr
+
+
+def test_sever_undo_rolls_back_context_archive_when_session_save_fails(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store, "source", "Source")
+    _context(store, "criteria", "Criterion")
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: SeverProvider(),
+    )
+    applied = runner.invoke(
+        app,
+        [
+            "sever",
+            "--source",
+            "source",
+            "--criteria",
+            "criteria",
+            "--save-as",
+            "result",
+            "--accept",
+        ],
+    )
+    assert applied.exit_code == 0, applied.output
+    session = SeverSessionStore(store).list()[0]
+    result_before = store.load_direct("result").to_dict()
+    original_save = SeverSessionStore.save
+
+    def fail_reviewing_save(self, candidate, *, expected_digest):
+        if candidate.uid == session.uid and candidate.state == "REVIEWING":
+            raise OSError("simulated Sever session failure")
+        return original_save(
+            self,
+            candidate,
+            expected_digest=expected_digest,
+        )
+
+    monkeypatch.setattr(SeverSessionStore, "save", fail_reviewing_save)
+
+    undone = runner.invoke(app, ["undo"])
+
+    assert undone.exit_code == 1
+    assert "simulated Sever session failure" in undone.stderr
+    assert store.load_direct("result").to_dict() == result_before
+    assert SeverSessionStore(store).load(session.uid) == session
+    assert store.list_command_context_archives() == ()
+    assert [
+        entry["command"] for entry in store.list_checkpoints("result")
+    ] == ["sever"]
+
+
 def test_query_only_reference_is_never_a_source_memory(isolated_store, monkeypatch):
     store = MemoryStore()
     source = _context(store, "local/personal-memory", "I need a step-free entrance.")

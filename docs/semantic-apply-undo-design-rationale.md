@@ -20,9 +20,43 @@ prototype until a transaction journal exists.
 | --- | --- | --- |
 | Meld | Saved Meld session plus target checkpoint | Context and session restore together; `APPLIED` returns to `READY_TO_APPLY` |
 | Atomize Grounding | Saved grounding dialogue plus Context checkpoint | Context and dialogue restore together; `APPLIED` returns to `READY_TO_APPLY` |
-| Ordinary Atomize and direct Context mutations | Derived from current Context/checkpoint history | Context restoration already changes the projection; no companion flag exists |
+| Saved Atomize analysis, in-place or `--save-as` | Applied state is projected by matching the current Context to the exact analysis checkpoint | Undo restores the reviewed pre-apply frame and projects the analysis as `CURRENT`; Redo restores the exact applied frame and projects `APPLIED`. A save-as destination retains its separate `init` baseline checkpoint. |
+| Saved Translation view, in-place or `--save-as` | The view is immutable planning evidence; materialization is represented by the `translate` checkpoint | Undo/Redo restores the exact untranslated/translated Context frame. A save-as destination retains its separate `init` baseline checkpoint. |
+| Forget apply | No separately stored applied-state flag exists; the Context snapshot and `forget` checkpoint are authoritative | Undo/Redo restores the complete applied batch as one command unit. |
+| Other direct Context mutations | Derived from current Context/checkpoint history | Context restoration already changes the projection; no companion flag exists. |
 | Local or granted Update | Saved Update receipt, sometimes across Profile stores | Undo retains the exact receipt under `undone`; Redo restores `applied`. Granted-target restoration reverses the authority restore if participant receipt CAS fails |
-| Sever | Saved Sever session plus creation of a new output Context | Requires command-unit Context creation/deletion restoration before the session can safely return to `REVIEWING` |
+| Sever | Saved Sever session plus creation of a new output Context | Undo removes the exact Result from the ordinary namespace, returns the session to `REVIEWING`, and retains its Context record and complete checkpoint log in a private command archive. Redo restores the same Context identity, application receipt, and log before appending a `redo` checkpoint. |
+
+### Reversible Context creation
+
+Sever is deliberately narrower than general Context-lifecycle Undo. Its apply
+checkpoint must carry an exact versioned `context_creation` receipt and match
+the saved Sever session's output UID, original checkpoint UID, and result
+Memory UIDs. The command stack admits only that proven creation shape; ordinary
+`init`, `branch`, import, rename, and delete operations remain outside Undo.
+
+Undo cannot keep its receipt only inside the Result Context because successful
+Undo makes that Context absent. It therefore moves the exact `context.json`
+and checkpoint directory into a Profile-private command archive while holding
+the command, graph, and Context locks. The archive remains part of command-stack
+reconstruction, so the `sever` and `undo` records survive while the public
+Context is absent. Redo rejects a reused output name or an edited review
+session, restores the archived files, and appends its normal checkpoint-bound
+restoration receipt. A failed session CAS moves the files back and removes the
+provisional restoration checkpoint.
+
+This archive is retained history, not a selectable Context and not a general
+undelete facility. Like multi-file Context restoration, it provides
+exception rollback but not a durable crash-recovery transaction journal.
+
+### Non-Context Apply boundaries
+
+External Share delivery is intentionally not made redoable by local command
+history: replay would be a second externally visible transmission, not a local
+state restoration. Named Ground revisions likewise remain under their exact
+Ground-command approval and CAS protocol rather than being reinterpreted as
+Context checkpoint commands. Query, Compare, Review-only reports, and saved
+workbench navigation do not have a Context Apply boundary.
 
 ## Forward rule
 

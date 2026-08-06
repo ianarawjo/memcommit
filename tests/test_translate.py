@@ -539,6 +539,8 @@ def test_cli_save_as_creates_derived_context_with_recorded_translation_lineage(
     checkpoints = store.list_checkpoints(loaded.name)
     assert len(checkpoints) == 2
     checkpoint = checkpoints[0]
+    translated_record = loaded.to_dict()
+    baseline_record = checkpoints[1]["snapshot"]
     assert checkpoint["command"] == "translate"
     assert checkpoint["args"]["schema_version"] == 2
     assert checkpoint["args"]["target_language"] == "English"
@@ -570,6 +572,17 @@ def test_cli_save_as_creates_derived_context_with_recorded_translation_lineage(
     }
     assert not trace.warnings
 
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert store.load_direct(loaded.name).to_dict() == baseline_record
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert store.load_direct(loaded.name).to_dict() == translated_record
+    assert [
+        entry["command"] for entry in store.list_checkpoints(loaded.name)[:4]
+    ] == ["redo", "undo", "translate", "init"]
+
 
 def test_cli_in_place_is_an_explicit_legacy_sibling_mode(
     isolated_store,
@@ -578,6 +591,7 @@ def test_cli_in_place_is_an_explicit_legacy_sibling_mode(
     store = MemoryStore()
     source = _saved_context(store, contents=("원문",))
     source_uid = source.ordered_uids()[0]
+    source_before = source.to_dict()
     _patch_provider(monkeypatch, PayloadProvider())
 
     result = runner.invoke(app, ["translate", "--in-place", "--yes"])
@@ -594,6 +608,18 @@ def test_cli_in_place_is_an_explicit_legacy_sibling_mode(
     checkpoint = store.list_checkpoints(source.name)[0]
     assert checkpoint["args"]["schema_version"] == 1
     assert checkpoint["args"]["translations"][0]["source_uid"] == source_uid
+    translated = loaded.to_dict()
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert store.load_direct(source.name).to_dict() == source_before
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert store.load_direct(source.name).to_dict() == translated
+    assert [
+        entry["command"] for entry in store.list_checkpoints(source.name)[:3]
+    ] == ["redo", "undo", "translate"]
 
 
 def test_cli_save_as_overrides_the_derived_context_name(

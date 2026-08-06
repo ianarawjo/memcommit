@@ -833,6 +833,10 @@ def test_update_undo_and_redo_follow_the_affected_target_not_current_context(
     redone_session = store.load_staged_update()
     assert redone_session.status == "applied"
     assert redone_session.application == undone_session.application
+    assert [
+        entry["command"]
+        for entry in store.list_checkpoints(TASK1_TARGET_CHILD)[:3]
+    ] == ["redo", "undo", "update"]
 
 
 def test_impact_then_update_resolve_relative_existing_target(
