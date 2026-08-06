@@ -40,6 +40,7 @@ from memcommit.context import Context, Memory, MemoryRef
 from memcommit.commands.compare import render_comparison
 from memcommit.commands.meld import render_meld_session
 from memcommit.commands.meld_shell import (
+    MeldShellAction,
     _comparison_issue_resolution_badges,
     _line,
     _screen_text,
@@ -48,6 +49,7 @@ from memcommit.commands.meld_shell import (
 from memcommit.commands.resolution_workbench_shell import (
     _NavigationAccelerator,
     _viewer_focus_fragments,
+    RESOLUTION_WORKBENCH_STYLE,
     ResolutionGlobalStrategy,
     _seeded_report_lines,
     _seeded_report_sections,
@@ -66,6 +68,7 @@ from memcommit.meld_provider import (
 )
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.provenance import build_trace
+from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
@@ -851,11 +854,13 @@ def test_result_rows_share_tree_prefix_and_keep_apply_card_fully_anchored():
         review_and_apply=True,
     )
     assert any(
-        style == "class:viewer-section" and "›     +" in text and "[PRESERVE]" in text
+        style == "class:memory-object.focused"
+        and "›     +" in text
+        and "[PRESERVE]" in text
         for style, text in result_fragments
     )
     assert any(
-        style == "class:viewer-section" and "WHY ·" in text
+        style == "class:memory-object.focused" and "WHY ·" in text
         for style, text in result_fragments
     )
     result_anchor = next(
@@ -866,7 +871,7 @@ def test_result_rows_share_tree_prefix_and_keep_apply_card_fully_anchored():
     result_body_end = max(
         index
         for index, (style, _text) in enumerate(result_fragments)
-        if style == "class:viewer-section"
+        if style == "class:memory-object.focused"
     )
     assert result_anchor > result_body_end
 
@@ -924,6 +929,7 @@ def test_viewer_position_is_blue_only_while_viewer_has_focus():
         ("[SetCursorPosition]", ""),
         ("class:viewer-section", "MEM COMPARE"),
         ("class:detail-card.focused", "Focused conflict"),
+        ("class:memory-object.focused", "Focused Memory"),
         ("class:option-card.focused", "Option cursor"),
         ("class:option-card.other", "Other-direction cursor"),
         ("class:selection-badge", "CHOSEN · Two sentences"),
@@ -934,11 +940,24 @@ def test_viewer_position_is_blue_only_while_viewer_has_focus():
         ("[SetCursorPosition]", ""),
         ("class:section", "MEM COMPARE"),
         ("class:detail-card", "Focused conflict"),
+        ("class:memory-object", "Focused Memory"),
         ("class:option-card", "Option cursor"),
         ("class:option-card", "Other-direction cursor"),
         ("class:selection-badge", "CHOSEN · Two sentences"),
         ("class:option-card.selected", "Durable selected option"),
     ]
+
+
+def test_compare_report_is_white_and_only_memory_objects_are_lavender():
+    report = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:detail-card"
+    )
+    memory = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:memory-object"
+    )
+
+    assert report.color == "ffffff"
+    assert memory.color == "cad3f5"
 
 
 def test_v3_rejects_cross_relation_thematic_compression():
@@ -1183,6 +1202,9 @@ def test_undo_and_redo_restore_meld_application_state_as_one_operation(
     assert redone_session.state == "APPLIED"
     assert redone_session.application is not None
     assert redone_session.application.checkpoint_uid == original_checkpoint_uid
+    assert [
+        entry["command"] for entry in store.list_checkpoints(target.name)[:3]
+    ] == ["redo", "undo", "meld"]
 
     undone_again = runner.invoke(app, ["undo"])
     assert undone_again.exit_code == 0, undone_again.output
@@ -2314,6 +2336,81 @@ def test_meld_rejects_refs_without_dereferencing_them(isolated_store):
         MeldSession.create_symmetric(left, right, target)
 
 
+def test_context_rename_keeps_an_unapplied_meld_target_and_session_bound(
+    isolated_store,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    store.save_meld_session(session)
+
+    plan = store.plan_context_rename(target.name, "task-2/relocated-result")
+    result = store.rename_contexts(plan)
+
+    relocated = store.load_meld_session(target.uid)
+    assert relocated is not None
+    assert relocated.target.context_name == "task-2/relocated-result"
+    assert store.load_direct("task-2/relocated-result").uid == target.uid
+    assert result.meld_session_count == 1
+
+
+def test_context_rename_rebinds_an_unapplied_meld_compare_seed(isolated_store):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    store.save_meld_session(session)
+
+    store.rename_contexts(
+        store.plan_context_rename(left.name, "task-2/renamed-left")
+    )
+
+    rebound = store.load_meld_session(target.uid)
+    assert rebound is not None and rebound.comparison_seed is not None
+    assert rebound.frames[0].context_name == "task-2/renamed-left"
+    assert (
+        rebound.comparison_seed.analysis.frames[0].context_name
+        == "task-2/renamed-left"
+    )
+
+
+def test_symmetric_workbench_can_relocate_its_empty_result_before_apply(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+    store.save_meld_session(session)
+    actions = iter(
+        (
+            MeldShellAction(
+                kind="CHANGE_DESTINATION",
+                destination="task-2/reviewed-result",
+            ),
+            None,
+        )
+    )
+    monkeypatch.setattr(meld_command, "run_meld_shell", lambda *args, **kwargs: next(actions))
+
+    relocated = meld_command._run_interactive(
+        store=store,
+        session=session,
+        provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("provider called")
+        ),
+    )
+
+    assert relocated.target.context_name == "task-2/reviewed-result"
+    assert not store.context_exists(target.name)
+    assert store.load_direct("task-2/reviewed-result").uid == target.uid
+
+
 def test_meld_session_save_uses_optimistic_concurrency(isolated_store):
     store = MemoryStore()
     left, right, target = _task2_contexts(store)
@@ -2672,7 +2769,10 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\rcKeep all supported details.\x13\t\x1b[B\r\r")
+        pipe_input.send_text(
+            "\x1b[B\r\x1b[B\x1b[B\r\r"
+            "cKeep all supported details.\x13\t\t\r"
+        )
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -2713,9 +2813,9 @@ def test_ready_meld_applies_from_report_without_separate_review_screen():
     assert session.state == "READY_TO_APPLY"
 
     with create_pipe_input() as pipe_input:
-        # REPORT -> REVIEW & APPLY; Enter returns ACCEPT directly instead of
-        # replacing the Viewer with a separate review surface.
-        pipe_input.send_text("\x1b[B\r")
+        # To Do owns the actionable APPLY control; Shift-Tab reaches it from
+        # Items and Enter returns ACCEPT without another review surface.
+        pipe_input.send_text("\x1b[Z\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -2777,7 +2877,8 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\x1b[B\r\rcKeep the rate.\nKeep every payment method.\r\t\x1b[B\r\r"
+            "\x1b[B\r\x1b[B\x1b[B\r\r"
+            "cKeep the rate.\nKeep every payment method.\r\t\t\r"
         )
         action = run_meld_shell(
             session,
@@ -2792,7 +2893,10 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
     assert "Keep the rate.\nKeep every payment method." in action.comment
 
 
-def test_meld_escape_collapses_detail_before_leaving_the_workbench():
+@pytest.mark.parametrize("back_key", ["\x1b", "\x7f"])
+def test_meld_back_key_collapses_detail_before_leaving_the_workbench(
+    back_key: str,
+):
     left = ops.init("left/escape-detail")
     ops.add(left, "Cash compensation includes travel time.")
     right = ops.init("right/escape-detail")
@@ -2806,9 +2910,11 @@ def test_meld_escape_collapses_detail_before_leaving_the_workbench():
     )
 
     with create_pipe_input() as pipe_input:
-        # The first Down opens conflict 1. Escape returns to REPORT instead of
-        # closing, and the conflict can then be selected again for a comment.
-        pipe_input.send_text("\x1b[B\r\x1b\x1b[B\rcStill reviewing.\x13\t\x1b[B\r\r")
+        # The first Down opens conflict 1. Either back key returns to REPORT
+        # instead of closing, then the conflict can be selected again.
+        pipe_input.send_text(
+            f"\x1b[B\r{back_key}\x1b[B\rcStill reviewing.\x13\t\t\r"
+        )
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -2881,7 +2987,7 @@ def test_applied_meld_reopens_in_read_only_workbench():
     assert session.to_dict() == before
 
 
-def test_meld_resolve_all_can_choose_broadest_scope_without_applying():
+def test_meld_todo_opens_required_conflict_before_whole_set_resolution():
     left = ops.init("left/global-strategy")
     ops.add(left, "Cash compensation includes travel time.")
     right = ops.init("right/global-strategy")
@@ -2893,23 +2999,25 @@ def test_meld_resolve_all_can_choose_broadest_scope_without_applying():
         session.current_turn.uid,
         assess_meld_turn(session, Task2Provider()),
     )
-    issue_count = len(session.current_assessment.issues)
+    first_issue_uid = session.current_assessment.issues[0].uid
+    original_state = session.state
+    navigation = ResolutionNavigation()
 
     with create_pipe_input() as pipe_input:
-        # REPORT -> every conflict -> RESOLVE ALL; Right moves from preserve
-        # all to the broadest-applicable whole-set strategy.
-        pipe_input.send_text("\x1b[B" * (issue_count + 1) + "\x1b[C" * 3 + "\r")
+        # To Do must route to the first required conflict. A broad whole-set
+        # strategy is not an escape hatch around unresolved required items.
+        pipe_input.send_text("\x1b[Z\rq")
         action = run_meld_shell(
             session,
+            navigation=navigation,
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
-    assert action is not None
-    assert action.kind == "COMMENT_ALL"
-    assert "broadest justified applicability" in action.comment
-    assert session.state == "AWAITING_REPLY"
+    assert action is None
+    assert navigation.selected_item_uid == first_issue_uid
+    assert session.state == original_state
     assert session.application is None
 
 

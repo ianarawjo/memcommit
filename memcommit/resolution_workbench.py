@@ -9,6 +9,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
+from memcommit.result_workbench import ResultRef
+
 
 RESOLUTION_TEXT_LIMIT = 20_000
 RESOLUTION_LABEL_LIMIT = 500
@@ -27,6 +29,7 @@ ResolutionActionKind = Literal[
     "PRESERVE_ALL",
     "DEFER",
     "ACCEPT",
+    "CHANGE_DESTINATION",
     "CLOSE",
 ]
 
@@ -37,7 +40,7 @@ _CAPABILITIES = {
     "DEFER",
     "ACCEPT",
 }
-_ACTION_KINDS = {*_CAPABILITIES, "CLOSE"}
+_ACTION_KINDS = {*_CAPABILITIES, "CHANGE_DESTINATION", "CLOSE"}
 
 
 class ResolutionWorkbenchError(ValueError):
@@ -122,6 +125,7 @@ class ResolutionDetailBlock:
 
     heading: str
     text: str
+    refs: tuple[ResultRef, ...] = ()
 
     def __post_init__(self) -> None:
         _text(
@@ -131,6 +135,137 @@ class ResolutionDetailBlock:
             one_line=True,
         )
         _text(self.text, "resolution detail text")
+        refs = _items(self.refs, ResultRef, "resolution detail references")
+        if len(set(refs)) != len(refs):
+            raise ResolutionWorkbenchError(
+                "Duplicate resolution detail reference."
+            )
+
+
+@dataclass(frozen=True)
+class ResolutionIssueSource:
+    """One exact Memory shown inside an actionable quality issue."""
+
+    label: str
+    context_name: str
+    memory_uid: str
+    content: str
+    ordinal: int | None = None
+
+    def __post_init__(self) -> None:
+        _text(self.label, "resolution source label", one_line=True)
+        _text(self.context_name, "resolution source Context", one_line=True)
+        _text(self.memory_uid, "resolution source Memory uid", one_line=True)
+        _text(self.content, "resolution source content", empty=True)
+        if self.ordinal is not None and (
+            isinstance(self.ordinal, bool)
+            or not isinstance(self.ordinal, int)
+            or self.ordinal < 1
+        ):
+            raise ResolutionWorkbenchError("Invalid resolution source ordinal.")
+
+
+@dataclass(frozen=True)
+class ResolutionIssueClaim:
+    """One frame-owned claim supported by one or more exact Memories."""
+
+    label: str
+    context_name: str
+    sources: tuple[ResolutionIssueSource, ...]
+
+    def __post_init__(self) -> None:
+        _text(self.label, "resolution claim label", one_line=True)
+        _text(self.context_name, "resolution claim Context", one_line=True)
+        sources = _items(
+            self.sources,
+            ResolutionIssueSource,
+            "resolution claim sources",
+        )
+        if not sources:
+            raise ResolutionWorkbenchError(
+                "A resolution claim requires a source Memory."
+            )
+
+
+@dataclass(frozen=True)
+class ResolutionIssueEvidence:
+    """One source-linked assessment inside an actionable issue."""
+
+    heading: str
+    classification: str
+    reason_heading: str
+    reason: str
+    sources: tuple[ResolutionIssueSource, ...] = ()
+    claims: tuple[ResolutionIssueClaim, ...] = ()
+    criterion_blocks: tuple[ResolutionDetailBlock, ...] = ()
+
+    def __post_init__(self) -> None:
+        _text(self.heading, "resolution evidence heading", one_line=True)
+        sources = _items(
+            self.sources,
+            ResolutionIssueSource,
+            "resolution evidence sources",
+        )
+        claims = _items(
+            self.claims,
+            ResolutionIssueClaim,
+            "resolution evidence claims",
+        )
+        if bool(sources) == bool(claims):
+            raise ResolutionWorkbenchError(
+                "Resolution issue evidence requires either sources or claims."
+            )
+        _items(
+            self.criterion_blocks,
+            ResolutionDetailBlock,
+            "resolution criterion blocks",
+        )
+        _text(self.classification, "resolution issue classification")
+        _text(self.reason_heading, "resolution issue reason heading", one_line=True)
+        _text(self.reason, "resolution issue reason")
+
+    @property
+    def source_groups(self) -> tuple[ResolutionIssueClaim, ...]:
+        """Return explicit claims or one compact group per ungrouped source."""
+        if self.claims:
+            return self.claims
+        return tuple(
+            ResolutionIssueClaim(
+                label=source.label,
+                context_name=source.context_name,
+                sources=(source,),
+            )
+            for source in self.sources
+        )
+
+
+@dataclass(frozen=True)
+class ResolutionIssuePresentation:
+    """Adapter-authored labels for the shared actionable-issue Viewer."""
+
+    evidence: tuple[ResolutionIssueEvidence, ...]
+    prompt_heading: str
+    options_heading: str
+    other_option_label: str
+    response_heading: str
+
+    def __post_init__(self) -> None:
+        evidence = _items(
+            self.evidence,
+            ResolutionIssueEvidence,
+            "resolution issue evidence",
+        )
+        if not evidence:
+            raise ResolutionWorkbenchError(
+                "An actionable issue requires source-linked evidence."
+            )
+        for value, label in (
+            (self.prompt_heading, "resolution prompt heading"),
+            (self.options_heading, "resolution options heading"),
+            (self.other_option_label, "resolution other-option label"),
+            (self.response_heading, "resolution response heading"),
+        ):
+            _text(value, label, one_line=True)
 
 
 @dataclass(frozen=True)
@@ -147,6 +282,12 @@ class ResolutionItem:
     options: tuple[ResolutionOption, ...] = ()
     blocks: tuple[ResolutionDetailBlock, ...] = ()
     selected_option_uid: str | None = None
+    decision_block_index: int = 0
+    evidence_refs: tuple[ResultRef, ...] = ()
+    judgment_refs: tuple[ResultRef, ...] = ()
+    outcome_refs: tuple[ResultRef, ...] = ()
+    unresolved_refs: tuple[ResultRef, ...] = ()
+    issue_presentation: ResolutionIssuePresentation | None = None
 
     def __post_init__(self) -> None:
         for value, label in (
@@ -178,6 +319,41 @@ class ResolutionItem:
             ResolutionDetailBlock,
             "resolution item detail blocks",
         )
+        if (
+            isinstance(self.decision_block_index, bool)
+            or not isinstance(self.decision_block_index, int)
+            or not 0 <= self.decision_block_index <= len(blocks)
+        ):
+            raise ResolutionWorkbenchError(
+                "Invalid resolution decision block index."
+            )
+        trace_groups = (
+            self.evidence_refs,
+            self.judgment_refs,
+            self.outcome_refs,
+            self.unresolved_refs,
+        )
+        for refs in trace_groups:
+            validated_refs = _items(
+                refs,
+                ResultRef,
+                "resolution trace references",
+            )
+            if len(set(validated_refs)) != len(validated_refs):
+                raise ResolutionWorkbenchError(
+                    "Duplicate resolution trace reference."
+                )
+        if any(trace_groups) and not (self.evidence_refs and self.judgment_refs):
+            raise ResolutionWorkbenchError(
+                "A resolution trace requires evidence and judgment references."
+            )
+        if self.issue_presentation is not None and not isinstance(
+            self.issue_presentation,
+            ResolutionIssuePresentation,
+        ):
+            raise ResolutionWorkbenchError(
+                "Invalid resolution issue presentation."
+            )
         if len({option.uid for option in options}) != len(options):
             raise ResolutionWorkbenchError(
                 "Duplicate resolution option uid."
@@ -221,6 +397,7 @@ class ResolutionResult:
     label: str
     text: str
     reason: str = ""
+    rules: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         _text(
@@ -243,6 +420,9 @@ class ResolutionResult:
         )
         _text(self.text, "resolution result text")
         _text(self.reason, "resolution result reason", empty=True)
+        rules = _items(self.rules, str, "resolution result rules")
+        for rule in rules:
+            _text(rule, "resolution result rule")
 
 
 @dataclass(frozen=True)
@@ -253,6 +433,7 @@ class ResolutionWorkbenchAction:
     item_uid: str | None = None
     option_uid: str | None = None
     comment: str = ""
+    destination: str | None = None
 
     def __post_init__(self) -> None:
         if self.kind not in _ACTION_KINDS:
@@ -278,6 +459,17 @@ class ResolutionWorkbenchAction:
             "resolution action comment",
             empty=True,
         )
+        if self.destination is not None:
+            _text(
+                self.destination,
+                "resolution action destination",
+                limit=RESOLUTION_KEY_LIMIT,
+                one_line=True,
+            )
+        if (self.kind == "CHANGE_DESTINATION") != (self.destination is not None):
+            raise ResolutionWorkbenchError(
+                "Only a destination-change action may carry a destination."
+            )
 
 
 @dataclass(frozen=True)
@@ -300,6 +492,7 @@ class ResolutionWorkbenchView:
     capabilities: frozenset[ResolutionCapability] = frozenset()
     accept_enabled: bool = False
     input_locked: bool = False
+    report_items_summary: ResolutionDetailBlock | None = None
 
     def __post_init__(self) -> None:
         for value, label, limit in (
@@ -326,6 +519,13 @@ class ResolutionWorkbenchView:
             ResolutionResult,
             "resolution results",
         )
+        if self.report_items_summary is not None and not isinstance(
+            self.report_items_summary,
+            ResolutionDetailBlock,
+        ):
+            raise ResolutionWorkbenchError(
+                "Invalid resolution report-items summary."
+            )
         if len({item.uid for item in items}) != len(items):
             raise ResolutionWorkbenchError(
                 "Duplicate resolution item uid."

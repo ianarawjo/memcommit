@@ -50,7 +50,7 @@ def test_fixed_update_setup_returns_both_initial_roles(isolated_store):
     store.create_context(ops.init("setup/b"))
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("f")
+        pipe_input.send_text("\t\t\r")
         receipt = choose_update_setup(
             store,
             app_input=pipe_input,
@@ -63,13 +63,13 @@ def test_fixed_update_setup_returns_both_initial_roles(isolated_store):
     assert receipt.target_name == "setup/b"
 
 
-def test_meld_directional_receipt_has_no_third_target(isolated_store):
+def test_meld_directional_option_has_no_third_target(isolated_store):
     store = MemoryStore()
     store.create_context(ops.init("meld-setup/a"))
     store.create_context(ops.init("meld-setup/b"))
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("f")
+        pipe_input.send_text("\x1b[C\t\t\t\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,
@@ -90,8 +90,8 @@ def test_meld_symmetric_mode_collects_new_result_c(isolated_store):
     store.create_context(ops.init("meld-setup/b"))
 
     with create_pipe_input() as pipe_input:
-        # Right selects symmetric. Four Tabs reach C's exact new-name editor.
-        pipe_input.send_text("\x1b[C\t\t\t\tfaq/result\nf")
+        # Symmetric is the default. Four Tabs reach C's exact new-name editor.
+        pipe_input.send_text("\t\t\t\tfaq/result\n\t\t\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,

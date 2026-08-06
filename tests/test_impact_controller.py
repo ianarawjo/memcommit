@@ -39,6 +39,7 @@ def _view(*, operation: str = "SEVER", revision: str = "revision-1"):
                 label="ADD",
                 text="Add the reviewed Memory.",
                 reason="It passed the operation-owned review.",
+                rules=("Retain reviewed additions.",),
             ),
         ),
         capabilities=frozenset({"ACCEPT"}),
@@ -66,7 +67,182 @@ def test_resolution_impact_is_rendered_immediately_before_operation_apply():
     assert rendered.index("IMPACT · LOCAL OUTBOUND DRAFT · NOT SENT") < rendered.index(
         "REVIEW & APPLY SEVER"
     )
-    assert "[ADD] Add the reviewed Memory." in rendered
+    assert "PROPOSED EFFECTS" not in rendered
+    assert "[ADD] [result-1] Add the reviewed Memory." in rendered
+    assert "RULE · Retain reviewed additions." not in rendered
+    assert "WHY ·" not in rendered
+    assert "It passed the operation-owned review." not in rendered
+
+    expanded = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            review_and_apply=True,
+            impact_controller=impact,
+            expanded_impact_section_uid="REPORT:IMPACT:result-1",
+        )
+    )
+    assert "RULE · Retain reviewed additions." in expanded
+    assert "WHY · It passed the operation-owned review." in expanded
+
+
+def test_impact_treatment_uid_content_and_detail_columns_align():
+    view = replace(
+        _view(),
+        results=(
+            ResolutionResult(
+                uid="keep-uid",
+                marker="+",
+                label="KEEP",
+                text="Kept content.",
+                reason="Keep reason.",
+                rules=("Keep rule.",),
+            ),
+            ResolutionResult(
+                uid="summary-uid",
+                marker="~",
+                label="SUMMARIZE",
+                text="Summarized content.",
+            ),
+        ),
+    )
+    impact = ImpactController.from_resolution(
+        view,
+        title="IMPACT · ALIGNED",
+        summary="Aligned effects.",
+    )
+
+    rendered = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            impact_controller=impact,
+            expanded_impact_section_uid="REPORT:IMPACT:keep-uid",
+        )
+    )
+    lines = rendered.splitlines()
+    keep = next(line for line in lines if "[keep-uid]" in line)
+    summary = next(line for line in lines if "[summary" in line)
+    rule = next(line for line in lines if "RULE · Keep rule." in line)
+    why = next(line for line in lines if "WHY · Keep reason." in line)
+
+    assert keep.index("[keep-uid]") == summary.index("[summary")
+    assert keep.index("Kept content.") == summary.index("Summarized content.")
+    assert rule.index("RULE ·") == keep.index("Kept content.")
+    assert why.index("WHY ·") == keep.index("Kept content.")
+
+
+def test_impact_treatments_and_markers_use_distinct_semantic_styles():
+    labels = ("KEEP", "REDACT", "SUMMARIZE", "REFRAME", "FORGET")
+    view = replace(
+        _view(),
+        results=tuple(
+            ResolutionResult(
+                uid=f"uid-{index}",
+                marker="−" if label == "FORGET" else "+",
+                label=label,
+                text=f"{label.title()} content.",
+            )
+            for index, label in enumerate(labels)
+        ),
+    )
+    impact = ImpactController.from_resolution(
+        view,
+        title="IMPACT · COLORS",
+        summary="Colored treatments.",
+    )
+
+    fragments = resolution_report_fragments(view, impact_controller=impact)
+    styles = {
+        label: next(style for style, text in fragments if f"[{label}]" in text)
+        for label in labels
+    }
+
+    assert styles == {
+        "KEEP": "class:impact.keep",
+        "REDACT": "class:impact.redact",
+        "SUMMARIZE": "class:impact.summarize",
+        "REFRAME": "class:impact.reframe",
+        "FORGET": "class:impact.forget",
+    }
+
+
+def test_focused_impact_memory_content_follows_its_treatment_color():
+    view = replace(
+        _view(),
+        results=(
+            ResolutionResult(
+                uid="keep-focus",
+                marker="+",
+                label="KEEP",
+                text="Focused retained content.",
+                reason="Keep it.",
+                rules=("Retention rule.",),
+            ),
+        ),
+    )
+    impact = ImpactController.from_resolution(
+        view,
+        title="IMPACT · FOCUS",
+        summary="Focused effect.",
+    )
+
+    fragments = resolution_report_fragments(
+        view,
+        impact_controller=impact,
+        focused_section=4,
+        expanded_impact_section_uid="REPORT:IMPACT:keep-focus",
+    )
+
+    assert next(
+        style for style, text in fragments if "Focused retained content." in text
+    ) == "class:impact.keep.focused"
+    assert next(
+        style for style, text in fragments if "RULE · Retention rule." in text
+    ) == "class:impact.keep.focused"
+    assert next(
+        style for style, text in fragments if "WHY · Keep it." in text
+    ) == "class:impact.keep.focused"
+    assert all(style != "class:memory-object.focused" for style, _text in fragments)
+
+
+def test_impact_hanging_wrap_tracks_the_supplied_frame_width():
+    view = replace(
+        _view(),
+        results=(
+            ResolutionResult(
+                uid="wrap-uid",
+                marker="+",
+                label="KEEP",
+                text=(
+                    "One two three four five six seven eight nine ten eleven "
+                    "twelve thirteen fourteen."
+                ),
+            ),
+        ),
+    )
+    impact = ImpactController.from_resolution(
+        view,
+        title="IMPACT · WRAP",
+        summary="Wrapped effect.",
+    )
+
+    rendered = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            impact_controller=impact,
+            content_width=48,
+        )
+    )
+    lines = rendered.splitlines()
+    first_index = next(index for index, line in enumerate(lines) if "[wrap-uid]" in line)
+    first = lines[first_index]
+    continuation = lines[first_index + 1]
+
+    assert first.index("One") == continuation.index("five")
+    assert len(first) <= 48
+    assert len(continuation) <= 48
 
 
 def test_seeded_compare_impact_precedes_meld_apply():
@@ -114,7 +290,9 @@ def test_split_apply_row_accepts_without_whole_set_strategies():
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r")
+        # Apply is the state-derived control in To Do, directly before Items
+        # in the reverse focus cycle.
+        pipe_input.send_text("\x1b[Z\r")
         action = run_resolution_workbench_shell(
             view,
             app_input=pipe_input,

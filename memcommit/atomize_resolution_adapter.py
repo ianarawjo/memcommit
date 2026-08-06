@@ -11,11 +11,15 @@ from memcommit.atomize_workbench import (
 )
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
+    ResolutionIssueEvidence,
+    ResolutionIssuePresentation,
+    ResolutionIssueSource,
     ResolutionItem,
     ResolutionMetric,
     ResolutionOption,
     ResolutionWorkbenchView,
 )
+from memcommit.result_workbench import ResultRef
 
 
 _KIND_LABELS = {
@@ -81,32 +85,86 @@ class AtomizeResolutionWorkbenchAdapter:
         source_by_uid = {
             item.memory_uid: item.content for item in analysis.items
         }
+        position_by_uid = {
+            item.memory_uid: item.position + 1 for item in analysis.items
+        }
         projected: list[ResolutionItem] = []
         for descriptor in workbench.ordered_issues():
             finding = findings[descriptor.uid]
             response = workbench.responses.get(finding.uid)
-            arity = "UNARY" if len(finding.source_uids) == 1 else "PAIR"
-            source_text = "\n\n".join(
-                f"SOURCE {index} [{source_uid}]\n{source_by_uid[source_uid]}"
+            source_refs = tuple(
+                ResultRef(
+                    "context-memory",
+                    f"{analysis.context_name}:{source_uid}",
+                )
+                for source_uid in finding.source_uids
+            )
+            judgment_ref = ResultRef("atomize-finding", finding.uid)
+            issue_sources = tuple(
+                ResolutionIssueSource(
+                    label=f"SOURCE {index}",
+                    context_name=analysis.context_name,
+                    memory_uid=source_uid,
+                    content=source_by_uid[source_uid],
+                    ordinal=position_by_uid[source_uid],
+                )
                 for index, source_uid in enumerate(
                     finding.source_uids,
                     start=1,
                 )
             )
-            blocks: list[ResolutionDetailBlock] = [
-                ResolutionDetailBlock(
-                    heading=f"SOURCES · {arity}",
-                    text=source_text,
+            reason_heading = {
+                "AMBIGUITY": "WHY THIS IS UNCLEAR",
+                "CONFLICT": "WHY THESE MEMORIES CONFLICT",
+                "ATOMIZE_SPLIT": "WHY THIS SPLIT",
+                "ATOMIZE_UNCERTAINTY": "WHY ATOMIZE IS BLOCKED",
+            }[finding.kind]
+            conflict = finding.kind == "CONFLICT"
+            ambiguity = finding.kind == "AMBIGUITY"
+            issue_presentation = ResolutionIssuePresentation(
+                evidence=(
+                    ResolutionIssueEvidence(
+                        heading=(
+                            "MEMORIES IN CONFLICT"
+                            if conflict
+                            else "SOURCE MEMORY"
+                        ),
+                        sources=issue_sources,
+                        classification=finding.classification,
+                        reason_heading=reason_heading,
+                        reason=finding.reason,
+                    ),
                 ),
-                ResolutionDetailBlock(
-                    heading="CLASSIFICATION",
-                    text=finding.classification,
+                prompt_heading=(
+                    "RESOLUTION QUESTION"
+                    if conflict
+                    else "CLARIFICATION QUESTION"
+                    if ambiguity
+                    else "REVIEW QUESTION"
                 ),
-                ResolutionDetailBlock(
-                    heading="REASON",
-                    text=finding.reason,
+                options_heading=(
+                    "PROPOSED RESOLUTIONS"
+                    if conflict
+                    else "PROPOSED READINGS"
+                    if ambiguity
+                    else "PROPOSED RESPONSES"
                 ),
-            ]
+                other_option_label=(
+                    "Different resolution"
+                    if conflict
+                    else "Different reading"
+                    if ambiguity
+                    else "Different direction"
+                ),
+                response_heading=(
+                    "REFINE, COMMENT, OR ENTER A DIFFERENT RESOLUTION"
+                    if conflict
+                    else "REFINE, COMMENT, OR ENTER A DIFFERENT READING"
+                    if ambiguity
+                    else "COMMENT OR ENTER A DIFFERENT DIRECTION"
+                ),
+            )
+            blocks: list[ResolutionDetailBlock] = []
             if finding.children:
                 child_lines: list[str] = []
                 for index, child in enumerate(finding.children, start=1):
@@ -119,6 +177,13 @@ class AtomizeResolutionWorkbenchAdapter:
                     ResolutionDetailBlock(
                         heading="PROPOSED CHILDREN",
                         text="\n\n".join(child_lines),
+                        refs=tuple(
+                            ResultRef("atomize-child", f"{finding.uid}:{index}")
+                            for index, _child in enumerate(
+                                finding.children,
+                                start=1,
+                            )
+                        ),
                     )
                 )
             if response is not None and response.answered:
@@ -157,11 +222,25 @@ class AtomizeResolutionWorkbenchAdapter:
                         for reading in finding.readings
                     ),
                     blocks=tuple(blocks),
+                    decision_block_index=0,
                     selected_option_uid=(
                         response.selected_choice_uid
                         if response is not None
                         else None
                     ),
+                    evidence_refs=source_refs,
+                    judgment_refs=(judgment_ref,),
+                    outcome_refs=tuple(
+                        ResultRef("atomize-child", f"{finding.uid}:{index}")
+                        for index, _child in enumerate(
+                            finding.children,
+                            start=1,
+                        )
+                    ),
+                    unresolved_refs=(
+                        ResultRef("atomize-finding", finding.uid),
+                    ),
+                    issue_presentation=issue_presentation,
                 )
             )
         return ResolutionWorkbenchView(

@@ -257,6 +257,13 @@ relative height without knowing whether its content is a Goal, a meld issue,
 or a finder result. Ground composes five such panes because its Goal, Contexts,
 Rules, Memories, and Chat must remain simultaneously inspectable.
 
+Focused Frames use actual heavy box-drawing glyphs (`┏━┓┃┗┛`) in addition to
+the shared light-blue bold style; unfocused Frames retain the ordinary light
+glyphs (`┌─┐│└┘`). Bold styling alone is not a sufficient focus cue because
+terminal fonts do not consistently increase the stroke weight of box-drawing
+characters. The common binding changes only Frame chrome and never traverses
+the dynamic body, so semantic content and nested controls remain unchanged.
+
 Ground and meld share the same state-free Message buffer primitive, while
 Ground additionally uses the reusable in-frame manager and Meld retains a
 standalone frame. Review and atomize keep their operation-specific editors.

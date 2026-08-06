@@ -12,6 +12,13 @@ The atomize workbench is the first implemented adapter. Other operations may
 adopt the common result view only when they can supply the required evidence
 without inventing an explanation or silently omitting unresolved findings.
 
+Result, Compare, and Resolution viewers share terminal presentation
+primitives: frame focus, neutral report chrome, lavender Memory objects, and
+blue selection emphasis. They do not share this Result detail grammar. Result
+cases remain immutable and digest-bound evidence-to-outcome traces, while
+actionable Resolution items use a source-linked quality-issue contract with
+operation-owned questions, proposed answers, and responses.
+
 The current demo renders the shared headings and Mem-authored semantic prose
 in English while preserving source evidence verbatim. English is a bounded
 demo convention, not a claim of cross-language semantic neutrality. The

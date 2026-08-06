@@ -244,7 +244,7 @@ def test_tab_switches_to_item_navigation_and_back_to_reader():
     assert receipt.action == "close"
 
 
-@pytest.mark.parametrize("back_key", ["b", "\x1b"])
+@pytest.mark.parametrize("back_key", ["b", "\x1b", "\x7f"])
 def test_detail_back_key_returns_to_complete_report(back_key: str):
     analysis, _left, _right = _analysis()
     with create_pipe_input() as pipe_input:

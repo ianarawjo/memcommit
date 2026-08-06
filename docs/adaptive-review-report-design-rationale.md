@@ -33,7 +33,7 @@ Constructing a report that still exposes Accept fails closed.
 | --- | --- | --- |
 | Compare | `READ_ONLY` | Exact saved equal-authority Compare prose; browse and close only. |
 | Meld | `RESOLUTION` | Compare or directional assessment, issues, and proposed Memories; existing Meld turns may be recorded, but target application is unavailable. |
-| Sever | `DISCLOSURE` | Source treatment evidence and local outbound draft; existing item decisions may be saved, but output materialization is unavailable. |
+| Sever | `CONTENT SEVERING` | Source/Criteria evidence and the proposed local Result; existing item decisions may be saved, but Result materialization is unavailable. |
 | Atomize | `CLARIFICATION` | Findings and saved clarifications; the existing Atomize workbench remains its response controller. |
 | Update | `CHANGE_PLAN` | Existing exact ADD/EDIT/REMOVE blocks, reasons, owners, and source references; read-only. |
 

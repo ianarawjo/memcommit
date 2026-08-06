@@ -10,12 +10,17 @@ from __future__ import annotations
 from memcommit.meld import MeldProposal, MeldSession, meld_accounting
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
+    ResolutionIssueClaim,
+    ResolutionIssueEvidence,
+    ResolutionIssuePresentation,
+    ResolutionIssueSource,
     ResolutionItem,
     ResolutionMetric,
     ResolutionOption,
     ResolutionResult,
     ResolutionWorkbenchView,
 )
+from memcommit.result_workbench import ResultRef
 
 
 def _route(session: MeldSession) -> str:
@@ -100,34 +105,88 @@ class MeldResolutionWorkbenchAdapter:
             )
             for issue in ordered_issues:
                 seen_members: set[tuple[str, str]] = set()
-                source_lines: list[str] = []
-                relation_lines: list[str] = []
+                evidence_refs: list[ResultRef] = []
+                judgment_refs: list[ResultRef] = []
+                evidence_groups: list[ResolutionIssueEvidence] = []
                 relation_kinds: list[str] = []
                 for relation_uid in issue.relation_uids:
                     relation = relation_by_uid[relation_uid]
+                    relation_ref = ResultRef("meld-relation", relation.uid)
+                    judgment_refs.append(relation_ref)
                     if relation.kind not in relation_kinds:
                         relation_kinds.append(relation.kind)
-                    relation_lines.append(
-                        f"R{relation_number[relation_uid]} · "
-                        f"{relation.kind} · {relation.status}\n"
-                        f"{relation.summary}\nWHY · {relation.reason}"
-                    )
+                    claim_sources: dict[str, list[ResolutionIssueSource]] = {
+                        frame.uid: [] for frame in session.frames
+                    }
                     for member in relation.members:
                         key = (member.frame_uid, member.memory_uid)
-                        if key in seen_members:
-                            continue
-                        seen_members.add(key)
                         frame = frame_by_uid[member.frame_uid]
                         memory = memory_by_key[key]
                         location, content = _memory_location(
                             frame.context_name,
                             memory.content,
                         )
-                        role = "" if session.mode == "SYMMETRIC" else f"{frame.role} · "
-                        source_lines.append(
-                            f"{role}{location} · #{memory.position + 1} "
-                            f"· [{memory.uid[:8]}]\n{content}"
+                        claim_sources[frame.uid].append(
+                            ResolutionIssueSource(
+                                label="SOURCE",
+                                context_name=location,
+                                memory_uid=memory.uid,
+                                content=content,
+                                ordinal=memory.position + 1,
+                            )
                         )
+                        memory_ref = ResultRef(
+                            "context-memory",
+                            f"{location}:{memory.uid}",
+                        )
+                        if key not in seen_members:
+                            seen_members.add(key)
+                            evidence_refs.append(memory_ref)
+                    relation_heading = (
+                        "MEMORY COLLISION"
+                        if relation.kind == "CONFLICT"
+                        else "SOURCE RELATION"
+                    )
+                    why_heading = (
+                        "WHY THESE MEMORIES CONFLICT"
+                        if relation.kind == "CONFLICT"
+                        else "WHY SCOPE CHANGES THE RELATION"
+                        if relation.kind == "SCOPED"
+                        else "WHY THESE MEMORIES RELATE"
+                    )
+                    evidence_groups.append(
+                        ResolutionIssueEvidence(
+                            heading=(
+                                f"{relation_heading} · "
+                                f"R{relation_number[relation_uid]}"
+                            ),
+                            classification=(
+                                f"{relation.kind} · {relation.status}\n"
+                                f"{relation.summary}"
+                            ),
+                            reason_heading=why_heading,
+                            reason=relation.reason,
+                            claims=tuple(
+                                ResolutionIssueClaim(
+                                    label=(
+                                        f"CLAIM {claim_index}"
+                                        + (
+                                            f" · {frame.role}"
+                                            if session.mode == "DIRECTIONAL"
+                                            else ""
+                                        )
+                                    ),
+                                    context_name=frame.context_name,
+                                    sources=tuple(claim_sources[frame.uid]),
+                                )
+                                for claim_index, frame in enumerate(
+                                    session.frames,
+                                    start=1,
+                                )
+                                if claim_sources[frame.uid]
+                            ),
+                        )
+                    )
                 affected = [
                     proposal
                     for proposal in assessment.proposals
@@ -146,6 +205,10 @@ class MeldResolutionWorkbenchAdapter:
                     affected_lines.append(
                         "No target Memory is proposed for these relations yet."
                     )
+                outcome_refs = tuple(
+                    ResultRef("meld-proposal", proposal.uid)
+                    for proposal in affected
+                )
                 issue_title = issue.title
                 if issue.priority == "HELPFUL" and len(issue.relation_uids) == 1:
                     relation = relation_by_uid[issue.relation_uids[0]]
@@ -169,16 +232,23 @@ class MeldResolutionWorkbenchAdapter:
                         ),
                         blocks=(
                             ResolutionDetailBlock(
-                                heading="EVIDENCE",
-                                text="\n\n".join(source_lines),
-                            ),
-                            ResolutionDetailBlock(
-                                heading="RELATIONS",
-                                text="\n\n".join(relation_lines),
-                            ),
-                            ResolutionDetailBlock(
                                 heading="PROPOSED RESULT",
                                 text="\n\n".join(affected_lines),
+                                refs=outcome_refs,
+                            ),
+                        ),
+                        decision_block_index=0,
+                        evidence_refs=tuple(evidence_refs),
+                        judgment_refs=tuple(judgment_refs),
+                        outcome_refs=outcome_refs,
+                        unresolved_refs=(ResultRef("meld-issue", issue.uid),),
+                        issue_presentation=ResolutionIssuePresentation(
+                            evidence=tuple(evidence_groups),
+                            prompt_heading="RESOLUTION QUESTION",
+                            options_heading="PROPOSED RESOLUTIONS",
+                            other_option_label="Different resolution",
+                            response_heading=(
+                                "REFINE, COMMENT, OR ENTER A DIFFERENT RESOLUTION"
                             ),
                         ),
                     )

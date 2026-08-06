@@ -20,10 +20,14 @@ from memcommit.atomize_resolution_adapter import (
 )
 from memcommit.atomize_workbench import create_atomize_workbench
 from memcommit.context import Context, Memory
+from memcommit.commands.resolution_workbench_shell import (
+    resolution_viewer_fragments,
+)
 from memcommit.meld import MeldAssessment, MeldSession
 from memcommit.meld_resolution_adapter import (
     MeldResolutionWorkbenchAdapter,
 )
+from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.update import (
     AddOperation,
     ContextFingerprint,
@@ -54,11 +58,21 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
         uid=_uid(),
         content="Use the north entrance during construction.",
     )
+    left_support = Memory(
+        uid=_uid(),
+        content="The south entrance remains staffed during construction.",
+    )
+    right_support = Memory(
+        uid=_uid(),
+        content="The north entrance appears on the existing visitor map.",
+    )
     left = Context(uid=_uid(), name="participant/updates")
     right = Context(uid=_uid(), name="participant/wiki-guidance")
     target = Context(uid=_uid(), name="participant/merged-guidance")
     left.add(left_memory)
+    left.add(left_support)
     right.add(right_memory)
+    right.add(right_support)
     session = MeldSession.create_symmetric(left, right, target)
     turn = session.start_initial_analysis()
     relation_uid = _uid()
@@ -80,8 +94,16 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
                             "memory_uid": left_memory.uid,
                         },
                         {
+                            "frame_uid": left_frame.uid,
+                            "memory_uid": left_support.uid,
+                        },
+                        {
                             "frame_uid": right_frame.uid,
                             "memory_uid": right_memory.uid,
+                        },
+                        {
+                            "frame_uid": right_frame.uid,
+                            "memory_uid": right_support.uid,
                         },
                     ],
                     "summary": "The two notices cover the same construction window.",
@@ -120,8 +142,16 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
                             "memory_uid": left_memory.uid,
                         },
                         {
+                            "frame_uid": left_frame.uid,
+                            "memory_uid": left_support.uid,
+                        },
+                        {
                             "frame_uid": right_frame.uid,
                             "memory_uid": right_memory.uid,
+                        },
+                        {
+                            "frame_uid": right_frame.uid,
+                            "memory_uid": right_support.uid,
                         },
                     ],
                     "grounded_by_turn_uids": [],
@@ -139,7 +169,8 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
         "participant/updates + participant/wiki-guidance → participant/merged-guidance"
     )
     assert view.status == "READY_TO_APPLY"
-    assert view.overview == assessment.overview
+    assert view.overview.startswith(assessment.overview)
+    assert "ACCOUNTING" in view.overview
     assert view.accept_enabled is True
     assert view.capabilities == frozenset(
         {
@@ -153,14 +184,47 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
     item = view.item(issue_uid)
     assert item.options[0].uid == option_uid
     assert item.options[0].text == "Replace north with south."
+    assert item.issue_presentation is not None
+    collision = item.issue_presentation.evidence[0]
     blocks = {block.heading: block.text for block in item.blocks}
-    assert "participant/updates" in blocks["EVIDENCE"]
-    assert "[PEER]" not in blocks["EVIDENCE"]
-    assert left_memory.content in blocks["EVIDENCE"]
-    assert "participant/wiki-guidance" in blocks["EVIDENCE"]
-    assert "SCOPED · RESOLVED" in blocks["RELATIONS"]
-    assert assessment.relations[0].reason in blocks["RELATIONS"]
+    assert collision.heading == "SOURCE RELATION · R1"
+    assert "SCOPED · RESOLVED" in collision.classification
+    assert [claim.label for claim in collision.claims] == ["CLAIM 1", "CLAIM 2"]
+    assert collision.claims[0].context_name == "participant/updates"
+    assert collision.claims[0].sources[0].content == left_memory.content
+    assert collision.claims[0].sources[1].content == left_support.content
+    assert collision.claims[1].context_name == "participant/wiki-guidance"
+    assert collision.claims[1].sources[1].content == right_support.content
+    assert collision.reason == assessment.relations[0].reason
+    assert item.issue_presentation.prompt_heading == "RESOLUTION QUESTION"
+    assert item.issue_presentation.options_heading == "PROPOSED RESOLUTIONS"
     assert assessment.proposals[0].content in blocks["PROPOSED RESULT"]
+    assert item.decision_block_index == 0
+    assert len(item.evidence_refs) == 4
+    assert item.judgment_refs[0].key == relation_uid
+    assert item.outcome_refs[0].key == proposal_uid
+    rendered = "".join(
+        text
+        for _style, text in resolution_viewer_fragments(
+            view,
+            ResolutionNavigation(selected_item_uid=issue_uid),
+        )
+    )
+    assert rendered.index("SOURCE RELATION") < rendered.index(
+        "RESOLUTION QUESTION"
+    )
+    assert rendered.index("CLASSIFICATION") < rendered.index("CLAIM 1 · FROM")
+    assert rendered.index("CLAIM 2 · FROM") < rendered.index(
+        "WHY SCOPE CHANGES THE RELATION"
+    )
+    assert "CLAIM 1 · FROM participant/updates" in rendered
+    assert "CLAIM 2 · FROM participant/wiki-guidance" in rendered
+    assert f"[{left_memory.uid[:8]}] {left_memory.content}" in rendered
+    assert rendered.count("CLAIM 1 · FROM participant/updates") == 1
+    assert f"[{left_support.uid[:8]}] {left_support.content}" in rendered
+    assert left_memory.uid not in rendered
+    assert "PROPOSED RESOLUTIONS" in rendered
+    assert "TRACE" not in rendered
     assert view.results[0].uid == proposal_uid
     assert view.results[0].marker == "+"
     assert view.results[0].label == "SYNTHESIZE"
@@ -275,16 +339,44 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
         "reading:different-doors",
     ]
     blocks = {block.heading: block.text for block in conflict.blocks}
-    assert "SOURCES · PAIR" in blocks
-    assert "Staff use an NFC card." in blocks["SOURCES · PAIR"]
-    assert "north door closes" in blocks["SOURCES · PAIR"]
-    assert analysis.quality_issues[0].reason == blocks["REASON"]
+    assert conflict.issue_presentation is not None
+    evidence = conflict.issue_presentation.evidence[0]
+    assert evidence.heading == "MEMORIES IN CONFLICT"
+    assert evidence.sources[0].content == "Staff use an NFC card."
+    assert "north door closes" in evidence.sources[1].content
+    assert analysis.quality_issues[0].reason == evidence.reason
+    assert evidence.reason_heading == "WHY THESE MEMORIES CONFLICT"
+    assert conflict.issue_presentation.prompt_heading == "RESOLUTION QUESTION"
+    assert conflict.issue_presentation.options_heading == "PROPOSED RESOLUTIONS"
     assert "reading:different-doors" in blocks["SAVED RESPONSE"]
     assert response.text in blocks["SAVED RESPONSE"]
+    assert conflict.decision_block_index == 0
+    assert len(conflict.evidence_refs) == 2
+    assert conflict.judgment_refs[0].key == conflict_uid
+
+    rendered = "".join(
+        text
+        for _style, text in resolution_viewer_fragments(
+            view,
+            ResolutionNavigation(selected_item_uid=conflict_uid),
+        )
+    )
+    assert rendered.index("MEMORIES IN CONFLICT") < rendered.index(
+        "RESOLUTION QUESTION"
+    )
+    assert rendered.index("CLASSIFICATION") < rendered.index("SOURCE 1 · FROM")
+    assert rendered.index("SOURCE 2 · FROM") < rendered.index(
+        "WHY THESE MEMORIES CONFLICT"
+    )
+    assert rendered.index("RESOLUTION QUESTION") < rendered.index(
+        "PROPOSED RESOLUTIONS"
+    )
+    assert "TRACE" not in rendered
 
     split = view.item(f"atomize:{composite_uid}")
     split_blocks = {block.heading: block.text for block in split.blocks}
-    assert "SOURCES · UNARY" in split_blocks
+    assert split.issue_presentation is not None
+    assert split.issue_presentation.evidence[0].sources
     assert "The north door closes." in split_blocks["PROPOSED CHILDREN"]
     assert "The south door remains open." in split_blocks["PROPOSED CHILDREN"]
 

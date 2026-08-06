@@ -27,6 +27,7 @@ from prompt_toolkit.layout import (
     FormattedTextControl,
     HSplit,
     Window,
+    VSplit,
 )
 from prompt_toolkit.layout.containers import AnyContainer, WindowRenderInfo
 from prompt_toolkit.layout.dimension import Dimension
@@ -55,6 +56,48 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
         # The blue surface is persistent selection; reverse video remains the
         # separate navigation cursor while a person browses a tree.
         "memcommit.choice.active": "fg:#10242f bg:#8bd5ff bold",
+    }
+)
+
+# Semantic workbenches share presentation vocabulary even when their state
+# contracts differ.  A Result viewer is read-only, Compare owns report
+# navigation, and Resolution owns choices; keeping these colors here avoids
+# implying that one operation also owns another operation's semantics.
+SEMANTIC_VIEWER_STYLE = Style.from_dict(
+    {
+        "viewer-section": "fg:#8bd5ff bold",
+        "detail-card": "fg:#ffffff",
+        "detail-card.focused": "fg:#8bd5ff bold",
+        # Lavender is reserved for actual Memory objects, not report prose.
+        "memory-object": "fg:#cad3f5",
+        "memory-object.focused": "fg:#8bd5ff bold",
+        # Impact treatment colors classify the operation applied to one
+        # Memory; the surrounding Memory row owns the separate blue focus.
+        "impact.keep": "fg:#a6da95 bold",
+        "impact.keep.focused": "fg:#a6da95 bold",
+        "impact.redact": "fg:#f5a97f bold",
+        "impact.redact.focused": "fg:#f5a97f bold",
+        "impact.summarize": "fg:#8aadf4 bold",
+        "impact.summarize.focused": "fg:#8aadf4 bold",
+        "impact.reframe": "fg:#c6a0f6 bold",
+        "impact.reframe.focused": "fg:#c6a0f6 bold",
+        "impact.forget": "fg:#ed8796 bold",
+        "impact.forget.focused": "fg:#ed8796 bold",
+        "impact.custom": "fg:#eed49f bold",
+        "impact.custom.focused": "fg:#eed49f bold",
+        "impact.other": "fg:#cad3f5 bold",
+        "impact.other.focused": "fg:#cad3f5 bold",
+        "option-card": "fg:#ffffff",
+        # Resolution choices are rows, not nested cards. Underline belongs
+        # only to the navigation cursor and disappears when focus moves away.
+        "option-card.focused": "fg:#8bd5ff bold underline",
+        "option-card.selected": "fg:#8bd5ff bold",
+        "option-card.other": "fg:#8bd5ff bold underline",
+        "selection-badge": "fg:#8bd5ff bold",
+        "case-title": "fg:#ffffff bold",
+        "detail-heading": "fg:#ffffff bold",
+        "block-heading": "fg:#ffffff bold",
+        "trace": "fg:#8bd5ff",
     }
 )
 
@@ -349,7 +392,7 @@ def bind_focused_frame_style(
     *,
     is_focused: Callable[[], bool],
 ) -> None:
-    """Render one focused border in bold light blue without changing labels."""
+    """Render focused chrome with light-blue styling and heavy box glyphs."""
 
     base_style = frame.container.style
 
@@ -362,6 +405,40 @@ def bind_focused_frame_style(
         )
 
     frame.container.style = focused_style
+
+    # Terminal bold does not reliably increase a box glyph's stroke weight.
+    # Swap the actual frame characters instead so focus stays visible across
+    # fonts, while leaving the dynamic body and all semantic content untouched.
+    heavy_border = {
+        "┌": "┏",
+        "─": "━",
+        "┐": "┓",
+        "│": "┃",
+        "└": "┗",
+        "┘": "┛",
+        # prompt-toolkit uses ASCII separators around a Frame title.
+        "|": "┃",
+    }
+
+    def bind_border_chars(container: AnyContainer) -> None:
+        if isinstance(container, Window):
+            normal = container.char
+            if isinstance(normal, str) and normal in heavy_border:
+                heavy = heavy_border[normal]
+                container.char = (
+                    lambda normal=normal, heavy=heavy: (
+                        heavy if is_focused() else normal
+                    )
+                )
+            return
+        if isinstance(container, ConditionalContainer):
+            bind_border_chars(container.content)
+            return
+        if isinstance(container, (HSplit, VSplit)):
+            for child in container.children:
+                bind_border_chars(child)
+
+    bind_border_chars(frame.container)
 
 
 def scroll_wrapped_page(event: object, *, direction: int) -> None:

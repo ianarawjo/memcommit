@@ -38,9 +38,58 @@ def render_review_report_snapshot(report: ReviewReport) -> str:
         )
         detail_lines: list[str] = []
         for item in report.view.items:
-            if not item.blocks:
+            if not item.blocks and item.issue_presentation is None:
                 continue
             detail_lines.append(safe_terminal_text(item.title))
+            if item.issue_presentation is not None:
+                for evidence in item.issue_presentation.evidence:
+                    detail_lines.append(f"  {safe_terminal_text(evidence.heading)}")
+                    detail_lines.append("    CLASSIFICATION")
+                    detail_lines.extend(
+                        f"      {line}"
+                        for line in safe_terminal_text(
+                            evidence.classification
+                        ).splitlines()
+                    )
+                    for claim in evidence.source_groups:
+                        detail_lines.append(
+                            "    "
+                            f"{safe_terminal_text(claim.label)} · FROM "
+                            f"{safe_terminal_text(claim.context_name)}"
+                        )
+                        for source in claim.sources:
+                            detail_lines.append(
+                                "      "
+                                f"[{safe_terminal_text(source.memory_uid[:8])}] "
+                                f"{safe_terminal_text(source.content)}"
+                            )
+                    detail_lines.append(
+                        f"    {safe_terminal_text(evidence.reason_heading)}"
+                    )
+                    detail_lines.extend(
+                        f"      {line}"
+                        for line in safe_terminal_text(evidence.reason).splitlines()
+                    )
+                if item.question:
+                    detail_lines.append(
+                        "  "
+                        f"{safe_terminal_text(item.issue_presentation.prompt_heading)}"
+                    )
+                    detail_lines.append(
+                        f"    {safe_terminal_text(item.question)}"
+                    )
+                if item.options:
+                    detail_lines.append(
+                        "  "
+                        f"{safe_terminal_text(item.issue_presentation.options_heading)}"
+                    )
+                    for index, option in enumerate(item.options, start=1):
+                        detail_lines.append(
+                            f"    {index}. {safe_terminal_text(option.label)}"
+                        )
+                        detail_lines.append(
+                            f"       {safe_terminal_text(option.text)}"
+                        )
             for block in item.blocks:
                 detail_lines.append(f"  {safe_terminal_text(block.heading)}")
                 detail_lines.extend(

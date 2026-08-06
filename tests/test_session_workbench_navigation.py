@@ -25,6 +25,16 @@ def test_focus_rows_and_semantic_sections_share_one_controller():
     assert navigation.toggle_frames() == "items"
 
 
+def test_three_frame_session_cycle_includes_todo_without_affecting_compare_toggle():
+    navigation = SessionWorkbenchNavigation(pane="items")
+    panes = ("items", "viewer", "todo")
+
+    assert navigation.cycle_panes(panes) == "viewer"
+    assert navigation.cycle_panes(panes) == "todo"
+    assert navigation.cycle_panes(panes, -1) == "viewer"
+    assert navigation.toggle_frames() == "items"
+
+
 def test_section_identity_survives_insertions_and_apply_is_not_an_offset():
     navigation = SessionWorkbenchNavigation(section_uid="APPLY")
     before = _sections("REPORT", "RESULTS", "APPLY")

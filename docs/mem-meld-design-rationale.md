@@ -341,6 +341,20 @@ but C is absent from the directional receipt and cannot affect its provider or
 target identity. See `session-endpoint-setup-design-rationale.md` for the
 presentation, receipt, and validation boundaries.
 
+Symmetric `A + B → C` is the initial and leftmost mode. Directional `A → B`
+remains the explicit option to its right in the same horizontal selector.
+
+The A/B source trees use the shared readable public namespace rather than only
+the active Profile's ordinary Context records. READ-granted public names are
+therefore visible at their public hierarchy position and carry an explicit
+`GRANTED · READ SOURCE` annotation. The Grant attachment is not rendered as a
+semantic parent. Query-only routes are absent because Meld has no query-source
+contract and must not substitute hidden query output for a reviewed source
+frame. C remains a local empty or newly created Context. The current
+directional implementation also requires local A and B; the setup validates
+that boundary explicitly instead of silently hiding Grant sources needed by
+symmetric mode.
+
 | Mode | Inputs | Authority contract | Target | Representative case | Current status |
 | --- | --- | --- | --- | --- | --- |
 | **Directional** | Prepared incoming evidence plus an existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
@@ -818,12 +832,24 @@ appends its current proposed target Memories and whole-set strategy section.
 Directional Meld has no Compare seed and therefore keeps its authority-specific
 report projection.
 
-Immediately above Apply, Meld also exposes the shared revision-bound Impact
-surface. For symmetric Meld this Impact is the saved Compare report itself:
+Before Apply, Meld also exposes the shared revision-bound Impact surface. For
+symmetric Meld this Impact is the saved Compare report itself:
 the equal-authority analysis is reused rather than summarized into a second
 dialect. Directional Meld deliberately does not call its Impact Compare; it
 shows the exact proposed baseline effects because incoming and baseline do not
 have peer authority. Impact is provider-free and cannot apply the Meld.
+
+An unapplied symmetric Meld then shows a `SAVE LOCATION` card immediately
+above Apply. Editing it relocates the already-created empty Result Context and
+its target-bound Meld session through the ordinary Context-rename freshness
+and rollback boundary, then returns to the same review. The relocation keeps
+the Result Context UID, rewrites the target name and metadata digest, and does
+not rerun the provider or apply proposed Memories. A target namespace with
+descendants is rejected in this inline flow rather than moving unrelated work.
+Directional Meld deliberately omits the card: its target is the authoritative
+existing baseline, so changing its “save location” would change the operation
+rather than merely rename a new symmetric result. Review-only Meld surfaces
+also omit the control.
 
 `mem review meld` opens the same saved assessment as an adaptive Review report.
 It may record the existing issue or whole-set semantic turns and reassess the

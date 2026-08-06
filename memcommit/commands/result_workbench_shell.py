@@ -13,17 +13,26 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
+from prompt_toolkit.styles import merge_styles
+from prompt_toolkit.widgets import Frame
 
 from memcommit.commands.tui_primitives import (
     TuiRegion,
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+    bind_focused_frame_style,
     build_tui_frame,
     require_interactive_terminal,
     safe_terminal_text,
 )
+from memcommit.commands.semantic_detail_renderer import (
+    semantic_detail_block_fragments,
+    semantic_detail_header_fragments,
+    semantic_trace_fragments,
+)
 from memcommit.result_workbench import (
     ResultCase,
     ResultCaseDetail,
-    ResultRef,
     ResultSection,
     ResultWorkbenchAdapter,
     ResultWorkbenchError,
@@ -51,17 +60,6 @@ def _section_text(section: ResultSection) -> str:
         else "(not recorded by this result artifact)"
     )
     return f"{marker}\n{text}" if text else marker
-
-
-def _ref_text(reference: ResultRef) -> str:
-    return (
-        f"{safe_terminal_text(reference.kind)}:"
-        f"{safe_terminal_text(reference.key)}"
-    )
-
-
-def _refs_text(refs: tuple[ResultRef, ...]) -> str:
-    return ", ".join(_ref_text(reference) for reference in refs)
 
 
 def _case_row(
@@ -101,62 +99,30 @@ def _case_detail_fragments(
         for index, candidate in enumerate(view.cases, start=1)
         if candidate.uid == case.uid
     )
-    fragments: list[tuple[str, str]] = [
-        (
-            "class:section",
-            (
-                f"\n CASE DETAIL · {case_number}/{len(view.cases)} · "
-                f"{case.role}\n"
-            ),
-        ),
-        ("class:case-title", f" {safe_terminal_text(case.title)}\n"),
-        ("class:detail-heading", "\n WHY SELECTED\n"),
-        ("", f" {safe_terminal_text(case.why_selected)}\n"),
-        ("class:detail-heading", "\n OPERATION DETAIL\n"),
-    ]
+    fragments = semantic_detail_header_fragments(
+        label=f"CASE DETAIL · {case_number}/{len(view.cases)} · {case.role}",
+        title=case.title,
+        why_heading="WHY SELECTED",
+        why=case.why_selected,
+    )
     # Detail blocks are operation-authored and deliberately retain their
     # supplied order.  The common layer must not reinterpret their semantics.
     for block in detail.blocks:
         fragments.extend(
-            [
-                (
-                    "class:block-heading",
-                    f" {safe_terminal_text(block.heading)}\n",
-                ),
-                ("", f" {safe_terminal_text(block.text)}\n"),
-            ]
-        )
-        if block.refs:
-            fragments.append(
-                ("class:trace", f" refs · {_refs_text(block.refs)}\n")
+            semantic_detail_block_fragments(
+                heading=block.heading,
+                text=block.text,
+                refs=block.refs,
             )
+        )
     fragments.extend(
-        [
-            ("class:detail-heading", "\n TRACE\n"),
-            (
-                "class:trace",
-                f" EVIDENCE   · {_refs_text(detail.evidence_refs)}\n",
-            ),
-            (
-                "class:trace",
-                f" → JUDGMENT · {_refs_text(detail.judgment_refs)}\n",
-            ),
-        ]
+        semantic_trace_fragments(
+            evidence_refs=detail.evidence_refs,
+            judgment_refs=detail.judgment_refs,
+            outcome_refs=detail.outcome_refs,
+            unresolved_refs=detail.unresolved_refs,
+        )
     )
-    if detail.outcome_refs:
-        fragments.append(
-            (
-                "class:trace",
-                f" → OUTCOME  · {_refs_text(detail.outcome_refs)}\n",
-            )
-        )
-    if detail.unresolved_refs:
-        fragments.append(
-            (
-                "class:trace",
-                f" → UNRESOLVED · {_refs_text(detail.unresolved_refs)}\n",
-            )
-        )
     return fragments
 
 
@@ -385,10 +351,12 @@ def run_result_workbench_shell(
         height=1,
         dont_extend_height=True,
     )
+    viewer_frame = Frame(body, title="VIEWER")
+    bind_focused_frame_style(viewer_frame, is_focused=lambda: True)
     application: Application[ResultWorkbenchView] = Application(
         layout=Layout(
             build_tui_frame(
-                TuiRegion(body),
+                TuiRegion(viewer_frame),
                 TuiRegion(footer),
             ),
             focused_element=body_control,
@@ -399,6 +367,12 @@ def run_result_workbench_shell(
         input=app_input,
         output=app_output,
         mouse_support=False,
+        style=merge_styles(
+            [
+                MEMCOMMIT_TUI_STYLE,
+                SEMANTIC_VIEWER_STYLE,
+            ]
+        ),
     )
     try:
         return application.run()

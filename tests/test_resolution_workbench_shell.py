@@ -7,16 +7,23 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.resolution_workbench_shell import (
+    RESOLUTION_WORKBENCH_STYLE,
+    ResolutionDestination,
     ResolutionGlobalStrategy,
+    _session_items_fragments,
     render_resolution_workbench_snapshot,
     resolution_report_fragments,
     resolution_viewer_fragments,
     resolution_workbench_fragments,
     run_resolution_workbench_shell,
+    session_todo_view,
 )
 from memcommit.impact_controller import ImpactController
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
+    ResolutionIssueEvidence,
+    ResolutionIssuePresentation,
+    ResolutionIssueSource,
     ResolutionItem,
     ResolutionNavigation,
     ResolutionOption,
@@ -107,6 +114,29 @@ def test_nested_arrow_and_enter_option_selection_returns_uid_bound_comment():
     assert action.comment == "Use the incoming wording."
 
 
+def test_save_location_card_emits_an_exact_destination_change_before_apply():
+    view = _view(
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+    )
+    with create_pipe_input() as pipe_input:
+        # Open the Report, move from its title through understanding, review
+        # set, and results to SAVE LOCATION, then edit the exact Context name.
+        pipe_input.send_text("\r\x1b[B\x1b[B\x1b[B\x1b[B\r\x15task-3/severed-final\r")
+        action = run_resolution_workbench_shell(
+            view,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            split_viewer_items=True,
+            review_and_apply=True,
+            destination=ResolutionDestination(value="task-3/severed"),
+        )
+
+    assert action.kind == "CHANGE_DESTINATION"
+    assert action.destination == "task-3/severed-final"
+
+
 @pytest.mark.parametrize("numeric_key", ["1", "2", "3", "4", "5"])
 def test_numeric_shortcuts_are_inert(numeric_key: str):
     item = _item(
@@ -131,12 +161,13 @@ def test_numeric_shortcuts_are_inert(numeric_key: str):
     assert action.comment == "Explain without choosing."
 
 
-def test_escape_collapses_detail_before_close():
+@pytest.mark.parametrize("back_key", ["\x1b", "\x7f"])
+def test_back_key_collapses_detail_before_close(back_key: str):
     navigation = ResolutionNavigation()
     view = _view(_item("issue-1"))
 
-    # First Escape unwinds the expanded detail. Q then closes the workbench.
-    action = _run(view, "\r\x1bq", navigation=navigation)
+    # Escape and Backspace both unwind detail. Q then closes the workbench.
+    action = _run(view, f"\r{back_key}q", navigation=navigation)
 
     assert action.kind == "CLOSE"
     assert navigation.selected_item_uid == "issue-1"
@@ -278,6 +309,35 @@ def test_split_report_contains_conflicts_and_whole_set_strategies():
     assert "Choose broadest" in rendered
 
 
+def test_items_hanging_wrap_tracks_the_supplied_frame_width():
+    item = replace(
+        _item("a"),
+        title=(
+            "A long review target whose visible title must wrap inside the "
+            "Items frame instead of being clipped at a fixed character limit"
+        ),
+    )
+    view = _view(item)
+
+    rendered = "".join(
+        text
+        for _style, text in _session_items_fragments(
+            view,
+            selected_index=1,
+            focused=True,
+            content_width=48,
+            report_label="Complete Meld report",
+        )
+    )
+    lines = rendered.splitlines()
+    item_lines = lines[1:]
+
+    assert "…" not in rendered
+    assert len(item_lines) > 1
+    assert all(len(line) <= 48 for line in item_lines)
+    assert item_lines[0].index("A long") == item_lines[1].index("visible")
+
+
 def test_issue_detail_is_compact_and_section_navigable():
     item = ResolutionItem(
         uid="a",
@@ -307,15 +367,108 @@ def test_issue_detail_is_compact_and_section_navigable():
         )
     )
 
-    assert "CONFLICT 1/1 · Question paradigm" in rendered
-    assert "╭─ QUESTION " in rendered
+    assert "REVIEW DETAIL · 1/1 · REQUIRED · CONFLICT · OPEN" in rendered
+    assert "REVIEW SET · REQUIRED 1 · OPTIONAL 0" in rendered
+    assert "WHY THIS NEEDS REVIEW" in rendered
+    assert "OPERATION DETAIL" in rendered
+    assert "QUESTION\n" in rendered
     assert "╭─ OPTIONS " in rendered
     assert "2. Other direction" in rendered
-    assert "╭─ EVIDENCE " in rendered
-    assert "│   advisor1 · #1" in rendered
-    assert "╯\n\n ╭─ QUESTION" in rendered
+    assert "EVIDENCE\n" in rendered
+    assert "advisor1 · #1" in rendered
     assert "WHAT MEM UNDERSTOOD" not in rendered
     assert "Review the current resolution." not in rendered
+
+
+def test_options_card_explains_entry_and_uses_blue_focus_with_checkmark():
+    item = _item(
+        "option-guidance",
+        options=(
+            ResolutionOption("one", "First", "Use the first form."),
+            ResolutionOption("two", "Second", "Use the second form."),
+        ),
+    )
+    view = _view(item)
+    navigation = ResolutionNavigation(selected_item_uid=item.uid)
+    navigation.toggle_detail(view)
+
+    waiting = resolution_viewer_fragments(
+        view,
+        navigation,
+        focused_section=2,
+    )
+    assert "Enter to choose an option" in "".join(
+        text for _style, text in waiting
+    )
+    assert not any("› ○" in text for _style, text in waiting)
+
+    navigation.selected_option_uid = "one"
+    active = resolution_viewer_fragments(
+        view,
+        navigation,
+        focused_section=2,
+        option_navigation_active=True,
+    )
+    assert any(
+        style == "class:option-card.focused" and "› ✓ 1. First" in text
+        for style, text in active
+    )
+    active_text = "".join(text for _style, text in active)
+    assert "╭─ ✓ 1. First" not in active_text
+    focused_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:option-card.focused"
+    )
+    assert focused_style.underline is True
+    neutral_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:option-card"
+    )
+    assert neutral_style.underline is False
+    selected_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:option-card.selected"
+    )
+    assert selected_style.color == "8bd5ff"
+    assert selected_style.underline is False
+
+
+def test_focused_bottom_detail_card_anchors_after_its_closing_border():
+    item = ResolutionItem(
+        uid="bottom-card",
+        kind="CONFLICT",
+        status="OPEN",
+        priority="REQUIRED",
+        title="Opening-length rule",
+        summary="Choose one rule.",
+        blocks=(
+            ResolutionDetailBlock("EVIDENCE", "A long evidence explanation."),
+            ResolutionDetailBlock("RELATIONS", "R1 · CONFLICT"),
+            ResolutionDetailBlock("PROPOSED RESULT", "Use the reviewed rule."),
+        ),
+    )
+    fragments = resolution_viewer_fragments(
+        _view(item),
+        ResolutionNavigation(selected_item_uid=item.uid),
+        focused_section=3,
+    )
+    proposed_start = next(
+        index
+        for index, (_style, text) in enumerate(fragments)
+        if "PROPOSED RESULT" in text
+    )
+    proposed_content = next(
+        index
+        for index, (_style, text) in enumerate(
+            fragments[proposed_start:],
+            proposed_start,
+        )
+        if "Use the reviewed rule." in text
+    )
+    anchor = max(
+        index
+        for index, (style, _text) in enumerate(fragments)
+        if style == "[SetCursorPosition]"
+    )
+
+    assert anchor > proposed_content
 
 
 def test_split_detail_submits_a_supplied_option_with_an_optional_comment():
@@ -328,9 +481,9 @@ def test_split_detail_submits_a_supplied_option_with_an_optional_comment():
     )
 
     with create_pipe_input() as pipe_input:
-        # Open conflict 1, choose its first supplied option, then use C to
-        # send that choice with the optional comment field empty.
-        pipe_input.send_text("\x1b[B\r\rc\r")
+        # Open conflict 1, move to OPTIONS, Enter its nested navigation,
+        # select the first option, then submit an empty optional comment.
+        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\r\rc\r")
         action = run_resolution_workbench_shell(
             _view(item),
             split_viewer_items=True,
@@ -355,10 +508,11 @@ def test_split_detail_submits_other_direction_without_a_fabricated_option():
     )
 
     with create_pipe_input() as pipe_input:
-        # Open conflict 1, move beyond both supplied options to Other
-        # direction, and submit a free-form resolution.
+        # Open conflict 1, enter OPTIONS, move beyond both supplied options to
+        # Other direction, and submit a free-form resolution.
         pipe_input.send_text(
-            "\x1b[B\r\x1b[C\x1b[C\rUse a staged combination instead.\r"
+            "\x1b[B\r\x1b[B\x1b[B\r"
+            "\x1b[B\x1b[B\rUse a staged combination instead.\r"
         )
         action = run_resolution_workbench_shell(
             _view(item),
@@ -372,6 +526,147 @@ def test_split_detail_submits_other_direction_without_a_fabricated_option():
     assert action.item_uid == "issue-1"
     assert action.option_uid is None
     assert action.comment == "Use a staged combination instead."
+
+
+def test_inline_other_direction_keeps_current_detail_visible():
+    item = replace(
+        _item(
+            "issue-1",
+            options=(ResolutionOption("keep", "Keep", "Keep this direction."),),
+        ),
+        issue_presentation=ResolutionIssuePresentation(
+            evidence=(
+                ResolutionIssueEvidence(
+                    heading="MEMORIES IN CONFLICT",
+                    classification="CONFLICT",
+                    reason_heading="WHY THESE MEMORIES CONFLICT",
+                    reason="They prescribe incompatible actions.",
+                    sources=(
+                        ResolutionIssueSource(
+                            label="SOURCE 1",
+                            context_name="advisor/a",
+                            memory_uid="memory-1",
+                            content="Use the first direction.",
+                        ),
+                    ),
+                ),
+            ),
+            prompt_heading="RESOLUTION QUESTION",
+            options_heading="PROPOSED RESOLUTIONS",
+            other_option_label="Different resolution",
+            response_heading="ENTER A RESPONSE",
+        ),
+    )
+    optional_item = replace(
+        _item("optional"),
+        priority="HELPFUL",
+    )
+    view = _view(item, optional_item)
+    navigation = ResolutionNavigation(selected_item_uid=item.uid)
+    navigation.toggle_detail(view)
+
+    fragments = resolution_viewer_fragments(
+        view,
+        navigation,
+        focused_section=2,
+        option_navigation_active=True,
+        other_direction_focused=True,
+        other_direction_editing=True,
+    )
+    rendered = "".join(text for _style, text in fragments)
+
+    assert "Issue issue-1" in rendered
+    assert "PROPOSED RESOLUTIONS" in rendered
+    assert "REVIEW SET · REQUIRED 1 · OPTIONAL 1" in rendered
+    assert any(
+        style == "class:viewer-section" and "RESOLUTION QUESTION" in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:detail-card.focused"
+        and "PROPOSED RESOLUTIONS" in text
+        for style, text in fragments
+    )
+    assert "Editing below · Enter save · Ctrl-J newline" in rendered
+    assert "◇ OTHER DIRECTION" not in rendered
+
+
+def test_inline_response_enter_saves_and_returns_without_closing_workbench():
+    item = _item(
+        "issue-1",
+        options=(ResolutionOption("keep", "Keep", "Keep this direction."),),
+    )
+    saved: list[tuple[str, str | None, str]] = []
+
+    with create_pipe_input() as pipe_input:
+        # Open the item, enter its response editor with Tab, save with Enter,
+        # then close from the restored Viewer focus.
+        pipe_input.send_text("\r\tAdditional guidance.\rq")
+        action = run_resolution_workbench_shell(
+            _view(item),
+            draft_saver=lambda uid, option_uid, comment: saved.append(
+                (uid, option_uid, comment)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert saved == [("issue-1", None, "Additional guidance.")]
+
+
+def test_actionable_response_is_focusable_and_opens_inline_with_enter():
+    item = replace(
+        _item(
+            "issue-1",
+            options=(ResolutionOption("keep", "Keep", "Keep this direction."),),
+        ),
+        issue_presentation=ResolutionIssuePresentation(
+            evidence=(
+                ResolutionIssueEvidence(
+                    heading="MEMORIES IN CONFLICT",
+                    classification="CONFLICT",
+                    reason_heading="WHY THESE MEMORIES CONFLICT",
+                    reason="They prescribe incompatible actions.",
+                    sources=(
+                        ResolutionIssueSource(
+                            label="SOURCE 1",
+                            context_name="advisor/a",
+                            memory_uid="memory-1",
+                            content="Use the first direction.",
+                        ),
+                    ),
+                ),
+            ),
+            prompt_heading="RESOLUTION QUESTION",
+            options_heading="PROPOSED RESOLUTIONS",
+            other_option_label="Different resolution",
+            response_heading="LEGACY RESPONSE INSTRUCTION",
+        ),
+    )
+    saved: list[tuple[str, str | None, str]] = []
+
+    with create_pipe_input() as pipe_input:
+        # Open the item, move Summary -> Evidence -> Decision -> Response,
+        # open the inline field, save it, then close the unchanged workbench.
+        pipe_input.send_text(
+            "\x1b[B\r\x1b[B\x1b[B\x1b[B\r"
+            "A separate response.\rq"
+        )
+        action = run_resolution_workbench_shell(
+            _view(item),
+            split_viewer_items=True,
+            draft_saver=lambda uid, option_uid, comment: saved.append(
+                (uid, option_uid, comment)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert saved == [("issue-1", None, "A separate response.")]
 
 
 def test_split_viewer_section_navigation_selects_matching_item_row():
@@ -430,7 +725,7 @@ def test_item_selection_does_not_replace_open_viewer_until_enter():
     view = _view(_item("a"), _item("b"))
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\t\x1b[Bq")
+        pipe_input.send_text("\x1b[B\r\x1b[Z\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             navigation=item_navigation,
@@ -447,6 +742,44 @@ def test_item_selection_does_not_replace_open_viewer_until_enter():
     assert item_navigation.selected_item_uid == "a"
 
 
+def test_tab_from_open_viewer_visits_items_before_todo():
+    workbench_navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Open the first item in Viewer, then one Tab must focus the visually
+        # adjacent Items frame rather than skipping directly to To Do.
+        pipe_input.send_text("\x1b[B\r\tq")
+        action = run_resolution_workbench_shell(
+            _view(_item("a")),
+            workbench_navigation=workbench_navigation,
+            split_viewer_items=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.pane == "items"
+
+
+def test_second_tab_from_open_viewer_reaches_todo_after_items():
+    workbench_navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r\t\tq")
+        action = run_resolution_workbench_shell(
+            _view(_item("a")),
+            workbench_navigation=workbench_navigation,
+            split_viewer_items=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.pane == "todo"
+
+
 def test_apply_section_uses_stable_identity_after_review_items_and_impact():
     view = replace(
         _view(
@@ -461,9 +794,9 @@ def test_apply_section_uses_stable_identity_after_review_items_and_impact():
 
     with create_pipe_input() as pipe_input:
         # Viewer order is title, understanding, review-items, item, results,
-        # impact, apply. The controller must retain APPLY by identity rather
-        # than by the pre-review-items numeric offset.
-        pipe_input.send_text("\t" + "\x1b[B" * 6 + "q")
+        # impact, one impact Memory, then apply. The controller must retain
+        # APPLY by identity rather than by the numeric offset.
+        pipe_input.send_text("\t" + "\x1b[B" * 7 + "q")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -481,7 +814,51 @@ def test_apply_section_uses_stable_identity_after_review_items_and_impact():
 
     assert action.kind == "CLOSE"
     assert workbench_navigation.section_uid == "REPORT:ACTION"
-    assert workbench_navigation.row_index == 2
+    # The report may describe the action, but the actionable control now lives
+    # in the separate To Do frame and therefore has no synthetic Items row.
+    assert workbench_navigation.row_index == 0
+
+
+def test_enter_on_impact_memory_opens_rationale_without_leaving_report():
+    view = replace(
+        _view(
+            capabilities=frozenset({"ACCEPT"}),
+            accept_enabled=True,
+        ),
+        results=(
+            ResolutionResult(
+                uid="result-1",
+                marker="+",
+                label="KEEP",
+                text="Retained Memory.",
+                reason="The rule requires retention.",
+                rules=("Retain required information.",),
+            ),
+        ),
+    )
+    workbench_navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Items → Viewer, then title → understanding → items → impact → Memory.
+        pipe_input.send_text("\t" + "\x1b[B" * 4 + "\rq")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            impact_controller=ImpactController.from_resolution(
+                view,
+                title="IMPACT · UPDATE",
+                summary="Exact staged effects.",
+            ),
+            workbench_navigation=workbench_navigation,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.pane == "viewer"
+    assert workbench_navigation.section_uid == "REPORT:IMPACT:result-1"
 
 
 def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
@@ -503,7 +880,8 @@ def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
         # Select the first option in each conflict, then open the final review
         # row and submit the combined resolution turn.
         pipe_input.send_text(
-            "\x1b[B\r\r\t\x1b[B\r\r\t\x1b[B\r"
+            "\x1b[B\r\x1b[B\x1b[B\r\r\t"
+            "\x1b[B\r\x1b[B\x1b[B\r\r\t\t\r"
         )
         action = run_resolution_workbench_shell(
             _view(first, second, capabilities=frozenset({"SUBMIT_ALL"})),
@@ -520,7 +898,7 @@ def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
     assert "Issue b: Choose this reading: Use answer B." in action.comment
 
 
-def test_review_and_apply_treats_enter_again_as_selection_cancellation():
+def test_todo_reopens_a_required_conflict_after_selection_cancellation():
     item = _item(
         "a",
         options=(ResolutionOption("a-1", "First A", "Use answer A."),),
@@ -532,9 +910,11 @@ def test_review_and_apply_treats_enter_again_as_selection_cancellation():
     )
 
     with create_pipe_input() as pipe_input:
-        # The second Enter on the same option clears it. Final review therefore
-        # routes the conflict through the explicit unresolved policy.
-        pipe_input.send_text("\x1b[B\r\r\r\t\x1b[B\r")
+        # The second Enter on the same option clears it. To Do must reopen that
+        # required conflict instead of applying a whole-set fallback over it.
+        pipe_input.send_text(
+            "\x1b[B\r\x1b[B\x1b[B\r\r\r\t\rq"
+        )
         action = run_resolution_workbench_shell(
             _view(item, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,
@@ -545,7 +925,60 @@ def test_review_and_apply_treats_enter_again_as_selection_cancellation():
             require_tty=False,
         )
 
-    assert action.kind == "SUBMIT_ALL"
-    assert "Choose this reading" not in action.comment
-    assert "Issue a" in action.comment
-    assert "Preserve every unresolved distinction." in action.comment
+    assert action.kind == "CLOSE"
+
+
+def test_todo_derives_conflict_then_materialize_then_apply_states():
+    conflict = replace(_item("a"), kind="CONTENT_CONFLICT")
+    optional = replace(
+        _item("b"),
+        kind="CONTENT_CONFLICT",
+        priority="HELPFUL",
+    )
+    open_view = _view(conflict, optional)
+
+    pending = session_todo_view(
+        open_view,
+        {},
+        review_and_apply=True,
+        read_only=False,
+    )
+    assert pending.kind == "RESOLVE"
+    assert pending.label == "Resolve 1 required conflict"
+    assert pending.detail.startswith("1 optional item may be skipped.")
+    assert pending.unresolved_item_uids == ("a",)
+
+    materialize = session_todo_view(
+        open_view,
+        {"a": (None, "Use the local wording.")},
+        review_and_apply=True,
+        read_only=False,
+    )
+    assert materialize.kind == "MATERIALIZE"
+    assert materialize.unresolved_item_uids == ()
+    assert materialize.detail.startswith("1 optional item may be skipped.")
+
+    apply_view = replace(
+        open_view,
+        accept_enabled=True,
+        capabilities=frozenset({"ACCEPT"}),
+    )
+    apply = session_todo_view(
+        apply_view,
+        {"a": (None, "Use the local wording.")},
+        review_and_apply=True,
+        read_only=False,
+    )
+    assert apply.kind == "APPLY"
+    assert apply.detail.startswith("1 optional item left unanswered.")
+
+    complete = session_todo_view(
+        open_view,
+        {"a": (None, "Use the local wording.")},
+        review_and_apply=False,
+        read_only=False,
+        whole_set_available=False,
+    )
+    assert complete.kind == "COMPLETE"
+    assert complete.label == "Required review is complete"
+    assert complete.detail.startswith("1 optional item left unanswered.")

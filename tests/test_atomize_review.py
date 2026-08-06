@@ -190,6 +190,9 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     assert "REVIEW ITEMS · 1" in review.output
     assert "ATOMIZE UNCERTAINTY 1 · ATOMIZE UNCERTAINTY" in review.output
     assert "UNCERTAIN · REQUIRES CONTEXT" in review.output
+    assert review.output.index("CLASSIFICATION") < review.output.index(
+        memory.content
+    )
     assert RESPONSE_LABEL not in review.output
     assert "READING OPTIONS" not in review.output
     assert len(provider.payloads) == 1
@@ -272,12 +275,19 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     assert "Resumed saved analysis" in resumed_preview.output
     assert len(provider.payloads) == 2
 
+    monkeypatch.setattr(
+        "memcommit.commands.atomize._interactive_terminal",
+        lambda: True,
+    )
     applied = runner.invoke(
         app,
-        ["atomize", "--save-as", "atomize/resolved"],
+        ["atomize", "--save-as", "atomize/draft"],
+        input="e\natomize/resolved\ny\n",
     )
     assert applied.exit_code == 0, applied.output
+    assert "SAVE LOCATION" in applied.output
     assert store.current_context_name() == "atomize/resolved"
+    assert not store.context_exists("atomize/draft")
     assert store._context_file(ctx.name).read_bytes() == context_before
     resolved = store.load_direct("atomize/resolved")
     assert [

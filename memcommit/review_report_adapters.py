@@ -58,14 +58,14 @@ def meld_review_report(session: MeldSession) -> ReviewReportController:
 
 
 def sever_review_report(session: SeverSession) -> ReviewReportController:
-    """Expose disclosure decisions and the local unsent outbound draft."""
+    """Expose content-severing decisions and the proposed local result."""
     return ReviewReportController.from_resolution(
         SeverResolutionWorkbenchAdapter(session).view,
-        kind="DISCLOSURE",
+        kind="CONTENT SEVERING",
         title="MEM REVIEW · SEVER",
         summary=(
-            "Review source treatments and the local outbound draft. "
-            "Nothing is created, sent, or published by Review."
+            "Review what the local result keeps, rewrites, or forgets. "
+            "Review leaves the Source unchanged and creates no result Context."
         ),
     )
 

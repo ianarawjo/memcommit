@@ -485,6 +485,7 @@ def connect_provider(
     if provider_id == CODEX_CHATGPT_PROVIDER:
         provider = CodexChatGPTProvider.connect(
             env=dict(environment),
+            timeout=settings.semantic_timeout_seconds(),
             model=settings.model_for_provider(CODEX_CHATGPT_PROVIDER),
             reasoning_effort=settings.codex_reasoning_effort(),
         )

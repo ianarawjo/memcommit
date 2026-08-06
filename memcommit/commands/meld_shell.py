@@ -32,6 +32,7 @@ class MeldShellAction:
     issue_uid: str | None = None
     choice_index: int | None = None
     comment: str = ""
+    destination: str | None = None
 
 
 def _line(value: str, limit: int = 100) -> str:
@@ -568,6 +569,7 @@ def run_meld_shell(
     require_tty: bool = True,
     read_only: bool = False,
     review_only: bool = False,
+    destination=None,
 ) -> MeldShellAction | None:
     """Collect one action through the shared dynamic resolution workbench."""
     from memcommit.commands.resolution_workbench_shell import (
@@ -716,6 +718,7 @@ def run_meld_shell(
         review_and_apply=not read_only and not review_only,
         read_only=read_only,
         impact_controller=None if review_only else impact_controller,
+        destination=destination,
     )
     if action.kind == "CLOSE":
         return None
@@ -727,6 +730,11 @@ def run_meld_shell(
         return MeldShellAction(kind="DEFER_ALL")
     if action.kind == "ACCEPT":
         return MeldShellAction(kind="ACCEPT")
+    if action.kind == "CHANGE_DESTINATION":
+        return MeldShellAction(
+            kind="CHANGE_DESTINATION",
+            destination=action.destination,
+        )
     if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
         raise ValueError(f"Unsupported resolution action '{action.kind}' for Meld.")
     issue = adapter.view().item(action.item_uid)

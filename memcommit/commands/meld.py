@@ -71,6 +71,7 @@ from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     context_record_digest,
+    validate_context_name,
 )
 
 
@@ -865,16 +866,62 @@ def _run_interactive(
     allow_apply: bool = True,
 ) -> MeldSession:
     """Run issue and whole-set turns through one shared interactive shell."""
+    from memcommit.commands.resolution_workbench_shell import ResolutionDestination
+
     navigation = ResolutionNavigation()
     while session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}:
+        def validate_destination(name: str) -> None:
+            validate_context_name(name)
+            if name == session.target.context_name:
+                return
+            descendants = tuple(
+                candidate
+                for candidate in store.list_context_names()
+                if candidate.startswith(session.target.context_name + "/")
+            )
+            if descendants:
+                raise ValueError(
+                    "A symmetric Meld save location with descendants cannot "
+                    "be moved from the review workbench."
+                )
+            store.plan_context_rename(session.target.context_name, name)
+
+        destination = (
+            ResolutionDestination(
+                value=session.target.context_name,
+                validate=validate_destination,
+            )
+            if allow_apply and session.mode == "SYMMETRIC"
+            else None
+        )
         action = run_meld_shell(
             session,
             navigation=navigation,
             review_only=not allow_apply,
+            destination=destination,
         )
         if action is None:
             break
         expected = meld_canonical_digest(session.to_dict())
+        if action.kind == "CHANGE_DESTINATION":
+            if destination is None or action.destination is None:
+                raise MeldCommandError(
+                    "This Meld cannot change its save location."
+                )
+            validate_destination(action.destination)
+            if action.destination != session.target.context_name:
+                plan = store.plan_context_rename(
+                    session.target.context_name,
+                    action.destination,
+                )
+                store.rename_contexts(plan)
+                relocated = store.load_meld_session(session.target.context_uid)
+                if relocated is None or relocated.uid != session.uid:
+                    raise MeldCommandError(
+                        "The relocated Meld session could not be reloaded."
+                    )
+                session = relocated
+            continue
         if action.kind == "DEFER_ALL":
             session.keep_review_only()
             store.save_meld_session(
@@ -1174,16 +1221,32 @@ def _start_new_meld_from_picker(store: MemoryStore) -> None:
         cmd(left=left, into=right)
         return
 
-    left_ctx = store.load_direct(left)
-    right_ctx = store.load_direct(right)
-    analysis = load_comparison_analysis(left_ctx.uid, right_ctx.uid)
-    if analysis is None:
-        raise MeldCommandError(
-            "A symmetric Meld requires a saved ordered Compare analysis for "
-            "the selected peers. Start Compare first."
-        )
     if receipt.target_name is None:
         raise MeldCommandError("Symmetric Meld setup omitted result C.")
+    current_name = store.current_context_name()
+    left_access = _resolve_meld_source(
+        store,
+        left,
+        current_name=current_name,
+    )
+    right_access = _resolve_meld_source(
+        store,
+        right,
+        current_name=current_name,
+    )
+    left_ctx = _load_meld_source(left_access)
+    right_ctx = _load_meld_source(right_access)
+    target = (
+        ops.init(receipt.target_name)
+        if receipt.create_target
+        else store.load_direct(receipt.target_name)
+    )
+    analysis = _load_symmetric_comparison(
+        left=left_ctx,
+        right=right_ctx,
+        target=target,
+        create_target=receipt.create_target,
+    )
     session = start_reviewed_symmetric_meld(
         store=store,
         analysis=analysis,

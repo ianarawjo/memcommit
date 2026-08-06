@@ -195,9 +195,9 @@ def test_adaptive_review_starts_in_items_and_opens_the_selected_item():
     )
 
     with create_pipe_input() as pipe_input:
-        # Initial focus is Items: Down selects the finding, Enter opens it in
-        # Viewer, Enter selects its first reading, and C submits the draft.
-        pipe_input.send_text("\x1b[B\r\rc\r")
+        # Initial focus is Items: open the finding, move to OPTIONS, enter its
+        # nested control, choose the first reading, then submit the draft.
+        pipe_input.send_text("\x1b[B\r\x1b[B\r\rc\r")
         action = run_review_report_shell(
             controller,
             interactive_actions=True,

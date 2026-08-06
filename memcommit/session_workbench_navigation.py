@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Literal, Sequence
 
 
-WorkbenchPane = Literal["items", "viewer", "composer"]
+WorkbenchPane = Literal["items", "viewer", "todo", "composer"]
 
 
 @dataclass(frozen=True)
@@ -34,19 +34,33 @@ class SessionWorkbenchNavigation:
     section_uid: str | None = None
 
     def __post_init__(self) -> None:
-        if self.pane not in {"items", "viewer", "composer"}:
+        if self.pane not in {"items", "viewer", "todo", "composer"}:
             raise ValueError("Unsupported workbench pane.")
         if self.row_index < 0 or self.viewer_row_index < 0:
             raise ValueError("Workbench row indices cannot be negative.")
 
     def focus(self, pane: WorkbenchPane) -> None:
-        if pane not in {"items", "viewer", "composer"}:
+        if pane not in {"items", "viewer", "todo", "composer"}:
             raise ValueError("Unsupported workbench pane.")
         self.pane = pane
 
     def toggle_frames(self) -> WorkbenchPane:
         """Toggle only the two durable reading frames."""
         self.pane = "viewer" if self.pane == "items" else "items"
+        return self.pane
+
+    def cycle_panes(
+        self,
+        panes: Sequence[WorkbenchPane],
+        delta: int = 1,
+    ) -> WorkbenchPane:
+        """Cycle one shell's visible panes without inventing hidden targets."""
+
+        values = tuple(panes)
+        if not values or len(set(values)) != len(values) or "composer" in values:
+            raise ValueError("Session pane cycle must contain distinct visible panes.")
+        index = values.index(self.pane) if self.pane in values else 0
+        self.pane = values[(index + delta) % len(values)]
         return self.pane
 
     def move_row(self, row_count: int, delta: int) -> int:

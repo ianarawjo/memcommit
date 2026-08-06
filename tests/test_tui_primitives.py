@@ -55,13 +55,20 @@ class _SizedDummyOutput(DummyOutput):
         return self._size
 
 
-def _render_pane_top_row(*, active: bool, columns: int) -> str:
+def _render_pane_top_row(
+    *,
+    active: bool,
+    columns: int,
+    focused: bool = False,
+) -> str:
     pane = build_scrollable_text_pane(
         "GOAL",
         "one Goal",
         height=3,
         notification=lambda: active,
     )
+    if focused:
+        bind_focused_frame_style(pane.frame, is_focused=lambda: True)
     captured: list[str] = []
 
     with create_pipe_input() as pipe_input:
@@ -235,6 +242,14 @@ def test_scrollable_pane_notification_is_optional_and_right_anchored():
     assert "| GOAL |" in active
 
 
+def test_focused_frame_renders_heavy_box_glyphs():
+    focused = _render_pane_top_row(active=False, columns=30, focused=True)
+
+    assert focused.startswith("┏")
+    assert focused.endswith("┓")
+    assert "━┃ GOAL ┃━" in focused
+
+
 def test_focus_style_highlights_only_frame_chrome_and_keeps_base_style():
     pane = build_scrollable_text_pane(
         "RULES",
@@ -248,14 +263,28 @@ def test_focus_style_highlights_only_frame_chrome_and_keeps_base_style():
         is_focused=lambda: focused["value"],
     )
 
+    def border_chars(container) -> str:
+        values: list[str] = []
+        char = getattr(container, "char", None)
+        if char is not None:
+            values.append(char() if callable(char) else char)
+        content = getattr(container, "content", None)
+        if content is not None and type(container).__name__ == "ConditionalContainer":
+            values.append(border_chars(content))
+        for child in getattr(container, "children", ()):
+            values.append(border_chars(child))
+        return "".join(values)
+
     assert pane.frame.container.style() == (
         "class:frame class:custom-frame"
     )
+    assert set(border_chars(pane.frame.container)) == set("┌─|┐│└┘")
     assert pane.container is not pane.frame
     focused["value"] = True
     assert pane.frame.container.style() == (
         "class:frame class:custom-frame class:memcommit.focused"
     )
+    assert set(border_chars(pane.frame.container)) == set("┏━┓┃┗┛")
 
     border = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
         "class:memcommit.focused class:frame.border"

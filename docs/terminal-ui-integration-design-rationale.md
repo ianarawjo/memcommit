@@ -172,7 +172,7 @@ not retarget a later Apply or whole-set action.
 The shared workbench renders the revision-bound Impact card immediately above
 its operation-aware Apply card. In a TTY, Update now stops after staging,
 shows Impact, and requires explicit Apply; closing leaves the exact session
-staged. Sever shows its local outbound draft as `NOT SENT`. Symmetric Meld uses
+staged. Sever shows its proposed local Result as `SOURCE UNCHANGED`. Symmetric Meld uses
 its saved equal-authority Compare report as Impact, while directional Meld
 shows its exact proposed baseline effects and does not mislabel them Compare.
 

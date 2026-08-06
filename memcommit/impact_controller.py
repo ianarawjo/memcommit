@@ -16,6 +16,8 @@ class ImpactEntry:
     label: str
     text: str
     reason: str = ""
+    uid: str = ""
+    rules: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         for label, value in (
@@ -27,6 +29,12 @@ class ImpactEntry:
                 raise ValueError(f"{label} must be nonempty text.")
         if not isinstance(self.reason, str):
             raise ValueError("Impact reason must be text.")
+        if not isinstance(self.uid, str):
+            raise ValueError("Impact uid must be text.")
+        if not isinstance(self.rules, tuple) or any(
+            not isinstance(rule, str) or not rule.strip() for rule in self.rules
+        ):
+            raise ValueError("Impact rules must be a tuple of nonempty text.")
 
 
 @dataclass(frozen=True)
@@ -101,6 +109,8 @@ class ImpactController:
                         label=result.label,
                         text=result.text,
                         reason=result.reason,
+                        uid=result.uid,
+                        rules=result.rules,
                     )
                     for result in resolution.results
                 )
@@ -117,6 +127,7 @@ class ImpactController:
                         )
                         or item.summary,
                         reason=item.summary,
+                        uid=item.uid,
                     )
                     for item in resolution.items
                 )

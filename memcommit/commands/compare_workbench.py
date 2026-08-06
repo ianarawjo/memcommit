@@ -13,11 +13,12 @@ from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.styles import Style, merge_styles
+from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
     bind_focused_frame_style,
     display_escape_text,
 )
@@ -632,6 +633,7 @@ def run_compare_workbench(
         event.app.invalidate()
 
     @bindings.add("escape", eager=True)
+    @bindings.add("backspace", eager=True)
     def _escape(event) -> None:
         if navigation.row_index != 0 or selected["expanded"]:
             back_to_report()
@@ -677,7 +679,7 @@ def run_compare_workbench(
     footer = Window(
         FormattedTextControl(
             lambda: (
-                f" FOCUS {navigation.pane.upper()} · B/Esc back · Q close · "
+                f" FOCUS {navigation.pane.upper()} · B/Esc/Backspace back · Q close · "
                 "Tab switch · ↑↓ section/item · Enter deeper · ←→ source · "
                 "PgUp/PgDn page · Home/End · R rationale · L ledger · M meld"
                 f"  ·  {navigation.row_index + 1}/{len(rows)}"
@@ -706,11 +708,7 @@ def run_compare_workbench(
         style=merge_styles(
             [
                 MEMCOMMIT_TUI_STYLE,
-                Style.from_dict(
-                    {
-                        "viewer-section": "fg:#8bd5ff bold",
-                    }
-                ),
+                SEMANTIC_VIEWER_STYLE,
             ]
         ),
     )

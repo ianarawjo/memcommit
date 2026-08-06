@@ -960,6 +960,7 @@ def run_atomize_workbench_shell(
             draft_saver=save_draft,
             save_draft_on_close=True,
             toggle_sort=toggle_sort,
+            split_viewer_items=True,
         )
         first_round = False
         session.cursor_uid = navigation.selected_item_uid

@@ -34,8 +34,8 @@ Meld adds a focused horizontal mode selector above those inputs:
 ```text
  NEW MELD
 
- MODE  [ DIRECTIONAL · A → B ]   [ SYMMETRIC · A + B → C ]
- MEANING · A is incoming evidence. B remains authoritative and is the result target.
+ MODE  [ SYMMETRIC · A + B → C ]   [ DIRECTIONAL · A → B ]
+ MEANING · A and B are equal peers. The result is separate C.
 
  A · INCOMING / PEER     [Context namespace tree]
  B · BASELINE / PEER     [Context namespace tree]
@@ -130,9 +130,14 @@ saved session, or start an operation.
 - `Up` and `Down` move within a tree. Sever may still move `Up` from the first
   tree row into that role's scope selector.
 - `Enter` or `Space` selects the current existing Context row.
-- A new-name field remains a one-line exact editor.
-- `F` finishes setup and asks the operation adapter to produce its typed
-  receipt. `Q` or `Escape` cancels without creating or replacing anything.
+- `N create new Context` opens a creatable role's one-line exact-name editor.
+  While that editor is focused, its footer explicitly renders `Esc back`;
+  Escape returns to the role tree without canceling the whole setup.
+- A dedicated one-line `[ APPLY ]` control follows the endpoint panes in the
+  Tab order. `Enter` or `Space` on that focused control validates the complete
+  setup and asks the operation adapter to produce its typed receipt. There is
+  no hidden finish shortcut. Outside the new-name editor, `Q` or `Escape`
+  cancels without creating or replacing anything.
 
 The footer is derived from the focused component so the same arrow keys never
 advertise two meanings simultaneously.

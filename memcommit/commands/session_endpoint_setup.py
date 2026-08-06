@@ -16,6 +16,7 @@ from prompt_toolkit.layout import (
     HSplit,
     Layout,
     Window,
+    WindowAlign,
 )
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
@@ -233,7 +234,7 @@ def choose_session_endpoints(
                                     f"{display_escape_text(role_by_uid[uid].new_label)}"
                                     " ]",
                                 ),
-                                ("", " · N EDIT"),
+                                ("", " · N CREATE NEW CONTEXT"),
                             ]
                         ),
                         height=1,
@@ -278,6 +279,29 @@ def choose_session_endpoints(
         and app_ref["app"].layout.has_focus(mode_control),
     )
 
+    apply_control = FormattedTextControl(
+        lambda: [
+            ("[SetCursorPosition]", ""),
+            (
+                (
+                    "class:memcommit.choice.active"
+                    if app_ref.get("app") is not None
+                    and app_ref["app"].layout.has_focus(apply_control)
+                    else ""
+                ),
+                "[ APPLY ]",
+            ),
+        ],
+        focusable=True,
+        show_cursor=False,
+    )
+    apply_window = Window(
+        apply_control,
+        height=1,
+        align=WindowAlign.CENTER,
+        dont_extend_height=True,
+    )
+
     def active_focusables():
         values: list[object] = []
         if len(mode_specs) > 1:
@@ -286,6 +310,7 @@ def choose_session_endpoints(
             values.append(controls[uid])
             if uid in new_inputs:
                 values.append(new_inputs[uid])
+        values.append(apply_control)
         return values
 
     def focused_role_uid() -> str | None:
@@ -455,9 +480,9 @@ def choose_session_endpoints(
         event.app.layout.focus(focusables[(index - 1) % len(focusables)])
         event.app.invalidate()
 
-    @bindings.add("f", filter=~new_input_focus, eager=True)
-    @bindings.add("F", filter=~new_input_focus, eager=True)
-    def _finish(event) -> None:
+    @bindings.add("enter", filter=has_focus(apply_control), eager=True)
+    @bindings.add(" ", filter=has_focus(apply_control), eager=True)
+    def _apply(event) -> None:
         finish(event)
 
     @bindings.add("escape", filter=new_input_focus, eager=True)
@@ -478,14 +503,23 @@ def choose_session_endpoints(
         return f" {display_escape_text(title)} · {active_mode().label}"
 
     def render_footer() -> str:
+        uid = focused_role_uid()
+        if (
+            uid is not None
+            and uid in new_inputs
+            and app_ref["app"].layout.has_focus(new_inputs[uid])
+        ):
+            guidance = "Enter use name · Esc back · Tab pane"
+            if status["value"]:
+                return f" {display_escape_text(status['value'])} · {guidance}"
+            return f" NEW CONTEXT NAME: {guidance}"
         if status["value"]:
             return f" {display_escape_text(status['value'])}"
+        if app_ref["app"].layout.has_focus(apply_control):
+            return " APPLY: Enter/Space apply · Tab pane · Q cancel"
         if app_ref["app"].layout.has_focus(mode_control):
-            return " MODE: ←/→ choose · Tab endpoints · F continue · Q cancel"
-        uid = focused_role_uid()
-        if uid is not None and uid in new_inputs and app_ref["app"].layout.has_focus(new_inputs[uid]):
-            return " NEW NAME: Enter retain · Tab pane · Q cancel"
-        return " ↑/↓ move · ←/→ tree · Enter/Space choose · N new · Tab pane · F continue · Q cancel"
+            return " MODE: ←/→ choose · Tab endpoints · Q cancel"
+        return " ↑/↓ move · ←/→ tree · Enter/Space choose · N create new Context · Tab pane · Q cancel"
 
     children: list[object] = []
     if len(mode_specs) > 1:
@@ -502,6 +536,7 @@ def choose_session_endpoints(
             Window(FormattedTextControl(render_header), height=1),
             Window(height=1, char="─"),
             *children,
+            apply_window,
             Window(FormattedTextControl(render_footer), height=1),
         ]
     )

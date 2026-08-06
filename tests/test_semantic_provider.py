@@ -5,7 +5,11 @@ import json
 
 import pytest
 
-from memcommit.provider_types import OLLAMA_PROVIDER, OPENROUTER_PROVIDER
+from memcommit.provider_types import (
+    CODEX_CHATGPT_PROVIDER,
+    OLLAMA_PROVIDER,
+    OPENROUTER_PROVIDER,
+)
 from memcommit.query_provider import QueryProviderError
 from memcommit.semantic_provider import (
     OllamaProvider,
@@ -233,3 +237,27 @@ class _FakeConfig:
 def test_connect_provider_rejects_unallowlisted_name_without_execution():
     with pytest.raises(QueryProviderError, match="Unsupported semantic provider"):
         connect_provider("../../executable", config=_FakeConfig())  # type: ignore[arg-type]
+
+
+def test_connect_codex_provider_uses_the_reported_semantic_timeout(monkeypatch):
+    captured = {}
+
+    class CodexConfig:
+        def semantic_timeout_seconds(self):
+            return 321.0
+
+        def model_for_provider(self, provider):
+            assert provider == CODEX_CHATGPT_PROVIDER
+            return None
+
+        def codex_reasoning_effort(self):
+            return None
+
+    monkeypatch.setattr(
+        "memcommit.semantic_provider.CodexChatGPTProvider.connect",
+        lambda **kwargs: captured.update(kwargs) or object(),
+    )
+
+    connect_provider(CODEX_CHATGPT_PROVIDER, config=CodexConfig(), env={})
+
+    assert captured["timeout"] == 321.0
