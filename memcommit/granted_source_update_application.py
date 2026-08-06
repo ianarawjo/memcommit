@@ -9,6 +9,7 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
 )
 from memcommit.context import AutoCheckpoint
+from memcommit.context_scope import load_context_scope
 from memcommit.granted_update_application import _authority_name, _remove_checkpoint
 from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import (
@@ -56,10 +57,15 @@ def apply_granted_source_staged_update(
             registry=registry,
         )
         with source_access.store._context_write_locks(authority_source_names):
-            source = GrantedReadStore(
+            source_store = GrantedReadStore(
                 source_access,
                 registry=registry,
-            ).load(binding.public_name)
+            )
+            source = load_context_scope(
+                source_store,
+                binding.public_name,
+                include_descendants=session.source_include_descendants,
+            )
             with active_store._command_write_lock():
                 active_store._assert_profile_write_allowed()
                 with active_store._update_session_write_lock():
@@ -71,7 +77,13 @@ def apply_granted_source_staged_update(
                             "The active staged update changed before application."
                         )
                     with active_store._context_write_locks(target_lock_names):
-                        target = active_store.load(session.target_name)
+                        target = load_context_scope(
+                            active_store,
+                            session.target_name,
+                            include_descendants=(
+                                session.target_include_descendants
+                            ),
+                        )
                         if not session_matches(
                             session,
                             source,
@@ -157,7 +169,13 @@ def apply_granted_source_staged_update(
                                     (owner.owner_context_name, checkpoint.uid)
                                 )
 
-                            target_after = active_store.load(session.target_name)
+                            target_after = load_context_scope(
+                                active_store,
+                                session.target_name,
+                                include_descendants=(
+                                    session.target_include_descendants
+                                ),
+                            )
                             inputs_after = collect_update_inputs(source, target_after)
                             checkpoint_by_name = dict(created_checkpoints)
                             receipt = UpdateApplicationReceipt(

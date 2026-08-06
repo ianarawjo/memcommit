@@ -11,7 +11,9 @@ import memcommit.ops as ops
 import memcommit.commands.update as update_command
 from memcommit.cli import app
 from memcommit.commands.endpoint_setup_flows import UpdateSetupReceipt
+from memcommit.commands.session_picker import SessionOpenReceipt
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_scope import load_context_scope
 from memcommit.provenance import build_trace
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.update import (
@@ -518,6 +520,65 @@ def test_empty_source_and_overlapping_graph_fail_before_provider():
     assert calls == []
 
 
+def test_descendant_scope_loads_lexical_children_and_applies_to_child_owner(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("source")
+    source_child = ops.init("source/child")
+    ops.add(source_child, "new child fact")
+    target = ops.init("target")
+    target_child = ops.init("target/child")
+    target_memory = ops.add(target_child, "old child fact")
+    for context in (source, source_child, target, target_child):
+        store.create_context(context)
+
+    source_scope = load_context_scope(
+        store,
+        source.name,
+        include_descendants=True,
+    )
+    target_scope = load_context_scope(
+        store,
+        target.name,
+        include_descendants=True,
+    )
+
+    def response(prompt):
+        payload = json.loads(prompt.split("UPDATE PAYLOAD:\n", 1)[1])
+        return {
+            "edits": [
+                {
+                    "target_id": payload["target"]["memories"][0]["target_id"],
+                    "new_content": "updated child fact",
+                    "source_ids": [
+                        payload["source"]["memories"][0]["source_id"]
+                    ],
+                    "reason": "The source updates the child-owned fact.",
+                }
+            ],
+            "additions": [],
+            "removals": [],
+        }
+
+    session = plan_update(
+        source_scope,
+        target_scope,
+        lambda: PlanProvider(response),
+        status="staged",
+        source_include_descendants=True,
+        target_include_descendants=True,
+    )
+    store.save_staged_update(session, expected_current=None)
+    applied = store.apply_staged_update(session)
+
+    assert applied.source_include_descendants is True
+    assert applied.target_include_descendants is True
+    updated = store.load_direct(target_child.name).memories[target_memory.uid]
+    assert isinstance(updated, Memory)
+    assert updated.content == "updated child fact"
+
+
 def test_empty_target_still_allows_addition_to_root():
     source = ops.init("source")
     ops.add(source, "novel fact")
@@ -582,6 +643,10 @@ def test_schema_one_update_session_remains_readable():
     legacy = session.to_dict()
     legacy["schema_version"] = 1
     legacy.pop("application")
+    legacy["source"].pop("access")
+    legacy["source"].pop("include_descendants")
+    legacy["target"].pop("access")
+    legacy["target"].pop("include_descendants")
 
     assert UpdateSession.from_dict(legacy) == session
 
@@ -805,8 +870,10 @@ def test_update_undo_and_redo_follow_the_affected_target_not_current_context(
     undo = runner.invoke(app, ["undo"])
 
     assert undo.exit_code == 0, undo.output
-    assert "Undid command: mem update" in undo.output
-    assert f"Affected Context: {TASK1_TARGET_CHILD}" in undo.output
+    assert (
+        f"Undid command: mem update --from {TASK1_SOURCE} --to {TASK1_TARGET}"
+        in undo.output
+    )
     assert store.current_context_name() == TASK1_SOURCE
     assert (
         store.load_direct(TASK1_TARGET_CHILD).memories[target_memory.uid].content
@@ -822,8 +889,10 @@ def test_update_undo_and_redo_follow_the_affected_target_not_current_context(
     redo = runner.invoke(app, ["redo"])
 
     assert redo.exit_code == 0, redo.output
-    assert "Redid command: mem update" in redo.output
-    assert f"Affected Context: {TASK1_TARGET_CHILD}" in redo.output
+    assert (
+        f"Redid command: mem update --from {TASK1_SOURCE} --to {TASK1_TARGET}"
+        in redo.output
+    )
     assert store.current_context_name() == TASK1_SOURCE
     assert store.load_direct(TASK1_TARGET_CHILD).memories[
         target_memory.uid
@@ -1110,7 +1179,121 @@ def test_empty_update_launcher_new_collects_distinct_endpoints(
 
     update_command._browse_saved_update(store)
 
-    assert invoked == [{"source_name": "source", "target_name": "target"}]
+    assert invoked == [
+        {
+            "source_name": "source",
+            "target_name": "target",
+            "source_descendants": False,
+            "target_descendants": False,
+        }
+    ]
+
+
+def test_saved_update_launcher_opens_state_aware_interactive_workbench(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source, source_child, _, target, target_child, _ = _make_nested_pair()
+    for context in (source_child, source, target_child, target):
+        store.save(context)
+    session = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    store.save_staged_update(session, expected_current=None)
+
+    class TTY:
+        @staticmethod
+        def isatty():
+            return True
+
+    monkeypatch.setattr(update_command.sys, "stdin", TTY())
+    monkeypatch.setattr(update_command.sys, "stdout", TTY())
+    monkeypatch.setattr(
+        update_command,
+        "choose_session",
+        lambda entries, **_kwargs: SessionOpenReceipt(
+            kind="update",
+            key=entries[0].key,
+            argv=entries[0].reopen_argv,
+        ),
+    )
+    opened = []
+    monkeypatch.setattr(
+        update_command,
+        "_run_saved_update_workbench",
+        lambda opened_session: opened.append(opened_session) or False,
+    )
+    monkeypatch.setattr(update_command.typer, "echo", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(
+        update_command,
+        "render_plan",
+        lambda *_args, **_kwargs: pytest.fail(
+            "interactive saved Update fell back to the static plan dump"
+        ),
+    )
+
+    update_command._browse_saved_update(store)
+
+    assert len(opened) == 1
+    opened_session = opened[0]
+    assert opened_session == session
+
+
+def test_saved_update_workbench_handoff_reenters_normal_update_command(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source, source_child, _, target, target_child, _ = _make_nested_pair()
+    for context in (source_child, source, target_child, target):
+        store.save(context)
+    session = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    store.save_staged_update(session, expected_current=None)
+
+    class TTY:
+        @staticmethod
+        def isatty():
+            return True
+
+    monkeypatch.setattr(update_command.sys, "stdin", TTY())
+    monkeypatch.setattr(update_command.sys, "stdout", TTY())
+    monkeypatch.setattr(
+        update_command,
+        "choose_session",
+        lambda entries, **_kwargs: SessionOpenReceipt(
+            kind="update",
+            key=entries[0].key,
+            argv=entries[0].reopen_argv,
+        ),
+    )
+    monkeypatch.setattr(
+        update_command,
+        "_run_saved_update_workbench",
+        lambda _session: True,
+    )
+    invoked = []
+    monkeypatch.setattr(update_command, "cmd", lambda **kwargs: invoked.append(kwargs))
+
+    update_command._browse_saved_update(store)
+
+    assert invoked == [
+        {
+            "source_name": session.source_name,
+            "target_name": session.target_name,
+            "replace_stage": False,
+            "source_descendants": session.source_include_descendants,
+            "target_descendants": session.target_include_descendants,
+        }
+    ]
 
 
 @pytest.mark.parametrize("command", ["impact", "update"])

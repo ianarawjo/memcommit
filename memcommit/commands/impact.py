@@ -1,4 +1,4 @@
-"""Preview directional updates or unary semantic Context operations."""
+"""Preview new effects or inspect saved operation-owned Impact artifacts."""
 
 import sys
 from enum import Enum
@@ -21,6 +21,10 @@ from memcommit.commands.atomize_workbench_shell import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
+from memcommit.commands.command_progress import (
+    CommandProgress,
+    progressing_provider_factory,
+)
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.granted_context import (
     GrantedReadStore,
@@ -28,6 +32,11 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.commands.review_shell import ReviewCancelled
+from memcommit.commands.session_picker import (
+    SessionOpenReceipt,
+    SessionPickerEntry,
+    choose_session,
+)
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.commands.update_render import (
     render_plan,
@@ -55,9 +64,12 @@ from memcommit.update_endpoints import resolve_update_endpoints
 
 
 class ImpactOperation(str, Enum):
-    """Unary operations supported by the impact preview command."""
+    """Operation-owned artifacts supported by the Impact command."""
 
     atomize = "atomize"
+    meld = "meld"
+    sever = "sever"
+    update = "update"
 
 
 def _resolve_directional_access(
@@ -82,6 +94,210 @@ def _resolve_directional_access(
 def _usage_error(message: str) -> None:
     typer.secho(f"Impact error: {message}", fg=typer.colors.RED, err=True)
     raise typer.Exit(2)
+
+
+def _select_saved_session(
+    entries: tuple[SessionPickerEntry, ...],
+    *,
+    kind: str,
+    title: str,
+    session_uid: str | None,
+) -> SessionPickerEntry | None:
+    """Resolve an exact saved operation artifact or one frozen TTY choice."""
+
+    if session_uid is not None:
+        matches = [entry for entry in entries if entry.key == session_uid]
+        if len(matches) != 1:
+            raise ValueError(
+                f"Saved {kind.title()} Impact artifact '{session_uid}' is not "
+                "available."
+            )
+        return matches[0]
+    if not entries:
+        raise ValueError(f"No saved {kind.title()} Impact artifacts are available.")
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        if len(entries) == 1:
+            return entries[0]
+        raise ValueError(
+            f"Several saved {kind.title()} artifacts are available; pass "
+            "--session UID."
+        )
+    receipt = choose_session(entries, title=title)
+    if receipt is None:
+        return None
+    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != kind:
+        raise ValueError("Impact session picker returned an invalid receipt.")
+    selected = next((entry for entry in entries if entry.key == receipt.key), None)
+    if selected is None or selected.reopen_argv != receipt.argv:
+        raise ValueError("Impact session picker returned a stale receipt.")
+    return selected
+
+
+def _show_saved_impact(presentation, *, kind: str) -> bool:
+    from memcommit.commands.impact_sessions import (
+        render_impact_session_snapshot,
+        run_impact_session_workbench,
+    )
+
+    if sys.stdin.isatty() and sys.stdout.isatty():
+        handoff = run_impact_session_workbench(
+            presentation,
+            terminal_label=f"Interactive saved {kind.title()} Impact",
+        )
+        if not handoff:
+            typer.echo(f"{kind.title()} Impact closed; session unchanged.")
+        return handoff
+    typer.echo(render_impact_session_snapshot(presentation))
+    return False
+
+
+def _saved_update_impact(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+) -> None:
+    from memcommit.commands.impact_sessions import update_impact_presentation
+
+    session = store.load_staged_update() or store.load_impact_plan()
+    if session is None:
+        raise ValueError(
+            "No saved Update or directional Impact plan exists. Run "
+            "'mem impact --from SOURCE --to TARGET' first."
+        )
+    if session_uid is not None and session.uid != session_uid:
+        raise ValueError(
+            f"Saved Update Impact artifact '{session_uid}' is not available."
+        )
+    if _show_saved_impact(update_impact_presentation(session), kind="update"):
+        # Re-enter through Update's public command boundary so the exact live
+        # endpoints, grants, operation digest, and final Apply confirmation are
+        # checked again after leaving this immutable Impact projection.
+        from memcommit.commands.update import cmd as update_cmd
+
+        update_cmd(
+            source_name=session.source_name,
+            target_name=session.target_name,
+            replace_stage=False,
+            source_descendants=session.source_include_descendants,
+            target_descendants=session.target_include_descendants,
+        )
+
+
+def _saved_meld_impact(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+) -> None:
+    from memcommit.commands.impact_sessions import meld_impact_presentation
+    from memcommit.commands.meld_sessions import (
+        list_meld_session_catalog,
+        reload_selected_meld_session,
+    )
+
+    catalog = list_meld_session_catalog(store)
+    by_session_uid = {entry.session_uid: entry for entry in catalog}
+    entries = tuple(
+        SessionPickerEntry(
+            kind="meld",
+            key=entry.session_uid,
+            title=entry.title,
+            status=entry.status,
+            subtitle=entry.subtitle,
+            group=entry.group,
+            sort_timestamp=entry.modified_timestamp,
+            detail=entry.detail,
+            reopen_argv=entry.reopen_argv,
+        )
+        for entry in catalog
+    )
+    selected = _select_saved_session(
+        entries,
+        kind="meld",
+        title="MEM IMPACT · MELD SESSIONS",
+        session_uid=session_uid,
+    )
+    if selected is None:
+        typer.echo("Meld Impact selection cancelled.")
+        return
+    session = reload_selected_meld_session(
+        store,
+        by_session_uid[selected.key],
+    )
+    if _show_saved_impact(meld_impact_presentation(session), kind="meld"):
+        # The owning resume route reloads the catalog identity and enforces its
+        # source/target binding checks before presenting the real Apply action.
+        from memcommit.commands.meld import _resume_picked_meld
+
+        _resume_picked_meld(
+            store=store,
+            entry=by_session_uid[selected.key],
+        )
+
+
+def _saved_sever_impact(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+) -> None:
+    from memcommit.commands.impact_sessions import sever_impact_presentation
+    from memcommit.commands.sever_sessions import (
+        list_sever_session_catalog,
+        reload_selected_sever_session,
+    )
+    from memcommit.sever_store import SeverSessionStore
+
+    sessions = SeverSessionStore(store)
+    catalog = list_sever_session_catalog(sessions)
+    by_session_uid = {entry.picker_entry.key: entry for entry in catalog}
+    selected = _select_saved_session(
+        tuple(entry.picker_entry for entry in catalog),
+        kind="sever",
+        title="MEM IMPACT · SEVER SESSIONS",
+        session_uid=session_uid,
+    )
+    if selected is None:
+        typer.echo("Sever Impact selection cancelled.")
+        return
+    session = reload_selected_sever_session(
+        sessions,
+        by_session_uid[selected.key],
+    )
+    if _show_saved_impact(sever_impact_presentation(session), kind="sever"):
+        # Sever retains its ordinary reviewed materialization path; Impact does
+        # not bypass its destination validation, CAS save, or Source boundary.
+        from memcommit.commands.sever import _run_workbench, render_sever
+
+        session = _run_workbench(store, session)
+        typer.echo(render_sever(session))
+        typer.secho(f"Session · {session.uid}", fg=typer.colors.CYAN)
+
+
+def _operation_session_impact(
+    *,
+    operation: ImpactOperation,
+    session_uid: str | None,
+) -> None:
+    try:
+        store = MemoryStore(create=False)
+        runners = {
+            ImpactOperation.meld: _saved_meld_impact,
+            ImpactOperation.sever: _saved_sever_impact,
+            ImpactOperation.update: _saved_update_impact,
+        }
+        runners[operation](store, session_uid=session_uid)
+    except (
+        FileNotFoundError,
+        OSError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+    ) as error:
+        typer.secho(
+            f"Impact error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
 
 
 def _directional_impact(
@@ -109,36 +325,42 @@ def _directional_impact(
             current_name=current_name,
         )
         authorize_derived_transfer(source_access, target_access)
-        # Authenticate before opening authority-owned Memory content.
-        provider = connect_codex_chatgpt_provider()
-        source = (
-            GrantedReadStore(source_access).load(source_access.display_name)
-            if source_access.is_granted
-            else store.load(source_access.context_name)
-        )
-        target = (
-            GrantedReadStore(target_access).load(target_access.display_name)
-            if target_access.is_granted
-            else store.load(target_access.context_name)
-        )
-        granted_source = (
-            freeze_granted_update_target(source_access)
-            if source_access.is_granted
-            else None
-        )
-        granted_target = (
-            freeze_granted_update_target(target_access)
-            if target_access.is_granted
-            else None
-        )
-        session = plan_update(
-            source,
-            target,
-            lambda: provider,
-            status="impact",
-            granted_source=granted_source,
-            granted_target=granted_target,
-        )
+        with CommandProgress(
+            "IMPACT UPDATE",
+            "connecting provider",
+            total=2,
+        ) as progress:
+            # Authenticate before opening authority-owned Memory content.
+            provider = connect_codex_chatgpt_provider()
+            progress.update("planning memory changes", step=2)
+            source = (
+                GrantedReadStore(source_access).load(source_access.display_name)
+                if source_access.is_granted
+                else store.load(source_access.context_name)
+            )
+            target = (
+                GrantedReadStore(target_access).load(target_access.display_name)
+                if target_access.is_granted
+                else store.load(target_access.context_name)
+            )
+            granted_source = (
+                freeze_granted_update_target(source_access)
+                if source_access.is_granted
+                else None
+            )
+            granted_target = (
+                freeze_granted_update_target(target_access)
+                if target_access.is_granted
+                else None
+            )
+            session = plan_update(
+                source,
+                target,
+                lambda: provider,
+                status="impact",
+                granted_source=granted_source,
+                granted_target=granted_target,
+            )
 
         # Provider latency is not an authorization lease. Re-resolve both
         # endpoints and rebuild both projections before publishing the plan.
@@ -341,17 +563,22 @@ def _atomize_impact(
                     "running; no preview was saved."
                 )
 
-        opened = open_or_create_atomize_workbench(
-            store=store,
-            ctx=ctx,
-            provider_factory=connect_codex_chatgpt_provider,
-            refresh=refresh or with_review,
-            declared_frames=declared_frames,
-            declared_frame_origins=declared_frame_origins,
-            source_review_uid=source_review_uid,
-            source_review_digest=source_review_digest,
-            validate_before_save=validate_review_before_save,
-        )
+        with progressing_provider_factory(
+            "IMPACT ATOMIZE",
+            "analyzing memory structure",
+            connect_codex_chatgpt_provider,
+        ) as provider_factory:
+            opened = open_or_create_atomize_workbench(
+                store=store,
+                ctx=ctx,
+                provider_factory=provider_factory,
+                refresh=refresh or with_review,
+                declared_frames=declared_frames,
+                declared_frame_origins=declared_frame_origins,
+                source_review_uid=source_review_uid,
+                source_review_digest=source_review_digest,
+                validate_before_save=validate_review_before_save,
+            )
         analysis = opened.analysis
         workbench = opened.workbench
     except (
@@ -409,7 +636,17 @@ def cmd(
     operation: Annotated[
         Optional[ImpactOperation],
         typer.Argument(
-            help="Optional unary impact operation: atomize",
+            help=(
+                "Impact operation: atomize, meld, sever, or update; omit for "
+                "a directional Update preview"
+            ),
+        ),
+    ] = None,
+    session_uid: Annotated[
+        Optional[str],
+        typer.Option(
+            "--session",
+            help="Exact saved Meld, Sever, or Update artifact uid",
         ),
     ] = None,
     source_name: Annotated[
@@ -459,8 +696,13 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Dispatch one of the two non-mutating impact preview forms."""
+    """Preview a new plan or inspect saved Impact before an optional Apply handoff."""
     if operation is ImpactOperation.atomize:
+        if session_uid is not None:
+            _usage_error(
+                "'--session' is valid only with 'mem impact meld', "
+                "'mem impact sever', or 'mem impact update'."
+            )
         if source_name is not None or target_name is not None:
             _usage_error(
                 "'atomize' cannot be combined with '--from' or '--to'. "
@@ -492,16 +734,42 @@ def cmd(
         )
         return
 
+    if operation is not None:
+        if (
+            source_name is not None
+            or target_name is not None
+            or context_name is not None
+            or show_all
+            or with_review
+            or refresh
+        ):
+            _usage_error(
+                f"'mem impact {operation.value}' opens a saved session and "
+                "cannot be combined with directional or atomize options."
+            )
+        _operation_session_impact(
+            operation=operation,
+            session_uid=session_uid,
+        )
+        return
+
     if source_name is None and target_name is None:
         _usage_error(
-            "choose an endpoint with '--from SOURCE' or '--to TARGET', or "
-            "preview atomization with 'mem impact atomize'."
+            "choose an endpoint with '--from SOURCE' or '--to TARGET', "
+            "preview atomization with 'mem impact atomize', or inspect a "
+            "saved 'meld', 'sever', or 'update' Impact."
         )
-    if context_name is not None or show_all or with_review or refresh:
+    if (
+        session_uid is not None
+        or context_name is not None
+        or show_all
+        or with_review
+        or refresh
+    ):
         _usage_error(
+            "'--session' is valid only with a saved-session operation; "
             "'--context', '--all', '--with-review', and '--refresh' are only "
-            "valid with "
-            "'mem impact atomize'."
+            "valid with 'mem impact atomize'."
         )
     try:
         store = MemoryStore()

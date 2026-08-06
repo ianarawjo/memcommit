@@ -57,7 +57,7 @@ query campus-wiki/construction-details when detail context is needed
 `mem impact` now accepts that granted ordinary wiki view as a read-only target
 for planning. It freezes the exact grantee, authority, attachment, resource,
 grant identity, grant revision, grant digest, and permission set into a
-schema-v4 plan. The target projection excludes any descendant covered by the
+schema-v6 plan. The target projection excludes any descendant covered by the
 narrower `QUERY`-only grant, so concealed construction details cannot enter the
 ordinary impact corpus. Provider authentication happens before authority-owned
 content is opened. After the provider turn, the command reloads the source,
@@ -68,7 +68,7 @@ The preview reports the permissions implied by its actual operations:
 `READ`, plus `CREATE` for additions, `UPDATE` for edits, and `DELETE` for
 removals. `READY` means only that the frozen grant contains those permissions;
 it does not mean that the plan has been applied. `mem impact` remains
-non-mutating. `mem update` can promote that exact schema-v4 plan and apply it
+non-mutating. `mem update` can promote that exact schema-v6 plan and apply it
 to the run-private authority store. It holds the grant registry snapshot,
 rechecks the active grantee and complete frozen binding, resolves every owner
 through the same grant, and requires `UPDATE`, `CREATE`, or `DELETE` for the
@@ -129,7 +129,103 @@ The same saved `UpdateSession` also supplies `mem review update`. Review keeps
 the existing detailed ADD/EDIT/REMOVE presentation, including OWNER, Memory
 UID, BEFORE/AFTER, REASON, and SOURCE REFERENCES. It is a read-only explanation
 of the plan and exposes no Accept or Apply capability. Impact remains the
-separate exact-effect surface adjacent to application.
+separate exact-effect surface adjacent to application; its `APPLY?` route is a
+handoff to the owning operation rather than an application capability on the
+Impact projection itself.
+
+The default TTY grammar is `mem diff [CONTEXT]`. Bare `mem diff` first opens
+the same complete Context tree used by other Context-selecting flows; a Context
+operand resolves directly to that location and skips only this first selector.
+The second screen is the shared checkpoint browser also used by `mem log`.
+Tree annotations count command operations rather than physical checkpoint
+files: `N direct · M descendant operations`. A multi-Context Update shares its
+session/digest identity across every owner and therefore counts once in every
+covering subtree; one Undo or Redo likewise shares its restoration receipt and
+counts once. `init` is the baseline for later transitions and is not presented
+as a Diff operation. Direct and descendant counts remain separate so a parent
+does not falsely appear to own its children's independently restorable history.
+Log and Diff use this same location controller rather than maintaining separate
+catalog, count, or scrolling implementations. Their Context rows and inline
+operation rows therefore form the same navigation-unit sequence: `m` toggles
+the focused Context's operations, `M` toggles all visible operation rows, and
+Up/Down traverses both without turning a preview into a Context selection.
+Operation previews use neutral report styling, not the lavender reserved for
+actual Memory objects. Log retains checkpoint metadata detail while Diff adds
+the directional before/after renderer.
+Local Contexts expose their recorded checkpoint history even when no saved
+Update exists. A currently saved Update additionally contributes its frozen
+target catalog and granted affected locations, so its authority-owned
+checkpoint receipts remain inspectable without opening the authority store.
+The selected checkpoint names its actual command (`ACTION update`, `add`,
+`edit`, and so on); one Update checkpoint may contain several EDIT, ADD, or
+REMOVE transitions. A catalog parent with changed Update owners below it offers
+`Enter open changed descendants`; because that catalog-only row has no exact
+history of its own, the unmodified key introduces no competing action. Arrow
+keys continue to own tree expansion. That explicit selection opens one
+read-only history whose rows remain location-owned and whose detail continues
+to name each exact Context and checkpoint. It includes only affected owners
+already frozen in the saved Update, not every readable or local descendant, so
+subtree convenience cannot widen authority or invent an aggregate checkpoint.
+A Context with no checkpoints remains in an explicit empty history TUI rather
+than returning immediately. In location-first Diff, Escape and Backspace
+return one level to the Context selector and preserve its selected location;
+`q` or `Ctrl-C` closes the command. An explicit Context operand has no selector
+to return to, so its close keys exit normally. Outside a TTY, operand-free Diff
+retains the deterministic saved-Update snapshot used by automation. The
+checkpoint detail preserves directional diff semantics:
+unchanged text and markers are white, text that disappears is red and
+underlined, and text that appears is green and underlined. The mechanical span
+classification—not whether text is on an upper, lower, or wrapped continuation
+line—determines the directional color.
+ADD and REMOVE show only their applicable side. `--raw` remains the exact
+unified-diff escape hatch, `--stat` the compact count-only form, and `--verbose`
+the diagnostic identity view. Opening the selector is inspection only: staged,
+applied, and undone receipts remain in their recorded lifecycle state, and no
+Apply or Undo capability is introduced by Diff.
+
+The History detail and semantic Impact viewer use the same shared report and
+directional Memory-diff style roles. History does not own a second copy of the
+red, green, neutral, or label palette; changing the common roles therefore
+changes both projections together. Their navigation and data models remain
+separate because sharing presentation must not give History any Impact action.
+History follows the common read-only workbench topology with `VIEWER` above
+`ITEMS` while retaining Items as the initial hub. Enter from Items focuses the
+selected checkpoint detail in Viewer; Tab switches the two frames; Up/Down
+moves items or scrolls Viewer according to focus. Escape or Backspace from
+Viewer returns to Items first, and only the next back action leaves History for
+the owning Context selector. The shared focused-frame chrome communicates this
+layering without changing the checkpoint or operation projection.
+
+Selecting the singleton receipt from the interactive bare `mem update`
+launcher uses this same state-aware workbench instead of printing the complete
+operation list as terminal prose. Applied and undone receipts have no handoff;
+an impact or staged receipt may hand control to the normal Update command, but
+the read-only workbench itself still cannot apply anything.
+
+The reusable controller also supports provider-free reopening through the
+standalone command surface:
+
+```text
+mem impact update [--session UID]
+mem impact meld [--session UID]
+mem impact sever [--session UID]
+```
+
+These forms inspect an already-saved operation artifact; opening the Impact
+ledger never creates a new plan, requests a semantic response, or changes a
+Context. In a TTY, Meld and Sever select from their frozen session catalogs and
+reload the selected artifact before projection. Outside a TTY, a sole saved
+artifact opens directly, while multiple artifacts require `--session UID`.
+Update retains its existing singleton receipt but accepts `--session` as an
+exact-identity check.
+All three use the same operation/artifact/revision match enforced by
+`ImpactController`. An applicable saved artifact also shows `APPLY?` in To Do.
+Selecting it leaves the immutable Impact host and re-enters the owning Update,
+Meld, or Sever workflow, which reloads or resolves live state, repeats its
+normal grant, binding, freshness, and CAS checks, and still requires its real
+Apply action. Thus `APPLY?` is a transition for deciding after inspection, not
+authorization and not a second application implementation. Closing leaves the
+session and every Context unchanged. Terminal artifacts omit the handoff.
 
 `mem update` accepts the same three forms. `--from` and `--to` are therefore
 composable endpoint selectors, not mutually exclusive modes. At least one must
@@ -137,16 +233,52 @@ be supplied. If an omitted endpoint has no current Context, the command fails
 and asks for that endpoint explicitly. Source and target must resolve to
 different canonical ordinary Context names.
 
-The two impact forms are mutually exclusive:
+### Optional descendant scopes
+
+The interactive Update setup puts an independent, default-off checkbox below
+each Source and Target tree: `INCLUDE ALL DESCENDANT CONTEXTS (OWNED OR
+GRANTED)`. Unchecked retains the selected Context graph used before this
+control was added. Checked also freezes every lexical descendant exposed by
+that endpoint's same owned store or effective READ Grant view. Thus an empty
+namespace root such as `task-1/participant` can deliberately supply Memories
+from `task-1/participant/...` without making recursive input an invisible
+default.
+
+The equivalent explicit flags are `--source-descendants` and
+`--target-descendants`; `--source-only` and `--target-only` select the defaults.
+Source and Target scopes are independent. Query-only overrides remain excluded,
+and a local endpoint does not absorb a separately attached Grant merely because
+the attachment happens to sit below it: the selected endpoint's ownership or
+Grant identity remains the authorization boundary.
+
+The graph-widening rule itself lives in the shared `load_context_scope`
+utility used by Update, Compare, and eligible Meld roles. Presentation remains
+in the shared endpoint shell, while each operation declares which roles may
+offer the control and persists the resulting booleans in its own artifact.
+This shares the mechanical lexical-descendant and UID-deduplication contract
+without pretending that the operations share mutation authority.
+
+Schema v6 records both booleans with the endpoint fingerprints. Cache reuse,
+staged-session matching, Grant revalidation, and application reload the same
+scope. A descendant added, removed, or changed after planning therefore makes
+the receipt stale before a write; an unchecked plan cannot be silently reused
+as a checked one even when the two graphs happen to be momentarily identical.
+
+Planning and saved-session inspection forms are mutually exclusive:
 
 ```text
 mem impact [--from A] [--to B] directional update preview
 mem impact atomize      unary atomization preview
+mem impact update       saved Update effect inspection
+mem impact meld         saved Meld effect inspection
+mem impact sever        saved Sever effect inspection
 ```
 
 Supplying `atomize` together with either `--from` or `--to`, or supplying no
-directional endpoint and no operation, is a usage error. `--context` and
-`--all` belong only to the unary atomize form.
+directional endpoint and no operation, is a usage error. `--context`, `--all`,
+`--with-review`, and `--refresh` belong only to the unary atomize form.
+`--session` belongs only to a saved Update, Meld, or Sever inspection. A saved
+session operation cannot be combined with planning or Atomize options.
 
 `impact` plans and previews the edits, additions, and explicitly supported
 whole-Memory removals that would make B reflect A. It does not change either

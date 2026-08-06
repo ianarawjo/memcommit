@@ -17,7 +17,10 @@ from memcommit.atomize import (
     sentence_like_segment_count,
 )
 from memcommit.cli import app
-from memcommit.commands.atomize_sessions import revalidate_saved_atomize_analysis
+from memcommit.commands.atomize_sessions import (
+    atomize_session_entries,
+    revalidate_saved_atomize_analysis,
+)
 from memcommit.context import (
     AutoCheckpoint,
     Context,
@@ -874,6 +877,68 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     assert [
         entry["command"] for entry in store.list_checkpoints(ctx.name)[:3]
     ] == ["redo", "undo", "atomize"]
+
+
+def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("planned/input")
+    ops.add(source, "The entrance closes at 5 p.m.")
+    store.save(source)
+    store.set_current(source.name)
+
+    provider = AtomizeProvider(
+        lambda payload: {
+            "items": [_item(payload["memories"][0]["candidate_id"])]
+        }
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    opened = runner.invoke(
+        app,
+        [
+            "atomize",
+            "--context",
+            source.name,
+            "--output",
+            "planned/output",
+        ],
+    )
+    assert opened.exit_code == 0, opened.output
+    analysis = store.load_atomize_analysis(source.uid)
+    assert analysis is not None
+    workbench = store.load_atomize_workbench(analysis)
+    assert workbench is not None
+    assert workbench.output_context_name == "planned/output"
+    assert not store.context_exists("planned/output")
+
+    applied = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save"],
+    )
+    assert applied.exit_code == 0, applied.output
+    assert "Created and atomized 'planned/output'" in applied.output
+    assert store.load_direct(source.name).memories
+    output = store.load_direct("planned/output")
+    assert store.load_atomize_analysis(output.uid).uid == analysis.uid
+    entries = atomize_session_entries(store)
+    assert len(entries) == 1
+    assert entries[0].key == analysis.uid
+    assert entries[0].status == "APPLIED"
+    assert "planned/input → planned/output" in entries[0].subtitle
+
+    repeated = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save"],
+    )
+    assert repeated.exit_code == 0, repeated.output
+    assert "already applied to planned Output" in repeated.output
+    assert len(provider.calls) == 1
 
 
 def test_atomize_save_as_rejects_conflicts_and_preserves_published_failure(

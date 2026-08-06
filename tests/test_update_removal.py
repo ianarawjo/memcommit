@@ -122,10 +122,10 @@ def test_mem_update_applies_explicit_removal_and_diff_keeps_provenance(
     raw = runner.invoke(app, ["diff", "--raw"])
 
     assert semantic.exit_code == 0, semantic.output
-    assert "1 change · 0 edited · 0 added · 1 removed" in semantic.output
-    assert f"REMOVE {TARGET_NAME}  [{obsolete.uid[:8]}]" in semantic.output
+    assert "0 EDITS · 0 ADDITIONS · 1 REMOVALS · 1 CHANGES" in semantic.output
+    assert f"REMOVE {TARGET_NAME} Memory [{obsolete.uid}]" in semantic.output
     assert (
-        f"Source  {SOURCE_NAME} [{source_memory.uid[:8]}]"
+        f"Memory [{source_memory.uid}]"
         in semantic.output
     )
     assert raw.exit_code == 0, raw.output
@@ -167,7 +167,7 @@ def test_remove_session_round_trip_is_v3_and_legacy_schema_rejects_it() -> None:
     session = plan_update(source, target, Provider, status="staged")
     data = session.to_dict()
 
-    assert data["schema_version"] == 3
+    assert data["schema_version"] == 6
     assert isinstance(session.operations[0], RemoveOperation)
     assert session.operations[0].old_content == obsolete.content
     assert UpdateSession.from_dict(data) == session
@@ -175,9 +175,15 @@ def test_remove_session_round_trip_is_v3_and_legacy_schema_rejects_it() -> None:
     legacy_without_removal = json.loads(json.dumps(data))
     legacy_without_removal["schema_version"] = 2
     legacy_without_removal["operations"] = []
+    for endpoint in ("source", "target"):
+        legacy_without_removal[endpoint].pop("access")
+        legacy_without_removal[endpoint].pop("include_descendants")
     assert UpdateSession.from_dict(legacy_without_removal).operations == ()
 
     data["schema_version"] = 2
+    for endpoint in ("source", "target"):
+        data[endpoint].pop("access")
+        data[endpoint].pop("include_descendants")
     with pytest.raises(ValueError, match="Legacy update sessions"):
         UpdateSession.from_dict(data)
 

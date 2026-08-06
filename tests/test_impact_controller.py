@@ -145,27 +145,55 @@ def test_located_memory_changes_render_as_compact_before_after_diff():
         for style, text in fragments
     )
 
-    for side in ("remove", "add"):
+    for side, changed_color in (("remove", "ed8796"), ("add", "a6da95")):
         neutral_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
             f"class:memory-diff.{side}"
         )
         changed_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
             f"class:memory-diff.{side}.changed"
         )
-        assert neutral_style.color == (
-            "ed8796" if side == "remove" else "a6da95"
-        )
+        assert neutral_style.color == "ffffff"
         assert neutral_style.underline is False
-        assert changed_style.color == (
-            "ed8796" if side == "remove" else "a6da95"
-        )
-        assert changed_style.bold is True
-        assert changed_style.underline is False
+        assert changed_style.color == changed_color
+        assert changed_style.bold is False
+        assert changed_style.underline is True
 
     equal_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
         "class:memory-diff.equal"
     )
-    assert equal_style.color == "d8dee9"
+    assert equal_style.color == "ffffff"
+
+    assert next(style for style, text in fragments if "[EDIT]" in text) == (
+        "class:impact.edit"
+    )
+    assert next(style for style, text in fragments if "[ADD]" in text) == (
+        "class:impact.add"
+    )
+    assert next(
+        style
+        for style, text in fragments
+        if "campus-wiki/route-changes [12345678]" in text
+    ) == "class:memory-object"
+
+    assert RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:impact.edit"
+    ).color == "a6da95"
+    assert RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:impact.add"
+    ).color == "8aadf4"
+    assert RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+        "class:impact.remove"
+    ).color == "ed8796"
+
+    addition_index = next(
+        index
+        for index, (_style, text) in enumerate(fragments)
+        if text == "Follow the temporary signs."
+    )
+    assert [text for _style, text in fragments[addition_index + 1 : addition_index + 3]] == [
+        "\n",
+        "\n",
+    ]
 
 
 def test_impact_treatment_uid_content_and_detail_columns_align():
@@ -215,7 +243,16 @@ def test_impact_treatment_uid_content_and_detail_columns_align():
 
 
 def test_impact_treatments_and_markers_use_distinct_semantic_styles():
-    labels = ("KEEP", "REDACT", "SUMMARIZE", "REFRAME", "FORGET")
+    labels = (
+        "KEEP",
+        "REDACT",
+        "SUMMARIZE",
+        "REFRAME",
+        "FORGET",
+        "EDIT",
+        "ADD",
+        "REMOVE",
+    )
     view = replace(
         _view(),
         results=tuple(
@@ -246,6 +283,9 @@ def test_impact_treatments_and_markers_use_distinct_semantic_styles():
         "SUMMARIZE": "class:impact.summarize",
         "REFRAME": "class:impact.reframe",
         "FORGET": "class:impact.forget",
+        "EDIT": "class:impact.edit",
+        "ADD": "class:impact.add",
+        "REMOVE": "class:impact.remove",
     }
 
 

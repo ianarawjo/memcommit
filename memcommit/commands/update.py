@@ -5,6 +5,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.endpoint_setup_flows import choose_update_setup
 from memcommit.commands.granted_context import (
     GrantedReadStore,
@@ -18,6 +19,7 @@ from memcommit.commands.session_picker import (
     choose_session,
 )
 from memcommit.commands.update_render import render_plan, review_update_application
+from memcommit.context_scope import load_context_scope
 from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.granted_source_update_application import (
     apply_granted_source_staged_update,
@@ -32,6 +34,7 @@ from memcommit.query_provider import (
 from memcommit.store import MemoryStore
 from memcommit.update import (
     UpdateError,
+    UpdateSession,
     applied_session_matches,
     plan_update,
     session_matches,
@@ -41,6 +44,20 @@ from memcommit.update_endpoints import resolve_update_endpoints
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _run_saved_update_workbench(session: UpdateSession) -> bool:
+    """Open the shared state-aware Update surface without eager UI imports."""
+
+    from memcommit.commands.impact_sessions import (
+        run_impact_session_workbench,
+        update_impact_presentation,
+    )
+
+    return run_impact_session_workbench(
+        update_impact_presentation(session),
+        terminal_label="Interactive saved Update Impact",
+    )
 
 
 def _browse_saved_update(store: MemoryStore) -> None:
@@ -76,6 +93,10 @@ def _browse_saved_update(store: MemoryStore) -> None:
                     f"Session {session.uid}\n"
                     f"Source {session.source_name}\n"
                     f"Target {session.target_name}\n"
+                    "Source scope "
+                    f"{'includes descendants' if session.source_include_descendants else 'selected graph only'}\n"
+                    "Target scope "
+                    f"{'includes descendants' if session.target_include_descendants else 'selected graph only'}\n"
                     "Update retains one global receipt; New replaces it only "
                     "through the existing explicit endpoint checks."
                 ),
@@ -97,7 +118,12 @@ def _browse_saved_update(store: MemoryStore) -> None:
         if setup is None:
             typer.echo("New Update cancelled; no session was created.")
             return
-        cmd(source_name=setup.source_name, target_name=setup.target_name)
+        cmd(
+            source_name=setup.source_name,
+            target_name=setup.target_name,
+            source_descendants=setup.source_descendants,
+            target_descendants=setup.target_descendants,
+        )
         return
     if (
         not isinstance(receipt, SessionOpenReceipt)
@@ -113,10 +139,20 @@ def _browse_saved_update(store: MemoryStore) -> None:
             "The saved Update session changed while the launcher was open. "
             "Reopen it."
         )
-    render_plan(
-        current,
-        staged=current.status == "staged",
-        applied=current.status == "applied",
+    handoff = _run_saved_update_workbench(current)
+    if not handoff:
+        typer.echo("Update view closed; saved session unchanged.")
+        return
+
+    # The Impact workbench is inspection-only. Re-enter Update through its
+    # public command boundary so an Apply request repeats the normal endpoint,
+    # authority, freshness, and exact-review checks.
+    cmd(
+        source_name=current.source_name,
+        target_name=current.target_name,
+        replace_stage=False,
+        source_descendants=current.source_include_descendants,
+        target_descendants=current.target_include_descendants,
     )
 
 
@@ -165,6 +201,20 @@ def cmd(
             help="Replace a different, stale, or applied update record",
         ),
     ] = False,
+    source_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--source-descendants/--source-only",
+            help="Include all readable descendant Contexts under Source A",
+        ),
+    ] = False,
+    target_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--target-descendants/--target-only",
+            help="Include all writable descendant Contexts under Target B",
+        ),
+    ] = False,
 ) -> None:
     if source_name is None and target_name is None:
         store = MemoryStore(create=False)
@@ -195,15 +245,33 @@ def cmd(
             endpoints.target_name,
             current_name=current_name,
         )
-        source = (
-            GrantedReadStore(source_access).load(source_access.display_name)
+        source_store = (
+            GrantedReadStore(source_access)
             if source_access.is_granted
-            else store.load(source_access.context_name)
+            else store
         )
-        target = (
-            GrantedReadStore(target_access).load(target_access.display_name)
+        target_store = (
+            GrantedReadStore(target_access)
             if target_access.is_granted
-            else store.load(target_access.context_name)
+            else store
+        )
+        source = load_context_scope(
+            source_store,
+            (
+                source_access.display_name
+                if source_access.is_granted
+                else source_access.context_name
+            ),
+            include_descendants=source_descendants,
+        )
+        target = load_context_scope(
+            target_store,
+            (
+                target_access.display_name
+                if target_access.is_granted
+                else target_access.context_name
+            ),
+            include_descendants=target_descendants,
         )
         granted_source = (
             freeze_granted_update_target(source_access)
@@ -233,12 +301,16 @@ def cmd(
         raise typer.Exit(1)
 
     if existing is not None and existing.status == "applied":
-        if applied_session_matches(
+        if (
+            existing.source_include_descendants == source_descendants
+            and existing.target_include_descendants == target_descendants
+            and applied_session_matches(
             existing,
             source,
             target,
             granted_source=granted_source,
             granted_target=granted_target,
+            )
         ):
             render_plan(existing, applied=True)
             typer.echo("This update was already applied locally.")
@@ -277,12 +349,16 @@ def cmd(
         and existing.status == "staged"
         and not replace_stage
     ):
-        if session_matches(
+        if (
+            existing.source_include_descendants == source_descendants
+            and existing.target_include_descendants == target_descendants
+            and session_matches(
             existing,
             source,
             target,
             granted_source=granted_source,
             granted_target=granted_target,
+            )
         ):
             session = existing
         else:
@@ -306,23 +382,35 @@ def cmd(
 
     try:
         if session is None:
-            if cached is not None and session_matches(
-                cached,
-                source,
-                target,
-                granted_source=granted_source,
-                granted_target=granted_target,
-            ):
-                session = cached.with_status("staged")
-            else:
-                session = plan_update(
+            if (
+                cached is not None
+                and cached.source_include_descendants == source_descendants
+                and cached.target_include_descendants == target_descendants
+                and session_matches(
+                    cached,
                     source,
                     target,
-                    connect_codex_chatgpt_provider,
-                    status="staged",
                     granted_source=granted_source,
                     granted_target=granted_target,
                 )
+            ):
+                session = cached.with_status("staged")
+            else:
+                with progressing_provider_factory(
+                    "UPDATE",
+                    "planning memory changes",
+                    connect_codex_chatgpt_provider,
+                ) as provider_factory:
+                    session = plan_update(
+                        source,
+                        target,
+                        provider_factory,
+                        status="staged",
+                        source_include_descendants=source_descendants,
+                        target_include_descendants=target_descendants,
+                        granted_source=granted_source,
+                        granted_target=granted_target,
+                    )
             # Bind the staged intent to the active record observed above.
             # This prevents two update processes from silently replacing one
             # another between planning and local application.

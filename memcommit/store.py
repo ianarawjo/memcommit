@@ -1464,6 +1464,7 @@ class MemoryStore:
             session_matches,
         )
         from memcommit.update_application import prepare_update_application
+        from memcommit.context_scope import load_context_scope
 
         if not isinstance(session, UpdateSession) or session.status != "staged":
             raise ValueError("Expected one staged UpdateSession.")
@@ -1498,8 +1499,16 @@ class MemoryStore:
                 )
 
             with self._context_write_locks(lock_names):
-                source = self.load(session.source_name)
-                target = self.load(session.target_name)
+                source = load_context_scope(
+                    self,
+                    session.source_name,
+                    include_descendants=session.source_include_descendants,
+                )
+                target = load_context_scope(
+                    self,
+                    session.target_name,
+                    include_descendants=session.target_include_descendants,
+                )
                 if not session_matches(session, source, target):
                     raise ConcurrentContextUpdateError(
                         "The update source or local fork changed before application."
@@ -1597,8 +1606,16 @@ class MemoryStore:
                             )
                         )
 
-                    source_after = self.load(session.source_name)
-                    target_after = self.load(session.target_name)
+                    source_after = load_context_scope(
+                        self,
+                        session.source_name,
+                        include_descendants=session.source_include_descendants,
+                    )
+                    target_after = load_context_scope(
+                        self,
+                        session.target_name,
+                        include_descendants=session.target_include_descendants,
+                    )
                     inputs_after = collect_update_inputs(
                         source_after,
                         target_after,

@@ -17,7 +17,7 @@ UPDATE_RESPONSE_CHAR_LIMIT = 1_000_000
 UPDATE_OPERATION_LIMIT = 200
 UPDATE_SOURCE_REFS_PER_OPERATION = 50
 UPDATE_REASON_CHAR_LIMIT = 1_000
-UPDATE_SCHEMA_VERSION = 5
+UPDATE_SCHEMA_VERSION = 6
 UpdateStatus = Literal["impact", "staged", "applied", "undone"]
 
 
@@ -677,6 +677,8 @@ class UpdateSession:
     target_digest: str
     target_contexts: tuple[ContextFingerprint, ...]
     operations: tuple[UpdateOperation, ...]
+    source_include_descendants: bool = False
+    target_include_descendants: bool = False
     granted_source: GrantedUpdateTarget | None = None
     granted_target: GrantedUpdateTarget | None = None
     application: UpdateApplicationReceipt | None = None
@@ -715,32 +717,31 @@ class UpdateSession:
         return replace(self, status="applied" if applied else "undone")
 
     def to_dict(self) -> dict[str, object]:
-        schema_version = (
-            UPDATE_SCHEMA_VERSION
-            if self.granted_source is not None
-            else 4 if self.granted_target is not None else 3
-        )
+        schema_version = UPDATE_SCHEMA_VERSION
         source: dict[str, object] = {
             "uid": self.source_uid,
             "name": self.source_name,
             "digest": self.source_digest,
             "contexts": [context.to_dict() for context in self.source_contexts],
+            "include_descendants": self.source_include_descendants,
+            "access": (
+                None
+                if self.granted_source is None
+                else self.granted_source.to_dict()
+            ),
         }
         target: dict[str, object] = {
             "uid": self.target_uid,
             "name": self.target_name,
             "digest": self.target_digest,
             "contexts": [context.to_dict() for context in self.target_contexts],
-        }
-        if self.granted_target is not None:
-            target["access"] = self.granted_target.to_dict()
-        if schema_version == UPDATE_SCHEMA_VERSION:
-            source["access"] = self.granted_source.to_dict()
-            target["access"] = (
+            "include_descendants": self.target_include_descendants,
+            "access": (
                 None
                 if self.granted_target is None
                 else self.granted_target.to_dict()
-            )
+            ),
+        }
         return {
             "schema_version": schema_version,
             "uid": self.uid,
@@ -779,7 +780,7 @@ class UpdateSession:
                 "update session",
             )
             application = None
-        elif schema_version in {2, 3, 4, UPDATE_SCHEMA_VERSION}:
+        elif schema_version in {2, 3, 4, 5, UPDATE_SCHEMA_VERSION}:
             data = _require_exact_keys(
                 value,
                 {
@@ -808,16 +809,20 @@ class UpdateSession:
             raise ValueError("Invalid update application state.")
 
         source_keys = {"uid", "name", "digest", "contexts"}
-        if schema_version == UPDATE_SCHEMA_VERSION:
+        if schema_version == 5:
             source_keys.add("access")
+        elif schema_version == UPDATE_SCHEMA_VERSION:
+            source_keys.update({"access", "include_descendants"})
         source = _require_exact_keys(data["source"], source_keys, "update source")
         target_keys = {"uid", "name", "digest", "contexts"}
-        if schema_version in {4, UPDATE_SCHEMA_VERSION}:
+        if schema_version in {4, 5}:
             target_keys.add("access")
+        elif schema_version == UPDATE_SCHEMA_VERSION:
+            target_keys.update({"access", "include_descendants"})
         target = _require_exact_keys(data["target"], target_keys, "update target")
         granted_source = (
             None
-            if schema_version < UPDATE_SCHEMA_VERSION
+            if schema_version < 5 or source["access"] is None
             else GrantedUpdateTarget.from_dict(source["access"])
         )
         granted_target = (
@@ -838,6 +843,21 @@ class UpdateSession:
             raise ValueError("Invalid update Context fingerprints.")
         if not isinstance(data["operations"], list):
             raise ValueError("Invalid update operations.")
+        source_include_descendants = (
+            source["include_descendants"]
+            if schema_version == UPDATE_SCHEMA_VERSION
+            else False
+        )
+        target_include_descendants = (
+            target["include_descendants"]
+            if schema_version == UPDATE_SCHEMA_VERSION
+            else False
+        )
+        if (
+            type(source_include_descendants) is not bool
+            or type(target_include_descendants) is not bool
+        ):
+            raise ValueError("Invalid update descendant scope.")
 
         operations = tuple(
             _operation_from_dict(item)
@@ -926,6 +946,8 @@ class UpdateSession:
                 for item in target["contexts"]
             ),
             operations=operations,
+            source_include_descendants=source_include_descendants,
+            target_include_descendants=target_include_descendants,
             granted_source=granted_source,
             granted_target=granted_target,
             application=application,
@@ -1558,10 +1580,17 @@ def plan_update(
     provider_factory: Callable[[], UpdateProvider],
     *,
     status: UpdateStatus = "impact",
+    source_include_descendants: bool = False,
+    target_include_descendants: bool = False,
     granted_source: GrantedUpdateTarget | None = None,
     granted_target: GrantedUpdateTarget | None = None,
 ) -> UpdateSession:
     """Ask a provider for a validated, non-mutating update plan."""
+    if (
+        type(source_include_descendants) is not bool
+        or type(target_include_descendants) is not bool
+    ):
+        raise ValueError("Update descendant scopes must be booleans.")
     if status not in {"impact", "staged"}:
         raise ValueError(
             "Planning may create only an impact or staged update."
@@ -1594,6 +1623,8 @@ def plan_update(
         target_digest=inputs.target_digest,
         target_contexts=inputs.target_context_fingerprints,
         operations=operations,
+        source_include_descendants=source_include_descendants,
+        target_include_descendants=target_include_descendants,
         granted_source=granted_source,
         granted_target=granted_target,
     )

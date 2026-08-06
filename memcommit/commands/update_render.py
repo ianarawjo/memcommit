@@ -130,6 +130,12 @@ def render_plan(
         f"{additions} addition{'s' if additions != 1 else ''}, "
         f"{removals} removal{'s' if removals != 1 else ''}"
     )
+    typer.echo(
+        "SCOPE · SOURCE "
+        f"{'INCLUDE DESCENDANTS' if session.source_include_descendants else 'SELECTED GRAPH ONLY'}"
+        " · TARGET "
+        f"{'INCLUDE DESCENDANTS' if session.target_include_descendants else 'SELECTED GRAPH ONLY'}"
+    )
     if session.granted_target is not None:
         required = required_grant_permissions(session.operations)
         granted = set(session.granted_target.permissions)

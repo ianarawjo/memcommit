@@ -34,6 +34,7 @@ from memcommit.derived_policy import analysis_retention, authorize_analysis_save
 from memcommit.granted_comparison_store import (
     load_granted_comparison_artifact,
 )
+from memcommit.meld_provider import MELD_PAYLOAD_MARKER
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -54,6 +55,48 @@ from memcommit.semantic.changes import AddChange, RemoveChange, apply_changes
 
 runner = CliRunner(mix_stderr=False)
 DETAIL_SECRET = "Concealed construction sequence must not enter impact planning."
+
+
+class _GrantedDirectionalMeldProvider:
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "meld_contexts"
+        payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+        incoming = payload["frames"][0]["memories"][0]
+        baseline = payload["frames"][1]["memories"][0]
+        return json.dumps(
+            {
+                "overview": "The incoming correction replaces the baseline claim.",
+                "relations": [
+                    {
+                        "relation_key": "location",
+                        "left_memory_ids": [incoming["memory_id"]],
+                        "right_memory_ids": [baseline["memory_id"]],
+                        "kind": "CONFLICT",
+                        "status": "RESOLVED",
+                        "summary": "The service-desk locations conflict.",
+                        "reason": "The incoming Memory is the reviewed correction.",
+                    }
+                ],
+                "issues": [],
+                "results": [
+                    {
+                        "result_key": "location_edit",
+                        "operation": "EDIT",
+                        "target_memory_ids": [baseline["memory_id"]],
+                        "disposition": "SYNTHESIZE",
+                        "content": incoming["content"],
+                        "reason": "Apply the incoming correction to baseline.",
+                        "relation_keys": ["location"],
+                        "source_memory_ids": [
+                            incoming["memory_id"],
+                            baseline["memory_id"],
+                        ],
+                        "grounded_turn_ids": [],
+                    }
+                ],
+                "ready_to_apply": True,
+            }
+        )
 
 
 class _GrantedFindProvider:
@@ -101,6 +144,7 @@ def _setup_granted_target(
     authority_source=None,
     attachment_name="task-root",
     public_name="campus-wiki",
+    extra_authority_baseline=False,
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
     active_store = MemoryStore()
@@ -131,6 +175,11 @@ def _setup_granted_target(
     ops.add(details, DETAIL_SECRET)
     wiki.add(Context(uid=public_child.uid, name=public_child.name))
     wiki.add(Context(uid=details.uid, name=details.name))
+    if extra_authority_baseline:
+        extra_baseline = ops.init("campus-wiki/baseline")
+        ops.add(extra_baseline, "The service desk is closed on weekdays.")
+        wiki.add(Context(uid=extra_baseline.uid, name=extra_baseline.name))
+        authority_store.save(extra_baseline)
     authority_store.save(public_child)
     authority_store.save(details)
     authority_store.save(wiki)
@@ -164,6 +213,276 @@ def _setup_granted_target(
         recursive=True,
     )
     return active_store, authority_store, source, wiki, parent_grant
+
+
+def test_directional_meld_updates_granted_baseline_authority_context(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, incoming, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    provider = _GrantedDirectionalMeldProvider()
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    started = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", "campus-wiki/services"],
+    )
+    assert started.exit_code == 0, (started.output, started.stderr, repr(started.exception))
+    authority_target = authority.load_direct("campus-wiki/services")
+    session = active.load_meld_session(authority_target.uid)
+    assert session is not None
+    assert session.granted_target is not None
+    assert session.state == "READY_TO_APPLY"
+
+    accepted = runner.invoke(
+        app,
+        [
+            "meld",
+            incoming.name,
+            "--into",
+            "campus-wiki/services",
+            "--accept",
+        ],
+    )
+    assert accepted.exit_code == 0, accepted.output
+    assert [
+        memory.content
+            for memory in authority.load_direct("campus-wiki/services").iter_items()
+    ][0] == "Verified update: the public service desk moved east."
+    # The attachment remains participant-owned authorization metadata; Meld
+    # must not materialize an authority baseline copy into it.
+    assert active.load_direct(incoming.name).uid == incoming.uid
+
+
+def test_directional_meld_reads_granted_incoming_into_local_baseline(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, attachment, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    baseline = ops.init("local-baseline")
+    ops.add(baseline, "The public service desk is in the central lobby.")
+    active.save(baseline)
+    provider = _GrantedDirectionalMeldProvider()
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    started = runner.invoke(
+        app,
+        ["meld", "campus-wiki/services", "--into", baseline.name],
+    )
+    assert started.exit_code == 0, (started.output, started.stderr, repr(started.exception))
+    session = active.load_meld_session(baseline.uid)
+    assert session is not None
+    assert session.granted_incoming is not None
+    assert session.granted_target is None
+
+    accepted = runner.invoke(
+        app,
+        [
+            "meld",
+            "campus-wiki/services",
+            "--into",
+            baseline.name,
+            "--accept",
+        ],
+    )
+    assert accepted.exit_code == 0, accepted.output
+    assert [memory.content for memory in active.load_direct(baseline.name).iter_items()] == [
+        "The service desk is open on weekdays."
+    ]
+
+
+def test_directional_meld_combines_granted_contexts_in_one_authority_profile(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, _attachment, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        extra_authority_baseline=True,
+    )
+    baseline = authority.load_direct("campus-wiki/baseline")
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        lambda: _GrantedDirectionalMeldProvider(),
+    )
+
+    started = runner.invoke(
+        app,
+        [
+            "meld",
+            "campus-wiki/services",
+            "--into",
+            "campus-wiki/baseline",
+        ],
+    )
+    assert started.exit_code == 0, started.output + started.stderr
+    session = active.load_meld_session(baseline.uid)
+    assert session is not None
+    assert session.granted_incoming is not None
+    assert session.granted_target is not None
+
+    accepted = runner.invoke(
+        app,
+        [
+            "meld",
+            "campus-wiki/services",
+            "--into",
+            "campus-wiki/baseline",
+            "--accept",
+        ],
+    )
+    assert accepted.exit_code == 0, accepted.output + accepted.stderr
+    assert [item.content for item in authority.load_direct(baseline.name).iter_items()] == [
+        "The service desk is open on weekdays."
+    ]
+
+
+def test_directional_meld_revalidates_grant_before_baseline_acceptance(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, incoming, _wiki, grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    target = authority.load_direct("campus-wiki/services")
+    original = target.to_dict()
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        lambda: _GrantedDirectionalMeldProvider(),
+    )
+    started = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", "campus-wiki/services"],
+    )
+    assert started.exit_code == 0, started.output + started.stderr
+
+    delete_authority_grant(grant.uid)
+    accepted = runner.invoke(
+        app,
+        [
+            "meld",
+            incoming.name,
+            "--into",
+            "campus-wiki/services",
+            "--accept",
+        ],
+    )
+    assert accepted.exit_code == 1
+    assert "Grant" in accepted.stderr or "grant" in accepted.stderr
+    assert authority.load_direct(target.name).to_dict() == original
+    session = active.load_meld_session(target.uid)
+    assert session is not None and session.state == "READY_TO_APPLY"
+
+
+def test_directional_meld_rejects_ungranted_baseline_edit(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, incoming, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=(
+            "READ",
+            "CREATE",
+            "DERIVE",
+            "COMBINE",
+            "EXPORT",
+            "ACCEPT_DERIVED",
+            "SAVE_BOUND_ANALYSIS",
+        ),
+    )
+    target_access = resolve_context_access(
+        active,
+        "campus-wiki/services",
+        current_name=incoming.name,
+        required_permission="READ",
+    )
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        lambda: _GrantedDirectionalMeldProvider(),
+    )
+
+    started = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", "campus-wiki/services"],
+    )
+    assert started.exit_code == 1
+    assert "does not authorize UPDATE" in started.stderr
+    assert active.load_meld_session(
+        target_access.store.load_direct(target_access.context_name).uid
+    ) is None
+
+
+def test_directional_meld_rolls_back_granted_baseline_when_receipt_save_fails(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, incoming, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    target = authority.load_direct("campus-wiki/services")
+    original = target.to_dict()
+    checkpoints_before = tuple(authority.list_checkpoints(target.name))
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        lambda: _GrantedDirectionalMeldProvider(),
+    )
+    started = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", "campus-wiki/services"],
+    )
+    assert started.exit_code == 0, started.output + started.stderr
+
+    def fail_receipt(*_args, **_kwargs):
+        raise RuntimeError("participant receipt write failed")
+
+    monkeypatch.setattr(active, "save_meld_session", fail_receipt)
+    monkeypatch.setattr(meld_command, "MemoryStore", lambda: active)
+    accepted = runner.invoke(
+        app,
+        [
+            "meld",
+            incoming.name,
+            "--into",
+            "campus-wiki/services",
+            "--accept",
+        ],
+    )
+    assert accepted.exit_code == 1
+    assert authority.load_direct(target.name).to_dict() == original
+    assert tuple(authority.list_checkpoints(target.name)) == checkpoints_before
 
 
 def test_local_namespace_root_reads_granted_and_owned_descendants_together(
@@ -825,7 +1144,7 @@ def test_granted_source_impact_and_update_apply_to_local_target(
     planned = active.load_impact_plan()
     assert impact.exit_code == 0, impact.output + impact.stderr
     assert planned is not None
-    assert planned.to_dict()["schema_version"] == 5
+    assert planned.to_dict()["schema_version"] == 6
     assert planned.granted_source is not None
     assert planned.granted_source.grant_uid == grant.uid
     assert planned.granted_target is None
@@ -875,7 +1194,7 @@ def test_new_compare_and_update_setup_include_a_granted_target(
     assert "READ" in annotations[wiki.name]
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\r")
+        pipe_input.send_text("\t\t\t\t\r")
         compare = choose_compare_setup(
             active,
             app_input=pipe_input,
@@ -883,7 +1202,7 @@ def test_new_compare_and_update_setup_include_a_granted_target(
             require_tty=False,
         )
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\r")
+        pipe_input.send_text("\t\t\t\t\r")
         update = choose_update_setup(
             active,
             app_input=pipe_input,
@@ -1202,7 +1521,7 @@ def test_granted_impact_projects_only_readable_target_scope(
     assert DETAIL_SECRET not in prompts[0]
     session = active_store.load_impact_plan()
     assert session is not None
-    assert session.to_dict()["schema_version"] == 4
+    assert session.to_dict()["schema_version"] == 6
     assert session.granted_target is not None
     assert session.granted_target.grant_uid == parent_grant.uid
     assert session.granted_target.permissions == (
@@ -1661,8 +1980,10 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
     undone = runner.invoke(app, ["undo"])
 
     assert undone.exit_code == 0, undone.output
-    assert "Undid command: mem update" in undone.stdout
-    assert "Affected Context: campus-wiki" in undone.stdout
+    assert (
+        f"Undid command: mem update --from {source.name} --to {wiki.name}"
+        in undone.stdout
+    )
     assert authority.load_direct(wiki.name).to_dict() == root_before
     assert (
         authority.load_direct("campus-wiki/services").to_dict()
@@ -1675,8 +1996,10 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
     redone = runner.invoke(app, ["redo"])
 
     assert redone.exit_code == 0, redone.output
-    assert "Redid command: mem update" in redone.stdout
-    assert "Affected Context: campus-wiki/services" in redone.stdout
+    assert (
+        f"Redid command: mem update --from {source.name} --to {wiki.name}"
+        in redone.stdout
+    )
     assert authority.load_direct(wiki.name).to_dict() == root_after
     assert (
         authority.load_direct("campus-wiki/services").to_dict()

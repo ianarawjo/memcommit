@@ -15,6 +15,7 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.context import Context, Memory
+from memcommit.context_scope import load_context_scope
 from memcommit.command_history import CommandRestoreResult
 from memcommit.profile_config import ProfileRegistry
 from memcommit.profiles import (
@@ -87,29 +88,47 @@ def inspect_granted_update(
     try:
         with authority_grant_snapshot_lock() as registry:
             if session.granted_source is None:
-                source = active_store.load(session.source_name)
+                source = load_context_scope(
+                    active_store,
+                    session.source_name,
+                    include_descendants=session.source_include_descendants,
+                )
             else:
                 source_access = revalidate_granted_context_binding(
                     session.granted_source,
                     required_permission="READ",
                     registry=registry,
                 )
-                source = GrantedReadStore(
+                source_reader = GrantedReadStore(
                     source_access,
                     registry=registry,
-                ).load(session.granted_source.public_name)
+                )
+                source = load_context_scope(
+                    source_reader,
+                    session.granted_source.public_name,
+                    include_descendants=session.source_include_descendants,
+                )
             if session.granted_target is None:
-                target = active_store.load(session.target_name)
+                target = load_context_scope(
+                    active_store,
+                    session.target_name,
+                    include_descendants=session.target_include_descendants,
+                )
             else:
                 target_access = _resolve_exact_access(
                     active_store,
                     session.granted_target,
                     registry,
                 )
-                target = GrantedReadStore(
+                target_reader = GrantedReadStore(
                     target_access,
                     registry=registry,
-                ).load(session.granted_target.public_name)
+                )
+                target = load_context_scope(
+                    target_reader,
+                    session.granted_target.public_name,
+                    include_descendants=session.target_include_descendants,
+                )
             fresh = (
                 applied_session_matches(
                     session,
@@ -345,11 +364,20 @@ def apply_granted_staged_update(
 
         def load_source() -> Context:
             if source_access is None:
-                return active_store.load(session.source_name)
-            return GrantedReadStore(
+                return load_context_scope(
+                    active_store,
+                    session.source_name,
+                    include_descendants=session.source_include_descendants,
+                )
+            source_reader = GrantedReadStore(
                 source_access,
                 registry=registry,
-            ).load(source_binding.public_name)
+            )
+            return load_context_scope(
+                source_reader,
+                source_binding.public_name,
+                include_descendants=session.source_include_descendants,
+            )
 
         with active_store._update_session_write_lock():
             current = active_store._load_update_session(
@@ -374,10 +402,15 @@ def apply_granted_staged_update(
                         combined_authority_locks
                     ):
                         source = load_source()
-                        target = GrantedReadStore(
+                        target_reader = GrantedReadStore(
                             access,
                             registry=registry,
-                        ).load(binding.public_name)
+                        )
+                        target = load_context_scope(
+                            target_reader,
+                            binding.public_name,
+                            include_descendants=session.target_include_descendants,
+                        )
                         if not session_matches(
                             session,
                             source,
@@ -513,10 +546,17 @@ def apply_granted_staged_update(
                                 )
 
                             source_after = load_source()
-                            target_after = GrantedReadStore(
+                            target_reader_after = GrantedReadStore(
                                 access,
                                 registry=registry,
-                            ).load(binding.public_name)
+                            )
+                            target_after = load_context_scope(
+                                target_reader_after,
+                                binding.public_name,
+                                include_descendants=(
+                                    session.target_include_descendants
+                                ),
+                            )
                             inputs_after = collect_update_inputs(
                                 source_after,
                                 target_after,

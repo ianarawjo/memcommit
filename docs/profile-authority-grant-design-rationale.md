@@ -116,12 +116,24 @@ those copied Contexts into its run-private authority Profile before creating
 the table's participant-facing grants; it never grants against the baseline
 itself.
 
-When `mem init-study` omits its name in a TTY, the command opens a focused
-single-line editor prefilled with the existing
-`study-YYYYMMDDTHHMMSSZ-xxxxxxxx` default and places the cursor at its end.
-Enter validates and uses the exact visible name; Escape creates nothing. An
-explicit positional name bypasses the editor, while non-TTY execution retains
-automatic naming so scripts do not acquire an interactive dependency.
+When `mem init-study` omits its name in a TTY, the command stays in the ordinary
+terminal transcript and opens a five-row inline TUI prefilled with the existing
+`study-YYYYMMDDTHHMMSSZ-xxxxxxxx` default. It uses the same prompt-toolkit input
+behavior as the other terminal workbenches without entering an alternate or
+full-screen surface. A left-aligned `STUDY NAME` label sits above an untitled
+rectangular edit field so the label cannot be mistaken for a centered border
+choice. The cursor starts at the default's end. Enter validates
+and uses the exact visible name; Escape creates nothing. An explicit positional
+name bypasses the prompt, while non-TTY execution retains automatic naming so
+scripts do not acquire an interactive dependency.
+
+A successful `init-study` registry transaction selects the new participant
+Profile as active, matching `mem init`'s create-and-enter behavior. The paired
+`-granted-memory` authority Profile is never selected. Cancellation or any
+failure before registry replacement publishes nothing and leaves the previously
+active Profile unchanged. If replacement becomes visible but its durability
+confirmation fails, the complete run remains registered and selected because
+rolling back only the active pointer would expose a partial generation.
 
 ## Why registry grants
 
