@@ -80,17 +80,12 @@ def inspect_granted_update(
     active_store: MemoryStore,
     session: UpdateSession,
 ) -> GrantedUpdateInspection:
-    """Revalidate a saved grant while keeping its recorded diff inspectable."""
+    """Revalidate saved endpoint Grants while keeping the diff inspectable."""
 
-    if session.granted_target is None:
+    if session.granted_source is None and session.granted_target is None:
         raise ValueError("Expected a granted UpdateSession.")
     try:
         with authority_grant_snapshot_lock() as registry:
-            access = _resolve_exact_access(
-                active_store,
-                session.granted_target,
-                registry,
-            )
             if session.granted_source is None:
                 source = active_store.load(session.source_name)
             else:
@@ -103,9 +98,18 @@ def inspect_granted_update(
                     source_access,
                     registry=registry,
                 ).load(session.granted_source.public_name)
-            target = GrantedReadStore(access, registry=registry).load(
-                session.granted_target.public_name
-            )
+            if session.granted_target is None:
+                target = active_store.load(session.target_name)
+            else:
+                target_access = _resolve_exact_access(
+                    active_store,
+                    session.granted_target,
+                    registry,
+                )
+                target = GrantedReadStore(
+                    target_access,
+                    registry=registry,
+                ).load(session.granted_target.public_name)
             fresh = (
                 applied_session_matches(
                     session,

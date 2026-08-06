@@ -27,6 +27,14 @@ prototype until a transaction journal exists.
 | Local or granted Update | Saved Update receipt, sometimes across Profile stores | Undo retains the exact receipt under `undone`; Redo restores `applied`. Granted-target restoration reverses the authority restore if participant receipt CAS fails |
 | Sever | Saved Sever session plus creation of a new output Context | Undo removes the exact Result from the ordinary namespace, returns the session to `REVIEWING`, and retains its Context record and complete checkpoint log in a private command archive. Redo restores the same Context identity, application receipt, and log before appending a `redo` checkpoint. |
 
+Read-only `mem diff` treats the saved Update receipt as one endpoint unit too.
+An Update may bind a granted Source, a granted Target, or both, so freshness
+inspection revalidates every present frozen Grant binding before comparing the
+current frames. A granted Source must never be reopened from the active
+Profile's local store merely because its Target is local. Revocation or
+authority drift leaves the recorded diff inspectable but marks it revoked or
+stale under the same fail-closed presentation used for a granted Target.
+
 ### Reversible Context creation
 
 Sever is deliberately narrower than general Context-lifecycle Undo. Its apply

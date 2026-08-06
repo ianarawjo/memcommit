@@ -69,7 +69,10 @@ def _render_header(session: UpdateSession, *, verbose: bool) -> None:
     heading = (
         (
             "Applied granted update"
-            if session.granted_target is not None
+            if (
+                session.granted_source is not None
+                or session.granted_target is not None
+            )
             else "Applied local update"
         )
         if session.status == "applied"
@@ -105,9 +108,16 @@ def _render_header(session: UpdateSession, *, verbose: bool) -> None:
                     f"{checkpoint.checkpoint_uid}",
                     dim=True,
                 )
+        if session.granted_source is not None:
+            typer.secho(
+                "Source Grant   "
+                f"{session.granted_source.grant_uid}  "
+                f"authority {session.granted_source.authority_profile_uid}",
+                dim=True,
+            )
         if session.granted_target is not None:
             typer.secho(
-                "Grant   "
+                "Target Grant   "
                 f"{session.granted_target.grant_uid}  "
                 f"authority {session.granted_target.authority_profile_uid}",
                 dim=True,
@@ -468,7 +478,7 @@ def cmd(
         raise typer.Exit(1)
 
     inspection_status = "current"
-    if session.granted_target is not None:
+    if session.granted_source is not None or session.granted_target is not None:
         inspection_status = inspect_granted_update(store, session).status
         fresh = inspection_status == "current"
     else:
@@ -513,7 +523,10 @@ def cmd(
             "The recorded diff remains inspectable, but it cannot be treated "
             "as a current applied result. Re-run impact/update only after "
             "access and endpoints are current."
-            if session.granted_target is not None
+            if (
+                session.granted_source is not None
+                or session.granted_target is not None
+            )
             else (
                 "Review the local fork and re-run impact/update before "
                 "contributing."

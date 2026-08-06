@@ -833,8 +833,13 @@ def test_granted_source_impact_and_update_apply_to_local_target(
         app,
         ["update", "--from", wiki.name, "--to", local_target.name],
     )
+    diff = runner.invoke(app, ["diff", "--stat"])
 
     assert update.exit_code == 0, update.output + update.stderr
+    assert diff.exit_code == 0, diff.output + diff.stderr
+    assert "Applied granted update" in diff.stdout
+    assert "STALE" not in diff.stderr
+    assert "REVOKED" not in diff.stderr
     assert calls == 1
     assert any(
         isinstance(item, Memory)
@@ -842,6 +847,11 @@ def test_granted_source_impact_and_update_apply_to_local_target(
         for item in active.load_direct(local_target.name).iter_items()
     )
     assert authority.load_direct(wiki.name).to_dict() == wiki.to_dict()
+    delete_authority_grant(grant.uid)
+    revoked_diff = runner.invoke(app, ["diff", "--stat"])
+    assert revoked_diff.exit_code == 1
+    assert "REVOKED" in revoked_diff.stderr
+    assert "remains inspectable" in revoked_diff.stderr
 
 
 def test_new_compare_and_update_setup_include_a_granted_target(
