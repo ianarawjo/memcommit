@@ -17,7 +17,7 @@ from typing import Iterable, Mapping
 
 
 PURPOSE_CODES = frozenset({"KB", "PP", "SM", "UM", "WM", "OM"})
-EXPECTED_CORPUS_COUNT = 1_290
+EXPECTED_CORPUS_COUNT = 1_303
 _PURPOSE_NAMES = {
     "Knowledge Base": "KB",
     "Procedural Policy": "PP",
@@ -235,7 +235,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK3_INLINE,
         context_name="local/personal-memory",
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=462,
+        purpose_sidecar_count=475,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix="local/personal-memory/",
         fixture_ids_required=False,
@@ -248,7 +248,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         syntax=FixtureSyntax.TASK3_INLINE,
         context_name="local/guardrails",
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=462,
+        purpose_sidecar_count=475,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix="local/guardrails/",
         fixture_ids_required=False,
@@ -263,7 +263,7 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
             "remote/government/healthcare-agent/info-request/questions-and-answers"
         ),
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=462,
+        purpose_sidecar_count=475,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix=(
             "remote/government/healthcare-agent/info-request/questions-and-answers/"
@@ -275,16 +275,16 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         name="task3-healthcare-public-guidance",
         task=3,
         file_stem="task-3-healthcare-public-guidance",
-        expected_count=12,
+        expected_count=25,
         syntax=FixtureSyntax.TASK3_INLINE,
         context_name=(
-            "remote/government/healthcare-agent/info-request/official-guidance"
+            "remote/government/healthcare-agent/info-request/transmission-guidance"
         ),
         purpose_sidecar_stem="task-3-memory-purpose",
-        purpose_sidecar_count=462,
+        purpose_sidecar_count=475,
         purpose_sidecar_key=PurposeSidecarKey.CANONICAL_LOCATOR,
         sidecar_prefix=(
-            "remote/government/healthcare-agent/info-request/official-guidance/"
+            "remote/government/healthcare-agent/info-request/transmission-guidance/"
         ),
         fixture_ids_required=False,
     ),

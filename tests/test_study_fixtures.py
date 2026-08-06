@@ -75,8 +75,8 @@ EXPECTED_DATASETS = {
         {"KB": 5, "PP": 42, "SM": 8, "WM": 7, "OM": 13},
     ),
     "task3-healthcare-public-guidance": (
-        12,
-        {"KB": 7, "PP": 5},
+        25,
+        {"KB": 4, "PP": 8, "SM": 3, "UM": 2, "WM": 2, "OM": 6},
     ),
 }
 

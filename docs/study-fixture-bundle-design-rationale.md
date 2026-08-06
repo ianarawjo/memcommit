@@ -118,9 +118,10 @@ Task 2 starts at an empty `participant/proposal-workspace` task Context.
 `proposal-submission-guidelines`; the advisor views are `READ` and guidelines
 are `QUERY+SESSION_LOG`. Task 3 owns `local/personal-memory` and
 `local/guardrails`. `task-3-healthcare-authority` owns ordinary
-`remote/government/healthcare-agent/info-request/official-guidance` and the
-query-only sibling `questions-and-answers`. Only official guidance receives a
-derived-work READ grant; questions-and-answers receives `QUERY+SESSION_LOG`.
+`remote/government/healthcare-agent/info-request/transmission-guidance` and the
+query-only sibling `questions-and-answers`. Only the public transmission
+guidance receives a derived-work READ grant; questions-and-answers receives
+`QUERY+SESSION_LOG`.
 The real healthcare-agent parent supplies a non-recursive `SHARE` endpoint
 grant under the stable recipient name `government/healthcare-agent`.
 

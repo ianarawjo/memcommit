@@ -53,9 +53,9 @@ EXPECTED_PROFILES = {
         "task-3": ("TASK", 375, 46, "local/personal-memory"),
         "task-3-healthcare-authority": (
             "AUTHORITY",
-            87,
+            100,
             13,
-            "remote/government/healthcare-agent/info-request/official-guidance",
+            "remote/government/healthcare-agent/info-request/transmission-guidance",
         ),
     },
 }
@@ -147,7 +147,7 @@ def _assert_profile_ownership(task, profile_records, manifest_path):
             in authority_contexts
         )
         assert (
-            "remote/government/healthcare-agent/info-request/official-guidance"
+            "remote/government/healthcare-agent/info-request/transmission-guidance"
             in authority_contexts
         )
         assert {
@@ -218,7 +218,7 @@ def _assert_grant_templates(task, manifest, context_uids):
         },
         3: {
             "task-3-healthcare-receiver-endpoint",
-            "task-3-healthcare-official-guidance-view",
+            "task-3-healthcare-transmission-guidance-view",
             "task-3-healthcare-questions-and-answers-query",
         },
     }[task]
@@ -304,7 +304,7 @@ def _assert_grant_templates(task, manifest, context_uids):
         healthcare = grants["task-3-healthcare-questions-and-answers-query"]
         assert healthcare["permissions"] == ["QUERY", "SESSION_LOG"]
         assert healthcare["provider"] == "codex_chatgpt"
-        assert grants["task-3-healthcare-official-guidance-view"]["permissions"] == [
+        assert grants["task-3-healthcare-transmission-guidance-view"]["permissions"] == [
             "READ",
             "DERIVE",
             "COMBINE",

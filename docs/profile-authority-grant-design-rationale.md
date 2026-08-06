@@ -100,7 +100,7 @@ each newly initialized run.
 | --- | --- | --- | --- |
 | 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE+DELETE+QUERY`; nested details `QUERY+SESSION_LOG` |
 | 2 | `participant/proposal-workspace` | `task-2-proposal-authority`: `advisor1`, `advisor2`, submission guidelines | advisors `READ`; guidelines `QUERY+SESSION_LOG` |
-| 3 | `local/personal-memory`, `local/guardrails` | `task-3-healthcare-authority`: `remote/government/healthcare-agent/info-request/official-guidance`, `questions-and-answers` | healthcare agent `SHARE`; official guidance `READ+DERIVE+COMBINE+EXPORT+SAVE_BOUND_ANALYSIS+SAVE_ANALYSIS`; questions-and-answers `QUERY+SESSION_LOG` |
+| 3 | `local/personal-memory`, `local/guardrails` | `task-3-healthcare-authority`: `remote/government/healthcare-agent/info-request/transmission-guidance`, `questions-and-answers` | healthcare agent `SHARE`; public transmission guidance `READ+DERIVE+COMBINE+EXPORT+SAVE_BOUND_ANALYSIS+SAVE_ANALYSIS`; questions-and-answers `QUERY+SESSION_LOG` |
 
 `task-1-campus-authority` is intentionally task-specific. A future shared
 campus authority may be appropriate for a different experiment, but this
@@ -115,6 +115,13 @@ Within `study-baseline`, the corresponding authority material remains under
 those copied Contexts into its run-private authority Profile before creating
 the table's participant-facing grants; it never grants against the baseline
 itself.
+
+When `mem init-study` omits its name in a TTY, the command opens a focused
+single-line editor prefilled with the existing
+`study-YYYYMMDDTHHMMSSZ-xxxxxxxx` default and places the cursor at its end.
+Enter validates and uses the exact visible name; Escape creates nothing. An
+explicit positional name bypasses the editor, while non-TTY execution retains
+automatic naming so scripts do not acquire an interactive dependency.
 
 ## Why registry grants
 

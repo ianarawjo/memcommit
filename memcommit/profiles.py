@@ -3708,8 +3708,9 @@ def init_study_profile(
     generated_uid = uuid.uuid4()
     created = datetime.now(timezone.utc)
     if name is None:
-        profile_name = (
-            f"study-{created.strftime('%Y%m%dT%H%M%SZ')}-{str(generated_uid)[:8]}"
+        profile_name = generate_study_profile_name(
+            created=created,
+            generated_uid=generated_uid,
         )
     else:
         try:
@@ -3774,3 +3775,17 @@ def init_study_profile(
         finally:
             if staging.exists() and not staging.is_symlink():
                 shutil.rmtree(staging)
+
+
+def generate_study_profile_name(
+    *,
+    created: datetime | None = None,
+    generated_uid: uuid.UUID | None = None,
+) -> str:
+    """Return the editable timestamp-and-UUID default for one Study run."""
+    timestamp = created or datetime.now(timezone.utc)
+    if timestamp.tzinfo is None:
+        raise ValueError("Study name timestamps must be timezone-aware.")
+    timestamp = timestamp.astimezone(timezone.utc)
+    suffix = generated_uid or uuid.uuid4()
+    return f"study-{timestamp.strftime('%Y%m%dT%H%M%SZ')}-{str(suffix)[:8]}"

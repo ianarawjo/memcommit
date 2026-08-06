@@ -278,7 +278,7 @@ TASK_SPECS = {
             name="task-3-healthcare-authority",
             role="AUTHORITY",
             current_context=(
-                "remote/government/healthcare-agent/info-request/official-guidance"
+                "remote/government/healthcare-agent/info-request/transmission-guidance"
             ),
             initial_contexts=(
                 "remote",
@@ -289,7 +289,7 @@ TASK_SPECS = {
             datasets=(
                 BundleDatasetSpec(
                     "task3-healthcare-public-guidance",
-                    "remote/government/healthcare-agent/info-request/official-guidance",
+                    "remote/government/healthcare-agent/info-request/transmission-guidance",
                 ),
                 BundleDatasetSpec(
                     "task3-healthcare-qna",
@@ -309,14 +309,14 @@ TASK_SPECS = {
                 recursive=False,
             ),
             BundleGrantTemplate(
-                key="task-3-healthcare-official-guidance-view",
+                key="task-3-healthcare-transmission-guidance-view",
                 authority_profile="task-3-healthcare-authority",
                 grantee_profile="task-3",
                 authority_context=(
-                    "remote/government/healthcare-agent/info-request/official-guidance"
+                    "remote/government/healthcare-agent/info-request/transmission-guidance"
                 ),
                 public_name=(
-                    "remote/government/healthcare-agent/info-request/official-guidance"
+                    "remote/government/healthcare-agent/info-request/transmission-guidance"
                 ),
                 permissions=(
                     "READ",

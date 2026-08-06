@@ -140,7 +140,7 @@ confidentiality.
   - [Participant brief draft](task-3-study-brief-en.md)
   - [300 `local/personal-memory` Memories](task-3-personal-memory-en.md)
   - [75 ordinary `local/guardrails`](task-3-guardrails-en.md)
-  - [12 ordinary `remote/government/healthcare-agent/info-request/official-guidance` Memories](task-3-healthcare-public-guidance-en.md)
+  - [25 ordinary `remote/government/healthcare-agent/info-request/transmission-guidance` Memories](task-3-healthcare-public-guidance-en.md)
   - [75 query-only `remote/government/healthcare-agent/info-request/questions-and-answers` Memories](task-3-healthcare-information-request-en.md)
   - [Purpose sidecar](task-3-memory-purpose-en.tsv)
 - [Complete design rationale](fixture-corpus-design-rationale-en.md)
@@ -279,8 +279,9 @@ choices during the experiment; they are replaced with `WM` statements about
 external data-flow conditions and `OM` statements about anticipated recipient
 or organization interpretations.
 
-The ordinary Context `remote/government/healthcare-agent/info-request/official-guidance` contains 12
-distributable high-level review principles. Its grant permits reading,
+The ordinary Context `remote/government/healthcare-agent/info-request/transmission-guidance` contains 25
+distributable public transmission-guidance Memories, including its own role,
+review policies, and Self, User, World, and recipient-facing Other Models. Its grant permits reading,
 derivation, combination, export, and retained analysis, so it can serve as the
 one Criteria Context of Sever or be combined with another criterion through
 Meld. The connected query-only Context has canonical locator

@@ -12,8 +12,8 @@ Memories include specific events involving meals, mobility, scheduling, family,
 and daily-life management, as well as preferences derived from multiple events
 and personal rules that the local agent has followed.
 
-Read `remote/government/healthcare-agent/info-request/official-guidance` for distributable high-level
-sharing criteria. Consult `remote/government/healthcare-agent/info-request/questions-and-answers` separately when a
+Read `remote/government/healthcare-agent/info-request/transmission-guidance` for the distributable public
+transmission-guidance working set. Consult `remote/government/healthcare-agent/info-request/questions-and-answers` separately when a
 detailed question remains. Then, in a local review process separate from the
 healthcare Q&A agent, decide what
 information from `local/personal-memory` to send. For each candidate, the participant
@@ -28,8 +28,8 @@ consent to share.
 - `local/personal-memory`: 300 de-identified, synthetic personal Memories
 - `local/guardrails`: pre-review policies automatically applied to local outbound
   sharing
-- `remote/government/healthcare-agent/info-request/official-guidance`: 12 readable and derivable high-level
-  information-sharing guidance Memories
+- `remote/government/healthcare-agent/info-request/transmission-guidance`: 25 readable and derivable public
+  transmission-guidance Memories
 - `remote/government/healthcare-agent/info-request/questions-and-answers`: 75 query-only information-
   sharing guidance Memories
 

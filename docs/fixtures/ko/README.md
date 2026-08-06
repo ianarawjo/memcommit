@@ -122,7 +122,7 @@ Memory별 ACL이나 사용자 인증이 아니며 현재 프로토타입이 집�
   - [참가자용 설명 초안](task-3-study-brief-ko.md)
   - [`local/personal-memory` 300개](task-3-personal-memory-ko.md)
   - [일반 열람 `local/guardrails` 75개](task-3-guardrails-ko.md)
-  - [일반 열람 `remote/government/healthcare-agent/info-request/official-guidance` 12개](task-3-healthcare-public-guidance-ko.md)
+  - [일반 열람 `remote/government/healthcare-agent/info-request/transmission-guidance` 25개](task-3-healthcare-public-guidance-ko.md)
   - [질의 전용 `remote/government/healthcare-agent/info-request/questions-and-answers` 75개](task-3-healthcare-information-request-ko.md)
   - [목적 sidecar](task-3-memory-purpose-ko.tsv)
 - [전체 설계 근거](fixture-corpus-design-rationale-ko.md)
@@ -234,8 +234,9 @@ Guardrails에는 참가자의 공유 선호를 미리 규정하는 `UM`을 두�
 문장은 실험 중 선택을 유도할 수 있으므로 외부 데이터 흐름 조건인 `WM`과
 수신자·조직의 예상 해석인 `OM`으로 대체한다.
 
-ordinary Context `remote/government/healthcare-agent/info-request/official-guidance`에는 배포 가능한 상위
-수준 검토 원칙 12개가 있다. 해당 grant는 읽기·파생·결합·반출·분석 보존을
+ordinary Context `remote/government/healthcare-agent/info-request/transmission-guidance`에는 자체 역할,
+검토 정책, Self·User·World Model과 수신자 중심 Other Model을 포함한 공개 전송
+가이던스 Memory 25개가 있다. 해당 grant는 읽기·파생·결합·반출·분석 보존을
 허용하므로 Sever의 하나뿐인 Criteria Context로 사용하거나 Meld를 통해 다른
 기준과 결합할 수 있다. 연결된 query-only Context의 canonical locator는
 `remote/government/healthcare-agent/info-request/questions-and-answers`다. 75개 Memory는 어떤 개인

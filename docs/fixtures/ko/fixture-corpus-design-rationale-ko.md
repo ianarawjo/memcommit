@@ -443,11 +443,16 @@ query-only `proposal-submission-guidelines`는 75개, 10개 directory로 구성�
 이는 실험 행동을 priming할 수 있으므로, 사용자 선호 대신 사본·전송·동기화
 같은 외부 조건을 `WM`으로, 수신자·조직의 예상 해석을 `OM`으로 모델링한다.
 
-일반 열람 `remote/government/healthcare-agent/info-request/official-guidance` 자료군에는 authority가 공개한
-상위 수준 원칙 12개가 있다. 이 Memory들은 읽기와 반출이 가능하도록 의도적으로
-발행되므로 Sever의 하나뿐인 Criteria Context로 사용하거나 Meld를 통해 권한이
-있는 다른 기준과 결합할 수 있다. 공개 여부는 authority 쪽의 선별 결정이며,
-Sever가 query-only 내용을 이 Context로 승격하지 않는다.
+일반 열람 `remote/government/healthcare-agent/info-request/transmission-guidance` 자료군에는 authority가
+공개한 전송 가이던스 Memory 25개가 있다. 내부 guardrail 및 query-only 명세와
+달리, 이 공개 작업 세트는 숨은 설명 없이도 후속 독자가 해석할 수 있도록 자체
+역할 설명과 절차, Self·User·World Model 및 수신자 중심 Other Model을 함께
+담는다. 모든 공개 문장은 query-only 명세보다 약하게 유지한다. 가능성과 검토
+단서는 노출하지만 권한을 추가하거나 정확한 수신자·이용을 확정하거나 요청을
+승인으로 바꾸지 않는다. 이 Memory들은 읽기와 반출이 가능하도록 의도적으로 발행되므로 Sever의
+하나뿐인 Criteria Context로 사용하거나 Meld를 통해 권한이 있는 다른 기준과
+결합할 수 있다. 공개 여부는 authority 쪽의 선별 결정이며, Sever가 query-only
+내용을 이 Context로 승격하지 않는다.
 
 query-only 외부 Context의 canonical locator는
 `remote/government/healthcare-agent/info-request/questions-and-answers`이며 75개다. 이 자료는 의료
@@ -529,7 +534,7 @@ gateway가 필요한 비목표다.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `local/personal-memory` | 30 | 20 | 20 | 184 | 16 | 30 | 300 |
 | `local/guardrails` | 8 | 47 | 4 | 0 | 5 | 11 | 75 |
-| `remote/government/healthcare-agent/info-request/official-guidance` | 7 | 5 | 0 | 0 | 0 | 0 | 12 |
+| `remote/government/healthcare-agent/info-request/transmission-guidance` | 4 | 8 | 3 | 2 | 2 | 6 | 25 |
 | `remote/government/healthcare-agent/info-request/questions-and-answers` | 5 | 42 | 8 | 0 | 7 | 13 | 75 |
 
 정책을 주축으로 하되 공유 범주에 관한 지식, 의료 Q&A 에이전트의 한계,

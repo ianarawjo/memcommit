@@ -375,7 +375,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
     assert "study-baseline: Contexts 135 owned + 0 granted" in result.output
-    assert "Memories 1290 owned + 0 granted" in result.output
+    assert "Memories 1303 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -464,7 +464,7 @@ def test_profile_use_selects_the_initialized_complete_profile(
     assert selected.exit_code == 0, selected.output
     assert "Selected profile 'profile-view'." in selected.output
     assert "Contexts 59 owned + 43 granted" in selected.output
-    assert "Memories 450 owned + 612 granted" in selected.output
+    assert "Memories 450 owned + 625 granted" in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
     assert "* task-1" in contexts.stdout
@@ -1127,7 +1127,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
     assert "Contexts 59 · Memories 450" in result.output
-    assert "Granted Contexts 43 · Granted Memories 612" in result.output
+    assert "Granted Contexts 43 · Granted Memories 625" in result.output
     assert "Active Profile unchanged: authoring" in result.output
     assert "Use it with: mem profile pilot-001" in result.output
     assert _tree_digest(bundle_root) == source_digest
@@ -1173,6 +1173,24 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert authority_store.current_context_name() == "task-1/campus-wiki"
     assert "granted-memory/task-1/campus-wiki" in baseline_store.list_context_names()
     assert "task-1/campus-wiki" in authority_store.list_context_names()
+    public_guidance = authority_store.load_direct(
+        "task-3/remote/government/healthcare-agent/info-request/"
+        "transmission-guidance/public-guidance"
+    )
+    public_memories = [
+        item for item in public_guidance.iter_items() if isinstance(item, Memory)
+    ]
+    assert len(public_memories) == 25
+    assert public_memories[0].content.startswith(
+        "This Context is a synthetic, publicly distributable summary"
+    )
+    assert public_memories[-1].content.endswith(
+        "that the user approved transmission."
+    )
+    assert not any(
+        "official-guidance" in name
+        for name in authority_store.list_context_names()
+    )
     assert not any(copied_root.rglob("checkpoints/*.json"))
     assert not any(authority_root.rglob("checkpoints/*.json"))
 
@@ -1210,6 +1228,42 @@ def test_init_study_without_name_generates_unique_timestamped_name(
     assert study_profile_groups(load_profile_registry().profiles) == ()
 
 
+def test_init_study_without_name_uses_the_tty_edited_default(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    defaults: list[str] = []
+
+    monkeypatch.setattr(
+        "memcommit.commands.init_study._is_interactive_terminal",
+        lambda: True,
+    )
+
+    def choose(default: str) -> str:
+        defaults.append(default)
+        return "edited-study-name"
+
+    monkeypatch.setattr(
+        "memcommit.commands.init_study.choose_study_profile_name",
+        choose,
+    )
+
+    result = runner.invoke(app, ["init-study"])
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert re.fullmatch(r"study-\d{8}T\d{6}Z-[0-9a-f]{8}", defaults[0])
+    assert "Initialized Study run 'edited-study-name'." in result.output
+    registry = load_profile_registry()
+    assert registry.by_name("edited-study-name") is not None
+    assert registry.by_name("edited-study-name-granted-memory") is not None
+
+
 def test_profile_inventory_shows_run_pair_and_real_granted_counts(
     isolated_store,
     tmp_path,
@@ -1235,14 +1289,14 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
         line for line in result.output.splitlines() if "pilot-002" in line
     )
     assert "Contexts 59 owned + 43 granted" in profile_line
-    assert "Memories 450 owned + 612 granted" in profile_line
+    assert "Memories 450 owned + 625 granted" in profile_line
     authority_line = next(
         line
         for line in result.output.splitlines()
         if "pilot-002-granted-memory" in line
     )
     assert "Contexts 75 owned + 0 granted" in authority_line
-    assert "Memories 840 owned + 0 granted" in authority_line
+    assert "Memories 853 owned + 0 granted" in authority_line
     assert "STUDY pilot-002" not in result.output
     assert "pilot-002-task-" not in result.output
     assert "Authority 1" not in result.output

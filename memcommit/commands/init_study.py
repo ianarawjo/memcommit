@@ -2,23 +2,35 @@
 
 from __future__ import annotations
 
+import sys
 from typing import Annotated, Optional
 
 import typer
 
 from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.study_name_dialog import choose_study_profile_name
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
+    generate_study_profile_name,
     init_study_profile,
 )
+
+
+def _is_interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def cmd(
     name: Annotated[
         Optional[str],
-        typer.Argument(help=("New Profile name; omit for a timestamped unique name")),
+        typer.Argument(
+            help=(
+                "New Profile name; omit to edit a timestamped default in a "
+                "terminal, or generate it automatically outside a terminal"
+            )
+        ),
     ] = None,
     baseline_profile: Annotated[
         str,
@@ -31,6 +43,11 @@ def cmd(
     """Clone one live Study baseline and restore its real grants."""
 
     try:
+        if name is None and _is_interactive_terminal():
+            name = choose_study_profile_name(generate_study_profile_name())
+            if name is None:
+                typer.echo("Cancelled — no Study Profile was created.")
+                return
         result = init_study_profile(baseline_profile, name=name)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(

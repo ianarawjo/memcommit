@@ -540,12 +540,18 @@ conditions such as copies, transmission, and synchronization are modeled as
 `WM`, and anticipated recipient or organization interpretations as `OM`, in
 place of user preferences.
 
-The ordinary `remote/government/healthcare-agent/info-request/official-guidance` dataset contains 12
-authority-published high-level principles. These Memories are deliberately
-readable and exportable, so one may be used as Sever's sole Criteria Context or
-combined with another authorized criterion through Meld. Publication is an
-authority-side curation decision; Sever never promotes query-only content into
-this Context.
+The ordinary `remote/government/healthcare-agent/info-request/transmission-guidance` dataset contains
+25 authority-published public transmission-guidance Memories. Unlike internal
+guardrails and query-only specifications, this working set carries its own role
+description plus procedural, Self, User, World, and recipient-facing Other
+Models so downstream readers can interpret it without hidden context. Every
+public statement remains weaker than the query-only specification: it exposes
+possibilities and review cues but does not add authority, establish an exact
+recipient or use, or convert a request into approval. These
+Memories are deliberately readable and exportable, so the set may be used as
+Sever's sole Criteria Context or combined with another authorized criterion
+through Meld. Publication is an authority-side curation decision; Sever never
+promotes query-only content into this Context.
 
 The canonical locator of the query-only external Context is
 `remote/government/healthcare-agent/info-request/questions-and-answers`, which contains 75 Memories.
@@ -653,7 +659,7 @@ The purpose distribution is:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `local/personal-memory` | 30 | 20 | 20 | 184 | 16 | 30 | 300 |
 | `local/guardrails` | 8 | 47 | 4 | 0 | 5 | 11 | 75 |
-| `remote/government/healthcare-agent/info-request/official-guidance` | 7 | 5 | 0 | 0 | 0 | 0 | 12 |
+| `remote/government/healthcare-agent/info-request/transmission-guidance` | 4 | 8 | 3 | 2 | 2 | 6 | 25 |
 | `remote/government/healthcare-agent/info-request/questions-and-answers` | 5 | 42 | 8 | 0 | 7 | 13 | 75 |
 
 Policies remain the main axis, but knowledge about sharing categories,
