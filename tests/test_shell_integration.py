@@ -103,12 +103,21 @@ def test_emit_selection_requires_a_terminal():
 
 
 @pytest.mark.skipif(shutil.which("zsh") is None, reason="zsh is unavailable")
-def test_generated_wrapper_prefills_and_delegates(tmp_path):
+@pytest.mark.parametrize(
+    "selected_command",
+    (
+        'mem add "[memory]"',
+        "mem checkpoint",
+        'mem checkpoint "[message]"',
+        'mem query [query_view]#[memory_handle] "[question]"',
+    ),
+)
+def test_generated_wrapper_prefills_and_delegates(tmp_path, selected_command):
     executable = tmp_path / "mem"
     executable.write_text(
         """#!/bin/zsh
 if [[ $1 == help && $2 == --emit-selection ]]; then
-  print -r -- 'mem add "[memory]"'
+  print -r -- "$MEM_TEST_SELECTION"
 else
   print -r -- "delegated:$*"
 fi
@@ -119,6 +128,7 @@ fi
     environment = os.environ.copy()
     environment["PATH"] = f"{tmp_path}{os.pathsep}{environment['PATH']}"
     environment["MEMCOMMIT_ZSH_INIT"] = render_zsh_init()
+    environment["MEM_TEST_SELECTION"] = selected_command
     script = """\
 eval "$MEMCOMMIT_ZSH_INIT"
 mem help
@@ -155,5 +165,5 @@ mem status
     output = b"".join(chunks).decode(errors="replace").replace("\r", "")
 
     assert returncode == 0, output
-    assert 'buffer=mem add "[memory]" ' in output
+    assert f"buffer={selected_command} " in output
     assert "delegated:status" in output

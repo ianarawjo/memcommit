@@ -572,12 +572,12 @@ def cmd(
     save_as: Annotated[Optional[str], typer.Option("--save-as", help="New local Result Context name; never overwrites an existing Context")] = None,
     source_descendants: Annotated[bool, typer.Option("--source-descendants/--source-only", help="Include the Source root's readable descendant Contexts")] = True,
     criteria_descendants: Annotated[bool, typer.Option("--criteria-descendants/--criteria-only", help="Include the Criteria root's readable descendant Contexts")] = True,
-    resume: Annotated[Optional[str], typer.Option("--resume", help="Resume one saved Sever session uid")] = None,
+    resume: Annotated[Optional[str], typer.Option("--resume", help="Enter one exact saved Sever session by UID")] = None,
     candidate: Annotated[Optional[str], typer.Option("--candidate", help="Candidate uid or unique prefix for a scripted decision")] = None,
     choice: Annotated[Optional[str], typer.Option("--choice", help="recommended, as-written, forget, or custom")] = None,
     comment: Annotated[Optional[str], typer.Option("--comment", help="Exact custom result content when --choice custom")] = None,
     accept: Annotated[bool, typer.Option("--accept", help="Create the reviewed local result Context; Source remains unchanged")] = False,
-    sessions_flag: Annotated[bool, typer.Option("--sessions", help="Browse saved Sever sessions or start a new one")] = False,
+    sessions_flag: Annotated[bool, typer.Option("--sessions", help="Enter the interactive Sever session launcher")] = False,
 ) -> None:
     store = MemoryStore()
     session_store = SeverSessionStore(store)

@@ -920,7 +920,8 @@ def cmd(
         typer.Argument(
             help=(
                 "Existing Context to list by canonical name or explicit "
-                "relative locator (defaults to current)"
+                "relative locator; omit to enter the current Context browser "
+                "in a TTY or print it otherwise"
             )
         ),
     ] = None,

@@ -32,7 +32,10 @@ def invoke(*args: str):
 
 def _all_output(result) -> str:
     """Support both merged and split-stderr Click/Typer test runners."""
-    stderr = getattr(result, "stderr", "")
+    try:
+        stderr = result.stderr
+    except ValueError:
+        stderr = ""
     return result.output + (stderr if stderr not in result.output else "")
 
 
@@ -49,7 +52,7 @@ def test_help_exposes_bare_recursive_context_memory_and_profile_targets():
 
     assert inventory.exit_code == 0
     assert any(
-        line.startswith("lock ") and "implemented" in line
+        line.startswith("lock ") and "current Context" in line
         for line in inventory.output.splitlines()
     )
     assert lock_help.exit_code == 0

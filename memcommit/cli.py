@@ -67,17 +67,29 @@ app = typer.Typer(
 )
 
 # --- Core ---
-app.command("init",           help="Initialize a new context and switch to it.")(init.cmd)
+app.command(
+    "init",
+    help="Create, or with --parents ensure, a Context and switch to it.",
+)(init.cmd)
 app.command(
     "import",
-    help="Import a Profile, Context tree, or Memory while preserving identity.",
+    help=(
+        "Import a clean-baseline Profile, Context tree, or Memory by value "
+        "while preserving resource identity."
+    ),
 )(import_profile.cmd)
 app.command(
     "init-study",
-    help="Copy one Study baseline into a complete ordinary Profile.",
+    help="Copy one Study baseline into an isolated participant/authority Profile pair.",
 )(init_study.cmd)
-app.command("add",            help="Add one or more memories to the current context.")(add.cmd)
-app.command("status",         help="Show current context and recent memories.")(status.cmd)
+app.command(
+    "add",
+    help="Add one or more Memories to the current or explicit Context.",
+)(add.cmd)
+app.command(
+    "status",
+    help="Show current Context counts, recent Memories, and checkpoints.",
+)(status.cmd)
 app.command(
     "summarize",
     help=(
@@ -86,13 +98,25 @@ app.command(
 )(summarize.cmd)
 app.command(
     "list",
-    help="List child Contexts and direct items in the current (or given) Context.",
+    help=(
+        "Enter the interactive Context browser for the current Context in a "
+        "TTY, or print child Contexts and direct items."
+    ),
 )(list_memories.cmd)
 app.command(
     "ls",
-    help="List child Contexts and direct items in the current (or given) Context.",
+    help=(
+        "Enter the interactive Context browser for the current Context in a "
+        "TTY, or print child Contexts and direct items."
+    ),
 )(list_memories.cmd)
-app.command("show",           help="Show a memory, embedded context, or the current context in full.")(show.cmd)
+app.command(
+    "show",
+    help=(
+        "Show a Memory, reference, embedded Context, or the direct contents "
+        "of a current/explicit Context."
+    ),
+)(show.cmd)
 app.command("contexts",       help="List all available contexts.")(contexts.cmd)
 app.add_typer(
     write_protection.lock_app,
@@ -104,30 +128,49 @@ app.add_typer(
     name="unlock",
     help="Unlock the current Context, a recursive set, Memory, or Profile.",
 )
-app.command("clear",          help="Clear all memories from the current (or given) context.")(clear_cmd)
-app.command("delete",         help="Delete a context and its history; preserve descendants.")(delete.cmd)
+app.command(
+    "clear",
+    help=(
+        "Remove all direct items from the current or explicit Context after "
+        "confirmation."
+    ),
+)(clear_cmd)
+app.command(
+    "delete",
+    help=(
+        "Select a Context or direct item to delete, or name it by locator, "
+        "name, or UID."
+    ),
+)(delete.cmd)
 app.command(
     "diff",
     help=(
-        "Render the active staged or locally applied update; not an "
-        "arbitrary Context diff."
+        "Select or name a Context and browse its checkpoint changes in a TTY, "
+        "or render the active Update record outside a TTY."
     ),
 )(diff.cmd)
 app.command(
     "compare",
     help=(
-        "Browse saved comparisons with no target, or compare the active "
+        "Enter the interactive Compare session launcher with no endpoints, or compare "
+        "the active "
         "Context with an equal-authority PEER; save no target changes."
     ),
 )(compare.cmd)
 
 # --- Navigation ---
-app.command("switch",         help="Switch to a different context.")(switch.cmd)
+app.command(
+    "switch",
+    help="Enter the interactive Context picker, or switch to an explicit Context.",
+)(switch.cmd)
 app.command(
     "rename",
     help="Rename an ordinary Context namespace and all lexical descendants.",
 )(rename.cmd)
-app.command("branch",         help="Create a new context branched from the current one.")(branch.cmd)
+app.command(
+    "branch",
+    help="Create and switch to a new Context branched from the current one.",
+)(branch.cmd)
 app.command(
     "merge",
     help="Add UID-new direct items from another Context; no semantic reconciliation.",
@@ -135,9 +178,12 @@ app.command(
 app.command(
     "meld",
     help=(
-        "Browse saved Meld work with no operands, combine two equal-authority "
+        "Enter the interactive Meld session launcher with no operands, combine two "
+        "equal-authority "
         "Contexts into the current empty Context, or directionally use "
-        "INCOMING --into BASELINE; --from INCOMING uses the current BASELINE."
+        "INCOMING --into authoritative BASELINE; --from INCOMING uses the "
+        "current authoritative BASELINE and is normalized to INCOMING "
+        "--into BASELINE."
     ),
 )(meld.cmd)
 app.command("embed",          help="Embed one context inside another.")(embed.cmd)
@@ -151,25 +197,50 @@ app.command(
 )(query.cmd)
 
 # --- Editing ---
-app.command("edit",           help="Replace the content of one or more direct Memories by uid.")(edit.cmd)
-app.command("remove",         help="Remove a direct item from the current context by uid.")(remove.cmd)
-app.command("chunk",          help="Split a memory into chunks (markdown_headers, paragraphs, sentences).")(chunk.cmd)
+app.command(
+    "edit",
+    help=(
+        "Replace direct Memory content by UID or prefix in the current or "
+        "explicit Context."
+    ),
+)(edit.cmd)
+app.command(
+    "remove",
+    help=(
+        "Select a Context or direct item to delete, or name it by locator, "
+        "name, or UID."
+    ),
+)(remove.cmd)
+app.command(
+    "chunk",
+    help=(
+        "Preview and, after confirmation, split one direct current-Context "
+        "Memory by headers, paragraphs, or sentences."
+    ),
+)(chunk.cmd)
 app.command(
     "atomize",
     help=(
-        "Create or resume atomization; --evaluate runs its issue-scoped "
+        "Enter an interactive Atomize session; --evaluate runs its issue-scoped "
         "directional meld, changes require explicit acceptance, and "
-        "--sessions browses saved work."
+        "--sessions enters the interactive cross-Context session launcher."
     ),
 )(atomize.cmd)
 app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
 app.command(
     "revert",
-    help="Restore an exact, interactively chosen, or semantically found checkpoint.",
+    help=(
+        "Enter the interactive checkpoint picker when no selector is given, or "
+        "restore an exact or semantically found checkpoint; discard newer "
+        "checkpoints unless --keep is used."
+    ),
 )(revert.cmd)
 app.command(
     "log",
-    help="Inspect or semantically search checkpoint history for the current Context.",
+    help=(
+        "Select a Context and browse its checkpoints in a TTY, search current-"
+        "Context history, or list Profile command attempts."
+    ),
 )(log.cmd)
 app.command(
     "undo",
@@ -181,11 +252,17 @@ app.command(
 )(redo.cmd)
 app.command(
     "trace",
-    help="Trace one current or historical Memory from retained origin to current descendants.",
+    help=(
+        "Enter the interactive Memory picker when no Memory is given, or trace "
+        "one retained origin through its current descendants."
+    ),
 )(trace.cmd)
 app.command(
     "rationale",
-    help="Show recorded evidence and optional labeled inference for a Memory.",
+    help=(
+        "Enter the interactive Memory picker when no Memory is given, or show "
+        "recorded evidence and optional labeled contextual inference; no Context changes."
+    ),
 )(rationale.cmd)
 app.command(
     "translate",
@@ -201,20 +278,39 @@ app.command(
     "find",
     help="Find current items or explicitly temporal Memory history.",
 )(find.cmd)
-app.command("find-duplicates", help="Find duplicate direct Memories.")(find_duplicates.cmd)
-app.command("find-ambiguities", help="Find ambiguous or underspecified direct Memories.")(find_ambiguities.cmd)
-app.command("find-conflicts", help="Find conflicting direct Memory pairs.")(find_conflicts.cmd)
+app.command(
+    "find-duplicates",
+    help=(
+        "Report duplicate direct Memories in the current or explicit Context; "
+        "no Context changes."
+    ),
+)(find_duplicates.cmd)
+app.command(
+    "find-ambiguities",
+    help=(
+        "Report ambiguous direct Memories in the current or explicit Context; "
+        "no Context changes."
+    ),
+)(find_ambiguities.cmd)
+app.command(
+    "find-conflicts",
+    help=(
+        "Report conflicting direct Memory pairs in the current or explicit "
+        "Context; no Context changes."
+    ),
+)(find_conflicts.cmd)
 app.command(
     "review",
     help=(
-        "Open adaptive operation reports or stage semantic review responses; "
+        "Enter an interactive Review session or stage semantic review responses; "
         "never apply Memories."
     ),
 )(review.cmd)
 app.command(
     "sever",
     help=(
-        "Browse saved Sever work with no operands, or review one Source root "
+        "Enter the interactive Sever session launcher with no operands, or review one "
+        "Source root "
         "against one scoped Criteria root and create a local result that "
         "forgets selected content while leaving Source unchanged."
     ),
@@ -222,24 +318,32 @@ app.command(
 app.command(
     "share",
     help=(
-        "Send one ordinary Context through a grant-backed receiver endpoint."
+        "Enter interactive Source and endpoint setup when operands are incomplete, "
+        "or send one ordinary Context through a grant-backed receiver endpoint."
     ),
 )(share.cmd)
 app.command(
     "ground",
     help=(
-        "Browse saved Grounds or revise one Goal–Rules–Memories workbench; "
-        "use N in the picker to start a provider-backed chat."
+        "Enter an interactive Ground session, or open one named "
+        "Goal–Rules–Memories workbench; --sessions enters its launcher."
     ),
 )(ground.cmd)
 app.command(
     "impact",
-    help="Preview a directional update or atomization; no Context changes.",
+    help=(
+        "Preview a directional Update or Atomize analysis, or inspect a saved "
+        "Meld, Sever, or Update Impact; no Context changes occur in the Impact "
+        "view, and APPLY? hands saved work to its normal Apply flow."
+    ),
 )(impact.cmd)
 app.command("integrate",      help="Intelligently integrate info into the current context (uses LLM).")(integrate.cmd)
 app.command(
     "update",
-    help="Apply a directional plan to a local target; no shared publication.",
+    help=(
+        "Enter the interactive Update session launcher with no endpoints, or apply a "
+        "directional plan to a local target; no shared publication."
+    ),
 )(update.cmd)
 
 # --- Sub-apps ---
@@ -257,14 +361,17 @@ app.add_typer(
 app.add_typer(
     profile_app,
     name="profile",
-    help="Register and select complete local MemoryStore profiles.",
+    help=(
+        "Enter the interactive Profile selector, or manage complete local "
+        "MemoryStore Profiles."
+    ),
 )
 app.add_typer(dev_app,    name="dev",    help="Developer tools (eval, diagnostics).", hidden=True)
 
 
 app.command(
     "help",
-    help="Browse commands and open syntax help.",
+    help="Enter the interactive command browser and open syntax help.",
 )(help_inventory.cmd)
 app.command(
     "shell-init",
@@ -275,7 +382,7 @@ app.command(
 # checkout: alias for switch, with -b to branch instead
 @app.command(
     "checkout",
-    help="Alias for switch; with -b, alias for branch.",
+    help="Alias for explicit switch; with -b, alias for branch.",
 )
 def _checkout(
     name: Annotated[str, typer.Argument(help="Context to switch to, or name of new branch")],

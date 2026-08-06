@@ -1890,7 +1890,8 @@ def cmd(
                 "Portable Ground name to create or resume, or a natural-"
                 "language starting request when the value cannot be a "
                 "portable name; omit to start from a blank, unsaved frame "
-                "outside a terminal or browse saved Grounds inside one"
+                "outside a terminal or enter the provider-backed chat inside "
+                "the Ground session"
             )
         ),
     ] = None,
@@ -1908,7 +1909,7 @@ def cmd(
         bool,
         typer.Option(
             "--sessions",
-            help="Choose an existing saved Ground or start a new one",
+            help="Enter the interactive Ground session launcher",
         ),
     ] = False,
     goal: Annotated[

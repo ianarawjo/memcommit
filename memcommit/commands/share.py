@@ -26,7 +26,7 @@ def cmd(
     source: Annotated[
         Optional[str],
         typer.Argument(
-            help="Ordinary Context to send; bare TTY use opens selection"
+            help="Ordinary Context to send; omit to enter interactive Share setup"
         ),
     ] = None,
     recipient: Annotated[

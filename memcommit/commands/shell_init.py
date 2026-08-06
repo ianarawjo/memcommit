@@ -29,7 +29,9 @@ function mem {
       return 1
     fi
     case $_mem_selected in
-      (*[!A-Za-z0-9_./:=\\ \\[\\]\\"-]*)
+      # `#` is a literal separator in the audited query-view Memory form, not
+      # shell syntax introduced by terminal input.
+      (*[!A-Za-z0-9_./:=#\\ \\[\\]\\"-]*)
         builtin print -u2 -- 'mem: unsafe command selection'
         return 1
         ;;

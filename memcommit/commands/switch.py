@@ -154,7 +154,7 @@ def cmd(
             help=(
                 "Canonical Context name, or an explicit lexical relative "
                 "selector such as '.', '..', './child', or '../sibling'; "
-                "omit to choose interactively"
+                "omit to enter the interactive Context picker"
             )
         ),
     ] = None,

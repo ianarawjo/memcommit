@@ -201,7 +201,7 @@ def _use_profile(name: str) -> None:
 
 @app.callback(invoke_without_command=True)
 def profile_cmd(ctx: typer.Context) -> None:
-    """Open the Profile selector, or print its stable non-TTY list."""
+    """Enter the Profile selector, or print its stable non-TTY list."""
 
     if ctx.invoked_subcommand is not None:
         return
