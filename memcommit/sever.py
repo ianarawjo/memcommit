@@ -1,4 +1,4 @@
-"""Strict, retained state for one local disclosure-severing review."""
+"""Strict retained state for one local content-severing review."""
 
 from __future__ import annotations
 
@@ -11,25 +11,34 @@ from typing import Literal
 from memcommit.update import GrantedUpdateTarget
 
 
-SEVER_SCHEMA_VERSION = 1
+SEVER_SCHEMA_VERSION = 3
 SeverDecision = Literal[
-    "SEND_AS_WRITTEN",
-    "SEND_REDACTED",
-    "SEND_SUMMARY",
-    "SEND_PREFERENCE_OR_POLICY",
-    "DO_NOT_SEND",
+    "KEEP_AS_WRITTEN",
+    "KEEP_REDACTED",
+    "KEEP_SUMMARY",
+    "KEEP_PREFERENCE_OR_POLICY",
+    "FORGET",
 ]
-SeverSelection = Literal["RECOMMENDED", "AS_WRITTEN", "EXCLUDE", "CUSTOM"]
+SeverSelection = Literal["RECOMMENDED", "AS_WRITTEN", "FORGET", "CUSTOM"]
 SeverState = Literal["REVIEWING", "APPLIED"]
 
 _DECISIONS = {
-    "SEND_AS_WRITTEN",
-    "SEND_REDACTED",
-    "SEND_SUMMARY",
-    "SEND_PREFERENCE_OR_POLICY",
-    "DO_NOT_SEND",
+    "KEEP_AS_WRITTEN",
+    "KEEP_REDACTED",
+    "KEEP_SUMMARY",
+    "KEEP_PREFERENCE_OR_POLICY",
+    "FORGET",
 }
-_SELECTIONS = {"RECOMMENDED", "AS_WRITTEN", "EXCLUDE", "CUSTOM"}
+_SELECTIONS = {"RECOMMENDED", "AS_WRITTEN", "FORGET", "CUSTOM"}
+# Read-only migration boundary for version-1 session files. New provider turns,
+# in-memory decisions, and serialized records use only the neutral vocabulary.
+_LEGACY_DECISIONS = {
+    "SEND_AS_WRITTEN": "KEEP_AS_WRITTEN",
+    "SEND_REDACTED": "KEEP_REDACTED",
+    "SEND_SUMMARY": "KEEP_SUMMARY",
+    "SEND_PREFERENCE_OR_POLICY": "KEEP_PREFERENCE_OR_POLICY",
+    "DO_NOT_SEND": "FORGET",
+}
 
 
 class SeverError(ValueError):
@@ -97,6 +106,7 @@ class SeverContextBinding:
     memories: tuple[SeverMemory, ...]
     granted: dict[str, object] | None = None
     include_descendants: bool = True
+    excluded_query_context_names: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         _uuid(self.root_uid, "Context uid")
@@ -119,6 +129,15 @@ class SeverContextBinding:
             raise SeverError("Duplicate Sever Memory uid.")
         if type(self.include_descendants) is not bool:
             raise SeverError("Invalid Sever descendant scope.")
+        if (
+            any(
+                not isinstance(name, str) or not name.strip()
+                for name in self.excluded_query_context_names
+            )
+            or len(set(self.excluded_query_context_names))
+            != len(self.excluded_query_context_names)
+        ):
+            raise SeverError("Invalid excluded query-only Context names.")
         if self.granted is not None:
             if not isinstance(self.granted, dict):
                 raise SeverError("Invalid Sever granted binding.")
@@ -141,6 +160,9 @@ class SeverContextBinding:
             "memories": [memory.to_dict() for memory in self.memories],
             "granted": self.granted,
             "include_descendants": self.include_descendants,
+            "excluded_query_context_names": list(
+                self.excluded_query_context_names
+            ),
         }
 
     @classmethod
@@ -153,6 +175,10 @@ class SeverContextBinding:
         if frozenset(value) not in {
             frozenset(legacy_keys),
             frozenset(legacy_keys | {"include_descendants"}),
+            frozenset(
+                legacy_keys
+                | {"include_descendants", "excluded_query_context_names"}
+            ),
         }:
             raise SeverError("Invalid Sever Context binding.")
         data = value
@@ -160,6 +186,12 @@ class SeverContextBinding:
         raw_memories = data["memories"]
         if not isinstance(raw_contexts, list) or not isinstance(raw_memories, list):
             raise SeverError("Invalid Sever Context binding.")
+        excluded_query_context_names = data.get(
+            "excluded_query_context_names",
+            [],
+        )
+        if not isinstance(excluded_query_context_names, list):
+            raise SeverError("Invalid excluded query-only Context names.")
         contexts: list[tuple[str, str, str]] = []
         for item in raw_contexts:
             record = _exact(item, {"name", "uid", "digest"}, "bound Context")
@@ -172,6 +204,7 @@ class SeverContextBinding:
             memories=tuple(SeverMemory.from_dict(item) for item in raw_memories),
             granted=data["granted"],  # type: ignore[arg-type]
             include_descendants=data.get("include_descendants", True),  # type: ignore[arg-type]
+            excluded_query_context_names=tuple(excluded_query_context_names),
         )
 
 
@@ -193,11 +226,11 @@ class SeverCandidate:
             raise SeverError("Invalid Sever recommendation.")
         _text(self.proposed_content, "proposed content", empty=True)
         _text(self.rationale, "candidate rationale")
-        if self.recommendation == "DO_NOT_SEND":
+        if self.recommendation == "FORGET":
             if self.proposed_content:
-                raise SeverError("Excluded Sever candidates cannot have outbound content.")
+                raise SeverError("Forgotten Sever candidates cannot have result content.")
         elif not self.proposed_content.strip():
-            raise SeverError("Included Sever candidates require outbound content.")
+            raise SeverError("Retained Sever candidates require result content.")
         if self.selection not in _SELECTIONS:
             raise SeverError("Invalid Sever selection.")
         if self.selection == "CUSTOM" and not self.custom_content.strip():
@@ -235,12 +268,64 @@ class SeverCandidate:
         return cls(
             uid=data["uid"],  # type: ignore[arg-type]
             source_memory_uid=data["source_memory_uid"],  # type: ignore[arg-type]
-            recommendation=data["recommendation"],  # type: ignore[arg-type]
+            recommendation=_LEGACY_DECISIONS.get(
+                data["recommendation"],  # type: ignore[arg-type]
+                data["recommendation"],  # type: ignore[arg-type]
+            ),
             proposed_content=data["proposed_content"],  # type: ignore[arg-type]
             rationale=data["rationale"],  # type: ignore[arg-type]
             criterion_memory_uids=tuple(refs),
-            selection=data["selection"],  # type: ignore[arg-type]
+            selection=(
+                "FORGET" if data["selection"] == "EXCLUDE" else data["selection"]
+            ),  # type: ignore[arg-type]
             custom_content=data["custom_content"],  # type: ignore[arg-type]
+        )
+
+
+@dataclass(frozen=True)
+class SeverAppliedSummary:
+    """Grounded compact account of the material Sever transformations."""
+
+    text: str
+    source_memory_uids: tuple[str, ...]
+    criterion_memory_uids: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        _text(self.text, "applied summary")
+        for uid in (*self.source_memory_uids, *self.criterion_memory_uids):
+            _uuid(uid, "applied summary Memory uid")
+        if len(set(self.source_memory_uids)) != len(self.source_memory_uids):
+            raise SeverError("Duplicate applied-summary Source Memory uid.")
+        if len(set(self.criterion_memory_uids)) != len(
+            self.criterion_memory_uids
+        ):
+            raise SeverError("Duplicate applied-summary Criteria Memory uid.")
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "text": self.text,
+            "source_memory_uids": list(self.source_memory_uids),
+            "criterion_memory_uids": list(self.criterion_memory_uids),
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> "SeverAppliedSummary":
+        data = _exact(
+            value,
+            {"text", "source_memory_uids", "criterion_memory_uids"},
+            "applied summary",
+        )
+        source_uids = data["source_memory_uids"]
+        criterion_uids = data["criterion_memory_uids"]
+        if not isinstance(source_uids, list) or not isinstance(
+            criterion_uids,
+            list,
+        ):
+            raise SeverError("Invalid applied-summary Memory references.")
+        return cls(
+            text=data["text"],  # type: ignore[arg-type]
+            source_memory_uids=tuple(source_uids),
+            criterion_memory_uids=tuple(criterion_uids),
         )
 
 
@@ -284,6 +369,7 @@ class SeverSession:
     output_name: str
     overview: str
     candidates: tuple[SeverCandidate, ...]
+    applied_summary: SeverAppliedSummary | None = None
     application: SeverApplication | None = None
 
     def __post_init__(self) -> None:
@@ -304,6 +390,11 @@ class SeverSession:
             raise SeverError("Sever candidates must cover every source Memory exactly once.")
         if any(not set(candidate.criterion_memory_uids) <= criterion_uids for candidate in self.candidates):
             raise SeverError("Sever candidate cites an unavailable criterion Memory.")
+        if self.applied_summary is not None:
+            if not set(self.applied_summary.source_memory_uids) <= source_uids:
+                raise SeverError("Applied summary cites an unavailable Source Memory.")
+            if not set(self.applied_summary.criterion_memory_uids) <= criterion_uids:
+                raise SeverError("Applied summary cites an unavailable Criteria Memory.")
         if (self.state == "APPLIED") != (self.application is not None):
             raise SeverError("Invalid Sever application state.")
 
@@ -334,17 +425,32 @@ class SeverSession:
             raise SeverError("Unknown Sever candidate.")
         return replace(self, revision=self.revision + 1, candidates=tuple(updated))
 
-    def outbound(self) -> tuple[tuple[SeverCandidate, SeverMemory, str], ...]:
+    def with_output_name(self, output_name: str) -> "SeverSession":
+        """Rebind an unapplied review to one newly validated local name."""
+
+        if self.state != "REVIEWING":
+            raise SeverError("An applied Sever session cannot change output location.")
+        _text(output_name, "output name")
+        if output_name == self.output_name:
+            return self
+        return replace(
+            self,
+            revision=self.revision + 1,
+            output_name=output_name,
+        )
+
+    def results(self) -> tuple[tuple[SeverCandidate, SeverMemory, str], ...]:
+        """Return the Memories retained in the reviewed local result."""
         results: list[tuple[SeverCandidate, SeverMemory, str]] = []
         for candidate in self.candidates:
             source = self.source_memory(candidate.source_memory_uid)
-            if candidate.selection == "EXCLUDE":
+            if candidate.selection == "FORGET":
                 continue
             if candidate.selection == "AS_WRITTEN":
                 content = source.content
             elif candidate.selection == "CUSTOM":
                 content = candidate.custom_content
-            elif candidate.recommendation == "DO_NOT_SEND":
+            elif candidate.recommendation == "FORGET":
                 continue
             else:
                 content = candidate.proposed_content
@@ -393,20 +499,26 @@ class SeverSession:
             "output_name": self.output_name,
             "overview": self.overview,
             "candidates": [candidate.to_dict() for candidate in self.candidates],
+            "applied_summary": (
+                self.applied_summary.to_dict() if self.applied_summary else None
+            ),
             "application": self.application.to_dict() if self.application else None,
         }
 
     @classmethod
     def from_dict(cls, value: object) -> "SeverSession":
-        data = _exact(
-            value,
-            {
-                "schema_version", "uid", "revision", "state", "source", "criteria",
-                "output_name", "overview", "candidates", "application",
-            },
-            "session",
-        )
-        if data["schema_version"] != SEVER_SCHEMA_VERSION:
+        legacy_keys = {
+            "schema_version", "uid", "revision", "state", "source", "criteria",
+            "output_name", "overview", "candidates", "application",
+        }
+        current_keys = legacy_keys | {"applied_summary"}
+        if not isinstance(value, dict) or frozenset(value) not in {
+            frozenset(legacy_keys),
+            frozenset(current_keys),
+        }:
+            raise SeverError("Invalid Sever session.")
+        data = value
+        if data["schema_version"] not in {1, 2, SEVER_SCHEMA_VERSION}:
             raise SeverError("Unsupported Sever schema version.")
         candidates = data["candidates"]
         if not isinstance(candidates, list):
@@ -420,6 +532,11 @@ class SeverSession:
             output_name=data["output_name"],  # type: ignore[arg-type]
             overview=data["overview"],  # type: ignore[arg-type]
             candidates=tuple(SeverCandidate.from_dict(item) for item in candidates),
+            applied_summary=(
+                None
+                if data.get("applied_summary") is None
+                else SeverAppliedSummary.from_dict(data["applied_summary"])
+            ),
             application=(
                 None
                 if data["application"] is None

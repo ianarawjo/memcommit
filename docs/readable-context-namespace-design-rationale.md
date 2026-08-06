@@ -41,9 +41,10 @@ The catalog observes these invariants:
 - namespace projection is process-local and never writes grant pointers into a
   Context record.
 
-`mem ls`, current-state `mem find`, and `mem rationale` consume this shared
-catalog. Recursive listing, search, and Rationale inference from `task-1` can
-therefore see both
+`mem ls`, current-state `mem find`, `mem rationale`, and the A/B source picker
+for new symmetric `mem meld` sessions consume this shared catalog. Recursive
+listing, search, Rationale inference, and Meld source selection from `task-1`
+can therefore see both
 `task-1/participant/...` and `task-1/campus-wiki/...`, even when the latter is
 stored by another Profile. Find also performs one bounded relevance check over
 omitted first-level branches when a small global limit would otherwise show
@@ -68,6 +69,9 @@ interpretation. If a public subtree combines local and granted ownership, or
 combines distinct grants, every contributing Grant must additionally permit
 `DERIVE` and `COMBINE`. Missing permission fails closed before any candidate
 content is sent. Query-only routes remain excluded from the inference frame.
+Meld similarly annotates granted source rows, excludes query-only routes, and
+keeps C local. Its current directional mode remains local-only and reports that
+boundary if a visible granted source is selected.
 
 A recursive list rooted locally can now contain both local and granted Memory
 content. The private structured clipboard does not yet have a multi-source,

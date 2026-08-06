@@ -1,4 +1,4 @@
-"""Contracts for local Source × Criteria disclosure review."""
+"""Contracts for local Source × Criteria content severing."""
 
 from __future__ import annotations
 
@@ -18,8 +18,18 @@ from memcommit.commands.sever_sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
 )
+from memcommit.commands.resolution_workbench_shell import (
+    resolution_report_fragments,
+    resolution_viewer_fragments,
+)
+from memcommit.impact_controller import ImpactController
 from memcommit.context import QueryContextRef
-from memcommit.sever import SeverSession, sever_record_digest
+from memcommit.query_provider import QueryProviderError
+from memcommit.resolution_workbench import (
+    ResolutionNavigation,
+    ResolutionWorkbenchAction,
+)
+from memcommit.sever import SEVER_SCHEMA_VERSION, SeverSession, sever_record_digest
 from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
 from memcommit.sever_resolution_adapter import SeverResolutionWorkbenchAdapter
 from memcommit.sever_store import SeverSessionStore
@@ -36,19 +46,31 @@ class SeverProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "sever_context"
         assert "query-only sources" in prompt
-        assert "local minimization and de-identification draft" in prompt
-        assert "later Share preconditions" in prompt
-        assert "must not by itself cause DO_NOT_SEND" in prompt
+        assert "selectively forgetting information" in prompt
+        assert "decide only what the local Result remembers" in prompt
+        assert "KEEP_AS_WRITTEN" in prompt
+        assert "WHAT CHANGED summary rather than a count report" in prompt
+        instructions = prompt.split(SEVER_PAYLOAD_MARKER, 1)[0]
+        for unrelated_term in (
+            "SEND_",
+            "DO_NOT_SEND",
+            "Share",
+            "recipient",
+            "transmission",
+            "audience",
+            "destination",
+        ):
+            assert unrelated_term not in instructions
         payload = json.loads(prompt.split(SEVER_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
         criterion_id = payload["criteria"]["memories"][0]["memory_id"]
         candidates = []
         for index, source in enumerate(payload["source"]["memories"]):
             if index == 0:
-                decision = "SEND_SUMMARY"
+                decision = "KEEP_SUMMARY"
                 content = "Needs step-free access at appointments."
             else:
-                decision = "DO_NOT_SEND"
+                decision = "FORGET"
                 content = ""
             candidates.append(
                 {
@@ -61,7 +83,15 @@ class SeverProvider:
             )
         return json.dumps(
             {
-                "overview": "The proposal retains necessary access information and excludes unrelated detail.",
+                "overview": "The proposal keeps necessary access information and forgets unrelated detail.",
+                "application_summary": {
+                    "text": (
+                        "Access-related needs were condensed while unrelated "
+                        "personal detail was removed under the minimization criterion."
+                    ),
+                    "source_memory_ids": [payload["source"]["memories"][0]["memory_id"]],
+                    "criterion_memory_ids": [criterion_id],
+                },
                 "candidates": candidates,
             }
         )
@@ -73,6 +103,67 @@ def _context(store: MemoryStore, name: str, *contents: str):
         ops.add(context, content)
     store.create_context(context)
     return context
+
+
+def test_sever_start_reports_real_blocking_stages(isolated_store, monkeypatch):
+    store = MemoryStore()
+    source = _context(store, "local/source", "Source")
+    criteria = _context(store, "local/criteria", "Criterion")
+    events: list[tuple[object, ...]] = []
+
+    class Progress:
+        def __init__(self, operation, stage, *, total):
+            events.append(("start", operation, stage, total))
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            events.append(("close",))
+
+        def update(self, stage, *, step):
+            events.append(("update", stage, step))
+
+    monkeypatch.setattr(sever_command, "CommandProgress", Progress)
+
+    sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="local/result",
+        provider_factory=SeverProvider,
+    )
+
+    assert events == [
+        ("start", "SEVER", "freezing source and criteria", 3),
+        ("update", "connecting provider", 2),
+        ("update", "analyzing 1 source x 1 criteria", 3),
+        ("close",),
+    ]
+
+
+def test_sever_provider_failure_reports_the_unsaved_frozen_frame(isolated_store):
+    store = MemoryStore()
+    source = _context(store, "local/source", "One", "Two")
+    criteria = _context(store, "local/criteria", "Criterion")
+
+    class TimedOutProvider:
+        def complete(self, *args, **kwargs):
+            raise QueryProviderError(
+                "The temporary Codex sever_context timed out after 600 seconds."
+            )
+
+    with pytest.raises(
+        sever_command.SeverCommandError,
+        match=r"Frozen frame: 2 Source Memories x 1 Criteria Memories",
+    ):
+        sever_command._start(
+            store=store,
+            source_name=source.name,
+            criteria_name=criteria.name,
+            output_name="local/result",
+            provider_factory=TimedOutProvider,
+        )
 
 
 def test_explicit_sever_creates_review_session_without_output_or_query_access(
@@ -109,9 +200,9 @@ def test_explicit_sever_creates_review_session_without_output_or_query_access(
     )
 
     assert result.exit_code == 0, result.output
-    assert "REVIEWING · NOT SENT" in result.output
-    assert "No query-only Context was opened" in result.output
-    assert "No draft was sent to a recipient" in result.output
+    assert "REVIEWING · SOURCE UNCHANGED" in result.output
+    assert "query-only Contexts do not grant" not in result.output
+    assert "The Source Context is unchanged" in result.output
     assert not store.context_exists("healthcare-draft")
     sessions = SeverSessionStore(store).list()
     assert len(sessions) == 1
@@ -120,7 +211,7 @@ def test_explicit_sever_creates_review_session_without_output_or_query_access(
     assert set(provider.payloads[0]) == {"source", "criteria", "output_name"}
 
 
-def test_accept_materializes_only_reviewed_outbound_content(isolated_store, monkeypatch):
+def test_accept_materializes_only_reviewed_result_content(isolated_store, monkeypatch):
     store = MemoryStore()
     source = _context(
         store,
@@ -150,7 +241,7 @@ def test_accept_materializes_only_reviewed_outbound_content(isolated_store, monk
     )
 
     assert result.exit_code == 0, result.output
-    assert "APPLIED · NOT SENT" in result.output
+    assert "APPLIED · SOURCE UNCHANGED" in result.output
     output = store.load_direct("healthcare-draft")
     assert [item.content for item in output.iter_items()] == [
         "Needs step-free access at appointments."
@@ -334,6 +425,14 @@ def test_query_only_reference_is_never_a_source_memory(isolated_store, monkeypat
     assert result.exit_code == 0, result.output
     assert len(provider.payloads[0]["source"]["memories"]) == 1
     assert "qna" not in json.dumps(provider.payloads[0])
+    session = SeverSessionStore(store).list()[0]
+    assert session.source.excluded_query_context_names == (
+        "remote/government/healthcare-agent/info-request/questions-and-answers",
+    )
+    overview = SeverResolutionWorkbenchAdapter(session).view().overview
+    assert "NOT INCLUDED" in overview
+    assert "questions-and-answers" in overview
+    assert "do not grant readable Memory access" in overview
 
 
 def test_provider_schema_avoids_unsupported_unique_items_and_rejects_duplicates(
@@ -474,13 +573,192 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
     assert view.route == (
         "SOURCE local/personal-memory × CRITERIA local/guardrails → OUTPUT draft"
     )
-    assert view.status == "REVIEWING · NOT SENT"
+    assert view.status == "REVIEWING"
     assert view.accept_enabled
-    assert [option.label for option in view.items[0].options] == [
-        "Use recommendation · SEND_SUMMARY",
-        "Send as written",
-        "Do not send",
+    assert {item.priority for item in view.items} == {"REQUIRED"}
+    item = view.items[0]
+    assert item.title == "Source"
+    assert item.issue_presentation is not None
+    evidence = item.issue_presentation.evidence[0]
+    assert evidence.heading == "SEVER ASSESSMENT"
+    assert evidence.classification == "RECOMMENDED RESULT · SUMMARIZE"
+    assert [source.label for source in evidence.sources] == [
+        "SOURCE MEMORY",
+        "APPLICABLE CRITERION 1",
     ]
+    assert [block.heading for block in item.blocks] == [
+        "PROPOSED RESULT MEMORY"
+    ]
+    navigation = ResolutionNavigation(
+        selected_item_uid=item.uid,
+        expanded_item_uid=item.uid,
+    )
+    detail = "".join(
+        text
+        for _style, text in resolution_viewer_fragments(
+            view,
+            navigation,
+        )
+    )
+    ordered_headings = (
+        "CLASSIFICATION",
+        "SOURCE MEMORY · FROM local/personal-memory",
+        "WHY THIS TREATMENT",
+        "SEVER QUESTION",
+        "PROPOSED RESULT TREATMENTS",
+        "PROPOSED RESULT MEMORY",
+        "RESPONSE",
+    )
+    positions = [detail.index(heading) for heading in ordered_headings]
+    assert positions == sorted(positions)
+    report = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            review_and_apply=True,
+        )
+    )
+    assert "WHAT APPLIED" in report
+    assert "Access-related needs were condensed" in report
+    assert "Affected Source examples: “Source”" in report
+    assert "Main Criteria: “Criterion”" in report
+    assert "SOURCE MEMORIES · 1" not in report
+    assert "DISCLOSURE 1 ·" not in report
+    assert [option.label for option in view.items[0].options] == [
+        "Use recommendation · SUMMARIZE",
+        "Keep",
+        "Forget",
+    ]
+    assert [result.label for result in view.results] == ["SUMMARIZE"]
+
+
+def test_sever_workbench_can_change_save_location_before_apply(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _context(store, "local/personal-memory", "Source")
+    criteria = _context(store, "local/guardrails", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="draft",
+        provider_factory=lambda: SeverProvider(),
+    )
+    sessions = SeverSessionStore(store)
+    sessions.save(session, expected_digest=None)
+    actions = iter(
+        (
+            ResolutionWorkbenchAction(
+                kind="CHANGE_DESTINATION",
+                destination="task-3/severed",
+            ),
+            ResolutionWorkbenchAction(kind="CLOSE"),
+        )
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
+        lambda *args, **kwargs: next(actions),
+    )
+
+    changed = sever_command._run_workbench(store, session)
+
+    assert changed.output_name == "task-3/severed"
+    assert sessions.load(session.uid).output_name == "task-3/severed"
+
+
+def test_sever_report_lists_large_result_only_once_when_impact_is_present(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _context(store, "source", "A uniquely identifiable Source Memory")
+    criteria = _context(store, "criteria", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="result",
+        provider_factory=lambda: SeverProvider(),
+    )
+    view = SeverResolutionWorkbenchAdapter(session).view()
+    impact = ImpactController.from_resolution(
+        view,
+        title="IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED",
+        summary="The exact local result.",
+    )
+
+    report = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            review_and_apply=True,
+            impact_controller=impact,
+        )
+    )
+
+    assert "LOCAL RESULT DRAFT · SOURCE UNCHANGED" not in report
+    assert report.count("Needs step-free access at appointments.") == 1
+    assert "[SUMMARIZE]" in report
+    assert "[SUMMARIZE] [" in report
+    assert "RULE · Criterion" not in report
+    assert "WHY · The criterion requires necessity and minimization." not in report
+
+
+def test_legacy_share_oriented_tokens_load_as_neutral_sever_decisions(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _context(store, "source", "Source")
+    criteria = _context(store, "criteria", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="result",
+        provider_factory=lambda: SeverProvider(),
+    )
+    legacy = session.to_dict()
+    legacy["schema_version"] = 1
+    candidate = legacy["candidates"][0]
+    candidate["recommendation"] = "DO_NOT_SEND"
+    candidate["proposed_content"] = ""
+    candidate["selection"] = "EXCLUDE"
+
+    loaded = SeverSession.from_dict(legacy)
+
+    assert loaded.candidates[0].recommendation == "FORGET"
+    assert loaded.candidates[0].selection == "FORGET"
+    assert loaded.to_dict()["schema_version"] == SEVER_SCHEMA_VERSION
+
+
+def test_version_two_session_without_grounded_summary_or_exclusion_names_loads(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = _context(store, "source", "Source")
+    criteria = _context(store, "criteria", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="result",
+        provider_factory=lambda: SeverProvider(),
+    )
+    legacy = session.to_dict()
+    legacy["schema_version"] = 2
+    legacy.pop("applied_summary")
+    legacy["source"].pop("excluded_query_context_names")
+    legacy["criteria"].pop("excluded_query_context_names")
+
+    loaded = SeverSession.from_dict(legacy)
+
+    assert loaded.applied_summary is None
+    assert loaded.source.excluded_query_context_names == ()
+    assert loaded.criteria.excluded_query_context_names == ()
+    summary = SeverResolutionWorkbenchAdapter(loaded).view().report_items_summary
+    assert summary is not None
+    assert "Affected Source examples: “Source”" in summary.text
 
 
 def test_saved_sever_catalog_projects_common_picker_rows_and_reloads(
@@ -505,7 +783,7 @@ def test_saved_sever_catalog_projects_common_picker_rows_and_reloads(
     entry = catalog[0]
     assert entry.picker_entry.kind == "sever"
     assert entry.picker_entry.key == session.uid
-    assert entry.picker_entry.status == "REVIEWING · NOT SENT"
+    assert entry.picker_entry.status == "REVIEWING · SOURCE UNCHANGED"
     assert entry.picker_entry.reopen_argv == (
         "mem",
         "sever",
@@ -534,7 +812,7 @@ def test_shared_sever_picker_revalidates_the_selected_record(
     sessions.save(session, expected_digest=None)
 
     def change_then_select(entries, **kwargs):
-        changed = session.select(session.candidates[0].uid, "EXCLUDE")
+        changed = session.select(session.candidates[0].uid, "FORGET")
         sessions.save(changed, expected_digest=sever_record_digest(session))
         entry = entries[0]
         return SessionOpenReceipt(
@@ -605,7 +883,7 @@ def test_bare_sever_opens_a_selected_saved_session_without_provider_call(
 
     assert result.exit_code == 0, result.output
     assert f"Session · {session.uid}" in result.output
-    assert "REVIEWING · NOT SENT" in result.output
+    assert "REVIEWING · SOURCE UNCHANGED" in result.output
 
 
 def test_non_tty_sever_sessions_retains_plain_listing(

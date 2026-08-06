@@ -264,7 +264,7 @@ def test_query_timeout_cleans_up_temporary_directory():
         _runner=runner,
     )
 
-    with pytest.raises(QueryProviderError, match="timed out"):
+    with pytest.raises(QueryProviderError, match="timed out after 120 seconds"):
         provider.query("source", "text", "question")
 
     assert not Path(captured["cwd"]).exists()

@@ -215,8 +215,8 @@ app.command(
     "sever",
     help=(
         "Browse saved Sever work with no operands, or review one Source root "
-        "against one scoped Criteria root and create a local outbound draft; "
-        "never transmit it."
+        "against one scoped Criteria root and create a local result that "
+        "forgets selected content while leaving Source unchanged."
     ),
 )(sever.cmd)
 app.command(

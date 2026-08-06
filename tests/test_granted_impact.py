@@ -10,6 +10,7 @@ from typer.testing import CliRunner
 
 import memcommit.clipboard as clipboard
 import memcommit.ops as ops
+import memcommit.commands.meld as meld_command
 from memcommit.cli import app
 from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
 from memcommit.comparison_store import comparison_analysis_path
@@ -19,6 +20,10 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
 )
 from memcommit.commands.compare_sessions import comparison_session_entries
+from memcommit.commands.endpoint_setup_flows import (
+    MeldSetupReceipt,
+    _meld_source_catalog,
+)
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.derived_policy import analysis_retention, authorize_analysis_save
 from memcommit.granted_comparison_store import (
@@ -937,6 +942,11 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
         tmp_path,
         monkeypatch,
     )
+    source_names, _first, _second, annotations = _meld_source_catalog(active)
+    assert source.name in source_names
+    assert wiki.name in source_names
+    assert annotations[wiki.name] == "GRANTED · READ SOURCE"
+    assert "campus-wiki/construction-details" not in source_names
     calls = 0
 
     class Provider:
@@ -992,6 +1002,23 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     target = ops.init("participant-meld")
     active.save(target)
     active.set_current(target.name)
+    monkeypatch.setattr(
+        meld_command,
+        "choose_meld_setup",
+        lambda selected_store: (
+            MeldSetupReceipt(
+                "symmetric",
+                source.name,
+                wiki.name,
+                target.name,
+                create_target=False,
+            )
+            if selected_store is active
+            else pytest.fail("Meld setup received another store")
+        ),
+    )
+    meld_command._start_new_meld_from_picker(active)
+
     melded = runner.invoke(app, ["meld", source.name, wiki.name])
 
     assert melded.exit_code == 0, melded.output + melded.stderr

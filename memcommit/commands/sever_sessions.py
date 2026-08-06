@@ -67,10 +67,10 @@ def list_sever_session_catalog(
                 f"{session.source.root_name} × {session.criteria.root_name} "
                 f"→ {session.output_name}"
             ),
-            status=f"{session.state} · NOT SENT",
+            status=f"{session.state} · SOURCE UNCHANGED",
             subtitle=(
-                f"{len(session.candidates)} outbound "
-                f"{'candidate' if len(session.candidates) == 1 else 'candidates'}"
+                f"{len(session.candidates)} result "
+                f"{'decision' if len(session.candidates) == 1 else 'decisions'}"
             ),
             group=session.source.root_name,
             sort_timestamp=modified_at,
@@ -87,7 +87,7 @@ def list_sever_session_catalog(
                         if session.state == "APPLIED"
                         else "NOT CREATED"
                     ),
-                    "Delivery: NOT SENT",
+                    "Source: UNCHANGED",
                 )
             ),
             reopen_argv=("mem", "sever", "--resume", session.uid),

@@ -1,3 +1,4 @@
+import sys
 from typing import Annotated
 
 import typer
@@ -10,11 +11,71 @@ from memcommit.commands.granted_context import (
 )
 from memcommit.config import Config
 from memcommit.context import AutoCheckpoint, Context
+from memcommit.forget_resolution_adapter import ForgetResolutionWorkbenchAdapter
+from memcommit.forget_review import ForgetReview, ForgetSelection
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
+from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.semantic.llm import LLMClient, LLMError
 from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange, apply_changes
 from memcommit.store import MemoryStore
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _run_resolution_forget(
+    ctx: Context,
+    info: str,
+    llm: LLMClient,
+) -> list[ProposedChange]:
+    from memcommit.commands.resolution_workbench_shell import (
+        run_resolution_workbench_shell,
+    )
+
+    typer.secho(f"Consulting {llm.model!r}...", dim=True)
+    analysis, _history = ops.analyze_forget(ctx, info, llm)
+    if not analysis.decisions:
+        typer.echo("Nothing to apply.")
+        return []
+    review = ForgetReview.create(ctx, info, analysis)
+    navigation = ResolutionNavigation()
+    while True:
+        action = run_resolution_workbench_shell(
+            ForgetResolutionWorkbenchAdapter(review).view,
+            navigation=navigation,
+            terminal_label="Interactive Forget",
+            snapshot_hint=(
+                "Run 'mem forget INSTRUCTION' in a terminal to review the batch."
+            ),
+            review_and_apply=True,
+            split_viewer_items=True,
+        )
+        if action.kind == "CLOSE":
+            return []
+        if action.kind == "ACCEPT":
+            changes = review.changes()
+            apply_changes(ctx, changes)
+            return changes
+        if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
+            raise ValueError("Unsupported Forget workbench action.")
+        if action.comment.strip():
+            review = review.select(
+                action.item_uid,
+                "CUSTOM",
+                action.comment.strip(),
+            )
+            continue
+        suffix = (action.option_uid or "").rpartition(":")[2]
+        selection: ForgetSelection | None = {
+            "recommended": "RECOMMENDED",
+            "keep": "KEEP",
+            "delete": "DELETE",
+        }.get(suffix)  # type: ignore[assignment]
+        if selection is None:
+            raise ValueError("Unsupported Forget decision.")
+        review = review.select(action.item_uid, selection)
 
 
 def _required_permissions(changes: list[ProposedChange]) -> tuple[str, ...]:
@@ -52,6 +113,8 @@ def _run_interactive_forget(
     info: str,
     llm: LLMClient,
 ) -> list[ProposedChange]:
+    if _interactive_terminal():
+        return _run_resolution_forget(ctx, info, llm)
     typer.secho(f"Consulting {llm.model!r}...", dim=True)
     proposals, history = ops.forget(ctx, info, llm)
 

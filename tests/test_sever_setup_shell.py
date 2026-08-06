@@ -7,6 +7,7 @@ from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.sever_setup_shell import (
     SeverSetupReceipt,
+    _shared_local_output_name,
     choose_sever_setup,
 )
 
@@ -27,7 +28,7 @@ def test_three_pane_setup_stacks_roles_and_supplies_a_default_output() -> None:
     assert result == SeverSetupReceipt(
         source_name="personal-memory",
         criteria_name="public-guidance",
-        output_name="personal-memory/severed",
+        output_name="severed",
     )
 
 
@@ -98,22 +99,21 @@ def test_each_context_pane_has_an_independent_descendant_scope_toggle() -> None:
 
 
 def test_default_output_uses_a_fresh_suffix_when_the_first_name_exists() -> None:
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r\x1b[B\r\r")
-        result = choose_sever_setup(
-            (
-                "personal-memory",
-                "personal-memory/severed",
-                "public-guidance",
-            ),
-            current="personal-memory",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+    assert _shared_local_output_name(
+        "personal-memory/source",
+        "personal-memory/criteria",
+        local_names=("personal-memory",),
+        occupied_names=frozenset({"personal-memory/severed"}),
+    ) == "personal-memory/severed-2"
 
-    assert result is not None
-    assert result.output_name == "personal-memory/severed-2"
+
+def test_granted_peers_default_under_their_shared_local_ancestor() -> None:
+    assert _shared_local_output_name(
+        "task-3/remote/guidance",
+        "task-3/local/guardrails",
+        local_names=("task-1", "task-3", "task-3/local/guardrails"),
+        occupied_names=frozenset(),
+    ) == "task-3/severed"
 
 
 def test_left_and_right_reuse_switch_tree_navigation_for_nested_criteria() -> None:

@@ -29,6 +29,10 @@ class QueryProviderError(RuntimeError):
     """Safe, user-facing error from a query provider."""
 
 
+class QueryProviderTimeoutError(QueryProviderError):
+    """A bounded provider process exceeded its effective transport timeout."""
+
+
 class QueryProvider(Protocol):
     def query(self, source_name: str, source_content: str, question: str) -> str:
         """Answer a question using one opaque source."""
@@ -297,8 +301,9 @@ class CodexChatGPTProvider:
                     check=False,
                 )
         except subprocess.TimeoutExpired as e:
-            raise QueryProviderError(
-                f"The temporary Codex {operation} timed out."
+            raise QueryProviderTimeoutError(
+                f"The temporary Codex {operation} timed out after "
+                f"{self.timeout:g} seconds."
             ) from e
         except OSError as e:
             raise QueryProviderError(

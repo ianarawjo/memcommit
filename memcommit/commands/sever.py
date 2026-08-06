@@ -19,6 +19,7 @@ from memcommit.commands.session_picker import (
     SessionOpenReceipt,
     choose_session,
 )
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.sever_sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
@@ -26,13 +27,18 @@ from memcommit.commands.sever_sessions import (
 from memcommit.commands.switch import _granted_picker_state
 from memcommit.commands.sever_setup_shell import choose_sever_setup
 from memcommit.commands.tui_primitives import display_escape_text, safe_terminal_text
+from memcommit.command_attempts import annotate_sever_attempt
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef, QueryContextRef
 from memcommit.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.query_provider import QueryProviderError, connect_codex_chatgpt_provider
+from memcommit.query_provider import (
+    QueryProviderError,
+    QueryProviderTimeoutError,
+    connect_codex_chatgpt_provider,
+)
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.sever import (
     SeverApplication,
@@ -89,6 +95,7 @@ def _capture_binding(
             roots.append(descendant)
     contexts: list[tuple[str, str, str]] = []
     memories: list[SeverMemory] = []
+    excluded_query_context_names: list[str] = []
     seen_contexts: set[str] = set()
 
     def visit(context: Context) -> None:
@@ -106,6 +113,8 @@ def _capture_binding(
                     visit(item)
             elif isinstance(item, QueryContextRef):
                 # Query-only routes never become Sever frames or provider input.
+                if item.name not in excluded_query_context_names:
+                    excluded_query_context_names.append(item.name)
                 continue
             elif isinstance(item, MemoryRef):
                 raise SeverCommandError(
@@ -134,6 +143,7 @@ def _capture_binding(
             else None
         ),
         include_descendants=include_descendants,
+        excluded_query_context_names=tuple(excluded_query_context_names),
     )
 
 
@@ -177,21 +187,83 @@ def _start(
     authorize_derived_transfer(source_access, output_access)
     authorize_derived_transfer(criteria_access, output_access)
     authorize_analysis_save((source_access, criteria_access), retention="RETAINED")
-    provider = (provider_factory or connect_codex_chatgpt_provider)()
-    source = _capture_binding(
-        source_access,
-        include_descendants=source_descendants,
-    )
-    criteria = _capture_binding(
-        criteria_access,
-        include_descendants=criteria_descendants,
-    )
-    return analyze_sever(source, criteria, output_name, provider)
+    with CommandProgress(
+        "SEVER",
+        "freezing source and criteria",
+        total=3,
+    ) as progress:
+        source = _capture_binding(
+            source_access,
+            include_descendants=source_descendants,
+        )
+        criteria = _capture_binding(
+            criteria_access,
+            include_descendants=criteria_descendants,
+        )
+        annotate_sever_attempt(
+            source_name=source.root_name,
+            source_scope=(
+                "INCLUDE_DESCENDANTS"
+                if source.include_descendants
+                else "THIS_CONTEXT_ONLY"
+            ),
+            source_memory_count=len(source.memories),
+            criteria_name=criteria.root_name,
+            criteria_scope=(
+                "INCLUDE_DESCENDANTS"
+                if criteria.include_descendants
+                else "THIS_CONTEXT_ONLY"
+            ),
+            criteria_memory_count=len(criteria.memories),
+            output_name=output_name,
+            excluded_query_context_count=len(
+                set(source.excluded_query_context_names)
+                | set(criteria.excluded_query_context_names)
+            ),
+        )
+        progress.update("connecting provider", step=2)
+        provider = (provider_factory or connect_codex_chatgpt_provider)()
+        identity = getattr(provider, "identity", None)
+        provider_name = getattr(identity, "provider", None)
+        provider_timeout = getattr(provider, "timeout", None)
+        provider_details: dict[str, object] = {}
+        if isinstance(provider_name, str) and provider_name:
+            provider_details["provider"] = provider_name
+        if (
+            isinstance(provider_timeout, (int, float))
+            and not isinstance(provider_timeout, bool)
+            and provider_timeout > 0
+        ):
+            provider_details["provider_timeout_seconds"] = provider_timeout
+        if provider_details:
+            annotate_sever_attempt(**provider_details)
+        progress.update(
+            f"analyzing {len(source.memories)} source x "
+            f"{len(criteria.memories)} criteria",
+            step=3,
+        )
+        try:
+            return analyze_sever(source, criteria, output_name, provider)
+        except QueryProviderError as error:
+            annotate_sever_attempt(
+                failure_kind=(
+                    "TIMEOUT"
+                    if isinstance(error, QueryProviderTimeoutError)
+                    else "PROVIDER"
+                )
+            )
+            raise SeverCommandError(
+                f"{error} Frozen frame: {len(source.memories)} Source Memories x "
+                f"{len(criteria.memories)} Criteria Memories."
+            ) from error
+        except SeverProviderError:
+            annotate_sever_attempt(failure_kind="VALIDATION")
+            raise
 
 
 def render_sever(session: SeverSession) -> str:
     lines = [
-        f"SEVER · {session.state} · NOT SENT",
+        f"SEVER · {session.state} · SOURCE UNCHANGED",
         f"SOURCE · {safe_terminal_text(session.source.root_name)} · "
         f"{'INCLUDE DESCENDANTS' if session.source.include_descendants else 'THIS CONTEXT ONLY'} · "
         f"{len(session.source.memories)} Memories",
@@ -207,10 +279,10 @@ def render_sever(session: SeverSession) -> str:
     for index, candidate in enumerate(session.candidates, 1):
         source = session.source_memory(candidate.source_memory_uid)
         label = candidate.selection if candidate.selection != "RECOMMENDED" else candidate.recommendation
-        outbound = (
-            "(excluded)"
-            if candidate.selection == "EXCLUDE" or (
-                candidate.selection == "RECOMMENDED" and candidate.recommendation == "DO_NOT_SEND"
+        result = (
+            "(forgotten)"
+            if candidate.selection == "FORGET" or (
+                candidate.selection == "RECOMMENDED" and candidate.recommendation == "FORGET"
             )
             else candidate.custom_content
             if candidate.selection == "CUSTOM"
@@ -222,16 +294,28 @@ def render_sever(session: SeverSession) -> str:
             [
                 f"  {index}. [{candidate.uid[:8]}] {label}",
                 f"     SOURCE · {safe_terminal_text(source.content)}",
-                f"     OUTBOUND · {safe_terminal_text(outbound)}",
+                f"     RESULT · {safe_terminal_text(result)}",
                 f"     WHY · {safe_terminal_text(candidate.rationale)}",
             ]
         )
-    lines.extend(
-        [
-            "",
-            "No query-only Context was opened. No draft was sent to a recipient.",
-        ]
+    excluded_query_names = tuple(
+        dict.fromkeys(
+            (
+                *session.source.excluded_query_context_names,
+                *session.criteria.excluded_query_context_names,
+            )
+        )
     )
+    if excluded_query_names:
+        lines.extend(
+            [
+                "",
+                "NOT INCLUDED · "
+                + ", ".join(safe_terminal_text(name) for name in excluded_query_names),
+                "These query-only Contexts do not grant readable Memory access.",
+            ]
+        )
+    lines.extend(["", "The Source Context is unchanged."])
     return "\n".join(lines)
 
 
@@ -245,7 +329,7 @@ def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
     output = Context(uid=str(uuid.uuid4()), name=session.output_name)
     result_uids: list[str] = []
     sources: list[dict[str, str]] = []
-    for candidate, source, content in session.outbound():
+    for candidate, source, content in session.results():
         uid = _result_uid(session.uid, source.uid, content)
         output.add(Memory(uid=uid, content=content))
         result_uids.append(uid)
@@ -290,9 +374,9 @@ def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
             }
         },
         description=(
-            f"Created local Sever draft '{session.output_name}' from "
+            f"Created local Sever result '{session.output_name}' from "
             f"'{session.source.root_name}' under '{session.criteria.root_name}'; "
-            "no recipient transmission"
+            "source unchanged"
         ),
     )
     if deduplicated:
@@ -360,7 +444,7 @@ def _choose_saved_sever_session(
     by_key = {entry.picker_entry.key: entry for entry in catalog}
     receipt = choose_session(
         tuple(entry.picker_entry for entry in catalog),
-        title="MEM SEVER · SAVED SESSIONS · NOT SENT",
+        title="MEM SEVER · SAVED SESSIONS",
         new_receipt=SessionNewReceipt(kind="sever", argv=("mem", "sever")),
     )
     if receipt is None:
@@ -385,13 +469,21 @@ def _run_workbench(
     *,
     allow_apply: bool = True,
 ) -> SeverSession:
-    from memcommit.commands.resolution_workbench_shell import run_resolution_workbench_shell
+    from memcommit.commands.resolution_workbench_shell import (
+        ResolutionDestination,
+        run_resolution_workbench_shell,
+    )
     from memcommit.impact_controller import ImpactController
     from memcommit.review_report_adapters import sever_review_report
 
     sessions = SeverSessionStore(store)
     navigation = ResolutionNavigation()
     while session.state == "REVIEWING":
+        def validate_destination(name: str) -> None:
+            validate_context_name(name)
+            if name != session.output_name and store.context_exists(name):
+                raise ValueError(f"Output Context '{name}' already exists.")
+
         adapter = SeverResolutionWorkbenchAdapter(session)
         review_view = None
         if not allow_apply:
@@ -400,10 +492,10 @@ def _run_workbench(
                 raise SeverCommandError("Sever Review report has no interactive view.")
         impact_controller = ImpactController.from_resolution(
             review_view if review_view is not None else adapter.view,
-            title="IMPACT · LOCAL OUTBOUND DRAFT · NOT SENT",
+            title="IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED",
             summary=(
-                "This is the exact local disclosure draft that Apply would "
-                "materialize. It does not send or publish anything."
+                "This is the exact local result that Apply would materialize. "
+                "The Source Context remains unchanged."
             ),
         )
         action = run_resolution_workbench_shell(
@@ -414,10 +506,29 @@ def _run_workbench(
             review_and_apply=allow_apply,
             split_viewer_items=True,
             impact_controller=None if not allow_apply else impact_controller,
+            destination=(
+                ResolutionDestination(
+                    value=session.output_name,
+                    validate=validate_destination,
+                )
+                if allow_apply
+                else None
+            ),
         )
         if action.kind == "CLOSE":
             break
         expected = sever_record_digest(session)
+        if action.kind == "CHANGE_DESTINATION":
+            if not allow_apply or action.destination is None:
+                raise SeverCommandError(
+                    "Review cannot change a Sever output location."
+                )
+            validate_destination(action.destination)
+            changed = session.with_output_name(action.destination)
+            if changed is not session:
+                sessions.save(changed, expected_digest=expected)
+                session = changed
+            continue
         if action.kind == "ACCEPT":
             if not allow_apply:
                 raise SeverCommandError("Review cannot apply a Sever output.")
@@ -434,7 +545,7 @@ def _run_workbench(
             selection: SeverSelection = {
                 "recommended": "RECOMMENDED",
                 "as-written": "AS_WRITTEN",
-                "exclude": "EXCLUDE",
+            "forget": "FORGET",
             }.get(suffix)  # type: ignore[assignment]
             if selection is None:
                 raise SeverCommandError("Unsupported Sever decision.")
@@ -451,14 +562,14 @@ def run_sever_review(store: MemoryStore, session: SeverSession) -> SeverSession:
 def cmd(
     source_name: Annotated[Optional[str], typer.Option("--source", help="Existing ordinary Source Context; defaults to current only in explicit flag mode")] = None,
     criteria_name: Annotated[Optional[str], typer.Option("--criteria", "--against", help="One readable Criteria root Context; query-only views are rejected")] = None,
-    save_as: Annotated[Optional[str], typer.Option("--save-as", help="New local output Context name; never overwrites an existing Context")] = None,
+    save_as: Annotated[Optional[str], typer.Option("--save-as", help="New local Result Context name; never overwrites an existing Context")] = None,
     source_descendants: Annotated[bool, typer.Option("--source-descendants/--source-only", help="Include the Source root's readable descendant Contexts")] = True,
     criteria_descendants: Annotated[bool, typer.Option("--criteria-descendants/--criteria-only", help="Include the Criteria root's readable descendant Contexts")] = True,
     resume: Annotated[Optional[str], typer.Option("--resume", help="Resume one saved Sever session uid")] = None,
     candidate: Annotated[Optional[str], typer.Option("--candidate", help="Candidate uid or unique prefix for a scripted decision")] = None,
-    choice: Annotated[Optional[str], typer.Option("--choice", help="recommended, as-written, exclude, or custom")] = None,
-    comment: Annotated[Optional[str], typer.Option("--comment", help="Exact custom outbound content when --choice custom")] = None,
-    accept: Annotated[bool, typer.Option("--accept", help="Create the reviewed local output Context; sends nothing")] = False,
+    choice: Annotated[Optional[str], typer.Option("--choice", help="recommended, as-written, forget, or custom")] = None,
+    comment: Annotated[Optional[str], typer.Option("--comment", help="Exact custom result content when --choice custom")] = None,
+    accept: Annotated[bool, typer.Option("--accept", help="Create the reviewed local result Context; Source remains unchanged")] = False,
     sessions_flag: Annotated[bool, typer.Option("--sessions", help="Browse saved Sever sessions or start a new one")] = False,
 ) -> None:
     store = MemoryStore()
@@ -562,13 +673,13 @@ def cmd(
             selections: dict[str, SeverSelection] = {
                 "recommended": "RECOMMENDED",
                 "as-written": "AS_WRITTEN",
-                "exclude": "EXCLUDE",
+                "forget": "FORGET",
                 "custom": "CUSTOM",
             }
             if normalized not in selections:
-                raise SeverCommandError("--choice must be recommended, as-written, exclude, or custom.")
+                raise SeverCommandError("--choice must be recommended, as-written, forget, or custom.")
             if normalized == "custom" and (comment is None or not comment.strip()):
-                raise SeverCommandError("--choice custom requires --comment with exact outbound content.")
+                raise SeverCommandError("--choice custom requires --comment with exact result content.")
             if normalized != "custom" and comment is not None:
                 raise SeverCommandError("--comment is valid only with --choice custom.")
             expected = sever_record_digest(session)

@@ -1,210 +1,212 @@
 # `mem sever` design rationale
 
-## Problem
+## Problem and meaning
 
-Task 3 needs a local disclosure-review operation between finding personal
-Memories and any later transmission. Query-only healthcare Q&A cannot supply
-that operation's semantic criteria: `QUERY + SESSION_LOG` permits questions and
-retention of visible Q/A, but does not grant `READ`, `DERIVE`, or `COMBINE`.
-Treating the Q&A view as an ordinary Sever input would silently widen its
-authority and could expose personal source text to the wrong provider.
+`mem sever` creates a new local Context that deliberately forgets selected
+content from an existing Source. It is a content transformation, not a Share
+preparation step. It has no recipient, destination, delivery, consent, or
+transmission semantics. The Source is immutable throughout the operation.
 
-## Command and interaction contract
-
-One Sever pass has exactly three roles:
+One pass has three roles:
 
 ```text
 SOURCE ordinary Context × one CRITERIA ordinary Context
-    → new local OUTPUT Context
+    → new local RESULT Context
 ```
+
+The whole Source frame and whole Criteria frame use the shared
+[selective-curation batch contract](selective-curation-design-rationale.md).
+Inference is one contextual provider turn, while the returned artifact retains
+exactly one independently reviewable decision per Source Memory. Sever keeps
+its own durable schema, authority checks, and require-new materializer.
 
 The explicit form is:
 
 ```text
-mem sever --source SOURCE --criteria CRITERIA --save-as OUTPUT
+mem sever --source SOURCE --criteria CRITERIA --save-as RESULT
 # optional: --source-only / --source-descendants
 #           --criteria-only / --criteria-descendants
 ```
 
-`--against` is an alias for `--criteria`. `--to` is deliberately absent because
-Sever does not address or transmit to a recipient; a future `mem share --to`
-owns that separate consent boundary. With no operands in a TTY, Sever opens one
-simultaneous three-pane setup view: `SOURCE`, `CRITERIA`, and `OUTPUT` are
-stacked vertically in operation order. Output is a framed, directly editable
-field, so its default name and edit boundary remain inside the OUTPUT box. The
-first two panes expose the same
-frozen ordinary Context catalog, while query-only rows remain visible and
-unavailable. Both trees begin with the current Context selected and reuse the
-`mem switch` namespace behavior: only the current ancestry begins expanded,
-`Left`/`Right` collapse or expand one complete descendant depth at a time, and
-`A` temporarily expands the whole tree. The former `ROOTS` summary above each
-tree is replaced by an
-independent `THIS CONTEXT ONLY / INCLUDE DESCENDANTS` scope row. `Up` from the
-first visible Context enters that row, `Down` returns to the tree, and
-`Left`/`Right` select exact/subtree scope. The default includes descendants to
-preserve Sever's earlier recursive behavior; exact-only is the
-disclosure-minimizing alternative. Source and Criteria must be made distinct
-before continuing.
-Output is not another selection pane. It uses the same bottom-composer shape as
-interactive Find and begins with a fresh directly editable name under the
-current local Context, such as `local/personal-memory/severed`, adding a numeric
-suffix when necessary. It never offers an existing Context as an overwrite
-target. `Tab` and `Shift-Tab` move between the two trees and Output field,
-`Enter`/`Space` select Source or Criteria, and `Enter` in Output continues only
-after all three roles are valid.
-The resulting proposal then opens the shared Resolution Workbench. The
-workbench lets a person retain the recommendation, use exact source text,
-exclude an item, or submit exact custom outbound text. `--resume`,
-`--candidate`, `--choice`, and `--accept` expose the same saved-session
-transitions for recovery, scripts, and exact command review.
+`--against` aliases `--criteria`. `--to` is absent because Sever names no
+destination. `mem share` is an independent operation that can separately
+review any eligible ordinary Context.
 
-Sever's Source and Criteria panes use two independent instances of the same
-terminal-independent `ContextTreeState` that backs the `mem switch` namespace
-picker. Sever retains the chosen-role markers, descendant-scope controls, and
-new Output editor; the common tree owns only cursor and namespace navigation.
+## Semantic contract
 
-Bare `mem sever` now opens the shared saved-session launcher in a terminal.
-Interactive `mem sever --sessions` opens the same launcher, while non-TTY
-`--sessions` retains the plain stable listing. Selecting `N` enters the
-Source–Criteria–Output setup. Selecting a saved row reloads the exact record and
-compares its digest before opening the existing provider-free Resolution
-Workbench. The public route hint is presentation only and is never executed.
+The provider returns exactly one decision for every Source Memory:
 
-The initial provider turn is analysis only. It creates a retained Sever session
-and no output Context. `--accept` creates a require-new local Context and an
-automatic checkpoint. The source and criteria remain unchanged, and every
-screen and snapshot says `NOT SENT`.
+- `KEEP_AS_WRITTEN`: retain the exact source text;
+- `KEEP_REDACTED`: retain a redacted standalone Memory;
+- `KEEP_SUMMARY`: retain a standalone summary;
+- `KEEP_PREFERENCE_OR_POLICY`: retain a condition-preserving preference or
+  policy; or
+- `FORGET`: omit the Memory from the Result.
 
-Sever treats its Source as already selected for the current review, normally by
-an earlier `find` or an explicit Context choice. Its semantic job is local
-minimization, de-identification, condition preservation, and exclusion—not
-recipient selection or delivery approval. Recipient identity, authority,
-channel, approval, retention, and downstream-use Criteria remain visible as
-deferred Share preconditions, but missing delivery facts alone must not turn
-every Source Memory into `DO_NOT_SEND`. This phase distinction lets one
-guardrail tree remain useful across preparation and delivery without treating a
-locally saved draft as a transmission attempt.
+The provider may use only the supplied Source and the one Criteria frame. It
+must not infer an audience, destination, or later use. Any retained rewrite
+must preserve material conditions, exceptions, time bounds, and uncertainty
+without inventing facts. `KEEP_AS_WRITTEN` is checked byte-for-byte and
+`FORGET` must return empty result content. Criteria citations are bounded to
+the supplied opaque aliases and checked for uniqueness locally.
 
-## Context and capability model
+Older saved sessions may contain `SEND_*`, `DO_NOT_SEND`, or `EXCLUDE`
+compatibility tokens. Loading maps those values to the neutral version-2
+decision vocabulary; new provider turns and newly serialized records never
+emit the legacy Share-oriented terms.
 
-Both Source and Criteria must resolve through ordinary `READ` access. Query-only
-rows remain visible but unselectable in the Context picker and cannot enter the
-Sever payload. An `INCLUDE DESCENDANTS` frame freezes both embedded children
-and every readable ordinary lexical descendant below the selected root. `THIS
-CONTEXT ONLY` loads only directly owned items. Both projections skip
-`QueryContextRef` records and fail on live `MemoryRef` records rather than
-copying content through a pointer.
+## Setup and review
 
-One Criteria root is accepted, with its exact/subtree scope recorded
-separately. This makes the provider frame, authority intersection, provenance,
-and user-visible rationale unambiguous.
-When two criteria deserve equal consideration, the person may first create one
-reviewed criteria Context with `mem meld`. Running Sever twice is also allowed,
-but it is intentionally order-dependent: a later pass sees the earlier output
-and cannot reconsider text already excluded by that pass.
+With no operands in a TTY, Sever opens the shared saved-session launcher.
+Starting a new session uses the three-pane Source–Criteria–Result setup. Source
+and Criteria reuse the ordinary Context namespace tree and independently select
+`THIS CONTEXT ONLY` or `INCLUDE DESCENDANTS`. Query-only rows remain visible
+but unavailable. Result is a fresh editable Context name and never overwrites
+an existing Context. Its initial suggestion is derived from Source and
+Criteria, not from the first local catalog row: Mem finds their deepest shared
+path that is also an ordinary local Context and proposes `ANCESTOR/severed`.
+If they share no local ancestor, it proposes the top-level `severed`; occupied
+suggestions receive a numeric suffix. This keeps a granted
+`task-3/remote/...` Source and local `task-3/local/...` Criteria oriented under
+`task-3/severed` without pretending the granted path is locally writable.
 
-For granted inputs, Sever requires the existing derived-work capabilities:
+The provider turn creates only a retained review session. The shared Resolution
+Workbench then shows:
 
-- `READ` to open the ordinary projection;
-- `DERIVE + COMBINE` when it is analyzed with the other frame;
-- `EXPORT` because the result leaves the authority resource for a local output;
-  and
-- `SAVE_ANALYSIS` because the session retains exact source and criteria
-  snapshots.
+```text
+classification → Source/Criteria evidence → rationale → Sever question
+→ result choices → proposed Result Memory → response
+```
 
-Task 3 therefore splits government material at the authority boundary:
+Creating that session uses the shared transient TTY progress line. It reports
+only host-observable stages—freezing Source and Criteria, connecting the
+provider, and analyzing the complete frames—plus the frozen Source and
+Criteria Memory counts and elapsed time; it does not invent provider-side
+percentages. A provider failure repeats those counts and the effective timeout
+so an unsaved failed attempt remains diagnosable without retaining its Memory
+content. Because the selective-curation invariant requires one complete Source
+× Criteria turn, Sever uses the configured semantic timeout exactly. It does
+not silently fall back to the Codex adapter's shorter transport default or
+extend the wait beyond the timeout shown by `mem provider status`.
 
-- `remote/government/healthcare-agent/info-request/official-guidance` is an ordinary 12-Memory published
-  Context with read, derivation, combination, export, and analysis-retention
-  permission; and
-- `remote/government/healthcare-agent/info-request/questions-and-answers` remains a 75-Memory query-only view with
-  only `QUERY + SESSION_LOG`.
+The Profile command-attempt ledger freezes the selected Source/Criteria/Result
+names, scopes, ordinary Memory counts, provider, and effective timeout before
+inference. A timeout or invalid response is therefore inspectable later with
+`mem log --operations` even though no valid Sever review session was created.
+This attempt evidence contains no Memory text, candidate output, rationale, or
+query-only Context name.
 
-The public set is curated before publication. Sever never copies or promotes a
-query-only answer or concealed Memory into public guidance.
+Every Source Memory is a REQUIRED review item because each needs an explicit
+keep, rewrite, or forget treatment. The report-level `WHAT APPLIED` paragraph
+explains the main material transformation or preservation pattern rather than
+leading with classification totals. Like Atomize's `WHAT CHANGED`, the text is
+a concise provider-authored paragraph grounded by bounded references. Sever
+then names up to three representative affected Source Memories and the three
+most frequently cited Criteria Memories; exact Source-to-Criteria mappings and
+rationale remain in Items. Version-2 sessions without the grounded paragraph
+fall back to the same locally derived affected-Source and influential-Criteria
+view rather than being reanalyzed.
 
-## Persistence and freshness
+When Impact is present it is the only full per-Memory result list; the report
+does not print the same potentially large list above it. Impact shows the exact
+local Result that Apply would create and explicitly says the Source remains
+unchanged. Compact display labels (`KEEP`, `REDACT`, `SUMMARIZE`, `REFRAME`,
+and `FORGET`) keep large lists scannable while persisted/provider decision
+tokens remain unchanged.
 
-A Sever session retains:
+Each Sever Impact row follows the `mem ls` hanging layout: `[TREATMENT]`, the
+short UID, and result content begin on one line, with continuation text aligned
+to the content column and no blank separator between rows. The treatment field
+uses the widest visible treatment as its display width, so every UID and result
+begins in the same column. Exact cited Criteria
+Memories and candidate rationale are both hidden in the resting list. Every
+Impact Memory is a semantic navigation stop, and Enter toggles that one
+Memory's indented `RULE` and `WHY` detail without changing the review or
+leaving the report.
+The marker and treatment tag use distinct semantic colors for `KEEP`, `REDACT`,
+`SUMMARIZE`, `REFRAME`, `FORGET`, and `CUSTOM`; the rest of the Memory remains
+under the common Memory-object color contract while resting. When focused, one
+Impact row—including UID, content, Rule, and Why—follows its treatment color
+instead of the shared blue focus; this exception is scoped to Impact. Impact
+and Items both reflow to the live Viewer/Items frame width instead of retaining
+a report-specific fixed column count.
 
-- complete Source and Criteria recursive Memory frames;
-- every direct Context name, UID, and canonical record digest in each frame;
-- the exact granted binding when a frame crosses Profiles;
-- one proposal per Source Memory;
-- the person's current selection and exact custom content; and
-- an application receipt after output creation.
+Scripted review uses `--choice recommended`, `as-written`, `forget`, or
+`custom`. Custom content is exact Result Memory text. `--accept` creates the
+new local Result Context; it does not edit or delete anything in Source.
 
-Session writes use a record-digest compare-and-swap. Output publication uses the
-ordinary require-new Context boundary. Every local contributing Context is
-rechecked under the output creation lock set. Granted frames are retained only
-after `SAVE_ANALYSIS` authorization, so later materialization uses the reviewed
-snapshot instead of turning provider latency into an authority lease.
+## Context and authority boundaries
 
-The output checkpoint records the Sever session identity, pre-application
-digest, Source, Criteria, output name, result-to-source mapping, and selection.
-Local rationale and excluded content stay in the Sever session rather than
-becoming ordinary outbound Memories.
+Both Source and Criteria resolve through ordinary `READ` access. An
+`INCLUDE DESCENDANTS` frame freezes embedded ordinary children and readable
+ordinary lexical descendants. `THIS CONTEXT ONLY` loads direct items only.
+Both projections skip `QueryContextRef` and fail on live `MemoryRef` rather
+than copying through a pointer.
 
-## Embedded Impact boundary
+The session retains only the public names of query-only Context references
+encountered and excluded while capturing either frame. The report says nothing
+about query-only access when that set is empty. When it is nonempty, it names
+those Contexts once and explains that query-only authority does not grant
+readable Memory access; their routing metadata and hidden content never enter
+provider input.
 
-The shared Sever workbench projects the exact reviewed outbound draft through
-the reusable `ImpactController` immediately above Apply. The card remains
-`LOCAL OUTBOUND DRAFT · NOT SENT`; it neither transmits content nor creates the
-output Context. It is bound to the current Sever UID and digest, so a stale
-projection cannot be shown as the effect of a newer review revision. Apply
-continues through Sever's existing output validation, checkpoint, and session
-receipt boundary.
+One Criteria root keeps precedence, provenance, and authority intersection
+explicit. When multiple criteria need equal authority, they can first be
+reviewed into one Criteria Context. Running Sever repeatedly is allowed and is
+intentionally order-dependent because a later pass cannot reconsider content
+forgotten by an earlier Result.
 
-`mem review sever` reuses the same candidate evidence and outbound-draft
-projection with Accept removed. Item decisions and comments remain durable
-Sever review state, but Review cannot create the output Context or send it.
+Granted inputs retain the existing derived-work checks: `READ`, the required
+`DERIVE`/`COMBINE` authority, transfer authority into the local Result, and
+`SAVE_ANALYSIS` for retained exact frames. Query-only authority never becomes
+ordinary Memory input.
 
-## Provider invariants
+## Persistence and application
 
-The provider receives only opaque aliases, exact Source content, and exactly one
-ordinary Criteria frame. It must return one candidate for every Source Memory
-exactly once. `SEND_AS_WRITTEN` must be byte-for-byte equal to the source;
-`DO_NOT_SEND` must have empty outbound content; every other disposition must
-have standalone nonempty content. Criteria citations must use supplied aliases.
-Malformed, incomplete, duplicate, or invented identifiers fail closed.
-The structured-output schema bounds citations to those aliases, while citation
-uniqueness is checked after decoding because the Codex response-schema subset
-does not accept JSON Schema's `uniqueItems` keyword.
+A version-3 Sever session retains exact Source and Criteria frames, Context identities
+and digests, granted bindings, one decision per Source Memory, current manual
+selections, exact custom content, the grounded applied-summary references,
+names of excluded query-only Context references, and an application receipt.
+Writes use a record-digest compare-and-swap. Versions 1 and 2 remain readable;
+new serialization emits version 3.
 
-## Alternatives considered
+The report shows a focusable `SAVE LOCATION` card immediately before the final
+Apply card. Enter opens the shared inline direct editor. Saving a new exact
+name updates the REVIEWING session under its record-digest CAS, then returns to
+the same workbench; it neither reruns the provider nor creates a Context.
+Existing names and invalid ordinary Context identifiers fail before the session
+changes. Review-only surfaces omit this control.
 
-### Use query-only Q&A as guidance input
+Apply revalidates local contributing Contexts under the output creation lock,
+creates one require-new ordinary Context, and records a `sever` checkpoint with
+the session, Source, Criteria, Result, and source-to-result mapping. Forgotten
+content and rationale remain only in the Sever session. The Source record and
+its Memories are never mutated.
 
-Rejected because `SESSION_LOG` permits transcript retention and replay inside
-the query operation, not general derivative combination. A human may consult
-Q&A separately, while machine-usable guidance must be published with explicit
-ordinary derived-work authority.
+Command Undo removes that exact Result Context and returns the saved session to
+`REVIEWING`. Because the ordinary Context must be absent while still supporting
+Redo, its record and complete checkpoint directory move to a private command
+archive. Redo fails closed if the output name was reused or the review changed;
+otherwise it restores the same Context UID and application receipt and appends
+a `redo` checkpoint after the retained `sever` and `undo` entries. Session-save
+failure rolls the Context move and provisional checkpoint back together.
 
-### Accept several Criteria Contexts directly
+`mem review sever` reuses the same evidence and proposed Result with Apply
+removed. It cannot create the Result Context.
 
-Rejected for the initial operation because provider precedence and authority
-intersection would be hidden inside Sever. Meld already provides an explicit
-place to review how multiple criteria relate before producing one criterion.
+## Alternatives and limitations
 
-### Make `--to` name the Q&A view
-
-Rejected because it resembles the actual recipient spelling of a transmission
-command. Sever has no recipient and uses `--criteria`; later sharing retains
-`--to` for the receiving boundary.
-
-### Delete or mutate Source Memories
-
-Rejected. “Sever” means separating a reviewed disclosure artifact from its
-private source, not erasing that source. Removal remains an independent command.
-
-## Current limitations
-
-- The output checkpoint retains source mapping, but `mem trace` and
-  `mem rationale` do not yet render Sever-specific lineage as a dedicated
-  presentation.
-- A crash after output creation but before the session application receipt is
-  saved leaves an inspectable output Context; automatic receipt recovery is not
-  yet implemented.
-- Sever itself never sends the reviewed draft. The separate initial
-  `mem share` implementation accepts only an unchanged applied Sever output
-  and delivers its ordinary Memories through a grant-backed endpoint.
+- Mutating or deleting Source was rejected: “forget” describes the derived
+  Result's memory boundary, while Source preservation keeps review and recovery
+  possible.
+- Treating query-only answers as Criteria was rejected because query authority
+  does not imply ordinary read, derivation, or retained-analysis authority.
+- Coupling Sever to Share was rejected. Share owns its own source snapshot,
+  endpoint, preview, approval, digest, and delivery checks.
+- `mem trace` and `mem rationale` do not yet render a dedicated Sever lineage
+  view.
+- A crash after Result creation but before saving the application receipt can
+  leave an inspectable Result Context; automatic receipt recovery remains
+  future work.
+- Sever Undo/Redo has exception rollback across Context and session writes, but
+  a process or machine crash between its file moves is not journal-recovered.

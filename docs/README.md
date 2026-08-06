@@ -208,6 +208,10 @@ considered sufficient design history.
 
 ## Disclosure and delivery contract
 
+- [`selective-curation-design-rationale.md`](selective-curation-design-rationale.md)
+  defines the common whole-frame keep/transform/drop analysis and Resolution
+  report used by Forget and Sever while keeping their mutation, grant, and
+  materialization boundaries separate.
 - [`mem-sever-design-rationale.md`](mem-sever-design-rationale.md) defines the
   local disclosure-review artifact and its strict separation from sending.
 - [`mem-share-design-rationale.md`](mem-share-design-rationale.md) defines the

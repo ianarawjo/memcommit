@@ -113,6 +113,15 @@ it does not observe later edits to global config during the process. There is
 no automatic fallback. Codex remains the default when no provider is selected,
 preserving the earlier command behavior.
 
+The timeout printed by `mem provider status` is also the transport timeout
+passed to every configured adapter, including the temporary Codex process.
+Leaving Codex on its adapter's historical 120-second constructor default while
+status reported 600 seconds was rejected: it made aggregate failures look like
+model latency and made the displayed configuration false. Operation-local
+overrides remain possible only where a documented aggregate contract requires
+one; ordinary Sever uses the configured value and reports the effective limit
+and frozen frame counts when a provider call fails.
+
 During rollout the historical command connector name remains a compatibility
 seam because tests and downstream experiments patch it. Its implementation now
 performs provider selection. Query-only routing bypasses this seam and uses its

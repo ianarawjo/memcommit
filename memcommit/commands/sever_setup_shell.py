@@ -48,6 +48,40 @@ class SeverSetupReceipt:
     criteria_descendants: bool = True
 
 
+def _shared_local_output_name(
+    source_name: str,
+    criteria_name: str,
+    *,
+    local_names: Sequence[str],
+    occupied_names: AbstractSet[str],
+) -> str:
+    """Choose a fresh result under the deepest shared ordinary ancestor."""
+
+    source_parts = source_name.split("/")
+    criteria_parts = criteria_name.split("/")
+    shared_parts: list[str] = []
+    for source_part, criteria_part in zip(source_parts, criteria_parts):
+        if source_part != criteria_part:
+            break
+        shared_parts.append(source_part)
+    local = frozenset(local_names)
+    output_base = next(
+        (
+            "/".join(shared_parts[:depth])
+            for depth in range(len(shared_parts), 0, -1)
+            if "/".join(shared_parts[:depth]) in local
+        ),
+        None,
+    )
+    output_stem = f"{output_base}/severed" if output_base else "severed"
+    default_output = output_stem
+    suffix = 2
+    while default_output in occupied_names:
+        default_output = f"{output_stem}-{suffix}"
+        suffix += 1
+    return default_output
+
+
 def choose_sever_setup(
     local_names: Sequence[str],
     *,
@@ -112,13 +146,13 @@ def choose_sever_setup(
         "SOURCE": False,
         "CRITERIA": False,
     }
-    output_base = current if current in local else local[0]
-    output_stem = f"{output_base}/severed"
-    default_output = output_stem
-    suffix = 2
-    while default_output in catalog:
-        default_output = f"{output_stem}-{suffix}"
-        suffix += 1
+    default_output = _shared_local_output_name(
+        selected["SOURCE"],
+        selected["CRITERIA"],
+        local_names=local,
+        occupied_names=frozenset(catalog),
+    )
+    suggested_output = {"value": default_output}
 
     error_message = {"value": ""}
     bindings = KeyBindings()
@@ -231,7 +265,7 @@ def choose_sever_setup(
 
     def render_header() -> str:
         return (
-            " MEM SEVER · SETUP · NOT SENT\n "
+            " MEM SEVER · SETUP · SOURCE UNCHANGED\n "
             f"SOURCE {display_escape_text(selected['SOURCE'])} "
             f"({'SUBTREE' if scope_choice['SOURCE'].selected_uid == 'SUBTREE' else 'THIS ONLY'}) × "
             f"CRITERIA {display_escape_text(selected['CRITERIA'])} "
@@ -388,6 +422,7 @@ def choose_sever_setup(
             )
             return
         selected[role] = name
+        refresh_suggested_output()
         error_message["value"] = ""
         if role == "SOURCE":
             app.layout.focus(criteria_control)
@@ -430,6 +465,21 @@ def choose_sever_setup(
                 ),
             )
         )
+
+    def refresh_suggested_output() -> None:
+        """Follow Source/Criteria until the person edits the proposed name."""
+
+        previous = suggested_output["value"]
+        suggested = _shared_local_output_name(
+            selected["SOURCE"],
+            selected["CRITERIA"],
+            local_names=local,
+            occupied_names=frozenset(catalog),
+        )
+        suggested_output["value"] = suggested
+        if output_editor.text == previous:
+            output_editor.text = suggested
+            output_editor.buffer.cursor_position = len(suggested)
 
     @bindings.add("f", filter=tree_focus, eager=True)
     @bindings.add("F", filter=tree_focus, eager=True)

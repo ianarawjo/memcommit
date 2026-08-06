@@ -9,6 +9,12 @@ import pytest
 import memcommit.store as store_module
 
 
+@pytest.fixture(autouse=True)
+def disable_real_command_attempt_log(monkeypatch):
+    """Keep ordinary CliRunner tests from publishing host audit records."""
+    monkeypatch.setenv("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG", "1")
+
+
 @pytest.fixture()
 def isolated_store(tmp_path, monkeypatch):
     """Redirect MemoryStore to a fresh temporary directory for each test."""

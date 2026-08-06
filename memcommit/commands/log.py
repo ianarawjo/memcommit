@@ -5,13 +5,19 @@ from typing import Annotated, Any, Optional
 
 import typer
 
+from memcommit.command_attempts import (
+    CommandAttempt,
+    CommandAttemptError,
+    CommandAttemptLedger,
+    current_command_attempt_uid,
+)
 from memcommit.commands.history_picker import choose_history
 from memcommit.commands.history_present import (
     checkpoint_picker_entries,
     history_result_recovery_label,
     history_result_picker_entries,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_primitives import display_escape_text, safe_terminal_text
 from memcommit.history import HistoryError, build_history
 from memcommit.history_search import (
     HistorySearchError,
@@ -68,6 +74,58 @@ def _render_history_results(
         )
 
 
+def _render_operation_attempts(attempts: Sequence[CommandAttempt]) -> None:
+    typer.secho("Operation attempts · recent first", bold=True)
+    if not attempts:
+        typer.echo("  (no earlier command attempts)")
+        return
+    for attempt in attempts:
+        timestamp = attempt.started_at[:16].replace("T", " ")
+        elapsed = (
+            "running"
+            if attempt.elapsed_seconds is None
+            else f"{attempt.elapsed_seconds:.1f}s"
+        )
+        typer.echo(
+            f"  [{attempt.uid[:8]}] {display_escape_text(timestamp)}  "
+            f"{attempt.status:<11} {attempt.operation:<16} {elapsed}"
+        )
+        sever = attempt.details.get("sever")
+        if isinstance(sever, dict):
+            source = sever.get("source_name")
+            criteria = sever.get("criteria_name")
+            source_count = sever.get("source_memory_count")
+            criteria_count = sever.get("criteria_memory_count")
+            output = sever.get("output_name")
+            if all(
+                value is not None
+                for value in (source, criteria, source_count, criteria_count, output)
+            ):
+                typer.echo(
+                    "      SEVER · "
+                    f"{safe_terminal_text(str(source))} ({source_count}) × "
+                    f"{safe_terminal_text(str(criteria))} ({criteria_count}) → "
+                    f"{safe_terminal_text(str(output))}"
+                )
+            provider = sever.get("provider")
+            timeout = sever.get("provider_timeout_seconds")
+            failure_kind = sever.get("failure_kind")
+            if provider is not None or timeout is not None or failure_kind is not None:
+                detail = []
+                if provider is not None:
+                    detail.append(f"provider {safe_terminal_text(str(provider))}")
+                if timeout is not None:
+                    detail.append(f"timeout {timeout:g}s")
+                if failure_kind is not None:
+                    detail.append(f"failure {safe_terminal_text(str(failure_kind))}")
+                typer.echo("      " + " · ".join(detail))
+        if attempt.failure is not None:
+            kind = safe_terminal_text(str(attempt.failure["kind"]))
+            exit_code = attempt.failure.get("exit_code")
+            suffix = f" · exit {exit_code}" if exit_code is not None else ""
+            typer.echo(f"      COMMAND · {kind}{suffix}")
+
+
 def cmd(
     query: Annotated[
         Optional[str],
@@ -94,7 +152,47 @@ def cmd(
             help="Maximum semantic history matches to return (1-20)",
         ),
     ] = 20,
+    operations: Annotated[
+        bool,
+        typer.Option(
+            "--operations",
+            help="Show Profile-scoped mem command attempts instead of Context checkpoints",
+        ),
+    ] = False,
 ) -> None:
+    if operations:
+        if query is not None or manual:
+            typer.secho(
+                "--operations cannot be combined with a history query or --manual.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not 1 <= limit <= 200:
+            typer.secho(
+                "--limit must be between 1 and 200 for operation attempts.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        store = MemoryStore(create=False)
+        try:
+            current_uid = current_command_attempt_uid()
+            attempts = tuple(
+                attempt
+                for attempt in CommandAttemptLedger(store.store_dir).list()
+                if attempt.uid != current_uid
+            )[:limit]
+        except CommandAttemptError as error:
+            typer.secho(
+                f"Operation log error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        _render_operation_attempts(attempts)
+        return
+
     store = MemoryStore()
     name = store.current_context_name()
     if not name:
