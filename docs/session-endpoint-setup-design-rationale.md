@@ -53,10 +53,10 @@ The other initial configurations are:
 
 | Operation | Visible shape | Endpoint kinds |
 | --- | --- | --- |
-| Compare | `A ↔ B → ANALYSIS` | A and B are existing Context trees; the result is a saved analysis, not a Context C |
-| Update | `SOURCE A → TARGET B` | A and B are existing Context trees |
-| Meld, directional | `INCOMING A → BASELINE B` | A and B are existing Context trees; B is also the result target |
-| Meld, symmetric | `PEER A + PEER B → RESULT C` | A and B are existing Context trees; C is an eligible empty Context or a validated new exact name |
+| Compare | `A ↔ B → ANALYSIS` | A and B are existing Context trees with independent, default-off descendant checkboxes; the result is a saved analysis, not a Context C |
+| Update | `SOURCE A → TARGET B` | A and B are existing Context trees; each has an independent, default-off descendant checkbox |
+| Meld, directional | `INCOMING A → BASELINE B` | A has a default-off descendant checkbox; B is a direct authoritative mutation target and intentionally has none |
+| Meld, symmetric | `PEER A + PEER B → RESULT C` | A and B have independent, default-off descendant checkboxes; C is an eligible empty Context or a validated new exact name |
 | Sever | `SOURCE A × CRITERIA B → OUTPUT C` | A and B are existing Context trees with independent scope controls; C is a new exact name |
 
 Compare and Update freeze A and B from the same unified readable public
@@ -165,17 +165,31 @@ saved session, or start an operation.
 - `Tab` and `Shift-Tab` move among the mode and active endpoint panes.
 - `Left` and `Right` change a focused horizontal choice; inside a Context tree
   they retain the shared collapse/expand meaning.
-- `Up` and `Down` move within a tree. Sever may still move `Up` from the first
-  tree row into that role's scope selector.
+- `Up` and `Down` treat the visible setup as one top-to-bottom navigation run.
+  They move within a Context tree first, then cross its boundary into the
+  role's descendant checkbox when present and into the next role's first tree
+  row. Reverse navigation enters the preceding tree at its last visible row.
+  The same boundary rule applies across Compare, Update, Meld, and Sever
+  because it lives in the common setup shell. It stops rather than wrapping at
+  the mode and Apply edges; writable new-name fields remain `N`/Tab targets so
+  arrow navigation cannot unexpectedly enter an editor.
 - `Enter` or `Space` selects the current existing Context row.
+- A mode may opt each readable endpoint into one checkbox below a separator:
+  `INCLUDE ALL DESCENDANT CONTEXTS (OWNED OR GRANTED)`. It is off by default;
+  `Enter` or `Space` toggles only the focused endpoint's scope. The checkbox is
+  in normal Tab order immediately after its Context tree. Compare and Update
+  enable it for A and B. Symmetric Meld enables it for both peers; directional
+  Meld enables it only for incoming A.
 - `N create new Context` opens a creatable role's one-line exact-name editor.
   While that editor is focused, its footer explicitly renders `Esc back`;
   Escape returns to the role tree without canceling the whole setup.
-- A dedicated one-line `[ APPLY ]` control follows the endpoint panes in the
-  Tab order. `Enter` or `Space` on that focused control validates the complete
-  setup and asks the operation adapter to produce its typed receipt. There is
-  no hidden finish shortcut. Outside the new-name editor, `Q` or `Escape`
-  cancels without creating or replacing anything.
+- A dedicated `APPLY` frame follows the endpoint panes in the Tab order. Its
+  left-aligned `[ PRESS ENTER TO APPLY ]` control makes the final action
+  visually distinct from both the endpoint trees and passive footer guidance. `Enter`
+  or `Space` on that focused control validates the complete setup and asks the
+  operation adapter to produce its typed receipt. There is no hidden finish
+  shortcut. Outside the new-name editor, `Q` or `Escape` cancels without
+  creating or replacing anything.
 
 The footer is derived from the focused component so the same arrow keys never
 advertise two meanings simultaneously.
@@ -186,9 +200,10 @@ The common shell returns a presentation draft with stable role IDs. It does
 not construct command-line arguments and is not an authorization receipt.
 An operation adapter converts the draft into an operation-owned typed receipt:
 
-- Compare: ordered A/B names;
-- Update: source/target names;
-- Meld: mode plus A/B, and C/create only for symmetric mode; and
+- Compare: ordered A/B names plus independent descendant-scope flags;
+- Update: source/target names plus independent descendant-scope flags;
+- Meld: mode plus A/B, mode-enabled descendant-scope flags, and C/create only
+  for symmetric mode; and
 - Sever: source/criteria names, both descendant-scope flags, and new output
   name.
 
@@ -205,13 +220,17 @@ selected names came from the frozen selectable catalog, a proposed name has
 valid syntax, and declarative distinctness constraints hold. The operation
 continues to own all consequential checks:
 
-- Compare re-resolves the ordered pair and freezes the analysis inputs.
-- Update applies its endpoint, grant, staged-session replacement, and
-  application rules.
-- Directional Meld binds B as both baseline and target and rechecks A and B.
-- Symmetric Meld requires the saved ordered Compare analysis, rechecks both
-  peers, and verifies that C is distinct, eligible, empty/session-free when
-  existing, or atomically creatable when new.
+- Compare re-resolves the ordered pair and freezes each selected scope in the
+  saved analysis.
+- Update applies its endpoint, independently frozen scope, grant,
+  staged-session replacement, and application rules.
+- Directional Meld may widen incoming A, but binds direct B as both baseline
+  and target and rechecks both frozen inputs. Descendant B is deliberately
+  unavailable until materialization can preserve each child owner instead of
+  moving child Memories into the root baseline.
+- Symmetric Meld requires the saved ordered Compare analysis with the exact
+  same A/B scope flags, rechecks both peers, and verifies that C is distinct,
+  eligible, empty/session-free when existing, or atomically creatable when new.
 - Sever freezes its independently scoped Source and Criteria projections and
   requires a new Output at its established application boundary.
 
@@ -226,8 +245,9 @@ The implementation has three layers:
 
 1. `HorizontalChoiceState` and its renderer own generic left/right selection
    presentation.
-2. The role-based setup shell owns composition of frozen tree states, editors,
-   focus, and process-local draft state.
+2. The role-based setup shell owns composition of frozen tree states, optional
+   per-mode/per-role descendant controls, editors, focus, and process-local
+   draft state.
 3. Compare, Update, and Meld adapters own role specs, typed receipts, semantic
    validation, and orchestration. Sever retains its existing typed setup shell
    while sharing the horizontal scope component.

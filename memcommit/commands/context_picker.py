@@ -5,24 +5,40 @@ from __future__ import annotations
 import sys
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
-from typing import AbstractSet, Mapping
+from typing import AbstractSet, Literal, Mapping
 
-from prompt_toolkit.application import Application
+from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.styles import Style
+from prompt_toolkit.styles import Style, merge_styles
+from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.tui_primitives import (
+    NavigationAccelerator,
+    SEMANTIC_VIEWER_STYLE,
     display_escape_text,
     navigable_tree_row_prefix,
 )
 
 
 _CONTEXT_NAVIGATION_HINT = " ↑↓ move  ←→ expand  "
+_CONTEXT_PICKER_STYLE = merge_styles(
+    [
+        SEMANTIC_VIEWER_STYLE,
+        Style.from_dict(
+            {
+                # Context and read-only Memory navigation share one moving
+                # focus bar without sharing selection semantics.
+                "selected": "reverse bold",
+                "focused": "reverse bold",
+            }
+        ),
+    ]
+)
 
 
 @dataclass(frozen=True)
@@ -42,6 +58,15 @@ class ContextMemoryRow:
 
     label: str
     content: str
+
+
+@dataclass(frozen=True)
+class ContextPickerNavigationUnit:
+    """One viewport stop; only Context units are semantically selectable."""
+
+    kind: Literal["CONTEXT", "MEMORY"]
+    context_name: str
+    memory_index: int | None = None
 
 
 @dataclass(frozen=True)
@@ -305,17 +330,20 @@ def render_context_options(
     show_memories: bool = False,
     visible_memory_contexts: AbstractSet[str] | None = None,
     display_names: Mapping[str, str] | None = None,
+    wrap_width: int | None = None,
+    memory_anchor: tuple[str, int] | None = None,
 ) -> list[tuple[str, str]]:
     """Render visible tree rows and anchor prompt-toolkit at the selection."""
     fragments: list[tuple[str, str]] = []
     for index, row in enumerate(rows):
         is_selected = row.name == selected
-        if is_selected:
+        context_is_focused = is_selected and memory_anchor is None
+        if context_is_focused:
             # A real cursor anchor lets Window own terminal-height-dependent
             # scrolling while expansion controls which tree rows exist.
             fragments.append(("[SetCursorPosition]", ""))
         is_current = row.name == current
-        style = "class:selected" if is_selected else ""
+        style = "class:selected" if context_is_focused else ""
         memory_is_visible = (
             row.name in visible_memory_contexts
             if visible_memory_contexts is not None
@@ -361,19 +389,162 @@ def render_context_options(
         )
         if memory_is_visible and row.materialized:
             memories = (memories_by_context or {}).get(row.name, ())
-            for memory in memories:
+            for memory_index, memory in enumerate(memories):
                 fragments.append(("", "\n"))
+                memory_is_focused = memory_anchor == (row.name, memory_index)
+                if memory_is_focused:
+                    # Memory previews can anchor viewport motion without
+                    # becoming selectable Context-tree rows.
+                    fragments.append(("[SetCursorPosition]", ""))
+                memory_style = (
+                    "class:focused"
+                    if memory_is_focused
+                    else "class:memory-object"
+                )
+                leading = (
+                    "  " * (row.depth + 1)
+                    + f"· [{display_escape_text(memory.label)}] "
+                )
+                content_lines = _wrap_memory_preview(
+                    display_escape_text(memory.content),
+                    available_width=(
+                        None
+                        if wrap_width is None
+                        else max(1, wrap_width - get_cwidth(leading))
+                    ),
+                )
                 fragments.append(
                     (
-                        "class:memory",
-                        "  " * (row.depth + 1)
-                        + f"· [{display_escape_text(memory.label)}] "
-                        + display_escape_text(memory.content),
+                        memory_style,
+                        leading + content_lines[0],
                     )
                 )
+                for continuation in content_lines[1:]:
+                    fragments.append(("", "\n"))
+                    fragments.append(
+                        (
+                            memory_style,
+                            " " * get_cwidth(leading) + continuation,
+                        )
+                    )
         if index < len(rows) - 1:
             fragments.append(("", "\n"))
     return fragments
+
+
+def context_picker_navigation_units(
+    rows: Sequence[ContextTreeRow],
+    *,
+    memories_by_context: Mapping[str, Sequence[ContextMemoryRow]] | None = None,
+    show_memories: bool = False,
+    visible_memory_contexts: AbstractSet[str] | None = None,
+) -> tuple[ContextPickerNavigationUnit, ...]:
+    """Interleave Context selection rows with read-only Memory viewport stops."""
+
+    units: list[ContextPickerNavigationUnit] = []
+    for row in rows:
+        units.append(ContextPickerNavigationUnit("CONTEXT", row.name))
+        memory_is_visible = (
+            row.name in visible_memory_contexts
+            if visible_memory_contexts is not None
+            else show_memories
+        )
+        if not memory_is_visible or not row.materialized:
+            continue
+        units.extend(
+            ContextPickerNavigationUnit("MEMORY", row.name, memory_index)
+            for memory_index, _memory in enumerate(
+                (memories_by_context or {}).get(row.name, ())
+            )
+        )
+    return tuple(units)
+
+
+def _wrap_memory_preview(
+    content: str,
+    *,
+    available_width: int | None,
+) -> tuple[str, ...]:
+    """Soft-wrap escaped preview text at whitespace boundaries."""
+
+    if available_width is None or get_cwidth(content) <= available_width:
+        return (content,)
+    lines: list[str] = []
+    remaining = content
+    while get_cwidth(remaining) > available_width:
+        used = 0
+        fit = 0
+        for index, character in enumerate(remaining):
+            width = get_cwidth(character)
+            if used + width > available_width:
+                break
+            used += width
+            fit = index + 1
+        if fit == 0:
+            fit = 1
+        boundary = max(
+            (
+                index
+                for index, character in enumerate(remaining[:fit], start=1)
+                if character.isspace()
+            ),
+            default=0,
+        )
+        split_at = boundary if boundary else fit
+        line = remaining[:split_at].rstrip()
+        if not line:
+            line = remaining[:fit]
+            split_at = fit
+        lines.append(line)
+        remaining = remaining[split_at:].lstrip()
+    lines.append(remaining)
+    return tuple(lines)
+
+
+def context_option_continuation_prefixes(
+    rows: Sequence[ContextTreeRow],
+    *,
+    memories_by_context: Mapping[str, Sequence[ContextMemoryRow]] | None = None,
+    show_memories: bool = False,
+    visible_memory_contexts: AbstractSet[str] | None = None,
+    wrap_width: int | None = None,
+) -> tuple[str, ...]:
+    """Return one hanging indent for every logical picker body line.
+
+    Prompt-toolkit wraps a formatted-text Window after the row fragments have
+    been built. Keeping the continuation prefix separate lets a resized
+    terminal reflow long previews without inserting durable newlines into
+    Memory content. Context continuations align with their displayed name;
+    Memory continuations align after the selector so the selector is not
+    repeated on every visual line.
+    """
+
+    prefixes: list[str] = []
+    for row in rows:
+        # Pointer, current marker, tree indentation, branch glyph, and space.
+        prefixes.append(" " * (6 + 2 * row.depth))
+        memory_is_visible = (
+            row.name in visible_memory_contexts
+            if visible_memory_contexts is not None
+            else show_memories
+        )
+        if not memory_is_visible or not row.materialized:
+            continue
+        for memory in (memories_by_context or {}).get(row.name, ()):
+            leading = (
+                "  " * (row.depth + 1)
+                + f"· [{display_escape_text(memory.label)}] "
+            )
+            wrapped_lines = _wrap_memory_preview(
+                display_escape_text(memory.content),
+                available_width=(
+                    None
+                    if wrap_width is None
+                    else max(1, wrap_width - get_cwidth(leading))
+                ),
+            )
+            prefixes.extend(" " * get_cwidth(leading) for _ in wrapped_lines)
+    return tuple(prefixes)
 
 
 def render_context_roots(
@@ -482,6 +653,8 @@ def choose_context(
         state._before_expand_all = set()
     state.show_memories = initially_show_memories and memory_loader is not None
     memory_cache: dict[str, tuple[ContextMemoryRow, ...]] = {}
+    memory_anchor: tuple[str, int] | None = None
+    navigation_accelerator = NavigationAccelerator()
 
     def load_visible_memories() -> None:
         if memory_loader is None:
@@ -508,6 +681,7 @@ def choose_context(
     bindings = KeyBindings()
 
     def render_options():
+        wrap_width = max(1, get_app().output.get_size().columns - 1)
         return render_context_options(
             state.visible_rows(),
             selected=state.selected_name,
@@ -520,7 +694,62 @@ def choose_context(
                 if state.memories_visible_for(row.name)
             ),
             display_names=labels,
+            wrap_width=wrap_width,
+            memory_anchor=memory_anchor,
         )
+
+    def navigation_units() -> tuple[ContextPickerNavigationUnit, ...]:
+        return context_picker_navigation_units(
+            state.visible_rows(),
+            memories_by_context=memory_cache,
+            visible_memory_contexts=frozenset(
+                row.name
+                for row in state.visible_rows()
+                if state.memories_visible_for(row.name)
+            ),
+        )
+
+    def current_navigation_unit() -> ContextPickerNavigationUnit:
+        units = navigation_units()
+        if memory_anchor is not None:
+            candidate = ContextPickerNavigationUnit(
+                "MEMORY",
+                memory_anchor[0],
+                memory_anchor[1],
+            )
+            if candidate in units:
+                return candidate
+        return ContextPickerNavigationUnit("CONTEXT", state.selected_name)
+
+    def move_navigation(direction: int) -> None:
+        nonlocal memory_anchor
+        units = navigation_units()
+        current = current_navigation_unit()
+        index = units.index(current)
+        delta = direction * navigation_accelerator.step(direction)
+        target = units[max(0, min(index + delta, len(units) - 1))]
+        state.selected_name = target.context_name
+        memory_anchor = (
+            (target.context_name, target.memory_index)
+            if target.kind == "MEMORY" and target.memory_index is not None
+            else None
+        )
+
+    def continuation_prefix(line_number: int, wrap_count: int):
+        if wrap_count == 0:
+            return ""
+        wrap_width = max(1, get_app().output.get_size().columns - 1)
+        prefixes = context_option_continuation_prefixes(
+            state.visible_rows(),
+            memories_by_context=memory_cache,
+            visible_memory_contexts=frozenset(
+                row.name
+                for row in state.visible_rows()
+                if state.memories_visible_for(row.name)
+            ),
+            wrap_width=wrap_width,
+        )
+        return prefixes[line_number] if line_number < len(prefixes) else ""
 
     control = FormattedTextControl(
         text=render_options,
@@ -530,48 +759,75 @@ def choose_context(
 
     @bindings.add("down")
     def _next_context(event) -> None:
-        state.move(1)
+        move_navigation(1)
         event.app.invalidate()
 
     @bindings.add("up")
     def _previous_context(event) -> None:
-        state.move(-1)
+        move_navigation(-1)
         event.app.invalidate()
 
     @bindings.add("right")
     def _expand_or_enter_context(event) -> None:
+        nonlocal memory_anchor
+        navigation_accelerator.reset()
+        if memory_anchor is not None:
+            return
         state.expand_selected(include_leaf_memories=memory_loader is not None)
         load_visible_memories()
         event.app.invalidate()
 
     @bindings.add("left")
     def _collapse_or_leave_context(event) -> None:
+        nonlocal memory_anchor
+        navigation_accelerator.reset()
+        if memory_anchor is not None:
+            memory_anchor = None
+            event.app.invalidate()
+            return
         state.collapse_selected(include_leaf_memories=memory_loader is not None)
         event.app.invalidate()
 
     @bindings.add("a")
     @bindings.add("A")
     def _toggle_expand_all(event) -> None:
+        nonlocal memory_anchor
+        navigation_accelerator.reset()
+        memory_anchor = None
         state.toggle_expand_all()
         load_visible_memories()
         event.app.invalidate()
 
     @bindings.add("M")
     def _toggle_memories(event) -> None:
+        nonlocal memory_anchor
+        navigation_accelerator.reset()
         if memory_loader is not None:
             state.toggle_memories()
             load_visible_memories()
+            if not state.memories_visible_for(state.selected_name):
+                memory_anchor = None
         event.app.invalidate()
 
     @bindings.add("m")
     def _toggle_selected_memories(event) -> None:
+        nonlocal memory_anchor
+        navigation_accelerator.reset()
         if memory_loader is not None:
             state.toggle_selected_memories()
             load_visible_memories()
+            if not state.memories_visible_for(state.selected_name):
+                memory_anchor = None
         event.app.invalidate()
 
     @bindings.add("enter")
     def _accept_context(event) -> None:
+        navigation_accelerator.reset()
+        if memory_anchor is not None:
+            # A Memory is a viewport stop only. Enter never changes selection
+            # or turns its parent into an implicit receipt.
+            event.app.invalidate()
+            return
         name = state.selected_name
         if browse_only:
             if not tree.children_by_name[name] and memory_loader is not None:
@@ -609,15 +865,19 @@ def choose_context(
     )
     options_window = Window(
         control,
-        wrap_lines=False,
+        wrap_lines=True,
+        get_line_prefix=continuation_prefix,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
 
     def render_footer() -> str:
-        rows = state.visible_rows()
+        units = navigation_units()
+        navigation_index = units.index(current_navigation_unit())
         expansion_action = "A restore tree" if state.all_expanded else "A expand all"
         name = state.selected_name
-        if name in tree.materialized_names:
+        if memory_anchor is not None:
+            enter_action = "Enter preview only"
+        elif name in tree.materialized_names:
             enter_action = (
                 "Enter open/collapse"
                 if browse_only
@@ -644,7 +904,7 @@ def choose_context(
         return (
             _CONTEXT_NAVIGATION_HINT
             + f"{expansion_action}  {memory_action}{enter_action}  {close_action}"
-            f" · {state.selected_row_index() + 1}/{len(rows)}"
+            f" · {navigation_index + 1}/{len(units)}"
             f" · {len(tree.materialized_names)} selectable"
         )
 
@@ -671,12 +931,7 @@ def choose_context(
         erase_when_done=True,
         input=app_input,
         output=app_output,
-        style=Style.from_dict(
-            {
-                "selected": "reverse bold",
-                "memory": "fg:#a6adc8",
-            }
-        ),
+        style=_CONTEXT_PICKER_STYLE,
     )
     try:
         return app.run()

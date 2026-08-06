@@ -25,12 +25,16 @@ from memcommit.store import MemoryStore
 class CompareSetupReceipt:
     reference_name: str
     compared_name: str
+    reference_descendants: bool = False
+    compared_descendants: bool = False
 
 
 @dataclass(frozen=True)
 class UpdateSetupReceipt:
     source_name: str
     target_name: str
+    source_descendants: bool = False
+    target_descendants: bool = False
 
 
 @dataclass(frozen=True)
@@ -40,6 +44,8 @@ class MeldSetupReceipt:
     right_name: str
     target_name: str | None = None
     create_target: bool = False
+    left_descendants: bool = False
+    right_descendants: bool = False
 
 
 def _readable_endpoint_catalog(
@@ -140,11 +146,22 @@ def choose_compare_setup(
                 "A ↔ B → ANALYSIS",
                 ("A", "B"),
                 {"A": "A · REFERENCE", "B": "B · PEER"},
+                descendant_roles=frozenset({"A", "B"}),
             ),
         ),
         roles=(
-            EndpointRoleSpec("A", frozenset(names), first),
-            EndpointRoleSpec("B", frozenset(names), second),
+            EndpointRoleSpec(
+                "A",
+                frozenset(names),
+                first,
+                allow_descendants=True,
+            ),
+            EndpointRoleSpec(
+                "B",
+                frozenset(names),
+                second,
+                allow_descendants=True,
+            ),
         ),
         initial_mode_uid="COMPARE",
         annotations=annotations,
@@ -158,6 +175,8 @@ def choose_compare_setup(
     return CompareSetupReceipt(
         draft.value("A").context_name,
         draft.value("B").context_name,
+        reference_descendants=draft.value("A").include_descendants,
+        compared_descendants=draft.value("B").include_descendants,
     )
 
 
@@ -178,11 +197,22 @@ def choose_update_setup(
                 "A → B",
                 ("A", "B"),
                 {"A": "A · SOURCE", "B": "B · TARGET"},
+                descendant_roles=frozenset({"A", "B"}),
             ),
         ),
         roles=(
-            EndpointRoleSpec("A", frozenset(names), first),
-            EndpointRoleSpec("B", frozenset(names), second),
+            EndpointRoleSpec(
+                "A",
+                frozenset(names),
+                first,
+                allow_descendants=True,
+            ),
+            EndpointRoleSpec(
+                "B",
+                frozenset(names),
+                second,
+                allow_descendants=True,
+            ),
         ),
         initial_mode_uid="UPDATE",
         annotations=annotations,
@@ -196,6 +226,8 @@ def choose_update_setup(
     return UpdateSetupReceipt(
         draft.value("A").context_name,
         draft.value("B").context_name,
+        source_descendants=draft.value("A").include_descendants,
+        target_descendants=draft.value("B").include_descendants,
     )
 
 
@@ -243,6 +275,7 @@ def choose_meld_setup(
                 ("A", "B", "C"),
                 {"A": "A · PEER", "B": "B · PEER", "C": "C · RESULT"},
                 "A and B are equal peers. A saved ordered Compare is required; the result is separate C.",
+                descendant_roles=frozenset({"A", "B"}),
             ),
             EndpointModeSpec(
                 "DIRECTIONAL",
@@ -250,11 +283,22 @@ def choose_meld_setup(
                 ("A", "B"),
                 {"A": "A · INCOMING", "B": "B · BASELINE + RESULT"},
                 "A is incoming evidence. B remains authoritative and is the result target.",
+                descendant_roles=frozenset({"A"}),
             ),
         ),
         roles=(
-            EndpointRoleSpec("A", frozenset(names), first),
-            EndpointRoleSpec("B", frozenset(names), second),
+            EndpointRoleSpec(
+                "A",
+                frozenset(names),
+                first,
+                allow_descendants=True,
+            ),
+            EndpointRoleSpec(
+                "B",
+                frozenset(names),
+                second,
+                allow_descendants=True,
+            ),
             EndpointRoleSpec(
                 "C",
                 eligible,
@@ -280,4 +324,6 @@ def choose_meld_setup(
         right_name=draft.value("B").context_name,
         target_name=target.context_name if target is not None else None,
         create_target=target.create if target is not None else False,
+        left_descendants=draft.value("A").include_descendants,
+        right_descendants=draft.value("B").include_descendants,
     )

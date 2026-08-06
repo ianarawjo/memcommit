@@ -60,8 +60,23 @@ is expanded.
 - Lowercase `m` toggles read-only direct Memory rows only for the selected
   Context. Uppercase `M` shows or hides them for all Contexts and clears prior
   per-Context exceptions, providing a predictable fresh global state. Memory
-  rows show their short selector and escaped one-line content, but never become
-  cursor targets and never change which Context Enter accepts. Newly revealed
+  rows show their short selector and escaped content, but never become semantic
+  selections or accepted values and never change which Context owns the
+  selection. While Memory rows are visible, Up and Down interleave them as
+  read-only viewport focus stops between their owning Context and the next
+  Context. The same reverse-video focus bar moves from the owning Context onto
+  all wrapped lines of the focused Memory; ordinary Memory rows remain
+  lavender. This is presentation focus only—the owning Context remains the
+  semantic selection even though its focus bar has moved. Enter on a Memory
+  stop is inert, and Left returns the focus bar to that Context. This
+  prevents a long expanded Memory run from being skipped merely because only
+  Contexts are selectable. Content wraps at the
+  available terminal width, and every continuation line uses a hanging indent
+  aligned with the first line's content after the Memory selector. The wrapping
+  prefers whitespace boundaries so ordinary words remain intact; only a single
+  token wider than the available content column falls back to character-level
+  splitting. Wrapping remains presentation-only, so terminal resizing never
+  inserts newlines into stored content. Newly revealed
   Contexts are loaded into a process-local cache only when their effective
   visibility is on. Query-only and otherwise unavailable virtual rows remain
   opaque; their source content is never opened for the preview.
@@ -125,6 +140,16 @@ that state and can also run in read-only browse mode. Larger TUIs may embed one 
 independent states and retain their own role, scope, validation, and receipt
 contracts. Sever setup uses one state for Source and one for Criteria while
 keeping descendant scope and the require-new Output name Sever-owned.
+
+Long Memory runs reuse the common `NavigationAccelerator` presentation
+primitive also used by semantic result reports. Deliberate arrow taps move one
+Context-or-Memory viewport unit, even when several taps arrive quickly. Because
+a terminal supplies key presses rather than key-up state, acceleration begins
+only after the initial auto-repeat delay and a sustained short repeat cadence
+identify a held arrow. Holding the same direction then accelerates through
+steps of two, five, and ten; an interrupted cadence, direction change, or
+structural action resets the step to one. The shared accelerator owns timing
+only and never makes a Memory selectable or changes the Context receipt.
 
 ## Dependency map and ownership
 

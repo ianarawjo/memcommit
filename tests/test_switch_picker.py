@@ -9,9 +9,12 @@ from typer.testing import CliRunner
 from memcommit.cli import app
 from memcommit.commands.context_picker import (
     _CONTEXT_NAVIGATION_HINT,
+    _CONTEXT_PICKER_STYLE,
     ContextTreeState,
     ContextMemoryRow,
     build_context_tree,
+    context_option_continuation_prefixes,
+    context_picker_navigation_units,
     _build_context_tree,
     _context_ancestors,
     _expandable_context_subtree,
@@ -193,6 +196,133 @@ def test_picker_memory_rows_toggle_without_becoming_context_rows():
     rendered = "".join(text for _, text in shown)
     assert "[memory abcdef12] first\\nline" in rendered
     assert [row.name for row in state.visible_rows()] == ["alpha"]
+
+
+def test_picker_navigation_interleaves_read_only_memory_viewport_units():
+    tree = build_context_tree(("alpha", "alpha/child", "beta"))
+    rows = _visible_context_rows(tree, {"alpha"})
+    memories = {
+        "alpha/child": (
+            ContextMemoryRow("memory 11111111", "first"),
+            ContextMemoryRow("memory 22222222", "second"),
+        )
+    }
+
+    units = context_picker_navigation_units(
+        rows,
+        memories_by_context=memories,
+        visible_memory_contexts={"alpha/child"},
+    )
+
+    assert [
+        (unit.kind, unit.context_name, unit.memory_index) for unit in units
+    ] == [
+        ("CONTEXT", "alpha", None),
+        ("CONTEXT", "alpha/child", None),
+        ("MEMORY", "alpha/child", 0),
+        ("MEMORY", "alpha/child", 1),
+        ("CONTEXT", "beta", None),
+    ]
+
+
+def test_picker_memory_viewport_anchor_moves_focus_bar_without_selecting():
+    tree = build_context_tree(("alpha",))
+    rows = _visible_context_rows(tree, set())
+    memories = {
+        "alpha": (
+            ContextMemoryRow("memory 11111111", "first"),
+            ContextMemoryRow("memory 22222222", "second"),
+        )
+    }
+
+    fragments = _render_context_options(
+        rows,
+        selected="alpha",
+        current="alpha",
+        memories_by_context=memories,
+        visible_memory_contexts={"alpha"},
+        memory_anchor=("alpha", 1),
+    )
+    marker_index = next(
+        index
+        for index, (style, _text) in enumerate(fragments)
+        if style == "[SetCursorPosition]"
+    )
+
+    assert fragments[marker_index + 1] == (
+        "class:focused",
+        "  · [memory 22222222] second",
+    )
+    assert any(
+        style == "class:memory-object" and "memory 11111111" in text
+        for style, text in fragments
+    )
+    assert all(style != "class:selected" for style, _text in fragments)
+    assert all(
+        style != "class:selected" or "memory" not in text
+        for style, text in fragments
+    )
+    focused_style = _CONTEXT_PICKER_STYLE.get_attrs_for_style_str("class:focused")
+    assert focused_style.reverse
+
+
+def test_picker_wraps_memory_content_with_a_hanging_selector_indent():
+    tree = build_context_tree(("alpha", "alpha/child"))
+    rows = _visible_context_rows(tree, {"alpha"})
+    memories = {
+        "alpha/child": (
+            ContextMemoryRow(
+                "memory abcdef12",
+                "A long participant-facing description that must wrap.",
+            ),
+        )
+    }
+
+    prefixes = context_option_continuation_prefixes(
+        rows,
+        memories_by_context=memories,
+        visible_memory_contexts=frozenset({"alpha/child"}),
+    )
+
+    assert prefixes[0] == " " * 6
+    assert prefixes[1] == " " * 8
+    assert prefixes[2] == " " * len("    · [memory abcdef12] ")
+
+
+def test_picker_wraps_memory_preview_at_spaces_before_character_boundaries():
+    tree = build_context_tree(("task-1", "task-1/description"))
+    rows = _visible_context_rows(tree, {"task-1"})
+    memories = {
+        "task-1/description": (
+            ContextMemoryRow(
+                "memory 2db26309",
+                "Imagine that you are a campus facilities coordinator "
+                "responsible for maintaining a university organizational wiki.",
+            ),
+        )
+    }
+
+    fragments = _render_context_options(
+        rows,
+        selected="task-1/description",
+        current="task-1",
+        memories_by_context=memories,
+        visible_memory_contexts={"task-1/description"},
+        wrap_width=79,
+        memory_anchor=("task-1/description", 0),
+    )
+    rendered = "".join(text for _, text in fragments)
+    memory_lines = rendered.splitlines()[2:]
+
+    assert memory_lines[0].endswith("facilities coordinator")
+    assert memory_lines[1] == (
+        " " * 24 + "responsible for maintaining a university"
+    )
+    assert memory_lines[2] == " " * 24 + "organizational wiki."
+    assert "coordinator re\n" not in rendered
+    assert sum(
+        style == "class:focused" for style, _text in fragments
+    ) == 3
 
 
 def test_picker_leaf_uses_expand_marker_for_its_memory_layer():

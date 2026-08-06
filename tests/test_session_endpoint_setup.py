@@ -50,7 +50,7 @@ def test_fixed_update_setup_returns_both_initial_roles(isolated_store):
     store.create_context(ops.init("setup/b"))
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\r")
+        pipe_input.send_text("\t\t\t\t\r")
         receipt = choose_update_setup(
             store,
             app_input=pipe_input,
@@ -61,6 +61,62 @@ def test_fixed_update_setup_returns_both_initial_roles(isolated_store):
     assert receipt is not None
     assert receipt.source_name == "setup/a"
     assert receipt.target_name == "setup/b"
+    assert receipt.source_descendants is False
+    assert receipt.target_descendants is False
+
+
+def test_update_setup_toggles_each_endpoint_descendant_scope_independently(
+    isolated_store,
+):
+    store = MemoryStore()
+    store.create_context(ops.init("setup/a"))
+    store.create_context(ops.init("setup/a/child"))
+    store.create_context(ops.init("setup/b"))
+    store.create_context(ops.init("setup/b/child"))
+
+    with create_pipe_input() as pipe_input:
+        # A tree → A checkbox (toggle) → B tree → B checkbox → Apply.
+        pipe_input.send_text("\t\r\t\t\t\r")
+        receipt = choose_update_setup(
+            store,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt is not None
+    assert receipt.source_descendants is True
+    assert receipt.target_descendants is False
+
+
+def test_endpoint_setup_arrows_cross_tree_and_scope_boundaries(isolated_store):
+    store = MemoryStore()
+    store.create_context(ops.init("nav/a"))
+    store.create_context(ops.init("nav/b"))
+    store.create_context(ops.init("nav/c"))
+
+    with create_pipe_input() as pipe_input:
+        # A's last row ↓ A scope ↓ B's first row, then reverse the same path.
+        down = "\x1b[B"
+        up = "\x1b[A"
+        pipe_input.send_text(
+            down * 4
+            + up * 2
+            + "\r"
+            + down * 2
+            + "\r"
+            + "\t\t\r"
+        )
+        receipt = choose_update_setup(
+            store,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt is not None
+    assert receipt.source_name == "nav/c"
+    assert receipt.target_name == "nav/a"
 
 
 def test_meld_directional_option_has_no_third_target(isolated_store):
@@ -69,7 +125,7 @@ def test_meld_directional_option_has_no_third_target(isolated_store):
     store.create_context(ops.init("meld-setup/b"))
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[C\t\t\t\r")
+        pipe_input.send_text("\x1b[C\t\t\r\t\t\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,
@@ -82,6 +138,8 @@ def test_meld_directional_option_has_no_third_target(isolated_store):
     assert receipt.left_name != receipt.right_name
     assert receipt.target_name is None
     assert receipt.create_target is False
+    assert receipt.left_descendants is True
+    assert receipt.right_descendants is False
 
 
 def test_meld_symmetric_mode_collects_new_result_c(isolated_store):
@@ -90,8 +148,8 @@ def test_meld_symmetric_mode_collects_new_result_c(isolated_store):
     store.create_context(ops.init("meld-setup/b"))
 
     with create_pipe_input() as pipe_input:
-        # Symmetric is the default. Four Tabs reach C's exact new-name editor.
-        pipe_input.send_text("\t\t\t\tfaq/result\n\t\t\r")
+        # Symmetric is the default. Six Tabs reach C's exact new-name editor.
+        pipe_input.send_text("\t\t\t\t\t\tfaq/result\n\t\t\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,
@@ -103,3 +161,5 @@ def test_meld_symmetric_mode_collects_new_result_c(isolated_store):
     assert receipt.mode == "symmetric"
     assert receipt.target_name == "faq/result"
     assert receipt.create_target is True
+    assert receipt.left_descendants is False
+    assert receipt.right_descendants is False

@@ -10,6 +10,7 @@ import unicodedata
 from collections.abc import Sequence
 from dataclasses import dataclass
 from itertools import count
+from time import monotonic
 from typing import Callable, Literal
 
 from prompt_toolkit.document import Document
@@ -43,6 +44,70 @@ INLINE_DIRECT_EDIT_TITLE = "EDIT (DIRECTLY)"
 INLINE_AGENT_COMMENT_TITLE = "COMMENT (FOR THE AGENT)"
 
 _BUFFER_SERIAL = count(1)
+
+
+@dataclass
+class NavigationAccelerator:
+    """Increase held-arrow travel while keeping deliberate taps precise.
+
+    The stepped schedule is presentation behavior shared by long Memory/result
+    runs. Terminals do not report key-up events, so hold detection requires the
+    characteristic initial repeat delay followed by a sustained short cadence.
+    Rapid taps that begin immediately, a pause, or a direction change retain
+    one-unit navigation in every TUI that adopts it.
+    """
+
+    direction: int = 0
+    streak: int = 0
+    last_at: float | None = None
+    repeat_candidate: bool = False
+
+    _INITIAL_REPEAT_DELAY_MIN = 0.2
+    _INITIAL_REPEAT_DELAY_MAX = 1.2
+    _REPEAT_INTERVAL_MAX = 0.16
+
+    def reset(self) -> None:
+        self.direction = 0
+        self.streak = 0
+        self.last_at = None
+        self.repeat_candidate = False
+
+    def step(self, direction: int, *, now: float | None = None) -> int:
+        if direction not in {-1, 1}:
+            raise ValueError("Navigation direction must be -1 or 1.")
+        observed_at = monotonic() if now is None else now
+        if self.last_at is None or direction != self.direction:
+            self.direction = direction
+            self.streak = 0
+            self.last_at = observed_at
+            self.repeat_candidate = False
+            return 1
+
+        interval = observed_at - self.last_at
+        self.last_at = observed_at
+        if interval < 0:
+            self.streak = 0
+            self.repeat_candidate = False
+        elif self.repeat_candidate and interval <= self._REPEAT_INTERVAL_MAX:
+            self.streak += 1
+        else:
+            # A real held key normally emits one delayed first repeat. Fast
+            # manual taps start with short intervals, so they never arm the
+            # accelerator merely by arriving close together.
+            self.repeat_candidate = (
+                self._INITIAL_REPEAT_DELAY_MIN
+                <= interval
+                <= self._INITIAL_REPEAT_DELAY_MAX
+            )
+            self.streak = 0
+
+        if self.streak >= 14:
+            return 10
+        if self.streak >= 9:
+            return 5
+        if self.streak >= 4:
+            return 2
+        return 1
 
 # Focus belongs to terminal chrome, not to the semantic panel title. Nested
 # selectors color only the frame border/label and leave its content unchanged.

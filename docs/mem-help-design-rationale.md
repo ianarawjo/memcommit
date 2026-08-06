@@ -8,14 +8,17 @@ distinction matters while building the study prototype and when preparing its
 printed cheat sheet.
 
 `mem help` therefore renders one concise inventory line per visible registered
-command:
+command, ordered case-insensitively from A to Z:
 
 ```text
 name [(exception)] - short description
 ```
 
 It reports capabilities; it does not recommend a command sequence or perform
-work for the participant.
+work for the participant. The alphabetical order is shared by the plain-text
+inventory and interactive selector so the same command has a predictable
+location in either surface; source registration order remains free to group
+related implementation code.
 
 ## Interactive terminal contract
 
@@ -23,23 +26,30 @@ In an interactive terminal, `mem help` presents the inventory as a
 prompt-toolkit selector:
 
 - Up and Down move one command at a time or move among one expanded command's
-  forms.
+  forms. Holding one direction reuses the shared `NavigationAccelerator`: it
+  waits for the terminal's initial key-repeat delay, then advances by the same
+  two-, five-, and ten-row steps used by the Context/model selector. Deliberate
+  rapid taps remain one row each, and every non-arrow navigation action resets
+  the acceleration streak.
 - Page Up, Page Down, Home, and End move through the longer list.
 - Right expands one command in place and immediately moves the focus bar to its
   first `FORM`, matching the newly visible content below the command row. Up
   and Down then inspect the alternative invocations. Left returns from a Form
   to its command row and a second Left collapses the command.
-- Enter selects the exact focused row. From the command row it yields only the
-  bare `mem <name>` template; from a Form it yields that Form's editable command
-  template without the parenthesized explanation. `H` separately opens the
-  registered command's complete syntax help.
+- Enter on a command row expands its Forms and focuses the first Form without
+  leaving the browser. Enter on a focused Form then yields that Form's editable
+  command template without the parenthesized explanation. This two-stage
+  interaction consumes both confirmation key presses inside the TUI, so a
+  habitual second Enter cannot reach zsh and execute an unedited placeholder
+  such as `[context]`. `H` separately opens the registered command's complete
+  syntax help.
 - `q`, Escape, and Ctrl-C cancel without selecting or invoking anything.
 
 The selected command's callback is deliberately never invoked. Some commands
 can change local state with no additional arguments, while other commands
-require operands or provider work. Treating a single Enter in a help browser
-as execution would therefore make inspection unexpectedly mutate state or
-produce an avoidable usage error.
+require operands or provider work. No Enter in the browser invokes the selected
+command callback; selection only returns editable shell text. Execution remains
+a later, separate Enter after the person has reviewed and edited that text.
 
 The child `mem help` process cannot itself prefill its parent shell's next
 editable command line. The opt-in output of `mem shell-init zsh` now supplies
@@ -66,8 +76,17 @@ instead of repeating a badge across the inventory.
 ## Invocation forms
 
 Expansion lists complete meaningful entry forms rather than presenting one
-generic Click usage line. For example, Meld distinguishes bare saved-work
-browsing, symmetric peers, a require-new symmetric Result, canonical
+generic Click usage line. Interactive forms name the surface entered instead
+of enumerating its internal choices. A saved-or-new operation picker is an
+`interactive <Operation> session launcher`; a bound operation opens an
+`interactive <Operation> session`; and non-session surfaces are named as a
+selector, browser, viewer, or setup according to their actual role. This keeps
+the compact contract stable when a launcher's saved and New rows evolve, while
+avoiding the false implication that every interactive picker is durable
+session state.
+
+For example, Meld distinguishes its bare interactive session launcher,
+symmetric peers, a require-new symmetric Result, canonical
 `INCOMING --into BASELINE`, and the current-Baseline `--from` convenience form.
 Each form includes a short parenthesized semantic label when the operands alone
 would not explain the route. Bracketed lowercase values such as `[context1]`,
@@ -81,9 +100,44 @@ Free-text placeholders that commonly contain whitespace retain double quotes
 in both the displayed Form and the selected shell template. Structured names,
 UIDs, flags, and paths remain unquoted so their token boundaries stay visible.
 
-Simple commands derive one conservative form from their registered positional
-operands. Commands with several semantic entry routes keep an explicit bounded
-form list. This list intentionally omits action flags such as comments,
+Every currently visible top-level command has an explicitly audited, bounded
+form list. This is necessary even for apparently simple callbacks: Click
+cannot reveal that a temporal `find` is selected from the wording of its query,
+that `profile NAME` is routed through a group alias, or that bare `lock` changes
+the current Context. A conservative registered-operand fallback remains for a
+new command before its inventory is updated, but the test contract requires
+all shipped commands to replace that fallback with reviewed forms.
+
+The form lists follow one bare-route rule: if a callback has a meaningful
+no-argument behavior, its exact `mem <name>` spelling appears as a Form.
+This prevents a current-target route, generated default, or interactive picker
+from disappearing merely because the same callback also accepts operands or
+subcommands. Parser-valid spellings whose callback deliberately returns a
+usage error, such as bare `mem impact` or `mem query`, are not advertised as
+meaningful Forms. Group help alone is also not treated as an operation, while
+groups with real bare callbacks (`lock`, `unlock`, and `profile`) expose them.
+
+For example, `mem update` exposes its interactive Update session launcher
+before its three directional endpoint forms,
+while `mem impact` omits bare invocation because it requires a directional or
+named operation route. Its expanded Forms enumerate `impact atomize`, the
+three directional Update planners, and the saved-session inspections
+`impact meld`, `impact sever`, and `impact update`; the latter may also name an
+exact artifact with `--session UID`. Those saved-session Form labels also name
+the optional `APPLY?` handoff so the inventory does not misdescribe Impact as
+a dead-end viewer: the handoff opens the owning operation's separate Apply
+flow and does not itself mutate anything. This is intentionally more explicit
+than the optional positional operand shown by generic parser usage, because
+the operation names select materially different saved artifacts and provider
+boundaries. A message-less `mem checkpoint` and the default-English
+`mem translate` route are likewise shown because both are callable behaviors,
+not syntax errors. `find` describes retained-history selection as an explicitly
+temporal query instead of inventing a `--history` option that the parser does
+not implement. Resource imports and write-protection groups enumerate their
+distinct public grammars rather than collapsing them into ambiguous positional
+placeholders.
+
+The list intentionally omits secondary action flags such as comments,
 responses, snapshots, and acceptance controls; `H` retains the complete
 registered syntax reference. A selected Form preserves its bracketed
 placeholders when prefilled as editable shell text by the opt-in zsh
@@ -98,12 +152,13 @@ operation suggested by the command's name or a production-readiness claim.
 Individual commands may still have documented permission, provider,
 concurrency, or remote-persistence boundaries.
 
-An implementation can expose two co-equal public spellings through one
+An implementation can expose two related public spellings through one
 internal callback. `mem list` and `mem ls` deliberately have the same
 description: participants may learn and use either spelling. A compatibility
-alias such as `checkout` identifies its canonical `switch` and `branch`
+alias such as `checkout` identifies its explicit `switch` and `branch`
 operations directly in its description instead of adding another status
-column.
+column. It does not claim the bare interactive `switch` picker because
+`checkout` requires a name.
 
 ## Consistency boundary
 
@@ -113,8 +168,14 @@ Exceptional annotations and multi-route invocation forms are explicit because
 compatibility status and semantic entry routes cannot be inferred safely from
 Click registration alone.
 
-The renderer fails closed if an annotated command is no longer registered.
-Ordinary new commands need no redundant `implemented` entry.
+The renderer fails closed if an annotated or explicitly formed command is no
+longer registered. Tests also require every visible command to have an audited
+form list, recursively parse every selected template without invoking its
+callback, and require a bare Form for every meaningful bare callback. This
+catches stale options, wrong nested subcommands, missing required operands,
+and hidden picker/current-target routes without running mutations or provider
+work. Ordinary new commands need no redundant `implemented` entry, but their
+forms must be reviewed before the inventory contract is considered complete.
 
 Only callable visible commands are listed. Proposed but unregistered
 operations are omitted rather than shown as commands a participant could try.

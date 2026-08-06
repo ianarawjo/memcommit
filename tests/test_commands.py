@@ -5,8 +5,12 @@ the full user-facing path (argument parsing, error messages, exit codes).
 All tests use the `isolated_store` fixture from conftest.py to avoid touching
 the real ~/.mem directory.
 """
+import shlex
+
+import click
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+from typer.main import get_command
 from typer.testing import CliRunner
 
 import memcommit.commands.help_inventory as help_inventory
@@ -50,6 +54,8 @@ class TestHelp:
         assert result.exit_code == 0
         assert "mem command inventory" in result.output
         assert "implemented" not in result.output
+        assert "Browse saved" not in result.output
+        assert "start a new" not in result.output
         lines = result.output.splitlines()
         assert any(
             line.startswith("impact ")
@@ -65,10 +71,11 @@ class TestHelp:
         list_row = next(line for line in lines if line.startswith("list "))
         ls_row = next(line for line in lines if line.startswith("ls "))
         assert list_row.split(" - ", 1)[1] == ls_row.split(" - ", 1)[1]
-        assert "List child Contexts and direct items" in list_row
+        assert "interactive Context browser" in list_row
+        assert "print child Contexts and direct items" in list_row
         assert any(
             line.startswith("checkout ")
-            and "Alias for switch" in line
+            and "Alias for explicit switch" in line
             and "alias for branch" in line
             for line in lines
         )
@@ -86,6 +93,17 @@ class TestHelp:
             and "issue-scoped directional meld" in line
             for line in lines
         )
+
+    def test_lists_commands_alphabetically(self):
+        result = invoke("help")
+
+        assert result.exit_code == 0
+        command_names = [
+            line.split(maxsplit=1)[0]
+            for line in result.output.splitlines()
+            if " - " in line
+        ]
+        assert command_names == sorted(command_names, key=str.casefold)
 
     def test_meld_help_distinguishes_atomic_and_context_entry_points(self):
         atomize = invoke("atomize", "--help")
@@ -106,17 +124,27 @@ class TestHelp:
         assert "authoritative BASELINE" in meld_help
 
         forms = help_inventory.COMMAND_FORMS["meld"]
-        assert "mem meld (interactive saved-work view)" in forms
-        assert "mem meld [context1] [context2] (symmetric)" in forms
+        assert "mem meld (enter the interactive Meld session launcher)" in forms
+        assert (
+            "mem meld [context1] [context2] "
+            "(symmetric into current empty Context)"
+        ) in forms
         assert (
             "mem meld [incoming_context] --into [baseline_context] (directional)"
+            in forms
+        )
+        assert (
+            "mem meld --into [baseline_context] (current Context is incoming)"
             in forms
         )
         assert (
             "mem meld --from [incoming_context] (current Context is baseline)"
             in forms
         )
-        assert help_inventory._selectable_form_line(forms[2]) == (
+        result_form = next(
+            form for form in forms if "--to [result_context]" in form
+        )
+        assert help_inventory._selectable_form_line(result_form) == (
             "mem meld [context1] [context2] --to [result_context]"
         )
 
@@ -128,8 +156,159 @@ class TestHelp:
             'mem edit [memory] "[new_content]"'
         )
         assert help_inventory.COMMAND_FORMS["rename"][0] == (
-            "mem rename [current_context] [new_context]"
+            "mem rename [existing_context] [new_context]"
         )
+        assert help_inventory.COMMAND_FORMS["remove"][0].startswith(
+            "mem remove [item]"
+        )
+
+    def test_forms_include_meaningful_bare_entry_routes(self):
+        assert help_inventory.COMMAND_FORMS["update"][0] == (
+            "mem update (enter the interactive Update session launcher)"
+        )
+        assert help_inventory.COMMAND_FORMS["checkpoint"][0] == (
+            "mem checkpoint (save without a message)"
+        )
+        assert help_inventory.COMMAND_FORMS["translate"][0] == (
+            "mem translate "
+            "(show/save a default-English view of the current Context)"
+        )
+        assert help_inventory.COMMAND_FORMS["init-study"][:2] == (
+            "mem init-study (edit or generate a Study Profile name)",
+            "mem init-study [profile_name] (use an explicit Study Profile name)",
+        )
+
+    def test_interactive_help_names_the_entry_surface(self):
+        session_launchers = ("atomize", "compare", "ground", "meld", "sever")
+        root = get_command(app)
+        context = click.Context(root)
+        for command_name in session_launchers:
+            command = root.get_command(context, command_name)
+
+            assert command is not None
+            sessions_option = next(
+                parameter
+                for parameter in command.params
+                if isinstance(parameter, click.Option)
+                and "--sessions" in parameter.opts
+            )
+            assert sessions_option.help == (
+                f"Enter the interactive {command_name.title()} session launcher"
+            )
+
+        all_forms = tuple(
+            form
+            for forms in help_inventory.COMMAND_FORMS.values()
+            for form in forms
+        )
+        assert not any("browse saved work or start" in form for form in all_forms)
+        assert not any("browse saved Grounds or start" in form for form in all_forms)
+
+    def test_every_visible_command_has_explicitly_audited_forms(self):
+        root = get_command(app)
+        context = click.Context(root)
+        visible = {
+            name
+            for name in root.list_commands(context)
+            if (command := root.get_command(context, name)) is not None
+            and not command.hidden
+        }
+
+        assert set(help_inventory.COMMAND_FORMS) == visible
+
+    def test_every_advertised_form_is_accepted_by_the_registered_parser(self):
+        root = get_command(app)
+
+        def parse_without_invoking(
+            command,
+            command_name: str,
+            argv: list[str],
+            *,
+            parent: click.Context | None = None,
+        ) -> None:
+            context = command.make_context(command_name, argv, parent=parent)
+            try:
+                if not isinstance(command, click.Group):
+                    return
+                remaining = [*context.protected_args, *context.args]
+                if not remaining:
+                    return
+                child_name, child, child_argv = command.resolve_command(
+                    context,
+                    remaining,
+                )
+                assert child_name is not None
+                assert child is not None
+                parse_without_invoking(
+                    child,
+                    child_name,
+                    child_argv,
+                    parent=context,
+                )
+            finally:
+                context.close()
+
+        samples = {
+            "[campaign]": "ambiguity",
+            "[kind]": "compare",
+            "[method]": "paragraphs",
+            "[permission]": "READ",
+            "[provider]": "codex_chatgpt",
+        }
+        for command_name, forms in help_inventory.COMMAND_FORMS.items():
+            for form in forms:
+                command_line = help_inventory._selectable_form_line(form)
+                assert shlex.split(command_line)[:2] == ["mem", command_name], (
+                    f"{command_name} owns a form for another command: "
+                    f"{command_line}"
+                )
+                for placeholder, sample in samples.items():
+                    command_line = command_line.replace(placeholder, sample)
+                argv = shlex.split(command_line)[1:]
+
+                try:
+                    parse_without_invoking(root, "mem", argv)
+                except click.ClickException as error:
+                    raise AssertionError(
+                        f"{command_name} advertises an unparseable form: "
+                        f"{command_line}\n{error.format_message()}"
+                    ) from error
+
+    def test_meaningful_bare_callbacks_have_a_bare_form(self):
+        root = get_command(app)
+        context = click.Context(root)
+        semantic_usage_errors = {"add", "edit", "impact", "query"}
+
+        for command_name in root.list_commands(context):
+            command = root.get_command(context, command_name)
+            if command is None or command.hidden:
+                continue
+            if isinstance(command, click.Group):
+                meaningful_bare = command.invoke_without_command
+            else:
+                required_arguments = [
+                    parameter
+                    for parameter in command.params
+                    if isinstance(parameter, click.Argument) and parameter.required
+                ]
+                meaningful_bare = (
+                    not required_arguments
+                    and command_name not in semantic_usage_errors
+                )
+            if not meaningful_bare:
+                continue
+
+            selectable = {
+                help_inventory._selectable_form_line(form)
+                for form in help_inventory.COMMAND_FORMS[command_name]
+            }
+            assert f"mem {command_name}" in selectable
+
+    def test_find_history_form_uses_the_temporal_query_contract(self):
+        forms = help_inventory.COMMAND_FORMS["find"]
+
+        assert not any("--history" in form for form in forms)
+        assert any('mem find "[temporal_query]"' in form for form in forms)
 
     def test_free_text_placeholders_include_shell_quotes(self):
         assert help_inventory._selectable_form_line(
@@ -138,13 +317,18 @@ class TestHelp:
         assert help_inventory._selectable_form_line(
             help_inventory.COMMAND_FORMS["find"][0]
         ) == 'mem find "[query]"'
-        assert help_inventory._selectable_form_line(
-            help_inventory.COMMAND_FORMS["ground"][2]
-        ) == 'mem ground --request "[request]"'
+        request_form = next(
+            form
+            for form in help_inventory.COMMAND_FORMS["ground"]
+            if "--request" in form
+        )
+        assert help_inventory._selectable_form_line(request_form) == (
+            'mem ground --request "[request]"'
+        )
 
-    def test_selector_moves_down_and_returns_selected_command(self):
+    def test_selector_first_enter_opens_forms_and_second_returns_first_form(self):
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[B\r")
+            pipe_input.send_text("\x1b[B\r\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
@@ -157,7 +341,7 @@ class TestHelp:
 
     def test_selector_clamps_at_first_command_and_can_cancel(self):
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[A\r")
+            pipe_input.send_text("\x1b[A\r\r")
             selected = run_help_selector(
                 self.selector_entries(),
                 app_input=pipe_input,
@@ -202,6 +386,64 @@ class TestHelp:
             )
         assert second_form is not None
         assert second_form.command_line == "mem alpha VALUE"
+
+    def test_selector_second_enter_returns_placeholder_form_for_shell_editing(self):
+        entry = CommandEntry(
+            name="switch",
+            annotation=None,
+            description="Switch Contexts.",
+            command=object(),
+            forms=help_inventory.COMMAND_FORMS["switch"],
+        )
+        with create_pipe_input() as pipe_input:
+            # First Enter opens FORM 1, Down reaches FORM 2, and the second
+            # Enter returns the template rather than invoking ``mem switch``.
+            pipe_input.send_text("\r\x1b[B\r")
+            selected = run_help_selector(
+                [entry],
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem switch [context]"
+
+    def test_selector_reuses_shared_held_arrow_acceleration(self, monkeypatch):
+        class FiveStepAccelerator:
+            def step(self, direction):
+                assert direction == 1
+                return 5
+
+            def reset(self):
+                pass
+
+        monkeypatch.setattr(
+            help_inventory,
+            "NavigationAccelerator",
+            FiveStepAccelerator,
+        )
+        entries = [
+            CommandEntry(
+                name=f"command-{index}",
+                annotation=None,
+                description="Description.",
+                command=object(),
+                forms=(f"mem command-{index}",),
+            )
+            for index in range(8)
+        ]
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("\x1b[B\r\r")
+            selected = run_help_selector(
+                entries,
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem command-5"
 
     def test_enter_opens_command_help_without_running_command(
         self,

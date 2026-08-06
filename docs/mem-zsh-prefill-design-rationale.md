@@ -14,8 +14,10 @@ eval "$(mem shell-init zsh)"
 ```
 
 After that opt-in, an exact `mem help` invocation opens the existing picker.
-Enter places `mem <selected-command> ` in zsh's next edit buffer. The user can
-add required operands or options and decides whether to execute it.
+Enter on a command opens its invocation Forms; Enter on a focused Form places
+that editable template in zsh's next edit buffer. Both navigation confirmations
+are consumed before the picker closes. The user can replace placeholders or add
+options and separately decides whether to execute the resulting command.
 
 ## Data and control contract
 

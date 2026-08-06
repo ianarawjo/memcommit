@@ -22,6 +22,7 @@ from memcommit.commands.tui_primitives import (
     INLINE_AGENT_COMMENT_TITLE,
     INLINE_DIRECT_EDIT_TITLE,
     MEMCOMMIT_TUI_STYLE,
+    NavigationAccelerator,
     TuiRegion,
     anchored_fragments,
     bind_focused_frame_style,
@@ -44,6 +45,50 @@ class _RecordingApp:
 
     def invalidate(self) -> None:
         self.invalidations += 1
+
+
+def test_shared_navigation_accelerator_accelerates_only_after_hold_cadence():
+    accelerator = NavigationAccelerator()
+
+    held_input_times = [0.0, 0.35] + [0.35 + index * 0.08 for index in range(1, 15)]
+    assert [accelerator.step(1, now=now) for now in held_input_times] == [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+    ]
+    assert accelerator.step(1, now=2.0) == 1
+    assert accelerator.step(-1, now=2.1) == 1
+    assert accelerator.step(-1, now=2.6) == 1
+
+
+def test_shared_navigation_accelerator_never_accelerates_rapid_taps():
+    accelerator = NavigationAccelerator()
+
+    assert [accelerator.step(1, now=index * 0.08) for index in range(20)] == [
+        1
+    ] * 20
+
+
+def test_shared_navigation_accelerator_resets_on_interrupted_repeat_bursts():
+    accelerator = NavigationAccelerator()
+    interrupted_times = (0.0, 0.35, 0.43, 0.51, 0.82, 0.90, 0.98, 1.35)
+
+    assert [accelerator.step(1, now=now) for now in interrupted_times] == [
+        1
+    ] * len(interrupted_times)
 
 
 class _SizedDummyOutput(DummyOutput):
