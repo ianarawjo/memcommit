@@ -30,6 +30,13 @@ class CompareSetupReceipt:
 
 
 @dataclass(frozen=True)
+class AtomizeSetupReceipt:
+    input_name: str
+    output_name: str
+    create_output: bool = False
+
+
+@dataclass(frozen=True)
 class UpdateSetupReceipt:
     source_name: str
     target_name: str
@@ -180,6 +187,73 @@ def choose_compare_setup(
     )
 
 
+def choose_atomize_setup(
+    store: MemoryStore,
+    *,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> AtomizeSetupReceipt | None:
+    """Collect one local Input-to-Output plan for a shared Atomize session."""
+
+    names = tuple(store.list_context_names())
+    if not names:
+        raise ValueError("Starting Atomize requires an ordinary local Context.")
+    current = store.current_context_name()
+    input_name = current if current in names else names[0]
+
+    def validate(draft: EndpointSetupDraft) -> str | None:
+        source = draft.value("A")
+        output = draft.value("B")
+        if not output.create and output.context_name != source.context_name:
+            return (
+                "Output must be the Input Context for in-place Atomize or "
+                "a new exact Context name."
+            )
+        return None
+
+    draft = choose_session_endpoints(
+        names,
+        title="NEW ATOMIZE · INPUT A → OUTPUT B",
+        modes=(
+            EndpointModeSpec(
+                "ATOMIZE",
+                "INPUT A → OUTPUT B",
+                ("A", "B"),
+                {"A": "A · INPUT", "B": "B · OUTPUT"},
+                (
+                    "B may be the same Context for an in-place result or a "
+                    "new exact name that preserves A."
+                ),
+            ),
+        ),
+        roles=(
+            EndpointRoleSpec("A", frozenset(names), input_name),
+            EndpointRoleSpec(
+                "B",
+                frozenset(names),
+                input_name,
+                allow_new=True,
+                new_label="CREATE NEW OUTPUT CONTEXT",
+                prefer_new=True,
+            ),
+        ),
+        initial_mode_uid="ATOMIZE",
+        validate_draft=validate,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    if draft is None:
+        return None
+    output = draft.value("B")
+    return AtomizeSetupReceipt(
+        input_name=draft.value("A").context_name,
+        output_name=output.context_name,
+        create_output=output.create,
+    )
+
+
 def choose_update_setup(
     store: MemoryStore,
     *,
@@ -239,7 +313,6 @@ def choose_meld_setup(
     require_tty: bool = True,
 ) -> MeldSetupReceipt | None:
     names, first, second, annotations = _meld_source_catalog(store)
-    local_names = frozenset(store.list_context_names())
     # Eligibility is frozen independently of the initial A/B defaults. The
     # adapter's distinctness check excludes whichever peers are finally chosen.
     eligible = frozenset(eligible_meld_targets(store, source_names=("", "")))
@@ -248,14 +321,6 @@ def choose_meld_setup(
         distinct = _distinct_ab(draft)
         if distinct:
             return distinct
-        if draft.mode_uid == "DIRECTIONAL" and (
-            draft.value("A").context_name not in local_names
-            or draft.value("B").context_name not in local_names
-        ):
-            return (
-                "Granted sources are currently available only to symmetric "
-                "Meld; directional Meld mutates a local baseline."
-            )
         if draft.mode_uid == "SYMMETRIC":
             target = draft.value("C")
             if target.context_name in {
