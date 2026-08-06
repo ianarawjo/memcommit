@@ -166,6 +166,8 @@ def choose_sever_setup(
     def render_context(role: _Role) -> list[tuple[str, str]]:
         fragments: list[tuple[str, str]] = []
         rows = visible_rows(role)
+        control = source_control if role == "SOURCE" else criteria_control
+        tree_focused = app.layout.has_focus(control) and not scope_focused[role]
         for index, row in enumerate(rows):
             focused = tree_state[role].selected_name == row.name
             if focused:
@@ -184,7 +186,11 @@ def choose_sever_setup(
             suffix_text = (
                 f"  {display_escape_text(annotation)}" if annotation else ""
             )
-            style = "class:memcommit.table.selected" if focused else ""
+            style = (
+                "class:memcommit.table.selected"
+                if focused and tree_focused
+                else ""
+            )
             fragments.append(
                 (
                     style,
@@ -208,7 +214,10 @@ def choose_sever_setup(
             return render_horizontal_choice(
                 scope_choice[role],
                 title="SCOPE",
-                focused=scope_focused[role],
+                focused=(
+                    scope_focused[role]
+                    and app.layout.has_focus(control)
+                ),
             )
 
         scope = Window(
