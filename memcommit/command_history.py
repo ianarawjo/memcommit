@@ -45,6 +45,7 @@ class ContextCommandUnit:
     started_at: str
     completed_at: str
     changes: tuple[CommandContextChange, ...]
+    checkpoint_args: tuple[dict[str, object], ...]
 
 
 @dataclass(frozen=True)
@@ -68,6 +69,7 @@ class _OriginalPart:
     description: str
     timestamp: str
     expected_contexts: tuple[tuple[str, str], ...] | None
+    args: dict[str, object]
     change: CommandContextChange
 
 
@@ -370,6 +372,7 @@ def _context_parts(
                         description=f"Reverted to checkpoint [{target_uid[:8]}]",
                         timestamp=timestamp,
                         expected_contexts=None,
+                        args=args,
                         change=CommandContextChange(
                             context_uid=context.uid,
                             context_name=context.name,
@@ -422,6 +425,7 @@ def _context_parts(
                     description=description,
                     timestamp=timestamp,
                     expected_contexts=None,
+                    args=args,
                     change=CommandContextChange(
                         context_uid=context.uid,
                         context_name=context.name,
@@ -467,6 +471,7 @@ def _context_parts(
                 expected_contexts=_command_contexts(
                     args.get("command_contexts")
                 ),
+                args=args,
                 change=CommandContextChange(
                     context_uid=context.uid,
                     context_name=context.name,
@@ -524,6 +529,7 @@ def _group_originals(parts: list[_OriginalPart]) -> dict[str, ContextCommandUnit
             started_at=min(member.timestamp for member in members),
             completed_at=max(member.timestamp for member in members),
             changes=tuple(member.change for member in ordered),
+            checkpoint_args=tuple(member.args for member in ordered),
         )
     return units
 

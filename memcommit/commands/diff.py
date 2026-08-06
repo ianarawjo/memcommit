@@ -15,9 +15,7 @@ from memcommit.memory_diff import (
     memory_diff_lines,
     update_operation_change,
 )
-from memcommit.commands.update_checkpoint_history import (
-    choose_update_checkpoint_history,
-)
+from memcommit.commands.diff_browser import browse_diff
 from memcommit.commands.update_render import render_plan
 from memcommit.update import (
     AddOperation,
@@ -397,6 +395,15 @@ def render_diff(
 
 
 def cmd(
+    context_name: Annotated[
+        str | None,
+        typer.Argument(
+            help=(
+                "Existing Context to inspect; omit in a TTY to select from "
+                "the shared Context tree"
+            )
+        ),
+    ] = None,
     raw: Annotated[
         bool,
         typer.Option(
@@ -427,6 +434,14 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if context_name is not None and (raw or stat or verbose):
+        typer.secho(
+            "Diff error: a Context operand cannot be combined with "
+            "--raw, --stat, or --verbose.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
 
     store = MemoryStore(create=False)
     try:
@@ -434,6 +449,30 @@ def cmd(
     except (OSError, ValueError) as error:
         typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
+    if context_name is not None or (
+        not raw and not stat and not verbose and _interactive_terminal()
+    ):
+        browser_session = (
+            session
+            if session is not None
+            and session.status in {"staged", "applied", "undone"}
+            else None
+        )
+        try:
+            browse_diff(
+                store,
+                session=browser_session,
+                context_locator=context_name,
+            )
+        except (OSError, RuntimeError, ValueError) as error:
+            typer.secho(
+                f"Diff browser error: {error}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        return
+
     if session is None:
         typer.secho(
             "Diff error: no local update. Run 'mem update --to <context>' "
@@ -485,23 +524,12 @@ def cmd(
             bold=True,
             err=True,
         )
-    if (
-        not raw
-        and not stat
-        and not verbose
-        and _interactive_terminal()
-    ):
-        if session.operations:
-            choose_update_checkpoint_history(session)
-        else:
-            render_diff(session)
-    else:
-        render_diff(
-            session,
-            raw=raw,
-            stat=stat,
-            verbose=verbose,
-        )
+    render_diff(
+        session,
+        raw=raw,
+        stat=stat,
+        verbose=verbose,
+    )
     if not fresh:
         guidance = (
             "The recorded diff remains inspectable, but it cannot be treated "

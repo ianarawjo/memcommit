@@ -12,26 +12,28 @@ from dataclasses import dataclass
 from typing import Callable, Literal, Protocol, runtime_checkable
 
 from prompt_toolkit.application import Application
-from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import (
-    ConditionalContainer,
     FormattedTextControl,
     HSplit,
     Layout,
     Window,
 )
 from prompt_toolkit.layout.dimension import Dimension
+from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
+from prompt_toolkit.widgets import Frame
 
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    bind_focused_frame_style,
     display_escape_text,
 )
+from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 
 HistoryPickerMode = Literal["log", "revert"]
@@ -79,6 +81,14 @@ class HistorySelectionReceipt:
 
     context_name: str
     checkpoint_uid: str
+
+
+@dataclass(frozen=True)
+class HistoryBackNavigation:
+    """Read-only receipt requesting return to the owning previous screen."""
+
+
+HISTORY_BACK = HistoryBackNavigation()
 
 
 @dataclass
@@ -169,7 +179,8 @@ def choose_history(
     initial_details_open: bool | None = None,
     detail_renderer: Callable[[HistoryPickerItem], StyleAndTextTuples] | None = None,
     empty_message: str | None = None,
-) -> HistorySelectionReceipt | None:
+    back_navigation: bool = False,
+) -> HistorySelectionReceipt | HistoryBackNavigation | None:
     """Inspect history or return one exact checkpoint selection.
 
     In ``log`` mode Enter toggles the selected checkpoint's details and only a
@@ -251,7 +262,9 @@ def choose_history(
 
     def render_detail() -> str | StyleAndTextTuples:
         if not options:
-            return ""
+            return " No checkpoint operation is available."
+        if not state.details_open:
+            return " Select an item and press Enter to open its detail."
         entry = options[state.selected_index]
         return (
             detail_renderer(entry)
@@ -260,20 +273,32 @@ def choose_history(
         )
 
     def render_footer() -> str:
+        close = (
+            "Esc/Backspace back  q close"
+            if back_navigation
+            else "Esc/Backspace/q close"
+        )
         if not options:
-            return " Esc/q close  ·  0/0"
+            return f" {close}  ·  0/0"
         position = f"{state.selected_index + 1}/{len(options)}"
+        if navigation.pane == "viewer":
+            return (
+                " FOCUS VIEWER · ↑/↓ scroll  Enter/Esc/Backspace items  "
+                f"Tab switch  q close  ·  {position}"
+            )
         if mode == "revert":
             action = "Enter revert to exact UID"
-            close = "Esc/q cancel"
-        else:
-            action = (
-                "Enter hide details"
-                if state.details_open
-                else "Enter details"
+            close = (
+                "Esc/Backspace back  q cancel"
+                if back_navigation
+                else "Esc/Backspace/q cancel"
             )
-            close = "Esc/q close"
-        return f" ↑/↓ move  {action}  {close}  ·  {position}"
+        else:
+            action = "Enter viewer"
+        return (
+            f" FOCUS ITEMS · ↑/↓ move  {action}  Tab switch  {close}"
+            f"  ·  {position}"
+        )
 
     list_control = FormattedTextControl(
         text=render_entries,
@@ -282,41 +307,103 @@ def choose_history(
     )
     detail_control = FormattedTextControl(
         text=render_detail,
-        focusable=False,
+        focusable=True,
         show_cursor=False,
     )
+    navigation = SessionWorkbenchNavigation(pane="items")
+    options_window = Window(
+        list_control,
+        height=Dimension(
+            min=1,
+            preferred=min(len(options), _VISIBLE_ROWS),
+            max=_VISIBLE_ROWS,
+            weight=3,
+        ),
+        wrap_lines=False,
+        right_margins=[ScrollbarMargin(display_arrows=True)],
+    )
+    detail_window = Window(
+        detail_control,
+        height=Dimension(min=6, preferred=14, weight=7),
+        wrap_lines=True,
+        right_margins=[ScrollbarMargin(display_arrows=True)],
+    )
+    windows = {"viewer": detail_window, "items": options_window}
 
     @bindings.add("down")
     def _next_checkpoint(event) -> None:
+        if navigation.pane == "viewer":
+            detail_window.vertical_scroll += 1
+            event.app.invalidate()
+            return
         if not options:
             return
         _move(state, 1, len(options))
+        detail_window.vertical_scroll = 0
         event.app.invalidate()
 
     @bindings.add("up")
     def _previous_checkpoint(event) -> None:
+        if navigation.pane == "viewer":
+            detail_window.vertical_scroll = max(
+                0,
+                detail_window.vertical_scroll - 1,
+            )
+            event.app.invalidate()
+            return
         if not options:
             return
         _move(state, -1, len(options))
+        detail_window.vertical_scroll = 0
         event.app.invalidate()
 
     @bindings.add("enter")
     def _enter(event) -> None:
+        if navigation.pane == "viewer":
+            navigation.focus("items")
+            event.app.layout.focus(windows["items"])
+            event.app.invalidate()
+            return
         if not options:
             return
-        result = _activate(
-            state,
-            mode=mode,
-            context_name=context_name,
-            entry=options[state.selected_index],
-        )
         if mode == "revert":
+            result = _activate(
+                state,
+                mode=mode,
+                context_name=context_name,
+                entry=options[state.selected_index],
+            )
             event.app.exit(result=result)
         else:
+            state.details_open = True
+            navigation.open_selected()
+            detail_window.vertical_scroll = 0
+            event.app.layout.focus(windows["viewer"])
             event.app.invalidate()
 
-    @bindings.add("q", eager=True)
+    @bindings.add("tab")
+    def _next_pane(event) -> None:
+        pane = navigation.toggle_frames()
+        event.app.layout.focus(windows[pane])
+        event.app.invalidate()
+
+    @bindings.add("s-tab")
+    def _previous_pane(event) -> None:
+        pane = navigation.toggle_frames()
+        event.app.layout.focus(windows[pane])
+        event.app.invalidate()
+
     @bindings.add("escape", eager=True)
+    @bindings.add("backspace", eager=True)
+    def _back(event) -> None:
+        if navigation.pane == "viewer":
+            navigation.focus("items")
+            event.app.layout.focus(windows["items"])
+            event.app.invalidate()
+            return
+        event.app.exit(result=HISTORY_BACK if back_navigation else None)
+
+    @bindings.add("q", eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:
         event.app.exit(result=None)
@@ -331,37 +418,22 @@ def choose_history(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    options_window = Window(
-        list_control,
-        height=Dimension(
-            min=1,
-            preferred=min(len(options), _VISIBLE_ROWS),
-            max=_VISIBLE_ROWS,
-        ),
-        wrap_lines=False,
-    )
-    detail_window = ConditionalContainer(
-        Window(
-            detail_control,
-            height=Dimension(min=6, preferred=10, weight=1),
-            wrap_lines=True,
-        ),
-        filter=Condition(lambda: state.details_open),
-    )
+    viewer_frame = Frame(detail_window, title="VIEWER")
+    items_frame = Frame(options_window, title="ITEMS")
     footer = Window(
         FormattedTextControl(render_footer),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    app: Application[HistorySelectionReceipt | None] = Application(
+    app: Application[
+        HistorySelectionReceipt | HistoryBackNavigation | None
+    ] = Application(
         layout=Layout(
             HSplit(
                 [
                     header,
-                    Window(height=1, char="─"),
-                    options_window,
-                    Window(height=1, char="─"),
-                    detail_window,
+                    viewer_frame,
+                    items_frame,
                     footer,
                 ]
             ),
@@ -374,6 +446,11 @@ def choose_history(
         output=app_output,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
     )
+    for pane, frame in (("viewer", viewer_frame), ("items", items_frame)):
+        bind_focused_frame_style(
+            frame,
+            is_focused=lambda pane=pane: navigation.pane == pane,
+        )
     try:
         return app.run()
     except (EOFError, KeyboardInterrupt):

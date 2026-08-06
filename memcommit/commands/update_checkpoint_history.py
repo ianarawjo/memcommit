@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import dataclass
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
 from memcommit.commands.history_picker import (
+    HistoryBackNavigation,
     HistoryPickerEntry,
     HistoryPickerItem,
     choose_history,
@@ -14,6 +16,13 @@ from memcommit.commands.history_location_picker import choose_history_location
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.memory_diff import memory_diff_lines, update_operation_change
 from memcommit.update import UpdateSession
+
+
+@dataclass(frozen=True)
+class UpdateSubtreeCheckpointEntry(HistoryPickerEntry):
+    """One location-owned checkpoint projected into a subtree history."""
+
+    location: str
 
 
 def _location_names(session: UpdateSession) -> tuple[str, ...]:
@@ -91,6 +100,50 @@ def update_checkpoint_entry(
             else "Staged Update · no checkpoint has been created."
         ),
     )
+
+
+def update_subtree_locations(
+    session: UpdateSession,
+    root: str,
+) -> tuple[str, ...]:
+    """Return changed owners at or lexically below one frozen catalog root."""
+
+    prefix = root + "/"
+    return tuple(
+        location
+        for location in _location_names(session)
+        if location == root or location.startswith(prefix)
+    )
+
+
+def update_subtree_checkpoint_entries(
+    session: UpdateSession,
+    root: str,
+) -> tuple[UpdateSubtreeCheckpointEntry, ...]:
+    """Project every available changed owner into one inspectable list."""
+
+    entries: list[UpdateSubtreeCheckpointEntry] = []
+    for index, location in enumerate(update_subtree_locations(session, root), 1):
+        entry = update_checkpoint_entry(session, location)
+        # Staged locations share one session UID. The process-local suffix only
+        # keeps history rows addressable; detail still labels the checkpoint as
+        # not created and never presents this projection as a durable identity.
+        projected_uid = (
+            entry.uid
+            if location in _checkpoint_by_location(session)
+            else f"{entry.uid}:location-{index}"
+        )
+        entries.append(
+            UpdateSubtreeCheckpointEntry(
+                uid=projected_uid,
+                timestamp=entry.timestamp,
+                command=entry.command,
+                description=f"{location} · {entry.description}",
+                detail=entry.detail,
+                location=location,
+            )
+        )
+    return tuple(entries)
 
 
 def update_checkpoint_detail_renderer(
@@ -196,19 +249,56 @@ def choose_update_checkpoint_history(session: UpdateSession) -> None:
     )
     if selected is None:
         return
+    if not isinstance(selected, str):
+        raise ValueError("This Update history does not expose a subtree scope.")
     choose_update_checkpoint_at_location(session, selected)
 
 
 def choose_update_checkpoint_at_location(
     session: UpdateSession,
     location: str,
-) -> None:
+    *,
+    back_navigation: bool = False,
+) -> HistoryBackNavigation | None:
     """Inspect the recorded Update checkpoint for one already-selected location."""
     entry = update_checkpoint_entry(session, location)
-    choose_history(
+    result = choose_history(
         (entry,),
         context_name=location,
         mode="log",
         initial_details_open=True,
         detail_renderer=update_checkpoint_detail_renderer(session, location),
+        back_navigation=back_navigation,
     )
+    return result if isinstance(result, HistoryBackNavigation) else None
+
+
+def choose_update_checkpoint_subtree(
+    session: UpdateSession,
+    root: str,
+    *,
+    back_navigation: bool = False,
+) -> HistoryBackNavigation | None:
+    """Inspect all Update checkpoints owned at or below one catalog root."""
+
+    entries = update_subtree_checkpoint_entries(session, root)
+    if not entries:
+        raise ValueError("The selected Update subtree has no changed Contexts.")
+
+    def render(entry: HistoryPickerItem) -> StyleAndTextTuples:
+        if not isinstance(entry, UpdateSubtreeCheckpointEntry):
+            raise ValueError("Update subtree history received an invalid entry.")
+        return update_checkpoint_detail_renderer(
+            session,
+            entry.location,
+        )(entry)
+
+    result = choose_history(
+        entries,
+        context_name=f"{root} · CHANGED SUBTREE",
+        mode="log",
+        initial_details_open=True,
+        detail_renderer=render,
+        back_navigation=back_navigation,
+    )
+    return result if isinstance(result, HistoryBackNavigation) else None

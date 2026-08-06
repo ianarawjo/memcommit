@@ -1,13 +1,14 @@
 """Action- and impact-oriented receipts for Context restoration commands."""
 from __future__ import annotations
 
+import shlex
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
 import typer
 
-from memcommit.command_history import CommandRestoreResult
+from memcommit.command_history import CommandRestoreResult, ContextCommandUnit
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.context import Checkpoint
 
@@ -151,16 +152,20 @@ def _change_line(change: _ItemChange) -> str:
     )
 
 
+def _change_item_kind(change: _ItemChange) -> str:
+    before_kind = _item_kind(change.before)
+    after_kind = _item_kind(change.after)
+    if before_kind == after_kind or change.after is None:
+        return before_kind
+    if change.before is None:
+        return after_kind
+    return "direct item"
+
+
 def _impact_summary(changes: list[_ItemChange], reordered: bool) -> str:
     counts: dict[tuple[str, str], int] = {}
     for change in changes:
-        before_kind = _item_kind(change.before)
-        after_kind = _item_kind(change.after)
-        item_kind = (
-            before_kind
-            if before_kind == after_kind or change.after is None
-            else after_kind if change.before is None else "direct item"
-        )
+        item_kind = _change_item_kind(change)
         key = (item_kind, change.kind)
         counts[key] = counts.get(key, 0) + 1
 
@@ -195,6 +200,262 @@ def _action_name(command: str | None, *, fallback: str) -> str:
     return "mem " + _short(command.strip(), limit=80)
 
 
+def _command_arg(value: object) -> str:
+    """Return one display-safe shell argument without introducing new lines."""
+
+    return shlex.quote(display_escape_text(str(value)))
+
+
+def _sole_context(unit: ContextCommandUnit) -> str | None:
+    names = {change.context_name for change in unit.changes}
+    return next(iter(names)) if len(names) == 1 else None
+
+
+def _operand_context(
+    args: Mapping[str, object], fallback: str | None
+) -> str | None:
+    """Prefer the retained public Grant operand over its authority owner."""
+
+    grant = args.get("authority_grant")
+    if isinstance(grant, Mapping) and isinstance(
+        grant.get("public_context"), str
+    ):
+        return grant["public_context"]
+    return fallback
+
+
+def _with_context(command: str, context_name: str | None) -> str:
+    if context_name is None:
+        return command
+    return f"{command} --context {_command_arg(context_name)}"
+
+
+def _meld_command(args: Mapping[str, object]) -> str | None:
+    left = args.get("left")
+    right = args.get("right")
+    target = args.get("to")
+    if all(isinstance(value, str) for value in (left, right, target)):
+        return (
+            f"mem meld {_command_arg(left)} {_command_arg(right)} "
+            f"--to {_command_arg(target)}"
+        )
+
+    record = args.get("meld")
+    if not isinstance(record, Mapping):
+        return None
+    sources = record.get("sources")
+    baseline = record.get("target_baseline")
+    if not isinstance(sources, list) or not isinstance(baseline, Mapping):
+        return None
+    source_names = [
+        item.get("context_name")
+        for item in sources
+        if isinstance(item, Mapping)
+        and isinstance(item.get("context_name"), str)
+    ]
+    target_name = baseline.get("context_name")
+    if not isinstance(target_name, str):
+        return None
+    if record.get("mode") == "DIRECTIONAL" and source_names:
+        incoming = next(
+            (
+                item.get("context_name")
+                for item in sources
+                if isinstance(item, Mapping)
+                and item.get("role") == "INCOMING"
+                and isinstance(item.get("context_name"), str)
+            ),
+            source_names[0],
+        )
+        return (
+            f"mem meld {_command_arg(incoming)} "
+            f"--into {_command_arg(target_name)} --accept"
+        )
+    if len(source_names) >= 2:
+        return (
+            f"mem meld {_command_arg(source_names[0])} "
+            f"{_command_arg(source_names[1])} "
+            f"--to {_command_arg(target_name)} --accept"
+        )
+    return None
+
+
+def _sever_command(args: Mapping[str, object]) -> str | None:
+    record = args.get("sever")
+    if not isinstance(record, Mapping):
+        return None
+    source = record.get("source")
+    criteria = record.get("criteria")
+    output = record.get("output")
+    if not all(isinstance(value, str) for value in (source, criteria, output)):
+        return None
+    source_scope = (
+        "--source-descendants"
+        if record.get("source_scope") == "INCLUDE_DESCENDANTS"
+        else "--source-only"
+    )
+    criteria_scope = (
+        "--criteria-descendants"
+        if record.get("criteria_scope") == "INCLUDE_DESCENDANTS"
+        else "--criteria-only"
+    )
+    return (
+        f"mem sever --source {_command_arg(source)} "
+        f"--criteria {_command_arg(criteria)} --save-as {_command_arg(output)} "
+        f"{source_scope} {criteria_scope} --accept"
+    )
+
+
+def _translate_command(args: Mapping[str, object]) -> str | None:
+    language = args.get("target_language")
+    source = args.get("source_context")
+    scope = args.get("scope")
+    if not isinstance(language, str) or not isinstance(source, Mapping):
+        return None
+    source_name = source.get("name")
+    if not isinstance(source_name, str):
+        return None
+    selector = None
+    if isinstance(scope, Mapping) and scope.get("kind") == "memory":
+        selector = scope.get("memory_uid")
+        if not isinstance(selector, str):
+            return None
+    command = "mem translate"
+    if selector is not None:
+        command += f" {_command_arg(selector)}"
+    command += f" --to {_command_arg(language)}"
+    destination = args.get("destination_context")
+    if isinstance(destination, Mapping) and isinstance(destination.get("name"), str):
+        command += f" --save-as {_command_arg(destination['name'])}"
+    else:
+        command += " --in-place"
+    return command
+
+
+def _restored_command(unit: ContextCommandUnit) -> str:
+    """Render a canonical effective command from retained checkpoint args."""
+
+    context_name = _sole_context(unit)
+    args = unit.checkpoint_args[0] if unit.checkpoint_args else {}
+    operand_context = _operand_context(args, context_name)
+    if unit.command == "add":
+        if isinstance(args.get("content"), str):
+            return _with_context(
+                "mem add <CONTENT>", operand_context
+            )
+        if isinstance(args.get("input"), str):
+            return _with_context(
+                f"mem add --input {_command_arg(args['input'])}", operand_context
+            )
+        if args.get("mode") == "paste":
+            return _with_context("mem add --paste", operand_context)
+    if unit.command == "edit":
+        if isinstance(args.get("input"), str):
+            return _with_context(
+                f"mem edit --input {_command_arg(args['input'])}",
+                operand_context,
+            )
+        if isinstance(args.get("uid"), str) and isinstance(
+            args.get("content"), str
+        ):
+            return _with_context(
+                f"mem edit {_command_arg(args['uid'])} "
+                "<CONTENT>",
+                operand_context,
+            )
+    if unit.command == "remove" and isinstance(args.get("uid"), str):
+        return _with_context(
+            f"mem remove {_command_arg(args['uid'])}", operand_context
+        )
+    if unit.command == "chunk" and isinstance(args.get("uid"), str):
+        command = f"mem chunk {_command_arg(args['uid'])}"
+        if isinstance(args.get("method"), str):
+            command += f" --method {_command_arg(args['method'])}"
+        return command
+    if unit.command == "clear":
+        target = args.get("context") or context_name
+        if isinstance(target, str):
+            return f"mem clear {_command_arg(target)} --force"
+    if unit.command == "embed" and isinstance(args.get("child"), str) and isinstance(
+        args.get("into"), str
+    ):
+        return (
+            f"mem embed {_command_arg(args['child'])} "
+            f"--into {_command_arg(args['into'])}"
+        )
+    if unit.command == "reference" and all(
+        isinstance(args.get(key), str)
+        for key in ("memory_uid", "source", "into")
+    ):
+        return (
+            f"mem reference {_command_arg(args['memory_uid'])} "
+            f"--from {_command_arg(args['source'])} "
+            f"--into {_command_arg(args['into'])}"
+        )
+    if unit.command == "merge" and isinstance(args.get("source"), str):
+        return f"mem merge {_command_arg(args['source'])}"
+    if unit.command == "forget" and isinstance(args.get("query"), str):
+        return "mem forget <INSTRUCTION>"
+    if unit.command == "integrate" and isinstance(args.get("info"), str):
+        return "mem integrate <INFO>"
+    if unit.command == "meld":
+        command = _meld_command(args)
+        if command is not None:
+            return command
+    if unit.command == "sever":
+        command = _sever_command(args)
+        if command is not None:
+            return command
+    if unit.command == "translate":
+        command = _translate_command(args)
+        if command is not None:
+            return command
+    if unit.command == "revert" and isinstance(args.get("target_uid"), str):
+        return f"mem revert {_command_arg(args['target_uid'])}"
+    if unit.command == "atomize":
+        if context_name is not None:
+            if unit.changes and unit.changes[0].before is None:
+                return f"mem atomize --save-as {_command_arg(context_name)}"
+            return f"mem atomize --save --context {_command_arg(context_name)}"
+    if unit.command == "atomize-grounding" and context_name is not None:
+        return (
+            "mem atomize --accept-grounding --context "
+            + _command_arg(context_name)
+        )
+    if unit.command == "dev query-source install" and all(
+        isinstance(args.get(key), str) for key in ("name", "into")
+    ):
+        command = (
+            f"mem dev query-source install {_command_arg(args['name'])} "
+        )
+        source_file = args.get("source_file")
+        if isinstance(source_file, str):
+            command += f"--from {_command_arg(source_file)} "
+        # Legacy checkpoints omit the concealed source path. Keep their exact
+        # retained operands and do not fabricate a --from value.
+        return command + f"--into {_command_arg(args['into'])}"
+    if unit.command != "update":
+        return _action_name(unit.command, fallback="recorded Context command")
+
+    sources = {
+        args.get("source_context_name")
+        for args in unit.checkpoint_args
+        if isinstance(args.get("source_context_name"), str)
+    }
+    targets = {
+        args.get("target_context_name")
+        for args in unit.checkpoint_args
+        if isinstance(args.get("target_context_name"), str)
+    }
+    if not targets and len(unit.changes) == 1:
+        targets = {unit.changes[0].context_name}
+    if len(sources) == 1 and len(targets) == 1:
+        source = _command_arg(next(iter(sources)))
+        target = _command_arg(next(iter(targets)))
+        return f"mem update --from {source} --to {target}"
+    return "mem update"
+
+
 def _render_impact(
     *,
     context_name: str,
@@ -227,37 +488,60 @@ def _render_action_detail(description: str | None) -> None:
         )
 
 
-def render_command_restore_receipt(result: CommandRestoreResult) -> None:
-    """Report one global command-unit Undo or Redo and every affected Context."""
-    direction = result.direction
-    past = "Undid" if direction == "undo" else "Redid"
-    inverse = "redo" if direction == "undo" else "undo"
-    typer.secho(
-        f"{past} command: "
-        + _action_name(result.unit.command, fallback="recorded Context command"),
-        fg=typer.colors.GREEN,
-        bold=True,
-    )
-    _render_action_detail(result.unit.description)
-    count = len(result.unit.changes)
-    typer.echo(f"Affected Contexts: {count}")
-    for change in result.unit.changes:
+def _compact_restore_effect(result: CommandRestoreResult) -> str:
+    """Summarize one restoration without repeating restored Memory content."""
+
+    changes: list[_ItemChange] = []
+    reordered_contexts = 0
+    for context_change in result.unit.changes:
         before_snapshot = (
-            change.after if direction == "undo" else change.before
+            context_change.after
+            if result.direction == "undo"
+            else context_change.before
         )
         after_snapshot = (
-            change.before if direction == "undo" else change.after
+            context_change.before
+            if result.direction == "undo"
+            else context_change.after
         )
-        _render_impact(
-            context_name=change.context_name,
-            before_snapshot=before_snapshot,
-            after_snapshot=after_snapshot,
+        context_changes, reordered = _changes(before_snapshot, after_snapshot)
+        changes.extend(context_changes)
+        reordered_contexts += int(reordered)
+
+    memory_changes = [
+        change
+        for change in changes
+        if _change_item_kind(change) == "Memory"
+    ]
+    parts = [f"Affected Memories: {len(memory_changes)}"]
+    markers = {"added": "+", "edited": "~", "removed": "-"}
+    for kind in ("added", "edited", "removed"):
+        count = sum(change.kind == kind for change in memory_changes)
+        if count:
+            parts.append(f"{markers[kind]} {count} {kind}")
+
+    other_changes = [change for change in changes if change not in memory_changes]
+    if other_changes:
+        parts.append("Other: " + _impact_summary(other_changes, False))
+    if reordered_contexts:
+        parts.append(
+            f"~ order restored in {reordered_contexts} "
+            f"{'Context' if reordered_contexts == 1 else 'Contexts'}"
         )
-    typer.secho(
-        f"Restoration receipt: [{result.receipt_uid[:8]}]",
-        dim=True,
+    return " · ".join(parts)
+
+
+def render_command_restore_receipt(result: CommandRestoreResult) -> None:
+    """Report one global Undo or Redo as a compact one-line receipt."""
+    direction = result.direction
+    past = "Undid" if direction == "undo" else "Redid"
+    typer.echo(
+        f"{past} command: "
+        + _restored_command(result.unit)
+        + f" · Affected Contexts: {len(result.unit.changes)}"
+        + " · "
+        + _compact_restore_effect(result)
     )
-    typer.secho(f"{inverse.title()} command: mem {inverse}", dim=True)
 
 
 def render_revert_receipt(

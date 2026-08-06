@@ -27,9 +27,8 @@ def test_undo_restores_the_previous_distinct_context_state(isolated_store):
 
     assert result.exit_code == 0
     assert "Undid command: mem add" in result.output
-    assert "Affected Context: notes" in result.output
-    assert "Affected content: 1 Memory removed" in result.output
-    assert 'Memory: "undo me"' in result.output
+    assert "Affected Contexts: 1" in result.output
+    assert "Affected Memories: 1 · - 1 removed" in result.output
     contents = [
         memory.content for memory in MemoryStore().load_current().memories.values()
     ]
@@ -132,14 +131,12 @@ def test_undo_and_redo_follow_global_command_order_across_contexts(
     first_undo = invoke("undo")
 
     assert first_undo.exit_code == 0, first_undo.output
-    assert "Affected Context: second" in first_undo.output
     assert not store.load_direct("second").memories
     assert store.load_direct("first").memories
 
     second_undo = invoke("undo")
 
     assert second_undo.exit_code == 0, second_undo.output
-    assert "Affected Context: first" in second_undo.output
     assert not store.load_direct("first").memories
 
     first_redo = invoke("redo")
@@ -147,9 +144,7 @@ def test_undo_and_redo_follow_global_command_order_across_contexts(
 
     assert first_redo.exit_code == 0, first_redo.output
     assert "Redid command: mem add" in first_redo.output
-    assert "Affected Context: first" in first_redo.output
     assert second_redo.exit_code == 0, second_redo.output
-    assert "Affected Context: second" in second_redo.output
     assert store.load_direct("first").memories
     assert store.load_direct("second").memories
 

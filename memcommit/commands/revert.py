@@ -8,6 +8,7 @@ from typing import Annotated, Any, Optional
 
 import typer
 
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.history_picker import (
     HistorySelectionReceipt,
     choose_history,
@@ -100,13 +101,20 @@ def _semantic_selection(
             "'mem revert <checkpoint-uid>'."
         )
     timeline = build_history(store, name)
-    results = search_history(
-        timeline,
-        query,
-        connect_codex_chatgpt_provider(),
-        result_kinds=("checkpoint",),
-        limit=20,
-    )
+    with CommandProgress(
+        "REVERT",
+        "connecting provider",
+        total=2,
+    ) as progress:
+        provider = connect_codex_chatgpt_provider()
+        progress.update("searching history", step=2)
+        results = search_history(
+            timeline,
+            query,
+            provider,
+            result_kinds=("checkpoint",),
+            limit=20,
+        )
     active_uids = {
         entry["uid"]
         for entry in entries
@@ -242,7 +250,7 @@ def cmd(
         typer.Argument(
             help=(
                 "Checkpoint UID/prefix, or a natural-language description; "
-                "omit to choose interactively"
+                "omit to enter the interactive checkpoint picker"
             )
         ),
     ] = None,

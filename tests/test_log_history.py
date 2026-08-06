@@ -48,19 +48,50 @@ def test_tty_log_opens_shared_picker(isolated_store, monkeypatch):
         lambda: True,
     )
 
-    def choose(entries, *, context_name, mode):
+    def choose_location(names, **kwargs):
+        observed["locations"] = names
+        observed["location_title"] = kwargs["title"]
+        observed["annotations"] = kwargs["annotations"]
+        observed["operation_rows"] = kwargs["operation_loader"]("notes")
+        return "notes"
+
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history_location",
+        choose_location,
+    )
+
+    def choose(
+        entries,
+        *,
+        context_name,
+        mode,
+        initial_details_open,
+        empty_message,
+        **_kwargs,
+    ):
         observed["entries"] = entries
         observed["context_name"] = context_name
         observed["mode"] = mode
+        observed["initial_details_open"] = initial_details_open
+        observed["empty_message"] = empty_message
         return None
 
-    monkeypatch.setattr("memcommit.commands.log.choose_history", choose)
+    monkeypatch.setattr("memcommit.commands.diff_browser.choose_history", choose)
 
     result = invoke("log")
 
     assert result.exit_code == 0
     assert observed["context_name"] == "notes"
+    assert observed["locations"] == ("notes",)
+    assert observed["location_title"] == "LOG · SELECT A CONTEXT"
+    assert observed["annotations"]["notes"] == (
+        "1 direct · 0 descendant operations"
+    )
+    assert [row.label for row in observed["operation_rows"]] == ["add"]
+    assert observed["operation_rows"][0].style == "report-neutral"
     assert observed["mode"] == "log"
+    assert observed["initial_details_open"] is True
+    assert observed["empty_message"] == "No checkpoints for this Context yet."
     assert len(observed["entries"]) == 2
     assert "Snapshot:" in observed["entries"][0].detail
 
@@ -141,11 +172,24 @@ def test_manual_picker_detail_uses_the_actual_preceding_checkpoint(
         lambda: True,
     )
 
-    def choose(entries, *, context_name, mode):
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history_location",
+        lambda *args, **kwargs: "notes",
+    )
+
+    def choose(
+        entries,
+        *,
+        context_name,
+        mode,
+        initial_details_open,
+        empty_message,
+        **_kwargs,
+    ):
         observed["entries"] = entries
         return None
 
-    monkeypatch.setattr("memcommit.commands.log.choose_history", choose)
+    monkeypatch.setattr("memcommit.commands.diff_browser.choose_history", choose)
 
     result = invoke("log", "--manual")
 

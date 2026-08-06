@@ -93,6 +93,27 @@ def test_diff_requires_a_local_update(isolated_store):
     assert not isolated_store.exists()
 
 
+def test_tty_diff_can_browse_context_history_without_a_saved_update(
+    isolated_store,
+    monkeypatch,
+):
+    opened = []
+    monkeypatch.setattr(
+        "memcommit.commands.diff._interactive_terminal",
+        lambda: True,
+    )
+
+    def browse(store_arg, *, session, context_locator):
+        opened.append((session, context_locator))
+
+    monkeypatch.setattr("memcommit.commands.diff.browse_diff", browse)
+
+    result = runner.invoke(app, ["diff"])
+
+    assert result.exit_code == 0, result.output
+    assert opened == [(None, None)]
+
+
 def test_diff_renders_readable_semantic_edit_addition_and_provenance(
     isolated_store,
 ):
@@ -226,7 +247,7 @@ def test_diff_is_read_only_and_does_not_depend_on_current_context(
     assert after == before
 
 
-def test_diff_opens_location_then_checkpoint_history_in_a_tty(
+def test_diff_opens_common_context_tree_before_checkpoint_history_in_a_tty(
     isolated_store,
     monkeypatch,
 ):
@@ -237,16 +258,47 @@ def test_diff_opens_location_then_checkpoint_history_in_a_tty(
         "memcommit.commands.diff._interactive_terminal",
         lambda: True,
     )
-    monkeypatch.setattr(
-        "memcommit.commands.diff.choose_update_checkpoint_history",
-        opened.append,
-    )
+    def browse(store_arg, *, session, context_locator):
+        opened.append((store_arg.store_dir, session, context_locator))
+
+    monkeypatch.setattr("memcommit.commands.diff.browse_diff", browse)
 
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 0, result.output
-    assert opened == [session]
+    assert opened == [(store.store_dir, session, None)]
     assert "Update preview" not in result.output
+
+
+def test_diff_context_operand_bypasses_location_selection(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    session, _, _, _ = _stage(store)
+    opened = []
+
+    def browse(store_arg, *, session, context_locator):
+        opened.append((store_arg.store_dir, session, context_locator))
+
+    monkeypatch.setattr("memcommit.commands.diff.browse_diff", browse)
+
+    result = runner.invoke(app, ["diff", "campus-wiki"])
+
+    assert result.exit_code == 0, result.output
+    assert opened == [(store.store_dir, session, "campus-wiki")]
+
+
+def test_diff_context_operand_rejects_update_record_output_flags(
+    isolated_store,
+):
+    store = MemoryStore()
+    _stage(store)
+
+    result = runner.invoke(app, ["diff", "campus-wiki", "--raw"])
+
+    assert result.exit_code == 2
+    assert "Context operand cannot be combined" in result.stderr
 
 
 def test_diff_renders_empty_fresh_stage(isolated_store):

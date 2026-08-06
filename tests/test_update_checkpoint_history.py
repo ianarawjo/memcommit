@@ -2,12 +2,15 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 
 import memcommit.ops as ops
 from memcommit.commands.update_checkpoint_history import (
     update_checkpoint_detail_renderer,
     update_checkpoint_entry,
     update_location_annotations,
+    update_subtree_checkpoint_entries,
+    update_subtree_locations,
 )
 from memcommit.update import (
     UpdateApplicationReceipt,
@@ -109,11 +112,43 @@ def test_checkpoint_detail_keeps_update_action_and_red_then_green_transition():
     assert rendered.index(" - Use the blue entrance.") < rendered.index(
         " + Use the green entrance."
     )
-    assert any(
-        style.startswith("class:memory-diff.remove") and "blue" in text
-        for style, text in fragments
+    assert next(style for style, text in fragments if text == "blue") == (
+        "class:memory-diff.remove.changed"
     )
-    assert any(
-        style.startswith("class:memory-diff.add") and "green" in text
-        for style, text in fragments
+    assert next(style for style, text in fragments if text == "green") == (
+        "class:memory-diff.add.changed"
     )
+    assert sum(
+        style in {"class:memory-diff.remove", "class:memory-diff.add"}
+        and text == "Use the "
+        for style, text in fragments
+    ) == 2
+
+
+def test_subtree_history_collects_only_changed_owners_below_exact_root():
+    session = _session()
+    first = session.operations[0]
+    second = replace(
+        first,
+        owner_context_name="target/temporary-parking",
+        owner_context_uid="22222222-2222-4222-8222-222222222222",
+        memory_uid="33333333-3333-4333-8333-333333333333",
+    )
+    unrelated = replace(
+        first,
+        owner_context_name="other/temporary-parking",
+        owner_context_uid="44444444-4444-4444-8444-444444444444",
+        memory_uid="55555555-5555-4555-8555-555555555555",
+    )
+    session = replace(session, operations=(first, second, unrelated))
+
+    locations = update_subtree_locations(session, "target")
+    entries = update_subtree_checkpoint_entries(session, "target")
+
+    assert locations == (
+        "target/building-access",
+        "target/temporary-parking",
+    )
+    assert tuple(entry.location for entry in entries) == locations
+    assert len({entry.uid for entry in entries}) == 2
+    assert all(entry.location in entry.description for entry in entries)

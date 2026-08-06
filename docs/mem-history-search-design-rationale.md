@@ -163,9 +163,12 @@ mem log --manual
 mem log --plain
 ```
 
-In a TTY, `mem log` opens the shared history picker. Up and down move through
+In a TTY, operand-free `mem log` first opens the shared complete Context tree.
+Selecting a location opens the shared history picker for that Context. Contexts
+with zero eligible checkpoints remain selectable and open an explicit empty
+history view; only Escape or `q` closes it. Up and down move through populated
 entries, Enter toggles the selected entry's details, and Escape or `q` closes
-the view. Closing or inspecting a log entry has no write effect.
+the view. Closing or inspecting a Context or log entry has no write effect.
 
 Outside a TTY, `mem log` retains plain checkpoint rows. This preserves shell
 redirection and automation and avoids requiring terminal key input.
@@ -264,15 +267,13 @@ overwriting an unrecorded concurrent change.
 ### Restoration receipts
 
 The success receipt is action- and impact-oriented. A checkpoint UID and time
-alone identify a storage boundary but do not tell a person what was reversed
-or which local information changed. `mem undo` and `mem redo` therefore name
-the recorded command (for example, `mem update`, `mem add`, or `mem revert`),
-its bounded recorded description when present, the number and canonical names
-of affected Contexts, and each direct-item difference in restoration direction.
-`mem revert` names its one affected Context, the command that recorded the
-selected target state, and the same directional difference. Receipt and exact
-checkpoint identifiers remain secondary history/recovery details rather than
-the primary explanation.
+alone identify a storage boundary but do not tell a person what was reversed.
+`mem undo` and `mem redo` therefore reconstruct a canonical effective `mem …`
+command from retained checkpoint arguments and pair it with exact affected
+Context and Memory counts. `mem revert` retains its more detailed confirmation
+because selecting an older state is a separate inspection workflow. Receipt
+and exact checkpoint identifiers remain secondary history/recovery details
+rather than the primary explanation.
 
 Impact is reconstructed from the two local direct-Context snapshots, not from
 command arguments. This makes the receipt work for older checkpoints and for
@@ -290,16 +291,22 @@ operation. It is not used to choose or authorize Undo/Redo: restoration still
 requires the complete command-unit pre/post frames described above, whereas a
 Trace intentionally contains only the selected lineage's local effect.
 
-Receipts remain bounded terminal output: at most twelve changed direct items
-are expanded, content and descriptions have per-field preview limits, and the
-exact total counts remain visible. Newlines, terminal controls, bidi controls,
-and backslashes in stored names or content are display-escaped so content
-cannot imitate another receipt heading. This is intentionally a useful local
-confirmation, not a complete diff or immutable audit record. It neither opens
-embedded Contexts nor resolves MemoryRefs or query-only sources. A future
+Undo and Redo use a single-line terminal receipt containing only the source
+action and affected Context and Memory counts with `+`/`~`/`-` effect totals.
+Supported receipts reconstruct their canonical effective operands from frozen
+checkpoint metadata, including Update's `--from` and `--to`, so they omit a
+redundant affected-location list. Content-bearing Add/Edit operands and
+Forget/Integrate instructions use typed placeholders: the action shape remains
+visible without repeating private text. Missing legacy operands fail down to
+the recorded command name. Receipts do not repeat restored Memory content,
+descriptions, receipt UIDs, or inverse-command guidance. Revert retains its
+bounded detailed confirmation: at most twelve changed direct items are
+expanded, with per-field preview limits and exact totals. Newlines, terminal
+controls, bidi controls, and backslashes in displayed names or Revert content
+remain escaped so data cannot imitate another receipt heading. Neither form
+opens embedded Contexts nor resolves MemoryRefs or query-only sources. A future
 unbounded or machine-readable restoration diff should be a separate explicit
-command or output mode rather than silently making every Undo/Revert receipt
-arbitrarily large.
+command or output mode.
 
 ## Restoration and recoverability
 

@@ -11,6 +11,8 @@ from memcommit.command_attempts import (
     CommandAttemptLedger,
     current_command_attempt_uid,
 )
+from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.diff_browser import browse_checkpoint_locations
 from memcommit.commands.history_picker import choose_history
 from memcommit.commands.history_present import (
     checkpoint_picker_entries,
@@ -131,8 +133,9 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Optional natural-language history query; omit to show all "
-                "checkpoints"
+                "Optional natural-language history query; omit to select a "
+                "Context then browse its checkpoints in a TTY, or print the "
+                "current Context's checkpoints otherwise"
             )
         ),
     ] = None,
@@ -195,6 +198,24 @@ def cmd(
 
     store = MemoryStore()
     name = store.current_context_name()
+    if query is None and _interactive_terminal() and not plain:
+        try:
+            browse_checkpoint_locations(
+                store,
+                session=None if manual else store.load_staged_update(),
+                context_locator=None,
+                title="LOG",
+                manual=manual,
+                show_diffs=False,
+            )
+        except ValueError as error:
+            typer.secho(
+                f"History location picker error: {error}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        return
     if not name:
         typer.secho("No current context. Run 'mem init <name>' first.", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
@@ -219,13 +240,20 @@ def cmd(
                         if checkpoint.selectable and not checkpoint.auto
                     ),
                 )
-            results = search_history(
-                timeline,
-                query,
-                connect_codex_chatgpt_provider(),
-                result_kinds=("checkpoint",),
-                limit=limit,
-            )
+            with CommandProgress(
+                "LOG",
+                "connecting provider",
+                total=2,
+            ) as progress:
+                provider = connect_codex_chatgpt_provider()
+                progress.update("searching history", step=2)
+                results = search_history(
+                    timeline,
+                    query,
+                    provider,
+                    result_kinds=("checkpoint",),
+                    limit=limit,
+                )
         except (HistoryError, HistorySearchError, QueryProviderError) as error:
             typer.secho(
                 f"History search error: {error}",
@@ -254,11 +282,6 @@ def cmd(
         _render_history_results(name, results)
         return
 
-    if not entries:
-        msg = "No manual checkpoints" if manual else "No checkpoints"
-        typer.echo(f"{msg} for '{name}' yet.")
-        return
-
     if _interactive_terminal() and not plain:
         try:
             projected = {
@@ -272,6 +295,12 @@ def cmd(
                 ],
                 context_name=name,
                 mode="log",
+                initial_details_open=True,
+                empty_message=(
+                    "No manual checkpoints for this Context yet."
+                    if manual
+                    else "No checkpoints for this Context yet."
+                ),
             )
         except ValueError as error:
             typer.secho(
@@ -280,6 +309,11 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
+        return
+
+    if not entries:
+        msg = "No manual checkpoints" if manual else "No checkpoints"
+        typer.echo(f"{msg} for '{name}' yet.")
         return
 
     typer.secho(f"Log for '{name}':", bold=True)

@@ -8,6 +8,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.history_picker import (
+    HISTORY_BACK,
     HistoryPickerEntry,
     HistorySelectionReceipt,
     _PickerState,
@@ -110,7 +111,24 @@ def test_log_enter_toggles_details_and_q_closes_without_selection():
     assert state.details_open is False
 
 
-@pytest.mark.parametrize("key", ["q", "\x1b", "\x03"])
+def test_empty_log_stays_open_until_an_explicit_close_key():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\rq")
+        selected = choose_history(
+            (),
+            context_name="empty/context",
+            mode="log",
+            initial_details_open=True,
+            empty_message="No checkpoints for this Context yet.",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+
+
+@pytest.mark.parametrize("key", ["q", "\x1b", "\x7f", "\x03"])
 def test_cancel_keys_return_no_receipt(key: str):
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(key)
@@ -124,6 +142,42 @@ def test_cancel_keys_return_no_receipt(key: str):
         )
 
     assert selected is None
+
+
+@pytest.mark.parametrize("key", ["\x1b", "\x7f"])
+def test_diff_style_back_keys_return_explicit_navigation_receipt(key: str):
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(key)
+        selected = choose_history(
+            (entry(1),),
+            context_name="journal",
+            mode="log",
+            back_navigation=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is HISTORY_BACK
+
+
+def test_viewer_back_returns_to_items_before_leaving_history():
+    with create_pipe_input() as pipe_input:
+        # Enter opens VIEWER; the first Backspace returns to ITEMS and only the
+        # second requests the owning Context selector.
+        pipe_input.send_text("\r\x7f\x7f")
+        selected = choose_history(
+            (entry(1),),
+            context_name="journal",
+            mode="log",
+            initial_details_open=True,
+            back_navigation=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is HISTORY_BACK
 
 
 def test_move_helper_clamps_at_both_boundaries():

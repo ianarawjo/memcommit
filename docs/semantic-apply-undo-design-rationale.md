@@ -14,6 +14,23 @@ checkpoint. Restoration happens under the command and affected-Context locks,
 with exception rollback for both records. Crash atomicity remains outside this
 prototype until a transaction journal exists.
 
+Successful Undo and Redo print one compact receipt line rather than replaying
+restored Memory content. The line reconstructs a canonical effective `mem …`
+command from frozen checkpoint metadata for each supported undoable operation;
+it does not claim to reproduce the person's raw shell spelling. Context and
+Memory selectors, source/target operands, scope switches, and apply switches
+are retained where the checkpoint proves them. Raw Memory content and semantic
+instruction text are represented by typed placeholders so Undo does not copy
+private payloads into terminal scrollback. Older or internal checkpoint shapes
+fall back to the recorded command name instead of inventing operands. The
+remaining fields are the exact affected Context count, total affected Memory
+count, and `+`/`~`/`-` effect counts. A separate location list would duplicate
+the command operands and is omitted. Checkpoint receipt UIDs, detailed pre/post
+content, descriptions, and the inverse-command hint remain available through
+durable history and Trace rather than being expanded after every restoration.
+This is presentation minimization only; the checkpoint and command-unit
+records retain their complete recovery contract.
+
 ## Current coverage
 
 | Apply flow | Applied-state source | Undo behavior |
