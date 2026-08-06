@@ -4,10 +4,10 @@
 
 The Korean source fixtures use the following scale:
 
-- Task 1: 375 ordinary Memories and 78 query-only Memories
-- Task 2: 300 ordinary Memories and 75 query-only Memories
-- Task 3: 387 ordinary Memories and 75 query-only Memories
-- Total: 1,062 ordinary Memories, 228 query-only Memories, and 1,290 overall
+- Task 1: 376 ordinary Memories and 78 query-only Memories
+- Task 2: 301 ordinary Memories and 75 query-only Memories
+- Task 3: 401 ordinary Memories and 75 query-only Memories
+- Total: 1,078 ordinary Memories, 228 query-only Memories, and 1,306 overall
 
 In the original workflow, English translation and installation into actual
 Contexts are separate stages after review of the Korean content. Counts are an

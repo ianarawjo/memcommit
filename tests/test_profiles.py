@@ -374,8 +374,8 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
 
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
-    assert "study-baseline: Contexts 135 owned + 0 granted" in result.output
-    assert "Memories 1303 owned + 0 granted" in result.output
+    assert "study-baseline: Contexts 138 owned + 0 granted" in result.output
+    assert "Memories 1306 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 

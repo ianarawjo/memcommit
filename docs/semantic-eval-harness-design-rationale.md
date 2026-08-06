@@ -522,9 +522,9 @@ The reviewed pilot fixture currently contains 37 cases:
 
 The fixture declares a hard 200-case campaign ceiling. This is an intermediate
 review and execution bound, not a claim that 200 cases cover the study. The
-study loader already validates 1,278 bilingual fixture identities across nine
-datasets: Task 1 has 453, Task 2 has 375, and Task 3 has 450. Expansion proceeds
-through reviewed slices rather than copying all 1,278 Memories into prompts:
+study loader already validates 1,306 bilingual fixture identities across thirteen
+datasets: Task 1 has 454, Task 2 has 376, and Task 3 has 476. Expansion proceeds
+through reviewed slices rather than copying all 1,306 Memories into prompts:
 
 ```text
 37 reviewed gates
@@ -533,7 +533,7 @@ through reviewed slices rather than copying all 1,278 Memories into prompts:
   -> 125-case bilingual/adversarial slice
   -> 200-case operation campaign
   -> micro-batched Task 1/2/3 operation coverage
-  -> full 1,278-Memory workload and candidate-coverage evaluation
+  -> full 1,306-Memory workload and candidate-coverage evaluation
 ```
 
 After the Conflict optimization described below, the 37-case calibration

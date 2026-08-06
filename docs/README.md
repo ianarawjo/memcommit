@@ -132,7 +132,7 @@ considered sufficient design history.
   change production mutation boundaries.
   The same note now records the frozen 37-case base and 75-case composite
   operation-gate pilots, short/long Task 1--3 slices, the 200-case intermediate
-  ceiling, and the staged path to all 1,278 study Memories. It also records the
+  ceiling, and the staged path to all 1,306 study Memories. It also records the
   locked Task 2 150-versus-150 relation-discovery ladder, full Sol/Qwen
   one-shot failures, structure-only decomposition, oracle-band diagnostic, and
   why the reviewed relation groups are not a 22,500-pair answer key.
