@@ -66,6 +66,118 @@ conversation.
 - Keep the implementation and rollout list consistent with
   `docs/context-locator-design-rationale.md`.
 
+## Grant-aware readable Contexts
+
+- Whenever a read or source-selection command promises a readable Context
+  namespace, do not build its catalog from `MemoryStore.list_context_names()`
+  alone. Use `ReadableContextCatalog` so effectively READ-granted public names
+  and ordinary local names share the same command-local public hierarchy.
+- Public names determine semantic parent/child placement. A Grant attachment
+  is authorization metadata and must never be treated as a hierarchy edge.
+  Keep the exact `ContextAccess` for every selected name so loading,
+  revalidation, provider disclosure, and user-visible Grant annotation retain
+  the correct owner and Grant identity.
+- A readable name does not authorize every downstream use. Before provider
+  inference, retained analysis, transfer, or mutation, apply that operation's
+  `DERIVE`, `COMBINE`, `EXPORT`, `SAVE_*`, `ACCEPT_DERIVED`, and target-locality
+  rules. Fail before provider connection when required authority is absent.
+- QUERY-only routes may be shown only where the operation explicitly supports
+  the authorized query interface. Never open or silently treat their hidden
+  content as ordinary Memory input.
+
+## Selective curation batches
+
+- Forget and Sever share one batch semantic invariant: send the complete
+  frozen Source frame and criterion frame in one provider turn, then require
+  exactly one keep/transform/drop decision per Source Memory. Do not decompose
+  the turn into independent per-Memory inference calls; neighboring Source
+  Memories may supply necessary context.
+- Treat a Forget instruction as one process-local `INSTRUCTION` criterion and
+  Sever Criteria as a `MEMORY_FRAME`. Never render the instruction as a Memory
+  or assign it fabricated durable provenance.
+- Keep provider aliasing, complete-coverage validation, exact KEEP, nonempty
+  TRANSFORM, and empty DROP invariants in the shared curation decoder. Preserve
+  operation-specific variants in adapters.
+- Sharing analysis and Resolution presentation does not share authority or
+  materialization. Forget alone may update/delete its Source after its normal
+  mutation checks; Sever must leave Source unchanged and create its reviewed
+  require-new result under its derived-work permissions.
+- Keep the implementation and rollout limitations consistent with
+  `docs/selective-curation-design-rationale.md`.
+
+## Terminal color semantics
+
+- Keep report structure, explanatory prose, cards, and ordinary labels neutral
+  white. Do not tint a whole Compare, Meld, Review, or Impact report merely to
+  make it look grouped.
+- Reserve the shared light lavender (`#cad3f5`) for text that represents an
+  individual Memory object. Focus may temporarily replace that color with the
+  shared blue focus treatment; selection, warning, and status colors retain
+  their own explicit semantics.
+- When adding a formatted report fragment, classify it by meaning before
+  assigning a style. A box surrounding prose is report chrome, not a Memory,
+  even when the report was derived from Memories.
+- Across saved-session workbenches, bind both Escape and Backspace to the same
+  one-level back-navigation path while focus is in a read-only surface. Do not
+  steal Backspace from a composer or other writable input, where it must remain
+  ordinary text deletion.
+- Keep focused detail-card viewport behavior in the shared session Viewer, not
+  in an operation-specific adapter. Place the hidden cursor anchor after the
+  focused card's closing border so a lower card is not rendered as only a top
+  edge at the bottom of the viewport.
+- Treat OPTIONS in the shared Resolution Session Viewer as an explicit nested
+  layer: Enter opens it, Up/Down moves, Enter selects, and Escape/Backspace
+  returns to section navigation. Use the shared light-blue focus treatment and
+  a `✓` for the staged selection. Render choices as unboxed rows inside the
+  OPTIONS section; underline only the currently focused row and remove the
+  underline when focus leaves it. When reopening a saved draft, initialize the
+  option cursor on the checked choice so the visible selection and the next
+  Enter target cannot disagree. Do not give individual operations a separate
+  option grammar or marker scheme.
+- In an actionable Ambiguity or Conflict detail, treat its clarification or
+  resolution question and proposed readings or resolutions as one Decision
+  focus section. One navigation step focuses both; Enter from that section
+  opens the nested choice rows. Do not make the person focus the question and
+  options separately when the question has no independent action.
+- Open Different reading/resolution and ordinary item Response input inline
+  inside the existing Viewer frame; never replace the current detail with a
+  separate editor screen or add a sibling Message frame. Enter saves the
+  response and returns focus to the same Viewer, while `Ctrl-J` inserts a
+  newline. A draft-owning adapter may persist that response without closing
+  the workbench; operations that require a new semantic provider turn still
+  receive their explicit submitted action.
+- Make `RESPONSE` itself a focusable section after operation-specific result
+  blocks. Enter on that section opens its inline field. Do not render an
+  adapter-authored instruction such as `REFINE, COMMENT, OR ENTER...` as if it
+  were saved content; a new response starts blank, while reopening a durable
+  draft restores its existing text.
+- Keep the common Resolution Session topology as `VIEWER`, `ITEMS`, then
+  `TO DO`. Items contains review targets only. To Do derives one next action:
+  open an unresolved required conflict/item first, otherwise materialize the
+  reviewed choices, apply an exact ready proposal, or expose the operation's
+  whole-set resolution. Do not put Apply or Resolve All back into Items as a
+  synthetic row, and do not let this presentation state bypass adapter action
+  validation.
+- After an item is opened in Viewer, visible-frame Tab order must follow the
+  screen: `VIEWER → ITEMS → TO DO → VIEWER`; do not skip Items when leaving
+  Viewer. Preserve Items as the initial hub only: its first Tab opens Viewer
+  and its first Shift-Tab reaches To Do.
+- Keep a detail's ordinal (`n/total`) separate from review obligation. Show
+  `REQUIRED n · OPTIONAL m` for the complete item set. To Do gates progression
+  only on unanswered REQUIRED items; unanswered OPTIONAL items remain
+  inspectable in Items but may be skipped when materializing or applying.
+  Report their skipped or unanswered count explicitly.
+- Result, Compare, and Resolution viewers share frame, focus, report-chrome,
+  Memory-object, and option-card styles, but they do not share one semantic
+  detail model. Result detail is a read-only evidence-to-outcome trace.
+  Actionable Ambiguity and Conflict detail instead shows classification
+  before source-linked evidence, followed by a type-specific reason, question,
+  proposed readings or resolutions, and an independently stored response. For Meld,
+  keep each relation adjacent to its exact Context/Memory members and group
+  its member Memories into one claim per source frame; do not flatten issue
+  evidence away from the relation that judged it or repeat the same Context
+  heading for every supporting Memory.
+
 ## Agent-mediated Ground turns
 
 When the user is working from a target-focused screen such as
