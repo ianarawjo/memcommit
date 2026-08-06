@@ -1425,6 +1425,6 @@ def test_help_inventory_classifies_translate(isolated_store):
     assert result.exit_code == 0
     assert any(
         line.startswith("translate ")
-        and " - implemented " in line
+        and "Show and save a reusable translation view" in line
         for line in result.output.splitlines()
     )

@@ -82,7 +82,7 @@ def test_cli_registers_reviewed_namespace_rename_syntax(isolated_store):
     assert "--force" in command_help.output
     assert inventory.exit_code == 0, inventory.output
     assert any(
-        line.startswith("rename ") and " - implemented " in line
+        line.startswith("rename ") and "Rename an ordinary Context" in line
         for line in inventory.output.splitlines()
     )
 
