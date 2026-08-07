@@ -61,7 +61,7 @@ HELP_CATEGORY_GROUPS = (
         ),
     ),
     (
-        "ANALYZE & RESOLVE",
+        "ANALYZE & TRANSFORM",
         (
             "atomize", "compare", "impact", "review", "meld", "update",
             "sever", "translate", "merge",

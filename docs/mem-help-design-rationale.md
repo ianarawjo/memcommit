@@ -49,6 +49,9 @@ prompt-toolkit selector:
   destructive or broad cleanup actions last. Primary commands and their aliases
   remain adjacent. This order comes from `HELP_CATEGORY_GROUPS`; the renderer
   must not alphabetize it again. `A–Z` alone provides lexical lookup.
+  `ANALYZE & TRANSFORM` intentionally covers both read-only inspection and
+  operations that reshape or reconcile Memory material; `TRANSFORM` is broad
+  enough for Atomize, Translate, Merge, and Update where `RESOLVE` was not.
   Aliases remain separate commands in the same box so the inventory still
   describes every registered spelling. `A–Z` has no semantic categories, so
   its complete alphabetic projection occupies one `A–Z` box.

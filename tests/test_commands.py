@@ -118,6 +118,10 @@ class TestHelp:
         assert help_inventory._help_group_width(20) == 36
 
     def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
+        assert (
+            help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
+            == "ANALYZE & TRANSFORM"
+        )
         names = (
             "clear", "branch", "status", "delete", "add", "show",
             "switch", "contexts", "edit", "remove",
