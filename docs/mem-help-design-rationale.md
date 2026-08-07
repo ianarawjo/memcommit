@@ -44,7 +44,7 @@ prompt-toolkit selector:
   the command list, only the retained choice surface and `✓` remain active.
 - `BY KIND` assigns each command one primary discovery category and renders
   each category as one titled box containing all of its command records.
-  Before those categories, one neutral, non-focusable `CORE CONCEPTS` and
+  Before those categories, one neutral `CORE CONCEPTS` and
   `COMMON KEYS` information box explains Memory, Context, Profile,
   Grant, Session, and Checkpoint plus the shared navigation grammar. It belongs
   to the scrolling inventory rather than the fixed header, so it moves out of
@@ -57,6 +57,13 @@ prompt-toolkit selector:
   qualifier in the heading or navigation action. Operation-specific footers
   remain authoritative for keys that are not common enough to appear in this
   primer.
+  Each Core Concept row participates in the same vertical focus path before
+  the first command: Up from that command reaches Checkpoint, continued Up
+  visits Session through Memory, and only Up from Memory reaches VIEW. Down
+  traverses the reverse path. A focused concept supplies a cursor anchor and
+  the common blue row/frame treatment so scrolling can keep it visible, but
+  Enter, Left, Right, and full-command Help deliberately perform no action.
+  Common Keys remains reference prose rather than five additional focus stops.
   Inside a category it preserves an intentional workflow order: orient and
   inspect first, then navigate or create, then perform semantic work, with
   destructive or broad cleanup actions last. Primary commands and their aliases

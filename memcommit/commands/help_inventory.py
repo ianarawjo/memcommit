@@ -741,33 +741,54 @@ def _help_information_box_fragments(
     *,
     width: int,
     by_kind: bool,
+    focused_concept_index: int | None = None,
+    focused: bool = False,
 ) -> list[tuple[str, str]]:
-    """Render the non-focusable BY KIND primer inside the scrolling list."""
+    """Render the BY KIND primer as focusable concepts plus key reference."""
     if not by_kind:
         return []
     width = max(36, width)
     inner_width = width - 2
     content_width = inner_width - 2
-    border_style = "class:help-guide.border"
+    guide_focused = focused and focused_concept_index is not None
+    border_style = (
+        "class:help-guide.border.focused"
+        if guide_focused
+        else "class:help-guide.border"
+    )
     label_style = "class:help-guide.label"
     fragments: list[tuple[str, str]] = []
 
     def border(title: str, *, middle: bool) -> None:
         title_label = f" {title} "[:inner_width]
+        if guide_focused:
+            left, right = ("┣", "┫") if middle else ("┏", "┓")
+        else:
+            left, right = ("├", "┤") if middle else ("┌", "┐")
+        horizontal = "━" if guide_focused else "─"
         fragments.append(
             (
                 border_style,
-                ("├" if middle else "┌")
+                left
                 + title_label
-                + "─" * max(0, inner_width - len(title_label))
-                + ("┤" if middle else "┐")
+                + horizontal * max(0, inner_width - len(title_label))
+                + right
                 + "\n",
             )
         )
 
-    def rows(items: tuple[tuple[str, str], ...]) -> None:
+    def rows(
+        items: tuple[tuple[str, str], ...],
+        *,
+        selectable: bool,
+    ) -> None:
         label_width = max(len(label) for label, _description in items)
-        for label, description in items:
+        for item_index, (label, description) in enumerate(items):
+            row_focused = (
+                selectable
+                and focused
+                and focused_concept_index == item_index
+            )
             prefix = f"{label:<{label_width}}  "
             lines = textwrap.wrap(
                 display_escape_text(description),
@@ -776,6 +797,8 @@ def _help_information_box_fragments(
                 break_on_hyphens=False,
             ) or [""]
             for line_index, line in enumerate(lines):
+                if row_focused and line_index == 0:
+                    fragments.append(("[SetCursorPosition]", ""))
                 row_prefix = prefix if line_index == 0 else " " * len(prefix)
                 padding = " " * max(
                     0,
@@ -783,19 +806,39 @@ def _help_information_box_fragments(
                 )
                 fragments.extend(
                     [
-                        (border_style, "│"),
-                        ("", " "),
-                        (label_style if line_index == 0 else "", row_prefix),
-                        ("", line + padding + " "),
-                        (border_style, "│\n"),
+                        (border_style, "┃" if guide_focused else "│"),
+                        (
+                            "class:selected" if row_focused else "",
+                            " " + row_prefix + line + padding + " ",
+                        )
+                        if row_focused
+                        else ("", " "),
                     ]
+                )
+                if not row_focused:
+                    fragments.extend(
+                        [
+                            (label_style if line_index == 0 else "", row_prefix),
+                            ("", line + padding + " "),
+                        ]
+                    )
+                fragments.append(
+                    (border_style, ("┃" if guide_focused else "│") + "\n")
                 )
 
     border("CORE CONCEPTS", middle=False)
-    rows(HELP_CORE_CONCEPTS)
+    rows(HELP_CORE_CONCEPTS, selectable=True)
     border("COMMON KEYS", middle=True)
-    rows(HELP_COMMON_KEYS)
-    fragments.append((border_style, "└" + "─" * inner_width + "┘\n"))
+    rows(HELP_COMMON_KEYS, selectable=False)
+    fragments.append(
+        (
+            border_style,
+            ("┗" if guide_focused else "└")
+            + ("━" if guide_focused else "─") * inner_width
+            + ("┛" if guide_focused else "┘")
+            + "\n",
+        )
+    )
     return fragments
 
 
@@ -852,6 +895,7 @@ def run_help_selector(
 
     visible_entries = {"value": ordered_entries()}
     selected_index = {"value": 0}
+    selected_concept_index: dict[str, int | None] = {"value": None}
     expanded_index: dict[str, int | None] = {"value": None}
     selected_form: dict[str, int | None] = {"value": None}
     bindings = KeyBindings()
@@ -870,6 +914,13 @@ def run_help_selector(
         )
         expanded_index["value"] = None
         selected_form["value"] = None
+        selected_concept_index["value"] = None
+
+    def concept_focus_active() -> bool:
+        return (
+            view_state.selected_uid == "CATEGORY"
+            and selected_concept_index["value"] is not None
+        )
 
     def render_entries():
         fragments: list[tuple[str, str]] = []
@@ -882,6 +933,8 @@ def run_help_selector(
             _help_information_box_fragments(
                 width=card_width,
                 by_kind=by_kind,
+                focused_concept_index=selected_concept_index["value"],
+                focused=list_focused,
             )
         )
         if fragments:
@@ -899,7 +952,7 @@ def run_help_selector(
         for group_index, (title, group_entries) in enumerate(groups):
             group_focused = list_focused and any(
                 index == selected_index["value"] for index, _entry in group_entries
-            )
+            ) and not concept_focus_active()
             fragments.extend(
                 _help_group_fragments(
                     group_entries,
@@ -935,6 +988,15 @@ def run_help_selector(
     )
 
     def move_one(direction: int) -> None:
+        concept_index = selected_concept_index["value"]
+        if concept_focus_active() and concept_index is not None:
+            candidate = concept_index + direction
+            if candidate >= len(HELP_CORE_CONCEPTS):
+                selected_concept_index["value"] = None
+                selected_index["value"] = 0
+            else:
+                selected_concept_index["value"] = max(0, candidate)
+            return
         form_index = selected_form["value"]
         if form_index is not None:
             forms = visible_entries["value"][selected_index["value"]].forms
@@ -950,6 +1012,14 @@ def run_help_selector(
                     selected_index["value"] + 1,
                     len(visible_entries["value"]) - 1,
                 )
+            return
+        if (
+            direction < 0
+            and selected_index["value"] == 0
+            and view_state.selected_uid == "CATEGORY"
+        ):
+            expanded_index["value"] = None
+            selected_concept_index["value"] = len(HELP_CORE_CONCEPTS) - 1
             return
         previous = selected_index["value"]
         selected_index["value"] = max(
@@ -973,8 +1043,22 @@ def run_help_selector(
     @bindings.add("up", filter=has_focus(list_control))
     def _previous_command(event) -> None:
         if (
+            concept_focus_active()
+            and selected_concept_index["value"] == 0
+        ):
+            navigation_accelerator.reset()
+            focus_in_order(
+                event.app,
+                (view_control, list_control),
+                -1,
+                wrap=False,
+            )
+            event.app.invalidate()
+            return
+        if (
             selected_index["value"] == 0
             and selected_form["value"] is None
+            and view_state.selected_uid != "CATEGORY"
         ):
             navigation_accelerator.reset()
             focus_in_order(
@@ -996,10 +1080,25 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        selected_index["value"] = min(
-            selected_index["value"] + 10,
-            len(visible_entries["value"]) - 1,
+        concept_count = (
+            len(HELP_CORE_CONCEPTS)
+            if view_state.selected_uid == "CATEGORY"
+            else 0
         )
+        position = (
+            selected_concept_index["value"]
+            if concept_focus_active()
+            else concept_count + selected_index["value"]
+        )
+        target = min(
+            int(position) + 10,
+            concept_count + len(visible_entries["value"]) - 1,
+        )
+        if target < concept_count:
+            selected_concept_index["value"] = target
+        else:
+            selected_concept_index["value"] = None
+            selected_index["value"] = target - concept_count
         event.app.invalidate()
 
     @bindings.add("pageup", filter=has_focus(list_control))
@@ -1007,7 +1106,22 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        selected_index["value"] = max(selected_index["value"] - 10, 0)
+        concept_count = (
+            len(HELP_CORE_CONCEPTS)
+            if view_state.selected_uid == "CATEGORY"
+            else 0
+        )
+        position = (
+            selected_concept_index["value"]
+            if concept_focus_active()
+            else concept_count + selected_index["value"]
+        )
+        target = max(int(position) - 10, 0)
+        if target < concept_count:
+            selected_concept_index["value"] = target
+        else:
+            selected_concept_index["value"] = None
+            selected_index["value"] = target - concept_count
         event.app.invalidate()
 
     @bindings.add("home", filter=has_focus(list_control))
@@ -1015,7 +1129,10 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        selected_index["value"] = 0
+        if view_state.selected_uid == "CATEGORY":
+            selected_concept_index["value"] = 0
+        else:
+            selected_index["value"] = 0
         event.app.invalidate()
 
     @bindings.add("end", filter=has_focus(list_control))
@@ -1023,12 +1140,15 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
+        selected_concept_index["value"] = None
         selected_index["value"] = len(visible_entries["value"]) - 1
         event.app.invalidate()
 
     @bindings.add("enter", filter=has_focus(list_control))
     def _select_row(event) -> None:
         navigation_accelerator.reset()
+        if concept_focus_active():
+            return
         index = selected_index["value"]
         form_index = selected_form["value"]
         if form_index is None:
@@ -1051,6 +1171,8 @@ def run_help_selector(
     @bindings.add("right", filter=has_focus(list_control))
     def _expand(event) -> None:
         navigation_accelerator.reset()
+        if concept_focus_active():
+            return
         index = selected_index["value"]
         if expanded_index["value"] != index:
             expanded_index["value"] = index
@@ -1062,6 +1184,8 @@ def run_help_selector(
     @bindings.add("left", filter=has_focus(list_control))
     def _collapse(event) -> None:
         navigation_accelerator.reset()
+        if concept_focus_active():
+            return
         if selected_form["value"] is not None:
             selected_form["value"] = None
         elif expanded_index["value"] == selected_index["value"]:
@@ -1071,6 +1195,8 @@ def run_help_selector(
     @bindings.add("h", filter=has_focus(list_control))
     def _open_full_help(event) -> None:
         navigation_accelerator.reset()
+        if concept_focus_active():
+            return
         entry = visible_entries["value"][selected_index["value"]]
         event.app.exit(
             result=HelpSelection(
@@ -1163,6 +1289,8 @@ def run_help_selector(
                 " VIEW: ←/→ choose · ↓ list · Tab surface · Q cancel"
                 if app_ref.get("app") is not None
                 and app_ref["app"].layout.has_focus(view_control)
+                else " ↑/↓ move (hold accelerates)  Tab surface "
+                if concept_focus_active()
                 else " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "
                 + (
                     "Enter open forms  "
@@ -1198,6 +1326,7 @@ def run_help_selector(
                         "help-group": "",
                         "help-group.focused": "fg:#8bd5ff bold",
                         "help-guide.border": "",
+                        "help-guide.border.focused": "fg:#8bd5ff bold",
                         "help-guide.label": "bold",
                     }
                 ),

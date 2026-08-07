@@ -143,6 +143,47 @@ class TestHelp:
             by_kind=False,
         ) == []
 
+    def test_each_core_concept_can_own_focus_without_an_action(self):
+        for concept_index, (label, _description) in enumerate(
+            help_inventory.HELP_CORE_CONCEPTS
+        ):
+            fragments = help_inventory._help_information_box_fragments(
+                width=100,
+                by_kind=True,
+                focused_concept_index=concept_index,
+                focused=True,
+            )
+
+            assert any(
+                style == "class:selected" and label in text
+                for style, text in fragments
+            )
+            assert sum(
+                style == "[SetCursorPosition]" for style, _text in fragments
+            ) == 1
+            assert any(
+                style == "class:help-guide.border.focused" and "┏" in text
+                for style, text in fragments
+            )
+
+    def test_concepts_join_the_vertical_path_before_the_first_command(self):
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text(
+                "\x1b[A\r\x1b[C\x1b[Dh"
+                + "\x1b[A" * (len(help_inventory.HELP_CORE_CONCEPTS) - 1)
+                + "\x1b[B" * len(help_inventory.HELP_CORE_CONCEPTS)
+                + "\r\r"
+            )
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem alpha"
+
     def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
