@@ -27,8 +27,9 @@ without changing command semantics.
 
 Recent commands already share the structural completion interface
 `complete(prompt, operation, output_schema)`, but command modules historically
-imported a Codex-named connector. Earlier `forget`, `integrate`, and developer
-evaluation paths separately used a small Ollama/OpenAI-compatible client. This
+imported a Codex-named connector. Earlier `forget`, the now-retired Integrate
+pipeline, and developer evaluation paths separately used a small
+Ollama/OpenAI-compatible client. This
 split made local configuration irrelevant to the newer Ground, Find, Compare,
 Atomize, Meld, Translate, Review, Impact, and Update paths and prevented an
 honest cross-model evaluation.
@@ -184,10 +185,12 @@ of semantic equivalence with the prior Codex result.
   operation; it makes the comparison possible and fail-closed.
 - Context-window preflight remains conservative and model-specific evaluation
   is required before increasing aggregate input limits.
-- The earlier chat-shaped `forget` and `integrate` implementation still uses
-  the compatibility Ollama model setting. Selecting Ollama synchronizes that
-  model name, but a later change should move those commands onto the shared
-  completion/result contract before they support OpenRouter or Codex.
+- The earlier chat-shaped `forget` implementation and retired Integrate
+  evaluation pipeline still use the compatibility Ollama model setting.
+  Selecting Ollama synchronizes that model name, but live Forget would need to
+  move onto the shared completion/result contract before it supports
+  OpenRouter or Codex. Integrate remains frozen for research comparison rather
+  than returning as a public command.
 - Provider call metadata is available from the adapters, but existing durable
   analysis schemas do not yet persist it. That schema migration is required
   for reproducible saved results.

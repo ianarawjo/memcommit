@@ -108,9 +108,11 @@ deterministic instead of emitting a terminal-control interface.
 Ordinary commands carry no implementation label. Repeating `implemented` on
 nearly every row adds noise without helping a person choose a command. A
 parenthesized annotation is reserved for exceptional compatibility state:
-`integrate (legacy)` and `config (legacy)` remain callable but sit outside the
-current workflow. Ordinary TUI entry is described inside the expanded Forms
-instead of repeating a badge across the inventory.
+`config (legacy)` remains callable but sits outside the current workflow.
+Retired commands such as `integrate` are omitted instead of occupying an
+inventory row that suggests they can still be selected. Ordinary TUI entry is
+described inside the expanded Forms instead of repeating a badge across the
+inventory.
 
 ## Invocation forms
 

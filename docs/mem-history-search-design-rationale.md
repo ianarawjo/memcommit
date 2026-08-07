@@ -296,8 +296,10 @@ action and affected Context and Memory counts with `+`/`~`/`-` effect totals.
 Supported receipts reconstruct their canonical effective operands from frozen
 checkpoint metadata, including Update's `--from` and `--to`, so they omit a
 redundant affected-location list. Content-bearing Add/Edit operands and
-Forget/Integrate instructions use typed placeholders: the action shape remains
-visible without repeating private text. Missing legacy operands fail down to
+Forget instructions and historical Integrate instructions use typed
+placeholders: the action shape remains visible without repeating private text.
+The Integrate receipt reconstructs a retired action and is not an executable
+recommendation. Missing legacy operands fail down to
 the recorded command name. Receipts do not repeat restored Memory content,
 descriptions, receipt UIDs, or inverse-command guidance. Revert retains its
 bounded detailed confirmation: at most twelve changed direct items are

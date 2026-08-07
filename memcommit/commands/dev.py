@@ -226,15 +226,16 @@ def dev_fake(
 
 @app.command("eval")
 def dev_eval(
-    command: Annotated[str, typer.Option("--command", "-c", help=f"Semantic command to evaluate: {_SUPPORTED_COMMANDS}")],
+    command: Annotated[str, typer.Option("--command", "-c", help=f"Semantic benchmark to evaluate: {_SUPPORTED_COMMANDS}")],
     llm: Annotated[str, typer.Option("--llm", "-m", help="Ollama model name (e.g. llama3.2)")],
     runs: Annotated[int, typer.Option("--runs", "-n", help="Number of runs per test case")] = 3,
 ) -> None:
     """
-    Run an evaluation suite for a semantic operation against a given LLM model.
+    Run a frozen semantic benchmark against a given LLM model.
 
     Reports per-case precision, recall, and stability (consistency across runs).
-    Useful for vetting a new model before using it as a semantic backend.
+    Useful for vetting a new model before using it as a semantic backend. A
+    benchmark name may identify a retired public command.
 
     \b
     Example:

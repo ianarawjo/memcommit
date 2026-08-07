@@ -505,8 +505,9 @@ tuned on a consumed holdout.
 ## Nine-operation gate pilot and Task scaling
 
 The harness now includes `operation-gate-v1`, a common strict-label runner for
-Conflict, Atomize, Translate, Compare, Update, Ground, Meld, Forget, and
-Integrate. This common runner does not make their complete semantics generic.
+Conflict, Atomize, Translate, Compare, Update, Ground, Meld, Forget, and the
+retired Integrate benchmark. This common runner does not make their complete
+semantics generic or make every benchmark label a public command.
 Each operation owns its label vocabulary and decision instruction, and later
 candidate discovery, explanation, projection, review, and mutation stages
 remain operation-specific. The shared component owns only strict JSON parsing,
@@ -581,7 +582,8 @@ The next iteration preserved the frozen 37-case file byte-for-byte and stored
 verifying the base filename and digest. The resulting 75-case corpus contains
 57 `SHORT` and 18 `LONG` cases and fills labels absent from the first pilot,
 including Translate/Meld `UNKNOWN`, Update `REMOVE` and `UNRESOLVED`, Ground
-`FACT` and `MEMORY`, and Integrate `UNRESOLVED`. `--layer additions` permits a
+`FACT` and `MEMORY`, and retired Integrate `UNRESOLVED`. `--layer additions`
+permits a
 failure-driven run of only the new cases, while `--case` selects exact case
 identities; neither changes the frozen campaign manifest after execution
 starts.

@@ -111,7 +111,7 @@ The existing commands each cover only part of the required behavior:
 | `atomize` | Produces source-grounded atomic candidates and preserves uncertainty. | It does not decide whether a candidate is already represented, corrects a target, or belongs in a peer result. |
 | `merge` | Copies direct items whose UIDs are new to a target. | UID novelty is not semantic novelty, and the command performs no reconciliation. |
 | `impact` / `update` | Plans a directional publication-style update from verified A to target B. | It assumes source authority and does not express peer authority, case-level clarification, or a reusable meld relation ledger. |
-| legacy `integrate` | Distinguishes duplicate, update, and novel input for one assumed Memory. | It assumes the input is already suitable, lacks full ambiguity/conflict grounding, and does not supply the shared provenance or authority contract. |
+| retired legacy `integrate` | Distinguished duplicate, update, and novel input for one assumed Memory. | It assumed the input was already suitable, lacked full ambiguity/conflict grounding, and did not supply the shared provenance or authority contract. |
 | atomize grounding | Demonstrates clarification, downstream effects, exact edits/additions, and explicit acceptance. | It is deliberately anchored to one atomize issue rather than a general incoming or peer Context. |
 
 Without a meld operation, a person must manually atomize new notes, search for
@@ -546,11 +546,11 @@ raw source
 operation. Grounding is the interaction protocol used when reconciliation or
 another consequential judgment needs user participation.
 
-The current legacy `integrate` operation already approximates the
-`DUPLICATE / UPDATE / NOVEL` branch of a directional meld. It assumes its
-input is already one suitable Memory and lacks the full atomize, ambiguity,
-conflict, grounding, and provenance contracts. It is evidence for the useful
-relation split, not the final meld implementation.
+The retired legacy Integrate pipeline approximated the
+`DUPLICATE / UPDATE / NOVEL` branch of a directional meld. It assumed its
+input was already one suitable Memory and lacked the full atomize, ambiguity,
+conflict, grounding, and provenance contracts. Its frozen evaluation path is
+evidence for the useful relation split, not a public alternative to Meld.
 
 ## Source roles and authority
 

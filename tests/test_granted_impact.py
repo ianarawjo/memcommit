@@ -50,7 +50,7 @@ from memcommit.profiles import (
     delete_authority_grant,
 )
 from memcommit.store import MemoryStore
-from memcommit.semantic.changes import AddChange, RemoveChange, apply_changes
+from memcommit.semantic.changes import RemoveChange, apply_changes
 
 
 runner = CliRunner(mix_stderr=False)
@@ -746,44 +746,6 @@ def test_granted_chunk_and_clear_apply_to_authority_with_effect_permissions(
 
     assert cleared.exit_code == 0, cleared.output + cleared.stderr
     assert not authority.load_direct(wiki.name).memories
-
-
-def test_granted_integrate_applies_create_to_authority(
-    isolated_store,
-    tmp_path,
-    monkeypatch,
-):
-    active, authority, source, wiki, _grant = _setup_granted_target(
-        isolated_store,
-        tmp_path,
-        monkeypatch,
-        parent_permissions=("READ", "CREATE"),
-    )
-    active.set_current_virtual_context_if(source.name, "campus-wiki")
-    monkeypatch.setattr(
-        "memcommit.commands.integrate.Config.require_llm_model",
-        lambda _self: "test-model",
-    )
-
-    def approve_add(ctx, _info, _llm):
-        changes = [AddChange(content="New campus fact.", reason="Requested")]
-        apply_changes(ctx, changes)
-        return changes
-
-    monkeypatch.setattr(
-        "memcommit.commands.integrate._run_interactive_integrate",
-        approve_add,
-    )
-
-    result = runner.invoke(app, ["integrate", "Add the new campus fact"])
-
-    assert result.exit_code == 0, result.output + result.stderr
-    contents = [
-        item.content
-        for item in authority.load_direct(wiki.name).iter_items()
-        if isinstance(item, Memory)
-    ]
-    assert "New campus fact." in contents
 
 
 def test_granted_forget_rejects_delete_when_only_update_is_granted(

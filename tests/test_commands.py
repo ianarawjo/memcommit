@@ -79,10 +79,7 @@ class TestHelp:
             and "alias for branch" in line
             for line in lines
         )
-        assert any(
-            line.startswith("integrate (legacy) ")
-            for line in lines
-        )
+        assert not any(line.startswith("integrate ") for line in lines)
         assert any(line.startswith("config (legacy) ") for line in lines)
         assert any(line.startswith("switch ") for line in lines)
         assert any(line.startswith("share ") for line in lines)
@@ -108,6 +105,12 @@ class TestHelp:
             and "keep/edit/delete decision" in line
             for line in lines
         )
+
+    def test_integrate_is_not_a_public_command(self):
+        result = invoke("integrate", "new information")
+
+        assert result.exit_code == 2
+        assert "No such command 'integrate'" in result.stderr
 
     def test_help_kind_box_contains_multiple_commands_and_expanded_forms(self):
         entries = [

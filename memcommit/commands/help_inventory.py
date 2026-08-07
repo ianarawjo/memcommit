@@ -36,7 +36,6 @@ from memcommit.commands.horizontal_choice import (
 
 COMMAND_ANNOTATIONS = {
     "config": "legacy",
-    "integrate": "legacy",
 }
 
 HELP_CATEGORY_GROUPS = (
@@ -50,8 +49,7 @@ HELP_CATEGORY_GROUPS = (
     (
         "MEMORIES",
         (
-            "add", "chunk", "clear", "delete", "edit", "forget",
-            "integrate", "remove",
+            "add", "chunk", "clear", "delete", "edit", "forget", "remove",
         ),
     ),
     (
@@ -227,9 +225,6 @@ COMMAND_FORMS = {
         "mem init-study [profile_name] (use an explicit Study Profile name)",
         "mem init-study --from-profile [baseline_profile] (generated run name)",
         "mem init-study [profile_name] --from-profile [baseline_profile] (explicit baseline)",
-    ),
-    "integrate": (
-        'mem integrate "[memory]" (legacy semantic integration)',
     ),
     "list": (
         "mem list (enter the interactive Context browser in a TTY; print otherwise)",

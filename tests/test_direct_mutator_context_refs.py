@@ -6,11 +6,10 @@ from typer.testing import CliRunner
 
 import memcommit.commands.add as add_command
 import memcommit.commands.forget as forget_command
-import memcommit.commands.integrate as integrate_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Memory
-from memcommit.semantic.changes import AddChange, RemoveChange
+from memcommit.semantic.changes import RemoveChange
 from memcommit.store import MemoryStore
 
 
@@ -156,33 +155,6 @@ def test_forget_preserves_unresolved_context_ref(
     assert result.exit_code == 0, result.output
     _assert_context_ref(store, name, reference_uid)
     assert memories[0].uid not in store.load_direct(name).memories
-
-
-def test_integrate_preserves_unresolved_context_ref(
-    isolated_store,
-    monkeypatch,
-):
-    store, name, _, reference_uid = _dangling_parent()
-
-    class FakeConfig:
-        def require_llm_model(self) -> str:
-            return "fake-model"
-
-    def apply_integrate(context, info, _llm):
-        context.add(info)
-        return [AddChange(content=info, reason="test")]
-
-    monkeypatch.setattr(integrate_command, "Config", FakeConfig)
-    monkeypatch.setattr(
-        integrate_command,
-        "_run_interactive_integrate",
-        apply_integrate,
-    )
-
-    result = runner.invoke(app, ["integrate", "integrated"])
-
-    assert result.exit_code == 0, result.output
-    _assert_context_ref(store, name, reference_uid)
 
 
 def test_clear_counts_and_removes_unresolved_context_ref(isolated_store):

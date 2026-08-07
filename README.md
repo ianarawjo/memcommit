@@ -98,7 +98,8 @@ mem eval semantic run gates \
 
 The latest pilot composes a frozen 37-case baseline with 38 reviewed additions:
 75 cases across Conflict, Atomize, Translate, Compare, Update, Ground, Meld,
-Forget, and Integrate, including 57 short and 18 long Task 1--3 gates. Qwen
+Forget, and the retired Integrate benchmark, including 57 short and 18 long
+Task 1--3 gates. Qwen
 thinking-off matched 225/225 repeated attempts across all 75 cases, with mean
 0.550 seconds and p95 1.081 seconds per attempt in the warm campaign. Conflict,
 Translate, Compare, and Meld expose resolution evidence before the host projects

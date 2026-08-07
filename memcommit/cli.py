@@ -26,7 +26,6 @@ from memcommit.commands import (
     import_profile,
     init,
     init_study,
-    integrate,
     list_memories,
     log,
     meld,
@@ -368,13 +367,6 @@ app.command(
         "view, and APPLY? hands saved work to its normal Apply flow."
     ),
 )(impact.cmd)
-app.command(
-    "integrate",
-    help=(
-        "Legacy semantic route that may add or rewrite current-Context Memories "
-        "to incorporate supplied information after confirmation."
-    ),
-)(integrate.cmd)
 app.command(
     "update",
     help=(

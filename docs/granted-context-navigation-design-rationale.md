@@ -90,12 +90,13 @@ Failure therefore occurs before the first authority write, and the authority
 checkpoint records the grant UID, revision, grantee Profile, and public Context
 used for the operation.
 
-`forget` and `integrate` cannot authorize from the natural-language request or
-command name. They first produce a reviewable proposal, then derive the exact
-permission union from the accepted changes: additions require `CREATE`, edits
-require `UPDATE`, and removals require `DELETE`. The accepted changes remain
-in-memory until that complete union is revalidated under the registry lock and
-the single Context save succeeds.
+`forget` cannot authorize from the natural-language request or command name.
+It first produces a reviewable proposal, then derives the exact permission
+union from the accepted changes: edits require `UPDATE` and removals require
+`DELETE`. The accepted changes remain in-memory until that complete union is
+revalidated under the registry lock and the single Context save succeeds. The
+retired `integrate` command is no longer a granted mutation route; historical
+checkpoints retain their original identity for inspection.
 
 `merge` authorizes its source for `READ` and its current target for `CREATE`.
 When the two endpoints belong to different Profile stores, only direct ordinary

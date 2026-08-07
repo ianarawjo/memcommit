@@ -20,7 +20,6 @@ nor can a friendly command name stand in for the effects it eventually writes.
 | chunk | CREATE + DELETE | Replacement UIDs saved atomically in one Context |
 | clear | DELETE | Direct items removed in one Context save |
 | forget | UPDATE and/or DELETE from accepted proposal | One authority Context save |
-| integrate | CREATE, UPDATE, and/or DELETE from accepted proposal | One authority Context save |
 | merge | source READ + DERIVE; EXPORT across domains; target CREATE + ACCEPT_DERIVED | Cross-Profile transfer copies direct Memory values only |
 | compare | READ + DERIVE; COMBINE across domains; common SAVE mode | Exact grant-bound or retained artifact, otherwise process-local |
 | meld | Symmetric: Compare save authority + source EXPORT, local result. Directional: READ/DERIVE, COMBINE/EXPORT and ACCEPT_DERIVED across domains, plus baseline CREATE/UPDATE effects | Symmetric imports an ordered Compare ledger; directional freezes both endpoint Grants and updates a granted baseline in its authority Profile with rollback |
@@ -53,6 +52,9 @@ permission set while the registry lock remains held through the write.
   Grant BASELINE is revalidated for the exact ADD/EDIT effects and mutated in
   its authority store. Both endpoints may belong to the same exact Grant
   domain, in which case no artificial export boundary is introduced.
+- The retired `integrate` command is not a granted mutation route. Historical
+  checkpoints remain readable under their original command identity, but new
+  semantic ingestion must use the reviewed directional Meld or Update paths.
 - Granted Compare uses a distinct artifact containing the exact analysis and
   frozen source bindings. Grant-bound artifacts require live revalidation;
   retained artifacts survive revocation because permanent retention was
