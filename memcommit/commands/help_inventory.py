@@ -25,6 +25,7 @@ from memcommit.commands.tui_primitives import (
     bind_focused_frame_style,
     display_escape_text,
     focus_in_order,
+    horizontal_rule,
 )
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
@@ -1040,7 +1041,7 @@ def run_help_selector(
     )
     application: Application[HelpSelection | None] = Application(
         layout=Layout(
-            HSplit([header, view_frame, body, footer]),
+            HSplit([header, view_frame, body, horizontal_rule(), footer]),
             focused_element=list_control,
         ),
         key_bindings=bindings,

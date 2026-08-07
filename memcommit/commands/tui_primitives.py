@@ -47,6 +47,16 @@ INLINE_AGENT_COMMENT_TITLE = "COMMENT (FOR THE AGENT)"
 _BUFFER_SERIAL = count(1)
 
 
+def horizontal_rule() -> Window:
+    """Return the shared fixed-height separator between terminal regions."""
+
+    return Window(
+        height=Dimension.exact(1),
+        char="─",
+        dont_extend_height=True,
+    )
+
+
 def focus_in_order(app, controls: Sequence[object], delta: int, *, wrap: bool) -> bool:
     """Move focus through one caller-supplied visible screen order.
 

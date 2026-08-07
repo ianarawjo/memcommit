@@ -33,7 +33,7 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.utils import get_cwidth
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_primitives import display_escape_text, horizontal_rule
 
 
 SessionSortMode = Literal["recent", "name"]
@@ -827,12 +827,12 @@ def choose_session(
                 [
                     header,
                     location_window,
-                    Window(height=1, char="─"),
+                    horizontal_rule(),
                     list_window,
                     search_window,
-                    Window(height=1, char="─"),
+                    horizontal_rule(),
                     detail_window,
-                    Window(height=1, char="─"),
+                    horizontal_rule(),
                     footer,
                 ]
             ),

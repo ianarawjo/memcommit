@@ -35,9 +35,17 @@ from memcommit.commands.tui_primitives import (
     display_escape_text,
     equal_pane_height,
     focused_control_style,
+    horizontal_rule,
     safe_terminal_text,
     set_scrollable_pane_text,
 )
+
+
+def test_horizontal_rule_is_one_fixed_full_width_separator():
+    rule = horizontal_rule()
+
+    assert rule.char == "─"
+    assert (rule.height.min, rule.height.preferred, rule.height.max) == (1, 1, 1)
 
 
 class _RecordingApp:

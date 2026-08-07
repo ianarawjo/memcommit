@@ -78,6 +78,12 @@ prompt-toolkit selector:
   syntax help.
 - `q`, Escape, and Ctrl-C cancel without selecting or invoking anything.
 
+The scrollable inventory and its fixed footer are separated by the same
+full-width horizontal-rule primitive used between regions in the common saved
+session picker. Spare terminal height therefore remains part of the list
+viewport, while the rule and key guide stay pinned at the bottom; Help does not
+grow an operation-specific separator convention.
+
 The selected command's callback is deliberately never invoked. Some commands
 can change local state with no additional arguments, while other commands
 require operands or provider work. No Enter in the browser invokes the selected
