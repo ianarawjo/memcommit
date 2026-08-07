@@ -18,7 +18,7 @@ different pane and used a different page size.
 `SessionWorkbenchNavigation` owns only process-local presentation state:
 
 - focused pane (`items`, `viewer`, `todo`, or `composer`);
-- selected Items row and the separately opened Viewer row; and
+- selected Items row and the Viewer row currently previewing it; and
 - stable Viewer section UID.
 
 Every renderer supplies an ordered tuple of `WorkbenchSection` records. A
@@ -28,9 +28,11 @@ projection. Inserting `REVIEW_ITEMS` or `IMPACT` therefore does not change the
 identity of a report section or an operation item. Apply and whole-set controls
 are not synthetic Items rows; their actionable representation belongs only to
 To Do.
-Moving through Items does not replace the open Viewer merely because the
-selection changed; `Enter` is the explicit transition that copies the selected
-row into the Viewer identity.
+Moving through Items immediately previews the selected report or item in
+Viewer while keyboard focus remains in Items. This prevents a stale detail
+from remaining above a newly selected row. `Enter` transfers focus into that
+already aligned Viewer so the person can navigate its semantic sections or
+open nested choices.
 
 Resolution sessions use three visible frames with separate responsibilities:
 
@@ -40,15 +42,37 @@ Resolution sessions use three visible frames with separate responsibilities:
 
 `TO DO` first points to the earliest unresolved required conflict or item, and
 Enter opens that target in Viewer. Once every REQUIRED item has a staged
-resolution, an applying session changes to `MATERIALIZE`; after an exact
-proposal is ready, it changes to
-`APPLY`. OPTIONAL items remain selectable in Items but do not gate either
-transition, and To Do reports how many may be skipped or remain unanswered.
+resolution, an applying session with saved responses that are not yet part of
+the exact proposal changes to `INCORPORATE RESPONSES`; after an exact proposal
+is ready, it changes to `APPLY CHANGES`. OPTIONAL reviews remain selectable in
+Items but do not gate either transition, and To Do reports how many may be
+skipped or remain open.
 Non-applying resolution sessions expose their whole-set resolution there
 instead. Read-only sessions explicitly show that no action is available. The
 frame derives this projection from the current view and process-local drafts;
 it neither persists a new state nor bypasses the adapter's semantic action
 validation.
+
+`INCORPORATE RESPONSES` names the semantic boundary rather than the storage
+mechanism: it creates a revised complete proposal from saved responses and
+does not alter a Context or Memory. `APPLY CHANGES` is the only label for the
+later mutation boundary. Report and To Do must project the same next action so
+one surface cannot advertise incorporation while the other still requires a
+response.
+
+When saved responses make incorporation the current To Do, the open item also
+renders that same `INCORPORATE RESPONSES` section immediately below `RESPONSE`.
+It is a second route to the same complete reviewed-response action, not a
+per-item provider call or a second semantic boundary. If another REQUIRED item
+is still open, the inline action remains hidden because the complete response
+frame is not ready to submit.
+
+The shared shell does not infer review semantics from display priority alone.
+Each production adapter supplies an item role (`DECISION`, `OPTIONAL_REVIEW`,
+or `CHANGE`), a response obligation (`REQUIRED`, `OPTIONAL`, or `NONE`), and a
+response state (`OPEN`, `ANSWERED`, or `NOT_APPLICABLE`). This keeps exact
+Update changes out of unanswered counts and keeps durable custom Forget and
+Sever wording answered when a session is reopened.
 
 The current item's `n/total` is only an ordinal. Actionable detail separately
 shows `REQUIRED n · OPTIONAL m` for the complete review set so position cannot
@@ -57,7 +81,9 @@ be mistaken for required progress.
 The shared interaction grammar is:
 
 - Items receives initial focus;
-- `Enter` opens the selected row in Viewer;
+- `Up` and `Down` in Items select and immediately preview the corresponding
+  report or item in Viewer;
+- `Enter` moves from the selected Items row into its aligned Viewer;
 - Items is the initial hub: its first `Tab` opens Viewer and its first
   `Shift-Tab` reaches To Do. Once a visible-frame cycle begins, forward Tab
   follows screen order `Viewer → Items → To Do → Viewer`, with Shift-Tab
@@ -90,6 +116,31 @@ rendered visual rows rather than reporting a misleading logical-line offset.
 This is a shared Viewer property and must not be reimplemented by Atomize or
 another operation adapter.
 
+An actionable evidence card is also not one oversized navigation stop. The
+shared Resolution Viewer orders its stops as Classification, each criterion,
+each terminal-wrapped line of every source Memory, and Why. Up/Down can
+therefore traverse a long quoted Memory one visible line at a time before
+moving to the reason or proposed result. Those line stops are presentation
+slices only: the typed source remains one Memory, its short UID appears only
+on the first line, and a source-frame/claim heading remains attached to the
+first line of that group. A terminal resize may rewrap and reclamp the line
+index without changing semantic identity or persisted state. The item kind,
+ordinal, title, status, and review-set counts remain visible as non-focusable
+report chrome, so opening an actionable detail starts on Classification.
+
+Compact technical refs use the shared purple reference style rather than the
+blue focus color. When a ref denotes an individual proposed Memory and its
+content is available, the adapter renders it as a lavender `[n] content` row
+and retains the UID only in the typed model. Raw `kind:key` identities must not
+duplicate those visible Memory rows.
+
+A detail block containing several proposed Memories contributes one semantic
+Viewer stop per Memory rather than one stop for the whole block. Up/Down
+therefore advances exactly one `[n] content` row. Evidence remains collapsed
+so the list stays compact; Enter on a Memory shows only that row's evidence,
+and Enter again or Escape/Backspace collapses it before any outer back step.
+This state is process-local and never enters the artifact or response frame.
+
 An OPTIONS section is a nested navigation layer, not an implicitly active list.
 For actionable quality issues, its clarification or resolution question is
 the prompt of that same Decision section rather than a separate navigation
@@ -112,11 +163,13 @@ Sever, and Atomize, and for the Update and adaptive Review projections. Sever
 classifies each outbound treatment as REQUIRED because every source Memory
 needs one inspectable disclosure decision, even though its provider
 recommendation is already staged. Atomize uses the shared two-stage terminal
-path: after all required responses are saved, To Do offers MATERIALIZE to
-reanalyze the complete reviewed response set; only the fresh, unedited
-review-bound proposal offers APPLY. Unanswered optional items are counted and
-may be skipped, but a response added to the fresh proposal removes Apply until
-that response is materialized again.
+path only when review input exists: after all required responses are saved, To
+Do offers `INCORPORATE RESPONSES` to reanalyze the complete reviewed response
+set; the resulting unedited exact proposal offers `APPLY CHANGES`. A current
+analysis with no unresolved required finding and no unincorporated response is
+already exact, so an unanswered optional split may proceed directly to Apply.
+A response added to that proposal removes Apply until it is incorporated
+again.
 
 Choosing Other direction or opening an item's ordinary Response keeps the
 current detail and options visible. The writable field appears inline within

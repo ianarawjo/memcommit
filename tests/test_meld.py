@@ -485,7 +485,9 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
         True,
         True,
     )
-    assert any("[scope/left/child]" in memory.content for memory in restored.frames[0].memories)
+    assert any(
+        "[scope/left/child]" in memory.content for memory in restored.frames[0].memories
+    )
 
 
 def test_directional_meld_freezes_incoming_descendants_but_direct_baseline(
@@ -1025,12 +1027,8 @@ def test_viewer_position_is_blue_only_while_viewer_has_focus():
 
 
 def test_compare_report_is_white_and_only_memory_objects_are_lavender():
-    report = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
-        "class:detail-card"
-    )
-    memory = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
-        "class:memory-object"
-    )
+    report = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str("class:detail-card")
+    memory = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str("class:memory-object")
 
     assert report.color == "ffffff"
     assert memory.color == "cad3f5"
@@ -1278,9 +1276,11 @@ def test_undo_and_redo_restore_meld_application_state_as_one_operation(
     assert redone_session.state == "APPLIED"
     assert redone_session.application is not None
     assert redone_session.application.checkpoint_uid == original_checkpoint_uid
-    assert [
-        entry["command"] for entry in store.list_checkpoints(target.name)[:3]
-    ] == ["redo", "undo", "meld"]
+    assert [entry["command"] for entry in store.list_checkpoints(target.name)[:3]] == [
+        "redo",
+        "undo",
+        "meld",
+    ]
 
     undone_again = runner.invoke(app, ["undo"])
     assert undone_again.exit_code == 0, undone_again.output
@@ -1541,8 +1541,7 @@ def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
     assert undone.exit_code == 0, undone.output
     assert store.load_meld_session(baseline.uid).state == "READY_TO_APPLY"
     assert [
-        memory.content
-        for memory in store.load_direct(baseline.name).memories.values()
+        memory.content for memory in store.load_direct(baseline.name).memories.values()
     ] == [
         "The underground-parking stairwell is closed.",
         "The Campus Store remains open during construction.",
@@ -1660,8 +1659,7 @@ def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
     assert undone.exit_code == 0, undone.output
     assert store.load_meld_session(baseline.uid).state == "READY_TO_APPLY"
     assert [
-        memory.content
-        for memory in store.load_direct(baseline.name).memories.values()
+        memory.content for memory in store.load_direct(baseline.name).memories.values()
     ] == ["The Campus Store remains open during construction."]
 
     redone = runner.invoke(app, ["redo"])
@@ -2441,16 +2439,13 @@ def test_context_rename_rebinds_an_unapplied_meld_compare_seed(isolated_store):
     session = MeldSession.create_symmetric_from_comparison(comparison, target)
     store.save_meld_session(session)
 
-    store.rename_contexts(
-        store.plan_context_rename(left.name, "task-2/renamed-left")
-    )
+    store.rename_contexts(store.plan_context_rename(left.name, "task-2/renamed-left"))
 
     rebound = store.load_meld_session(target.uid)
     assert rebound is not None and rebound.comparison_seed is not None
     assert rebound.frames[0].context_name == "task-2/renamed-left"
     assert (
-        rebound.comparison_seed.analysis.frames[0].context_name
-        == "task-2/renamed-left"
+        rebound.comparison_seed.analysis.frames[0].context_name == "task-2/renamed-left"
     )
 
 
@@ -2472,7 +2467,9 @@ def test_symmetric_workbench_can_relocate_its_empty_result_before_apply(
             None,
         )
     )
-    monkeypatch.setattr(meld_command, "run_meld_shell", lambda *args, **kwargs: next(actions))
+    monkeypatch.setattr(
+        meld_command, "run_meld_shell", lambda *args, **kwargs: next(actions)
+    )
 
     relocated = meld_command._run_interactive(
         store=store,
@@ -2846,8 +2843,7 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\r\r"
-            "cKeep all supported details.\x13\t\t\r"
+            "\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\r\rcKeep all supported details.\x13\t\t\r"
         )
         action = run_meld_shell(
             session,
@@ -2917,7 +2913,9 @@ def test_ready_meld_review_report_cannot_accept_or_apply():
         assess_meld_turn(session, provider),
     )
     issue_uid = session.current_assessment.issues[0].uid
-    session.start_turn("Keep all supported details.", scope="ISSUE", issue_uids=(issue_uid,))
+    session.start_turn(
+        "Keep all supported details.", scope="ISSUE", issue_uids=(issue_uid,)
+    )
     session.record_assessment(
         session.current_turn.uid,
         assess_meld_turn(session, provider),
@@ -2953,7 +2951,7 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\r\r"
+            "\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\r\r"
             "cKeep the rate.\nKeep every payment method.\r\t\t\r"
         )
         action = run_meld_shell(
@@ -2988,9 +2986,7 @@ def test_meld_back_key_collapses_detail_before_leaving_the_workbench(
     with create_pipe_input() as pipe_input:
         # The first Down opens conflict 1. Either back key returns to REPORT
         # instead of closing, then the conflict can be selected again.
-        pipe_input.send_text(
-            f"\x1b[B\r{back_key}\x1b[B\rcStill reviewing.\x13\t\t\r"
-        )
+        pipe_input.send_text(f"\x1b[B\r{back_key}\x1b[B\rcStill reviewing.\x13\t\t\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,

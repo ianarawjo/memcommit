@@ -158,7 +158,7 @@ def test_report_sections_precede_issues_and_relation_ledger():
     assert rows[-2].label == "Relation ledger · 1"
 
 
-def test_item_selection_does_not_replace_viewer_until_enter():
+def test_item_selection_immediately_previews_viewer_without_moving_focus():
     analysis, _left, _right = _analysis()
     navigation = SessionWorkbenchNavigation()
     with create_pipe_input() as pipe_input:
@@ -173,7 +173,27 @@ def test_item_selection_does_not_replace_viewer_until_enter():
 
     assert receipt.action == "close"
     assert navigation.row_index == 1
+    assert navigation.viewer_row_index == 1
+    assert navigation.pane == "items"
+
+
+def test_up_from_an_open_compare_item_previews_the_report():
+    analysis, _left, _right = _analysis()
+    navigation = SessionWorkbenchNavigation()
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r\t\x1b[A\x1b[Aq")
+        receipt = run_compare_workbench(
+            analysis,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            workbench_navigation=navigation,
+        )
+
+    assert receipt.action == "close"
+    assert navigation.row_index == 0
     assert navigation.viewer_row_index == 0
+    assert navigation.pane == "items"
 
 
 def test_multiline_report_preserves_layout_and_escapes_controls_per_line():

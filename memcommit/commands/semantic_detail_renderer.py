@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.resolution_workbench import ResolutionMemoryRow
 from memcommit.result_workbench import ResultRef
 
 
@@ -40,16 +41,57 @@ def semantic_detail_block_fragments(
     heading: str,
     text: str,
     refs: tuple[ResultRef, ...] = (),
+    memory_rows: tuple[ResolutionMemoryRow, ...] = (),
 ) -> list[tuple[str, str]]:
     """Render one operation-authored block without reordering its meaning."""
 
-    fragments = [
-        ("class:block-heading", f" {safe_terminal_text(heading)}\n"),
-        ("", f" {safe_terminal_text(text)}\n"),
-    ]
+    fragments = [("class:block-heading", f" {safe_terminal_text(heading)}\n")]
+    if text:
+        fragments.append(("", f" {safe_terminal_text(text)}\n"))
+    for row in memory_rows:
+        fragments.append(
+            (
+                "class:memory-object",
+                f" [{row.ordinal}] {safe_terminal_text(row.content)}\n",
+            )
+        )
+        if row.evidence:
+            fragments.append(
+                (
+                    "",
+                    "     Evidence · "
+                    + " | ".join(safe_terminal_text(span) for span in row.evidence)
+                    + "\n",
+                )
+            )
     if refs:
         fragments.append(
-            ("class:trace", f" refs · {semantic_refs_text(refs)}\n")
+            ("class:reference", f" refs · {semantic_refs_text(refs)}\n")
+        )
+    return fragments
+
+
+def semantic_memory_row_fragments(
+    row: ResolutionMemoryRow,
+    *,
+    expanded: bool,
+) -> list[tuple[str, str]]:
+    """Render one Memory on one row and disclose evidence only on demand."""
+
+    fragments: list[tuple[str, str]] = [
+        (
+            "class:memory-object",
+            f" [{row.ordinal}] {safe_terminal_text(row.content)}\n",
+        )
+    ]
+    if expanded and row.evidence:
+        fragments.append(
+            (
+                "",
+                "     Evidence · "
+                + " | ".join(safe_terminal_text(span) for span in row.evidence)
+                + "\n",
+            )
         )
     return fragments
 

@@ -249,7 +249,7 @@ ISSUES · 0/4 answered                             ORDER: SOURCE
      WHY · The entrance scope determines whether the two claims conflict.
      ↳ R1 · Same entrance
      ↳ R2 · Different entrances
-  3. ATOMIZE SPLIT                   "The store closes..."
+  3. SUGGESTED SPLIT                 "The store closes..."
   4. ATOMIZE UNCERTAINTY             "after that time..."
 ```
 
@@ -325,6 +325,16 @@ alongside "split" or "preserved." No-loss is an invariant. If the operation
 detects or cannot rule out a material omission under its validation contract,
 application must be blocked or the source retained; the UI must not normalize
 loss as an acceptable outcome.
+
+An unresolved quality finding is not itself proof that the exact structural
+proposal loses content. The workbench therefore does not turn silence into a
+deferment decision or require one response per finding. Answered unary
+responses must first be incorporated in one complete reanalysis turn. With no
+incorporable response pending, the To Do card exposes `APPLY AS IS`; applying
+uses every current `COMPOSITE` split, preserves `UNCERTAIN` sources because
+they have no children, and leaves Conflict semantics unresolved. The action
+records those findings as `UNRESOLVED AT APPLY` rather than `RESOLVED`,
+`SKIPPED`, or `DEFERRED`.
 
 As with the understanding block, each of these two sections is its own concise,
 traceable natural-language report paragraph. The shared 40-50-word soft target
@@ -432,9 +442,9 @@ The visual shell is shared, but issue semantics must not be flattened into one
 generic `UNCERTAIN / RECONCILE` record. Source arity, evidence, choices, and
 future application differ by issue type.
 
-### Atomize split
+### Suggested split
 
-An atomize-split issue has:
+The durable `ATOMIZE_SPLIT` issue, displayed as `SUGGESTED SPLIT`, has:
 
 - exactly one source Memory;
 - two or more ordered proposed children;
@@ -447,9 +457,15 @@ The detail view must show the original and the proposed children together so
 the user can inspect coverage, scope, and revision boundaries. Showing only
 `COMPOSITE / SPLIT` does not reveal what will actually be stored.
 
-The exact action vocabulary for accepting, refining, retaining unsplit, or
-deferring a split has not yet been agreed and must not be accidentally frozen
-by a generic UI implementation.
+Proposed children are a compact ordered Memory list. Each `[n] content` row is
+one Viewer navigation stop; Evidence is hidden until Enter expands that exact
+row. The list does not repeat raw child UIDs or place every evidence span under
+every child by default, because both forms obscure comparison across children.
+
+Suggested splits are optional review rows. Leaving one unanswered does not
+exclude it from application: ordinary `APPLY CHANGES` accepts the current
+children. A typed response is incorporable unary evidence and therefore moves
+To Do to `INCORPORATE RESPONSES` before the fresh proposal can apply.
 
 ### Ambiguity
 
@@ -497,7 +513,9 @@ meaning. Because the prototype retains only one workbench revision per
 Context, `--with-review` fails before calling the provider whenever any
 answered pairwise issue is present. Replacing the workbench while merely
 skipping that answer would lose evidence. The answer therefore remains in the
-current workbench for a future reconcile operation.
+current workbench for a future reconcile operation. It does not, however,
+block `APPLY AS IS`: Atomize may apply its exact current structural proposal
+while retaining and auditing the still-unresolved pairwise finding.
 
 ### Atomize uncertainty
 
@@ -842,6 +860,13 @@ The following decisions are stable enough to guide implementation and tests:
   active.
 - Reopening or taking a snapshot never silently reruns semantic analysis.
 - Reanalysis is explicit, and applying it must identify the exact analysis.
+- Unanswered Ambiguity, Atomize Uncertainty, and Conflict findings do not
+  require per-item responses; they select one explicit `APPLY AS IS` boundary.
+- Answered unary responses still require one batch incorporation turn before
+  Apply. Silence is not incorporated as an answer or policy.
+- Apply-as-is records the issue UID, kind, source arity, classification,
+  reason, visible response state, workbench UID, and response-state digest in
+  the application checkpoint without copying an unapplied free-form response.
 - The first screen contains counts, `WHAT MEM UNDERSTOOD`, `WHAT HAPPENED`,
   `WHAT REMAINS UNRESOLVED`, sampled representative/boundary cases, and the
   complete actionable issue list; reading-bearing issues include one
@@ -935,8 +960,8 @@ The following must not be accidentally encoded as settled behavior:
 
 - an archive and diff UI for multiple analysis revisions;
 - whether more than one concurrent workbench can be retained and how it locks;
-- the exact action vocabulary for accepting, refining, keeping, or deferring
-  an atomize split;
+- a future per-split selective keep/defer contract; the current response,
+  incorporation, and whole-proposal Apply vocabulary is settled;
 - a hard word limit for overview paragraphs;
 - migration of atomize grounding into a generic cross-operation persistence
   schema; its current lossless meld adapter deliberately preserves the

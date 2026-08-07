@@ -42,6 +42,7 @@ from memcommit.commands.tui_primitives import (
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
     semantic_detail_header_fragments,
+    semantic_memory_row_fragments,
     semantic_trace_fragments,
 )
 from memcommit.impact_controller import ImpactController, ImpactView
@@ -51,6 +52,7 @@ from memcommit.resolution_workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchError,
     ResolutionItem,
+    ResolutionMemoryRow,
     ResolutionWorkbenchView,
 )
 from memcommit.session_workbench_navigation import (
@@ -94,6 +96,46 @@ class SessionTodoView:
     unresolved_item_uids: tuple[str, ...] = ()
 
 
+def _item_draft(
+    item: ResolutionItem,
+    drafts: dict[str, tuple[str | None, str]],
+) -> tuple[str | None, str]:
+    """Return the live draft or the adapter's durable response projection."""
+
+    return drafts.get(
+        item.uid,
+        (item.selected_option_uid, item.response_text),
+    )
+
+
+def _item_is_answered(
+    item: ResolutionItem,
+    drafts: dict[str, tuple[str | None, str]],
+) -> bool:
+    if item.response_state == "NOT_APPLICABLE":
+        return True
+    # A live draft is authoritative even when it deliberately clears a
+    # durable answer; otherwise the To Do pane can keep reporting the item as
+    # answered after its selected option is cancelled.
+    if item.uid in drafts:
+        option_uid, comment = drafts[item.uid]
+        return bool(option_uid or comment.strip())
+    if item.response_state == "ANSWERED":
+        return True
+    option_uid, comment = _item_draft(item, drafts)
+    return bool(option_uid or comment.strip())
+
+
+def _review_count_text(
+    count: int,
+    singular_suffix: str,
+    plural_suffix: str | None = None,
+) -> str:
+    noun = "review" if count == 1 else "reviews"
+    suffix = singular_suffix if count == 1 or plural_suffix is None else plural_suffix
+    return f"{count} optional {noun} {suffix}. "
+
+
 def session_todo_view(
     view: ResolutionWorkbenchView,
     drafts: dict[str, tuple[str | None, str]],
@@ -105,14 +147,11 @@ def session_todo_view(
 ) -> SessionTodoView:
     """Derive one honest next action without creating semantic authority."""
 
-    unresolved: list[ResolutionItem] = []
-    for item in view.items:
-        option_uid, comment = drafts.get(
-            item.uid,
-            (item.selected_option_uid, ""),
-        )
-        if not (option_uid or comment.strip()):
-            unresolved.append(item)
+    unresolved = [
+        item
+        for item in view.items
+        if item.effective_obligation != "NONE" and not _item_is_answered(item, drafts)
+    ]
     if read_only:
         if read_only_handoff is not None:
             return read_only_handoff
@@ -122,8 +161,12 @@ def session_todo_view(
             "This saved session can only be inspected.",
         )
     if unresolved:
-        required = tuple(item for item in unresolved if item.priority == "REQUIRED")
-        optional = tuple(item for item in unresolved if item.priority != "REQUIRED")
+        required = tuple(
+            item for item in unresolved if item.effective_obligation == "REQUIRED"
+        )
+        optional = tuple(
+            item for item in unresolved if item.effective_obligation == "OPTIONAL"
+        )
         pending = required
     else:
         required = ()
@@ -136,10 +179,7 @@ def session_todo_view(
             noun += "s"
         qualifier = "required " if required else ""
         optional_note = (
-            f"{len(optional)} optional item"
-            f"{'s' if len(optional) != 1 else ''} may be skipped. "
-            if optional
-            else ""
+            _review_count_text(len(optional), "may be skipped") if optional else ""
         )
         return SessionTodoView(
             "RESOLVE",
@@ -148,36 +188,63 @@ def session_todo_view(
             tuple(item.uid for item in pending),
         )
     if review_and_apply and view.accept_enabled:
+        if view.accept_mode == "AS_IS":
+            open_reviews = tuple(
+                item for item in unresolved if item.role == "OPTIONAL_REVIEW"
+            )
+            detail = ""
+            if view.unresolved_at_apply_count:
+                noun = "finding" if view.unresolved_at_apply_count == 1 else "findings"
+                detail += (
+                    f"{view.unresolved_at_apply_count} unresolved {noun} will be "
+                    "recorded at apply. "
+                )
+            if open_reviews:
+                detail += _review_count_text(
+                    len(open_reviews),
+                    "remains open",
+                    "remain open",
+                )
+            return SessionTodoView(
+                "APPLY AS IS",
+                f"Apply {view.operation.title()} as is",
+                detail + "Enter to apply the exact current proposal as is. "
+                "Recovery: mem undo.",
+            )
         return SessionTodoView(
-            "APPLY",
-            f"Apply {view.operation.title()}",
+            "APPLY CHANGES",
+            f"Apply {view.operation.title()} changes",
             (
-                f"{len(optional)} optional item"
-                f"{'s' if len(optional) != 1 else ''} left unanswered. "
+                _review_count_text(
+                    len(optional),
+                    "remains open and will be skipped",
+                    "remain open and will be skipped",
+                )
                 if optional
                 else ""
             )
-            + "Enter to apply the exact reviewed proposal.",
+            + "Enter to apply the exact proposal shown above.",
         )
-    if review_and_apply:
+    if review_and_apply and whole_set_available:
         return SessionTodoView(
-            "MATERIALIZE",
-            "Materialize reviewed choices",
-            (
-                f"{len(optional)} optional item"
-                f"{'s' if len(optional) != 1 else ''} may be skipped. "
-                if optional
-                else ""
-            )
-            + "Enter to create the complete proposal for final review.",
+            "INCORPORATE RESPONSES",
+            "Incorporate saved responses",
+            (_review_count_text(len(optional), "may be skipped") if optional else "")
+            + (
+                "Enter to create a revised complete proposal. "
+                "No Context or Memory changes will be applied yet."
+            ),
         )
     if not whole_set_available:
         return SessionTodoView(
             "COMPLETE",
             "Required review is complete",
             (
-                f"{len(optional)} optional item"
-                f"{'s' if len(optional) != 1 else ''} left unanswered. "
+                _review_count_text(
+                    len(optional),
+                    "remains open",
+                    "remain open",
+                )
                 if optional
                 else ""
             )
@@ -190,8 +257,30 @@ def session_todo_view(
     )
 
 
-def _apply_heading(view: ResolutionWorkbenchView) -> str:
-    return f"REVIEW & APPLY {view.operation.upper()}"
+def _apply_heading(view: ResolutionWorkbenchView, kind: str) -> str:
+    return f"{kind} · {view.operation.upper()}"
+
+
+def _report_action(
+    view: ResolutionWorkbenchView,
+    drafts: dict[str, tuple[str | None, str]],
+    strategies: tuple[ResolutionGlobalStrategy, ...],
+) -> tuple[str, str, bool]:
+    """Project the same next action into Report that To Do already exposes."""
+
+    todo = session_todo_view(
+        view,
+        drafts,
+        review_and_apply=True,
+        read_only=False,
+        whole_set_available=bool(strategies),
+    )
+    heading = (
+        _apply_heading(view, todo.kind)
+        if todo.kind in {"APPLY CHANGES", "APPLY AS IS"}
+        else todo.kind
+    )
+    return heading, todo.detail, todo.kind == "INCORPORATE RESPONSES"
 
 
 def _current_impact(
@@ -206,7 +295,9 @@ def _current_impact(
         or impact.artifact_uid != view.artifact_uid
         or impact.revision != view.revision
     ):
-        raise ValueError("Impact projection does not match the active artifact revision.")
+        raise ValueError(
+            "Impact projection does not match the active artifact revision."
+        )
     return impact
 
 
@@ -214,20 +305,17 @@ def _impact_repeats_results(
     impact: ImpactView | None,
     view: ResolutionWorkbenchView,
 ) -> bool:
-    return (
-        impact is not None
-        and (
-            impact.replaces_results
-            or (
-                len(impact.entries) == len(view.results)
-                and all(
-                    (entry.marker, entry.label, entry.text)
-                    == (result.marker, result.label, result.text)
-                    for entry, result in zip(
-                        impact.entries,
-                        view.results,
-                        strict=True,
-                    )
+    return impact is not None and (
+        impact.replaces_results
+        or (
+            len(impact.entries) == len(view.results)
+            and all(
+                (entry.marker, entry.label, entry.text)
+                == (result.marker, result.label, result.text)
+                for entry, result in zip(
+                    impact.entries,
+                    view.results,
+                    strict=True,
                 )
             )
         )
@@ -300,9 +388,10 @@ def _line(value: str, limit: int = 100) -> str:
     return "".join(kept).rstrip() + "…"
 
 
-def _item_kind_label(value: str) -> str:
-    """Render operation-owned kind tokens as stable human-facing row labels."""
-    return safe_terminal_text(value.replace("_", " "))
+def _item_kind_label(item: ResolutionItem) -> str:
+    """Render the operation-owned label without leaking its storage token."""
+
+    return safe_terminal_text(item.display_kind)
 
 
 def _stable_sections(
@@ -323,6 +412,14 @@ def _stable_sections(
             )
         )
     return tuple(sections)
+
+
+def _memory_row_section_uid(
+    item_uid: str,
+    block_index: int,
+    row: ResolutionMemoryRow,
+) -> str:
+    return f"ITEM:{item_uid}:BLOCK:{block_index}:MEMORY:{row.ordinal}"
 
 
 def _indented(value: str, indent: str = "       ") -> str:
@@ -365,6 +462,25 @@ def _visual_wrap(value: str, width: int) -> list[str]:
         if current:
             wrapped.append(leading + current)
     return wrapped or [""]
+
+
+def _source_memory_lines(content: str, content_width: int) -> tuple[str, ...]:
+    """Wrap one source Memory into independently navigable display rows."""
+
+    # Reserve the first-row short UID and continuation indentation. The
+    # returned rows remain presentation-only slices of one Memory object.
+    return tuple(_visual_wrap(content, max(1, content_width - 16)))
+
+
+def _evidence_section_count(evidence, content_width: int) -> int:
+    """Count Classification, criterion, source-line, and Why stops."""
+
+    source_line_count = sum(
+        len(_source_memory_lines(source.content, content_width))
+        for claim in evidence.source_groups
+        for source in claim.sources
+    )
+    return 2 + len(evidence.criterion_blocks) + source_line_count
 
 
 def _visual_wrap_diff_spans(
@@ -422,7 +538,7 @@ def _session_items_fragments(
 ) -> list[tuple[str, str]]:
     """Render Items with hanging wraps inside the current frame width."""
     rows = (("REPORT", report_label),) + tuple(
-        (_item_kind_label(item.kind).upper(), item.title) for item in view.items
+        (_item_kind_label(item).upper(), item.title) for item in view.items
     )
     fragments: list[tuple[str, str]] = []
     available_width = max(12, content_width)
@@ -540,7 +656,7 @@ def resolution_workbench_fragments(
                 "",
                 (
                     "       "
-                    f"{_item_kind_label(item.kind)} · "
+                    f"{_item_kind_label(item)} · "
                     f"{safe_terminal_text(item.status)} · "
                     f"{_line(item.summary)}\n"
                 ),
@@ -553,7 +669,10 @@ def resolution_workbench_fragments(
             # exact actionable-issue detail contract instead of maintaining a
             # second ambiguity/conflict layout inside that compatibility UI.
             presentation = item.issue_presentation
-            options_section = len(presentation.evidence) + 1
+            options_section = sum(
+                _evidence_section_count(evidence, 76)
+                for evidence in presentation.evidence
+            )
             fragments.extend(
                 resolution_viewer_fragments(
                     view,
@@ -664,6 +783,8 @@ def resolution_viewer_fragments(
     option_navigation_active: bool = False,
     other_direction_focused: bool = False,
     other_direction_editing: bool = False,
+    inline_action: SessionTodoView | None = None,
+    expanded_memory_section_uid: str | None = None,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
     """Render one issue as a compact, section-navigable detail surface."""
@@ -679,16 +800,19 @@ def resolution_viewer_fragments(
     presentation = item.issue_presentation
     section_count = (
         (
-            1
-            + len(presentation.evidence)
+            sum(
+                _evidence_section_count(evidence, content_width)
+                for evidence in presentation.evidence
+            )
             + bool(item.question or item.options)
-            + len(item.blocks)
+            + sum(len(block.memory_rows) or 1 for block in item.blocks)
             + 1
+            + bool(inline_action)
         )
         if presentation is not None
         else (
             1
-            + len(item.blocks)
+            + sum(len(block.memory_rows) or 1 for block in item.blocks)
             + bool(item.evidence_refs)
             + bool(item.question)
             + bool(item.options)
@@ -715,6 +839,8 @@ def resolution_viewer_fragments(
                 }
                 else "class:detail-card.focused"
                 if active and style == ""
+                else "class:memory-object.focused"
+                if active and style == "class:memory-object"
                 else style
             )
             fragments.append((focused_style, text))
@@ -855,17 +981,19 @@ def resolution_viewer_fragments(
     )
     if presentation is not None:
         required_count = sum(
-            candidate.priority == "REQUIRED" for candidate in view.items
+            candidate.effective_obligation == "REQUIRED" for candidate in view.items
         )
-        optional_count = len(view.items) - required_count
-        report_section(
+        optional_count = sum(
+            candidate.effective_obligation == "OPTIONAL" for candidate in view.items
+        )
+        # This identifies the opened review target; it is report chrome, not
+        # an actionable section. Keep the cursor on Classification when the
+        # detail opens instead of making the user move past its title.
+        fragments.extend(
             [
                 (
                     "class:section",
-                    (
-                        f"\n {_item_kind_label(item.kind)} "
-                        f"{item_index}/{len(view.items)}\n"
-                    ),
+                    (f"\n {_item_kind_label(item)} {item_index}/{len(view.items)}\n"),
                 ),
                 ("class:case-title", f" {safe_terminal_text(item.title)}\n"),
                 (
@@ -885,46 +1013,56 @@ def resolution_viewer_fragments(
             ]
         )
         for evidence in presentation.evidence:
-            parts: list[tuple[str, str]] = [
-                ("class:block-heading", f" {safe_terminal_text(evidence.heading)}\n"),
-                ("class:block-heading", "\n CLASSIFICATION\n"),
-                ("", f" {safe_terminal_text(evidence.classification)}\n\n"),
-            ]
+            report_section(
+                [
+                    (
+                        "class:block-heading",
+                        f" {safe_terminal_text(evidence.heading)}\n",
+                    ),
+                    ("class:block-heading", "\n CLASSIFICATION\n"),
+                    ("", f" {safe_terminal_text(evidence.classification)}\n"),
+                ]
+            )
             for criterion in evidence.criterion_blocks:
-                parts.extend(
+                report_section(
                     semantic_detail_block_fragments(
                         heading=criterion.heading,
                         text=criterion.text,
                         refs=criterion.refs,
+                        memory_rows=criterion.memory_rows,
                     )
                 )
-                parts.append(("", "\n"))
             for claim in evidence.source_groups:
-                parts.extend(
-                    [
-                        (
-                            "class:block-heading",
-                            (
-                                f" {safe_terminal_text(claim.label)} · FROM "
-                                f"{safe_terminal_text(claim.context_name)}\n"
-                            ),
-                        ),
-                    ]
-                )
-                for source in claim.sources:
-                    parts.extend(
-                        [
-                            (
-                                "",
-                                f"   [{safe_terminal_text(source.memory_uid[:8])}] ",
-                            ),
-                            (
-                                "class:memory-object",
-                                f"{safe_terminal_text(source.content)}\n",
-                            ),
-                        ]
-                    )
-            parts.extend(
+                for source_index, source in enumerate(claim.sources):
+                    lines = _source_memory_lines(source.content, content_width)
+                    for line_index, line in enumerate(lines):
+                        source_parts: list[tuple[str, str]] = []
+                        if source_index == 0 and line_index == 0:
+                            source_parts.append(
+                                (
+                                    "class:block-heading",
+                                    (
+                                        f"\n {safe_terminal_text(claim.label)} · FROM "
+                                        f"{safe_terminal_text(claim.context_name)}\n"
+                                    ),
+                                )
+                            )
+                        source_parts.extend(
+                            [
+                                (
+                                    "",
+                                    (
+                                        "   "
+                                        f"[{safe_terminal_text(source.memory_uid[:8])}] "
+                                        if line_index == 0
+                                        else "              "
+                                    ),
+                                ),
+                                ("class:memory-object", f"{line}\n"),
+                            ]
+                        )
+                        report_section(source_parts)
+            report_section(
                 [
                     (
                         "class:block-heading",
@@ -933,17 +1071,12 @@ def resolution_viewer_fragments(
                     ("", f" {safe_terminal_text(evidence.reason)}\n"),
                 ]
             )
-            report_section(parts)
         if item.options:
             options_card(
                 heading=presentation.options_heading,
                 other_label=presentation.other_option_label,
-                other_text=(
-                    "Press Enter and write a different answer here."
-                ),
-                prompt_heading=(
-                    presentation.prompt_heading if item.question else ""
-                ),
+                other_text=("Press Enter and write a different answer here."),
+                prompt_heading=(presentation.prompt_heading if item.question else ""),
                 prompt_text=item.question,
             )
         elif item.question:
@@ -953,14 +1086,34 @@ def resolution_viewer_fragments(
                     text=item.question,
                 )
             )
-        for block in item.blocks:
-            report_section(
-                semantic_detail_block_fragments(
-                    heading=block.heading,
-                    text=block.text,
-                    refs=block.refs,
+        for block_index, block in enumerate(item.blocks):
+            if not block.memory_rows:
+                report_section(
+                    semantic_detail_block_fragments(
+                        heading=block.heading,
+                        text=block.text,
+                        refs=block.refs,
+                    )
                 )
-            )
+                continue
+            for row_index, row in enumerate(block.memory_rows):
+                section_uid = _memory_row_section_uid(
+                    item.uid,
+                    block_index,
+                    row,
+                )
+                parts = (
+                    [("class:block-heading", f" {safe_terminal_text(block.heading)}\n")]
+                    if row_index == 0
+                    else []
+                )
+                parts.extend(
+                    semantic_memory_row_fragments(
+                        row,
+                        expanded=expanded_memory_section_uid == section_uid,
+                    )
+                )
+                report_section(parts)
         report_section(
             [
                 ("class:detail-heading", "\n RESPONSE\n"),
@@ -974,11 +1127,26 @@ def resolution_viewer_fragments(
                 ),
             ]
         )
+        if inline_action is not None:
+            report_section(
+                [
+                    (
+                        "class:detail-heading",
+                        f"\n {safe_terminal_text(inline_action.kind)}\n",
+                    ),
+                    (
+                        "",
+                        f" {safe_terminal_text(inline_action.detail)}\n",
+                    ),
+                ]
+            )
         return fragments
     required_count = sum(
-        candidate.priority == "REQUIRED" for candidate in view.items
+        candidate.effective_obligation == "REQUIRED" for candidate in view.items
     )
-    optional_count = len(view.items) - required_count
+    optional_count = sum(
+        candidate.effective_obligation == "OPTIONAL" for candidate in view.items
+    )
     review_set_fragments = (
         [
             (
@@ -999,7 +1167,7 @@ def resolution_viewer_fragments(
         semantic_detail_header_fragments(
             label=(
                 f"REVIEW DETAIL · {item_index}/{len(view.items)} · "
-                f"{item.priority} · {_item_kind_label(item.kind)} · {item.status}"
+                f"{item.priority} · {_item_kind_label(item)} · {item.status}"
             ),
             title=item.title,
             why_heading="WHY THIS NEEDS REVIEW",
@@ -1007,14 +1175,30 @@ def resolution_viewer_fragments(
         )
         + review_set_fragments
     )
-    for block in item.blocks[: item.decision_block_index]:
-        report_section(
-            semantic_detail_block_fragments(
-                heading=block.heading,
-                text=block.text,
-                refs=block.refs,
+    for block_index, block in enumerate(item.blocks[: item.decision_block_index]):
+        if not block.memory_rows:
+            report_section(
+                semantic_detail_block_fragments(
+                    heading=block.heading,
+                    text=block.text,
+                    refs=block.refs,
+                )
             )
-        )
+            continue
+        for row_index, row in enumerate(block.memory_rows):
+            section_uid = _memory_row_section_uid(item.uid, block_index, row)
+            parts = (
+                [("class:block-heading", f" {safe_terminal_text(block.heading)}\n")]
+                if row_index == 0
+                else []
+            )
+            parts.extend(
+                semantic_memory_row_fragments(
+                    row,
+                    expanded=expanded_memory_section_uid == section_uid,
+                )
+            )
+            report_section(parts)
     if item.question:
         report_section(
             semantic_detail_block_fragments(
@@ -1024,14 +1208,33 @@ def resolution_viewer_fragments(
         )
     if item.options:
         options_card()
-    for block in item.blocks[item.decision_block_index :]:
-        report_section(
-            semantic_detail_block_fragments(
-                heading=block.heading,
-                text=block.text,
-                refs=block.refs,
+    for block_index, block in enumerate(
+        item.blocks[item.decision_block_index :],
+        start=item.decision_block_index,
+    ):
+        if not block.memory_rows:
+            report_section(
+                semantic_detail_block_fragments(
+                    heading=block.heading,
+                    text=block.text,
+                    refs=block.refs,
+                )
             )
-        )
+            continue
+        for row_index, row in enumerate(block.memory_rows):
+            section_uid = _memory_row_section_uid(item.uid, block_index, row)
+            parts = (
+                [("class:block-heading", f" {safe_terminal_text(block.heading)}\n")]
+                if row_index == 0
+                else []
+            )
+            parts.extend(
+                semantic_memory_row_fragments(
+                    row,
+                    expanded=expanded_memory_section_uid == section_uid,
+                )
+            )
+            report_section(parts)
     if item.evidence_refs:
         report_section(
             semantic_trace_fragments(
@@ -1048,6 +1251,7 @@ def resolution_report_fragments(
     view: ResolutionWorkbenchView,
     *,
     strategies: tuple[ResolutionGlobalStrategy, ...] = (),
+    drafts: dict[str, tuple[str | None, str]] | None = None,
     focused_section: int = 0,
     review_and_apply: bool = False,
     read_only: bool = False,
@@ -1067,7 +1271,9 @@ def resolution_report_fragments(
     # sessions, so the richer Impact block is their single report location.
     impact_repeats_results = _impact_repeats_results(impact, view)
     show_results = not impact_repeats_results
-    report_item_sections = 0 if view.report_items_summary is not None else len(view.items)
+    report_item_sections = (
+        0 if view.report_items_summary is not None else len(view.items)
+    )
     section_count = (
         report_item_sections
         + 3
@@ -1080,6 +1286,7 @@ def resolution_report_fragments(
     focused_section = max(0, min(focused_section, section_count - 1))
     section_index = 0
     fragments: list[tuple[str, str]] = []
+    draft_values = drafts or {}
 
     def heading(text: str, *, style: str = "class:section") -> None:
         nonlocal section_index
@@ -1120,7 +1327,7 @@ def resolution_report_fragments(
         if not view.items:
             fragments.append(("", f"  {safe_terminal_text(view.empty_message)}\n"))
         for index, item in enumerate(view.items, start=1):
-            heading(f"{_item_kind_label(item.kind)} {index} · {item.title}")
+            heading(f"{_item_kind_label(item)} {index} · {item.title}")
             fragments.extend(
                 [
                     (
@@ -1154,9 +1361,7 @@ def resolution_report_fragments(
         heading(impact.title)
         fragments.append(("", f" {safe_terminal_text(impact.summary)}\n"))
         if any(entry.reason for entry in impact.entries):
-            fragments.append(
-                ("", " Focus a Memory and press Enter to show why.\n")
-            )
+            fragments.append(("", " Focus a Memory and press Enter to show why.\n"))
         if impact.detail:
             fragments.append(("", f"\n {safe_terminal_text(impact.detail)}\n"))
         treatment_width = max(
@@ -1177,13 +1382,10 @@ def resolution_report_fragments(
             treatment = f"[{safe_terminal_text(entry.label)}]"
             treatment_field = _visual_pad(treatment, treatment_width)
             uid_field = f"[{safe_terminal_text(entry.uid[:8] or str(index))}]"
-            identity = (
-                f"{treatment_field} "
-                + (
-                    f"{safe_terminal_text(entry.location)} {uid_field}"
-                    if entry.location
-                    else f"{uid_field} "
-                )
+            identity = f"{treatment_field} " + (
+                f"{safe_terminal_text(entry.location)} {uid_field}"
+                if entry.location
+                else f"{uid_field} "
             )
             content_indent = " " * (_visual_width(prefix) + 2)
             row_content_width = max(
@@ -1254,9 +1456,7 @@ def resolution_report_fragments(
                 # Legacy result rows keep treatment-colored focus to bind
                 # their UID, content, and expanded basis together.
                 style = (
-                    f"{treatment_style}.focused"
-                    if active
-                    else "class:memory-object"
+                    f"{treatment_style}.focused" if active else "class:memory-object"
                 )
                 expanded_detail_style = style
                 legacy_indent = " " * _visual_width(prefix + identity)
@@ -1276,9 +1476,7 @@ def resolution_report_fragments(
                             ]
                         )
                     else:
-                        fragments.append(
-                            (style, f" {content_indent}{content_line}\n")
-                        )
+                        fragments.append((style, f" {content_indent}{content_line}\n"))
             expanded = expanded_impact_section_uid == entry_section_uid
             if expanded:
                 for rule in entry.rules:
@@ -1312,9 +1510,7 @@ def resolution_report_fragments(
                         if line_index == 0
                         else " " * _visual_width(reason_prefix)
                     )
-                    fragments.append(
-                        (expanded_detail_style, f" {lead}{reason_line}\n")
-                    )
+                    fragments.append((expanded_detail_style, f" {lead}{reason_line}\n"))
             if active:
                 # Anchor after the complete row so wrapped or expanded detail
                 # remains visible as one semantic Impact Memory.
@@ -1330,35 +1526,33 @@ def resolution_report_fragments(
             )
         )
     if not read_only:
-        heading(
-            (_apply_heading(view) if view.accept_enabled else "MATERIALIZE REVIEW")
-            if review_and_apply
-            else "RESOLVE ALL · WHOLE-SET STRATEGY"
+        action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
+        action_detail = (
+            "Choose a strategy below. It requests a revised proposal and "
+            "never applies the target."
         )
+        show_strategies = True
+        if review_and_apply:
+            action_heading, action_detail, show_strategies = _report_action(
+                view,
+                draft_values,
+                strategies,
+            )
+        heading(action_heading)
         fragments.append(
             (
                 "",
-                (
-                    (
-                        " The exact proposed Memories are shown above. Press Enter "
-                        "to apply them.\n"
-                        if view.accept_enabled
-                        else " Review the choices and policy already shown in this "
-                        "report, then press Enter to materialize the proposal.\n"
-                    )
-                    if review_and_apply
-                    else " Choose a strategy below. It requests a revised proposal "
-                    "and never applies the target.\n"
-                ),
+                f" {action_detail}\n",
             )
         )
-        for index, item in enumerate(strategies):
-            fragments.append(
-                (
-                    "class:choice",
-                    f"   {index + 1}. {safe_terminal_text(item.label)}\n",
+        if show_strategies:
+            for index, item in enumerate(strategies):
+                fragments.append(
+                    (
+                        "class:choice",
+                        f"   {index + 1}. {safe_terminal_text(item.label)}\n",
+                    )
                 )
-            )
     return fragments
 
 
@@ -1370,6 +1564,7 @@ def _seeded_report_lines(
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     destination: ResolutionDestination | None = None,
+    drafts: dict[str, tuple[str | None, str]] | None = None,
 ) -> list[str]:
     lines = report_text.splitlines()
     lines.extend(["", f"{view.results_label} · {len(view.results)}"])
@@ -1399,33 +1594,26 @@ def _seeded_report_lines(
             ]
         )
     if not read_only:
+        action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
+        action_detail = (
+            "Choose a strategy below. It requests a revised proposal and "
+            "never applies the target."
+        )
+        show_strategies = True
+        if review_and_apply:
+            action_heading, action_detail, show_strategies = _report_action(
+                view,
+                drafts or {},
+                strategies,
+            )
         lines.extend(
             [
                 "",
-                (
-                    (
-                        _apply_heading(view)
-                        if view.accept_enabled
-                        else "MATERIALIZE REVIEW"
-                    )
-                    if review_and_apply
-                    else "RESOLVE ALL · WHOLE-SET STRATEGY"
-                ),
-                (
-                    (
-                        "The exact proposed Memories are shown above. Press Enter "
-                        "to apply them."
-                        if view.accept_enabled
-                        else "Review the choices and policy already shown in this "
-                        "report, then press Enter to materialize the proposal."
-                    )
-                    if review_and_apply
-                    else "Choose a strategy below. It requests a revised proposal "
-                    "and never applies the target."
-                ),
+                action_heading,
+                action_detail,
             ]
         )
-        if not (review_and_apply and view.accept_enabled):
+        if show_strategies:
             lines.extend(
                 f"  {index}. {item.label}"
                 for index, item in enumerate(strategies, start=1)
@@ -1445,9 +1633,11 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         "PROPOSED TARGET MEMORIES",
         "PROPOSED BASELINE CHANGES",
         "RESOLVE ALL ·",
-        "MATERIALIZE REVIEW",
+        "RESOLVE",
+        "INCORPORATE RESPONSES",
         "IMPACT ·",
-        "REVIEW & APPLY ",
+        "APPLY CHANGES ·",
+        "APPLY AS IS ·",
         "SAVE LOCATION",
     )
     sections: list[tuple[int, str]] = []
@@ -1464,8 +1654,10 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         if line.startswith(
             (
                 "RESOLVE ALL ·",
-                "MATERIALIZE REVIEW",
-                "REVIEW & APPLY ",
+                "RESOLVE",
+                "INCORPORATE RESPONSES",
+                "APPLY CHANGES ·",
+                "APPLY AS IS ·",
                 "SAVE LOCATION",
             )
         ):
@@ -1476,8 +1668,10 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                 if line.startswith(
                     (
                         "RESOLVE ALL ·",
-                        "MATERIALIZE REVIEW",
-                        "REVIEW & APPLY ",
+                        "RESOLVE",
+                        "INCORPORATE RESPONSES",
+                        "APPLY CHANGES ·",
+                        "APPLY AS IS ·",
                     )
                 )
                 else "DESTINATION"
@@ -1525,10 +1719,11 @@ def resolution_seeded_report_fragments(
         view,
         report_text,
         strategies,
-        review_and_apply,
-        read_only,
-        impact_controller,
-        destination,
+        review_and_apply=review_and_apply,
+        read_only=read_only,
+        impact_controller=impact_controller,
+        destination=destination,
+        drafts=drafts,
     )
     sections = _seeded_report_sections(lines)
     if not sections:
@@ -1592,10 +1787,7 @@ def resolution_seeded_report_fragments(
                 badge = ""
                 if item_index < len(view.items):
                     item = view.items[item_index]
-                    option_uid, comment = draft_values.get(
-                        item.uid,
-                        (item.selected_option_uid, ""),
-                    )
+                    option_uid, comment = _item_draft(item, draft_values)
                     if option_uid is not None:
                         badge = f"SELECTED · {item.option(option_uid).label}"
                     elif comment.strip():
@@ -1660,11 +1852,7 @@ def resolution_seeded_report_fragments(
             active = section_index == focused_section
             result_index = int(key.split(":", 1)[1])
             result = view.results[result_index]
-            style = (
-                "class:memory-object.focused"
-                if active
-                else "class:memory-object"
-            )
+            style = "class:memory-object.focused" if active else "class:memory-object"
             prefix = navigable_tree_row_prefix(
                 selected=active,
                 depth=1,
@@ -1734,10 +1922,7 @@ def resolution_seeded_report_fragments(
             title = f"POTENTIAL CONFLICT {item_index + 1}"
             if item_index < len(view.items):
                 item = view.items[item_index]
-                option_uid, comment = draft_values.get(
-                    item.uid,
-                    (item.selected_option_uid, ""),
-                )
+                option_uid, comment = _item_draft(item, draft_values)
                 if option_uid is not None:
                     badge = f"SELECTED · {item.option(option_uid).label}"
                 elif comment.strip():
@@ -1745,7 +1930,17 @@ def resolution_seeded_report_fragments(
         elif (
             key == "RESOLVE_ALL"
             and strategies
-            and not (review_and_apply and view.accept_enabled)
+            and (
+                not review_and_apply
+                or session_todo_view(
+                    view,
+                    draft_values,
+                    review_and_apply=True,
+                    read_only=False,
+                    whole_set_available=True,
+                ).kind
+                == "INCORPORATE RESPONSES"
+            )
         ):
             policy_index = max(0, min(selected_strategy_index, len(strategies) - 1))
             badge = f"POLICY · {strategies[policy_index].label}"
@@ -1763,9 +1958,7 @@ def resolution_seeded_report_fragments(
         )
         anchor_at_end = active
         badge_line_count = (
-            len(_visual_wrap(badge, max(1, card_width - 4)))
-            if badge
-            else 0
+            len(_visual_wrap(badge, max(1, card_width - 4))) if badge else 0
         )
         for card_line_index, card_line in enumerate(card_lines):
             style = "class:detail-card.focused" if active else "class:detail-card"
@@ -1798,11 +1991,13 @@ def resolution_review_fragments(
     response_lines: list[str] = []
     unresolved_counts: dict[str, int] = {}
     unresolved_required: list[str] = []
+    reviewable = 0
     for index, item in enumerate(view.items, start=1):
-        option_uid, comment = drafts.get(
-            item.uid,
-            (item.selected_option_uid, ""),
-        )
+        obligation = item.effective_obligation
+        if obligation == "NONE":
+            continue
+        reviewable += 1
+        option_uid, comment = _item_draft(item, drafts)
         if option_uid is not None:
             option = item.option(option_uid)
             answer = f"SELECTED · {option.label}"
@@ -1810,13 +2005,14 @@ def resolution_review_fragments(
         elif comment.strip():
             answer = f"OTHER DIRECTION · {comment.strip()}"
             answered += 1
+        elif item.response_state == "ANSWERED":
+            answer = "ANSWERED"
+            answered += 1
         else:
             answer = "UNRESOLVED"
         if answer == "UNRESOLVED":
-            unresolved_counts[item.priority] = (
-                unresolved_counts.get(item.priority, 0) + 1
-            )
-            if item.priority == "REQUIRED":
+            unresolved_counts[obligation] = unresolved_counts.get(obligation, 0) + 1
+            if obligation == "REQUIRED":
                 unresolved_required.append(item.title)
             continue
         response_lines.extend([f"{index}. {item.title}", f"   {answer}"])
@@ -1828,7 +2024,7 @@ def resolution_review_fragments(
             f"{priority} {count}"
             for priority, count in (
                 ("REQUIRED", unresolved_counts.get("REQUIRED", 0)),
-                ("HELPFUL", unresolved_counts.get("HELPFUL", 0)),
+                ("OPTIONAL", unresolved_counts.get("OPTIONAL", 0)),
             )
             if count
         )
@@ -1841,7 +2037,7 @@ def resolution_review_fragments(
     if focused_section == 0:
         fragments.append(("[SetCursorPosition]", ""))
     for line in _boxed_lines(
-        f"{_apply_heading(view)} · {answered}/{len(view.items)} RESOLVED",
+        f"INCORPORATE RESPONSES · {answered}/{reviewable} ANSWERED",
         "\n".join(response_lines).rstrip(),
         width=max(24, content_width - 1),
     ):
@@ -1865,11 +2061,12 @@ def resolution_review_fragments(
     fragments.append(("", "\n"))
 
     next_text = (
-        f"This {view.operation.title()} is ready. Press A to apply the reviewed changes."
+        f"This {view.operation.title()} is ready. Press A to apply the exact changes."
         if view.accept_enabled
         else (
-            "Press Enter to resolve the staged choices and remaining-item policy. "
-            "Mem will show the resulting target Memories for final application."
+            "Press Enter to incorporate the saved responses and remaining-item "
+            "policy into a revised proposal. No Context or Memory changes will "
+            "be applied yet."
         )
     )
     next_box = _boxed_lines(
@@ -1940,10 +2137,11 @@ def run_resolution_workbench_shell(
                 active_view,
                 split_report_text,
                 global_strategies,
-                review_and_apply,
-                read_only,
-                impact_controller,
-                destination,
+                review_and_apply=review_and_apply,
+                read_only=read_only,
+                impact_controller=impact_controller,
+                destination=destination,
+                drafts=local_drafts,
             )
             entries = tuple(
                 (
@@ -1999,48 +2197,113 @@ def run_resolution_workbench_shell(
             )
         return _stable_sections(tuple(entries))
 
+    def inline_item_action() -> SessionTodoView | None:
+        """Mirror the existing batch-incorporation boundary below Response."""
+
+        if not review_and_apply or read_only or not global_strategies:
+            return None
+        todo = session_todo_view(
+            current_view(),
+            local_drafts,
+            review_and_apply=True,
+            read_only=False,
+            whole_set_available=True,
+        )
+        return todo if todo.kind == "INCORPORATE RESPONSES" else None
+
     def item_sections() -> tuple[WorkbenchSection, ...]:
         item = current_navigation.current_item(current_view())
         if item is None:
             return _stable_sections((("SUMMARY", "ITEM:SUMMARY", None),))
-        entries: list[tuple[str, str, int | None]] = [
-            ("SUMMARY", f"ITEM:{item.uid}:SUMMARY", None)
-        ]
+        entries: list[tuple[str, str, int | None]] = []
+
+        def append_block_sections(blocks, *, start: int = 0) -> None:
+            for block_index, block in enumerate(blocks, start=start):
+                if block.memory_rows:
+                    entries.extend(
+                        (
+                            "MEMORY_ROW",
+                            _memory_row_section_uid(item.uid, block_index, row),
+                            None,
+                        )
+                        for row in block.memory_rows
+                    )
+                else:
+                    entries.append(
+                        (
+                            "BLOCK",
+                            f"ITEM:{item.uid}:BLOCK:{block_index}:{block.heading}",
+                            None,
+                        )
+                    )
+
         if item.issue_presentation is not None:
-            entries.extend(
-                (
-                    "EVIDENCE",
-                    f"ITEM:{item.uid}:EVIDENCE:{index}:{evidence.heading}",
-                    None,
+            for evidence_index, evidence in enumerate(item.issue_presentation.evidence):
+                evidence_prefix = f"ITEM:{item.uid}:EVIDENCE:{evidence_index}"
+                entries.append(
+                    (
+                        "EVIDENCE_CLASSIFICATION",
+                        f"{evidence_prefix}:CLASSIFICATION",
+                        None,
+                    )
                 )
-                for index, evidence in enumerate(
-                    item.issue_presentation.evidence
+                entries.extend(
+                    (
+                        "EVIDENCE_CRITERION",
+                        f"{evidence_prefix}:CRITERION:{criterion_index}",
+                        None,
+                    )
+                    for criterion_index, _criterion in enumerate(
+                        evidence.criterion_blocks
+                    )
                 )
-            )
+                for claim_index, claim in enumerate(evidence.source_groups):
+                    for source in claim.sources:
+                        entries.extend(
+                            (
+                                "SOURCE_MEMORY_LINE",
+                                (
+                                    f"{evidence_prefix}:SOURCE:{claim_index}:"
+                                    f"{source.memory_uid}:LINE:{line_index}"
+                                ),
+                                None,
+                            )
+                            for line_index, _line in enumerate(
+                                _source_memory_lines(
+                                    source.content,
+                                    pane_content_width(),
+                                )
+                            )
+                        )
+                entries.append(
+                    (
+                        "EVIDENCE_REASON",
+                        f"{evidence_prefix}:REASON",
+                        None,
+                    )
+                )
             if item.question or item.options:
                 entries.append(("OPTIONS", f"ITEM:{item.uid}:DECISION", None))
-            entries.extend(
-                ("BLOCK", f"ITEM:{item.uid}:BLOCK:{index}:{block.heading}", None)
-                for index, block in enumerate(item.blocks)
-            )
+            append_block_sections(item.blocks)
             entries.append(("RESPONSE", f"ITEM:{item.uid}:RESPONSE", None))
+            if inline_item_action() is not None:
+                entries.append(
+                    (
+                        "INCORPORATE",
+                        f"ITEM:{item.uid}:INCORPORATE_RESPONSES",
+                        None,
+                    )
+                )
             return _stable_sections(tuple(entries))
-        entries.extend(
-            ("BLOCK", f"ITEM:{item.uid}:BLOCK:{index}:{block.heading}", None)
-            for index, block in enumerate(
-                item.blocks[: item.decision_block_index]
-            )
-        )
+        entries.append(("SUMMARY", f"ITEM:{item.uid}:SUMMARY", None))
+        append_block_sections(item.blocks[: item.decision_block_index])
         if item.question:
             entries.append(("QUESTION", f"ITEM:{item.uid}:QUESTION", None))
         if item.options:
             entries.append(("OPTIONS", f"ITEM:{item.uid}:OPTIONS", None))
-        entries.extend(
-            ("BLOCK", f"ITEM:{item.uid}:BLOCK:{index}:{block.heading}", None)
-            for index, block in enumerate(
-                item.blocks[item.decision_block_index :],
-                start=item.decision_block_index,
-            )
+        append_block_sections(
+            item.blocks[item.decision_block_index :],
+            start=item.decision_block_index,
         )
         if item.evidence_refs:
             entries.append(("TRACE", f"ITEM:{item.uid}:TRACE", None))
@@ -2122,6 +2385,7 @@ def run_resolution_workbench_shell(
                 resolution_report_fragments(
                     active_view,
                     strategies=global_strategies,
+                    drafts=local_drafts,
                     focused_section=viewer_section_index(),
                     review_and_apply=review_and_apply,
                     read_only=read_only,
@@ -2140,6 +2404,8 @@ def run_resolution_workbench_shell(
                 option_navigation_active=option_navigation["active"],
                 other_direction_focused=other_direction["focused"],
                 other_direction_editing=other_direction_editor["open"],
+                inline_action=inline_item_action(),
+                expanded_memory_section_uid=expanded_memory_section_uid["uid"],
                 content_width=pane_content_width(),
             ),
             focused=session_navigation.pane == "viewer",
@@ -2155,19 +2421,22 @@ def run_resolution_workbench_shell(
     option_navigation = {"active": False}
     other_direction = {"focused": False}
     other_direction_editor = {"open": False}
+    expanded_memory_section_uid: dict[str, str | None] = {"uid": None}
     destination_editing = {"value": False}
     visible_pane_cycle_started = {"value": False}
     input_heading = {"value": "COMMENT ON SELECTED ITEM"}
     local_drafts: dict[str, tuple[str | None, str]] = {}
-    if draft_loader is not None:
-        # To Do summarizes the whole session before any individual row is
-        # opened, so seed its process-local projection from operation-owned
-        # drafts instead of treating not-yet-visited rows as unresolved.
-        for item in current_view().items:
+    # To Do summarizes the whole session before any individual row is opened,
+    # so seed it from the adapter's durable response projection or the
+    # operation-owned loader instead of treating unvisited rows as unresolved.
+    for item in current_view().items:
+        if draft_loader is None:
+            option_uid, comment = item.selected_option_uid, item.response_text
+        else:
             option_uid, comment = draft_loader(item.uid)
-            if option_uid is not None:
-                item.option(option_uid)
-            local_drafts[item.uid] = (option_uid, comment)
+        if option_uid is not None:
+            item.option(option_uid)
+        local_drafts[item.uid] = (option_uid, comment)
 
     composer = build_framed_multiline_input(
         "MESSAGE",
@@ -2269,10 +2538,7 @@ def run_resolution_workbench_shell(
             input_area.text = ""
             return
         if draft_loader is None:
-            selected_option_uid, comment = local_drafts.get(
-                item.uid,
-                (item.selected_option_uid, ""),
-            )
+            selected_option_uid, comment = _item_draft(item, local_drafts)
         else:
             selected_option_uid, comment = draft_loader(item.uid)
             if selected_option_uid is not None:
@@ -2321,6 +2587,58 @@ def run_resolution_workbench_shell(
             set_status(str(error))
             return None
 
+    def incorporate_responses_action(
+        active_view: ResolutionWorkbenchView,
+    ) -> ResolutionWorkbenchAction | None:
+        """Build the one complete reviewed-response turn used by both surfaces."""
+
+        if not global_strategies:
+            set_status("No remaining-item policies are available.")
+            return None
+        selected_strategy = global_strategies[strategy["index"]]
+        lines = ["Use these reviewed issue resolutions:"]
+        unresolved_counts: dict[str, int] = {}
+        unresolved_required: list[str] = []
+        for item in active_view.items:
+            obligation = item.effective_obligation
+            if obligation == "NONE":
+                continue
+            option_uid, comment = _item_draft(item, local_drafts)
+            if option_uid is not None:
+                option = item.option(option_uid)
+                response = f"Choose this reading: {option.text}"
+                if comment.strip():
+                    response += f" Additional guidance: {comment.strip()}"
+                lines.append(f"- {item.title}: {response}")
+            elif comment.strip():
+                lines.append(f"- {item.title}: Other direction: {comment.strip()}")
+            elif item.response_state == "ANSWERED":
+                lines.append(f"- {item.title}: Keep the saved response.")
+            else:
+                unresolved_counts[obligation] = unresolved_counts.get(obligation, 0) + 1
+                if obligation == "REQUIRED":
+                    unresolved_required.append(item.title)
+        if unresolved_counts:
+            counts = ", ".join(
+                f"{priority} {count}"
+                for priority, count in (
+                    ("REQUIRED", unresolved_counts.get("REQUIRED", 0)),
+                    ("OPTIONAL", unresolved_counts.get("OPTIONAL", 0)),
+                )
+                if count
+            )
+            lines.append(
+                "For remaining items ("
+                + counts
+                + "), apply this policy: "
+                + selected_strategy.comment
+            )
+        if unresolved_required:
+            lines.append(
+                "Still-required issue titles: " + "; ".join(unresolved_required)
+            )
+        return semantic_action("SUBMIT_ALL", comment="\n".join(lines))
+
     def destination_action(value: str) -> ResolutionWorkbenchAction | None:
         if destination is None:
             set_status("Save-location editing is unavailable here.")
@@ -2335,6 +2653,28 @@ def run_resolution_workbench_shell(
         except (OSError, TypeError, ValueError) as error:
             set_status(str(error))
             return None
+
+    def preview_items_row(active_view: ResolutionWorkbenchView) -> None:
+        """Keep Viewer aligned with Items while Items retains keyboard focus."""
+
+        session_navigation.preview_selected_row()
+        option_navigation["active"] = False
+        other_direction["focused"] = False
+        other_direction_editor["open"] = False
+        expanded_memory_section_uid["uid"] = None
+        if session_navigation.row_index == 0:
+            viewer_content["kind"] = "REPORT"
+            current_navigation.close_detail()
+            reset_viewer_section()
+            return
+        item = active_view.items[session_navigation.row_index - 1]
+        viewer_content["kind"] = "ITEM"
+        current_navigation.selected_item_uid = item.uid
+        current_navigation.sync(active_view)
+        current_navigation.close_detail()
+        current_navigation.toggle_detail(active_view)
+        reset_viewer_section()
+        load_draft()
 
     def move(delta: int) -> None:
         active_view = current_view()
@@ -2360,6 +2700,7 @@ def run_resolution_workbench_shell(
                 return
             total_rows = len(active_view.items) + 1
             session_navigation.move_row(total_rows, delta)
+            preview_items_row(active_view)
             set_status("")
             return
         item = current_navigation.current_item(active_view)
@@ -2439,26 +2780,15 @@ def run_resolution_workbench_shell(
 
         active_view = current_view()
         item_index = next(
-            index for index, item in enumerate(active_view.items) if item.uid == item_uid
+            index
+            for index, item in enumerate(active_view.items)
+            if item.uid == item_uid
         )
-        item = active_view.items[item_index]
         session_navigation.row_index = item_index + 1
-        other_direction_editor["open"] = False
-        current_navigation.selected_item_uid = item.uid
-        current_navigation.sync(active_view)
-        viewer_content["kind"] = "ITEM"
-        reset_viewer_section()
-        current_navigation.expanded_item_uid = item.uid
-        current_navigation.option_cursor_uid = (
-            item.options[0].uid if item.options else None
-        )
-        current_navigation.selected_option_uid = item.selected_option_uid
-        other_direction["focused"] = False
-        option_navigation["active"] = False
+        preview_items_row(active_view)
         session_navigation.open_selected(item_sections())
         event_app = get_app()
         event_app.layout.focus(body_control)
-        load_draft()
         set_status("")
 
     def submit(event) -> None:
@@ -2471,10 +2801,9 @@ def run_resolution_workbench_shell(
             else:
                 event.app.invalidate()
             return
-        if (
-            (review_and_apply or draft_saver is not None)
-            and not global_comment["value"]
-        ):
+        if (review_and_apply or draft_saver is not None) and not global_comment[
+            "value"
+        ]:
             item = current_navigation.current_item(active_view)
             save_draft()
             other_direction_editor["open"] = False
@@ -2556,8 +2885,7 @@ def run_resolution_workbench_shell(
             elif (
                 split_kind() == "ITEM"
                 and session_navigation.pane == "viewer"
-                and session_navigation.viewer_row_index
-                == session_navigation.row_index
+                and session_navigation.viewer_row_index == session_navigation.row_index
                 and option_navigation["active"]
             ):
                 move_split_option(1)
@@ -2576,8 +2904,7 @@ def run_resolution_workbench_shell(
             elif (
                 split_kind() == "ITEM"
                 and session_navigation.pane == "viewer"
-                and session_navigation.viewer_row_index
-                == session_navigation.row_index
+                and session_navigation.viewer_row_index == session_navigation.row_index
                 and option_navigation["active"]
             ):
                 move_split_option(-1)
@@ -2625,7 +2952,8 @@ def run_resolution_workbench_shell(
                 set_status("")
             elif kind == "ITEM":
                 if (
-                    viewer_content["kind"] != "ITEM"
+                    session_navigation.pane != "viewer"
+                    or viewer_content["kind"] != "ITEM"
                     or session_navigation.viewer_row_index
                     != session_navigation.row_index
                 ):
@@ -2636,7 +2964,26 @@ def run_resolution_workbench_shell(
                 else:
                     section = active_viewer_sections()[viewer_section_index()]
                     item = current_navigation.current_item(active_view)
-                    if (
+                    if section.kind == "MEMORY_ROW":
+                        expanded_memory_section_uid["uid"] = (
+                            None
+                            if expanded_memory_section_uid["uid"] == section.uid
+                            else section.uid
+                        )
+                        set_status(
+                            "Evidence hidden."
+                            if expanded_memory_section_uid["uid"] is None
+                            else "Evidence shown."
+                        )
+                        event.app.invalidate()
+                        return
+                    if section.kind == "INCORPORATE":
+                        save_draft()
+                        action = incorporate_responses_action(active_view)
+                        if action is not None:
+                            event.app.exit(result=action)
+                            return
+                    elif (
                         not option_navigation["active"]
                         and section.kind == "OPTIONS"
                         and item is not None
@@ -2673,14 +3020,17 @@ def run_resolution_workbench_shell(
                         set_status(
                             "Move to the Decision or Response section and press Enter."
                         )
-            elif kind == "TODO" and session_todo_view(
-                active_view,
-                local_drafts,
-                review_and_apply=review_and_apply,
-                read_only=read_only,
-                whole_set_available=bool(global_strategies),
-                read_only_handoff=read_only_handoff,
-            ).unresolved_item_uids:
+            elif (
+                kind == "TODO"
+                and session_todo_view(
+                    active_view,
+                    local_drafts,
+                    review_and_apply=review_and_apply,
+                    read_only=read_only,
+                    whole_set_available=bool(global_strategies),
+                    read_only_handoff=read_only_handoff,
+                ).unresolved_item_uids
+            ):
                 todo = session_todo_view(
                     active_view,
                     local_drafts,
@@ -2697,20 +3047,22 @@ def run_resolution_workbench_shell(
                     # A standalone result remains immutable here. The handoff
                     # opens the owning operation, which must independently
                     # revalidate and obtain its normal Apply confirmation.
-                    event.app.exit(
-                        result=ResolutionWorkbenchAction(kind="HANDOFF")
-                    )
+                    event.app.exit(result=ResolutionWorkbenchAction(kind="HANDOFF"))
                     return
-            elif kind == "TODO" and session_todo_view(
-                active_view,
-                local_drafts,
-                review_and_apply=review_and_apply,
-                read_only=read_only,
-                whole_set_available=bool(global_strategies),
-                read_only_handoff=read_only_handoff,
-            ).kind == "COMPLETE":
+            elif (
+                kind == "TODO"
+                and session_todo_view(
+                    active_view,
+                    local_drafts,
+                    review_and_apply=review_and_apply,
+                    read_only=read_only,
+                    whole_set_available=bool(global_strategies),
+                    read_only_handoff=read_only_handoff,
+                ).kind
+                == "COMPLETE"
+            ):
                 set_status(
-                    "Required review is complete; close or revisit an optional item."
+                    "Required review is complete; close or revisit an optional review."
                 )
             elif kind == "TODO" and review_and_apply:
                 save_draft()
@@ -2720,55 +3072,7 @@ def run_resolution_workbench_shell(
                         event.app.exit(result=action)
                     event.app.invalidate()
                     return
-                if not global_strategies:
-                    set_status("No remaining-item policies are available.")
-                    event.app.invalidate()
-                    return
-                selected_strategy = global_strategies[strategy["index"]]
-                lines = ["Use these reviewed issue resolutions:"]
-                unresolved_counts: dict[str, int] = {}
-                unresolved_required: list[str] = []
-                for item in active_view.items:
-                    option_uid, comment = local_drafts.get(
-                        item.uid,
-                        (item.selected_option_uid, ""),
-                    )
-                    if option_uid is not None:
-                        option = item.option(option_uid)
-                        response = f"Choose this reading: {option.text}"
-                        if comment.strip():
-                            response += f" Additional guidance: {comment.strip()}"
-                        lines.append(f"- {item.title}: {response}")
-                    elif comment.strip():
-                        lines.append(
-                            f"- {item.title}: Other direction: {comment.strip()}"
-                        )
-                    else:
-                        unresolved_counts[item.priority] = (
-                            unresolved_counts.get(item.priority, 0) + 1
-                        )
-                        if item.priority == "REQUIRED":
-                            unresolved_required.append(item.title)
-                if unresolved_counts:
-                    counts = ", ".join(
-                        f"{priority} {count}"
-                        for priority, count in (
-                            ("REQUIRED", unresolved_counts.get("REQUIRED", 0)),
-                            ("HELPFUL", unresolved_counts.get("HELPFUL", 0)),
-                        )
-                        if count
-                    )
-                    lines.append(
-                        "For remaining items ("
-                        + counts
-                        + "), apply this policy: "
-                        + selected_strategy.comment
-                    )
-                if unresolved_required:
-                    lines.append(
-                        "Still-required issue titles: " + "; ".join(unresolved_required)
-                    )
-                action = semantic_action("SUBMIT_ALL", comment="\n".join(lines))
+                action = incorporate_responses_action(active_view)
                 if action is not None:
                     event.app.exit(result=action)
             elif kind == "TODO" and not global_strategies:
@@ -3004,6 +3308,10 @@ def run_resolution_workbench_shell(
             other_direction["focused"] = False
             set_status("")
             return True
+        if expanded_memory_section_uid["uid"] is not None:
+            expanded_memory_section_uid["uid"] = None
+            set_status("")
+            return True
         if current_navigation.expanded_item_uid is None:
             return False
         current_navigation.close_detail()
@@ -3027,6 +3335,11 @@ def run_resolution_workbench_shell(
         if option_navigation["active"]:
             option_navigation["active"] = False
             other_direction["focused"] = False
+            set_status("")
+            event.app.invalidate()
+            return
+        if expanded_memory_section_uid["uid"] is not None:
+            expanded_memory_section_uid["uid"] = None
             set_status("")
             event.app.invalidate()
             return
@@ -3083,12 +3396,21 @@ def run_resolution_workbench_shell(
                 else f" Enter {todo.kind.lower()}  Tab switch  Esc/Backspace back "
             )
         elif split_viewer_items and split_kind() == "RESOLVE_ALL":
+            todo = session_todo_view(
+                active_view,
+                local_drafts,
+                review_and_apply=review_and_apply,
+                read_only=read_only,
+                whole_set_available=bool(global_strategies),
+                read_only_handoff=read_only_handoff,
+            )
             navigation_help = (
                 (
-                    " ↑/↓ section/item  Tab switch  Enter apply  Esc/Backspace report "
-                    if active_view.accept_enabled
+                    " ↑/↓ section/item  Tab switch  Enter apply changes  "
+                    "Esc/Backspace report "
+                    if todo.kind in {"APPLY CHANGES", "APPLY AS IS"}
                     else " ↑/↓ section/item  Tab switch  ←/→ policy  "
-                    "Enter materialize  Esc/Backspace report "
+                    "Enter incorporate responses  Esc/Backspace report "
                 )
                 if review_and_apply
                 else " ↑/↓ section/item  Tab switch  ←/→ strategy  "
@@ -3102,11 +3424,29 @@ def run_resolution_workbench_shell(
             split_viewer_items
             and viewer_content["kind"] == "ITEM"
             and session_navigation.pane == "viewer"
+            and active_viewer_sections()[viewer_section_index()].kind == "MEMORY_ROW"
+        ):
+            navigation_help = (
+                " Enter show/hide evidence  ↑/↓ Memory  Esc/Backspace back  Tab switch "
+            )
+        elif (
+            split_viewer_items
+            and viewer_content["kind"] == "ITEM"
+            and session_navigation.pane == "viewer"
+            and active_viewer_sections()[viewer_section_index()].kind == "INCORPORATE"
+        ):
+            navigation_help = (
+                " Enter incorporate responses  ↑/↓ section  "
+                "Esc/Backspace report  Tab switch "
+            )
+        elif (
+            split_viewer_items
+            and viewer_content["kind"] == "ITEM"
+            and session_navigation.pane == "viewer"
             and active_viewer_sections()[viewer_section_index()].kind == "RESPONSE"
         ):
             navigation_help = (
-                " Enter write response  ↑/↓ section  Esc/Backspace report  "
-                "Tab switch "
+                " Enter write response  ↑/↓ section  Esc/Backspace report  Tab switch "
             )
         elif (
             split_viewer_items
@@ -3115,8 +3455,7 @@ def run_resolution_workbench_shell(
             and active_viewer_sections()[viewer_section_index()].kind == "OPTIONS"
         ):
             navigation_help = (
-                " Enter choose options  ↑/↓ section  Esc/Backspace report  "
-                "Tab switch "
+                " Enter choose options  ↑/↓ section  Esc/Backspace report  Tab switch "
             )
         elif split_viewer_items:
             navigation_help = (

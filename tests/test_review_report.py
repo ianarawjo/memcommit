@@ -123,6 +123,7 @@ def test_update_existing_change_blocks_are_preserved_as_review_report():
     assert "SOURCE REFERENCES" in rendered
     assert "8fa46317-ba39-54bb-8cf0-f85770bd5032" in rendered
     assert "REVIEW & APPLY" not in rendered
+    assert "APPLY CHANGES" not in rendered
 
 
 def test_mem_review_update_prints_saved_exact_change_report(isolated_store):
@@ -137,6 +138,7 @@ def test_mem_review_update_prints_saved_exact_change_report(isolated_store):
     assert "ADD 1 · ADD" not in result.output
     assert "SOURCE REFERENCES" in result.output
     assert "REVIEW & APPLY" not in result.output
+    assert "APPLY CHANGES" not in result.output
 
 
 def test_review_host_cannot_turn_accept_key_into_apply():

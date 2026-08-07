@@ -83,6 +83,37 @@ def test_projection_rejects_duplicate_item_and_option_uids() -> None:
         _view(items=(duplicate, duplicate))
 
 
+def test_item_response_semantics_distinguish_changes_from_open_decisions() -> None:
+    change = ResolutionItem(
+        uid="change-1",
+        kind="EDIT",
+        status="PLANNED",
+        priority="CHANGE",
+        title="Target Memory",
+        summary="Apply the exact edit.",
+        role="CHANGE",
+        obligation="NONE",
+        response_state="NOT_APPLICABLE",
+    )
+
+    assert change.effective_obligation == "NONE"
+
+    with pytest.raises(
+        ResolutionWorkbenchError,
+        match="non-applicable response requires no review obligation",
+    ):
+        ResolutionItem(
+            uid="invalid-1",
+            kind="ISSUE",
+            status="OPEN",
+            priority="REQUIRED",
+            title="Invalid issue",
+            summary="This state is contradictory.",
+            obligation="REQUIRED",
+            response_state="NOT_APPLICABLE",
+        )
+
+
 def test_action_validation_binds_item_and_option_uids_and_capabilities() -> None:
     item = _item(
         "issue-1",

@@ -1,4 +1,5 @@
 """End-to-end contracts for the saved atomize overview and issue workbench."""
+
 from __future__ import annotations
 
 import json
@@ -123,9 +124,7 @@ class AggregateProvider:
                     if reviewed
                     else "The antecedent of “same NFC” remains unresolved."
                 ),
-                "source_ids": (
-                    [] if reviewed else [first["candidate_id"]]
-                ),
+                "source_ids": ([] if reviewed else [first["candidate_id"]]),
             },
         }
         quality_issues = (
@@ -141,17 +140,11 @@ class AggregateProvider:
                     "ordinary_readings": [
                         {
                             "label": "Use the prior NFC mechanism",
-                            "text": (
-                                "It uses the previously described NFC "
-                                "mechanism."
-                            ),
+                            "text": ("It uses the previously described NFC mechanism."),
                         },
                         {
                             "label": "Use the prior NFC credential",
-                            "text": (
-                                "It accepts the previously described "
-                                "credential."
-                            ),
+                            "text": ("It accepts the previously described credential."),
                         },
                     ],
                     "scope_dimensions": [],
@@ -159,9 +152,7 @@ class AggregateProvider:
                         "“same NFC” can denote a mechanism or credential, "
                         "so the accepted access method cannot be determined."
                     ),
-                    "question": (
-                        "Does “same NFC” mean the mechanism or credential?"
-                    ),
+                    "question": ("Does “same NFC” mean the mechanism or credential?"),
                 }
             ]
         )
@@ -284,16 +275,11 @@ def test_aggregate_analysis_preserves_overview_and_typed_issue_arity():
                             "ordinary_readings": [
                                 {
                                     "label": "This entrance",
-                                    "text": (
-                                        "The NFC rule concerns this entrance."
-                                    ),
+                                    "text": ("The NFC rule concerns this entrance."),
                                 },
                                 {
                                     "label": "Another entrance",
-                                    "text": (
-                                        "The NFC rule concerns another "
-                                        "entrance."
-                                    ),
+                                    "text": ("The NFC rule concerns another entrance."),
                                 },
                             ],
                             "scope_dimensions": ["PLACE"],
@@ -344,9 +330,7 @@ def test_aggregate_contract_rejects_items_without_overview_or_quality_scan():
                 {
                     "items": [
                         {
-                            "candidate_id": payload["memories"][0][
-                                "candidate_id"
-                            ],
+                            "candidate_id": payload["memories"][0]["candidate_id"],
                             "classification": "ATOMIC",
                             "reason_codes": ["A01_ONE_FOCUS"],
                             "children": [],
@@ -380,9 +364,7 @@ def test_context_clean_quality_scan_does_not_duplicate_source_uncertainty():
                 report.items[1],
                 classification="UNCERTAIN",
                 reason_codes=("A06_NO_HIDDEN_CONTEXT",),
-                reason=(
-                    "The target's time antecedent is unavailable source-locally."
-                ),
+                reason=("The target's time antecedent is unavailable source-locally."),
             ),
         ),
         quality_issues=(),
@@ -509,9 +491,7 @@ def test_bare_interactive_atomize_enters_shared_session_launcher(
     )
     monkeypatch.setattr(
         "memcommit.commands.atomize.choose_atomize_session",
-        lambda selected_store, *, show_all: calls.append(
-            (selected_store, show_all)
-        ),
+        lambda selected_store, *, show_all: calls.append((selected_store, show_all)),
     )
     monkeypatch.setattr(
         "memcommit.commands.atomize.connect_codex_chatgpt_provider",
@@ -855,16 +835,11 @@ def test_refresh_is_explicit_and_stale_analysis_fails_closed(
     assert second is not None and second.uid != first.uid
     refreshed_workbench = store.load_atomize_workbench(second)
     assert refreshed_workbench is not None
-    assert (
-        refreshed_workbench.output_context_name
-        == "workbench/refreshed-output"
-    )
+    assert refreshed_workbench.output_context_name == "workbench/refreshed-output"
     assert len(provider.payloads) == 2
 
     changed = store.load_direct(ctx.name)
-    changed.replace(
-        type(memory)(uid=memory.uid, content="Changed access rule.")
-    )
+    changed.replace(type(memory)(uid=memory.uid, content="Changed access rule."))
     store.save(changed)
     stale = runner.invoke(app, ["impact", "atomize"])
 
@@ -999,12 +974,12 @@ def test_reviewed_reanalysis_preserves_mixed_pairwise_responses_by_failing_close
         ),
     )
     workbench = create_atomize_workbench(analysis)
-    workbench.response_for(f"ambiguity:{first.uid}").text = (
-        "Use the staff-door NFC credential."
-    )
-    workbench.response_for(conflict.uid).text = (
-        "The closing time applies to that same staff door."
-    )
+    workbench.response_for(
+        f"ambiguity:{first.uid}"
+    ).text = "Use the staff-door NFC credential."
+    workbench.response_for(
+        conflict.uid
+    ).text = "The closing time applies to that same staff door."
     store.save_atomize_analysis(analysis)
     store.save_atomize_workbench(workbench)
     original_digest = atomize_workbench_response_digest(workbench)
@@ -1031,9 +1006,7 @@ def test_reviewed_reanalysis_preserves_mixed_pairwise_responses_by_failing_close
     assert current_analysis.uid == analysis.uid
     current_workbench = store.load_atomize_workbench(current_analysis)
     assert current_workbench is not None
-    assert atomize_workbench_response_digest(
-        current_workbench
-    ) == original_digest
+    assert atomize_workbench_response_digest(current_workbench) == original_digest
 
 
 def test_reviewed_reanalysis_rejects_two_unary_origins_for_one_memory(
@@ -1045,12 +1018,12 @@ def test_reviewed_reanalysis_rejects_two_unary_origins_for_one_memory(
     report = impact_atomize(ctx, lambda: AggregateProvider())
     analysis = create_atomize_analysis(ctx, report)
     workbench = create_atomize_workbench(analysis)
-    workbench.response_for(f"ambiguity:{memory.uid}").text = (
-        "The antecedent is the staff-door credential."
-    )
-    workbench.response_for(f"atomize:{memory.uid}").text = (
-        "Retain the staff-only scope."
-    )
+    workbench.response_for(
+        f"ambiguity:{memory.uid}"
+    ).text = "The antecedent is the staff-door credential."
+    workbench.response_for(
+        f"atomize:{memory.uid}"
+    ).text = "Retain the staff-only scope."
     store.save_atomize_analysis(analysis)
     store.save_atomize_workbench(workbench)
     original_digest = atomize_workbench_response_digest(workbench)
@@ -1077,9 +1050,7 @@ def test_reviewed_reanalysis_rejects_two_unary_origins_for_one_memory(
     assert current_analysis.uid == analysis.uid
     current_workbench = store.load_atomize_workbench(current_analysis)
     assert current_workbench is not None
-    assert atomize_workbench_response_digest(
-        current_workbench
-    ) == original_digest
+    assert atomize_workbench_response_digest(current_workbench) == original_digest
 
 
 def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
@@ -1098,10 +1069,7 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
     assert snapshot.count(RESPONSE_LABEL) == 1
     assert "WHY THIS IS UNCLEAR" in snapshot
     issue_list = snapshot.split("\n\nAMBIGUITY 1/", 1)[0]
-    assert (
-        "WHY · “same NFC” can denote a mechanism or credential"
-        in issue_list
-    )
+    assert "WHY · “same NFC” can denote a mechanism or credential" in issue_list
     assert "↳ R1 · Use the prior NFC mechanism" in issue_list
     assert "↳ R2 · Use the prior NFC credential" in issue_list
     assert "It uses the previously described NFC mechanism." not in issue_list
@@ -1115,7 +1083,7 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
         # 2, leave option navigation, then use the Response compatibility key
         # to open and save the same inline field.
         pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\r\x1b[B\r"
+            "\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b[B\r"
             "\x7fcNeeds the staff-only qualifier.\x13q"
         )
         run_atomize_workbench_shell(
@@ -1132,11 +1100,11 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
     assert response.text == "Needs the staff-only qualifier."
     frames, _ = atomize_workbench_declared_frames(workbench, analysis)
     assert (
-        "Selected ordinary reading: "
-        "It accepts the previously described credential."
+        "Selected ordinary reading: It accepts the previously described credential."
     ) in frames[next(iter(frames))]
-    assert "Selected ordinary reading: Use the prior NFC credential" not in (
-        frames[next(iter(frames))]
+    assert (
+        "Selected ordinary reading: Use the prior NFC credential"
+        not in (frames[next(iter(frames))])
     )
     assert saved
 
@@ -1177,9 +1145,7 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
     assert cursor_line.lstrip().startswith("› ○ 2. [ALTERNATIVE]")
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\r\x1b[B\rq"
-        )
+        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b[B\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1188,14 +1154,12 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
             app_output=DummyOutput(),
             require_tty=False,
         )
-    assert workbench.response_for(
-        first.uid
-    ).selected_choice_uid.endswith(":reading:2")
+    assert workbench.response_for(first.uid).selected_choice_uid.endswith(":reading:2")
 
     # Reopening starts on the selected reading. Entering it again clears the
     # selection, so a separate numeric "clear" command is unnecessary.
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\r\rq")
+        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\x1b[B\r\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1232,9 +1196,7 @@ def test_atomize_shell_embeds_read_only_result_case_navigation() -> None:
     assert result is workbench
     assert workbench.answered_count == 0
     assert workbench.cursor_uid == before["cursor_uid"]
-    assert all(
-        not response.answered for response in workbench.responses.values()
-    )
+    assert all(not response.answered for response in workbench.responses.values())
     assert saved
     assert saved[-1]["analysis_uid"] == before["analysis_uid"]
 
@@ -1275,9 +1237,7 @@ def test_response_backspace_still_edits_text_instead_of_navigating_up():
     first = workbench.ordered_issues()[0]
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\x1b[B\rab\x7f\rq"
-        )
+        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\rab\x7f\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1309,9 +1269,7 @@ def test_enter_expands_and_closes_an_issue_without_readings():
         expanded_issue_uid=issue.uid,
     )
     assert "ATOMIZE UNCERTAINTY 2/2" in expanded
-    assert "Which local reading or scope should govern this source?" in (
-        expanded
-    )
+    assert "Which local reading or scope should govern this source?" in (expanded)
 
     saved: list[dict] = []
     with create_pipe_input() as pipe_input:
@@ -1496,6 +1454,35 @@ def test_shared_atomize_apply_action_uses_the_normal_save_boundary(
     assert store.load_direct(ctx.name).uid == ctx.uid
 
 
+def test_unanswered_atomize_findings_apply_as_is_and_are_checkpointed(
+    isolated_store,
+):
+    store = MemoryStore()
+    ctx, _memory = _init_context(store)
+    opened = open_or_create_atomize_workbench(
+        store=store,
+        ctx=ctx,
+        provider_factory=AggregateProvider,
+    )
+
+    result = runner.invoke(app, ["atomize", "--context", ctx.name, "--save"])
+
+    assert result.exit_code == 0, result.output
+    assert "Applied as is with 2 unresolved findings recorded" in result.output
+    checkpoint = store.list_checkpoints(ctx.name)[0]
+    args = checkpoint["args"]
+    assert args["application_mode"] == "AS_IS"
+    assert args["unresolved_at_apply_count"] == 2
+    assert {item["kind"] for item in args["unresolved_at_apply"]} == {
+        "AMBIGUITY",
+        "ATOMIZE_UNCERTAINTY",
+    }
+    assert {item["response_state"] for item in args["unresolved_at_apply"]} == {"OPEN"}
+    assert args["application_workbench_uid"] == opened.workbench.uid
+    assert len(args["application_workbench_response_digest"]) == 64
+    assert "2 unresolved at apply" in checkpoint["description"]
+
+
 def test_issue_list_uses_labels_and_discloses_additional_readings():
     ctx = ops.init("workbench/reading-preview")
     ops.add(ctx, "Use the same NFC.")
@@ -1524,9 +1511,7 @@ def test_issue_list_uses_labels_and_discloses_additional_readings():
         ctx,
         replace(
             report,
-            quality_issues=(
-                replace(issue, readings=readings),
-            ),
+            quality_issues=(replace(issue, readings=readings),),
         ),
     )
     snapshot = render_atomize_workbench_snapshot(
@@ -1562,7 +1547,4 @@ def test_schema_v3_readings_resume_with_full_text_as_legacy_label():
     restored_reading = restored.quality_issues[0].readings[0]
     assert restored_reading.label == restored_reading.text
     assert restored.to_dict()["schema_version"] == 4
-    assert (
-        "↳ R1 · It uses the previously described NFC mechanism."
-        in snapshot
-    )
+    assert "↳ R1 · It uses the previously described NFC mechanism." in snapshot

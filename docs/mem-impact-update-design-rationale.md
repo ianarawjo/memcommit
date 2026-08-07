@@ -108,7 +108,7 @@ Update UID and operation digest revision, preventing a stale preview from
 appearing above a newer Apply action.
 
 In a TTY, `mem update` saves or reuses the staged receipt first, displays that
-revision-bound Impact immediately above `REVIEW & APPLY UPDATE`, and applies
+revision-bound Impact immediately above `APPLY CHANGES · UPDATE`, and applies
 only after explicit acceptance. Closing the workbench leaves the receipt
 staged and all target owners unchanged. Non-TTY explicit update retains the
 existing scriptable application behavior; adding an interactive approval to a

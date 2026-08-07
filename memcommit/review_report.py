@@ -81,7 +81,8 @@ class ReviewReportController:
     @classmethod
     def from_resolution(
         cls,
-        view_or_supplier: ResolutionWorkbenchView | Callable[[], ResolutionWorkbenchView],
+        view_or_supplier: ResolutionWorkbenchView
+        | Callable[[], ResolutionWorkbenchView],
         *,
         kind: ReviewReportKind,
         title: str,
@@ -110,6 +111,8 @@ class ReviewReportController:
                     if capability != "ACCEPT"
                 ),
                 accept_enabled=False,
+                accept_mode="CHANGES",
+                unresolved_at_apply_count=0,
             )
             return ReviewReport(
                 operation=view.operation,

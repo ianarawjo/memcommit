@@ -212,7 +212,10 @@ class MeldResolutionWorkbenchAdapter:
                 issue_title = issue.title
                 if issue.priority == "HELPFUL" and len(issue.relation_uids) == 1:
                     relation = relation_by_uid[issue.relation_uids[0]]
-                    issue_title = f"{relation.kind.title()} · {relation.summary}"
+                    # The shared row prefix already renders relation.kind.
+                    # Keep the title semantic so rows do not read
+                    # ``SCOPED · Scoped · ...``.
+                    issue_title = relation.summary
                 projected_items.append(
                     ResolutionItem(
                         uid=issue.uid,
@@ -221,6 +224,13 @@ class MeldResolutionWorkbenchAdapter:
                         priority=issue.priority,
                         title=issue_title,
                         summary=issue.why_it_matters,
+                        role="DECISION",
+                        obligation=(
+                            "REQUIRED"
+                            if issue.priority == "REQUIRED"
+                            else "OPTIONAL"
+                        ),
+                        response_state="OPEN",
                         question=issue.question,
                         options=tuple(
                             ResolutionOption(

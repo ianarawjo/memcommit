@@ -116,7 +116,9 @@ def test_saved_update_impact_renders_exact_diff_with_apply_handoff():
     assert "[ APPLY? ]" in rendered
     assert "does not apply anything yet" in rendered
     assert "REVIEW & APPLY" not in rendered
-    assert "MATERIALIZE REVIEW" not in rendered
+    assert "MATERIALIZE" not in rendered
+    assert "INCORPORATE RESPONSES" not in rendered
+    assert "APPLY CHANGES" not in rendered
 
 
 def test_cli_reopens_saved_update_impact_without_provider(
@@ -143,6 +145,7 @@ def test_cli_reopens_saved_update_impact_without_provider(
     assert "+ The verified route is now south." in result.output
     assert "[ APPLY? ]" in result.output
     assert "REVIEW & APPLY" not in result.output
+    assert "APPLY CHANGES" not in result.output
 
 
 def test_saved_update_apply_handoff_reenters_owning_update_flow(

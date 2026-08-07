@@ -21,6 +21,7 @@ from memcommit.commands.sever_sessions import (
 from memcommit.commands.resolution_workbench_shell import (
     resolution_report_fragments,
     resolution_viewer_fragments,
+    session_todo_view,
 )
 from memcommit.impact_controller import ImpactController
 from memcommit.context import QueryContextRef
@@ -633,6 +634,35 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
         "Forget",
     ]
     assert [result.label for result in view.results] == ["SUMMARIZE"]
+
+
+def test_custom_sever_response_remains_answered_and_apply_ready(isolated_store):
+    store = MemoryStore()
+    source = _context(store, "local/personal-memory", "Source")
+    criteria = _context(store, "local/guardrails", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="draft",
+        provider_factory=lambda: SeverProvider(),
+    )
+    candidate = session.candidates[0]
+    session = session.select(candidate.uid, "CUSTOM", "Custom local result.")
+
+    view = SeverResolutionWorkbenchAdapter(session).view()
+    item = view.item(candidate.uid)
+    todo = session_todo_view(
+        view,
+        {},
+        review_and_apply=True,
+        read_only=False,
+    )
+
+    assert item.response_state == "ANSWERED"
+    assert item.response_text == "Custom local result."
+    assert item.blocks[0].text == "Custom local result."
+    assert todo.kind == "APPLY CHANGES"
 
 
 def test_sever_workbench_can_change_save_location_before_apply(

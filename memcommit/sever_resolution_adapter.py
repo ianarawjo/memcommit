@@ -210,6 +210,15 @@ class SeverResolutionWorkbenchAdapter:
             )
             outcome_ref = ResultRef("sever-result", candidate.uid)
             selected = selection_option[candidate.selection]
+            selected_result = (
+                "(forgotten)"
+                if candidate.selection == "FORGET"
+                else candidate.custom_content
+                if candidate.selection == "CUSTOM"
+                else source.content
+                if candidate.selection == "AS_WRITTEN"
+                else candidate.proposed_content or "(forgotten)"
+            )
             title = " ".join(source.content.split())
             items.append(
                 ResolutionItem(
@@ -223,6 +232,14 @@ class SeverResolutionWorkbenchAdapter:
                     priority="REQUIRED",
                     title=title,
                     summary=candidate.rationale,
+                    role="DECISION",
+                    obligation="REQUIRED",
+                    response_state="ANSWERED",
+                    response_text=(
+                        candidate.custom_content
+                        if candidate.selection == "CUSTOM"
+                        else ""
+                    ),
                     question="Choose what the local result should remember.",
                     options=(
                         ResolutionOption(
@@ -250,7 +267,7 @@ class SeverResolutionWorkbenchAdapter:
                     blocks=(
                         ResolutionDetailBlock(
                             heading="PROPOSED RESULT MEMORY",
-                            text=candidate.proposed_content or "(forgotten)",
+                            text=selected_result,
                             refs=(outcome_ref,),
                         ),
                     ),

@@ -266,9 +266,9 @@ def run_compare_workbench(
 
     def move_row(delta: int) -> None:
         navigation.move_row(len(rows), delta)
+        navigation.preview_selected_row()
         selected["member"] = 0
         selected["expanded"] = False
-        navigation.section_uid = None
 
     def move_member(delta: int) -> None:
         members = current_members()

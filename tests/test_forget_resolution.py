@@ -5,7 +5,10 @@ import pytest
 
 import memcommit.ops as ops
 from memcommit.commands import forget as forget_command
-from memcommit.commands.resolution_workbench_shell import resolution_viewer_fragments
+from memcommit.commands.resolution_workbench_shell import (
+    resolution_viewer_fragments,
+    session_todo_view,
+)
 from memcommit.context import Context, Memory
 from memcommit.forget_resolution_adapter import ForgetResolutionWorkbenchAdapter
 from memcommit.forget_review import ForgetReview
@@ -138,8 +141,20 @@ def test_forget_review_materializes_only_reviewed_operation_specific_changes():
     custom_candidate = review.candidates[2]
     review = review.select(custom_candidate.uid, "CUSTOM", "Custom retained wording.")
 
+    view = ForgetResolutionWorkbenchAdapter(review).view()
+    custom_item = view.item(custom_candidate.uid)
+    todo = session_todo_view(
+        view,
+        {},
+        review_and_apply=True,
+        read_only=False,
+    )
+
     changes = review.changes()
 
+    assert custom_item.response_state == "ANSWERED"
+    assert custom_item.response_text == "Custom retained wording."
+    assert todo.kind == "APPLY CHANGES"
     assert [type(change) for change in changes] == [EditChange, EditChange]
     assert changes[-1].new_content == "Custom retained wording."
 

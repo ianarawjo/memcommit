@@ -188,9 +188,9 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     assert "ATOMIZE UNCERTAINTY" in preview.output
     assert review.exit_code == 0, review.output
     assert "REVIEW ITEMS · 1" in review.output
-    assert "ATOMIZE UNCERTAINTY 1 · ATOMIZE UNCERTAINTY" in review.output
+    assert f"ATOMIZE UNCERTAINTY 1 · {memory.content}" in review.output
     assert "UNCERTAIN · REQUIRES CONTEXT" in review.output
-    assert review.output.index("CLASSIFICATION") < review.output.index(
+    assert review.output.index("CLASSIFICATION") < review.output.rindex(
         memory.content
     )
     assert RESPONSE_LABEL not in review.output
@@ -269,7 +269,7 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     # Both entry points resume it without another provider call.
     resumed_review = runner.invoke(app, ["review", "--snapshot"])
     assert resumed_review.exit_code == 0, resumed_review.output
-    assert "ATOMIZE SPLIT" in resumed_review.output
+    assert "SUGGESTED SPLIT" in resumed_review.output
     resumed_preview = runner.invoke(app, ["impact", "atomize"])
     assert resumed_preview.exit_code == 0, resumed_preview.output
     assert "Resumed saved analysis" in resumed_preview.output

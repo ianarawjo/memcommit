@@ -101,6 +101,9 @@ def _operation_item(
         # out of the title avoids labels such as ``ADD 73 · ADD …``.
         title=f"{operation.owner_context_name} Memory [{operation.memory_uid}]",
         summary=operation.reason,
+        role="CHANGE",
+        obligation="NONE",
+        response_state="NOT_APPLICABLE",
         blocks=tuple(blocks),
     )
 

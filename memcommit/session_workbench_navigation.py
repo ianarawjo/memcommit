@@ -72,6 +72,13 @@ class SessionWorkbenchNavigation:
             self.row_index = max(0, min(self.row_index + delta, row_count - 1))
         return self.row_index
 
+    def preview_selected_row(self) -> int:
+        """Project the selected Items row into Viewer without moving focus."""
+
+        self.viewer_row_index = self.row_index
+        self.section_uid = None
+        return self.viewer_row_index
+
     def bind_sections(self, sections: Sequence[WorkbenchSection]) -> int:
         """Preserve the selected semantic section across projection changes."""
         if not sections:

@@ -67,7 +67,7 @@ def test_resolution_impact_is_rendered_immediately_before_operation_apply():
     )
 
     assert rendered.index("IMPACT · LOCAL OUTBOUND DRAFT · NOT SENT") < rendered.index(
-        "REVIEW & APPLY SEVER"
+        "APPLY CHANGES · SEVER"
     )
     assert "PROPOSED EFFECTS" not in rendered
     assert "[ADD] [result-1] Add the reviewed Memory." in rendered
@@ -387,7 +387,7 @@ def test_seeded_compare_impact_precedes_meld_apply():
         impact,
     )
 
-    assert lines.index("IMPACT · COMPARE") < lines.index("REVIEW & APPLY MELD")
+    assert lines.index("IMPACT · COMPARE") < lines.index("APPLY CHANGES · MELD")
     assert "WHAT DIFFERS\nOne exact difference." in lines
 
 

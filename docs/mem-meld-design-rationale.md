@@ -744,12 +744,14 @@ answer and a second `Enter` clears it; an Other-direction submission returns to
 the same workbench as a staged response. There is no separate Review Viewer.
 The Report itself is the review surface: its conflict cards show staged choices
 and its final card shows the current whole-set policy. Before exact target
-Memories exist, the last item is `MATERIALIZE REVIEW`; activating it sends one
-combined semantic turn and returns to the updated Report. Once the assessment
-is `READY_TO_APPLY`, the same row becomes `REVIEW & APPLY MELD`; activating it
-returns the exact `ACCEPT` action directly. Thus application remains gated by a
-ready exact proposal, but the person never leaves the Report for a redundant
-second rendering of the same decisions.
+Memories exist, the last item is `INCORPORATE RESPONSES`; activating it sends
+one combined semantic turn and returns to the updated Report without changing
+the target. Once the assessment is `READY_TO_APPLY`, the same row becomes
+`APPLY CHANGES · MELD`; activating it returns the exact `ACCEPT` action
+directly. Thus application remains gated by a ready exact proposal, but the
+person never leaves the Report for a redundant second rendering of the same
+decisions. Report and To Do derive this label from the same state so they
+cannot advertise conflicting next actions.
 
 The one-shot Meld item bound is 500 source Memories. The canonical Task 2
 topology contains 150 Memories from each Advisor, so the former total bound of

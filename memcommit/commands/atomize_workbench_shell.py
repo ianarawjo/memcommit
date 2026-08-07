@@ -127,7 +127,7 @@ def _issue_label(finding: AtomizeWorkbenchFinding) -> str:
     return {
         "AMBIGUITY": "AMBIGUITY",
         "CONFLICT": "CONFLICT",
-        "ATOMIZE_SPLIT": "ATOMIZE SPLIT",
+        "ATOMIZE_SPLIT": "SUGGESTED SPLIT",
         "ATOMIZE_UNCERTAINTY": "ATOMIZE UNCERTAINTY",
     }[finding.kind]
 
@@ -301,7 +301,7 @@ def _list_fragments(
 
 def _reason_heading(finding: AtomizeWorkbenchFinding) -> str:
     if finding.kind == "ATOMIZE_SPLIT":
-        return "WHY THIS SPLIT"
+        return "WHY THIS MEMORY SPLIT"
     if finding.kind == "CONFLICT":
         return (
             "WHY THE CONFLICT DEPENDS ON SCOPE"
@@ -976,7 +976,8 @@ def run_atomize_workbench_shell(
                     action_kind="SUBMIT_ALL",
                     comment=(
                         "Keep unanswered optional findings as analyzed while "
-                        "materializing every saved Atomize response."
+                        "incorporating every saved Atomize response into the "
+                        "revised proposal."
                     ),
                 ),
             ) if workflow_actions else (),

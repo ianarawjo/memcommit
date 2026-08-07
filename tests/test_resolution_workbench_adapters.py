@@ -184,6 +184,8 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
         }
     )
     item = view.item(issue_uid)
+    assert item.title == assessment.relations[0].summary
+    assert not item.title.lower().startswith("scoped")
     assert item.options[0].uid == option_uid
     assert item.options[0].text == "Replace north with south."
     assert item.issue_presentation is not None
@@ -212,9 +214,7 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
             ResolutionNavigation(selected_item_uid=issue_uid),
         )
     )
-    assert rendered.index("SOURCE RELATION") < rendered.index(
-        "RESOLUTION QUESTION"
-    )
+    assert rendered.index("SOURCE RELATION") < rendered.index("RESOLUTION QUESTION")
     assert rendered.index("CLASSIFICATION") < rendered.index("CLAIM 1 · FROM")
     assert rendered.index("CLAIM 2 · FROM") < rendered.index(
         "WHY SCOPE CHANGES THE RELATION"
@@ -328,8 +328,11 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     view = AtomizeResolutionWorkbenchAdapter(analysis, workbench).view()
 
     assert view.list_label == "ACTIONABLE FINDINGS"
-    assert view.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL"})
-    assert view.accept_enabled is False
+    assert view.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"})
+    assert view.accept_enabled is True
+    assert view.accept_mode == "AS_IS"
+    assert view.unresolved_at_apply_count == 1
+    assert view.status == "READY_TO_APPLY_AS_IS"
     assert view.results == ()
     assert [metric.value for metric in view.metrics] == ["2", "3", "2", "1"]
     conflict = view.item(conflict_uid)
@@ -376,17 +379,36 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     assert "TRACE" not in rendered
 
     split = view.item(f"atomize:{composite_uid}")
-    split_blocks = {block.heading: block.text for block in split.blocks}
+    assert split.title == analysis.items[1].content
+    assert split.title != "ATOMIZE SPLIT"
+    assert split.kind == "ATOMIZE_SPLIT"
+    assert split.kind_label == "SUGGESTED SPLIT"
+    split_blocks = {block.heading: block for block in split.blocks}
     assert split.issue_presentation is not None
     assert split.issue_presentation.evidence[0].sources
-    assert "The north door closes." in split_blocks["PROPOSED CHILDREN"]
-    assert "The south door remains open." in split_blocks["PROPOSED CHILDREN"]
+    child_rows = split_blocks["PROPOSED CHILDREN"].memory_rows
+    assert [row.ordinal for row in child_rows] == [1, 2]
+    assert child_rows[0].content == "The north door closes."
+    assert child_rows[1].content == "The south door remains open."
+    assert all(row.ref is not None for row in child_rows)
+
+    split_fragments = resolution_viewer_fragments(
+        view,
+        ResolutionNavigation(selected_item_uid=split.uid),
+    )
+    split_rendered = "".join(text for _style, text in split_fragments)
+    assert "atomize-child:" not in split_rendered
+    assert any(
+        style == "class:memory-object" and "[1] The north door closes." in text
+        for style, text in split_fragments
+    )
 
 
 def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() -> None:
     analysis, _conflict_uid, _composite_uid = _atomize_fixture()
     reviewed = replace(
         analysis,
+        quality_issues=(),
         source_review_uid=_uid(),
         source_review_digest=_digest("reviewed-responses"),
     )
@@ -396,9 +418,7 @@ def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() 
 
     assert ready.status == "READY_TO_APPLY"
     assert ready.accept_enabled is True
-    assert ready.capabilities == frozenset(
-        {"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}
-    )
+    assert ready.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"})
 
     workbench.response_for(workbench.ordered_issues()[0].uid).text = "Revise it."
     edited = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
@@ -406,6 +426,33 @@ def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() 
     assert edited.status == "REVIEWING"
     assert edited.accept_enabled is False
     assert "ACCEPT" not in edited.capabilities
+
+
+def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:
+    analysis, conflict_uid, _composite_uid = _atomize_fixture()
+    workbench = create_atomize_workbench(analysis)
+    view = AtomizeResolutionWorkbenchAdapter(analysis, workbench).view()
+
+    todo = session_todo_view(
+        view,
+        {},
+        review_and_apply=True,
+        read_only=False,
+    )
+
+    assert view.item(conflict_uid).priority == "HIGH"
+    assert view.item(conflict_uid).effective_obligation == "OPTIONAL"
+    assert view.accept_enabled is True
+    assert view.accept_mode == "AS_IS"
+    assert view.unresolved_at_apply_count == 1
+    assert view.status == "READY_TO_APPLY_AS_IS"
+    assert todo.kind == "APPLY AS IS"
+    assert todo.label == "Apply Atomize as is"
+    assert todo.detail.startswith(
+        "1 unresolved finding will be recorded at apply. "
+        "1 optional review remains open."
+    )
+    assert todo.detail.endswith("Recovery: mem undo.")
 
 
 def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
@@ -427,9 +474,32 @@ def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
     )
 
     assert [item.priority for item in view.items] == ["REVIEW"]
-    assert todo.kind == "APPLY"
-    assert todo.label == "Apply Atomize"
-    assert todo.detail.startswith("1 optional item left unanswered.")
+    assert todo.kind == "APPLY CHANGES"
+    assert todo.label == "Apply Atomize changes"
+    assert todo.detail.startswith("1 optional review remains open and will be skipped.")
+
+
+def test_initial_atomize_optional_split_is_already_ready_to_apply() -> None:
+    analysis, _conflict_uid, _composite_uid = _atomize_fixture()
+    initial = replace(
+        analysis,
+        quality_issues=(),
+        source_review_uid=None,
+        source_review_digest=None,
+    )
+    workbench = create_atomize_workbench(initial)
+    view = AtomizeResolutionWorkbenchAdapter(initial, workbench).view()
+
+    todo = session_todo_view(
+        view,
+        {},
+        review_and_apply=True,
+        read_only=False,
+    )
+
+    assert view.status == "READY_TO_APPLY"
+    assert view.accept_enabled is True
+    assert todo.kind == "APPLY CHANGES"
 
 
 def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> None:
@@ -500,9 +570,7 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
 
     assert view.list_label == "PLANNED CHANGES"
     assert [item.kind for item in view.items] == ["EDIT", "ADD", "REMOVE"]
-    assert view.items[1].title == (
-        f"campus-wiki/buildings Memory [{add_uid}]"
-    )
+    assert view.items[1].title == (f"campus-wiki/buildings Memory [{add_uid}]")
     assert not view.items[1].title.startswith("ADD ")
     assert view.report_items_summary is not None
     assert "3 exact target Memory changes" in view.report_items_summary.text
@@ -511,6 +579,20 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
     assert view.accept_enabled is False
     assert "unresolved" not in (view.overview + view.empty_message).lower()
     assert [metric.value for metric in view.metrics] == ["1", "1", "1", "3"]
+
+    apply_view = replace(
+        view,
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+    )
+    todo = session_todo_view(
+        apply_view,
+        {},
+        review_and_apply=True,
+        read_only=False,
+    )
+    assert todo.kind == "APPLY CHANGES"
+    assert "optional" not in todo.detail.lower()
 
     edit_item = view.items[0]
     edit_blocks = {block.heading: block.text for block in edit_item.blocks}

@@ -167,20 +167,29 @@ revision.  It supplies:
 - operation, artifact, and revision identities;
 - title, route, status, and locally computed metrics;
 - an adapter-owned list label;
-- ordered items with opaque UIDs, status, priority, title, summary, question,
-  option UIDs, operation-authored detail blocks, optional trace references,
-  and an optional typed actionable-issue presentation containing exact
-  source Memories, classification, and type-specific labels;
+- ordered items with opaque UIDs, status, display priority, semantic role,
+  response obligation and state, title, summary, question, option UIDs,
+  durable response text, operation-authored detail blocks, optional trace
+  references, and an optional typed actionable-issue presentation containing
+  exact source Memories, classification, and type-specific labels;
 - exact proposed or applied results when the operation has them;
 - explicit capabilities for item comments, whole-set comments, preserve,
   defer, and accept; and
-- adapter-owned readiness and input-lock state.
+- adapter-owned readiness, acceptance mode, and input-lock state.
 
 The list uses the neutral term **item** internally.  Meld calls its items
 `ISSUES`, Atomize calls them `ACTIONABLE FINDINGS`, and Update calls them
 `PLANNED CHANGES`.  Calling a conflict-free Update operation an issue would
 incorrectly claim that the current Update planner produced an unresolved
 assessment.
+
+The shell renders an item's human-facing kind label as the row prefix. The
+durable kind token remains available for command logic, but an adapter may
+supply a clearer `kind_label` so tokens such as `ATOMIZE_SPLIT` do not leak
+into the UI. Adapter titles contain semantic identity or a source preview
+rather than repeating the label; for example
+`SUGGESTED SPLIT · “source…”`, not
+`ATOMIZE SPLIT · ATOMIZE SPLIT`.
 
 The common shell emits only the following UID-bound semantic actions:
 
@@ -199,10 +208,18 @@ keys do not select options; nested arrows and Enter are the common grammar.
 acceptance or application.
 
 An item's `n/total` is likewise only its position in the ordered review set.
-The Viewer separately reports total REQUIRED and OPTIONAL items. Only an
-unanswered REQUIRED item blocks review-and-apply; OPTIONAL items can be
-inspected and answered but may remain unanswered under the operation's
+The Viewer separately reports total REQUIRED and OPTIONAL reviews. Only an
+open REQUIRED response blocks review-and-apply; OPTIONAL reviews can be
+inspected and answered but may remain open under the operation's
 remaining-item materialization policy.
+
+Acceptance has two presentation modes while retaining the same UID-bound
+`ACCEPT` action. `CHANGES` renders the ordinary `APPLY CHANGES` boundary.
+`AS_IS` renders `APPLY AS IS`, counts still-open Decision findings separately
+from unvisited optional proposal reviews, and states that the unresolved
+findings will be recorded at application. The adapter, not the shell, selects
+this mode. It is approval of the exact current proposal, not a synthetic
+answer, deferment decision, or permission to invent a missing result.
 
 ## Dynamic list replacement
 
@@ -269,12 +286,33 @@ pair evidence arity, issue digest, response persistence, explicit reanalysis,
 and Context application remain Atomize-owned.  Editing a response is not a
 full assessment replacement and therefore does not reset common navigation.
 
+Atomize separates semantic attention from progression obligation. Its
+high-attention Ambiguity, Uncertainty, and Conflict rows are OPTIONAL for
+progression: unanswered rows do not force a provider turn. An answered unary
+response still disables acceptance until one complete incorporation turn has
+produced a fresh proposal. With no such response pending, detected unresolved
+meaning selects `AS_IS`; a proposal containing only unreviewed suggested
+splits keeps ordinary `CHANGES`. Pairwise Conflict responses remain retained
+review evidence because Atomize cannot truthfully consume them as unary
+declared frames, but their presence does not prevent applying the current
+structural proposal.
+
 Atomize identifies unary versus pair evidence before the decision control and
 includes the analysis Context in every source label. Ambiguity uses
 `CLARIFICATION QUESTION` and `PROPOSED READINGS`; conflict uses
 `RESOLUTION QUESTION` and `PROPOSED RESOLUTIONS`. Both retain the original
 independent selected-choice and free-response state. `mem impact atomize`
 continues to use the separate read-only Result detail grammar.
+
+The common actionable-detail renderer does not make `SOURCE MEMORY` one large
+focus block. Classification, each criterion, each visually wrapped source
+Memory line, and the type-specific Why are independent Viewer stops. This
+allows Atomize quotations and Meld claims to move one visible line per arrow
+without splitting, renumbering, or persisting fragments of the underlying
+Memory. Claim/source-frame headings remain grouped with their first source
+line, preserving evidence arity while improving viewport movement. The item
+kind, ordinal, title, status, and review-set counts are visible report chrome,
+not stops; opening a detail therefore begins at Classification.
 
 ### Dedup
 
@@ -332,8 +370,8 @@ local application. Sharing the workbench does not make the setup screen or the
 saved-session listing common, and it does not relax Sever's rule that reviewed
 output is never transmitted by the Sever operation.
 The embedded Sever Impact is the exact proposed local Result and is explicitly
-labelled `SOURCE UNCHANGED`; Apply materializes a new Context without editing
-the Source.
+labelled `SOURCE UNCHANGED`; Apply creates a new Context without editing the
+Source.
 It compares every Source Memory with its reviewed Result representation. KEEP
 renders one equality line; redaction, summary, reframe, and custom wording
 render a two-sided transition; FORGET renders only the Source-side `-` line.
@@ -342,7 +380,7 @@ while Source remains unchanged.
 
 ### Save location before Apply
 
-Operations that materialize a distinct new local Result may supply one
+Operations that create a distinct new local Result may supply one
 operation-owned `SAVE LOCATION` value to the common report. The shell renders
 it as a focusable card immediately before the final Apply card and returns one
 exact `CHANGE_DESTINATION` action from the inline direct editor. The shell does
@@ -383,7 +421,8 @@ exists.
 - Adapter-supplied readiness is authoritative.  Zero items can mean ready,
   unassessed, or simply no planned changes depending on the adapter.
 - REQUIRED work cannot be bypassed through accept, preserve, close, or a
-  capability the adapter did not expose.
+  capability the adapter did not expose. A high display priority is not a
+  REQUIRED obligation; adapters must project that distinction explicitly.
 - Untrusted adapter text is terminal-sanitized before rendering.
 - A trace-bearing generic detail requires both evidence and judgment
   references. Actionable issue detail must instead supply at least one exact

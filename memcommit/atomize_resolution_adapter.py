@@ -1,4 +1,5 @@
 """Pure Atomize analysis/workbench projection for shared resolution UI."""
+
 from __future__ import annotations
 
 from memcommit.atomize import AtomizeAnalysisSession
@@ -15,6 +16,7 @@ from memcommit.resolution_workbench import (
     ResolutionIssuePresentation,
     ResolutionIssueSource,
     ResolutionItem,
+    ResolutionMemoryRow,
     ResolutionMetric,
     ResolutionOption,
     ResolutionWorkbenchView,
@@ -22,17 +24,12 @@ from memcommit.resolution_workbench import (
 from memcommit.result_workbench import ResultRef
 
 
-_KIND_LABELS = {
-    "AMBIGUITY": "AMBIGUITY",
-    "CONFLICT": "CONFLICT",
-    "ATOMIZE_SPLIT": "ATOMIZE SPLIT",
-    "ATOMIZE_UNCERTAINTY": "ATOMIZE UNCERTAINTY",
-}
-
-
 def _priority_label(finding: AtomizeWorkbenchFinding) -> str:
     return {
-        4: "REQUIRED",
+        # Priority describes semantic attention, not whether a response gates
+        # application. Atomize can apply its exact current proposal while a
+        # high-attention finding remains explicitly unresolved.
+        4: "HIGH",
         2: "HELPFUL",
         1: "REVIEW",
     }.get(finding.priority, f"PRIORITY {finding.priority}")
@@ -48,6 +45,11 @@ def _overview(analysis: AtomizeAnalysisSession) -> str:
             f"UNRESOLVED\n{analysis.overview.unresolved.text}",
         )
     )
+
+
+def _memory_preview(content: str, *, limit: int = 180) -> str:
+    compact = " ".join(content.split()) or "(empty Memory)"
+    return compact if len(compact) <= limit else compact[: limit - 1].rstrip() + "…"
 
 
 class AtomizeResolutionWorkbenchAdapter:
@@ -82,9 +84,7 @@ class AtomizeResolutionWorkbenchAdapter:
             finding.uid: finding
             for finding in project_atomize_workbench_findings(analysis)
         }
-        source_by_uid = {
-            item.memory_uid: item.content for item in analysis.items
-        }
+        source_by_uid = {item.memory_uid: item.content for item in analysis.items}
         position_by_uid = {
             item.memory_uid: item.position + 1 for item in analysis.items
         }
@@ -116,7 +116,7 @@ class AtomizeResolutionWorkbenchAdapter:
             reason_heading = {
                 "AMBIGUITY": "WHY THIS IS UNCLEAR",
                 "CONFLICT": "WHY THESE MEMORIES CONFLICT",
-                "ATOMIZE_SPLIT": "WHY THIS SPLIT",
+                "ATOMIZE_SPLIT": "WHY THIS MEMORY SPLIT",
                 "ATOMIZE_UNCERTAINTY": "WHY ATOMIZE IS BLOCKED",
             }[finding.kind]
             conflict = finding.kind == "CONFLICT"
@@ -125,9 +125,7 @@ class AtomizeResolutionWorkbenchAdapter:
                 evidence=(
                     ResolutionIssueEvidence(
                         heading=(
-                            "MEMORIES IN CONFLICT"
-                            if conflict
-                            else "SOURCE MEMORY"
+                            "MEMORIES IN CONFLICT" if conflict else "SOURCE MEMORY"
                         ),
                         sources=issue_sources,
                         classification=finding.classification,
@@ -166,24 +164,23 @@ class AtomizeResolutionWorkbenchAdapter:
             )
             blocks: list[ResolutionDetailBlock] = []
             if finding.children:
-                child_lines: list[str] = []
-                for index, child in enumerate(finding.children, start=1):
-                    line = f"{index}. {child.content}"
-                    evidence = (*child.source_spans, *child.frame_spans)
-                    if evidence:
-                        line += "\nEvidence: " + " | ".join(evidence)
-                    child_lines.append(line)
+                child_rows = tuple(
+                    ResolutionMemoryRow(
+                        ordinal=index,
+                        content=child.content,
+                        evidence=(*child.source_spans, *child.frame_spans),
+                        ref=ResultRef(
+                            "atomize-child",
+                            f"{finding.uid}:{index}",
+                        ),
+                    )
+                    for index, child in enumerate(finding.children, start=1)
+                )
                 blocks.append(
                     ResolutionDetailBlock(
                         heading="PROPOSED CHILDREN",
-                        text="\n\n".join(child_lines),
-                        refs=tuple(
-                            ResultRef("atomize-child", f"{finding.uid}:{index}")
-                            for index, _child in enumerate(
-                                finding.children,
-                                start=1,
-                            )
-                        ),
+                        text="",
+                        memory_rows=child_rows,
                     )
                 )
             if response is not None and response.answered:
@@ -210,8 +207,28 @@ class AtomizeResolutionWorkbenchAdapter:
                         else "OPEN"
                     ),
                     priority=_priority_label(finding),
-                    title=_KIND_LABELS[finding.kind],
+                    title=" ↔ ".join(
+                        _memory_preview(source_by_uid[source_uid])
+                        for source_uid in finding.source_uids
+                    ),
                     summary=finding.reason,
+                    role=(
+                        "OPTIONAL_REVIEW"
+                        if finding.kind == "ATOMIZE_SPLIT"
+                        else "DECISION"
+                    ),
+                    # Atomize findings remain answerable, but none requires a
+                    # per-item response before the current proposal can apply.
+                    obligation="OPTIONAL",
+                    response_state=(
+                        "ANSWERED"
+                        if response is not None and response.answered
+                        else "OPEN"
+                    ),
+                    response_text=(response.text if response is not None else ""),
+                    kind_label=(
+                        "SUGGESTED SPLIT" if finding.kind == "ATOMIZE_SPLIT" else None
+                    ),
                     question=finding.question,
                     options=tuple(
                         ResolutionOption(
@@ -224,9 +241,7 @@ class AtomizeResolutionWorkbenchAdapter:
                     blocks=tuple(blocks),
                     decision_block_index=0,
                     selected_option_uid=(
-                        response.selected_choice_uid
-                        if response is not None
-                        else None
+                        response.selected_choice_uid if response is not None else None
                     ),
                     evidence_refs=source_refs,
                     judgment_refs=(judgment_ref,),
@@ -237,20 +252,32 @@ class AtomizeResolutionWorkbenchAdapter:
                             start=1,
                         )
                     ),
-                    unresolved_refs=(
-                        ResultRef("atomize-finding", finding.uid),
-                    ),
+                    unresolved_refs=(ResultRef("atomize-finding", finding.uid),),
                     issue_presentation=issue_presentation,
                 )
             )
-        # A reviewed reanalysis is the exact proposal boundary. Any response
-        # added to its new workbench makes that proposal provisional again and
-        # must be materialized before Apply can be offered.
-        ready_to_apply = (
-            analysis.source_review_uid is not None
-            and analysis.source_review_digest is not None
-            and workbench.answered_count == 0
+        # Unary responses can change the atomization proposal and therefore
+        # require one batch incorporation turn. An unanswered finding does
+        # not imply deferment and does not gate applying the exact proposal.
+        # Pairwise Conflict responses remain non-atomizing review evidence;
+        # they cannot become a single-Memory declared frame.
+        incorporable_response_open = any(
+            response is not None
+            and response.answered
+            and len(findings[issue_uid].source_uids) == 1
+            for issue_uid, response in workbench.responses.items()
         )
+        ready_to_apply = not incorporable_response_open
+        unresolved_at_apply_count = sum(
+            finding.kind
+            in {
+                "AMBIGUITY",
+                "CONFLICT",
+                "ATOMIZE_UNCERTAINTY",
+            }
+            for finding in findings.values()
+        )
+        unresolved_at_apply = unresolved_at_apply_count > 0
         capabilities = {"SUBMIT_ITEM", "SUBMIT_ALL"}
         if ready_to_apply:
             capabilities.add("ACCEPT")
@@ -266,7 +293,13 @@ class AtomizeResolutionWorkbenchAdapter:
                 f"INPUT {analysis.context_name} → OUTPUT "
                 f"{workbench.output_context_name or analysis.context_name}"
             ),
-            status="READY_TO_APPLY" if ready_to_apply else "REVIEWING",
+            status=(
+                "READY_TO_APPLY_AS_IS"
+                if ready_to_apply and unresolved_at_apply
+                else "READY_TO_APPLY"
+                if ready_to_apply
+                else "REVIEWING"
+            ),
             metrics=(
                 ResolutionMetric("SOURCE MEMORIES", str(analysis.memory_count)),
                 ResolutionMetric(
@@ -281,10 +314,17 @@ class AtomizeResolutionWorkbenchAdapter:
             items=tuple(projected),
             empty_message="No actionable Atomize findings in this analysis.",
             results_label="EXACT RESULTS",
-            # Split children are analysis evidence, not an approved mutation.
+            # Split children remain source-linked analysis evidence until the
+            # separate Apply Changes boundary mutates the Context.
             results=(),
             capabilities=frozenset(capabilities),
             accept_enabled=ready_to_apply,
+            accept_mode=(
+                "AS_IS" if ready_to_apply and unresolved_at_apply else "CHANGES"
+            ),
+            unresolved_at_apply_count=(
+                unresolved_at_apply_count if ready_to_apply else 0
+            ),
             input_locked=False,
         )
 

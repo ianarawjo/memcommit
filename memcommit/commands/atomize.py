@@ -1,4 +1,5 @@
 """Inspect or explicitly apply the latest saved atomize analysis."""
+
 from __future__ import annotations
 
 import sys
@@ -19,6 +20,7 @@ from memcommit.atomize_workbench import (
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
     create_atomize_workbench,
+    project_atomize_workbench_findings,
 )
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.commands.atomize_workbench_shell import (
@@ -65,14 +67,77 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
+_UNRESOLVED_AT_APPLY_KINDS = {
+    "AMBIGUITY",
+    "CONFLICT",
+    "ATOMIZE_UNCERTAINTY",
+}
+
+
+def _incorporable_workbench_response_count(
+    analysis: AtomizeAnalysisSession,
+    workbench,
+) -> int:
+    """Count answered unary findings that can revise Atomize output."""
+
+    if workbench is None:
+        return 0
+    findings = {
+        finding.uid: finding for finding in project_atomize_workbench_findings(analysis)
+    }
+    return sum(
+        response.answered and len(findings[issue_uid].source_uids) == 1
+        for issue_uid, response in workbench.responses.items()
+    )
+
+
+def _atomize_application_audit(
+    analysis: AtomizeAnalysisSession,
+    workbench,
+) -> dict[str, object]:
+    """Freeze unresolved-at-apply state without treating silence as a choice."""
+
+    responses = {} if workbench is None else workbench.responses
+    unresolved = []
+    for finding in project_atomize_workbench_findings(analysis):
+        if finding.kind not in _UNRESOLVED_AT_APPLY_KINDS:
+            continue
+        response = responses.get(finding.uid)
+        unresolved.append(
+            {
+                "issue_uid": finding.uid,
+                "kind": finding.kind,
+                "source_uids": list(finding.source_uids),
+                "classification": finding.classification,
+                "reason": finding.reason,
+                "response_state": (
+                    "ANSWERED_RETAINED"
+                    if response is not None and response.answered
+                    else "OPEN"
+                ),
+            }
+        )
+    return {
+        "application_mode": "AS_IS" if unresolved else "REVIEWED",
+        "unresolved_at_apply_count": len(unresolved),
+        "unresolved_at_apply": unresolved,
+        # The digest proves which response state was visible at approval while
+        # keeping unapplied free-form response text out of checkpoint metadata.
+        "application_workbench_uid": (workbench.uid if workbench is not None else None),
+        "application_workbench_response_digest": (
+            atomize_workbench_response_digest(workbench)
+            if workbench is not None
+            else None
+        ),
+    }
+
+
 def _inbound_split_references(
     store: MemoryStore,
     session: AtomizeAnalysisSession,
 ) -> list[tuple[str, MemoryRef]]:
     split_uids = {
-        item.memory_uid
-        for item in session.items
-        if item.classification == "COMPOSITE"
+        item.memory_uid for item in session.items if item.classification == "COMPOSITE"
     }
     if not split_uids:
         return []
@@ -98,6 +163,7 @@ def _render_apply_result(
     context_name: str,
     result,
     created: bool,
+    unresolved_at_apply_count: int,
 ) -> None:
     action = "Created and atomized" if created else "Applied atomize analysis to"
     typer.secho(
@@ -111,6 +177,13 @@ def _render_apply_result(
         f"-> {result.child_count} children"
     )
     typer.echo(f"  {result.preserved_count} Memories preserved in place")
+    if unresolved_at_apply_count:
+        typer.secho(
+            f"  Applied as is with {unresolved_at_apply_count} unresolved "
+            f"{'finding' if unresolved_at_apply_count == 1 else 'findings'} "
+            "recorded",
+            fg=typer.colors.YELLOW,
+        )
     for item in result.items:
         if item.classification != "COMPOSITE":
             continue
@@ -125,10 +198,7 @@ def _render_apply_result(
         )
         typer.echo(f"Switched to '{context_name}'.")
     else:
-        typer.echo(
-            "One Context checkpoint created. "
-            "The saved analysis remains linked."
-        )
+        typer.echo("One Context checkpoint created. The saved analysis remains linked.")
 
 
 def _present_workbench(
@@ -175,7 +245,7 @@ def _materialize_reviewed_workbench(
     )
     if not declared_frames:
         raise AtomizeImpactError(
-            "The workbench has no single-Memory response to materialize. "
+            "The workbench has no single-Memory response to incorporate. "
             "Pairwise conflict responses remain staged for reconcile."
         )
     source_review_uid = workbench.uid
@@ -195,7 +265,7 @@ def _materialize_reviewed_workbench(
 
     with progressing_provider_factory(
         "ATOMIZE",
-        "materializing reviewed choices",
+        "incorporating saved responses",
         connect_codex_chatgpt_provider,
     ) as provider_factory:
         return open_or_create_atomize_workbench(
@@ -292,12 +362,11 @@ def _apply_to_new_context(
     destination_name: str,
     session: AtomizeAnalysisSession,
     expected_current: str | None,
+    application_audit: dict[str, object],
 ):
     """Create an init-like copy, then apply one saved preview to that copy."""
     if store.context_exists(destination_name):
-        raise AtomizeImpactError(
-            f"Context '{destination_name}' already exists."
-        )
+        raise AtomizeImpactError(f"Context '{destination_name}' already exists.")
 
     # Resolve normal refs only after the direct-only preview has been verified.
     # Query-only refs remain opaque. ops.branch gives the destination a fresh
@@ -351,24 +420,21 @@ def _apply_to_new_context(
                 args={
                     "analysis_uid": destination_session.uid,
                     "ruleset_version": destination_session.ruleset_version,
-                    "source_review_uid": (
-                        destination_session.source_review_uid
-                    ),
-                    "source_review_digest": (
-                        destination_session.source_review_digest
-                    ),
-                    "declared_frame_count": len(
-                        destination_session.declared_frames
-                    ),
+                    "source_review_uid": (destination_session.source_review_uid),
+                    "source_review_digest": (destination_session.source_review_digest),
+                    "declared_frame_count": len(destination_session.declared_frames),
                     "split_count": result.split_count,
                     "child_count": result.child_count,
                     "preserved_count": result.preserved_count,
+                    **application_audit,
                     "trace": result.trace_metadata(),
                 },
                 description=(
                     f"Applied atomize [{destination_session.uid[:8]}]: "
                     f"{result.split_count} splits -> {result.child_count} "
-                    f"children; {result.preserved_count} preserved"
+                    f"children; {result.preserved_count} preserved; "
+                    f"{application_audit['unresolved_at_apply_count']} "
+                    "unresolved at apply"
                 ),
             ),
         )
@@ -460,8 +526,7 @@ def cmd(
         typer.Option(
             "--comment",
             help=(
-                "Initial context/comment for --evaluate; prompted in a TTY "
-                "when omitted"
+                "Initial context/comment for --evaluate; prompted in a TTY when omitted"
             ),
         ),
     ] = None,
@@ -879,13 +944,9 @@ def cmd(
                 f"No saved atomize analysis exists for '{name}'. "
                 "Run 'mem impact atomize' or 'mem atomize' first."
             )
-        if (
-            session.context_uid != direct_ctx.uid
-            or session.context_name != name
-        ):
+        if session.context_uid != direct_ctx.uid or session.context_name != name:
             raise AtomizeImpactError(
-                "The saved atomize analysis does not match this Context's "
-                "identity."
+                "The saved atomize analysis does not match this Context's identity."
             )
         already_applied = atomize_analysis_was_applied(
             store,
@@ -906,13 +967,9 @@ def cmd(
             )
         workbench = store.load_atomize_workbench(session)
         planned_output = (
-            workbench.output_context_name
-            if workbench is not None
-            else name
+            workbench.output_context_name if workbench is not None else name
         )
-        applying_planned_output = (
-            save and save_as is None and planned_output != name
-        )
+        applying_planned_output = save and save_as is None and planned_output != name
         if applying_planned_output:
             save_as = planned_output
         if save_as is not None and store.context_exists(save_as):
@@ -938,19 +995,18 @@ def cmd(
                 f"Planned atomize Output '{save_as}' already exists and is "
                 "not the exact applied result of this session."
             )
-        workbench_frames = {}
-        if workbench is not None and workbench.answered_count:
-            (
-                workbench_frames,
-                _workbench_origins,
-            ) = atomize_workbench_declared_frames(
-                workbench,
-                session,
+        incorporable_response_count = _incorporable_workbench_response_count(
+            session,
+            workbench,
+        )
+        if (
+            incorporable_response_count
+            and workbench is not None
+            and (
+                session.source_review_uid != workbench.uid
+                or session.source_review_digest
+                != atomize_workbench_response_digest(workbench)
             )
-        if workbench_frames and (
-            session.source_review_uid != workbench.uid
-            or session.source_review_digest
-            != atomize_workbench_response_digest(workbench)
         ):
             raise AtomizeImpactError(
                 "Saved atomize workbench responses have not been "
@@ -965,9 +1021,8 @@ def cmd(
             and atomize_review_declared_frames(review)
         )
         if review_has_comments and (
-                session.source_review_uid != review.uid
-                or session.source_review_digest
-                != review_response_digest(review)
+            session.source_review_uid != review.uid
+            or session.source_review_digest != review_response_digest(review)
         ):
             if atomize_review_matches_analysis(
                 review,
@@ -1018,6 +1073,7 @@ def cmd(
                 )
                 store.save_atomize_workbench(workbench)
 
+        application_audit = _atomize_application_audit(session, workbench)
         if save_as is not None:
             applied_session, result = _apply_to_new_context(
                 store=store,
@@ -1025,6 +1081,7 @@ def cmd(
                 destination_name=save_as,
                 session=session,
                 expected_current=context_snapshot.current_name,
+                application_audit=application_audit,
             )
             applied_name = save_as
             created = True
@@ -1032,8 +1089,7 @@ def cmd(
             inbound = _inbound_split_references(store, session)
             if inbound:
                 locations = ", ".join(
-                    f"{owner}#{reference.uid[:8]}"
-                    for owner, reference in inbound
+                    f"{owner}#{reference.uid[:8]}" for owner, reference in inbound
                 )
                 raise AtomizeImpactError(
                     "Cannot split a Memory with inbound memory references in "
@@ -1052,18 +1108,19 @@ def cmd(
                         "ruleset_version": session.ruleset_version,
                         "source_review_uid": session.source_review_uid,
                         "source_review_digest": session.source_review_digest,
-                        "declared_frame_count": len(
-                            session.declared_frames
-                        ),
+                        "declared_frame_count": len(session.declared_frames),
                         "split_count": result.split_count,
                         "child_count": result.child_count,
                         "preserved_count": result.preserved_count,
+                        **application_audit,
                         "trace": result.trace_metadata(),
                     },
                     description=(
                         f"Applied atomize [{session.uid[:8]}]: "
                         f"{result.split_count} splits -> {result.child_count} "
-                        f"children; {result.preserved_count} preserved"
+                        f"children; {result.preserved_count} preserved; "
+                        f"{application_audit['unresolved_at_apply_count']} "
+                        "unresolved at apply"
                     ),
                 ),
             )
@@ -1089,4 +1146,5 @@ def cmd(
         context_name=applied_name,
         result=result,
         created=created,
+        unresolved_at_apply_count=int(application_audit["unresolved_at_apply_count"]),
     )

@@ -246,6 +246,9 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         # Lavender is reserved for actual Memory objects, not report prose.
         "memory-object": "fg:#cad3f5",
         "memory-object.focused": "fg:#8bd5ff bold",
+        # Compact semantic references use purple rather than the blue focus
+        # color. Memory-shaped reference rows still use memory-object lavender.
+        "reference": "fg:#c6a0f6",
         # Impact treatment colors classify the operation applied to one
         # Memory; the surrounding Memory row owns the separate blue focus.
         "impact.keep": "fg:#a6da95 bold",

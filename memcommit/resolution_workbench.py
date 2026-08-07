@@ -4,6 +4,7 @@ The common workbench owns presentation identity and navigation only.  Meld,
 Atomize, Update, and a future Reconcile adapter remain authoritative for their
 semantic artifacts, provider calls, persistence, reanalysis, and mutation.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -23,6 +24,10 @@ ResolutionCapability = Literal[
     "DEFER",
     "ACCEPT",
 ]
+ResolutionItemRole = Literal["DECISION", "OPTIONAL_REVIEW", "CHANGE"]
+ResolutionItemObligation = Literal["REQUIRED", "OPTIONAL", "NONE"]
+ResolutionResponseState = Literal["OPEN", "ANSWERED", "NOT_APPLICABLE"]
+ResolutionAcceptMode = Literal["CHANGES", "AS_IS"]
 ResolutionActionKind = Literal[
     "SUBMIT_ITEM",
     "SUBMIT_ALL",
@@ -121,12 +126,41 @@ class ResolutionOption:
 
 
 @dataclass(frozen=True)
+class ResolutionMemoryRow:
+    """One visible Memory-shaped row backed by an optional semantic ref."""
+
+    ordinal: int
+    content: str
+    evidence: tuple[str, ...] = ()
+    ref: ResultRef | None = None
+
+    def __post_init__(self) -> None:
+        if (
+            isinstance(self.ordinal, bool)
+            or not isinstance(self.ordinal, int)
+            or self.ordinal < 1
+        ):
+            raise ResolutionWorkbenchError("Invalid resolution Memory ordinal.")
+        _text(self.content, "resolution Memory row content")
+        evidence = _items(self.evidence, str, "resolution Memory row evidence")
+        for span in evidence:
+            _text(span, "resolution Memory row evidence span")
+        if len(set(evidence)) != len(evidence):
+            raise ResolutionWorkbenchError(
+                "Duplicate resolution Memory row evidence span."
+            )
+        if self.ref is not None and not isinstance(self.ref, ResultRef):
+            raise ResolutionWorkbenchError("Invalid resolution Memory row reference.")
+
+
+@dataclass(frozen=True)
 class ResolutionDetailBlock:
     """One adapter-authored detail block rendered without reinterpretation."""
 
     heading: str
     text: str
     refs: tuple[ResultRef, ...] = ()
+    memory_rows: tuple[ResolutionMemoryRow, ...] = ()
 
     def __post_init__(self) -> None:
         _text(
@@ -135,12 +169,23 @@ class ResolutionDetailBlock:
             limit=RESOLUTION_LABEL_LIMIT,
             one_line=True,
         )
-        _text(self.text, "resolution detail text")
+        rows = _items(
+            self.memory_rows,
+            ResolutionMemoryRow,
+            "resolution detail Memory rows",
+        )
+        _text(self.text, "resolution detail text", empty=bool(rows))
+        if not self.text and not rows:
+            raise ResolutionWorkbenchError(
+                "A resolution detail block requires text or Memory rows."
+            )
+        if len({row.ordinal for row in rows}) != len(rows):
+            raise ResolutionWorkbenchError(
+                "Duplicate resolution detail Memory ordinal."
+            )
         refs = _items(self.refs, ResultRef, "resolution detail references")
         if len(set(refs)) != len(refs):
-            raise ResolutionWorkbenchError(
-                "Duplicate resolution detail reference."
-            )
+            raise ResolutionWorkbenchError("Duplicate resolution detail reference.")
 
 
 @dataclass(frozen=True)
@@ -279,6 +324,10 @@ class ResolutionItem:
     priority: str
     title: str
     summary: str
+    role: ResolutionItemRole = "DECISION"
+    obligation: ResolutionItemObligation | None = None
+    response_state: ResolutionResponseState = "OPEN"
+    response_text: str = ""
     question: str = ""
     options: tuple[ResolutionOption, ...] = ()
     blocks: tuple[ResolutionDetailBlock, ...] = ()
@@ -289,6 +338,7 @@ class ResolutionItem:
     outcome_refs: tuple[ResultRef, ...] = ()
     unresolved_refs: tuple[ResultRef, ...] = ()
     issue_presentation: ResolutionIssuePresentation | None = None
+    kind_label: str | None = None
 
     def __post_init__(self) -> None:
         for value, label in (
@@ -309,6 +359,26 @@ class ResolutionItem:
                 one_line=True,
             )
         _text(self.summary, "resolution item summary")
+        if self.role not in {"DECISION", "OPTIONAL_REVIEW", "CHANGE"}:
+            raise ResolutionWorkbenchError("Invalid resolution item role.")
+        if self.obligation not in {None, "REQUIRED", "OPTIONAL", "NONE"}:
+            raise ResolutionWorkbenchError(
+                "Invalid resolution item response obligation."
+            )
+        if self.response_state not in {"OPEN", "ANSWERED", "NOT_APPLICABLE"}:
+            raise ResolutionWorkbenchError("Invalid resolution item response state.")
+        _text(
+            self.response_text,
+            "resolution item response text",
+            empty=True,
+        )
+        if (
+            self.response_state == "NOT_APPLICABLE"
+            and self.effective_obligation != "NONE"
+        ):
+            raise ResolutionWorkbenchError(
+                "A non-applicable response requires no review obligation."
+            )
         _text(self.question, "resolution item question", empty=True)
         options = _items(
             self.options,
@@ -325,9 +395,8 @@ class ResolutionItem:
             or not isinstance(self.decision_block_index, int)
             or not 0 <= self.decision_block_index <= len(blocks)
         ):
-            raise ResolutionWorkbenchError(
-                "Invalid resolution decision block index."
-            )
+            raise ResolutionWorkbenchError("Invalid resolution decision block index.")
+
         trace_groups = (
             self.evidence_refs,
             self.judgment_refs,
@@ -341,9 +410,7 @@ class ResolutionItem:
                 "resolution trace references",
             )
             if len(set(validated_refs)) != len(validated_refs):
-                raise ResolutionWorkbenchError(
-                    "Duplicate resolution trace reference."
-                )
+                raise ResolutionWorkbenchError("Duplicate resolution trace reference.")
         if any(trace_groups) and not (self.evidence_refs and self.judgment_refs):
             raise ResolutionWorkbenchError(
                 "A resolution trace requires evidence and judgment references."
@@ -352,19 +419,20 @@ class ResolutionItem:
             self.issue_presentation,
             ResolutionIssuePresentation,
         ):
-            raise ResolutionWorkbenchError(
-                "Invalid resolution issue presentation."
+            raise ResolutionWorkbenchError("Invalid resolution issue presentation.")
+        if self.kind_label is not None:
+            _text(
+                self.kind_label,
+                "resolution item kind label",
+                limit=RESOLUTION_LABEL_LIMIT,
+                one_line=True,
             )
         if len({option.uid for option in options}) != len(options):
-            raise ResolutionWorkbenchError(
-                "Duplicate resolution option uid."
-            )
+            raise ResolutionWorkbenchError("Duplicate resolution option uid.")
         if self.selected_option_uid is not None and self.selected_option_uid not in {
             option.uid for option in options
         }:
-            raise ResolutionWorkbenchError(
-                "Selected resolution option is unavailable."
-            )
+            raise ResolutionWorkbenchError("Selected resolution option is unavailable.")
         if not blocks and not self.question and not options:
             # A compact planned change can still be expanded to its summary.
             object.__setattr__(
@@ -378,10 +446,29 @@ class ResolutionItem:
                 ),
             )
 
+    @property
+    def effective_obligation(self) -> ResolutionItemObligation:
+        """Return explicit review semantics, with a legacy construction fallback.
+
+        Production adapters set ``obligation`` directly.  The fallback keeps
+        older callers and small test fixtures compatible while the shared
+        shell stops treating every non-REQUIRED row as an optional question.
+        """
+
+        if self.obligation is not None:
+            return self.obligation
+        if self.role == "CHANGE":
+            return "NONE"
+        return "REQUIRED" if self.priority == "REQUIRED" else "OPTIONAL"
+
+    @property
+    def display_kind(self) -> str:
+        """Return an operation-owned label without exposing storage tokens."""
+
+        return self.kind_label or self.kind.replace("_", " ")
+
     def option(self, option_uid: str) -> ResolutionOption:
-        matches = [
-            option for option in self.options if option.uid == option_uid
-        ]
+        matches = [option for option in self.options if option.uid == option_uid]
         if len(matches) != 1:
             raise ResolutionWorkbenchError(
                 f"No resolution option matches '{option_uid}'."
@@ -438,9 +525,7 @@ class ResolutionWorkbenchAction:
 
     def __post_init__(self) -> None:
         if self.kind not in _ACTION_KINDS:
-            raise ResolutionWorkbenchError(
-                "Invalid resolution workbench action."
-            )
+            raise ResolutionWorkbenchError("Invalid resolution workbench action.")
         if self.item_uid is not None:
             _text(
                 self.item_uid,
@@ -492,6 +577,8 @@ class ResolutionWorkbenchView:
     results: tuple[ResolutionResult, ...]
     capabilities: frozenset[ResolutionCapability] = frozenset()
     accept_enabled: bool = False
+    accept_mode: ResolutionAcceptMode = "CHANGES"
+    unresolved_at_apply_count: int = 0
     input_locked: bool = False
     report_items_summary: ResolutionDetailBlock | None = None
 
@@ -524,21 +611,16 @@ class ResolutionWorkbenchView:
             self.report_items_summary,
             ResolutionDetailBlock,
         ):
-            raise ResolutionWorkbenchError(
-                "Invalid resolution report-items summary."
-            )
+            raise ResolutionWorkbenchError("Invalid resolution report-items summary.")
         if len({item.uid for item in items}) != len(items):
-            raise ResolutionWorkbenchError(
-                "Duplicate resolution item uid."
-            )
+            raise ResolutionWorkbenchError("Duplicate resolution item uid.")
         if len({result.uid for result in results}) != len(results):
-            raise ResolutionWorkbenchError(
-                "Duplicate resolution result uid."
-            )
-        if not isinstance(self.capabilities, frozenset) or not self.capabilities <= _CAPABILITIES:
-            raise ResolutionWorkbenchError(
-                "Invalid resolution capabilities."
-            )
+            raise ResolutionWorkbenchError("Duplicate resolution result uid.")
+        if (
+            not isinstance(self.capabilities, frozenset)
+            or not self.capabilities <= _CAPABILITIES
+        ):
+            raise ResolutionWorkbenchError("Invalid resolution capabilities.")
         if self.accept_enabled and "ACCEPT" not in self.capabilities:
             raise ResolutionWorkbenchError(
                 "Enabled acceptance requires the ACCEPT capability."
@@ -546,20 +628,30 @@ class ResolutionWorkbenchView:
         # Readiness belongs to the adapter.  An empty list can be either ready
         # (for example a zero-change directional Meld) or merely unassessed.
         if not isinstance(self.accept_enabled, bool):
+            raise ResolutionWorkbenchError("Invalid resolution acceptance state.")
+        if self.accept_mode not in {"CHANGES", "AS_IS"}:
+            raise ResolutionWorkbenchError("Invalid resolution acceptance mode.")
+        if self.accept_mode == "AS_IS" and not self.accept_enabled:
             raise ResolutionWorkbenchError(
-                "Invalid resolution acceptance state."
+                "Apply-as-is mode requires enabled acceptance."
+            )
+        if (
+            isinstance(self.unresolved_at_apply_count, bool)
+            or not isinstance(self.unresolved_at_apply_count, int)
+            or self.unresolved_at_apply_count < 0
+        ):
+            raise ResolutionWorkbenchError("Invalid unresolved-at-apply count.")
+        if self.accept_mode != "AS_IS" and self.unresolved_at_apply_count:
+            raise ResolutionWorkbenchError(
+                "Only apply-as-is mode may report unresolved application state."
             )
         if not isinstance(self.input_locked, bool):
-            raise ResolutionWorkbenchError(
-                "Invalid resolution input-lock state."
-            )
+            raise ResolutionWorkbenchError("Invalid resolution input-lock state.")
 
     def item(self, item_uid: str) -> ResolutionItem:
         matches = [item for item in self.items if item.uid == item_uid]
         if len(matches) != 1:
-            raise ResolutionWorkbenchError(
-                f"No resolution item matches '{item_uid}'."
-            )
+            raise ResolutionWorkbenchError(f"No resolution item matches '{item_uid}'.")
         return matches[0]
 
     def validate_action(
@@ -569,9 +661,7 @@ class ResolutionWorkbenchView:
         """Reject stale, unavailable, or capability-crossing shell output."""
         if action.kind == "CLOSE":
             if action.item_uid is not None or action.option_uid is not None:
-                raise ResolutionWorkbenchError(
-                    "Close cannot target a resolution item."
-                )
+                raise ResolutionWorkbenchError("Close cannot target a resolution item.")
             return action
         if self.input_locked:
             raise ResolutionWorkbenchError(
@@ -583,9 +673,7 @@ class ResolutionWorkbenchView:
             )
         if action.kind == "SUBMIT_ITEM":
             if action.item_uid is None:
-                raise ResolutionWorkbenchError(
-                    "An item response requires an item uid."
-                )
+                raise ResolutionWorkbenchError("An item response requires an item uid.")
             item = self.item(action.item_uid)
             if action.option_uid is not None:
                 item.option(action.option_uid)
@@ -599,13 +687,9 @@ class ResolutionWorkbenchView:
                 "A whole-workbench action cannot target one item."
             )
         if action.kind == "SUBMIT_ALL" and not action.comment.strip():
-            raise ResolutionWorkbenchError(
-                "A whole-set response requires a comment."
-            )
+            raise ResolutionWorkbenchError("A whole-set response requires a comment.")
         if action.kind == "ACCEPT" and not self.accept_enabled:
-            raise ResolutionWorkbenchError(
-                "This resolution is not ready to accept."
-            )
+            raise ResolutionWorkbenchError("This resolution is not ready to accept.")
         return action
 
 

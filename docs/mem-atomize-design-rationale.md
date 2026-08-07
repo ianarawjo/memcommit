@@ -537,14 +537,29 @@ mem impact atomize --with-review
 ```
 
 The interactive Atomize workbench exposes that same boundary through the
-shared `TO DO` progression. Once every required finding has a saved response,
-`MATERIALIZE` performs the reviewed reanalysis; it does not mutate the
-Context. The resulting fresh workbench becomes `READY_TO_APPLY` only when it
-is bound to the prior response UID/digest and has not itself been edited.
-`APPLY` then enters the ordinary `mem atomize --save` validation and
-checkpoint path. This keeps reviewed semantic materialization and Context
-mutation as two separately visible Enter actions while avoiding a dead-end
-review screen.
+shared `TO DO` progression. Once any eligible unary finding has a saved
+response, `INCORPORATE RESPONSES` performs one reviewed reanalysis; it does not
+mutate the Context. While that is the current next action, the same control
+appears directly below the open finding's `RESPONSE`; both routes submit the
+complete saved response frame. The resulting fresh workbench becomes
+`READY_TO_APPLY` when it has no newly answered unary response. `APPLY CHANGES`
+or `APPLY AS IS` then enters the ordinary `mem atomize --save` validation and
+checkpoint path. This keeps response incorporation and Context mutation as two
+separately visible Enter actions without requiring responses for untouched
+findings.
+
+An initial current analysis with no saved unary response is already an exact
+proposal. A proposal containing only suggested splits proceeds directly to
+`APPLY CHANGES`. Ambiguity, Atomize Uncertainty, or Conflict instead changes
+the label to `APPLY AS IS` and records the unresolved state; it does not
+request an empty provider reanalysis. Once a unary response is saved, Apply is
+removed until that response has been incorporated into a fresh analysis.
+
+Proposed children render as lavender Memory rows in provider order using
+`[n] content`. Each child is a separate Up/Down stop, and Enter expands only
+that child's evidence. Their stable `atomize-child` refs remain typed
+provenance but are not repeated as raw technical `kind:key` strings in the
+Viewer.
 
 That explicit reanalysis sends each eligible response only as the
 `declared_frame` of its own source Memory. If any answered conflict issue is
@@ -604,7 +619,21 @@ eligible unary responses, application additionally requires the analysis's
 recorded workbench UID and response digest to match; unincorporated responses
 block application. Pair-shaped conflict responses remain staged for future
 reconciliation instead of becoming unary declared frames; their presence also
-prevents `--with-review` from replacing the only saved workbench.
+prevents `--with-review` from replacing the only saved workbench, but does not
+block applying the current atomization proposal.
+
+Unanswered Ambiguity, Atomize Uncertainty, and Conflict findings are not
+silently classified as deferred. They make the shared boundary read
+`APPLY AS IS`. The current exact proposal still applies: every `COMPOSITE`
+source is split, an `UNCERTAIN` source remains unchanged because it has no
+proposed children, and Conflict remains a semantic finding rather than an
+Atomize transformation. The checkpoint records `application_mode=AS_IS`, the
+complete unresolved-at-apply finding summary, and the exact workbench response
+digest visible at approval. It deliberately omits unapplied free-form response
+text. Immediate recovery uses the ordinary `mem undo` command; after later
+commands, restoration remains whole-Context history recovery rather than a
+selective inverse that preserves arbitrary later edits. `--save-as` remains
+the safer experiment when the source must stay untouched.
 
 Saved source positions are ordinals within the direct-Memory frame, not slots
 among every pointer in the Context. A read-only direct load may intentionally

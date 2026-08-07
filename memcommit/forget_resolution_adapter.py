@@ -38,10 +38,11 @@ class ForgetResolutionWorkbenchAdapter:
             source_ref = ResultRef("context-memory", f"{review.context_name}:{source.uid}")
             judgment_ref = ResultRef("forget-decision", candidate.uid)
             outcome_ref = ResultRef("forget-result", candidate.uid)
+            selected_action, selected_content = candidate.selected_action()
             result_text = (
                 "This Source Memory will be removed from its current Context."
-                if decision.action == "DROP"
-                else decision.proposed_content
+                if selected_action == "DROP"
+                else selected_content
             )
             items.append(
                 ResolutionItem(
@@ -51,6 +52,14 @@ class ForgetResolutionWorkbenchAdapter:
                     priority="REQUIRED",
                     title=" ".join(source.content.split()),
                     summary=decision.rationale,
+                    role="DECISION",
+                    obligation="REQUIRED",
+                    response_state="ANSWERED",
+                    response_text=(
+                        candidate.custom_content
+                        if candidate.selection == "CUSTOM"
+                        else ""
+                    ),
                     question="Choose what the Source Context should remember.",
                     options=(
                         ResolutionOption(
@@ -114,7 +123,7 @@ class ForgetResolutionWorkbenchAdapter:
                     ),
                 )
             )
-            action, content = candidate.selected_action()
+            action, content = selected_action, selected_content
             results.append(
                 ResolutionResult(
                     uid=candidate.uid,

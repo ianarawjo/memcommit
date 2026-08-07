@@ -18,6 +18,8 @@ def test_focus_rows_and_semantic_sections_share_one_controller():
 
     assert navigation.pane == "items"
     assert navigation.move_row(4, 2) == 2
+    assert navigation.preview_selected_row() == 2
+    assert navigation.pane == "items"
     navigation.open_selected(sections)
     assert navigation.pane == "viewer"
     assert navigation.viewer_row_index == 2
