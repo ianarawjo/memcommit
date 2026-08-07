@@ -988,7 +988,11 @@ def run_atomize_workbench_shell(
             if not saved_in_round["value"]:
                 save(session)
             return session
-        if workflow_actions and action.kind in {"SUBMIT_ALL", "ACCEPT"}:
+        if workflow_actions and action.kind in {
+            "SUBMIT_ALL",
+            "INCORPORATE_AND_APPLY",
+            "ACCEPT",
+        }:
             return action
         if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
             raise ValueError(

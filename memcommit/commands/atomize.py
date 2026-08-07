@@ -320,13 +320,19 @@ def _resume_selected_atomize(
         show_all=show_all,
         workflow_actions=not applied,
     )
-    if action is not None and action.kind == "SUBMIT_ALL":
+    if action is not None and action.kind in {
+        "SUBMIT_ALL",
+        "INCORPORATE_AND_APPLY",
+    }:
         opened = _materialize_reviewed_workbench(
             store=store,
             context=context,
             analysis=analysis,
             workbench=workbench,
         )
+        if action.kind == "INCORPORATE_AND_APPLY":
+            cmd(save=True, context_name=context.name, show_all=show_all)
+            return
         _resume_selected_atomize(
             store=store,
             analysis_uid=opened.analysis.uid,
@@ -889,7 +895,7 @@ def cmd(
                 )
                 if action is None:
                     break
-                if action.kind == "SUBMIT_ALL":
+                if action.kind in {"SUBMIT_ALL", "INCORPORATE_AND_APPLY"}:
                     opened = _materialize_reviewed_workbench(
                         store=store,
                         context=direct_ctx,
@@ -897,6 +903,10 @@ def cmd(
                         workbench=opened.workbench,
                     )
                     session = opened.analysis
+                    if action.kind == "INCORPORATE_AND_APPLY":
+                        save = True
+                        applying = True
+                        break
                     continue
                 if action.kind == "ACCEPT":
                     save = True

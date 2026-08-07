@@ -536,24 +536,29 @@ Eligible unary responses enter semantic analysis only through:
 mem impact atomize --with-review
 ```
 
-The interactive Atomize workbench exposes that same boundary through the
-shared `TO DO` progression. Once any eligible unary finding has a saved
-response, `INCORPORATE RESPONSES` performs one reviewed reanalysis; it does not
-mutate the Context. While that is the current next action, the same control
-appears directly below the open finding's `RESPONSE`; both routes submit the
-complete saved response frame. The resulting fresh workbench becomes
-`READY_TO_APPLY` when it has no newly answered unary response. `APPLY CHANGES`
-or `APPLY AS IS` then enters the ordinary `mem atomize --save` validation and
-checkpoint path. This keeps response incorporation and Context mutation as two
-separately visible Enter actions without requiring responses for untouched
-findings.
+The interactive Atomize workbench exposes application through
+`TO DO → REVIEW AND APPLY`; entering To Do never mutates the Context. With no
+unincorporated response, the final action is `APPLY` or `APPLY AS IS`. Once an
+eligible unary finding has a saved response, the final action becomes
+`INCORPORATE AND APPLY`: one explicit approval performs reviewed reanalysis
+and then enters the ordinary `mem atomize --save` freshness, safety, and
+checkpoint path. This intentionally removes the second repetitive approval;
+the final screen discloses that the revised proposal will apply without being
+rendered again. Escape/Backspace returns without either step, and `mem undo`
+remains the recovery boundary.
+
+The narrower `INCORPORATE RESPONSES` control below the open finding's
+`RESPONSE` still submits the complete response frame without applying. It
+exists for a person who wants to inspect the revised proposal before returning
+to Review and Apply.
 
 An initial current analysis with no saved unary response is already an exact
-proposal. A proposal containing only suggested splits proceeds directly to
-`APPLY CHANGES`. Ambiguity, Atomize Uncertainty, or Conflict instead changes
-the label to `APPLY AS IS` and records the unresolved state; it does not
-request an empty provider reanalysis. Once a unary response is saved, Apply is
-removed until that response has been incorporated into a fresh analysis.
+proposal. A proposal with any open optional finding, including a suggested
+split, offers `APPLY AS IS`; a proposal with no open review offers `APPLY`.
+Ambiguity, Atomize Uncertainty, and Conflict continue to record their
+unresolved state at application and never request an empty provider
+reanalysis. Once a unary response is saved, exact Apply is replaced by the
+compound incorporation action until a fresh analysis exists.
 
 Proposed children render as lavender Memory rows in provider order using
 `[n] content`. Each child is a separate Up/Down stop, and Enter expands only

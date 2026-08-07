@@ -67,7 +67,7 @@ def test_resolution_impact_is_rendered_immediately_before_operation_apply():
     )
 
     assert rendered.index("IMPACT · LOCAL OUTBOUND DRAFT · NOT SENT") < rendered.index(
-        "APPLY CHANGES · SEVER"
+        "REVIEW AND APPLY"
     )
     assert "PROPOSED EFFECTS" not in rendered
     assert "[ADD] [result-1] Add the reviewed Memory." in rendered
@@ -387,7 +387,7 @@ def test_seeded_compare_impact_precedes_meld_apply():
         impact,
     )
 
-    assert lines.index("IMPACT · COMPARE") < lines.index("APPLY CHANGES · MELD")
+    assert lines.index("IMPACT · COMPARE") < lines.index("REVIEW AND APPLY")
     assert "WHAT DIFFERS\nOne exact difference." in lines
 
 
@@ -412,9 +412,8 @@ def test_split_apply_row_accepts_without_whole_set_strategies():
     )
 
     with create_pipe_input() as pipe_input:
-        # Apply is the state-derived control in To Do, directly before Items
-        # in the reverse focus cycle.
-        pipe_input.send_text("\x1b[Z\r")
+        # To Do opens the final review; End reaches its Apply action.
+        pipe_input.send_text("\x1b[Z\r\x1b[F\r")
         action = run_resolution_workbench_shell(
             view,
             app_input=pipe_input,

@@ -214,9 +214,9 @@ inspected and answered but may remain open under the operation's
 remaining-item materialization policy.
 
 Acceptance has two presentation modes while retaining the same UID-bound
-`ACCEPT` action. `CHANGES` renders the ordinary `APPLY CHANGES` boundary.
-`AS_IS` renders `APPLY AS IS`, counts still-open Decision findings separately
-from unvisited optional proposal reviews, and states that the unresolved
+`ACCEPT` action. Both appear only inside `REVIEW AND APPLY`: `CHANGES` renders
+`APPLY`, while `AS_IS` renders `APPLY AS IS`, counts still-open Decision
+findings separately from unvisited optional proposal reviews, and states that the unresolved
 findings will be recorded at application. The adapter, not the shell, selects
 this mode. It is approval of the exact current proposal, not a synthetic
 answer, deferment decision, or permission to invent a missing result.
@@ -289,10 +289,12 @@ full assessment replacement and therefore does not reset common navigation.
 Atomize separates semantic attention from progression obligation. Its
 high-attention Ambiguity, Uncertainty, and Conflict rows are OPTIONAL for
 progression: unanswered rows do not force a provider turn. An answered unary
-response still disables acceptance until one complete incorporation turn has
-produced a fresh proposal. With no such response pending, detected unresolved
-meaning selects `AS_IS`; a proposal containing only unreviewed suggested
-splits keeps ordinary `CHANGES`. Pairwise Conflict responses remain retained
+response still disables exact acceptance until one complete incorporation
+turn has produced a fresh proposal, but Atomize may authorize the explicit
+compound `INCORPORATE_AND_APPLY` action. With no such response pending,
+detected unresolved meaning or an open suggested-split review selects
+`AS_IS`; only a proposal with no open review keeps ordinary `CHANGES`.
+Pairwise Conflict responses remain retained
 review evidence because Atomize cannot truthfully consume them as unary
 declared frames, but their presence does not prevent applying the current
 structural proposal.

@@ -2843,7 +2843,8 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\r\rcKeep all supported details.\x13\t\t\r"
+            "\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\r\rcKeep all supported details."
+            "\x13\t\t\r\x1b[F\r"
         )
         action = run_meld_shell(
             session,
@@ -2859,7 +2860,7 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     assert comparison.issues[0].title in action.comment
 
 
-def test_ready_meld_applies_from_report_without_separate_review_screen():
+def test_ready_meld_applies_after_the_shared_final_review_screen():
     left = ops.init("left/report-apply")
     ops.add(left, "Cash compensation includes travel time.")
     right = ops.init("right/report-apply")
@@ -2885,9 +2886,9 @@ def test_ready_meld_applies_from_report_without_separate_review_screen():
     assert session.state == "READY_TO_APPLY"
 
     with create_pipe_input() as pipe_input:
-        # To Do owns the actionable APPLY control; Shift-Tab reaches it from
-        # Items and Enter returns ACCEPT without another review surface.
-        pipe_input.send_text("\x1b[Z\r")
+        # To Do opens Review and Apply; the final Enter confirms the exact
+        # ready proposal.
+        pipe_input.send_text("\x1b[Z\r\x1b[F\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -2952,7 +2953,7 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
             "\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\r\r"
-            "cKeep the rate.\nKeep every payment method.\r\t\t\r"
+            "cKeep the rate.\nKeep every payment method.\r\t\t\r\x1b[F\r"
         )
         action = run_meld_shell(
             session,
@@ -2986,7 +2987,9 @@ def test_meld_back_key_collapses_detail_before_leaving_the_workbench(
     with create_pipe_input() as pipe_input:
         # The first Down opens conflict 1. Either back key returns to REPORT
         # instead of closing, then the conflict can be selected again.
-        pipe_input.send_text(f"\x1b[B\r{back_key}\x1b[B\rcStill reviewing.\x13\t\t\r")
+        pipe_input.send_text(
+            f"\x1b[B\r{back_key}\x1b[B\rcStill reviewing.\x13\t\t\r\x1b[F\r"
+        )
         action = run_meld_shell(
             session,
             app_input=pipe_input,

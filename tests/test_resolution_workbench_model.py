@@ -46,9 +46,7 @@ def _view(
     capabilities: frozenset[str] = frozenset(),
     accept_enabled: bool = False,
 ) -> ResolutionWorkbenchView:
-    projected_items = (
-        tuple(_item(uid) for uid in uids) if items is None else items
-    )
+    projected_items = tuple(_item(uid) for uid in uids) if items is None else items
     return ResolutionWorkbenchView(
         operation="MELD",
         artifact_uid="meld-1",
@@ -167,6 +165,21 @@ def test_empty_view_readiness_is_owned_by_the_adapter() -> None:
         not_ready.validate_action(accept)
     assert ready.validate_action(accept) is accept
     assert not_ready.items == ready.items == ()
+
+
+def test_compound_incorporate_and_apply_requires_explicit_capability_and_guidance():
+    action = ResolutionWorkbenchAction(
+        kind="INCORPORATE_AND_APPLY",
+        comment="Use the saved responses, then apply the resulting proposal.",
+    )
+    enabled = _view(capabilities=frozenset({"INCORPORATE_AND_APPLY"}))
+
+    assert enabled.validate_action(action) is action
+
+    with pytest.raises(ResolutionWorkbenchError, match="unavailable"):
+        _view().validate_action(action)
+    with pytest.raises(ResolutionWorkbenchError, match="requires a comment"):
+        enabled.validate_action(ResolutionWorkbenchAction(kind="INCORPORATE_AND_APPLY"))
 
 
 def test_navigation_preserves_uid_across_add_and_reorder_then_clamps_ordinal() -> None:

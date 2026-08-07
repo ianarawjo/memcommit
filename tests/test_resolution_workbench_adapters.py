@@ -23,6 +23,7 @@ from memcommit.atomize_workbench import create_atomize_workbench
 from memcommit.context import Context, Memory
 from memcommit.commands.resolution_workbench_shell import (
     resolution_viewer_fragments,
+    session_review_action_view,
     session_todo_view,
 )
 from memcommit.meld import MeldAssessment, MeldSession
@@ -416,7 +417,7 @@ def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() 
 
     ready = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
 
-    assert ready.status == "READY_TO_APPLY"
+    assert ready.status == "READY_TO_APPLY_AS_IS"
     assert ready.accept_enabled is True
     assert ready.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"})
 
@@ -426,6 +427,11 @@ def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() 
     assert edited.status == "REVIEWING"
     assert edited.accept_enabled is False
     assert "ACCEPT" not in edited.capabilities
+    assert "INCORPORATE_AND_APPLY" in edited.capabilities
+    assert (
+        session_review_action_view(edited, {}, whole_set_available=True).kind
+        == "INCORPORATE AND APPLY"
+    )
 
 
 def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:
@@ -446,13 +452,18 @@ def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:
     assert view.accept_mode == "AS_IS"
     assert view.unresolved_at_apply_count == 1
     assert view.status == "READY_TO_APPLY_AS_IS"
-    assert todo.kind == "APPLY AS IS"
-    assert todo.label == "Apply Atomize as is"
-    assert todo.detail.startswith(
+    assert todo.kind == "REVIEW AND APPLY"
+    assert (
+        session_review_action_view(view, {}, whole_set_available=True).kind
+        == "APPLY AS IS"
+    )
+    assert todo.label == "Review final Atomize action"
+    final_action = session_review_action_view(view, {}, whole_set_available=True)
+    assert final_action.detail.startswith(
         "1 unresolved finding will be recorded at apply. "
         "1 optional review remains open."
     )
-    assert todo.detail.endswith("Recovery: mem undo.")
+    assert final_action.detail.endswith("Recovery: mem undo.")
 
 
 def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
@@ -474,9 +485,13 @@ def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
     )
 
     assert [item.priority for item in view.items] == ["REVIEW"]
-    assert todo.kind == "APPLY CHANGES"
-    assert todo.label == "Apply Atomize changes"
-    assert todo.detail.startswith("1 optional review remains open and will be skipped.")
+    assert todo.kind == "REVIEW AND APPLY"
+    assert (
+        session_review_action_view(view, {}, whole_set_available=True).kind
+        == "APPLY AS IS"
+    )
+    assert todo.label == "Review final Atomize action"
+    assert "APPLY AS IS is available" in todo.detail
 
 
 def test_initial_atomize_optional_split_is_already_ready_to_apply() -> None:
@@ -497,9 +512,13 @@ def test_initial_atomize_optional_split_is_already_ready_to_apply() -> None:
         read_only=False,
     )
 
-    assert view.status == "READY_TO_APPLY"
+    assert view.status == "READY_TO_APPLY_AS_IS"
     assert view.accept_enabled is True
-    assert todo.kind == "APPLY CHANGES"
+    assert todo.kind == "REVIEW AND APPLY"
+    assert (
+        session_review_action_view(view, {}, whole_set_available=True).kind
+        == "APPLY AS IS"
+    )
 
 
 def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> None:
@@ -591,7 +610,11 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
         review_and_apply=True,
         read_only=False,
     )
-    assert todo.kind == "APPLY CHANGES"
+    assert todo.kind == "REVIEW AND APPLY"
+    assert (
+        session_review_action_view(apply_view, {}, whole_set_available=True).kind
+        == "APPLY"
+    )
     assert "optional" not in todo.detail.lower()
 
     edit_item = view.items[0]

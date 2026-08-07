@@ -277,10 +277,19 @@ class AtomizeResolutionWorkbenchAdapter:
             }
             for finding in findings.values()
         )
-        unresolved_at_apply = unresolved_at_apply_count > 0
+        open_optional_review = any(
+            item.effective_obligation == "OPTIONAL" and item.response_state == "OPEN"
+            for item in projected
+        )
+        unresolved_at_apply = unresolved_at_apply_count > 0 or open_optional_review
         capabilities = {"SUBMIT_ITEM", "SUBMIT_ALL"}
         if ready_to_apply:
             capabilities.add("ACCEPT")
+        else:
+            # Atomize can honor one reviewed compound boundary: incorporate
+            # the saved unary response frame, revalidate the new proposal,
+            # and apply it without forcing a second approval screen.
+            capabilities.add("INCORPORATE_AND_APPLY")
         return ResolutionWorkbenchView(
             operation="ATOMIZE",
             artifact_uid=workbench.uid,

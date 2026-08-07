@@ -1348,7 +1348,7 @@ def test_shared_atomize_shell_preserves_durable_sort_toggle():
     assert workbench.sort_mode == "PRIORITY"
 
 
-def test_shared_atomize_todo_materializes_answered_review_before_apply():
+def test_shared_atomize_review_can_incorporate_and_apply_in_one_action():
     ctx = ops.init("workbench/materialize-todo")
     ops.add(ctx, "Use the same NFC.")
     analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
@@ -1358,8 +1358,8 @@ def test_shared_atomize_todo_materializes_answered_review_before_apply():
             workbench.response_for(issue.uid).text = "Use the reviewed local meaning."
 
     with create_pipe_input() as pipe_input:
-        # Items is the initial hub; Shift-Tab reaches the shared To Do row.
-        pipe_input.send_text("\x1b[Z\r")
+        # To Do opens Review and Apply; End reaches the compound final action.
+        pipe_input.send_text("\x1b[Z\r\x1b[F\r")
         action = run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1370,7 +1370,7 @@ def test_shared_atomize_todo_materializes_answered_review_before_apply():
             workflow_actions=True,
         )
 
-    assert action.kind == "SUBMIT_ALL"
+    assert action.kind == "INCORPORATE_AND_APPLY"
 
 
 def test_atomize_todo_materialization_creates_an_apply_ready_proposal(
@@ -1451,6 +1451,45 @@ def test_shared_atomize_apply_action_uses_the_normal_save_boundary(
     assert result.exit_code == 0, result.output
     assert "Applied atomize analysis" in result.output
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
+    assert store.load_direct(ctx.name).uid == ctx.uid
+
+
+def test_compound_atomize_action_incorporates_then_uses_normal_apply_boundary(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx, _memory = _init_context(store)
+    _patch_provider(monkeypatch, AggregateProvider())
+    opened = open_or_create_atomize_workbench(
+        store=store,
+        ctx=ctx,
+        provider_factory=AggregateProvider,
+    )
+    findings = _finding_map(opened.analysis)
+    unary = next(
+        issue
+        for issue in opened.workbench.ordered_issues()
+        if len(findings[issue.uid].source_uids) == 1
+    )
+    opened.workbench.response_for(unary.uid).text = "Use this local meaning."
+    store.save_atomize_workbench(opened.workbench)
+    checkpoints_before = store.list_checkpoints(ctx.name)
+    monkeypatch.setattr(
+        "memcommit.commands.atomize._present_workbench",
+        lambda **_kwargs: ResolutionWorkbenchAction(
+            kind="INCORPORATE_AND_APPLY",
+            comment="Incorporate every saved Atomize response and apply.",
+        ),
+    )
+
+    result = runner.invoke(app, ["atomize", "--context", ctx.name])
+
+    assert result.exit_code == 0, result.output
+    assert "Applied atomize analysis" in result.output
+    assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
+    checkpoint = store.list_checkpoints(ctx.name)[-1]
+    assert checkpoint["args"]["source_review_uid"] == opened.workbench.uid
     assert store.load_direct(ctx.name).uid == ctx.uid
 
 

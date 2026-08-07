@@ -20,6 +20,7 @@ RESOLUTION_KEY_LIMIT = 500
 ResolutionCapability = Literal[
     "SUBMIT_ITEM",
     "SUBMIT_ALL",
+    "INCORPORATE_AND_APPLY",
     "PRESERVE_ALL",
     "DEFER",
     "ACCEPT",
@@ -31,6 +32,7 @@ ResolutionAcceptMode = Literal["CHANGES", "AS_IS"]
 ResolutionActionKind = Literal[
     "SUBMIT_ITEM",
     "SUBMIT_ALL",
+    "INCORPORATE_AND_APPLY",
     "PRESERVE_ALL",
     "DEFER",
     "ACCEPT",
@@ -42,6 +44,7 @@ ResolutionActionKind = Literal[
 _CAPABILITIES = {
     "SUBMIT_ITEM",
     "SUBMIT_ALL",
+    "INCORPORATE_AND_APPLY",
     "PRESERVE_ALL",
     "DEFER",
     "ACCEPT",
@@ -686,7 +689,10 @@ class ResolutionWorkbenchView:
             raise ResolutionWorkbenchError(
                 "A whole-workbench action cannot target one item."
             )
-        if action.kind == "SUBMIT_ALL" and not action.comment.strip():
+        if (
+            action.kind in {"SUBMIT_ALL", "INCORPORATE_AND_APPLY"}
+            and not action.comment.strip()
+        ):
             raise ResolutionWorkbenchError("A whole-set response requires a comment.")
         if action.kind == "ACCEPT" and not self.accept_enabled:
             raise ResolutionWorkbenchError("This resolution is not ready to accept.")

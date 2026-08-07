@@ -136,6 +136,85 @@ def _review_count_text(
     return f"{count} optional {noun} {suffix}. "
 
 
+def session_review_action_view(
+    view: ResolutionWorkbenchView,
+    drafts: dict[str, tuple[str | None, str]],
+    *,
+    whole_set_available: bool,
+) -> SessionTodoView:
+    """Derive the action offered inside the Review and Apply surface."""
+
+    optional = tuple(
+        item
+        for item in view.items
+        if item.effective_obligation == "OPTIONAL"
+        and not _item_is_answered(item, drafts)
+    )
+    if view.accept_enabled:
+        if view.accept_mode == "AS_IS":
+            open_reviews = tuple(
+                item for item in optional if item.role == "OPTIONAL_REVIEW"
+            )
+            detail = ""
+            if view.unresolved_at_apply_count:
+                noun = "finding" if view.unresolved_at_apply_count == 1 else "findings"
+                detail += (
+                    f"{view.unresolved_at_apply_count} unresolved {noun} will be "
+                    "recorded at apply. "
+                )
+            if open_reviews:
+                detail += _review_count_text(
+                    len(open_reviews),
+                    "remains open",
+                    "remain open",
+                )
+            return SessionTodoView(
+                "APPLY AS IS",
+                f"Apply {view.operation.title()} as is",
+                detail + "Enter to apply the exact current proposal as is. "
+                "Recovery: mem undo.",
+            )
+        return SessionTodoView(
+            "APPLY",
+            f"Apply {view.operation.title()}",
+            "Enter to apply the exact current proposal shown in the report.",
+        )
+    if whole_set_available:
+        if "INCORPORATE_AND_APPLY" in view.capabilities:
+            return SessionTodoView(
+                "INCORPORATE AND APPLY",
+                f"Incorporate responses and apply {view.operation.title()}",
+                (_review_count_text(len(optional), "remains open") if optional else "")
+                + (
+                    "Enter to create a revised proposal from the saved responses "
+                    "and apply it after normal freshness and safety validation."
+                ),
+            )
+        return SessionTodoView(
+            "INCORPORATE RESPONSES",
+            "Incorporate saved responses",
+            (_review_count_text(len(optional), "may be skipped") if optional else "")
+            + (
+                "Enter to create a revised complete proposal. "
+                "No Context or Memory changes will be applied yet."
+            ),
+        )
+    return SessionTodoView(
+        "COMPLETE",
+        "Required review is complete",
+        (
+            _review_count_text(
+                len(optional),
+                "remains open",
+                "remain open",
+            )
+            if optional
+            else ""
+        )
+        + "No whole-set action is required; close or revisit an item.",
+    )
+
+
 def session_todo_view(
     view: ResolutionWorkbenchView,
     drafts: dict[str, tuple[str | None, str]],
@@ -187,53 +266,16 @@ def session_todo_view(
             optional_note + "Enter to open the first unresolved item.",
             tuple(item.uid for item in pending),
         )
-    if review_and_apply and view.accept_enabled:
-        if view.accept_mode == "AS_IS":
-            open_reviews = tuple(
-                item for item in unresolved if item.role == "OPTIONAL_REVIEW"
-            )
-            detail = ""
-            if view.unresolved_at_apply_count:
-                noun = "finding" if view.unresolved_at_apply_count == 1 else "findings"
-                detail += (
-                    f"{view.unresolved_at_apply_count} unresolved {noun} will be "
-                    "recorded at apply. "
-                )
-            if open_reviews:
-                detail += _review_count_text(
-                    len(open_reviews),
-                    "remains open",
-                    "remain open",
-                )
-            return SessionTodoView(
-                "APPLY AS IS",
-                f"Apply {view.operation.title()} as is",
-                detail + "Enter to apply the exact current proposal as is. "
-                "Recovery: mem undo.",
-            )
-        return SessionTodoView(
-            "APPLY CHANGES",
-            f"Apply {view.operation.title()} changes",
-            (
-                _review_count_text(
-                    len(optional),
-                    "remains open and will be skipped",
-                    "remain open and will be skipped",
-                )
-                if optional
-                else ""
-            )
-            + "Enter to apply the exact proposal shown above.",
+    if review_and_apply and (view.accept_enabled or whole_set_available):
+        action = session_review_action_view(
+            view,
+            drafts,
+            whole_set_available=whole_set_available,
         )
-    if review_and_apply and whole_set_available:
         return SessionTodoView(
-            "INCORPORATE RESPONSES",
-            "Incorporate saved responses",
-            (_review_count_text(len(optional), "may be skipped") if optional else "")
-            + (
-                "Enter to create a revised complete proposal. "
-                "No Context or Memory changes will be applied yet."
-            ),
+            "REVIEW AND APPLY",
+            f"Review final {view.operation.title()} action",
+            f"{action.kind} is available. Enter to review before anything changes.",
         )
     if not whole_set_available:
         return SessionTodoView(
@@ -257,10 +299,6 @@ def session_todo_view(
     )
 
 
-def _apply_heading(view: ResolutionWorkbenchView, kind: str) -> str:
-    return f"{kind} · {view.operation.upper()}"
-
-
 def _report_action(
     view: ResolutionWorkbenchView,
     drafts: dict[str, tuple[str | None, str]],
@@ -275,12 +313,7 @@ def _report_action(
         read_only=False,
         whole_set_available=bool(strategies),
     )
-    heading = (
-        _apply_heading(view, todo.kind)
-        if todo.kind in {"APPLY CHANGES", "APPLY AS IS"}
-        else todo.kind
-    )
-    return heading, todo.detail, todo.kind == "INCORPORATE RESPONSES"
+    return todo.kind, todo.detail, False
 
 
 def _current_impact(
@@ -1634,6 +1667,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         "PROPOSED BASELINE CHANGES",
         "RESOLVE ALL ·",
         "RESOLVE",
+        "REVIEW AND APPLY",
         "INCORPORATE RESPONSES",
         "IMPACT ·",
         "APPLY CHANGES ·",
@@ -1655,6 +1689,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
             (
                 "RESOLVE ALL ·",
                 "RESOLVE",
+                "REVIEW AND APPLY",
                 "INCORPORATE RESPONSES",
                 "APPLY CHANGES ·",
                 "APPLY AS IS ·",
@@ -1669,6 +1704,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                     (
                         "RESOLVE ALL ·",
                         "RESOLVE",
+                        "REVIEW AND APPLY",
                         "INCORPORATE RESPONSES",
                         "APPLY CHANGES ·",
                         "APPLY AS IS ·",
@@ -1932,14 +1968,12 @@ def resolution_seeded_report_fragments(
             and strategies
             and (
                 not review_and_apply
-                or session_todo_view(
+                or session_review_action_view(
                     view,
                     draft_values,
-                    review_and_apply=True,
-                    read_only=False,
                     whole_set_available=True,
                 ).kind
-                == "INCORPORATE RESPONSES"
+                in {"INCORPORATE RESPONSES", "INCORPORATE AND APPLY"}
             )
         ):
             policy_index = max(0, min(selected_strategy_index, len(strategies) - 1))
@@ -1981,16 +2015,22 @@ def resolution_review_fragments(
     drafts: dict[str, tuple[str | None, str]],
     strategies: tuple[ResolutionGlobalStrategy, ...],
     strategy_index: int,
+    action: SessionTodoView,
     focused_section: int = 0,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
-    """Render the staged issue responses and unresolved-item policy."""
-    focused_section = max(0, min(focused_section, 2))
+    """Render the explicit final review without performing its action."""
+
+    show_policy = action.kind in {
+        "INCORPORATE RESPONSES",
+        "INCORPORATE AND APPLY",
+    }
+    section_count = 3 if show_policy else 2
+    focused_section = max(0, min(focused_section, section_count - 1))
     fragments: list[tuple[str, str]] = []
     answered = 0
     response_lines: list[str] = []
     unresolved_counts: dict[str, int] = {}
-    unresolved_required: list[str] = []
     reviewable = 0
     for index, item in enumerate(view.items, start=1):
         obligation = item.effective_obligation
@@ -2012,8 +2052,6 @@ def resolution_review_fragments(
             answer = "UNRESOLVED"
         if answer == "UNRESOLVED":
             unresolved_counts[obligation] = unresolved_counts.get(obligation, 0) + 1
-            if obligation == "REQUIRED":
-                unresolved_required.append(item.title)
             continue
         response_lines.extend([f"{index}. {item.title}", f"   {answer}"])
 
@@ -2030,54 +2068,73 @@ def resolution_review_fragments(
         )
         or "NONE"
     )
-    response_lines.append(f"REMAINING · {remaining_summary}")
-    if unresolved_required:
-        response_lines.append("REQUIRED NEXT · " + "; ".join(unresolved_required))
+    response_lines.extend(
+        [
+            f"RESPONSES · {answered}/{reviewable} ANSWERED",
+            f"OPEN REVIEWS · {remaining_summary}",
+            "Nothing changes until the final action below is confirmed.",
+        ]
+    )
 
     if focused_section == 0:
         fragments.append(("[SetCursorPosition]", ""))
     for line in _boxed_lines(
-        f"INCORPORATE RESPONSES · {answered}/{reviewable} ANSWERED",
+        "REVIEW AND APPLY",
         "\n".join(response_lines).rstrip(),
         width=max(24, content_width - 1),
     ):
-        fragments.append(("class:detail-card.focused", f" {line}\n"))
-    fragments.append(("", "\n"))
-
-    policy_lines: list[str] = []
-    for index, policy in enumerate(strategies):
-        selected = index == strategy_index
-        marker = "›" if selected else " "
-        policy_lines.append(f"{marker} {index + 1}. {policy.label}")
-    policy_box = _boxed_lines(
-        "REMAINING-ITEM POLICY",
-        "\n".join(policy_lines) or "No unresolved-conflict policies are available.",
-        width=max(24, content_width - 1),
-    )
-    for index, line in enumerate(policy_box):
-        if focused_section == 1 and index == len(policy_box) - 1:
-            fragments.append(("[SetCursorPosition]", ""))
-        fragments.append(("class:option-card.focused", f" {line}\n"))
-    fragments.append(("", "\n"))
-
-    next_text = (
-        f"This {view.operation.title()} is ready. Press A to apply the exact changes."
-        if view.accept_enabled
-        else (
-            "Press Enter to incorporate the saved responses and remaining-item "
-            "policy into a revised proposal. No Context or Memory changes will "
-            "be applied yet."
+        fragments.append(
+            (
+                "class:detail-card.focused"
+                if focused_section == 0
+                else "class:detail-card",
+                f" {line}\n",
+            )
         )
-    )
-    next_box = _boxed_lines(
-        "NEXT",
-        next_text,
+    fragments.append(("", "\n"))
+
+    action_section = 1
+    if show_policy:
+        policy_lines: list[str] = []
+        for index, policy in enumerate(strategies):
+            selected = index == strategy_index
+            marker = "›" if selected else " "
+            policy_lines.append(f"{marker} {index + 1}. {policy.label}")
+        policy_box = _boxed_lines(
+            "REMAINING-ITEM POLICY",
+            "\n".join(policy_lines) or "No unresolved-conflict policies are available.",
+            width=max(24, content_width - 1),
+        )
+        for index, line in enumerate(policy_box):
+            if focused_section == 1 and index == len(policy_box) - 1:
+                fragments.append(("[SetCursorPosition]", ""))
+            fragments.append(
+                (
+                    "class:option-card.focused"
+                    if focused_section == 1
+                    else "class:detail-card",
+                    f" {line}\n",
+                )
+            )
+        fragments.append(("", "\n"))
+        action_section = 2
+
+    action_box = _boxed_lines(
+        action.kind,
+        f"{action.label}\n{action.detail}\nEsc/Backspace returns without applying.",
         width=max(24, content_width - 1),
     )
-    for index, line in enumerate(next_box):
-        if focused_section == 2 and index == len(next_box) - 1:
+    for index, line in enumerate(action_box):
+        if focused_section == action_section and index == len(action_box) - 1:
             fragments.append(("[SetCursorPosition]", ""))
-        fragments.append(("class:detail-card", f" {line}\n"))
+        fragments.append(
+            (
+                "class:detail-card.focused"
+                if focused_section == action_section
+                else "class:detail-card",
+                f" {line}\n",
+            )
+        )
     return fragments
 
 
@@ -2190,7 +2247,7 @@ def run_resolution_workbench_shell(
         if not read_only:
             entries.append(
                 (
-                    "APPLY" if review_and_apply else "RESOLVE_ALL",
+                    "REVIEW_AND_APPLY" if review_and_apply else "RESOLVE_ALL",
                     "REPORT:ACTION",
                     None,
                 )
@@ -2202,14 +2259,21 @@ def run_resolution_workbench_shell(
 
         if not review_and_apply or read_only or not global_strategies:
             return None
-        todo = session_todo_view(
+        action = session_review_action_view(
             current_view(),
             local_drafts,
-            review_and_apply=True,
-            read_only=False,
             whole_set_available=True,
         )
-        return todo if todo.kind == "INCORPORATE RESPONSES" else None
+        if action.kind not in {"INCORPORATE RESPONSES", "INCORPORATE AND APPLY"}:
+            return None
+        # The inline item route retains the narrower incorporation boundary;
+        # only the dedicated final-review surface can authorize the compound
+        # incorporate-and-apply action.
+        return SessionTodoView(
+            "INCORPORATE RESPONSES",
+            "Incorporate saved responses",
+            "Enter to create a revised proposal without applying it yet.",
+        )
 
     def item_sections() -> tuple[WorkbenchSection, ...]:
         item = current_navigation.current_item(current_view())
@@ -2313,13 +2377,16 @@ def run_resolution_workbench_shell(
         if viewer_content["kind"] == "REPORT":
             return report_sections()
         if viewer_content["kind"] == "REVIEW":
-            return _stable_sections(
-                (
-                    ("SUMMARY", "REVIEW:SUMMARY", None),
-                    ("POLICY", "REVIEW:POLICY", None),
-                    ("NEXT", "REVIEW:NEXT", None),
-                )
-            )
+            entries: list[tuple[str, str, int | None]] = [
+                ("SUMMARY", "REVIEW:SUMMARY", None)
+            ]
+            if review_action().kind in {
+                "INCORPORATE RESPONSES",
+                "INCORPORATE AND APPLY",
+            }:
+                entries.append(("POLICY", "REVIEW:POLICY", None))
+            entries.append(("ACTION", "REVIEW:ACTION", None))
+            return _stable_sections(tuple(entries))
         return item_sections()
 
     def viewer_section_index() -> int:
@@ -2347,6 +2414,13 @@ def run_resolution_workbench_shell(
             return "ITEM"
         return "RESOLVE_ALL"
 
+    def review_action() -> SessionTodoView:
+        return session_review_action_view(
+            current_view(),
+            local_drafts,
+            whole_set_available=bool(global_strategies),
+        )
+
     def split_view_fragments():
         active_view = current_view()
         if viewer_content["kind"] == "REVIEW":
@@ -2356,6 +2430,7 @@ def run_resolution_workbench_shell(
                     local_drafts,
                     global_strategies,
                     strategy["index"],
+                    review_action(),
                     viewer_section_index(),
                     content_width=pane_content_width(),
                 ),
@@ -2589,6 +2664,8 @@ def run_resolution_workbench_shell(
 
     def incorporate_responses_action(
         active_view: ResolutionWorkbenchView,
+        *,
+        action_kind: str = "SUBMIT_ALL",
     ) -> ResolutionWorkbenchAction | None:
         """Build the one complete reviewed-response turn used by both surfaces."""
 
@@ -2637,7 +2714,7 @@ def run_resolution_workbench_shell(
             lines.append(
                 "Still-required issue titles: " + "; ".join(unresolved_required)
             )
-        return semantic_action("SUBMIT_ALL", comment="\n".join(lines))
+        return semantic_action(action_kind, comment="\n".join(lines))
 
     def destination_action(value: str) -> ResolutionWorkbenchAction | None:
         if destination is None:
@@ -2789,6 +2866,33 @@ def run_resolution_workbench_shell(
         session_navigation.open_selected(item_sections())
         event_app = get_app()
         event_app.layout.focus(body_control)
+        set_status("")
+
+    def open_review_and_apply() -> None:
+        """Open the non-mutating final review before any apply action."""
+
+        save_draft()
+        active_view = current_view()
+        todo = session_todo_view(
+            active_view,
+            local_drafts,
+            review_and_apply=review_and_apply,
+            read_only=read_only,
+            whole_set_available=bool(global_strategies),
+            read_only_handoff=read_only_handoff,
+        )
+        if todo.kind != "REVIEW AND APPLY":
+            if todo.unresolved_item_uids:
+                open_split_item(todo.unresolved_item_uids[0])
+            else:
+                set_status(todo.detail)
+            return
+        session_navigation.row_index = len(active_view.items) + 1
+        session_navigation.viewer_row_index = session_navigation.row_index
+        viewer_content["kind"] = "REVIEW"
+        reset_viewer_section()
+        session_navigation.focus("viewer")
+        get_app().layout.focus(body_control)
         set_status("")
 
     def submit(event) -> None:
@@ -2944,6 +3048,12 @@ def run_resolution_workbench_shell(
                         open_destination_input()
                         event.app.invalidate()
                         return
+                    if section.kind == "REVIEW_AND_APPLY" or (
+                        review_and_apply and section.kind == "RESOLVE_ALL"
+                    ):
+                        open_review_and_apply()
+                        event.app.invalidate()
+                        return
                 other_direction_editor["open"] = False
                 viewer_content["kind"] = "REPORT"
                 reset_viewer_section()
@@ -3020,6 +3130,27 @@ def run_resolution_workbench_shell(
                         set_status(
                             "Move to the Decision or Response section and press Enter."
                         )
+            elif kind == "RESOLVE_ALL" and viewer_content["kind"] == "REVIEW":
+                section = active_viewer_sections()[viewer_section_index()]
+                if section.kind != "ACTION":
+                    set_status("Move to the final action and press Enter.")
+                else:
+                    final_action = review_action()
+                    if final_action.kind in {"APPLY", "APPLY AS IS"}:
+                        action = semantic_action("ACCEPT")
+                    elif final_action.kind == "INCORPORATE AND APPLY":
+                        action = incorporate_responses_action(
+                            active_view,
+                            action_kind="INCORPORATE_AND_APPLY",
+                        )
+                    elif final_action.kind == "INCORPORATE RESPONSES":
+                        action = incorporate_responses_action(active_view)
+                    else:
+                        action = None
+                        set_status("No final action is available.")
+                    if action is not None:
+                        event.app.exit(result=action)
+                        return
             elif (
                 kind == "TODO"
                 and session_todo_view(
@@ -3065,16 +3196,7 @@ def run_resolution_workbench_shell(
                     "Required review is complete; close or revisit an optional review."
                 )
             elif kind == "TODO" and review_and_apply:
-                save_draft()
-                if active_view.accept_enabled:
-                    action = semantic_action("ACCEPT")
-                    if action is not None:
-                        event.app.exit(result=action)
-                    event.app.invalidate()
-                    return
-                action = incorporate_responses_action(active_view)
-                if action is not None:
-                    event.app.exit(result=action)
+                open_review_and_apply()
             elif kind == "TODO" and not global_strategies:
                 set_status("No whole-set strategies are available.")
             elif kind == "TODO" and (
@@ -3172,6 +3294,14 @@ def run_resolution_workbench_shell(
                     ("viewer", "items", "todo"),
                     delta,
                 )
+            if pane == "items" and viewer_content["kind"] == "REVIEW":
+                # The final review is not an Items row. Leaving it for Items
+                # returns to the report instead of leaving an impossible
+                # sentinel row selected in the visible list.
+                session_navigation.row_index = 0
+                session_navigation.viewer_row_index = 0
+                viewer_content["kind"] = "REPORT"
+                reset_viewer_section()
             controls = {
                 "viewer": body_control,
                 "items": items_control,
@@ -3286,6 +3416,10 @@ def run_resolution_workbench_shell(
 
     @bindings.add("a", filter=~has_focus(input_area))
     def _accept(event) -> None:
+        if split_viewer_items and review_and_apply:
+            open_review_and_apply()
+            event.app.invalidate()
+            return
         exit_simple(event, "ACCEPT")
 
     @bindings.add("s", filter=~has_focus(input_area))
@@ -3396,26 +3530,18 @@ def run_resolution_workbench_shell(
                 else f" Enter {todo.kind.lower()}  Tab switch  Esc/Backspace back "
             )
         elif split_viewer_items and split_kind() == "RESOLVE_ALL":
-            todo = session_todo_view(
-                active_view,
-                local_drafts,
-                review_and_apply=review_and_apply,
-                read_only=read_only,
-                whole_set_available=bool(global_strategies),
-                read_only_handoff=read_only_handoff,
-            )
-            navigation_help = (
-                (
-                    " ↑/↓ section/item  Tab switch  Enter apply changes  "
-                    "Esc/Backspace report "
-                    if todo.kind in {"APPLY CHANGES", "APPLY AS IS"}
-                    else " ↑/↓ section/item  Tab switch  ←/→ policy  "
-                    "Enter incorporate responses  Esc/Backspace report "
+            if review_and_apply and viewer_content["kind"] == "REVIEW":
+                final_action = review_action()
+                navigation_help = (
+                    " ↑/↓ review  Tab switch  "
+                    f"Enter {final_action.kind.lower()}  "
+                    "Esc/Backspace return "
                 )
-                if review_and_apply
-                else " ↑/↓ section/item  Tab switch  ←/→ strategy  "
-                "Enter open/run  C custom  Esc/Backspace report "
-            )
+            else:
+                navigation_help = (
+                    " ↑/↓ section/item  Tab switch  ←/→ strategy  "
+                    "Enter open/run  C custom  Esc/Backspace report "
+                )
         elif split_viewer_items and option_navigation["active"]:
             navigation_help = (
                 " ↑/↓ option  Enter select  Esc/Backspace back  Tab switch "
@@ -3486,7 +3612,7 @@ def run_resolution_workbench_shell(
         if "DEFER" in active_view.capabilities:
             actions.append("D defer")
         if "ACCEPT" in active_view.capabilities:
-            actions.append("A accept")
+            actions.append("A review & apply" if review_and_apply else "A accept")
         if toggle_sort is not None:
             actions.append("S sort")
         actions.append("Q close")

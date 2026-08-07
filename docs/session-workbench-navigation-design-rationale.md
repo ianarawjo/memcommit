@@ -42,11 +42,13 @@ Resolution sessions use three visible frames with separate responsibilities:
 
 `TO DO` first points to the earliest unresolved required conflict or item, and
 Enter opens that target in Viewer. Once every REQUIRED item has a staged
-resolution, an applying session with saved responses that are not yet part of
-the exact proposal changes to `INCORPORATE RESPONSES`; after an exact proposal
-is ready, it changes to `APPLY CHANGES`. OPTIONAL reviews remain selectable in
-Items but do not gate either transition, and To Do reports how many may be
-skipped or remain open.
+resolution, an applying session changes to `REVIEW AND APPLY`; Enter opens a
+non-mutating final-review surface rather than applying immediately. That
+surface derives exactly one final action: `APPLY` for a fully reviewed exact
+proposal, `APPLY AS IS` when the adapter declares open findings or reviews,
+or an incorporation action when saved responses are not yet part of the
+proposal. OPTIONAL reviews remain selectable in Items but do not gate this
+transition, and the final review reports how many remain open.
 Non-applying resolution sessions expose their whole-set resolution there
 instead. Read-only sessions explicitly show that no action is available. The
 frame derives this projection from the current view and process-local drafts;
@@ -55,10 +57,12 @@ validation.
 
 `INCORPORATE RESPONSES` names the semantic boundary rather than the storage
 mechanism: it creates a revised complete proposal from saved responses and
-does not alter a Context or Memory. `APPLY CHANGES` is the only label for the
-later mutation boundary. Report and To Do must project the same next action so
-one surface cannot advertise incorporation while the other still requires a
-response.
+does not alter a Context or Memory. `APPLY` names the later exact mutation
+boundary. An adapter may explicitly authorize `INCORPORATE AND APPLY` as one
+compound final action; the label must disclose that the revised proposal will
+not receive a second visual approval. Report and To Do both project
+`REVIEW AND APPLY`, while the final surface alone exposes the state-dependent
+mutation action.
 
 When saved responses make incorporation the current To Do, the open item also
 renders that same `INCORPORATE RESPONSES` section immediately below `RESPONSE`.
@@ -163,13 +167,14 @@ Sever, and Atomize, and for the Update and adaptive Review projections. Sever
 classifies each outbound treatment as REQUIRED because every source Memory
 needs one inspectable disclosure decision, even though its provider
 recommendation is already staged. Atomize uses the shared two-stage terminal
-path only when review input exists: after all required responses are saved, To
-Do offers `INCORPORATE RESPONSES` to reanalyze the complete reviewed response
-set; the resulting unedited exact proposal offers `APPLY CHANGES`. A current
-analysis with no unresolved required finding and no unincorporated response is
-already exact, so an unanswered optional split may proceed directly to Apply.
-A response added to that proposal removes Apply until it is incorporated
-again.
+path only when review input exists. To Do always enters `REVIEW AND APPLY`
+after required work is complete. Without new input, its final action is
+`APPLY` or `APPLY AS IS`. With an incorporable Atomize response, the adapter
+offers `INCORPORATE AND APPLY`: one explicit approval reanalyzes the complete
+reviewed response set and then enters the normal validated application path.
+The final surface states this compound behavior and Escape/Backspace returns
+without either step. The narrower inline control below an item's Response
+remains `INCORPORATE RESPONSES` and never applies.
 
 Choosing Other direction or opening an item's ordinary Response keeps the
 current detail and options visible. The writable field appears inline within

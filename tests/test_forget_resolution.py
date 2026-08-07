@@ -7,6 +7,7 @@ import memcommit.ops as ops
 from memcommit.commands import forget as forget_command
 from memcommit.commands.resolution_workbench_shell import (
     resolution_viewer_fragments,
+    session_review_action_view,
     session_todo_view,
 )
 from memcommit.context import Context, Memory
@@ -154,7 +155,10 @@ def test_forget_review_materializes_only_reviewed_operation_specific_changes():
 
     assert custom_item.response_state == "ANSWERED"
     assert custom_item.response_text == "Custom retained wording."
-    assert todo.kind == "APPLY CHANGES"
+    assert todo.kind == "REVIEW AND APPLY"
+    assert (
+        session_review_action_view(view, {}, whole_set_available=True).kind == "APPLY"
+    )
     assert [type(change) for change in changes] == [EditChange, EditChange]
     assert changes[-1].new_content == "Custom retained wording."
 

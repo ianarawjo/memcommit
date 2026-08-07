@@ -18,9 +18,11 @@ from memcommit.commands.resolution_workbench_shell import (
     _session_items_fragments,
     render_resolution_workbench_snapshot,
     resolution_report_fragments,
+    resolution_review_fragments,
     resolution_viewer_fragments,
     resolution_workbench_fragments,
     run_resolution_workbench_shell,
+    session_review_action_view,
     session_todo_view,
 )
 from memcommit.impact_controller import ImpactController
@@ -1196,7 +1198,9 @@ def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
     with create_pipe_input() as pipe_input:
         # Select the first option in each conflict, then open the final review
         # row and submit the combined resolution turn.
-        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\r\r\t\x1b[B\r\x1b[B\x1b[B\r\r\t\t\r")
+        pipe_input.send_text(
+            "\x1b[B\r\x1b[B\x1b[B\r\r\t\x1b[B\r\x1b[B\x1b[B\r\r\t\t\r\x1b[F\r"
+        )
         action = run_resolution_workbench_shell(
             _view(first, second, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,
@@ -1210,6 +1214,92 @@ def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
     assert action.kind == "SUBMIT_ALL"
     assert "Issue a: Choose this reading: Use answer A." in action.comment
     assert "Issue b: Choose this reading: Use answer B." in action.comment
+
+
+def test_review_and_apply_requires_final_confirmation_and_can_go_back():
+    view = replace(
+        _view(_item("optional")),
+        items=(replace(_item("optional"), obligation="OPTIONAL"),),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # The first Enter only opens Review and Apply. Escape returns to the
+        # report without applying, and Q then closes the workbench.
+        pipe_input.send_text("\x1b[Z\r\x1bq")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+
+    final = session_review_action_view(view, {}, whole_set_available=False)
+    fragments = resolution_review_fragments(
+        view,
+        {},
+        (),
+        0,
+        final,
+        focused_section=1,
+    )
+    rendered = "".join(text for _style, text in fragments)
+    assert "REVIEW AND APPLY" in rendered
+    assert "APPLY AS IS" in rendered
+    assert "Esc/Backspace returns without applying." in rendered
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Z\r\x1b[F\r")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "ACCEPT"
+
+
+def test_review_and_apply_can_authorize_one_compound_atomize_action():
+    item = replace(
+        _item("answered"),
+        obligation="OPTIONAL",
+        response_state="ANSWERED",
+        response_text="Keep the reviewed causal scope.",
+    )
+    view = replace(
+        _view(item),
+        operation="ATOMIZE",
+        capabilities=frozenset({"SUBMIT_ALL", "INCORPORATE_AND_APPLY"}),
+    )
+    policy = ResolutionGlobalStrategy(
+        "Keep unanswered optional findings as analyzed",
+        "SUBMIT_ALL",
+        "Keep unanswered optional findings as analyzed.",
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Z\r\x1b[F\r")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            global_strategies=(policy,),
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "INCORPORATE_AND_APPLY"
+    assert "Keep the reviewed causal scope." in action.comment
 
 
 def test_todo_reopens_a_required_conflict_after_selection_cancellation():
@@ -1281,10 +1371,19 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
         review_and_apply=True,
         read_only=False,
     )
-    assert incorporate.kind == "INCORPORATE RESPONSES"
+    assert incorporate.kind == "REVIEW AND APPLY"
+    assert (
+        session_review_action_view(
+            open_view,
+            {"a": (None, "Use the local wording.")},
+            whole_set_available=True,
+        ).kind
+        == "INCORPORATE RESPONSES"
+    )
     assert incorporate.unresolved_item_uids == ()
-    assert incorporate.detail.startswith("1 optional review may be skipped.")
-    assert "No Context or Memory changes" in incorporate.detail
+    assert incorporate.detail == (
+        "INCORPORATE RESPONSES is available. Enter to review before anything changes."
+    )
     incorporate_report = "".join(
         text
         for _style, text in resolution_report_fragments(
@@ -1294,7 +1393,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
             review_and_apply=True,
         )
     )
-    assert "INCORPORATE RESPONSES" in incorporate_report
+    assert "REVIEW AND APPLY" in incorporate_report
 
     apply_view = replace(
         open_view,
@@ -1307,9 +1406,14 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
         review_and_apply=True,
         read_only=False,
     )
-    assert apply.kind == "APPLY CHANGES"
-    assert apply.detail.startswith(
-        "1 optional review remains open and will be skipped."
+    assert apply.kind == "REVIEW AND APPLY"
+    assert (
+        session_review_action_view(
+            apply_view,
+            {"a": (None, "Use the local wording.")},
+            whole_set_available=True,
+        ).kind
+        == "APPLY"
     )
 
     complete = session_todo_view(
@@ -1351,9 +1455,11 @@ def test_todo_exposes_adapter_declared_apply_as_is_without_required_gate():
         read_only=False,
     )
 
-    assert todo.kind == "APPLY AS IS"
-    assert todo.label == "Apply Meld as is"
-    assert todo.detail == (
+    assert todo.kind == "REVIEW AND APPLY"
+    final_action = session_review_action_view(view, {}, whole_set_available=True)
+    assert final_action.kind == "APPLY AS IS"
+    assert final_action.label == "Apply Meld as is"
+    assert final_action.detail == (
         "1 unresolved finding will be recorded at apply. "
         "1 optional review remains open. "
         "Enter to apply the exact current proposal as is. Recovery: mem undo."
@@ -1365,7 +1471,7 @@ def test_todo_exposes_adapter_declared_apply_as_is_without_required_gate():
             review_and_apply=True,
         )
     )
-    assert "APPLY AS IS · MELD" in report
+    assert "REVIEW AND APPLY" in report
 
 
 def test_saved_response_exposes_inline_incorporation_below_response():

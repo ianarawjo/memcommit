@@ -21,6 +21,7 @@ from memcommit.commands.sever_sessions import (
 from memcommit.commands.resolution_workbench_shell import (
     resolution_report_fragments,
     resolution_viewer_fragments,
+    session_review_action_view,
     session_todo_view,
 )
 from memcommit.impact_controller import ImpactController
@@ -662,7 +663,10 @@ def test_custom_sever_response_remains_answered_and_apply_ready(isolated_store):
     assert item.response_state == "ANSWERED"
     assert item.response_text == "Custom local result."
     assert item.blocks[0].text == "Custom local result."
-    assert todo.kind == "APPLY CHANGES"
+    assert todo.kind == "REVIEW AND APPLY"
+    assert (
+        session_review_action_view(view, {}, whole_set_available=True).kind == "APPLY"
+    )
 
 
 def test_sever_workbench_can_change_save_location_before_apply(
