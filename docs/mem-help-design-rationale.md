@@ -28,22 +28,34 @@ prompt-toolkit selector:
 
 - A shared horizontal choice at the top selects `BY KIND` or `A–Z`; `BY KIND`
   is the default. Each choice is a separate box; the selected box retains the
-  shared light-blue selection surface, and the keyboard target also receives
-  the shared heavy blue focus border. Left and Right change the projection
-  through the common `HorizontalChoiceState` only while VIEW has focus. Up from
-  the first command reaches VIEW, Down returns to the command list, and
-  Tab/Shift-Tab traverse the same two visible surfaces. A view change retains
-  the selected command by name but closes its Forms because their row offsets
-  belong to the old projection.
+  shared light-blue selection surface and a visible `✓`, while the keyboard
+  target also receives the shared heavy blue focus border. Left and Right
+  change the projection through the common `HorizontalChoiceState` only while
+  VIEW has focus. Up from the first command reaches VIEW, Down returns to the
+  command list, and Tab/Shift-Tab traverse the same two visible surfaces. A
+  view change retains the selected command by name but closes its Forms because
+  their row offsets belong to the old projection.
+- The two choice boxes sit inside one `INVENTORY VIEW` frame, matching the
+  common endpoint setup hierarchy where Meld's mode boxes sit inside
+  `OPERATION SHAPE`. When VIEW owns keyboard focus, the shared focused-frame
+  treatment turns that enclosing border blue and heavy; when focus returns to
+  the command list, only the retained choice surface and `✓` remain active.
 - `BY KIND` assigns each command one primary discovery category and renders
-  nonselectable category headings. Aliases remain separate commands in the
-  same category so the inventory still describes every registered spelling.
-- Every command is one bounded card containing its name and wrapped
-  description. The focused command uses the common blue focus treatment and
-  heavy border instead of relying on a whole-line reverse video bar. Expansion
-  keeps that command's Forms inside the same card; long descriptions and Forms
-  wrap within the current terminal width so semantic qualifiers do not vanish
-  beyond the right edge. Report chrome remains neutral when it is not focused.
+  each category as one titled box containing all of its command records.
+  Aliases remain separate commands in the same box so the inventory still
+  describes every registered spelling. `A–Z` has no semantic categories, so
+  its complete alphabetic projection occupies one `A–Z` box.
+- Each command record keeps its name and description on one aligned line
+  inside the owning category box. A description wraps only when the terminal
+  width requires it, with continuation text aligned to its original start
+  column. The box containing the focused command uses the
+  common blue heavy border, while only the exact focused command or Form gets
+  the blue selection surface. Expansion keeps Forms immediately beneath their
+  command without introducing a nested command box. The next command begins
+  on the line immediately following the prior record, without an empty spacer
+  row. Long descriptions and Forms wrap within the current terminal width so
+  semantic qualifiers do not vanish beyond the right edge. Unfocused box
+  chrome remains neutral.
 - Up and Down move one command at a time or move among one expanded command's
   forms. Holding one direction reuses the shared `NavigationAccelerator`: it
   waits for the terminal's initial key-repeat delay, then increases movement to

@@ -34,7 +34,10 @@ Meld adds a focused horizontal mode selector above those inputs:
 ```text
  NEW MELD
 
- MODE  [ SYMMETRIC · A + B → C ]   [ DIRECTIONAL · A → B ]
+ MODE · ←/→ SELECT
+ ┌──────────────────────────────┐  ┌───────────────────────┐
+ │ ✓ SYMMETRIC · A + B → C      │  │   DIRECTIONAL · A → B │
+ └──────────────────────────────┘  └───────────────────────┘
  MEANING · A and B are equal peers. The result is separate C.
 
  A · INCOMING / PEER     [Context namespace tree]
@@ -91,8 +94,9 @@ Its contract is intentionally narrow:
 - options have stable UIDs and display labels;
 - exactly one option is active;
 - `Left` and `Right` move with clamped, non-wrapping behavior;
-- rendering exposes focus, a stable blue active-value surface, and a concise
-  `←/→` hint without moving a radio glyph;
+- rendering supports a compact segmented row or individual option boxes,
+  exposes focus, a stable blue active-value surface, a visible `✓` in the
+  boxed selected option, and a concise `←/→` hint;
 - changing the active option performs no I/O, provider call, persistence, or
   semantic action; and
 - callers own the meaning and validation of the selected UID.
@@ -136,18 +140,20 @@ catalog-neutral. Their callers must supply the namespace authorized for the
 specific role; using the shared widget does not make a local-only catalog
 Grant-aware by itself.
 
-The Meld mode selector additionally renders one `MEANING` line for the active
-contract. Directional explains that B remains authoritative and is also the
-result target. Symmetric explains that A and B are equal peers, requires their
-saved ordered Compare, and introduces separate result C. Context roles use the
-same blue surface for the retained choice while `›` and reverse video remain
-separate browsing-cursor signals; changing a selection therefore does not move
-an additional `(●)` column through the namespace tree. A retained blue choice
-is not bold after keyboard focus leaves it. Bold identifies the exact nested
-control that currently owns input, including a selected Context, checked
-descendant scope, mode choice, or Apply control. The containing endpoint frame
-keeps its blue border while Tab moves between its tree and descendant scope,
-so the pane and within-pane focus levels remain visible at the same time.
+The Meld mode selector uses the same boxed horizontal-choice presentation as
+Help's `BY KIND` / `A–Z` selector and additionally renders one `MEANING` line
+for the active contract. Directional explains that B remains authoritative and
+is also the result target. Symmetric explains that A and B are equal peers,
+requires their saved ordered Compare, and introduces separate result C.
+Context roles use the same blue surface for the retained choice while `›` and
+reverse video remain separate browsing-cursor signals; changing a selection
+therefore does not move an additional `(●)` column through the namespace tree.
+A retained blue choice is not bold after keyboard focus leaves it. Bold
+identifies the exact nested control that currently owns input, including a
+selected Context, checked descendant scope, mode choice, or Apply control. The
+containing endpoint frame keeps its blue border while Tab moves between its
+tree and descendant scope, so the pane and within-pane focus levels remain
+visible at the same time.
 
 ## Setup state and mode transitions
 

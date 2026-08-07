@@ -428,12 +428,13 @@ def choose_session_endpoints(
             focused=app_ref.get("app") is not None
             and app_ref["app"].layout.has_focus(mode_control),
             show_description=True,
+            boxed=True,
         ),
         focusable=True,
         show_cursor=False,
     )
     mode_frame = Frame(
-        Window(mode_control, height=2, dont_extend_height=True),
+        Window(mode_control, height=5, dont_extend_height=True),
         title="OPERATION SHAPE",
     )
     bind_focused_frame_style(

@@ -109,36 +109,62 @@ class TestHelp:
             for line in lines
         )
 
-    def test_help_card_wraps_description_and_forms_inside_one_focused_box(self):
-        entry = CommandEntry(
-            name="explain",
-            annotation=None,
-            description=(
-                "Explain a sufficiently long operation description without "
-                "letting its meaning disappear beyond the terminal edge."
+    def test_help_kind_box_contains_multiple_commands_and_expanded_forms(self):
+        entries = [
+            (
+                0,
+                CommandEntry(
+                    name="explain",
+                    annotation=None,
+                    description=(
+                        "Explain a sufficiently long operation description without "
+                        "letting its meaning disappear beyond the terminal edge."
+                    ),
+                    command=object(),
+                    forms=(
+                        "mem explain [memory] --context [context] "
+                        "(inspect one explicit target)",
+                    ),
+                ),
             ),
-            command=object(),
-            forms=(
-                "mem explain [memory] --context [context] "
-                "(inspect one explicit target)",
+            (
+                1,
+                CommandEntry(
+                    name="find",
+                    annotation=None,
+                    description="Find one relevant record.",
+                    command=object(),
+                    forms=("mem find [query]",),
+                ),
             ),
-        )
+        ]
 
-        fragments = help_inventory._help_card_fragments(
-            entry,
+        fragments = help_inventory._help_group_fragments(
+            entries,
+            title="SEARCH & EXPLAIN",
             width=52,
-            expanded=True,
             focused=True,
+            selected_index=0,
+            expanded_index=0,
             selected_form=0,
         )
         rendered = "".join(text for _style, text in fragments)
         lines = rendered.splitlines()
 
-        assert lines[0].startswith("┏ ▾ mem explain ")
+        assert lines[0].startswith("┏ SEARCH & EXPLAIN ")
         assert lines[-1] == "┗" + "━" * 50 + "┛"
         assert all(len(line) == 52 for line in lines)
+        assert rendered.count("┏") == 1
+        assert rendered.count("┛") == 1
+        explain_line = next(line for line in lines if "▾ mem explain" in line)
+        assert "Explain a sufficiently" in explain_line
+        assert "▸ mem find     Find one relevant record." in rendered
         assert "terminal edge." in rendered
         assert "FORM 1 · mem explain" in rendered
+        find_line = next(
+            index for index, line in enumerate(lines) if "▸ mem find" in line
+        )
+        assert lines[find_line - 1].strip("┃ ")
         assert any(style == "[SetCursorPosition]" for style, _text in fragments)
         assert any(style == "class:selected" for style, _text in fragments)
 
@@ -408,6 +434,30 @@ class TestHelp:
                 require_tty=False,
             )
         assert cancelled is None
+
+    def test_help_selector_uses_shared_focused_frame_for_inventory_view(
+        self,
+        monkeypatch,
+    ):
+        bound: list[str] = []
+        original = help_inventory.bind_focused_frame_style
+
+        def record(frame, *, is_focused):
+            bound.append(frame.title)
+            return original(frame, is_focused=is_focused)
+
+        monkeypatch.setattr(help_inventory, "bind_focused_frame_style", record)
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("q")
+            result = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert result is None
+        assert bound == ["INVENTORY VIEW"]
 
     def test_selector_tab_switches_category_and_a_z_views(self):
         entries = [

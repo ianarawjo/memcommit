@@ -17,10 +17,12 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style, merge_styles
+from prompt_toolkit.widgets import Frame
 
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     NavigationAccelerator,
+    bind_focused_frame_style,
     display_escape_text,
     focus_in_order,
 )
@@ -574,81 +576,102 @@ def _render_plain_inventory(entries: list[CommandEntry]) -> None:
         )
 
 
-def _help_card_fragments(
-    entry: CommandEntry,
+def _help_group_fragments(
+    entries: list[tuple[int, CommandEntry]],
     *,
+    title: str,
     width: int,
-    expanded: bool,
     focused: bool,
+    selected_index: int,
+    expanded_index: int | None,
     selected_form: int | None,
 ) -> list[tuple[str, str]]:
-    """Render one command and any visible Forms inside a bounded card."""
+    """Render one discovery kind and its command records in a single box."""
+    if not entries:
+        return []
     width = max(36, width)
     inner_width = width - 2
     content_width = inner_width - 2
-    label = entry.name
-    if entry.annotation:
-        label += f" ({entry.annotation})"
-    label = display_escape_text(label)
-    title = f" {'▾' if expanded else '▸'} mem {label} "
-    title = title[:inner_width]
-    border_style = "class:help-card.focused" if focused else "class:help-card"
+    title_label = f" {display_escape_text(title)} "[:inner_width]
+    border_style = "class:help-group.focused" if focused else "class:help-group"
     horizontal = "━" if focused else "─"
-    top = ("┏" if focused else "┌") + title
-    top += horizontal * max(0, inner_width - len(title))
+    top = ("┏" if focused else "┌") + title_label
+    top += horizontal * max(0, inner_width - len(title_label))
     top += "┓" if focused else "┐"
     fragments: list[tuple[str, str]] = [(border_style, top + "\n")]
-
-    description_lines = textwrap.wrap(
-        display_escape_text(entry.description),
-        width=content_width,
-        break_long_words=True,
-        break_on_hyphens=False,
-    ) or [""]
     vertical = "┃" if focused else "│"
-    for line in description_lines:
-        fragments.extend(
-            [
-                (border_style, vertical),
-                ("", f" {line:<{content_width}} "),
-                (border_style, vertical + "\n"),
-            ]
+    labels = {
+        index: display_escape_text(
+            entry.name
+            + (f" ({entry.annotation})" if entry.annotation else "")
         )
-
-    if expanded:
-        fragments.append(
-            (
-                border_style,
-                ("┣" if focused else "├")
-                + horizontal * inner_width
-                + ("┫" if focused else "┤")
-                + "\n",
+        for index, entry in entries
+    }
+    name_width = max(len(label) for label in labels.values())
+    for index, entry in entries:
+        expanded = index == expanded_index
+        owns_selection = index == selected_index
+        command_focused = focused and owns_selection and selected_form is None
+        if command_focused:
+            fragments.append(("[SetCursorPosition]", ""))
+        command_prefix = (
+            f"{'▾' if expanded else '▸'} mem {labels[index]:<{name_width}}  "
+        )
+        description_lines = textwrap.wrap(
+            display_escape_text(entry.description),
+            width=max(1, content_width - len(command_prefix)),
+            break_long_words=True,
+            break_on_hyphens=False,
+        ) or [""]
+        for description_index, line in enumerate(description_lines):
+            prefix = (
+                command_prefix
+                if description_index == 0
+                else " " * len(command_prefix)
             )
-        )
-        for form_index, form in enumerate(entry.forms):
-            selected = selected_form == form_index
-            prefix = f"FORM {form_index + 1} · "
-            lines = textwrap.wrap(
-                display_escape_text(form),
-                width=max(1, content_width - len(prefix)),
-                initial_indent=prefix,
-                subsequent_indent=" " * len(prefix),
-                break_long_words=True,
-                break_on_hyphens=False,
-            ) or [prefix]
-            if selected:
-                fragments.append(("[SetCursorPosition]", ""))
-            for line in lines:
+            padding = " " * max(0, content_width - len(prefix) - len(line))
+            fragments.append((border_style, vertical))
+            if command_focused:
+                fragments.append(
+                    ("class:selected", f" {prefix}{line}{padding} ")
+                )
+            else:
                 fragments.extend(
                     [
-                        (border_style, vertical),
-                        (
-                            "class:selected" if selected else "class:form",
-                            f" {line:<{content_width}} ",
-                        ),
-                        (border_style, vertical + "\n"),
+                        ("class:help-command", f" {prefix}"),
+                        ("", f"{line}{padding} "),
                     ]
                 )
+            fragments.append((border_style, vertical + "\n"))
+        if expanded:
+            for form_index, form in enumerate(entry.forms):
+                form_focused = (
+                    focused and owns_selection and selected_form == form_index
+                )
+                prefix = f"  FORM {form_index + 1} · "
+                lines = textwrap.wrap(
+                    display_escape_text(form),
+                    width=content_width,
+                    initial_indent=prefix,
+                    subsequent_indent=" " * len(prefix),
+                    break_long_words=True,
+                    break_on_hyphens=False,
+                ) or [prefix]
+                if form_focused:
+                    fragments.append(("[SetCursorPosition]", ""))
+                for line in lines:
+                    fragments.extend(
+                        [
+                            (border_style, vertical),
+                            (
+                                "class:selected"
+                                if form_focused
+                                else "class:form",
+                                f" {line:<{content_width}} ",
+                            ),
+                            (border_style, vertical + "\n"),
+                        ]
+                    )
     fragments.append(
         (
             border_style,
@@ -722,39 +745,36 @@ def run_help_selector(
 
     def render_entries():
         fragments: list[tuple[str, str]] = []
-        previous_category: str | None = None
         app = app_ref.get("app")
         list_focused = app is not None and app.layout.has_focus(list_control)
         terminal_columns = app.output.get_size().columns if app is not None else 80
         card_width = min(112, max(36, terminal_columns - 3))
-        for index, entry in enumerate(visible_entries["value"]):
-            if view_state.selected_uid == "CATEGORY":
+        indexed_entries = list(enumerate(visible_entries["value"]))
+        groups: list[tuple[str, list[tuple[int, CommandEntry]]]] = []
+        if view_state.selected_uid == "CATEGORY":
+            for index, entry in indexed_entries:
                 category = HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER")
-                if category != previous_category:
-                    if fragments:
-                        fragments.append(("", "\n"))
-                    fragments.append(("class:category", f" {category}\n"))
-                    previous_category = category
-            expanded = index == expanded_index["value"]
-            card_focused = index == selected_index["value"] and list_focused
-            if card_focused and selected_form["value"] is None:
-                # This marker lets prompt-toolkit scroll the long inventory so
-                # the focused card remains visible in short terminals.
-                fragments.append(("[SetCursorPosition]", ""))
+                if not groups or groups[-1][0] != category:
+                    groups.append((category, []))
+                groups[-1][1].append((index, entry))
+        else:
+            groups.append(("A–Z", indexed_entries))
+        for group_index, (title, group_entries) in enumerate(groups):
+            group_focused = list_focused and any(
+                index == selected_index["value"] for index, _entry in group_entries
+            )
             fragments.extend(
-                _help_card_fragments(
-                    entry,
+                _help_group_fragments(
+                    group_entries,
+                    title=title,
                     width=card_width,
-                    expanded=expanded,
-                    focused=card_focused,
-                    selected_form=(
-                        selected_form["value"]
-                        if index == selected_index["value"]
-                        else None
-                    ),
+                    focused=group_focused,
+                    selected_index=selected_index["value"],
+                    expanded_index=expanded_index["value"],
+                    selected_form=selected_form["value"],
                 )
             )
-            if index < len(visible_entries["value"]) - 1:
+            if group_index < len(groups) - 1:
                 fragments.append(("", "\n"))
         return fragments
 
@@ -992,6 +1012,14 @@ def run_help_selector(
         height=Dimension.exact(4),
         dont_extend_height=True,
     )
+    view_frame = Frame(view, title="INVENTORY VIEW")
+    bind_focused_frame_style(
+        view_frame,
+        is_focused=lambda: (
+            app_ref.get("app") is not None
+            and app_ref["app"].layout.has_focus(view_control)
+        ),
+    )
     footer = Window(
         FormattedTextControl(
             lambda: (
@@ -1012,7 +1040,7 @@ def run_help_selector(
     )
     application: Application[HelpSelection | None] = Application(
         layout=Layout(
-            HSplit([header, view, body, footer]),
+            HSplit([header, view_frame, body, footer]),
             focused_element=list_control,
         ),
         key_bindings=bindings,
@@ -1029,8 +1057,9 @@ def run_help_selector(
                         "selected": "fg:#10242f bg:#8bd5ff bold",
                         "form": "fg:#cad3f5",
                         "category": "bold",
-                        "help-card": "",
-                        "help-card.focused": "fg:#8bd5ff bold",
+                        "help-command": "bold",
+                        "help-group": "",
+                        "help-group.focused": "fg:#8bd5ff bold",
                     }
                 ),
             ]

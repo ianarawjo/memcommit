@@ -125,6 +125,7 @@ def _render_boxed_horizontal_choice(
         for index, (option, label) in enumerate(zip(state.options, escaped_labels)):
             selected = option.uid == state.selected_uid
             keyboard_target = focused and selected
+            choice_text = f"{'✓ ' if selected else '  '}{label}"
             border_style = (
                 "class:memcommit.choice.border.focused"
                 if keyboard_target
@@ -138,24 +139,24 @@ def _render_boxed_horizontal_choice(
             vertical = "┃" if keyboard_target else "│"
             if row == "top":
                 left, content, right = (
-                    ("┏", horizontal * (len(label) + 2), "┓")
+                    ("┏", horizontal * (len(label) + 4), "┓")
                     if keyboard_target
-                    else ("┌", horizontal * (len(label) + 2), "┐")
+                    else ("┌", horizontal * (len(label) + 4), "┐")
                 )
                 fragments.append((border_style, left + content + right))
             elif row == "middle":
                 fragments.extend(
                     [
                         (border_style, vertical),
-                        (content_style, f" {label} "),
+                        (content_style, f" {choice_text} "),
                         (border_style, vertical),
                     ]
                 )
             else:
                 left, content, right = (
-                    ("┗", horizontal * (len(label) + 2), "┛")
+                    ("┗", horizontal * (len(label) + 4), "┛")
                     if keyboard_target
-                    else ("└", horizontal * (len(label) + 2), "┘")
+                    else ("└", horizontal * (len(label) + 4), "┘")
                 )
                 fragments.append((border_style, left + content + right))
             if index < len(state.options) - 1:
