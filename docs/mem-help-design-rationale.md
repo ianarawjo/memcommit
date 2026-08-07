@@ -44,6 +44,19 @@ prompt-toolkit selector:
   the command list, only the retained choice surface and `✓` remain active.
 - `BY KIND` assigns each command one primary discovery category and renders
   each category as one titled box containing all of its command records.
+  Before those categories, one neutral, non-focusable `CORE CONCEPTS` and
+  `COMMON KEYS` information box explains Memory, Context, Profile,
+  Grant, Session, and Checkpoint plus the shared navigation grammar. It belongs
+  to the scrolling inventory rather than the fixed header, so it moves out of
+  view as the person browses and does not permanently reduce command space.
+  `A–Z` omits this primer entirely and begins with its lexical command box.
+  Grant prose describes selectively given or received permission without
+  implying ownership, and Checkpoint prose identifies both its per-operation
+  creation and per-affected-Context recording boundary. The Backspace hint
+  concisely states the writable-field exception without repeating a read-only
+  qualifier in the heading or navigation action. Operation-specific footers
+  remain authoritative for keys that are not common enough to appear in this
+  primer.
   Inside a category it preserves an intentional workflow order: orient and
   inspect first, then navigate or create, then perform semantic work, with
   destructive or broad cleanup actions last. Primary commands and their aliases

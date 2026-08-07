@@ -38,6 +38,52 @@ COMMAND_ANNOTATIONS = {
     "config": "legacy",
 }
 
+HELP_CORE_CONCEPTS = (
+    (
+        "MEMORY",
+        "An atomic unit of information stored in a Context.",
+    ),
+    (
+        "CONTEXT",
+        "A named workspace that organizes Memories and other Contexts.",
+    ),
+    (
+        "PROFILE",
+        "An ownership and storage boundary for Contexts.",
+    ),
+    (
+        "GRANT",
+        "A permission relationship that can be given or received, selectively "
+        "allowing someone without direct ownership to read or query a Context "
+        "and its Memories, or run permitted operations on them, while the Grant "
+        "remains valid.",
+    ),
+    (
+        "SESSION",
+        "A saved record of an analysis or review workflow that can be reopened "
+        "and continued; it does not itself mean Context changes were applied.",
+    ),
+    (
+        "CHECKPOINT",
+        "A recoverable history boundary created for each applied operation and "
+        "recorded per affected Context.",
+    ),
+)
+
+HELP_COMMON_KEYS = (
+    ("↑/↓", "Move or scroll within the focused surface."),
+    (
+        "←/→",
+        "Change a horizontal choice, expand, or go back according to focus.",
+    ),
+    ("Tab / Shift-Tab", "Move focus between visible surfaces."),
+    ("Enter", "Open, select, or submit the focused action."),
+    (
+        "Esc / Backspace",
+        "Go back one layer; Backspace edits text in writable fields.",
+    ),
+)
+
 HELP_CATEGORY_GROUPS = (
     (
         "CONTEXTS",
@@ -691,6 +737,68 @@ def _help_group_width(terminal_columns: int) -> int:
     return max(36, terminal_columns - 1)
 
 
+def _help_information_box_fragments(
+    *,
+    width: int,
+    by_kind: bool,
+) -> list[tuple[str, str]]:
+    """Render the non-focusable BY KIND primer inside the scrolling list."""
+    if not by_kind:
+        return []
+    width = max(36, width)
+    inner_width = width - 2
+    content_width = inner_width - 2
+    border_style = "class:help-guide.border"
+    label_style = "class:help-guide.label"
+    fragments: list[tuple[str, str]] = []
+
+    def border(title: str, *, middle: bool) -> None:
+        title_label = f" {title} "[:inner_width]
+        fragments.append(
+            (
+                border_style,
+                ("├" if middle else "┌")
+                + title_label
+                + "─" * max(0, inner_width - len(title_label))
+                + ("┤" if middle else "┐")
+                + "\n",
+            )
+        )
+
+    def rows(items: tuple[tuple[str, str], ...]) -> None:
+        label_width = max(len(label) for label, _description in items)
+        for label, description in items:
+            prefix = f"{label:<{label_width}}  "
+            lines = textwrap.wrap(
+                display_escape_text(description),
+                width=max(1, content_width - len(prefix)),
+                break_long_words=True,
+                break_on_hyphens=False,
+            ) or [""]
+            for line_index, line in enumerate(lines):
+                row_prefix = prefix if line_index == 0 else " " * len(prefix)
+                padding = " " * max(
+                    0,
+                    content_width - len(row_prefix) - len(line),
+                )
+                fragments.extend(
+                    [
+                        (border_style, "│"),
+                        ("", " "),
+                        (label_style if line_index == 0 else "", row_prefix),
+                        ("", line + padding + " "),
+                        (border_style, "│\n"),
+                    ]
+                )
+
+    border("CORE CONCEPTS", middle=False)
+    rows(HELP_CORE_CONCEPTS)
+    border("COMMON KEYS", middle=True)
+    rows(HELP_COMMON_KEYS)
+    fragments.append((border_style, "└" + "─" * inner_width + "┘\n"))
+    return fragments
+
+
 def _ordered_help_entries(
     entries: list[CommandEntry],
     *,
@@ -769,9 +877,18 @@ def run_help_selector(
         list_focused = app is not None and app.layout.has_focus(list_control)
         terminal_columns = app.output.get_size().columns if app is not None else 80
         card_width = _help_group_width(terminal_columns)
+        by_kind = view_state.selected_uid == "CATEGORY"
+        fragments.extend(
+            _help_information_box_fragments(
+                width=card_width,
+                by_kind=by_kind,
+            )
+        )
+        if fragments:
+            fragments.append(("", "\n"))
         indexed_entries = list(enumerate(visible_entries["value"]))
         groups: list[tuple[str, list[tuple[int, CommandEntry]]]] = []
-        if view_state.selected_uid == "CATEGORY":
+        if by_kind:
             for index, entry in indexed_entries:
                 category = HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER")
                 if not groups or groups[-1][0] != category:
@@ -1080,6 +1197,8 @@ def run_help_selector(
                         "help-command": "bold",
                         "help-group": "",
                         "help-group.focused": "fg:#8bd5ff bold",
+                        "help-guide.border": "",
+                        "help-guide.label": "bold",
                     }
                 ),
             ]

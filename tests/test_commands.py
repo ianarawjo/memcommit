@@ -117,6 +117,32 @@ class TestHelp:
         assert help_inventory._help_group_width(80) == 79
         assert help_inventory._help_group_width(20) == 36
 
+    def test_information_box_is_full_width_and_only_in_by_kind(self):
+        fragments = help_inventory._help_information_box_fragments(
+            width=100,
+            by_kind=True,
+        )
+        rendered = "".join(text for _style, text in fragments)
+        lines = rendered.splitlines()
+        prose = " ".join(line.strip("│ ") for line in lines)
+
+        assert lines[0].startswith("┌ CORE CONCEPTS ")
+        assert any(line.startswith("├ COMMON KEYS ") for line in lines)
+        assert all(len(line) == 100 for line in lines)
+        assert "MEMORY" in rendered
+        assert "An atomic unit of information" in rendered
+        assert "without direct ownership" in prose
+        assert "read or query a Context" in prose
+        assert "run permitted operations" in prose
+        assert "created for each applied operation" in prose
+        assert "recorded per affected Context" in prose
+        assert "Esc / Backspace" in rendered
+        assert "Q" not in rendered
+        assert help_inventory._help_information_box_fragments(
+            width=100,
+            by_kind=False,
+        ) == []
+
     def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
