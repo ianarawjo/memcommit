@@ -44,6 +44,11 @@ prompt-toolkit selector:
   the command list, only the retained choice surface and `✓` remain active.
 - `BY KIND` assigns each command one primary discovery category and renders
   each category as one titled box containing all of its command records.
+  Inside a category it preserves an intentional workflow order: orient and
+  inspect first, then navigate or create, then perform semantic work, with
+  destructive or broad cleanup actions last. Primary commands and their aliases
+  remain adjacent. This order comes from `HELP_CATEGORY_GROUPS`; the renderer
+  must not alphabetize it again. `A–Z` alone provides lexical lookup.
   Aliases remain separate commands in the same box so the inventory still
   describes every registered spelling. `A–Z` has no semantic categories, so
   its complete alphabetic projection occupies one `A–Z` box.

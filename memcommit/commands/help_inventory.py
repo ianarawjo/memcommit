@@ -42,45 +42,46 @@ HELP_CATEGORY_GROUPS = (
     (
         "CONTEXTS",
         (
-            "branch", "checkout", "contexts", "embed", "import", "init",
-            "list", "ls", "reference", "rename", "show", "status", "switch",
+            "status", "contexts", "list", "ls", "show", "switch",
+            "checkout", "init", "branch", "rename", "import", "embed",
+            "reference",
         ),
     ),
     (
         "MEMORIES",
         (
-            "add", "chunk", "clear", "delete", "edit", "forget", "remove",
+            "add", "edit", "chunk", "forget", "remove", "delete", "clear",
         ),
     ),
     (
         "SEARCH & EXPLAIN",
         (
-            "find", "find-ambiguities", "find-conflicts", "find-duplicates",
-            "query", "rationale", "summarize", "trace",
+            "find", "query", "summarize", "trace", "rationale",
+            "find-duplicates", "find-ambiguities", "find-conflicts",
         ),
     ),
     (
         "ANALYZE & RESOLVE",
         (
-            "atomize", "compare", "impact", "meld", "merge", "review",
-            "sever", "translate", "update",
+            "atomize", "compare", "impact", "review", "meld", "update",
+            "sever", "translate", "merge",
         ),
     ),
     (
         "HISTORY & RECOVERY",
-        ("checkpoint", "diff", "log", "redo", "revert", "undo"),
+        ("log", "diff", "checkpoint", "undo", "redo", "revert"),
     ),
     (
         "GROUND & EVALUATION",
-        ("eval", "ground", "init-study"),
+        ("ground", "init-study", "eval"),
     ),
     (
         "PROFILE & SHARING",
-        ("lock", "profile", "share", "unlock"),
+        ("profile", "share", "lock", "unlock"),
     ),
     (
         "SYSTEM",
-        ("config", "help", "provider", "shell-init"),
+        ("help", "provider", "shell-init", "config"),
     ),
 )
 
@@ -91,6 +92,11 @@ HELP_CATEGORY_BY_COMMAND = {
 }
 HELP_CATEGORY_ORDER = {
     category: index for index, (category, _commands) in enumerate(HELP_CATEGORY_GROUPS)
+}
+HELP_COMMAND_ORDER = {
+    command_name: command_index
+    for _category, command_names in HELP_CATEGORY_GROUPS
+    for command_index, command_name in enumerate(command_names)
 }
 
 COMMAND_FORMS = {
@@ -685,6 +691,28 @@ def _help_group_width(terminal_columns: int) -> int:
     return max(36, terminal_columns - 1)
 
 
+def _ordered_help_entries(
+    entries: list[CommandEntry],
+    *,
+    by_kind: bool,
+) -> list[CommandEntry]:
+    """Keep workflow order for kinds and reserve lexical order for A–Z."""
+    if not by_kind:
+        return sorted(entries, key=lambda entry: (entry.name.casefold(), entry.name))
+    return sorted(
+        entries,
+        key=lambda entry: (
+            HELP_CATEGORY_ORDER.get(
+                HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER"),
+                len(HELP_CATEGORY_ORDER),
+            ),
+            HELP_COMMAND_ORDER.get(entry.name, 0),
+            entry.name.casefold(),
+            entry.name,
+        ),
+    )
+
+
 def run_help_selector(
     entries: list[CommandEntry],
     *,
@@ -709,18 +737,9 @@ def run_help_selector(
     )
 
     def ordered_entries() -> list[CommandEntry]:
-        if view_state.selected_uid == "A_Z":
-            return sorted(entries, key=lambda entry: (entry.name.casefold(), entry.name))
-        return sorted(
+        return _ordered_help_entries(
             entries,
-            key=lambda entry: (
-                HELP_CATEGORY_ORDER.get(
-                    HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER"),
-                    len(HELP_CATEGORY_ORDER),
-                ),
-                entry.name.casefold(),
-                entry.name,
-            ),
+            by_kind=view_state.selected_uid == "CATEGORY",
         )
 
     visible_entries = {"value": ordered_entries()}

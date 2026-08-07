@@ -117,6 +117,31 @@ class TestHelp:
         assert help_inventory._help_group_width(80) == 79
         assert help_inventory._help_group_width(20) == 36
 
+    def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
+        names = (
+            "clear", "branch", "status", "delete", "add", "show",
+            "switch", "contexts", "edit", "remove",
+        )
+        entries = [
+            CommandEntry(
+                name=name,
+                annotation=None,
+                description=name,
+                command=object(),
+                forms=(f"mem {name}",),
+            )
+            for name in reversed(names)
+        ]
+
+        by_kind = help_inventory._ordered_help_entries(entries, by_kind=True)
+        a_z = help_inventory._ordered_help_entries(entries, by_kind=False)
+
+        assert [entry.name for entry in by_kind] == [
+            "status", "contexts", "show", "switch", "branch",
+            "add", "edit", "remove", "delete", "clear",
+        ]
+        assert [entry.name for entry in a_z] == sorted(names, key=str.casefold)
+
     def test_help_kind_box_contains_multiple_commands_and_expanded_forms(self):
         entries = [
             (
