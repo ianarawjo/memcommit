@@ -65,6 +65,34 @@ def test_horizontal_choice_clamps_and_renders_active_value():
     )
 
 
+def test_horizontal_choice_can_render_each_option_as_a_focused_box():
+    state = HorizontalChoiceState(
+        (
+            HorizontalChoiceOption("KIND", "BY KIND"),
+            HorizontalChoiceOption("A_Z", "A–Z"),
+        ),
+        selected_uid="KIND",
+    )
+
+    fragments = render_horizontal_choice(
+        state,
+        title="VIEW",
+        focused=True,
+        boxed=True,
+    )
+    rendered = "".join(text for _style, text in fragments)
+
+    assert "VIEW · ←/→ SELECT" in rendered
+    assert "┏━━━━━━━━━┓" in rendered
+    assert "┃ BY KIND ┃" in rendered
+    assert "┌─────┐" in rendered
+    assert "│ A–Z │" in rendered
+    assert any(
+        style == "class:memcommit.choice.border.focused" and "┏" in text
+        for style, text in fragments
+    )
+
+
 def test_endpoint_row_keeps_selection_but_drops_cursor_when_tree_loses_focus():
     assert _endpoint_row_styles(
         cursor=True,

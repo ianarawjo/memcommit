@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import sys
+import textwrap
 from dataclasses import dataclass
 from typing import Annotated
 
@@ -15,10 +16,14 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.output.defaults import create_output
-from prompt_toolkit.styles import Style
+from prompt_toolkit.styles import Style, merge_styles
 
-from memcommit.commands.tui_primitives import NavigationAccelerator
-from memcommit.commands.tui_primitives import focus_in_order
+from memcommit.commands.tui_primitives import (
+    MEMCOMMIT_TUI_STYLE,
+    NavigationAccelerator,
+    display_escape_text,
+    focus_in_order,
+)
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -308,9 +313,9 @@ COMMAND_FORMS = {
         "mem query --show-session [session_name] (show one saved transcript)",
     ),
     "rationale": (
-        "mem rationale (enter the current Context's interactive Memory picker)",
+        "mem rationale (open recent Rationale targets or select a Memory)",
         "mem rationale [memory] (explain one current or historical Memory)",
-        "mem rationale --context [context] (enter that Context's interactive Memory picker)",
+        "mem rationale --context [context] (open Recents; Memory selection starts there)",
         "mem rationale [memory] --context [context] (explicit Context and Memory)",
         "mem rationale [memory] --recorded-only (skip inference and its cache)",
     ),
@@ -398,9 +403,9 @@ COMMAND_FORMS = {
         "mem translate [memory] --to [language] --in-place (add one translated sibling Memory)",
     ),
     "trace": (
-        "mem trace (enter the current Context's interactive Memory picker)",
+        "mem trace (open recent Trace targets or select a Memory)",
         "mem trace [memory] (trace one current or historical Memory)",
-        "mem trace --context [context] (enter that Context's interactive Memory picker)",
+        "mem trace --context [context] (open Recents; Memory selection starts there)",
         "mem trace [memory] --context [context] (explicit Context and Memory)",
     ),
     "undo": ("mem undo (undo the latest recorded Context command)",),
@@ -569,6 +574,93 @@ def _render_plain_inventory(entries: list[CommandEntry]) -> None:
         )
 
 
+def _help_card_fragments(
+    entry: CommandEntry,
+    *,
+    width: int,
+    expanded: bool,
+    focused: bool,
+    selected_form: int | None,
+) -> list[tuple[str, str]]:
+    """Render one command and any visible Forms inside a bounded card."""
+    width = max(36, width)
+    inner_width = width - 2
+    content_width = inner_width - 2
+    label = entry.name
+    if entry.annotation:
+        label += f" ({entry.annotation})"
+    label = display_escape_text(label)
+    title = f" {'▾' if expanded else '▸'} mem {label} "
+    title = title[:inner_width]
+    border_style = "class:help-card.focused" if focused else "class:help-card"
+    horizontal = "━" if focused else "─"
+    top = ("┏" if focused else "┌") + title
+    top += horizontal * max(0, inner_width - len(title))
+    top += "┓" if focused else "┐"
+    fragments: list[tuple[str, str]] = [(border_style, top + "\n")]
+
+    description_lines = textwrap.wrap(
+        display_escape_text(entry.description),
+        width=content_width,
+        break_long_words=True,
+        break_on_hyphens=False,
+    ) or [""]
+    vertical = "┃" if focused else "│"
+    for line in description_lines:
+        fragments.extend(
+            [
+                (border_style, vertical),
+                ("", f" {line:<{content_width}} "),
+                (border_style, vertical + "\n"),
+            ]
+        )
+
+    if expanded:
+        fragments.append(
+            (
+                border_style,
+                ("┣" if focused else "├")
+                + horizontal * inner_width
+                + ("┫" if focused else "┤")
+                + "\n",
+            )
+        )
+        for form_index, form in enumerate(entry.forms):
+            selected = selected_form == form_index
+            prefix = f"FORM {form_index + 1} · "
+            lines = textwrap.wrap(
+                display_escape_text(form),
+                width=max(1, content_width - len(prefix)),
+                initial_indent=prefix,
+                subsequent_indent=" " * len(prefix),
+                break_long_words=True,
+                break_on_hyphens=False,
+            ) or [prefix]
+            if selected:
+                fragments.append(("[SetCursorPosition]", ""))
+            for line in lines:
+                fragments.extend(
+                    [
+                        (border_style, vertical),
+                        (
+                            "class:selected" if selected else "class:form",
+                            f" {line:<{content_width}} ",
+                        ),
+                        (border_style, vertical + "\n"),
+                    ]
+                )
+    fragments.append(
+        (
+            border_style,
+            ("┗" if focused else "└")
+            + horizontal * inner_width
+            + ("┛" if focused else "┘")
+            + "\n",
+        )
+    )
+    return fragments
+
+
 def run_help_selector(
     entries: list[CommandEntry],
     *,
@@ -611,10 +703,6 @@ def run_help_selector(
     selected_index = {"value": 0}
     expanded_index: dict[str, int | None] = {"value": None}
     selected_form: dict[str, int | None] = {"value": None}
-    name_width = max(
-        len(entry.name) + (len(entry.annotation) + 3 if entry.annotation else 0)
-        for entry in entries
-    )
     bindings = KeyBindings()
     navigation_accelerator = NavigationAccelerator()
     app_ref: dict[str, Application[HelpSelection | None]] = {}
@@ -635,6 +723,10 @@ def run_help_selector(
     def render_entries():
         fragments: list[tuple[str, str]] = []
         previous_category: str | None = None
+        app = app_ref.get("app")
+        list_focused = app is not None and app.layout.has_focus(list_control)
+        terminal_columns = app.output.get_size().columns if app is not None else 80
+        card_width = min(112, max(36, terminal_columns - 3))
         for index, entry in enumerate(visible_entries["value"]):
             if view_state.selected_uid == "CATEGORY":
                 category = HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER")
@@ -643,41 +735,27 @@ def run_help_selector(
                         fragments.append(("", "\n"))
                     fragments.append(("class:category", f" {category}\n"))
                     previous_category = category
-            command_selected = (
-                index == selected_index["value"]
-                and selected_form["value"] is None
-            )
             expanded = index == expanded_index["value"]
-            if command_selected:
+            card_focused = index == selected_index["value"] and list_focused
+            if card_focused and selected_form["value"] is None:
                 # This marker lets prompt-toolkit scroll the long inventory so
-                # the selected row remains visible in short terminals.
+                # the focused card remains visible in short terminals.
                 fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:selected" if command_selected else "",
-                    ("▾ " if expanded else "▸ ")
-                    + _entry_line(
-                        entry,
-                        name_width=name_width,
-                    )
-                    + "\n",
+            fragments.extend(
+                _help_card_fragments(
+                    entry,
+                    width=card_width,
+                    expanded=expanded,
+                    focused=card_focused,
+                    selected_form=(
+                        selected_form["value"]
+                        if index == selected_index["value"]
+                        else None
+                    ),
                 )
             )
-            if not expanded:
-                continue
-            for form_index, form in enumerate(entry.forms):
-                form_selected = (
-                    index == selected_index["value"]
-                    and selected_form["value"] == form_index
-                )
-                if form_selected:
-                    fragments.append(("[SetCursorPosition]", ""))
-                fragments.append(
-                    (
-                        "class:selected" if form_selected else "class:form",
-                        f"    FORM {form_index + 1} · {form}\n",
-                    )
-                )
+            if index < len(visible_entries["value"]) - 1:
+                fragments.append(("", "\n"))
         return fragments
 
     list_control = FormattedTextControl(
@@ -693,6 +771,7 @@ def run_help_selector(
                 app_ref.get("app") is not None
                 and app_ref["app"].layout.has_focus(view_control)
             ),
+            boxed=True,
         ),
         focusable=True,
         show_cursor=False,
@@ -910,7 +989,7 @@ def run_help_selector(
     )
     view = Window(
         view_control,
-        height=Dimension.exact(1),
+        height=Dimension.exact(4),
         dont_extend_height=True,
     )
     footer = Window(
@@ -941,13 +1020,20 @@ def run_help_selector(
         erase_when_done=True,
         input=app_input,
         output=app_output,
-        style=Style.from_dict(
-            {
-                "title": "bold",
-                "selected": "reverse",
-                "form": "fg:#cad3f5",
-                "category": "bold",
-            }
+        style=merge_styles(
+            [
+                MEMCOMMIT_TUI_STYLE,
+                Style.from_dict(
+                    {
+                        "title": "bold",
+                        "selected": "fg:#10242f bg:#8bd5ff bold",
+                        "form": "fg:#cad3f5",
+                        "category": "bold",
+                        "help-card": "",
+                        "help-card.focused": "fg:#8bd5ff bold",
+                    }
+                ),
+            ]
         ),
     )
     app_ref["app"] = application

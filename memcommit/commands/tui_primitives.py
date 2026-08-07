@@ -203,6 +203,7 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
         # while that same nested control is the immediate keyboard target.
         "memcommit.choice.active": "fg:#10242f bg:#8bd5ff",
         "memcommit.choice.active.focused": "fg:#10242f bg:#8bd5ff bold",
+        "memcommit.choice.border.focused": "fg:#8bd5ff bold",
     }
 )
 

@@ -27,14 +27,23 @@ In an interactive terminal, `mem help` presents the inventory as a
 prompt-toolkit selector:
 
 - A shared horizontal choice at the top selects `BY KIND` or `A–Z`; `BY KIND`
-  is the default. Left and Right change the projection only while that row has
-  focus. Up from the first command reaches VIEW, Down returns to the command
-  list, and Tab/Shift-Tab traverse the same two visible surfaces. A view change
-  retains the selected command by name but closes its Forms because their row
-  offsets belong to the old projection.
+  is the default. Each choice is a separate box; the selected box retains the
+  shared light-blue selection surface, and the keyboard target also receives
+  the shared heavy blue focus border. Left and Right change the projection
+  through the common `HorizontalChoiceState` only while VIEW has focus. Up from
+  the first command reaches VIEW, Down returns to the command list, and
+  Tab/Shift-Tab traverse the same two visible surfaces. A view change retains
+  the selected command by name but closes its Forms because their row offsets
+  belong to the old projection.
 - `BY KIND` assigns each command one primary discovery category and renders
   nonselectable category headings. Aliases remain separate commands in the
   same category so the inventory still describes every registered spelling.
+- Every command is one bounded card containing its name and wrapped
+  description. The focused command uses the common blue focus treatment and
+  heavy border instead of relying on a whole-line reverse video bar. Expansion
+  keeps that command's Forms inside the same card; long descriptions and Forms
+  wrap within the current terminal width so semantic qualifiers do not vanish
+  beyond the right edge. Report chrome remains neutral when it is not focused.
 - Up and Down move one command at a time or move among one expanded command's
   forms. Holding one direction reuses the shared `NavigationAccelerator`: it
   waits for the terminal's initial key-repeat delay, then increases movement to

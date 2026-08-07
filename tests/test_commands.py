@@ -93,6 +93,54 @@ class TestHelp:
             and "issue-scoped directional meld" in line
             for line in lines
         )
+        assert any(
+            line.startswith("contexts ")
+            and "readable cross-Profile Context views" in line
+            for line in lines
+        )
+        assert any(
+            line.startswith("reference ")
+            and "identity metadata rather than copying" in line
+            for line in lines
+        )
+        assert any(
+            line.startswith("forget ")
+            and "keep/edit/delete decision" in line
+            for line in lines
+        )
+
+    def test_help_card_wraps_description_and_forms_inside_one_focused_box(self):
+        entry = CommandEntry(
+            name="explain",
+            annotation=None,
+            description=(
+                "Explain a sufficiently long operation description without "
+                "letting its meaning disappear beyond the terminal edge."
+            ),
+            command=object(),
+            forms=(
+                "mem explain [memory] --context [context] "
+                "(inspect one explicit target)",
+            ),
+        )
+
+        fragments = help_inventory._help_card_fragments(
+            entry,
+            width=52,
+            expanded=True,
+            focused=True,
+            selected_form=0,
+        )
+        rendered = "".join(text for _style, text in fragments)
+        lines = rendered.splitlines()
+
+        assert lines[0].startswith("┏ ▾ mem explain ")
+        assert lines[-1] == "┗" + "━" * 50 + "┛"
+        assert all(len(line) == 52 for line in lines)
+        assert "terminal edge." in rendered
+        assert "FORM 1 · mem explain" in rendered
+        assert any(style == "[SetCursorPosition]" for style, _text in fragments)
+        assert any(style == "class:selected" for style, _text in fragments)
 
     def test_lists_commands_alphabetically(self):
         result = invoke("help")

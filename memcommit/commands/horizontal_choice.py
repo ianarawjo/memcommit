@@ -69,8 +69,16 @@ def render_horizontal_choice(
     title: str,
     focused: bool,
     show_description: bool = False,
+    boxed: bool = False,
 ) -> StyleAndTextTuples:
     """Render one segmented row; callers retain all meaning and key bindings."""
+    if boxed:
+        return _render_boxed_horizontal_choice(
+            state,
+            title=title,
+            focused=focused,
+            show_description=show_description,
+        )
     fragments: StyleAndTextTuples = [
         ("", f"{'›' if focused else ' '} {title} · ")
     ]
@@ -88,6 +96,72 @@ def render_horizontal_choice(
         if index < len(state.options) - 1:
             fragments.append(("", "  "))
     fragments.append(("", " · ←/→ SELECT"))
+    selected = state.options[state.selected_index]
+    if show_description and selected.description:
+        fragments.extend(
+            [
+                ("", "\n"),
+                ("", f"  MEANING · {display_escape_text(selected.description)}"),
+            ]
+        )
+    return fragments
+
+
+def _render_boxed_horizontal_choice(
+    state: HorizontalChoiceState,
+    *,
+    title: str,
+    focused: bool,
+    show_description: bool,
+) -> StyleAndTextTuples:
+    """Render the shared choice state as individually focused cards."""
+    escaped_labels = tuple(
+        display_escape_text(option.label) for option in state.options
+    )
+    fragments: StyleAndTextTuples = [
+        ("", f"{'›' if focused else ' '} {title} · ←/→ SELECT\n  ")
+    ]
+    for row in ("top", "middle", "bottom"):
+        for index, (option, label) in enumerate(zip(state.options, escaped_labels)):
+            selected = option.uid == state.selected_uid
+            keyboard_target = focused and selected
+            border_style = (
+                "class:memcommit.choice.border.focused"
+                if keyboard_target
+                else ""
+            )
+            content_style = focused_control_style(
+                focused=keyboard_target,
+                selected=selected,
+            )
+            horizontal = "━" if keyboard_target else "─"
+            vertical = "┃" if keyboard_target else "│"
+            if row == "top":
+                left, content, right = (
+                    ("┏", horizontal * (len(label) + 2), "┓")
+                    if keyboard_target
+                    else ("┌", horizontal * (len(label) + 2), "┐")
+                )
+                fragments.append((border_style, left + content + right))
+            elif row == "middle":
+                fragments.extend(
+                    [
+                        (border_style, vertical),
+                        (content_style, f" {label} "),
+                        (border_style, vertical),
+                    ]
+                )
+            else:
+                left, content, right = (
+                    ("┗", horizontal * (len(label) + 2), "┛")
+                    if keyboard_target
+                    else ("└", horizontal * (len(label) + 2), "┘")
+                )
+                fragments.append((border_style, left + content + right))
+            if index < len(state.options) - 1:
+                fragments.append(("", "  "))
+        if row != "bottom":
+            fragments.append(("", "\n  "))
     selected = state.options[state.selected_index]
     if show_description and selected.description:
         fragments.extend(

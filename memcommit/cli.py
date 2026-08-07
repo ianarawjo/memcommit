@@ -117,7 +117,13 @@ app.command(
         "of a current/explicit Context."
     ),
 )(show.cmd)
-app.command("contexts",       help="List all available contexts.")(contexts.cmd)
+app.command(
+    "contexts",
+    help=(
+        "List ordinary local Contexts and readable cross-Profile Context views, "
+        "marking the current Context and each granted permission set."
+    ),
+)(contexts.cmd)
 app.add_typer(
     write_protection.lock_app,
     name="lock",
@@ -186,8 +192,20 @@ app.command(
         "--into BASELINE."
     ),
 )(meld.cmd)
-app.command("embed",          help="Embed one context inside another.")(embed.cmd)
-app.command("reference",      help="Add a read-only live reference to a memory.")(reference.cmd)
+app.command(
+    "embed",
+    help=(
+        "Add one Context to another as a live nested Context while the source "
+        "retains its own identity and ownership."
+    ),
+)(embed.cmd)
+app.command(
+    "reference",
+    help=(
+        "Add a read-only live pointer to a directly owned source Memory; the "
+        "target stores identity metadata rather than copying its content."
+    ),
+)(reference.cmd)
 app.command(
     "query",
     help=(
@@ -226,7 +244,13 @@ app.command(
         "--sessions enters the interactive cross-Context session launcher."
     ),
 )(atomize.cmd)
-app.command("checkpoint",     help="Save a manual checkpoint of the current context state.")(checkpoint.cmd)
+app.command(
+    "checkpoint",
+    help=(
+        "Save the current Context state as a manual recovery point for later "
+        "Diff or Revert, optionally labeled with a message."
+    ),
+)(checkpoint.cmd)
 app.command(
     "revert",
     help=(
@@ -268,13 +292,19 @@ app.command(
 app.command(
     "translate",
     help=(
-        "Show and save a reusable translation view; materialize only when "
-        "explicitly requested."
+        "Show and save a reusable translation view without changing the source; "
+        "materialize only through explicit --save-as or --in-place routes."
     ),
 )(translate.cmd)
 
 # --- Semantic (legacy configured LLM or isolated Codex provider) ---
-app.command("forget",         help="Forget memories matching a description (uses LLM).")(forget.cmd)
+app.command(
+    "forget",
+    help=(
+        "Analyze direct Memories against one instruction, review the proposed "
+        "keep/edit/delete decision for each, and apply only the accepted batch."
+    ),
+)(forget.cmd)
 app.command(
     "find",
     help="Find current items or explicitly temporal Memory history.",
@@ -338,7 +368,13 @@ app.command(
         "view, and APPLY? hands saved work to its normal Apply flow."
     ),
 )(impact.cmd)
-app.command("integrate",      help="Intelligently integrate info into the current context (uses LLM).")(integrate.cmd)
+app.command(
+    "integrate",
+    help=(
+        "Legacy semantic route that may add or rewrite current-Context Memories "
+        "to incorporate supplied information after confirmation."
+    ),
+)(integrate.cmd)
 app.command(
     "update",
     help=(
