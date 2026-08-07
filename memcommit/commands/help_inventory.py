@@ -680,6 +680,11 @@ def _help_group_fragments(
     return fragments
 
 
+def _help_group_width(terminal_columns: int) -> int:
+    """Use the complete Help viewport except its one-column scrollbar."""
+    return max(36, terminal_columns - 1)
+
+
 def run_help_selector(
     entries: list[CommandEntry],
     *,
@@ -744,7 +749,7 @@ def run_help_selector(
         app = app_ref.get("app")
         list_focused = app is not None and app.layout.has_focus(list_control)
         terminal_columns = app.output.get_size().columns if app is not None else 80
-        card_width = min(112, max(36, terminal_columns - 3))
+        card_width = _help_group_width(terminal_columns)
         indexed_entries = list(enumerate(visible_entries["value"]))
         groups: list[tuple[str, list[tuple[int, CommandEntry]]]] = []
         if view_state.selected_uid == "CATEGORY":
@@ -787,7 +792,7 @@ def run_help_selector(
                 app_ref.get("app") is not None
                 and app_ref["app"].layout.has_focus(view_control)
             ),
-            boxed=True,
+            inline_boxed=True,
         ),
         focusable=True,
         show_cursor=False,
@@ -1005,7 +1010,7 @@ def run_help_selector(
     )
     view = Window(
         view_control,
-        height=Dimension.exact(4),
+        height=Dimension.exact(1),
         dont_extend_height=True,
     )
     view_frame = Frame(view, title="INVENTORY VIEW")

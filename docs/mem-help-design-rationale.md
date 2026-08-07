@@ -27,15 +27,17 @@ In an interactive terminal, `mem help` presents the inventory as a
 prompt-toolkit selector:
 
 - A shared horizontal choice at the top selects `BY KIND` or `A–Z`; `BY KIND`
-  is the default. Each choice is a separate box; the selected box retains the
-  shared light-blue selection surface and a visible `✓`, while the keyboard
-  target also receives the shared heavy blue focus border. Left and Right
+  is the default. `VIEW`, both compact bracketed choices, and the Left/Right
+  hint occupy one line instead of reserving three rows for choice cards. The
+  selected choice retains the shared light-blue selection surface and a visible
+  `✓`, while the keyboard target also receives the shared blue focus treatment.
+  Left and Right
   change the projection through the common `HorizontalChoiceState` only while
   VIEW has focus. Up from the first command reaches VIEW, Down returns to the
   command list, and Tab/Shift-Tab traverse the same two visible surfaces. A
   view change retains the selected command by name but closes its Forms because
   their row offsets belong to the old projection.
-- The two choice boxes sit inside one `INVENTORY VIEW` frame, matching the
+- The two inline choice boxes sit inside one `INVENTORY VIEW` frame, matching the
   common endpoint setup hierarchy where Meld's mode boxes sit inside
   `OPERATION SHAPE`. When VIEW owns keyboard focus, the shared focused-frame
   treatment turns that enclosing border blue and heavy; when focus returns to
@@ -54,7 +56,9 @@ prompt-toolkit selector:
   command without introducing a nested command box. The next command begins
   on the line immediately following the prior record, without an empty spacer
   row. Long descriptions and Forms wrap within the current terminal width so
-  semantic qualifiers do not vanish beyond the right edge. Unfocused box
+  semantic qualifiers do not vanish beyond the right edge. Every category box
+  uses the complete Help viewport up to its one-column scrollbar; it has no
+  fixed maximum width that leaves a wide terminal half-empty. Unfocused box
   chrome remains neutral.
 - Up and Down move one command at a time or move among one expanded command's
   forms. Holding one direction reuses the shared `NavigationAccelerator`: it

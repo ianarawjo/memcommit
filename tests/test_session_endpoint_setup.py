@@ -104,6 +104,32 @@ def test_horizontal_choice_can_render_each_option_as_a_focused_box():
     assert "│ ✓ A–Z │" in inactive_text
 
 
+def test_horizontal_choice_can_render_checked_boxes_on_one_line():
+    state = HorizontalChoiceState(
+        (
+            HorizontalChoiceOption("KIND", "BY KIND"),
+            HorizontalChoiceOption("A_Z", "A–Z"),
+        ),
+        selected_uid="KIND",
+    )
+
+    fragments = render_horizontal_choice(
+        state,
+        title="VIEW",
+        focused=True,
+        inline_boxed=True,
+    )
+    rendered = "".join(text for _style, text in fragments)
+
+    assert rendered == "› VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT"
+    assert "\n" not in rendered
+    assert any(
+        style == "class:memcommit.choice.active.focused"
+        and text == " ✓ BY KIND "
+        for style, text in fragments
+    )
+
+
 def test_endpoint_row_keeps_selection_but_drops_cursor_when_tree_loses_focus():
     assert _endpoint_row_styles(
         cursor=True,

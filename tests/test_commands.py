@@ -112,6 +112,11 @@ class TestHelp:
         assert result.exit_code == 2
         assert "No such command 'integrate'" in result.stderr
 
+    def test_group_boxes_use_the_complete_help_viewport(self):
+        assert help_inventory._help_group_width(240) == 239
+        assert help_inventory._help_group_width(80) == 79
+        assert help_inventory._help_group_width(20) == 36
+
     def test_help_kind_box_contains_multiple_commands_and_expanded_forms(self):
         entries = [
             (
