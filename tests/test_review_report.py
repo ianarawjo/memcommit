@@ -200,9 +200,9 @@ def test_adaptive_review_starts_in_viewer_and_opens_the_selected_item():
 
     with create_pipe_input() as pipe_input:
         # Tab moves from the initial Viewer to Items. Open the finding, Tab to
-        # RESPONSES on its first reading, then move through Other to submit its
-        # Response draft.
-        pipe_input.send_text("\t\x1b[B\r\t\r\x1b[B\x1b[B\r\r")
+        # RESPONSES on its first reading, then move to the separate Response
+        # box and submit its draft.
+        pipe_input.send_text("\t\x1b[B\r\t\r\x1b[B\r\r")
         action = run_review_report_shell(
             controller,
             interactive_actions=True,

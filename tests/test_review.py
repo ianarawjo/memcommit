@@ -119,9 +119,9 @@ def test_common_review_response_frame_persists_choice_and_comment():
 
     with create_pipe_input() as pipe_input:
         # Open the first finding, enter RESPONSES on reading 1, choose reading
-        # 2, then move through Other to its independent Response field.
+        # 2, then move to its independent Response box.
         pipe_input.send_text(
-            "\t\x1b[B\r\t\x1b[B\r\x1b[B\x1b[B\r"
+            "\t\x1b[B\r\t\x1b[B\r\x1b[B\r"
             "교직원 출입구의 자격 규칙이다.\rq"
         )
         result = run_review_resolution_shell(

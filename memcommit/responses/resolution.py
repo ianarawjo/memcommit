@@ -33,12 +33,10 @@ def response_target_from_item(
     if presentation is None:
         prompt_heading = "QUESTION" if item.question else ""
         options_heading = "OPTIONS"
-        other_label = "Different response"
         mode = "DECISION" if item.question or item.options else "COMMENT"
     else:
         prompt_heading = presentation.prompt_heading
         options_heading = presentation.options_heading
-        other_label = presentation.other_option_label
         mode = "DECISION"
     return ResponseTarget(
         item_uid=item.uid,
@@ -53,7 +51,6 @@ def response_target_from_item(
             ResponseChoice(option.uid, option.label, option.text)
             for option in item.options
         ),
-        other_choice_label=other_label,
         editable=(
             not read_only
             and not view.input_locked

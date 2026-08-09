@@ -1083,9 +1083,9 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
     saved: list[dict] = []
     with create_pipe_input() as pipe_input:
         # Open issue 1 from Items, Tab into RESPONSES, choose reading 2,
-        # then move through Other to open and save its Response field.
+        # then move to the separate Response box and save its text.
         pipe_input.send_text(
-            "\t\x1b[B\r\t\x1b[B\r\x1b[B\x1b[B\rNeeds the staff-only qualifier.\x13q"
+            "\t\x1b[B\r\t\x1b[B\r\x1b[B\rNeeds the staff-only qualifier.\x13q"
         )
         run_atomize_workbench_shell(
             workbench,
@@ -1239,7 +1239,7 @@ def test_response_backspace_still_edits_text_instead_of_navigating_up():
     first = workbench.ordered_issues()[0]
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\x1b[B\x1b[B\rab\x7f\rq")
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\x1b[B\rab\x7f\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,

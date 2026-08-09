@@ -70,28 +70,6 @@ def response_frame_fragments(
             )
         )
 
-    response_parts: list[tuple[str, str]] = [
-        ("class:block-heading", " RESPONSE\n"),
-    ]
-    if state.editing:
-        response_parts.append(("", " Editing below · Enter save · Ctrl-J newline\n"))
-    elif draft.text.strip():
-        response_parts.append(("", " SAVED\n"))
-        for line in _wrap(draft.text, body_width):
-            response_parts.append(("class:viewer-body", f" {line}\n"))
-        if target.editable:
-            response_parts.append(("", " Enter to edit this response.\n"))
-    elif target.editable:
-        response_parts.append(("", " Enter to write a response.\n"))
-    else:
-        response_parts.append(("", " No saved response.\n"))
-    fragments.extend(
-        semantic_viewer_block_fragments(
-            response_parts,
-            active=focused and state.section == "RESPONSE",
-            anchor="start",
-        )
-    )
     return fragments
 
 

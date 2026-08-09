@@ -17,8 +17,8 @@ location for the same answer.
 - `ResponseTarget` identifies one current answerable item and supplies labels,
   obligation, state, question, choices, and editability.
 - `ResponseDraft` carries only a selected opaque choice UID and free-form text.
-- `ResponseFrameState` owns process-local Decision/Response focus, nested option
-  cursor, Other-response focus, and editor state.
+- `ResponseFrameState` owns process-local Decision/Response focus, choice
+  cursor, and editor state.
 - the TUI renderer owns common status, focus, selection, and input affordances.
 
 The contract contains no provider, persistence, mutation, or Apply authority.
@@ -55,6 +55,13 @@ Enter on a choice stages or clears its opaque UID, while Enter on Response opens
 multiline field. Enter saves, `Ctrl-J` inserts a newline, and Escape cancels the
 edit without silently replacing the durable draft.
 
+Response is a separate inner box below the real operation-supplied choices,
+built with the same shared framed multiline primitive used by other terminal
+composers. It is not fabricated as a final `Different` selection card. Moving
+into or editing that box does not itself clear a checked choice; free-form text
+may remain independent guidance or accompany the selected reading according to
+the operation adapter's existing contract.
+
 Hover and selection remain distinct. Moving over another choice is temporary;
 crossing into Response or leaving the frame restores the choice cursor to the
 checked UID when one exists. Returning therefore acts on the durable selection
@@ -64,8 +71,8 @@ Decision choices use the service-wide Meld-style selection cards rather than a
 Response-specific radio-row renderer. The staged value carries `✓`; the current
 keyboard target carries the heavy blue border, and descriptions wrap in stacked
 full-width cards. `SelectionOption` and `FlatSelectionState` own the flat cursor
-and checked-value mechanics while the Response adapter retains `Other`, draft,
-and persistence meaning. See `docs/selection-control-design-rationale.md`.
+and checked-value mechanics while the Response adapter retains draft and
+persistence meaning. See `docs/selection-control-design-rationale.md`.
 The focused card owns the frame's effective viewport anchor, placed after its
 closing border; the surrounding Decision presentation must not emit an earlier
 anchor that masks the exact row.

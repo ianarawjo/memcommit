@@ -61,7 +61,7 @@ A common selection control does not decide what selection means. Callers retain:
 
 - immediate Left/Right selection versus Up/Down followed by Enter;
 - single versus multiple cardinality and minimum checked counts;
-- the Response `Other` row and its transition to free-form input;
+- the Response box and its transition to free-form input;
 - tree expansion, availability, annotations, authority, and destination rules;
 - validation, persistence, provider turns, Apply actions, and CAS boundaries.
 

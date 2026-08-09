@@ -200,13 +200,15 @@ conversation.
   target receives the heavy blue border. Do not use radio circles, diamonds,
   or operation-authored option boxes. The clarification or resolution question
   is explanatory chrome above the choices, not an independent focus stop.
-- Open Different reading/resolution and ordinary item Response input inside
-  the existing `RESPONSES` frame; never replace the current detail with a
-  separate editor screen or add a sibling Message frame. Enter saves the
-  response and returns focus to the same Responses frame, while `Ctrl-J` inserts a
-  newline. A draft-owning adapter may persist that response without closing
-  the workbench; operations that require a new semantic provider turn still
-  receive their explicit submitted action.
+- Put free-form input in a separate inner `RESPONSE` box after the real
+  operation-supplied choices; do not fabricate a `Different`/`Other` choice.
+  Reuse the shared framed multiline input inside the existing `RESPONSES`
+  frame; never replace the current detail with a separate editor screen or add
+  a sibling Message frame. Enter saves the response and returns focus to the
+  same Responses frame, while `Ctrl-J` inserts a newline. Merely entering the
+  box must not clear a checked choice. A draft-owning adapter may persist that
+  response without closing the workbench; operations that require a new
+  semantic provider turn still receive their explicit submitted action.
 - Make `RESPONSE` itself the focusable stop after the visible choices inside the
   common Responses frame. Enter on that section opens its inline field. Do not
   render an adapter-authored instruction such as `REFINE, COMMENT, OR

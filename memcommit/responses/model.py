@@ -71,7 +71,6 @@ class ResponseTarget:
     prompt: str = ""
     choices_heading: str = "OPTIONS"
     choices: tuple[ResponseChoice, ...] = ()
-    other_choice_label: str = "Different response"
     editable: bool = True
 
     def __post_init__(self) -> None:
@@ -87,7 +86,6 @@ class ResponseTarget:
         if not isinstance(self.prompt, str):
             raise ValueError("Invalid response prompt.")
         _one_line(self.choices_heading, "response choices heading")
-        _one_line(self.other_choice_label, "response other-choice label")
         if not isinstance(self.choices, tuple) or any(
             not isinstance(choice, ResponseChoice) for choice in self.choices
         ):

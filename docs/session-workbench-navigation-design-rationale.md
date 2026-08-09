@@ -170,23 +170,28 @@ so the list stays compact; Enter on a Memory shows only that row's evidence,
 and Enter again or Escape/Backspace collapses it before any outer back step.
 This state is process-local and never enters the artifact or response frame.
 
-An OPTIONS section in the common Responses frame is a nested navigation layer,
-not an implicitly active list.
-For actionable quality issues, its clarification or resolution question is
-the prompt of that same Decision section rather than a separate navigation
-stop. One focus state therefore emphasizes both the question and its proposed
-answers, and Enter opens the choice rows directly.
-Its neutral state says `Enter to choose an option`. Enter activates the layer,
-Up/Down moves among supplied readings and Other direction, and Enter selects
-the focused reading. Escape or Backspace returns to Responses section navigation.
-Choices are plain rows rather than nested rectangular cards. The focused row
-uses the shared light-blue treatment and an underline; that underline is a
-cursor signal and disappears whenever the row is not focused. A durable staged
-selection carries a `✓` marker without retaining the underline. Reopening a
-durable draft restores the option cursor to that checked row; otherwise the
+The common Responses frame presents every proposed choice and Response as one
+linear navigation sequence. Its clarification or resolution question is
+explanatory chrome rather than a separate stop. Entering the frame focuses the
+checked choice, or the first choice when none is checked. Up/Down moves through
+the supplied readings and then the separate Response box without a preliminary
+Enter or a nested-layer Escape; moving up from Response restores the checked
+choice when one exists and otherwise retains the last exploratory row.
+Enter selects or clears the focused reading, while Enter on Response focuses
+its framed multiline field.
+
+The choice cursor is exploratory state, not the staged answer. Crossing from
+choices into Response or leaving the frame restores that cursor to the checked
+choice when one exists; returning to the frame must not preserve a stale hover
+over a different reading.
+
+Choices use the shared Meld-style cards. The focused card receives the heavy
+blue border, a durable staged selection carries `✓` and the retained fill, and
+the hidden viewport anchor follows the focused card's closing border. Reopening
+a durable draft restores the option cursor to that checked row; otherwise the
 screen would advertise one selection while Enter acts on another. This
-interaction belongs to the common Resolution Session Responses frame, so Meld, Sever,
-Update, Atomize, and adaptive Review do not define divergent option controls.
+interaction belongs to the common Resolution Session Responses frame, so Meld,
+Sever, Update, Atomize, and adaptive Review do not define divergent controls.
 
 The same session topology is the default for live resolution review in Meld,
 Sever, and Atomize, and for the Update and adaptive Review projections. Sever
@@ -201,16 +206,16 @@ reviewed response set and then enters the normal validated application path.
 The final surface states this compound behavior and Escape/Backspace returns
 without either step. Responses itself never incorporates or applies.
 
-Choosing Other direction or opening an item's ordinary Response keeps the
-current item visible. The writable field appears inline within the independent
-Responses frame rather than replacing the Viewer or opening a sibling Message
-frame. Enter saves and returns focus to Responses; `Ctrl-J` inserts
+Opening an item's Response keeps the current item visible. The writable field
+is a persistent inner box within the independent Responses frame rather than a
+fabricated final choice, a Viewer replacement, or a sibling Message frame.
+Enter saves and returns focus to Responses; `Ctrl-J` inserts
 a newline. When the adapter owns durable drafts, saving does not close the
 workbench. An operation that needs a provider response still receives the
 normal explicit submitted action at its semantic boundary.
 
-`RESPONSE` is a real navigation section after Decision inside the common
-Responses frame. Its resting state says only `Enter to write a response`; it
+`RESPONSE` is the final navigation stop after the visible choices inside the
+common Responses frame. Its resting state says only `Enter to write a response`; it
 does not display adapter-authored editing instructions as report content.
 Enter opens a blank field for a new response or restores the current durable
 draft for revision.

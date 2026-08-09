@@ -2753,9 +2753,10 @@ def run_resolution_workbench_shell(
         local_drafts[item.uid] = ResponseDraft(option_uid, comment)
 
     composer = build_framed_multiline_input(
-        "MESSAGE",
+        "RESPONSE",
         prompt="› ",
         buffer_name="resolution-message",
+        height=Dimension(min=4, preferred=5, max=7),
     )
     input_area = composer.text_area
     body_control = FormattedTextControl(
@@ -3053,7 +3054,7 @@ def run_resolution_workbench_shell(
                     response += f" Additional guidance: {comment.strip()}"
                 lines.append(f"- {item.title}: {response}")
             elif comment.strip():
-                lines.append(f"- {item.title}: Other direction: {comment.strip()}")
+                lines.append(f"- {item.title}: Response: {comment.strip()}")
             elif item.response_state == "ANSWERED":
                 lines.append(f"- {item.title}: Keep the saved response.")
             else:
@@ -3180,7 +3181,7 @@ def run_resolution_workbench_shell(
             current_navigation.move_item(active_view, delta)
             load_draft()
         global_comment["value"] = False
-        composer.frame.title = "MESSAGE"
+        composer.frame.title = "RESPONSE" if split_viewer_items else "MESSAGE"
         set_status("")
 
     def viewer_navigation_accelerates() -> bool:
@@ -3349,7 +3350,7 @@ def run_resolution_workbench_shell(
                     label = item.option(option_uid).label
                     set_status(f"Selected · {label}")
                 elif saved_comment.strip():
-                    set_status("Saved · Other direction")
+                    set_status("Saved · Response")
             event.app.invalidate()
             return
         if global_comment["value"]:
@@ -3483,32 +3484,22 @@ def run_resolution_workbench_shell(
                 elif response_state.option_navigation_active and not target.editable:
                     set_status("This response is read-only.")
                 elif response_state.option_navigation_active:
-                    if response_state.other_choice_focused:
-                        draft = response_state.toggle_current_choice(target)
-                        local_drafts[item.uid] = draft
-                        current_navigation.selected_option_uid = None
-                        if draft_saver is not None:
-                            draft_saver(item.uid, None, draft.text)
-                        open_item_input(title=current_response_heading())
-                    else:
-                        draft = response_state.toggle_current_choice(target)
-                        local_drafts[item.uid] = draft
-                        current_navigation.selected_option_uid = (
-                            draft.selected_choice_uid
+                    draft = response_state.toggle_current_choice(target)
+                    local_drafts[item.uid] = draft
+                    current_navigation.selected_option_uid = draft.selected_choice_uid
+                    if draft_saver is not None:
+                        draft_saver(
+                            item.uid,
+                            draft.selected_choice_uid,
+                            draft.text,
                         )
-                        if draft_saver is not None:
-                            draft_saver(
-                                item.uid,
-                                draft.selected_choice_uid,
-                                draft.text,
-                            )
-                        if draft.selected_choice_uid is None:
-                            set_status("Selection cleared.")
-                        else:
-                            set_status(
-                                "Selected · ✓ "
-                                + target.choice(draft.selected_choice_uid).label
-                            )
+                    if draft.selected_choice_uid is None:
+                        set_status("Selection cleared.")
+                    else:
+                        set_status(
+                            "Selected · ✓ "
+                            + target.choice(draft.selected_choice_uid).label
+                        )
                 elif response_state.section == "DECISION":
                     # A choice-bearing Decision is always directly focusable.
                     # This fallback is only reachable for a prompt-only target.
@@ -4202,7 +4193,7 @@ def run_resolution_workbench_shell(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    inline_input = ConditionalContainer(
+    legacy_inline_input = ConditionalContainer(
         HSplit(
             [
                 Window(
@@ -4218,8 +4209,17 @@ def run_resolution_workbench_shell(
     )
     if split_viewer_items:
         viewer_frame = Frame(body, title="VIEWER")
+        decision_container = ConditionalContainer(
+            responses_window,
+            filter=Condition(
+                lambda: (
+                    (target := current_response_target()) is not None
+                    and target.has_decision
+                )
+            ),
+        )
         responses_frame = Frame(
-            HSplit([responses_window, inline_input]),
+            HSplit([decision_container, composer.frame]),
             title="RESPONSES",
         )
         responses_container = ConditionalContainer(
@@ -4242,6 +4242,16 @@ def run_resolution_workbench_shell(
             is_focused=lambda: session_navigation.pane in {"responses", "composer"},
         )
         bind_focused_frame_style(
+            composer.frame,
+            is_focused=lambda: (
+                session_navigation.pane == "composer"
+                or (
+                    session_navigation.pane == "responses"
+                    and response_state.section == "RESPONSE"
+                )
+            ),
+        )
+        bind_focused_frame_style(
             items_frame,
             is_focused=lambda: session_navigation.pane == "items",
         )
@@ -4262,7 +4272,7 @@ def run_resolution_workbench_shell(
             "todo": todo_control,
         }[session_navigation.pane]
     else:
-        viewer_frame = Frame(HSplit([body, inline_input]), title="VIEWER")
+        viewer_frame = Frame(HSplit([body, legacy_inline_input]), title="VIEWER")
         bind_focused_frame_style(
             viewer_frame,
             is_focused=lambda: True,

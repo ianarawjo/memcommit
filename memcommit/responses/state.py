@@ -11,7 +11,6 @@ from memcommit.selection.state import FlatSelectionState
 
 
 ResponseSection = Literal["DECISION", "RESPONSE"]
-_OTHER_CHOICE_UID = "__memcommit_response_other__"
 
 
 @dataclass
@@ -41,49 +40,25 @@ class ResponseFrameState:
 
     @property
     def option_cursor_uid(self) -> str | None:
-        if self._choices is None or self._choices.cursor_uid == _OTHER_CHOICE_UID:
-            return None
-        return self._choices.cursor_uid
+        return None if self._choices is None else self._choices.cursor_uid
 
     @property
     def other_choice_focused(self) -> bool:
-        return (
-            self._choices is not None and self._choices.cursor_uid == _OTHER_CHOICE_UID
-        )
+        """Compatibility shim for shells saved before Other became a box."""
+
+        return False
 
     @other_choice_focused.setter
-    def other_choice_focused(self, focused: bool) -> None:
-        if self._choices is None:
-            return
-        if focused:
-            self._choices.cursor_uid = _OTHER_CHOICE_UID
-            return
-        if self._choices.cursor_uid == _OTHER_CHOICE_UID:
-            ordinary_uids = tuple(
-                option.uid
-                for option in self._choices.options
-                if option.uid != _OTHER_CHOICE_UID
-            )
-            if ordinary_uids:
-                self._choices.cursor_uid = (
-                    self._choices.selected_uid
-                    if self._choices.selected_uid in ordinary_uids
-                    else ordinary_uids[0]
-                )
+    def other_choice_focused(self, _focused: bool) -> None:
+        # Older frame-boundary code clears this flag while switching panes.
+        # There is no synthetic Other row to mutate now.
+        return
 
     @staticmethod
     def _selection_options(target: ResponseTarget) -> tuple[SelectionOption, ...]:
-        if any(choice.uid == _OTHER_CHOICE_UID for choice in target.choices):
-            raise ValueError("Response choice UID collides with the Other control.")
         return tuple(
             SelectionOption(choice.uid, choice.label, choice.text)
             for choice in target.choices
-        ) + (
-            SelectionOption(
-                _OTHER_CHOICE_UID,
-                target.other_choice_label,
-                "Write a different answer in Response.",
-            ),
         )
 
     def sync(
@@ -160,8 +135,6 @@ class ResponseFrameState:
         assert self._choices is not None
         if self.draft.selected_choice_uid is not None:
             self._choices.cursor_uid = self.draft.selected_choice_uid
-        elif self._choices.cursor_uid == _OTHER_CHOICE_UID:
-            self._choices.cursor_uid = target.choices[0].uid
         return True
 
     def focus_response(self) -> None:
@@ -212,11 +185,6 @@ class ResponseFrameState:
         self._choices.move(delta)
 
     def toggle_current_choice(self, target: ResponseTarget) -> ResponseDraft:
-        if self.other_choice_focused:
-            assert self._choices is not None
-            self._choices.set_selected(None)
-            self.draft = ResponseDraft(None, self.draft.text)
-            return self.draft
         if self._choices is None or self.option_cursor_uid is None:
             return self.draft
         target.choice(self.option_cursor_uid)

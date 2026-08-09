@@ -19,7 +19,6 @@ def _target() -> ResponseTarget:
             ResponseChoice("north", "North entrance", "Use the north entrance."),
             ResponseChoice("staff", "Staff entrance", "Use the staff entrance."),
         ),
-        other_choice_label="Different reading",
     )
 
 
@@ -31,8 +30,6 @@ def test_response_state_moves_linearly_from_choices_to_response():
     assert state.section == "DECISION"
     assert state.option_navigation_active is True
     assert state.option_cursor_uid == "staff"
-    state.move_focus(target, 1)
-    assert state.other_choice_focused is True
     state.move_focus(target, 1)
     assert state.section == "RESPONSE"
     assert state.option_navigation_active is False
@@ -65,7 +62,7 @@ def test_response_focus_restores_the_checked_choice_after_transient_hover():
     assert state.option_cursor_uid == "staff"
 
 
-def test_response_renderer_owns_question_options_and_saved_response():
+def test_response_renderer_owns_question_and_real_options_only():
     target = _target()
     draft = ResponseDraft("staff", "Only during construction.")
     state = ResponseFrameState()
@@ -87,8 +84,9 @@ def test_response_renderer_owns_question_options_and_saved_response():
     assert "CLARIFICATION QUESTION" in rendered
     assert "PROPOSED READINGS" in rendered
     assert "✓ 2. Staff entrance" in rendered
-    assert "RESPONSE" in rendered
-    assert "Only during construction." in rendered
+    assert "Different reading" not in rendered
+    assert "RESPONSE" not in rendered
+    assert "Only during construction." not in rendered
 
 
 def test_response_choice_owns_the_first_effective_viewport_anchor():
@@ -109,15 +107,10 @@ def test_response_choice_owns_the_first_effective_viewport_anchor():
         for index, (_style, text) in enumerate(fragments)
         if "✓ 2. Staff entrance" in text
     )
-    other_label = next(
-        index
-        for index, (_style, text) in enumerate(fragments)
-        if "3. Different reading" in text
-    )
     anchor = next(
         index
         for index, (style, _text) in enumerate(fragments)
         if style == "[SetCursorPosition]"
     )
 
-    assert selected_label < anchor < other_label
+    assert selected_label < anchor

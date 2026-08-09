@@ -2853,7 +2853,7 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\t\x1b[B\r\t\r\x1b[B\x1b[B\x1b[B\r"
+            "\t\x1b[B\r\t\r\x1b[B\x1b[B\r"
             "Keep all supported details.\x13\t\t\r\x1b[F\r"
         )
         action = run_meld_shell(
@@ -2962,7 +2962,7 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\t\x1b[B\r\t\r\x1b[B\x1b[B\x1b[B\r"
+            "\t\x1b[B\r\t\r\x1b[B\x1b[B\r"
             "Keep the rate.\nKeep every payment method.\r\t\t\r\x1b[F\r"
         )
         action = run_meld_shell(
@@ -3009,7 +3009,7 @@ def test_meld_back_key_collapses_detail_before_leaving_the_workbench(
 
     assert action is not None
     assert action.kind == "COMMENT_ALL"
-    assert "Other direction: Still reviewing." in action.comment
+    assert "Response: Still reviewing." in action.comment
 
 
 def test_meld_escape_from_overview_closes_without_changing_session():

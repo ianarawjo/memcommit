@@ -4,6 +4,7 @@ from dataclasses import replace
 
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.layout import to_container
 from prompt_toolkit.output import DummyOutput
 
 import memcommit.commands.resolution_workbench_shell as resolution_shell_module
@@ -713,8 +714,8 @@ def test_split_detail_submits_a_supplied_option_with_an_optional_comment():
 
     with create_pipe_input() as pipe_input:
         # Open conflict 1, Tab into RESPONSES, select the already-focused first
-        # choice, then move through choice 2 and Other to the Response field.
-        pipe_input.send_text("\t\x1b[B\r\t\r\x1b[B\x1b[B\x1b[B\r\r")
+        # choice, then move through choice 2 to the separate Response box.
+        pipe_input.send_text("\t\x1b[B\r\t\r\x1b[B\x1b[B\r\r")
         action = run_resolution_workbench_shell(
             _view(item),
             split_viewer_items=True,
@@ -729,7 +730,7 @@ def test_split_detail_submits_a_supplied_option_with_an_optional_comment():
     assert action.comment == ""
 
 
-def test_split_detail_submits_other_direction_without_a_fabricated_option():
+def test_split_detail_submits_response_without_a_fabricated_option():
     item = _item(
         "issue-1",
         options=(
@@ -740,7 +741,7 @@ def test_split_detail_submits_other_direction_without_a_fabricated_option():
 
     with create_pipe_input() as pipe_input:
         # Open conflict 1, enter RESPONSES on choice 1, move through choice 2
-        # to Different response, and submit a free-form resolution.
+        # into the separate Response box, and submit a free-form resolution.
         pipe_input.send_text(
             "\t\x1b[B\r\t\x1b[B\x1b[B\rUse a staged combination instead.\r"
         )
@@ -880,8 +881,8 @@ def test_actionable_response_is_focusable_and_opens_inline_with_enter():
 
     with create_pipe_input() as pipe_input:
         # Open the item, Tab into RESPONSES, move through its supplied choice
-        # and Other to Response, then save and close from the response frame.
-        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\x1b[B\rA separate response.\rq")
+        # to the separate Response box, then save and close from the frame.
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\rA separate response.\rq")
         action = run_resolution_workbench_shell(
             _view(item),
             split_viewer_items=True,
@@ -895,6 +896,47 @@ def test_actionable_response_is_focusable_and_opens_inline_with_enter():
 
     assert action.kind == "CLOSE"
     assert saved == [("issue-1", None, "A separate response.")]
+
+
+def test_split_responses_composes_the_shared_input_as_a_separate_inner_box(
+    monkeypatch,
+):
+    built_inputs = []
+    frames = []
+    original_builder = resolution_shell_module.build_framed_multiline_input
+    original_frame = resolution_shell_module.Frame
+
+    def recording_builder(*args, **kwargs):
+        component = original_builder(*args, **kwargs)
+        built_inputs.append(component)
+        return component
+
+    def recording_frame(*args, **kwargs):
+        frame = original_frame(*args, **kwargs)
+        frames.append(frame)
+        return frame
+
+    monkeypatch.setattr(
+        resolution_shell_module,
+        "build_framed_multiline_input",
+        recording_builder,
+    )
+    monkeypatch.setattr(resolution_shell_module, "Frame", recording_frame)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        run_resolution_workbench_shell(
+            _view(_item("issue-1")),
+            split_viewer_items=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    response_input = built_inputs[0]
+    responses_frame = next(frame for frame in frames if frame.title == "RESPONSES")
+    assert response_input.frame.title == "RESPONSE"
+    assert to_container(response_input.frame) in responses_frame.body.children
 
 
 def test_split_viewer_section_navigation_selects_matching_item_row():
@@ -1640,7 +1682,7 @@ def test_commentable_change_response_is_included_in_revision_turn():
         )
 
     assert action.kind == "SUBMIT_ALL"
-    assert "Issue change: Other direction: Remove this proposed change." in (
+    assert "Issue change: Response: Remove this proposed change." in (
         action.comment
     )
 
