@@ -17,15 +17,16 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.commands.context_picker import (
-    ContextTreeState,
-    build_context_tree,
+from memcommit.context_targeting.tui.reach import (
+    ContextReachState,
+    render_context_reach,
 )
-from memcommit.commands.horizontal_choice import (
-    HorizontalChoiceOption,
-    HorizontalChoiceState,
-    render_horizontal_choice,
+from memcommit.context_targeting.tui.rendering import (
+    ContextTreeRowDecoration,
+    render_context_tree_rows,
 )
+from memcommit.context_targeting.tui.selection import ContextSelectionState
+from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     bind_focused_frame_style,
@@ -100,10 +101,9 @@ def choose_sever_setup(
     catalog = (*local, *virtual)
     if not local:
         raise ValueError("No local Contexts are available for Sever.")
-    if (
-        any(not isinstance(name, str) or not name for name in catalog)
-        or len(set(catalog)) != len(catalog)
-    ):
+    if any(not isinstance(name, str) or not name for name in catalog) or len(
+        set(catalog)
+    ) != len(catalog):
         raise ValueError("Sever setup received invalid Context names.")
     selectable_virtual = frozenset(selectable_virtual_names)
     if not selectable_virtual <= set(virtual):
@@ -128,18 +128,16 @@ def choose_sever_setup(
     }
     # Both roles begin at the local current Context for orientation. Sever
     # still refuses to continue until the person makes them distinct.
-    selected: dict[_Role, str] = {
-        "SOURCE": initial_name,
-        "CRITERIA": initial_name,
-    }
-    scope_choice: dict[_Role, HorizontalChoiceState] = {
-        role: HorizontalChoiceState(
-            (
-                HorizontalChoiceOption("EXACT", "THIS CONTEXT ONLY"),
-                HorizontalChoiceOption("SUBTREE", "INCLUDE DESCENDANTS"),
-            ),
-            selected_uid="SUBTREE",
+    selections: dict[_Role, ContextSelectionState] = {
+        role: ContextSelectionState.create(
+            catalog,
+            selected=(initial_name,),
+            mode="SINGLE",
         )
+        for role in ("SOURCE", "CRITERIA")
+    }
+    scope_choice: dict[_Role, ContextReachState] = {
+        role: ContextReachState.create(include_descendants=True)
         for role in ("SOURCE", "CRITERIA")
     }
     scope_focused: dict[_Role, bool] = {
@@ -147,8 +145,8 @@ def choose_sever_setup(
         "CRITERIA": False,
     }
     default_output = _shared_local_output_name(
-        selected["SOURCE"],
-        selected["CRITERIA"],
+        selections["SOURCE"].selected_name,
+        selections["CRITERIA"].selected_name,
         local_names=local,
         occupied_names=frozenset(catalog),
     )
@@ -164,43 +162,27 @@ def choose_sever_setup(
         return tree_state[role].selected_row_index()
 
     def render_context(role: _Role) -> list[tuple[str, str]]:
-        fragments: list[tuple[str, str]] = []
-        rows = visible_rows(role)
         control = source_control if role == "SOURCE" else criteria_control
         tree_focused = app.layout.has_focus(control) and not scope_focused[role]
-        for index, row in enumerate(rows):
-            focused = tree_state[role].selected_name == row.name
-            if focused:
-                fragments.append(("[SetCursorPosition]", ""))
+
+        def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
             available = row.name in selectable
-            chosen = selected[role] == row.name
-            pointer = "›" if focused else " "
-            marker = "✓" if chosen else "·" if available else "×"
-            active = "*" if row.name == current else " "
-            branch = "▾" if row.expanded else "▸" if row.has_children else "·"
+            chosen = selections[role].selected_name == row.name
             annotation = labels.get(row.name, "")
             if not available:
                 annotation = (annotation + " · " if annotation else "") + (
                     "UNAVAILABLE"
                 )
-            suffix_text = (
-                f"  {display_escape_text(annotation)}" if annotation else ""
+            return ContextTreeRowDecoration(
+                marker="✓" if chosen else "·" if available else "×",
+                active="*" if row.name == current else " ",
+                annotation=annotation,
+                cursor_style=(
+                    "class:memcommit.table.selected" if cursor and tree_focused else ""
+                ),
             )
-            style = (
-                "class:memcommit.table.selected"
-                if focused and tree_focused
-                else ""
-            )
-            fragments.append(
-                (
-                    style,
-                    f"{pointer} {marker} {active} {'  ' * row.depth}{branch} "
-                    f"{display_escape_text(row.name)}{suffix_text}",
-                )
-            )
-            if index < len(rows) - 1:
-                fragments.append(("", "\n"))
-        return fragments
+
+        return render_context_tree_rows(tree_state[role], decorate)
 
     source_control = FormattedTextControl(
         lambda: render_context("SOURCE"), focusable=True, show_cursor=False
@@ -211,13 +193,10 @@ def choose_sever_setup(
 
     def context_frame(role: _Role, control: FormattedTextControl) -> Frame:
         def render_scope() -> list[tuple[str, str]]:
-            return render_horizontal_choice(
+            return render_context_reach(
                 scope_choice[role],
                 title="SCOPE",
-                focused=(
-                    scope_focused[role]
-                    and app.layout.has_focus(control)
-                ),
+                focused=(scope_focused[role] and app.layout.has_focus(control)),
             )
 
         scope = Window(
@@ -275,10 +254,10 @@ def choose_sever_setup(
     def render_header() -> str:
         return (
             " MEM SEVER · SETUP · SOURCE UNCHANGED\n "
-            f"SOURCE {display_escape_text(selected['SOURCE'])} "
-            f"({'SUBTREE' if scope_choice['SOURCE'].selected_uid == 'SUBTREE' else 'THIS ONLY'}) × "
-            f"CRITERIA {display_escape_text(selected['CRITERIA'])} "
-            f"({'SUBTREE' if scope_choice['CRITERIA'].selected_uid == 'SUBTREE' else 'THIS ONLY'}) → "
+            f"SOURCE {display_escape_text(selections['SOURCE'].selected_name)} "
+            f"({'SUBTREE' if scope_choice['SOURCE'].include_descendants else 'THIS ONLY'}) × "
+            f"CRITERIA {display_escape_text(selections['CRITERIA'].selected_name)} "
+            f"({'SUBTREE' if scope_choice['CRITERIA'].include_descendants else 'THIS ONLY'}) → "
             f"OUTPUT {display_escape_text(output_editor.text.strip())}"
         )
 
@@ -430,7 +409,7 @@ def choose_sever_setup(
                 "That row is query-only or a namespace and is unavailable to Sever."
             )
             return
-        selected[role] = name
+        selections[role].choose(name)
         refresh_suggested_output()
         error_message["value"] = ""
         if role == "SOURCE":
@@ -446,7 +425,7 @@ def choose_sever_setup(
         event.app.invalidate()
 
     def finish(event) -> None:
-        if selected["SOURCE"] == selected["CRITERIA"]:
+        if selections["SOURCE"].selected_name == selections["CRITERIA"].selected_name:
             error_message["value"] = "Source and Criteria must be distinct."
             app.layout.focus(criteria_control)
             event.app.invalidate()
@@ -463,15 +442,11 @@ def choose_sever_setup(
             return
         event.app.exit(
             result=SeverSetupReceipt(
-                source_name=selected["SOURCE"],
-                criteria_name=selected["CRITERIA"],
+                source_name=selections["SOURCE"].selected_name,
+                criteria_name=selections["CRITERIA"].selected_name,
                 output_name=candidate,
-                source_descendants=(
-                    scope_choice["SOURCE"].selected_uid == "SUBTREE"
-                ),
-                criteria_descendants=(
-                    scope_choice["CRITERIA"].selected_uid == "SUBTREE"
-                ),
+                source_descendants=(scope_choice["SOURCE"].include_descendants),
+                criteria_descendants=(scope_choice["CRITERIA"].include_descendants),
             )
         )
 
@@ -480,8 +455,8 @@ def choose_sever_setup(
 
         previous = suggested_output["value"]
         suggested = _shared_local_output_name(
-            selected["SOURCE"],
-            selected["CRITERIA"],
+            selections["SOURCE"].selected_name,
+            selections["CRITERIA"].selected_name,
             local_names=local,
             occupied_names=frozenset(catalog),
         )

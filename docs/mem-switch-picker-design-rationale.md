@@ -129,7 +129,8 @@ replacement, or modification of the selected record, and rejects a concurrent
 current-Context change. This prevents a slow picker or relative resolution
 from silently overwriting another terminal's later switch.
 
-The namespace tree is also available as the terminal-independent
+The namespace tree is also available from
+`memcommit.context_targeting.tui.tree` as the terminal-independent
 `ContextTree` plus `ContextTreeState` component. It owns the frozen tree,
 cursor, visible-row projection, depth-wise expansion and collapse, and
 expand-all restore behavior. Optional `ContextMemoryRow` projections add

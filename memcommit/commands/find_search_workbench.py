@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal
@@ -24,8 +23,22 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.commands.command_progress import BUSY_INTERVAL_SECONDS, busy_suffix
-from memcommit.commands.context_picker import ContextTreeState, build_context_tree
+from memcommit.commands.background_turn import BackgroundExecutorTurn
+from memcommit.commands.command_progress import busy_suffix
+from memcommit.context_targeting.tui.reach import (
+    ContextReachState,
+    render_context_reach,
+)
+from memcommit.context_targeting.tui.rendering import (
+    ContextTreeRowDecoration,
+    render_context_tree_rows,
+)
+from memcommit.context_targeting.tui.selection import (
+    ContextSelectionState,
+    ContextTargetModeState,
+    render_context_target_mode,
+)
+from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -35,9 +48,12 @@ from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     bind_focused_frame_style,
-    display_escape_text,
     require_interactive_terminal,
     safe_terminal_text,
+)
+from memcommit.commands.search_result_present import (
+    SearchResultViewRow,
+    render_grouped_search_results,
 )
 
 
@@ -132,12 +148,8 @@ class FindSearchResponse:
             raise ValueError("Find returned invalid result rows.")
         if not isinstance(self.related_query, str):
             raise ValueError("Find returned an invalid broader query.")
-        related = [
-            result for result in self.results if result.relevance == "related"
-        ]
-        primary = [
-            result for result in self.results if result.relevance == "primary"
-        ]
+        related = [result for result in self.results if result.relevance == "related"]
+        primary = [result for result in self.results if result.relevance == "primary"]
         if related and (primary or not self.related_query.strip()):
             raise ValueError("Related Find results require one separate broader query.")
         if not related and self.related_query:
@@ -160,40 +172,22 @@ def render_find_search_results(response: FindSearchResponse | None) -> str:
 
     if response is None:
         return "SEARCH RESULTS\n  Enter a query to search the selected scope."
-    if not response.results:
-        return "SEARCH RESULTS\n  (no matching items)"
-
-    grouped: dict[str, list[FindSearchResult]] = {}
-    for result in response.results:
-        grouped.setdefault(result.context_name, []).append(result)
-    lines: list[str] = []
-    if response.related_query:
-        lines.extend(
-            [
-                "PRIMARY MATCHES\n  (none)",
-                "",
-                "RELATED RESULTS",
-                "  Broader search: " + safe_terminal_text(response.related_query),
-                "  Related items do not satisfy the original query.",
-                "",
-            ]
+    rows = tuple(
+        SearchResultViewRow(
+            context_name=result.context_name,
+            label=(
+                f"[{index} "
+                f"{'related ' if result.relevance == 'related' else ''}"
+                f"{result.kind} {result.uid[:8]}]"
+            ),
+            content=result.content,
         )
-    else:
-        lines.append("SEARCH RESULTS")
-    result_index = 0
-    for group_index, (context_name, results) in enumerate(grouped.items()):
-        if group_index:
-            lines.append("")
-        lines.append(safe_terminal_text(context_name))
-        for result in results:
-            result_index += 1
-            qualifier = "related " if result.relevance == "related" else ""
-            label = f"[{result_index} {qualifier}{result.kind} {result.uid[:8]}]"
-            content_lines = safe_terminal_text(result.content).splitlines() or [""]
-            lines.append(f"  {label} {content_lines[0]}")
-            indent = " " * (len(label) + 3)
-            lines.extend(f"{indent}{line}" for line in content_lines[1:])
-    return "\n".join(lines)
+        for index, result in enumerate(response.results, start=1)
+    )
+    return render_grouped_search_results(
+        rows,
+        related_query=response.related_query,
+    )
 
 
 def _scope_summary(
@@ -202,11 +196,7 @@ def _scope_summary(
     include_descendants: bool,
     follow_embeds: bool,
 ) -> str:
-    reach = (
-        "INCLUDE BELOW"
-        if include_descendants
-        else "SELECTED CONTEXTS ONLY"
-    )
+    reach = "INCLUDE DESCENDANTS" if include_descendants else "THIS CONTEXT ONLY"
     embeds = "FOLLOW EMBEDS" if follow_embeds else "EXCLUDE EMBEDS"
     return f"TARGETS {target_count} · {reach} · {embeds}"
 
@@ -252,13 +242,16 @@ def run_find_search_workbench(
         build_context_tree(catalog),
         selected=initial_target,
     )
-    selected_targets = {initial_target}
-    range_choice = HorizontalChoiceState(
-        (
-            HorizontalChoiceOption("EXACT", "SELECTED CONTEXTS ONLY"),
-            HorizontalChoiceOption("SUBTREE", "INCLUDE BELOW"),
-        ),
-        selected_uid="SUBTREE" if initial_include_descendants else "EXACT",
+    target_selection = ContextSelectionState.create(
+        catalog,
+        selected=(initial_target,),
+        # Multiple remains the initial mode so the existing fast path—Tab to
+        # Targets and check peers—does not acquire a setup detour.
+        mode="MULTIPLE",
+    )
+    target_mode = ContextTargetModeState.create(multiple=True)
+    range_choice = ContextReachState.create(
+        include_descendants=initial_include_descendants
     )
     embed_choice = HorizontalChoiceState(
         (
@@ -270,9 +263,9 @@ def run_find_search_workbench(
     scope_row = {"value": 0}
     response: FindSearchResponse | None = None
     status = {"value": "READY · ENTER A QUERY"}
-    busy = False
-    close_requested = False
-    busy_frame = {"value": 0}
+    background_turn: BackgroundExecutorTurn[FindSearchResponse] = (
+        BackgroundExecutorTurn()
+    )
 
     bindings = KeyBindings()
     search_area = TextArea(
@@ -280,37 +273,24 @@ def run_find_search_workbench(
         prompt="› ",
         wrap_lines=False,
         height=Dimension.exact(1),
-        read_only=Condition(lambda: busy),
+        read_only=Condition(lambda: background_turn.busy),
         name="find-search-query",
     )
 
     def render_targets() -> list[tuple[str, str]]:
-        fragments: list[tuple[str, str]] = []
         focused = app.layout.has_focus(target_control)
-        rows = tree_state.visible_rows()
-        for index, row in enumerate(rows):
-            selected = row.name == tree_state.selected_name
-            if selected:
-                fragments.append(("[SetCursorPosition]", ""))
-            pointer = "›" if selected else " "
-            marker = "✓" if row.name in selected_targets else "·"
-            active = "*" if row.name == current else " "
-            branch = "▾" if row.expanded else "▸" if row.has_children else "·"
-            annotation = labels.get(row.name, "")
-            suffix = f"  {display_escape_text(annotation)}" if annotation else ""
-            style = (
-                "class:memcommit.table.selected" if selected and focused else ""
+
+        def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
+            return ContextTreeRowDecoration(
+                marker="✓" if row.name in target_selection.selected_set else "·",
+                active="*" if row.name == current else " ",
+                annotation=labels.get(row.name, ""),
+                cursor_style=(
+                    "class:memcommit.table.selected" if cursor and focused else ""
+                ),
             )
-            fragments.append(
-                (
-                    style,
-                    f"{pointer} {marker} {active} {'  ' * row.depth}{branch} "
-                    f"{display_escape_text(row.name)}{suffix}",
-                )
-            )
-            if index < len(rows) - 1:
-                fragments.append(("", "\n"))
-        return fragments
+
+        return render_context_tree_rows(tree_state, decorate)
 
     target_control = FormattedTextControl(
         render_targets,
@@ -325,17 +305,23 @@ def run_find_search_workbench(
 
     def render_scope() -> list[tuple[str, str]]:
         focused = app.layout.has_focus(scope_control)
-        fragments = render_horizontal_choice(
-            range_choice,
-            title="RANGE",
+        fragments = render_context_target_mode(
+            target_mode,
             focused=focused and scope_row["value"] == 0,
+        )
+        fragments.append(("", "\n"))
+        fragments.extend(
+            render_context_reach(
+                range_choice,
+                focused=focused and scope_row["value"] == 1,
+            )
         )
         fragments.append(("", "\n"))
         fragments.extend(
             render_horizontal_choice(
                 embed_choice,
                 title="EMBEDDED CONTEXTS",
-                focused=focused and scope_row["value"] == 1,
+                focused=focused and scope_row["value"] == 2,
             )
         )
         return fragments
@@ -358,8 +344,8 @@ def run_find_search_workbench(
 
     def render_header() -> str:
         summary = _scope_summary(
-            target_count=len(selected_targets),
-            include_descendants=range_choice.selected_uid == "SUBTREE",
+            target_count=len(target_selection.selected_names),
+            include_descendants=range_choice.include_descendants,
             follow_embeds=embed_choice.selected_uid == "FOLLOW",
         )
         mode = response.mode if response is not None else "AUTO FROM QUERY"
@@ -377,13 +363,13 @@ def run_find_search_workbench(
     )
     target_frame = Frame(
         target_window,
-        title="TARGETS · SPACE TO SELECT MULTIPLE",
+        title="TARGETS · ENTER/SPACE TO SELECT",
         height=Dimension(min=5, preferred=8, max=12, weight=1),
     )
     scope_frame = Frame(
-        Window(scope_control, height=Dimension.exact(2), wrap_lines=False),
+        Window(scope_control, height=Dimension.exact(3), wrap_lines=False),
         title="SCOPE",
-        height=Dimension.exact(4),
+        height=Dimension.exact(5),
     )
     results_frame = Frame(
         results_area,
@@ -392,15 +378,15 @@ def run_find_search_workbench(
     )
 
     def render_footer() -> str:
-        if busy:
+        if background_turn.busy:
             return (
-                f" SEARCHING {busy_suffix(busy_frame['value'])} · "
+                f" SEARCHING {busy_suffix(background_turn.frame)} · "
                 "scope frozen · Ctrl-C closes after search"
             )
         hint = (
             "Enter search · Tab/Shift-Tab panes · Ctrl-C close"
             if app.layout.has_focus(search_area)
-            else "Space target · ←/→ scope/tree · Enter returns to search · Q close"
+            else ("Enter/Space target · ←/→ scope/tree · / returns to search · Q close")
         )
         return f" {safe_terminal_text(status['value'])} · {hint}"
 
@@ -459,7 +445,7 @@ def run_find_search_workbench(
         )
 
     def query_changed(_buffer) -> None:
-        if response is None or busy:
+        if response is None or background_turn.busy:
             return
         clear_results("QUERY CHANGED · PRESS ENTER TO SEARCH")
         app.invalidate()
@@ -513,25 +499,26 @@ def run_find_search_workbench(
         event.app.invalidate()
 
     @bindings.add(" ", filter=has_focus(target_control), eager=True)
+    @bindings.add("enter", filter=has_focus(target_control), eager=True)
     def _toggle_target(event) -> None:
-        if busy:
+        if background_turn.busy:
             status["value"] = "Wait for the current search before changing scope."
         else:
             name = tree_state.selected_name
-            if name in selected_targets:
-                if len(selected_targets) == 1:
-                    status["value"] = "Find requires at least one target."
-                    event.app.invalidate()
-                    return
-                selected_targets.remove(name)
+            try:
+                changed = target_selection.choose(name)
+            except ValueError as error:
+                status["value"] = str(error)
             else:
-                selected_targets.add(name)
-            clear_results("TARGETS CHANGED · PRESS ENTER TO SEARCH")
+                if changed:
+                    clear_results("TARGETS CHANGED · PRESS ENTER TO SEARCH")
+                else:
+                    status["value"] = "TARGET ALREADY SELECTED"
         event.app.invalidate()
 
     @bindings.add("down", filter=has_focus(scope_control), eager=True)
     def _scope_down(event) -> None:
-        scope_row["value"] = min(1, scope_row["value"] + 1)
+        scope_row["value"] = min(2, scope_row["value"] + 1)
         event.app.invalidate()
 
     @bindings.add("up", filter=has_focus(scope_control), eager=True)
@@ -540,10 +527,24 @@ def run_find_search_workbench(
         event.app.invalidate()
 
     def move_scope(delta: int) -> None:
-        if busy:
+        if background_turn.busy:
             status["value"] = "Wait for the current search before changing scope."
             return
-        choice = range_choice if scope_row["value"] == 0 else embed_choice
+        row = scope_row["value"]
+        if row == 0:
+            if not target_mode.move(delta):
+                return
+            selection_changed = target_selection.set_multiple(target_mode.multiple)
+            if selection_changed:
+                clear_results("TARGETS CHANGED · PRESS ENTER TO SEARCH")
+            else:
+                status["value"] = (
+                    "MULTIPLE TARGET SELECTION"
+                    if target_mode.multiple
+                    else "SINGLE TARGET SELECTION"
+                )
+            return
+        choice = range_choice if row == 1 else embed_choice
         if choice.move(delta):
             clear_results("SCOPE CHANGED · PRESS ENTER TO SEARCH")
 
@@ -577,44 +578,46 @@ def run_find_search_workbench(
         scroll_page_down(event)
         event.app.invalidate()
 
-    non_search_focus = (
-        has_focus(target_control) | has_focus(scope_control) | has_focus(results_control)
-    )
+    search_return_focus = has_focus(scope_control) | has_focus(results_control)
+    non_search_focus = has_focus(target_control) | search_return_focus
 
-    @bindings.add("enter", filter=non_search_focus, eager=True)
+    @bindings.add("enter", filter=search_return_focus, eager=True)
     @bindings.add("/", filter=non_search_focus, eager=True)
     def _focus_search(event) -> None:
         event.app.layout.focus(search_area)
         search_area.buffer.cursor_position = len(search_area.text)
         event.app.invalidate()
 
-    async def animate_search() -> None:
-        while busy:
-            await asyncio.sleep(BUSY_INTERVAL_SECONDS)
-            if not busy:
-                return
-            busy_frame["value"] += 1
-            app.invalidate()
-
-    async def process_search(request: FindSearchRequest) -> None:
-        nonlocal busy, close_requested, response
+    @bindings.add("enter", filter=has_focus(search_area), eager=True)
+    def _search(event) -> None:
+        nonlocal response
+        if background_turn.busy:
+            status["value"] = "A Find search is already running."
+            event.app.invalidate()
+            return
         try:
-            loop = asyncio.get_running_loop()
-            next_response = await loop.run_in_executor(None, run_search, request)
+            request = FindSearchRequest(
+                query=search_area.text.strip(),
+                target_names=target_selection.selected_names,
+                include_descendants=range_choice.include_descendants,
+                follow_embeds=embed_choice.selected_uid == "FOLLOW",
+                limit=limit,
+            )
+        except ValueError as error:
+            status["value"] = str(error)
+            event.app.invalidate()
+            return
+
+        def work() -> FindSearchResponse:
+            next_response = run_search(request)
             if not isinstance(next_response, FindSearchResponse):
                 raise ValueError("Find controller returned an invalid response.")
             if next_response.request != request:
                 raise ValueError("Find controller changed the frozen request.")
-        except Exception as error:
-            next_response = None
-            detail = " ".join(safe_terminal_text(str(error)).split())
-            if len(detail) > 240:
-                detail = detail[:239].rstrip() + "…"
-            status["value"] = (
-                f"SEARCH FAILED · {type(error).__name__}: {detail}"
-            )
-        busy = False
-        if next_response is not None:
+            return next_response
+
+        def commit(next_response: FindSearchResponse) -> None:
+            nonlocal response
             response = next_response
             result_text = render_find_search_results(response)
             results_area.buffer.set_document(
@@ -624,44 +627,33 @@ def run_find_search_workbench(
             status["value"] = (
                 f"{response.mode} · {len(response.results)} RESULT(S) · SCOPE FROZEN"
             )
-        if close_requested:
-            app.exit(result=FindSearchWorkbenchResult("CLOSED", response))
-            return
-        app.layout.focus(results_control if response is not None else search_area)
-        app.invalidate()
 
-    @bindings.add("enter", filter=has_focus(search_area), eager=True)
-    def _search(event) -> None:
-        nonlocal busy
-        if busy:
-            status["value"] = "A Find search is already running."
-            event.app.invalidate()
-            return
-        try:
-            request = FindSearchRequest(
-                query=search_area.text.strip(),
-                target_names=tuple(
-                    name for name in catalog if name in selected_targets
-                ),
-                include_descendants=range_choice.selected_uid == "SUBTREE",
-                follow_embeds=embed_choice.selected_uid == "FOLLOW",
-                limit=limit,
-            )
-        except ValueError as error:
-            status["value"] = str(error)
-            event.app.invalidate()
-            return
-        busy = True
+        def fail(error: Exception) -> None:
+            detail = " ".join(safe_terminal_text(str(error)).split())
+            if len(detail) > 240:
+                detail = detail[:239].rstrip() + "…"
+            status["value"] = f"SEARCH FAILED · {type(error).__name__}: {detail}"
+
+        def return_to_surface() -> None:
+            app.layout.focus(results_control if response is not None else search_area)
+
+        def close_after_search() -> None:
+            app.exit(result=FindSearchWorkbenchResult("CLOSED", response))
+
+        background_turn.start(
+            event.app,
+            work=work,
+            on_success=commit,
+            on_error=fail,
+            on_idle=return_to_surface,
+            on_close=close_after_search,
+        )
         status["value"] = "SEARCHING · SCOPE FROZEN"
         event.app.layout.focus(results_control)
-        event.app.create_background_task(animate_search())
-        event.app.create_background_task(process_search(request))
         event.app.invalidate()
 
     def close(event) -> None:
-        nonlocal close_requested
-        if busy:
-            close_requested = True
+        if background_turn.request_close():
             status["value"] = "Closing after the current search finishes."
             event.app.invalidate()
             return

@@ -85,6 +85,34 @@ conversation.
   the authorized query interface. Never open or silently treat their hidden
   content as ordinary Memory input.
 
+## Shared Context targeting
+
+- Treat Context targets, lexical reach, namespace-tree navigation, and checked
+  selection as one reusable component family under
+  `memcommit.context_targeting`. Keep operation-neutral values in `model.py`,
+  pure public-name expansion in `resolution.py`, merged Context loading in
+  `loading.py`, search-only corpus construction in `search.py`, and
+  prompt-toolkit state under `tui/`.
+- Import the narrow owning module instead of reaching through another command
+  or adding a parallel helper beside an operation. When a shared component
+  grows into multiple related files, group them under one concept package and
+  preserve a dependency direction from models and pure resolution toward
+  integrations and presentation; core modules must not import operation code.
+- Reuse `ContextTreeState`, `ContextSelectionState`, and `ContextReachState`
+  for common cursor, checked-value, cardinality, and exact-versus-descendant
+  mechanics. Keep availability, role validation, default values, receipts,
+  authority, and materialization meaning in the calling operation.
+- Use `expand_lexical_context_names` for canonical name-prefix expansion.
+  Keep lexical descendants and embedded-Context traversal as independent axes,
+  and never interpret Grant attachment metadata as a hierarchy edge.
+- Common in-memory controls do not imply a common persisted schema or a
+  cross-launch preference. Preserve Compare, Update, Meld, and Sever's existing
+  session formats and compatibility defaults through operation adapters;
+  Find and new setup screens start from their explicit operation defaults.
+- Keep compatibility facades thin and free of implementation. New internal
+  code must import `memcommit.context_targeting` modules directly rather than
+  adding behavior to legacy `memcommit.context_scope` or command-local wrappers.
+
 ## Selective curation batches
 
 - Forget and Sever share one batch semantic invariant: send the complete

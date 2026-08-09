@@ -244,9 +244,14 @@ an answer.
 The pending other-Context request and its confirmation exist only in this
 in-process view; they are not a durable or resumable approval.
 
-The controller and its provider subprocess are currently synchronous. The
-executor boundary keeps the terminal responsive but cannot forcibly cancel
-that work. If the person requests close while a turn is running, the view
+The controller and its provider subprocess are currently synchronous. Find's
+shared `BackgroundExecutorTurn` owns the executor, busy animation, one-turn
+mutual exclusion, shutdown shielding, and close-after-turn lifecycle; the chat
+shell retains only Find state validation and commit meaning. The same lifecycle
+is used by the query-first Find workbench so the two surfaces cannot drift on
+non-cancellable close behavior. The executor boundary keeps the terminal
+responsive but cannot forcibly cancel that work. If the person requests close
+while a turn is running, the view
 therefore shows that it is closing and waits for the bounded turn to finish
 before leaving the alternate screen. Ctrl-D follows that same visible close
 path. If the input stream itself disappears, prompt-toolkit must tear down the
@@ -254,3 +259,10 @@ screen immediately; the managed task still waits for the non-cancellable
 worker and preserves its completed state in the returned session result.
 Immediate cancellation remains a deliberate non-goal until the provider
 boundary can own, terminate, and reap a cancellable child process.
+
+The retained chat and query-first workbench also project their locally
+validated rows through the same grouped search-result presenter. Alias shape
+remains caller-owned, while primary/related headings, Context grouping,
+multiline indentation, and terminal escaping are common policy. The styled
+one-shot CLI uses the same grouping primitive while retaining Typer-owned bold
+Context headings.

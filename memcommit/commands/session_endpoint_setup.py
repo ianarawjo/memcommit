@@ -22,7 +22,16 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.commands.context_picker import ContextTreeState, build_context_tree
+from memcommit.context_targeting.tui.reach import (
+    ContextReachState,
+    render_context_reach,
+)
+from memcommit.context_targeting.tui.rendering import (
+    ContextTreeRowDecoration,
+    render_context_tree_rows,
+)
+from memcommit.context_targeting.tui.selection import ContextSelectionState
+from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -89,9 +98,7 @@ def _endpoint_row_styles(
     """Separate a retained endpoint choice from the live tree cursor."""
 
     cursor_focused = cursor and tree_focused
-    cursor_style = (
-        "class:memcommit.table.selected" if cursor_focused else ""
-    )
+    cursor_style = "class:memcommit.table.selected" if cursor_focused else ""
     value_style = (
         focused_control_style(
             focused=cursor_focused,
@@ -181,12 +188,8 @@ def choose_session_endpoints(
             raise ValueError("Endpoint setup mode titles must cover active roles.")
         if not set(mode.active_roles) <= set(role_by_uid):
             raise ValueError("Endpoint setup mode references an unknown role.")
-        if (
-            not mode.descendant_roles <= set(mode.active_roles)
-            or any(
-                not role_by_uid[uid].allow_descendants
-                for uid in mode.descendant_roles
-            )
+        if not mode.descendant_roles <= set(mode.active_roles) or any(
+            not role_by_uid[uid].allow_descendants for uid in mode.descendant_roles
         ):
             raise ValueError(
                 "Endpoint setup mode enables an unavailable descendant scope."
@@ -208,7 +211,14 @@ def choose_session_endpoints(
         role.uid: ContextTreeState.create(tree, selected=role.initial_name)
         for role in role_specs
     }
-    selected = {role.uid: role.initial_name for role in role_specs}
+    selections = {
+        role.uid: ContextSelectionState.create(
+            catalog,
+            selected=(role.initial_name,),
+            mode="SINGLE",
+        )
+        for role in role_specs
+    }
     create = {role.uid: role.prefer_new for role in role_specs}
     confirmed_new_names = {
         role.uid: role.initial_new_name.strip() if role.prefer_new else ""
@@ -225,7 +235,10 @@ def choose_session_endpoints(
     bindings = KeyBindings()
     controls: dict[str, FormattedTextControl] = {}
     descendant_controls: dict[str, FormattedTextControl] = {}
-    include_descendants = {role.uid: False for role in role_specs}
+    descendant_scope = {
+        role.uid: ContextReachState.create(include_descendants=False)
+        for role in role_specs
+    }
     frames: dict[str, Frame] = {}
     new_inputs: dict[str, TextArea] = {}
     app_ref: dict[str, Application[EndpointSetupDraft | None]] = {}
@@ -243,45 +256,33 @@ def choose_session_endpoints(
         return uid in active_mode().descendant_roles
 
     def render_role(uid: str):
-        fragments: list[tuple[str, str]] = []
         state = states[uid]
         role = role_by_uid[uid]
-        tree_focused = (
-            app_ref.get("app") is not None
-            and app_ref["app"].layout.has_focus(controls[uid])
-        )
-        for index, row in enumerate(state.visible_rows()):
-            cursor = row.name == state.selected_name
+        tree_focused = app_ref.get("app") is not None and app_ref[
+            "app"
+        ].layout.has_focus(controls[uid])
+
+        def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
             confirmed_name = confirmed_new_names[uid]
-            if cursor and (tree_focused or not (create[uid] and confirmed_name)):
-                fragments.append(("[SetCursorPosition]", ""))
             available = row.name in role.selectable_names
-            chosen = not create[uid] and selected[uid] == row.name
-            pointer = "›" if cursor else " "
-            branch = "▾" if row.expanded else "▸" if row.has_children else "·"
+            chosen = not create[uid] and selections[uid].selected_name == row.name
             annotation = labels.get(row.name, "")
             if not available:
                 annotation = annotation or "UNAVAILABLE"
-            suffix = f"  {display_escape_text(annotation)}" if annotation else ""
             cursor_style, value_style = _endpoint_row_styles(
                 cursor=cursor,
                 chosen=chosen,
                 tree_focused=tree_focused,
             )
-            fragments.extend(
-                [
-                    (
-                        cursor_style,
-                        f"{pointer}   {'  ' * row.depth}{branch} ",
-                    ),
-                    (
-                        value_style,
-                        f"{display_escape_text(row.name)}{suffix}",
-                    ),
-                ]
+            return ContextTreeRowDecoration(
+                annotation=annotation,
+                cursor_style=cursor_style,
+                value_style=value_style,
+                anchor_cursor=(tree_focused or not (create[uid] and confirmed_name)),
             )
-            if index < len(state.visible_rows()) - 1:
-                fragments.append(("", "\n"))
+
+        fragments = render_context_tree_rows(state, decorate)
+        confirmed_name = confirmed_new_names[uid]
         if create[uid] and confirmed_name:
             if fragments:
                 fragments.append(("", "\n"))
@@ -310,25 +311,25 @@ def choose_session_endpoints(
         )
         body_parts: list[object] = [tree_window]
         if role.allow_descendants:
-            descendant_control = FormattedTextControl(
-                lambda uid=role.uid: [
-                    ("[SetCursorPosition]", ""),
-                    (
-                        focused_control_style(
-                            focused=(
-                                app_ref.get("app") is not None
-                                and app_ref["app"].layout.has_focus(
-                                    descendant_controls[uid]
-                                )
-                            ),
-                            selected=include_descendants[uid],
+
+            def render_descendant_scope(uid=role.uid):
+                fragments: list[tuple[str, str]] = [("[SetCursorPosition]", "")]
+                fragments.extend(
+                    render_context_reach(
+                        descendant_scope[uid],
+                        title="RANGE",
+                        focused=(
+                            app_ref.get("app") is not None
+                            and app_ref["app"].layout.has_focus(
+                                descendant_controls[uid]
+                            )
                         ),
-                        "  ["
-                        + ("✓" if include_descendants[uid] else " ")
-                        + "] INCLUDE ALL DESCENDANT CONTEXTS "
-                        "(OWNED OR GRANTED)",
-                    ),
-                ],
+                    )
+                )
+                return fragments
+
+            descendant_control = FormattedTextControl(
+                render_descendant_scope,
                 focusable=True,
                 show_cursor=False,
             )
@@ -345,9 +346,7 @@ def choose_session_endpoints(
                             ),
                         ]
                     ),
-                    filter=Condition(
-                        lambda uid=role.uid: role_descendants_active(uid)
-                    ),
+                    filter=Condition(lambda uid=role.uid: role_descendants_active(uid)),
                 )
             )
         if role.allow_new:
@@ -409,9 +408,7 @@ def choose_session_endpoints(
                     or (
                         uid in descendant_controls
                         and role_descendants_active(uid)
-                        and app_ref["app"].layout.has_focus(
-                            descendant_controls[uid]
-                        )
+                        and app_ref["app"].layout.has_focus(descendant_controls[uid])
                     )
                     or (
                         uid in new_inputs
@@ -529,12 +526,14 @@ def choose_session_endpoints(
     def focused_role_uid() -> str | None:
         app = app_ref["app"]
         for uid in active_mode().active_roles:
-            if app.layout.has_focus(controls[uid]) or (
-                uid in descendant_controls
-                and role_descendants_active(uid)
-                and app.layout.has_focus(descendant_controls[uid])
-            ) or (
-                uid in new_inputs and app.layout.has_focus(new_inputs[uid])
+            if (
+                app.layout.has_focus(controls[uid])
+                or (
+                    uid in descendant_controls
+                    and role_descendants_active(uid)
+                    and app.layout.has_focus(descendant_controls[uid])
+                )
+                or (uid in new_inputs and app.layout.has_focus(new_inputs[uid]))
             ):
                 return uid
         return None
@@ -559,7 +558,7 @@ def choose_session_endpoints(
                     )
                 values.append(EndpointValue(uid, name, create=True))
             else:
-                name = selected[uid]
+                name = selections[uid].selected_name
                 if name not in role.selectable_names:
                     raise ValueError(f"{role_title(uid)} is unavailable.")
                 values.append(
@@ -567,7 +566,7 @@ def choose_session_endpoints(
                         uid,
                         name,
                         include_descendants=(
-                            include_descendants[uid]
+                            descendant_scope[uid].include_descendants
                             if role_descendants_active(uid)
                             else False
                         ),
@@ -588,7 +587,9 @@ def choose_session_endpoints(
         event.app.exit(result=draft)
 
     tree_focus = Condition(
-        lambda: any(app_ref["app"].layout.has_focus(control) for control in controls.values())
+        lambda: any(
+            app_ref["app"].layout.has_focus(control) for control in controls.values()
+        )
     )
     descendant_focus = Condition(
         lambda: any(
@@ -598,8 +599,7 @@ def choose_session_endpoints(
     )
     new_input_focus = Condition(
         lambda: any(
-            app_ref["app"].layout.has_focus(editor)
-            for editor in new_inputs.values()
+            app_ref["app"].layout.has_focus(editor) for editor in new_inputs.values()
         )
     )
 
@@ -695,7 +695,7 @@ def choose_session_endpoints(
         if name not in role_by_uid[uid].selectable_names:
             status["value"] = f"{role_title(uid)} is unavailable."
         else:
-            selected[uid] = name
+            selections[uid].choose(name)
             create[uid] = False
             status["value"] = ""
         event.app.invalidate()
@@ -705,7 +705,25 @@ def choose_session_endpoints(
     def _toggle_descendants(event) -> None:
         uid = focused_role_uid()
         if uid is not None and uid in descendant_controls:
-            include_descendants[uid] = not include_descendants[uid]
+            descendant_scope[uid].move(
+                -1 if descendant_scope[uid].include_descendants else 1
+            )
+            status["value"] = ""
+        event.app.invalidate()
+
+    @bindings.add("left", filter=descendant_focus, eager=True)
+    def _exact_descendant_scope(event) -> None:
+        uid = focused_role_uid()
+        if uid is not None and uid in descendant_controls:
+            descendant_scope[uid].move(-1)
+            status["value"] = ""
+        event.app.invalidate()
+
+    @bindings.add("right", filter=descendant_focus, eager=True)
+    def _subtree_descendant_scope(event) -> None:
+        uid = focused_role_uid()
+        if uid is not None and uid in descendant_controls:
+            descendant_scope[uid].move(1)
             status["value"] = ""
         event.app.invalidate()
 
@@ -730,7 +748,9 @@ def choose_session_endpoints(
                 name = new_inputs[role_uid].text.strip()
                 validate_context_name(name)
                 if name in catalog_set:
-                    raise ValueError("That Context already exists; select its tree row.")
+                    raise ValueError(
+                        "That Context already exists; select its tree row."
+                    )
             except ValueError as error:
                 status["value"] = str(error)
                 event.app.invalidate()
@@ -802,11 +822,14 @@ def choose_session_endpoints(
             return " APPLY: Enter/Space apply · ↑ previous · Tab pane · Q cancel"
         if app_ref["app"].layout.has_focus(mode_control):
             return " MODE: ←/→ choose · ↓ endpoints · Tab endpoints · Q cancel"
-        if uid is not None and uid in descendant_controls and app_ref[
-            "app"
-        ].layout.has_focus(descendant_controls[uid]):
+        if (
+            uid is not None
+            and uid in descendant_controls
+            and app_ref["app"].layout.has_focus(descendant_controls[uid])
+        ):
             return (
-                " SCOPE: Enter/Space include all descendants · "
+                " RANGE: ← this Context only · → include descendants · "
+                "Enter/Space toggle · "
                 "↑/↓ move · Tab pane · Q cancel"
             )
         return " ↑/↓ move · ←/→ tree · Enter/Space choose · Tab pane · Q cancel"
@@ -830,7 +853,9 @@ def choose_session_endpoints(
             Window(FormattedTextControl(render_footer), height=1),
         ]
     )
-    initial_focus = mode_control if len(mode_specs) > 1 else controls[active_mode().active_roles[0]]
+    initial_focus = (
+        mode_control if len(mode_specs) > 1 else controls[active_mode().active_roles[0]]
+    )
     app: Application[EndpointSetupDraft | None] = Application(
         layout=Layout(root, focused_element=initial_focus),
         key_bindings=bindings,

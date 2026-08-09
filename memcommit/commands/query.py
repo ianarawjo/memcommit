@@ -9,11 +9,11 @@ import typer
 import memcommit.ops as ops
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.find import (
-    _collect_find_frame_candidates,
-    _load_find_frame_roots,
-)
 from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
+from memcommit.context_targeting.search import (
+    collect_readable_search_candidates,
+    load_readable_search_roots,
+)
 from memcommit.commands.tui_primitives import (
     display_escape_text,
     safe_terminal_text,
@@ -74,19 +74,19 @@ def _query_ordinary_context(
     )
     read_store = GrantedReadStore(access) if access.is_granted else store
     root = read_store.load(access.display_name)
-    roots = _load_find_frame_roots(
+    roots = load_readable_search_roots(
         read_store,
-        root,
-        recursive=True,
-        resolve_embeds=True,
+        (root.name,),
+        include_descendants=True,
+        follow_embeds=True,
     )
-    candidates = _collect_find_frame_candidates(
+    candidates = collect_readable_search_candidates(
         store,
         roots,
-        recursive=True,
+        follow_embeds=True,
         # READ grants expose authority Memories, not the authority Profile's
         # private session, checkpoint, trace, or rationale stores.
-        include_artifacts=not access.is_granted,
+        artifact_roots=roots if not access.is_granted else (),
     )
     with CommandProgress(
         "QUERY",
@@ -398,8 +398,8 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    candidate_route_selector, candidate_memory_handle = (
-        _split_query_memory_selector(selector)
+    candidate_route_selector, candidate_memory_handle = _split_query_memory_selector(
+        selector
     )
     route_selector = selector
     memory_handle = None
@@ -442,9 +442,7 @@ def cmd(
             attachment_uid, attachment_name = next(iter(attachment_identities))
             attachment = store.load_direct(attachment_name)
             if attachment.uid != attachment_uid:
-                raise RuntimeError(
-                    "The current granted view's query anchor changed."
-                )
+                raise RuntimeError("The current granted view's query anchor changed.")
             selected_name = attachment_name
         ctx = store.load(selected_name)
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
@@ -543,8 +541,7 @@ def cmd(
         if question is None:
             if session_name is not None:
                 typer.secho(
-                    "Error: --session currently applies only to a "
-                    "query-only view.",
+                    "Error: --session currently applies only to a query-only view.",
                     fg=typer.colors.RED,
                     err=True,
                 )
@@ -835,6 +832,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
+
 
 def _query_legacy(
     store: MemoryStore,

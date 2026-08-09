@@ -27,6 +27,8 @@ import uuid
 from typing import Iterator
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AuthorityGrant,
@@ -1333,10 +1335,11 @@ def _grant_scope(
     root = contexts.get(resource_name)
     if root is None:
         raise ProfileError(f"Authority Context {resource_name!r} does not exist.")
-    names = [resource_name]
-    if recursive:
-        prefix = resource_name + "/"
-        names.extend(name for name in sorted(contexts) if name.startswith(prefix))
+    scope = ContextScope.create(
+        (resource_name,),
+        include_descendants=recursive,
+    )
+    names = expand_lexical_context_names(scope, sorted(contexts))
     return tuple(
         GrantContextBinding(uid=contexts[name].uid, name=name) for name in names
     )

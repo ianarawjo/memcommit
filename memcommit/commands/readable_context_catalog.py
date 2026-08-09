@@ -11,6 +11,8 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.context import Context, QueryContextRef
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.profile_config import (
     ProfileRegistry,
     load_profile_registry,
@@ -86,9 +88,10 @@ class ReadableContextCatalog:
         value = registry or load_profile_registry()
         # An isolated or explicitly rooted MemoryStore must never inherit the
         # host Profile's virtual grants merely because a registry is present.
-        if self._active_store.store_dir.resolve() != profile_store_dir(
-            value.active
-        ).resolve():
+        if (
+            self._active_store.store_dir.resolve()
+            != profile_store_dir(value.active).resolve()
+        ):
             return None
         return value
 
@@ -98,9 +101,7 @@ class ReadableContextCatalog:
                 continue
             if not self._active_store.context_exists(grant.attachment_context_name):
                 continue
-            attachment = self._active_store.load_direct(
-                grant.attachment_context_name
-            )
+            attachment = self._active_store.load_direct(grant.attachment_context_name)
             if attachment.uid != grant.attachment_context_uid:
                 continue
             yield grant
@@ -198,11 +199,11 @@ class ReadableContextCatalog:
     def granted_names_below(self, root_name: str) -> tuple[str, ...]:
         """Return readable granted names in the root's public namespace."""
 
-        prefix = root_name + "/"
+        scope = ContextScope.create((root_name,), include_descendants=True)
         return tuple(
             name
-            for name, binding in self._bindings.items()
-            if name.startswith(prefix) and binding.access.is_granted
+            for name in expand_lexical_context_names(scope, self._names)[1:]
+            if self._bindings[name].access.is_granted
         )
 
     def _granted_store(self, access: ContextAccess) -> GrantedReadStore:

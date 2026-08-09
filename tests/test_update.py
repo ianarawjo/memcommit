@@ -13,7 +13,7 @@ from memcommit.cli import app
 from memcommit.commands.endpoint_setup_flows import UpdateSetupReceipt
 from memcommit.commands.session_picker import SessionOpenReceipt
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.context_scope import load_context_scope
+from memcommit.context_targeting.loading import load_context_scope
 from memcommit.provenance import build_trace
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.update import (

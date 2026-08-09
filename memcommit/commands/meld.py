@@ -17,7 +17,7 @@ from memcommit.comparison import (
 )
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.context_scope import load_context_scope
+from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_locator import resolve_context_locator
 from memcommit.commands.granted_context import (
     ContextAccess,

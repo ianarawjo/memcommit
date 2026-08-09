@@ -57,10 +57,10 @@ The other initial configurations are:
 | Operation | Visible shape | Endpoint kinds |
 | --- | --- | --- |
 | Atomize | `INPUT A → OUTPUT B` | A is one existing ordinary local Context; B is either the same Context for in-place application or a validated new exact Context name that preserves A |
-| Compare | `A ↔ B → ANALYSIS` | A and B are existing Context trees with independent, default-off descendant checkboxes; the result is a saved analysis, not a Context C |
-| Update | `SOURCE A → TARGET B` | A and B are existing Context trees; each has an independent, default-off descendant checkbox |
-| Meld, directional | `INCOMING A → BASELINE B` | A has a default-off descendant checkbox; B is a direct authoritative mutation target and intentionally has none |
-| Meld, symmetric | `PEER A + PEER B → RESULT C` | A and B have independent, default-off descendant checkboxes; C is an eligible empty Context or a validated new exact name |
+| Compare | `A ↔ B → ANALYSIS` | A and B are existing Context trees with independent, default-off reach controls; the result is a saved analysis, not a Context C |
+| Update | `SOURCE A → TARGET B` | A and B are existing Context trees; each has an independent, default-off reach control |
+| Meld, directional | `INCOMING A → BASELINE B` | A has a default-off reach control; B is a direct authoritative mutation target and intentionally has none |
+| Meld, symmetric | `PEER A + PEER B → RESULT C` | A and B have independent, default-off reach controls; C is an eligible empty Context or a validated new exact name |
 | Sever | `SOURCE A × CRITERIA B → OUTPUT C` | A and B are existing Context trees with independent scope controls; C is a new exact name |
 
 Compare and Update freeze A and B from the same unified readable public
@@ -85,7 +85,7 @@ identity.
 
 ## Horizontal choice component
 
-The mode row and Sever's existing exact/subtree scope row now share one small
+The mode row and every exact/subtree scope row share one small
 terminal component: the operation-free `HorizontalChoiceState` and renderer
 extracted from the inline Sever code.
 
@@ -188,7 +188,7 @@ saved session, or start an operation.
   they retain the shared collapse/expand meaning.
 - `Up` and `Down` treat the visible setup as one top-to-bottom navigation run.
   They move within a Context tree first, then cross its boundary into the
-  role's descendant checkbox when present and into the next role's first tree
+  role's descendant reach control when present and into the next role's first tree
   row. Reverse navigation enters the preceding tree at its last visible row.
   The same boundary rule applies across Compare, Update, Meld, and Sever
   because it lives in the common setup shell. It stops rather than wrapping at
@@ -199,12 +199,12 @@ saved session, or start an operation.
   the only way to enter it. Once inside, Tab or Shift-Tab may still leave the
   editor without confirming it.
 - `Enter` or `Space` selects the current existing Context row.
-- A mode may opt each readable endpoint into one checkbox below a separator:
-  `INCLUDE ALL DESCENDANT CONTEXTS (OWNED OR GRANTED)`. It is off by default;
-  `Enter` or `Space` toggles only the focused endpoint's scope. The checkbox is
-  in normal Tab order immediately after its Context tree. Compare and Update
-  enable it for A and B. Symmetric Meld enables it for both peers; directional
-  Meld enables it only for incoming A.
+- A mode may opt each readable endpoint into one `THIS CONTEXT ONLY` versus
+  `INCLUDE DESCENDANTS` control below a separator. It is exact-only by default;
+  Left and Right choose the shared reach, while Enter or Space remains a
+  compatibility toggle. The control is in normal Tab order immediately after
+  its Context tree. Compare and Update enable it for A and B. Symmetric Meld
+  enables it for both peers; directional Meld enables it only for incoming A.
 - Down from a creatable role's final tree row opens its one-line exact-name
   editor. Once the editor owns focus, the action row shows `ENTER CONFIRM`.
   Enter validates and confirms the exact name, projects it back into the role
@@ -272,24 +272,30 @@ boundary.
 
 The implementation has three layers:
 
-1. `HorizontalChoiceState` and its renderer own generic left/right selection
-   presentation.
-2. The role-based setup shell owns composition of frozen tree states, optional
+1. `HorizontalChoiceState` owns generic left/right selection, while
+   `ContextReachState` fixes the shared `THIS CONTEXT ONLY` versus
+   `INCLUDE DESCENDANTS` vocabulary and presentation.
+2. `ContextTreeState`, `ContextSelectionState`, and the common row renderer own
+   namespace cursor/expansion, checked values, and row geometry respectively.
+   The role-based setup shell composes those controls with optional
    per-mode/per-role descendant controls, editors, focus, and process-local
    draft state.
 3. Compare, Update, and Meld adapters own role specs, typed receipts, semantic
    validation, and orchestration. Sever retains its existing typed setup shell
-   while sharing the horizontal scope component.
+   while sharing the same Context reach component.
 
+These components live together under `memcommit.context_targeting.tui`.
 `ContextTreeState` remains the sole owner of namespace cursor and expansion
-mechanics. The setup shell composes it rather than copying `mem switch` key
-logic. `SessionPicker` remains the saved-work launcher and does not absorb new
-session setup.
+mechanics, and `ContextSelectionState` remains the checked-value owner. The
+setup shell composes them rather than copying `mem switch` key logic.
+`SessionPicker` remains the saved-work launcher and does not absorb new session
+setup.
 
 ## Rollout
 
-1. **Completed:** extract and test the horizontal choice component; migrate
-   Sever's scope rows without changing Sever behavior.
+1. **Completed:** extract and test the horizontal choice and Context reach
+   components; migrate Sever and the role-based endpoint shell without
+   changing their typed scope receipts.
 2. **Completed:** introduce the role-based setup draft and shell with Meld as
    the adaptive-mode consumer. Replace Meld's textual mode prompt and
    sequential pickers while retaining existing orchestration and validation.

@@ -66,7 +66,7 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.context_scope import load_context_scope
+from memcommit.context_targeting.loading import load_context_scope
 from memcommit.profile_config import ProfileConfigError
 from memcommit.provenance import ProvenanceError
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock

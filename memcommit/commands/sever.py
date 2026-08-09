@@ -28,7 +28,15 @@ from memcommit.commands.switch import _granted_picker_state
 from memcommit.commands.sever_setup_shell import choose_sever_setup
 from memcommit.commands.tui_primitives import display_escape_text, safe_terminal_text
 from memcommit.command_attempts import annotate_sever_attempt
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import (
+    AutoCheckpoint,
+    Context,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
@@ -76,21 +84,21 @@ def _capture_binding(
     root_name = access.display_name if access.is_granted else access.context_name
     load_direct = read_store.load_direct
     load_recursive = read_store.load
-    root = (
-        load_recursive(root_name)
-        if include_descendants
-        else load_direct(root_name)
+    scope = ContextScope.create(
+        (root_name,),
+        include_descendants=include_descendants,
     )
+    root = load_recursive(root_name) if include_descendants else load_direct(root_name)
     roots = [root]
     if include_descendants:
-        prefix = root_name + "/"
         seen_root_uids = {root.uid}
         # Namespace descendants and embedded children are both part of a
         # SUBTREE scope. UID de-duplication prevents the same Context from
         # entering provider input twice when both relationships expose it.
-        for name in read_store.list_context_names():
-            if not name.startswith(prefix):
-                continue
+        for name in expand_lexical_context_names(
+            scope,
+            read_store.list_context_names(),
+        )[1:]:
             descendant = load_recursive(name)
             if descendant.uid in seen_root_uids:
                 continue
@@ -109,7 +117,9 @@ def _capture_binding(
         for item in context.iter_items():
             if isinstance(item, Memory):
                 memories.append(
-                    SeverMemory(uid=item.uid, context_name=context.name, content=item.content)
+                    SeverMemory(
+                        uid=item.uid, context_name=context.name, content=item.content
+                    )
                 )
             elif isinstance(item, Context):
                 if include_descendants:
@@ -281,11 +291,17 @@ def render_sever(session: SeverSession) -> str:
     ]
     for index, candidate in enumerate(session.candidates, 1):
         source = session.source_memory(candidate.source_memory_uid)
-        label = candidate.selection if candidate.selection != "RECOMMENDED" else candidate.recommendation
+        label = (
+            candidate.selection
+            if candidate.selection != "RECOMMENDED"
+            else candidate.recommendation
+        )
         result = (
             "(forgotten)"
-            if candidate.selection == "FORGET" or (
-                candidate.selection == "RECOMMENDED" and candidate.recommendation == "FORGET"
+            if candidate.selection == "FORGET"
+            or (
+                candidate.selection == "RECOMMENDED"
+                and candidate.recommendation == "FORGET"
             )
             else candidate.custom_content
             if candidate.selection == "CUSTOM"
@@ -323,7 +339,9 @@ def render_sever(session: SeverSession) -> str:
 
 
 def _result_uid(session_uid: str, source_uid: str, content: str) -> str:
-    return str(uuid.uuid5(uuid.UUID(session_uid), f"result\x1f{source_uid}\x1f{content}"))
+    return str(
+        uuid.uuid5(uuid.UUID(session_uid), f"result\x1f{source_uid}\x1f{content}")
+    )
 
 
 def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
@@ -374,7 +392,7 @@ def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
                 ),
                 "output": session.output_name,
                 "results": sources,
-            }
+            },
         },
         description=(
             f"Created local Sever result '{session.output_name}' from "
@@ -482,6 +500,7 @@ def _run_workbench(
     sessions = SeverSessionStore(store)
     navigation = ResolutionNavigation()
     while session.state == "REVIEWING":
+
         def validate_destination(name: str) -> None:
             validate_context_name(name)
             if name != session.output_name and store.context_exists(name):
@@ -528,9 +547,7 @@ def _run_workbench(
         expected = sever_record_digest(session)
         if action.kind == "CHANGE_DESTINATION":
             if not allow_apply or action.destination is None:
-                raise SeverCommandError(
-                    "Review cannot change a Sever output location."
-                )
+                raise SeverCommandError("Review cannot change a Sever output location.")
             validate_destination(action.destination)
             changed = session.with_output_name(action.destination)
             if changed is not session:
@@ -553,7 +570,7 @@ def _run_workbench(
             selection: SeverSelection = {
                 "recommended": "RECOMMENDED",
                 "as-written": "AS_WRITTEN",
-            "forget": "FORGET",
+                "forget": "FORGET",
             }.get(suffix)  # type: ignore[assignment]
             if selection is None:
                 raise SeverCommandError("Unsupported Sever decision.")
@@ -568,24 +585,96 @@ def run_sever_review(store: MemoryStore, session: SeverSession) -> SeverSession:
 
 
 def cmd(
-    source_name: Annotated[Optional[str], typer.Option("--source", help="Existing ordinary Source Context; defaults to current only in explicit flag mode")] = None,
-    criteria_name: Annotated[Optional[str], typer.Option("--criteria", "--against", help="One readable Criteria root Context; query-only views are rejected")] = None,
-    save_as: Annotated[Optional[str], typer.Option("--save-as", help="New local Result Context name; never overwrites an existing Context")] = None,
-    source_descendants: Annotated[bool, typer.Option("--source-descendants/--source-only", help="Include the Source root's readable descendant Contexts")] = True,
-    criteria_descendants: Annotated[bool, typer.Option("--criteria-descendants/--criteria-only", help="Include the Criteria root's readable descendant Contexts")] = True,
-    resume: Annotated[Optional[str], typer.Option("--resume", help="Enter one exact saved Sever session by UID")] = None,
-    candidate: Annotated[Optional[str], typer.Option("--candidate", help="Candidate uid or unique prefix for a scripted decision")] = None,
-    choice: Annotated[Optional[str], typer.Option("--choice", help="recommended, as-written, forget, or custom")] = None,
-    comment: Annotated[Optional[str], typer.Option("--comment", help="Exact custom result content when --choice custom")] = None,
-    accept: Annotated[bool, typer.Option("--accept", help="Create the reviewed local result Context; Source remains unchanged")] = False,
-    sessions_flag: Annotated[bool, typer.Option("--sessions", help="Enter the interactive Sever session launcher")] = False,
+    source_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--source",
+            help="Existing ordinary Source Context; defaults to current only in explicit flag mode",
+        ),
+    ] = None,
+    criteria_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--criteria",
+            "--against",
+            help="One readable Criteria root Context; query-only views are rejected",
+        ),
+    ] = None,
+    save_as: Annotated[
+        Optional[str],
+        typer.Option(
+            "--save-as",
+            help="New local Result Context name; never overwrites an existing Context",
+        ),
+    ] = None,
+    source_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--source-descendants/--source-only",
+            help="Include the Source root's readable descendant Contexts",
+        ),
+    ] = True,
+    criteria_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--criteria-descendants/--criteria-only",
+            help="Include the Criteria root's readable descendant Contexts",
+        ),
+    ] = True,
+    resume: Annotated[
+        Optional[str],
+        typer.Option("--resume", help="Enter one exact saved Sever session by UID"),
+    ] = None,
+    candidate: Annotated[
+        Optional[str],
+        typer.Option(
+            "--candidate", help="Candidate uid or unique prefix for a scripted decision"
+        ),
+    ] = None,
+    choice: Annotated[
+        Optional[str],
+        typer.Option("--choice", help="recommended, as-written, forget, or custom"),
+    ] = None,
+    comment: Annotated[
+        Optional[str],
+        typer.Option(
+            "--comment", help="Exact custom result content when --choice custom"
+        ),
+    ] = None,
+    accept: Annotated[
+        bool,
+        typer.Option(
+            "--accept",
+            help="Create the reviewed local result Context; Source remains unchanged",
+        ),
+    ] = False,
+    sessions_flag: Annotated[
+        bool,
+        typer.Option("--sessions", help="Enter the interactive Sever session launcher"),
+    ] = False,
 ) -> None:
     store = MemoryStore()
     session_store = SeverSessionStore(store)
     try:
         if sessions_flag:
-            if any(value is not None for value in (source_name, criteria_name, save_as, resume, candidate, choice, comment)) or accept:
-                raise SeverCommandError("--sessions cannot be combined with another Sever action.")
+            if (
+                any(
+                    value is not None
+                    for value in (
+                        source_name,
+                        criteria_name,
+                        save_as,
+                        resume,
+                        candidate,
+                        choice,
+                        comment,
+                    )
+                )
+                or accept
+            ):
+                raise SeverCommandError(
+                    "--sessions cannot be combined with another Sever action."
+                )
 
         interactive = _interactive_terminal()
         bare_launcher = (
@@ -632,8 +721,12 @@ def cmd(
         if session is not None:
             pass
         elif resume is not None:
-            if any(value is not None for value in (source_name, criteria_name, save_as)):
-                raise SeverCommandError("--resume cannot be combined with Source, Criteria, or output operands.")
+            if any(
+                value is not None for value in (source_name, criteria_name, save_as)
+            ):
+                raise SeverCommandError(
+                    "--resume cannot be combined with Source, Criteria, or output operands."
+                )
             session = session_store.load(resume)
         else:
             if (
@@ -643,7 +736,9 @@ def cmd(
                 and save_as is None
             ):
                 if not interactive:
-                    typer.echo("No Sever setup supplied. Use --source, --criteria, and --save-as, or run in a TTY.")
+                    typer.echo(
+                        "No Sever setup supplied. Use --source, --criteria, and --save-as, or run in a TTY."
+                    )
                     return
                 setup = _interactive_setup(store)
                 if setup is None:
@@ -657,10 +752,14 @@ def cmd(
                     criteria_descendants,
                 ) = setup
             if criteria_name is None or save_as is None:
-                raise SeverCommandError("Starting Sever requires --criteria and --save-as.")
+                raise SeverCommandError(
+                    "Starting Sever requires --criteria and --save-as."
+                )
             source_name = source_name or store.current_context_name()
             if source_name is None:
-                raise SeverCommandError("Starting Sever requires --source or a current Context.")
+                raise SeverCommandError(
+                    "Starting Sever requires --source or a current Context."
+                )
             session = _start(
                 store=store,
                 source_name=source_name,
@@ -673,8 +772,12 @@ def cmd(
 
         if candidate is not None or choice is not None or comment is not None:
             if candidate is None or choice is None:
-                raise SeverCommandError("A scripted decision requires --candidate and --choice.")
-            matches = [item for item in session.candidates if item.uid.startswith(candidate)]
+                raise SeverCommandError(
+                    "A scripted decision requires --candidate and --choice."
+                )
+            matches = [
+                item for item in session.candidates if item.uid.startswith(candidate)
+            ]
             if len(matches) != 1:
                 raise SeverCommandError("Candidate selector is missing or ambiguous.")
             normalized = choice.lower()
@@ -685,9 +788,13 @@ def cmd(
                 "custom": "CUSTOM",
             }
             if normalized not in selections:
-                raise SeverCommandError("--choice must be recommended, as-written, forget, or custom.")
+                raise SeverCommandError(
+                    "--choice must be recommended, as-written, forget, or custom."
+                )
             if normalized == "custom" and (comment is None or not comment.strip()):
-                raise SeverCommandError("--choice custom requires --comment with exact result content.")
+                raise SeverCommandError(
+                    "--choice custom requires --comment with exact result content."
+                )
             if normalized != "custom" and comment is not None:
                 raise SeverCommandError("--comment is valid only with --choice custom.")
             expected = sever_record_digest(session)
@@ -719,5 +826,9 @@ def cmd(
         RuntimeError,
         ValueError,
     ) as error:
-        typer.secho(f"Sever error: {display_escape_text(str(error))}", fg=typer.colors.RED, err=True)
+        typer.secho(
+            f"Sever error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)

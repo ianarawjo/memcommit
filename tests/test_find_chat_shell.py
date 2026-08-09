@@ -42,10 +42,7 @@ TASK_1_CAFE_RESULTS = (
         context_name="temp/task-1-atomized-en",
         kind="memory",
         uid="6a53b8ae",
-        content=(
-            "Dining will not operate during construction. "
-            "Main building cafe."
-        ),
+        content=("Dining will not operate during construction. Main building cafe."),
     ),
     FindChatResult(
         alias="m3",
@@ -148,10 +145,8 @@ def test_snapshot_separates_related_fallback_from_primary_matches():
 
     assert "PRIMARY MATCHES 0 · RELATED 1 · KEPT 0" in snapshot
     assert "PRIMARY MATCHES\n  (none)" in snapshot
-    assert (
-        "RELATED RESULTS · BROADER SEARCH · health and healthcare memories"
-        in snapshot
-    )
+    assert "RELATED RESULTS" in snapshot
+    assert "Broader search: health and healthcare memories" in snapshot
     assert "Related items do not satisfy the original query." in snapshot
     assert "[m1 related memory" in snapshot
 
@@ -177,12 +172,10 @@ def test_related_results_require_one_query_and_cannot_mix_with_primary():
 
 
 def test_interactive_view_opens_at_the_first_ranked_result():
-    content = FormattedTextControl(
-        _result_text(_state())
-    ).create_content(width=80, height=12)
-    first_line = "".join(
-        text for _style, text in content.get_line(0)
+    content = FormattedTextControl(_result_text(_state())).create_content(
+        width=80, height=12
     )
+    first_line = "".join(text for _style, text in content.get_line(0))
 
     assert first_line == "SEARCH RESULTS"
     assert "38b46e04" in "".join(
@@ -247,10 +240,7 @@ def test_dialogue_arrow_keys_scroll_long_references(monkeypatch):
     def capturing_text_area(*args, **kwargs):
         text_area = original_text_area(*args, **kwargs)
         text = kwargs.get("text", "")
-        if (
-            kwargs.get("read_only") is True
-            and not text.startswith("SEARCH RESULTS")
-        ):
+        if kwargs.get("read_only") is True and not text.startswith("SEARCH RESULTS"):
             captured["dialogue"] = text_area
         return text_area
 
@@ -284,9 +274,7 @@ def test_dialogue_arrow_keys_scroll_long_references(monkeypatch):
 
 
 def test_empty_state_starts_with_an_open_find_question():
-    snapshot = render_find_chat_snapshot(
-        FindChatState(context_name="task-1")
-    )
+    snapshot = render_find_chat_snapshot(FindChatState(context_name="task-1"))
 
     assert "QUERY · (not asked yet)" in snapshot
     assert "OPEN QUESTION · FIND" in snapshot
@@ -414,6 +402,7 @@ def test_session_keeps_one_application_for_repeated_controller_turns(
         )
 
     with create_pipe_input() as pipe_input:
+
         def feed_turns() -> None:
             try:
                 pipe_input.send_text("first refinement\r")
@@ -506,6 +495,7 @@ def test_busy_indicator_cycles_dot_frames_until_the_turn_finishes(monkeypatch):
         return replace(state, status="REFINED")
 
     with create_pipe_input() as pipe_input:
+
         def close_after_animation() -> None:
             try:
                 pipe_input.send_text("healthcare\r")
@@ -575,6 +565,7 @@ def test_busy_turn_stays_visible_and_blocks_parallel_submission(monkeypatch):
         )
 
     with create_pipe_input() as pipe_input:
+
         def feed_while_busy() -> None:
             try:
                 pipe_input.send_text("first turn\r")
@@ -626,6 +617,7 @@ def test_busy_control_d_waits_for_the_current_turn():
         )
 
     with create_pipe_input() as pipe_input:
+
         def close_while_busy() -> None:
             pipe_input.send_text("first turn\r")
             assert handler_started.wait(2)
@@ -667,6 +659,7 @@ def test_input_stream_eof_during_busy_turn_preserves_completed_state():
         )
 
     with create_pipe_input() as pipe_input:
+
         def end_input_while_busy() -> None:
             pipe_input.send_text("first turn\r")
             assert handler_started.wait(2)

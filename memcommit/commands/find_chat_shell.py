@@ -4,9 +4,9 @@ The production session keeps one prompt-toolkit application alive while a
 controller handles submitted turns in a worker thread. A one-turn wrapper
 remains for focused shell tests and callers that need only input collection.
 """
+
 from __future__ import annotations
 
-import asyncio
 from dataclasses import dataclass, replace
 from typing import Literal, Protocol
 
@@ -36,9 +36,14 @@ from memcommit.commands.tui_primitives import (
     require_interactive_terminal,
     safe_terminal_text,
 )
+from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import (
     BUSY_INTERVAL_SECONDS,
     busy_suffix,
+)
+from memcommit.commands.search_result_present import (
+    SearchResultViewRow,
+    render_grouped_search_results,
 )
 
 
@@ -116,16 +121,12 @@ class FindPendingAnswerRequest:
             not isinstance(self.interpreted_request, str)
             or not self.interpreted_request.strip()
         ):
-            raise ValueError(
-                "Pending Find answers require an interpreted request."
-            )
+            raise ValueError("Pending Find answers require an interpreted request.")
         if self.pending_clarification is not None and (
             not isinstance(self.pending_clarification, str)
             or not self.pending_clarification.strip()
         ):
-            raise ValueError(
-                "Pending Find clarification must be nonblank text."
-            )
+            raise ValueError("Pending Find clarification must be nonblank text.")
 
 
 @dataclass(frozen=True)
@@ -170,34 +171,20 @@ class FindChatState:
         if not isinstance(self.related_query, str):
             raise ValueError("Find chat related query must be text.")
         related_query = self.related_query.strip()
-        related = tuple(
-            result for result in results if result.relevance == "related"
-        )
-        primary = tuple(
-            result for result in results if result.relevance == "primary"
-        )
+        related = tuple(result for result in results if result.relevance == "related")
+        primary = tuple(result for result in results if result.relevance == "primary")
         if primary and related:
             raise ValueError("Find chat cannot mix primary and related results.")
         if bool(related_query) != bool(related):
-            raise ValueError(
-                "Related Find chat results require one related query."
-            )
+            raise ValueError("Related Find chat results require one related query.")
         object.__setattr__(self, "related_query", related_query)
-        if (
-            type(self.kept_count) is not int
-            or self.kept_count < 0
-        ):
-            raise ValueError(
-                "Find chat kept count must be a nonnegative integer."
-            )
+        if type(self.kept_count) is not int or self.kept_count < 0:
+            raise ValueError("Find chat kept count must be a nonnegative integer.")
         if not isinstance(self.status, str) or not self.status.strip():
             raise ValueError("Find chat requires a nonblank status.")
-        if (
-            self.pending_answer is not None
-            and not isinstance(
-                self.pending_answer,
-                FindPendingAnswerRequest,
-            )
+        if self.pending_answer is not None and not isinstance(
+            self.pending_answer,
+            FindPendingAnswerRequest,
         ):
             raise ValueError("Invalid pending Find answer.")
 
@@ -243,9 +230,7 @@ class FindChatSessionResult:
 def render_find_chat_header(state: FindChatState) -> str:
     """Render the stable portion of the Find chat frame."""
     query = state.current_query.strip() or "(not asked yet)"
-    related_count = sum(
-        result.relevance == "related" for result in state.results
-    )
+    related_count = sum(result.relevance == "related" for result in state.results)
     result_summary = (
         f"PRIMARY MATCHES 0 · RELATED {related_count} · KEPT {state.kept_count}"
         if related_count
@@ -253,10 +238,7 @@ def render_find_chat_header(state: FindChatState) -> str:
     )
     return "\n".join(
         [
-            (
-                "MEM FIND · INTERACTIVE · "
-                f"{safe_terminal_text(state.context_name)}"
-            ),
+            (f"MEM FIND · INTERACTIVE · {safe_terminal_text(state.context_name)}"),
             f"QUERY · {safe_terminal_text(query)}",
             result_summary,
             f"STATUS · {safe_terminal_text(state.status)}",
@@ -274,7 +256,7 @@ def _message_block(message: FindChatMessage) -> str:
     return f"{label}\n  {content}"
 
 
-def _render_result(result: FindChatResult) -> str:
+def _result_view_row(result: FindChatResult) -> SearchResultViewRow:
     if result.relevance == "related":
         label = (
             f"[{safe_terminal_text(result.alias)} related "
@@ -285,43 +267,22 @@ def _render_result(result: FindChatResult) -> str:
             f"[{safe_terminal_text(result.alias)} "
             f"{result.kind:<7} {safe_terminal_text(result.uid[:8])}]"
         )
-    lines = safe_terminal_text(result.content).splitlines() or [""]
-    rendered = [f"{label} {lines[0]}"]
-    continuation = " " * (len(label) + 1)
-    rendered.extend(f"{continuation}{line}" for line in lines[1:])
-    return "\n".join(rendered)
+    return SearchResultViewRow(
+        context_name=result.context_name,
+        label=label,
+        content=result.content,
+    )
 
 
 def _result_blocks(state: FindChatState) -> tuple[str, ...]:
-    grouped: dict[str, list[FindChatResult]] = {}
-    for result in state.results:
-        grouped.setdefault(result.context_name, []).append(result)
-    blocks: list[str] = []
-    related = any(
-        result.relevance == "related" for result in state.results
+    if not state.results:
+        return ()
+    return (
+        render_grouped_search_results(
+            tuple(_result_view_row(result) for result in state.results),
+            related_query=state.related_query,
+        ),
     )
-    for index, (context_name, results) in enumerate(grouped.items()):
-        lines = []
-        if index == 0:
-            if related:
-                lines.extend(
-                    [
-                        "PRIMARY MATCHES",
-                        "  (none)",
-                        "",
-                        (
-                            "RELATED RESULTS · BROADER SEARCH · "
-                            + safe_terminal_text(state.related_query)
-                        ),
-                        "  Related items do not satisfy the original query.",
-                    ]
-                )
-            else:
-                lines.append("SEARCH RESULTS")
-        lines.append(safe_terminal_text(context_name))
-        lines.extend(_render_result(result) for result in results)
-        blocks.append("\n".join(lines))
-    return tuple(blocks)
 
 
 def _dialogue_blocks(state: FindChatState) -> tuple[str, ...]:
@@ -351,11 +312,7 @@ def _dialogue_text(state: FindChatState) -> str:
 
 def _result_text(state: FindChatState) -> str:
     blocks = _result_blocks(state)
-    return (
-        "\n\n".join(blocks)
-        if blocks
-        else "SEARCH RESULTS\n  (no matching items)"
-    )
+    return "\n\n".join(blocks) if blocks else "SEARCH RESULTS\n  (no matching items)"
 
 
 def render_find_chat_snapshot(state: FindChatState) -> str:
@@ -410,9 +367,9 @@ def _run_find_chat_application(
     committed_state = initial_state
     display_state = initial_state
     submitted_turns: list[str] = []
-    busy = False
-    busy_frame = {"index": 0}
-    close_requested = False
+    background_turn: BackgroundExecutorTurn[FindChatState] = BackgroundExecutorTurn(
+        interval_seconds=_FIND_BUSY_INTERVAL_SECONDS,
+    )
     status_message = {"value": ""}
     bindings = KeyBindings()
     input_area = TextArea(
@@ -423,7 +380,7 @@ def _run_find_chat_application(
         prompt="> ",
         # While a turn is in flight, keystrokes must not accumulate into a
         # hidden second submission that would race the frozen controller view.
-        read_only=Condition(lambda: busy),
+        read_only=Condition(lambda: background_turn.busy),
     )
     top_panel = Window(
         FormattedTextControl(lambda: render_find_chat_header(display_state)),
@@ -461,8 +418,8 @@ def _run_find_chat_application(
             Window(
                 FormattedTextControl(
                     lambda: (
-                        _processing_find_turn_label(busy_frame["index"])
-                        if busy
+                        _processing_find_turn_label(background_turn.frame)
+                        if background_turn.busy
                         else " ASK OR REFINE THE FIND"
                     )
                 ),
@@ -480,7 +437,7 @@ def _run_find_chat_application(
                 else (
                     " Working · current results remain visible    "
                     "Ctrl-C · close after this turn"
-                    if busy
+                    if background_turn.busy
                     else (
                         " Enter · submit    Ctrl-J / Alt-Enter · newline    "
                         "Tab · results/dialogue/input    "
@@ -499,18 +456,16 @@ def _run_find_chat_application(
         TuiRegion(input_panel, separator_before=True),
         TuiRegion(footer),
     )
-    application: Application[FindChatAction | FindChatSessionResult] = (
-        Application(
-            layout=Layout(root, focused_element=input_area),
-            key_bindings=bindings,
-            full_screen=True,
-            # The alternate screen is left only when the person closes the
-            # whole session, never between controller turns.
-            erase_when_done=True,
-            input=app_input,
-            output=app_output,
-            mouse_support=False,
-        )
+    application: Application[FindChatAction | FindChatSessionResult] = Application(
+        layout=Layout(root, focused_element=input_area),
+        key_bindings=bindings,
+        full_screen=True,
+        # The alternate screen is left only when the person closes the
+        # whole session, never between controller turns.
+        erase_when_done=True,
+        input=app_input,
+        output=app_output,
+        mouse_support=False,
     )
 
     def refresh(next_state: FindChatState) -> None:
@@ -537,62 +492,10 @@ def _run_find_chat_application(
             submitted_turns=tuple(submitted_turns),
         )
 
-    async def process_turn(base_state: FindChatState, text: str) -> None:
-        nonlocal busy, close_requested, committed_state
-        if handle_turn is None:  # pragma: no cover - submit path prevents this
-            return
-        cancelled_during_shutdown = False
-        try:
-            loop = asyncio.get_running_loop()
-            worker = loop.run_in_executor(
-                None,
-                handle_turn,
-                base_state,
-                text,
-            )
-            try:
-                # Shield the executor Future so an input-stream EOF cannot
-                # discard a read-only turn whose worker cannot be cancelled.
-                updated = await asyncio.shield(worker)
-            except asyncio.CancelledError:
-                cancelled_during_shutdown = True
-                updated = await worker
-            if not isinstance(updated, FindChatState):
-                raise ValueError(
-                    "Find chat controller returned an invalid next state."
-                )
-        except Exception as error:
-            updated = _failed_turn_state(base_state, text, error)
-
-        committed_state = updated
-        busy = False
-        if cancelled_during_shutdown:
-            # prompt-toolkit is already tearing down after EOF or an external
-            # interrupt. Preserve the completed state for the session result,
-            # but do not repaint a renderer that is leaving raw/full-screen
-            # mode. Re-propagating cancellation completes managed task cleanup.
-            raise asyncio.CancelledError()
-        refresh(updated)
-        if close_requested:
-            application.exit(result=session_result())
-            return
-        status_message["value"] = ""
-        application.layout.focus(input_area)
-        application.invalidate()
-
-    async def animate_busy_indicator() -> None:
-        """Repaint only while one controller turn owns the busy state."""
-        while busy:
-            await asyncio.sleep(_FIND_BUSY_INTERVAL_SECONDS)
-            if not busy:
-                return
-            busy_frame["index"] += 1
-            application.invalidate()
-
     @bindings.add("enter", filter=has_focus(input_area), eager=True)
     def _submit(event) -> None:
-        nonlocal busy
-        if busy:
+        nonlocal committed_state
+        if background_turn.busy:
             status_message["value"] = "A Find turn is already running."
             event.app.invalidate()
             return
@@ -608,8 +511,6 @@ def _run_find_chat_application(
         base_state = committed_state
         submitted_turns.append(text)
         input_area.buffer.set_document(Document("", cursor_position=0))
-        busy = True
-        busy_frame["index"] = 0
         status_message["value"] = ""
         refresh(
             replace(
@@ -622,8 +523,36 @@ def _run_find_chat_application(
             )
         )
         event.app.layout.focus(conversation_control)
-        event.app.create_background_task(animate_busy_indicator())
-        event.app.create_background_task(process_turn(base_state, text))
+
+        def work() -> FindChatState:
+            assert handle_turn is not None
+            updated = handle_turn(base_state, text)
+            if not isinstance(updated, FindChatState):
+                raise ValueError("Find chat controller returned an invalid next state.")
+            return updated
+
+        def commit(updated: FindChatState) -> None:
+            nonlocal committed_state
+            committed_state = updated
+            refresh(updated)
+
+        def fail(error: Exception) -> None:
+            nonlocal committed_state
+            committed_state = _failed_turn_state(base_state, text, error)
+            refresh(committed_state)
+
+        def return_to_input() -> None:
+            status_message["value"] = ""
+            application.layout.focus(input_area)
+
+        background_turn.start(
+            event.app,
+            work=work,
+            on_success=commit,
+            on_error=fail,
+            on_idle=return_to_input,
+            on_close=lambda: application.exit(result=session_result()),
+        )
         event.app.invalidate()
 
     @bindings.add("c-j", filter=has_focus(input_area), eager=True)
@@ -634,7 +563,7 @@ def _run_find_chat_application(
         eager=True,
     )
     def _insert_newline(event) -> None:
-        if busy:
+        if background_turn.busy:
             status_message["value"] = "Wait for the current Find turn."
         else:
             input_area.buffer.insert_text("\n")
@@ -646,7 +575,7 @@ def _run_find_chat_application(
             event.app.layout.focus(results_control)
         elif event.app.layout.has_focus(results_control):
             event.app.layout.focus(conversation_control)
-        elif busy:
+        elif background_turn.busy:
             event.app.layout.focus(results_control)
         else:
             event.app.layout.focus(input_area)
@@ -673,25 +602,19 @@ def _run_find_chat_application(
         event.app.invalidate()
 
     def close(event) -> None:
-        nonlocal close_requested
-        if busy and handle_turn is not None:
+        if handle_turn is not None and background_turn.request_close():
             # The synchronous controller may own a child process. A cancelled
             # executor future cannot terminate that process safely, so finish
             # the reviewed turn before leaving the alternate screen.
-            close_requested = True
             status_message["value"] = "Closing after the current turn finishes."
             event.app.invalidate()
             return
         result: FindChatAction | FindChatSessionResult = (
-            FindChatAction(kind="CLOSE")
-            if handle_turn is None
-            else session_result()
+            FindChatAction(kind="CLOSE") if handle_turn is None else session_result()
         )
         event.app.exit(result=result)
 
-    navigation_focus = (
-        has_focus(conversation_control) | has_focus(results_control)
-    )
+    navigation_focus = has_focus(conversation_control) | has_focus(results_control)
 
     @bindings.add("pageup", filter=navigation_focus, eager=True)
     def _scroll_page_up(event) -> None:
@@ -717,11 +640,7 @@ def _run_find_chat_application(
     try:
         result = application.run()
     except (EOFError, KeyboardInterrupt):
-        return (
-            FindChatAction(kind="CLOSE")
-            if handle_turn is None
-            else session_result()
-        )
+        return FindChatAction(kind="CLOSE") if handle_turn is None else session_result()
     if not isinstance(result, (FindChatAction, FindChatSessionResult)):
         raise ValueError("Find chat application returned an invalid result.")
     return result

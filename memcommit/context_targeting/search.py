@@ -1,0 +1,84 @@
+"""Search-specific loading over shared Context targeting models."""
+
+from __future__ import annotations
+
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Protocol
+
+from memcommit.context import Context
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.search import (
+    SearchCandidate,
+    append_artifact_candidates,
+    collect_candidates_from_roots,
+)
+from memcommit.search_artifacts import collect_search_artifacts
+
+if TYPE_CHECKING:
+    from memcommit.store import MemoryStore
+
+
+class SearchScopeStore(Protocol):
+    """Narrow ordinary-Context interface; query-only routes cannot implement it."""
+
+    def list_context_names(self) -> list[str]: ...
+
+    def context_exists(self, name: str) -> bool: ...
+
+    def load_direct(self, name: str) -> Context: ...
+
+    def load(self, name: str) -> Context: ...
+
+
+def load_readable_search_roots(
+    store: SearchScopeStore,
+    target_names: Sequence[str],
+    *,
+    include_descendants: bool,
+    follow_embeds: bool,
+) -> tuple[Context, ...]:
+    """Freeze ordinary roots with lexical and embedded reach kept independent."""
+
+    scope = ContextScope.create(
+        target_names,
+        include_descendants=include_descendants,
+    )
+    catalog_names = tuple(store.list_context_names())
+    for target_name in scope.target_names:
+        if not store.context_exists(target_name):
+            raise FileNotFoundError(
+                f"Context '{target_name}' is outside the readable search scope."
+            )
+    selected_names = expand_lexical_context_names(scope, catalog_names)
+    load = store.load if follow_embeds else store.load_direct
+    roots: list[Context] = []
+    seen_uids: set[str] = set()
+    for name in selected_names:
+        context = load(name)
+        if context.uid in seen_uids:
+            continue
+        seen_uids.add(context.uid)
+        roots.append(context)
+    return tuple(roots)
+
+
+def collect_readable_search_candidates(
+    active_store: MemoryStore,
+    roots: Sequence[Context],
+    *,
+    follow_embeds: bool,
+    artifact_roots: Sequence[Context] = (),
+) -> tuple[SearchCandidate, ...]:
+    """Collect ordinary candidates plus explicitly authorized local artifacts."""
+
+    candidates = collect_candidates_from_roots(
+        roots,
+        recursive=follow_embeds,
+    )
+    if artifact_roots:
+        candidates = append_artifact_candidates(
+            candidates,
+            collect_search_artifacts(active_store, artifact_roots),
+        )
+    return tuple(candidates)

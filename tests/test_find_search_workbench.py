@@ -87,7 +87,7 @@ def test_workbench_submits_multiple_targets_and_independent_scope_choices():
         # Search -> Targets; expand task-1; select its child; Scope: exact and
         # exclude embeds; Results -> Search; submit and close after completion.
         pipe_input.send_text(
-            "\t\x1b[C\x1b[B \t\x1b[D\x1b[B\x1b[D\t\tneedle\r\x03"
+            "\t\x1b[C\x1b[B \t\x1b[B\x1b[D\x1b[B\x1b[D\t\tneedle\r\x03"
         )
         result = run_find_search_workbench(
             ("task-1", "task-1/source", "other"),
@@ -113,6 +113,65 @@ def test_workbench_submits_multiple_targets_and_independent_scope_choices():
     ]
     assert result.response is not None
     assert result.response.request == requests[0]
+
+
+def test_enter_checks_target_and_stays_in_targets_until_explicit_return():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # Enter checks the child. Slash is then the explicit return to Search;
+        # if Enter had already returned, slash would become part of the query.
+        pipe_input.send_text("\t\x1b[C\x1b[B\r/needle\r\x03")
+        run_find_search_workbench(
+            ("task-1", "task-1/source"),
+            current="task-1",
+            initial_target="task-1",
+            initial_include_descendants=True,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task-1", "task-1/source"),
+        )
+    ]
+
+
+def test_scope_can_collapse_multiple_targets_to_the_most_recent_choice():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # Select child, move to Scope, and change MULTIPLE to SINGLE. The most
+        # recent explicit target remains checked before returning to Search.
+        pipe_input.send_text("\t\x1b[C\x1b[B\r\t\x1b[D/needle\r\x03")
+        run_find_search_workbench(
+            ("task-1", "task-1/source"),
+            current="task-1",
+            initial_target="task-1",
+            initial_include_descendants=True,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [FindSearchRequest("needle", ("task-1/source",))]
 
 
 @pytest.mark.parametrize("back_key", ["\x1b", "\x7f"])

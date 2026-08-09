@@ -15,7 +15,7 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.context import Context, Memory
-from memcommit.context_scope import load_context_scope
+from memcommit.context_targeting.loading import load_context_scope
 from memcommit.command_history import CommandRestoreResult
 from memcommit.profile_config import ProfileRegistry
 from memcommit.profiles import (

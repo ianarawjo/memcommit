@@ -16,7 +16,7 @@ from memcommit.commands.granted_context import (
 )
 from memcommit.comparison import ComparisonAnalysis, ComparisonError
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.context_scope import load_context_scope
+from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import AnalysisRetention, authorize_analysis_save
 from memcommit.store import MemoryStore, _write_json_atomic
 from memcommit.update import GrantedUpdateTarget

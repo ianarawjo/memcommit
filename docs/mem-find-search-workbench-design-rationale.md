@@ -22,16 +22,27 @@ an explicit query-required message rather than blocking on terminal input.
 The workbench presents four visible controls in screen order:
 
 1. `SEARCH`, a one-line query submitted with Enter;
-2. `TARGETS`, the frozen readable Context tree with Space toggling one or more
-   ordinary local or READ-granted roots;
-3. `SCOPE`, with independent `RANGE` and `EMBEDDED CONTEXTS` choices; and
+2. `TARGETS`, the frozen readable Context tree with Enter or Space changing
+   the checked ordinary local or READ-granted root while focus remains in the
+   tree;
+3. `SCOPE`, with independent `TARGET SELECTION`, `RANGE`, and
+   `EMBEDDED CONTEXTS` choices; and
 4. `RESULTS`, grouped by the exact owning Context.
 
 Tab and Shift-Tab move through that same order. The search field owns initial
 focus so opening Find feels like opening a search engine rather than entering
 a setup wizard. An empty query is UI state, not a request to rank every item.
 
-`INCLUDE BELOW` means canonical lexical namespace descendants only: selecting
+Target cardinality starts in `MULTIPLE` to preserve the fast path of checking
+peers on the first visit to the tree. `SINGLE` makes the next checked row
+replace the current target. Changing an existing multi-root selection to
+`SINGLE` retains the most recently explicitly checked root rather than silently
+returning to the initial current Context. At least one target is always
+required. Enter and Space are selection keys in `TARGETS`; `/`, Escape, and
+Backspace are the explicit paths back to `SEARCH`. This prevents Enter from
+appearing to accept a row while actually abandoning the tree unchanged.
+
+`INCLUDE DESCENDANTS` means canonical lexical namespace descendants only: selecting
 `task-1` includes materialized readable names beginning `task-1/`. `FOLLOW`
 under `EMBEDDED CONTEXTS` independently controls traversal through explicit
 Context objects. The legacy default remains both enabled; `--direct` initializes
@@ -67,13 +78,17 @@ and provider output validation remain the semantic execution boundaries.
 
 ## Reuse and limitations
 
-The workbench reuses the common Context tree state, horizontal-choice renderer,
-focused Frame styling, terminal escaping, and progress animation. Find owns the
-meaning of its target union and search results; those semantics are not added
-to the generic picker.
+The workbench reuses the common Context tree state, Context reach control,
+horizontal-choice renderer, focused Frame styling, terminal escaping, grouped
+search-result presentation, and close-safe background-turn controller.
+`ContextTreeState` continues to own only cursor and expansion, while the shared
+`ContextSelectionState` owns checked values. Find is the only current operation
+that configures that state for multiple roots; the common endpoint and Sever
+setups use the same state in single-selection mode. Multi-selection semantics
+are not added to the full-screen generic picker or exposed to those operations.
 
-The first version exposes multi-target selection in the interactive surface.
 The one-shot `--context` option remains singular, and the range/embed choices
 apply uniformly to every checked target. Result inspection and conversational
 follow-up remain separate from this Google-like search surface; the retained
-legacy Find chat shell is not silently reactivated.
+legacy Find chat shell is not silently reactivated. Query-only routes remain a
+separate authorized interface and never become selectable ordinary roots.

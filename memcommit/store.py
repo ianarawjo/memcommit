@@ -1464,7 +1464,7 @@ class MemoryStore:
             session_matches,
         )
         from memcommit.update_application import prepare_update_application
-        from memcommit.context_scope import load_context_scope
+        from memcommit.context_targeting.loading import load_context_scope
 
         if not isinstance(session, UpdateSession) or session.status != "staged":
             raise ValueError("Expected one staged UpdateSession.")

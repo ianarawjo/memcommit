@@ -20,7 +20,7 @@ from memcommit.commands.session_picker import (
     choose_session,
 )
 from memcommit.commands.update_render import render_plan, review_update_application
-from memcommit.context_scope import load_context_scope
+from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.granted_source_update_application import (
     apply_granted_source_staged_update,

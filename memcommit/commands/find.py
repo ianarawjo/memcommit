@@ -41,10 +41,15 @@ from memcommit.commands.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
 )
+from memcommit.context_targeting.search import (
+    collect_readable_search_candidates,
+    load_readable_search_roots,
+)
 from memcommit.commands.tui_primitives import (
     display_escape_text,
     safe_terminal_text,
 )
+from memcommit.commands.search_result_present import group_search_items
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.find_answer_dialogue import (
     FindAnswerCorpusTooLarge,
@@ -85,11 +90,8 @@ from memcommit.search import (
     SearchArtifact,
     SearchCandidate,
     SearchMatch,
-    append_artifact_candidates,
-    collect_candidates_from_roots,
     rank_candidates,
 )
-from memcommit.search_artifacts import collect_search_artifacts
 from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
@@ -445,26 +447,14 @@ def _load_find_frame_roots(
     recursive: bool,
     resolve_embeds: bool,
 ) -> tuple[Context, ...]:
-    """Freeze the selected Context plus every materialized namespace descendant."""
-    if not recursive:
-        return (root,)
+    """Compatibility adapter for the former Find-owned scope helper."""
 
-    prefix = root.name + "/"
-    load = store.load if resolve_embeds else store.load_direct
-    roots = [root]
-    seen_uids = {root.uid}
-    # Namespace scope is determined once per Find. It is a provider boundary:
-    # every ordinary Context below this canonical prefix may contribute content
-    # to ranking, while query-only sources remain outside the ordinary catalog.
-    for name in store.list_context_names():
-        if not name.startswith(prefix):
-            continue
-        descendant = load(name)
-        if descendant.uid in seen_uids:
-            continue
-        seen_uids.add(descendant.uid)
-        roots.append(descendant)
-    return tuple(roots)
+    return load_readable_search_roots(
+        store,
+        (root.name,),
+        include_descendants=recursive,
+        follow_embeds=resolve_embeds,
+    )
 
 
 def _load_find_scope_roots(
@@ -474,32 +464,14 @@ def _load_find_scope_roots(
     include_descendants: bool,
     follow_embeds: bool,
 ) -> tuple[Context, ...]:
-    """Freeze multiple roots while keeping namespace and embed reach separate."""
+    """Compatibility adapter for tests and retained Find callers."""
 
-    load = store.load if follow_embeds else store.load_direct
-    catalog_names = tuple(store.list_context_names())
-    selected_names: list[str] = []
-    for target_name in target_names:
-        if not store.context_exists(target_name):
-            raise FileNotFoundError(
-                f"Context '{target_name}' is outside the readable Find catalog."
-            )
-        selected_names.append(target_name)
-        if include_descendants:
-            prefix = target_name + "/"
-            selected_names.extend(
-                name for name in catalog_names if name.startswith(prefix)
-            )
-
-    roots: list[Context] = []
-    seen_uids: set[str] = set()
-    for name in dict.fromkeys(selected_names):
-        context = load(name)
-        if context.uid in seen_uids:
-            continue
-        seen_uids.add(context.uid)
-        roots.append(context)
-    return tuple(roots)
+    return load_readable_search_roots(
+        store,
+        target_names,
+        include_descendants=include_descendants,
+        follow_embeds=follow_embeds,
+    )
 
 
 def _collect_find_frame_candidates(
@@ -509,17 +481,14 @@ def _collect_find_frame_candidates(
     recursive: bool,
     include_artifacts: bool,
 ) -> tuple[SearchCandidate, ...]:
-    """Freeze ordinary items and permitted profile-local activity evidence."""
-    candidates = collect_candidates_from_roots(
+    """Compatibility adapter for the shared ordinary searchable corpus."""
+
+    return collect_readable_search_candidates(
+        store,
         frame_roots,
-        recursive=recursive,
+        follow_embeds=recursive,
+        artifact_roots=frame_roots if include_artifacts else (),
     )
-    if include_artifacts:
-        candidates = append_artifact_candidates(
-            candidates,
-            collect_search_artifacts(store, frame_roots),
-        )
-    return tuple(candidates)
 
 
 def _namespace_branch(name: str, root_name: str) -> str | None:
@@ -548,16 +517,17 @@ def _supplement_namespace_branch_coverage(
     branch into the result.
     """
 
-    if limit < 2 or not matches or any(
-        match.relevance != "primary" for match in matches
+    if (
+        limit < 2
+        or not matches
+        or any(match.relevance != "primary" for match in matches)
     ):
         return matches
     candidate_branches = {
         branch
         for candidate in candidates
         if candidate.kind != "artifact"
-        if (branch := _namespace_branch(candidate.context_name, root_name))
-        is not None
+        if (branch := _namespace_branch(candidate.context_name, root_name)) is not None
     }
     selected_branches = {
         branch
@@ -800,9 +770,7 @@ def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
 def _related_query_for_matches(matches: Sequence[SearchMatch]) -> str:
     """Return one common related query while rejecting mixed local tiers."""
     related_queries = {
-        match.related_query
-        for match in matches
-        if match.relevance == "related"
+        match.related_query for match in matches if match.relevance == "related"
     }
     primary_count = sum(match.relevance == "primary" for match in matches)
     related_count = sum(match.relevance == "related" for match in matches)
@@ -1095,9 +1063,7 @@ def _history_find_search_result(
     result: HistorySearchResult,
 ) -> FindSearchResult:
     timestamp = (
-        result.timestamp[:16].replace("T", " ")
-        if result.timestamp
-        else "current"
+        result.timestamp[:16].replace("T", " ") if result.timestamp else "current"
     )
     return FindSearchResult(
         context_name=result.context_name,
@@ -1156,10 +1122,6 @@ def _run_find_search_request(
             ),
         )
 
-    candidates = collect_candidates_from_roots(
-        roots,
-        recursive=request.follow_embeds,
-    )
     # Activity evidence belongs to the active Profile. READ-granted roots can
     # contribute their authorized Memories, but never the authority Profile's
     # private checkpoints, sessions, traces, or rationale records.
@@ -1171,9 +1133,11 @@ def _run_find_search_request(
             continue
         if not access.is_granted:
             local_roots.append(root)
-    candidates = append_artifact_candidates(
-        candidates,
-        collect_search_artifacts(store, local_roots),
+    candidates = collect_readable_search_candidates(
+        store,
+        roots,
+        follow_embeds=request.follow_embeds,
+        artifact_roots=local_roots,
     )
     provider = connect_codex_chatgpt_provider()
     matches = rank_candidates(
@@ -1223,9 +1187,7 @@ def _open_find_search_workbench(
         raise RuntimeError("The selected Context is outside the readable catalog.")
     displayed_current = current_name if current_name in names else initial_target
     annotations = {
-        name: "READ GRANT"
-        for name in names
-        if catalog.access_for(name).is_granted
+        name: "READ GRANT" for name in names if catalog.access_for(name).is_granted
     }
     run_find_search_workbench(
         names,
@@ -1251,7 +1213,7 @@ def cmd(
             help=(
                 "Natural-language query; omit in a terminal to open the "
                 "interactive search and scope selector"
-            )
+            ),
         ),
     ] = None,
     context_name: Annotated[
@@ -1477,23 +1439,14 @@ def cmd(
         typer.echo("  (no primary matches)")
         typer.echo()
         typer.secho("RELATED RESULTS", bold=True)
-        typer.echo(
-            "  Broader search: " + display_escape_text(related_query)
-        )
+        typer.echo("  Broader search: " + display_escape_text(related_query))
         typer.echo("  Related items do not satisfy the original query.")
 
-    # Grouping makes the owning Context legible without repeating it on every
-    # row. Dict insertion order keeps the model's first Context appearance,
-    # while each group's rows retain their relative ranking.
-    grouped: dict[tuple[str, str], list[SearchMatch]] = {}
-    for match in matches:
-        owner = (
-            match.candidate.context_uid,
-            match.candidate.context_name,
-        )
-        grouped.setdefault(owner, []).append(match)
-
-    for group_index, ((_, owner_name), owner_matches) in enumerate(grouped.items()):
+    groups = group_search_items(
+        matches,
+        context_name=lambda match: match.candidate.context_name,
+    )
+    for group_index, (owner_name, owner_matches) in enumerate(groups):
         if group_index or related_query:
             typer.echo()
         typer.secho(display_escape_text(owner_name), bold=True)

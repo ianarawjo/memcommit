@@ -1,4 +1,5 @@
 """Persistence for latest ordered peer-comparison analyses."""
+
 from __future__ import annotations
 
 from contextlib import ExitStack
@@ -13,16 +14,16 @@ from memcommit.comparison import (
     ComparisonError,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.context_scope import load_context_scope
+from memcommit.context_targeting.loading import load_context_scope
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.resolution import expand_lexical_context_names
 
 
 class ConcurrentComparisonUpdateError(RuntimeError):
     """A source or ordered comparison slot changed during analysis."""
 
 
-_FINAL_ANALYSIS_NAME = re.compile(
-    r"^([0-9a-f-]{36})--([0-9a-f-]{36})\.json$"
-)
+_FINAL_ANALYSIS_NAME = re.compile(r"^([0-9a-f-]{36})--([0-9a-f-]{36})\.json$")
 _ATOMIC_TEMP_NAME = re.compile(
     r"^\.([0-9a-f-]{36})--([0-9a-f-]{36})"
     r"\.json\.write-([0-9a-f]{32})$"
@@ -57,14 +58,10 @@ def comparison_analysis_path(
         "comparison compared Context uid",
     )
     if reference == compared:
-        raise ValueError(
-            "Comparison analysis requires distinct Context uids."
-        )
+        raise ValueError("Comparison analysis requires distinct Context uids.")
     root = comparison_analyses_dir()
     if root.is_symlink():
-        raise ValueError(
-            "Comparison analysis storage cannot be a symbolic link."
-        )
+        raise ValueError("Comparison analysis storage cannot be a symbolic link.")
     if root.exists() and not root.is_dir():
         raise ValueError("Comparison analysis storage is invalid.")
     return root / f"{reference}--{compared}.json"
@@ -112,8 +109,7 @@ def load_comparison_analysis(
         or analysis.frames[1].context_uid != compared_context_uid
     ):
         raise ValueError(
-            "Saved comparison analysis does not match its ordered storage "
-            "key."
+            "Saved comparison analysis does not match its ordered storage key."
         )
     return analysis
 
@@ -159,11 +155,11 @@ def save_comparison_analysis(
             analysis.include_descendants,
             strict=True,
         ):
-            if include_descendants:
-                prefix = frame.context_name + "/"
-                lock_names.update(
-                    name for name in catalog if name.startswith(prefix)
-                )
+            scope = ContextScope.create(
+                (frame.context_name,),
+                include_descendants=include_descendants,
+            )
+            lock_names.update(expand_lexical_context_names(scope, catalog))
         locks.enter_context(store._context_write_locks(lock_names))
         locks.enter_context(store.profile_write_guard())
 
@@ -204,9 +200,7 @@ def save_comparison_analysis(
             )
 
         root = comparison_analyses_dir()
-        if root.exists() and (
-            not root.is_dir() or root.is_symlink()
-        ):
+        if root.exists() and (not root.is_dir() or root.is_symlink()):
             raise ValueError("Comparison analysis storage is invalid.")
         root.mkdir(parents=True, exist_ok=True)
         if path.exists() and (not path.is_file() or path.is_symlink()):
