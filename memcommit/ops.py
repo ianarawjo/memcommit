@@ -545,7 +545,11 @@ def _forget_changes(analysis, ctx: Context) -> list[ProposedChange]:
 
 def analyze_forget(ctx: Context, query: str, llm: LLMClient):
     """Analyze the whole Source frame once and retain an explicit decision per Memory."""
-    from memcommit.selective_curation import CurationAnalysis
+    from memcommit.selective_curation import (
+        CurationAnalysis,
+        plan_curation_execution,
+    )
+    from memcommit.semantic_execution import ExecutionMode
     from memcommit.semantic.utils import build_messages
 
     if not any(isinstance(item, Memory) for item in ctx.iter_items()):
@@ -553,6 +557,15 @@ def analyze_forget(ctx: Context, query: str, llm: LLMClient):
             overview="The Source Context has no direct Memories to review.",
             decisions=(),
         ), []
+    frame = _forget_curation_frame(ctx, query)
+    execution_plan = plan_curation_execution(frame)
+    if execution_plan.mode is not ExecutionMode.ONE_SHOT:
+        axes = ", ".join(execution_plan.exceeded_axes)
+        raise ValueError(
+            "The complete Forget Source and instruction exceed the bounded "
+            f"selective-curation plan ({axes}). They are never partitioned "
+            "because neighboring Source Memories may affect one decision."
+        )
     messages = build_messages(_FORGET_SYSTEM, _format_forget_user_msg(ctx, query))
     text = llm.chat(messages)
     history = messages + [{"role": "assistant", "content": text}]
@@ -591,11 +604,10 @@ def revise_forget(
     import json
     import re
 
+    from memcommit.selective_curation import plan_curation_execution
+    from memcommit.semantic_execution import ExecutionMode
     from memcommit.semantic.utils import build_messages
 
-    messages = build_messages(history=history, feedback=feedback)
-    text = llm.chat(messages)
-    updated_history = messages + [{"role": "assistant", "content": text}]
     query = ""
     for message in history:
         content = message.get("content", "")
@@ -615,6 +627,21 @@ def revise_forget(
             break
     if not query:
         raise ValueError("The forget history does not contain its original instruction.")
+    messages = build_messages(history=history, feedback=feedback)
+    execution_plan = plan_curation_execution(
+        _forget_curation_frame(ctx, query),
+        payload=messages,
+    )
+    if execution_plan.mode is not ExecutionMode.ONE_SHOT:
+        axes = ", ".join(execution_plan.exceeded_axes)
+        raise ValueError(
+            "The complete Forget Source, instruction, and review history exceed "
+            f"the bounded selective-curation plan ({axes}). They are never "
+            "partitioned because neighboring Source Memories may affect one "
+            "decision."
+        )
+    text = llm.chat(messages)
+    updated_history = messages + [{"role": "assistant", "content": text}]
     analysis = _decode_forget_analysis(text, ctx, query)
     return _forget_changes(analysis, ctx), updated_history
 

@@ -22,6 +22,15 @@ from memcommit.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    json_budget,
+    plan_semantic_execution,
+)
 
 
 MELD_PAYLOAD_MARKER = "MELD TURN PAYLOAD:\n"
@@ -33,6 +42,16 @@ MELD_RESPONSE_CHAR_LIMIT = 1_000_000
 MELD_ITEM_LIMIT = 500
 MELD_KEY_LIMIT = 100
 MELD_OPTION_LIMIT = 5
+
+MELD_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation="meld_contexts",
+    strategy=ExecutionStrategy.BLOCK_RELATIONS,
+    one_shot_limits=BudgetLimits(
+        max_input_chars=MELD_INPUT_CHAR_LIMIT,
+        max_items=MELD_ITEM_LIMIT,
+    ),
+    staged_supported=False,
+)
 
 _RELATIONS = {
     "EQUIVALENT",
@@ -159,12 +178,17 @@ def _provider_view(session: MeldSession) -> _ProviderView:
         raise MeldProviderError("No meld turn is awaiting analysis.")
     if session.current_turn.assessment is not None:
         raise MeldProviderError("The current meld turn is already assessed.")
-    if sum(len(frame.memories) for frame in session.frames) > MELD_ITEM_LIMIT:
+    source_count = sum(len(frame.memories) for frame in session.frames)
+    item_plan = plan_semantic_execution(
+        MELD_EXECUTION_POLICY,
+        BudgetVector(item_count=source_count),
+    )
+    if item_plan.mode is not ExecutionMode.ONE_SHOT:
         raise MeldProviderError(
-            "This Context pair exceeds the one-shot meld limit of "
-            f"{MELD_ITEM_LIMIT} direct Memories. Input is never truncated."
+            "This Context pair exceeds the bounded Meld execution plan of "
+            f"{MELD_ITEM_LIMIT} direct Memories. Input is never truncated; "
+            "staged block reconciliation is not yet enabled."
         )
-
     memory_by_id: dict[str, MeldMember] = {}
     memory_id_by_key: dict[tuple[str, str], str] = {}
     frame_ids = (
@@ -565,7 +589,11 @@ def _prompt(payload: dict[str, object]) -> str:
         separators=(",", ":"),
         sort_keys=True,
     )
-    if len(encoded) > MELD_INPUT_CHAR_LIMIT:
+    plan = plan_semantic_execution(
+        MELD_EXECUTION_POLICY,
+        json_budget(payload),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise MeldProviderError(
             "This Context pair and dialogue exceed the one-shot meld limit "
             f"of {MELD_INPUT_CHAR_LIMIT} characters. Input is never "
@@ -1135,6 +1163,28 @@ def assess_meld_turn(
         raise MeldProviderError("Expected a MeldSession.")
     view = _provider_view(session)
     source_count = len(view.memory_by_id)
+    left_count = len(session.frames[0].memories)
+    right_count = len(session.frames[1].memories)
+    plan = plan_semantic_execution(
+        MELD_EXECUTION_POLICY,
+        json_budget(
+            view.payload,
+            item_count=source_count,
+            output_schema=meld_output_schema(
+                source_count,
+                mode=session.mode,
+            ),
+            expected_output_items=source_count,
+            relation_edges=left_count * right_count,
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
+        axes = ", ".join(plan.exceeded_axes)
+        raise MeldProviderError(
+            "This Context pair exceeds the bounded Meld execution plan "
+            f"({axes}). Input is never truncated; staged block reconciliation "
+            "is not yet enabled for this complete ledger."
+        )
     response = provider.complete(
         _prompt(view.payload),
         operation="meld_contexts",

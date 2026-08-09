@@ -20,7 +20,9 @@ from memcommit.selective_curation import (
     build_provider_frame,
     curation_output_schema,
     decode_curation_response,
+    plan_curation_execution,
 )
+from memcommit.semantic_execution import ExecutionMode
 
 
 SEVER_PAYLOAD_MARKER = "SEVER PAYLOAD:\n"
@@ -154,6 +156,18 @@ def analyze_sever(
             },
         },
     }
+    execution_plan = plan_curation_execution(
+        curation_frame,
+        payload=payload,
+        output_schema=output_schema,
+    )
+    if execution_plan.mode is not ExecutionMode.ONE_SHOT:
+        axes = ", ".join(execution_plan.exceeded_axes)
+        raise SeverProviderError(
+            "The complete Sever Source and Criteria exceed the bounded "
+            f"selective-curation plan ({axes}). They are never partitioned "
+            "because neighboring Source Memories may affect one decision."
+        )
     prompt = (
         "You prepare a new local Context by selectively forgetting information from a "
         "Source under one Criteria frame. Sever never changes the Source. Use only the "

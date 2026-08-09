@@ -11,6 +11,28 @@ import json
 from dataclasses import dataclass
 from typing import Literal, Mapping
 
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    ExecutionPlan,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    json_budget,
+    plan_semantic_execution,
+)
+
+
+SELECTIVE_CURATION_INPUT_CHAR_LIMIT = 400_000
+SELECTIVE_CURATION_ITEM_LIMIT = 500
+SELECTIVE_CURATION_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation="selective curation",
+    strategy=ExecutionStrategy.WHOLE_FRAME_ONLY,
+    one_shot_limits=BudgetLimits(
+        max_input_chars=SELECTIVE_CURATION_INPUT_CHAR_LIMIT,
+        max_items=SELECTIVE_CURATION_ITEM_LIMIT,
+    ),
+    staged_supported=False,
+)
+
 
 CurationAction = Literal["KEEP", "TRANSFORM", "DROP"]
 CriterionKind = Literal["INSTRUCTION", "MEMORY_FRAME"]
@@ -132,6 +154,25 @@ def build_provider_frame(batch: CurationBatch) -> CurationProviderFrame:
         payload=payload,
         source_aliases=source_aliases,
         criterion_aliases=criterion_aliases,
+    )
+
+
+def plan_curation_execution(
+    frame: CurationProviderFrame,
+    *,
+    payload: object | None = None,
+    output_schema: object | None = None,
+) -> ExecutionPlan:
+    """Require one complete Source × Criteria turn under a shared budget."""
+
+    return plan_semantic_execution(
+        SELECTIVE_CURATION_EXECUTION_POLICY,
+        json_budget(
+            frame.payload if payload is None else payload,
+            item_count=len(frame.batch.source) + len(frame.batch.criteria.items),
+            output_schema=output_schema,
+            expected_output_items=len(frame.batch.source),
+        ),
     )
 
 

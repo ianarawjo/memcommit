@@ -1,0 +1,183 @@
+# Semantic execution planning design rationale
+
+## Motivation
+
+The first semantic operations were bounded one-shot research prototypes. Their
+limits evolved locally: Find, Update, Atomize, Translate, and the quality
+finders used 200,000-character payload guards; Compare and Meld used 400,000
+characters plus separate item limits; other operations retained their own
+one-shot boundaries. The canonical 150-by-150 Task 2 frame exposed why one
+scalar was insufficient: a 200-item Compare boundary could produce a reviewed
+ledger that a 300-Memory Meld was then unable to consume, so Meld's local item
+limit was raised instead of changing the execution model.
+
+The immediate failure that motivated this shared layer was an interactive Find
+over 106 exact checked Contexts with embedded reach enabled. Its corpus crossed
+the 200,000-character guard before provider connection even though the selected
+provider might support a larger context. Raising the constant would only move
+the same problem to a later workload or a smaller provider.
+
+## Boundary
+
+`provider.complete()` remains one provider call. It cannot infer whether an
+arbitrary prompt is retrieval, an exhaustive relation ledger, a directional
+mutation plan, a holistic summary, or selective curation. Automatic splitting
+inside the provider adapter would therefore change operation meaning.
+
+`memcommit.semantic_execution` sits above the provider and below operation
+adapters. It owns only operation-neutral mechanics:
+
+- a vector budget;
+- one-shot, staged, or rejected planning;
+- stable group-preserving packing;
+- exactly-once input-exposure coverage;
+- all-batches-before-result execution and common progress;
+- complete left-batch by right-batch scheduling; and
+- connected components over validated positive relation observations.
+
+Operations still own candidate construction, authority, disclosure, provider
+prompts and schemas, semantic reconciliation, durable state, and application.
+
+## Budget contract
+
+`BudgetVector` records independent axes:
+
+| Axis | Meaning |
+| --- | --- |
+| `input_chars` | Deterministically serialized provider payload size |
+| `item_count` | Frozen Source and Target items presented to the operation |
+| `schema_chars` | Structured-output schema size, including alias enums |
+| `expected_output_items` | Expected or worst-case result cardinality |
+| `relation_edges` | Pair or bipartite relation space implied by the frame |
+
+`BudgetLimits` may constrain any subset. Reaching one axis does not imply that
+another is safe: many short items can overflow a coverage schema or relation
+ledger while one long Memory can overflow input with an item count of one.
+Character accounting remains deterministic because the current configured
+provider does not always expose a resolved model-specific tokenizer or context
+window. The vector can later accept a trustworthy token estimate without
+collapsing the existing axes.
+
+## Strategies
+
+Every operation declares one staged semantic strategy:
+
+| Strategy | Required reconciliation |
+| --- | --- |
+| `TOP_K_RERANK` | Rank every shard, retain every shard's validated shortlist, then globally rerank their union |
+| `COVERAGE_MAP` | Return exactly one validated result for every frozen input and restore canonical order |
+| `BLOCK_RELATIONS` | Expose complete block coordinates, reconcile positive relation components, then rebuild exhaustive dispositions and issues |
+| `MAP_PLUS_GLOBAL` | Map item-local judgments, then run the complete cross-item quality or consistency pass |
+| `HIERARCHICAL_REDUCE` | Reduce bounded source-linked reports and explicitly preserve the hierarchy's evidence limits |
+| `WHOLE_FRAME_ONLY` | Never partition; reject or require a smaller frame or more capable provider |
+
+A strategy declaration is not an implementation claim. `staged_supported`
+remains false until the operation adapter implements and validates its required
+reconciler. The planner then rejects an over-budget frame rather than returning
+a plausible-looking partial result.
+
+## Implemented staged paths
+
+### Ordinary Find
+
+Find preserves Context ownership as its first packing boundary. Multiple small
+Contexts share one batch; an oversized Context is subdivided only at candidate
+boundaries. Every candidate appears in exactly one first-stage request. Each
+batch returns a validated primary or related shortlist. If any primary exists,
+it is ordered first, but it does not suppress another shard's related fallback
+before the global judge can compare them. The validated union receives one
+final reranking call, which restores the ordinary mutually exclusive primary
+or single-related-query result contract.
+
+If one candidate cannot fit, or if the complete shortlist still cannot fit,
+Find fails without truncating stored content. Small corpora retain exactly one
+provider call. Temporal Find currently remains guarded one-shot because its
+provider returns a coupled subject/anchor/relation plan rather than ordinary
+ranked candidates; independently planned timeline shards cannot yet be merged
+without a temporal-plan agreement contract.
+
+### Translate
+
+Translate uses `COVERAGE_MAP`. Small selections retain one provider call. A
+large selection is split only between Memories, every global candidate alias
+is sent once, every batch must return complete validated coverage, and batch
+proposals are restored in source order. A failed batch exposes no plan. One
+oversized Memory fails before provider connection.
+
+The existing `provider_response_sha256` remains a single checkpoint field. For
+one call it retains the historical raw-response digest. For staged translation
+it hashes the canonical ordered tuple of raw batch responses. The batch count
+and individual response digests are not yet durable metadata; this is an
+explicit provenance limitation rather than a claim that staged work was one
+physical call.
+
+## Relation and holistic operations
+
+Compare, Meld, Update, Conflict, Atomize quality, Atomize grounding, Summarize,
+and Rationale now declare shared policies and budget vectors, but their staged
+reconcilers are not enabled. Their existing exhaustive or source-linked result
+contracts remain one-shot below the bound and fail closed above it.
+
+Update models its existing 200-operation ceiling independently from its
+200,000-character ceiling. The workload records the complete worst case of one
+addition per Source plus one mutually exclusive edit or removal per Target;
+crossing either axis requires a future Source-by-Target relation reconciler.
+An Update review turn budgets the Source, Target, current reviewed proposal,
+and guidance together, so revision cannot bypass the initial plan.
+
+The shared block-matrix scheduler makes every left-batch/right-batch coordinate
+observable once without allocating a Cartesian list of item pairs. The shared
+component builder can merge validated positive hyperedges and retain unmatched
+singletons. Those mechanics alone do not prove recall, choose a relation kind,
+merge conflicting batch judgments, reconstruct globally concise reports, or
+preserve issue and proposal provenance. An adapter must solve those semantics
+before changing `staged_supported` to true.
+
+The retained Task 2 evaluation pipeline is evidence for this caution. Its
+bidirectional retrieval and global component reconciliation improved scale,
+but candidate recall and final subset precision varied by provider and stage.
+Production Compare or Meld must not label such a retrieval projection an
+exhaustive ledger without an explicit coverage contract.
+
+## Whole-frame selective curation
+
+Forget and Sever declare `WHOLE_FRAME_ONLY`. They share a 400,000-character and
+500-item host preflight so a clearly oversized batch fails before provider
+connection. These are safety ceilings, not permission to sample. The complete
+frozen Source and criterion frame must still appear in one turn and return one
+decision per Source Memory because neighboring Source Memories may affect a
+decision. A Forget review turn also budgets its complete retained dialogue and
+fails before the provider rather than treating follow-up history as exempt.
+
+## Migration scope
+
+This layer covers aggregate Context operations whose candidate, relation,
+schema, or output cardinality grows with the selected frame. It is not a
+wrapper around every provider call. Fixed one-case calibration gates, bounded
+Ground authoring dialogue, and the legacy non-public Integrate batch protocol
+retain their own contracts for now. If any of those begins accepting an
+unbounded Context frame, it must declare an operation policy rather than rely
+on transport-level splitting.
+
+## Failure, progress, and compatibility invariants
+
+- Candidate aliases and frame contents are frozen before planning.
+- Group packing is stable and deterministic.
+- A group is kept whole when it fits; only an oversized group may split at
+  operation-approved item boundaries.
+- A single oversized item is never truncated.
+- Batch input identities are unique and must complete exactly once.
+- Exceptions publish no partial semantic result.
+- `BATCH`, `RECONCILE`, and `COMPLETE` progress is presentation-only state.
+- Existing one-shot prompts, local response validation, session schemas, CAS
+  checks, permissions, and apply boundaries remain authoritative.
+
+## Alternatives rejected
+
+Raising every character constant was rejected because it ignores provider
+variation, output/schema growth, and item or relation complexity. Generic
+provider-level prompt splitting was rejected because it cannot preserve
+operation meaning. Silent local semantic prefiltering was rejected because it
+can remove the only relevant candidate without a recall receipt. Treating a
+block matrix or connected components as a final Compare/Meld answer was
+rejected because exposure coverage is not semantic reconciliation.

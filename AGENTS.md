@@ -129,6 +129,32 @@ conversation.
   code must import `memcommit.context_targeting` modules directly rather than
   adding behavior to legacy `memcommit.context_scope` or command-local wrappers.
 
+## Shared semantic execution planning
+
+- Treat `provider.complete()` as one bounded provider-call primitive, never as
+  a generic place to split an arbitrary prompt. Plan aggregate semantic work
+  through `memcommit.semantic_execution`, where character, item, schema,
+  expected-output, and relation-edge budgets remain independent axes.
+- Every semantic operation must declare its staged meaning with an
+  `ExecutionStrategy`. Use group-preserving `TOP_K_RERANK` for retrieval,
+  exactly-once `COVERAGE_MAP` for independent transforms, and operation-owned
+  reconciliation for relation, global-quality, or hierarchical reductions.
+  Crossing a one-shot bound does not itself authorize hidden batching.
+- Freeze candidates and aliases before planning. Staged calls must cover every
+  frozen input exactly once at the batch-exposure layer, publish no partial
+  result after a failed batch, and perform the operation's final reconciliation
+  before reporting completion. Never truncate one oversized Memory silently.
+- A complete block matrix and connected-component mechanics are shared
+  scheduling tools, not proof of semantic completeness. Compare, Meld, Update,
+  Conflict, and Atomize may enable staged execution only after their adapters
+  preserve exhaustive disposition, cross-block relations, issues, provenance,
+  and application readiness. Until then they must reject over-budget frames.
+- Keep whole-frame invariants whole. In particular, Forget and Sever remain
+  `WHOLE_FRAME_ONLY`; the shared planner may fail them before provider
+  connection but must not partition their Source or criterion frames.
+- Keep implementation status and limitations consistent with
+  `docs/semantic-execution-planning-design-rationale.md`.
+
 ## Selective curation batches
 
 - Forget and Sever share one batch semantic invariant: send the complete

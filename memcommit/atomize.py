@@ -23,6 +23,14 @@ from memcommit.result_workbench import (
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
 from memcommit.review import direct_context_digest
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    plan_semantic_execution,
+)
 from memcommit.understanding import (
     UnderstandingError,
     UnderstandingSummary,
@@ -43,6 +51,22 @@ ATOMIZE_QUALITY_READING_LIMIT = 5
 ATOMIZE_READING_LABEL_CHAR_LIMIT = 160
 ATOMIZE_READING_LABEL_WORD_LIMIT = 20
 ATOMIZE_QUALITY_ISSUE_LIMIT = 5_000
+
+# Classification can eventually map over Memory batches, but quality findings
+# require a complete cross-batch pass before Atomize may claim full coverage.
+def _atomize_execution_policy(
+    *,
+    relation_limit: int = ATOMIZE_QUALITY_ISSUE_LIMIT,
+) -> SemanticExecutionPolicy:
+    return SemanticExecutionPolicy(
+        operation="impact_atomize",
+        strategy=ExecutionStrategy.MAP_PLUS_GLOBAL,
+        one_shot_limits=BudgetLimits(
+            max_input_chars=ATOMIZE_INPUT_CHAR_LIMIT,
+            max_relation_edges=relation_limit,
+        ),
+        staged_supported=False,
+    )
 ATOMIZE_RULESET_VERSION = "atomize-v2-reviewed-frame-draft"
 ATOMIZE_LEGACY_RULESET_VERSION = "atomize-v1-draft"
 ATOMIZE_SIZE_REVIEW_CHARS = 80
@@ -1709,7 +1733,11 @@ def _payload(
         _load_calibration_cases,
     )
 
-    if pair_count > CONFLICT_PAIR_LIMIT:
+    pair_plan = plan_semantic_execution(
+        _atomize_execution_policy(relation_limit=CONFLICT_PAIR_LIMIT),
+        BudgetVector(relation_edges=pair_count),
+    )
+    if pair_plan.mode is not ExecutionMode.ONE_SHOT:
         raise AtomizeImpactError(
             f"This Context has {pair_count} Memory pairs, exceeding the "
             f"one-shot prototype limit of {CONFLICT_PAIR_LIMIT}. Use a "
@@ -1954,12 +1982,24 @@ def _output_schema(
 
 def _prompt(payload: dict[str, object]) -> str:
     encoded = json.dumps(payload, ensure_ascii=False)
-    if len(encoded) > ATOMIZE_INPUT_CHAR_LIMIT:
+    memories = payload.get("memories")
+    pairs = payload.get("quality_scan")
+    pair_values = pairs.get("pairs") if isinstance(pairs, dict) else None
+    plan = plan_semantic_execution(
+        _atomize_execution_policy(),
+        BudgetVector(
+            input_chars=len(encoded),
+            item_count=(len(memories) if isinstance(memories, list) else 0),
+            relation_edges=(len(pair_values) if isinstance(pair_values, list) else 0),
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise AtomizeImpactError(
             "The Context is too large for one prototype atomize impact "
             f"operation ({len(encoded)} characters; limit "
             f"{ATOMIZE_INPUT_CHAR_LIMIT}). Input is never truncated or split "
-            "into hidden extra provider calls."
+            "into hidden extra provider calls; the global quality pass is "
+            "not yet available."
         )
     return (
         "You preview semantic atomization of directly owned Memories in one "

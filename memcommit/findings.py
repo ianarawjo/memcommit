@@ -14,6 +14,14 @@ from importlib import resources
 from typing import Callable, Literal, Protocol
 
 from memcommit.context import Context, Memory
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    plan_semantic_execution,
+)
 
 
 QUALITY_INPUT_CHAR_LIMIT = 200_000
@@ -48,6 +56,28 @@ _SCOPE_DIMENSIONS = {
     "EXCEPTION",
     "OTHER",
 }
+
+def _findings_execution_policy(operation: str) -> SemanticExecutionPolicy:
+    if operation not in {
+        "find_duplicates",
+        "find_ambiguities",
+        "find_conflicts",
+    }:
+        raise FindingsError(f"Unknown semantic finder operation '{operation}'.")
+    conflict = operation == "find_conflicts"
+    return SemanticExecutionPolicy(
+        operation=operation,
+        strategy=(
+            ExecutionStrategy.BLOCK_RELATIONS
+            if conflict
+            else ExecutionStrategy.MAP_PLUS_GLOBAL
+        ),
+        one_shot_limits=BudgetLimits(
+            max_input_chars=QUALITY_INPUT_CHAR_LIMIT,
+            max_relation_edges=(CONFLICT_PAIR_LIMIT if conflict else None),
+        ),
+        staged_supported=False,
+    )
 
 
 class FindingsError(RuntimeError):
@@ -187,7 +217,11 @@ def enumerate_pairs(
 ) -> list[MemoryPair]:
     """Enumerate canonical unordered pairs without self or reverse duplicates."""
     pair_count = len(candidates) * (len(candidates) - 1) // 2
-    if pair_count > CONFLICT_PAIR_LIMIT:
+    pair_plan = plan_semantic_execution(
+        _findings_execution_policy("find_conflicts"),
+        BudgetVector(relation_edges=pair_count),
+    )
+    if pair_plan.mode is not ExecutionMode.ONE_SHOT:
         # Check the quadratic size before allocating pair records; the limit is
         # a resource boundary, so enforcing it after construction is too late.
         raise FindingsError(
@@ -254,7 +288,12 @@ def _load_calibration_cases(filename: str) -> list[object]:
 
 
 def _ensure_payload_size(payload: str, operation: str) -> None:
-    if len(payload) > QUALITY_INPUT_CHAR_LIMIT:
+    policy = _findings_execution_policy(operation)
+    plan = plan_semantic_execution(
+        policy,
+        BudgetVector(input_chars=len(payload)),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise FindingsError(
             f"The Context is too large for one prototype {operation} "
             f"operation ({len(payload)} characters; limit "

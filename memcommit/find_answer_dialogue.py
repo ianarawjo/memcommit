@@ -13,12 +13,27 @@ from memcommit.find_answer_references import (
     FindAnswerSentence,
 )
 from memcommit.query_provider import QueryProviderError
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    plan_semantic_execution,
+)
 
 
 FIND_ANSWER_OPERATION = "find answer"
 FIND_ANSWER_RESPONSE_LIMIT = 50_000
 FIND_ANSWER_CORPUS_LIMIT = 220_000
 FIND_ANSWER_REQUEST_LIMIT = 20_000
+def _find_answer_execution_policy() -> SemanticExecutionPolicy:
+    return SemanticExecutionPolicy(
+        operation=FIND_ANSWER_OPERATION,
+        strategy=ExecutionStrategy.HIERARCHICAL_REDUCE,
+        one_shot_limits=BudgetLimits(max_input_chars=FIND_ANSWER_CORPUS_LIMIT),
+        staged_supported=False,
+    )
 FindOutsideStatus = Literal[
     "NOT_REQUESTED",
     "SEARCHED",
@@ -209,8 +224,7 @@ def _build_prompt(
     interpreted_request: str | None,
     pending_clarification: str | None,
 ) -> str:
-    payload = json.dumps(
-        {
+    payload_value = {
             "question": {
                 "latest_user_text": user_text,
                 "interpreted_request": interpreted_request,
@@ -224,13 +238,19 @@ def _build_prompt(
                     "evidence": _evidence_payload(outside),
                 },
             },
-        },
+        }
+    payload = json.dumps(
+        payload_value,
         ensure_ascii=False,
     )
-    if len(payload) > FIND_ANSWER_CORPUS_LIMIT:
+    plan = plan_semantic_execution(
+        _find_answer_execution_policy(),
+        BudgetVector(input_chars=len(payload)),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise FindAnswerCorpusTooLarge(
             "The scoped Find answer corpus is too large for one prototype "
-            "request."
+            "request; hierarchical evidence synthesis is not yet enabled."
         )
     return (
         "Synthesize one grounded answer for an interactive semantic Find.\n"

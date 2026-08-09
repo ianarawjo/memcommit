@@ -288,9 +288,12 @@ terminal control characters. Provider order is ignored; results are rebound
 to sources in canonical source order. Any validation failure occurs before a
 sidecar or materialized result is published.
 
-The one-call prototype caps serialized input at 200,000 characters and uses a
-300-second Codex timeout. It does not silently batch or retry because doing so
-would require a separate partial-failure contract.
+Each provider payload is capped at 200,000 characters and uses a 300-second
+Codex timeout. A fitting selection retains the historical one-call path. A
+larger selection uses the shared `COVERAGE_MAP` plan: batches split only between
+Memories, every global candidate alias is exposed exactly once, every batch is
+fully validated, and no plan is returned after a partial failure. One oversized
+Memory is never truncated. The final proposals retain canonical source order.
 
 ## Explicit materialization and provenance
 
@@ -311,13 +314,17 @@ name, and returns to the same apply choice without another provider turn.
 operand. In-place translation omits the card because it updates the already
 reviewed source Context rather than creating a distinct result.
 
-The current checkpoint provenance schemas prove a single provider response
-digest. They do not yet describe manual/import evidence, reviewer identity,
-or a materialized mixture assembled from several provider batches. Therefore
+The current checkpoint provenance schemas retain one response digest field.
+For a staged provider-only translation this is the digest of the canonical
+ordered tuple of raw batch responses; the batch count and individual response
+digests are not yet durable metadata. They also do not describe manual/import
+evidence, reviewer identity, or a materialized mixture assembled from unrelated
+provider and curated batches. Therefore
 `--save-as` and `--in-place` currently fail closed for curated or mixed
-catalogs and for provider-only catalogs composed from more than one response.
-Those representations remain useful same-UID views. Materializing them later
-requires a new checkpoint schema rather than fabricating provider evidence.
+catalogs and for imported provider catalogs whose multiple responses were not
+produced by this planner's one frozen exactly-once execution. Those
+representations remain useful same-UID views. Materializing them later requires
+a new checkpoint schema rather than fabricating provider evidence.
 
 A selector produces a partially translated derived Context: only the selected
 slot is replaced, while other directly owned Memories remain in their source

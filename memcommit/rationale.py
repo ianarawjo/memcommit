@@ -26,6 +26,15 @@ from memcommit.review import (
     atomize_review_matches_analysis,
     review_matches_context,
 )
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    json_budget,
+    plan_semantic_execution,
+)
 from memcommit.store import MemoryStore, context_record_digest
 
 
@@ -36,6 +45,15 @@ RATIONALE_READING_CHAR_LIMIT = 2_000
 RATIONALE_UNRESOLVED_CHAR_LIMIT = 1_000
 RATIONALE_SUPPORT_LIMIT = 8
 RATIONALE_FALLBACK_RADIUS = 4
+
+RATIONALE_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation="rationale inference",
+    strategy=ExecutionStrategy.HIERARCHICAL_REDUCE,
+    one_shot_limits=BudgetLimits(max_input_chars=RATIONALE_INPUT_CHAR_LIMIT),
+    # Nearby-evidence reduction happens before the final prompt. A second
+    # hidden provider hierarchy would change the explanation frame.
+    staged_supported=False,
+)
 
 
 class RationaleError(RuntimeError):
@@ -554,7 +572,17 @@ def _inference_prompt(
         ),
     }
     encoded = json.dumps(payload, ensure_ascii=False)
-    if len(encoded) > RATIONALE_INPUT_CHAR_LIMIT:
+    schema_budget = json_budget({}, output_schema=_inference_schema(candidates))
+    plan = plan_semantic_execution(
+        RATIONALE_EXECUTION_POLICY,
+        BudgetVector(
+            input_chars=len(encoded),
+            item_count=1 + len(candidates),
+            schema_chars=schema_budget.schema_chars,
+            expected_output_items=1,
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise RationaleError(
             "The available local Context is too large for rationale inference."
         )

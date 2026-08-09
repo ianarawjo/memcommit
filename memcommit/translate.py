@@ -10,6 +10,19 @@ import uuid
 
 from memcommit.context import Context, Memory
 from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionProgress,
+    ExecutionStrategy,
+    PartitionError,
+    SemanticExecutionPolicy,
+    json_budget,
+    pack_grouped_items,
+    plan_semantic_execution,
+    run_partitioned,
+)
 from memcommit.store import context_record_digest
 
 
@@ -18,6 +31,13 @@ TRANSLATE_RESPONSE_CHAR_LIMIT = 500_000
 TRANSLATED_CONTENT_CHAR_LIMIT = 200_000
 TRANSLATION_TARGET_CHAR_LIMIT = 500
 TRANSLATE_TIMEOUT_SECONDS = 300
+
+TRANSLATE_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation="translate",
+    strategy=ExecutionStrategy.COVERAGE_MAP,
+    one_shot_limits=BudgetLimits(max_input_chars=TRANSLATE_CORPUS_CHAR_LIMIT),
+    staged_supported=True,
+)
 
 
 class TranslateError(RuntimeError):
@@ -319,24 +339,50 @@ def _translation_output_schema(
     }
 
 
+def _translation_payload(
+    target_language: str,
+    candidates: list[tuple[str, Memory]],
+) -> dict[str, object]:
+    return {
+        "target_language": target_language,
+        "memories": [
+            {
+                "candidate_id": candidate_id,
+                "content": memory.content,
+            }
+            for candidate_id, memory in candidates
+        ],
+    }
+
+
+def _translation_workload(
+    target_language: str,
+    candidates: list[tuple[str, Memory]],
+) -> BudgetVector:
+    candidate_ids = [candidate_id for candidate_id, _memory in candidates]
+    return json_budget(
+        _translation_payload(target_language, candidates),
+        item_count=len(candidates),
+        output_schema=_translation_output_schema(candidate_ids),
+        expected_output_items=len(candidates),
+    )
+
+
 def _translation_prompt(
     target_language: str,
     candidates: list[tuple[str, Memory]],
 ) -> str:
     payload = json.dumps(
-        {
-            "target_language": target_language,
-            "memories": [
-                {
-                    "candidate_id": candidate_id,
-                    "content": memory.content,
-                }
-                for candidate_id, memory in candidates
-            ],
-        },
+        _translation_payload(target_language, candidates),
         ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
     )
-    if len(payload) > TRANSLATE_CORPUS_CHAR_LIMIT:
+    plan = plan_semantic_execution(
+        TRANSLATE_EXECUTION_POLICY,
+        _translation_workload(target_language, candidates),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise TranslateError(
             "The selected Memories are too large for one prototype "
             "translation request. Select one smaller Memory."
@@ -467,6 +513,7 @@ def plan_translation(
     *,
     selector: str | None = None,
     allocate_operation_uid: bool = True,
+    on_progress: Callable[[ExecutionProgress], None] | None = None,
 ) -> TranslationPlan:
     """Create one validated plan without mutating the Context."""
     if not isinstance(allocate_operation_uid, bool):
@@ -497,15 +544,67 @@ def plan_translation(
         (f"m{index:06d}", memory)
         for index, memory in enumerate(memories, 1)
     ]
-    prompt = _translation_prompt(language, candidates)
-    raw = _provider(provider_factory).complete(
-        prompt,
-        operation="translate",
-        output_schema=_translation_output_schema(
-            [candidate_id for candidate_id, _ in candidates]
-        ),
+    execution_plan = plan_semantic_execution(
+        TRANSLATE_EXECUTION_POLICY,
+        _translation_workload(language, candidates),
     )
-    proposals = _parse_translations(raw, candidates)
+
+    if execution_plan.mode is ExecutionMode.ONE_SHOT:
+        batches = (tuple(candidates),)
+    elif execution_plan.mode is ExecutionMode.STAGED:
+        try:
+            batches = pack_grouped_items(
+                candidates,
+                group_key=lambda _candidate: ctx.uid,
+                measure=lambda batch: _translation_workload(language, list(batch)),
+                limits=TRANSLATE_EXECUTION_POLICY.one_shot_limits,
+            )
+        except PartitionError as error:
+            raise TranslateError(
+                "One selected Memory is too large for a staged translation "
+                "request; source content is never truncated."
+            ) from error
+    else:
+        raise TranslateError("The selected Memories cannot be translated safely.")
+
+    provider = _provider(provider_factory)
+
+    def execute_batch(
+        batch: tuple[tuple[str, Memory], ...],
+        _index: int,
+        _total: int,
+    ) -> tuple[tuple[TranslationProposal, ...], str]:
+        values = list(batch)
+        raw = provider.complete(
+            _translation_prompt(language, values),
+            operation="translate",
+            output_schema=_translation_output_schema(
+                [candidate_id for candidate_id, _memory in values]
+            ),
+        )
+        return _parse_translations(raw, values), raw
+
+    if execution_plan.mode is ExecutionMode.ONE_SHOT:
+        batch_results = (execute_batch(batches[0], 1, 1),)
+    else:
+        batch_results = run_partitioned(
+            batches,
+            item_id=lambda candidate: candidate[0],
+            execute=execute_batch,
+            on_progress=on_progress,
+        )
+
+    proposals = tuple(
+        proposal
+        for batch_proposals, _raw in batch_results
+        for proposal in batch_proposals
+    )
+    raw_responses = tuple(raw for _batch_proposals, raw in batch_results)
+    response_digest_source = (
+        raw_responses[0]
+        if len(raw_responses) == 1
+        else json.dumps(raw_responses, ensure_ascii=False, separators=(",", ":"))
+    )
     return TranslationPlan(
         operation_uid=operation_uid,
         context_uid=ctx.uid,
@@ -515,7 +614,7 @@ def plan_translation(
         selected_memory_uid=selected_memory_uid,
         proposals=proposals,
         provider_response_sha256=hashlib.sha256(
-            raw.encode("utf-8")
+            response_digest_source.encode("utf-8")
         ).hexdigest(),
     )
 

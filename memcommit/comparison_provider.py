@@ -22,6 +22,15 @@ from memcommit.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    json_budget,
+    plan_semantic_execution,
+)
 from memcommit.understanding import understanding_text_schema
 
 
@@ -31,6 +40,18 @@ COMPARISON_RESPONSE_CHAR_LIMIT = 1_000_000
 COMPARISON_ITEM_LIMIT = 400
 COMPARISON_KEY_LIMIT = 100
 COMPARISON_OPTION_LIMIT = 5
+
+COMPARISON_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation="compare_contexts",
+    strategy=ExecutionStrategy.BLOCK_RELATIONS,
+    one_shot_limits=BudgetLimits(
+        max_input_chars=COMPARISON_INPUT_CHAR_LIMIT,
+        max_items=COMPARISON_ITEM_LIMIT,
+    ),
+    # A block reconciler must preserve the exhaustive relation ledger before
+    # production Compare can advertise staged execution.
+    staged_supported=False,
+)
 
 _RELATIONS = {
     "EQUIVALENT",
@@ -153,13 +174,16 @@ def _provider_view(
     source_count = sum(
         len(frame.memories) for frame in comparison_input.frames
     )
-    if source_count > COMPARISON_ITEM_LIMIT:
+    item_plan = plan_semantic_execution(
+        COMPARISON_EXECUTION_POLICY,
+        BudgetVector(item_count=source_count),
+    )
+    if item_plan.mode is not ExecutionMode.ONE_SHOT:
         raise ComparisonProviderError(
-            "This Context pair exceeds the one-shot compare limit of "
-            f"{COMPARISON_ITEM_LIMIT} projected Memories. Input is never "
-            "truncated."
+            "This Context pair exceeds the bounded Compare execution plan "
+            f"of {COMPARISON_ITEM_LIMIT} projected Memories. Input is never "
+            "truncated; staged block reconciliation is not yet enabled."
         )
-
     frame_ids = ("reference", "compared")
     memory_by_id: dict[str, ComparisonMember] = {}
     frame_payloads: list[dict[str, object]] = []
@@ -352,7 +376,11 @@ def _prompt(payload: dict[str, object]) -> str:
         separators=(",", ":"),
         sort_keys=True,
     )
-    if len(encoded) > COMPARISON_INPUT_CHAR_LIMIT:
+    plan = plan_semantic_execution(
+        COMPARISON_EXECUTION_POLICY,
+        json_budget(payload),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise ComparisonProviderError(
             "This Context pair exceeds the one-shot compare input limit of "
             f"{COMPARISON_INPUT_CHAR_LIMIT} characters. Input is never "
@@ -778,6 +806,25 @@ def analyze_comparison(
         )
     view = _provider_view(comparison_input)
     source_count = len(view.memory_by_id)
+    left_count = len(comparison_input.frames[0].memories)
+    right_count = len(comparison_input.frames[1].memories)
+    plan = plan_semantic_execution(
+        COMPARISON_EXECUTION_POLICY,
+        json_budget(
+            view.payload,
+            item_count=source_count,
+            output_schema=comparison_output_schema(source_count),
+            expected_output_items=source_count,
+            relation_edges=left_count * right_count,
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
+        axes = ", ".join(plan.exceeded_axes)
+        raise ComparisonProviderError(
+            "This Context pair exceeds the bounded Compare execution plan "
+            f"({axes}). Input is never truncated; staged block reconciliation "
+            "is not yet enabled for this exhaustive ledger."
+        )
     response = provider.complete(
         _prompt(view.payload),
         operation="compare_contexts",

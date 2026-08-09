@@ -43,6 +43,14 @@ from memcommit.atomize_workbench import (
     project_atomize_workbench_findings,
 )
 from memcommit.context import Context, Memory
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    json_budget,
+    plan_semantic_execution,
+)
 
 
 ATOMIZE_GROUNDING_PAYLOAD_MARKER = "ATOMIZE GROUNDING TURN PAYLOAD:\n"
@@ -51,6 +59,16 @@ ATOMIZE_GROUNDING_RESPONSE_CHAR_LIMIT = 1_000_000
 ATOMIZE_GROUNDING_ITEM_LIMIT = 200
 ATOMIZE_GROUNDING_UNDERSTANDING_LIMIT = 50
 ATOMIZE_GROUNDING_KEY_LIMIT = 100
+
+ATOMIZE_GROUNDING_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation="atomize_grounding_turn",
+    strategy=ExecutionStrategy.BLOCK_RELATIONS,
+    one_shot_limits=BudgetLimits(
+        max_input_chars=ATOMIZE_GROUNDING_INPUT_CHAR_LIMIT,
+        max_items=ATOMIZE_GROUNDING_ITEM_LIMIT,
+    ),
+    staged_supported=False,
+)
 
 _RESOLUTIONS = {"RESOLVED", "PARTIAL", "UNRESOLVED"}
 _EFFECTS = {
@@ -846,7 +864,16 @@ def _prompt(payload: dict[str, object]) -> str:
         separators=(",", ":"),
         sort_keys=True,
     )
-    if len(encoded) > ATOMIZE_GROUNDING_INPUT_CHAR_LIMIT:
+    context = payload.get("context")
+    memories = context.get("memories") if isinstance(context, dict) else None
+    plan = plan_semantic_execution(
+        ATOMIZE_GROUNDING_EXECUTION_POLICY,
+        json_budget(
+            payload,
+            item_count=(len(memories) if isinstance(memories, list) else 0),
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise AtomizeGroundingProviderError(
             "This Context and dialogue exceed the one-shot atomize grounding "
             f"limit of {ATOMIZE_GROUNDING_INPUT_CHAR_LIMIT} characters. "
@@ -1466,15 +1493,31 @@ def assess_atomize_grounding_turn(
     view = _build_provider_view(ctx, analysis, session)
     context_digest_before = atomize_grounding_context_digest(ctx)
     session_before = session.to_dict()
+    schema = atomize_grounding_output_schema(
+        view,
+        direct_item_count=len(ctx.ordered_uids()),
+    )
+    plan = plan_semantic_execution(
+        ATOMIZE_GROUNDING_EXECUTION_POLICY,
+        json_budget(
+            view.payload,
+            item_count=len(view.memory_by_id),
+            output_schema=schema,
+            expected_output_items=len(view.memory_by_id),
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
+        raise AtomizeGroundingProviderError(
+            "This Context and dialogue exceed the bounded atomize grounding "
+            "execution plan. Input is never truncated; cross-batch grounding "
+            "reconciliation is not yet enabled."
+        )
     prompt = _prompt(view.payload)
     provider = provider_factory()
     raw = provider.complete(
         prompt,
         operation="atomize_grounding_turn",
-        output_schema=atomize_grounding_output_schema(
-            view,
-            direct_item_count=len(ctx.ordered_uids()),
-        ),
+        output_schema=schema,
     )
     if (
         atomize_grounding_context_digest(ctx) != context_digest_before

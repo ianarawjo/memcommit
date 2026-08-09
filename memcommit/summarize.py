@@ -11,6 +11,14 @@ from memcommit.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    json_budget,
+    plan_semantic_execution,
+)
 from memcommit.understanding import (
     UnderstandingError,
     UnderstandingSummary,
@@ -23,6 +31,13 @@ SUMMARIZE_INPUT_CHAR_LIMIT = 400_000
 SUMMARIZE_RESPONSE_CHAR_LIMIT = 50_000
 SUMMARIZE_TEXT_LIMIT = 4_000
 SUMMARIZE_OPERATION = "summarize_context"
+
+SUMMARIZE_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation=SUMMARIZE_OPERATION,
+    strategy=ExecutionStrategy.HIERARCHICAL_REDUCE,
+    one_shot_limits=BudgetLimits(max_input_chars=SUMMARIZE_INPUT_CHAR_LIMIT),
+    staged_supported=False,
+)
 
 
 class SummarizeError(RuntimeError):
@@ -143,11 +158,24 @@ def _prompt(frame: SummaryFrame) -> str:
         separators=(",", ":"),
         sort_keys=True,
     )
-    if len(encoded) > SUMMARIZE_INPUT_CHAR_LIMIT:
+    plan = plan_semantic_execution(
+        SUMMARIZE_EXECUTION_POLICY,
+        json_budget(
+            payload,
+            item_count=len(frame.sources),
+            output_schema=source_linked_understanding_schema(
+                tuple(source.alias for source in frame.sources),
+                limit=SUMMARIZE_TEXT_LIMIT,
+            ),
+            expected_output_items=1,
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise SummarizeError(
             "The selected Context is too large for one summarize operation "
             f"({len(encoded)} characters; limit {SUMMARIZE_INPUT_CHAR_LIMIT}). "
-            "Input is never truncated or split into hidden provider calls."
+            "Input is never truncated; hierarchical reduction is not yet "
+            "enabled for this source-linked summary."
         )
     return (
         "Produce only the reusable understanding summary for one bounded "

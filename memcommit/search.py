@@ -3,17 +3,37 @@ from __future__ import annotations
 
 import json
 import unicodedata
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, replace
 from typing import Literal, Protocol
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionProgress,
+    ExecutionStrategy,
+    PartitionError,
+    SemanticExecutionPolicy,
+    json_budget,
+    pack_grouped_items,
+    plan_semantic_execution,
+    run_partitioned,
+)
 
 
 FIND_CORPUS_CHAR_LIMIT = 200_000
 FIND_RELATED_QUERY_LIMIT = 2_000
 SearchKind = Literal["memory", "memory_ref", "query_context", "artifact"]
 SearchRelevance = Literal["primary", "related"]
+
+FIND_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation="find",
+    strategy=ExecutionStrategy.TOP_K_RERANK,
+    one_shot_limits=BudgetLimits(max_input_chars=FIND_CORPUS_CHAR_LIMIT),
+    staged_supported=True,
+)
 
 
 @dataclass(frozen=True)
@@ -301,23 +321,51 @@ def _find_output_schema(
     }
 
 
+def _find_payload(
+    query: str,
+    candidates: Sequence[SearchCandidate],
+    limit: int,
+) -> dict[str, object]:
+    return {
+        "query": query,
+        "limit": limit,
+        "candidates": [
+            _candidate_payload(candidate)
+            for candidate in candidates
+        ],
+    }
+
+
+def _find_workload(
+    query: str,
+    candidates: Sequence[SearchCandidate],
+    limit: int,
+) -> BudgetVector:
+    values = list(candidates)
+    return json_budget(
+        _find_payload(query, values, limit),
+        item_count=len(values),
+        output_schema=_find_output_schema(limit, values),
+        expected_output_items=limit,
+    )
+
+
 def _build_find_prompt(
     query: str,
     candidates: list[SearchCandidate],
     limit: int,
 ) -> str:
     payload = json.dumps(
-        {
-            "query": query,
-            "limit": limit,
-            "candidates": [
-                _candidate_payload(candidate)
-                for candidate in candidates
-            ],
-        },
+        _find_payload(query, candidates, limit),
         ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
     )
-    if len(payload) > FIND_CORPUS_CHAR_LIMIT:
+    plan = plan_semantic_execution(
+        FIND_EXECUTION_POLICY,
+        _find_workload(query, candidates, limit),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise FindError(
             "The searchable Context is too large for one prototype find "
             "request. Narrow the scope with '--direct' or a smaller Context."
@@ -350,7 +398,7 @@ def _build_find_prompt(
     )
 
 
-def rank_candidates(
+def _rank_candidate_batch(
     query: str,
     candidates: list[SearchCandidate],
     provider: PromptProvider,
@@ -426,4 +474,113 @@ def rank_candidates(
                     related_query=(related_query if relevance == "related" else None),
                 )
             )
+    return matches
+
+
+def _staged_find_batches(
+    query: str,
+    candidates: list[SearchCandidate],
+    limit: int,
+) -> tuple[tuple[SearchCandidate, ...], ...]:
+    try:
+        return pack_grouped_items(
+            candidates,
+            group_key=lambda candidate: candidate.context_uid,
+            measure=lambda batch: _find_workload(query, batch, limit),
+            limits=FIND_EXECUTION_POLICY.one_shot_limits,
+        )
+    except PartitionError as error:
+        raise FindError(
+            "One searchable item is too large for a staged find request; "
+            "stored content is never truncated."
+        ) from error
+
+
+def _shortlist_staged_matches(
+    results: Sequence[Sequence[SearchMatch]],
+) -> list[SearchCandidate]:
+    flattened = [match for batch in results for match in batch]
+    primary = [match for match in flattened if match.relevance == "primary"]
+    related = [
+        match for match in flattened if match.relevance == "related"
+    ]
+    # A shard-local primary is not allowed to suppress another shard's related
+    # fallback before the global judge sees both. The final rerank restores the
+    # ordinary mutually exclusive tier contract over their validated union.
+    chosen = [*primary, *related]
+    seen: set[str] = set()
+    shortlist: list[SearchCandidate] = []
+    for match in chosen:
+        candidate = match.candidate
+        if candidate.candidate_id in seen:
+            continue
+        seen.add(candidate.candidate_id)
+        shortlist.append(candidate)
+    return shortlist
+
+
+def rank_candidates(
+    query: str,
+    candidates: list[SearchCandidate],
+    provider: PromptProvider,
+    *,
+    limit: int = 5,
+    on_progress: Callable[[ExecutionProgress], None] | None = None,
+) -> list[SearchMatch]:
+    """Rank one frozen corpus, staging Context-shaped batches when required."""
+
+    if not isinstance(query, str) or not query.strip():
+        raise FindError("Find query must be non-empty.")
+    if not 1 <= limit <= 20:
+        raise FindError("Find limit must be between 1 and 20.")
+    if not candidates:
+        return []
+    plan = plan_semantic_execution(
+        FIND_EXECUTION_POLICY,
+        _find_workload(query, candidates, limit),
+    )
+    if plan.mode is ExecutionMode.ONE_SHOT:
+        return _rank_candidate_batch(query, candidates, provider, limit=limit)
+    if plan.mode is not ExecutionMode.STAGED:
+        raise FindError("The searchable Context cannot be staged safely.")
+
+    batches = _staged_find_batches(query, candidates, limit)
+
+    def batch_progress(value: ExecutionProgress) -> None:
+        # Final completion belongs after the global rerank, not after the
+        # shard calls. COVERAGE_MAP callers can expose run_partitioned's
+        # immediate COMPLETE event directly.
+        if on_progress is not None and value.phase == "BATCH":
+            on_progress(value)
+
+    batch_results = run_partitioned(
+        batches,
+        item_id=lambda candidate: candidate.candidate_id,
+        execute=lambda batch, _index, _total: _rank_candidate_batch(
+            query,
+            list(batch),
+            provider,
+            limit=limit,
+        ),
+        on_progress=batch_progress if on_progress is not None else None,
+    )
+    shortlist = _shortlist_staged_matches(batch_results)
+    if not shortlist:
+        if on_progress is not None:
+            on_progress(ExecutionProgress("COMPLETE", len(batches), len(batches)))
+        return []
+    final_plan = plan_semantic_execution(
+        FIND_EXECUTION_POLICY,
+        _find_workload(query, shortlist, limit),
+    )
+    if final_plan.mode is not ExecutionMode.ONE_SHOT:
+        raise FindError(
+            "The staged Find shortlist is still too large for final reranking; "
+            "stored content is never truncated."
+        )
+    if on_progress is not None:
+        on_progress(ExecutionProgress("RECONCILE", len(batches), len(batches)))
+    matches = _rank_candidate_batch(query, shortlist, provider, limit=limit)
+    if on_progress is not None:
+        on_progress(ExecutionProgress("COMPLETE", len(batches), len(batches)))
     return matches

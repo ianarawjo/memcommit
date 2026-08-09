@@ -14,11 +14,30 @@ from memcommit.history import (
     MemoryTransition,
     MemoryVersion,
 )
+from memcommit.semantic_execution import (
+    BudgetLimits,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    json_budget,
+    plan_semantic_execution,
+)
 
 
 HISTORY_SEARCH_CORPUS_CHAR_LIMIT = 200_000
 HISTORY_SEARCH_RESPONSE_CHAR_LIMIT = 50_000
 HISTORY_SEARCH_TEXT_LIMIT = 2_000
+
+HISTORY_SEARCH_EXECUTION_POLICY = SemanticExecutionPolicy(
+    operation="history search",
+    strategy=ExecutionStrategy.TOP_K_RERANK,
+    one_shot_limits=BudgetLimits(
+        max_input_chars=HISTORY_SEARCH_CORPUS_CHAR_LIMIT,
+    ),
+    # Temporal subject/anchor plans must agree across timelines before this
+    # search can safely use the ordinary Find shortlist reconciler.
+    staged_supported=False,
+)
 
 HistoryResultKind = Literal[
     "memory_version",
@@ -371,19 +390,32 @@ def _build_prompt(
     result_kinds: tuple[HistoryResultKind, ...],
     limit: int,
 ) -> str:
+    payload_value = {
+        "query": query,
+        "allowed_result_kinds": list(result_kinds),
+        "final_limit": limit,
+        "candidates": _candidate_payloads(catalog),
+    }
     payload = json.dumps(
-        {
-            "query": query,
-            "allowed_result_kinds": list(result_kinds),
-            "final_limit": limit,
-            "candidates": _candidate_payloads(catalog),
-        },
+        payload_value,
         ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
     )
-    if len(payload) > HISTORY_SEARCH_CORPUS_CHAR_LIMIT:
+    plan = plan_semantic_execution(
+        HISTORY_SEARCH_EXECUTION_POLICY,
+        json_budget(
+            payload_value,
+            item_count=len(catalog.candidates),
+            output_schema=_output_schema(catalog, result_kinds),
+            expected_output_items=limit,
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
         raise HistorySearchError(
             "The retained history is too large for one prototype search "
-            "request. Narrow the Context scope."
+            "request. Narrow the Context scope; cross-timeline temporal "
+            "reconciliation is not yet enabled."
         )
     return (
         "Plan one semantic search over retained Context history.\n"
