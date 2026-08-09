@@ -2,32 +2,28 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.commands.tui_primitives import (
-    display_escape_text,
-    focused_control_style,
+from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.selection.model import SelectionOption
+from memcommit.selection.state import FlatSelectionState
+from memcommit.selection.tui import (
+    choice_marker,
+    choice_visual_state,
+    render_choice_card_rows,
 )
 
 
 @dataclass(frozen=True)
-class HorizontalChoiceOption:
-    """One stable choice independent of an operation's semantic meaning."""
-
-    uid: str
-    label: str
-    description: str = ""
+class HorizontalChoiceOption(SelectionOption):
+    """One common option constrained to the horizontal control's one-line UI."""
 
     def __post_init__(self) -> None:
-        if (
-            not self.uid
-            or not self.label
-            or any(c in self.label for c in "\r\n")
-            or any(c in self.description for c in "\r\n")
-        ):
-            raise ValueError("Horizontal choices require nonempty single-line values.")
+        super().__post_init__()
+        if any(character in self.description for character in "\r\n"):
+            raise ValueError("Horizontal choice descriptions must stay on one line.")
 
 
 @dataclass
@@ -36,30 +32,25 @@ class HorizontalChoiceState:
 
     options: tuple[HorizontalChoiceOption, ...]
     selected_uid: str
+    _selection: FlatSelectionState = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
-        uids = tuple(option.uid for option in self.options)
-        if not uids or len(set(uids)) != len(uids):
-            raise ValueError("Horizontal choices require distinct options.")
-        if self.selected_uid not in uids:
-            raise ValueError("The selected horizontal choice is unavailable.")
+        self._selection = FlatSelectionState(
+            self.options,
+            cursor_uid=self.selected_uid,
+            selected_uid=self.selected_uid,
+            allow_empty=False,
+        )
 
     @property
     def selected_index(self) -> int:
-        return next(
-            index
-            for index, option in enumerate(self.options)
-            if option.uid == self.selected_uid
-        )
+        return self._selection.cursor_index
 
     def move(self, delta: int) -> bool:
         """Move without wrapping and report whether the value changed."""
-        if isinstance(delta, bool) or not isinstance(delta, int):
-            raise ValueError("Horizontal choice movement must be an integer.")
-        index = max(0, min(self.selected_index + delta, len(self.options) - 1))
-        selected_uid = self.options[index].uid
-        changed = selected_uid != self.selected_uid
-        self.selected_uid = selected_uid
+        changed = self._selection.move(delta)
+        self._selection.select_cursor(toggle=False)
+        self.selected_uid = self._selection.selected_uid or self.selected_uid
         return changed
 
 
@@ -89,17 +80,17 @@ def render_horizontal_choice(
             focused=focused,
             show_description=show_description,
         )
-    fragments: StyleAndTextTuples = [
-        ("", f"{'›' if focused else ' '} {title} · ")
-    ]
+    fragments: StyleAndTextTuples = [("", f"{'›' if focused else ' '} {title} · ")]
     for index, option in enumerate(state.options):
         selected = option.uid == state.selected_uid
+        visual = choice_visual_state(
+            cursor=selected,
+            selected=selected,
+            focused=focused,
+        )
         fragments.append(
             (
-                focused_control_style(
-                    focused=focused and selected,
-                    selected=selected,
-                ),
+                visual.content_style,
                 f"[ {display_escape_text(option.label)} ]",
             )
         )
@@ -125,28 +116,23 @@ def _render_inline_boxed_horizontal_choice(
     show_description: bool,
 ) -> StyleAndTextTuples:
     """Render checked choices as compact one-line rectangles."""
-    fragments: StyleAndTextTuples = [
-        ("", f"{'›' if focused else ' '} {title} · ")
-    ]
+    fragments: StyleAndTextTuples = [("", f"{'›' if focused else ' '} {title} · ")]
     for index, option in enumerate(state.options):
         selected = option.uid == state.selected_uid
-        keyboard_target = focused and selected
-        border_style = (
-            "class:memcommit.choice.border.focused" if keyboard_target else ""
-        )
-        content_style = focused_control_style(
-            focused=keyboard_target,
+        visual = choice_visual_state(
+            cursor=selected,
             selected=selected,
+            focused=focused,
         )
         fragments.extend(
             [
-                (border_style, "["),
+                (visual.border_style, "["),
                 (
-                    content_style,
-                    f" {'✓ ' if selected else '  '}"
+                    visual.content_style,
+                    f" {choice_marker(selected=selected)} "
                     f"{display_escape_text(option.label)} ",
                 ),
-                (border_style, "]"),
+                (visual.border_style, "]"),
             ]
         )
         if index < len(state.options) - 1:
@@ -171,53 +157,29 @@ def _render_boxed_horizontal_choice(
     show_description: bool,
 ) -> StyleAndTextTuples:
     """Render the shared choice state as individually focused cards."""
-    escaped_labels = tuple(
-        display_escape_text(option.label) for option in state.options
-    )
     fragments: StyleAndTextTuples = [
         ("", f"{'›' if focused else ' '} {title} · ←/→ SELECT\n  ")
     ]
-    for row in ("top", "middle", "bottom"):
-        for index, (option, label) in enumerate(zip(state.options, escaped_labels)):
-            selected = option.uid == state.selected_uid
-            keyboard_target = focused and selected
-            choice_text = f"{'✓ ' if selected else '  '}{label}"
-            border_style = (
-                "class:memcommit.choice.border.focused"
-                if keyboard_target
-                else ""
+    cards = []
+    for option in state.options:
+        label = display_escape_text(option.label)
+        selected = option.uid == state.selected_uid
+        cards.append(
+            render_choice_card_rows(
+                (f" {choice_marker(selected=selected)} {label} ",),
+                visual=choice_visual_state(
+                    cursor=selected,
+                    selected=selected,
+                    focused=focused,
+                ),
             )
-            content_style = focused_control_style(
-                focused=keyboard_target,
-                selected=selected,
-            )
-            horizontal = "━" if keyboard_target else "─"
-            vertical = "┃" if keyboard_target else "│"
-            if row == "top":
-                left, content, right = (
-                    ("┏", horizontal * (len(label) + 4), "┓")
-                    if keyboard_target
-                    else ("┌", horizontal * (len(label) + 4), "┐")
-                )
-                fragments.append((border_style, left + content + right))
-            elif row == "middle":
-                fragments.extend(
-                    [
-                        (border_style, vertical),
-                        (content_style, f" {choice_text} "),
-                        (border_style, vertical),
-                    ]
-                )
-            else:
-                left, content, right = (
-                    ("┗", horizontal * (len(label) + 4), "┛")
-                    if keyboard_target
-                    else ("└", horizontal * (len(label) + 4), "┘")
-                )
-                fragments.append((border_style, left + content + right))
-            if index < len(state.options) - 1:
+        )
+    for row_index in range(3):
+        for index, card in enumerate(cards):
+            fragments.extend(card[row_index])
+            if index < len(cards) - 1:
                 fragments.append(("", "  "))
-        if row != "bottom":
+        if row_index != 2:
             fragments.append(("", "\n  "))
     selected = state.options[state.selected_index]
     if show_description and selected.description:

@@ -27,6 +27,7 @@ from memcommit.context_targeting.tui.rendering import (
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     bind_focused_frame_style,
@@ -173,13 +174,17 @@ def choose_sever_setup(
                 annotation = (annotation + " · " if annotation else "") + (
                     "UNAVAILABLE"
                 )
+            cursor_style, value_style = tree_choice_styles(
+                cursor=cursor,
+                selected=chosen,
+                focused=tree_focused,
+            )
             return ContextTreeRowDecoration(
-                marker="✓" if chosen else "·" if available else "×",
+                marker=tree_choice_marker(selected=chosen, available=available),
                 active="*" if row.name == current else " ",
                 annotation=annotation,
-                cursor_style=(
-                    "class:memcommit.table.selected" if cursor and tree_focused else ""
-                ),
+                cursor_style=cursor_style,
+                value_style=value_style,
             )
 
         return render_context_tree_rows(tree_state[role], decorate)

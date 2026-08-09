@@ -10,6 +10,7 @@ import memcommit.commands.resolution_workbench_shell as resolution_shell_module
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
 )
+from memcommit.commands.tui_primitives import MEMCOMMIT_TUI_STYLE
 from memcommit.commands.resolution_workbench_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionDestination,
@@ -540,7 +541,8 @@ def test_issue_detail_is_compact_and_section_navigable():
     assert "WHY THIS NEEDS REVIEW" in rendered
     assert "OPERATION DETAIL" in rendered
     assert "QUESTION\n" in rendered
-    assert "╭─ OPTIONS " in rendered
+    assert " OPTIONS\n" in rendered
+    assert "┌" in rendered
     assert "2. Other direction" in rendered
     assert "EVIDENCE\n" in rendered
     assert "advisor1 · #1" in rendered
@@ -548,7 +550,7 @@ def test_issue_detail_is_compact_and_section_navigable():
     assert "Review the current resolution." not in rendered
 
 
-def test_options_card_explains_entry_and_uses_blue_focus_with_checkmark():
+def test_options_use_common_meld_boxes_with_blue_focus_and_checkmark():
     item = _item(
         "option-guidance",
         options=(
@@ -566,7 +568,9 @@ def test_options_card_explains_entry_and_uses_blue_focus_with_checkmark():
         focused_section=4,
     )
     assert "Enter to choose an option" in "".join(text for _style, text in waiting)
-    assert not any("› ○" in text for _style, text in waiting)
+    assert not any(
+        marker in text for _style, text in waiting for marker in ("○", "●", "◇")
+    )
 
     navigation.selected_option_uid = "one"
     active = resolution_viewer_fragments(
@@ -576,24 +580,23 @@ def test_options_card_explains_entry_and_uses_blue_focus_with_checkmark():
         option_navigation_active=True,
     )
     assert any(
-        style == "class:option-card.focused" and "› ✓ 1. First" in text
+        style == "class:memcommit.choice.border.focused" and "┏" in text
         for style, text in active
     )
+    assert (
+        "class:memcommit.choice.active.focused",
+        "✓ 1. First",
+    ) in active
     active_text = "".join(text for _style, text in active)
-    assert "╭─ ✓ 1. First" not in active_text
-    focused_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
-        "class:option-card.focused"
+    assert not any(marker in active_text for marker in ("○", "●", "◇"))
+    focused_style = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
+        "class:memcommit.choice.active.focused"
     )
-    assert focused_style.underline is True
-    neutral_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
-        "class:option-card"
+    assert focused_style.bold is True
+    selected_style = MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
+        "class:memcommit.choice.active"
     )
-    assert neutral_style.underline is False
-    selected_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
-        "class:option-card.selected"
-    )
-    assert selected_style.color == "8bd5ff"
-    assert selected_style.underline is False
+    assert selected_style.bgcolor == "8bd5ff"
     reference_style = RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
         "class:reference"
     )

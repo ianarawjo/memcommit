@@ -1127,7 +1127,8 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
         reading_index=1,
     )
     assert "It accepts the previously described credential." in expanded
-    assert "› ○ 2. [ALTERNATIVE]" in expanded
+    assert "›   2. [ALTERNATIVE]" in expanded
+    assert not any(marker in expanded for marker in ("○", "●", "◇"))
     fragments = _list_fragments(
         workbench,
         analysis,
@@ -1143,7 +1144,7 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
     ]
     assert len(cursor_markers) == 1
     cursor_line = fragments[cursor_markers[0] + 1][1]
-    assert cursor_line.lstrip().startswith("› ○ 2. [ALTERNATIVE]")
+    assert cursor_line.lstrip().startswith("›   2. [ALTERNATIVE]")
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t\x1b[B\r\t\r\x1b[B\rq")

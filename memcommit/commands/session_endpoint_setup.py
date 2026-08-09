@@ -32,6 +32,7 @@ from memcommit.context_targeting.tui.rendering import (
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.selection.tui import tree_choice_styles
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -97,17 +98,11 @@ def _endpoint_row_styles(
 ) -> tuple[str, str]:
     """Separate a retained endpoint choice from the live tree cursor."""
 
-    cursor_focused = cursor and tree_focused
-    cursor_style = "class:memcommit.table.selected" if cursor_focused else ""
-    value_style = (
-        focused_control_style(
-            focused=cursor_focused,
-            selected=True,
-        )
-        if chosen
-        else cursor_style
+    return tree_choice_styles(
+        cursor=cursor,
+        selected=chosen,
+        focused=tree_focused,
     )
-    return cursor_style, value_style
 
 
 def _new_context_label_style(*, focused: bool) -> str:

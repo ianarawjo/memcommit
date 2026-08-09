@@ -26,7 +26,8 @@ ViewerFragments = Sequence[tuple[str, str]]
 # A focused Viewer stop changes only semantic identity fragments. Explanatory
 # prose remains neutral, while a Memory may temporarily replace its resting
 # lavender with the common blue focus treatment. Nested choices retain their
-# separate underline grammar.
+# own focus state before entering this semantic block; compatibility option-row
+# classes remain mapped for old saved fragments only.
 _FOCUSED_STYLE = {
     "class:title": "class:viewer-section",
     "class:section": "class:viewer-section",

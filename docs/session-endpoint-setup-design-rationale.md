@@ -272,7 +272,8 @@ boundary.
 
 The implementation has three layers:
 
-1. `HorizontalChoiceState` owns generic left/right selection, while
+1. `HorizontalChoiceState` remains the left/right compatibility facade over the
+   common `SelectionOption`, `FlatSelectionState`, and checked-card renderer, while
    `ContextReachState` fixes the shared `THIS CONTEXT ONLY` versus
    `INCLUDE DESCENDANTS` vocabulary and presentation.
 2. `ContextTreeState`, `ContextSelectionState`, and the common row renderer own

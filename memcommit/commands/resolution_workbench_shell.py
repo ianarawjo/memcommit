@@ -79,6 +79,9 @@ from memcommit.responses.resolution import (
 )
 from memcommit.responses.state import ResponseFrameState
 from memcommit.responses.tui import response_frame_fragments
+from memcommit.selection.model import SelectionOption
+from memcommit.selection.state import FlatSelectionState
+from memcommit.selection.tui import render_vertical_choice_cards
 from memcommit.session_workbench_navigation import (
     SessionWorkbenchNavigation,
     WorkbenchSection,
@@ -734,28 +737,27 @@ def resolution_workbench_fragments(
             )
         if item.options:
             fragments.append(("class:section", "       OPTIONS\n"))
-        for option in item.options:
-            cursor = option.uid == navigation.option_cursor_uid
-            chosen = option.uid == navigation.selected_option_uid
-            if cursor:
-                fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:choice" if cursor else "",
-                    (
-                        f"       {'›' if cursor else ' '} "
-                        f"{'●' if chosen else '○'} "
-                        f"{safe_terminal_text(option.label)}\n"
-                    ),
+            option_uids = tuple(option.uid for option in item.options)
+            choice_state = FlatSelectionState(
+                tuple(
+                    SelectionOption(option.uid, option.label, option.text)
+                    for option in item.options
+                ),
+                cursor_uid=(
+                    navigation.option_cursor_uid
+                    if navigation.option_cursor_uid in option_uids
+                    else option_uids[0]
+                ),
+                selected_uid=navigation.selected_option_uid,
+            )
+            fragments.extend(
+                render_vertical_choice_cards(
+                    choice_state,
+                    focused=True,
+                    content_width=68,
+                    indent="       ",
                 )
             )
-            if option.text != option.label:
-                fragments.append(
-                    (
-                        "",
-                        f"          {safe_terminal_text(option.text)}\n",
-                    )
-                )
         for block in item.blocks:
             fragments.append(
                 (
@@ -896,120 +898,59 @@ def resolution_viewer_fragments(
     ) -> None:
         nonlocal section_index
         active = section_index == focused_section
-        outer_style = "class:detail-card"
+        parts: list[tuple[str, str]] = []
         if prompt_heading:
-            fragments.extend(
-                semantic_viewer_block_fragments(
-                    [
-                        (
-                            "class:block-heading",
-                            f" {safe_terminal_text(prompt_heading)}\n",
-                        ),
-                        (
-                            "",
-                            f" {safe_terminal_text(prompt_text)}\n",
-                        ),
-                    ],
-                    active=active,
-                )
+            parts.extend(
+                [
+                    (
+                        "class:block-heading",
+                        f" {safe_terminal_text(prompt_heading)}\n",
+                    ),
+                    ("", f" {safe_terminal_text(prompt_text)}\n"),
+                ]
             )
-        outer_width = max(20, content_width - 1)
-        outer_body_width = outer_width - 4
-        top, bottom = boxed_lines(heading, "", width=outer_width)[::2]
-        fragments.extend(
-            semantic_viewer_block_fragments(
-                [(outer_style, f" {top}\n")],
-                active=active and not bool(prompt_heading),
-            )
-        )
+        parts.append(("class:block-heading", f" {safe_terminal_text(heading)}\n"))
         guidance = (
             "↑/↓ move · Enter select · Esc/Backspace back"
             if option_navigation_active
             else "Enter to choose an option"
         )
-        for guidance_line in _visual_wrap(guidance, outer_body_width):
-            fragments.append(
-                (
-                    outer_style,
-                    f" │ {_visual_pad(guidance_line, outer_body_width)} │\n",
-                )
-            )
-        fragments.append((outer_style, f" │{' ' * outer_body_width}│\n"))
-
-        choices = [
-            (
-                index,
-                option.label,
-                option.text,
-                (
-                    active
-                    and option_navigation_active
-                    and not other_direction_focused
-                    and option.uid == navigation.option_cursor_uid
-                ),
-                option.uid == navigation.selected_option_uid,
-                False,
-            )
-            for index, option in enumerate(item.options, start=1)
-        ]
-        choices.append(
-            (
-                len(item.options) + 1,
-                other_label,
-                other_text,
-                active and option_navigation_active and other_direction_focused,
-                False,
-                True,
+        parts.append(("", f" {guidance}\n"))
+        other_uid = "__memcommit_legacy_other__"
+        if any(option.uid == other_uid for option in item.options):
+            raise ValueError("Resolution option UID collides with the Other control.")
+        options = tuple(
+            SelectionOption(option.uid, option.label, option.text)
+            for option in item.options
+        ) + (SelectionOption(other_uid, other_label, other_text),)
+        option_uids = tuple(option.uid for option in item.options)
+        cursor_uid = (
+            other_uid
+            if other_direction_focused
+            else navigation.option_cursor_uid
+            if navigation.option_cursor_uid in option_uids
+            else option_uids[0]
+        )
+        choice_state = FlatSelectionState(
+            options,
+            cursor_uid=cursor_uid,
+            selected_uid=navigation.selected_option_uid,
+        )
+        parts.extend(
+            render_vertical_choice_cards(
+                choice_state,
+                focused=active and option_navigation_active,
+                content_width=max(12, content_width - 2),
+                indent=" ",
             )
         )
-        for choice_index, label, text, cursor, chosen, is_other in choices:
-            marker = "✓" if chosen else ("◇" if is_other else "○")
-            if cursor and is_other:
-                choice_style = "class:option-card.other"
-            elif cursor:
-                choice_style = "class:option-card.focused"
-            elif chosen:
-                choice_style = "class:option-card.selected"
-            else:
-                choice_style = "class:option-card"
-            if cursor:
-                # Keep the whole active row visible when the inline Other
-                # direction editor reduces the Viewer height.
-                fragments.append(("[SetCursorPosition]", ""))
-            pointer = "›" if cursor else " "
-            choice_heading = (
-                f"{pointer} {marker} {choice_index}. {safe_terminal_text(label)}"
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                parts,
+                active=active,
+                anchor="both",
             )
-            heading_width = max(1, outer_body_width - 2)
-            for heading_line in _visual_wrap(choice_heading, heading_width):
-                fragments.extend(
-                    [
-                        (outer_style, " │ "),
-                        (
-                            choice_style,
-                            _visual_pad(
-                                heading_line,
-                                heading_width,
-                            ),
-                        ),
-                        (outer_style, " │\n"),
-                    ]
-                )
-            description_width = max(1, outer_body_width - 6)
-            for description_line in _visual_wrap(text, description_width):
-                fragments.extend(
-                    [
-                        (outer_style, " │     "),
-                        (
-                            choice_style,
-                            _visual_pad(description_line, description_width),
-                        ),
-                        (outer_style, " │\n"),
-                    ]
-                )
-            if choice_index < len(choices):
-                fragments.append((outer_style, f" │{' ' * outer_body_width}│\n"))
-        fragments.append((outer_style, f" {bottom}\n"))
+        )
         fragments.append(("", "\n"))
         section_index += 1
 
@@ -3450,8 +3391,7 @@ def run_resolution_workbench_shell(
                     set_status("This response is read-only.")
                 elif response_state.option_navigation_active:
                     if response_state.other_choice_focused:
-                        draft = ResponseDraft(None, response_state.draft.text)
-                        response_state.draft = draft
+                        draft = response_state.toggle_current_choice(target)
                         local_drafts[item.uid] = draft
                         current_navigation.selected_option_uid = None
                         response_state.option_navigation_active = False

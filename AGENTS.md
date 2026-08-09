@@ -149,14 +149,19 @@ conversation.
 
 - Before adding operation-specific TUI state, rendering, focus traversal,
   scrolling, pointer, or key-navigation code, check the shared components in
-  `memcommit.commands.tui_primitives`, `horizontal_choice`, Context/Memory
-  pickers, and the common session workbench shells. Reuse or extend the
-  narrowest applicable shared component instead of cloning its behavior into
-  one command.
+  `memcommit.commands.tui_primitives`, `memcommit.selection`, Context/Memory
+  pickers, and the common session workbench shells. Reuse or extend the narrowest
+  applicable shared component instead of cloning its behavior into one command.
 - Keep semantic meaning and validation in the calling command, but keep common
   interaction mechanics common. When a missing capability belongs to an
   existing shared pattern, add it to that shared component and migrate the
   relevant caller rather than introducing a parallel grammar.
+- Project fixed flat choices through `SelectionOption` and
+  `FlatSelectionState`. Use the common checked-card renderer for horizontal or
+  stacked choices and the common tree marker/style projection for hierarchical
+  selectors. Layout and operation key meanings may differ, but `✓`, retained
+  selection color, focused border/color, escaping, and cursor-versus-selection
+  meaning must not be redrawn by an operation.
 
 - Keep report structure, explanatory prose, cards, and ordinary labels neutral
   white. Do not tint a whole Compare, Meld, Review, or Impact report merely to
@@ -178,13 +183,12 @@ conversation.
   edge at the bottom of the viewport.
 - Treat OPTIONS in the shared Resolution Session `RESPONSES` frame as an explicit nested
   layer: Enter opens it, Up/Down moves, Enter selects, and Escape/Backspace
-  returns to section navigation. Use the shared light-blue focus treatment and
-  a `✓` for the staged selection. Render choices as unboxed rows inside the
-  OPTIONS section; underline only the currently focused row and remove the
-  underline when focus leaves it. When reopening a saved draft, initialize the
-  option cursor on the checked choice so the visible selection and the next
-  Enter target cannot disagree. Do not give individual operations a separate
-  option grammar or marker scheme.
+  returns to section navigation. Render every option with the common Meld-style
+  checked card: `✓` marks the staged selection, retained selection keeps the
+  common fill, and the keyboard target receives the heavy blue border. Do not
+  use radio circles, diamonds, or operation-authored option boxes. When
+  reopening a saved draft, initialize the option cursor on the checked choice so
+  the visible selection and the next Enter target cannot disagree.
 - In an actionable Ambiguity or Conflict detail, treat its clarification or
   resolution question and proposed readings or resolutions as one Decision
   focus section. One navigation step focuses both; Enter from that section

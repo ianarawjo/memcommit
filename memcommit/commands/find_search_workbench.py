@@ -39,6 +39,7 @@ from memcommit.context_targeting.tui.tree import (
     build_context_tree,
     context_subtree_names,
 )
+from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -281,13 +282,18 @@ def run_find_search_workbench(
         focused = app.layout.has_focus(target_control)
 
         def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
+            chosen = row.name in target_selection.selected_set
+            cursor_style, value_style = tree_choice_styles(
+                cursor=cursor,
+                selected=chosen,
+                focused=focused,
+            )
             return ContextTreeRowDecoration(
-                marker="✓" if row.name in target_selection.selected_set else "·",
+                marker=tree_choice_marker(selected=chosen),
                 active="*" if row.name == current else " ",
                 annotation=labels.get(row.name, ""),
-                cursor_style=(
-                    "class:memcommit.table.selected" if cursor and focused else ""
-                ),
+                cursor_style=cursor_style,
+                value_style=value_style,
             )
 
         return render_context_tree_rows(tree_state, decorate)
@@ -355,7 +361,7 @@ def run_find_search_workbench(
     )
     target_frame = Frame(
         target_window,
-        title="TARGETS · ENTER/SPACE TO SELECT",
+        title="TARGETS · * CURRENT · ENTER/SPACE TO SELECT",
         height=Dimension(min=5, preferred=8, max=12, weight=1),
     )
     scope_frame = Frame(

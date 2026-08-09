@@ -7,6 +7,7 @@ from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.commands.tui_text_layout import wrap_terminal_text
 from memcommit.responses.model import ResponseDraft, ResponseTarget
 from memcommit.responses.state import ResponseFrameState
+from memcommit.selection.tui import render_vertical_choice_cards
 
 
 def _wrap(value: str, width: int) -> tuple[str, ...]:
@@ -63,40 +64,22 @@ def response_frame_fragments(
                 else "Enter to choose an option"
             )
             decision_parts.append(("", f" {guidance}\n"))
-            choices = tuple(target.choices) + (None,)
-            for index, choice in enumerate(choices, start=1):
-                is_other = choice is None
-                uid = None if is_other else choice.uid
-                label = target.other_choice_label if is_other else choice.label
-                text = (
-                    "Write a different answer in Response." if is_other else choice.text
+            choice_state = state.choice_state
+            if choice_state is None:
+                raise ValueError(
+                    "Response choices require synchronized selection state."
                 )
-                selected = uid is not None and uid == draft.selected_choice_uid
-                cursor = state.option_navigation_active and (
-                    state.other_choice_focused
-                    if is_other
-                    else not state.other_choice_focused
-                    and uid == state.option_cursor_uid
+            decision_parts.extend(
+                render_vertical_choice_cards(
+                    choice_state,
+                    focused=(
+                        focused
+                        and state.section == "DECISION"
+                        and state.option_navigation_active
+                    ),
+                    content_width=body_width,
                 )
-                marker = "✓" if selected else ("◇" if is_other else "○")
-                style = (
-                    "class:option-card.other"
-                    if cursor and is_other
-                    else "class:option-card.focused"
-                    if cursor
-                    else "class:option-card.selected"
-                    if selected
-                    else "class:option-card"
-                )
-                pointer = "›" if cursor else " "
-                decision_parts.append(
-                    (
-                        style,
-                        f" {pointer} {marker} {index}. {safe_terminal_text(label)}\n",
-                    )
-                )
-                for line in _wrap(text, max(1, body_width - 4)):
-                    decision_parts.append((style, f"       {line}\n"))
+            )
         fragments.extend(
             semantic_viewer_block_fragments(
                 decision_parts,
@@ -150,7 +133,7 @@ def response_snapshot_lines(
         if target.choices:
             lines.append(f"{child}{safe_terminal_text(target.choices_heading)}")
             for index, choice in enumerate(target.choices, start=1):
-                marker = "✓" if choice.uid == draft.selected_choice_uid else "○"
+                marker = "✓" if choice.uid == draft.selected_choice_uid else " "
                 lines.append(
                     f"{value}{marker} {index}. {safe_terminal_text(choice.label)}"
                 )

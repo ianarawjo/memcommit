@@ -295,9 +295,9 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "memory-diff.add.changed": "fg:#a6da95 underline",
         "memory-diff.equal": "fg:#ffffff",
         "memory-diff.equal.changed": "fg:#ffffff underline",
+        # Compatibility names for older semantic fragments. Interactive flat
+        # choices now use memcommit.selection's shared checked-card styles.
         "option-card": "fg:#ffffff",
-        # Resolution choices are rows, not nested cards. Underline belongs
-        # only to the navigation cursor and disappears when focus moves away.
         "option-card.focused": "fg:#8bd5ff bold underline",
         "option-card.selected": "fg:#8bd5ff bold",
         "option-card.other": "fg:#8bd5ff bold underline",

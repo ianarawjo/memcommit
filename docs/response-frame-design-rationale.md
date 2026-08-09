@@ -48,6 +48,13 @@ Response stop opens the multiline field inside the same Responses frame.
 Enter saves, `Ctrl-J` inserts a newline, and Escape cancels the edit without
 silently replacing the durable draft.
 
+Decision choices use the service-wide Meld-style selection cards rather than a
+Response-specific radio-row renderer. The staged value carries `✓`; the current
+keyboard target carries the heavy blue border, and descriptions wrap in stacked
+full-width cards. `SelectionOption` and `FlatSelectionState` own the flat cursor
+and checked-value mechanics while the Response adapter retains `Other`, draft,
+and persistence meaning. See `docs/selection-control-design-rationale.md`.
+
 ## Operation adapters
 
 Resolution adapters project their existing `ResolutionItem` values through

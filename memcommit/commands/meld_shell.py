@@ -27,6 +27,7 @@ from memcommit.commands.tui_text_layout import (
 )
 from memcommit.meld import MeldSession
 from memcommit.resolution_workbench import ResolutionNavigation
+from memcommit.selection.tui import choice_marker
 
 
 @dataclass(frozen=True)
@@ -151,7 +152,7 @@ def _screen_text(
                     (
                         "class:choice" if chosen else "",
                         (
-                            f"       {'●' if chosen else '○'} "
+                            f"       {choice_marker(selected=chosen)} "
                             f"{option_index + 1}. "
                             f"{safe_terminal_text(option.label)}\n"
                         ),

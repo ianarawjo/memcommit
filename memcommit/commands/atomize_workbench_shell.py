@@ -59,6 +59,7 @@ from memcommit.result_workbench import (
     ResultCaseDetail,
     ResultWorkbenchView,
 )
+from memcommit.selection.tui import choice_marker
 
 if TYPE_CHECKING:
     from memcommit.commands.resolution_workbench_shell import ResolutionDestination
@@ -368,7 +369,7 @@ def _detail_text(
                 marker = ""
             else:
                 pointer = "›" if reading_cursor_index == index - 1 else " "
-                marker = "● " if selected == index - 1 else "○ "
+                marker = f"{choice_marker(selected=selected == index - 1)} "
             cursor_marker = (
                 reading_cursor_token if reading_cursor_index == index - 1 else ""
             )
