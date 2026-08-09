@@ -950,7 +950,10 @@ def resolution_viewer_fragments(
             semantic_viewer_block_fragments(
                 parts,
                 active=active,
-                anchor="both",
+                # Nested option cards own their viewport position once opened.
+                # Before that, keep the combined question/choice section at
+                # its heading rather than jumping to its bottom.
+                anchor="end" if option_navigation_active else "start",
             )
         )
         fragments.append(("", "\n"))
@@ -2718,7 +2721,11 @@ def run_resolution_workbench_shell(
         target = current_response_target()
         if target is None:
             return None
-        response_state.sync(target, current_response_draft(target))
+        response_state.sync(
+            target,
+            current_response_draft(target),
+            frame_focused=session_navigation.pane == "responses",
+        )
         return target
 
     def response_visible() -> bool:
@@ -3094,8 +3101,6 @@ def run_resolution_workbench_shell(
         session_navigation.preview_selected_row()
         other_direction["focused"] = False
         other_direction_editor["open"] = False
-        response_state.option_navigation_active = False
-        response_state.other_choice_focused = False
         response_state.editing = False
         expanded_memory_section_uid["uid"] = None
         viewer_controller.close_nested()
@@ -3122,10 +3127,7 @@ def run_resolution_workbench_shell(
                 if target is None:
                     set_status("No response target is open.")
                     return
-                if response_state.option_navigation_active:
-                    response_state.move_option(target, delta)
-                else:
-                    response_state.move_section(target, delta)
+                response_state.move_focus(target, delta)
                 set_status("")
                 return
             if session_navigation.pane == "viewer":
@@ -3192,7 +3194,7 @@ def run_resolution_workbench_shell(
         destination_editing["value"] = False
         global_comment["value"] = False
         response_state.editing = True
-        response_state.section = "RESPONSE"
+        response_state.focus_response()
         composer.frame.title = title
         input_heading["value"] = title
         if clear:
@@ -3204,7 +3206,7 @@ def run_resolution_workbench_shell(
         destination_editing["value"] = False
         global_comment["value"] = True
         response_state.editing = True
-        response_state.section = "RESPONSE"
+        response_state.focus_response()
         other_direction_editor["open"] = False
         composer.frame.title = "WHOLE-SET COMMENT"
         input_heading["value"] = "WHOLE-SET GUIDANCE"
@@ -3485,7 +3487,6 @@ def run_resolution_workbench_shell(
                         draft = response_state.toggle_current_choice(target)
                         local_drafts[item.uid] = draft
                         current_navigation.selected_option_uid = None
-                        response_state.option_navigation_active = False
                         if draft_saver is not None:
                             draft_saver(item.uid, None, draft.text)
                         open_item_input(title=current_response_heading())
@@ -3509,11 +3510,10 @@ def run_resolution_workbench_shell(
                                 + target.choice(draft.selected_choice_uid).label
                             )
                 elif response_state.section == "DECISION":
-                    if response_state.open_options(target):
-                        set_status("Choose an option with ↑/↓, then press Enter.")
-                    else:
-                        response_state.section = "RESPONSE"
-                        set_status("Move to Response and press Enter to answer.")
+                    # A choice-bearing Decision is always directly focusable.
+                    # This fallback is only reachable for a prompt-only target.
+                    response_state.focus_response()
+                    set_status("Move to Response and press Enter to answer.")
                 elif not target.editable:
                     set_status("This response is read-only.")
                 else:
@@ -4086,16 +4086,12 @@ def run_resolution_workbench_shell(
         elif split_viewer_items and split_kind() == "RESPONSES":
             if response_state.option_navigation_active:
                 navigation_help = (
-                    " ↑/↓ option  Enter select  Esc/Backspace back  Tab switch "
-                )
-            elif response_state.section == "DECISION":
-                navigation_help = (
-                    " ↑/↓ section  Enter choose options  Tab switch  "
-                    "Esc/Backspace report "
+                    " ↑/↓ choice/Response  Enter select  "
+                    "Esc/Backspace report  Tab switch "
                 )
             else:
                 navigation_help = (
-                    " ↑/↓ section  Enter write response  Tab switch  "
+                    " ↑/↓ choice/Response  Enter write response  Tab switch  "
                     "Esc/Backspace report "
                 )
         elif split_viewer_items and split_kind() == "REPORT":

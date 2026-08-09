@@ -187,19 +187,19 @@ conversation.
   in an operation-specific adapter. Place the hidden cursor anchor after the
   focused card's closing border so a lower card is not rendered as only a top
   edge at the bottom of the viewport.
-- Treat OPTIONS in the shared Resolution Session `RESPONSES` frame as an explicit nested
-  layer: Enter opens it, Up/Down moves, Enter selects, and Escape/Backspace
-  returns to section navigation. Render every option with the common Meld-style
-  checked card: `✓` marks the staged selection, retained selection keeps the
-  common fill, and the keyboard target receives the heavy blue border. Do not
-  use radio circles, diamonds, or operation-authored option boxes. When
-  reopening a saved draft, initialize the option cursor on the checked choice so
-  the visible selection and the next Enter target cannot disagree.
-- In an actionable Ambiguity or Conflict detail, treat its clarification or
-  resolution question and proposed readings or resolutions as one Decision
-  focus section. One navigation step focuses both; Enter from that section
-  opens the nested choice rows. Do not make the person focus the question and
-  options separately when the question has no independent action.
+- In the shared Resolution Session `RESPONSES` frame, make visible choice cards
+  and `RESPONSE` one linear Up/Down sequence. Entering the frame focuses the
+  checked choice, or the first choice when none is checked; Enter selects or
+  clears that card. Moving past the final choice reaches `RESPONSE`, and moving
+  up from `RESPONSE` restores the checked choice when one exists. Do not require
+  a preliminary Enter or Escape merely to enter or leave an option layer. A transient hover
+  must not replace the checked value: crossing the choice/Response or frame
+  boundary restores the cursor to the checked choice when one exists.
+- Render every option with the common Meld-style checked card: `✓` marks the
+  staged selection, retained selection keeps the common fill, and the keyboard
+  target receives the heavy blue border. Do not use radio circles, diamonds,
+  or operation-authored option boxes. The clarification or resolution question
+  is explanatory chrome above the choices, not an independent focus stop.
 - Open Different reading/resolution and ordinary item Response input inside
   the existing `RESPONSES` frame; never replace the current detail with a
   separate editor screen or add a sibling Message frame. Enter saves the
@@ -207,11 +207,11 @@ conversation.
   newline. A draft-owning adapter may persist that response without closing
   the workbench; operations that require a new semantic provider turn still
   receive their explicit submitted action.
-- Make `RESPONSE` itself a focusable section after Decision inside the common
-  Responses frame. Enter on that section opens its inline field. Do not render an
-  adapter-authored instruction such as `REFINE, COMMENT, OR ENTER...` as if it
-  were saved content; a new response starts blank, while reopening a durable
-  draft restores its existing text.
+- Make `RESPONSE` itself the focusable stop after the visible choices inside the
+  common Responses frame. Enter on that section opens its inline field. Do not
+  render an adapter-authored instruction such as `REFINE, COMMENT, OR
+  ENTER...` as if it were saved content; a new response starts blank, while
+  reopening a durable draft restores its existing text.
 - Keep the common Resolution Session topology as `VIEWER`, conditional
   `RESPONSES`, `ITEMS`, optional `SAVE LOCATION`, then `TO DO`. Responses is
   visible only for the currently opened answerable item or whole-set guidance.

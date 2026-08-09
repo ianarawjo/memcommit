@@ -712,9 +712,9 @@ def test_split_detail_submits_a_supplied_option_with_an_optional_comment():
     )
 
     with create_pipe_input() as pipe_input:
-        # Open conflict 1, Tab into RESPONSES, select the first option, leave
-        # nested choice navigation, then submit the empty Response field.
-        pipe_input.send_text("\t\x1b[B\r\t\r\r\x1b\x1b[B\r\r")
+        # Open conflict 1, Tab into RESPONSES, select the already-focused first
+        # choice, then move through choice 2 and Other to the Response field.
+        pipe_input.send_text("\t\x1b[B\r\t\r\x1b[B\x1b[B\x1b[B\r\r")
         action = run_resolution_workbench_shell(
             _view(item),
             split_viewer_items=True,
@@ -739,10 +739,10 @@ def test_split_detail_submits_other_direction_without_a_fabricated_option():
     )
 
     with create_pipe_input() as pipe_input:
-        # Open conflict 1, enter RESPONSES, move beyond both supplied options
+        # Open conflict 1, enter RESPONSES on choice 1, move through choice 2
         # to Different response, and submit a free-form resolution.
         pipe_input.send_text(
-            "\t\x1b[B\r\t\r\x1b[B\x1b[B\rUse a staged combination instead.\r"
+            "\t\x1b[B\r\t\x1b[B\x1b[B\rUse a staged combination instead.\r"
         )
         action = run_resolution_workbench_shell(
             _view(item),
@@ -879,9 +879,9 @@ def test_actionable_response_is_focusable_and_opens_inline_with_enter():
     saved: list[tuple[str, str | None, str]] = []
 
     with create_pipe_input() as pipe_input:
-        # Open the item, Tab into RESPONSES, move from Decision to Response,
-        # then save the field and close from the response frame.
-        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\rA separate response.\rq")
+        # Open the item, Tab into RESPONSES, move through its supplied choice
+        # and Other to Response, then save and close from the response frame.
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\x1b[B\rA separate response.\rq")
         action = run_resolution_workbench_shell(
             _view(item),
             split_viewer_items=True,
@@ -1674,7 +1674,7 @@ def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
     with create_pipe_input() as pipe_input:
         # Select the first option in each conflict, then open the final review
         # row and submit the combined resolution turn.
-        pipe_input.send_text("\t\x1b[B\r\t\r\r\t\x1b[B\r\t\r\r\t\t\r\x1b[F\r")
+        pipe_input.send_text("\t\x1b[B\r\t\r\t\x1b[B\r\t\r\t\t\r\x1b[F\r")
         action = run_resolution_workbench_shell(
             _view(first, second, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,
@@ -1884,9 +1884,11 @@ def test_todo_reopens_a_required_conflict_after_selection_cancellation():
     )
 
     with create_pipe_input() as pipe_input:
-        # The second Enter on the same option clears it. To Do must reopen that
-        # required conflict instead of applying a whole-set fallback over it.
-        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\r\r\r\t\rq")
+        # Open the conflict, Tab into Responses, then Enter twice on its first
+        # choice so the second activation clears it. Traversing through Items
+        # to To Do must reopen that required conflict rather than apply a
+        # whole-set fallback over it.
+        pipe_input.send_text("\t\x1b[B\r\t\r\r\t\t\rq")
         action = run_resolution_workbench_shell(
             _view(item, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,

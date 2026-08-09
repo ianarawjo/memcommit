@@ -25,10 +25,13 @@ class ResponseFrameState:
 
     target_uid: str | None = None
     section: ResponseSection = "RESPONSE"
+    # Compatibility name: true now means a choice card owns the flat focus,
+    # not that a nested option layer has been opened.
     option_navigation_active: bool = False
     editing: bool = False
     draft: ResponseDraft = field(default_factory=ResponseDraft)
     _choices: FlatSelectionState | None = field(default=None, repr=False)
+    _frame_focused: bool = field(default=False, repr=False)
 
     @property
     def choice_state(self) -> FlatSelectionState | None:
@@ -83,17 +86,39 @@ class ResponseFrameState:
             ),
         )
 
-    def sync(self, target: ResponseTarget, draft: ResponseDraft) -> None:
+    def sync(
+        self,
+        target: ResponseTarget,
+        draft: ResponseDraft,
+        *,
+        frame_focused: bool | None = None,
+    ) -> None:
         changed = self.target_uid != target.item_uid
         self.target_uid = target.item_uid
         self.draft = draft
+        if frame_focused is not None:
+            if not isinstance(frame_focused, bool):
+                raise ValueError("Response frame focus state must be boolean.")
+            if frame_focused != self._frame_focused:
+                # Hover is process-local exploration. Crossing the frame
+                # boundary restores the checked value without changing it.
+                self.restore_choice_cursor()
+                if frame_focused:
+                    self.section = "DECISION" if target.choices else "RESPONSE"
+                    self.option_navigation_active = bool(target.choices)
+                self._frame_focused = frame_focused
         if changed:
-            self.section = "DECISION" if target.has_decision else "RESPONSE"
-            self.option_navigation_active = False
+            # The question is explanatory rather than an independent action.
+            # Entering Responses therefore lands on the first visible choice;
+            # a prompt without choices lands directly on Response.
+            self.section = "DECISION" if target.choices else "RESPONSE"
+            self.option_navigation_active = bool(target.choices)
             self.editing = False
         choice_uids = tuple(choice.uid for choice in target.choices)
         if not choice_uids:
             self._choices = None
+            self.section = "RESPONSE"
+            self.option_navigation_active = False
             return
         options = self._selection_options(target)
         if changed or self._choices is None or self._choices.options != options:
@@ -109,17 +134,20 @@ class ResponseFrameState:
             )
         else:
             self._choices.set_selected(draft.selected_choice_uid)
-            if changed:
-                self._choices.reset_cursor_to_selection()
 
     def sections(self, target: ResponseTarget) -> tuple[ResponseSection, ...]:
-        return ("DECISION", "RESPONSE") if target.has_decision else ("RESPONSE",)
+        return ("DECISION", "RESPONSE") if target.choices else ("RESPONSE",)
 
     def move_section(self, target: ResponseTarget, delta: int) -> ResponseSection:
+        """Compatibility movement for targets without selectable choices."""
+
         sections = self.sections(target)
         index = sections.index(self.section) if self.section in sections else 0
         index = max(0, min(index + delta, len(sections) - 1))
         self.section = sections[index]
+        self.option_navigation_active = self.section == "DECISION" and bool(
+            target.choices
+        )
         return self.section
 
     def open_options(self, target: ResponseTarget) -> bool:
@@ -135,6 +163,45 @@ class ResponseFrameState:
         elif self._choices.cursor_uid == _OTHER_CHOICE_UID:
             self._choices.cursor_uid = target.choices[0].uid
         return True
+
+    def focus_response(self) -> None:
+        """Move to the free-form Response stop without changing its draft."""
+
+        self.restore_choice_cursor()
+        self.section = "RESPONSE"
+        self.option_navigation_active = False
+
+    def restore_choice_cursor(self) -> None:
+        """Discard transient hover in favor of the durable checked choice."""
+
+        if self._choices is not None:
+            self._choices.reset_cursor_to_selection()
+
+    def move_focus(self, target: ResponseTarget, delta: int) -> ResponseSection:
+        """Move through visible choices and then Response as one flat sequence."""
+
+        if isinstance(delta, bool) or not isinstance(delta, int):
+            raise ValueError("Response focus movement must be an integer.")
+        if not target.choices:
+            self.focus_response()
+            return self.section
+        if self._choices is None:
+            self.sync(target, self.draft)
+        assert self._choices is not None
+
+        if self.section == "RESPONSE":
+            if delta < 0:
+                self.section = "DECISION"
+                self.option_navigation_active = True
+                self.restore_choice_cursor()
+            return self.section
+
+        self.section = "DECISION"
+        self.option_navigation_active = True
+        moved = self._choices.move(delta)
+        if delta > 0 and not moved:
+            self.focus_response()
+        return self.section
 
     def move_option(self, target: ResponseTarget, delta: int) -> None:
         if not target.choices:
@@ -158,10 +225,6 @@ class ResponseFrameState:
         return self.draft
 
     def close_nested(self) -> bool:
-        if self.option_navigation_active:
-            self.option_navigation_active = False
-            self.other_choice_focused = False
-            return True
         if self.editing:
             self.editing = False
             return True

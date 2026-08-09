@@ -109,7 +109,7 @@ def _case_detail_fragments(
             why=case.why_selected,
         ),
         active=focused_uid == f"RESULT:CASE:{case.uid}:DETAIL",
-        anchor="both",
+        anchor="end",
     )
     # Detail blocks are operation-authored and deliberately retain their
     # supplied order.  The common layer must not reinterpret their semantics.
@@ -122,7 +122,7 @@ def _case_detail_fragments(
                     refs=block.refs,
                 ),
                 active=(focused_uid == f"RESULT:CASE:{case.uid}:BLOCK:{block_index}"),
-                anchor="both",
+                anchor="end",
             )
         )
     fragments.extend(
@@ -134,7 +134,7 @@ def _case_detail_fragments(
                 unresolved_refs=detail.unresolved_refs,
             ),
             active=focused_uid == f"RESULT:CASE:{case.uid}:TRACE",
-            anchor="both",
+            anchor="end",
         )
     )
     return fragments

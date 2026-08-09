@@ -41,12 +41,18 @@ To Do derives the one whole-session next action. Final Review and Apply omits
 Responses because it confirms already staged state rather than collecting new
 item input.
 
-Decision combines a non-actionable question with its proposed choices as one
-focus stop. Enter opens nested choice navigation; Up/Down moves, Enter stages
-or clears the opaque choice UID, and Escape/Backspace returns one level. The
-Response stop opens the multiline field inside the same Responses frame.
-Enter saves, `Ctrl-J` inserts a newline, and Escape cancels the edit without
-silently replacing the durable draft.
+The question is explanatory chrome rather than a focus stop. Entering
+Responses focuses the checked choice, or the first proposed choice when no
+value is staged. Up/Down moves directly through every visible choice and then
+Response; moving up from Response restores the checked choice when one exists.
+Enter on a choice stages or clears its opaque UID, while Enter on Response opens the
+multiline field. Enter saves, `Ctrl-J` inserts a newline, and Escape cancels the
+edit without silently replacing the durable draft.
+
+Hover and selection remain distinct. Moving over another choice is temporary;
+crossing into Response or leaving the frame restores the choice cursor to the
+checked UID when one exists. Returning therefore acts on the durable selection
+rather than a stale exploratory row without changing the stored draft.
 
 Decision choices use the service-wide Meld-style selection cards rather than a
 Response-specific radio-row renderer. The staged value carries `✓`; the current
@@ -54,6 +60,9 @@ keyboard target carries the heavy blue border, and descriptions wrap in stacked
 full-width cards. `SelectionOption` and `FlatSelectionState` own the flat cursor
 and checked-value mechanics while the Response adapter retains `Other`, draft,
 and persistence meaning. See `docs/selection-control-design-rationale.md`.
+The focused card owns the frame's effective viewport anchor, placed after its
+closing border; the surrounding Decision presentation must not emit an earlier
+anchor that masks the exact row.
 
 ## Operation adapters
 

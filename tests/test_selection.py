@@ -47,6 +47,17 @@ def test_vertical_choices_use_meld_rectangles_without_radio_markers():
         style == "class:memcommit.choice.border.focused" and "┏" in text
         for style, text in fragments
     )
+    focused_bottom = next(
+        index
+        for index, (style, text) in enumerate(fragments)
+        if style == "class:memcommit.choice.border.focused" and "┗" in text
+    )
+    cursor_anchor = next(
+        index
+        for index, (style, _text) in enumerate(fragments)
+        if style == "[SetCursorPosition]"
+    )
+    assert cursor_anchor > focused_bottom
 
 
 def test_tree_variant_shares_checked_color_without_losing_tree_cursor():

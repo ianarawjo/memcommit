@@ -148,8 +148,6 @@ def render_vertical_choice_cards(
             selected=selected,
             focused=focused,
         )
-        if visual.keyboard_target and anchor_cursor:
-            fragments.append(("[SetCursorPosition]", ""))
         prefix = f"{choice_marker(selected=selected)} "
         if numbered:
             prefix += f"{index}. "
@@ -183,6 +181,10 @@ def render_vertical_choice_cards(
                 fragments.append(("", indent))
             fragments.extend(row)
             fragments.append(("", "\n"))
+        if visual.keyboard_target and anchor_cursor:
+            # Anchor after the closing border so scrolling reveals the whole
+            # focused card instead of leaving only its top edge at the bottom.
+            fragments.append(("[SetCursorPosition]", ""))
         if index < len(state.options):
             fragments.append(("", "\n"))
     return fragments

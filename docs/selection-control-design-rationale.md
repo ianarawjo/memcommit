@@ -26,6 +26,9 @@ The common visual policy uses `✓` for a staged selection. The current keyboard
 target receives the shared blue focus treatment and a heavy rectangle border;
 an unfocused staged value retains the shared selected fill. Choice controls do
 not use `○`, `●`, or `◇` to create a second radio-button grammar.
+For a stacked card, the hidden viewport anchor follows its closing border so a
+lower choice cannot appear as only a top edge. A surrounding semantic block
+must not place an earlier cursor anchor ahead of the active card.
 
 Layout remains adaptive. Short mode or range choices may be horizontal
 segments or adjacent compact rectangles. A Response Decision stacks full-width
@@ -43,6 +46,9 @@ becoming the source of a service-wide policy rather than a special case.
 
 The common `RESPONSES` frame and the older Resolution Viewer compatibility path
 project their operation-owned choices into the same stacked-card renderer.
+Responses places those visible cards and its free-form Response stop in one
+linear Up/Down sequence; this topology remains Response-owned rather than part
+of the operation-neutral flat state.
 Older compact Meld and Atomize snapshot paths use the same checked-marker
 policy, even though a stable text snapshot does not reproduce interactive focus
 borders. Context endpoint, Find target, and Sever setup trees use the common
@@ -53,7 +59,7 @@ tree marker and style projection while retaining
 
 A common selection control does not decide what selection means. Callers retain:
 
-- immediate Left/Right selection versus nested Up/Down then Enter;
+- immediate Left/Right selection versus Up/Down followed by Enter;
 - single versus multiple cardinality and minimum checked counts;
 - the Response `Other` row and its transition to free-form input;
 - tree expansion, availability, annotations, authority, and destination rules;

@@ -35,7 +35,9 @@ The semantic boundary rules are:
   orientation chrome rather than focus stops;
 - one operation-declared report claim is one stop;
 - one displayed Memory object is one outer stop, independent of wrapping;
-- a Decision is one outer stop whose choices remain a nested layer; and
+- an operation-authored Viewer Decision may remain one outer stop with nested
+  choices, while the independent Responses frame exposes its visible choices
+  directly before Response; and
 - a long Memory may open a nested reading layer, but its stable section UID
   and outer position do not change.
 

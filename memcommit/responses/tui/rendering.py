@@ -58,12 +58,9 @@ def response_frame_fragments(
                     f" {safe_terminal_text(target.choices_heading)}\n",
                 )
             )
-            guidance = (
-                "↑/↓ move · Enter select · Esc/Backspace back"
-                if state.option_navigation_active
-                else "Enter to choose an option"
+            decision_parts.append(
+                ("", " ↑/↓ move through choices and Response · Enter select\n")
             )
-            decision_parts.append(("", f" {guidance}\n"))
             choice_state = state.choice_state
             if choice_state is None:
                 raise ValueError(
@@ -72,11 +69,7 @@ def response_frame_fragments(
             decision_parts.extend(
                 render_vertical_choice_cards(
                     choice_state,
-                    focused=(
-                        focused
-                        and state.section == "DECISION"
-                        and state.option_navigation_active
-                    ),
+                    focused=(focused and state.section == "DECISION"),
                     content_width=body_width,
                 )
             )
@@ -84,7 +77,9 @@ def response_frame_fragments(
             semantic_viewer_block_fragments(
                 decision_parts,
                 active=focused and state.section == "DECISION",
-                anchor="both",
+                # The focused card owns the effective viewport anchor. An
+                # outer start anchor would mask it in prompt-toolkit.
+                anchor="end" if target.choices else "start",
             )
         )
 
@@ -107,7 +102,7 @@ def response_frame_fragments(
         semantic_viewer_block_fragments(
             response_parts,
             active=focused and state.section == "RESPONSE",
-            anchor="both",
+            anchor="start",
         )
     )
     return fragments
