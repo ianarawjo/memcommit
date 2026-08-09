@@ -291,6 +291,8 @@ def _present_workbench(
                         "Review and Apply."
                     ),
                     validate=validate_destination,
+                    context_names=tuple(store.list_context_names()),
+                    current_context=store.current_context_name(),
                 )
                 if workflow_actions and planned_output != analysis.context_name
                 else None

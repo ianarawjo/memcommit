@@ -119,6 +119,12 @@ conversation.
   cross-launch preference. Preserve Compare, Update, Meld, and Sever's existing
   session formats and compatibility defaults through operation adapters;
   Find and new setup screens start from their explicit operation defaults.
+- In the shared Save Location editor, keep direct exact-name input as the initial
+  focus and render a frozen local Context parent tree above it when a catalog is
+  available. Compose `ContextTreeState`, `ContextSelectionState`, and the common
+  row renderer; Enter on a tree row reparents the current final name segment and
+  returns to direct input. Browsing must not create, load, switch, rename, or
+  persist a Context, and the operation's exact validator remains authoritative.
 - Keep compatibility facades thin and free of implementation. New internal
   code must import `memcommit.context_targeting` modules directly rather than
   adding behavior to legacy `memcommit.context_scope` or command-local wrappers.

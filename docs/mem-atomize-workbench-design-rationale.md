@@ -341,11 +341,12 @@ The report also names its operation frame independently of this semantic
 summary. A typed `CONTEXT LOCATIONS` block identifies Source and Output above
 `WHAT MEM UNDERSTOOD`, marking an unchanged Output as `IN PLACE` and a planned
 fresh Output as `NOT CREATED`. For a fresh Output, the shared focusable
-`SAVE LOCATION` frame sits between `ITEMS` and `TO DO`; Enter edits the exact
-name inside that compact frame and the Atomize controller persists it before
-reopening the same revision. This keeps destination editing outside the report
-Viewer, leaves final Apply in To Do, and avoids a redundant post-review
-location prompt.
+`SAVE LOCATION` frame sits between `ITEMS` and `TO DO`; Enter expands the frame
+with the shared local parent-Context tree above the still-prefilled exact-name
+field. Direct input keeps initial focus, and the Atomize controller validates
+and persists the resulting exact name before reopening the same revision. This
+keeps destination editing outside the report Viewer, leaves final Apply in To
+Do, and avoids a redundant post-review location prompt.
 
 As with the understanding block, each of these two sections is its own concise,
 traceable natural-language report paragraph. The shared 40-50-word soft target

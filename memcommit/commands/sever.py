@@ -537,6 +537,8 @@ def _run_workbench(
                     value=session.output_name,
                     state="NOT CREATED",
                     validate=validate_destination,
+                    context_names=tuple(store.list_context_names()),
+                    current_context=store.current_context_name(),
                 )
                 if allow_apply
                 else None

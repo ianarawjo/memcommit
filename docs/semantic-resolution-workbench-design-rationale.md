@@ -437,6 +437,14 @@ its operation-owned state, and `Enter to change`. The shell does not persist,
 rename, create, or apply anything itself; the owning operation validates and
 commits the new name, then supplies a replacement revision.
 
+When the operation supplies a frozen local Context catalog, Enter expands the
+same frame into a shared parent tree above the prefilled direct-name field. The
+field retains initial focus. Choosing a parent explicitly preserves the final
+name segment and returns to direct editing; browsing does not switch, create, or
+load a Context. The operation-specific validator still decides whether the
+resulting exact name is legal. The interaction and safety boundary are recorded
+in `docs/save-location-control-design-rationale.md`.
+
 Sever uses this action to update its unapplied session output name. Symmetric
 Meld uses it to relocate its already-created empty target and target-bound
 session. Directional Meld does not expose it because its target is an existing

@@ -1255,6 +1255,8 @@ def _run_interactive(
                 value=session.target.context_name,
                 state="CURRENT TARGET",
                 validate=validate_destination,
+                context_names=tuple(store.list_context_names()),
+                current_context=store.current_context_name(),
             )
             if allow_apply and session.mode == "SYMMETRIC"
             else None

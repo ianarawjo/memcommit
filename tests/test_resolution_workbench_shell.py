@@ -153,6 +153,58 @@ def test_save_location_frame_emits_an_exact_destination_change_before_apply():
     assert action.destination == "task-3/severed-final"
 
 
+def test_save_location_editor_can_choose_parent_above_direct_input():
+    view = _view(
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+    )
+    with create_pipe_input() as pipe_input:
+        # Direct input remains the initial editor focus. Up enters the shared
+        # parent tree, Up moves from the nearest current parent to practice,
+        # and Enter re-parents while preserving the exact leaf name.
+        pipe_input.send_text("\t\t\r\x1b[A\x1b[A\r\r")
+        action = run_resolution_workbench_shell(
+            view,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            split_viewer_items=True,
+            review_and_apply=True,
+            destination=ResolutionDestination(
+                value="task-1/description/atomized",
+                state="NOT CREATED",
+                context_names=("practice", "task-1/description"),
+                current_context="practice",
+            ),
+        )
+
+    assert action.kind == "CHANGE_DESTINATION"
+    assert action.destination == "practice/atomized"
+
+
+@pytest.mark.parametrize("back_key", ("\x1b", "\x7f"))
+def test_save_location_parent_tree_back_keys_restore_compact_frame(back_key):
+    navigation = SessionWorkbenchNavigation()
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\r\x1b[A" + back_key + "q")
+        action = run_resolution_workbench_shell(
+            _view(),
+            workbench_navigation=navigation,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            split_viewer_items=True,
+            review_and_apply=True,
+            destination=ResolutionDestination(
+                value="task-1/description/atomized",
+                context_names=("task-1/description",),
+            ),
+        )
+
+    assert action.kind == "CLOSE"
+    assert navigation.pane == "save_location"
+
+
 def test_report_places_context_locations_above_understanding_and_apply_last():
     view = replace(
         _view(

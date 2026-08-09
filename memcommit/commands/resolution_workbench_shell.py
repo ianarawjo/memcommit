@@ -48,8 +48,10 @@ from memcommit.commands.tui_text_layout import (
     wrap_terminal_text,
 )
 from memcommit.commands.save_location_control import (
+    SaveLocationEditorState,
     SaveLocationView,
     save_location_row_fragments,
+    save_location_tree_fragments,
 )
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
@@ -2663,6 +2665,13 @@ def run_resolution_workbench_shell(
     global_response_draft = {"value": ResponseDraft()}
     expanded_memory_section_uid: dict[str, str | None] = {"uid": None}
     destination_editing = {"value": False}
+    destination_editor_state = {
+        "value": (
+            SaveLocationEditorState.create(destination)
+            if destination is not None
+            else None
+        )
+    }
     input_heading = {"value": "COMMENT ON SELECTED ITEM"}
     local_drafts: dict[str, ResponseDraft] = {}
 
@@ -2876,20 +2885,69 @@ def run_resolution_workbench_shell(
         name="resolution-save-location",
     )
     destination_input.buffer.cursor_position = len(destination_input.text)
+
+    def destination_tree_fragments() -> list[tuple[str, str]]:
+        state = destination_editor_state["value"]
+        if state is None:
+            return []
+        return save_location_tree_fragments(
+            state,
+            focused=get_app().layout.has_focus(destination_tree_control),
+        )
+
+    destination_tree_control = FormattedTextControl(
+        destination_tree_fragments,
+        focusable=True,
+        show_cursor=False,
+    )
+    destination_tree_window = Window(
+        destination_tree_control,
+        height=Dimension(min=3, preferred=6, max=9, weight=1),
+        wrap_lines=False,
+        right_margins=[ScrollbarMargin(display_arrows=True)],
+    )
+    destination_editor_with_tree = HSplit(
+        [
+            Window(
+                FormattedTextControl(
+                    " PARENT CONTEXT · ↑/↓ MOVE · ←/→ EXPAND · ENTER USE"
+                ),
+                height=Dimension.exact(1),
+                dont_extend_height=True,
+            ),
+            destination_tree_window,
+            Window(
+                FormattedTextControl(" EDIT DIRECTLY · ENTER SAVES EXACT NAME"),
+                height=Dimension.exact(1),
+                dont_extend_height=True,
+            ),
+            destination_input,
+        ]
+    )
+
+    def destination_frame_content():
+        if not destination_editing["value"]:
+            return destination_window
+        if destination_editor_state["value"] is None:
+            return destination_input
+        return destination_editor_with_tree
+
     destination_frame = Frame(
-        DynamicContainer(
-            lambda: destination_input
-            if destination_editing["value"]
-            else destination_window
-        ),
+        DynamicContainer(destination_frame_content),
         title=(
             safe_terminal_text(destination.label)
             if destination is not None
             else "SAVE LOCATION"
         ),
-        height=Dimension.exact(3),
     )
     writable_input_focused = has_focus(input_area) | has_focus(destination_input)
+
+    def destination_tree_is_focused() -> bool:
+        return (
+            destination_editing["value"]
+            and destination_editor_state["value"] is not None
+            and get_app().layout.has_focus(destination_tree_control)
+        )
 
     def load_draft() -> None:
         item = current_navigation.current_item(current_view())
@@ -3097,6 +3155,9 @@ def run_resolution_workbench_shell(
                 set_status("")
                 return
             if session_navigation.pane == "save_location":
+                state = destination_editor_state["value"]
+                if destination_tree_is_focused() and state is not None:
+                    state.tree.move(delta)
                 set_status("")
                 return
             total_rows = len(active_view.items) + 1
@@ -3160,17 +3221,35 @@ def run_resolution_workbench_shell(
             set_status("Save-location editing is unavailable here.")
             return
         destination_editing["value"] = True
+        destination_editor_state["value"] = SaveLocationEditorState.create(destination)
         global_comment["value"] = False
         other_direction_editor["open"] = False
         response_state.editing = False
-        destination_frame.title = (
-            f"{safe_terminal_text(destination.label)} · EDIT DIRECTLY"
+        destination_frame.title = safe_terminal_text(
+            f"{destination.label} · CHOOSE PARENT OR EDIT DIRECTLY"
         )
         destination_input.text = destination.value
         destination_input.buffer.cursor_position = len(destination.value)
         session_navigation.focus("save_location")
         get_app().layout.focus(destination_input)
         set_status("")
+
+    def use_destination_parent() -> None:
+        state = destination_editor_state["value"]
+        if state is None:
+            set_status("No parent Context catalog is available here.")
+            return
+        try:
+            candidate = state.choose_cursor_as_parent(destination_input.text)
+        except (TypeError, ValueError) as error:
+            set_status(str(error))
+            return
+        destination_input.text = candidate
+        destination_input.buffer.cursor_position = len(candidate)
+        get_app().layout.focus(destination_input)
+        set_status(
+            f"Parent selected · {state.selected_parent} · edit the exact name or Enter."
+        )
 
     def current_response_heading() -> str:
         item = current_navigation.current_item(current_view())
@@ -3329,6 +3408,12 @@ def run_resolution_workbench_shell(
 
     @bindings.add("right", filter=~writable_input_focused)
     def _right(event) -> None:
+        state = destination_editor_state["value"]
+        if destination_tree_is_focused() and state is not None:
+            state.tree.expand_selected()
+            set_status("")
+            event.app.invalidate()
+            return
         if split_viewer_items:
             impact_uid = focused_impact_entry_uid()
             if impact_uid is not None:
@@ -3352,6 +3437,12 @@ def run_resolution_workbench_shell(
 
     @bindings.add("left", filter=~writable_input_focused)
     def _left(event) -> None:
+        state = destination_editor_state["value"]
+        if destination_tree_is_focused() and state is not None:
+            state.tree.collapse_selected()
+            set_status("")
+            event.app.invalidate()
+            return
         if split_viewer_items:
             impact_uid = focused_impact_entry_uid()
             if impact_uid is not None:
@@ -3462,7 +3553,10 @@ def run_resolution_workbench_shell(
                 event.app.layout.focus(body_control)
                 set_status("")
             elif kind == "SAVE_LOCATION":
-                open_destination_input()
+                if destination_tree_is_focused():
+                    use_destination_parent()
+                else:
+                    open_destination_input()
             elif kind == "ITEM":
                 if (
                     session_navigation.pane != "viewer"
@@ -3631,7 +3725,16 @@ def run_resolution_workbench_shell(
     @bindings.add("s-tab")
     def _focus_input(event) -> None:
         if event.app.layout.has_focus(destination_input):
-            set_status("Press Enter to save this location or Escape to cancel.")
+            if destination_editor_state["value"] is not None:
+                event.app.layout.focus(destination_tree_control)
+                set_status("Choose a parent Context with arrows, then press Enter.")
+            else:
+                set_status("Press Enter to save this location or Escape to cancel.")
+            event.app.invalidate()
+            return
+        if destination_tree_is_focused():
+            event.app.layout.focus(destination_input)
+            set_status("Edit the exact Context name, then press Enter to save.")
             event.app.invalidate()
             return
         if event.app.layout.has_focus(input_area):
@@ -3791,6 +3894,15 @@ def run_resolution_workbench_shell(
         else:
             event.app.invalidate()
 
+    @bindings.add("up", filter=has_focus(destination_input), eager=True)
+    def _browse_destination_parents(event) -> None:
+        if destination_editor_state["value"] is None:
+            set_status("No parent Context catalog is available here.")
+        else:
+            event.app.layout.focus(destination_tree_control)
+            set_status("Choose a parent Context with arrows, then press Enter.")
+        event.app.invalidate()
+
     @bindings.add("c-j", filter=has_focus(destination_input), eager=True)
     def _reject_destination_newline(event) -> None:
         set_status("A Context name must stay on one line.")
@@ -3866,6 +3978,11 @@ def run_resolution_workbench_shell(
     @bindings.add("escape", filter=has_focus(destination_input), eager=True)
     def _cancel_destination_edit(event) -> None:
         destination_editing["value"] = False
+        destination_editor_state["value"] = (
+            SaveLocationEditorState.create(destination)
+            if destination is not None
+            else None
+        )
         if destination is not None:
             destination_frame.title = safe_terminal_text(destination.label)
         session_navigation.focus("save_location")
@@ -3896,6 +4013,9 @@ def run_resolution_workbench_shell(
     @bindings.add("escape", filter=~writable_input_focused, eager=True)
     @bindings.add("backspace", filter=~writable_input_focused, eager=True)
     def _back_or_close(event) -> None:
+        if destination_tree_is_focused():
+            _cancel_destination_edit(event)
+            return
         if (
             split_viewer_items
             and session_navigation.pane == "responses"
@@ -3954,7 +4074,12 @@ def run_resolution_workbench_shell(
         item = current_navigation.current_item(active_view)
         if get_app().layout.has_focus(destination_input):
             navigation_help = (
-                " Enter save exact location  Esc cancel  Ctrl-J unavailable "
+                " ↑/Tab browse parents  Enter save exact location  Esc cancel "
+            )
+        elif destination_tree_is_focused():
+            navigation_help = (
+                " ↑/↓ parent  ←/→ expand  Enter use  Tab edit directly  "
+                "Esc/Backspace cancel "
             )
         elif split_viewer_items and split_kind() == "SAVE_LOCATION":
             navigation_help = " Enter change location  Tab switch  Q close "

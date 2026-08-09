@@ -64,7 +64,9 @@ the shared typed `CONTEXT LOCATIONS` projection. Forget shows its Source.
 Sever shows Source, Criteria, and Result, including whether the Result is
 `NOT CREATED` or `CREATED`. An unapplied Sever Result also uses the shared
 compact `SAVE LOCATION` frame between `ITEMS` and final Review and Apply;
-changing it updates the durable session but does not create the Context.
+changing it updates the durable session but does not create the Context. Its
+expanded editor shares the local parent-Context tree and keeps exact direct
+input as the initial focus.
 
 ## Operation boundaries
 
