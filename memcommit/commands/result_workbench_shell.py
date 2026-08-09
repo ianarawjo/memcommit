@@ -173,10 +173,10 @@ def _screen_fragments(
             semantic_viewer_block_fragments(
                 [
                     ("class:section", f"\n {heading}\n"),
-                    ("", f" {_section_text(section)}\n"),
+                    ("class:viewer-body", f" {_section_text(section)}\n"),
                 ],
                 active=focused_uid == uid,
-                focus_indices=(0,),
+                focus_indices=(0, 1),
             )
         )
     fragments.append(("class:section", "\n REPRESENTATIVE / BOUNDARY CASES\n"))

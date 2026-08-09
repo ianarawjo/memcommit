@@ -108,6 +108,25 @@ def test_projection_rejects_duplicate_item_and_option_uids() -> None:
             ),
         )
 
+    with pytest.raises(
+        ResolutionWorkbenchError,
+        match="overview-section focus scope",
+    ):
+        ResolutionOverviewSection(
+            "bad-focus",
+            "UNDERSTOOD",
+            "Text.",
+            focus_body="yes",  # type: ignore[arg-type]
+        )
+
+
+def test_projection_rejects_non_boolean_results_visibility() -> None:
+    with pytest.raises(
+        ResolutionWorkbenchError,
+        match="Invalid resolution results visibility",
+    ):
+        replace(_view(), show_results=1)  # type: ignore[arg-type]
+
 
 def test_item_response_semantics_distinguish_changes_from_open_decisions() -> None:
     change = ResolutionItem(

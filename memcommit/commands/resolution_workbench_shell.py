@@ -801,35 +801,36 @@ def resolution_workbench_fragments(
                     _indented(safe_terminal_text(block.text)) + "\n",
                 )
             )
-    fragments.extend(
-        [
-            ("", "\n"),
-            (
-                "class:section",
-                f" {safe_terminal_text(view.results_label)}\n",
-            ),
-        ]
-    )
-    if not view.results:
-        fragments.append(("", "  (none)\n"))
-    for index, result in enumerate(view.results, start=1):
-        fragments.append(
-            (
-                "",
+    if view.show_results:
+        fragments.extend(
+            [
+                ("", "\n"),
                 (
-                    f"  {safe_terminal_text(result.marker)} {index:>2}. "
-                    f"[{safe_terminal_text(result.label)}] "
-                    f"{_line(result.text, 120)}\n"
+                    "class:section",
+                    f" {safe_terminal_text(view.results_label)}\n",
                 ),
-            )
+            ]
         )
-        if result.reason:
+        if not view.results:
+            fragments.append(("", "  (none)\n"))
+        for index, result in enumerate(view.results, start=1):
             fragments.append(
                 (
                     "",
-                    f"       WHY · {safe_terminal_text(result.reason)}\n",
+                    (
+                        f"  {safe_terminal_text(result.marker)} {index:>2}. "
+                        f"[{safe_terminal_text(result.label)}] "
+                        f"{_line(result.text, 120)}\n"
+                    ),
                 )
             )
+            if result.reason:
+                fragments.append(
+                    (
+                        "",
+                        f"       WHY · {safe_terminal_text(result.reason)}\n",
+                    )
+                )
     return fragments
 
 
@@ -1366,14 +1367,13 @@ def resolution_report_fragments(
     # with their rationale. Rendering both copies becomes unusable for large
     # sessions, so the richer Impact block is their single report location.
     impact_repeats_results = _impact_repeats_results(impact, view)
-    show_results = not impact_repeats_results
-    report_item_sections = (
-        0 if view.report_items_summary is not None else len(view.items)
+    show_results = view.show_results and not impact_repeats_results
+    review_sections = (
+        1 if view.report_items_summary is not None else len(view.items)
     )
     overview_sections = view.semantic_overview_sections
     section_count = (
-        report_item_sections
-        + 1
+        review_sections
         + len(overview_sections)
         + (not read_only)
         + show_results
@@ -1440,12 +1440,14 @@ def resolution_report_fragments(
                         f" {safe_terminal_text(overview_section.heading)}\n",
                     ),
                     (
-                        "",
+                        "class:viewer-body",
                         f" {safe_terminal_text(overview_section.text) or '(none)'}\n\n",
                     ),
                 ],
                 active=active,
-                focus_indices=(0,),
+                focus_indices=(
+                    (0, 1) if overview_section.focus_body else (0,)
+                ),
             )
         )
         section_index += 1
@@ -1455,11 +1457,21 @@ def resolution_report_fragments(
             ("", f" {safe_terminal_text(view.report_items_summary.text)}\n\n")
         )
     else:
-        heading(f"{view.list_label} · {len(view.items)}")
+        # The collection label is report chrome. Individual operation items
+        # are the independently reviewable focus stops beneath it.
+        fragments.append(
+            (
+                "class:report-label",
+                f" {safe_terminal_text(view.list_label)} · {len(view.items)}\n",
+            )
+        )
         if not view.items:
             fragments.append(("", f"  {safe_terminal_text(view.empty_message)}\n"))
         for index, item in enumerate(view.items, start=1):
-            heading(f"{_item_kind_label(item)} {index} · {item.title}")
+            heading(
+                f"{_item_kind_label(item)} {index} · {item.title}",
+                style="class:report-label",
+            )
             fragments.extend(
                 [
                     (
@@ -1744,20 +1756,21 @@ def _seeded_report_lines(
         )
         insert_at = 1 if lines else 0
         lines[insert_at:insert_at] = location_lines
-    lines.extend(["", f"{view.results_label} · {len(view.results)}"])
-    if view.results:
-        for index, result in enumerate(view.results, start=1):
-            lines.extend(
-                [
-                    "",
-                    f"  {result.marker} {index}. [{result.label}]",
-                    f"      {result.text}",
-                ]
-            )
-            if result.reason:
-                lines.append(f"      WHY · {result.reason}")
-    else:
-        lines.append("  (none)")
+    if view.show_results:
+        lines.extend(["", f"{view.results_label} · {len(view.results)}"])
+        if view.results:
+            for index, result in enumerate(view.results, start=1):
+                lines.extend(
+                    [
+                        "",
+                        f"  {result.marker} {index}. [{result.label}]",
+                        f"      {result.text}",
+                    ]
+                )
+                if result.reason:
+                    lines.append(f"      WHY · {result.reason}")
+        else:
+            lines.append("  (none)")
     impact = _current_impact(impact_controller, view)
     if impact is not None:
         lines.extend(["", *_impact_lines(impact)])
@@ -2377,8 +2390,9 @@ def run_resolution_workbench_shell(
             )
             for section in active_view.semantic_overview_sections
         ]
-        entries.append(("REVIEW_ITEMS", "REPORT:REVIEW_ITEMS", 0))
-        if active_view.report_items_summary is None:
+        if active_view.report_items_summary is not None:
+            entries.append(("REVIEW_ITEMS", "REPORT:REVIEW_ITEMS", 0))
+        else:
             entries.extend(
                 ("ITEM", f"ITEM:{item.uid}", index)
                 for index, item in enumerate(active_view.items, start=1)
@@ -2388,7 +2402,7 @@ def run_resolution_workbench_shell(
             active_impact,
             active_view,
         )
-        if not impact_repeats_results:
+        if active_view.show_results and not impact_repeats_results:
             entries.append(("RESULTS", "REPORT:RESULTS", 0))
         if active_impact is not None:
             entries.append(("IMPACT", "REPORT:IMPACT", 0))

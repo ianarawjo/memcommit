@@ -16,6 +16,7 @@ from memcommit.commands.resolution_workbench_shell import (
     ResolutionGlobalStrategy,
     SessionTodoView,
     _impact_arrow_expansion,
+    _seeded_report_lines,
     _session_items_fragments,
     render_resolution_workbench_snapshot,
     resolution_report_fragments,
@@ -135,7 +136,7 @@ def test_save_location_card_emits_an_exact_destination_change_before_apply():
     with create_pipe_input() as pipe_input:
         # Report identity is chrome. Move from its first declared overview
         # through review set and results to SAVE LOCATION, then edit the name.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\r\x15task-3/severed-final\r")
+        pipe_input.send_text("\x1b[B\x1b[B\r\x15task-3/severed-final\r")
         action = run_resolution_workbench_shell(
             view,
             app_input=pipe_input,
@@ -203,6 +204,46 @@ def test_report_focuses_operation_declared_overview_units_not_the_group():
             style == "class:viewer-section" and "WHAT MEM UNDERSTOOD" in text
             for style, text in fragments
         )
+        body_style = next(
+            style
+            for style, text in fragments
+            if {
+                "UNDERSTOOD": "Source meaning.",
+                "CHANGED": "One split.",
+                "UNRESOLVED": "One referent.",
+            }[heading]
+            in text
+        )
+        assert body_style == "class:viewer-body.focused"
+        assert (
+            RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(body_style).bold
+            is False
+        )
+
+
+def test_operation_can_keep_overview_body_neutral_within_the_same_stop():
+    view = replace(
+        _view(),
+        overview_sections=(
+            ResolutionOverviewSection(
+                "heading-only",
+                "ASSESSMENT",
+                "Keep this explanatory prose neutral.",
+                focus_body=False,
+            ),
+        ),
+    )
+
+    fragments = resolution_report_fragments(view, focused_section=0)
+
+    assert any(
+        style == "class:viewer-section" and "ASSESSMENT" in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:viewer-body" and "Keep this explanatory prose" in text
+        for style, text in fragments
+    )
 
 
 @pytest.mark.parametrize("numeric_key", ["1", "2", "3", "4", "5"])
@@ -366,7 +407,7 @@ def test_split_report_contains_conflicts_and_whole_set_strategies():
     fragments = resolution_report_fragments(
         view,
         strategies=strategies,
-        focused_section=2,
+        focused_section=1,
     )
     rendered = "".join(text for _style, text in fragments)
 
@@ -374,12 +415,52 @@ def test_split_report_contains_conflicts_and_whole_set_strategies():
     assert "ISSUE 1 · Issue a" in rendered
     assert "── ISSUE 1 · Issue a ──" not in rendered
     assert any(
-        style == "class:viewer-section" and "ISSUE 1 · Issue a" in text
+        style == "class:report-label.focused" and "ISSUE 1 · Issue a" in text
+        for style, text in fragments
+    )
+    assert (
+        RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+            "class:report-label"
+        ).bold
+        is True
+    )
+    assert (
+        RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+            "class:report-label.focused"
+        ).bold
+        is True
+    )
+    assert not any(
+        style == "class:viewer-section" and "ISSUES · 2" in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:report-label" and "ISSUES · 2" in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:report-label" and "ISSUE 2 · Issue b" in text
         for style, text in fragments
     )
     assert "ISSUE 2 · Issue b" in rendered
     assert "RESOLVE ALL · WHOLE-SET STRATEGY" in rendered
     assert "Choose broadest" in rendered
+
+
+def test_operation_can_hide_an_inapplicable_generic_results_section():
+    view = replace(_view(_item("a")), show_results=False)
+
+    fragments = resolution_report_fragments(view, read_only=True)
+    seeded = _seeded_report_lines(
+        view,
+        "MEM COMPARE · SAVED",
+        (),
+        False,
+        True,
+    )
+
+    assert "CHANGES" not in "".join(text for _style, text in fragments)
+    assert not any(line.startswith("CHANGES") for line in seeded)
 
 
 def test_items_hanging_wrap_tracks_the_supplied_frame_width():
@@ -989,9 +1070,9 @@ def test_split_workbench_starts_with_report_focused_in_viewer():
     view = _view(_item("a"), _item("b"))
 
     with create_pipe_input() as pipe_input:
-        # Identity chrome is skipped: two Down presses move through the list
-        # heading to issue a without first entering from Items.
-        pipe_input.send_text("\x1b[B\x1b[Bq")
+        # Identity and collection chrome are skipped: one Down press moves
+        # directly from the overview to issue a without entering from Items.
+        pipe_input.send_text("\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             navigation=navigation,
@@ -1157,7 +1238,7 @@ def test_enter_on_impact_memory_opens_rationale_without_leaving_report():
     with create_pipe_input() as pipe_input:
         # Viewer starts at the first declared overview, then moves through
         # items and impact to the focused Memory.
-        pipe_input.send_text("\x1b[B" * 3 + "\rq")
+        pipe_input.send_text("\x1b[B" * 2 + "\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1236,7 +1317,7 @@ def test_expanded_located_update_impact_renders_rule_and_reason_neutrally():
         # Viewer moves from the overview through items and impact to the
         # located Update Memory. Right opens, Left closes, and Enter retains
         # its existing toggle behavior.
-        pipe_input.send_text("\x1b[B" * 3 + "\x1b[C\x1b[D\rq")
+        pipe_input.send_text("\x1b[B" * 2 + "\x1b[C\x1b[D\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1312,7 +1393,7 @@ def test_expanded_update_impact_comment_revises_the_same_change_draft():
     with create_pipe_input() as pipe_input:
         # Move through Viewer to the Impact change, expand it, and comment
         # without detouring through the separate Items detail.
-        pipe_input.send_text("\x1b[B" * 4 + "\x1b[CcKeep the date less specific.\rq")
+        pipe_input.send_text("\x1b[B" * 3 + "\x1b[CcKeep the date less specific.\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,

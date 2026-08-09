@@ -38,6 +38,8 @@ def test_inactive_viewer_keeps_content_and_durable_selection_without_focus():
         [
             ("[SetCursorPosition]", ""),
             ("class:viewer-section", "WHAT MEM UNDERSTOOD"),
+            ("class:report-label.focused", "Focused finding"),
+            ("class:viewer-body.focused", "Focused explanation"),
             ("class:detail-card.focused", "Focused card heading"),
             ("class:memory-object.focused", "Focused Memory"),
             ("class:option-card.focused", "Option cursor"),
@@ -48,6 +50,8 @@ def test_inactive_viewer_keeps_content_and_durable_selection_without_focus():
     assert fragments == [
         ("[SetCursorPosition]", ""),
         ("class:section", "WHAT MEM UNDERSTOOD"),
+        ("class:report-label", "Focused finding"),
+        ("class:viewer-body", "Focused explanation"),
         ("class:detail-card", "Focused card heading"),
         ("class:memory-object", "Focused Memory"),
         ("class:option-card", "Option cursor"),
@@ -63,6 +67,29 @@ def test_unfocused_block_never_adds_a_viewport_anchor():
     )
 
     assert fragments == [("class:section", "WHAT HAPPENED")]
+
+
+def test_body_focus_uses_a_distinct_non_heading_style():
+    fragments = semantic_viewer_block_fragments(
+        [
+            ("class:block-heading", "UNDERSTOOD\n"),
+            ("class:viewer-body", "Explanation\n"),
+        ],
+        active=True,
+        focus_indices=(0, 1),
+    )
+
+    assert ("class:viewer-section", "UNDERSTOOD\n") in fragments
+    assert ("class:viewer-body.focused", "Explanation\n") in fragments
+
+
+def test_report_label_stays_bold_and_changes_only_color_with_focus():
+    fragments = semantic_viewer_block_fragments(
+        [("class:report-label", "AMBIGUITY 1\n")],
+        active=True,
+    )
+
+    assert ("class:report-label.focused", "AMBIGUITY 1\n") in fragments
 
 
 def test_focus_indices_restrict_card_emphasis_to_its_identity_line():

@@ -240,7 +240,12 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         # palette values into operation-specific style dictionaries.
         "report-neutral": "fg:#f4f5f7",
         "report-label": "fg:#f4f5f7 bold",
+        "report-label.focused": "fg:#8bd5ff bold",
         "viewer-section": "fg:#8bd5ff bold",
+        # A section may include its prose in the same focus stop without
+        # making explanatory text look like another heading.
+        "viewer-body": "fg:#f4f5f7",
+        "viewer-body.focused": "fg:#8bd5ff",
         "detail-card": "fg:#ffffff",
         "detail-card.focused": "fg:#8bd5ff bold",
         # Lavender is reserved for actual Memory objects, not report prose.

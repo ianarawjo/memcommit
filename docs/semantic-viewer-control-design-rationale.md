@@ -39,6 +39,25 @@ The semantic boundary rules are:
 - a long Memory may open a nested reading layer, but its stable section UID
   and outer position do not change.
 
+Each section also declares which rendered fragments express that stop. An
+overview normally focuses both its heading and prose: the heading uses the
+bold blue identity style while the prose uses the same blue foreground without
+bold. An operation may set `focus_body=False` when its body is contextual
+chrome rather than part of the independently reviewable claim. This visual
+scope never creates another navigation stop.
+
+Review-item headings remain bold even when another section owns focus; focus
+changes their foreground from neutral white to blue. The collection heading is
+bold report chrome, while each item is its own navigation stop. This keeps the
+kind and title legible without falsely making the whole collection one target.
+
+The common Resolution model also lets an operation declare whether its generic
+exact-results block is semantically present. An empty but meaningful result set
+may still render `(none)`. Atomize hides that block because its projected
+children remain source-linked inside each finding and its complete projection
+count is reported separately; showing `EXACT RESULTS · 0` would incorrectly
+suggest that the analysis projected no Memories.
+
 Terminal width may change the number of visual rows inside a nested reading
 layer. It must never change the number or identity of outer semantic stops.
 

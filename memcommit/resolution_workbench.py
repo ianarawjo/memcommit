@@ -141,6 +141,7 @@ class ResolutionOverviewSection:
     uid: str
     heading: str
     text: str
+    focus_body: bool = True
 
     def __post_init__(self) -> None:
         _text(
@@ -158,6 +159,10 @@ class ResolutionOverviewSection:
         # An explicitly declared empty section communicates a bounded absence
         # (for example, no unresolved Atomize issue) and remains navigable.
         _text(self.text, "resolution overview-section text", empty=True)
+        if not isinstance(self.focus_body, bool):
+            raise ResolutionWorkbenchError(
+                "Invalid resolution overview-section focus scope."
+            )
 
 
 def resolution_overview_text(
@@ -653,6 +658,7 @@ class ResolutionWorkbenchView:
     report_items_summary: ResolutionDetailBlock | None = None
     context_locations: tuple[ResolutionContextLocation, ...] = ()
     overview_sections: tuple[ResolutionOverviewSection, ...] = ()
+    show_results: bool = True
 
     def __post_init__(self) -> None:
         for value, label, limit in (
@@ -737,6 +743,8 @@ class ResolutionWorkbenchView:
             )
         if not isinstance(self.input_locked, bool):
             raise ResolutionWorkbenchError("Invalid resolution input-lock state.")
+        if not isinstance(self.show_results, bool):
+            raise ResolutionWorkbenchError("Invalid resolution results visibility.")
 
     @property
     def semantic_overview_sections(self) -> tuple[ResolutionOverviewSection, ...]:

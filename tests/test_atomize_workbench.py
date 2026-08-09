@@ -412,7 +412,9 @@ def test_cli_reuses_one_analysis_across_impact_atomize_and_review(
     assert "ISSUES" in first.output
     assert "REVIEW ITEMS" in review.output
     assert RESPONSE_LABEL in first.output
-    assert "EXACT RESULTS" in review.output
+    # Atomize keeps exact proposed children beside their source finding. The
+    # empty generic Resolution result slot must not read as zero projection.
+    assert "EXACT RESULTS" not in review.output
     assert RESPONSE_LABEL not in review.output
     resumed = store.load_atomize_workbench(analysis)
     assert resumed is not None

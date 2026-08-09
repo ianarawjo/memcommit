@@ -362,6 +362,11 @@ class AtomizeResolutionWorkbenchAdapter:
             # Split children remain source-linked analysis evidence until the
             # separate Apply Changes boundary mutates the Context.
             results=(),
+            # The generic Resolution result list is not Atomize's projected
+            # output model. Exact proposed children remain adjacent to their
+            # source finding, so an empty generic list must not imply that the
+            # saved analysis projects zero Memories.
+            show_results=False,
             capabilities=frozenset(capabilities),
             accept_enabled=ready_to_apply,
             accept_mode=(

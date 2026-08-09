@@ -33,6 +33,10 @@ _FOCUSED_STYLE = {
     "class:case-title": "class:viewer-section",
     "class:detail-heading": "class:viewer-section",
     "class:block-heading": "class:viewer-section",
+    # A report label is already bold while resting. Focus changes only its
+    # color, so reviewable item identity does not disappear between stops.
+    "class:report-label": "class:report-label.focused",
+    "class:viewer-body": "class:viewer-body.focused",
     "class:detail-card": "class:detail-card.focused",
     "class:memory-object": "class:memory-object.focused",
     "class:impact.keep": "class:impact.keep.focused",
@@ -54,6 +58,8 @@ _RESTING_STYLE = {
     # chrome; the operation-specific heading role is not recoverable from
     # the focused class and is not semantically relevant while inactive.
     "class:viewer-section": "class:section",
+    "class:report-label.focused": "class:report-label",
+    "class:viewer-body.focused": "class:viewer-body",
     "class:detail-card.focused": "class:detail-card",
     "class:memory-object.focused": "class:memory-object",
     "class:impact.keep.focused": "class:impact.keep",
