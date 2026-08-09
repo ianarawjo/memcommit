@@ -44,6 +44,7 @@ from memcommit.resolution_workbench import (
     ResolutionWorkbenchView,
 )
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
+from memcommit.responses.model import ResponseDraft
 from memcommit.result_workbench import ResultRef
 
 
@@ -216,8 +217,7 @@ def test_report_focuses_operation_declared_overview_units_not_the_group():
         )
         assert body_style == "class:viewer-body.focused"
         assert (
-            RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(body_style).bold
-            is False
+            RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(body_style).bold is False
         )
 
 
@@ -419,9 +419,7 @@ def test_split_report_contains_conflicts_and_whole_set_strategies():
         for style, text in fragments
     )
     assert (
-        RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
-            "class:report-label"
-        ).bold
+        RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str("class:report-label").bold
         is True
     )
     assert (
@@ -659,9 +657,9 @@ def test_split_detail_submits_a_supplied_option_with_an_optional_comment():
     )
 
     with create_pipe_input() as pipe_input:
-        # Open conflict 1, move to OPTIONS, Enter its nested navigation,
-        # select the first option, then submit an empty optional comment.
-        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\r\rc\r")
+        # Open conflict 1, Tab into RESPONSES, select the first option, leave
+        # nested choice navigation, then submit the empty Response field.
+        pipe_input.send_text("\t\x1b[B\r\t\r\r\x1b\x1b[B\r\r")
         action = run_resolution_workbench_shell(
             _view(item),
             split_viewer_items=True,
@@ -686,10 +684,10 @@ def test_split_detail_submits_other_direction_without_a_fabricated_option():
     )
 
     with create_pipe_input() as pipe_input:
-        # Open conflict 1, enter OPTIONS, move beyond both supplied options to
-        # Other direction, and submit a free-form resolution.
+        # Open conflict 1, enter RESPONSES, move beyond both supplied options
+        # to Different response, and submit a free-form resolution.
         pipe_input.send_text(
-            "\t\x1b[B\r\x1b[B\x1b[B\r\x1b[B\x1b[B\rUse a staged combination instead.\r"
+            "\t\x1b[B\r\t\r\x1b[B\x1b[B\rUse a staged combination instead.\r"
         )
         action = run_resolution_workbench_shell(
             _view(item),
@@ -826,11 +824,9 @@ def test_actionable_response_is_focusable_and_opens_inline_with_enter():
     saved: list[tuple[str, str | None, str]] = []
 
     with create_pipe_input() as pipe_input:
-        # Open the item, move through Classification, Source, Why, Decision,
-        # and Response, then save the inline field.
-        pipe_input.send_text(
-            "\t\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\x1b[B\rA separate response.\rq"
-        )
+        # Open the item, Tab into RESPONSES, move from Decision to Response,
+        # then save the field and close from the response frame.
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\rA separate response.\rq")
         action = run_resolution_workbench_shell(
             _view(item),
             split_viewer_items=True,
@@ -1244,9 +1240,7 @@ def test_save_location_editor_keeps_text_keys_local_and_retries_validation():
     with create_pipe_input() as pipe_input:
         # The q in the invalid candidate is ordinary editor text, not Close.
         # Failed validation retains the editor for an exact corrected retry.
-        pipe_input.send_text(
-            "\t\t\r\x15draftq/location\r\x15approved/location\r"
-        )
+        pipe_input.send_text("\t\t\r\x15draftq/location\r\x15approved/location\r")
         action = run_resolution_workbench_shell(
             _view(_item("a")),
             split_viewer_items=True,
@@ -1549,7 +1543,7 @@ def test_commentable_change_draft_requires_incorporation_before_apply():
 
     action = session_review_action_view(
         view,
-        {item.uid: (None, "Remove this proposed change.")},
+        {item.uid: ResponseDraft(None, "Remove this proposed change.")},
         whole_set_available=True,
     )
 
@@ -1572,11 +1566,11 @@ def test_commentable_change_response_is_included_in_revision_turn():
     )
 
     with create_pipe_input() as pipe_input:
-        # Open the change, jump to RESPONSE, save one comment, then traverse
-        # Viewer → Items → To Do. Final review opens at its summary, so
+        # Open the change, Tab to RESPONSES, save one comment, then traverse
+        # Responses → Items → To Do. Final review opens at its summary, so
         # End reaches the incorporation action before Enter confirms it.
         pipe_input.send_text(
-            "\t\x1b[B\r\x1b[F\rRemove this proposed change.\r\t\t\r\x1b[F\r"
+            "\t\x1b[B\r\t\rRemove this proposed change.\r\t\t\r\x1b[F\r"
         )
         action = run_resolution_workbench_shell(
             view,
@@ -1625,9 +1619,7 @@ def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
     with create_pipe_input() as pipe_input:
         # Select the first option in each conflict, then open the final review
         # row and submit the combined resolution turn.
-        pipe_input.send_text(
-            "\t\x1b[B\r\x1b[B\x1b[B\r\r\t\x1b[B\r\x1b[B\x1b[B\r\r\t\t\r\x1b[F\r"
-        )
+        pipe_input.send_text("\t\x1b[B\r\t\r\r\t\x1b[B\r\t\r\r\t\t\r\x1b[F\r")
         action = run_resolution_workbench_shell(
             _view(first, second, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,
@@ -1890,7 +1882,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
 
     incorporate = session_todo_view(
         open_view,
-        {"a": (None, "Use the local wording.")},
+        {"a": ResponseDraft(None, "Use the local wording.")},
         review_and_apply=True,
         read_only=False,
     )
@@ -1898,7 +1890,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
     assert (
         session_review_action_view(
             open_view,
-            {"a": (None, "Use the local wording.")},
+            {"a": ResponseDraft(None, "Use the local wording.")},
             whole_set_available=True,
         ).kind
         == "INCORPORATE RESPONSES"
@@ -1912,7 +1904,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
         for _style, text in resolution_report_fragments(
             open_view,
             strategies=(policy,),
-            drafts={"a": (None, "Use the local wording.")},
+            drafts={"a": ResponseDraft(None, "Use the local wording.")},
             review_and_apply=True,
         )
     )
@@ -1925,7 +1917,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
     )
     apply = session_todo_view(
         apply_view,
-        {"a": (None, "Use the local wording.")},
+        {"a": ResponseDraft(None, "Use the local wording.")},
         review_and_apply=True,
         read_only=False,
     )
@@ -1933,7 +1925,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
     assert (
         session_review_action_view(
             apply_view,
-            {"a": (None, "Use the local wording.")},
+            {"a": ResponseDraft(None, "Use the local wording.")},
             whole_set_available=True,
         ).kind
         == "APPLY"
@@ -1941,7 +1933,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
 
     complete = session_todo_view(
         open_view,
-        {"a": (None, "Use the local wording.")},
+        {"a": ResponseDraft(None, "Use the local wording.")},
         review_and_apply=False,
         read_only=False,
         whole_set_available=False,
@@ -1997,7 +1989,7 @@ def test_todo_exposes_adapter_declared_apply_as_is_without_required_gate():
     assert "REVIEW AND APPLY" in report
 
 
-def test_saved_response_exposes_inline_incorporation_below_response():
+def test_saved_response_uses_response_frame_and_todo_incorporation():
     presentation = ResolutionIssuePresentation(
         evidence=(
             ResolutionIssueEvidence(
@@ -2032,25 +2024,21 @@ def test_saved_response_exposes_inline_incorporation_below_response():
         "SUBMIT_ALL",
         "Keep unanswered optional findings as analyzed.",
     )
-    inline = SessionTodoView(
-        "INCORPORATE RESPONSES",
-        "Incorporate saved responses",
-        "Enter to create a revised complete proposal. No Context or Memory changes will be applied yet.",
-    )
     rendered = "".join(
         text
         for _style, text in resolution_viewer_fragments(
             _view(item, capabilities=frozenset({"SUBMIT_ALL"})),
             ResolutionNavigation(selected_item_uid=item.uid),
-            inline_action=inline,
+            include_response_sections=False,
         )
     )
-    assert rendered.index("RESPONSE") < rendered.index("INCORPORATE RESPONSES")
+    assert "RESPONSE" not in rendered
+    assert "INCORPORATE RESPONSES" not in rendered
 
     with create_pipe_input() as pipe_input:
-        # Open the item, jump to its final inline incorporation section, and
-        # run the same whole-set action as To Do.
-        pipe_input.send_text("\t\x1b[B\r\x1b[F\r")
+        # Open the item, traverse Viewer → Responses → Items → To Do, then
+        # confirm the saved-response incorporation from final review.
+        pipe_input.send_text("\t\x1b[B\r\t\t\t\r\x1b[F\r")
         action = run_resolution_workbench_shell(
             _view(item, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,
@@ -2075,7 +2063,7 @@ def test_todo_treats_an_explicitly_cleared_durable_answer_as_open():
 
     todo = session_todo_view(
         _view(answered),
-        {"a": (None, "")},
+        {"a": ResponseDraft(None, "")},
         review_and_apply=True,
         read_only=False,
     )

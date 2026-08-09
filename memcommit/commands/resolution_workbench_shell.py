@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.application.current import get_app
-from prompt_toolkit.filters import has_focus
+from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
@@ -72,6 +72,13 @@ from memcommit.resolution_workbench import (
     ResolutionMemoryRow,
     ResolutionWorkbenchView,
 )
+from memcommit.responses.model import ResponseDraft, ResponseTarget
+from memcommit.responses.resolution import (
+    response_draft_from_item,
+    response_target_from_item,
+)
+from memcommit.responses.state import ResponseFrameState
+from memcommit.responses.tui import response_frame_fragments
 from memcommit.session_workbench_navigation import (
     SessionWorkbenchNavigation,
     WorkbenchSection,
@@ -110,19 +117,19 @@ class SessionTodoView:
 
 def _item_draft(
     item: ResolutionItem,
-    drafts: dict[str, tuple[str | None, str]],
-) -> tuple[str | None, str]:
+    drafts: dict[str, ResponseDraft],
+) -> ResponseDraft:
     """Return the live draft or the adapter's durable response projection."""
 
     return drafts.get(
         item.uid,
-        (item.selected_option_uid, item.response_text),
+        response_draft_from_item(item),
     )
 
 
 def _item_is_answered(
     item: ResolutionItem,
-    drafts: dict[str, tuple[str | None, str]],
+    drafts: dict[str, ResponseDraft],
 ) -> bool:
     if item.response_state == "NOT_APPLICABLE":
         return True
@@ -130,12 +137,10 @@ def _item_is_answered(
     # durable answer; otherwise the To Do pane can keep reporting the item as
     # answered after its selected option is cancelled.
     if item.uid in drafts:
-        option_uid, comment = drafts[item.uid]
-        return bool(option_uid or comment.strip())
+        return drafts[item.uid].answered
     if item.response_state == "ANSWERED":
         return True
-    option_uid, comment = _item_draft(item, drafts)
-    return bool(option_uid or comment.strip())
+    return _item_draft(item, drafts).answered
 
 
 def _review_count_text(
@@ -150,7 +155,7 @@ def _review_count_text(
 
 def session_review_action_view(
     view: ResolutionWorkbenchView,
-    drafts: dict[str, tuple[str | None, str]],
+    drafts: dict[str, ResponseDraft],
     *,
     whole_set_available: bool,
 ) -> SessionTodoView:
@@ -165,7 +170,7 @@ def session_review_action_view(
     pending_comments = tuple(
         item
         for item in view.items
-        if item.commentable and _item_draft(item, drafts)[1].strip()
+        if item.commentable and _item_draft(item, drafts).text.strip()
     )
     if pending_comments and whole_set_available:
         noun = "comment" if len(pending_comments) == 1 else "comments"
@@ -242,7 +247,7 @@ def session_review_action_view(
 
 def session_todo_view(
     view: ResolutionWorkbenchView,
-    drafts: dict[str, tuple[str | None, str]],
+    drafts: dict[str, ResponseDraft],
     *,
     review_and_apply: bool,
     read_only: bool,
@@ -326,7 +331,7 @@ def session_todo_view(
 
 def _report_action(
     view: ResolutionWorkbenchView,
-    drafts: dict[str, tuple[str | None, str]],
+    drafts: dict[str, ResponseDraft],
     strategies: tuple[ResolutionGlobalStrategy, ...],
 ) -> tuple[str, str, bool]:
     """Project the same next action into Report that To Do already exposes."""
@@ -825,6 +830,7 @@ def resolution_viewer_fragments(
     expanded_memory_section_uid: str | None = None,
     nested_source_memory_uid: str | None = None,
     nested_source_memory_line: int = 0,
+    include_response_sections: bool = True,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
     """Render one issue as a compact, section-navigable detail surface."""
@@ -844,9 +850,9 @@ def resolution_viewer_fragments(
                 _evidence_section_count(evidence, content_width)
                 for evidence in presentation.evidence
             )
-            + bool(item.question or item.options)
+            + (bool(item.question or item.options) if include_response_sections else 0)
             + sum(len(block.memory_rows) or 1 for block in item.blocks)
-            + 1
+            + (1 if include_response_sections else 0)
             + bool(inline_action)
         )
         if presentation is not None
@@ -854,8 +860,9 @@ def resolution_viewer_fragments(
             1
             + sum(len(block.memory_rows) or 1 for block in item.blocks)
             + bool(item.evidence_refs)
-            + bool(item.question)
-            + bool(item.options)
+            + (bool(item.question) if include_response_sections else 0)
+            + (bool(item.options) if include_response_sections else 0)
+            + (bool(item.commentable) if include_response_sections else 0)
         )
     )
     focused_section = max(0, min(focused_section, section_count - 1))
@@ -1168,7 +1175,7 @@ def resolution_viewer_fragments(
                     ),
                 ]
             )
-        if item.options:
+        if include_response_sections and item.options:
             options_card(
                 heading=presentation.options_heading,
                 other_label=presentation.other_option_label,
@@ -1176,7 +1183,7 @@ def resolution_viewer_fragments(
                 prompt_heading=(presentation.prompt_heading if item.question else ""),
                 prompt_text=item.question,
             )
-        elif item.question:
+        elif include_response_sections and item.question:
             report_section(
                 semantic_detail_block_fragments(
                     heading=presentation.prompt_heading,
@@ -1211,19 +1218,20 @@ def resolution_viewer_fragments(
                     )
                 )
                 report_section(parts)
-        report_section(
-            [
-                ("class:detail-heading", "\n RESPONSE\n"),
-                (
-                    "",
+        if include_response_sections:
+            report_section(
+                [
+                    ("class:detail-heading", "\n RESPONSE\n"),
                     (
-                        " Editing below · Enter save · Ctrl-J newline\n"
-                        if other_direction_editing
-                        else " Enter to write a response.\n"
+                        "",
+                        (
+                            " Editing below · Enter save · Ctrl-J newline\n"
+                            if other_direction_editing
+                            else " Enter to write a response.\n"
+                        ),
                     ),
-                ),
-            ]
-        )
+                ]
+            )
         if inline_action is not None:
             report_section(
                 [
@@ -1296,14 +1304,14 @@ def resolution_viewer_fragments(
                 )
             )
             report_section(parts)
-    if item.question:
+    if include_response_sections and item.question:
         report_section(
             semantic_detail_block_fragments(
                 heading="QUESTION",
                 text=item.question,
             )
         )
-    if item.options:
+    if include_response_sections and item.options:
         options_card()
     for block_index, block in enumerate(
         item.blocks[item.decision_block_index :],
@@ -1341,7 +1349,7 @@ def resolution_viewer_fragments(
                 unresolved_refs=item.unresolved_refs,
             )
         )
-    if item.commentable:
+    if include_response_sections and item.commentable:
         report_section(
             [
                 ("class:detail-heading", "\n RESPONSE\n"),
@@ -1362,7 +1370,7 @@ def resolution_report_fragments(
     view: ResolutionWorkbenchView,
     *,
     strategies: tuple[ResolutionGlobalStrategy, ...] = (),
-    drafts: dict[str, tuple[str | None, str]] | None = None,
+    drafts: dict[str, ResponseDraft] | None = None,
     focused_section: int = 0,
     review_and_apply: bool = False,
     read_only: bool = False,
@@ -1381,9 +1389,7 @@ def resolution_report_fragments(
     # sessions, so the richer Impact block is their single report location.
     impact_repeats_results = _impact_repeats_results(impact, view)
     show_results = view.show_results and not impact_repeats_results
-    review_sections = (
-        1 if view.report_items_summary is not None else len(view.items)
-    )
+    review_sections = 1 if view.report_items_summary is not None else len(view.items)
     overview_sections = view.semantic_overview_sections
     section_count = (
         review_sections
@@ -1457,9 +1463,7 @@ def resolution_report_fragments(
                     ),
                 ],
                 active=active,
-                focus_indices=(
-                    (0, 1) if overview_section.focus_body else (0,)
-                ),
+                focus_indices=((0, 1) if overview_section.focus_body else (0,)),
             )
         )
         section_index += 1
@@ -1684,7 +1688,7 @@ def resolution_report_fragments(
                 and comment_item is not None
                 and comment_item.commentable
             ):
-                _option_uid, saved_comment = _item_draft(comment_item, draft_values)
+                saved_comment = _item_draft(comment_item, draft_values).text
                 comment_text = (
                     f"SAVED · {saved_comment.strip()}"
                     if saved_comment.strip()
@@ -1749,7 +1753,7 @@ def _seeded_report_lines(
     review_and_apply: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
-    drafts: dict[str, tuple[str | None, str]] | None = None,
+    drafts: dict[str, ResponseDraft] | None = None,
 ) -> list[str]:
     lines = report_text.splitlines()
     if view.context_locations:
@@ -1888,7 +1892,7 @@ def resolution_seeded_report_fragments(
     report_text: str,
     *,
     strategies: tuple[ResolutionGlobalStrategy, ...] = (),
-    drafts: dict[str, tuple[str | None, str]] | None = None,
+    drafts: dict[str, ResponseDraft] | None = None,
     report_item_badges: tuple[str, ...] = (),
     report_conflicts_remaining: int | None = None,
     selected_strategy_index: int = 0,
@@ -1971,7 +1975,8 @@ def resolution_seeded_report_fragments(
                 badge = ""
                 if item_index < len(view.items):
                     item = view.items[item_index]
-                    option_uid, comment = _item_draft(item, draft_values)
+                    draft = _item_draft(item, draft_values)
+                    option_uid, comment = draft.selected_choice_uid, draft.text
                     if option_uid is not None:
                         badge = f"SELECTED · {item.option(option_uid).label}"
                     elif comment.strip():
@@ -2107,7 +2112,8 @@ def resolution_seeded_report_fragments(
             title = f"POTENTIAL CONFLICT {item_index + 1}"
             if item_index < len(view.items):
                 item = view.items[item_index]
-                option_uid, comment = _item_draft(item, draft_values)
+                draft = _item_draft(item, draft_values)
+                option_uid, comment = draft.selected_choice_uid, draft.text
                 if option_uid is not None:
                     badge = f"SELECTED · {item.option(option_uid).label}"
                 elif comment.strip():
@@ -2164,7 +2170,7 @@ def resolution_seeded_report_fragments(
 
 def resolution_review_fragments(
     view: ResolutionWorkbenchView,
-    drafts: dict[str, tuple[str | None, str]],
+    drafts: dict[str, ResponseDraft],
     strategies: tuple[ResolutionGlobalStrategy, ...],
     strategy_index: int,
     action: SessionTodoView,
@@ -2186,7 +2192,8 @@ def resolution_review_fragments(
     reviewable = 0
     for index, item in enumerate(view.items, start=1):
         obligation = item.effective_obligation
-        option_uid, comment = _item_draft(item, drafts)
+        draft = _item_draft(item, drafts)
+        option_uid, comment = draft.selected_choice_uid, draft.text
         if obligation == "NONE":
             if item.commentable and comment.strip():
                 response_lines.extend(
@@ -2305,6 +2312,7 @@ def run_resolution_workbench_shell(
     ),
     draft_loader: (Callable[[str], tuple[str | None, str]] | None) = None,
     draft_saver: (Callable[[str, str | None, str], None] | None) = None,
+    response_validator: Callable[[str], None] | None = None,
     save_draft_on_close: bool = False,
     toggle_sort: Callable[[], None] | None = None,
     split_viewer_items: bool = False,
@@ -2340,15 +2348,12 @@ def run_resolution_workbench_shell(
         split_viewer_items and destination is not None and not read_only
     )
     if destination is not None and not split_viewer_items:
-        raise ValueError(
-            "Editable save locations require the split session workbench."
-        )
+        raise ValueError("Editable save locations require the split session workbench.")
     if split_viewer_items:
         # A caller may reuse process-local navigation, but a composer cannot be
         # the initial target before the shell has opened an input surface.
-        if session_navigation.pane == "composer" or (
-            session_navigation.pane == "save_location"
-            and not destination_available
+        if session_navigation.pane in {"composer", "responses"} or (
+            session_navigation.pane == "save_location" and not destination_available
         ):
             session_navigation.focus("viewer")
     else:
@@ -2423,27 +2428,6 @@ def run_resolution_workbench_shell(
             )
         return _stable_sections(tuple(entries))
 
-    def inline_item_action() -> SessionTodoView | None:
-        """Mirror the existing batch-incorporation boundary below Response."""
-
-        if not review_and_apply or read_only or not global_strategies:
-            return None
-        action = session_review_action_view(
-            current_view(),
-            local_drafts,
-            whole_set_available=True,
-        )
-        if action.kind not in {"INCORPORATE RESPONSES", "INCORPORATE AND APPLY"}:
-            return None
-        # The inline item route retains the narrower incorporation boundary;
-        # only the dedicated final-review surface can authorize the compound
-        # incorporate-and-apply action.
-        return SessionTodoView(
-            "INCORPORATE RESPONSES",
-            "Incorporate saved responses",
-            "Enter to create a revised proposal without applying it yet.",
-        )
-
     def item_sections() -> tuple[WorkbenchSection, ...]:
         item = current_navigation.current_item(current_view())
         if item is None:
@@ -2509,33 +2493,16 @@ def run_resolution_workbench_shell(
                         None,
                     )
                 )
-            if item.question or item.options:
-                entries.append(("OPTIONS", f"ITEM:{item.uid}:DECISION", None))
             append_block_sections(item.blocks)
-            entries.append(("RESPONSE", f"ITEM:{item.uid}:RESPONSE", None))
-            if inline_item_action() is not None:
-                entries.append(
-                    (
-                        "INCORPORATE",
-                        f"ITEM:{item.uid}:INCORPORATE_RESPONSES",
-                        None,
-                    )
-                )
             return _stable_sections(tuple(entries))
         entries.append(("SUMMARY", f"ITEM:{item.uid}:SUMMARY", None))
         append_block_sections(item.blocks[: item.decision_block_index])
-        if item.question:
-            entries.append(("QUESTION", f"ITEM:{item.uid}:QUESTION", None))
-        if item.options:
-            entries.append(("OPTIONS", f"ITEM:{item.uid}:OPTIONS", None))
         append_block_sections(
             item.blocks[item.decision_block_index :],
             start=item.decision_block_index,
         )
         if item.evidence_refs:
             entries.append(("TRACE", f"ITEM:{item.uid}:TRACE", None))
-        if item.commentable:
-            entries.append(("RESPONSE", f"ITEM:{item.uid}:RESPONSE", None))
         return _stable_sections(tuple(entries))
 
     def active_viewer_sections() -> tuple[WorkbenchSection, ...]:
@@ -2597,6 +2564,8 @@ def run_resolution_workbench_shell(
     def split_kind() -> str:
         if session_navigation.pane == "save_location":
             return "SAVE_LOCATION"
+        if session_navigation.pane == "responses":
+            return "RESPONSES"
         if session_navigation.pane == "todo":
             return "TODO"
         if session_navigation.pane == "viewer" and viewer_content["kind"] == "REVIEW":
@@ -2730,13 +2699,11 @@ def run_resolution_workbench_shell(
                 active_view,
                 current_navigation,
                 focused_section=viewer_section_index(),
-                option_navigation_active=option_navigation["active"],
-                other_direction_focused=other_direction["focused"],
                 other_direction_editing=other_direction_editor["open"],
-                inline_action=inline_item_action(),
                 expanded_memory_section_uid=expanded_memory_section_uid["uid"],
                 nested_source_memory_uid=viewer_controller.nested_uid,
                 nested_source_memory_line=viewer_controller.nested_index,
+                include_response_sections=False,
                 content_width=pane_content_width(),
             ),
             focused=session_navigation.pane == "viewer",
@@ -2749,13 +2716,63 @@ def run_resolution_workbench_shell(
     viewer_content = {"kind": "REPORT"}
     impact_reason_expanded: dict[str, str | None] = {"uid": None}
     navigation_accelerator = NavigationAccelerator()
-    option_navigation = {"active": False}
     other_direction = {"focused": False}
     other_direction_editor = {"open": False}
+    response_state = ResponseFrameState()
+    global_response_draft = {"value": ResponseDraft()}
     expanded_memory_section_uid: dict[str, str | None] = {"uid": None}
     destination_editing = {"value": False}
     input_heading = {"value": "COMMENT ON SELECTED ITEM"}
-    local_drafts: dict[str, tuple[str | None, str]] = {}
+    local_drafts: dict[str, ResponseDraft] = {}
+
+    def current_response_target() -> ResponseTarget | None:
+        """Project only the response context currently visible to the person."""
+
+        active_view = current_view()
+        if global_comment["value"]:
+            return ResponseTarget(
+                item_uid="WHOLE_SET",
+                item_label=f"Complete {active_view.operation.title()} proposal",
+                obligation="NONE",
+                state=(
+                    "ANSWERED" if global_response_draft["value"].answered else "OPEN"
+                ),
+                mode="COMMENT",
+                editable=(
+                    not read_only
+                    and not active_view.input_locked
+                    and "SUBMIT_ALL" in active_view.capabilities
+                ),
+            )
+        if viewer_content["kind"] != "ITEM" and not response_state.editing:
+            return None
+        item = current_navigation.current_item(active_view)
+        if item is None:
+            return None
+        return response_target_from_item(
+            active_view,
+            item,
+            read_only=read_only,
+            stage_locally=review_and_apply or draft_saver is not None,
+        )
+
+    def current_response_draft(target: ResponseTarget) -> ResponseDraft:
+        if target.item_uid == "WHOLE_SET":
+            return global_response_draft["value"]
+        item = current_navigation.current_item(current_view())
+        if item is None or item.uid != target.item_uid:
+            return ResponseDraft()
+        return _item_draft(item, local_drafts)
+
+    def sync_response_state() -> ResponseTarget | None:
+        target = current_response_target()
+        if target is None:
+            return None
+        response_state.sync(target, current_response_draft(target))
+        return target
+
+    def response_visible() -> bool:
+        return split_viewer_items and current_response_target() is not None
 
     def set_viewer_content(kind: str) -> None:
         """Keep the outer frame label aligned with its semantic surface."""
@@ -2776,7 +2793,7 @@ def run_resolution_workbench_shell(
             option_uid, comment = draft_loader(item.uid)
         if option_uid is not None:
             item.option(option_uid)
-        local_drafts[item.uid] = (option_uid, comment)
+        local_drafts[item.uid] = ResponseDraft(option_uid, comment)
 
     composer = build_framed_multiline_input(
         "MESSAGE",
@@ -2803,6 +2820,30 @@ def run_resolution_workbench_shell(
         # Resolution details contain long logical lines (source Memories,
         # evidence, and proposed children). Use the shared visual-row-aware
         # margin so the thumb and ^/v arrows follow what is actually visible.
+        right_margins=[WrappedScrollbarMargin(display_arrows=True)],
+    )
+
+    def responses_fragments() -> list[tuple[str, str]]:
+        target = sync_response_state()
+        if target is None:
+            return [("", " No response target is open.\n")]
+        return response_frame_fragments(
+            target,
+            current_response_draft(target),
+            response_state,
+            focused=session_navigation.pane == "responses",
+            content_width=pane_content_width(),
+        )
+
+    responses_control = FormattedTextControl(
+        responses_fragments,
+        focusable=True,
+        show_cursor=False,
+    )
+    responses_window = Window(
+        responses_control,
+        height=Dimension(min=4, preferred=9, max=13, weight=4),
+        wrap_lines=True,
         right_margins=[WrappedScrollbarMargin(display_arrows=True)],
     )
 
@@ -2916,7 +2957,8 @@ def run_resolution_workbench_shell(
             input_area.text = ""
             return
         if draft_loader is None:
-            selected_option_uid, comment = _item_draft(item, local_drafts)
+            draft = _item_draft(item, local_drafts)
+            selected_option_uid, comment = draft.selected_choice_uid, draft.text
         else:
             selected_option_uid, comment = draft_loader(item.uid)
             if selected_option_uid is not None:
@@ -2930,18 +2972,31 @@ def run_resolution_workbench_shell(
             current_navigation.option_cursor_uid = selected_option_uid
         input_area.text = comment
         input_area.buffer.cursor_position = len(comment)
+        target = current_response_target()
+        if target is not None:
+            response_state.sync(target, ResponseDraft(selected_option_uid, comment))
 
-    def save_draft() -> None:
+    def save_draft() -> bool:
         item = current_navigation.current_item(current_view())
         if item is None:
-            return
-        draft = (
+            return True
+        if response_validator is not None:
+            try:
+                response_validator(input_area.text)
+            except (TypeError, ValueError) as error:
+                set_status(str(error))
+                return False
+        draft = ResponseDraft(
             current_navigation.selected_option_uid,
             input_area.text,
         )
         local_drafts[item.uid] = draft
+        target = current_response_target()
+        if target is not None and target.item_uid == item.uid:
+            response_state.sync(target, draft)
         if draft_saver is not None:
-            draft_saver(item.uid, *draft)
+            draft_saver(item.uid, draft.selected_choice_uid, draft.text)
+        return True
 
     def set_status(message: str) -> None:
         status["value"] = message
@@ -2981,7 +3036,8 @@ def run_resolution_workbench_shell(
         unresolved_required: list[str] = []
         for item in active_view.items:
             obligation = item.effective_obligation
-            option_uid, comment = _item_draft(item, local_drafts)
+            draft = _item_draft(item, local_drafts)
+            option_uid, comment = draft.selected_choice_uid, draft.text
             if obligation == "NONE" and not (item.commentable and comment.strip()):
                 continue
             if option_uid is not None:
@@ -3037,9 +3093,11 @@ def run_resolution_workbench_shell(
         """Keep Viewer aligned with Items while Items retains keyboard focus."""
 
         session_navigation.preview_selected_row()
-        option_navigation["active"] = False
         other_direction["focused"] = False
         other_direction_editor["open"] = False
+        response_state.option_navigation_active = False
+        response_state.other_choice_focused = False
+        response_state.editing = False
         expanded_memory_section_uid["uid"] = None
         viewer_controller.close_nested()
         if session_navigation.row_index == 0:
@@ -3055,15 +3113,23 @@ def run_resolution_workbench_shell(
         current_navigation.toggle_detail(active_view)
         reset_viewer_section()
         load_draft()
+        sync_response_state()
 
     def move(delta: int) -> None:
         active_view = current_view()
         if split_viewer_items:
-            if session_navigation.pane == "viewer":
-                if option_navigation["active"]:
-                    move_split_option(delta)
-                    set_status("")
+            if session_navigation.pane == "responses":
+                target = sync_response_state()
+                if target is None:
+                    set_status("No response target is open.")
                     return
+                if response_state.option_navigation_active:
+                    response_state.move_option(target, delta)
+                else:
+                    response_state.move_section(target, delta)
+                set_status("")
+                return
+            if session_navigation.pane == "viewer":
                 if viewer_controller.nested_uid is not None:
                     source = focused_source_memory()
                     if source is not None:
@@ -3103,12 +3169,10 @@ def run_resolution_workbench_shell(
             and current_navigation.expanded_item_uid == item.uid
             and item.options
         ):
-            if item.issue_presentation is not None:
-                move_split_option(delta)
-            else:
-                current_navigation.move_option(active_view, delta)
+            current_navigation.move_option(active_view, delta)
         else:
-            save_draft()
+            if not save_draft():
+                return
             current_navigation.move_item(active_view, delta)
             load_draft()
         global_comment["value"] = False
@@ -3122,29 +3186,31 @@ def run_resolution_workbench_shell(
             return False
         return True
 
-    def move_split_option(delta: int) -> None:
-        item = current_navigation.current_item(current_view())
-        if item is None or not item.options:
-            return
-        option_uids = tuple(option.uid for option in item.options)
-        if other_direction["focused"]:
-            index = len(option_uids)
-        elif current_navigation.option_cursor_uid in option_uids:
-            index = option_uids.index(current_navigation.option_cursor_uid)
-        else:
-            index = 0
-        next_index = min(max(index + delta, 0), len(option_uids))
-        other_direction["focused"] = next_index == len(option_uids)
-        if not other_direction["focused"]:
-            current_navigation.option_cursor_uid = option_uids[next_index]
-
     def open_item_input(*, title: str, clear: bool = False) -> None:
         destination_editing["value"] = False
         global_comment["value"] = False
+        response_state.editing = True
+        response_state.section = "RESPONSE"
         composer.frame.title = title
         input_heading["value"] = title
         if clear:
             input_area.text = ""
+        session_navigation.focus("composer")
+        get_app().layout.focus(input_area)
+
+    def open_global_input(*, clear: bool = False) -> None:
+        destination_editing["value"] = False
+        global_comment["value"] = True
+        response_state.editing = True
+        response_state.section = "RESPONSE"
+        other_direction_editor["open"] = False
+        composer.frame.title = "WHOLE-SET COMMENT"
+        input_heading["value"] = "WHOLE-SET GUIDANCE"
+        if clear:
+            global_response_draft["value"] = ResponseDraft()
+        input_area.text = global_response_draft["value"].text
+        input_area.buffer.cursor_position = len(input_area.text)
+        sync_response_state()
         session_navigation.focus("composer")
         get_app().layout.focus(input_area)
 
@@ -3155,7 +3221,10 @@ def run_resolution_workbench_shell(
         destination_editing["value"] = True
         global_comment["value"] = False
         other_direction_editor["open"] = False
-        destination_frame.title = f"{safe_terminal_text(destination.label)} · EDIT DIRECTLY"
+        response_state.editing = False
+        destination_frame.title = (
+            f"{safe_terminal_text(destination.label)} · EDIT DIRECTLY"
+        )
         destination_input.text = destination.value
         destination_input.buffer.cursor_position = len(destination.value)
         session_navigation.focus("save_location")
@@ -3240,12 +3309,20 @@ def run_resolution_workbench_shell(
             "value"
         ]:
             item = current_navigation.current_item(active_view)
-            save_draft()
+            if not save_draft():
+                event.app.invalidate()
+                return
             other_direction_editor["open"] = False
-            session_navigation.focus("viewer")
-            event.app.layout.focus(body_control)
+            response_state.editing = False
+            if split_viewer_items:
+                session_navigation.focus("responses")
+                event.app.layout.focus(responses_control)
+            else:
+                session_navigation.focus("viewer")
+                event.app.layout.focus(body_control)
             if item is not None:
-                option_uid, saved_comment = local_drafts.get(item.uid, (None, ""))
+                draft = local_drafts.get(item.uid, ResponseDraft())
+                option_uid, saved_comment = draft.selected_choice_uid, draft.text
                 if option_uid is not None:
                     label = item.option(option_uid).label
                     set_status(f"Selected · {label}")
@@ -3325,13 +3402,6 @@ def run_resolution_workbench_shell(
                     strategy["index"] + 1,
                     len(global_strategies) - 1,
                 )
-            elif (
-                split_kind() == "ITEM"
-                and session_navigation.pane == "viewer"
-                and session_navigation.viewer_row_index == session_navigation.row_index
-                and option_navigation["active"]
-            ):
-                move_split_option(1)
             event.app.invalidate()
             return
         save_draft()
@@ -3354,13 +3424,6 @@ def run_resolution_workbench_shell(
                 impact_reason_expanded["uid"] = collapsed
             elif split_kind() == "RESOLVE_ALL" and global_strategies:
                 strategy["index"] = max(strategy["index"] - 1, 0)
-            elif (
-                split_kind() == "ITEM"
-                and session_navigation.pane == "viewer"
-                and session_navigation.viewer_row_index == session_navigation.row_index
-                and option_navigation["active"]
-            ):
-                move_split_option(-1)
             event.app.invalidate()
             return
         save_draft()
@@ -3373,6 +3436,59 @@ def run_resolution_workbench_shell(
         active_view = current_view()
         if split_viewer_items:
             kind = split_kind()
+            if kind == "RESPONSES":
+                target = sync_response_state()
+                item = current_navigation.current_item(active_view)
+                if target is not None and target.item_uid == "WHOLE_SET":
+                    if not target.editable:
+                        set_status("Whole-set guidance is read-only.")
+                    else:
+                        open_global_input()
+                elif target is None or item is None or target.item_uid != item.uid:
+                    set_status("No item response is available here.")
+                elif response_state.option_navigation_active and not target.editable:
+                    set_status("This response is read-only.")
+                elif response_state.option_navigation_active:
+                    if response_state.other_choice_focused:
+                        draft = ResponseDraft(None, response_state.draft.text)
+                        response_state.draft = draft
+                        local_drafts[item.uid] = draft
+                        current_navigation.selected_option_uid = None
+                        response_state.option_navigation_active = False
+                        if draft_saver is not None:
+                            draft_saver(item.uid, None, draft.text)
+                        open_item_input(title=current_response_heading())
+                    else:
+                        draft = response_state.toggle_current_choice(target)
+                        local_drafts[item.uid] = draft
+                        current_navigation.selected_option_uid = (
+                            draft.selected_choice_uid
+                        )
+                        if draft_saver is not None:
+                            draft_saver(
+                                item.uid,
+                                draft.selected_choice_uid,
+                                draft.text,
+                            )
+                        if draft.selected_choice_uid is None:
+                            set_status("Selection cleared.")
+                        else:
+                            set_status(
+                                "Selected · ✓ "
+                                + target.choice(draft.selected_choice_uid).label
+                            )
+                elif response_state.section == "DECISION":
+                    if response_state.open_options(target):
+                        set_status("Choose an option with ↑/↓, then press Enter.")
+                    else:
+                        response_state.section = "RESPONSE"
+                        set_status("Move to Response and press Enter to answer.")
+                elif not target.editable:
+                    set_status("This response is read-only.")
+                else:
+                    open_item_input(title=current_response_heading())
+                event.app.invalidate()
+                return
             if kind == "REPORT":
                 if (
                     session_navigation.pane == "viewer"
@@ -3450,49 +3566,10 @@ def run_resolution_workbench_shell(
                         )
                         event.app.invalidate()
                         return
-                    if section.kind == "INCORPORATE":
-                        save_draft()
-                        action = incorporate_responses_action(active_view)
-                        if action is not None:
-                            event.app.exit(result=action)
-                            return
-                    elif (
-                        not option_navigation["active"]
-                        and section.kind == "OPTIONS"
-                        and item is not None
-                        and item.options
-                    ):
-                        option_navigation["active"] = True
-                        other_direction["focused"] = False
-                        if current_navigation.option_cursor_uid is None:
-                            current_navigation.option_cursor_uid = item.options[0].uid
-                        set_status("Choose an option with ↑/↓, then press Enter.")
-                    elif option_navigation["active"] and other_direction["focused"]:
-                        current_navigation.selected_option_uid = None
-                        option_navigation["active"] = False
-                        other_direction_editor["open"] = True
-                        open_item_input(
-                            title=current_response_heading(),
-                            clear=True,
-                        )
-                    elif option_navigation["active"]:
-                        current_navigation.toggle_option(active_view)
-                        save_draft()
-                        selected_uid = current_navigation.selected_option_uid
-                        if selected_uid is None:
-                            set_status("Selection cleared.")
-                        else:
-                            selected_option = item.option(selected_uid)
-                            set_status(f"Selected · ✓ {selected_option.label}")
-                    elif section.kind == "RESPONSE":
-                        other_direction_editor["open"] = True
-                        open_item_input(
-                            title=current_response_heading(),
-                        )
-                    else:
-                        set_status(
-                            "Move to the Decision or Response section and press Enter."
-                        )
+                    set_status(
+                        "This Viewer section is read-only; use the Responses frame "
+                        "to answer."
+                    )
             elif kind == "RESOLVE_ALL" and viewer_content["kind"] == "REVIEW":
                 section = active_viewer_sections()[viewer_section_index()]
                 if section.kind != "ACTION":
@@ -3574,11 +3651,7 @@ def run_resolution_workbench_shell(
             elif kind == "TODO":
                 selected_strategy = global_strategies[strategy["index"]]
                 if selected_strategy.action_kind == "CUSTOM":
-                    global_comment["value"] = True
-                    input_heading["value"] = "WHOLE-SET GUIDANCE"
-                    input_area.text = ""
-                    session_navigation.focus("composer")
-                    event.app.layout.focus(input_area)
+                    open_global_input(clear=True)
                 else:
                     action = semantic_action(
                         selected_strategy.action_kind,
@@ -3605,7 +3678,9 @@ def run_resolution_workbench_shell(
                 )
             else:
                 current_navigation.toggle_option(active_view)
-                save_draft()
+                if not save_draft():
+                    event.app.invalidate()
+                    return
                 set_status("")
         else:
             current_navigation.toggle_detail(active_view)
@@ -3620,24 +3695,40 @@ def run_resolution_workbench_shell(
             event.app.invalidate()
             return
         if event.app.layout.has_focus(input_area):
-            save_draft()
+            if global_comment["value"]:
+                if response_validator is not None:
+                    try:
+                        response_validator(input_area.text)
+                    except (TypeError, ValueError) as error:
+                        set_status(str(error))
+                        event.app.invalidate()
+                        return
+                global_response_draft["value"] = ResponseDraft(None, input_area.text)
+            else:
+                if not save_draft():
+                    event.app.invalidate()
+                    return
             other_direction_editor["open"] = False
+            response_state.editing = False
             if split_viewer_items:
-                session_navigation.focus("viewer")
-                event.app.layout.focus(body_control)
+                session_navigation.focus("responses")
+                event.app.layout.focus(responses_control)
             else:
                 event.app.layout.focus(body_control)
             event.app.invalidate()
             return
         if split_viewer_items:
-            option_navigation["active"] = False
+            response_state.option_navigation_active = False
+            response_state.other_choice_focused = False
             viewer_controller.close_nested()
             delta = -1 if event.key_sequence[0].key == Keys.BackTab else 1
-            visible_panes = (
-                ("viewer", "items", "save_location", "todo")
-                if destination_available
-                else ("viewer", "items", "todo")
-            )
+            visible_panes = ["viewer"]
+            if response_visible():
+                visible_panes.append("responses")
+            visible_panes.append("items")
+            if destination_available:
+                visible_panes.append("save_location")
+            visible_panes.append("todo")
             pane = session_navigation.cycle_panes(
                 # Focus follows the visible top-to-bottom frame order from the
                 # first interaction; there is no hidden Items-first phase.
@@ -3652,6 +3743,7 @@ def run_resolution_workbench_shell(
                 session_navigation.row_index = 0
             controls = {
                 "viewer": body_control,
+                "responses": responses_control,
                 "items": items_control,
                 "save_location": destination_control,
                 "todo": todo_control,
@@ -3693,8 +3785,7 @@ def run_resolution_workbench_shell(
                 return
             current_navigation.selected_item_uid = impact_item.uid
             current_navigation.sync(active_view)
-            load_draft()
-            other_direction_editor["open"] = True
+            open_split_item(impact_item.uid)
             open_item_input(title="COMMENT ON THIS CHANGE")
             event.app.invalidate()
             return
@@ -3703,12 +3794,7 @@ def run_resolution_workbench_shell(
                 set_status("Whole-set guidance is unavailable here.")
                 event.app.invalidate()
                 return
-            global_comment["value"] = True
-            other_direction_editor["open"] = False
-            input_heading["value"] = "WHOLE-SET GUIDANCE"
-            input_area.text = ""
-            session_navigation.focus("composer")
-            event.app.layout.focus(input_area)
+            open_global_input(clear=True)
             return
         if split_kind() != "ITEM":
             set_status("Choose one review item or RESOLVE ALL first.")
@@ -3722,12 +3808,8 @@ def run_resolution_workbench_shell(
             set_status("Item comments are unavailable here.")
             event.app.invalidate()
             return
-        global_comment["value"] = False
         other_direction_editor["open"] = True
-        composer.frame.title = "MESSAGE"
-        input_heading["value"] = current_response_heading()
-        session_navigation.focus("composer")
-        event.app.layout.focus(input_area)
+        open_item_input(title=current_response_heading())
 
     @bindings.add("g", filter=~writable_input_focused)
     def _global_comment(event) -> None:
@@ -3740,14 +3822,15 @@ def run_resolution_workbench_shell(
             set_status("Resolution input is locked while analysis is pending.")
             event.app.invalidate()
             return
-        global_comment["value"] = True
-        other_direction_editor["open"] = False
-        composer.frame.title = "WHOLE-SET COMMENT"
-        input_heading["value"] = "WHOLE-SET GUIDANCE"
-        input_area.text = ""
         if split_viewer_items:
-            session_navigation.focus("composer")
-        event.app.layout.focus(input_area)
+            open_global_input(clear=True)
+        else:
+            global_comment["value"] = True
+            other_direction_editor["open"] = False
+            composer.frame.title = "WHOLE-SET COMMENT"
+            input_heading["value"] = "WHOLE-SET GUIDANCE"
+            input_area.text = ""
+            event.app.layout.focus(input_area)
 
     @bindings.add("enter", filter=has_focus(input_area), eager=True)
     @bindings.add("c-s", filter=has_focus(input_area), eager=True)
@@ -3811,12 +3894,14 @@ def run_resolution_workbench_shell(
     def _collapse_detail(event) -> bool:
         if event.app.layout.has_focus(input_area):
             return False
-        if viewer_controller.close_nested():
+        if (
+            split_viewer_items
+            and session_navigation.pane == "responses"
+            and response_state.close_nested()
+        ):
             set_status("")
             return True
-        if option_navigation["active"]:
-            option_navigation["active"] = False
-            other_direction["focused"] = False
+        if viewer_controller.close_nested():
             set_status("")
             return True
         if expanded_memory_section_uid["uid"] is not None:
@@ -3829,8 +3914,13 @@ def run_resolution_workbench_shell(
         return True
 
     def _close(event) -> None:
-        if save_draft_on_close and not event.app.layout.has_focus(input_area):
-            save_draft()
+        if (
+            save_draft_on_close
+            and not event.app.layout.has_focus(input_area)
+            and not save_draft()
+        ):
+            event.app.invalidate()
+            return
         event.app.exit(result=ResolutionWorkbenchAction(kind="CLOSE"))
 
     @bindings.add("escape", filter=has_focus(destination_input), eager=True)
@@ -3843,16 +3933,38 @@ def run_resolution_workbench_shell(
         set_status("")
         event.app.invalidate()
 
-    @bindings.add("escape", filter=~has_focus(destination_input), eager=True)
+    @bindings.add("escape", filter=has_focus(input_area), eager=True)
+    def _cancel_response_edit(event) -> None:
+        if not split_viewer_items:
+            _close(event)
+            return
+        if global_comment["value"]:
+            input_area.text = global_response_draft["value"].text
+        else:
+            load_draft()
+        response_state.editing = False
+        other_direction_editor["open"] = False
+        if split_viewer_items and response_visible():
+            session_navigation.focus("responses")
+            event.app.layout.focus(responses_control)
+        else:
+            session_navigation.focus("viewer")
+            event.app.layout.focus(body_control)
+        set_status("Response edit cancelled.")
+        event.app.invalidate()
+
+    @bindings.add("escape", filter=~writable_input_focused, eager=True)
     @bindings.add("backspace", filter=~writable_input_focused, eager=True)
     def _back_or_close(event) -> None:
-        if viewer_controller.close_nested():
+        if (
+            split_viewer_items
+            and session_navigation.pane == "responses"
+            and response_state.close_nested()
+        ):
             set_status("")
             event.app.invalidate()
             return
-        if option_navigation["active"]:
-            option_navigation["active"] = False
-            other_direction["focused"] = False
+        if viewer_controller.close_nested():
             set_status("")
             event.app.invalidate()
             return
@@ -3906,6 +4018,21 @@ def run_resolution_workbench_shell(
             )
         elif split_viewer_items and split_kind() == "SAVE_LOCATION":
             navigation_help = " Enter change location  Tab switch  Q close "
+        elif split_viewer_items and split_kind() == "RESPONSES":
+            if response_state.option_navigation_active:
+                navigation_help = (
+                    " ↑/↓ option  Enter select  Esc/Backspace back  Tab switch "
+                )
+            elif response_state.section == "DECISION":
+                navigation_help = (
+                    " ↑/↓ section  Enter choose options  Tab switch  "
+                    "Esc/Backspace report "
+                )
+            else:
+                navigation_help = (
+                    " ↑/↓ section  Enter write response  Tab switch  "
+                    "Esc/Backspace report "
+                )
         elif split_viewer_items and split_kind() == "REPORT":
             if focused_impact_entry_uid() is not None:
                 navigation_help = (
@@ -3947,10 +4074,6 @@ def run_resolution_workbench_shell(
                     " ↑/↓ section/item  Tab switch  ←/→ strategy  "
                     "Enter open/run  C custom  Esc/Backspace report "
                 )
-        elif split_viewer_items and option_navigation["active"]:
-            navigation_help = (
-                " ↑/↓ option  Enter select  Esc/Backspace back  Tab switch "
-            )
         elif viewer_controller.nested_uid is not None:
             navigation_help = (
                 " ↑/↓ scroll Memory  Enter/Esc/Backspace back  Tab switch "
@@ -3972,34 +4095,6 @@ def run_resolution_workbench_shell(
         ):
             navigation_help = (
                 " Enter show/hide evidence  ↑/↓ Memory  Esc/Backspace back  Tab switch "
-            )
-        elif (
-            split_viewer_items
-            and viewer_content["kind"] == "ITEM"
-            and session_navigation.pane == "viewer"
-            and active_viewer_sections()[viewer_section_index()].kind == "INCORPORATE"
-        ):
-            navigation_help = (
-                " Enter incorporate responses  ↑/↓ section  "
-                "Esc/Backspace report  Tab switch "
-            )
-        elif (
-            split_viewer_items
-            and viewer_content["kind"] == "ITEM"
-            and session_navigation.pane == "viewer"
-            and active_viewer_sections()[viewer_section_index()].kind == "RESPONSE"
-        ):
-            navigation_help = (
-                " Enter write response  ↑/↓ section  Esc/Backspace report  Tab switch "
-            )
-        elif (
-            split_viewer_items
-            and viewer_content["kind"] == "ITEM"
-            and session_navigation.pane == "viewer"
-            and active_viewer_sections()[viewer_section_index()].kind == "OPTIONS"
-        ):
-            navigation_help = (
-                " Enter choose options  ↑/↓ section  Esc/Backspace report  Tab switch "
             )
         elif split_viewer_items:
             navigation_help = (
@@ -4061,19 +4156,29 @@ def run_resolution_workbench_shell(
         filter=has_focus(input_area),
     )
     if split_viewer_items:
-        viewer_frame = Frame(HSplit([body, inline_input]), title="VIEWER")
+        viewer_frame = Frame(body, title="VIEWER")
+        responses_frame = Frame(
+            HSplit([responses_window, inline_input]),
+            title="RESPONSES",
+        )
+        responses_container = ConditionalContainer(
+            responses_frame,
+            filter=Condition(response_visible),
+        )
         items_frame = Frame(items_window, title="ITEMS")
         todo_frame = Frame(todo_window, title="TO DO")
-        session_frames = [viewer_frame, items_frame]
+        session_frames = [viewer_frame, responses_container, items_frame]
         if destination_available:
             session_frames.append(destination_frame)
         session_frames.extend([todo_frame, footer])
-        root = HSplit(
-            session_frames
-        )
+        root = HSplit(session_frames)
         bind_focused_frame_style(
             viewer_frame,
             is_focused=lambda: session_navigation.pane == "viewer",
+        )
+        bind_focused_frame_style(
+            responses_frame,
+            is_focused=lambda: session_navigation.pane in {"responses", "composer"},
         )
         bind_focused_frame_style(
             items_frame,
@@ -4090,6 +4195,7 @@ def run_resolution_workbench_shell(
         )
         focused_element = {
             "viewer": body_control,
+            "responses": responses_control,
             "items": items_control,
             "save_location": destination_control,
             "todo": todo_control,

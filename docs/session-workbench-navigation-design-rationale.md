@@ -89,14 +89,13 @@ action to the owning controller; Escape cancels locally. The operation
 validates and persists the change, while the shell neither creates nor renames
 a Context. Review and Apply remains the only route to the final mutation
 choice. Visible Tab order conditionally becomes
-`VIEWER → ITEMS → SAVE LOCATION → TO DO`.
+`VIEWER → RESPONSES → ITEMS → SAVE LOCATION → TO DO` for an answerable opened
+item, and omits Responses when no response target is visible.
 
-When saved responses make incorporation the current To Do, the open item also
-renders that same `INCORPORATE RESPONSES` section immediately below `RESPONSE`.
-It is a second route to the same complete reviewed-response action, not a
-per-item provider call or a second semantic boundary. If another REQUIRED item
-is still open, the inline action remains hidden because the complete response
-frame is not ready to submit.
+`INCORPORATE RESPONSES` remains a whole-session To Do/final-review action. It
+is not duplicated inside Viewer or Responses: the frame collects staged input,
+while the owning operation decides whether that input requires a new provider
+turn before Apply.
 
 The shared shell does not infer review semantics from display priority alone.
 Each production adapter supplies an item role (`DECISION`, `OPTIONAL_REVIEW`,
@@ -171,21 +170,22 @@ so the list stays compact; Enter on a Memory shows only that row's evidence,
 and Enter again or Escape/Backspace collapses it before any outer back step.
 This state is process-local and never enters the artifact or response frame.
 
-An OPTIONS section is a nested navigation layer, not an implicitly active list.
+An OPTIONS section in the common Responses frame is a nested navigation layer,
+not an implicitly active list.
 For actionable quality issues, its clarification or resolution question is
 the prompt of that same Decision section rather than a separate navigation
 stop. One focus state therefore emphasizes both the question and its proposed
 answers, and Enter opens the choice rows directly.
 Its neutral state says `Enter to choose an option`. Enter activates the layer,
 Up/Down moves among supplied readings and Other direction, and Enter selects
-the focused reading. Escape or Backspace returns to Viewer section navigation.
+the focused reading. Escape or Backspace returns to Responses section navigation.
 Choices are plain rows rather than nested rectangular cards. The focused row
 uses the shared light-blue treatment and an underline; that underline is a
 cursor signal and disappears whenever the row is not focused. A durable staged
 selection carries a `✓` marker without retaining the underline. Reopening a
 durable draft restores the option cursor to that checked row; otherwise the
 screen would advertise one selection while Enter acts on another. This
-interaction belongs to the common Resolution Session Viewer, so Meld, Sever,
+interaction belongs to the common Resolution Session Responses frame, so Meld, Sever,
 Update, Atomize, and adaptive Review do not define divergent option controls.
 
 The same session topology is the default for live resolution review in Meld,
@@ -199,19 +199,18 @@ after required work is complete. Without new input, its final action is
 offers `INCORPORATE AND APPLY`: one explicit approval reanalyzes the complete
 reviewed response set and then enters the normal validated application path.
 The final surface states this compound behavior and Escape/Backspace returns
-without either step. The narrower inline control below an item's Response
-remains `INCORPORATE RESPONSES` and never applies.
+without either step. Responses itself never incorporates or applies.
 
 Choosing Other direction or opening an item's ordinary Response keeps the
-current detail and options visible. The writable field appears inline within
-the same Viewer frame rather than replacing the detail or opening a sibling
-Message frame. Enter saves and returns focus to that Viewer; `Ctrl-J` inserts
+current item visible. The writable field appears inline within the independent
+Responses frame rather than replacing the Viewer or opening a sibling Message
+frame. Enter saves and returns focus to Responses; `Ctrl-J` inserts
 a newline. When the adapter owns durable drafts, saving does not close the
 workbench. An operation that needs a provider response still receives the
 normal explicit submitted action at its semantic boundary.
 
-`RESPONSE` is a real Viewer navigation section after any operation-specific
-result blocks. Its resting state says only `Enter to write a response`; it
+`RESPONSE` is a real navigation section after Decision inside the common
+Responses frame. Its resting state says only `Enter to write a response`; it
 does not display adapter-authored editing instructions as report content.
 Enter opens a blank field for a new response or restores the current durable
 draft for revision.

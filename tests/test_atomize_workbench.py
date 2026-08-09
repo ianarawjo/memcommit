@@ -1082,12 +1082,10 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
 
     saved: list[dict] = []
     with create_pipe_input() as pipe_input:
-        # Open issue 1 from Items, focus its combined Decision, choose reading
-        # 2, leave option navigation, then use the Response compatibility key
-        # to open and save the same inline field.
+        # Open issue 1 from Items, Tab into RESPONSES, choose reading 2,
+        # leave option navigation, then open and save its Response field.
         pipe_input.send_text(
-            "\t\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b[B\r"
-            "\x7fcNeeds the staff-only qualifier.\x13q"
+            "\t\x1b[B\r\t\r\x1b[B\r\x1b\x1b[B\rNeeds the staff-only qualifier.\x13q"
         )
         run_atomize_workbench_shell(
             workbench,
@@ -1148,7 +1146,7 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
     assert cursor_line.lstrip().startswith("› ○ 2. [ALTERNATIVE]")
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b[B\rq")
+        pipe_input.send_text("\t\x1b[B\r\t\r\x1b[B\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1162,7 +1160,7 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
     # Reopening starts on the selected reading. Entering it again clears the
     # selection, so a separate numeric "clear" command is unnecessary.
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\x1b[B\r\rq")
+        pipe_input.send_text("\t\x1b[B\r\t\r\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1240,7 +1238,7 @@ def test_response_backspace_still_edits_text_instead_of_navigating_up():
     first = workbench.ordered_issues()[0]
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\rab\x7f\rq")
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\rab\x7f\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,

@@ -65,6 +65,7 @@ from memcommit.meld_provider import (
     assess_meld_turn,
     meld_output_schema,
 )
+from memcommit.responses.model import ResponseDraft
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.provenance import build_trace
 from memcommit.resolution_workbench import ResolutionNavigation
@@ -831,7 +832,7 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
                 comment="Preserve the remaining helpful items.",
             ),
         ),
-        drafts={item.uid: (item.options[0].uid, "")},
+        drafts={item.uid: ResponseDraft(item.options[0].uid, "")},
         focused_section=conflict_section,
         review_and_apply=True,
     )
@@ -842,9 +843,7 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
     assert "SOURCE A · left/report-cards" in rendered
     assert "SOURCE B · right/report-cards" in rendered
     assert "RESULT · target/report-cards" in rendered
-    assert rendered.index("CONTEXT LOCATIONS") < rendered.index(
-        "WHAT MEM UNDERSTOOD"
-    )
+    assert rendered.index("CONTEXT LOCATIONS") < rendered.index("WHAT MEM UNDERSTOOD")
     assert "╭─ WHAT MEM UNDERSTOOD" in rendered
     assert "╭─ POTENTIAL CONFLICTS · 1 → 1" in rendered
     assert "│   CONFLICT 1" in rendered
@@ -2854,8 +2853,7 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\t\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\r\rcKeep all supported details."
-            "\x13\t\t\r\x1b[F\r"
+            "\t\x1b[B\r\t\r\r\x1b\x1b[B\rKeep all supported details.\x13\t\t\r\x1b[F\r"
         )
         action = run_meld_shell(
             session,
@@ -2963,8 +2961,8 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\t\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\r\r"
-            "cKeep the rate.\nKeep every payment method.\r\t\t\r\x1b[F\r"
+            "\t\x1b[B\r\t\r\r\x1b\x1b[B\r"
+            "Keep the rate.\nKeep every payment method.\r\t\t\r\x1b[F\r"
         )
         action = run_meld_shell(
             session,
@@ -3157,7 +3155,7 @@ def test_meld_escape_from_composer_discards_unsent_text(prefix):
     before = session.to_dict()
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(prefix + "\x1b")
+        pipe_input.send_text(prefix + "\x1bq")
         action = run_meld_shell(
             session,
             app_input=pipe_input,

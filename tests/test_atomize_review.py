@@ -211,7 +211,8 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
         ],
     )
     assert responded.exit_code == 0, responded.output
-    assert f"Comment:\n    {comment}" in responded.output
+    assert "RESPONSES" in responded.output
+    assert f"Comment:\n      {comment}" in responded.output
     source_analysis = store.load_atomize_analysis(ctx.uid)
     assert source_analysis is not None
     saved_workbench = store.load_atomize_workbench(source_analysis)

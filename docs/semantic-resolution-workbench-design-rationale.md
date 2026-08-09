@@ -129,26 +129,25 @@ classification
 source-frame identity
 source-linked evidence
 type-specific reason
-clarification or resolution question
-proposed readings or resolutions
-response
 operation-specific proposed result, when present
 ```
 
 The question is provider-authored guidance about what must be decided; it is
 not an input field. Proposed readings or resolutions are operation-authored
-answers. Because the question has no independent action, the Viewer combines
-it with those proposed answers into one navigable Decision section. The
+answers. Because the question has no independent action, the Responses frame
+combines it with those proposed answers into one navigable Decision section. The
 selected option and free-form response remain independent, so a
 person may choose and qualify an option, or supply a different answer without
 selecting one. Sharing presentation primitives preserves visual consistency
 without pretending that a read-only result and an actionable session are the
 same artifact.
 
-The Response is a focusable input affordance rather than another semantic
-report paragraph. Adapter-authored response guidance remains model metadata;
-the resting Viewer shows a neutral Enter affordance, and the inline editor
-starts blank unless a durable draft already exists.
+Question, proposed readings or resolutions, and free-form Response are
+projected into the independent common `RESPONSES` frame rather than repeated
+as report paragraphs. The Viewer therefore remains evidence and outcome
+reading space. Adapter-authored response guidance remains model metadata; the
+resting Response section shows a neutral Enter affordance, and its inline
+editor starts blank unless a durable draft already exists.
 
 ## Motivation
 
@@ -443,8 +442,9 @@ Meld uses it to relocate its already-created empty target and target-bound
 session. Directional Meld does not expose it because its target is an existing
 authoritative baseline. Read-only and review-only projections omit it. This is
 an optional shared control, not a review item: when present, visible Tab order
-is `VIEWER → ITEMS → SAVE LOCATION → TO DO`; otherwise the three-frame order is
-unchanged. It never enters Items or bypasses Apply gating.
+is `VIEWER → RESPONSES → ITEMS → SAVE LOCATION → TO DO` while an answerable
+item is open, and `VIEWER → ITEMS → SAVE LOCATION → TO DO` otherwise. It never
+enters Items or bypasses Apply gating.
 
 Atomize's durable planned-Output flow now uses this same card and persists a
 validated destination change back to its workbench before application. This

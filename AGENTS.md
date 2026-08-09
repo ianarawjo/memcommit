@@ -166,7 +166,7 @@ conversation.
   in an operation-specific adapter. Place the hidden cursor anchor after the
   focused card's closing border so a lower card is not rendered as only a top
   edge at the bottom of the viewport.
-- Treat OPTIONS in the shared Resolution Session Viewer as an explicit nested
+- Treat OPTIONS in the shared Resolution Session `RESPONSES` frame as an explicit nested
   layer: Enter opens it, Up/Down moves, Enter selects, and Escape/Backspace
   returns to section navigation. Use the shared light-blue focus treatment and
   a `✓` for the staged selection. Render choices as unboxed rows inside the
@@ -180,20 +180,22 @@ conversation.
   focus section. One navigation step focuses both; Enter from that section
   opens the nested choice rows. Do not make the person focus the question and
   options separately when the question has no independent action.
-- Open Different reading/resolution and ordinary item Response input inline
-  inside the existing Viewer frame; never replace the current detail with a
+- Open Different reading/resolution and ordinary item Response input inside
+  the existing `RESPONSES` frame; never replace the current detail with a
   separate editor screen or add a sibling Message frame. Enter saves the
-  response and returns focus to the same Viewer, while `Ctrl-J` inserts a
+  response and returns focus to the same Responses frame, while `Ctrl-J` inserts a
   newline. A draft-owning adapter may persist that response without closing
   the workbench; operations that require a new semantic provider turn still
   receive their explicit submitted action.
-- Make `RESPONSE` itself a focusable section after operation-specific result
-  blocks. Enter on that section opens its inline field. Do not render an
+- Make `RESPONSE` itself a focusable section after Decision inside the common
+  Responses frame. Enter on that section opens its inline field. Do not render an
   adapter-authored instruction such as `REFINE, COMMENT, OR ENTER...` as if it
   were saved content; a new response starts blank, while reopening a durable
   draft restores its existing text.
-- Keep the common Resolution Session topology as `VIEWER`, `ITEMS`, then
-  `TO DO`. Items contains review targets only. To Do derives one next action:
+- Keep the common Resolution Session topology as `VIEWER`, conditional
+  `RESPONSES`, `ITEMS`, optional `SAVE LOCATION`, then `TO DO`. Responses is
+  visible only for the currently opened answerable item or whole-set guidance.
+  Items contains review targets only. To Do derives one next action:
   open an unresolved required conflict/item first, otherwise materialize the
   reviewed choices, apply an exact ready proposal, or expose the operation's
   whole-set resolution. Do not put Apply or Resolve All back into Items as a
@@ -202,9 +204,11 @@ conversation.
 - Start a common Resolution Session with the complete report focused in
   Viewer. Visible-frame Tab order must follow the screen from the first
   interaction and after an item is opened:
-  `VIEWER → ITEMS → TO DO → VIEWER`; Shift-Tab follows the reverse order.
-  Do not introduce a separate initial Items hub or skip Items when leaving an
-  opened Viewer.
+  `VIEWER → ITEMS → TO DO → VIEWER` before an item is opened, and
+  `VIEWER → RESPONSES → ITEMS → TO DO → VIEWER` for an answerable opened item;
+  optional Save Location stays between Items and To Do. Shift-Tab follows the
+  reverse order. Do not introduce a separate initial Items hub or skip the
+  visible Responses or Items frame when leaving an opened Viewer.
 - Keep a detail's ordinal (`n/total`) separate from review obligation. Show
   `REQUIRED n · OPTIONAL m` for the complete item set. To Do gates progression
   only on unanswered REQUIRED items; unanswered OPTIONAL items remain

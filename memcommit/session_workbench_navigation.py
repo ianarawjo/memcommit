@@ -9,6 +9,7 @@ from typing import Literal, Sequence
 WorkbenchPane = Literal[
     "items",
     "viewer",
+    "responses",
     "save_location",
     "todo",
     "composer",
@@ -45,6 +46,7 @@ class SessionWorkbenchNavigation:
         if self.pane not in {
             "items",
             "viewer",
+            "responses",
             "save_location",
             "todo",
             "composer",
@@ -57,6 +59,7 @@ class SessionWorkbenchNavigation:
         if pane not in {
             "items",
             "viewer",
+            "responses",
             "save_location",
             "todo",
             "composer",

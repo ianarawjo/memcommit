@@ -16,6 +16,10 @@ from memcommit.commands.review_shell import (
     run_review_shell,
     safe_terminal_text,
 )
+from memcommit.commands.review_resolution_shell import (
+    review_resolution_view,
+    run_review_resolution_shell,
+)
 from memcommit.context import Memory
 from memcommit.findings import (
     AmbiguityFinding,
@@ -87,6 +91,52 @@ def _context_and_report():
         ),
     )
     return ctx, report, first, third
+
+
+def test_review_projects_into_common_response_workbench_without_schema_changes():
+    ctx, report, first, _third = _context_and_report()
+    session = create_ambiguity_review(ctx, report)
+    response = session.response_for(first.uid)
+    response.selected_choice_uid = session.items[0].choices[1].uid
+    response.text = "It refers to the staff credential."
+
+    view = review_resolution_view(session, ctx)
+    item = view.item(first.uid)
+
+    assert view.list_label == "ACTIONABLE FINDINGS"
+    assert view.capabilities == frozenset({"SUBMIT_ITEM"})
+    assert item.issue_presentation is not None
+    assert item.issue_presentation.evidence[0].sources[0].content == first.content
+    assert item.selected_option_uid == response.selected_choice_uid
+    assert item.response_text == response.text
+    assert session.to_dict()["schema_version"] == 2
+
+
+def test_common_review_response_frame_persists_choice_and_comment():
+    ctx, report, first, _third = _context_and_report()
+    session = create_ambiguity_review(ctx, report)
+    saved: list[dict[str, object]] = []
+
+    with create_pipe_input() as pipe_input:
+        # Open the first finding, enter RESPONSES, choose reading 2, leave the
+        # nested choice list, then write and save its independent Response.
+        pipe_input.send_text(
+            "\t\x1b[B\r\t\r\x1b[B\r\x1b\x1b[B\r"
+            "교직원 출입구의 자격 규칙이다.\rq"
+        )
+        result = run_review_resolution_shell(
+            session,
+            ctx,
+            save=lambda value: saved.append(value.to_dict()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    response = result.response_for(first.uid)
+    assert response.selected_choice_uid == session.items[0].choices[1].uid
+    assert response.text == "교직원 출입구의 자격 규칙이다."
+    assert saved
 
 
 def test_review_restores_source_order_and_derives_reading_roles():

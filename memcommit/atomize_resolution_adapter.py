@@ -205,20 +205,6 @@ class AtomizeResolutionWorkbenchAdapter:
                         memory_rows=child_rows,
                     )
                 )
-            if response is not None and response.answered:
-                response_parts: list[str] = []
-                if response.selected_choice_uid is not None:
-                    response_parts.append(
-                        "Selected reading: " + response.selected_choice_uid
-                    )
-                if response.text:
-                    response_parts.append("Comment:\n" + response.text)
-                blocks.append(
-                    ResolutionDetailBlock(
-                        heading="SAVED RESPONSE",
-                        text="\n\n".join(response_parts),
-                    )
-                )
             projected.append(
                 ResolutionItem(
                     uid=finding.uid,

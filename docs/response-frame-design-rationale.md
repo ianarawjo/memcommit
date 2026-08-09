@@ -1,0 +1,76 @@
+# Common Responses frame design rationale
+
+## Motivating problem
+
+Actionable Atomize, Meld, Sever, Forget, Update, and adaptive Review screens
+all need the same person-facing controls: an operation-authored question,
+zero or more proposed choices, one staged selection, and an optional multiline
+response. Keeping those controls as Viewer sections made the evidence report
+own writable state and encouraged adapters to repeat saved responses as report
+blocks. The result was inconsistent focus granularity and more than one visual
+location for the same answer.
+
+## Contract
+
+`memcommit.responses` is the service-wide presentation contract:
+
+- `ResponseTarget` identifies one current answerable item and supplies labels,
+  obligation, state, question, choices, and editability.
+- `ResponseDraft` carries only a selected opaque choice UID and free-form text.
+- `ResponseFrameState` owns process-local Decision/Response focus, nested option
+  cursor, Other-response focus, and editor state.
+- the TUI renderer owns common status, focus, selection, and input affordances.
+
+The contract contains no provider, persistence, mutation, or Apply authority.
+Each operation continues to validate and store its own durable response model,
+and its controller remains the only layer that may incorporate, materialize,
+or apply the reviewed result.
+
+## Topology and focus
+
+The complete report starts in Viewer with no synthetic response frame. When an
+answerable item is opened or previewed, the visible order is:
+
+```text
+VIEWER → RESPONSES → ITEMS → [SAVE LOCATION] → TO DO
+```
+
+Viewer contains evidence, source Memories, reasoning, and proposed outcomes.
+Responses contains Decision and Response. Items contains review targets only.
+To Do derives the one whole-session next action. Final Review and Apply omits
+Responses because it confirms already staged state rather than collecting new
+item input.
+
+Decision combines a non-actionable question with its proposed choices as one
+focus stop. Enter opens nested choice navigation; Up/Down moves, Enter stages
+or clears the opaque choice UID, and Escape/Backspace returns one level. The
+Response stop opens the multiline field inside the same Responses frame.
+Enter saves, `Ctrl-J` inserts a newline, and Escape cancels the edit without
+silently replacing the durable draft.
+
+## Operation adapters
+
+Resolution adapters project their existing `ResolutionItem` values through
+`response_target_from_item`. Durable Atomize responses, Meld decisions, Sever
+and Forget treatments, and Update change comments retain their existing
+schemas and execution semantics. Atomize no longer adds a duplicate `SAVED
+RESPONSE` Viewer block; the common frame is the single display location.
+
+The legacy `mem review ambiguities` and `mem review atomize` command path now
+uses a dedicated projection into the same Resolution workbench. Its
+`ReviewSession` JSON remains unchanged. The older snapshot renderer remains for
+stable non-interactive output and compatibility; it is not the live command's
+interaction grammar.
+
+## Boundaries and alternatives
+
+Ground comments and Find queries reuse lower-level terminal input primitives,
+not the response semantic contract: they are conversational or search input,
+not answers bound to a reviewed item. Save Location is also independent because
+it edits a materialization target rather than a response.
+
+Keeping Response inline in Viewer was rejected because it couples writable
+state to evidence navigation and makes the frame order depend on operation-
+specific report blocks. A global response store was also rejected: persistence,
+provider incorporation, and application authority differ by operation and must
+remain behind their existing validation and CAS boundaries.

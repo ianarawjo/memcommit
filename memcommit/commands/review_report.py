@@ -18,6 +18,11 @@ from memcommit.resolution_workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
+from memcommit.responses.resolution import (
+    response_draft_from_item,
+    response_target_from_item,
+)
+from memcommit.responses.tui import response_snapshot_lines
 from memcommit.review_report import ReviewReport, ReviewReportController
 
 
@@ -78,26 +83,19 @@ def render_review_report_snapshot(report: ReviewReport) -> str:
                         f"{detail_indent}  {line}"
                         for line in safe_terminal_text(evidence.reason).splitlines()
                     )
-                if item.question:
-                    detail_lines.append(
-                        "  "
-                        f"{safe_terminal_text(item.issue_presentation.prompt_heading)}"
-                    )
-                    detail_lines.append(
-                        f"    {safe_terminal_text(item.question)}"
-                    )
-                if item.options:
-                    detail_lines.append(
-                        "  "
-                        f"{safe_terminal_text(item.issue_presentation.options_heading)}"
-                    )
-                    for index, option in enumerate(item.options, start=1):
-                        detail_lines.append(
-                            f"    {index}. {safe_terminal_text(option.label)}"
+                response_target = response_target_from_item(
+                    report.view,
+                    item,
+                    read_only=True,
+                )
+                if response_target is not None:
+                    detail_lines.extend(
+                        response_snapshot_lines(
+                            response_target,
+                            response_draft_from_item(item),
+                            indent="  ",
                         )
-                        detail_lines.append(
-                            f"       {safe_terminal_text(option.text)}"
-                        )
+                    )
             for block in item.blocks:
                 detail_lines.append(f"  {safe_terminal_text(block.heading)}")
                 detail_lines.extend(

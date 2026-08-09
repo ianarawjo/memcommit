@@ -23,8 +23,10 @@ from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import (
     ReviewCancelled,
     render_review_snapshot,
-    run_review_shell,
     visible_ordinal_index,
+)
+from memcommit.commands.review_resolution_shell import (
+    run_review_resolution_shell as run_review_shell,
 )
 from memcommit.commands.session_picker import (
     SessionOpenReceipt,
@@ -368,9 +370,7 @@ def _run_atomize_workbench(
             typer.echo("Atomize workbench saved. No Memory changes applied.")
             return
         if action.kind != "SUBMIT_ITEM":
-            raise ReviewError(
-                f"Unsupported Atomize Review action '{action.kind}'."
-            )
+            raise ReviewError(f"Unsupported Atomize Review action '{action.kind}'.")
 
 
 def cmd(

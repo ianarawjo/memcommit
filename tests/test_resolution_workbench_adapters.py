@@ -31,6 +31,10 @@ from memcommit.meld_resolution_adapter import (
     MeldResolutionWorkbenchAdapter,
 )
 from memcommit.resolution_workbench import ResolutionNavigation
+from memcommit.responses.resolution import (
+    response_draft_from_item,
+    response_target_from_item,
+)
 from memcommit.update import (
     AddOperation,
     ContextFingerprint,
@@ -374,8 +378,14 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     assert evidence.reason_heading == "WHY THESE MEMORIES CONFLICT"
     assert conflict.issue_presentation.prompt_heading == "RESOLUTION QUESTION"
     assert conflict.issue_presentation.options_heading == "PROPOSED RESOLUTIONS"
-    assert "reading:different-doors" in blocks["SAVED RESPONSE"]
-    assert response.text in blocks["SAVED RESPONSE"]
+    assert "SAVED RESPONSE" not in blocks
+    response_target = response_target_from_item(view, conflict, read_only=False)
+    assert response_target is not None
+    assert response_target.prompt_heading == "RESOLUTION QUESTION"
+    assert response_target.choices_heading == "PROPOSED RESOLUTIONS"
+    response_draft = response_draft_from_item(conflict)
+    assert response_draft.selected_choice_uid == "reading:different-doors"
+    assert response_draft.text == response.text
     assert conflict.decision_block_index == 0
     assert len(conflict.evidence_refs) == 2
     assert conflict.judgment_refs[0].key == conflict_uid
@@ -387,9 +397,7 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
             ResolutionNavigation(selected_item_uid=conflict_uid),
         )
     )
-    assert rendered.index("SOURCE MEMORIES") < rendered.index(
-        "RESOLUTION QUESTION"
-    )
+    assert rendered.index("SOURCE MEMORIES") < rendered.index("RESOLUTION QUESTION")
     assert rendered.index("CLASSIFICATION") < rendered.index("SOURCE 1 · FROM")
     assert rendered.index("CLASSIFICATION") < rendered.index("SOURCE MEMORIES")
     assert rendered.index("SOURCE MEMORIES") < rendered.index("SOURCE 1 · FROM")
