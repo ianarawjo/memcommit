@@ -124,7 +124,9 @@ uses a quality-issue contract derived from the ambiguity review workflow:
 
 ```text
 issue identity
+evidence-group identity, when an issue contains multiple assessments
 classification
+source-frame identity
 source-linked evidence
 type-specific reason
 clarification or resolution question
@@ -182,7 +184,8 @@ revision.  It supplies:
   response obligation and state, title, summary, question, option UIDs,
   durable response text, operation-authored detail blocks, optional trace
   references, and an optional typed actionable-issue presentation containing
-  exact source Memories, classification, and type-specific labels;
+  exact source Memories, classification, distinct evidence-group/source-frame
+  labels, and type-specific labels;
 - exact proposed or applied results when the operation has them;
 - explicit capabilities for item comments, whole-set comments, preserve,
   defer, and accept; and
@@ -281,7 +284,7 @@ applies only the exact accepted change set.
 Each Meld relation is kept as one evidence group rather than flattening all
 issue evidence into one list and rendering relation judgments elsewhere. A
 block names its relation, shows its classification first, then groups its
-members by source frame as
+members under the neutral `SOURCE CLAIMS` frame as
 `CLAIM N · FROM Context`. Each claim lists its supporting Memories as an
 indented `[short UID] exact content` row. The Context is shown once per claim
 instead of once per Memory, and the full UID remains in the typed projection
@@ -329,15 +332,20 @@ includes the analysis Context in every source label. Ambiguity uses
 independent selected-choice and free-response state. `mem impact atomize`
 continues to use the separate read-only Result detail grammar.
 
-The common actionable-detail renderer does not make `SOURCE MEMORY` one large
-focus block. Classification, each criterion, each visually wrapped source
-Memory line, and the type-specific Why are independent Viewer stops. This
-allows Atomize quotations and Meld claims to move one visible line per arrow
-without splitting, renumbering, or persisting fragments of the underlying
-Memory. Claim/source-frame headings remain grouped with their first source
-line, preserving evidence arity while improving viewport movement. The item
-kind, ordinal, title, status, and review-set counts are visible report chrome,
-not stops; opening a detail therefore begins at Classification.
+The shared evidence contract keeps an optional relation/assessment
+`group_heading` separate from its required `sources_heading`. Both are neutral
+structural chrome: the group heading stays with Classification, while the
+source heading stays with the first exact source card. An adapter therefore
+cannot place `SOURCE MEMORY` above Classification and leave the actual Memory
+under a later, apparently unrelated `SOURCE 1` card.
+
+Classification, each criterion, each whole source Memory, and the type-specific
+Why are independent Viewer stops. Enter on a source Memory opens nested reading;
+visually wrapped lines are presentation-only offsets within that stable Memory
+identity rather than outer focus stops. This preserves evidence arity and avoids
+persisting terminal-width fragments. The item kind, ordinal, title, status,
+review-set counts, evidence-group heading, and source-frame heading are visible
+report chrome, not stops; opening a detail therefore begins at Classification.
 
 ### Dedup
 

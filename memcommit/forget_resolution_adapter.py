@@ -97,7 +97,8 @@ class ForgetResolutionWorkbenchAdapter:
                     issue_presentation=ResolutionIssuePresentation(
                         evidence=(
                             ResolutionIssueEvidence(
-                                heading="FORGET ASSESSMENT",
+                                group_heading="FORGET ASSESSMENT",
+                                sources_heading="SOURCE MEMORY",
                                 classification=f"RECOMMENDED ACTION · {decision.variant}",
                                 reason_heading="WHY THIS ACTION",
                                 reason=decision.rationale,
@@ -109,7 +110,7 @@ class ForgetResolutionWorkbenchAdapter:
                                 ),
                                 sources=(
                                     ResolutionIssueSource(
-                                        label="SOURCE MEMORY",
+                                        label="SOURCE 1",
                                         context_name=review.context_name,
                                         memory_uid=source.uid,
                                         content=source.content,

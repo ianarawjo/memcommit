@@ -309,7 +309,8 @@ class ResolutionIssueClaim:
 class ResolutionIssueEvidence:
     """One source-linked assessment inside an actionable issue."""
 
-    heading: str
+    group_heading: str
+    sources_heading: str
     classification: str
     reason_heading: str
     reason: str
@@ -318,7 +319,20 @@ class ResolutionIssueEvidence:
     criterion_blocks: tuple[ResolutionDetailBlock, ...] = ()
 
     def __post_init__(self) -> None:
-        _text(self.heading, "resolution evidence heading", one_line=True)
+        # A relation/assessment label and the label for its exact source frame
+        # are different hierarchy levels. Keeping both typed prevents an
+        # adapter from presenting SOURCE MEMORY as if it owned Classification.
+        _text(
+            self.group_heading,
+            "resolution evidence-group heading",
+            empty=True,
+            one_line=True,
+        )
+        _text(
+            self.sources_heading,
+            "resolution evidence-source heading",
+            one_line=True,
+        )
         sources = _items(
             self.sources,
             ResolutionIssueSource,

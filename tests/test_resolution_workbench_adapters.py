@@ -197,7 +197,8 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
     assert item.issue_presentation is not None
     collision = item.issue_presentation.evidence[0]
     blocks = {block.heading: block.text for block in item.blocks}
-    assert collision.heading == "SOURCE RELATION · R1"
+    assert collision.group_heading == "SOURCE RELATION · R1"
+    assert collision.sources_heading == "SOURCE CLAIMS"
     assert "SCOPED · RESOLVED" in collision.classification
     assert [claim.label for claim in collision.claims] == ["CLAIM 1", "CLAIM 2"]
     assert collision.claims[0].context_name == "participant/updates"
@@ -221,7 +222,8 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
         )
     )
     assert rendered.index("SOURCE RELATION") < rendered.index("RESOLUTION QUESTION")
-    assert rendered.index("CLASSIFICATION") < rendered.index("CLAIM 1 · FROM")
+    assert rendered.index("CLASSIFICATION") < rendered.index("SOURCE CLAIMS")
+    assert rendered.index("SOURCE CLAIMS") < rendered.index("CLAIM 1 · FROM")
     assert rendered.index("CLAIM 2 · FROM") < rendered.index(
         "WHY SCOPE CHANGES THE RELATION"
     )
@@ -364,7 +366,8 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     blocks = {block.heading: block.text for block in conflict.blocks}
     assert conflict.issue_presentation is not None
     evidence = conflict.issue_presentation.evidence[0]
-    assert evidence.heading == "MEMORIES IN CONFLICT"
+    assert evidence.group_heading == ""
+    assert evidence.sources_heading == "SOURCE MEMORIES"
     assert evidence.sources[0].content == "Staff use an NFC card."
     assert "north door closes" in evidence.sources[1].content
     assert analysis.quality_issues[0].reason == evidence.reason
@@ -384,10 +387,12 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
             ResolutionNavigation(selected_item_uid=conflict_uid),
         )
     )
-    assert rendered.index("MEMORIES IN CONFLICT") < rendered.index(
+    assert rendered.index("SOURCE MEMORIES") < rendered.index(
         "RESOLUTION QUESTION"
     )
     assert rendered.index("CLASSIFICATION") < rendered.index("SOURCE 1 · FROM")
+    assert rendered.index("CLASSIFICATION") < rendered.index("SOURCE MEMORIES")
+    assert rendered.index("SOURCE MEMORIES") < rendered.index("SOURCE 1 · FROM")
     assert rendered.index("SOURCE 2 · FROM") < rendered.index(
         "WHY THESE MEMORIES CONFLICT"
     )

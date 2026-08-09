@@ -44,31 +44,38 @@ def render_review_report_snapshot(report: ReviewReport) -> str:
             detail_lines.append(safe_terminal_text(item.title))
             if item.issue_presentation is not None:
                 for evidence in item.issue_presentation.evidence:
-                    detail_lines.append(f"  {safe_terminal_text(evidence.heading)}")
-                    detail_lines.append("    CLASSIFICATION")
+                    if evidence.group_heading:
+                        detail_lines.append(
+                            f"  {safe_terminal_text(evidence.group_heading)}"
+                        )
+                    detail_indent = "    " if evidence.group_heading else "  "
+                    detail_lines.append(f"{detail_indent}CLASSIFICATION")
                     detail_lines.extend(
-                        f"      {line}"
+                        f"{detail_indent}  {line}"
                         for line in safe_terminal_text(
                             evidence.classification
                         ).splitlines()
                     )
+                    detail_lines.append(
+                        f"{detail_indent}{safe_terminal_text(evidence.sources_heading)}"
+                    )
                     for claim in evidence.source_groups:
                         detail_lines.append(
-                            "    "
+                            f"{detail_indent}  "
                             f"{safe_terminal_text(claim.label)} · FROM "
                             f"{safe_terminal_text(claim.context_name)}"
                         )
                         for source in claim.sources:
                             detail_lines.append(
-                                "      "
+                                f"{detail_indent}    "
                                 f"[{safe_terminal_text(source.memory_uid[:8])}] "
                                 f"{safe_terminal_text(source.content)}"
                             )
                     detail_lines.append(
-                        f"    {safe_terminal_text(evidence.reason_heading)}"
+                        f"{detail_indent}{safe_terminal_text(evidence.reason_heading)}"
                     )
                     detail_lines.extend(
-                        f"      {line}"
+                        f"{detail_indent}  {line}"
                         for line in safe_terminal_text(evidence.reason).splitlines()
                     )
                 if item.question:

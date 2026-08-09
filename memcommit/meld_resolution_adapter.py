@@ -159,10 +159,11 @@ class MeldResolutionWorkbenchAdapter:
                     )
                     evidence_groups.append(
                         ResolutionIssueEvidence(
-                            heading=(
+                            group_heading=(
                                 f"{relation_heading} · "
                                 f"R{relation_number[relation_uid]}"
                             ),
+                            sources_heading="SOURCE CLAIMS",
                             classification=(
                                 f"{relation.kind} · {relation.status}\n"
                                 f"{relation.summary}"

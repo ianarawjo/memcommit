@@ -190,7 +190,12 @@ def project_atomize_workbench_findings(
         )
         if issue.kind == "AMBIGUITY":
             priority = clarification_priority[issue.clarification or "NONE"]
-            classification = f"{issue.interpretation} · {issue.clarification}"
+            # These are independent ambiguity axes. Naming both prevents the
+            # clarification requirement from looking like review obligation.
+            classification = (
+                f"INTERPRETATION · {issue.interpretation}\n"
+                f"CLARIFICATION · {issue.clarification}"
+            )
         else:
             priority = 4
             # The list and detail heading already carry the issue kind. Keep

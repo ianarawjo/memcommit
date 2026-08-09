@@ -865,6 +865,7 @@ def resolution_viewer_fragments(
         parts: list[tuple[str, str]],
         *,
         anchor: str = "both",
+        focus_indices: tuple[int, ...] | None = None,
     ) -> None:
         nonlocal section_index
         active = section_index == focused_section
@@ -873,6 +874,7 @@ def resolution_viewer_fragments(
                 parts,
                 active=active,
                 anchor=anchor,
+                focus_indices=focus_indices,
             )
         )
         section_index += 1
@@ -1046,15 +1048,39 @@ def resolution_viewer_fragments(
             ]
         )
         for evidence_index, evidence in enumerate(presentation.evidence):
-            report_section(
+            classification_parts: list[tuple[str, str]] = []
+            if evidence.group_heading:
+                classification_parts.append(
+                    (
+                        "class:block-heading",
+                        f" {safe_terminal_text(evidence.group_heading)}\n",
+                    )
+                )
+            classification_heading_index = len(classification_parts)
+            classification_parts.extend(
                 [
                     (
                         "class:block-heading",
-                        f" {safe_terminal_text(evidence.heading)}\n",
+                        (
+                            "\n CLASSIFICATION\n"
+                            if evidence.group_heading
+                            else " CLASSIFICATION\n"
+                        ),
                     ),
-                    ("class:block-heading", "\n CLASSIFICATION\n"),
-                    ("", f" {safe_terminal_text(evidence.classification)}\n"),
+                    (
+                        "class:viewer-body",
+                        f" {safe_terminal_text(evidence.classification)}\n",
+                    ),
                 ]
+            )
+            report_section(
+                classification_parts,
+                # The optional evidence-group heading is structural chrome.
+                # Focus identifies Classification and its value only.
+                focus_indices=(
+                    classification_heading_index,
+                    classification_heading_index + 1,
+                ),
             )
             for criterion in evidence.criterion_blocks:
                 report_section(
@@ -1065,6 +1091,7 @@ def resolution_viewer_fragments(
                         memory_rows=criterion.memory_rows,
                     )
                 )
+            first_source_section = True
             for claim_index, claim in enumerate(evidence.source_groups):
                 for source_index, source in enumerate(claim.sources):
                     lines = _source_memory_lines(source.content, content_width)
@@ -1074,6 +1101,18 @@ def resolution_viewer_fragments(
                     )
                     nested_reading = nested_source_memory_uid == source_section_uid
                     source_parts: list[tuple[str, str]] = []
+                    source_group_heading_index: int | None = None
+                    if first_source_section:
+                        source_group_heading_index = len(source_parts)
+                        source_parts.append(
+                            (
+                                "class:block-heading",
+                                (
+                                    f"\n {safe_terminal_text(evidence.sources_heading)}\n"
+                                ),
+                            )
+                        )
+                        first_source_section = False
                     if source_index == 0:
                         source_parts.append(
                             (
@@ -1104,9 +1143,18 @@ def resolution_viewer_fragments(
                                 ("class:memory-object", f"{line}\n"),
                             ]
                         )
+                    source_focus_indices = tuple(
+                        index
+                        for index, (style, _text) in enumerate(source_parts)
+                        if style in {"class:block-heading", "class:memory-object"}
+                        and index != source_group_heading_index
+                    )
                     report_section(
                         source_parts,
                         anchor="start" if nested_reading else "both",
+                        # SOURCE MEMORY/SOURCE CLAIMS is a non-interactive group
+                        # label; the exact claim/card below it owns focus.
+                        focus_indices=source_focus_indices,
                     )
             report_section(
                 [
@@ -1114,7 +1162,10 @@ def resolution_viewer_fragments(
                         "class:block-heading",
                         f"\n {safe_terminal_text(evidence.reason_heading)}\n",
                     ),
-                    ("", f" {safe_terminal_text(evidence.reason)}\n"),
+                    (
+                        "class:viewer-body",
+                        f" {safe_terminal_text(evidence.reason)}\n",
+                    ),
                 ]
             )
         if item.options:

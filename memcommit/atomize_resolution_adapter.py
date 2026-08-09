@@ -145,8 +145,9 @@ class AtomizeResolutionWorkbenchAdapter:
             issue_presentation = ResolutionIssuePresentation(
                 evidence=(
                     ResolutionIssueEvidence(
-                        heading=(
-                            "MEMORIES IN CONFLICT" if conflict else "SOURCE MEMORY"
+                        group_heading="",
+                        sources_heading=(
+                            "SOURCE MEMORIES" if conflict else "SOURCE MEMORY"
                         ),
                         sources=issue_sources,
                         classification=finding.classification,

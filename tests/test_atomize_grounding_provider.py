@@ -153,6 +153,9 @@ def _fixture() -> tuple[
     workbench = create_atomize_workbench(analysis)
     findings = project_atomize_workbench_findings(analysis)
     anchor_finding = findings[0]
+    assert anchor_finding.classification == (
+        "INTERPRETATION · COMPETING\nCLARIFICATION · REQUIRED"
+    )
     bindings = AtomizeGroundingBindings.from_dict(
         {
             "context": {

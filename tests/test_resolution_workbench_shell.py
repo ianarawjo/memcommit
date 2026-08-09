@@ -714,7 +714,8 @@ def test_inline_other_direction_keeps_current_detail_visible():
         issue_presentation=ResolutionIssuePresentation(
             evidence=(
                 ResolutionIssueEvidence(
-                    heading="MEMORIES IN CONFLICT",
+                    group_heading="MEMORIES IN CONFLICT",
+                    sources_heading="SOURCE MEMORIES",
                     classification="CONFLICT",
                     reason_heading="WHY THESE MEMORIES CONFLICT",
                     reason="They prescribe incompatible actions.",
@@ -801,7 +802,8 @@ def test_actionable_response_is_focusable_and_opens_inline_with_enter():
         issue_presentation=ResolutionIssuePresentation(
             evidence=(
                 ResolutionIssueEvidence(
-                    heading="MEMORIES IN CONFLICT",
+                    group_heading="MEMORIES IN CONFLICT",
+                    sources_heading="SOURCE MEMORIES",
                     classification="CONFLICT",
                     reason_heading="WHY THESE MEMORIES CONFLICT",
                     reason="They prescribe incompatible actions.",
@@ -888,7 +890,8 @@ def test_atomize_detail_down_uses_semantic_memory_stops_with_acceleration(
     presentation = ResolutionIssuePresentation(
         evidence=(
             ResolutionIssueEvidence(
-                heading="SOURCE MEMORY",
+                group_heading="",
+                sources_heading="SOURCE MEMORY",
                 sources=(
                     ResolutionIssueSource(
                         label="SOURCE 1",
@@ -954,6 +957,15 @@ def test_atomize_detail_down_uses_semantic_memory_stops_with_acceleration(
         text for style, text in focused_memory if style == "class:memory-object.focused"
     )
     assert memory_text.count("source Memory") == 20
+    assert ("class:block-heading", "\n SOURCE MEMORY\n") in focused_memory
+    assert any(
+        style == "class:viewer-section" and "SOURCE 1 · FROM" in text
+        for style, text in focused_memory
+    )
+    assert not any(
+        style == "class:viewer-section" and text == "\n SOURCE MEMORY\n"
+        for style, text in focused_memory
+    )
     assert any(
         style == "class:viewer-section" and "WHY THIS SPLIT" in text
         for style, text in focused_reason
@@ -967,6 +979,10 @@ def test_atomize_detail_down_uses_semantic_memory_stops_with_acceleration(
     )
     assert any(
         style == "class:viewer-section" and "CLASSIFICATION" in text
+        for style, text in opened
+    )
+    assert any(
+        style == "class:viewer-body.focused" and "COMPOSITE · 5 CHILDREN" in text
         for style, text in opened
     )
     assert not any(
@@ -997,7 +1013,8 @@ def test_proposed_memories_are_individual_stops_with_expandable_evidence():
     presentation = ResolutionIssuePresentation(
         evidence=(
             ResolutionIssueEvidence(
-                heading="SOURCE MEMORY",
+                group_heading="",
+                sources_heading="SOURCE MEMORY",
                 sources=(
                     ResolutionIssueSource(
                         label="SOURCE 1",
@@ -1984,7 +2001,8 @@ def test_saved_response_exposes_inline_incorporation_below_response():
     presentation = ResolutionIssuePresentation(
         evidence=(
             ResolutionIssueEvidence(
-                heading="SOURCE MEMORY",
+                group_heading="",
+                sources_heading="SOURCE MEMORY",
                 classification="COMPOSITE",
                 reason_heading="WHY THIS SPLIT",
                 reason="The claims can change independently.",

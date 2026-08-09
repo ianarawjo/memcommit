@@ -491,7 +491,10 @@ clarification: NONE | HELPFUL | REQUIRED
 
 The first axis describes the structure of ordinary readings. The second
 describes whether clarification changes or is needed for the task. They are
-not one confidence score and must remain separately visible.
+not one confidence score and must remain separately visible. The shared Viewer
+therefore renders the values with their axis names (`INTERPRETATION · ...` and
+`CLARIFICATION · ...`). A bare `SINGLE · REQUIRED` would make the clarification
+classification look like the independent REQUIRED/OPTIONAL review obligation.
 
 Proposed readings are displayed in English for cross-language comparison,
 while the source is displayed verbatim in its original language. Presentation

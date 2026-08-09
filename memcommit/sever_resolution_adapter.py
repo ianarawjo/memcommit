@@ -286,7 +286,8 @@ class SeverResolutionWorkbenchAdapter:
                     issue_presentation=ResolutionIssuePresentation(
                         evidence=(
                             ResolutionIssueEvidence(
-                                heading="SEVER ASSESSMENT",
+                                group_heading="SEVER ASSESSMENT",
+                                sources_heading="EVIDENCE MEMORIES",
                                 sources=evidence_sources,
                                 classification=(
                                     "RECOMMENDED RESULT · "

@@ -585,7 +585,8 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
     assert item.title == "Source"
     assert item.issue_presentation is not None
     evidence = item.issue_presentation.evidence[0]
-    assert evidence.heading == "SEVER ASSESSMENT"
+    assert evidence.group_heading == "SEVER ASSESSMENT"
+    assert evidence.sources_heading == "EVIDENCE MEMORIES"
     assert evidence.classification == "RECOMMENDED RESULT · SUMMARIZE"
     assert [source.label for source in evidence.sources] == [
         "SOURCE MEMORY",
@@ -614,7 +615,9 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
         )
     )
     ordered_headings = (
+        "SEVER ASSESSMENT",
         "CLASSIFICATION",
+        "EVIDENCE MEMORIES",
         "SOURCE MEMORY · FROM local/personal-memory",
         "WHY THIS TREATMENT",
         "SEVER QUESTION",
