@@ -8,7 +8,11 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
+from memcommit.commands.granted_context import (
+    ContextAccess,
+    GrantedReadStore,
+    resolve_context_access,
+)
 from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     format_exact_command,
@@ -21,6 +25,12 @@ from memcommit.commands.find_chat_shell import (
     FindPendingAnswerRequest,
     run_find_chat_session,
 )
+from memcommit.commands.find_search_workbench import (
+    FindSearchRequest,
+    FindSearchResponse,
+    FindSearchResult,
+    run_find_search_workbench,
+)
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.history_picker import choose_history
 from memcommit.commands.history_present import (
@@ -28,6 +38,7 @@ from memcommit.commands.history_present import (
     history_result_picker_entries,
 )
 from memcommit.commands.readable_context_catalog import (
+    ReadableContextCatalog,
     freeze_readable_context_catalog,
 )
 from memcommit.commands.tui_primitives import (
@@ -453,6 +464,41 @@ def _load_find_frame_roots(
             continue
         seen_uids.add(descendant.uid)
         roots.append(descendant)
+    return tuple(roots)
+
+
+def _load_find_scope_roots(
+    store: ReadableContextCatalog,
+    target_names: Sequence[str],
+    *,
+    include_descendants: bool,
+    follow_embeds: bool,
+) -> tuple[Context, ...]:
+    """Freeze multiple roots while keeping namespace and embed reach separate."""
+
+    load = store.load if follow_embeds else store.load_direct
+    catalog_names = tuple(store.list_context_names())
+    selected_names: list[str] = []
+    for target_name in target_names:
+        if not store.context_exists(target_name):
+            raise FileNotFoundError(
+                f"Context '{target_name}' is outside the readable Find catalog."
+            )
+        selected_names.append(target_name)
+        if include_descendants:
+            prefix = target_name + "/"
+            selected_names.extend(
+                name for name in catalog_names if name.startswith(prefix)
+            )
+
+    roots: list[Context] = []
+    seen_uids: set[str] = set()
+    for name in dict.fromkeys(selected_names):
+        context = load(name)
+        if context.uid in seen_uids:
+            continue
+        seen_uids.add(context.uid)
+        roots.append(context)
     return tuple(roots)
 
 
@@ -1031,16 +1077,189 @@ def _run_interactive_find(
     return result
 
 
+def _find_search_result(
+    match: SearchMatch,
+    index: int,
+) -> FindSearchResult:
+    rendered = _chat_result(match, index)
+    return FindSearchResult(
+        context_name=rendered.context_name,
+        kind=rendered.kind,
+        uid=rendered.uid,
+        content=rendered.content,
+        relevance=rendered.relevance,
+    )
+
+
+def _history_find_search_result(
+    result: HistorySearchResult,
+) -> FindSearchResult:
+    timestamp = (
+        result.timestamp[:16].replace("T", " ")
+        if result.timestamp
+        else "current"
+    )
+    return FindSearchResult(
+        context_name=result.context_name,
+        kind=result.kind,
+        uid=result.checkpoint_uid or result.candidate_id,
+        content=(
+            f"{timestamp} · {result.description} · "
+            f"{history_result_recovery_label(result)}"
+        ),
+    )
+
+
+def _run_find_search_request(
+    store: MemoryStore,
+    catalog: ReadableContextCatalog,
+    request: FindSearchRequest,
+) -> FindSearchResponse:
+    """Execute one frozen interactive request without mutating the workbench."""
+
+    roots = _load_find_scope_roots(
+        catalog,
+        request.target_names,
+        include_descendants=request.include_descendants,
+        follow_embeds=request.follow_embeds,
+    )
+    temporal = is_temporal_query(request.query)
+    if temporal:
+        history_names = _history_context_names(
+            catalog,
+            roots,
+            recursive=request.follow_embeds,
+        )
+        if any(catalog.access_for(name).is_granted for name in history_names):
+            raise RuntimeError(
+                "Temporal Find is unavailable for a granted READ view because "
+                "the grant does not expose authority checkpoint history."
+            )
+        timelines = [build_history(store, name) for name in history_names]
+        provider = connect_codex_chatgpt_provider()
+        history_results = search_history(
+            timelines,
+            request.query,
+            provider,
+            result_kinds=(
+                "memory_version",
+                "memory_transition",
+                "checkpoint",
+            ),
+            limit=request.limit,
+        )
+        return FindSearchResponse(
+            request=request,
+            mode="HISTORY",
+            results=tuple(
+                _history_find_search_result(result) for result in history_results
+            ),
+        )
+
+    candidates = collect_candidates_from_roots(
+        roots,
+        recursive=request.follow_embeds,
+    )
+    # Activity evidence belongs to the active Profile. READ-granted roots can
+    # contribute their authorized Memories, but never the authority Profile's
+    # private checkpoints, sessions, traces, or rationale records.
+    local_roots: list[Context] = []
+    for root in roots:
+        try:
+            access = catalog.access_for(root.name)
+        except FileNotFoundError:
+            continue
+        if not access.is_granted:
+            local_roots.append(root)
+    candidates = append_artifact_candidates(
+        candidates,
+        collect_search_artifacts(store, local_roots),
+    )
+    provider = connect_codex_chatgpt_provider()
+    matches = rank_candidates(
+        request.query,
+        candidates,
+        provider,
+        limit=request.limit,
+    )
+    if len(request.target_names) == 1 and request.include_descendants:
+        matches = _supplement_namespace_branch_coverage(
+            request.query,
+            candidates,
+            matches,
+            provider,
+            root_name=request.target_names[0],
+            limit=request.limit,
+        )
+    return FindSearchResponse(
+        request=request,
+        mode="CURRENT",
+        results=tuple(
+            _find_search_result(match, index)
+            for index, match in enumerate(matches, start=1)
+        ),
+        related_query=_related_query_for_matches(matches),
+    )
+
+
+def _open_find_search_workbench(
+    store: MemoryStore,
+    access: ContextAccess,
+    *,
+    current_name: str | None,
+    direct: bool,
+    limit: int,
+) -> None:
+    """Open a blank, query-focused Find over one frozen readable catalog."""
+
+    catalog = freeze_readable_context_catalog(
+        store,
+        access,
+        include_query_routes=True,
+    )
+    names = tuple(catalog.list_context_names())
+    initial_target = access.display_name
+    if initial_target not in names:
+        raise RuntimeError("The selected Context is outside the readable catalog.")
+    displayed_current = current_name if current_name in names else initial_target
+    annotations = {
+        name: "READ GRANT"
+        for name in names
+        if catalog.access_for(name).is_granted
+    }
+    run_find_search_workbench(
+        names,
+        current=displayed_current,
+        initial_target=initial_target,
+        initial_include_descendants=not direct,
+        initial_follow_embeds=not direct,
+        limit=limit,
+        run_search=lambda request: _run_find_search_request(
+            store,
+            catalog,
+            request,
+        ),
+        annotations=annotations,
+    )
+
+
 def cmd(
     query: Annotated[
-        str,
-        typer.Argument(help="Natural-language query to find matching items"),
-    ],
+        Optional[str],
+        typer.Argument(
+            show_default=False,
+            help=(
+                "Natural-language query; omit in a terminal to open the "
+                "interactive search and scope selector"
+            )
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
             "--context",
             "-c",
+            show_default=False,
             help="Context to search (defaults to current)",
         ),
     ] = None,
@@ -1090,7 +1309,6 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    temporal = is_temporal_query(query)
     if not 1 <= limit <= 20:
         typer.secho(
             "Find error: Find limit must be between 1 and 20.",
@@ -1098,6 +1316,42 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
+    if query is None:
+        if not _interactive_terminal():
+            typer.secho(
+                "Find error: QUERY is required outside a terminal. In a "
+                "terminal, run 'mem find' to open the interactive search.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        try:
+            _open_find_search_workbench(
+                store,
+                access,
+                current_name=context_snapshot.current_name,
+                direct=direct,
+                limit=limit,
+            )
+        except (
+            FindError,
+            HistoryError,
+            HistorySearchError,
+            QueryProviderError,
+            FileNotFoundError,
+            OSError,
+            RuntimeError,
+            ValueError,
+        ) as error:
+            typer.secho(
+                f"Find error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        return
+
+    temporal = is_temporal_query(query)
     try:
         if temporal and access.is_granted:
             raise RuntimeError(

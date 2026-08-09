@@ -6,6 +6,12 @@ import json
 from typer.testing import CliRunner
 
 from memcommit.cli import app
+from memcommit.commands.find import _run_find_search_request
+from memcommit.commands.find_search_workbench import FindSearchRequest
+from memcommit.commands.granted_context import resolve_context_access
+from memcommit.commands.readable_context_catalog import (
+    freeze_readable_context_catalog,
+)
 
 
 runner = CliRunner()
@@ -70,6 +76,42 @@ def test_temporal_find_prints_versioned_transition_outside_tty(
     assert "Parking is in Lot B." in result.output
     assert "event boundary" in result.output
     assert "not a direct restore target" in result.output
+
+
+def test_interactive_request_uses_the_same_temporal_history_contract(
+    isolated_store,
+    monkeypatch,
+):
+    _history_fixture()
+    from memcommit.store import MemoryStore
+
+    store = MemoryStore()
+    current = store.current_context_name()
+    assert current == "transport"
+    access = resolve_context_access(
+        store,
+        current,
+        current_name=current,
+        required_permission="READ",
+    )
+    catalog = freeze_readable_context_catalog(store, access)
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: LatestEditProvider(),
+    )
+    request = FindSearchRequest(
+        "the last updated Memory",
+        (current,),
+        include_descendants=False,
+        follow_embeds=False,
+    )
+
+    response = _run_find_search_request(store, catalog, request)
+
+    assert response.mode == "HISTORY"
+    assert len(response.results) == 1
+    assert response.results[0].kind == "memory_transition"
+    assert "Parking is in Lot B." in response.results[0].content
 
 
 def test_temporal_find_uses_shared_read_only_picker_in_tty(

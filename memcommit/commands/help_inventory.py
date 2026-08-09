@@ -217,10 +217,11 @@ COMMAND_FORMS = {
         "mem eval semantic run [campaign] (run a semantic evaluation campaign)",
     ),
     "find": (
-        'mem find "[query]" (current projection)',
+        "mem find (interactive search, multi-target, and scope selector)",
+        'mem find "[query]" (current Context, namespace descendants, and embedded Contexts)',
         'mem find "[temporal_query]" (retained history when the query explicitly asks about time)',
-        'mem find --context [context] "[query]" (explicit Context projection)',
-        'mem find --direct "[query]" (direct items only)',
+        'mem find --context [context] "[query]" (explicit Context root, descendants, and embeds)',
+        'mem find --direct "[query]" (selected Context only; no descendants or embeds)',
     ),
     "find-ambiguities": (
         "mem find-ambiguities (current Context; no changes)",

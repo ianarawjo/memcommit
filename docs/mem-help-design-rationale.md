@@ -204,11 +204,12 @@ than the optional positional operand shown by generic parser usage, because
 the operation names select materially different saved artifacts and provider
 boundaries. A message-less `mem checkpoint` and the default-English
 `mem translate` route are likewise shown because both are callable behaviors,
-not syntax errors. `find` describes retained-history selection as an explicitly
-temporal query instead of inventing a `--history` option that the parser does
-not implement. Resource imports and write-protection groups enumerate their
-distinct public grammars rather than collapsing them into ambiguous positional
-placeholders.
+not syntax errors. `find` exposes its bare interactive search-and-scope route,
+describes the default descendant-and-embed frame, and describes retained-history
+selection as an explicitly temporal query instead of inventing a `--history`
+option that the parser does not implement. Resource imports and write-protection
+groups enumerate their distinct public grammars rather than collapsing them
+into ambiguous positional placeholders.
 
 The list intentionally omits secondary action flags such as comments,
 responses, snapshots, and acceptance controls; `H` retains the complete

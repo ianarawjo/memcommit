@@ -14,13 +14,20 @@ from memcommit.commands.find import (
     _apply_show_result,
     _handle_find_turn,
     _initial_chat_state,
+    _load_find_scope_roots,
+    _run_find_search_request,
     _run_read_only_find_command,
     _show_result_proposal,
     _supplement_namespace_branch_coverage,
 )
+from memcommit.commands.granted_context import resolve_context_access
+from memcommit.commands.readable_context_catalog import (
+    freeze_readable_context_catalog,
+)
 from memcommit.commands.find_chat_shell import (
     FindChatMessage,
 )
+from memcommit.commands.find_search_workbench import FindSearchRequest
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.find_turn_dialogue import FindTurnAction
 from memcommit.search import (
@@ -108,6 +115,121 @@ def test_collect_candidates_from_roots_deduplicates_namespace_and_embed():
     candidates = collect_candidates_from_roots((root, child))
 
     assert [candidate.item for candidate in candidates] == [memory]
+
+
+def test_interactive_scope_separates_namespace_descendants_from_embeds(
+    isolated_store,
+):
+    store = MemoryStore()
+    root = ops.init("scope")
+    root_memory = ops.add(root, "root fact")
+    child = ops.init("scope/child")
+    child_memory = ops.add(child, "child fact")
+    embedded = ops.init("outside")
+    embedded_memory = ops.add(embedded, "embedded fact")
+    ops.embed(embedded, root)
+    for context in (root, child, embedded):
+        store.save(context)
+    store.set_current(root.name)
+    access = resolve_context_access(
+        store,
+        root.name,
+        current_name=root.name,
+        required_permission="READ",
+    )
+    catalog = freeze_readable_context_catalog(store, access)
+
+    exact_roots = _load_find_scope_roots(
+        catalog,
+        (root.name,),
+        include_descendants=False,
+        follow_embeds=False,
+    )
+    below_roots = _load_find_scope_roots(
+        catalog,
+        (root.name,),
+        include_descendants=True,
+        follow_embeds=False,
+    )
+    embedded_roots = _load_find_scope_roots(
+        catalog,
+        (root.name,),
+        include_descendants=False,
+        follow_embeds=True,
+    )
+
+    assert [
+        candidate.item.uid
+        for candidate in collect_candidates_from_roots(
+            exact_roots,
+            recursive=False,
+        )
+    ] == [root_memory.uid]
+    assert {
+        candidate.item.uid
+        for candidate in collect_candidates_from_roots(
+            below_roots,
+            recursive=False,
+        )
+    } == {root_memory.uid, child_memory.uid}
+    assert {
+        candidate.item.uid
+        for candidate in collect_candidates_from_roots(
+            embedded_roots,
+            recursive=True,
+        )
+    } == {root_memory.uid, embedded_memory.uid}
+
+
+def test_interactive_find_searches_multiple_exact_targets_in_one_provider_turn(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    first = ops.init("first")
+    first_memory = ops.add(first, "shared needle from first")
+    second = ops.init("second")
+    second_memory = ops.add(second, "shared needle from second")
+    omitted = ops.init("omitted")
+    omitted_memory = ops.add(omitted, "shared needle outside scope")
+    for context in (first, second, omitted):
+        store.save(context)
+    store.set_current(first.name)
+    access = resolve_context_access(
+        store,
+        first.name,
+        current_name=first.name,
+        required_permission="READ",
+    )
+    catalog = freeze_readable_context_catalog(store, access)
+    provider = KeywordProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    request = FindSearchRequest(
+        query="shared needle",
+        target_names=(first.name, second.name),
+        include_descendants=False,
+        follow_embeds=False,
+        limit=5,
+    )
+
+    response = _run_find_search_request(store, catalog, request)
+
+    assert response.request == request
+    assert response.mode == "CURRENT"
+    assert {result.uid for result in response.results} == {
+        first_memory.uid,
+        second_memory.uid,
+    }
+    payload = json.loads(provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1])
+    sent_content = {
+        candidate.get("content", "") for candidate in payload["candidates"]
+    }
+    assert first_memory.content in sent_content
+    assert second_memory.content in sent_content
+    assert omitted_memory.content not in sent_content
 
 
 def test_collect_candidates_terminates_cycles_and_visits_shared_context_once():
@@ -612,6 +734,65 @@ def test_find_cli_tty_prints_static_results_without_opening_chat(
     assert f"[memory  {memory.uid[:8]}]" in result.output
     assert memory.content in result.output
     assert "Find dialogue closed" not in result.output
+
+
+def test_find_without_query_opens_blank_interactive_search_in_a_tty(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("facilities-reference")
+    store.save(ctx)
+    store.set_current(ctx.name)
+    opened = []
+    monkeypatch.setattr(
+        "memcommit.commands.find._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find._open_find_search_workbench",
+        lambda store, access, **options: opened.append(
+            (store.store_dir, access.display_name, options)
+        ),
+    )
+
+    result = runner.invoke(app, ["find"])
+
+    assert result.exit_code == 0, result.output
+    assert opened == [
+        (
+            store.store_dir,
+            ctx.name,
+            {
+                "current_name": ctx.name,
+                "direct": False,
+                "limit": 5,
+            },
+        )
+    ]
+
+
+def test_find_without_query_requires_a_terminal(isolated_store):
+    store = MemoryStore()
+    ctx = ops.init("facilities-reference")
+    store.save(ctx)
+    store.set_current(ctx.name)
+
+    result = runner.invoke(app, ["find"])
+
+    assert result.exit_code == 1
+    assert "QUERY is required outside a terminal" in result.stderr
+
+
+def test_find_help_explains_the_bare_route_and_default_scope():
+    result = runner.invoke(app, ["find", "--help"])
+
+    assert result.exit_code == 0, result.output
+    assert "[QUERY]" in result.output
+    assert "interactive search" in result.output
+    assert "namespace descendants" in result.output
+    assert "embedded Contexts" in result.output
+    assert "--direct excludes" in result.output
 
 
 def test_find_cli_tty_static_results_include_namespace_descendants(

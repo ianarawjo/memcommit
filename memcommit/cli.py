@@ -306,7 +306,13 @@ app.command(
 )(forget.cmd)
 app.command(
     "find",
-    help="Find current items or explicitly temporal Memory history.",
+    help=(
+        "Open interactive search when QUERY is omitted, or search once when "
+        "QUERY is supplied. The default scope includes the selected Context, "
+        "its namespace descendants, and embedded Contexts; --direct excludes "
+        "both kinds of reach. Explicitly temporal wording searches retained "
+        "Memory history."
+    ),
 )(find.cmd)
 app.command(
     "find-duplicates",

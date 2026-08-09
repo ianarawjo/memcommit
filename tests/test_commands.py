@@ -493,7 +493,7 @@ class TestHelp:
             help_inventory.COMMAND_FORMS["add"][0]
         ) == 'mem add "[memory]"'
         assert help_inventory._selectable_form_line(
-            help_inventory.COMMAND_FORMS["find"][0]
+            help_inventory.COMMAND_FORMS["find"][1]
         ) == 'mem find "[query]"'
         request_form = next(
             form

@@ -135,10 +135,18 @@ their evidence are therefore part of the interaction contract.
 ### `mem find`
 
 ```text
+mem find
 mem find "parking information"
 mem find "things changed after the shuttle notice changed"
 mem find "셔틀 공지가 있을 때 마지막으로 업데이트된 메모리"
 ```
+
+A query-less invocation in a TTY opens the process-local Find search
+workbench with a blank, focused one-line query. The person may check multiple
+readable Context roots and independently choose whether to include lexical
+namespace descendants and follow explicit embeds. It sends nothing to a
+provider until a nonblank query is submitted. Outside a TTY, a query remains
+required so scripts never wait for an interactive selector.
 
 A non-temporal query keeps the existing current-state Find behavior and
 privacy boundary. A temporal query may return versioned direct Memory states
