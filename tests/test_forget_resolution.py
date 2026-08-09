@@ -155,6 +155,9 @@ def test_forget_review_materializes_only_reviewed_operation_specific_changes():
 
     assert custom_item.response_state == "ANSWERED"
     assert custom_item.response_text == "Custom retained wording."
+    assert [(location.role, location.name) for location in view.context_locations] == [
+        ("SOURCE", context.name)
+    ]
     assert todo.kind == "REVIEW AND APPLY"
     assert (
         session_review_action_view(view, {}, whole_set_available=True).kind == "APPLY"

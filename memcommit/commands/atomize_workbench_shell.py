@@ -1,9 +1,11 @@
 """Interactive and snapshot views over one saved atomize workbench."""
+
 from __future__ import annotations
 
 import sys
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import TYPE_CHECKING
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.filters import has_focus
@@ -54,6 +56,9 @@ from memcommit.result_workbench import (
     ResultWorkbenchView,
 )
 
+if TYPE_CHECKING:
+    from memcommit.commands.resolution_workbench_shell import ResolutionDestination
+
 _LIST_READING_PREVIEW_LIMIT = 2
 _LIST_READING_LABEL_LIMIT = 160
 _LIST_REASON_TEXT_LIMIT = 220
@@ -92,26 +97,21 @@ def _assert_matches(
         context_digest=analysis.context_digest,
         issues=atomize_workbench_issue_projection(analysis),
     ):
-        raise ValueError(
-            "The atomize workbench does not match its saved analysis."
-        )
+        raise ValueError("The atomize workbench does not match its saved analysis.")
 
 
 def _finding_map(
     analysis: AtomizeAnalysisSession,
 ) -> dict[str, AtomizeWorkbenchFinding]:
     return {
-        finding.uid: finding
-        for finding in project_atomize_workbench_findings(analysis)
+        finding.uid: finding for finding in project_atomize_workbench_findings(analysis)
     }
 
 
 def _source_map(
     analysis: AtomizeAnalysisSession,
 ) -> dict[str, str]:
-    return {
-        item.memory_uid: item.content for item in analysis.items
-    }
+    return {item.memory_uid: item.content for item in analysis.items}
 
 
 def _single_line(value: str, *, limit: int = 72) -> str:
@@ -257,9 +257,7 @@ def _list_text(
                     analysis,
                     findings,
                     sources,
-                    reading_cursor_index=(
-                        reading_index if finding.readings else None
-                    ),
+                    reading_cursor_index=(reading_index if finding.readings else None),
                     reading_cursor_token=cursor_token,
                 ).splitlines()
             )
@@ -342,9 +340,7 @@ def _detail_text(
         start=1,
     ):
         source_label = (
-            "SOURCE"
-            if len(finding.source_uids) == 1
-            else f"SOURCE {source_number}"
+            "SOURCE" if len(finding.source_uids) == 1 else f"SOURCE {source_number}"
         )
         lines.extend(
             [
@@ -395,16 +391,12 @@ def _detail_text(
     if finding.children:
         lines.extend(["", "PROPOSED CHILDREN"])
         for index, child in enumerate(finding.children, start=1):
-            lines.append(
-                f"{index}. {safe_terminal_text(child.content)}"
-            )
+            lines.append(f"{index}. {safe_terminal_text(child.content)}")
             evidence = [*child.source_spans, *child.frame_spans]
             if evidence:
                 lines.append(
                     "   EVIDENCE: "
-                    + " | ".join(
-                        safe_terminal_text(span) for span in evidence
-                    )
+                    + " | ".join(safe_terminal_text(span) for span in evidence)
                 )
     return "\n".join(lines).rstrip()
 
@@ -472,9 +464,7 @@ def run_atomize_workbench_shell(
 ) -> AtomizeWorkbenchSession:
     """Run the shared list/detail/response interaction over atomize issues."""
     _assert_matches(session, analysis)
-    if require_tty and (
-        not sys.stdin.isatty() or not sys.stdout.isatty()
-    ):
+    if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Atomize workbench requires an interactive terminal. "
             "Use a snapshot-capable entry point in a remote session."
@@ -562,9 +552,7 @@ def run_atomize_workbench_shell(
             response_area,
         ]
     )
-    split_body = VSplit(
-        [list_window, Window(width=1, char="│"), detail_panel]
-    )
+    split_body = VSplit([list_window, Window(width=1, char="│"), detail_panel])
     stacked_body = HSplit(
         [
             Window(
@@ -620,15 +608,11 @@ def run_atomize_workbench_shell(
             navigation_help = " ↑/↓ issue  Enter open  Tab input  V result  "
         elif findings[expanded_uid].readings:
             navigation_help = (
-                " ↑/↓ reading  Enter choose/clear  "
-                "Esc/Backspace up  Tab input  "
+                " ↑/↓ reading  Enter choose/clear  Esc/Backspace up  Tab input  "
             )
         else:
             navigation_help = " Enter close  Esc/Backspace up  Tab input  "
-        return (
-            navigation_help
-            + "F2/Ctrl-S save+next  S sort  L layout  Q quit "
-        )
+        return navigation_help + "F2/Ctrl-S save+next  S sort  L layout  Q quit "
 
     footer = Window(
         FormattedTextControl(footer_text),
@@ -768,9 +752,7 @@ def run_atomize_workbench_shell(
         ):
             navigation.close_result_detail()
         else:
-            navigation.result_detail = result_adapter.case_detail(
-                selected_case.uid
-            )
+            navigation.result_detail = result_adapter.case_detail(selected_case.uid)
         status_message["value"] = ""
         event.app.invalidate()
 
@@ -904,6 +886,8 @@ def run_atomize_workbench_shell(
     app_output: Output | None = None,
     require_tty: bool = True,
     workflow_actions: bool = False,
+    application_complete: bool = False,
+    destination: ResolutionDestination | None = None,
 ) -> AtomizeWorkbenchSession | ResolutionWorkbenchAction:
     """Review Atomize findings through the shared resolution workbench."""
     from memcommit.commands.resolution_workbench_shell import (
@@ -917,7 +901,20 @@ def run_atomize_workbench_shell(
     )
 
     def view():
-        return AtomizeResolutionWorkbenchAdapter(analysis, session).view()
+        projected = AtomizeResolutionWorkbenchAdapter(analysis, session).view()
+        if workflow_actions:
+            return projected
+        # Review-only and terminal sessions may still edit saved comments, but
+        # they must not leak the adapter's Apply or whole-set materialization
+        # capabilities through keyboard shortcuts in the common shell.
+        return replace(
+            projected,
+            status="APPLIED" if application_complete else projected.status,
+            capabilities=frozenset({"SUBMIT_ITEM"}),
+            accept_enabled=False,
+            accept_mode="CHANGES",
+            unresolved_at_apply_count=0,
+        )
 
     def load_draft(issue_uid: str) -> tuple[str | None, str]:
         response = session.responses.get(issue_uid)
@@ -961,8 +958,7 @@ def run_atomize_workbench_shell(
             require_tty=require_tty and first_round,
             terminal_label="Interactive atomize workbench",
             snapshot_hint=(
-                "Run 'mem impact atomize' outside a TTY to render the saved "
-                "snapshot."
+                "Run 'mem impact atomize' outside a TTY to render the saved snapshot."
             ),
             draft_loader=load_draft,
             draft_saver=save_draft,
@@ -970,6 +966,7 @@ def run_atomize_workbench_shell(
             toggle_sort=toggle_sort,
             split_viewer_items=True,
             review_and_apply=workflow_actions,
+            destination=destination,
             global_strategies=(
                 ResolutionGlobalStrategy(
                     label="Keep unanswered optional findings as analyzed",
@@ -980,7 +977,9 @@ def run_atomize_workbench_shell(
                         "revised proposal."
                     ),
                 ),
-            ) if workflow_actions else (),
+            )
+            if workflow_actions
+            else (),
         )
         first_round = False
         session.cursor_uid = navigation.selected_item_uid
@@ -992,6 +991,7 @@ def run_atomize_workbench_shell(
             "SUBMIT_ALL",
             "INCORPORATE_AND_APPLY",
             "ACCEPT",
+            "CHANGE_DESTINATION",
         }:
             return action
         if action.kind != "SUBMIT_ITEM" or action.item_uid is None:

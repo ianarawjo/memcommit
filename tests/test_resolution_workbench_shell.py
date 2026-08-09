@@ -15,6 +15,7 @@ from memcommit.commands.resolution_workbench_shell import (
     ResolutionDestination,
     ResolutionGlobalStrategy,
     SessionTodoView,
+    _impact_arrow_expansion,
     _session_items_fragments,
     render_resolution_workbench_snapshot,
     resolution_report_fragments,
@@ -28,6 +29,7 @@ from memcommit.commands.resolution_workbench_shell import (
 from memcommit.impact_controller import ImpactController
 from memcommit.memory_diff import MemoryChange
 from memcommit.resolution_workbench import (
+    ResolutionContextLocation,
     ResolutionDetailBlock,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,
@@ -145,6 +147,39 @@ def test_save_location_card_emits_an_exact_destination_change_before_apply():
 
     assert action.kind == "CHANGE_DESTINATION"
     assert action.destination == "task-3/severed-final"
+
+
+def test_report_places_context_locations_above_understanding_and_apply_last():
+    view = replace(
+        _view(
+            replace(_item("optional"), priority="OPTIONAL"),
+            capabilities=frozenset({"ACCEPT"}),
+            accept_enabled=True,
+        ),
+        context_locations=(
+            ResolutionContextLocation("SOURCE", "practice/source"),
+            ResolutionContextLocation(
+                "OUTPUT",
+                "practice/output",
+                "NOT CREATED",
+            ),
+        ),
+    )
+    rendered = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            review_and_apply=True,
+            destination=ResolutionDestination(value="practice/output"),
+        )
+    )
+
+    assert "CONTEXT LOCATIONS" in rendered
+    assert "SOURCE · practice/source" in rendered
+    assert "OUTPUT · practice/output · NOT CREATED" in rendered
+    assert "incoming -> baseline" not in rendered
+    assert rendered.index("CONTEXT LOCATIONS") < rendered.index("WHAT MEM UNDERSTOOD")
+    assert rendered.index("SAVE LOCATION") < rendered.index("REVIEW AND APPLY")
 
 
 @pytest.mark.parametrize("numeric_key", ["1", "2", "3", "4", "5"])
@@ -1146,6 +1181,13 @@ def test_expanded_located_update_impact_renders_rule_and_reason_neutrally():
         ),
     )
 
+    collapsed_fragments = resolution_report_fragments(
+        view,
+        impact_controller=controller,
+    )
+    collapsed_rendered = "".join(text for _style, text in collapsed_fragments)
+    assert "▸ ~ [EDIT]" in collapsed_rendered
+
     fragments = resolution_report_fragments(
         view,
         impact_controller=controller,
@@ -1155,6 +1197,7 @@ def test_expanded_located_update_impact_renders_rule_and_reason_neutrally():
     rule_style = next(style for style, text in fragments if "RULE ·" in text)
     reason_style = next(style for style, text in fragments if "WHY ·" in text)
     rendered = "".join(text for _style, text in fragments)
+    assert "▾ ~ [EDIT]" in rendered
     assert "Prefer the current evidence." in rendered
     assert "The source evidence changed." in rendered
     assert rule_style == ""
@@ -1163,8 +1206,9 @@ def test_expanded_located_update_impact_renders_rule_and_reason_neutrally():
     workbench_navigation = SessionWorkbenchNavigation()
     with create_pipe_input() as pipe_input:
         # Items → Viewer, then title → understanding → items → impact → the
-        # located Update Memory. Enter must expand its rationale in place.
-        pipe_input.send_text("\t" + "\x1b[B" * 4 + "\rq")
+        # located Update Memory. Right opens, Left closes, and Enter retains
+        # its existing toggle behavior.
+        pipe_input.send_text("\t" + "\x1b[B" * 4 + "\x1b[C\x1b[D\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1178,6 +1222,163 @@ def test_expanded_located_update_impact_renders_rule_and_reason_neutrally():
 
     assert action.kind == "CLOSE"
     assert workbench_navigation.section_uid == f"REPORT:IMPACT:{memory_uid}"
+
+
+def test_expanded_update_impact_comment_revises_the_same_change_draft():
+    memory_uid = "12345678-1111-1111-1111-111111111111"
+    change = ResolutionItem(
+        uid=f"edit:target-context:{memory_uid}",
+        kind="EDIT",
+        status="PLANNED",
+        priority="CHANGE",
+        title=f"target/context Memory [{memory_uid}]",
+        summary="The source evidence changed.",
+        role="CHANGE",
+        obligation="NONE",
+        response_state="NOT_APPLICABLE",
+        blocks=(
+            ResolutionDetailBlock("OWNER", "Context target/context [target-context]"),
+            ResolutionDetailBlock("MEMORY UID", memory_uid),
+        ),
+        commentable=True,
+    )
+    view = replace(
+        _view(
+            change,
+            capabilities=frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}),
+            accept_enabled=True,
+        ),
+        operation="UPDATE",
+        artifact_uid="update-1",
+        title="Review staged Update",
+    )
+    controller = ImpactController.from_memory_changes(
+        operation="UPDATE",
+        artifact_uid=view.artifact_uid,
+        revision=view.revision,
+        title="IMPACT · UPDATE",
+        summary="Exact staged effects.",
+        changes=(
+            MemoryChange(
+                marker="~",
+                treatment="EDIT",
+                location="target/context",
+                memory_uid=memory_uid,
+                before="Earlier content.",
+                after="Updated content.",
+                reason="The source evidence changed.",
+            ),
+        ),
+    )
+    expanded = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            impact_controller=controller,
+            expanded_impact_section_uid=f"REPORT:IMPACT:{memory_uid}",
+        )
+    )
+    assert "RESPONSE · Press C to comment on this proposed change." in expanded
+
+    saved: list[tuple[str, str | None, str]] = []
+    with create_pipe_input() as pipe_input:
+        # Items → Viewer, move to the Impact change, expand it, and comment
+        # without detouring through the separate Items detail.
+        pipe_input.send_text(
+            "\t" + "\x1b[B" * 5 + "\x1b[CcKeep the date less specific.\rq"
+        )
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            global_strategies=(
+                ResolutionGlobalStrategy("Revise from comments", "CUSTOM"),
+            ),
+            impact_controller=controller,
+            draft_saver=lambda uid, option_uid, comment: saved.append(
+                (uid, option_uid, comment)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert saved == [(change.uid, None, "Keep the date less specific.")]
+
+
+def test_commentable_change_draft_requires_incorporation_before_apply():
+    item = replace(
+        _item("change"),
+        role="CHANGE",
+        obligation="NONE",
+        response_state="NOT_APPLICABLE",
+        commentable=True,
+    )
+    view = _view(
+        item,
+        capabilities=frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}),
+        accept_enabled=True,
+    )
+
+    action = session_review_action_view(
+        view,
+        {item.uid: (None, "Remove this proposed change.")},
+        whole_set_available=True,
+    )
+
+    assert action.kind == "INCORPORATE RESPONSES"
+    assert "1 saved change comment" in action.detail
+
+
+def test_commentable_change_response_is_included_in_revision_turn():
+    item = replace(
+        _item("change"),
+        role="CHANGE",
+        obligation="NONE",
+        response_state="NOT_APPLICABLE",
+        commentable=True,
+    )
+    view = _view(
+        item,
+        capabilities=frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}),
+        accept_enabled=True,
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Open the change, jump to RESPONSE, save one comment, then traverse
+        # Viewer → Items → To Do. Final review opens at its summary, so
+        # End reaches the incorporation action before Enter confirms it.
+        pipe_input.send_text(
+            "\x1b[B\r\x1b[F\rRemove this proposed change.\r\t\t\r\x1b[F\r"
+        )
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            global_strategies=(
+                ResolutionGlobalStrategy("Revise from comments", "CUSTOM"),
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ALL"
+    assert "Issue change: Other direction: Remove this proposed change." in (
+        action.comment
+    )
+
+
+def test_impact_arrows_open_only_the_focused_row_and_close_it_idempotently():
+    first = "REPORT:IMPACT:first"
+    second = "REPORT:IMPACT:second"
+
+    assert _impact_arrow_expansion(None, first, expand=True) == first
+    assert _impact_arrow_expansion(first, second, expand=True) == second
+    assert _impact_arrow_expansion(second, second, expand=False) is None
+    assert _impact_arrow_expansion(first, second, expand=False) == first
+    assert _impact_arrow_expansion(first, None, expand=True) == first
 
 
 def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
@@ -1253,6 +1454,10 @@ def test_review_and_apply_requires_final_confirmation_and_can_go_back():
     assert "REVIEW AND APPLY" in rendered
     assert "APPLY AS IS" in rendered
     assert "Esc/Backspace returns without applying." in rendered
+    assert any(
+        style == "class:detail-card.focused" and "APPLY AS IS" in text
+        for style, text in fragments
+    )
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b[Z\r\x1b[F\r")
@@ -1266,6 +1471,98 @@ def test_review_and_apply_requires_final_confirmation_and_can_go_back():
         )
 
     assert action.kind == "ACCEPT"
+
+
+def test_final_review_hides_viewer_title_and_focuses_top_summary(monkeypatch):
+    view = replace(
+        _view(_item("optional")),
+        items=(replace(_item("optional"), obligation="OPTIONAL"),),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+    frames = []
+    original_frame = resolution_shell_module.Frame
+
+    def recording_frame(*args, **kwargs):
+        frame = original_frame(*args, **kwargs)
+        frames.append(frame)
+        return frame
+
+    monkeypatch.setattr(resolution_shell_module, "Frame", recording_frame)
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Shift-Tab reaches To Do. Enter opens final review at the top summary
+        # instead of leaving keyboard focus on the To Do handoff below it.
+        pipe_input.send_text("\x1b[Z\rq")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            workbench_navigation=navigation,
+        )
+
+    assert action.kind == "CLOSE"
+    assert navigation.pane == "viewer"
+    assert navigation.section_uid == "REVIEW:SUMMARY"
+    assert frames[0].title == ""
+
+
+@pytest.mark.parametrize(
+    ("navigation_keys", "expected_pane"),
+    [
+        ("\t", "items"),
+        ("\t\t", "todo"),
+        ("\t\t\t", "viewer"),
+        ("\x1b[Z", "todo"),
+        ("\x1b[Z\x1b[Z", "items"),
+        ("\x1b[Z\x1b[Z\x1b[Z", "viewer"),
+    ],
+)
+def test_final_review_tab_order_visits_viewer_items_todo_without_closing_review(
+    monkeypatch,
+    navigation_keys,
+    expected_pane,
+):
+    view = replace(
+        _view(_item("optional")),
+        items=(replace(_item("optional"), obligation="OPTIONAL"),),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+    frames = []
+    original_frame = resolution_shell_module.Frame
+
+    def recording_frame(*args, **kwargs):
+        frame = original_frame(*args, **kwargs)
+        frames.append(frame)
+        return frame
+
+    monkeypatch.setattr(resolution_shell_module, "Frame", recording_frame)
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # A opens final review at Viewer. Forward traversal is 1→2→3→1;
+        # reverse traversal is 1→3→2→1, matching visible cyclic order.
+        pipe_input.send_text("a" + navigation_keys + "q")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            workbench_navigation=navigation,
+        )
+
+    assert action.kind == "CLOSE"
+    assert navigation.pane == expected_pane
+    assert frames[0].title == ""
 
 
 def test_review_and_apply_can_authorize_one_compound_atomize_action():

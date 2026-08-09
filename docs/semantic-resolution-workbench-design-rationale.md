@@ -27,8 +27,11 @@ capabilities. For a nonterminal artifact, To Do additionally shows `APPLY?`.
 This action exits Impact and hands the saved identity to the owning operation;
 it does not authorize mutation. The owning workflow must reload or resolve its
 live inputs, repeat its ordinary authority, freshness, and CAS checks, and
-present its distinct real Apply action. Close still leaves everything
-unchanged, and terminal artifacts expose Close only.
+present its distinct real Apply action. Backing out of that final Apply
+reloads the exact saved artifact and returns to the standalone Impact host;
+the handoff is therefore a reversible navigation stack until the owning
+operation becomes terminal. Close still leaves everything unchanged, and
+terminal artifacts expose Close only.
 When an Impact projection repeats the view's result rows exactly, the report
 renders those rows only in Impact. This keeps one authoritative full list and
 avoids doubling potentially hundreds of rows; the operation's overview or
@@ -49,8 +52,14 @@ blue. `KEEP`, `REDACT`, `SUMMARIZE`, `REFRAME`, `FORGET`, and `CUSTOM`
 therefore remain distinguishable without coloring report chrome.
 Each entry is its own stable Viewer section, so a large result remains
 block-navigable. Influencing Rules and rationale are deliberately absent from
-the resting list; Enter on the focused Impact Memory toggles that entry's
-`RULE` and `WHY` detail together.
+the resting list. Enter on the focused Impact Memory toggles that entry's
+`RULE` and `WHY` detail together; Right opens it and Left closes it. Opening a
+new row replaces the one process-local expansion, so large Update and Sever
+Impact lists can be inspected with arrows without accumulating expanded
+detail throughout the report. An expandable row places a compact disclosure
+marker before its operation marker—for example `▸ ~ [EDIT]` or
+`▸ + [ADD]`—and changes it to `▾` while open. A row without Rule or Why detail
+uses `·` rather than falsely advertising expansion.
 This expansion is process-local presentation state and never changes the
 artifact, selection, Impact projection, or Apply readiness.
 
@@ -166,6 +175,8 @@ revision.  It supplies:
 
 - operation, artifact, and revision identities;
 - title, route, status, and locally computed metrics;
+- zero or more typed Context locations, each with an operation-owned role,
+  exact public name, and optional state such as `NOT CREATED` or `IN PLACE`;
 - an adapter-owned list label;
 - ordered items with opaque UIDs, status, display priority, semantic role,
   response obligation and state, title, summary, question, option UIDs,
@@ -182,6 +193,18 @@ The list uses the neutral term **item** internally.  Meld calls its items
 `PLANNED CHANGES`.  Calling a conflict-free Update operation an issue would
 incorrectly claim that the current Update planner produced an unresolved
 assessment.
+
+When typed Context locations are present, the report renders one neutral,
+non-focusable `CONTEXT LOCATIONS` block directly below its title and before
+`WHAT MEM UNDERSTOOD`. The block answers where the operation reads and where
+it will write; it is orientation metadata, not part of the provider's
+understanding. Adapters therefore use semantic roles instead of parsing the
+display route: Atomize exposes Source and Output, directional Meld exposes
+Incoming and Baseline/Target, symmetric Meld exposes both Sources and Result,
+Sever exposes Source, Criteria, and Result, Update exposes Source and Target,
+and Forget exposes Source. Legacy projections without typed endpoints may
+still render their route, but new operation adapters must not make the shell
+infer Context identity from prose.
 
 The shell renders an item's human-facing kind label as the row prefix. The
 durable kind token remains available for command logic, but an adapter may
@@ -333,10 +356,11 @@ artifact into `MeldSession` or named Ground.
 The current Update provider returns exact `EDIT`, `ADD`, and `REMOVE`
 operations only.  It does not return exhaustive source dispositions,
 unresolved issues, semantic turns, or readiness.  The Update adapter therefore
-projects those operations as read-only `PLANNED CHANGES` with exact owner,
-before/after content, reason, and source-reference digests.  It exposes no
-comment or accept capability and explicitly does not claim that no unresolved
-issue exists.
+projects those operations as `PLANNED CHANGES` with exact owner, before/after
+content, reason, and source-reference digests. It explicitly does not claim
+that no unresolved issue exists. Standalone Impact and applied/undone receipts
+remain read-only. Only the owning staged Update marks these no-obligation
+change rows as commentable and exposes whole-set guidance.
 
 The report overview summarizes those planned items rather than enumerating
 them a second time. Items remains the navigation hub for exact owner,
@@ -353,7 +377,18 @@ non-TTY explicit command retains its deterministic scripted application
 behavior. Its multi-owner locks, rollback, checkpoints, operation digest, and
 application receipt remain unchanged.
 
-A general Update resolution loop still requires a separate durable
+The staged host offers both `G` whole-set guidance and `RESPONSE` on an opened
+Items change. An expanded located Impact row exposes the same response through
+`C`; it does not create a second comment identity. Because Update rows carry
+no REQUIRED or OPTIONAL obligation, unanswered rows never gate Apply. Once a
+nonempty change comment exists, however, Review and Apply offers
+`INCORPORATE RESPONSES` instead of applying the stale proposal. Incorporation
+is a complete provider replan over the frozen Source, Target, alias-expressed
+current proposal, and reviewed guidance. The strict existing operation decoder
+validates the replacement, record CAS installs it as a new staged receipt, and
+the workbench reopens for review before any physical application.
+
+A general issue-oriented Update resolution loop still requires a separate durable
 `UpdateResolutionSession`, stable issue and operation keys, a provider contract
 that returns complete issues and readiness, source/target fingerprint binding,
 and an export step that creates the existing `UpdateSession` only after every
@@ -361,6 +396,10 @@ REQUIRED issue is resolved.  It must not overload the current impact cache or
 staged-update file and must not delegate physical application to Meld, because
 Update supports embedded multi-owner targets, resolved `MemoryRef` evidence,
 removal, and linked rollback boundaries that Context Meld does not.
+The implemented comment pass is intentionally narrower: comments are
+process-local until incorporated, the durable result is the replacement
+`UpdateSession`, and it does not invent an issue ledger or per-row completion
+state.
 
 ### Sever
 
@@ -396,12 +435,16 @@ authoritative baseline. Read-only and review-only projections omit it. This is
 an operation capability, not a fourth durable workbench pane: the shared
 `VIEWER → ITEMS → TO DO` topology and Apply gating remain unchanged.
 
-The same visual and exact-name review contract is reused by the older
-text-report materialization paths for Atomize `--save-as` and Translate
-`--save-as`. Those commands do not acquire a synthetic Resolution session;
-the card only edits their already-explicit fresh destination immediately
-before Apply. In-place Atomize/Translate, Forget, Update, and directional Meld
-remain target-bound and therefore do not expose a misleading save-as control.
+Atomize's durable planned-Output flow now uses this same card and persists a
+validated destination change back to its workbench before application. This
+removes the second standalone `y/e/n` location receipt that formerly appeared
+after the person had already chosen Review and Apply. Symmetric Meld and Sever
+continue to use the same shared card. An explicit one-shot Atomize
+`--save-as` does not enter the saved Resolution workbench, and Translate
+`--save-as` has no such session. They retain the older standalone
+exact-location receipt rather than inventing a synthetic review step.
+In-place Atomize/Translate, Forget, Update, and directional Meld remain
+target-bound and therefore do not expose a misleading save-as control.
 
 ### Reconcile
 

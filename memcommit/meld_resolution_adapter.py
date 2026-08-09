@@ -10,6 +10,7 @@ from __future__ import annotations
 from memcommit.meld import MeldProposal, MeldSession, meld_accounting
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
+    ResolutionContextLocation,
     ResolutionIssueClaim,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,
@@ -314,6 +315,28 @@ class MeldResolutionWorkbenchAdapter:
             and assessment is not None
             and assessment.ready_to_apply
         )
+        context_locations = (
+            (
+                ResolutionContextLocation(
+                    "INCOMING",
+                    next(
+                        frame.context_name
+                        for frame in session.frames
+                        if frame.role == "INCOMING"
+                    ),
+                ),
+                ResolutionContextLocation(
+                    "BASELINE / TARGET",
+                    session.target.context_name,
+                ),
+            )
+            if session.mode == "DIRECTIONAL"
+            else (
+                ResolutionContextLocation("SOURCE A", session.frames[0].context_name),
+                ResolutionContextLocation("SOURCE B", session.frames[1].context_name),
+                ResolutionContextLocation("RESULT", session.target.context_name),
+            )
+        )
         return ResolutionWorkbenchView(
             operation="MELD",
             artifact_uid=session.uid,
@@ -340,6 +363,7 @@ class MeldResolutionWorkbenchAdapter:
                     f"{accounting.represented_sources}/{accounting.source_memories}",
                 ),
             ),
+            context_locations=context_locations,
             overview=overview,
             list_label="ISSUES",
             items=items,

@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 
 from memcommit.resolution_workbench import (
+    ResolutionContextLocation,
     ResolutionItem,
     ResolutionNavigation,
     ResolutionOption,
@@ -79,6 +82,18 @@ def test_projection_rejects_duplicate_item_and_option_uids() -> None:
         match="Duplicate resolution item uid",
     ):
         _view(items=(duplicate, duplicate))
+
+    with pytest.raises(
+        ResolutionWorkbenchError,
+        match="Duplicate resolution Context-location role",
+    ):
+        replace(
+            _view(),
+            context_locations=(
+                ResolutionContextLocation("SOURCE", "one"),
+                ResolutionContextLocation("SOURCE", "two"),
+            ),
+        )
 
 
 def test_item_response_semantics_distinguish_changes_from_open_decisions() -> None:

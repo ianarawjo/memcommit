@@ -40,6 +40,14 @@ Resolution sessions use three visible frames with separate responsibilities:
 - `ITEMS` contains only selectable review targets; and
 - `TO DO` contains one state-derived next action.
 
+The complete report begins with a non-focusable `CONTEXT LOCATIONS` block
+whenever the adapter supplies typed endpoints. This sits before
+`WHAT MEM UNDERSTOOD` because source, criteria, target, and result locations
+describe the operation frame, not the model's interpretation of its contents.
+One-source, two-source, and source/criteria/result operations share the same
+row shape; role labels remain operation-owned so the navigation shell never
+guesses semantics from an arrow string.
+
 `TO DO` first points to the earliest unresolved required conflict or item, and
 Enter opens that target in Viewer. Once every REQUIRED item has a staged
 resolution, an applying session changes to `REVIEW AND APPLY`; Enter opens a
@@ -49,6 +57,15 @@ proposal, `APPLY AS IS` when the adapter declares open findings or reviews,
 or an incorporation action when saved responses are not yet part of the
 proposal. OPTIONAL reviews remain selectable in Items but do not gate this
 transition, and the final review reports how many remain open.
+Because this is a confirmation boundary rather than another report/detail
+view, its outer frame omits the `VIEWER` label. It opens at the top
+`REVIEW AND APPLY` summary inside Viewer so the viewport and keyboard focus do
+not remain on the lower `TO DO` handoff. Down moves through any policy card to
+the exact final action; Enter there runs only that disclosed action. Forward
+Tab follows `Viewer → Items → To Do` and Shift-Tab reverses it; merely passing
+through Items must not close the final review.
+Selecting or opening an Items row intentionally returns to ordinary report or
+item content. Escape or Backspace returns without applying.
 Non-applying resolution sessions expose their whole-set resolution there
 instead. Read-only sessions explicitly show that no action is available. The
 frame derives this projection from the current view and process-local drafts;
@@ -63,6 +80,13 @@ compound final action; the label must disclose that the revised proposal will
 not receive a second visual approval. Report and To Do both project
 `REVIEW AND APPLY`, while the final surface alone exposes the state-dependent
 mutation action.
+
+For an operation that creates a new Context, `SAVE LOCATION` is a shared
+focusable Viewer section immediately before `REVIEW AND APPLY`. Enter opens
+the shared inline exact-name editor and returns a destination-change action to
+the owning controller. The operation validates and persists that change; the
+shell neither creates nor renames a Context. Consequently Review and Apply is
+the last report section and the only route to the final mutation choice.
 
 When saved responses make incorporation the current To Do, the open item also
 renders that same `INCORPORATE RESPONSES` section immediately below `RESPONSE`.

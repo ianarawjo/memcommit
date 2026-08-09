@@ -855,6 +855,13 @@ dialect. Directional Meld deliberately does not call its Impact Compare; it
 shows the exact proposed baseline effects because incoming and baseline do not
 have peer authority. Impact is provider-free and cannot apply the Meld.
 
+The Resolution report names these endpoints separately from its semantic
+understanding. Directional Meld shows `INCOMING` and `BASELINE / TARGET`;
+symmetric Meld shows `SOURCE A`, `SOURCE B`, and `RESULT` in the common
+non-focusable `CONTEXT LOCATIONS` block. Seeded Compare prose receives the
+same block at the top of its first report card, so using Compare's exact report
+does not hide where Meld will materialize its result.
+
 An unapplied symmetric Meld then shows a `SAVE LOCATION` card immediately
 above Apply. Editing it relocates the already-created empty Result Context and
 its target-bound Meld session through the ordinary Context-rename freshness

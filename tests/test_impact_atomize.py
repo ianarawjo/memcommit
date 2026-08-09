@@ -1,4 +1,5 @@
 """Contracts for the preview-only ``mem impact atomize`` operation."""
+
 from __future__ import annotations
 
 import json
@@ -37,9 +38,7 @@ PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
 
 def _aggregate_response(payload: dict, response: dict) -> dict:
     """Wrap legacy item-focused fakes in the current one-shot envelope."""
-    candidate_ids = [
-        memory["candidate_id"] for memory in payload["memories"]
-    ]
+    candidate_ids = [memory["candidate_id"] for memory in payload["memories"]]
     return {
         "overview": {
             "understood": {
@@ -97,12 +96,7 @@ def _item(
 
 
 def _all_atomic(payload: dict) -> dict[str, object]:
-    return {
-        "items": [
-            _item(memory["candidate_id"])
-            for memory in payload["memories"]
-        ]
-    }
+    return {"items": [_item(memory["candidate_id"]) for memory in payload["memories"]]}
 
 
 def test_atomize_overview_prompt_requires_short_report_paragraphs() -> None:
@@ -118,9 +112,9 @@ def test_atomize_overview_prompt_requires_short_report_paragraphs() -> None:
     assert "roughly 40-50 English words at most" in prompt
     assert (
         "Do not use bullets, numbered lists, headings, key-value records"
-        in output_schema["properties"]["overview"]["properties"][
-            "understood"
-        ]["properties"]["text"]["description"]
+        in output_schema["properties"]["overview"]["properties"]["understood"][
+            "properties"
+        ]["text"]["description"]
     )
 
 
@@ -138,8 +132,7 @@ def test_atomize_overview_rejects_a_multiline_navigation_list() -> None:
             },
         )
         response["overview"]["understood"]["text"] = (
-            "- The entrance closes.\n"
-            "- Staff access remains available."
+            "- The entrance closes.\n- Staff access remains available."
         )
         return response
 
@@ -156,8 +149,7 @@ def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
 
     def respond(payload):
         ids = {
-            memory["content"]: memory["candidate_id"]
-            for memory in payload["memories"]
+            memory["content"]: memory["candidate_id"] for memory in payload["memories"]
         }
         return {
             "items": [
@@ -206,10 +198,7 @@ def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
         fourth.content,
     ]
     assert "For the ATOMIZE CLASSIFICATION AND CHILDREN" in prompt
-    assert (
-        "an UNCERTAIN atomize classification does not itself prove"
-        in prompt
-    )
+    assert "an UNCERTAIN atomize classification does not itself prove" in prompt
     assert "clean SINGLE/NONE and MUST be omitted" in prompt
     assert "after that time a card is required" in prompt
     assert "normally 2-10 English words and never more than 20" in prompt
@@ -230,11 +219,9 @@ def test_atomize_impact_is_one_shot_exhaustive_and_context_ordered():
     )
     assert schema["properties"]["items"]["minItems"] == 4
     assert "uniqueItems" not in json.dumps(schema)
-    reading_schema = (
-        schema["properties"]["quality_issues"]["items"]["properties"][
-            "ordinary_readings"
-        ]["items"]
-    )
+    reading_schema = schema["properties"]["quality_issues"]["items"]["properties"][
+        "ordinary_readings"
+    ]["items"]
     assert reading_schema["required"] == ["label", "text"]
     assert reading_schema["additionalProperties"] is False
 
@@ -279,9 +266,7 @@ def test_quality_reading_labels_over_twenty_words_fail_closed():
                 "conflict": "NONE",
                 "ordinary_readings": [
                     {
-                        "label": " ".join(
-                            f"word{index}" for index in range(21)
-                        ),
+                        "label": " ".join(f"word{index}" for index in range(21)),
                         "text": "Contact the responsible coordinator.",
                     }
                 ],
@@ -410,25 +395,16 @@ def test_parser_preserves_repeated_occurrence_children():
     report = impact_atomize(ctx, lambda: AtomizeProvider(respond))
 
     assert len(report.items[0].children) == 2
-    assert (
-        report.items[0].children[0].content
-        == report.items[0].children[1].content
-    )
+    assert report.items[0].children[0].content == report.items[0].children[1].content
 
 
 @pytest.mark.parametrize(
     "mutate",
     [
         lambda response, payload: response["items"].clear(),
-        lambda response, payload: response["items"].append(
-            dict(response["items"][0])
-        ),
-        lambda response, payload: response["items"][0].update(
-            candidate_id="unknown"
-        ),
-        lambda response, payload: response["items"][0].update(
-            classification="OTHER"
-        ),
+        lambda response, payload: response["items"].append(dict(response["items"][0])),
+        lambda response, payload: response["items"][0].update(candidate_id="unknown"),
+        lambda response, payload: response["items"][0].update(classification="OTHER"),
         lambda response, payload: response["items"][0].update(
             reason_codes=["A01_ONE_FOCUS", "A01_ONE_FOCUS"]
         ),
@@ -496,9 +472,7 @@ def test_ungrounded_child_span_and_duplicate_json_keys_fail_closed():
     with pytest.raises(AtomizeImpactError, match="ungrounded"):
         impact_atomize(ctx, lambda: AtomizeProvider(ungrounded))
 
-    duplicate_keys = (
-        '{"items":[],"items":[]}'
-    )
+    duplicate_keys = '{"items":[],"items":[]}'
     with pytest.raises(AtomizeImpactError, match="structured output"):
         impact_atomize(
             ctx,
@@ -667,11 +641,7 @@ def test_preview_refuses_to_save_if_context_changes_during_provider_call(
         changed = store.load(ctx.name)
         ops.add(changed, "Concurrent fact.")
         store.save(changed)
-        return {
-            "items": [
-                _item(payload["memories"][0]["candidate_id"])
-            ]
-        }
+        return {"items": [_item(payload["memories"][0]["candidate_id"])]}
 
     monkeypatch.setattr(
         "memcommit.commands.impact.connect_codex_chatgpt_provider",
@@ -777,8 +747,7 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
 
     def respond(payload):
         ids = {
-            memory["content"]: memory["candidate_id"]
-            for memory in payload["memories"]
+            memory["content"]: memory["candidate_id"] for memory in payload["memories"]
         }
         return {
             "items": [
@@ -864,7 +833,16 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
         store,
         store.load_atomize_analysis(ctx.uid),
     )
-    assert not projected_applied
+    # Undo restores Context content, not eligibility to apply the same
+    # reviewed Atomize session a second time.
+    assert projected_applied
+
+    checkpoints_after_undo = len(store.list_checkpoints(ctx.name))
+    repeated_after_undo = runner.invoke(app, ["atomize", "--save"])
+    assert repeated_after_undo.exit_code == 0, repeated_after_undo.output
+    assert "already applied" in repeated_after_undo.output
+    assert len(store.list_checkpoints(ctx.name)) == checkpoints_after_undo
+    assert store.load_direct(ctx.name).to_dict() == context_before_apply
 
     redone = runner.invoke(app, ["redo"])
     assert redone.exit_code == 0, redone.output
@@ -874,9 +852,11 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
         store.load_atomize_analysis(ctx.uid),
     )
     assert projected_applied
-    assert [
-        entry["command"] for entry in store.list_checkpoints(ctx.name)[:3]
-    ] == ["redo", "undo", "atomize"]
+    assert [entry["command"] for entry in store.list_checkpoints(ctx.name)[:3]] == [
+        "redo",
+        "undo",
+        "atomize",
+    ]
 
 
 def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
@@ -890,9 +870,7 @@ def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
     store.set_current(source.name)
 
     provider = AtomizeProvider(
-        lambda payload: {
-            "items": [_item(payload["memories"][0]["candidate_id"])]
-        }
+        lambda payload: {"items": [_item(payload["memories"][0]["candidate_id"])]}
     )
     monkeypatch.setattr(
         "memcommit.commands.atomize.connect_codex_chatgpt_provider",
@@ -926,18 +904,52 @@ def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
     assert store.load_direct(source.name).memories
     output = store.load_direct("planned/output")
     assert store.load_atomize_analysis(output.uid).uid == analysis.uid
+    terminal_workbench = store.load_atomize_workbench(analysis)
+    assert terminal_workbench is not None
+    assert terminal_workbench.application is not None
+    assert terminal_workbench.application.output_context_name == "planned/output"
     entries = atomize_session_entries(store)
     assert len(entries) == 1
     assert entries[0].key == analysis.uid
     assert entries[0].status == "APPLIED"
     assert "planned/input → planned/output" in entries[0].subtitle
 
+    presented = []
+    with monkeypatch.context() as terminal_review:
+        terminal_review.setattr(
+            "memcommit.commands.atomize._present_workbench",
+            lambda **kwargs: presented.append(kwargs),
+        )
+        reopened = runner.invoke(
+            app,
+            ["atomize", "--context", source.name],
+        )
+    assert reopened.exit_code == 0, reopened.output
+    assert presented[0]["workflow_actions"] is False
+    assert presented[0]["application_complete"] is True
+
     repeated = runner.invoke(
         app,
         ["atomize", "--context", source.name, "--save"],
     )
     assert repeated.exit_code == 0, repeated.output
-    assert "already applied to planned Output" in repeated.output
+    assert "already applied" in repeated.output
+    assert len(provider.calls) == 1
+
+    diverged_output = store.load_direct("planned/output")
+    ops.add(diverged_output, "A local follow-up was added after Atomize.")
+    store.save(diverged_output)
+    checkpoints_after_divergence = len(store.list_checkpoints("planned/output"))
+
+    repeated_after_divergence = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save"],
+    )
+
+    assert repeated_after_divergence.exit_code == 0, repeated_after_divergence.output
+    assert "already applied" in repeated_after_divergence.output
+    assert len(store.list_checkpoints("planned/output")) == checkpoints_after_divergence
+    assert atomize_session_entries(store)[0].status == "APPLIED"
     assert len(provider.calls) == 1
 
 
@@ -1068,10 +1080,7 @@ def test_atomize_save_as_preserves_destination_when_final_switch_fails(
     original_write = store_module._write_json_atomic
 
     def fail_state_switch(path, data):
-        if (
-            path == store_module.STATE_FILE
-            and data.get("current") == "derived"
-        ):
+        if path == store_module.STATE_FILE and data.get("current") == "derived":
             raise OSError("injected state switch failure")
         return original_write(path, data)
 
@@ -1187,9 +1196,7 @@ def test_atomize_save_as_does_not_overwrite_concurrent_destination(
     assert competitor is not None
     loaded = store.load_direct("derived")
     assert loaded.uid == competitor.uid
-    assert [item.content for item in loaded.iter_items()] == [
-        "concurrent owner"
-    ]
+    assert [item.content for item in loaded.iter_items()] == ["concurrent owner"]
     assert store.current_context_name() == source.name
 
 
@@ -1332,16 +1339,15 @@ def test_atomize_apply_uses_direct_memory_ordinals_around_embedded_contexts(
         )
         for item in result.iter_items()
     ] == ["memory", "context", "memory"]
-    assert [
-        item.uid
-        for item in result.iter_items()
-        if isinstance(item, Memory)
-    ] == [first.uid, second.uid]
+    assert [item.uid for item in result.iter_items() if isinstance(item, Memory)] == [
+        first.uid,
+        second.uid,
+    ]
     if expected_name != source.name:
         assert store._context_file(source.name).read_bytes() == source_bytes
 
 
-def test_atomize_revert_keep_makes_saved_analysis_current_again(
+def test_atomize_revert_keep_does_not_rearm_an_applied_analysis(
     isolated_store,
     monkeypatch,
 ):
@@ -1395,12 +1401,14 @@ def test_atomize_revert_keep_makes_saved_analysis_current_again(
 
     inspected = runner.invoke(app, ["atomize"])
     assert inspected.exit_code == 0, inspected.output
-    assert "CURRENT" in inspected.output
-    assert "APPLIED" not in inspected.output
+    assert "APPLIED" in inspected.output
 
-    reapplied = runner.invoke(app, ["atomize", "--save"])
-    assert reapplied.exit_code == 0, reapplied.output
-    assert "1 split -> 2 children" in reapplied.output
+    checkpoints_after_revert = len(store.list_checkpoints(ctx.name))
+    rejected_reapply = runner.invoke(app, ["atomize", "--save"])
+    assert rejected_reapply.exit_code == 0, rejected_reapply.output
+    assert "already applied" in rejected_reapply.output
+    assert len(store.list_checkpoints(ctx.name)) == checkpoints_after_revert
+    assert source.uid in store.load_direct(ctx.name).memories
 
 
 def test_saved_atomize_analysis_revalidates_grounding_and_projected_count(
@@ -1481,8 +1489,7 @@ def test_atomize_store_rejects_tampered_saved_source_positions(
     tampered = replace(
         analysis,
         items=tuple(
-            replace(item, position=item.position + 10)
-            for item in analysis.items
+            replace(item, position=item.position + 10) for item in analysis.items
         ),
     )
     with pytest.raises(ValueError, match="analysis is invalid"):
@@ -1598,8 +1605,7 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
 
     def respond(payload):
         ids = {
-            memory["content"]: memory["candidate_id"]
-            for memory in payload["memories"]
+            memory["content"]: memory["candidate_id"] for memory in payload["memories"]
         }
         return {
             "items": [
@@ -1667,8 +1673,7 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
     assert direct_memories[0].uid == atomic.uid
     assert composite.uid not in {item.uid for item in direct_memories}
     assert all(
-        item.uid not in {atomic.uid, composite.uid}
-        for item in direct_memories[1:]
+        item.uid not in {atomic.uid, composite.uid} for item in direct_memories[1:]
     )
     assert any(
         isinstance(item, QueryContextRef) and item.uid == query_ref.uid
@@ -1679,13 +1684,10 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
         for item in destination.iter_items()
     )
     assert [
-        checkpoint["command"]
-        for checkpoint in store.list_checkpoints(destination.name)
+        checkpoint["command"] for checkpoint in store.list_checkpoints(destination.name)
     ] == ["atomize", "init"]
     destination_after_apply = destination.to_dict()
-    destination_before_apply = store.list_checkpoints(destination.name)[1][
-        "snapshot"
-    ]
+    destination_before_apply = store.list_checkpoints(destination.name)[1]["snapshot"]
 
     destination_analysis = store.load_atomize_analysis(destination.uid)
     assert source_analysis is not None
@@ -1704,12 +1706,12 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
         app,
         [
             "trace",
-                composite.uid[:8],
-                "--context",
-                destination.name,
-                "--verbose",
-            ],
-        )
+            composite.uid[:8],
+            "--context",
+            destination.name,
+            "--verbose",
+        ],
+    )
     assert traced.exit_code == 0, traced.output
     assert "CREATED  RECORDED" in traced.output
     assert "SPLIT  RECORDED" in traced.output
@@ -1717,10 +1719,7 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
 
     undone = runner.invoke(app, ["undo"])
     assert undone.exit_code == 0, undone.output
-    assert (
-        store.load_direct(destination.name).to_dict()
-        == destination_before_apply
-    )
+    assert store.load_direct(destination.name).to_dict() == destination_before_apply
 
     redone = runner.invoke(app, ["redo"])
     assert redone.exit_code == 0, redone.output

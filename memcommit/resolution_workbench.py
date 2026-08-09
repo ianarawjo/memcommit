@@ -105,6 +105,36 @@ class ResolutionMetric:
 
 
 @dataclass(frozen=True)
+class ResolutionContextLocation:
+    """One operation-owned Context endpoint shown as report orientation."""
+
+    role: str
+    name: str
+    state: str = ""
+
+    def __post_init__(self) -> None:
+        _text(
+            self.role,
+            "resolution Context role",
+            limit=RESOLUTION_LABEL_LIMIT,
+            one_line=True,
+        )
+        _text(
+            self.name,
+            "resolution Context name",
+            limit=RESOLUTION_KEY_LIMIT,
+            one_line=True,
+        )
+        _text(
+            self.state,
+            "resolution Context state",
+            empty=True,
+            limit=RESOLUTION_LABEL_LIMIT,
+            one_line=True,
+        )
+
+
+@dataclass(frozen=True)
 class ResolutionOption:
     """One operation-owned answer option addressed by opaque identity."""
 
@@ -342,6 +372,7 @@ class ResolutionItem:
     unresolved_refs: tuple[ResultRef, ...] = ()
     issue_presentation: ResolutionIssuePresentation | None = None
     kind_label: str | None = None
+    commentable: bool = False
 
     def __post_init__(self) -> None:
         for value, label in (
@@ -430,6 +461,8 @@ class ResolutionItem:
                 limit=RESOLUTION_LABEL_LIMIT,
                 one_line=True,
             )
+        if not isinstance(self.commentable, bool):
+            raise ResolutionWorkbenchError("Invalid resolution item commentability.")
         if len({option.uid for option in options}) != len(options):
             raise ResolutionWorkbenchError("Duplicate resolution option uid.")
         if self.selected_option_uid is not None and self.selected_option_uid not in {
@@ -584,6 +617,7 @@ class ResolutionWorkbenchView:
     unresolved_at_apply_count: int = 0
     input_locked: bool = False
     report_items_summary: ResolutionDetailBlock | None = None
+    context_locations: tuple[ResolutionContextLocation, ...] = ()
 
     def __post_init__(self) -> None:
         for value, label, limit in (
@@ -604,6 +638,15 @@ class ResolutionWorkbenchView:
             ResolutionMetric,
             "resolution metrics",
         )
+        locations = _items(
+            self.context_locations,
+            ResolutionContextLocation,
+            "resolution Context locations",
+        )
+        if len({location.role for location in locations}) != len(locations):
+            raise ResolutionWorkbenchError(
+                "Duplicate resolution Context-location role."
+            )
         items = _items(self.items, ResolutionItem, "resolution items")
         results = _items(
             self.results,

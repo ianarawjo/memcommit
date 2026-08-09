@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 
 import pytest
 from typer.testing import CliRunner
@@ -160,11 +161,12 @@ def test_saved_update_apply_handoff_reenters_owning_update_flow(
     store = MemoryStore()
     store.save_impact_plan(session)
     observed = []
+    impact_views = iter((True, False))
 
     monkeypatch.setattr(
         impact_command,
         "_show_saved_impact",
-        lambda *_args, **_kwargs: True,
+        lambda *_args, **_kwargs: next(impact_views),
     )
     monkeypatch.setattr(
         update_command,
@@ -183,3 +185,34 @@ def test_saved_update_apply_handoff_reenters_owning_update_flow(
             "target_descendants": False,
         }
     ]
+
+
+def test_terminal_owning_apply_does_not_reopen_impact(monkeypatch):
+    source = ops.init("source")
+    ops.add(source, "The verified route is now south.")
+    target = ops.init("target")
+    ops.add(target, "The route is north.")
+    current = {"value": update_impact_presentation(
+        plan_update(source, target, lambda: _UpdateProvider())
+    )}
+    shown = []
+
+    monkeypatch.setattr(
+        impact_command,
+        "_show_saved_impact",
+        lambda presentation, *, kind: shown.append((presentation, kind)) or True,
+    )
+
+    def finish_apply():
+        current["value"] = replace(
+            current["value"],
+            handoff_available=False,
+        )
+
+    impact_command._run_saved_impact_handoff_loop(
+        load_presentation=lambda: current["value"],
+        open_owning_workflow=finish_apply,
+        kind="update",
+    )
+
+    assert len(shown) == 1

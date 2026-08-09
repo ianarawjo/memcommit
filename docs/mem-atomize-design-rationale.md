@@ -547,6 +547,16 @@ the final screen discloses that the revised proposal will apply without being
 rendered again. Escape/Backspace returns without either step, and `mem undo`
 remains the recovery boundary.
 
+That Apply boundary is terminal for the saved analysis identity. After the
+durable Atomize checkpoint exists, the Source-owned workbench records its
+Output and checkpoint UID so target divergence or deletion cannot rearm the
+session. Later Output edits, conflicts, or Undo do not make the same proposal
+applicable again.
+Reopening an applied workbench may retain and edit item comments as review
+evidence, but it exposes neither whole-set incorporation nor `APPLY`, `APPLY AS
+IS`, or `INCORPORATE AND APPLY`. Another structural attempt begins from a new
+analysis instead of replaying a proposal against post-application state.
+
 The narrower `INCORPORATE RESPONSES` control below the open finding's
 `RESPONSE` still submits the complete response frame without applying. It
 exists for a person who wants to inspect the revised proposal before returning
@@ -606,13 +616,17 @@ mem atomize --save-as NEW_CONTEXT  # preserve source; create and switch
 mem atomize --context INPUT --output OUTPUT  # plan, but do not create, Output
 ```
 
-In an interactive `--save-as` application, the exact reviewed preview is
-followed by the shared `SAVE LOCATION` card before mutation. `E` may replace
-the fresh destination name, which is revalidated without reanalysis; Apply
-then uses that final name. Aborting leaves the saved analysis and source
-unchanged. Non-TTY automation keeps the explicit CLI operand as its frozen
-destination, while in-place `--save` has no location editor because it is
-defined to update the selected source Context.
+In the durable planned-Output workflow, the exact reviewed preview includes
+the shared `SAVE LOCATION` card immediately before `REVIEW AND APPLY`. Enter
+may replace the fresh destination name, which is revalidated and persisted to
+the workbench without reanalysis; Apply then uses that final name. The command
+does not ask for a second standalone `y/e/n` location approval after leaving
+the workbench. Aborting leaves the saved analysis and source unchanged.
+Explicit one-shot `--save-as` still uses its standalone exact-location receipt
+because that command path does not enter the durable Resolution workbench.
+Non-TTY automation keeps the explicit CLI operand as its frozen destination,
+while in-place `--save` has no location editor because it is defined to update
+the selected source Context.
 
 Both require the latest preview to match the Context UID, name, ordered
 direct-Memory digest, and current source contents. `COMPOSITE` sources are

@@ -171,6 +171,11 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
     assert view.route == (
         "participant/updates + participant/wiki-guidance → participant/merged-guidance"
     )
+    assert [(location.role, location.name) for location in view.context_locations] == [
+        ("SOURCE A", "participant/updates"),
+        ("SOURCE B", "participant/wiki-guidance"),
+        ("RESULT", "participant/merged-guidance"),
+    ]
     assert view.status == "READY_TO_APPLY"
     assert view.overview.startswith(assessment.overview)
     assert "ACCOUNTING" in view.overview
@@ -336,6 +341,13 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     assert view.status == "READY_TO_APPLY_AS_IS"
     assert view.results == ()
     assert [metric.value for metric in view.metrics] == ["2", "3", "2", "1"]
+    assert [
+        (location.role, location.name, location.state)
+        for location in view.context_locations
+    ] == [
+        ("SOURCE", "participant/construction-updates", ""),
+        ("OUTPUT", "participant/construction-updates", "IN PLACE"),
+    ]
     conflict = view.item(conflict_uid)
     assert conflict.status == "ANSWERED"
     assert conflict.selected_option_uid == "reading:different-doors"
@@ -598,6 +610,17 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
     assert view.accept_enabled is False
     assert "unresolved" not in (view.overview + view.empty_message).lower()
     assert [metric.value for metric in view.metrics] == ["1", "1", "1", "3"]
+    assert [(location.role, location.name) for location in view.context_locations] == [
+        ("SOURCE", "participant/construction-updates"),
+        ("TARGET", "campus-wiki"),
+    ]
+
+    staged_view = UpdateResolutionWorkbenchAdapter(
+        replace(session, status="staged")
+    ).view()
+    assert staged_view.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL"})
+    assert all(item.commentable for item in staged_view.items)
+    assert all(item.effective_obligation == "NONE" for item in staged_view.items)
 
     apply_view = replace(
         view,

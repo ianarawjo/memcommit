@@ -12,6 +12,7 @@ from memcommit.atomize_workbench import (
 )
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
+    ResolutionContextLocation,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,
     ResolutionIssueSource,
@@ -317,6 +318,19 @@ class AtomizeResolutionWorkbenchAdapter:
                 ),
                 ResolutionMetric("FINDINGS", str(len(projected))),
                 ResolutionMetric("ANSWERED", str(workbench.answered_count)),
+            ),
+            context_locations=(
+                ResolutionContextLocation("SOURCE", analysis.context_name),
+                ResolutionContextLocation(
+                    "OUTPUT",
+                    workbench.output_context_name or analysis.context_name,
+                    (
+                        "IN PLACE"
+                        if (workbench.output_context_name or analysis.context_name)
+                        == analysis.context_name
+                        else "NOT CREATED"
+                    ),
+                ),
             ),
             overview=_overview(analysis),
             list_label="ACTIONABLE FINDINGS",

@@ -224,7 +224,11 @@ Selecting it leaves the immutable Impact host and re-enters the owning Update,
 Meld, or Sever workflow, which reloads or resolves live state, repeats its
 normal grant, binding, freshness, and CAS checks, and still requires its real
 Apply action. Thus `APPLY?` is a transition for deciding after inspection, not
-authorization and not a second application implementation. Closing leaves the
+authorization and not a second application implementation. If the person
+backs out of the owning workflow's final Apply without mutating anything, the
+caller reloads the same saved artifact and returns to its Impact/`APPLY?`
+surface. This stack behavior is shared by Update, Meld, and Sever; a successful
+or otherwise terminal application ends the loop. Closing Impact leaves the
 session and every Context unchanged. Terminal artifacts omit the handoff.
 
 `mem update` accepts the same three forms. `--from` and `--to` are therefore
@@ -289,10 +293,22 @@ In a terminal, directional `impact` presents the saved plan through the shared
 Resolution Workbench: arrows select a planned change and Enter expands its
 exact owner, before/after content, reason, and source-reference digests.
 Outside a terminal it prints the deterministic projection. These rows are
-labelled `PLANNED CHANGES`, expose no comment or acceptance capability, and do
-not claim that the current operations-only provider assessed an exhaustive
-unresolved-issue list. `update` uses the same projection for its applied
-result while preserving its existing application contract.
+labelled `PLANNED CHANGES` and do not claim that the current operations-only
+provider assessed an exhaustive unresolved-issue list. Standalone `impact`
+remains read-only and exposes no comment or acceptance capability. The owning
+staged `update` workflow uses the same projection but allows a whole-proposal
+comment or a comment on one exact expanded change before its separate Apply.
+
+A staged change comment is guidance, not a direct local edit of an operation.
+The workbench binds it to the operation-backed item UID, including when it was
+opened from the located Impact row, and changes the next action from Apply to
+`INCORPORATE RESPONSES`. The provider then receives the complete frozen Source,
+Target, current proposal expressed only through public candidate aliases, and
+the reviewed comments. It must return one complete replacement operation set
+through the existing strict Update schema. The revised staged receipt replaces
+only the exact receipt reviewed through record CAS and returns to review; it is
+not applied implicitly. An empty comment batch leaves the original Apply path
+unchanged.
 
 The `--from` and `--to` operands locate existing Contexts through the shared
 Context locator contract. Bare names remain canonical global names; `.`,

@@ -23,14 +23,11 @@ from memcommit.commands.ground_session_picker import (
     session_picker_location,
 )
 from memcommit.context import Context
-from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore
 
 
 _FINAL_ANALYSIS_NAME = re.compile(r"^([0-9a-f-]{36})\.json$")
-_ATOMIC_TEMP_NAME = re.compile(
-    r"^\.([0-9a-f-]{36})\.json\.write-([0-9a-f]{32})$"
-)
+_ATOMIC_TEMP_NAME = re.compile(r"^\.([0-9a-f-]{36})\.json\.write-([0-9a-f]{32})$")
 
 
 def _canonical_uuid(value: str, label: str) -> str:
@@ -140,9 +137,7 @@ def _canonical_saved_atomize_analyses(
                 "one shared workbench session."
             )
         canonical.append(owners[0])
-    return tuple(
-        sorted(canonical, key=lambda record: record[0].context_name)
-    )
+    return tuple(sorted(canonical, key=lambda record: record[0].context_name))
 
 
 def load_saved_atomize_analysis(
@@ -180,18 +175,19 @@ def revalidate_saved_atomize_analysis(
         context = store.load_direct(analysis.context_name)
     except FileNotFoundError as error:
         raise ValueError(
-            "The source Context for this saved atomize analysis no longer "
-            "exists."
+            "The source Context for this saved atomize analysis no longer exists."
         ) from error
     if context.uid != analysis.context_uid or context.name != analysis.context_name:
         raise ValueError(
-            "The source Context identity changed after this atomize analysis "
-            "was saved."
+            "The source Context identity changed after this atomize analysis was saved."
         )
+    if atomize_workbench_was_applied(
+        store,
+        analysis,
+    ) or atomize_analysis_was_applied(store, context, analysis.uid):
+        return context, True
     if atomize_analysis_matches_context(analysis, context):
         return context, False
-    if atomize_analysis_was_applied(store, context, analysis.uid):
-        return context, True
     else:
         raise ValueError(
             "The source Context changed after this atomize analysis was "
@@ -204,13 +200,20 @@ def atomize_analysis_was_applied(
     context: Context,
     analysis_uid: str,
 ) -> bool:
-    """Recognize the exact current post-application state provider-free."""
-    current_digest = direct_context_digest(context)
+    """Recognize a terminal application receipt, independent of later state.
+
+    Apply is a one-shot transition for one analysis identity. Undo or later
+    edits may change the Context again, but neither makes that reviewed
+    analysis eligible for a second structural application.
+    """
+
     for checkpoint in store.list_checkpoints(context.name):
         args = checkpoint.get("args")
         trace = args.get("trace") if isinstance(args, dict) else None
         if not (
-            isinstance(trace, dict)
+            checkpoint.get("command") == "atomize"
+            and isinstance(trace, dict)
+            and args.get("analysis_uid") == analysis_uid
             and trace.get("operation_id") == analysis_uid
         ):
             continue
@@ -224,10 +227,19 @@ def atomize_analysis_was_applied(
         if (
             checkpoint_context.uid == context.uid
             and checkpoint_context.name == context.name
-            and direct_context_digest(checkpoint_context) == current_digest
         ):
             return True
     return False
+
+
+def atomize_workbench_was_applied(
+    store: MemoryStore,
+    analysis: AtomizeAnalysisSession,
+) -> bool:
+    """Return the Source-owned terminal marker for one workbench session."""
+
+    workbench = store.load_atomize_workbench(analysis)
+    return workbench is not None and workbench.application is not None
 
 
 def atomize_planned_output_was_applied(
@@ -235,7 +247,10 @@ def atomize_planned_output_was_applied(
     analysis: AtomizeAnalysisSession,
     output_name: str,
 ) -> bool:
-    """Recognize one exact require-new Output without treating its name as identity."""
+    """Recognize one terminal require-new Output by identity and receipt."""
+
+    if atomize_workbench_was_applied(store, analysis):
+        return True
 
     if output_name == analysis.context_name:
         try:
@@ -292,10 +307,15 @@ def atomize_session_entries(
                 status = "STALE OUTPUT"
         if status == "CURRENT" and applied:
             status = "APPLIED"
-        elif status == "CURRENT" and grounding is not None and grounding.state in {
-            "AWAITING_REPLY",
-            "READY_TO_APPLY",
-        }:
+        elif (
+            status == "CURRENT"
+            and grounding is not None
+            and grounding.state
+            in {
+                "AWAITING_REPLY",
+                "READY_TO_APPLY",
+            }
+        ):
             status = grounding.state
         elif status == "CURRENT" and workbench is None:
             status = "ANALYSIS ONLY"

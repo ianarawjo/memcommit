@@ -1,4 +1,5 @@
 """Strict persistence and interaction contracts for the atomize workbench."""
+
 from __future__ import annotations
 
 import copy
@@ -57,9 +58,9 @@ def _session(
 def test_create_round_trips_only_mutable_state_bound_to_issue_digest():
     issues = _issues()
     session = _session(issues)
-    session.response_for("ambiguity:m2").text = (
-        "The first reading is right, but staff alone are authorized."
-    )
+    session.response_for(
+        "ambiguity:m2"
+    ).text = "The first reading is right, but staff alone are authorized."
     session.move(1)
     session.select_choice(0)
     session.toggle_layout()
@@ -78,6 +79,7 @@ def test_create_round_trips_only_mutable_state_bound_to_issue_digest():
         "sort",
         "layout",
         "responses",
+        "application",
     }
     assert data["schema_version"] == ATOMIZE_WORKBENCH_SCHEMA_VERSION
     assert data["output_context_name"] == "temp/task-1"
@@ -106,14 +108,60 @@ def test_output_plan_round_trips_and_schema_one_defaults_to_in_place():
     )
     assert restored.output_context_name == "atomize/output"
 
+    destination_only = session.to_dict()
+    destination_only["schema_version"] = 2
+    destination_only.pop("application")
+    restored_destination_only = AtomizeWorkbenchSession.from_dict(
+        destination_only,
+        issues=issues,
+    )
+    assert restored_destination_only.output_context_name == "atomize/output"
+    assert restored_destination_only.application is None
+
     legacy = session.to_dict()
     legacy["schema_version"] = 1
     legacy.pop("output_context_name")
+    legacy.pop("application")
     restored_legacy = AtomizeWorkbenchSession.from_dict(
         legacy,
         issues=issues,
     )
     assert restored_legacy.output_context_name == "atomize/input"
+
+
+def test_application_receipt_is_terminal_and_round_trips_with_comments():
+    issues = _issues()
+    session = AtomizeWorkbenchSession.create(
+        analysis_uid=str(uuid.uuid4()),
+        context_uid=str(uuid.uuid4()),
+        context_name="atomize/input",
+        context_digest=_digest("context"),
+        output_context_name="atomize/output",
+        issues=issues,
+    )
+    checkpoint_uid = str(uuid.uuid4())
+    session.record_application(
+        output_context_name="atomize/output",
+        checkpoint_uid=checkpoint_uid,
+    )
+    session.response_for("ambiguity:m2").text = "Retain this as review evidence."
+
+    restored = AtomizeWorkbenchSession.from_dict(
+        session.to_dict(),
+        issues=issues,
+    )
+
+    assert restored.application is not None
+    assert restored.application.output_context_name == "atomize/output"
+    assert restored.application.checkpoint_uid == checkpoint_uid
+    assert restored.response_for("ambiguity:m2").text == (
+        "Retain this as review evidence."
+    )
+    with pytest.raises(AtomizeWorkbenchError, match="different application"):
+        restored.record_application(
+            output_context_name="atomize/output",
+            checkpoint_uid=str(uuid.uuid4()),
+        )
 
 
 def test_source_and_priority_order_are_deterministic_and_cursor_is_stable():
@@ -203,9 +251,7 @@ def test_exact_match_checks_revision_context_and_complete_issue_projection():
         ),
         *issues[1:],
     )
-    assert not session.matches_analysis(
-        **{**arguments, "issues": changed_choices}
-    )
+    assert not session.matches_analysis(**{**arguments, "issues": changed_choices})
 
 
 @pytest.mark.parametrize(

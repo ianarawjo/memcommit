@@ -5,6 +5,7 @@ from __future__ import annotations
 from memcommit.forget_review import ForgetReview
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
+    ResolutionContextLocation,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,
     ResolutionIssueSource,
@@ -149,6 +150,9 @@ class ForgetResolutionWorkbenchAdapter:
                 ResolutionMetric("SOURCE", str(len(review.candidates))),
                 ResolutionMetric("CRITERION", "1 instruction"),
                 ResolutionMetric("CHANGES", str(changed)),
+            ),
+            context_locations=(
+                ResolutionContextLocation("SOURCE", review.context_name),
             ),
             overview=review.overview,
             list_label="SOURCE MEMORIES TO REVIEW",

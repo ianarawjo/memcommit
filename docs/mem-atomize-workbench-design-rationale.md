@@ -337,6 +337,15 @@ they have no children, and leaves Conflict semantics unresolved. The action
 records those findings as `UNRESOLVED AT APPLY` rather than `RESOLVED`,
 `SKIPPED`, or `DEFERRED`.
 
+The report also names its operation frame independently of this semantic
+summary. A typed `CONTEXT LOCATIONS` block identifies Source and Output above
+`WHAT MEM UNDERSTOOD`, marking an unchanged Output as `IN PLACE` and a planned
+fresh Output as `NOT CREATED`. For a fresh Output, the shared focusable
+`SAVE LOCATION` section sits immediately before `REVIEW AND APPLY`; Enter
+edits the exact name and the Atomize controller persists it before reopening
+the same revision. This keeps final Apply last and avoids a redundant
+post-review location prompt.
+
 As with the understanding block, each of these two sections is its own concise,
 traceable natural-language report paragraph. The shared 40-50-word soft target
 applies; exact hard enforcement remains intentionally deferred because
@@ -862,6 +871,15 @@ The following decisions are stable enough to guide implementation and tests:
   active.
 - Reopening or taking a snapshot never silently reruns semantic analysis.
 - Reanalysis is explicit, and applying it must identify the exact analysis.
+- One analysis identity crosses Apply at most once. After its Context
+  checkpoint exists, the Source-owned workbench stores the applied Output and
+  checkpoint UID as a terminal receipt. This is not merely evidence that the
+  Context still equals the immediate post-Apply bytes. Undo, later edits, a
+  conflict in a created Output, or loss of that Output therefore do not
+  re-enable `APPLY AS IS`, `INCORPORATE AND APPLY`, or any other second
+  application of that session. Reopening it keeps item comments editable for
+  review evidence but removes whole-set and Apply capabilities; a new
+  structural application requires a new analysis session.
 - Unanswered Ambiguity, Atomize Uncertainty, and Conflict findings do not
   require per-item responses; they select one explicit `APPLY AS IS` boundary.
 - Answered unary responses still require one batch incorporation turn. The
@@ -972,7 +990,8 @@ The following must not be accidentally encoded as settled behavior:
   atomize-specific artifact;
 - true creation-time ordering and timestamp migration;
 - a relationship-map secondary view;
-- the exact read-only interaction offered after an analysis has been applied;
+- richer history and comparison UI for an applied analysis beyond its current
+  terminal inspection and comment-editing surface;
 - automatic use of predecessor, parent, or neighboring Contexts as declared
   evidence;
 - semantic Update resolution, Reconcile, Distill, and Sever application

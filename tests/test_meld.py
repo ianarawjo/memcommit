@@ -838,6 +838,13 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
     rendered = "".join(text for _style, text in fragments)
 
     assert "╭─ MEM COMPARE · SYMMETRIC PEERS" in rendered
+    assert "CONTEXT LOCATIONS" in rendered
+    assert "SOURCE A · left/report-cards" in rendered
+    assert "SOURCE B · right/report-cards" in rendered
+    assert "RESULT · target/report-cards" in rendered
+    assert rendered.index("CONTEXT LOCATIONS") < rendered.index(
+        "WHAT MEM UNDERSTOOD"
+    )
     assert "╭─ WHAT MEM UNDERSTOOD" in rendered
     assert "╭─ POTENTIAL CONFLICTS · 1 → 1" in rendered
     assert "│   CONFLICT 1" in rendered

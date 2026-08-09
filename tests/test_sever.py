@@ -594,6 +594,14 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
     assert [block.heading for block in item.blocks] == [
         "PROPOSED RESULT MEMORY"
     ]
+    assert [
+        (location.role, location.name, location.state)
+        for location in view.context_locations
+    ] == [
+        ("SOURCE", source.name, ""),
+        ("CRITERIA", criteria.name, ""),
+        ("RESULT", "draft", "NOT CREATED"),
+    ]
     navigation = ResolutionNavigation(
         selected_item_uid=item.uid,
         expanded_item_uid=item.uid,

@@ -1,13 +1,16 @@
 """Pure Update-plan projection for the common resolution workbench.
 
-Update currently has no issue-resolution artifact.  Its rows are therefore
-labelled planned changes, carry no semantic actions, and make no claim that an
-empty issue ledger was assessed or resolved.
+Update has no issue-resolution artifact or per-change review obligation. Its
+planned changes can nevertheless carry review comments in the owning staged
+workflow; those comments revise the complete proposal before Apply rather than
+mutating an individual operation directly in the terminal.
 """
+
 from __future__ import annotations
 
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
+    ResolutionContextLocation,
     ResolutionItem,
     ResolutionMetric,
     ResolutionWorkbenchView,
@@ -105,6 +108,7 @@ def _operation_item(
         obligation="NONE",
         response_state="NOT_APPLICABLE",
         blocks=tuple(blocks),
+        commentable=session_status == "staged",
     )
 
 
@@ -123,19 +127,18 @@ class UpdateResolutionWorkbenchAdapter:
             for operation in session.operations
         )
         edit_count = sum(
-            isinstance(operation, EditOperation)
-            for operation in session.operations
+            isinstance(operation, EditOperation) for operation in session.operations
         )
         add_count = sum(
-            isinstance(operation, AddOperation)
-            for operation in session.operations
+            isinstance(operation, AddOperation) for operation in session.operations
         )
         remove_count = sum(
-            isinstance(operation, RemoveOperation)
-            for operation in session.operations
+            isinstance(operation, RemoveOperation) for operation in session.operations
         )
         locations = tuple(
-            dict.fromkeys(operation.owner_context_name for operation in session.operations)
+            dict.fromkeys(
+                operation.owner_context_name for operation in session.operations
+            )
         )
         location_text = (
             "no target Context locations"
@@ -178,13 +181,21 @@ class UpdateResolutionWorkbenchAdapter:
                 ResolutionMetric("REMOVALS", str(remove_count)),
                 ResolutionMetric("CHANGES", str(len(items))),
             ),
+            context_locations=(
+                ResolutionContextLocation("SOURCE", session.source_name),
+                ResolutionContextLocation("TARGET", session.target_name),
+            ),
             overview=overview,
             list_label="PLANNED CHANGES",
             items=items,
             empty_message="No planned changes are recorded in this Update artifact.",
             results_label="APPLICATION",
             results=(),
-            capabilities=frozenset(),
+            capabilities=(
+                frozenset({"SUBMIT_ITEM", "SUBMIT_ALL"})
+                if session.status == "staged"
+                else frozenset()
+            ),
             accept_enabled=False,
             input_locked=False,
             report_items_summary=ResolutionDetailBlock(

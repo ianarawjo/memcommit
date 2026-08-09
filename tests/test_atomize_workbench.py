@@ -50,6 +50,7 @@ from memcommit.commands.atomize_sessions import (
 )
 from memcommit.commands.endpoint_setup_flows import AtomizeSetupReceipt
 from memcommit.commands.review_shell import RESPONSE_LABEL
+from memcommit.commands.resolution_workbench_shell import ResolutionDestination
 from memcommit.commands.session_picker import (
     SessionNewReceipt,
     SessionOpenReceipt,
@@ -1373,6 +1374,72 @@ def test_shared_atomize_review_can_incorporate_and_apply_in_one_action():
     assert action.kind == "INCORPORATE_AND_APPLY"
 
 
+def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
+    monkeypatch,
+):
+    ctx = ops.init("workbench/already-applied")
+    ops.add(ctx, "Use the same NFC.")
+    analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
+    workbench = create_atomize_workbench(analysis)
+    captured = []
+
+    def inspect_view(view_supplier, **kwargs):
+        captured.append((view_supplier(), kwargs))
+        return ResolutionWorkbenchAction(kind="CLOSE")
+
+    monkeypatch.setattr(
+        "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
+        inspect_view,
+    )
+
+    returned = run_atomize_workbench_shell(
+        workbench,
+        analysis,
+        save=lambda _session: None,
+        require_tty=False,
+        workflow_actions=False,
+        application_complete=True,
+    )
+
+    assert returned is workbench
+    view, kwargs = captured[0]
+    assert view.status == "APPLIED"
+    assert view.capabilities == frozenset({"SUBMIT_ITEM"})
+    assert view.accept_enabled is False
+    assert kwargs["review_and_apply"] is False
+    assert kwargs["global_strategies"] == ()
+
+
+def test_atomize_uses_shared_save_location_immediately_before_final_review():
+    ctx = ops.init("workbench/destination-source")
+    ops.add(ctx, "First fact. Second fact.")
+    analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
+    workbench = create_atomize_workbench(
+        analysis,
+        output_context_name="workbench/destination-draft",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Items → Report, End reaches Review and Apply, Up reaches the shared
+        # Save Location card, and Enter opens its exact-name editor.
+        pipe_input.send_text("\t\x1b[F\x1b[A\r\x15workbench/destination-final\r")
+        action = run_atomize_workbench_shell(
+            workbench,
+            analysis,
+            save=lambda _session: None,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            workflow_actions=True,
+            destination=ResolutionDestination(
+                value="workbench/destination-draft",
+            ),
+        )
+
+    assert action.kind == "CHANGE_DESTINATION"
+    assert action.destination == "workbench/destination-final"
+
+
 def test_atomize_todo_materialization_creates_an_apply_ready_proposal(
     isolated_store,
     monkeypatch,
@@ -1452,6 +1519,53 @@ def test_shared_atomize_apply_action_uses_the_normal_save_boundary(
     assert "Applied atomize analysis" in result.output
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
     assert store.load_direct(ctx.name).uid == ctx.uid
+
+
+def test_atomize_persists_shared_destination_change_before_final_apply(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx, _memory = _init_context(store)
+    _patch_provider(monkeypatch, AggregateProvider())
+    open_or_create_atomize_workbench(
+        store=store,
+        ctx=ctx,
+        provider_factory=AggregateProvider,
+        output_context_name="workbench/old-output",
+    )
+    actions = iter(
+        (
+            ResolutionWorkbenchAction(
+                kind="CHANGE_DESTINATION",
+                destination="workbench/final-output",
+            ),
+            ResolutionWorkbenchAction(kind="ACCEPT"),
+        )
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize._present_workbench",
+        lambda **_kwargs: next(actions),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.save_location_review.review_save_location",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError(
+                "a planned Output was already reviewed in the shared workbench"
+            )
+        ),
+    )
+
+    result = runner.invoke(app, ["atomize", "--context", ctx.name])
+
+    assert result.exit_code == 0, result.output
+    assert not store.context_exists("workbench/old-output")
+    assert store.context_exists("workbench/final-output")
+    assert store.current_context_name() == "workbench/final-output"
 
 
 def test_compound_atomize_action_incorporates_then_uses_normal_apply_boundary(

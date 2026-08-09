@@ -1,6 +1,8 @@
 """Shared terminal rendering for impact and update plans."""
+
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import replace
 
 import typer
@@ -8,6 +10,7 @@ import typer
 from memcommit.impact_controller import ImpactController
 from memcommit.memory_diff import update_operation_change
 from memcommit.commands.resolution_workbench_shell import (
+    ResolutionGlobalStrategy,
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,
 )
@@ -51,7 +54,9 @@ def _view(
     )
 
 
-def _impact_controller(view, session: UpdateSession, *, summary: str) -> ImpactController:
+def _impact_controller(
+    view, session: UpdateSession, *, summary: str
+) -> ImpactController:
     """Keep Update Impact aligned with the same changes rendered by mem diff."""
 
     return ImpactController.from_memory_changes(
@@ -84,31 +89,50 @@ def run_update_workbench(session: UpdateSession) -> None:
     )
 
 
-def review_update_application(session: UpdateSession) -> bool:
-    """Return true only after explicit TTY acceptance of one staged Update."""
-    view = replace(
-        _view(session, staged=True, applied=False),
-        capabilities=frozenset({"ACCEPT"}),
-        accept_enabled=True,
-    )
-    action = run_resolution_workbench_shell(
-        view,
-        terminal_label="Review staged Update impact",
-        snapshot_hint=(
-            "Run 'mem update --to TARGET' in a TTY to review Impact before Apply."
-        ),
-        split_viewer_items=True,
-        review_and_apply=True,
-        impact_controller=_impact_controller(
+def review_update_application(
+    session: UpdateSession,
+    *,
+    incorporate: Callable[[UpdateSession, str], UpdateSession],
+) -> UpdateSession | None:
+    """Return the exact accepted revision, or None when final Apply is closed."""
+
+    current = session
+    while True:
+        view = replace(
+            _view(current, staged=True, applied=False),
+            capabilities=frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}),
+            accept_enabled=True,
+        )
+        action = run_resolution_workbench_shell(
             view,
-            session,
-            summary=(
-                "These exact target changes are staged. Apply remains a separate "
-                "explicit action."
+            terminal_label="Review staged Update impact",
+            snapshot_hint=(
+                "Run 'mem update --to TARGET' in a TTY to review Impact before Apply."
             ),
-        ),
-    )
-    return action.kind == "ACCEPT"
+            split_viewer_items=True,
+            review_and_apply=True,
+            global_strategies=(
+                ResolutionGlobalStrategy(
+                    "Revise from comments",
+                    "CUSTOM",
+                    "Revise the complete Update proposal from saved comments.",
+                ),
+            ),
+            impact_controller=_impact_controller(
+                view,
+                current,
+                summary=(
+                    "These exact target changes are staged. Apply remains a separate "
+                    "explicit action."
+                ),
+            ),
+        )
+        if action.kind == "ACCEPT":
+            return current
+        if action.kind == "SUBMIT_ALL":
+            current = incorporate(current, action.comment)
+            continue
+        return None
 
 
 def render_plan(
@@ -163,12 +187,9 @@ def render_plan(
     typer.echo()
     if applied:
         if session.granted_target is not None:
+            typer.echo(f"Updated granted authority target {session.target_name}.")
             typer.echo(
-                f"Updated granted authority target {session.target_name}."
-            )
-            typer.echo(
-                "The participant source and fixed study baseline were not "
-                "changed."
+                "The participant source and fixed study baseline were not changed."
             )
         else:
             typer.echo(f"Updated local working copy {session.target_name}.")
@@ -179,8 +200,6 @@ def render_plan(
     elif staged:
         typer.echo(f"Shared {session.target_name} is unchanged.")
     elif undone:
-        typer.echo(
-            f"The recorded Update to {session.target_name} remains undone."
-        )
+        typer.echo(f"The recorded Update to {session.target_name} remains undone.")
     else:
         typer.echo("No changes applied.")

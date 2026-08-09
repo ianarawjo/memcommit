@@ -1,6 +1,9 @@
 """Preview new effects or inspect saved operation-owned Impact artifacts."""
 
+from __future__ import annotations
+
 import sys
+from collections.abc import Callable
 from enum import Enum
 from typing import Annotated, Optional
 
@@ -31,6 +34,7 @@ from memcommit.commands.granted_context import (
     freeze_granted_update_target,
     resolve_context_access,
 )
+from memcommit.commands.impact_sessions import ImpactSessionPresentation
 from memcommit.commands.review_shell import ReviewCancelled
 from memcommit.commands.session_picker import (
     SessionOpenReceipt,
@@ -151,6 +155,24 @@ def _show_saved_impact(presentation, *, kind: str) -> bool:
     return False
 
 
+def _run_saved_impact_handoff_loop(
+    *,
+    load_presentation: Callable[[], ImpactSessionPresentation],
+    open_owning_workflow: Callable[[], None],
+    kind: str,
+) -> None:
+    """Return a cancelled final Apply to its exact saved Impact surface."""
+
+    while True:
+        presentation = load_presentation()
+        if not _show_saved_impact(presentation, kind=kind):
+            return
+        open_owning_workflow()
+        refreshed = load_presentation()
+        if not refreshed.handoff_available:
+            return
+
+
 def _saved_update_impact(
     store: MemoryStore,
     *,
@@ -168,7 +190,15 @@ def _saved_update_impact(
         raise ValueError(
             f"Saved Update Impact artifact '{session_uid}' is not available."
         )
-    if _show_saved_impact(update_impact_presentation(session), kind="update"):
+    def load_presentation() -> ImpactSessionPresentation:
+        current = store.load_staged_update() or store.load_impact_plan()
+        if current is None or current.uid != session.uid:
+            raise ValueError(
+                "The saved Update changed while returning from Apply. Reopen it."
+            )
+        return update_impact_presentation(current)
+
+    def open_owning_workflow() -> None:
         # Re-enter through Update's public command boundary so the exact live
         # endpoints, grants, operation digest, and final Apply confirmation are
         # checked again after leaving this immutable Impact projection.
@@ -181,6 +211,12 @@ def _saved_update_impact(
             source_descendants=session.source_include_descendants,
             target_descendants=session.target_include_descendants,
         )
+
+    _run_saved_impact_handoff_loop(
+        load_presentation=load_presentation,
+        open_owning_workflow=open_owning_workflow,
+        kind="update",
+    )
 
 
 def _saved_meld_impact(
@@ -219,19 +255,42 @@ def _saved_meld_impact(
     if selected is None:
         typer.echo("Meld Impact selection cancelled.")
         return
-    session = reload_selected_meld_session(
-        store,
-        by_session_uid[selected.key],
-    )
-    if _show_saved_impact(meld_impact_presentation(session), kind="meld"):
+    active_entry = {"value": by_session_uid[selected.key]}
+
+    def load_presentation() -> ImpactSessionPresentation:
+        refreshed_catalog = list_meld_session_catalog(store)
+        refreshed = next(
+            (
+                entry
+                for entry in refreshed_catalog
+                if entry.session_uid == selected.key
+            ),
+            None,
+        )
+        if refreshed is None:
+            raise ValueError(
+                "The saved Meld changed while returning from Apply. Reopen it."
+            )
+        active_entry["value"] = refreshed
+        return meld_impact_presentation(
+            reload_selected_meld_session(store, refreshed)
+        )
+
+    def open_owning_workflow() -> None:
         # The owning resume route reloads the catalog identity and enforces its
         # source/target binding checks before presenting the real Apply action.
         from memcommit.commands.meld import _resume_picked_meld
 
         _resume_picked_meld(
             store=store,
-            entry=by_session_uid[selected.key],
+            entry=active_entry["value"],
         )
+
+    _run_saved_impact_handoff_loop(
+        load_presentation=load_presentation,
+        open_owning_workflow=open_owning_workflow,
+        kind="meld",
+    )
 
 
 def _saved_sever_impact(
@@ -248,7 +307,6 @@ def _saved_sever_impact(
 
     sessions = SeverSessionStore(store)
     catalog = list_sever_session_catalog(sessions)
-    by_session_uid = {entry.picker_entry.key: entry for entry in catalog}
     selected = _select_saved_session(
         tuple(entry.picker_entry for entry in catalog),
         kind="sever",
@@ -258,18 +316,50 @@ def _saved_sever_impact(
     if selected is None:
         typer.echo("Sever Impact selection cancelled.")
         return
-    session = reload_selected_sever_session(
-        sessions,
-        by_session_uid[selected.key],
-    )
-    if _show_saved_impact(sever_impact_presentation(session), kind="sever"):
+    active_session = {"value": None}
+    owning_opened = {"value": False}
+
+    def load_presentation() -> ImpactSessionPresentation:
+        refreshed_catalog = list_sever_session_catalog(sessions)
+        refreshed = next(
+            (
+                entry
+                for entry in refreshed_catalog
+                if entry.picker_entry.key == selected.key
+            ),
+            None,
+        )
+        if refreshed is None:
+            raise ValueError(
+                "The saved Sever changed while returning from Apply. Reopen it."
+            )
+        current = reload_selected_sever_session(sessions, refreshed)
+        active_session["value"] = current
+        return sever_impact_presentation(current)
+
+    def open_owning_workflow() -> None:
         # Sever retains its ordinary reviewed materialization path; Impact does
         # not bypass its destination validation, CAS save, or Source boundary.
-        from memcommit.commands.sever import _run_workbench, render_sever
+        from memcommit.commands.sever import _run_workbench
 
-        session = _run_workbench(store, session)
-        typer.echo(render_sever(session))
-        typer.secho(f"Session · {session.uid}", fg=typer.colors.CYAN)
+        session = active_session["value"]
+        if session is None:
+            raise ValueError("The saved Sever session is unavailable.")
+        owning_opened["value"] = True
+        active_session["value"] = _run_workbench(store, session)
+
+    _run_saved_impact_handoff_loop(
+        load_presentation=load_presentation,
+        open_owning_workflow=open_owning_workflow,
+        kind="sever",
+    )
+
+    final_session = active_session["value"]
+    if owning_opened["value"] and final_session is not None:
+        from memcommit.commands.sever import render_sever
+
+        typer.echo(render_sever(final_session))
+        typer.secho(f"Session · {final_session.uid}", fg=typer.colors.CYAN)
 
 
 def _operation_session_impact(

@@ -1,4 +1,5 @@
 """Apply or reopen a semantic update from Context A to a local target B."""
+
 from datetime import datetime
 import sys
 from typing import Annotated, Optional
@@ -37,6 +38,7 @@ from memcommit.update import (
     UpdateSession,
     applied_session_matches,
     plan_update,
+    revise_update,
     session_matches,
 )
 from memcommit.update_endpoints import resolve_update_endpoints
@@ -136,24 +138,35 @@ def _browse_saved_update(store: MemoryStore) -> None:
     current = store.load_staged_update()
     if current is None or current.to_dict() != session.to_dict():
         raise UpdateError(
-            "The saved Update session changed while the launcher was open. "
-            "Reopen it."
+            "The saved Update session changed while the launcher was open. Reopen it."
         )
-    handoff = _run_saved_update_workbench(current)
-    if not handoff:
-        typer.echo("Update view closed; saved session unchanged.")
-        return
+    while True:
+        handoff = _run_saved_update_workbench(current)
+        if not handoff:
+            typer.echo("Update view closed; saved session unchanged.")
+            return
 
-    # The Impact workbench is inspection-only. Re-enter Update through its
-    # public command boundary so an Apply request repeats the normal endpoint,
-    # authority, freshness, and exact-review checks.
-    cmd(
-        source_name=current.source_name,
-        target_name=current.target_name,
-        replace_stage=False,
-        source_descendants=current.source_include_descendants,
-        target_descendants=current.target_include_descendants,
-    )
+        # The Impact workbench is inspection-only. Re-enter Update through its
+        # public command boundary so an Apply request repeats the normal endpoint,
+        # authority, freshness, and exact-review checks.
+        cmd(
+            source_name=current.source_name,
+            target_name=current.target_name,
+            replace_stage=False,
+            source_descendants=current.source_include_descendants,
+            target_descendants=current.target_include_descendants,
+        )
+        refreshed = store.load_staged_update()
+        if (
+            refreshed is None
+            or refreshed.uid != current.uid
+            or refreshed.status not in {"impact", "staged"}
+        ):
+            return
+        # A cancelled final Apply leaves the exact staged receipt actionable.
+        # Reopen its Impact screen so Back is a real stack transition rather
+        # than dropping the person at the command prompt.
+        current = refreshed
 
 
 def _resolve_update_access(
@@ -180,18 +193,14 @@ def cmd(
         Optional[str],
         typer.Option(
             "--from",
-            help=(
-                "Source Context A; if --to is omitted, current supplies B"
-            ),
+            help=("Source Context A; if --to is omitted, current supplies B"),
         ),
     ] = None,
     target_name: Annotated[
         Optional[str],
         typer.Option(
             "--to",
-            help=(
-                "Target Context B; if --from is omitted, current supplies A"
-            ),
+            help=("Target Context B; if --from is omitted, current supplies A"),
         ),
     ] = None,
     replace_stage: Annotated[
@@ -246,14 +255,10 @@ def cmd(
             current_name=current_name,
         )
         source_store = (
-            GrantedReadStore(source_access)
-            if source_access.is_granted
-            else store
+            GrantedReadStore(source_access) if source_access.is_granted else store
         )
         target_store = (
-            GrantedReadStore(target_access)
-            if target_access.is_granted
-            else store
+            GrantedReadStore(target_access) if target_access.is_granted else store
         )
         source = load_context_scope(
             source_store,
@@ -305,11 +310,11 @@ def cmd(
             existing.source_include_descendants == source_descendants
             and existing.target_include_descendants == target_descendants
             and applied_session_matches(
-            existing,
-            source,
-            target,
-            granted_source=granted_source,
-            granted_target=granted_target,
+                existing,
+                source,
+                target,
+                granted_source=granted_source,
+                granted_target=granted_target,
             )
         ):
             render_plan(existing, applied=True)
@@ -332,11 +337,7 @@ def cmd(
         )
         return
 
-    if (
-        existing is not None
-        and existing.status == "impact"
-        and not replace_stage
-    ):
+    if existing is not None and existing.status == "impact" and not replace_stage:
         typer.secho(
             "Update error: the active update record is not staged.",
             fg=typer.colors.RED,
@@ -344,20 +345,16 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    if (
-        existing is not None
-        and existing.status == "staged"
-        and not replace_stage
-    ):
+    if existing is not None and existing.status == "staged" and not replace_stage:
         if (
             existing.source_include_descendants == source_descendants
             and existing.target_include_descendants == target_descendants
             and session_matches(
-            existing,
-            source,
-            target,
-            granted_source=granted_source,
-            granted_target=granted_target,
+                existing,
+                source,
+                target,
+                granted_source=granted_source,
+                granted_target=granted_target,
             )
         ):
             session = existing
@@ -418,10 +415,39 @@ def cmd(
                 session,
                 expected_current=existing,
             )
-        if _interactive_terminal() and not review_update_application(session):
-            render_plan(session, staged=True)
-            typer.echo("Update remains staged; no target changes were applied.")
-            return
+        if _interactive_terminal():
+
+            def incorporate_comments(
+                current: UpdateSession,
+                guidance: str,
+            ) -> UpdateSession:
+                with progressing_provider_factory(
+                    "UPDATE",
+                    "incorporating review comments",
+                    connect_codex_chatgpt_provider,
+                ) as provider_factory:
+                    revised = revise_update(
+                        current,
+                        source,
+                        target,
+                        provider_factory,
+                        guidance,
+                    )
+                # The comment turn replaces only the exact staged proposal it
+                # reviewed. A concurrent Update must never be overwritten.
+                store.save_staged_update(revised, expected_current=current)
+                return revised
+
+            reviewed = review_update_application(
+                session,
+                incorporate=incorporate_comments,
+            )
+            if reviewed is None:
+                current = store.load_staged_update() or session
+                render_plan(current, staged=True)
+                typer.echo("Update remains staged; no target changes were applied.")
+                return
+            session = reviewed
         if session.granted_target is not None:
             applied = apply_granted_staged_update(store, session)
         elif session.granted_source is not None:

@@ -7,6 +7,7 @@ from collections import Counter
 from memcommit.memory_diff import MemoryChange
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
+    ResolutionContextLocation,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,
     ResolutionIssueSource,
@@ -336,6 +337,15 @@ class SeverResolutionWorkbenchAdapter:
                 ResolutionMetric(label="SOURCE", value=str(len(session.source.memories))),
                 ResolutionMetric(label="CRITERIA", value="1 Context"),
                 ResolutionMetric(label="RESULT", value=str(len(session.results()))),
+            ),
+            context_locations=(
+                ResolutionContextLocation("SOURCE", session.source.root_name),
+                ResolutionContextLocation("CRITERIA", session.criteria.root_name),
+                ResolutionContextLocation(
+                    "RESULT",
+                    session.output_name,
+                    "CREATED" if session.state == "APPLIED" else "NOT CREATED",
+                ),
             ),
             overview=_overview(session),
             list_label="SOURCE MEMORIES TO REVIEW",

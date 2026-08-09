@@ -40,6 +40,7 @@ from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.atomize_sessions import (
     atomize_analysis_was_applied,
     atomize_planned_output_was_applied,
+    atomize_workbench_was_applied,
     choose_atomize_session,
     load_saved_atomize_analysis,
     revalidate_saved_atomize_analysis,
@@ -132,6 +133,47 @@ def _atomize_application_audit(
     }
 
 
+def _record_atomize_workbench_application(
+    *,
+    store: MemoryStore,
+    analysis: AtomizeAnalysisSession,
+    workbench,
+    output_context_name: str,
+) -> None:
+    """Persist Source-owned terminal state after the Context checkpoint exists."""
+
+    if workbench is None:
+        return
+    checkpoint_uid = next(
+        (
+            checkpoint.get("uid")
+            for checkpoint in store.list_checkpoints(output_context_name)
+            if checkpoint.get("command") == "atomize"
+            and isinstance(checkpoint.get("args"), dict)
+            and checkpoint["args"].get("analysis_uid") == analysis.uid
+        ),
+        None,
+    )
+    if not isinstance(checkpoint_uid, str):
+        raise AtomizeImpactError(
+            "Atomize applied but its application checkpoint could not be found."
+        )
+    latest = store.load_atomize_workbench(analysis)
+    if latest is None or latest.uid != workbench.uid:
+        raise AtomizeImpactError(
+            "Atomize applied but its reviewed workbench changed before the "
+            "terminal receipt could be saved."
+        )
+    # An explicit one-shot --save-as chooses its Output after the workbench;
+    # retain that actual destination before freezing the terminal receipt.
+    latest.output_context_name = output_context_name
+    latest.record_application(
+        output_context_name=output_context_name,
+        checkpoint_uid=checkpoint_uid,
+    )
+    store.save_atomize_workbench(latest)
+
+
 def _inbound_split_references(
     store: MemoryStore,
     session: AtomizeAnalysisSession,
@@ -208,6 +250,7 @@ def _present_workbench(
     workbench,
     show_all: bool,
     workflow_actions: bool = True,
+    application_complete: bool = False,
 ) -> ResolutionWorkbenchAction | None:
     if not sys.stdin.isatty() or not sys.stdout.isatty():
         typer.echo(
@@ -219,11 +262,38 @@ def _present_workbench(
         )
         return None
     try:
+        from memcommit.commands.resolution_workbench_shell import (
+            ResolutionDestination,
+        )
+
+        planned_output = workbench.output_context_name or analysis.context_name
+
+        def validate_destination(name: str) -> None:
+            if name == analysis.context_name:
+                raise ValueError(
+                    "A distinct Atomize Output cannot be changed to the Input "
+                    "Context from Save Location."
+                )
+            store.assert_context_creatable(name)
+
         result = run_atomize_workbench_shell(
             workbench,
             analysis,
             save=store.save_atomize_workbench,
             workflow_actions=workflow_actions,
+            application_complete=application_complete,
+            destination=(
+                ResolutionDestination(
+                    value=planned_output,
+                    detail=(
+                        "Enter to change this exact new Context name before "
+                        "Review and Apply."
+                    ),
+                    validate=validate_destination,
+                )
+                if workflow_actions and planned_output != analysis.context_name
+                else None
+            ),
         )
         return result if isinstance(result, ResolutionWorkbenchAction) else None
     except ReviewCancelled:
@@ -296,11 +366,22 @@ def _resume_selected_atomize(
             "The saved atomize workbench is unavailable. Open the Context "
             "explicitly if you want to create fresh workbench state."
         )
+    planned_output = workbench.output_context_name or analysis.context_name
+    applied = applied or atomize_planned_output_was_applied(
+        store,
+        analysis,
+        planned_output,
+    )
     grounding = store.load_atomize_grounding_session(context.uid)
-    if grounding is not None and grounding.state in {
-        "AWAITING_REPLY",
-        "READY_TO_APPLY",
-    }:
+    if (
+        not applied
+        and grounding is not None
+        and grounding.state
+        in {
+            "AWAITING_REPLY",
+            "READY_TO_APPLY",
+        }
+    ):
         assert_current_grounding_bindings(
             grounding,
             context,
@@ -319,6 +400,7 @@ def _resume_selected_atomize(
         workbench=workbench,
         show_all=show_all,
         workflow_actions=not applied,
+        application_complete=applied,
     )
     if action is not None and action.kind in {
         "SUBMIT_ALL",
@@ -339,14 +421,20 @@ def _resume_selected_atomize(
             show_all=show_all,
         )
         return
+    if action is not None and action.kind == "CHANGE_DESTINATION":
+        if action.destination is None:
+            raise AtomizeImpactError("Atomize returned an empty save-location change.")
+        updated = replace(workbench, output_context_name=action.destination)
+        store.save_atomize_workbench(updated)
+        _resume_selected_atomize(
+            store=store,
+            analysis_uid=analysis.uid,
+            show_all=show_all,
+        )
+        return
     if action is not None and action.kind == "ACCEPT":
         cmd(save=True, context_name=context.name, show_all=show_all)
         return
-    applied = applied or atomize_planned_output_was_applied(
-        store,
-        analysis,
-        workbench.output_context_name or analysis.context_name,
-    )
     if applied:
         typer.secho(
             f"Saved analysis [{analysis.uid[:8]}]: APPLIED.",
@@ -836,10 +924,9 @@ def cmd(
 
         applying = save or save_as is not None
         if not applying:
-            if session is not None and atomize_analysis_was_applied(
-                store,
-                direct_ctx,
-                session.uid,
+            if session is not None and (
+                atomize_analysis_was_applied(store, direct_ctx, session.uid)
+                or atomize_workbench_was_applied(store, session)
             ):
                 workbench = store.load_atomize_workbench(session)
                 if workbench is None:
@@ -851,6 +938,7 @@ def cmd(
                     workbench=workbench,
                     show_all=show_all,
                     workflow_actions=False,
+                    application_complete=True,
                 )
                 typer.secho(
                     f"Saved analysis [{session.uid[:8]}]: APPLIED.",
@@ -892,6 +980,8 @@ def cmd(
                     analysis=session,
                     workbench=opened.workbench,
                     show_all=show_all,
+                    workflow_actions=not planned_output_applied,
+                    application_complete=planned_output_applied,
                 )
                 if action is None:
                     break
@@ -907,6 +997,16 @@ def cmd(
                         save = True
                         applying = True
                         break
+                    continue
+                if action.kind == "CHANGE_DESTINATION":
+                    if action.destination is None:
+                        raise AtomizeImpactError(
+                            "Atomize returned an empty save-location change."
+                        )
+                    opened.workbench.output_context_name = action.destination
+                    store.save_atomize_workbench(opened.workbench)
+                    planned_output = action.destination
+                    planned_output_applied = False
                     continue
                 if action.kind == "ACCEPT":
                     save = True
@@ -958,11 +1058,9 @@ def cmd(
             raise AtomizeImpactError(
                 "The saved atomize analysis does not match this Context's identity."
             )
-        already_applied = atomize_analysis_was_applied(
-            store,
-            direct_ctx,
-            session.uid,
-        )
+        already_applied = atomize_workbench_was_applied(
+            store, session
+        ) or atomize_analysis_was_applied(store, direct_ctx, session.uid)
         if save and already_applied:
             typer.secho(
                 f"Atomize analysis [{session.uid[:8]}] is already applied; "
@@ -988,11 +1086,7 @@ def cmd(
             if (
                 output_analysis is not None
                 and output_analysis.uid == session.uid
-                and atomize_analysis_was_applied(
-                    store,
-                    output_context,
-                    session.uid,
-                )
+                and atomize_planned_output_was_applied(store, session, save_as)
             ):
                 typer.secho(
                     f"Atomize analysis [{session.uid[:8]}] is already "
@@ -1052,7 +1146,15 @@ def cmd(
                 "replace them before saving."
             )
 
-        if save_as is not None and _interactive_terminal():
+        # A bare interactive session has already reviewed its planned Output
+        # in the shared workbench immediately before Review and Apply. Keep
+        # the standalone receipt only for an explicit one-shot --save-as,
+        # which does not open that saved-session surface.
+        if (
+            save_as is not None
+            and _interactive_terminal()
+            and not applying_planned_output
+        ):
             from memcommit.commands.save_location_review import (
                 review_save_location,
             )
@@ -1069,19 +1171,6 @@ def cmd(
                 )
                 return
             save_as = reviewed_destination
-            if (
-                applying_planned_output
-                and workbench is not None
-                and workbench.output_context_name != save_as
-            ):
-                # The SAVE LOCATION editor is an explicit route correction.
-                # Persist it before applying so every later entry point sees
-                # the same Output even if the Context mutation then fails.
-                workbench = replace(
-                    workbench,
-                    output_context_name=save_as,
-                )
-                store.save_atomize_workbench(workbench)
 
         application_audit = _atomize_application_audit(session, workbench)
         if save_as is not None:
@@ -1137,6 +1226,12 @@ def cmd(
             applied_session = session
             applied_name = ctx.name
             created = False
+        _record_atomize_workbench_application(
+            store=store,
+            analysis=session,
+            workbench=workbench,
+            output_context_name=applied_name,
+        )
     except (
         FileNotFoundError,
         OSError,
