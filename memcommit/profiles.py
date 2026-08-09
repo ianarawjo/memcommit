@@ -191,7 +191,7 @@ def default_study_bundle_root() -> Path:
 _STUDY_TASKS = (1, 2, 3)
 _STUDY_PRACTICE_ROOT = "practice"
 _STUDY_PRACTICE_DESCRIPTION = "practice/description"
-_STUDY_PRACTICE_DESCRIPTION_CONTENT = (
+_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
     "MemLab is a research prototype that provides command-line and terminal "
     "user interfaces (CLI/TUI) for managing agent memory and supporting "
     "collaboration among people and agents. Through MemLab's operations and "
@@ -199,9 +199,34 @@ _STUDY_PRACTICE_DESCRIPTION_CONTENT = (
     "Sessions—you can manage agent memories as they are collected, organized, "
     "and propagated among people and agents. In this study, you will use "
     "MemLab in three different situations, each involving a different context, "
-    "goal, and kind of memory. Before beginning, this practice session will "
-    "introduce MemLab's basic controls and structure by guiding you through "
-    "atomizing a short practice description."
+    "goal, and kind of memory."
+)
+_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
+    "Before beginning the three study tasks, complete a short practice "
+    "exercise to become familiar with how MemLab organizes and presents its "
+    "commands. The Memory in `practice/source` was produced by chunking a "
+    "larger source. However, this chunk still combines multiple propositions "
+    "in a single Memory. It would therefore be better to divide it into "
+    "appropriate atomic Memories so that each can be handled independently. "
+    "Open `mem help`, inspect the available operations, find the operation "
+    "designed for atomization, and use it to review the proposed atomization "
+    "and save the result as `practice/source-atomized`."
+)
+_STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT = (
+    "King Sejong, “Preface to *Hunminjeongeum*” (1446), translated by Gari K. "
+    "Ledyard, *The Korean Language Reform of 1446: The Origin, Background, "
+    "and Early History of the Korean Alphabet* (Seoul: Singu Munhwasa, 1998), "
+    "p. 170."
+)
+_STUDY_PRACTICE_SOURCE = "practice/source"
+_STUDY_PRACTICE_SOURCE_CONTENT = (
+    "The sounds of our country's language are different from those of the "
+    "Middle Kingdom and are not confluent with the sounds of characters. "
+    "Therefore, among the ignorant people, there have been many who, having "
+    "something they want to put into words, have in the end been unable to "
+    "express their feelings. I have been distressed because of this, and have "
+    "newly designed twenty-eight letters, which I wish to have everyone "
+    "practice at their ease and make convenient for their daily use."
 )
 STUDY_BASELINE_PROFILE_NAME = "study-baseline"
 _STUDY_BASELINE_SOURCE_KIND = "STUDY_BASELINE"
@@ -575,10 +600,7 @@ def inspect_store(
     current = state.get("current")
     if current is not None and (
         not isinstance(current, str)
-        or (
-            current not in contexts
-            and current not in allowed_virtual_currents
-        )
+        or (current not in contexts and current not in allowed_virtual_currents)
     ):
         raise ProfileError("MemoryStore current Context is invalid.")
     sources = _query_sources(root)
@@ -971,22 +993,16 @@ def _read_granted_public_names(
 
     result: set[str] = set()
     grants = tuple(
-        grant
-        for grant in registry.grants
-        if grant.grantee_profile_uid == profile_uid
+        grant for grant in registry.grants if grant.grantee_profile_uid == profile_uid
     )
     for grant in grants:
         for binding in grant.contexts:
-            public_name = (
-                grant.public_name
-                + binding.name[len(grant.resource_name) :]
-            )
+            public_name = grant.public_name + binding.name[len(grant.resource_name) :]
             candidates = tuple(
                 candidate
                 for candidate in grants
                 if (
-                    candidate.attachment_context_uid
-                    == grant.attachment_context_uid
+                    candidate.attachment_context_uid == grant.attachment_context_uid
                     and (
                         public_name == candidate.public_name
                         or public_name.startswith(candidate.public_name + "/")
@@ -2761,7 +2777,7 @@ def _study_baseline_branch(task: int, *, authority: bool) -> str:
     return f"{_STUDY_BASELINE_GRANTED_ROOT}/{task_name}" if authority else task_name
 
 
-def _study_practice_contexts() -> tuple[Context, Context]:
+def _study_practice_contexts() -> tuple[Context, ...]:
     """Return the stable participant-only Atomize rehearsal fixture."""
 
     root = Context(
@@ -2785,16 +2801,56 @@ def _study_practice_contexts() -> tuple[Context, Context]:
                     "memcommit:study:practice/description:memory",
                 )
             ),
-            content=_STUDY_PRACTICE_DESCRIPTION_CONTENT,
+            content=_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
         )
     )
-    return root, description
+    description.add(
+        Memory(
+            uid=str(
+                uuid.uuid5(
+                    uuid.NAMESPACE_URL,
+                    "memcommit:study:practice/description:task-memory",
+                )
+            ),
+            content=_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+        )
+    )
+    description.add(
+        Memory(
+            uid=str(
+                uuid.uuid5(
+                    uuid.NAMESPACE_URL,
+                    "memcommit:study:practice/description:reference-memory",
+                )
+            ),
+            content=_STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT,
+        )
+    )
+    source = Context(
+        uid=str(
+            uuid.uuid5(
+                uuid.NAMESPACE_URL,
+                "memcommit:study:practice/source",
+            )
+        ),
+        name=_STUDY_PRACTICE_SOURCE,
+    )
+    source.add(
+        Memory(
+            uid=str(
+                uuid.uuid5(
+                    uuid.NAMESPACE_URL,
+                    "memcommit:study:practice/source:memory",
+                )
+            ),
+            content=_STUDY_PRACTICE_SOURCE_CONTENT,
+        )
+    )
+    return root, description, source
 
 
 def _is_study_practice_name(name: str) -> bool:
-    return name == _STUDY_PRACTICE_ROOT or name.startswith(
-        _STUDY_PRACTICE_ROOT + "/"
-    )
+    return name == _STUDY_PRACTICE_ROOT or name.startswith(_STUDY_PRACTICE_ROOT + "/")
 
 
 def _remap_context_records(
@@ -3361,6 +3417,7 @@ def _snapshot_study_baseline(
     practice_names = {
         _STUDY_PRACTICE_ROOT,
         _STUDY_PRACTICE_DESCRIPTION,
+        _STUDY_PRACTICE_SOURCE,
     }
     present_practice_names = practice_names.intersection(contexts)
     if present_practice_names and present_practice_names != practice_names:
@@ -3403,14 +3460,10 @@ def _snapshot_study_baseline(
             }
             if task == 1 and not authority:
                 practice = (
-                    {
-                        name: contexts[name]
-                        for name in sorted(present_practice_names)
-                    }
+                    {name: contexts[name] for name in sorted(present_practice_names)}
                     if present_practice_names
                     else {
-                        context.name: context
-                        for context in _study_practice_contexts()
+                        context.name: context for context in _study_practice_contexts()
                     }
                 )
                 selected.update(practice)
@@ -3418,9 +3471,7 @@ def _snapshot_study_baseline(
                 raise ProfileError(f"Study baseline branch {branch!r} is empty.")
             mapping = {
                 name: (
-                    name
-                    if _is_study_practice_name(name)
-                    else name[len(branch) + 1 :]
+                    name if _is_study_practice_name(name) else name[len(branch) + 1 :]
                 )
                 for name in selected
             }
@@ -3567,9 +3618,7 @@ def _compose_study_run_pair(
             mapping = {
                 name: (
                     name
-                    if task == 1
-                    and not authority
-                    and _is_study_practice_name(name)
+                    if task == 1 and not authority and _is_study_practice_name(name)
                     else f"task-{task}/{name}"
                 )
                 for name in source_contexts

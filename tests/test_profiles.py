@@ -375,8 +375,8 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
 
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
-    assert "study-baseline: Contexts 140 owned + 0 granted" in result.output
-    assert "Memories 1307 owned + 0 granted" in result.output
+    assert "study-baseline: Contexts 141 owned + 0 granted" in result.output
+    assert "Memories 1310 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -425,10 +425,18 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     practice_memories = [
         item for item in practice.iter_items() if isinstance(item, Memory)
     ]
-    assert len(practice_memories) == 1
-    assert practice_memories[0].content == (
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_CONTENT
-    )
+    assert [item.content for item in practice_memories] == [
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT,
+    ]
+    practice_source = store.load_direct("practice/source")
+    source_memories = [
+        item for item in practice_source.iter_items() if isinstance(item, Memory)
+    ]
+    assert [item.content for item in source_memories] == [
+        profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
+    ]
 
     selected = runner.invoke(
         app,
@@ -1133,7 +1141,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Baseline Profile: study-baseline" in result.output
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
-    assert "Contexts 64 · Memories 454" in result.output
+    assert "Contexts 65 · Memories 457" in result.output
     assert "Granted Contexts 43 · Granted Memories 625" in result.output
     assert "Active Profile: pilot-001" in result.output
     assert _tree_digest(bundle_root) == source_digest
@@ -1171,7 +1179,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     baseline_store = MemoryStore(root=baseline_root, create=False)
     copied_store = MemoryStore(root=copied_root, create=False)
     authority_store = MemoryStore(root=authority_root, create=False)
-    assert len(copied_store.list_context_names()) == 64
+    assert len(copied_store.list_context_names()) == 65
     assert len(authority_store.list_context_names()) == 75
     assert copied_store.current_context_name() == (
         "task-1/participant/construction-updates"
@@ -1181,15 +1189,24 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "task-1/campus-wiki" in authority_store.list_context_names()
     assert "practice" in copied_store.list_context_names()
     assert "practice/description" in copied_store.list_context_names()
+    assert "practice/source" in copied_store.list_context_names()
     assert "practice" not in authority_store.list_context_names()
     practice = copied_store.load_direct("practice/description")
     practice_memories = [
         item for item in practice.iter_items() if isinstance(item, Memory)
     ]
-    assert len(practice_memories) == 1
-    assert practice_memories[0].content == (
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_CONTENT
-    )
+    assert [item.content for item in practice_memories] == [
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT,
+    ]
+    practice_source = copied_store.load_direct("practice/source")
+    source_memories = [
+        item for item in practice_source.iter_items() if isinstance(item, Memory)
+    ]
+    assert [item.content for item in source_memories] == [
+        profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
+    ]
     public_guidance = authority_store.load_direct(
         "task-3/remote/government/healthcare-agent/info-request/"
         "transmission-guidance/public-guidance"
@@ -1237,10 +1254,18 @@ def test_init_study_adds_practice_description_to_an_older_baseline(
     memories = [
         item for item in practice.iter_items() if isinstance(item, Memory)
     ]
-    assert len(memories) == 1
-    assert memories[0].content == (
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_CONTENT
-    )
+    assert [item.content for item in memories] == [
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT,
+    ]
+    source = store.load_direct("practice/source")
+    source_memories = [
+        item for item in source.iter_items() if isinstance(item, Memory)
+    ]
+    assert [item.content for item in source_memories] == [
+        profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
+    ]
 
 
 def test_init_study_without_name_generates_unique_timestamped_name(
@@ -1336,8 +1361,8 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
     profile_line = next(
         line for line in result.output.splitlines() if "pilot-002" in line
     )
-    assert "Contexts 64 owned + 43 granted" in profile_line
-    assert "Memories 454 owned + 625 granted" in profile_line
+    assert "Contexts 65 owned + 43 granted" in profile_line
+    assert "Memories 457 owned + 625 granted" in profile_line
     authority_line = next(
         line
         for line in result.output.splitlines()

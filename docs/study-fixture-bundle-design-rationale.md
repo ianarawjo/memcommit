@@ -77,41 +77,62 @@ The current corpus contains:
 | 3 | 301 | 100 | 75 | 476 |
 | Total | 378 | 700 | 228 | 1,306 |
 
-The editable baseline additionally contains one participant-only rehearsal
-Memory under `practice/description`, bringing the composed baseline to 1,307
-ordinary Memories. It is not part of any Task corpus or authority package and
-therefore does not change the reviewed Task counts above.
+The editable baseline additionally contains four participant-only rehearsal
+Memories under `practice/description` and `practice/source`, bringing the
+composed baseline to 1,310 ordinary Memories. They are not part of any Task
+corpus or authority package and therefore do not change the reviewed Task
+counts above.
 
 The old Korean XLSX was a smaller intermediate snapshot and is not a build
 input. Spreadsheet views are regenerated from the current parsed corpus.
 
 ## Ordinary Context mapping
 
-Every `init-study` participant Profile receives `practice/description` as a
-separate local Context with one four-sentence composite Memory explaining Mem,
-Memories, Contexts, impact preview, and reviewed saving. It exists solely for
-the onboarding Atomize exercise. Keeping it outside `task-1`, `task-2`, and
-`task-3` prevents rehearsal analyses, workbenches, and any accidental later
-application from contaminating measured Task material. The run-private
-granted-memory Profile never receives this Context and no Grant references it.
-The Context and Memory identities are deterministic across runs. A baseline
-created before this fixture existed is still accepted by `init-study`; the
-new run receives the canonical practice fixture without mutating that older
-baseline.
+Every `init-study` participant Profile receives two separate local rehearsal
+Contexts. `practice/description` contains an overview Memory, a task Memory,
+and a bibliographic-reference Memory. The overview introduces MemLab and the
+three Study situations. The task directs the participant to use the grouped
+`mem help` browser to discover the atomization operation, review its proposal,
+and save the result as `practice/source-atomized`. The reference preserves the
+translation citation without placing it in the analysis target.
+`practice/source` contains the one composite Memory to analyze. Separating
+instruction and reference from source prevents either from becoming Atomize
+evidence while still requiring the participant to learn the help structure
+rather than receiving an exact command.
 
-The canonical rehearsal Memory is deliberately one composite record rather
-than four pre-split Memories:
+Both Contexts exist solely for onboarding. Keeping them outside `task-1`,
+`task-2`, and `task-3` prevents rehearsal analyses, workbenches, and any
+accidental later application from contaminating measured Task material. The
+run-private granted-memory Profile never receives these Contexts and no Grant
+references them. Context and Memory identities are deterministic across runs.
+A baseline created before this fixture existed is still accepted by
+`init-study`; the new run receives the canonical practice fixture without
+mutating that older baseline.
+
+The three description Memories are:
 
 ```text
 MemLab is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents.
 Through MemLab's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents.
 In this study, you will use MemLab in three different situations, each involving a different context, goal, and kind of memory.
-Before beginning, this practice session will introduce MemLab's basic controls and structure by guiding you through atomizing a short practice description.
 ```
 
-The four claims introduce the vocabulary used by the tutorial while giving
-Atomize a small, legible decomposition target. They avoid claims about any
-Study Task, participant, or granted source.
+```text
+Before beginning the three study tasks, complete a short practice exercise to become familiar with how MemLab organizes and presents its commands. The Memory in `practice/source` was produced by chunking a larger source. However, this chunk still combines multiple propositions in a single Memory. It would therefore be better to divide it into appropriate atomic Memories so that each can be handled independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to review the proposed atomization and save the result as `practice/source-atomized`.
+```
+
+```text
+King Sejong, “Preface to *Hunminjeongeum*” (1446), translated by Gari K. Ledyard, *The Korean Language Reform of 1446: The Origin, Background, and Early History of the Korean Alphabet* (Seoul: Singu Munhwasa, 1998), p. 170.
+```
+
+The source Memory reproduces only Gari K. Ledyard's English translation of
+King Sejong's 1446 preface to *Hunminjeongeum*. Attribution stays in the
+separate bibliographic-reference Memory so it cannot become an extra
+proposition in the Atomize input. The translation's several claims and causal
+relations provide a small, legible semantic decomposition target. The
+translation is cited from Gari K. Ledyard, *The Korean Language Reform of
+1446: The Origin, Background, and Early History of the Korean Alphabet*
+(Seoul: Singu Munhwasa, 1998), 170.
 
 Each Task Profile also owns one participant-facing description Memory directly
 under `description`. Its English body is the previously authored Task
