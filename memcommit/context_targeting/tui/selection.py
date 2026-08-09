@@ -17,12 +17,17 @@ from memcommit.context_targeting.model import ContextSelectionMode
 
 @dataclass
 class ContextSelectionState:
-    """Track selected names separately from the moving Context-tree cursor."""
+    """Track checked names separately from the moving Context-tree cursor.
+
+    Multiple selection may be empty while a person is editing a control. The
+    operation validates its required cardinality only when constructing an
+    executable request or receipt; this state owns interaction mechanics, not
+    operation readiness.
+    """
 
     catalog: tuple[str, ...]
     mode: ContextSelectionMode
     _selected_order: list[str] = field(repr=False)
-    minimum: int = 1
 
     @classmethod
     def create(
@@ -31,7 +36,6 @@ class ContextSelectionState:
         *,
         selected: Sequence[str],
         mode: ContextSelectionMode = "SINGLE",
-        minimum: int = 1,
     ) -> "ContextSelectionState":
         names = tuple(catalog)
         chosen = list(dict.fromkeys(selected))
@@ -43,13 +47,11 @@ class ContextSelectionState:
             raise ValueError("Context selection requires a distinct catalog.")
         if mode not in {"SINGLE", "MULTIPLE"}:
             raise ValueError("Context selection mode must be SINGLE or MULTIPLE.")
-        if isinstance(minimum, bool) or not 1 <= minimum <= len(names):
-            raise ValueError("Context selection minimum is outside the catalog.")
-        if any(name not in names for name in chosen) or len(chosen) < minimum:
+        if any(name not in names for name in chosen):
             raise ValueError("Initial Context selections are outside the catalog.")
         if mode == "SINGLE" and len(chosen) != 1:
             raise ValueError("Single Context selection requires exactly one value.")
-        return cls(names, mode, chosen, minimum)
+        return cls(names, mode, chosen)
 
     @property
     def selected_names(self) -> tuple[str, ...]:
@@ -64,6 +66,8 @@ class ContextSelectionState:
 
     @property
     def most_recent_name(self) -> str:
+        if not self._selected_order:
+            raise ValueError("No Context is currently selected.")
         return self._selected_order[-1]
 
     @property
@@ -78,19 +82,35 @@ class ContextSelectionState:
     def multiple(self) -> bool:
         return self.mode == "MULTIPLE"
 
-    def set_multiple(self, enabled: bool) -> bool:
-        """Change cardinality and collapse deterministically when needed."""
+    def set_multiple(
+        self,
+        enabled: bool,
+        *,
+        fallback_name: str | None = None,
+    ) -> bool:
+        """Change cardinality and keep SINGLE valid when MULTIPLE is empty."""
 
         next_mode: ContextSelectionMode = "MULTIPLE" if enabled else "SINGLE"
         if next_mode == self.mode:
             return False
+        selection_changed = False
+        if not enabled:
+            if len(self._selected_order) > 1:
+                # Retain the last explicit choice rather than silently reverting
+                # to the initial/current Context when a multi-root search narrows.
+                self._selected_order = [self.most_recent_name]
+                selection_changed = True
+            elif not self._selected_order:
+                if fallback_name not in self.catalog:
+                    raise ValueError(
+                        "Single Context selection requires a visible fallback."
+                    )
+                # The moving cursor is the only visible non-stale choice when
+                # an empty multi-select control switches back to single mode.
+                self._selected_order = [fallback_name]
+                selection_changed = True
         self.mode = next_mode
-        if not enabled and len(self._selected_order) > 1:
-            # Retain the last explicit choice rather than silently reverting to
-            # the initial/current Context when a multi-root search is narrowed.
-            self._selected_order = [self.most_recent_name]
-            return True
-        return False
+        return selection_changed
 
     def choose(self, name: str) -> bool:
         """Choose or toggle one name and report whether the checked set changed."""
@@ -102,14 +122,44 @@ class ContextSelectionState:
             self._selected_order = [name]
             return changed
         if name in self._selected_order:
-            if len(self._selected_order) <= self.minimum:
-                raise ValueError(
-                    f"Select at least {self.minimum} Context"
-                    + ("s." if self.minimum != 1 else ".")
-                )
             self._selected_order.remove(name)
             return True
         self._selected_order.append(name)
+        return True
+
+    def toggle_group(self, names: Sequence[str], *, anchor_name: str) -> bool:
+        """Toggle a caller-defined group through one explicit anchor row.
+
+        The selection model deliberately does not infer hierarchy. A composing
+        tree can supply its frozen subtree, while a flat picker can keep using
+        ``choose``. Keeping the anchor most recent also makes a later collapse
+        to SINGLE retain the row the person explicitly acted on.
+        """
+
+        group = tuple(dict.fromkeys(names))
+        if (
+            not group
+            or anchor_name not in group
+            or any(name not in self.catalog for name in group)
+        ):
+            raise ValueError("Context selection group is outside the frozen catalog.")
+        if not self.multiple:
+            return self.choose(anchor_name)
+
+        group_set = frozenset(group)
+        if anchor_name in self._selected_order:
+            self._selected_order = [
+                name for name in self._selected_order if name not in group_set
+            ]
+            return True
+
+        # Replace any partial group with the complete group, and append the
+        # actual row last so cardinality collapse preserves the visible intent.
+        self._selected_order = [
+            name for name in self._selected_order if name not in group_set
+        ]
+        self._selected_order.extend(name for name in group if name != anchor_name)
+        self._selected_order.append(anchor_name)
         return True
 
 

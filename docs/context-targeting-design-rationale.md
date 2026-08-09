@@ -58,6 +58,23 @@ and application authority. Sever therefore continues to default to descendant
 reach while Compare, Update, and Meld setup default to exact roots. Find keeps
 multiple roots and independently configurable embeds.
 
+A MULTIPLE checked-selection control may temporarily contain zero names. This
+lets a person clear and rebuild a set without the last row becoming a special
+case. The operation enforces its required minimum only when it constructs an
+executable request or typed receipt. SINGLE mode still contains exactly one
+name; switching an empty MULTIPLE control to SINGLE checks the visible tree
+cursor supplied by the composing UI.
+
+Hierarchical group selection is an explicit composition of those two common
+controls. The tree supplies the complete frozen subtree and the selection
+state toggles that caller-defined group through its anchor row. It does not
+infer hierarchy itself, so flat pickers retain ordinary per-row selection. A
+checked parent action clears its whole group; an unchecked parent action fills
+the whole group and records the parent as the most recent explicit choice.
+Find uses this composition so every lexical Context it will search is visibly
+checked. Saved-session operations retain their separate descendant-reach
+boolean and are not migrated to expanded checked lists.
+
 ## Persistence and compatibility boundary
 
 No common control is a durable preference. Repeating searches in one open Find

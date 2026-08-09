@@ -25,8 +25,8 @@ The workbench presents four visible controls in screen order:
 2. `TARGETS`, the frozen readable Context tree with Enter or Space changing
    the checked ordinary local or READ-granted root while focus remains in the
    tree;
-3. `SCOPE`, with independent `TARGET SELECTION`, `RANGE`, and
-   `EMBEDDED CONTEXTS` choices; and
+3. `SCOPE`, with independent `TARGET SELECTION` and `EMBEDDED CONTEXTS`
+   choices; and
 4. `RESULTS`, grouped by the exact owning Context.
 
 Tab and Shift-Tab move through that same order. The search field owns initial
@@ -37,24 +37,28 @@ Target cardinality starts in `MULTIPLE` to preserve the fast path of checking
 peers on the first visit to the tree. `SINGLE` makes the next checked row
 replace the current target. Changing an existing multi-root selection to
 `SINGLE` retains the most recently explicitly checked root rather than silently
-returning to the initial current Context. At least one target is always
-required. Enter and Space are selection keys in `TARGETS`; `/`, Escape, and
-Backspace are the explicit paths back to `SEARCH`. This prevents Enter from
-appearing to accept a row while actually abandoning the tree unchanged.
+returning to the initial current Context. Enter and Space are selection keys
+in `TARGETS`; `/`, Escape, and Backspace are the explicit paths back to
+`SEARCH`. This prevents Enter from appearing to accept a row while actually
+abandoning the tree unchanged.
 
-`INCLUDE DESCENDANTS` means canonical lexical namespace descendants only: selecting
-`task-1` includes materialized readable names beginning `task-1/`. `FOLLOW`
-under `EMBEDDED CONTEXTS` independently controls traversal through explicit
-Context objects. The legacy default remains both enabled; `--direct` initializes
-both disabled when it is used with operand-free Find. Keeping the controls
-independent prevents "below" from silently meaning a graph edge.
+In `MULTIPLE`, selecting a parent checks every readable Context in its frozen
+lexical subtree, including descendants that are currently collapsed. Selecting
+that checked parent again clears the same complete subtree. Descendant rows
+remain independently editable after a group action. Search executes the exact
+visible checked set rather than re-expanding a parent behind the UI; otherwise
+an independently unchecked child would still be searched. The legacy default
+`INCLUDE DESCENDANTS` is therefore projected once into the initial checked set,
+while `--direct` starts with only the exact initial target checked. `FOLLOW`
+under `EMBEDDED CONTEXTS` remains an independent graph-traversal choice.
 
-Every submission freezes the query, ordered selected roots, range, embed
-choice, and limit into one `FindSearchRequest`. Changes to query, targets, or
-scope invalidate the visible result set and require another Enter; stale rows
-must never appear to describe a new frame. Search work runs outside the
-prompt-toolkit event-loop thread while the exact request stays visible and
-immutable. Closing during a search waits for that read-only turn to complete.
+Every workbench submission freezes the query, ordered exact checked targets,
+embed choice, and limit into one `FindSearchRequest` with descendant expansion
+disabled. Changes to query, targets, or scope invalidate the visible result set
+and require another Enter; stale rows must never appear to describe a new
+frame. Search work runs outside the prompt-toolkit event-loop thread while the
+exact request stays visible and immutable. Closing during a search waits for
+that read-only turn to complete.
 
 ## Authority and privacy boundaries
 
@@ -64,8 +68,8 @@ edge. Query-only views are not selectable ordinary roots. Their already-public
 names may still appear as current-state candidates where the selected readable
 parent exposes them, but their concealed contents are never opened.
 
-Overlapping roots, namespace descendants, and embeds are deduplicated by
-Context identity and logical item identity before ranking. READ-granted roots
+Overlapping checked targets and embeds are deduplicated by Context identity
+and logical item identity before ranking. READ-granted roots
 may contribute authorized Memory content but never the authority Profile's
 private checkpoints, sessions, traces, or rationale artifacts. Temporal
 queries remain unavailable for a selected granted root because READ authority
@@ -78,7 +82,7 @@ and provider output validation remain the semantic execution boundaries.
 
 ## Reuse and limitations
 
-The workbench reuses the common Context tree state, Context reach control,
+The workbench reuses the common Context tree and checked-selection states,
 horizontal-choice renderer, focused Frame styling, terminal escaping, grouped
 search-result presentation, and close-safe background-turn controller.
 `ContextTreeState` continues to own only cursor and expansion, while the shared
@@ -87,8 +91,15 @@ that configures that state for multiple roots; the common endpoint and Sever
 setups use the same state in single-selection mode. Multi-selection semantics
 are not added to the full-screen generic picker or exposed to those operations.
 
-The one-shot `--context` option remains singular, and the range/embed choices
-apply uniformly to every checked target. Result inspection and conversational
-follow-up remain separate from this Google-like search surface; the retained
-legacy Find chat shell is not silently reactivated. Query-only routes remain a
-separate authorized interface and never become selectable ordinary roots.
+The one-shot `--context` option remains singular and retains its existing
+descendant behavior. The workbench's embed choice applies uniformly to every
+checked target. Result inspection and conversational follow-up remain separate
+from this Google-like search surface; the retained legacy Find chat shell is
+not silently reactivated. Query-only routes remain a separate authorized
+interface and never become selectable ordinary roots.
+
+Multiple-target editing may temporarily leave zero rows checked. Clearing the
+last row changes only process-local UI state; pressing Search then fails before
+provider connection because `FindSearchRequest` requires at least one distinct
+readable Context. Switching that empty control to SINGLE selects the visible
+tree cursor so single-cardinality state cannot become invalid.

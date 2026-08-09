@@ -62,7 +62,13 @@ def test_blank_workbench_initial_focus_accepts_the_query_immediately():
             require_tty=False,
         )
 
-    assert requests == [FindSearchRequest("needle", ("task-1",))]
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task-1",),
+            include_descendants=False,
+        )
+    ]
 
 
 def test_workbench_submits_multiple_targets_and_independent_scope_choices():
@@ -84,16 +90,14 @@ def test_workbench_submits_multiple_targets_and_independent_scope_choices():
         )
 
     with create_pipe_input() as pipe_input:
-        # Search -> Targets; expand task-1; select its child; Scope: exact and
-        # exclude embeds; Results -> Search; submit and close after completion.
-        pipe_input.send_text(
-            "\t\x1b[C\x1b[B \t\x1b[B\x1b[D\x1b[B\x1b[D\t\tneedle\r\x03"
-        )
+        # Search -> Targets; expand task-1; select its child; Scope: exclude
+        # embeds; Results -> Search; submit and close after completion.
+        pipe_input.send_text("\t\x1b[C\x1b[B \t\x1b[B\x1b[D\t\tneedle\r\x03")
         result = run_find_search_workbench(
             ("task-1", "task-1/source", "other"),
             current="task-1",
             initial_target="task-1",
-            initial_include_descendants=True,
+            initial_include_descendants=False,
             initial_follow_embeds=True,
             limit=7,
             run_search=search,
@@ -130,7 +134,7 @@ def test_enter_checks_target_and_stays_in_targets_until_explicit_return():
             ("task-1", "task-1/source"),
             current="task-1",
             initial_target="task-1",
-            initial_include_descendants=True,
+            initial_include_descendants=False,
             initial_follow_embeds=True,
             limit=5,
             run_search=search,
@@ -143,8 +147,37 @@ def test_enter_checks_target_and_stays_in_targets_until_explicit_return():
         FindSearchRequest(
             "needle",
             ("task-1", "task-1/source"),
+            include_descendants=False,
         )
     ]
+
+
+def test_empty_target_selection_is_staged_but_rejected_when_search_runs():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # Enter a query, clear the only checked target, return to Search, and
+        # submit. The target interaction succeeds; request construction blocks.
+        pipe_input.send_text("needle\t\r/\r\x03")
+        result = run_find_search_workbench(
+            ("task-1",),
+            current="task-1",
+            initial_target="task-1",
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == []
+    assert result.response is None
 
 
 def test_scope_can_collapse_multiple_targets_to_the_most_recent_choice():
@@ -162,7 +195,7 @@ def test_scope_can_collapse_multiple_targets_to_the_most_recent_choice():
             ("task-1", "task-1/source"),
             current="task-1",
             initial_target="task-1",
-            initial_include_descendants=True,
+            initial_include_descendants=False,
             initial_follow_embeds=True,
             limit=5,
             run_search=search,
@@ -171,7 +204,13 @@ def test_scope_can_collapse_multiple_targets_to_the_most_recent_choice():
             require_tty=False,
         )
 
-    assert requests == [FindSearchRequest("needle", ("task-1/source",))]
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task-1/source",),
+            include_descendants=False,
+        )
+    ]
 
 
 @pytest.mark.parametrize("back_key", ["\x1b", "\x7f"])
@@ -197,7 +236,77 @@ def test_escape_and_backspace_return_read_only_scope_to_the_search(back_key):
             require_tty=False,
         )
 
-    assert requests == [FindSearchRequest("needle", ("task-1",))]
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task-1",),
+            include_descendants=False,
+        )
+    ]
+
+
+def test_initial_descendant_reach_is_materialized_as_exact_checked_targets():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("needle\r\x03")
+        run_find_search_workbench(
+            ("task", "task/a", "task/a/deep", "task/b", "other"),
+            current="task",
+            initial_target="task",
+            initial_include_descendants=True,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task", "task/a", "task/a/deep", "task/b"),
+            include_descendants=False,
+        )
+    ]
+
+
+def test_selecting_a_collapsed_parent_checks_its_hidden_descendants():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # The initial cursor is the second collapsed root. Select the first root
+        # without expanding it, then remove the initial target and search.
+        pipe_input.send_text("needle\t\x1b[A\r\x1b[B\r/\r\x03")
+        run_find_search_workbench(
+            ("task", "task/a", "task/a/deep", "task/b", "other"),
+            current="other",
+            initial_target="other",
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task", "task/a", "task/a/deep", "task/b"),
+            include_descendants=False,
+        )
+    ]
 
 
 def test_result_renderer_keeps_related_results_separate_from_primary_matches():

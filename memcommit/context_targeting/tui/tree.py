@@ -100,6 +100,20 @@ def expandable_context_subtree(tree: ContextTree, name: str) -> set[str]:
     return expandable
 
 
+def context_subtree_names(tree: ContextTree, name: str) -> tuple[str, ...]:
+    """Return one frozen lexical subtree in visible depth-first order."""
+
+    if name not in tree.parent_by_name:
+        raise ValueError("Context subtree root is outside the frozen catalog.")
+    names: list[str] = []
+    pending = [name]
+    while pending:
+        candidate = pending.pop()
+        names.append(candidate)
+        pending.extend(reversed(tree.children_by_name[candidate]))
+    return tuple(names)
+
+
 def visible_context_rows(
     tree: ContextTree,
     expanded: AbstractSet[str],

@@ -25,10 +25,6 @@ from prompt_toolkit.widgets import Frame, TextArea
 
 from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import busy_suffix
-from memcommit.context_targeting.tui.reach import (
-    ContextReachState,
-    render_context_reach,
-)
 from memcommit.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
@@ -38,7 +34,11 @@ from memcommit.context_targeting.tui.selection import (
     ContextTargetModeState,
     render_context_target_mode,
 )
-from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.context_targeting.tui.tree import (
+    ContextTreeState,
+    build_context_tree,
+    context_subtree_names,
+)
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -193,12 +193,10 @@ def render_find_search_results(response: FindSearchResponse | None) -> str:
 def _scope_summary(
     *,
     target_count: int,
-    include_descendants: bool,
     follow_embeds: bool,
 ) -> str:
-    reach = "INCLUDE DESCENDANTS" if include_descendants else "THIS CONTEXT ONLY"
     embeds = "FOLLOW EMBEDS" if follow_embeds else "EXCLUDE EMBEDS"
-    return f"TARGETS {target_count} · {reach} · {embeds}"
+    return f"EXACT CHECKED TARGETS {target_count} · {embeds}"
 
 
 def run_find_search_workbench(
@@ -238,21 +236,23 @@ def run_find_search_workbench(
     if set(labels) - set(catalog):
         raise ValueError("Find Context annotations are outside the catalog.")
 
-    tree_state = ContextTreeState.create(
-        build_context_tree(catalog),
-        selected=initial_target,
+    tree = build_context_tree(catalog)
+    tree_state = ContextTreeState.create(tree, selected=initial_target)
+    initial_group = context_subtree_names(tree, initial_target)
+    initial_checked = (
+        tuple(name for name in initial_group if name != initial_target)
+        + (initial_target,)
+        if initial_include_descendants
+        else (initial_target,)
     )
     target_selection = ContextSelectionState.create(
         catalog,
-        selected=(initial_target,),
+        selected=initial_checked,
         # Multiple remains the initial mode so the existing fast path—Tab to
         # Targets and check peers—does not acquire a setup detour.
         mode="MULTIPLE",
     )
     target_mode = ContextTargetModeState.create(multiple=True)
-    range_choice = ContextReachState.create(
-        include_descendants=initial_include_descendants
-    )
     embed_choice = HorizontalChoiceState(
         (
             HorizontalChoiceOption("EXCLUDE", "EXCLUDE"),
@@ -311,17 +311,10 @@ def run_find_search_workbench(
         )
         fragments.append(("", "\n"))
         fragments.extend(
-            render_context_reach(
-                range_choice,
-                focused=focused and scope_row["value"] == 1,
-            )
-        )
-        fragments.append(("", "\n"))
-        fragments.extend(
             render_horizontal_choice(
                 embed_choice,
                 title="EMBEDDED CONTEXTS",
-                focused=focused and scope_row["value"] == 2,
+                focused=focused and scope_row["value"] == 1,
             )
         )
         return fragments
@@ -345,7 +338,6 @@ def run_find_search_workbench(
     def render_header() -> str:
         summary = _scope_summary(
             target_count=len(target_selection.selected_names),
-            include_descendants=range_choice.include_descendants,
             follow_embeds=embed_choice.selected_uid == "FOLLOW",
         )
         mode = response.mode if response is not None else "AUTO FROM QUERY"
@@ -367,9 +359,9 @@ def run_find_search_workbench(
         height=Dimension(min=5, preferred=8, max=12, weight=1),
     )
     scope_frame = Frame(
-        Window(scope_control, height=Dimension.exact(3), wrap_lines=False),
+        Window(scope_control, height=Dimension.exact(2), wrap_lines=False),
         title="SCOPE",
-        height=Dimension.exact(5),
+        height=Dimension.exact(4),
     )
     results_frame = Frame(
         results_area,
@@ -506,7 +498,10 @@ def run_find_search_workbench(
         else:
             name = tree_state.selected_name
             try:
-                changed = target_selection.choose(name)
+                changed = target_selection.toggle_group(
+                    context_subtree_names(tree, name),
+                    anchor_name=name,
+                )
             except ValueError as error:
                 status["value"] = str(error)
             else:
@@ -518,7 +513,7 @@ def run_find_search_workbench(
 
     @bindings.add("down", filter=has_focus(scope_control), eager=True)
     def _scope_down(event) -> None:
-        scope_row["value"] = min(2, scope_row["value"] + 1)
+        scope_row["value"] = min(1, scope_row["value"] + 1)
         event.app.invalidate()
 
     @bindings.add("up", filter=has_focus(scope_control), eager=True)
@@ -534,7 +529,10 @@ def run_find_search_workbench(
         if row == 0:
             if not target_mode.move(delta):
                 return
-            selection_changed = target_selection.set_multiple(target_mode.multiple)
+            selection_changed = target_selection.set_multiple(
+                target_mode.multiple,
+                fallback_name=tree_state.selected_name,
+            )
             if selection_changed:
                 clear_results("TARGETS CHANGED · PRESS ENTER TO SEARCH")
             else:
@@ -544,8 +542,7 @@ def run_find_search_workbench(
                     else "SINGLE TARGET SELECTION"
                 )
             return
-        choice = range_choice if row == 1 else embed_choice
-        if choice.move(delta):
+        if embed_choice.move(delta):
             clear_results("SCOPE CHANGED · PRESS ENTER TO SEARCH")
 
     @bindings.add("right", filter=has_focus(scope_control), eager=True)
@@ -599,7 +596,9 @@ def run_find_search_workbench(
             request = FindSearchRequest(
                 query=search_area.text.strip(),
                 target_names=target_selection.selected_names,
-                include_descendants=range_choice.include_descendants,
+                # Find materializes lexical descendants as visible checkmarks;
+                # re-expanding here would make a manually unchecked child lie.
+                include_descendants=False,
                 follow_embeds=embed_choice.selected_uid == "FOLLOW",
                 limit=limit,
             )

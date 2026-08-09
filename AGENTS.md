@@ -102,6 +102,16 @@ conversation.
   for common cursor, checked-value, cardinality, and exact-versus-descendant
   mechanics. Keep availability, role validation, default values, receipts,
   authority, and materialization meaning in the calling operation.
+- Allow a shared MULTIPLE `ContextSelectionState` to contain zero checked
+  names while the person edits it. Enforce an operation's minimum only when
+  constructing its executable request or typed receipt. SINGLE mode must
+  contain exactly one name; when switching an empty MULTIPLE control to SINGLE,
+  use the composing tree's visible cursor as the explicit fallback.
+- For hierarchical MULTIPLE selection, compose the frozen Context tree with
+  the shared selection state's group toggle: checking a parent checks its full
+  lexical subtree and unchecking it clears that subtree. Render every effective
+  target as checked and execute the exact checked set; do not also apply hidden
+  descendant expansion that could re-include an independently unchecked row.
 - Use `expand_lexical_context_names` for canonical name-prefix expansion.
   Keep lexical descendants and embedded-Context traversal as independent axes,
   and never interpret Grant attachment metadata as a hierarchy edge.
