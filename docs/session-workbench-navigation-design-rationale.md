@@ -108,14 +108,14 @@ be mistaken for required progress.
 
 The shared interaction grammar is:
 
-- Items receives initial focus;
+- Viewer receives initial focus on the complete report;
+- `Tab` moves from Viewer to Items, while `Shift-Tab` moves from Viewer to To
+  Do, following the visible frame order from the first interaction;
 - `Up` and `Down` in Items select and immediately preview the corresponding
   report or item in Viewer;
 - `Enter` moves from the selected Items row into its aligned Viewer;
-- Items is the initial hub: its first `Tab` opens Viewer and its first
-  `Shift-Tab` reaches To Do. Once a visible-frame cycle begins, forward Tab
-  follows screen order `Viewer → Items → To Do → Viewer`, with Shift-Tab
-  reversing that established cycle. In particular, leaving an opened Viewer
+- Forward Tab follows screen order `Viewer → Items → To Do → Viewer`, with
+  Shift-Tab reversing that cycle. In particular, leaving an opened Viewer
   never skips the adjacent Items frame;
 - `Up` and `Down` move one row or semantic Viewer section in the focused frame;
   while Viewer has focus, held-arrow repeats use the shared navigation

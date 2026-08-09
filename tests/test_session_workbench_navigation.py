@@ -16,10 +16,10 @@ def test_focus_rows_and_semantic_sections_share_one_controller():
     navigation = SessionWorkbenchNavigation()
     sections = _sections("REPORT", "ITEM:a", "IMPACT", "APPLY")
 
-    assert navigation.pane == "items"
+    assert navigation.pane == "viewer"
     assert navigation.move_row(4, 2) == 2
     assert navigation.preview_selected_row() == 2
-    assert navigation.pane == "items"
+    assert navigation.pane == "viewer"
     navigation.open_selected(sections)
     assert navigation.pane == "viewer"
     assert navigation.viewer_row_index == 2
@@ -28,13 +28,13 @@ def test_focus_rows_and_semantic_sections_share_one_controller():
 
 
 def test_three_frame_session_cycle_includes_todo_without_affecting_compare_toggle():
-    navigation = SessionWorkbenchNavigation(pane="items")
-    panes = ("items", "viewer", "todo")
+    navigation = SessionWorkbenchNavigation()
+    panes = ("viewer", "items", "todo")
 
-    assert navigation.cycle_panes(panes) == "viewer"
+    assert navigation.cycle_panes(panes) == "items"
     assert navigation.cycle_panes(panes) == "todo"
-    assert navigation.cycle_panes(panes, -1) == "viewer"
-    assert navigation.toggle_frames() == "items"
+    assert navigation.cycle_panes(panes, -1) == "items"
+    assert navigation.toggle_frames() == "viewer"
 
 
 def test_section_identity_survives_insertions_and_apply_is_not_an_offset():

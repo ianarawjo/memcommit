@@ -132,9 +132,9 @@ def test_save_location_card_emits_an_exact_destination_change_before_apply():
         accept_enabled=True,
     )
     with create_pipe_input() as pipe_input:
-        # Open the Report, move from its title through understanding, review
-        # set, and results to SAVE LOCATION, then edit the exact Context name.
-        pipe_input.send_text("\r\x1b[B\x1b[B\x1b[B\x1b[B\r\x15task-3/severed-final\r")
+        # The Report starts focused. Move from its title through understanding,
+        # review set, and results to SAVE LOCATION, then edit the exact name.
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\x1b[B\r\x15task-3/severed-final\r")
         action = run_resolution_workbench_shell(
             view,
             app_input=pipe_input,
@@ -536,7 +536,7 @@ def test_split_detail_submits_a_supplied_option_with_an_optional_comment():
     with create_pipe_input() as pipe_input:
         # Open conflict 1, move to OPTIONS, Enter its nested navigation,
         # select the first option, then submit an empty optional comment.
-        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\r\rc\r")
+        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\r\rc\r")
         action = run_resolution_workbench_shell(
             _view(item),
             split_viewer_items=True,
@@ -564,7 +564,7 @@ def test_split_detail_submits_other_direction_without_a_fabricated_option():
         # Open conflict 1, enter OPTIONS, move beyond both supplied options to
         # Other direction, and submit a free-form resolution.
         pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\r\x1b[B\x1b[B\rUse a staged combination instead.\r"
+            "\t\x1b[B\r\x1b[B\x1b[B\r\x1b[B\x1b[B\rUse a staged combination instead.\r"
         )
         action = run_resolution_workbench_shell(
             _view(item),
@@ -702,7 +702,7 @@ def test_actionable_response_is_focusable_and_opens_inline_with_enter():
         # Open the item, move through Classification, Source, Why, Decision,
         # and Response, then save the inline field.
         pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\x1b[B\rA separate response.\rq"
+            "\t\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\x1b[B\rA separate response.\rq"
         )
         action = run_resolution_workbench_shell(
             _view(item),
@@ -724,10 +724,9 @@ def test_split_viewer_section_navigation_selects_matching_item_row():
     view = _view(_item("a"), _item("b"))
 
     with create_pipe_input() as pipe_input:
-        # Tab focuses Viewer. Four Down presses move title -> understanding ->
-        # item-list heading -> issue a -> issue b, which must synchronize the
-        # lower row.
-        pipe_input.send_text("\t\x1b[B\x1b[B\x1b[B\x1b[Bq")
+        # Viewer starts focused. Four Down presses move title -> understanding
+        # -> item-list heading -> issue a -> issue b, synchronizing the row.
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             navigation=navigation,
@@ -854,7 +853,7 @@ def test_atomize_detail_down_uses_shared_viewer_arrow_acceleration(monkeypatch):
         # Move from REPORT to the split, open it, then one held-arrow pulse
         # starts on Classification and then reaches the second wrapped Source
         # Memory line.
-        pipe_input.send_text("\x1b[B\r\x1b[Bq")
+        pipe_input.send_text("\t\x1b[B\r\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             workbench_navigation=workbench_navigation,
@@ -944,7 +943,7 @@ def test_proposed_memories_are_individual_stops_with_expandable_evidence():
     with create_pipe_input() as pipe_input:
         # Open the item, reach child 1, expand and collapse its evidence, then
         # Down must move to child 2 rather than skipping the Memory list.
-        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b\x1b[Bq")
+        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             workbench_navigation=workbench_navigation,
@@ -958,18 +957,19 @@ def test_proposed_memories_are_individual_stops_with_expandable_evidence():
     assert workbench_navigation.section_uid == "ITEM:split:BLOCK:0:MEMORY:2"
 
 
-def test_enter_on_report_moves_focus_from_items_into_viewer():
+def test_split_workbench_starts_with_report_focused_in_viewer():
     navigation = ResolutionNavigation()
+    workbench_navigation = SessionWorkbenchNavigation()
     view = _view(_item("a"), _item("b"))
 
     with create_pipe_input() as pipe_input:
-        # Enter opens the selected REPORT row in Viewer. Three Down presses
-        # move through title, understanding, and the list heading to issue a.
-        # If focus had remained in ITEMS, the same keys would select issue b.
-        pipe_input.send_text("\r\x1b[B\x1b[B\x1b[Bq")
+        # Three Down presses move through title, understanding, and the list
+        # heading to issue a without first entering from Items.
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             navigation=navigation,
+            workbench_navigation=workbench_navigation,
             split_viewer_items=True,
             global_strategies=(
                 ResolutionGlobalStrategy("Preserve all", "PRESERVE_ALL"),
@@ -980,6 +980,7 @@ def test_enter_on_report_moves_focus_from_items_into_viewer():
         )
 
     assert action.kind == "CLOSE"
+    assert workbench_navigation.pane == "viewer"
     assert navigation.selected_item_uid == "a"
 
 
@@ -989,7 +990,7 @@ def test_item_arrow_selection_immediately_previews_the_matching_viewer():
     view = _view(_item("a"), _item("b"))
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\x1b[Z\x1b[Bq")
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             navigation=item_navigation,
@@ -1013,7 +1014,7 @@ def test_up_on_the_report_row_replaces_a_stale_item_viewer():
     with create_pipe_input() as pipe_input:
         # Open item a, return focus to Items, then Up selects REPORT. A second
         # Up at the boundary must still align Viewer with REPORT.
-        pipe_input.send_text("\x1b[B\r\t\x1b[A\x1b[Aq")
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[A\x1b[Aq")
         action = run_resolution_workbench_shell(
             _view(_item("a")),
             navigation=item_navigation,
@@ -1037,7 +1038,7 @@ def test_tab_from_open_viewer_visits_items_before_todo():
     with create_pipe_input() as pipe_input:
         # Open the first item in Viewer, then one Tab must focus the visually
         # adjacent Items frame rather than skipping directly to To Do.
-        pipe_input.send_text("\x1b[B\r\tq")
+        pipe_input.send_text("\t\x1b[B\r\tq")
         action = run_resolution_workbench_shell(
             _view(_item("a")),
             workbench_navigation=workbench_navigation,
@@ -1055,7 +1056,7 @@ def test_second_tab_from_open_viewer_reaches_todo_after_items():
     workbench_navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\t\tq")
+        pipe_input.send_text("\t\x1b[B\r\t\tq")
         action = run_resolution_workbench_shell(
             _view(_item("a")),
             workbench_navigation=workbench_navigation,
@@ -1085,7 +1086,7 @@ def test_apply_section_uses_stable_identity_after_review_items_and_impact():
         # Viewer order is title, understanding, review-items, item, results,
         # impact, one impact Memory, then apply. The controller must retain
         # APPLY by identity rather than by the numeric offset.
-        pipe_input.send_text("\t" + "\x1b[B" * 7 + "q")
+        pipe_input.send_text("\x1b[B" * 7 + "q")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1128,8 +1129,9 @@ def test_enter_on_impact_memory_opens_rationale_without_leaving_report():
     workbench_navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
-        # Items → Viewer, then title → understanding → items → impact → Memory.
-        pipe_input.send_text("\t" + "\x1b[B" * 4 + "\rq")
+        # Viewer starts at title, then moves through understanding, items,
+        # impact, and the focused Memory.
+        pipe_input.send_text("\x1b[B" * 4 + "\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1205,10 +1207,10 @@ def test_expanded_located_update_impact_renders_rule_and_reason_neutrally():
 
     workbench_navigation = SessionWorkbenchNavigation()
     with create_pipe_input() as pipe_input:
-        # Items → Viewer, then title → understanding → items → impact → the
+        # Viewer moves from title through understanding, items, impact, and the
         # located Update Memory. Right opens, Left closes, and Enter retains
         # its existing toggle behavior.
-        pipe_input.send_text("\t" + "\x1b[B" * 4 + "\x1b[C\x1b[D\rq")
+        pipe_input.send_text("\x1b[B" * 4 + "\x1b[C\x1b[D\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1282,10 +1284,10 @@ def test_expanded_update_impact_comment_revises_the_same_change_draft():
 
     saved: list[tuple[str, str | None, str]] = []
     with create_pipe_input() as pipe_input:
-        # Items → Viewer, move to the Impact change, expand it, and comment
+        # Move through Viewer to the Impact change, expand it, and comment
         # without detouring through the separate Items detail.
         pipe_input.send_text(
-            "\t" + "\x1b[B" * 5 + "\x1b[CcKeep the date less specific.\rq"
+            "\x1b[B" * 5 + "\x1b[CcKeep the date less specific.\rq"
         )
         action = run_resolution_workbench_shell(
             view,
@@ -1350,7 +1352,7 @@ def test_commentable_change_response_is_included_in_revision_turn():
         # Viewer → Items → To Do. Final review opens at its summary, so
         # End reaches the incorporation action before Enter confirms it.
         pipe_input.send_text(
-            "\x1b[B\r\x1b[F\rRemove this proposed change.\r\t\t\r\x1b[F\r"
+            "\t\x1b[B\r\x1b[F\rRemove this proposed change.\r\t\t\r\x1b[F\r"
         )
         action = run_resolution_workbench_shell(
             view,
@@ -1400,7 +1402,7 @@ def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
         # Select the first option in each conflict, then open the final review
         # row and submit the combined resolution turn.
         pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\r\r\t\x1b[B\r\x1b[B\x1b[B\r\r\t\t\r\x1b[F\r"
+            "\t\x1b[B\r\x1b[B\x1b[B\r\r\t\x1b[B\r\x1b[B\x1b[B\r\r\t\t\r\x1b[F\r"
         )
         action = run_resolution_workbench_shell(
             _view(first, second, capabilities=frozenset({"SUBMIT_ALL"})),
@@ -1613,7 +1615,7 @@ def test_todo_reopens_a_required_conflict_after_selection_cancellation():
     with create_pipe_input() as pipe_input:
         # The second Enter on the same option clears it. To Do must reopen that
         # required conflict instead of applying a whole-set fallback over it.
-        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\r\r\r\t\rq")
+        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\r\r\r\t\rq")
         action = run_resolution_workbench_shell(
             _view(item, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,
@@ -1823,7 +1825,7 @@ def test_saved_response_exposes_inline_incorporation_below_response():
     with create_pipe_input() as pipe_input:
         # Open the item, jump to its final inline incorporation section, and
         # run the same whole-set action as To Do.
-        pipe_input.send_text("\x1b[B\r\x1b[F\r")
+        pipe_input.send_text("\t\x1b[B\r\x1b[F\r")
         action = run_resolution_workbench_shell(
             _view(item, capabilities=frozenset({"SUBMIT_ALL"})),
             split_viewer_items=True,
@@ -1865,7 +1867,7 @@ def test_read_only_todo_can_return_an_explicit_apply_handoff():
     )
 
     with create_pipe_input() as pipe_input:
-        # Items is the initial hub; Shift-Tab reaches To Do directly.
+        # Viewer is initially focused; Shift-Tab follows screen order to To Do.
         pipe_input.send_text("\x1b[Z\r")
         action = run_resolution_workbench_shell(
             _view(_item("a")),

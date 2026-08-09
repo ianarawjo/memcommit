@@ -25,6 +25,7 @@ from memcommit.commands.tui_primitives import (
     require_interactive_terminal,
     safe_terminal_text,
 )
+from memcommit.commands.tui_text_layout import single_line_terminal_text
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
     semantic_detail_header_fragments,
@@ -40,14 +41,10 @@ from memcommit.result_workbench import (
 )
 
 
-_COMPACT_TEXT_LIMIT = 120
+def _compact(value: str) -> str:
+    """Keep one logical case row; the live Window owns visual wrapping."""
 
-
-def _compact(value: str, limit: int = _COMPACT_TEXT_LIMIT) -> str:
-    normalized = " ".join(safe_terminal_text(value).split())
-    if len(normalized) <= limit:
-        return normalized
-    return normalized[: limit - 1].rstrip() + "…"
+    return single_line_terminal_text(safe_terminal_text(value))
 
 
 def _section_text(section: ResultSection) -> str:

@@ -27,6 +27,7 @@ from memcommit.commands.tui_primitives import (
     display_escape_text,
     safe_terminal_text,
 )
+from memcommit.commands.tui_text_layout import elide_terminal_text
 from memcommit.provenance import (
     MemoryState,
     ProvenanceError,
@@ -144,9 +145,7 @@ def _compact(value: str, limit: int = _COMPACT_CONTENT_LIMIT) -> str:
     escaped = display_escape_text(value)
     if not escaped:
         return "(empty)"
-    if len(escaped) <= limit:
-        return escaped
-    return escaped[: limit - 1].rstrip() + "…"
+    return elide_terminal_text(escaped, limit)
 
 
 def _compact_states(states: tuple[MemoryState, ...], *, verbose: bool) -> str:

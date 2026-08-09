@@ -252,8 +252,11 @@ Cases provide concrete inspection of the overview:
   scope-sensitive judgment where a mistake would be most informative.
 
 This section is interactive because its value lies in drill-down rather than
-in another prose summary. The default row is compact. Expanding a case should
-show, as supported by the adapter:
+in another prose summary. The default row is compact in structure, not by a
+fixed character cutoff: its complete one-line title and summary are retained,
+and the live Window wraps them only when the current viewport requires it.
+Widening the terminal can therefore reveal more text without reconstructing a
+discarded row value. Expanding a case should show, as supported by the adapter:
 
 ```text
 source evidence

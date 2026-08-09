@@ -55,6 +55,10 @@ from memcommit.commands.endpoint_setup_flows import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
 from memcommit.commands.session_picker import SessionNewReceipt
 from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_text_layout import (
+    elide_terminal_text,
+    single_line_terminal_text,
+)
 from memcommit.commands.understanding_render import understanding_lines
 from memcommit.query_provider import (
     CodexChatGPTProvider,
@@ -83,12 +87,8 @@ class CompareCommandError(RuntimeError):
 
 
 def _single_line(value: str, *, limit: int = 110) -> str:
-    normalized = " ".join(display_escape_text(value).split())
-    return (
-        normalized
-        if len(normalized) <= limit
-        else normalized[: limit - 1].rstrip() + "…"
-    )
+    normalized = single_line_terminal_text(display_escape_text(value))
+    return elide_terminal_text(normalized, limit)
 
 
 def _relation_lines(

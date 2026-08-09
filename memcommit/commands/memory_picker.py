@@ -16,6 +16,7 @@ from memcommit.commands.context_picker import (
     choose_context,
 )
 from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_text_layout import elide_terminal_text
 
 
 MemoryPickerOperation = Literal["trace", "rationale"]
@@ -43,7 +44,7 @@ class ScopedMemoryPickerItem:
 
 def _preview(value: str, limit: int = 100) -> str:
     escaped = display_escape_text(value)
-    return escaped if len(escaped) <= limit else escaped[: limit - 1] + "…"
+    return elide_terminal_text(escaped, limit)
 
 
 def _render_memory_options(

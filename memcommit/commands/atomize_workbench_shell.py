@@ -46,6 +46,10 @@ from memcommit.commands.result_workbench_shell import (
 from memcommit.commands.tui_primitives import (
     safe_terminal_text,
 )
+from memcommit.commands.tui_text_layout import (
+    elide_terminal_text,
+    single_line_terminal_text,
+)
 from memcommit.resolution_workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
@@ -115,12 +119,8 @@ def _source_map(
 
 
 def _single_line(value: str, *, limit: int = 72) -> str:
-    normalized = " ".join(safe_terminal_text(value).split())
-    return (
-        normalized
-        if len(normalized) <= limit
-        else normalized[: limit - 1].rstrip() + "…"
-    )
+    normalized = single_line_terminal_text(safe_terminal_text(value))
+    return elide_terminal_text(normalized, limit)
 
 
 def _issue_label(finding: AtomizeWorkbenchFinding) -> str:
@@ -164,22 +164,13 @@ def _reading_preview_lines(
 
 def _compact_preview_text(value: str, limit: int) -> str:
     """Keep both a preview's opening claim and trailing qualification."""
-    normalized = " ".join(safe_terminal_text(value).split())
-    if len(normalized) <= limit:
-        return normalized
-    marker = " … "
-    available = limit - len(marker)
-    head_limit = available * 11 // 20
-    tail_limit = available - head_limit
-    head = normalized[:head_limit].rstrip()
-    tail = normalized[-tail_limit:].lstrip()
-    if " " in head:
-        head = head.rsplit(" ", 1)[0]
-    if " " in tail:
-        tail = tail.split(" ", 1)[1]
-    if not head or not tail:
-        return _single_line(normalized, limit=limit)
-    return f"{head}{marker}{tail}"
+    normalized = single_line_terminal_text(safe_terminal_text(value))
+    return elide_terminal_text(
+        normalized,
+        limit,
+        position="middle",
+        marker=" … ",
+    )
 
 
 def _overview_text(

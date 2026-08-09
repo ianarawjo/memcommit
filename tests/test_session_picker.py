@@ -19,6 +19,7 @@ from memcommit.commands.session_picker import (
     _grouped_line_count,
     _ordered_entries,
     _render_detail,
+    _render_entry_line,
     _render_location,
     _render_new_detail,
     _new_session_label,
@@ -56,6 +57,57 @@ def test_compact_uses_terminal_cell_width_for_korean_text():
 
     assert compact.endswith("…")
     assert get_cwidth(compact) <= 12
+
+
+def test_session_row_uses_available_width_before_eliding_summary():
+    candidate = entry(
+        "task-one",
+        title="task-1/description",
+        timestamp=1,
+        status="CURRENT",
+        subtitle=(
+            "task-1/description → task-1/description/atomized · "
+            "1 → 1 Memories · 1 issues"
+        ),
+    )
+
+    wide = _render_entry_line(
+        candidate,
+        entries=(candidate,),
+        selected=True,
+        available_width=160,
+    )
+    narrow = _render_entry_line(
+        candidate,
+        entries=(candidate,),
+        selected=True,
+        available_width=80,
+    )
+
+    assert candidate.subtitle in wide
+    assert "…" not in wide
+    assert "…" in narrow
+    assert get_cwidth(narrow) <= 80
+
+
+def test_session_row_does_not_reserve_thirty_cells_for_a_short_title():
+    candidate = entry(
+        "short",
+        title="Input",
+        timestamp=1,
+        status="OPEN",
+        subtitle="This summary receives every cell the short title does not need.",
+    )
+
+    rendered = _render_entry_line(
+        candidate,
+        entries=(candidate,),
+        selected=False,
+        available_width=110,
+    )
+
+    assert candidate.subtitle in rendered
+    assert "…" not in rendered
 
 
 def test_location_escapes_frozen_profile_and_store_orientation():

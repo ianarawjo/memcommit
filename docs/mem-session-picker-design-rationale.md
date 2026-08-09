@@ -30,6 +30,15 @@ kind + stable local key + title + status + summary
 internal compatibility field remains `subtitle` so existing adapters and
 serialized test fixtures do not need a semantic migration.
 
+Picker rows use the shared adaptive terminal text policy rather than fixed
+30/12/38-cell Title, Status, and Summary columns. The current list Window width
+is measured on every render. Status reaches its content width first, Title uses
+only the width needed by the visible catalog slice, and Summary receives the
+remaining space. A narrow viewport may omit the row timestamp and elide lower
+priority text, while Detail retains every complete field. Widening or resizing
+the terminal can therefore reveal the original text because the catalog entry
+itself is never truncated.
+
 The shared terminal component owns only arrows, scrolling, filtering, recent
 or name sorting, Context grouping, detail rendering, and a local selection
 receipt. Operation adapters continue to own discovery, parsing,

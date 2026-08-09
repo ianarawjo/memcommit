@@ -171,10 +171,12 @@ conversation.
   whole-set resolution. Do not put Apply or Resolve All back into Items as a
   synthetic row, and do not let this presentation state bypass adapter action
   validation.
-- After an item is opened in Viewer, visible-frame Tab order must follow the
-  screen: `VIEWER → ITEMS → TO DO → VIEWER`; do not skip Items when leaving
-  Viewer. Preserve Items as the initial hub only: its first Tab opens Viewer
-  and its first Shift-Tab reaches To Do.
+- Start a common Resolution Session with the complete report focused in
+  Viewer. Visible-frame Tab order must follow the screen from the first
+  interaction and after an item is opened:
+  `VIEWER → ITEMS → TO DO → VIEWER`; Shift-Tab follows the reverse order.
+  Do not introduce a separate initial Items hub or skip Items when leaving an
+  opened Viewer.
 - Keep a detail's ordinal (`n/total`) separate from review obligation. Show
   `REQUIRED n · OPTIONAL m` for the complete item set. To Do gates progression
   only on unanswered REQUIRED items; unanswered OPTIONAL items remain

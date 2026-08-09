@@ -39,14 +39,16 @@ Constructing a report that still exposes Accept fails closed.
 
 ## Common terminal grammar
 
-Adaptive Review reports now use one shared two-frame host even though their
-rows remain operation-specific. The lower `Items` frame receives initial
-focus. Its first row is the complete report, followed by adaptive rows such as
-`CONFLICT`, `DISCLOSURE`, `ATOMIZE UNCERTAINTY`, or `ADD`; token underscores
-are rendered as spaces rather than leaking persistence notation into the UI.
+Adaptive Review reports now use one shared report workbench even though their
+rows remain operation-specific. The upper `Viewer` receives initial focus on
+the complete report. The lower `Items` frame retains the complete report as
+its first row, followed by adaptive rows such as `CONFLICT`, `DISCLOSURE`,
+`ATOMIZE UNCERTAINTY`, or `ADD`; token underscores are rendered as spaces
+rather than leaking persistence notation into the UI.
 
-`Enter` opens the selected row in the upper `Viewer`. `Tab` moves between
-`Items`, `Viewer`, and an item composer when one exists. `Up` and `Down` move
+`Enter` from Items opens the selected row in the upper `Viewer`. `Tab` moves
+between `Viewer`, `Items`, `To Do`, and an inline composer when one exists.
+`Up` and `Down` move
 only the currently focused surface, and closing the view never implies a
 response or application. The report reading surface consistently presents
 the operation title and identity, `WHAT MEM UNDERSTOOD`, `REVIEW ITEMS` and its

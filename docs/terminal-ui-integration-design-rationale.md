@@ -155,15 +155,16 @@ The detailed contract and deliberate Ground/Impact exclusions are recorded in
 
 The presentation-normalization follow-up is also complete for these five
 adaptive reports. Compare, Meld, Sever, Update, and Atomize now open through
-the same Items-first, Enter-to-Viewer, Tab-between-frames host. Report sections
-share one heading grammar while operation-owned row kinds and exact evidence
-remain adaptive. Atomize's immutable result account is retained ahead of its
-common clarification rows rather than flattened or discarded.
+the same Viewer-first, screen-order Tab host. Enter from Items opens the
+selected row in Viewer. Report sections share one heading grammar while
+operation-owned row kinds and exact evidence remain adaptive. Atomize's
+immutable result account is retained ahead of its common clarification rows
+rather than flattened or discarded.
 
 The follow-up now covers standalone Compare as well as adaptive Review.
-Compare and the Resolution-based session screens start in Items, use Enter to
-open Viewer, share frame focus styling, move through semantic section IDs, and
-use the same page/Home/End grammar. Stable IDs replace positional
+Compare and the Resolution-based session screens start in Viewer, share frame
+focus styling, move through semantic section IDs, and use the same
+page/Home/End grammar. Stable IDs replace positional
 `len(items) + N` action targeting, so inserting Review or Impact sections does
 not retarget a later Apply or whole-set action.
 

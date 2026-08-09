@@ -39,6 +39,11 @@ from memcommit.commands.tui_primitives import (
     require_interactive_terminal,
     safe_terminal_text,
 )
+from memcommit.commands.tui_text_layout import (
+    elide_terminal_text,
+    single_line_terminal_text,
+    terminal_cell_width,
+)
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
     semantic_detail_header_fragments,
@@ -459,18 +464,8 @@ def _impact_lines(impact: ImpactView) -> list[str]:
 
 
 def _line(value: str, limit: int = 100) -> str:
-    normalized = " ".join(safe_terminal_text(value).split())
-    if sum(get_cwidth(character) for character in normalized) <= limit:
-        return normalized
-    kept: list[str] = []
-    width = 0
-    for character in normalized:
-        character_width = get_cwidth(character)
-        if width + character_width > limit - 1:
-            break
-        kept.append(character)
-        width += character_width
-    return "".join(kept).rstrip() + "…"
+    normalized = single_line_terminal_text(safe_terminal_text(value))
+    return elide_terminal_text(normalized, limit)
 
 
 def _item_kind_label(item: ResolutionItem) -> str:
@@ -512,7 +507,7 @@ def _indented(value: str, indent: str = "       ") -> str:
 
 
 def _visual_width(value: str) -> int:
-    return sum(get_cwidth(character) for character in value)
+    return terminal_cell_width(value)
 
 
 def _visual_pad(value: str, width: int) -> str:
@@ -2311,10 +2306,13 @@ def run_resolution_workbench_shell(
         current_navigation.sync(view)
         return view
 
-    session_navigation = workbench_navigation or SessionWorkbenchNavigation(
-        pane="items" if split_viewer_items else "viewer"
-    )
-    if not split_viewer_items:
+    session_navigation = workbench_navigation or SessionWorkbenchNavigation()
+    if split_viewer_items:
+        # A caller may reuse process-local navigation, but a composer cannot be
+        # the initial target before the shell has opened an input surface.
+        if session_navigation.pane == "composer":
+            session_navigation.focus("viewer")
+    else:
         session_navigation.focus("viewer")
 
     def report_sections() -> tuple[WorkbenchSection, ...]:
@@ -2695,7 +2693,6 @@ def run_resolution_workbench_shell(
     other_direction_editor = {"open": False}
     expanded_memory_section_uid: dict[str, str | None] = {"uid": None}
     destination_editing = {"value": False}
-    visible_pane_cycle_started = {"value": False}
     input_heading = {"value": "COMMENT ON SELECTED ITEM"}
     local_drafts: dict[str, tuple[str | None, str]] = {}
 
@@ -3098,7 +3095,6 @@ def run_resolution_workbench_shell(
         # handoff below the Viewer. This keeps the summary in view and makes
         # moving down to the exact Apply action an explicit review step.
         session_navigation.focus("viewer")
-        visible_pane_cycle_started["value"] = True
         get_app().layout.focus(body_control)
         set_status("")
 
@@ -3506,28 +3502,12 @@ def run_resolution_workbench_shell(
         if split_viewer_items:
             option_navigation["active"] = False
             delta = -1 if event.key_sequence[0].key == Keys.BackTab else 1
-            if not visible_pane_cycle_started["value"]:
-                # Items is the initial hub: forward opens Viewer, backward
-                # reaches To Do. If Enter already opened Viewer, either Tab
-                # direction returns to the adjacent Items frame first.
-                initial_targets = {
-                    ("items", 1): "viewer",
-                    ("items", -1): "todo",
-                    ("viewer", 1): "items",
-                    ("viewer", -1): "items",
-                    ("todo", 1): "viewer",
-                    ("todo", -1): "items",
-                }
-                pane = initial_targets[(session_navigation.pane, delta)]
-                session_navigation.focus(pane)
-                visible_pane_cycle_started["value"] = True
-            else:
-                pane = session_navigation.cycle_panes(
-                    # After the initial hub transition, follow the visible
-                    # top-to-bottom frame order in either direction.
-                    ("viewer", "items", "todo"),
-                    delta,
-                )
+            pane = session_navigation.cycle_panes(
+                # Focus follows the visible top-to-bottom frame order from the
+                # first interaction; there is no hidden Items-first phase.
+                ("viewer", "items", "todo"),
+                delta,
+            )
             if pane == "items" and viewer_content["kind"] == "REVIEW":
                 # The final review is not an Items row. Give Items its normal
                 # report selection without closing the visible review merely
@@ -3929,7 +3909,11 @@ def run_resolution_workbench_shell(
             todo_frame,
             is_focused=lambda: session_navigation.pane == "todo",
         )
-        focused_element = items_control
+        focused_element = {
+            "viewer": body_control,
+            "items": items_control,
+            "todo": todo_control,
+        }[session_navigation.pane]
     else:
         viewer_frame = Frame(HSplit([body, inline_input]), title="VIEWER")
         bind_focused_frame_style(

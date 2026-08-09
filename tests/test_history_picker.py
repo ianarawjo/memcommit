@@ -6,6 +6,7 @@ import io
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.history_picker import (
     HISTORY_BACK,
@@ -15,6 +16,7 @@ from memcommit.commands.history_picker import (
     _activate,
     _move,
     _render_detail,
+    _render_entry_line,
     _visible_bounds,
     choose_history,
 )
@@ -36,6 +38,34 @@ def entry(
             "Transition: +1 added · ~2 edited · -3 removed · 4 reordered"
         ),
     )
+
+
+def test_history_row_gives_wide_viewport_to_description():
+    candidate = entry(
+        1,
+        description=(
+            "A complete checkpoint description that used to be cut at a fixed "
+            "fifty-eight characters even on a wide terminal."
+        ),
+    )
+
+    wide = _render_entry_line(
+        candidate,
+        entries=(candidate,),
+        selected=True,
+        available_width=180,
+    )
+    narrow = _render_entry_line(
+        candidate,
+        entries=(candidate,),
+        selected=True,
+        available_width=70,
+    )
+
+    assert candidate.description in wide
+    assert "…" not in wide
+    assert "…" in narrow
+    assert get_cwidth(narrow) <= 70
 
 
 def test_revert_enter_returns_exact_checkpoint_receipt():

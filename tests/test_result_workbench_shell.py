@@ -179,6 +179,22 @@ def test_snapshot_uses_shared_information_hierarchy_and_compact_cases():
     assert "CASE DETAIL" not in snapshot
 
 
+def test_case_rows_preserve_complete_text_for_window_owned_wrapping():
+    view, _ = _fixture()
+    long_summary = (
+        "This complete result summary remains available to a wide viewport and "
+        "is wrapped by the Window only when the actual terminal width requires it. "
+        "No fixed one-hundred-and-twenty-character omission is applied first."
+    )
+    first = replace(view.cases[0], summary=long_summary)
+    view = replace(view, cases=(first, *view.cases[1:]))
+
+    snapshot = render_result_workbench_snapshot(view)
+
+    assert long_summary in snapshot
+    assert "…" not in snapshot
+
+
 def test_snapshot_distinguishes_none_reported_from_not_recorded():
     view, _ = _fixture()
     view = replace(

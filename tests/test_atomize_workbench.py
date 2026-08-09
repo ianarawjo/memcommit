@@ -1084,7 +1084,7 @@ def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
         # 2, leave option navigation, then use the Response compatibility key
         # to open and save the same inline field.
         pipe_input.send_text(
-            "\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b[B\r"
+            "\t\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b[B\r"
             "\x7fcNeeds the staff-only qualifier.\x13q"
         )
         run_atomize_workbench_shell(
@@ -1146,7 +1146,7 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
     assert cursor_line.lstrip().startswith("› ○ 2. [ALTERNATIVE]")
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b[B\rq")
+        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\x1b[B\r\x1b[B\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1160,7 +1160,7 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
     # Reopening starts on the selected reading. Entering it again clears the
     # selection, so a separate numeric "clear" command is unnecessary.
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\x1b[B\r\rq")
+        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\x1b[B\r\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1238,7 +1238,7 @@ def test_response_backspace_still_edits_text_instead_of_navigating_up():
     first = workbench.ordered_issues()[0]
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\rab\x7f\rq")
+        pipe_input.send_text("\t\x1b[B\r\x1b[B\x1b[B\x1b[B\x1b[B\rab\x7f\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1298,7 +1298,7 @@ def test_tui_up_and_down_follow_the_vertical_issue_list():
 
     saved: list[dict] = []
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\x1b[B\rq")
+        pipe_input.send_text("\t\x1b[B\x1b[B\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1314,7 +1314,7 @@ def test_tui_up_and_down_follow_the_vertical_issue_list():
         # Start from the report row, move down to issue 2, then back up to
         # issue 1. Moving the Items cursor is only a preview; Enter explicitly
         # opens that row and updates the durable workbench cursor.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[A\rq")
+        pipe_input.send_text("\t\x1b[B\x1b[B\x1b[A\rq")
         run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1420,9 +1420,9 @@ def test_atomize_uses_shared_save_location_immediately_before_final_review():
     )
 
     with create_pipe_input() as pipe_input:
-        # Items → Report, End reaches Review and Apply, Up reaches the shared
-        # Save Location card, and Enter opens its exact-name editor.
-        pipe_input.send_text("\t\x1b[F\x1b[A\r\x15workbench/destination-final\r")
+        # Viewer starts on Report. End reaches Review and Apply, Up reaches the
+        # shared Save Location card, and Enter opens its exact-name editor.
+        pipe_input.send_text("\x1b[F\x1b[A\r\x15workbench/destination-final\r")
         action = run_atomize_workbench_shell(
             workbench,
             analysis,

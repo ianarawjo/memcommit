@@ -53,6 +53,10 @@ from memcommit.meld_provider import (
     assess_meld_turn,
 )
 from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.commands.tui_text_layout import (
+    elide_terminal_text,
+    single_line_terminal_text,
+)
 from memcommit.commands.meld_shell import run_meld_shell
 from memcommit.commands.meld_sessions import (
     MeldSessionCatalogEntry,
@@ -261,12 +265,8 @@ def _connect_meld_provider(provider_factory):
 
 
 def _single_line(value: str, *, limit: int = 90) -> str:
-    normalized = " ".join(safe_terminal_text(value).split())
-    return (
-        normalized
-        if len(normalized) <= limit
-        else normalized[: limit - 1].rstrip() + "…"
-    )
+    normalized = single_line_terminal_text(safe_terminal_text(value))
+    return elide_terminal_text(normalized, limit)
 
 
 def _issue_selector(

@@ -33,6 +33,14 @@ from memcommit.commands.tui_primitives import (
     bind_focused_frame_style,
     display_escape_text,
 )
+from memcommit.commands.tui_text_layout import (
+    AdaptiveColumn,
+    allocate_adaptive_columns,
+    elide_terminal_text,
+    live_window_content_width,
+    pad_terminal_text,
+    terminal_cell_width,
+)
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 
@@ -133,10 +141,77 @@ def _compact_timestamp(value: str) -> str:
 
 
 def _compact(value: str, width: int) -> str:
-    escaped = display_escape_text(value)
-    if len(escaped) <= width:
-        return escaped
-    return escaped[: max(0, width - 1)] + "…"
+    return elide_terminal_text(display_escape_text(value), width)
+
+
+def _render_entry_line(
+    entry: HistoryPickerItem,
+    *,
+    entries: Sequence[HistoryPickerItem],
+    selected: bool,
+    available_width: int,
+) -> str:
+    """Render command and description columns from the live Items width."""
+
+    pointer = "›" if selected else " "
+    timestamp = (
+        f"{_compact_timestamp(entry.timestamp):<16}  "
+        if available_width >= 58
+        else ""
+    )
+    uid = display_escape_text(entry.uid)[:8]
+    prefix = f"{pointer} {timestamp}"
+    suffix = f"  {uid}  "
+    field_budget = max(
+        0,
+        available_width - terminal_cell_width(prefix + suffix),
+    )
+    commands = tuple(display_escape_text(item.command) for item in entries)
+    descriptions = tuple(
+        display_escape_text(item.description or "(no description)")
+        for item in entries
+    )
+    command_natural = max(
+        (terminal_cell_width(value) for value in commands),
+        default=0,
+    )
+    description_natural = max(
+        (terminal_cell_width(value) for value in descriptions),
+        default=0,
+    )
+    widths = allocate_adaptive_columns(
+        field_budget,
+        (
+            AdaptiveColumn(
+                "command",
+                minimum=min(6, command_natural),
+                preferred=command_natural,
+                maximum=command_natural,
+                shrink_order=1,
+                grow_order=0,
+            ),
+            AdaptiveColumn(
+                "description",
+                minimum=min(10, description_natural),
+                preferred=description_natural,
+                shrink_order=0,
+                grow_order=1,
+                expand=True,
+            ),
+        ),
+    )
+    command = pad_terminal_text(
+        elide_terminal_text(display_escape_text(entry.command), widths["command"]),
+        widths["command"],
+    )
+    description = elide_terminal_text(
+        display_escape_text(entry.description or "(no description)"),
+        widths["description"],
+    )
+    return elide_terminal_text(
+        f"{prefix}{command}{suffix}{description}",
+        available_width,
+    )
 
 
 def _indented_detail(value: str) -> tuple[str, ...]:
@@ -234,25 +309,25 @@ def choose_history(
         if not options:
             return [("class:report-neutral", f"  {display_escape_text(empty_message or '')}")]
         start, end = _visible_bounds(state.selected_index, len(options))
+        visible = options[start:end]
+        available_width = live_window_content_width(
+            windows.get("items"),
+            fallback_reserved=3,
+        )
         fragments: list[tuple[str, str]] = []
         for index in range(start, end):
             entry = options[index]
             selected = index == state.selected_index
             if selected:
                 fragments.append(("[SetCursorPosition]", ""))
-            pointer = "›" if selected else " "
-            command = _compact(entry.command, 12)
-            description = _compact(
-                entry.description or "(no description)",
-                58,
-            )
             fragments.append(
                 (
                     "class:memcommit.table.selected" if selected else "",
-                    (
-                        f"{pointer} {_compact_timestamp(entry.timestamp):<16}  "
-                        f"{command:<12}  "
-                        f"{display_escape_text(entry.uid)[:8]}  {description}"
+                    _render_entry_line(
+                        entry,
+                        entries=visible,
+                        selected=selected,
+                        available_width=available_width,
                     ),
                 )
             )

@@ -30,10 +30,17 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
-from prompt_toolkit.utils import get_cwidth
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.commands.tui_primitives import display_escape_text, horizontal_rule
+from memcommit.commands.tui_text_layout import (
+    AdaptiveColumn,
+    allocate_adaptive_columns,
+    elide_terminal_text,
+    live_window_content_width,
+    pad_terminal_text,
+    terminal_cell_width,
+)
 
 
 SessionSortMode = Literal["recent", "name"]
@@ -300,23 +307,93 @@ def _grouped_line_count(
 
 
 def _compact(value: str, width: int) -> str:
-    escaped = display_escape_text(value)
-    if get_cwidth(escaped) <= width:
-        return escaped
-    kept: list[str] = []
-    used = 0
-    for character in escaped:
-        character_width = get_cwidth(character)
-        if used + character_width > width - 1:
-            break
-        kept.append(character)
-        used += character_width
-    return "".join(kept).rstrip() + "…"
+    """Compatibility wrapper around the shared terminal-cell policy."""
+
+    return elide_terminal_text(display_escape_text(value), width)
 
 
 def _pad_display(value: str, width: int) -> str:
     """Pad by terminal cells rather than code points for aligned CJK rows."""
-    return value + (" " * max(0, width - get_cwidth(value)))
+    return pad_terminal_text(value, width)
+
+
+def _render_entry_line(
+    entry: SessionPickerEntry,
+    *,
+    entries: Sequence[SessionPickerEntry],
+    selected: bool,
+    available_width: int,
+) -> str:
+    """Render one row from the current viewport budget without fixed columns."""
+
+    pointer = "›" if selected else " "
+    # The timestamp is useful orientation on ordinary screens, but identity and
+    # state take priority when a genuinely narrow terminal cannot hold all four
+    # columns. Detail still exposes the complete timestamp for the selected row.
+    timestamp = (
+        f"{_format_timestamp(entry.sort_timestamp)}  "
+        if available_width >= 64
+        else ""
+    )
+    prefix = f"{pointer} {timestamp}"
+    fixed_width = terminal_cell_width(prefix + "  [" + "]  ")
+    field_budget = max(0, available_width - fixed_width)
+
+    escaped_titles = tuple(display_escape_text(item.title) for item in entries)
+    escaped_statuses = tuple(display_escape_text(item.status) for item in entries)
+    escaped_summaries = tuple(display_escape_text(item.subtitle) for item in entries)
+    title_natural = max((terminal_cell_width(value) for value in escaped_titles), default=0)
+    status_natural = max(
+        (terminal_cell_width(value) for value in escaped_statuses),
+        default=0,
+    )
+    summary_natural = max(
+        (terminal_cell_width(value) for value in escaped_summaries),
+        default=0,
+    )
+    widths = allocate_adaptive_columns(
+        field_budget,
+        (
+            AdaptiveColumn(
+                "title",
+                minimum=min(10, title_natural),
+                preferred=title_natural,
+                maximum=title_natural,
+                shrink_order=1,
+                grow_order=1,
+            ),
+            AdaptiveColumn(
+                "status",
+                minimum=min(6, status_natural),
+                preferred=status_natural,
+                maximum=status_natural,
+                shrink_order=2,
+                grow_order=0,
+            ),
+            AdaptiveColumn(
+                "summary",
+                minimum=min(10, summary_natural),
+                preferred=summary_natural,
+                shrink_order=0,
+                grow_order=2,
+                expand=True,
+            ),
+        ),
+    )
+    title = pad_terminal_text(
+        elide_terminal_text(display_escape_text(entry.title), widths["title"]),
+        widths["title"],
+    )
+    status = pad_terminal_text(
+        elide_terminal_text(display_escape_text(entry.status), widths["status"]),
+        widths["status"],
+    )
+    summary = elide_terminal_text(
+        display_escape_text(entry.subtitle),
+        widths["summary"],
+    )
+    line = f"{prefix}{title}  [{status}]  {summary}"
+    return elide_terminal_text(line, available_width)
 
 
 def _format_timestamp(value: float) -> str:
@@ -527,6 +604,10 @@ def choose_session(
     def render_entries() -> list[tuple[str, str]]:
         projected = current_options()
         fragments: list[tuple[str, str]] = []
+        available_width = live_window_content_width(
+            windows.get("list"),
+            fallback_reserved=1,
+        )
         if new_receipt is not None:
             if state.new_selected:
                 fragments.append(("[SetCursorPosition]", ""))
@@ -534,7 +615,10 @@ def choose_session(
             fragments.append(
                 (
                     "class:selected" if state.new_selected else "class:new",
-                    f"{pointer} + {_new_session_label(new_receipt)}",
+                    elide_terminal_text(
+                        f"{pointer} + {_new_session_label(new_receipt)}",
+                        available_width,
+                    ),
                 )
             )
         if not projected:
@@ -585,21 +669,23 @@ def choose_session(
                 fragments.append(
                     (
                         "class:group",
-                        "  CONTEXT · "
-                        f"{display_escape_text(entry.group)}{suffix}\n",
+                        elide_terminal_text(
+                            "  CONTEXT · "
+                            f"{display_escape_text(entry.group)}{suffix}",
+                            available_width,
+                        )
+                        + "\n",
                     )
                 )
                 prior_group = entry.group
             selected = index == state.selected_index
             if selected:
                 fragments.append(("[SetCursorPosition]", ""))
-            pointer = "›" if selected else " "
-            title = _pad_display(_compact(entry.title, 30), 30)
-            line = (
-                f"{pointer} {_format_timestamp(entry.sort_timestamp)}  "
-                f"{title}  "
-                f"[{_compact(entry.status, 12)}]  "
-                f"{_compact(entry.subtitle, 38)}"
+            line = _render_entry_line(
+                entry,
+                entries=projected[start:end],
+                selected=selected,
+                available_width=available_width,
             )
             fragments.append(("class:selected" if selected else "", line))
             if index < end - 1:
@@ -805,6 +891,7 @@ def choose_session(
         wrap_lines=False,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
+    windows["list"] = list_window
     search_window = ConditionalContainer(
         search_area,
         filter=Condition(lambda: state.search_active or bool(search_area.text)),

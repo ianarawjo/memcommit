@@ -22,6 +22,12 @@ from memcommit.commands.tui_primitives import (
     bind_focused_frame_style,
     display_escape_text,
 )
+from memcommit.commands.tui_text_layout import (
+    elide_terminal_text,
+    live_window_content_width,
+    single_line_terminal_text,
+    terminal_cell_width,
+)
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonIssue,
@@ -56,9 +62,11 @@ class _WorkbenchRow:
     issue_uid: str | None = None
 
 
-def _compact(value: str, limit: int = 104) -> str:
-    escaped = " ".join(display_escape_text(value).split())
-    return escaped if len(escaped) <= limit else escaped[: limit - 1] + "…"
+def _compact(value: str, limit: int) -> str:
+    """Fit one escaped label through the service-wide cell-width policy."""
+
+    escaped = single_line_terminal_text(display_escape_text(value))
+    return elide_terminal_text(escaped, limit)
 
 
 def _display_multiline(value: str) -> str:
@@ -187,12 +195,30 @@ def _rows(analysis: ComparisonAnalysis) -> tuple[_WorkbenchRow, ...]:
         _WorkbenchRow(
             kind="RELATION",
             key=relation.uid,
-            label=f"R{index} · {relation.kind} · {_compact(relation.summary)}",
+            # Preserve the complete summary in the row model. Viewport-specific
+            # omission happens only at render time so widening can reveal it.
+            label=f"R{index} · {relation.kind} · {relation.summary}",
             relation_uid=relation.uid,
         )
         for index, relation in enumerate(analysis.relations, start=1)
     )
     return tuple(result)
+
+
+def _render_row_line(
+    row: _WorkbenchRow,
+    *,
+    active: bool,
+    available_width: int,
+) -> str:
+    """Render one Compare item against the current Items frame width."""
+
+    pointer = "›" if active else " "
+    kind = "ITEM" if row.kind == "ISSUE" else row.kind
+    prefix = f"{pointer} " if row.kind == "RELATION" else f"{pointer} {kind:<8} "
+    label_width = max(0, available_width - terminal_cell_width(prefix))
+    label = _compact(row.label, label_width)
+    return elide_terminal_text(prefix + label, available_width)
 
 
 def _relation_for_row(
@@ -247,6 +273,8 @@ def run_compare_workbench(
     rows = _rows(analysis)
     selected = {"member": 0, "expanded": False}
     navigation = workbench_navigation or SessionWorkbenchNavigation()
+    if navigation.pane not in {"viewer", "items"}:
+        navigation.focus("viewer")
     groups = _relation_groups(analysis)
     windows: dict[str, Window] = {}
     bindings = KeyBindings()
@@ -303,11 +331,14 @@ def run_compare_workbench(
 
     def render_rows():
         fragments: list[tuple[str, str]] = []
+        available_width = live_window_content_width(
+            windows.get("items"),
+            fallback_reserved=3,
+        )
         for index, row in enumerate(rows):
             active = index == navigation.row_index
             if active:
                 fragments.append(("[SetCursorPosition]", ""))
-            pointer = "›" if active else " "
             style = (
                 "class:memcommit.table.selected"
                 if active and navigation.pane == "items"
@@ -315,13 +346,16 @@ def run_compare_workbench(
                 if active
                 else ""
             )
-            kind = "ITEM" if row.kind == "ISSUE" else row.kind
-            if row.kind == "RELATION":
-                fragments.append((style, f"{pointer} {_compact(row.label)}"))
-            else:
-                fragments.append(
-                    (style, f"{pointer} {kind:<8} {_compact(row.label)}")
+            fragments.append(
+                (
+                    style,
+                    _render_row_line(
+                        row,
+                        active=active,
+                        available_width=available_width,
+                    ),
                 )
+            )
             if index < len(rows) - 1:
                 fragments.append(("", "\n"))
         return fragments
@@ -698,7 +732,7 @@ def run_compare_workbench(
                     footer,
                 ]
             ),
-            focused_element=list_window,
+            focused_element=windows[navigation.pane],
         ),
         key_bindings=bindings,
         full_screen=True,

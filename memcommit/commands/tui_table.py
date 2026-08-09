@@ -18,6 +18,10 @@ from prompt_toolkit.layout.utils import explode_text_fragments
 from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.commands.tui_text_layout import (
+    elide_terminal_text,
+    pad_terminal_text,
+)
 
 
 @dataclass(frozen=True)
@@ -89,17 +93,7 @@ def _fit_display(value: str, width: int) -> str:
     if width < 2:
         raise ValueError("table column width must be at least two")
     value = _single_line(value)
-    if get_cwidth(value) > width:
-        kept: list[str] = []
-        used = 0
-        for character in value:
-            character_width = get_cwidth(character)
-            if used + character_width > width - 1:
-                break
-            kept.append(character)
-            used += character_width
-        value = "".join(kept).rstrip() + "…"
-    return value + (" " * max(0, width - get_cwidth(value)))
+    return pad_terminal_text(elide_terminal_text(value, width), width)
 
 
 def _wrap_display(value: str, width: int) -> tuple[str, ...]:

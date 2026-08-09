@@ -5,16 +5,19 @@ from __future__ import annotations
 import io
 import json
 import uuid
+from dataclasses import replace
 
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.compare_workbench import (
     _display_multiline,
     _focused_section_line,
     _next_viewer_section_index,
     _reader_section_offsets,
+    _render_row_line,
     _rows,
     run_compare_workbench,
 )
@@ -88,12 +91,35 @@ def _analysis():
     return analysis, left, right
 
 
+def test_compare_rows_preserve_full_summary_until_live_width_rendering():
+    analysis, _left, _right = _analysis()
+    long_summary = (
+        "One complete relationship summary remains recoverable when the Items "
+        "viewport grows after a terminal resize."
+    )
+    analysis = replace(
+        analysis,
+        relations=(replace(analysis.relations[0], summary=long_summary),),
+    )
+    row = next(row for row in _rows(analysis) if row.kind == "RELATION")
+
+    wide = _render_row_line(row, active=True, available_width=180)
+    narrow = _render_row_line(row, active=True, available_width=50)
+
+    assert long_summary in row.label
+    assert long_summary in wide
+    assert "…" not in wide
+    assert "…" in narrow
+    assert get_cwidth(narrow) <= 50
+
+
 def test_issue_can_choose_either_exact_source_for_rationale():
     analysis, _left, right = _analysis()
     with create_pipe_input() as pipe_input:
-        # Items owns initial focus. Report sections precede the issue; Enter
-        # opens that row in Viewer after choosing its second exact source.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\x1b[B\x1b[C\rr")
+        # Tab opens Items from the initially focused Viewer. Report sections
+        # precede the issue; Enter reopens that row in Viewer after choosing
+        # its second exact source.
+        pipe_input.send_text("\t\x1b[B\x1b[B\x1b[B\x1b[B\x1b[C\rr")
         receipt = run_compare_workbench(
             analysis,
             app_input=pipe_input,
@@ -162,7 +188,7 @@ def test_item_selection_immediately_previews_viewer_without_moving_focus():
     analysis, _left, _right = _analysis()
     navigation = SessionWorkbenchNavigation()
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[Bq")
+        pipe_input.send_text("\t\x1b[Bq")
         receipt = run_compare_workbench(
             analysis,
             app_input=pipe_input,
@@ -181,7 +207,7 @@ def test_up_from_an_open_compare_item_previews_the_report():
     analysis, _left, _right = _analysis()
     navigation = SessionWorkbenchNavigation()
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\r\t\x1b[A\x1b[Aq")
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[A\x1b[Aq")
         receipt = run_compare_workbench(
             analysis,
             app_input=pipe_input,
@@ -251,8 +277,8 @@ def test_report_detail_can_scroll_without_changing_selection():
 def test_tab_switches_to_item_navigation_and_back_to_reader():
     analysis, _left, _right = _analysis()
     with create_pipe_input() as pipe_input:
-        # Items starts focused. Tab opens Viewer navigation, another Tab
-        # returns to Items, and the final Tab restores semantic scrolling.
+        # Viewer starts focused. Tab opens Items navigation, another Tab
+        # returns to Viewer, and the final Tab restores item movement.
         pipe_input.send_text("\t\x1b[B\t\x1b[B\t\x1b[Bq")
         receipt = run_compare_workbench(
             analysis,
@@ -270,7 +296,7 @@ def test_detail_back_key_returns_to_complete_report(back_key: str):
     with create_pipe_input() as pipe_input:
         # Select and open a report section, return to REPORT, then R must remain
         # a no-op because the aggregate report has no synthetic Memory target.
-        pipe_input.send_text(f"\x1b[B\r{back_key}rq")
+        pipe_input.send_text(f"\t\x1b[B\r{back_key}rq")
         receipt = run_compare_workbench(
             analysis,
             app_input=pipe_input,

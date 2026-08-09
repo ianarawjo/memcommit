@@ -28,7 +28,9 @@ class WorkbenchSection:
 class SessionWorkbenchNavigation:
     """Operation-neutral Items/Viewer focus and semantic scroll controller."""
 
-    pane: WorkbenchPane = "items"
+    # The report is the primary reading surface. Pickers that intentionally
+    # start from a selectable row opt into Items explicitly.
+    pane: WorkbenchPane = "viewer"
     row_index: int = 0
     viewer_row_index: int = 0
     section_uid: str | None = None

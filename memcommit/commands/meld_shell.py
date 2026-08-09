@@ -12,7 +12,6 @@ from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.tui_primitives import (
     TuiRegion,
@@ -21,6 +20,10 @@ from memcommit.commands.tui_primitives import (
     dispatch_tui_back,
     require_interactive_terminal,
     safe_terminal_text,
+)
+from memcommit.commands.tui_text_layout import (
+    elide_terminal_text,
+    single_line_terminal_text,
 )
 from memcommit.meld import MeldSession
 from memcommit.resolution_workbench import ResolutionNavigation
@@ -36,18 +39,8 @@ class MeldShellAction:
 
 
 def _line(value: str, limit: int = 100) -> str:
-    normalized = " ".join(safe_terminal_text(value).split())
-    if sum(get_cwidth(character) for character in normalized) <= limit:
-        return normalized
-    kept: list[str] = []
-    width = 0
-    for character in normalized:
-        character_width = get_cwidth(character)
-        if width + character_width > limit - 1:
-            break
-        kept.append(character)
-        width += character_width
-    return "".join(kept).rstrip() + "…"
+    normalized = single_line_terminal_text(safe_terminal_text(value))
+    return elide_terminal_text(normalized, limit)
 
 
 def _route_line(session: MeldSession) -> str:
