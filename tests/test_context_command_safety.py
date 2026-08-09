@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.cli import app
+from memcommit.commands.branch_dialog import BranchCreationReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.store import MemoryStore
 
@@ -189,6 +190,58 @@ def test_branch_preserves_concurrent_current_selection(
     assert "current Context changed" in result.stderr
     assert store.current_context_name() == "other"
     assert not store.context_exists("feature")
+
+
+def test_bare_branch_preserves_a_switch_made_while_the_picker_is_open(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _save(store, ops.init("source"))
+    _save(store, ops.init("other"))
+    store.set_current(source.name)
+
+    def switch_then_choose(*args, **kwargs):
+        store.set_current("other")
+        return BranchCreationReceipt("source", "feature")
+
+    monkeypatch.setattr(
+        "memcommit.commands.branch.choose_branch_creation",
+        switch_then_choose,
+    )
+
+    result = runner.invoke(app, ["branch"])
+
+    assert result.exit_code == 1
+    assert "current Context changed" in result.stderr
+    assert store.current_context_name() == "other"
+    assert not store.context_exists("feature")
+
+
+def test_bare_init_preserves_a_switch_made_while_the_editor_is_open(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _save(store, ops.init("source"))
+    _save(store, ops.init("other"))
+    store.set_current(source.name)
+
+    def switch_then_choose(view):
+        store.set_current("other")
+        return "new-context"
+
+    monkeypatch.setattr(
+        "memcommit.commands.init.choose_context_name",
+        switch_then_choose,
+    )
+
+    result = runner.invoke(app, ["init"])
+
+    assert result.exit_code == 1
+    assert "current Context changed" in result.stderr
+    assert store.current_context_name() == "other"
+    assert not store.context_exists("new-context")
 
 
 def test_branch_rejects_history_changed_after_snapshot(

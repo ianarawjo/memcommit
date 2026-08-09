@@ -12,9 +12,13 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import Dimension, FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
-from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.commands.tui_primitives import MEMCOMMIT_TUI_STYLE, display_escape_text
+from memcommit.commands.tui_primitives import (
+    ExactNameFieldControl,
+    ExactNameFieldView,
+    MEMCOMMIT_TUI_STYLE,
+    display_escape_text,
+)
 from memcommit.profile_config import ProfileConfigError, validate_profile_name
 
 
@@ -46,14 +50,23 @@ def choose_study_profile_name(
 
     status = {"value": ""}
     bindings = KeyBindings()
-    name_input = TextArea(
-        text=default_name,
-        multiline=False,
+    name_field = ExactNameFieldControl.create(
+        ExactNameFieldView(
+            value=default_name,
+            label="STUDY NAME",
+            validate=validate_profile_name,
+            value_label="Study Profile name",
+            # Profile validation intentionally sees whitespace exactly as
+            # typed; unlike CLI destination names, it is not prompt padding.
+            strip_candidate=False,
+        ),
+        input_name="study-profile-name",
         prompt="",
-        height=1,
-        style="class:study-name-input",
-        name="study-profile-name",
+        input_style="class:study-name-input",
+        frame_style="class:study-name-field",
+        frame_title="",
     )
+    name_input = name_field.input
     # The compact editor is primarily for replacing or refining the generated
     # suffix, so expose a real caret at the end without selecting the value.
     name_input.buffer.cursor_position = len(default_name)
@@ -61,7 +74,7 @@ def choose_study_profile_name(
     @bindings.add("enter", filter=has_focus(name_input), eager=True)
     def _submit(event) -> None:
         try:
-            selected = validate_profile_name(name_input.text)
+            selected = name_field.validate_candidate()
         except (ProfileConfigError, ValueError) as error:
             status["value"] = display_escape_text(str(error))
             event.app.invalidate()
@@ -80,11 +93,7 @@ def choose_study_profile_name(
             [("", " Edit directly · Ctrl-U clear · Enter create · Esc cancel")]
         )
 
-    name_frame = Frame(
-        name_input,
-        style="class:study-name-field",
-        height=Dimension.exact(3),
-    )
+    name_frame = name_field.frame
     root = HSplit(
         [
             Window(

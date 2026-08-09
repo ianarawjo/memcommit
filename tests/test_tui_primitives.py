@@ -17,6 +17,9 @@ from memcommit.commands.exact_command_review import (
     render_exact_command_review,
 )
 from memcommit.commands.tui_primitives import (
+    ExactNameFieldControl,
+    ExactNameFieldView,
+    ExactNameInputControl,
     InFrameInputManager,
     InFrameInputSection,
     INLINE_AGENT_COMMENT_TITLE,
@@ -39,6 +42,36 @@ from memcommit.commands.tui_primitives import (
     safe_terminal_text,
     set_scrollable_pane_text,
 )
+
+
+def test_exact_name_input_can_embed_without_owning_a_frame() -> None:
+    observed: list[str] = []
+    control = ExactNameInputControl.create(
+        ExactNameFieldView(
+            value="draft",
+            label="OUTPUT NAME",
+            validate=observed.append,
+        )
+    )
+
+    control.set_text("final")
+
+    assert control.validate_candidate() == "final"
+    assert observed == ["final"]
+    assert not hasattr(control, "frame")
+
+
+def test_exact_name_framed_control_composes_the_same_input_contract() -> None:
+    view = ExactNameFieldView(
+        value="draft",
+        label="OUTPUT NAME",
+        state="NOT CREATED",
+    )
+    control = ExactNameFieldControl.create(view)
+
+    assert control.input_control.view is view
+    assert control.input.text == "draft"
+    assert control.frame.title == "OUTPUT NAME · NOT CREATED"
 
 
 def test_horizontal_rule_is_one_fixed_full_width_separator():

@@ -163,8 +163,9 @@ The shell owns only a process-local draft:
 - one independent tree state and selected canonical name for each existing
   role;
 - one process-local new-name draft for each creatable role;
-- one separately confirmed new name, so text merely typed into an editor does
-  not become an endpoint choice when focus moves away;
+- one separately confirmed new name, entered through the shared unframed
+  `ExactNameInputControl`, so text merely typed into an editor does not become
+  an endpoint choice when focus moves away;
 - whether an existing-or-new role currently names an existing Context or a
   proposed new one; and
 - focus and validation-message presentation.

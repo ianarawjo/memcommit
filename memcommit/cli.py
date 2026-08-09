@@ -1,5 +1,5 @@
 """Entry point for the `mem` CLI."""
-from typing import Annotated
+from typing import Annotated, Optional
 
 import typer
 
@@ -68,7 +68,10 @@ app = typer.Typer(
 # --- Core ---
 app.command(
     "init",
-    help="Create, or with --parents ensure, a Context and switch to it.",
+    help=(
+        "Edit a suggested name, or create an explicitly named Context, and "
+        "switch to it; --parents ensures its hierarchy."
+    ),
 )(init.cmd)
 app.command(
     "import",
@@ -174,7 +177,10 @@ app.command(
 )(rename.cmd)
 app.command(
     "branch",
-    help="Create and switch to a new Context branched from the current one.",
+    help=(
+        "Choose a local Source when unnamed, or use the current Context, then "
+        "create and switch to a new branch Context."
+    ),
 )(branch.cmd)
 app.command(
     "merge",
@@ -414,16 +420,31 @@ app.command(
 )(shell_init.cmd)
 
 
-# checkout: alias for switch, with -b to branch instead
+# checkout: complete switch alias, with -b to branch instead
 @app.command(
     "checkout",
-    help="Alias for explicit switch; with -b, alias for branch.",
+    help="Alias for switch, including its picker; with -b, alias for branch.",
 )
 def _checkout(
-    name: Annotated[str, typer.Argument(help="Context to switch to, or name of new branch")],
-    b: Annotated[bool, typer.Option("-b", "--branch", help="Create a new branch from the current context")] = False,
+    name: Annotated[
+        Optional[str],
+        typer.Argument(
+            help=(
+                "Context to switch to; omit to enter the switch picker, or "
+                "with -b omit to choose a branch Source and name"
+            )
+        ),
+    ] = None,
+    b: Annotated[
+        bool,
+        typer.Option(
+            "-b",
+            "--branch",
+            help="Create a branch; without NAME choose its local Source and name",
+        ),
+    ] = False,
 ) -> None:
-    """Alias for 'switch'; with -b, alias for 'branch'."""
+    """Alias for all switch entry routes; with -b, alias for branch."""
     if b:
         branch.cmd(name)
     else:

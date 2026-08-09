@@ -23,10 +23,12 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
-from prompt_toolkit.widgets import Frame, TextArea
+from prompt_toolkit.widgets import Frame
 from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.tui_primitives import (
+    ExactNameFieldView,
+    ExactNameInputControl,
     MEMCOMMIT_TUI_STYLE,
     NavigationAccelerator,
     SEMANTIC_VIEWER_STYLE,
@@ -2883,16 +2885,13 @@ def run_resolution_workbench_shell(
         dont_extend_height=True,
         wrap_lines=False,
     )
-    destination_input = TextArea(
-        text=destination.value if destination is not None else "",
-        multiline=False,
-        prompt="› ",
-        focusable=True,
-        wrap_lines=False,
-        height=Dimension.exact(1),
-        name="resolution-save-location",
+    destination_name_field = ExactNameInputControl.create(
+        destination
+        if destination is not None
+        else ExactNameFieldView(value="", label="SAVE LOCATION"),
+        input_name="resolution-save-location",
     )
-    destination_input.buffer.cursor_position = len(destination_input.text)
+    destination_input = destination_name_field.input
 
     def destination_tree_fragments() -> list[tuple[str, str]]:
         state = destination_editor_state["value"]

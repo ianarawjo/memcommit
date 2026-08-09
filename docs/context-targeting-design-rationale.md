@@ -28,9 +28,14 @@ there is intentionally no profile-wide “last Scope” preference.
   ordinary Query.
 - `tui/tree.py` owns frozen namespace topology, cursor, and expansion state.
 - `tui/selection.py` owns checked values and single-versus-multiple cardinality.
+- `tui/selector.py` composes that cardinality state with the common framed
+  namespace tree while callers retain role labels and availability.
 - `tui/reach.py` owns the shared exact-versus-descendant segmented control.
 - `tui/rendering.py` owns pointer, marker-slot, indentation, branch, escaping,
   annotation, and line-break grammar while operations supply semantic markers.
+- `tui/name_editor.py` owns the optional existing-parent locator and composes it
+  with the operation-neutral exact-name input from `commands.tui_primitives`.
+  Callers supply labels such as Save Location, New Context, or Branch Name.
 
 Find, the common endpoint setup used by Compare/Update/Meld/Atomize, and Sever
 import these controls directly. The older `commands/context_picker.py` keeps

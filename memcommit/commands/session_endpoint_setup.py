@@ -39,6 +39,8 @@ from memcommit.commands.horizontal_choice import (
     render_horizontal_choice,
 )
 from memcommit.commands.tui_primitives import (
+    ExactNameFieldView,
+    ExactNameInputControl,
     MEMCOMMIT_TUI_STYLE,
     bind_focused_frame_style,
     display_escape_text,
@@ -236,6 +238,7 @@ def choose_session_endpoints(
     }
     frames: dict[str, Frame] = {}
     new_inputs: dict[str, TextArea] = {}
+    new_name_fields: dict[str, ExactNameInputControl] = {}
     app_ref: dict[str, Application[EndpointSetupDraft | None]] = {}
 
     def active_mode() -> EndpointModeSpec:
@@ -345,13 +348,25 @@ def choose_session_endpoints(
                 )
             )
         if role.allow_new:
-            editor = TextArea(
-                text=role.initial_new_name,
-                multiline=False,
-                prompt="› ",
-                height=1,
-                name=f"endpoint-{role.uid.casefold()}-new-name",
+            def validate_new_name(candidate: str) -> None:
+                validate_context_name(candidate)
+                if candidate in catalog_set:
+                    raise ValueError(
+                        "That Context already exists; select its tree row."
+                    )
+
+            name_field = ExactNameInputControl.create(
+                ExactNameFieldView(
+                    value=role.initial_new_name,
+                    label=role.new_label,
+                    state="NOT CREATED",
+                    validate=validate_new_name,
+                    value_label="Context name",
+                ),
+                input_name=f"endpoint-{role.uid.casefold()}-new-name",
             )
+            new_name_fields[role.uid] = name_field
+            editor = name_field.input
             new_inputs[role.uid] = editor
             body_parts.extend(
                 [
@@ -740,12 +755,7 @@ def choose_session_endpoints(
         @bindings.add("enter", filter=editor_filter, eager=True)
         def _accept_new(event, role_uid=uid) -> None:
             try:
-                name = new_inputs[role_uid].text.strip()
-                validate_context_name(name)
-                if name in catalog_set:
-                    raise ValueError(
-                        "That Context already exists; select its tree row."
-                    )
+                name = new_name_fields[role_uid].validate_candidate()
             except ValueError as error:
                 status["value"] = str(error)
                 event.app.invalidate()

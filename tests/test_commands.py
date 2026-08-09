@@ -14,7 +14,9 @@ from typer.main import get_command
 from typer.testing import CliRunner
 
 import memcommit.commands.help_inventory as help_inventory
+import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.commands.branch_dialog import BranchCreationReceipt
 from memcommit.commands.help_inventory import CommandEntry, run_help_selector
 from memcommit.store import MemoryStore
 
@@ -75,7 +77,8 @@ class TestHelp:
         assert "print child Contexts and direct items" in list_row
         assert any(
             line.startswith("checkout ")
-            and "Alias for explicit switch" in line
+            and "Alias for switch" in line
+            and "including its picker" in line
             and "alias for branch" in line
             for line in lines
         )
@@ -355,6 +358,14 @@ class TestHelp:
             "mem init-study (edit or generate a Study Profile name)",
             "mem init-study [profile_name] (use an explicit Study Profile name)",
         )
+        assert help_inventory.COMMAND_FORMS["checkout"][0] == (
+            "mem checkout (enter the interactive Context picker; switch alias)"
+        )
+        assert help_inventory.COMMAND_FORMS["checkout"][3] == (
+            "mem checkout -b [new_context] (branch-and-checkout)"
+        )
+        assert help_inventory.COMMAND_FORMS["init"][0].startswith("mem init (")
+        assert help_inventory.COMMAND_FORMS["branch"][0].startswith("mem branch (")
 
     def test_interactive_help_names_the_entry_surface(self):
         session_launchers = ("atomize", "compare", "ground", "meld", "sever")
@@ -455,7 +466,7 @@ class TestHelp:
     def test_meaningful_bare_callbacks_have_a_bare_form(self):
         root = get_command(app)
         context = click.Context(root)
-        semantic_usage_errors = {"add", "edit", "impact", "query"}
+        semantic_usage_errors = {"add", "edit", "impact"}
 
         for command_name in root.list_commands(context):
             command = root.get_command(context, command_name)
@@ -708,6 +719,72 @@ class TestHelp:
 # ---------------------------------------------------------------------------
 
 class TestInit:
+    def test_bare_init_edits_a_fresh_suggestion_and_switches(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        invoke("init", "new-context")
+        observed = {}
+
+        def choose(view):
+            observed["view"] = view
+            return view.value
+
+        monkeypatch.setattr("memcommit.commands.init.choose_context_name", choose)
+
+        result = invoke("init")
+
+        assert result.exit_code == 0
+        assert observed["view"].value == "new-context-2"
+        assert observed["view"].label == "NEW CONTEXT NAME"
+        assert observed["view"].state == "NOT CREATED"
+        assert MemoryStore().current_context_name() == "new-context-2"
+
+    def test_bare_init_cancel_preserves_current(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        invoke("init", "main")
+        monkeypatch.setattr(
+            "memcommit.commands.init.choose_context_name",
+            lambda view: None,
+        )
+
+        result = invoke("init")
+
+        assert result.exit_code == 0
+        assert "cancelled" in result.output
+        assert MemoryStore().list_context_names() == ["main"]
+        assert MemoryStore().current_context_name() == "main"
+
+    def test_bare_init_parents_uses_the_same_name_editor(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        monkeypatch.setattr(
+            "memcommit.commands.init.choose_context_name",
+            lambda view: "project/work",
+        )
+
+        result = invoke("init", "--parents")
+
+        assert result.exit_code == 0
+        assert MemoryStore().list_context_names() == ["project", "project/work"]
+        assert MemoryStore().current_context_name() == "project/work"
+
+    def test_bare_init_requires_a_terminal_without_an_explicit_name(
+        self,
+        isolated_store,
+    ):
+        result = invoke("init")
+
+        assert result.exit_code == 1
+        assert "requires a terminal" in result.stderr
+        assert MemoryStore().list_context_names() == []
+
     def test_creates_context_and_switches(self, isolated_store):
         result = invoke("init", "myctx")
         assert result.exit_code == 0
@@ -1190,6 +1267,83 @@ class TestSwitch:
 # ---------------------------------------------------------------------------
 
 class TestBranch:
+    def test_bare_branch_can_choose_a_noncurrent_local_source(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        invoke("init", "source")
+        invoke("add", "source-only")
+        invoke("init", "current")
+        invoke("add", "current-only")
+        monkeypatch.setattr(
+            "memcommit.commands.branch.choose_branch_creation",
+            lambda *args, **kwargs: BranchCreationReceipt(
+                source_name="source",
+                new_name="experiment",
+            ),
+        )
+
+        result = invoke("branch")
+
+        assert result.exit_code == 0
+        assert "Branched 'source' → 'experiment'" in result.output
+        branched = MemoryStore().load("experiment")
+        contents = [item.content for item in branched.memories.values()]
+        assert contents == ["source-only"]
+        assert MemoryStore().current_context_name() == "experiment"
+
+    def test_bare_branch_cancel_preserves_current(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        invoke("init", "main")
+        monkeypatch.setattr(
+            "memcommit.commands.branch.choose_branch_creation",
+            lambda *args, **kwargs: None,
+        )
+
+        result = invoke("branch")
+
+        assert result.exit_code == 0
+        assert "cancelled" in result.output
+        assert MemoryStore().list_context_names() == ["main"]
+        assert MemoryStore().current_context_name() == "main"
+
+    def test_bare_branch_can_select_a_source_when_current_is_unset(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        store = MemoryStore()
+        store.create_context(ops.init("source"))
+        monkeypatch.setattr(
+            "memcommit.commands.branch.choose_branch_creation",
+            lambda *args, **kwargs: BranchCreationReceipt(
+                source_name="source",
+                new_name="feature",
+            ),
+        )
+
+        result = invoke("branch")
+
+        assert result.exit_code == 0
+        assert store.context_exists("feature")
+        assert store.current_context_name() == "feature"
+
+    def test_bare_branch_requires_a_terminal_without_an_explicit_name(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "source")
+
+        result = invoke("branch")
+
+        assert result.exit_code == 1
+        assert "requires a terminal" in result.stderr
+        assert MemoryStore().list_context_names() == ["source"]
+
     def test_creates_branch_and_switches(self, isolated_store):
         invoke("init", "main")
         invoke("add", "shared memory")
@@ -1543,6 +1697,26 @@ class TestCheckout:
     def test_checkout_b_creates_branch(self, isolated_store):
         invoke("init", "main")
         result = invoke("checkout", "-b", "feature")
+        assert result.exit_code == 0
+        assert MemoryStore().context_exists("feature")
+        assert MemoryStore().current_context_name() == "feature"
+
+    def test_checkout_b_without_a_name_uses_the_branch_picker(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        invoke("init", "main")
+        monkeypatch.setattr(
+            "memcommit.commands.branch.choose_branch_creation",
+            lambda *args, **kwargs: BranchCreationReceipt(
+                source_name="main",
+                new_name="feature",
+            ),
+        )
+
+        result = invoke("checkout", "-b")
+
         assert result.exit_code == 0
         assert MemoryStore().context_exists("feature")
         assert MemoryStore().current_context_name() == "feature"

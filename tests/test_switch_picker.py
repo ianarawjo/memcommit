@@ -840,6 +840,37 @@ def test_bare_switch_uses_picker_result(
     assert MemoryStore().current_context_name() == "alpha"
 
 
+def test_bare_checkout_uses_the_same_switch_picker(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "alpha")
+    invoke("init", "beta")
+    observed: dict[str, object] = {}
+
+    def select(names, *, current, accept_label, memory_loader):
+        observed["names"] = names
+        observed["current"] = current
+        observed["accept_label"] = accept_label
+        return "alpha"
+
+    monkeypatch.setattr(
+        "memcommit.commands.switch.choose_context",
+        select,
+    )
+
+    result = invoke("checkout")
+
+    assert result.exit_code == 0
+    assert "Switched to context 'alpha'" in result.output
+    assert observed == {
+        "names": ["alpha", "beta"],
+        "current": "beta",
+        "accept_label": "switch",
+    }
+    assert MemoryStore().current_context_name() == "alpha"
+
+
 def test_bare_switch_cancel_preserves_current(
     isolated_store,
     monkeypatch,

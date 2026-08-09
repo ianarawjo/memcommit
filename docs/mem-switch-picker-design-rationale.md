@@ -263,10 +263,17 @@ missing Contexts. With no current Context, at a namespace boundary, when the
 exact target Context is absent, or when the target cannot be loaded, the
 command reports the error and leaves current state unchanged.
 
-## Limitations and non-goals
+## Compatibility alias
 
-- `mem checkout` still requires a name; this change is scoped to the explicit
-  argument form and delegates non-branch selection to Switch.
+`mem checkout` delegates every non-branch route to Switch. With an explicit
+name it preserves the scriptable `mem switch NAME` behavior; without a name it
+opens the same picker and therefore shares its validation, relative-navigation
+boundary, granted-view handling, and current-state compare-and-swap. The alias
+does not maintain a second picker implementation. `mem checkout -b NAME`
+remains the explicit Branch alias, while bare `mem checkout -b` delegates to
+Branch's Source-and-name creation control.
+
+## Limitations and non-goals
 - Relative selectors walk only a name namespace. They do not represent an
   embedded-Context relationship, and there is no implicit search for an
   embedding parent.

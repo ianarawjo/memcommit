@@ -109,6 +109,15 @@ command releases its creation lock, later failure preserves that Context for
 inspection instead of deleting by name; another process may already have
 observed or referenced it.
 
+Bare interactive Init and Branch apply this rule across their name/Source
+controls. Init keeps require-new creation and final selection inside the same
+batch lock and rolls back its exact new identities if the frozen current
+pointer changed. Branch freezes the command-start current pointer separately
+from its selected local Source, then rechecks Source UID, content digest,
+checkpoint-history digest, target newness, and current state in its existing
+atomic branch transaction. Choosing a non-current Source never performs an
+intermediate global switch.
+
 Rollback inside one still-held creation transaction may remove only the exact
 new identity created by that transaction.
 

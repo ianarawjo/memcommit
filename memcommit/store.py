@@ -58,6 +58,7 @@ GROUND_SESSIONS_DIR = STORE_DIR / "ground-sessions"
 MELD_SESSIONS_DIR = STORE_DIR / "meld-sessions"
 RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
 _NO_UPDATE_SESSION_EXPECTATION = object()
+_NO_CURRENT_CONTEXT_EXPECTATION = object()
 
 
 def _reject_duplicate_json_keys(
@@ -4322,7 +4323,7 @@ class MemoryStore:
         expected_source_uid: str,
         expected_source_digest: str,
         expected_history_digest: str,
-        expected_current: str,
+        expected_current: str | None,
     ) -> None:
         """Create, inherit history, and select one exact branch atomically.
 
@@ -4413,13 +4414,15 @@ class MemoryStore:
         *,
         make_current: str | None = None,
         require_all_new: bool = False,
+        expected_current: str | None | object = _NO_CURRENT_CONTEXT_EXPECTATION,
     ) -> tuple[Context, ...]:
-        """Create one namespace batch inside the command-order boundary."""
+        """Create one namespace batch and optionally CAS-select its target."""
         with self._command_write_lock():
             return self._create_missing_contexts_command_locked(
                 entries,
                 make_current=make_current,
                 require_all_new=require_all_new,
+                expected_current=expected_current,
             )
 
     def _create_missing_contexts_command_locked(
@@ -4428,6 +4431,7 @@ class MemoryStore:
         *,
         make_current: str | None = None,
         require_all_new: bool = False,
+        expected_current: str | None | object = _NO_CURRENT_CONTEXT_EXPECTATION,
     ) -> tuple[Context, ...]:
         """Create a validated batch and optionally select one batch Context.
 
@@ -4438,9 +4442,11 @@ class MemoryStore:
         stays inside the same boundary so a new leaf cannot be deleted or
         replaced between its creation and the state write.
 
-        ``require_all_new`` is used by identity-preserving import: silently
-        reusing one existing name would turn a reviewed all-new batch into a
-        partial merge with different collision semantics.
+        ``require_all_new`` is used by exact creation and identity-preserving
+        import: silently reusing one existing name would turn a reviewed
+        all-new batch into a different operation. When supplied,
+        ``expected_current`` prevents a long interactive creation flow from
+        overwriting a later Context switch at the final state write.
         """
         records = tuple(entries)
         if not records:
@@ -4469,7 +4475,7 @@ class MemoryStore:
 
                 if require_all_new and existing:
                     raise FileExistsError(
-                        "Context import destination already exists: "
+                        "Context destination already exists: "
                         + ", ".join(sorted(existing))
                     )
 
@@ -4489,6 +4495,14 @@ class MemoryStore:
                     if make_current is not None:
                         with self._state_write_lock():
                             state = self._read_state()
+                            if (
+                                expected_current is not _NO_CURRENT_CONTEXT_EXPECTATION
+                                and state.get("current") != expected_current
+                            ):
+                                raise ConcurrentContextUpdateError(
+                                    "The current Context changed before the new "
+                                    "Context could be selected."
+                                )
                             state["current"] = make_current
                             self._write_state(state)
                 except Exception as error:

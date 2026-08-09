@@ -161,11 +161,14 @@ COMMAND_FORMS = {
         'mem atomize --evaluate "[issue]" (directional atomic review)',
     ),
     "branch": (
+        "mem branch (choose a local Source and edit a suggested branch name)",
         "mem branch [new_context] (branch the current Context and switch)",
     ),
     "checkout": (
+        "mem checkout (enter the interactive Context picker; switch alias)",
         "mem checkout [context] (switch alias)",
-        "mem checkout -b [new_context] (branch-and-switch alias)",
+        "mem checkout -b (interactive branch-and-checkout)",
+        "mem checkout -b [new_context] (branch-and-checkout)",
     ),
     "checkpoint": (
         "mem checkpoint (save without a message)",
@@ -270,7 +273,9 @@ COMMAND_FORMS = {
         "mem import [profile_name] --from [store] (legacy clean-baseline Profile spelling)",
     ),
     "init": (
+        "mem init (edit a suggested fresh Context name, create, and switch)",
         "mem init [context] (create and switch to one Context)",
+        "mem init --parents (edit a suggested name and ensure its hierarchy)",
         "mem init [context] --parents (ensure its lexical hierarchy and switch)",
     ),
     "init-study": (

@@ -228,11 +228,12 @@ concurrency, or remote-persistence boundaries.
 
 An implementation can expose two related public spellings through one
 internal callback. `mem list` and `mem ls` deliberately have the same
-description: participants may learn and use either spelling. A compatibility
-alias such as `checkout` identifies its explicit `switch` and `branch`
-operations directly in its description instead of adding another status
-column. It does not claim the bare interactive `switch` picker because
-`checkout` requires a name.
+description: participants may learn and use either spelling. The `checkout`
+compatibility alias identifies both underlying operations directly in its
+description instead of adding another status column. Bare `checkout` is also
+listed because it delegates to the same interactive picker as bare `switch`;
+bare `checkout -b` names the interactive branch-and-checkout route and
+`checkout -b NAME` names its explicit counterpart.
 
 ## Consistency boundary
 
