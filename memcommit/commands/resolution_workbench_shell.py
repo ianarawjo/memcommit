@@ -51,6 +51,7 @@ from memcommit.commands.semantic_detail_renderer import (
     semantic_trace_fragments,
 )
 from memcommit.commands.semantic_viewer import (
+    SemanticViewerController,
     deactivate_semantic_viewer_fragments,
     semantic_viewer_block_fragments,
 )
@@ -549,22 +550,21 @@ def _visual_wrap(value: str, width: int) -> list[str]:
 
 
 def _source_memory_lines(content: str, content_width: int) -> tuple[str, ...]:
-    """Wrap one source Memory into independently navigable display rows."""
+    """Wrap one Memory for its nested reading viewport, not outer focus."""
 
-    # Reserve the first-row short UID and continuation indentation. The
-    # returned rows remain presentation-only slices of one Memory object.
+    # Reserve the first-row short UID and continuation indentation. These rows
+    # are presentation-only offsets inside one stable SOURCE_MEMORY section.
     return tuple(_visual_wrap(content, max(1, content_width - 16)))
 
 
 def _evidence_section_count(evidence, content_width: int) -> int:
-    """Count Classification, criterion, source-line, and Why stops."""
+    """Count Classification, criterion, whole-Memory, and Why stops."""
 
-    source_line_count = sum(
-        len(_source_memory_lines(source.content, content_width))
-        for claim in evidence.source_groups
-        for source in claim.sources
+    _ = content_width
+    source_memory_count = sum(
+        1 for claim in evidence.source_groups for source in claim.sources
     )
-    return 2 + len(evidence.criterion_blocks) + source_line_count
+    return 2 + len(evidence.criterion_blocks) + source_memory_count
 
 
 def _visual_wrap_diff_spans(
@@ -695,13 +695,18 @@ def resolution_workbench_fragments(
         ("", f" {safe_terminal_text(view.route)}\n"),
         ("", status_line + "\n\n"),
     ]
-    if view.overview:
-        fragments.extend(
-            [
-                ("class:section", " WHAT MEM UNDERSTOOD\n"),
-                ("", f" {safe_terminal_text(view.overview)}\n\n"),
-            ]
-        )
+    if view.semantic_overview_sections:
+        fragments.append(("class:section", " WHAT MEM UNDERSTOOD\n"))
+        for section in view.semantic_overview_sections:
+            fragments.extend(
+                [
+                    (
+                        "class:block-heading",
+                        f" {safe_terminal_text(section.heading)}\n",
+                    ),
+                    ("", f" {safe_terminal_text(section.text) or '(none)'}\n\n"),
+                ]
+            )
     fragments.append(("class:section", f" {safe_terminal_text(view.list_label)}\n"))
     if not view.items:
         fragments.append(("", f"  {safe_terminal_text(view.empty_message)}\n"))
@@ -854,6 +859,8 @@ def resolution_viewer_fragments(
     other_direction_editing: bool = False,
     inline_action: SessionTodoView | None = None,
     expanded_memory_section_uid: str | None = None,
+    nested_source_memory_uid: str | None = None,
+    nested_source_memory_line: int = 0,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
     """Render one issue as a compact, section-navigable detail surface."""
@@ -890,14 +897,18 @@ def resolution_viewer_fragments(
     focused_section = max(0, min(focused_section, section_count - 1))
     section_index = 0
 
-    def report_section(parts: list[tuple[str, str]]) -> None:
+    def report_section(
+        parts: list[tuple[str, str]],
+        *,
+        anchor: str = "both",
+    ) -> None:
         nonlocal section_index
         active = section_index == focused_section
         fragments.extend(
             semantic_viewer_block_fragments(
                 parts,
                 active=active,
-                anchor="both",
+                anchor=anchor,
             )
         )
         section_index += 1
@@ -1070,7 +1081,7 @@ def resolution_viewer_fragments(
                 ),
             ]
         )
-        for evidence in presentation.evidence:
+        for evidence_index, evidence in enumerate(presentation.evidence):
             report_section(
                 [
                     (
@@ -1090,21 +1101,31 @@ def resolution_viewer_fragments(
                         memory_rows=criterion.memory_rows,
                     )
                 )
-            for claim in evidence.source_groups:
+            for claim_index, claim in enumerate(evidence.source_groups):
                 for source_index, source in enumerate(claim.sources):
                     lines = _source_memory_lines(source.content, content_width)
-                    for line_index, line in enumerate(lines):
-                        source_parts: list[tuple[str, str]] = []
-                        if source_index == 0 and line_index == 0:
-                            source_parts.append(
+                    source_section_uid = (
+                        f"ITEM:{item.uid}:EVIDENCE:{evidence_index}:SOURCE:"
+                        f"{claim_index}:{source.memory_uid}"
+                    )
+                    nested_reading = nested_source_memory_uid == source_section_uid
+                    source_parts: list[tuple[str, str]] = []
+                    if source_index == 0:
+                        source_parts.append(
+                            (
+                                "class:block-heading",
                                 (
-                                    "class:block-heading",
-                                    (
-                                        f"\n {safe_terminal_text(claim.label)} · FROM "
-                                        f"{safe_terminal_text(claim.context_name)}\n"
-                                    ),
-                                )
+                                    f"\n {safe_terminal_text(claim.label)} · FROM "
+                                    f"{safe_terminal_text(claim.context_name)}\n"
+                                ),
                             )
+                        )
+                    for line_index, line in enumerate(lines):
+                        if nested_reading and line_index == min(
+                            nested_source_memory_line,
+                            len(lines) - 1,
+                        ):
+                            source_parts.append(("[SetCursorPosition]", ""))
                         source_parts.extend(
                             [
                                 (
@@ -1119,7 +1140,10 @@ def resolution_viewer_fragments(
                                 ("class:memory-object", f"{line}\n"),
                             ]
                         )
-                        report_section(source_parts)
+                    report_section(
+                        source_parts,
+                        anchor="start" if nested_reading else "both",
+                    )
             report_section(
                 [
                     (
@@ -1346,9 +1370,11 @@ def resolution_report_fragments(
     report_item_sections = (
         0 if view.report_items_summary is not None else len(view.items)
     )
+    overview_sections = view.semantic_overview_sections
     section_count = (
         report_item_sections
-        + 3
+        + 1
+        + len(overview_sections)
         + (not read_only)
         + show_results
         + (impact is not None)
@@ -1371,7 +1397,10 @@ def resolution_report_fragments(
         )
         section_index += 1
 
-    heading(view.title, style="class:title")
+    # Report identity and endpoint metadata orient the reader but are not
+    # semantic inspection targets. Initial Viewer focus therefore lands on
+    # the first operation-declared overview section.
+    fragments.append(("class:title", f" {safe_terminal_text(view.title)}\n"))
     if view.context_locations:
         fragments.append(("class:section", " CONTEXT LOCATIONS\n"))
         for location in view.context_locations:
@@ -1398,8 +1427,28 @@ def resolution_report_fragments(
             + "\n\n",
         )
     )
-    heading("WHAT MEM UNDERSTOOD")
-    fragments.append(("", f" {safe_terminal_text(view.overview) or '(none)'}\n\n"))
+    fragments.append(("class:section", " WHAT MEM UNDERSTOOD\n"))
+    if not overview_sections:
+        fragments.append(("", " (none)\n\n"))
+    for overview_section in overview_sections:
+        active = section_index == focused_section
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                [
+                    (
+                        "class:block-heading",
+                        f" {safe_terminal_text(overview_section.heading)}\n",
+                    ),
+                    (
+                        "",
+                        f" {safe_terminal_text(overview_section.text) or '(none)'}\n\n",
+                    ),
+                ],
+                active=active,
+                focus_indices=(0,),
+            )
+        )
+        section_index += 1
     if view.report_items_summary is not None:
         heading(view.report_items_summary.heading)
         fragments.append(
@@ -2283,6 +2332,7 @@ def run_resolution_workbench_shell(
         return view
 
     session_navigation = workbench_navigation or SessionWorkbenchNavigation()
+    viewer_controller = SemanticViewerController(session_navigation)
     if split_viewer_items:
         # A caller may reuse process-local navigation, but a composer cannot be
         # the initial target before the shell has opened an input surface.
@@ -2320,10 +2370,14 @@ def run_resolution_workbench_shell(
             )
             return _stable_sections(entries)
         entries: list[tuple[str, str, int | None]] = [
-            ("TITLE", "REPORT:TITLE", 0),
-            ("UNDERSTANDING", "REPORT:UNDERSTANDING", 0),
-            ("REVIEW_ITEMS", "REPORT:REVIEW_ITEMS", 0),
+            (
+                "OVERVIEW",
+                f"REPORT:OVERVIEW:{section.uid}",
+                0,
+            )
+            for section in active_view.semantic_overview_sections
         ]
+        entries.append(("REVIEW_ITEMS", "REPORT:REVIEW_ITEMS", 0))
         if active_view.report_items_summary is None:
             entries.extend(
                 ("ITEM", f"ITEM:{item.uid}", index)
@@ -2427,20 +2481,14 @@ def run_resolution_workbench_shell(
                 )
                 for claim_index, claim in enumerate(evidence.source_groups):
                     for source in claim.sources:
-                        entries.extend(
+                        entries.append(
                             (
-                                "SOURCE_MEMORY_LINE",
+                                "SOURCE_MEMORY",
                                 (
                                     f"{evidence_prefix}:SOURCE:{claim_index}:"
-                                    f"{source.memory_uid}:LINE:{line_index}"
+                                    f"{source.memory_uid}"
                                 ),
                                 None,
-                            )
-                            for line_index, _line in enumerate(
-                                _source_memory_lines(
-                                    source.content,
-                                    pane_content_width(),
-                                )
                             )
                         )
                 entries.append(
@@ -2496,11 +2544,35 @@ def run_resolution_workbench_shell(
         return item_sections()
 
     def viewer_section_index() -> int:
-        return session_navigation.section_index(active_viewer_sections())
+        return viewer_controller.index(active_viewer_sections())
 
     def reset_viewer_section() -> None:
+        viewer_controller.close_nested()
         sections = active_viewer_sections()
         session_navigation.section_uid = sections[0].uid if sections else None
+
+    def focused_source_memory():
+        """Resolve the exact typed Memory owned by the current Viewer stop."""
+
+        section = viewer_controller.current(active_viewer_sections())
+        item = current_navigation.current_item(current_view())
+        if (
+            section is None
+            or section.kind != "SOURCE_MEMORY"
+            or item is None
+            or item.issue_presentation is None
+        ):
+            return None
+        for evidence_index, evidence in enumerate(item.issue_presentation.evidence):
+            for claim_index, claim in enumerate(evidence.source_groups):
+                for source in claim.sources:
+                    uid = (
+                        f"ITEM:{item.uid}:EVIDENCE:{evidence_index}:SOURCE:"
+                        f"{claim_index}:{source.memory_uid}"
+                    )
+                    if uid == section.uid:
+                        return source
+        return None
 
     def pane_content_width() -> int:
         """Track the live inner frame width, including terminal resizes."""
@@ -2652,6 +2724,8 @@ def run_resolution_workbench_shell(
                 other_direction_editing=other_direction_editor["open"],
                 inline_action=inline_item_action(),
                 expanded_memory_section_uid=expanded_memory_section_uid["uid"],
+                nested_source_memory_uid=viewer_controller.nested_uid,
+                nested_source_memory_line=viewer_controller.nested_index,
                 content_width=pane_content_width(),
             ),
             focused=session_navigation.pane == "viewer",
@@ -2912,6 +2986,7 @@ def run_resolution_workbench_shell(
         other_direction["focused"] = False
         other_direction_editor["open"] = False
         expanded_memory_section_uid["uid"] = None
+        viewer_controller.close_nested()
         if session_navigation.row_index == 0:
             set_viewer_content("REPORT")
             current_navigation.close_detail()
@@ -2934,10 +3009,21 @@ def run_resolution_workbench_shell(
                     move_split_option(delta)
                     set_status("")
                     return
-                section = session_navigation.move_section(
-                    active_viewer_sections(),
-                    delta,
-                )
+                if viewer_controller.nested_uid is not None:
+                    source = focused_source_memory()
+                    if source is not None:
+                        viewer_controller.move_nested(
+                            len(
+                                _source_memory_lines(
+                                    source.content,
+                                    pane_content_width(),
+                                )
+                            ),
+                            delta,
+                        )
+                    set_status("")
+                    return
+                section = viewer_controller.move(active_viewer_sections(), delta)
                 if viewer_content["kind"] == "REPORT" and section is not None:
                     session_navigation.row_index = section.row_index or 0
                     if section.kind == "ITEM" and section.row_index is not None:
@@ -3282,6 +3368,22 @@ def run_resolution_workbench_shell(
                 ):
                     item = active_view.items[session_navigation.row_index - 1]
                     open_split_item(item.uid)
+                elif (
+                    session_navigation.pane == "viewer"
+                    and active_viewer_sections()[viewer_section_index()].kind
+                    == "SOURCE_MEMORY"
+                ):
+                    section = active_viewer_sections()[viewer_section_index()]
+                    if viewer_controller.nested_uid == section.uid:
+                        viewer_controller.close_nested()
+                        set_status("Memory reading closed.")
+                    else:
+                        viewer_controller.open_nested(section.uid)
+                        set_status(
+                            "Reading this Memory · ↑/↓ scroll · Enter/Escape back."
+                        )
+                    event.app.invalidate()
+                    return
                 elif read_only:
                     set_status("Applied Melds are read-only.")
                 else:
@@ -3477,6 +3579,7 @@ def run_resolution_workbench_shell(
             return
         if split_viewer_items:
             option_navigation["active"] = False
+            viewer_controller.close_nested()
             delta = -1 if event.key_sequence[0].key == Keys.BackTab else 1
             pane = session_navigation.cycle_panes(
                 # Focus follows the visible top-to-bottom frame order from the
@@ -3641,6 +3744,9 @@ def run_resolution_workbench_shell(
     def _collapse_detail(event) -> bool:
         if event.app.layout.has_focus(input_area):
             return False
+        if viewer_controller.close_nested():
+            set_status("")
+            return True
         if option_navigation["active"]:
             option_navigation["active"] = False
             other_direction["focused"] = False
@@ -3667,6 +3773,10 @@ def run_resolution_workbench_shell(
             destination_editing["value"] = False
             session_navigation.focus("viewer")
             event.app.layout.focus(body_control)
+            set_status("")
+            event.app.invalidate()
+            return
+        if viewer_controller.close_nested():
             set_status("")
             event.app.invalidate()
             return
@@ -3764,6 +3874,19 @@ def run_resolution_workbench_shell(
         elif split_viewer_items and option_navigation["active"]:
             navigation_help = (
                 " ↑/↓ option  Enter select  Esc/Backspace back  Tab switch "
+            )
+        elif viewer_controller.nested_uid is not None:
+            navigation_help = (
+                " ↑/↓ scroll Memory  Enter/Esc/Backspace back  Tab switch "
+            )
+        elif (
+            split_viewer_items
+            and viewer_content["kind"] == "ITEM"
+            and session_navigation.pane == "viewer"
+            and active_viewer_sections()[viewer_section_index()].kind == "SOURCE_MEMORY"
+        ):
+            navigation_help = (
+                " Enter read Memory  ↑/↓ section  Esc/Backspace back  Tab switch "
             )
         elif (
             split_viewer_items

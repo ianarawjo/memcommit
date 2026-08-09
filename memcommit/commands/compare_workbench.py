@@ -24,6 +24,7 @@ from memcommit.commands.tui_primitives import (
 )
 from memcommit.commands.semantic_viewer import (
     SemanticViewerBlock,
+    SemanticViewerController,
     SemanticViewerDocument,
     SemanticViewerSection,
 )
@@ -278,6 +279,7 @@ def run_compare_workbench(
     rows = _rows(analysis)
     selected = {"member": 0, "expanded": False}
     navigation = workbench_navigation or SessionWorkbenchNavigation()
+    viewer_controller = SemanticViewerController(navigation)
     if navigation.pane not in {"viewer", "items"}:
         navigation.focus("viewer")
     groups = _relation_groups(analysis)
@@ -554,20 +556,15 @@ def run_compare_workbench(
         hidden cursor crosses the upper or lower boundary, like a normal list.
         """
         document = _current_reader_document()
-        sections = document.navigation_sections
-        section_index = navigation.section_index(sections)
-        return document.render(
-            focused_uid=sections[section_index].uid,
+        return viewer_controller.render(
+            document,
             viewer_focused=navigation.pane == "viewer",
         )
 
     @bindings.add("down")
     def _down(event) -> None:
         if navigation.pane == "viewer":
-            navigation.move_section(
-                _current_reader_sections(),
-                1,
-            )
+            viewer_controller.move(_current_reader_sections(), 1)
         else:
             move_row(1)
         event.app.invalidate()
@@ -575,10 +572,7 @@ def run_compare_workbench(
     @bindings.add("up")
     def _up(event) -> None:
         if navigation.pane == "viewer":
-            navigation.move_section(
-                _current_reader_sections(),
-                -1,
-            )
+            viewer_controller.move(_current_reader_sections(), -1)
         else:
             move_row(-1)
         event.app.invalidate()
@@ -586,7 +580,7 @@ def run_compare_workbench(
     @bindings.add("pagedown")
     def _page_down(event) -> None:
         if navigation.pane == "viewer":
-            navigation.move_section(_current_reader_sections(), 8)
+            viewer_controller.move(_current_reader_sections(), 8)
         else:
             move_row(8)
         event.app.invalidate()
@@ -594,7 +588,7 @@ def run_compare_workbench(
     @bindings.add("pageup")
     def _page_up(event) -> None:
         if navigation.pane == "viewer":
-            navigation.move_section(_current_reader_sections(), -8)
+            viewer_controller.move(_current_reader_sections(), -8)
         else:
             move_row(-8)
         event.app.invalidate()
@@ -602,7 +596,7 @@ def run_compare_workbench(
     @bindings.add("home")
     def _home(event) -> None:
         if navigation.pane == "viewer":
-            navigation.move_section(_current_reader_sections(), -1_000_000)
+            viewer_controller.home(_current_reader_sections())
         else:
             move_row(-1_000_000)
         event.app.invalidate()
@@ -610,7 +604,7 @@ def run_compare_workbench(
     @bindings.add("end")
     def _end(event) -> None:
         if navigation.pane == "viewer":
-            navigation.move_section(_current_reader_sections(), 1_000_000)
+            viewer_controller.end(_current_reader_sections())
         else:
             move_row(1_000_000)
         event.app.invalidate()

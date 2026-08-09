@@ -20,7 +20,9 @@ from memcommit.resolution_workbench import (
     ResolutionMemoryRow,
     ResolutionMetric,
     ResolutionOption,
+    ResolutionOverviewSection,
     ResolutionWorkbenchView,
+    resolution_overview_text,
 )
 from memcommit.result_workbench import ResultRef
 
@@ -36,15 +38,33 @@ def _priority_label(finding: AtomizeWorkbenchFinding) -> str:
     }.get(finding.priority, f"PRIORITY {finding.priority}")
 
 
-def _overview(analysis: AtomizeAnalysisSession) -> str:
+def _overview_sections(
+    analysis: AtomizeAnalysisSession,
+) -> tuple[ResolutionOverviewSection, ...]:
     if analysis.overview is None:
-        return "The saved Atomize analysis has no compact overview."
-    return "\n\n".join(
-        (
-            f"UNDERSTOOD\n{analysis.overview.understood.text}",
-            f"CHANGED\n{analysis.overview.changed.text}",
-            f"UNRESOLVED\n{analysis.overview.unresolved.text}",
+        return (
+            ResolutionOverviewSection(
+                "not-recorded",
+                "NOT RECORDED",
+                "The saved Atomize analysis has no compact overview.",
+            ),
         )
+    return (
+        ResolutionOverviewSection(
+            "understood",
+            "UNDERSTOOD",
+            analysis.overview.understood.text,
+        ),
+        ResolutionOverviewSection(
+            "changed",
+            "CHANGED",
+            analysis.overview.changed.text,
+        ),
+        ResolutionOverviewSection(
+            "unresolved",
+            "UNRESOLVED",
+            analysis.overview.unresolved.text,
+        ),
     )
 
 
@@ -291,6 +311,7 @@ class AtomizeResolutionWorkbenchAdapter:
             # the saved unary response frame, revalidate the new proposal,
             # and apply it without forcing a second approval screen.
             capabilities.add("INCORPORATE_AND_APPLY")
+        overview_sections = _overview_sections(analysis)
         return ResolutionWorkbenchView(
             operation="ATOMIZE",
             artifact_uid=workbench.uid,
@@ -332,7 +353,8 @@ class AtomizeResolutionWorkbenchAdapter:
                     ),
                 ),
             ),
-            overview=_overview(analysis),
+            overview=resolution_overview_text(overview_sections),
+            overview_sections=overview_sections,
             list_label="ACTIONABLE FINDINGS",
             items=tuple(projected),
             empty_message="No actionable Atomize findings in this analysis.",

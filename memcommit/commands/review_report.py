@@ -14,6 +14,7 @@ from memcommit.commands.resolution_workbench_shell import (
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.resolution_workbench import (
     ResolutionNavigation,
+    ResolutionOverviewSection,
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
@@ -102,6 +103,9 @@ def render_review_report_snapshot(report: ReviewReport) -> str:
 
 
 def _text_only_view(report: ReviewReport) -> ResolutionWorkbenchView:
+    overview_sections = (
+        ResolutionOverviewSection("summary", "SUMMARY", report.summary),
+    )
     return ResolutionWorkbenchView(
         operation=report.operation,
         artifact_uid=report.artifact_uid,
@@ -111,6 +115,7 @@ def _text_only_view(report: ReviewReport) -> ResolutionWorkbenchView:
         status="REVIEW REPORT · READ ONLY",
         metrics=(),
         overview=report.summary,
+        overview_sections=overview_sections,
         list_label="REPORT",
         items=(),
         empty_message="This report has no interactive review items.",

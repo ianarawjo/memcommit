@@ -25,6 +25,7 @@ from memcommit.commands.tui_primitives import (
 )
 from memcommit.commands.semantic_viewer import (
     SemanticViewerBlock,
+    SemanticViewerController,
     SemanticViewerDocument,
     SemanticViewerSection,
     semantic_viewer_block_fragments,
@@ -77,6 +78,7 @@ def run_share_viewer(
         raise ValueError("Interactive Share requires a terminal.")
 
     nav = navigation or SessionWorkbenchNavigation(pane="viewer")
+    viewer_controller = SemanticViewerController(nav)
     selected = {"memory": 0}
     windows: dict[str, Window] = {}
     bindings = KeyBindings()
@@ -112,10 +114,9 @@ def run_share_viewer(
     )
 
     def render_context():
-        section_index = nav.section_index(context_document.navigation_sections)
         return FormattedText(
-            context_document.render(
-                focused_uid=context_document.navigation_sections[section_index].uid,
+            viewer_controller.render(
+                context_document,
                 viewer_focused=nav.pane == "viewer",
             )
         )
@@ -163,7 +164,7 @@ def run_share_viewer(
     @bindings.add("down")
     def _down(event) -> None:
         if nav.pane == "viewer":
-            nav.move_section(context_document.navigation_sections, 1)
+            viewer_controller.move(context_document, 1)
         elif nav.pane == "items":
             selected["memory"] = min(
                 selected["memory"] + 1,
@@ -174,7 +175,7 @@ def run_share_viewer(
     @bindings.add("up")
     def _up(event) -> None:
         if nav.pane == "viewer":
-            nav.move_section(context_document.navigation_sections, -1)
+            viewer_controller.move(context_document, -1)
         elif nav.pane == "items":
             selected["memory"] = max(0, selected["memory"] - 1)
         event.app.invalidate()

@@ -340,6 +340,11 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     assert view.unresolved_at_apply_count == 1
     assert view.status == "READY_TO_APPLY_AS_IS"
     assert view.results == ()
+    assert [section.heading for section in view.overview_sections] == [
+        "UNDERSTOOD",
+        "CHANGED",
+        "UNRESOLVED",
+    ]
     assert [metric.value for metric in view.metrics] == ["2", "3", "2", "1"]
     assert [
         (location.role, location.name, location.state)

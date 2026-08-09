@@ -13,6 +13,7 @@ from memcommit.resolution_workbench import (
     ResolutionContextLocation,
     ResolutionItem,
     ResolutionMetric,
+    ResolutionOverviewSection,
     ResolutionWorkbenchView,
 )
 from memcommit.update import (
@@ -168,6 +169,7 @@ class UpdateResolutionWorkbenchAdapter:
                 "still describes the exact reversible transition."
             ),
         }.get(session.status, "This Update records exact target Memory changes.")
+        overview_sections = (ResolutionOverviewSection("plan", "PLAN", overview),)
         return ResolutionWorkbenchView(
             operation="UPDATE",
             artifact_uid=session.uid,
@@ -186,6 +188,7 @@ class UpdateResolutionWorkbenchAdapter:
                 ResolutionContextLocation("TARGET", session.target_name),
             ),
             overview=overview,
+            overview_sections=overview_sections,
             list_label="PLANNED CHANGES",
             items=items,
             empty_message="No planned changes are recorded in this Update artifact.",

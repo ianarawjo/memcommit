@@ -38,6 +38,7 @@ from memcommit.resolution_workbench import (
     ResolutionMemoryRow,
     ResolutionNavigation,
     ResolutionOption,
+    ResolutionOverviewSection,
     ResolutionResult,
     ResolutionWorkbenchView,
 )
@@ -132,9 +133,9 @@ def test_save_location_card_emits_an_exact_destination_change_before_apply():
         accept_enabled=True,
     )
     with create_pipe_input() as pipe_input:
-        # The Report starts focused. Move from its title through understanding,
-        # review set, and results to SAVE LOCATION, then edit the exact name.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\x1b[B\r\x15task-3/severed-final\r")
+        # Report identity is chrome. Move from its first declared overview
+        # through review set and results to SAVE LOCATION, then edit the name.
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\r\x15task-3/severed-final\r")
         action = run_resolution_workbench_shell(
             view,
             app_input=pipe_input,
@@ -180,6 +181,28 @@ def test_report_places_context_locations_above_understanding_and_apply_last():
     assert "incoming -> baseline" not in rendered
     assert rendered.index("CONTEXT LOCATIONS") < rendered.index("WHAT MEM UNDERSTOOD")
     assert rendered.index("SAVE LOCATION") < rendered.index("REVIEW AND APPLY")
+
+
+def test_report_focuses_operation_declared_overview_units_not_the_group():
+    view = replace(
+        _view(),
+        overview_sections=(
+            ResolutionOverviewSection("understood", "UNDERSTOOD", "Source meaning."),
+            ResolutionOverviewSection("changed", "CHANGED", "One split."),
+            ResolutionOverviewSection("unresolved", "UNRESOLVED", "One referent."),
+        ),
+    )
+
+    for index, heading in enumerate(("UNDERSTOOD", "CHANGED", "UNRESOLVED")):
+        fragments = resolution_report_fragments(view, focused_section=index)
+        assert any(
+            style == "class:viewer-section" and heading in text
+            for style, text in fragments
+        )
+        assert not any(
+            style == "class:viewer-section" and "WHAT MEM UNDERSTOOD" in text
+            for style, text in fragments
+        )
 
 
 @pytest.mark.parametrize("numeric_key", ["1", "2", "3", "4", "5"])
@@ -343,7 +366,7 @@ def test_split_report_contains_conflicts_and_whole_set_strategies():
     fragments = resolution_report_fragments(
         view,
         strategies=strategies,
-        focused_section=3,
+        focused_section=2,
     )
     rendered = "".join(text for _style, text in fragments)
 
@@ -748,7 +771,9 @@ def test_split_viewer_section_navigation_selects_matching_item_row():
     assert navigation.selected_item_uid == "b"
 
 
-def test_atomize_detail_down_uses_shared_viewer_arrow_acceleration(monkeypatch):
+def test_atomize_detail_down_uses_semantic_memory_stops_with_acceleration(
+    monkeypatch,
+):
     class TwoSectionAccelerator:
         def move(self, direction, *, app, move_one):
             for _ in range(2):
@@ -816,27 +841,26 @@ def test_atomize_detail_down_uses_shared_viewer_arrow_acceleration(monkeypatch):
     )
     workbench_navigation = SessionWorkbenchNavigation()
 
-    first_line = resolution_viewer_fragments(
+    focused_memory = resolution_viewer_fragments(
         view,
         ResolutionNavigation(selected_item_uid=item.uid),
         focused_section=1,
         content_width=40,
     )
-    second_line = resolution_viewer_fragments(
+    focused_reason = resolution_viewer_fragments(
         view,
         ResolutionNavigation(selected_item_uid=item.uid),
         focused_section=2,
         content_width=40,
     )
-    first_focused = "".join(
-        text for style, text in first_line if style == "class:memory-object.focused"
+    memory_text = "".join(
+        text for style, text in focused_memory if style == "class:memory-object.focused"
     )
-    second_focused = "".join(
-        text for style, text in second_line if style == "class:memory-object.focused"
+    assert memory_text.count("source Memory") == 20
+    assert any(
+        style == "class:viewer-section" and "WHY THIS SPLIT" in text
+        for style, text in focused_reason
     )
-    assert first_focused
-    assert second_focused
-    assert first_focused != second_focused
 
     opened = resolution_viewer_fragments(
         view,
@@ -856,8 +880,8 @@ def test_atomize_detail_down_uses_shared_viewer_arrow_acceleration(monkeypatch):
 
     with create_pipe_input() as pipe_input:
         # Move from REPORT to the split, open it, then one held-arrow pulse
-        # starts on Classification and then reaches the second wrapped Source
-        # Memory line.
+        # starts on Classification, visits the whole Source Memory once, and
+        # then reaches Why. Terminal wrapping must not add focus stops.
         pipe_input.send_text("\t\x1b[B\r\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
@@ -869,10 +893,7 @@ def test_atomize_detail_down_uses_shared_viewer_arrow_acceleration(monkeypatch):
         )
 
     assert action.kind == "CLOSE"
-    assert workbench_navigation.section_uid == (
-        "ITEM:atomize-split:EVIDENCE:0:SOURCE:0:"
-        "12345678-1111-1111-1111-111111111111:LINE:1"
-    )
+    assert workbench_navigation.section_uid == ("ITEM:atomize-split:EVIDENCE:0:REASON")
 
 
 def test_proposed_memories_are_individual_stops_with_expandable_evidence():
@@ -968,9 +989,9 @@ def test_split_workbench_starts_with_report_focused_in_viewer():
     view = _view(_item("a"), _item("b"))
 
     with create_pipe_input() as pipe_input:
-        # Three Down presses move through title, understanding, and the list
+        # Identity chrome is skipped: two Down presses move through the list
         # heading to issue a without first entering from Items.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[Bq")
+        pipe_input.send_text("\x1b[B\x1b[Bq")
         action = run_resolution_workbench_shell(
             view,
             navigation=navigation,
@@ -1134,9 +1155,9 @@ def test_enter_on_impact_memory_opens_rationale_without_leaving_report():
     workbench_navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
-        # Viewer starts at title, then moves through understanding, items,
-        # impact, and the focused Memory.
-        pipe_input.send_text("\x1b[B" * 4 + "\rq")
+        # Viewer starts at the first declared overview, then moves through
+        # items and impact to the focused Memory.
+        pipe_input.send_text("\x1b[B" * 3 + "\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1212,10 +1233,10 @@ def test_expanded_located_update_impact_renders_rule_and_reason_neutrally():
 
     workbench_navigation = SessionWorkbenchNavigation()
     with create_pipe_input() as pipe_input:
-        # Viewer moves from title through understanding, items, impact, and the
+        # Viewer moves from the overview through items and impact to the
         # located Update Memory. Right opens, Left closes, and Enter retains
         # its existing toggle behavior.
-        pipe_input.send_text("\x1b[B" * 4 + "\x1b[C\x1b[D\rq")
+        pipe_input.send_text("\x1b[B" * 3 + "\x1b[C\x1b[D\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1291,9 +1312,7 @@ def test_expanded_update_impact_comment_revises_the_same_change_draft():
     with create_pipe_input() as pipe_input:
         # Move through Viewer to the Impact change, expand it, and comment
         # without detouring through the separate Items detail.
-        pipe_input.send_text(
-            "\x1b[B" * 5 + "\x1b[CcKeep the date less specific.\rq"
-        )
+        pipe_input.send_text("\x1b[B" * 4 + "\x1b[CcKeep the date less specific.\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,

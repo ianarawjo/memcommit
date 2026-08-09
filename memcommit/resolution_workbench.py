@@ -135,6 +135,40 @@ class ResolutionContextLocation:
 
 
 @dataclass(frozen=True)
+class ResolutionOverviewSection:
+    """One operation-declared semantic stop inside the report overview."""
+
+    uid: str
+    heading: str
+    text: str
+
+    def __post_init__(self) -> None:
+        _text(
+            self.uid,
+            "resolution overview-section uid",
+            limit=RESOLUTION_KEY_LIMIT,
+            one_line=True,
+        )
+        _text(
+            self.heading,
+            "resolution overview-section heading",
+            limit=RESOLUTION_LABEL_LIMIT,
+            one_line=True,
+        )
+        # An explicitly declared empty section communicates a bounded absence
+        # (for example, no unresolved Atomize issue) and remains navigable.
+        _text(self.text, "resolution overview-section text", empty=True)
+
+
+def resolution_overview_text(
+    sections: tuple[ResolutionOverviewSection, ...],
+) -> str:
+    """Return the legacy flat report text without rediscovering boundaries."""
+
+    return "\n\n".join(f"{section.heading}\n{section.text}" for section in sections)
+
+
+@dataclass(frozen=True)
 class ResolutionOption:
     """One operation-owned answer option addressed by opaque identity."""
 
@@ -618,6 +652,7 @@ class ResolutionWorkbenchView:
     input_locked: bool = False
     report_items_summary: ResolutionDetailBlock | None = None
     context_locations: tuple[ResolutionContextLocation, ...] = ()
+    overview_sections: tuple[ResolutionOverviewSection, ...] = ()
 
     def __post_init__(self) -> None:
         for value, label, limit in (
@@ -633,6 +668,15 @@ class ResolutionWorkbenchView:
         ):
             _text(value, label, limit=limit, one_line=True)
         _text(self.overview, "resolution overview", empty=True)
+        overview_sections = _items(
+            self.overview_sections,
+            ResolutionOverviewSection,
+            "resolution overview sections",
+        )
+        if len({section.uid for section in overview_sections}) != len(
+            overview_sections
+        ):
+            raise ResolutionWorkbenchError("Duplicate resolution overview-section uid.")
         _items(
             self.metrics,
             ResolutionMetric,
@@ -693,6 +737,22 @@ class ResolutionWorkbenchView:
             )
         if not isinstance(self.input_locked, bool):
             raise ResolutionWorkbenchError("Invalid resolution input-lock state.")
+
+    @property
+    def semantic_overview_sections(self) -> tuple[ResolutionOverviewSection, ...]:
+        """Return typed stops, with one compatibility stop for legacy callers."""
+
+        if self.overview_sections:
+            return self.overview_sections
+        if not self.overview:
+            return ()
+        return (
+            ResolutionOverviewSection(
+                uid="understanding",
+                heading="UNDERSTOOD",
+                text=self.overview,
+            ),
+        )
 
     def item(self, item_uid: str) -> ResolutionItem:
         matches = [item for item in self.items if item.uid == item_uid]

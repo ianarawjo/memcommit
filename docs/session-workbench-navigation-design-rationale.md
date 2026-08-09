@@ -145,14 +145,13 @@ This is a shared Viewer property and must not be reimplemented by Atomize or
 another operation adapter.
 
 An actionable evidence card is also not one oversized navigation stop. The
-shared Resolution Viewer orders its stops as Classification, each criterion,
-each terminal-wrapped line of every source Memory, and Why. Up/Down can
-therefore traverse a long quoted Memory one visible line at a time before
-moving to the reason or proposed result. Those line stops are presentation
-slices only: the typed source remains one Memory, its short UID appears only
-on the first line, and a source-frame/claim heading remains attached to the
-first line of that group. A terminal resize may rewrap and reclamp the line
-index without changing semantic identity or persisted state. The item kind,
+shared Resolution Viewer orders its outer stops as Classification, each
+criterion, each complete source Memory, and Why. One Memory remains one stop
+regardless of terminal wrapping. Enter opens the shared process-local nested
+reading layer; Up/Down then scrolls its visual rows without replacing the
+stable outer Memory UID with width-dependent line identities. Enter,
+Escape, or Backspace returns to section navigation. A source-frame/claim
+heading remains attached to the first Memory in that group. The item kind,
 ordinal, title, status, and review-set counts remain visible as non-focusable
 report chrome, so opening an actionable detail starts on Classification.
 
@@ -236,7 +235,10 @@ Enter, paging, Home/End, and back behavior.
 
 Compare, Result, Share, and Resolution also use the shared semantic Viewer
 block presenter in addition to the same palette and focused-frame primitive.
-It owns focus styling and viewport anchors without rewriting report text.
+They now route section movement through the shared `SemanticViewerController`,
+which owns stable-UID clamping, paging, rendering, and nested reading state.
+Operations still declare the section order and meaning. The controller owns
+focus styling and viewport anchors without rewriting report text.
 Compare additionally derives navigation and rendering from one
 `SemanticViewerDocument`; Resolution retains operation-adaptive block builders
 while delegating their presentation to the same policy. This is a family of

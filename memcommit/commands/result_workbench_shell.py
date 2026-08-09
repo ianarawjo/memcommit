@@ -4,6 +4,7 @@ The common shell owns only information hierarchy, terminal safety, and case
 navigation.  The operation adapter remains responsible for every semantic
 judgment, reference, persisted artifact, provider call, and mutation.
 """
+
 from __future__ import annotations
 
 from prompt_toolkit.application import Application
@@ -31,7 +32,10 @@ from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_header_fragments,
     semantic_trace_fragments,
 )
-from memcommit.commands.semantic_viewer import semantic_viewer_block_fragments
+from memcommit.commands.semantic_viewer import (
+    SemanticViewerController,
+    semantic_viewer_block_fragments,
+)
 from memcommit.result_workbench import (
     ResultCase,
     ResultCaseDetail,
@@ -39,6 +43,10 @@ from memcommit.result_workbench import (
     ResultWorkbenchAdapter,
     ResultWorkbenchError,
     ResultWorkbenchView,
+)
+from memcommit.session_workbench_navigation import (
+    SessionWorkbenchNavigation,
+    WorkbenchSection,
 )
 
 
@@ -64,28 +72,27 @@ def _case_row(
     case: ResultCase,
     *,
     index: int,
-    selected: bool,
+    active: bool,
     expanded: bool,
 ) -> list[tuple[str, str]]:
-    marker = "▾" if selected and expanded else ("›" if selected else " ")
+    marker = "▾" if expanded else ("›" if active else " ")
     return semantic_viewer_block_fragments(
         [
             (
                 "class:case-title",
-                (
-                    f" {marker} {index:>2}. [{case.role}] "
-                    f"{_compact(case.title)}\n"
-                ),
+                (f" {marker} {index:>2}. [{case.role}] {_compact(case.title)}\n"),
             ),
             ("", f"       {_compact(case.summary)}\n"),
         ],
-        active=selected,
+        active=active,
     )
 
 
 def _case_detail_fragments(
     view: ResultWorkbenchView,
     detail: ResultCaseDetail,
+    *,
+    focused_uid: str | None = None,
 ) -> list[tuple[str, str]]:
     detail = view.validate_detail(detail)
     case = view.case(detail.case_uid)
@@ -94,28 +101,40 @@ def _case_detail_fragments(
         for index, candidate in enumerate(view.cases, start=1)
         if candidate.uid == case.uid
     )
-    fragments = semantic_detail_header_fragments(
-        label=f"CASE DETAIL · {case_number}/{len(view.cases)} · {case.role}",
-        title=case.title,
-        why_heading="WHY SELECTED",
-        why=case.why_selected,
+    fragments = semantic_viewer_block_fragments(
+        semantic_detail_header_fragments(
+            label=f"CASE DETAIL · {case_number}/{len(view.cases)} · {case.role}",
+            title=case.title,
+            why_heading="WHY SELECTED",
+            why=case.why_selected,
+        ),
+        active=focused_uid == f"RESULT:CASE:{case.uid}:DETAIL",
+        anchor="both",
     )
     # Detail blocks are operation-authored and deliberately retain their
     # supplied order.  The common layer must not reinterpret their semantics.
-    for block in detail.blocks:
+    for block_index, block in enumerate(detail.blocks):
         fragments.extend(
-            semantic_detail_block_fragments(
-                heading=block.heading,
-                text=block.text,
-                refs=block.refs,
+            semantic_viewer_block_fragments(
+                semantic_detail_block_fragments(
+                    heading=block.heading,
+                    text=block.text,
+                    refs=block.refs,
+                ),
+                active=(focused_uid == f"RESULT:CASE:{case.uid}:BLOCK:{block_index}"),
+                anchor="both",
             )
         )
     fragments.extend(
-        semantic_trace_fragments(
-            evidence_refs=detail.evidence_refs,
-            judgment_refs=detail.judgment_refs,
-            outcome_refs=detail.outcome_refs,
-            unresolved_refs=detail.unresolved_refs,
+        semantic_viewer_block_fragments(
+            semantic_trace_fragments(
+                evidence_refs=detail.evidence_refs,
+                judgment_refs=detail.judgment_refs,
+                outcome_refs=detail.outcome_refs,
+                unresolved_refs=detail.unresolved_refs,
+            ),
+            active=focused_uid == f"RESULT:CASE:{case.uid}:TRACE",
+            anchor="both",
         )
     )
     return fragments
@@ -126,12 +145,10 @@ def _screen_fragments(
     *,
     selected_index: int,
     detail: ResultCaseDetail | None,
+    focused_uid: str | None = None,
 ) -> list[tuple[str, str]]:
     metrics = "".join(
-        (
-            f" · {safe_terminal_text(metric.label)}="
-            f"{metric.value:,}"
-        )
+        (f" · {safe_terminal_text(metric.label)}={metric.value:,}")
         for metric in view.metrics
     )
     fragments: list[tuple[str, str]] = [
@@ -146,14 +163,23 @@ def _screen_fragments(
             "class:metadata",
             f" STATUS · {safe_terminal_text(view.status)}{metrics}\n",
         ),
-        ("class:section", "\n WHAT MEM UNDERSTOOD\n"),
-        ("", f" {_section_text(view.understood)}\n"),
-        ("class:section", "\n WHAT HAPPENED\n"),
-        ("", f" {_section_text(view.happened)}\n"),
-        ("class:section", "\n WHAT REMAINS UNRESOLVED\n"),
-        ("", f" {_section_text(view.unresolved)}\n"),
-        ("class:section", "\n REPRESENTATIVE / BOUNDARY CASES\n"),
     ]
+    for uid, heading, section in (
+        ("RESULT:UNDERSTOOD", "WHAT MEM UNDERSTOOD", view.understood),
+        ("RESULT:HAPPENED", "WHAT HAPPENED", view.happened),
+        ("RESULT:UNRESOLVED", "WHAT REMAINS UNRESOLVED", view.unresolved),
+    ):
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                [
+                    ("class:section", f"\n {heading}\n"),
+                    ("", f" {_section_text(section)}\n"),
+                ],
+                active=focused_uid == uid,
+                focus_indices=(0,),
+            )
+        )
+    fragments.append(("class:section", "\n REPRESENTATIVE / BOUNDARY CASES\n"))
     if not view.cases:
         fragments.append(("", "  (no inspection cases recorded)\n"))
         return fragments
@@ -163,12 +189,16 @@ def _screen_fragments(
             _case_row(
                 case,
                 index=index + 1,
-                selected=index == selected_index,
+                active=(
+                    focused_uid == f"RESULT:CASE:{case.uid}"
+                    if focused_uid is not None
+                    else index == selected_index
+                ),
                 expanded=case.uid == expanded_uid,
             )
         )
     if detail is not None:
-        fragments.extend(_case_detail_fragments(view, detail))
+        fragments.extend(_case_detail_fragments(view, detail, focused_uid=focused_uid))
     return fragments
 
 
@@ -214,10 +244,7 @@ def result_workbench_fragments(
         raise ResultWorkbenchError("Invalid result workbench view.")
     if detail is not None:
         detail = view.validate_detail(detail)
-        if (
-            selected_case_uid is not None
-            and selected_case_uid != detail.case_uid
-        ):
+        if selected_case_uid is not None and selected_case_uid != detail.case_uid:
             raise ResultWorkbenchError(
                 "Expanded result detail does not match the selected case."
             )
@@ -234,6 +261,44 @@ def result_workbench_fragments(
     )
 
 
+def _result_viewer_sections(
+    view: ResultWorkbenchView,
+    detail: ResultCaseDetail | None,
+) -> tuple[WorkbenchSection, ...]:
+    """Project result units into the service-wide focus grammar."""
+
+    sections: list[WorkbenchSection] = [
+        WorkbenchSection("RESULT:UNDERSTOOD", "OVERVIEW"),
+        WorkbenchSection("RESULT:HAPPENED", "OVERVIEW"),
+        WorkbenchSection("RESULT:UNRESOLVED", "OVERVIEW"),
+    ]
+    sections.extend(
+        WorkbenchSection(f"RESULT:CASE:{case.uid}", "CASE", index)
+        for index, case in enumerate(view.cases)
+    )
+    if detail is not None:
+        sections.append(
+            WorkbenchSection(
+                f"RESULT:CASE:{detail.case_uid}:DETAIL",
+                "CASE_DETAIL",
+            )
+        )
+        sections.extend(
+            WorkbenchSection(
+                f"RESULT:CASE:{detail.case_uid}:BLOCK:{index}",
+                "DETAIL_BLOCK",
+            )
+            for index, _block in enumerate(detail.blocks)
+        )
+        sections.append(
+            WorkbenchSection(
+                f"RESULT:CASE:{detail.case_uid}:TRACE",
+                "TRACE",
+            )
+        )
+    return tuple(sections)
+
+
 def run_result_workbench_shell(
     adapter: ResultWorkbenchAdapter,
     *,
@@ -246,8 +311,7 @@ def run_result_workbench_shell(
         require_interactive_terminal(
             "Result workbench",
             snapshot_hint=(
-                "Use the operation's snapshot option for non-interactive "
-                "inspection."
+                "Use the operation's snapshot option for non-interactive inspection."
             ),
         )
     # Freeze one validated operation projection for the entire UI session.
@@ -261,12 +325,22 @@ def run_result_workbench_shell(
     expanded = {"detail": None}
     status = {"value": ""}
     bindings = KeyBindings()
+    navigation = SessionWorkbenchNavigation(pane="viewer")
+    viewer_controller = SemanticViewerController(navigation)
+
+    def viewer_sections() -> tuple[WorkbenchSection, ...]:
+        return _result_viewer_sections(view, expanded["detail"])
+
+    def focused_uid() -> str | None:
+        section = viewer_controller.current(viewer_sections())
+        return None if section is None else section.uid
 
     body_control = FormattedTextControl(
         lambda: _screen_fragments(
             view,
             selected_index=selected["index"],
             detail=expanded["detail"],
+            focused_uid=focused_uid(),
         ),
         focusable=True,
         show_cursor=False,
@@ -278,17 +352,17 @@ def run_result_workbench_shell(
     )
 
     def collapse() -> None:
+        current = expanded["detail"]
         expanded["detail"] = None
+        if current is not None:
+            navigation.section_uid = f"RESULT:CASE:{current.case_uid}"
         status["value"] = ""
 
     def move(delta: int) -> None:
-        if not view.cases:
-            return
-        selected["index"] = max(
-            0,
-            min(selected["index"] + delta, len(view.cases) - 1),
-        )
-        collapse()
+        section = viewer_controller.move(viewer_sections(), delta)
+        if section is not None and section.kind == "CASE":
+            selected["index"] = section.row_index or 0
+        status["value"] = ""
 
     @bindings.add("down", filter=has_focus(body_control))
     def _down(event) -> None:
@@ -300,12 +374,34 @@ def run_result_workbench_shell(
         move(-1)
         event.app.invalidate()
 
+    @bindings.add("pagedown", filter=has_focus(body_control))
+    def _page_down(event) -> None:
+        move(8)
+        event.app.invalidate()
+
+    @bindings.add("pageup", filter=has_focus(body_control))
+    def _page_up(event) -> None:
+        move(-8)
+        event.app.invalidate()
+
+    @bindings.add("home", filter=has_focus(body_control))
+    def _home(event) -> None:
+        viewer_controller.home(viewer_sections())
+        event.app.invalidate()
+
+    @bindings.add("end", filter=has_focus(body_control))
+    def _end(event) -> None:
+        viewer_controller.end(viewer_sections())
+        event.app.invalidate()
+
     @bindings.add("enter", filter=has_focus(body_control))
     def _expand(event) -> None:
-        if not view.cases:
-            status["value"] = "No inspection case is available."
+        section = viewer_controller.current(viewer_sections())
+        if section is None or section.kind != "CASE":
+            status["value"] = "Move to a representative or boundary case first."
             event.app.invalidate()
             return
+        selected["index"] = section.row_index or 0
         case = view.cases[selected["index"]]
         current = expanded["detail"]
         if current is not None and current.case_uid == case.uid:
@@ -338,7 +434,7 @@ def run_result_workbench_shell(
                 f" {status['value']}"
                 if status["value"]
                 else (
-                    " ↑/↓ case  Enter expand  Esc/Backspace collapse  "
+                    " ↑/↓ section  Enter expand case  Esc/Backspace collapse  "
                     "Q quit · read-only "
                 )
             )

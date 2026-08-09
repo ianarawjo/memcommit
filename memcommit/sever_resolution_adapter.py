@@ -14,6 +14,7 @@ from memcommit.resolution_workbench import (
     ResolutionItem,
     ResolutionMetric,
     ResolutionOption,
+    ResolutionOverviewSection,
     ResolutionResult,
     ResolutionWorkbenchView,
 )
@@ -139,7 +140,8 @@ def _report_items_summary(session: SeverSession) -> str:
     )
 
 
-def _overview(session: SeverSession) -> str:
+def _overview_sections(session: SeverSession) -> tuple[ResolutionOverviewSection, ...]:
+    sections = [ResolutionOverviewSection("understood", "UNDERSTOOD", session.overview)]
     excluded = tuple(
         dict.fromkeys(
             (
@@ -148,14 +150,18 @@ def _overview(session: SeverSession) -> str:
             )
         )
     )
-    if not excluded:
-        return session.overview
-    names = ", ".join(excluded)
-    return (
-        f"{session.overview}\n\nNOT INCLUDED · {names}. These query-only "
-        "Contexts do not grant readable Memory access, so they were not part "
-        "of the Source or Criteria frame."
-    )
+    if excluded:
+        names = ", ".join(excluded)
+        sections.append(
+            ResolutionOverviewSection(
+                "not-included",
+                "NOT INCLUDED",
+                f"{names}. These query-only Contexts do not grant readable "
+                "Memory access, so they were not part of the Source or "
+                "Criteria frame.",
+            )
+        )
+    return tuple(sections)
 
 
 class SeverResolutionWorkbenchAdapter:
@@ -323,6 +329,11 @@ class SeverResolutionWorkbenchAdapter:
             )
             for candidate in session.candidates
         )
+        overview_sections = _overview_sections(session)
+        overview = session.overview
+        if len(overview_sections) > 1:
+            excluded = overview_sections[1]
+            overview += f"\n\n{excluded.heading} · {excluded.text}"
         return ResolutionWorkbenchView(
             operation="sever",
             artifact_uid=session.uid,
@@ -347,7 +358,8 @@ class SeverResolutionWorkbenchAdapter:
                     "CREATED" if session.state == "APPLIED" else "NOT CREATED",
                 ),
             ),
-            overview=_overview(session),
+            overview=overview,
+            overview_sections=overview_sections,
             list_label="SOURCE MEMORIES TO REVIEW",
             items=tuple(items),
             empty_message="No source Memories.",

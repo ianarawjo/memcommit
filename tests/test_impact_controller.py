@@ -312,7 +312,7 @@ def test_focused_impact_memory_content_follows_its_treatment_color():
     fragments = resolution_report_fragments(
         view,
         impact_controller=impact,
-        focused_section=4,
+        focused_section=3,
         expanded_impact_section_uid="REPORT:IMPACT:keep-focus",
     )
 

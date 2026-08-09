@@ -9,6 +9,7 @@ from memcommit.resolution_workbench import (
     ResolutionItem,
     ResolutionNavigation,
     ResolutionOption,
+    ResolutionOverviewSection,
     ResolutionWorkbenchAction,
     ResolutionWorkbenchError,
     ResolutionWorkbenchView,
@@ -92,6 +93,18 @@ def test_projection_rejects_duplicate_item_and_option_uids() -> None:
             context_locations=(
                 ResolutionContextLocation("SOURCE", "one"),
                 ResolutionContextLocation("SOURCE", "two"),
+            ),
+        )
+
+    with pytest.raises(
+        ResolutionWorkbenchError,
+        match="Duplicate resolution overview-section uid",
+    ):
+        replace(
+            _view(),
+            overview_sections=(
+                ResolutionOverviewSection("same", "ONE", "First."),
+                ResolutionOverviewSection("same", "TWO", "Second."),
             ),
         )
 

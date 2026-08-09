@@ -12,6 +12,7 @@ from memcommit.resolution_workbench import (
     ResolutionItem,
     ResolutionMetric,
     ResolutionOption,
+    ResolutionOverviewSection,
     ResolutionResult,
     ResolutionWorkbenchView,
 )
@@ -139,6 +140,13 @@ class ForgetResolutionWorkbenchAdapter:
                 )
             )
         changed = sum(result.label != "KEEP" for result in results)
+        overview_sections = (
+            ResolutionOverviewSection(
+                "assessment",
+                "ASSESSMENT",
+                review.overview,
+            ),
+        )
         return ResolutionWorkbenchView(
             operation="forget",
             artifact_uid=review.uid,
@@ -155,6 +163,7 @@ class ForgetResolutionWorkbenchAdapter:
                 ResolutionContextLocation("SOURCE", review.context_name),
             ),
             overview=review.overview,
+            overview_sections=overview_sections,
             list_label="SOURCE MEMORIES TO REVIEW",
             items=tuple(items),
             empty_message="No Source Memories.",

@@ -4,11 +4,13 @@ import pytest
 
 from memcommit.commands.semantic_viewer import (
     SemanticViewerBlock,
+    SemanticViewerController,
     SemanticViewerDocument,
     SemanticViewerSection,
     deactivate_semantic_viewer_fragments,
     semantic_viewer_block_fragments,
 )
+from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 
 def test_focus_styles_only_semantic_identity_and_anchors_complete_block():
@@ -128,3 +130,32 @@ def test_document_rejects_duplicate_section_identities():
 
     with pytest.raises(ValueError, match="unique"):
         SemanticViewerDocument((section, section))
+
+
+def test_controller_owns_shared_movement_rendering_and_nested_reading_state():
+    document = SemanticViewerDocument(
+        (
+            SemanticViewerSection(
+                "ONE",
+                "SECTION",
+                SemanticViewerBlock((("class:section", "One"),)),
+            ),
+            SemanticViewerSection(
+                "TWO",
+                "MEMORY",
+                SemanticViewerBlock((("class:memory-object", "Two"),)),
+            ),
+        )
+    )
+    navigation = SessionWorkbenchNavigation(pane="viewer")
+    controller = SemanticViewerController(navigation)
+
+    assert controller.current(document).uid == "ONE"  # type: ignore[union-attr]
+    assert controller.move(document, 1).uid == "TWO"  # type: ignore[union-attr]
+    assert ("class:memory-object.focused", "Two") in controller.render(document)
+
+    controller.open_nested("TWO")
+    assert controller.move_nested(4, 3) == 3
+    assert navigation.section_uid == "TWO"
+    assert controller.close_nested() is True
+    assert controller.close_nested() is False

@@ -18,6 +18,7 @@ from memcommit.resolution_workbench import (
     ResolutionItem,
     ResolutionMetric,
     ResolutionOption,
+    ResolutionOverviewSection,
     ResolutionResult,
     ResolutionWorkbenchView,
 )
@@ -85,6 +86,7 @@ class MeldResolutionWorkbenchAdapter:
             items: tuple[ResolutionItem, ...] = ()
             results: tuple[ResolutionResult, ...] = ()
             overview = ""
+            overview_sections: tuple[ResolutionOverviewSection, ...] = ()
         else:
             relation_by_uid = {
                 relation.uid: relation for relation in assessment.relations
@@ -275,9 +277,7 @@ class MeldResolutionWorkbenchAdapter:
                 )
                 for proposal in assessment.proposals
             )
-            overview = (
-                f"{assessment.overview}\n\n"
-                "ACCOUNTING\n"
+            accounting_text = (
                 f"Source coverage · {accounting.represented_sources}/"
                 f"{accounting.source_memories}\n"
                 f"Relation coverage · {accounting.represented_relations}/"
@@ -291,6 +291,19 @@ class MeldResolutionWorkbenchAdapter:
                 f"HELPFUL {accounting.helpful_issues}\n"
                 f"Cross-relation results · {accounting.cross_relation_results}"
             )
+            overview_sections = (
+                ResolutionOverviewSection(
+                    "understood",
+                    "UNDERSTOOD",
+                    assessment.overview,
+                ),
+                ResolutionOverviewSection(
+                    "accounting",
+                    "ACCOUNTING",
+                    accounting_text,
+                ),
+            )
+            overview = f"{assessment.overview}\n\nACCOUNTING\n{accounting_text}"
 
         active = assessment is not None and session.state in {
             "AWAITING_REPLY",
@@ -365,6 +378,7 @@ class MeldResolutionWorkbenchAdapter:
             ),
             context_locations=context_locations,
             overview=overview,
+            overview_sections=overview_sections,
             list_label="ISSUES",
             items=items,
             empty_message="No current Meld issues.",

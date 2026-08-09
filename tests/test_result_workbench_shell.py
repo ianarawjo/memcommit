@@ -68,9 +68,7 @@ def _fixture() -> tuple[
         role="BOUNDARY",
         title="Unresolved local referent",
         summary="The source says “that door” without a safe local referent.",
-        why_selected=(
-            "A guessed referent would change which entrance is restricted."
-        ),
+        why_selected=("A guessed referent would change which entrance is restricted."),
     )
     view = ResultWorkbenchView(
         operation="atomize",
@@ -208,13 +206,9 @@ def test_snapshot_distinguishes_none_reported_from_not_recorded():
 
     snapshot = render_result_workbench_snapshot(view)
 
-    assert "(none reported under this operation's bounded contract)" in (
-        snapshot
-    )
+    assert "(none reported under this operation's bounded contract)" in (snapshot)
     assert "(not recorded by this result artifact)" in snapshot
-    assert "This legacy artifact predates aggregate outcome narration." in (
-        snapshot
-    )
+    assert "This legacy artifact predates aggregate outcome narration." in (snapshot)
 
 
 def test_expanded_snapshot_preserves_operation_detail_and_canonical_trace():
@@ -290,7 +284,9 @@ def test_tty_navigation_fetches_only_the_case_explicitly_expanded():
     adapter = RecordingAdapter(view, details)
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\rq")
+        # The three typed overview sections are real Viewer stops. Move past
+        # them and the representative case to the boundary case.
+        pipe_input.send_text("\x1b[B" * 4 + "\rq")
         result = run_result_workbench_shell(
             adapter,
             app_input=pipe_input,
@@ -310,7 +306,7 @@ def test_tty_escape_and_backspace_collapse_without_another_detail_lookup(
     adapter = RecordingAdapter(view, details)
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(f"\r{collapse_key}q")
+        pipe_input.send_text("\x1b[B" * 3 + f"\r{collapse_key}q")
         run_result_workbench_shell(
             adapter,
             app_input=pipe_input,
