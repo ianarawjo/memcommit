@@ -31,6 +31,7 @@ from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_header_fragments,
     semantic_trace_fragments,
 )
+from memcommit.commands.semantic_viewer import semantic_viewer_block_fragments
 from memcommit.result_workbench import (
     ResultCase,
     ResultCaseDetail,
@@ -67,22 +68,19 @@ def _case_row(
     expanded: bool,
 ) -> list[tuple[str, str]]:
     marker = "▾" if selected and expanded else ("›" if selected else " ")
-    fragments: list[tuple[str, str]] = []
-    if selected:
-        fragments.append(("[SetCursorPosition]", ""))
-    fragments.extend(
+    return semantic_viewer_block_fragments(
         [
             (
-                "class:selected" if selected else "",
+                "class:case-title",
                 (
                     f" {marker} {index:>2}. [{case.role}] "
                     f"{_compact(case.title)}\n"
                 ),
             ),
             ("", f"       {_compact(case.summary)}\n"),
-        ]
+        ],
+        active=selected,
     )
-    return fragments
 
 
 def _case_detail_fragments(

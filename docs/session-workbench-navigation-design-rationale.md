@@ -234,10 +234,14 @@ retains its operation-specific report renderer, source-member navigation, and
 section navigation to the same controller and follows the same initial-focus,
 Enter, paging, Home/End, and back behavior.
 
-Compare, Result, and Resolution also use the same semantic Viewer style
-palette and focused-frame primitive. This is a family of Viewer variants, not
-a claim that Compare relations, Result cases, and Resolution choices share one
-state model.
+Compare, Result, Share, and Resolution also use the shared semantic Viewer
+block presenter in addition to the same palette and focused-frame primitive.
+It owns focus styling and viewport anchors without rewriting report text.
+Compare additionally derives navigation and rendering from one
+`SemanticViewerDocument`; Resolution retains operation-adaptive block builders
+while delegating their presentation to the same policy. This is a family of
+Viewer variants, not a claim that Compare relations, Result cases, Resolution
+choices, and Share delivery sections share one state model.
 
 This is presentation reuse, not a universal durable session. Provider calls,
 revision checks, responses, Apply, publication, checkpoints, and provenance

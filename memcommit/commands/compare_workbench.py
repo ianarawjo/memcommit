@@ -22,6 +22,11 @@ from memcommit.commands.tui_primitives import (
     bind_focused_frame_style,
     display_escape_text,
 )
+from memcommit.commands.semantic_viewer import (
+    SemanticViewerBlock,
+    SemanticViewerDocument,
+    SemanticViewerSection,
+)
 from memcommit.commands.tui_text_layout import (
     elide_terminal_text,
     live_window_content_width,
@@ -75,8 +80,8 @@ def _display_multiline(value: str) -> str:
 
 
 def _focused_section_line(value: str) -> str:
-    """Mark one Viewer section without changing the persisted report text."""
-    return f"── {value} ──"
+    """Return report text unchanged; focus is a presentation overlay."""
+    return value
 
 
 def _reader_section_offsets(value: str) -> tuple[int, ...]:
@@ -506,15 +511,40 @@ def run_compare_workbench(
                     )
         return _display_multiline("\n".join(lines))
 
-    def _current_reader_sections() -> tuple[WorkbenchSection, ...]:
-        offsets = _reader_section_offsets(render_detail())
-        return tuple(
-            WorkbenchSection(
-                uid=f"COMPARE:{current_viewer_row().key}:LINE:{offset}",
-                kind="REPORT_SECTION",
+    def _current_reader_document() -> SemanticViewerDocument:
+        lines = render_detail().split("\n")
+        offsets = _reader_section_offsets("\n".join(lines))
+        sections: list[SemanticViewerSection] = []
+        for section_index, offset in enumerate(offsets):
+            end = (
+                offsets[section_index + 1]
+                if section_index + 1 < len(offsets)
+                else len(lines)
             )
-            for offset in offsets
-        )
+            block_fragments: list[tuple[str, str]] = []
+            for line_index in range(offset, end):
+                block_fragments.append(
+                    (
+                        "class:section" if line_index == offset else "",
+                        lines[line_index],
+                    )
+                )
+                if line_index < len(lines) - 1:
+                    block_fragments.append(("", "\n"))
+            sections.append(
+                SemanticViewerSection(
+                    uid=f"COMPARE:{current_viewer_row().key}:LINE:{offset}",
+                    kind="REPORT_SECTION",
+                    block=SemanticViewerBlock(
+                        tuple(block_fragments),
+                        focus_indices=(0,),
+                    ),
+                )
+            )
+        return SemanticViewerDocument(tuple(sections))
+
+    def _current_reader_sections() -> tuple[WorkbenchSection, ...]:
+        return _current_reader_document().navigation_sections
 
     def render_reader():
         """Anchor focus at one heading and let the viewport follow minimally.
@@ -523,24 +553,13 @@ def run_compare_workbench(
         while the focused heading remains visible. It scrolls only when that
         hidden cursor crosses the upper or lower boundary, like a normal list.
         """
-        lines = render_detail().split("\n")
-        offsets = _reader_section_offsets("\n".join(lines))
-        sections = _current_reader_sections()
+        document = _current_reader_document()
+        sections = document.navigation_sections
         section_index = navigation.section_index(sections)
-        anchor = offsets[section_index]
-        fragments: list[tuple[str, str]] = []
-        for index, line in enumerate(lines):
-            if index == anchor:
-                fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:viewer-section" if index == anchor else "",
-                    _focused_section_line(line) if index == anchor else line,
-                )
-            )
-            if index < len(lines) - 1:
-                fragments.append(("", "\n"))
-        return fragments
+        return document.render(
+            focused_uid=sections[section_index].uid,
+            viewer_focused=navigation.pane == "viewer",
+        )
 
     @bindings.add("down")
     def _down(event) -> None:

@@ -23,6 +23,12 @@ from memcommit.commands.tui_primitives import (
     bind_focused_frame_style,
     display_escape_text,
 )
+from memcommit.commands.semantic_viewer import (
+    SemanticViewerBlock,
+    SemanticViewerDocument,
+    SemanticViewerSection,
+    semantic_viewer_block_fragments,
+)
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.share import SharePreview
 
@@ -71,43 +77,63 @@ def run_share_viewer(
         raise ValueError("Interactive Share requires a terminal.")
 
     nav = navigation or SessionWorkbenchNavigation(pane="viewer")
-    selected = {"context_line": 0, "memory": 0}
-    context_lines = share_context_text(preview).splitlines()
+    selected = {"memory": 0}
     windows: dict[str, Window] = {}
     bindings = KeyBindings()
 
+    context_document = SemanticViewerDocument(
+        (
+            SemanticViewerSection(
+                uid="SHARE:CONTEXT",
+                kind="CONTEXT",
+                block=SemanticViewerBlock(
+                    (
+                        ("class:section", "CONTEXT TO SEND\n"),
+                        ("", display_escape_text(preview.source_context) + "\n"),
+                        ("", f"MEMORIES · {len(preview.memories)}\n\n"),
+                    ),
+                    focus_indices=(0,),
+                ),
+            ),
+            SemanticViewerSection(
+                uid="SHARE:DESTINATION",
+                kind="DESTINATION",
+                block=SemanticViewerBlock(
+                    (
+                        (
+                            "class:section",
+                            "TO · " + display_escape_text(preview.endpoint),
+                        ),
+                    ),
+                    focus_indices=(0,),
+                ),
+            ),
+        )
+    )
+
     def render_context():
-        fragments: list[tuple[str, str]] = []
-        for index, line in enumerate(context_lines):
-            focused = nav.pane == "viewer" and index == selected["context_line"]
-            if focused:
-                fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:viewer-section" if focused else "",
-                    line,
-                )
+        section_index = nav.section_index(context_document.navigation_sections)
+        return FormattedText(
+            context_document.render(
+                focused_uid=context_document.navigation_sections[section_index].uid,
+                viewer_focused=nav.pane == "viewer",
             )
-            if index < len(context_lines) - 1:
-                fragments.append(("", "\n"))
-        return FormattedText(fragments)
+        )
 
     def render_memories():
         fragments: list[tuple[str, str]] = []
         for index, memory in enumerate(preview.memories):
             focused = nav.pane == "items" and index == selected["memory"]
-            if focused:
-                fragments.append(("[SetCursorPosition]", ""))
             marker = "›" if focused else " "
-            style = (
-                "class:memory-object.focused"
-                if focused
-                else "class:memory-object"
-            )
-            fragments.append(
-                (
-                    style,
-                    f"{marker} M{index + 1} · {_compact_memory(memory.content)}",
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    [
+                        (
+                            "class:memory-object",
+                            f"{marker} M{index + 1} · {_compact_memory(memory.content)}",
+                        )
+                    ],
+                    active=focused,
                 )
             )
             if index < len(preview.memories) - 1:
@@ -115,8 +141,10 @@ def run_share_viewer(
         return FormattedText(fragments)
 
     def render_send():
-        style = "class:viewer-section" if nav.pane == "todo" else ""
-        return [(style, "SEND CONTEXT · Enter")]
+        return semantic_viewer_block_fragments(
+            [("class:section", "SEND CONTEXT · Enter")],
+            active=nav.pane == "todo",
+        )
 
     def focus_current(event) -> None:
         event.app.layout.focus(windows[nav.pane])
@@ -135,10 +163,7 @@ def run_share_viewer(
     @bindings.add("down")
     def _down(event) -> None:
         if nav.pane == "viewer":
-            selected["context_line"] = min(
-                selected["context_line"] + 1,
-                len(context_lines) - 1,
-            )
+            nav.move_section(context_document.navigation_sections, 1)
         elif nav.pane == "items":
             selected["memory"] = min(
                 selected["memory"] + 1,
@@ -149,7 +174,7 @@ def run_share_viewer(
     @bindings.add("up")
     def _up(event) -> None:
         if nav.pane == "viewer":
-            selected["context_line"] = max(0, selected["context_line"] - 1)
+            nav.move_section(context_document.navigation_sections, -1)
         elif nav.pane == "items":
             selected["memory"] = max(0, selected["memory"] - 1)
         event.app.invalidate()
@@ -298,10 +323,13 @@ def run_share_unavailable_viewer(
 
     context_window = Window(
         FormattedTextControl(
-            lambda: [
-                ("class:viewer-section", "NO SENDABLE CONTEXT\n"),
-                ("", safe_reason),
-            ],
+            lambda: semantic_viewer_block_fragments(
+                [
+                    ("class:section", "NO SENDABLE CONTEXT\n"),
+                    ("", safe_reason),
+                ],
+                active=nav.pane == "viewer",
+            ),
             focusable=True,
             show_cursor=False,
         ),
@@ -316,12 +344,10 @@ def run_share_unavailable_viewer(
     )
     action_window = Window(
         FormattedTextControl(
-            lambda: [
-                (
-                    "class:viewer-section" if nav.pane == "todo" else "",
-                    "SEND UNAVAILABLE",
-                )
-            ],
+            lambda: semantic_viewer_block_fragments(
+                [("class:section", "SEND UNAVAILABLE")],
+                active=nav.pane == "todo",
+            ),
             focusable=True,
             show_cursor=False,
         ),

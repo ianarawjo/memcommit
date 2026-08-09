@@ -228,9 +228,9 @@ def test_multiline_report_preserves_layout_and_escapes_controls_per_line():
     assert rendered == "WHAT BOTH CONTAIN\nunsafe\\tvalue\nWHAT DIFFERS"
 
 
-def test_viewer_marks_the_current_section_with_a_focus_line():
+def test_viewer_focus_does_not_rewrite_the_report_heading():
     assert _focused_section_line("POTENTIAL CONFLICTS · 5") == (
-        "── POTENTIAL CONFLICTS · 5 ──"
+        "POTENTIAL CONFLICTS · 5"
     )
 
 

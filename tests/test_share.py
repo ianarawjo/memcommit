@@ -19,6 +19,7 @@ from memcommit.commands.share_viewer import (
     share_context_text,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -276,6 +277,31 @@ def test_share_viewer_presents_context_then_memories_and_only_send_action(
         )
 
     assert receipt.action == "send"
+
+
+def test_share_context_moves_between_stable_semantic_sections(
+    tmp_path,
+    monkeypatch,
+):
+    _sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    preview = prepare_share(source.name, "government/healthcare-agent")
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Bq")
+        receipt = run_share_viewer(
+            preview,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            navigation=navigation,
+        )
+
+    assert receipt.action == "close"
+    assert navigation.section_uid == "SHARE:DESTINATION"
 
 
 def test_closing_share_viewer_does_not_deliver(

@@ -50,6 +50,10 @@ from memcommit.commands.semantic_detail_renderer import (
     semantic_memory_row_fragments,
     semantic_trace_fragments,
 )
+from memcommit.commands.semantic_viewer import (
+    deactivate_semantic_viewer_fragments,
+    semantic_viewer_block_fragments,
+)
 from memcommit.impact_controller import ImpactController, ImpactView
 from memcommit.memory_diff import MemoryChange, MemoryDiffSpan, memory_diff_lines
 from memcommit.resolution_workbench import (
@@ -668,22 +672,7 @@ def _viewer_focus_fragments(
     """Hide positional emphasis when the Viewer is not the active pane."""
     if focused:
         return fragments
-    inactive_style = {
-        "class:viewer-section": "class:section",
-        "class:detail-card.focused": "class:detail-card",
-        "class:memory-object.focused": "class:memory-object",
-        "class:impact.keep.focused": "class:memory-object",
-        "class:impact.redact.focused": "class:memory-object",
-        "class:impact.summarize.focused": "class:memory-object",
-        "class:impact.reframe.focused": "class:memory-object",
-        "class:impact.forget.focused": "class:memory-object",
-        "class:impact.custom.focused": "class:memory-object",
-        "class:impact.other.focused": "class:memory-object",
-        "class:option-card.focused": "class:option-card",
-        "class:option-card.other": "class:option-card",
-        "class:choice": "",
-    }
-    return [(inactive_style.get(style, style), text) for style, text in fragments]
+    return deactivate_semantic_viewer_fragments(fragments)
 
 
 def resolution_workbench_fragments(
@@ -904,30 +893,13 @@ def resolution_viewer_fragments(
     def report_section(parts: list[tuple[str, str]]) -> None:
         nonlocal section_index
         active = section_index == focused_section
-        if active:
-            fragments.append(("[SetCursorPosition]", ""))
-        for style, text in parts:
-            focused_style = (
-                "class:viewer-section"
-                if active
-                and style
-                in {
-                    "class:section",
-                    "class:case-title",
-                    "class:detail-heading",
-                    "class:block-heading",
-                }
-                else "class:detail-card.focused"
-                if active and style == ""
-                else "class:memory-object.focused"
-                if active and style == "class:memory-object"
-                else style
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                parts,
+                active=active,
+                anchor="both",
             )
-            fragments.append((focused_style, text))
-        if active:
-            # As in Result Workbench, keep the complete semantic block visible
-            # rather than anchoring only its heading at the viewport edge.
-            fragments.append(("[SetCursorPosition]", ""))
+        )
         section_index += 1
 
     def options_card(
@@ -940,26 +912,32 @@ def resolution_viewer_fragments(
     ) -> None:
         nonlocal section_index
         active = section_index == focused_section
-        if active:
-            fragments.append(("[SetCursorPosition]", ""))
-        outer_style = "class:detail-card.focused" if active else "class:detail-card"
+        outer_style = "class:detail-card"
         if prompt_heading:
             fragments.extend(
-                [
-                    (
-                        "class:viewer-section" if active else "class:block-heading",
-                        f" {safe_terminal_text(prompt_heading)}\n",
-                    ),
-                    (
-                        "class:detail-card.focused" if active else "",
-                        f" {safe_terminal_text(prompt_text)}\n",
-                    ),
-                ]
+                semantic_viewer_block_fragments(
+                    [
+                        (
+                            "class:block-heading",
+                            f" {safe_terminal_text(prompt_heading)}\n",
+                        ),
+                        (
+                            "",
+                            f" {safe_terminal_text(prompt_text)}\n",
+                        ),
+                    ],
+                    active=active,
+                )
             )
         outer_width = max(20, content_width - 1)
         outer_body_width = outer_width - 4
         top, bottom = _boxed_lines(heading, "", width=outer_width)[::2]
-        fragments.append((outer_style, f" {top}\n"))
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                [(outer_style, f" {top}\n")],
+                active=active and not bool(prompt_heading),
+            )
+        )
         guidance = (
             "↑/↓ move · Enter select · Esc/Backspace back"
             if option_navigation_active
@@ -1385,14 +1363,10 @@ def resolution_report_fragments(
     def heading(text: str, *, style: str = "class:section") -> None:
         nonlocal section_index
         active = section_index == focused_section
-        if active:
-            fragments.append(("[SetCursorPosition]", ""))
-        fragments.append(
-            (
-                "class:viewer-section" if active else style,
-                f" ── {safe_terminal_text(text)} ──\n"
-                if active
-                else f" {safe_terminal_text(text)}\n",
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                [(style, f" {safe_terminal_text(text)}\n")],
+                active=active,
             )
         )
         section_index += 1
@@ -1913,14 +1887,15 @@ def resolution_seeded_report_fragments(
             width = max(24, content_width - 1)
             inner_width = width - 2
             label = f"─ {_line(group_title, inner_width - 3)} "
-            if group_active:
-                fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:detail-card.focused"
-                    if group_active
-                    else "class:detail-card",
-                    f" ╭{label}{'─' * (inner_width - _visual_width(label))}╮\n",
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    [
+                        (
+                            "class:detail-card",
+                            f" ╭{label}{'─' * (inner_width - _visual_width(label))}╮\n",
+                        )
+                    ],
+                    active=group_active,
                 )
             )
             fragments.append(("class:detail-card", f" │{' ' * inner_width}│\n"))
@@ -1955,15 +1930,9 @@ def resolution_seeded_report_fragments(
                     item_body = [badge, "", *item_body]
                 item_active = section_index == focused_section
                 conflict_heading = f"CONFLICT {item_index + 1}"
-                heading_style = (
-                    "class:viewer-section" if item_active else "class:section"
-                )
-                fragments.append(
-                    (
-                        heading_style,
-                        f" │   {conflict_heading}\n",
-                    )
-                )
+                item_fragments: list[tuple[str, str]] = [
+                    ("class:section", f" │   {conflict_heading}\n")
+                ]
                 badge_visual_lines = (
                     _visual_wrap(badge, inner_width - 6) if badge else []
                 )
@@ -1972,29 +1941,31 @@ def resolution_seeded_report_fragments(
                     inner_width - 6,
                 )
                 for badge_line in badge_visual_lines:
-                    fragments.append(
+                    item_fragments.append(
                         (
                             "class:selection-badge",
                             f" │     {_visual_pad(badge_line, inner_width - 6)} │\n",
                         )
                     )
                 if badge_visual_lines:
-                    fragments.append(("class:detail-card", f" │{' ' * inner_width}│\n"))
+                    item_fragments.append(
+                        ("class:detail-card", f" │{' ' * inner_width}│\n")
+                    )
                 for body_line in body_visual_lines:
-                    fragments.append(
+                    item_fragments.append(
                         (
-                            (
-                                "class:detail-card.focused"
-                                if item_active
-                                else "class:detail-card"
-                            ),
+                            "class:detail-card",
                             f" │     {_visual_pad(body_line, inner_width - 6)} │\n",
                         )
                     )
-                if item_active:
-                    # Anchor after the complete conflict so prompt-toolkit
-                    # scrolls its body into view, not merely its first line.
-                    fragments.append(("[SetCursorPosition]", ""))
+                fragments.extend(
+                    semantic_viewer_block_fragments(
+                        item_fragments,
+                        active=item_active,
+                        anchor="end",
+                        focus_indices=(0,),
+                    )
+                )
                 section_index += 1
                 if section_index < len(sections) and sections[section_index][
                     1
@@ -2009,7 +1980,6 @@ def resolution_seeded_report_fragments(
             active = section_index == focused_section
             result_index = int(key.split(":", 1)[1])
             result = view.results[result_index]
-            style = "class:memory-object.focused" if active else "class:memory-object"
             prefix = navigable_tree_row_prefix(
                 selected=active,
                 depth=1,
@@ -2022,9 +1992,12 @@ def resolution_seeded_report_fragments(
                 content_width - _visual_width(prefix + identity) - 1,
             )
             wrapped_content = _visual_wrap(result.text, result_content_width)
+            result_fragments: list[tuple[str, str]] = []
             for line_index, content_line in enumerate(wrapped_content):
                 lead = prefix + identity if line_index == 0 else content_indent
-                fragments.append((style, f" {lead}{content_line}\n"))
+                result_fragments.append(
+                    ("class:memory-object", f" {lead}{content_line}\n")
+                )
             if result.reason:
                 reason_prefix = " " * _visual_width(prefix) + "    WHY · "
                 reason_width = max(
@@ -2039,11 +2012,16 @@ def resolution_seeded_report_fragments(
                         if line_index == 0
                         else " " * _visual_width(reason_prefix)
                     )
-                    fragments.append((style, f" {lead}{reason_line}\n"))
-            if active:
-                # A trailing anchor keeps the complete wrapped Memory and WHY
-                # visible whenever this independently focusable block fits.
-                fragments.append(("[SetCursorPosition]", ""))
+                    result_fragments.append(
+                        ("class:memory-object", f" {lead}{reason_line}\n")
+                    )
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    result_fragments,
+                    active=active,
+                    anchor="end",
+                )
+            )
             if section_index < len(sections) - 1:
                 fragments.append(("", "\n"))
             section_index += 1
@@ -2051,12 +2029,10 @@ def resolution_seeded_report_fragments(
 
         if title.startswith(("PROPOSED TARGET MEMORIES", "PROPOSED BASELINE CHANGES")):
             active = section_index == focused_section
-            if active:
-                fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:viewer-section" if active else "class:section",
-                    f" {safe_terminal_text(title)}\n",
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    [("class:section", f" {safe_terminal_text(title)}\n")],
+                    active=active,
                 )
             )
             fragments.append(("", "\n"))
@@ -2111,20 +2087,23 @@ def resolution_seeded_report_fragments(
             "\n".join(body_lines),
             width=card_width,
         )
-        anchor_at_end = active
         badge_line_count = (
             len(_visual_wrap(badge, max(1, card_width - 4))) if badge else 0
         )
+        card_fragments: list[tuple[str, str]] = []
         for card_line_index, card_line in enumerate(card_lines):
-            style = "class:detail-card.focused" if active else "class:detail-card"
+            style = "class:detail-card"
             if badge and 1 <= card_line_index <= badge_line_count:
                 style = "class:selection-badge"
-            fragments.append((style, f" {safe_terminal_text(card_line)}\n"))
-        if anchor_at_end:
-            # A block-end anchor exposes the complete card when it fits. This
-            # is especially important for the terminal apply boundary after a
-            # long result list, but applies equally to ordinary report cards.
-            fragments.append(("[SetCursorPosition]", ""))
+            card_fragments.append((style, f" {safe_terminal_text(card_line)}\n"))
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                card_fragments,
+                active=active,
+                anchor="end",
+                focus_indices=(0,),
+            )
+        )
         if section_index < len(sections) - 1:
             fragments.append(("", "\n"))
         section_index += 1
@@ -2201,21 +2180,22 @@ def resolution_review_fragments(
         ]
     )
 
-    if focused_section == 0:
-        fragments.append(("[SetCursorPosition]", ""))
-    for line in _boxed_lines(
-        "REVIEW AND APPLY",
-        "\n".join(response_lines).rstrip(),
-        width=max(24, content_width - 1),
-    ):
-        fragments.append(
-            (
-                "class:detail-card.focused"
-                if focused_section == 0
-                else "class:detail-card",
-                f" {line}\n",
-            )
+    summary_fragments = [
+        ("class:detail-card", f" {line}\n")
+        for line in _boxed_lines(
+            "REVIEW AND APPLY",
+            "\n".join(response_lines).rstrip(),
+            width=max(24, content_width - 1),
         )
+    ]
+    fragments.extend(
+        semantic_viewer_block_fragments(
+            summary_fragments,
+            active=focused_section == 0,
+            anchor="end",
+            focus_indices=(0,),
+        )
+    )
     fragments.append(("", "\n"))
 
     action_section = 1
@@ -2230,17 +2210,15 @@ def resolution_review_fragments(
             "\n".join(policy_lines) or "No unresolved-conflict policies are available.",
             width=max(24, content_width - 1),
         )
-        for index, line in enumerate(policy_box):
-            if focused_section == 1 and index == len(policy_box) - 1:
-                fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:option-card.focused"
-                    if focused_section == 1
-                    else "class:detail-card",
-                    f" {line}\n",
-                )
+        policy_fragments = [("class:detail-card", f" {line}\n") for line in policy_box]
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                policy_fragments,
+                active=focused_section == 1,
+                anchor="end",
+                focus_indices=(0,),
             )
+        )
         fragments.append(("", "\n"))
         action_section = 2
 
@@ -2249,17 +2227,15 @@ def resolution_review_fragments(
         f"{action.label}\n{action.detail}\nEsc/Backspace returns without applying.",
         width=max(24, content_width - 1),
     )
-    for index, line in enumerate(action_box):
-        if focused_section == action_section and index == len(action_box) - 1:
-            fragments.append(("[SetCursorPosition]", ""))
-        fragments.append(
-            (
-                "class:detail-card.focused"
-                if focused_section == action_section
-                else "class:detail-card",
-                f" {line}\n",
-            )
+    action_fragments = [("class:detail-card", f" {line}\n") for line in action_box]
+    fragments.extend(
+        semantic_viewer_block_fragments(
+            action_fragments,
+            active=focused_section == action_section,
+            anchor="end",
+            focus_indices=(0,),
         )
+    )
     return fragments
 
 

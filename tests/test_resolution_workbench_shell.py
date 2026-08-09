@@ -348,7 +348,12 @@ def test_split_report_contains_conflicts_and_whole_set_strategies():
     rendered = "".join(text for _style, text in fragments)
 
     assert "ISSUES · 2" in rendered
-    assert "── ISSUE 1 · Issue a ──" in rendered
+    assert "ISSUE 1 · Issue a" in rendered
+    assert "── ISSUE 1 · Issue a ──" not in rendered
+    assert any(
+        style == "class:viewer-section" and "ISSUE 1 · Issue a" in text
+        for style, text in fragments
+    )
     assert "ISSUE 2 · Issue b" in rendered
     assert "RESOLVE ALL · WHOLE-SET STRATEGY" in rendered
     assert "Choose broadest" in rendered
@@ -634,7 +639,7 @@ def test_inline_other_direction_keeps_current_detail_visible():
         style == "class:viewer-section" and "RESOLUTION QUESTION" in text
         for style, text in fragments
     )
-    assert any(
+    assert not any(
         style == "class:detail-card.focused" and "PROPOSED RESOLUTIONS" in text
         for style, text in fragments
     )

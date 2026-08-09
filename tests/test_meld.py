@@ -856,7 +856,11 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
         for style, text in fragments
     )
     assert any(
-        style == "class:detail-card.focused" and "compensation" in text.lower()
+        style == "class:detail-card" and "compensation" in text.lower()
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:viewer-section" and "CONFLICT 1" in text
         for style, text in fragments
     )
 

@@ -298,10 +298,12 @@ heading to the first line;
 The panes are titled `VIEWER` and `ITEMS`. Both use the same focused-frame
 border and label styling as Ground, so the active pane remains visually
 explicit in addition to the footer's textual `FOCUS` indicator. Within the
-Viewer, the current logical section heading is separately rendered as
-`── HEADING ──` in the focus color. This second boundary identifies the exact
-semantic section independently of pane focus and leaves a stable target for a
-later interactive Potential Conflicts action.
+Viewer, the current logical section identity is rendered in the common focus
+color without rewriting the report heading. The focus overlay and hidden
+viewport anchor identify the exact semantic section while leaving snapshot and
+persisted report text unchanged. Compare projects those blocks into the shared
+`SemanticViewerDocument`, so navigation order and rendering order come from the
+same stable section identities.
 Selecting a lower item replaces the Viewer content with that item's report or
 source-linked detail, while returning to the first `REPORT` item restores the
 whole report. `Left`/`Right` select an exact source frame when one is available,
