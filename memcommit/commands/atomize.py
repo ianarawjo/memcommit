@@ -285,6 +285,7 @@ def _present_workbench(
             destination=(
                 ResolutionDestination(
                     value=planned_output,
+                    state="NOT CREATED",
                     detail=(
                         "Enter to change this exact new Context name before "
                         "Review and Apply."

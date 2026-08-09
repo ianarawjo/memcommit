@@ -1253,6 +1253,7 @@ def _run_interactive(
         destination = (
             ResolutionDestination(
                 value=session.target.context_name,
+                state="CURRENT TARGET",
                 validate=validate_destination,
             )
             if allow_apply and session.mode == "SYMMETRIC"

@@ -1412,7 +1412,7 @@ def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
     assert kwargs["global_strategies"] == ()
 
 
-def test_atomize_uses_shared_save_location_immediately_before_final_review():
+def test_atomize_uses_shared_save_location_frame_before_final_review():
     ctx = ops.init("workbench/destination-source")
     ops.add(ctx, "First fact. Second fact.")
     analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
@@ -1422,9 +1422,9 @@ def test_atomize_uses_shared_save_location_immediately_before_final_review():
     )
 
     with create_pipe_input() as pipe_input:
-        # Viewer starts on Report. End reaches Review and Apply, Up reaches the
-        # shared Save Location card, and Enter opens its exact-name editor.
-        pipe_input.send_text("\x1b[F\x1b[A\r\x15workbench/destination-final\r")
+        # Viewer starts on Report. Two Tabs reach the compact frame between
+        # Items and To Do, and Enter opens its own exact-name editor.
+        pipe_input.send_text("\t\t\r\x15workbench/destination-final\r")
         action = run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1435,6 +1435,7 @@ def test_atomize_uses_shared_save_location_immediately_before_final_review():
             workflow_actions=True,
             destination=ResolutionDestination(
                 value="workbench/destination-draft",
+                state="NOT CREATED",
             ),
         )
 

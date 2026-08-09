@@ -63,7 +63,7 @@ Both reports identify their operation frame above `WHAT MEM UNDERSTOOD` using
 the shared typed `CONTEXT LOCATIONS` projection. Forget shows its Source.
 Sever shows Source, Criteria, and Result, including whether the Result is
 `NOT CREATED` or `CREATED`. An unapplied Sever Result also uses the shared
-focusable `SAVE LOCATION` section immediately before final Review and Apply;
+compact `SAVE LOCATION` frame between `ITEMS` and final Review and Apply;
 changing it updates the durable session but does not create the Context.
 
 ## Operation boundaries

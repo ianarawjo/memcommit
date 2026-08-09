@@ -50,6 +50,8 @@ Review-item headings remain bold even when another section owns focus; focus
 changes their foreground from neutral white to blue. The collection heading is
 bold report chrome, while each item is its own navigation stop. This keeps the
 kind and title legible without falsely making the whole collection one target.
+Generic exact-results headings use the same resting and focused label policy;
+their result rows retain their own Memory or outcome semantics.
 
 The common Resolution model also lets an operation declare whether its generic
 exact-results block is semantically present. An empty but meaningful result set

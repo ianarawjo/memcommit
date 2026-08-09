@@ -516,6 +516,7 @@ def _run_workbench(
             destination=(
                 ResolutionDestination(
                     value=session.output_name,
+                    state="NOT CREATED",
                     validate=validate_destination,
                 )
                 if allow_apply

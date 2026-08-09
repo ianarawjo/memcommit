@@ -6,7 +6,13 @@ from dataclasses import dataclass
 from typing import Literal, Sequence
 
 
-WorkbenchPane = Literal["items", "viewer", "todo", "composer"]
+WorkbenchPane = Literal[
+    "items",
+    "viewer",
+    "save_location",
+    "todo",
+    "composer",
+]
 
 
 @dataclass(frozen=True)
@@ -36,13 +42,25 @@ class SessionWorkbenchNavigation:
     section_uid: str | None = None
 
     def __post_init__(self) -> None:
-        if self.pane not in {"items", "viewer", "todo", "composer"}:
+        if self.pane not in {
+            "items",
+            "viewer",
+            "save_location",
+            "todo",
+            "composer",
+        }:
             raise ValueError("Unsupported workbench pane.")
         if self.row_index < 0 or self.viewer_row_index < 0:
             raise ValueError("Workbench row indices cannot be negative.")
 
     def focus(self, pane: WorkbenchPane) -> None:
-        if pane not in {"items", "viewer", "todo", "composer"}:
+        if pane not in {
+            "items",
+            "viewer",
+            "save_location",
+            "todo",
+            "composer",
+        }:
             raise ValueError("Unsupported workbench pane.")
         self.pane = pane
 

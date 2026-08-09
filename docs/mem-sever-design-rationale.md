@@ -170,8 +170,8 @@ names of excluded query-only Context references, and an application receipt.
 Writes use a record-digest compare-and-swap. Versions 1 and 2 remain readable;
 new serialization emits version 3.
 
-The report shows a focusable `SAVE LOCATION` card immediately before the final
-Apply card. Enter opens the shared inline direct editor. Saving a new exact
+The workbench shows a compact focusable `SAVE LOCATION` frame between `ITEMS`
+and `TO DO`. Enter opens its shared one-line direct editor. Saving a new exact
 name updates the REVIEWING session under its record-digest CAS, then returns to
 the same workbench; it neither reruns the provider nor creates a Context.
 Existing names and invalid ordinary Context identifiers fail before the session

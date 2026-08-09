@@ -862,9 +862,10 @@ non-focusable `CONTEXT LOCATIONS` block. Seeded Compare prose receives the
 same block at the top of its first report card, so using Compare's exact report
 does not hide where Meld will materialize its result.
 
-An unapplied symmetric Meld then shows a `SAVE LOCATION` card immediately
-above Apply. Editing it relocates the already-created empty Result Context and
-its target-bound Meld session through the ordinary Context-rename freshness
+An unapplied symmetric Meld then shows the shared compact `SAVE LOCATION` frame
+between `ITEMS` and `TO DO`. Editing it relocates the already-created empty
+Result Context and its target-bound Meld session through the ordinary
+Context-rename freshness
 and rollback boundary, then returns to the same review. The relocation keeps
 the Result Context UID, rewrites the target name and metadata digest, and does
 not rerun the provider or apply proposed Memories. A target namespace with

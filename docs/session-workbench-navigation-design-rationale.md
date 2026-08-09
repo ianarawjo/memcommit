@@ -81,12 +81,15 @@ not receive a second visual approval. Report and To Do both project
 `REVIEW AND APPLY`, while the final surface alone exposes the state-dependent
 mutation action.
 
-For an operation that creates a new Context, `SAVE LOCATION` is a shared
-focusable Viewer section immediately before `REVIEW AND APPLY`. Enter opens
-the shared inline exact-name editor and returns a destination-change action to
-the owning controller. The operation validates and persists that change; the
-shell neither creates nor renames a Context. Consequently Review and Apply is
-the last report section and the only route to the final mutation choice.
+For an operation with an editable materialization target, `SAVE LOCATION` is a
+shared compact frame between `ITEMS` and `TO DO`, not a Viewer section or Items
+row. Its resting line shows the current exact name and state. Enter replaces
+that line with a one-line exact-name editor and returns a destination-change
+action to the owning controller; Escape cancels locally. The operation
+validates and persists the change, while the shell neither creates nor renames
+a Context. Review and Apply remains the only route to the final mutation
+choice. Visible Tab order conditionally becomes
+`VIEWER → ITEMS → SAVE LOCATION → TO DO`.
 
 When saved responses make incorporation the current To Do, the open item also
 renders that same `INCORPORATE RESPONSES` section immediately below `RESPONSE`.

@@ -617,9 +617,10 @@ mem atomize --context INPUT --output OUTPUT  # plan, but do not create, Output
 ```
 
 In the durable planned-Output workflow, the exact reviewed preview includes
-the shared `SAVE LOCATION` card immediately before `REVIEW AND APPLY`. Enter
-may replace the fresh destination name, which is revalidated and persisted to
-the workbench without reanalysis; Apply then uses that final name. The command
+the shared compact `SAVE LOCATION` frame between `ITEMS` and `TO DO`. Enter may
+replace the fresh destination name inside its one-line editor; the name is
+revalidated and persisted to the workbench without reanalysis, and Apply then
+uses that final name. The command
 does not ask for a second standalone `y/e/n` location approval after leaving
 the workbench. Aborting leaves the saved analysis and source unchanged.
 Explicit one-shot `--save-as` still uses its standalone exact-location receipt

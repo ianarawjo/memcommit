@@ -13,6 +13,7 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.layout import (
     ConditionalContainer,
+    DynamicContainer,
     FormattedTextControl,
     HSplit,
     Layout,
@@ -22,7 +23,7 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
-from prompt_toolkit.widgets import Frame
+from prompt_toolkit.widgets import Frame, TextArea
 from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.tui_primitives import (
@@ -32,6 +33,7 @@ from memcommit.commands.tui_primitives import (
     TuiRegion,
     WrappedScrollbarMargin,
     bind_focused_frame_style,
+    boxed_lines,
     build_framed_multiline_input,
     build_tui_frame,
     focused_control_style,
@@ -43,6 +45,11 @@ from memcommit.commands.tui_text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
     terminal_cell_width,
+    wrap_terminal_text,
+)
+from memcommit.commands.save_location_control import (
+    SaveLocationView,
+    save_location_row_fragments,
 )
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
@@ -86,14 +93,9 @@ class ResolutionGlobalStrategy:
     comment: str = ""
 
 
-@dataclass(frozen=True)
-class ResolutionDestination:
-    """One operation-owned local materialization name shown before Apply."""
-
-    value: str
-    label: str = "SAVE LOCATION"
-    detail: str = "Enter to change this exact local Context name."
-    validate: Callable[[str], None] | None = None
+# Compatibility export for operation adapters that adopted the Resolution name
+# before save-location presentation became a service-wide control.
+ResolutionDestination = SaveLocationView
 
 
 @dataclass(frozen=True)
@@ -521,32 +523,7 @@ def _visual_pad(value: str, width: int) -> str:
 
 def _visual_wrap(value: str, width: int) -> list[str]:
     """Wrap terminal text by display cells while retaining paragraph breaks."""
-    wrapped: list[str] = []
-    for source_line in safe_terminal_text(value).splitlines() or [""]:
-        if not source_line.strip():
-            wrapped.append("")
-            continue
-        leading = source_line[: len(source_line) - len(source_line.lstrip(" "))]
-        content_width = max(1, width - _visual_width(leading))
-        current = ""
-        for word in source_line.strip().split():
-            candidate = word if not current else f"{current} {word}"
-            if _visual_width(candidate) <= content_width:
-                current = candidate
-                continue
-            if current:
-                wrapped.append(leading + current)
-                current = ""
-            chunk = ""
-            for character in word:
-                if chunk and _visual_width(chunk + character) > content_width:
-                    wrapped.append(leading + chunk)
-                    chunk = ""
-                chunk += character
-            current = chunk
-        if current:
-            wrapped.append(leading + current)
-    return wrapped or [""]
+    return wrap_terminal_text(safe_terminal_text(value), width)
 
 
 def _source_memory_lines(content: str, content_width: int) -> tuple[str, ...]:
@@ -648,20 +625,6 @@ def _session_items_fragments(
         if index < len(rows) - 1:
             fragments.append(("", "\n"))
     return fragments
-
-
-def _boxed_lines(title: str, body: str, *, width: int = 72) -> list[str]:
-    """Return a fixed-width terminal card small enough for the Viewer pane."""
-    inner_width = width - 2
-    body_width = width - 4
-    label = f"─ {_line(title, inner_width - 3)} "
-    lines = [f"╭{label}{'─' * (inner_width - _visual_width(label))}╮"]
-    lines.extend(
-        f"│ {_visual_pad(line, body_width)} │"
-        for line in _visual_wrap(body, body_width)
-    )
-    lines.append(f"╰{'─' * inner_width}╯")
-    return lines
 
 
 def _viewer_focus_fragments(
@@ -806,7 +769,7 @@ def resolution_workbench_fragments(
             [
                 ("", "\n"),
                 (
-                    "class:section",
+                    "class:report-label",
                     f" {safe_terminal_text(view.results_label)}\n",
                 ),
             ]
@@ -943,7 +906,7 @@ def resolution_viewer_fragments(
             )
         outer_width = max(20, content_width - 1)
         outer_body_width = outer_width - 4
-        top, bottom = _boxed_lines(heading, "", width=outer_width)[::2]
+        top, bottom = boxed_lines(heading, "", width=outer_width)[::2]
         fragments.extend(
             semantic_viewer_block_fragments(
                 [(outer_style, f" {top}\n")],
@@ -1354,7 +1317,6 @@ def resolution_report_fragments(
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     expanded_impact_section_uid: str | None = None,
-    destination: ResolutionDestination | None = None,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
     """Render the complete Meld reading surface before any individual issue."""
@@ -1379,7 +1341,6 @@ def resolution_report_fragments(
         + show_results
         + (impact is not None)
         + (len(impact.entries) if impact is not None else 0)
-        + (destination is not None and not read_only)
     )
     focused_section = max(0, min(focused_section, section_count - 1))
     section_index = 0
@@ -1489,7 +1450,10 @@ def resolution_report_fragments(
                 ]
             )
     if show_results:
-        heading(f"{view.results_label} · {len(view.results)}")
+        heading(
+            f"{view.results_label} · {len(view.results)}",
+            style="class:report-label",
+        )
         if not view.results:
             fragments.append(("", "  (none)\n"))
         for index, result in enumerate(view.results, start=1):
@@ -1696,15 +1660,6 @@ def resolution_report_fragments(
                 # remains visible as one semantic Impact Memory.
                 fragments.append(("[SetCursorPosition]", ""))
             section_index += 1
-    if destination is not None and not read_only:
-        heading(destination.label)
-        fragments.append(
-            (
-                "",
-                f" {safe_terminal_text(destination.value)}\n"
-                f" {safe_terminal_text(destination.detail)}\n\n",
-            )
-        )
     if not read_only:
         action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
         action_detail = (
@@ -1743,7 +1698,6 @@ def _seeded_report_lines(
     review_and_apply: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
-    destination: ResolutionDestination | None = None,
     drafts: dict[str, tuple[str | None, str]] | None = None,
 ) -> list[str]:
     lines = report_text.splitlines()
@@ -1774,15 +1728,6 @@ def _seeded_report_lines(
     impact = _current_impact(impact_controller, view)
     if impact is not None:
         lines.extend(["", *_impact_lines(impact)])
-    if destination is not None and not read_only:
-        lines.extend(
-            [
-                "",
-                destination.label,
-                destination.value,
-                destination.detail,
-            ]
-        )
     if not read_only:
         action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
         action_detail = (
@@ -1829,7 +1774,6 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         "IMPACT ·",
         "APPLY CHANGES ·",
         "APPLY AS IS ·",
-        "SAVE LOCATION",
     )
     sections: list[tuple[int, str]] = []
     in_conflicts = False
@@ -1850,7 +1794,6 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                 "INCORPORATE RESPONSES",
                 "APPLY CHANGES ·",
                 "APPLY AS IS ·",
-                "SAVE LOCATION",
             )
         ):
             in_results = False
@@ -1867,8 +1810,6 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                         "APPLY AS IS ·",
                     )
                 )
-                else "DESTINATION"
-                if line.startswith("SAVE LOCATION")
                 else "REPORT"
             )
             sections.append((line_index, key))
@@ -1904,7 +1845,6 @@ def resolution_seeded_report_fragments(
     review_and_apply: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
-    destination: ResolutionDestination | None = None,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
     """Render Compare and Meld report sections as nested Viewer cards."""
@@ -1915,7 +1855,6 @@ def resolution_seeded_report_fragments(
         review_and_apply=review_and_apply,
         read_only=read_only,
         impact_controller=impact_controller,
-        destination=destination,
         drafts=drafts,
     )
     sections = _seeded_report_sections(lines)
@@ -2093,7 +2032,7 @@ def resolution_seeded_report_fragments(
             active = section_index == focused_section
             fragments.extend(
                 semantic_viewer_block_fragments(
-                    [("class:section", f" {safe_terminal_text(title)}\n")],
+                    [("class:report-label", f" {safe_terminal_text(title)}\n")],
                     active=active,
                 )
             )
@@ -2144,7 +2083,7 @@ def resolution_seeded_report_fragments(
 
         active = section_index == focused_section
         card_width = max(24, content_width - 1)
-        card_lines = _boxed_lines(
+        card_lines = boxed_lines(
             title,
             "\n".join(body_lines),
             width=card_width,
@@ -2244,7 +2183,7 @@ def resolution_review_fragments(
 
     summary_fragments = [
         ("class:detail-card", f" {line}\n")
-        for line in _boxed_lines(
+        for line in boxed_lines(
             "REVIEW AND APPLY",
             "\n".join(response_lines).rstrip(),
             width=max(24, content_width - 1),
@@ -2267,7 +2206,7 @@ def resolution_review_fragments(
             selected = index == strategy_index
             marker = "›" if selected else " "
             policy_lines.append(f"{marker} {index + 1}. {policy.label}")
-        policy_box = _boxed_lines(
+        policy_box = boxed_lines(
             "REMAINING-ITEM POLICY",
             "\n".join(policy_lines) or "No unresolved-conflict policies are available.",
             width=max(24, content_width - 1),
@@ -2284,7 +2223,7 @@ def resolution_review_fragments(
         fragments.append(("", "\n"))
         action_section = 2
 
-    action_box = _boxed_lines(
+    action_box = boxed_lines(
         action.kind,
         f"{action.label}\n{action.detail}\nEsc/Backspace returns without applying.",
         width=max(24, content_width - 1),
@@ -2346,10 +2285,20 @@ def run_resolution_workbench_shell(
 
     session_navigation = workbench_navigation or SessionWorkbenchNavigation()
     viewer_controller = SemanticViewerController(session_navigation)
+    destination_available = (
+        split_viewer_items and destination is not None and not read_only
+    )
+    if destination is not None and not split_viewer_items:
+        raise ValueError(
+            "Editable save locations require the split session workbench."
+        )
     if split_viewer_items:
         # A caller may reuse process-local navigation, but a composer cannot be
         # the initial target before the shell has opened an input surface.
-        if session_navigation.pane == "composer":
+        if session_navigation.pane == "composer" or (
+            session_navigation.pane == "save_location"
+            and not destination_available
+        ):
             session_navigation.focus("viewer")
     else:
         session_navigation.focus("viewer")
@@ -2364,7 +2313,6 @@ def run_resolution_workbench_shell(
                 review_and_apply=review_and_apply,
                 read_only=read_only,
                 impact_controller=impact_controller,
-                destination=destination,
                 drafts=local_drafts,
             )
             entries = tuple(
@@ -2414,8 +2362,6 @@ def run_resolution_workbench_shell(
                 )
                 for index, entry in enumerate(active_impact.entries, start=1)
             )
-        if destination is not None and not read_only:
-            entries.append(("DESTINATION", "REPORT:DESTINATION", None))
         if not read_only:
             entries.append(
                 (
@@ -2598,6 +2544,8 @@ def run_resolution_workbench_shell(
         return max(20, columns - 3)
 
     def split_kind() -> str:
+        if session_navigation.pane == "save_location":
+            return "SAVE_LOCATION"
         if session_navigation.pane == "todo":
             return "TODO"
         if session_navigation.pane == "viewer" and viewer_content["kind"] == "REVIEW":
@@ -2708,7 +2656,6 @@ def run_resolution_workbench_shell(
                         review_and_apply=review_and_apply,
                         read_only=read_only,
                         impact_controller=impact_controller,
-                        destination=destination,
                         content_width=pane_content_width(),
                     ),
                     focused=session_navigation.pane == "viewer",
@@ -2723,7 +2670,6 @@ def run_resolution_workbench_shell(
                     read_only=read_only,
                     impact_controller=impact_controller,
                     expanded_impact_section_uid=impact_reason_expanded["uid"],
-                    destination=destination,
                     content_width=pane_content_width(),
                 ),
                 focused=session_navigation.pane == "viewer",
@@ -2867,6 +2813,51 @@ def run_resolution_workbench_shell(
         wrap_lines=False,
     )
 
+    def destination_fragments() -> list[tuple[str, str]]:
+        if destination is None:
+            return []
+        return save_location_row_fragments(
+            destination,
+            focused=session_navigation.pane == "save_location",
+            content_width=pane_content_width(),
+        )
+
+    destination_control = FormattedTextControl(
+        destination_fragments,
+        focusable=True,
+        show_cursor=False,
+    )
+    destination_window = Window(
+        destination_control,
+        height=Dimension.exact(1),
+        dont_extend_height=True,
+        wrap_lines=False,
+    )
+    destination_input = TextArea(
+        text=destination.value if destination is not None else "",
+        multiline=False,
+        prompt="› ",
+        focusable=True,
+        wrap_lines=False,
+        height=Dimension.exact(1),
+        name="resolution-save-location",
+    )
+    destination_input.buffer.cursor_position = len(destination_input.text)
+    destination_frame = Frame(
+        DynamicContainer(
+            lambda: destination_input
+            if destination_editing["value"]
+            else destination_window
+        ),
+        title=(
+            safe_terminal_text(destination.label)
+            if destination is not None
+            else "SAVE LOCATION"
+        ),
+        height=Dimension.exact(3),
+    )
+    writable_input_focused = has_focus(input_area) | has_focus(destination_input)
+
     def load_draft() -> None:
         item = current_navigation.current_item(current_view())
         if item is None:
@@ -2982,8 +2973,7 @@ def run_resolution_workbench_shell(
             set_status("Save-location editing is unavailable here.")
             return None
         try:
-            if destination.validate is not None:
-                destination.validate(value)
+            destination.validate_value(value)
             return ResolutionWorkbenchAction(
                 kind="CHANGE_DESTINATION",
                 destination=value,
@@ -3048,6 +3038,9 @@ def run_resolution_workbench_shell(
             if session_navigation.pane == "todo":
                 set_status("")
                 return
+            if session_navigation.pane == "save_location":
+                set_status("")
+                return
             total_rows = len(active_view.items) + 1
             session_navigation.move_row(total_rows, delta)
             preview_items_row(active_view)
@@ -3105,19 +3098,18 @@ def run_resolution_workbench_shell(
         get_app().layout.focus(input_area)
 
     def open_destination_input() -> None:
-        if destination is None:
+        if destination is None or not destination_available:
             set_status("Save-location editing is unavailable here.")
             return
         destination_editing["value"] = True
         global_comment["value"] = False
         other_direction_editor["open"] = False
-        title = f"{destination.label} · CHANGE"
-        composer.frame.title = title
-        input_heading["value"] = title
-        input_area.text = destination.value
-        input_area.buffer.cursor_position = len(destination.value)
-        session_navigation.focus("composer")
-        get_app().layout.focus(input_area)
+        destination_frame.title = f"{safe_terminal_text(destination.label)} · EDIT DIRECTLY"
+        destination_input.text = destination.value
+        destination_input.buffer.cursor_position = len(destination.value)
+        session_navigation.focus("save_location")
+        get_app().layout.focus(destination_input)
+        set_status("")
 
     def current_response_heading() -> str:
         item = current_navigation.current_item(current_view())
@@ -3193,13 +3185,6 @@ def run_resolution_workbench_shell(
     def submit(event) -> None:
         active_view = current_view()
         comment = input_area.text.strip()
-        if destination_editing["value"]:
-            action = destination_action(comment)
-            if action is not None:
-                event.app.exit(result=action)
-            else:
-                event.app.invalidate()
-            return
         if (review_and_apply or draft_saver is not None) and not global_comment[
             "value"
         ]:
@@ -3230,7 +3215,7 @@ def run_resolution_workbench_shell(
         if action is not None:
             event.app.exit(result=action)
 
-    @bindings.add("down", filter=~has_focus(input_area))
+    @bindings.add("down", filter=~writable_input_focused)
     def _down(event) -> None:
         if viewer_navigation_accelerates():
             navigation_accelerator.move(1, app=event.app, move_one=move)
@@ -3238,7 +3223,7 @@ def run_resolution_workbench_shell(
             move(1)
             event.app.invalidate()
 
-    @bindings.add("up", filter=~has_focus(input_area))
+    @bindings.add("up", filter=~writable_input_focused)
     def _up(event) -> None:
         if viewer_navigation_accelerates():
             navigation_accelerator.move(-1, app=event.app, move_one=move)
@@ -3246,7 +3231,7 @@ def run_resolution_workbench_shell(
             move(-1)
             event.app.invalidate()
 
-    @bindings.add("pagedown", filter=~has_focus(input_area))
+    @bindings.add("pagedown", filter=~writable_input_focused)
     def _page_down(event) -> None:
         # Once results are independent sections, a page step advances several
         # short result blocks instead of trying to display one 234-result
@@ -3255,25 +3240,25 @@ def run_resolution_workbench_shell(
         move(8)
         event.app.invalidate()
 
-    @bindings.add("pageup", filter=~has_focus(input_area))
+    @bindings.add("pageup", filter=~writable_input_focused)
     def _page_up(event) -> None:
         navigation_accelerator.reset()
         move(-8)
         event.app.invalidate()
 
-    @bindings.add("end", filter=~has_focus(input_area))
+    @bindings.add("end", filter=~writable_input_focused)
     def _end(event) -> None:
         navigation_accelerator.reset()
         move(1_000_000)
         event.app.invalidate()
 
-    @bindings.add("home", filter=~has_focus(input_area))
+    @bindings.add("home", filter=~writable_input_focused)
     def _home(event) -> None:
         navigation_accelerator.reset()
         move(-1_000_000)
         event.app.invalidate()
 
-    @bindings.add("right", filter=~has_focus(input_area))
+    @bindings.add("right", filter=~writable_input_focused)
     def _right(event) -> None:
         if split_viewer_items:
             impact_uid = focused_impact_entry_uid()
@@ -3303,7 +3288,7 @@ def run_resolution_workbench_shell(
         load_draft()
         event.app.invalidate()
 
-    @bindings.add("left", filter=~has_focus(input_area))
+    @bindings.add("left", filter=~writable_input_focused)
     def _left(event) -> None:
         if split_viewer_items:
             impact_uid = focused_impact_entry_uid()
@@ -3332,7 +3317,7 @@ def run_resolution_workbench_shell(
         load_draft()
         event.app.invalidate()
 
-    @bindings.add("enter", filter=~has_focus(input_area))
+    @bindings.add("enter", filter=~writable_input_focused)
     def _open_or_choose(event) -> None:
         active_view = current_view()
         if split_viewer_items:
@@ -3357,10 +3342,6 @@ def run_resolution_workbench_shell(
                         )
                         event.app.invalidate()
                         return
-                    if section.kind == "DESTINATION":
-                        open_destination_input()
-                        event.app.invalidate()
-                        return
                     if section.kind == "REVIEW_AND_APPLY" or (
                         review_and_apply and section.kind == "RESOLVE_ALL"
                     ):
@@ -3373,6 +3354,8 @@ def run_resolution_workbench_shell(
                 session_navigation.open_selected(report_sections())
                 event.app.layout.focus(body_control)
                 set_status("")
+            elif kind == "SAVE_LOCATION":
+                open_destination_input()
             elif kind == "ITEM":
                 if (
                     session_navigation.pane != "viewer"
@@ -3581,6 +3564,10 @@ def run_resolution_workbench_shell(
     @bindings.add("tab")
     @bindings.add("s-tab")
     def _focus_input(event) -> None:
+        if event.app.layout.has_focus(destination_input):
+            set_status("Press Enter to save this location or Escape to cancel.")
+            event.app.invalidate()
+            return
         if event.app.layout.has_focus(input_area):
             save_draft()
             other_direction_editor["open"] = False
@@ -3595,10 +3582,15 @@ def run_resolution_workbench_shell(
             option_navigation["active"] = False
             viewer_controller.close_nested()
             delta = -1 if event.key_sequence[0].key == Keys.BackTab else 1
+            visible_panes = (
+                ("viewer", "items", "save_location", "todo")
+                if destination_available
+                else ("viewer", "items", "todo")
+            )
             pane = session_navigation.cycle_panes(
                 # Focus follows the visible top-to-bottom frame order from the
                 # first interaction; there is no hidden Items-first phase.
-                ("viewer", "items", "todo"),
+                visible_panes,
                 delta,
             )
             if pane == "items" and viewer_content["kind"] == "REVIEW":
@@ -3610,6 +3602,7 @@ def run_resolution_workbench_shell(
             controls = {
                 "viewer": body_control,
                 "items": items_control,
+                "save_location": destination_control,
                 "todo": todo_control,
             }
             event.app.layout.focus(controls[pane])
@@ -3633,7 +3626,7 @@ def run_resolution_workbench_shell(
             session_navigation.focus("composer")
         event.app.layout.focus(input_area)
 
-    @bindings.add("c", filter=~has_focus(input_area))
+    @bindings.add("c", filter=~writable_input_focused)
     def _comment_item(event) -> None:
         if not split_viewer_items:
             return
@@ -3685,7 +3678,7 @@ def run_resolution_workbench_shell(
         session_navigation.focus("composer")
         event.app.layout.focus(input_area)
 
-    @bindings.add("g", filter=~has_focus(input_area))
+    @bindings.add("g", filter=~writable_input_focused)
     def _global_comment(event) -> None:
         active_view = current_view()
         if "SUBMIT_ALL" not in active_view.capabilities:
@@ -3713,11 +3706,20 @@ def run_resolution_workbench_shell(
 
     @bindings.add("c-j", filter=has_focus(input_area), eager=True)
     def _insert_newline(event) -> None:
-        if destination_editing["value"]:
-            set_status("A Context name must stay on one line.")
-            event.app.invalidate()
-            return
         input_area.buffer.insert_text("\n")
+        event.app.invalidate()
+
+    @bindings.add("enter", filter=has_focus(destination_input), eager=True)
+    def _submit_destination(event) -> None:
+        action = destination_action(destination_input.text.strip())
+        if action is not None:
+            event.app.exit(result=action)
+        else:
+            event.app.invalidate()
+
+    @bindings.add("c-j", filter=has_focus(destination_input), eager=True)
+    def _reject_destination_newline(event) -> None:
+        set_status("A Context name must stay on one line.")
         event.app.invalidate()
 
     def exit_simple(event, kind: str) -> None:
@@ -3727,15 +3729,15 @@ def run_resolution_workbench_shell(
         else:
             event.app.invalidate()
 
-    @bindings.add("p", filter=~has_focus(input_area))
+    @bindings.add("p", filter=~writable_input_focused)
     def _preserve(event) -> None:
         exit_simple(event, "PRESERVE_ALL")
 
-    @bindings.add("d", filter=~has_focus(input_area))
+    @bindings.add("d", filter=~writable_input_focused)
     def _defer(event) -> None:
         exit_simple(event, "DEFER")
 
-    @bindings.add("a", filter=~has_focus(input_area))
+    @bindings.add("a", filter=~writable_input_focused)
     def _accept(event) -> None:
         if split_viewer_items and review_and_apply:
             open_review_and_apply()
@@ -3743,7 +3745,7 @@ def run_resolution_workbench_shell(
             return
         exit_simple(event, "ACCEPT")
 
-    @bindings.add("s", filter=~has_focus(input_area))
+    @bindings.add("s", filter=~writable_input_focused)
     def _sort(event) -> None:
         if toggle_sort is None:
             set_status("Sorting is unavailable here.")
@@ -3780,16 +3782,19 @@ def run_resolution_workbench_shell(
             save_draft()
         event.app.exit(result=ResolutionWorkbenchAction(kind="CLOSE"))
 
-    @bindings.add("escape", eager=True)
-    @bindings.add("backspace", filter=~has_focus(input_area), eager=True)
+    @bindings.add("escape", filter=has_focus(destination_input), eager=True)
+    def _cancel_destination_edit(event) -> None:
+        destination_editing["value"] = False
+        if destination is not None:
+            destination_frame.title = safe_terminal_text(destination.label)
+        session_navigation.focus("save_location")
+        event.app.layout.focus(destination_control)
+        set_status("")
+        event.app.invalidate()
+
+    @bindings.add("escape", filter=~has_focus(destination_input), eager=True)
+    @bindings.add("backspace", filter=~writable_input_focused, eager=True)
     def _back_or_close(event) -> None:
-        if event.app.layout.has_focus(input_area) and destination_editing["value"]:
-            destination_editing["value"] = False
-            session_navigation.focus("viewer")
-            event.app.layout.focus(body_control)
-            set_status("")
-            event.app.invalidate()
-            return
         if viewer_controller.close_nested():
             set_status("")
             event.app.invalidate()
@@ -3834,7 +3839,7 @@ def run_resolution_workbench_shell(
             return
         _close(event)
 
-    @bindings.add("q", filter=~has_focus(input_area), eager=True)
+    @bindings.add("q", filter=~writable_input_focused, eager=True)
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
         _close(event)
@@ -3844,7 +3849,13 @@ def run_resolution_workbench_shell(
             return f" {status['value']}"
         active_view = current_view()
         item = current_navigation.current_item(active_view)
-        if split_viewer_items and split_kind() == "REPORT":
+        if get_app().layout.has_focus(destination_input):
+            navigation_help = (
+                " Enter save exact location  Esc cancel  Ctrl-J unavailable "
+            )
+        elif split_viewer_items and split_kind() == "SAVE_LOCATION":
+            navigation_help = " Enter change location  Tab switch  Q close "
+        elif split_viewer_items and split_kind() == "REPORT":
             if focused_impact_entry_uid() is not None:
                 navigation_help = (
                     " ↑/↓ Memory  → show  ← hide  Enter toggle  "
@@ -4002,13 +4013,12 @@ def run_resolution_workbench_shell(
         viewer_frame = Frame(HSplit([body, inline_input]), title="VIEWER")
         items_frame = Frame(items_window, title="ITEMS")
         todo_frame = Frame(todo_window, title="TO DO")
+        session_frames = [viewer_frame, items_frame]
+        if destination_available:
+            session_frames.append(destination_frame)
+        session_frames.extend([todo_frame, footer])
         root = HSplit(
-            [
-                viewer_frame,
-                items_frame,
-                todo_frame,
-                footer,
-            ]
+            session_frames
         )
         bind_focused_frame_style(
             viewer_frame,
@@ -4018,6 +4028,11 @@ def run_resolution_workbench_shell(
             items_frame,
             is_focused=lambda: session_navigation.pane == "items",
         )
+        if destination_available:
+            bind_focused_frame_style(
+                destination_frame,
+                is_focused=lambda: session_navigation.pane == "save_location",
+            )
         bind_focused_frame_style(
             todo_frame,
             is_focused=lambda: session_navigation.pane == "todo",
@@ -4025,6 +4040,7 @@ def run_resolution_workbench_shell(
         focused_element = {
             "viewer": body_control,
             "items": items_control,
+            "save_location": destination_control,
             "todo": todo_control,
         }[session_navigation.pane]
     else:

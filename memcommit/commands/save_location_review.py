@@ -3,21 +3,25 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import replace
 
 import typer
 
-from memcommit.commands.resolution_workbench_shell import _boxed_lines
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.save_location_control import (
+    SaveLocationView,
+    save_location_card_lines,
+)
 
 
 def render_save_location(name: str, *, detail: str) -> None:
     """Render one neutral report card immediately before Apply."""
 
-    for line in _boxed_lines(
-        "SAVE LOCATION",
-        f"{display_escape_text(name)}\n{detail}",
-        width=72,
-    ):
+    location = SaveLocationView(
+        value=name,
+        state="NOT CREATED",
+        detail=detail,
+    )
+    for line in save_location_card_lines(location):
         typer.echo(f" {line}")
 
 
@@ -31,14 +35,17 @@ def review_save_location(
 
     # Validate before rendering or using the value as an interactive default;
     # display escaping alone must not turn an invalid CLI operand into a name.
-    validate(name)
-    current = name
+    location = SaveLocationView(
+        value=name,
+        state="NOT CREATED",
+        detail="E edits this exact new Context name before Apply.",
+        validate=validate,
+    )
+    location.validate_value(name)
     while True:
         typer.echo()
-        render_save_location(
-            current,
-            detail="E edits this exact new Context name before Apply.",
-        )
+        for line in save_location_card_lines(location):
+            typer.echo(f" {line}")
         typer.secho(
             f"  y = {apply_label}    e = edit save location    n = abort",
             dim=True,
@@ -46,23 +53,23 @@ def review_save_location(
         decision = typer.prompt(">", default="", show_default=False).strip().lower()
         if decision in {"y", "yes"}:
             try:
-                validate(current)
+                location.validate_value(location.value)
             except (OSError, TypeError, ValueError) as error:
                 typer.secho(f"Save location error: {error}", fg=typer.colors.RED)
                 continue
-            return current
+            return location.value
         if decision in {"n", "no"}:
             return None
         if decision not in {"e", "edit"}:
             continue
         candidate = typer.prompt(
             "SAVE LOCATION · EDIT DIRECTLY",
-            default=current,
+            default=location.value,
             show_default=True,
         ).strip()
         try:
-            validate(candidate)
+            location.validate_value(candidate)
         except (OSError, TypeError, ValueError) as error:
             typer.secho(f"Save location error: {error}", fg=typer.colors.RED)
             continue
-        current = candidate
+        location = replace(location, value=candidate)

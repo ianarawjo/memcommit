@@ -37,6 +37,15 @@ def test_three_frame_session_cycle_includes_todo_without_affecting_compare_toggl
     assert navigation.toggle_frames() == "viewer"
 
 
+def test_save_location_can_join_the_visible_session_cycle():
+    navigation = SessionWorkbenchNavigation()
+    panes = ("viewer", "items", "save_location", "todo")
+
+    assert navigation.cycle_panes(panes) == "items"
+    assert navigation.cycle_panes(panes) == "save_location"
+    assert navigation.cycle_panes(panes) == "todo"
+
+
 def test_section_identity_survives_insertions_and_apply_is_not_an_offset():
     navigation = SessionWorkbenchNavigation(section_uid="APPLY")
     before = _sections("REPORT", "RESULTS", "APPLY")

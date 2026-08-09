@@ -65,6 +65,42 @@ def pad_terminal_text(value: str, width: int) -> str:
     return value + (" " * max(0, width - terminal_cell_width(value)))
 
 
+def wrap_terminal_text(value: str, width: int) -> list[str]:
+    """Wrap text by rendered cells while retaining explicit paragraph breaks."""
+
+    if width <= 0:
+        raise ValueError("terminal wrap width must be positive")
+    wrapped: list[str] = []
+    for source_line in value.splitlines() or [""]:
+        if not source_line.strip():
+            wrapped.append("")
+            continue
+        leading = source_line[: len(source_line) - len(source_line.lstrip(" "))]
+        content_width = max(1, width - terminal_cell_width(leading))
+        current = ""
+        for word in source_line.strip().split():
+            candidate = word if not current else f"{current} {word}"
+            if terminal_cell_width(candidate) <= content_width:
+                current = candidate
+                continue
+            if current:
+                wrapped.append(leading + current)
+                current = ""
+            chunk = ""
+            for character in word:
+                if (
+                    chunk
+                    and terminal_cell_width(chunk + character) > content_width
+                ):
+                    wrapped.append(leading + chunk)
+                    chunk = ""
+                chunk += character
+            current = chunk
+        if current:
+            wrapped.append(leading + current)
+    return wrapped or [""]
+
+
 def _take_terminal_cells(
     value: str,
     max_cells: int,

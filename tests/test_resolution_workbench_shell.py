@@ -128,15 +128,15 @@ def test_nested_arrow_and_enter_option_selection_returns_uid_bound_comment():
     assert action.comment == "Use the incoming wording."
 
 
-def test_save_location_card_emits_an_exact_destination_change_before_apply():
+def test_save_location_frame_emits_an_exact_destination_change_before_apply():
     view = _view(
         capabilities=frozenset({"ACCEPT"}),
         accept_enabled=True,
     )
     with create_pipe_input() as pipe_input:
-        # Report identity is chrome. Move from its first declared overview
-        # through review set and results to SAVE LOCATION, then edit the name.
-        pipe_input.send_text("\x1b[B\x1b[B\r\x15task-3/severed-final\r")
+        # SAVE LOCATION is the visible frame after Items. Enter opens its own
+        # one-line editor without moving authoring into Viewer.
+        pipe_input.send_text("\t\t\r\x15task-3/severed-final\r")
         action = run_resolution_workbench_shell(
             view,
             app_input=pipe_input,
@@ -172,7 +172,6 @@ def test_report_places_context_locations_above_understanding_and_apply_last():
         for _style, text in resolution_report_fragments(
             view,
             review_and_apply=True,
-            destination=ResolutionDestination(value="practice/output"),
         )
     )
 
@@ -181,7 +180,8 @@ def test_report_places_context_locations_above_understanding_and_apply_last():
     assert "OUTPUT · practice/output · NOT CREATED" in rendered
     assert "incoming -> baseline" not in rendered
     assert rendered.index("CONTEXT LOCATIONS") < rendered.index("WHAT MEM UNDERSTOOD")
-    assert rendered.index("SAVE LOCATION") < rendered.index("REVIEW AND APPLY")
+    assert "SAVE LOCATION" not in rendered
+    assert "REVIEW AND APPLY" in rendered
 
 
 def test_report_focuses_operation_declared_overview_units_not_the_group():
@@ -461,6 +461,22 @@ def test_operation_can_hide_an_inapplicable_generic_results_section():
 
     assert "CHANGES" not in "".join(text for _style, text in fragments)
     assert not any(line.startswith("CHANGES") for line in seeded)
+
+
+def test_exact_results_heading_stays_bold_at_rest_and_in_focus():
+    view = replace(_view(_item("a")), results_label="EXACT RESULTS")
+
+    resting = resolution_report_fragments(view, focused_section=1, read_only=True)
+    focused = resolution_report_fragments(view, focused_section=2, read_only=True)
+
+    assert any(
+        style == "class:report-label" and "EXACT RESULTS · 0" in text
+        for style, text in resting
+    )
+    assert any(
+        style == "class:report-label.focused" and "EXACT RESULTS · 0" in text
+        for style, text in focused
+    )
 
 
 def test_items_hanging_wrap_tracks_the_supplied_frame_width():
@@ -1177,6 +1193,92 @@ def test_second_tab_from_open_viewer_reaches_todo_after_items():
     assert workbench_navigation.pane == "todo"
 
 
+def test_save_location_frame_joins_visible_tab_order_before_todo():
+    workbench_navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\tq")
+        action = run_resolution_workbench_shell(
+            _view(_item("a")),
+            workbench_navigation=workbench_navigation,
+            split_viewer_items=True,
+            review_and_apply=True,
+            destination=ResolutionDestination(
+                value="task-3/severed",
+                state="NOT CREATED",
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.pane == "save_location"
+
+
+def test_save_location_editor_keeps_text_keys_local_and_retries_validation():
+    validated: list[str] = []
+
+    def validate(value: str) -> None:
+        validated.append(value)
+        if value != "approved/location":
+            raise ValueError("Choose the approved location.")
+
+    with create_pipe_input() as pipe_input:
+        # The q in the invalid candidate is ordinary editor text, not Close.
+        # Failed validation retains the editor for an exact corrected retry.
+        pipe_input.send_text(
+            "\t\t\r\x15draftq/location\r\x15approved/location\r"
+        )
+        action = run_resolution_workbench_shell(
+            _view(_item("a")),
+            split_viewer_items=True,
+            review_and_apply=True,
+            destination=ResolutionDestination(
+                value="draft/location",
+                state="NOT CREATED",
+                validate=validate,
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CHANGE_DESTINATION"
+    assert action.destination == "approved/location"
+    assert validated == ["draftq/location", "approved/location"]
+
+
+def test_save_location_frame_remains_between_items_and_todo_in_final_review():
+    navigation = SessionWorkbenchNavigation()
+    view = _view(
+        _item("a"),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+    )
+
+    with create_pipe_input() as pipe_input:
+        # A opens final review in Viewer; two Tabs follow the still-visible
+        # layout through Items to Save Location, before To Do.
+        pipe_input.send_text("a\t\tq")
+        action = run_resolution_workbench_shell(
+            view,
+            workbench_navigation=navigation,
+            split_viewer_items=True,
+            review_and_apply=True,
+            destination=ResolutionDestination(
+                value="result/final",
+                state="NOT CREATED",
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert navigation.pane == "save_location"
+
+
 def test_apply_section_uses_stable_identity_after_review_items_and_impact():
     view = replace(
         _view(
@@ -1616,7 +1718,7 @@ def test_final_review_hides_viewer_title_and_focuses_top_summary(monkeypatch):
     assert action.kind == "CLOSE"
     assert navigation.pane == "viewer"
     assert navigation.section_uid == "REVIEW:SUMMARY"
-    assert frames[0].title == ""
+    assert any(frame.title == "" for frame in frames)
 
 
 @pytest.mark.parametrize(
@@ -1669,7 +1771,7 @@ def test_final_review_tab_order_visits_viewer_items_todo_without_closing_review(
 
     assert action.kind == "CLOSE"
     assert navigation.pane == expected_pane
-    assert frames[0].title == ""
+    assert any(frame.title == "" for frame in frames)
 
 
 def test_review_and_apply_can_authorize_one_compound_atomize_action():

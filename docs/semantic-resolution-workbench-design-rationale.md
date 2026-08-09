@@ -422,18 +422,21 @@ while Source remains unchanged.
 ### Save location before Apply
 
 Operations that create a distinct new local Result may supply one
-operation-owned `SAVE LOCATION` value to the common report. The shell renders
-it as a focusable card immediately before the final Apply card and returns one
-exact `CHANGE_DESTINATION` action from the inline direct editor. The shell does
-not persist, rename, create, or apply anything itself; the owning operation
-validates and commits the new name, then supplies a replacement revision.
+operation-owned `SAVE LOCATION` value to the common workbench. The shell
+renders it as a compact conditional frame between `ITEMS` and `TO DO`, outside
+the report Viewer, and returns one exact `CHANGE_DESTINATION` action from the
+frame's one-line direct editor. The resting row shows the current exact name,
+its operation-owned state, and `Enter to change`. The shell does not persist,
+rename, create, or apply anything itself; the owning operation validates and
+commits the new name, then supplies a replacement revision.
 
 Sever uses this action to update its unapplied session output name. Symmetric
 Meld uses it to relocate its already-created empty target and target-bound
 session. Directional Meld does not expose it because its target is an existing
 authoritative baseline. Read-only and review-only projections omit it. This is
-an operation capability, not a fourth durable workbench pane: the shared
-`VIEWER → ITEMS → TO DO` topology and Apply gating remain unchanged.
+an optional shared control, not a review item: when present, visible Tab order
+is `VIEWER → ITEMS → SAVE LOCATION → TO DO`; otherwise the three-frame order is
+unchanged. It never enters Items or bypasses Apply gating.
 
 Atomize's durable planned-Output flow now uses this same card and persists a
 validated destination change back to its workbench before application. This
@@ -443,6 +446,8 @@ continue to use the same shared card. An explicit one-shot Atomize
 `--save-as` does not enter the saved Resolution workbench, and Translate
 `--save-as` has no such session. They retain the older standalone
 exact-location receipt rather than inventing a synthetic review step.
+Those non-full-screen paths share the same save-location model and neutral card
+renderer while retaining their prompt-oriented approval grammar.
 In-place Atomize/Translate, Forget, Update, and directional Meld remain
 target-bound and therefore do not expose a misleading save-as control.
 
