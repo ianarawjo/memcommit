@@ -16,8 +16,11 @@ from typing import Callable, Literal
 
 from prompt_toolkit.document import Document
 from prompt_toolkit.application.current import get_app
-from prompt_toolkit.filters import Condition
+from prompt_toolkit.filters import Condition, FilterOrBool
+from prompt_toolkit.formatted_text import to_formatted_text
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
+from prompt_toolkit.formatted_text.utils import split_lines
+from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
 from prompt_toolkit.key_binding.bindings.scroll import (
     scroll_page_down,
     scroll_page_up,
@@ -35,6 +38,7 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.layout.containers import AnyContainer, WindowRenderInfo
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
+from prompt_toolkit.lexers import Lexer
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import Frame, TextArea
 
@@ -45,6 +49,7 @@ from memcommit.commands.tui_text_layout import (
     terminal_cell_width,
     wrap_terminal_text,
 )
+from memcommit.commands.surface_focus import focus_in_order as _focus_in_order
 
 
 ScrollAnchor = Literal["preserve", "start", "end"]
@@ -54,6 +59,12 @@ INLINE_DIRECT_EDIT_TITLE = "EDIT (DIRECTLY)"
 INLINE_AGENT_COMMENT_TITLE = "COMMENT (FOR THE AGENT)"
 
 _BUFFER_SERIAL = count(1)
+
+
+def focus_in_order(app, controls: Sequence[object], delta: int, *, wrap: bool) -> bool:
+    """Compatibility facade for the shared Surface focus controller."""
+
+    return _focus_in_order(app, controls, delta, wrap=wrap)
 
 
 def horizontal_rule() -> Window:
@@ -66,34 +77,32 @@ def horizontal_rule() -> Window:
     )
 
 
-def focus_in_order(app, controls: Sequence[object], delta: int, *, wrap: bool) -> bool:
-    """Move focus through one caller-supplied visible screen order.
+def bind_case_insensitive_key(
+    bindings: KeyBindings,
+    key: str,
+    *,
+    filter: FilterOrBool = True,
+    eager: FilterOrBool = False,
+) -> Callable[
+    [Callable[[KeyPressEvent], None]],
+    Callable[[KeyPressEvent], None],
+]:
+    """Bind one alphabetic shortcut in both lowercase and uppercase forms."""
 
-    Callers retain ownership of which controls are currently visible.  This
-    shared step keeps Tab and cross-surface arrow movement from growing
-    operation-specific indexing and wrap semantics.
-    """
+    if len(key) != 1 or not key.isalpha():
+        raise ValueError("Case-insensitive shortcuts require one alphabetic key.")
+    lower, upper = key.lower(), key.upper()
 
-    if delta not in {-1, 1}:
-        raise ValueError("Focus movement direction must be -1 or 1.")
-    values = tuple(controls)
-    if not values:
-        return False
-    index = next(
-        (
-            position
-            for position, control in enumerate(values)
-            if app.layout.has_focus(control)
-        ),
-        -1,
-    )
-    candidate = index + delta
-    if wrap:
-        candidate %= len(values)
-    elif index < 0 or not 0 <= candidate < len(values):
-        return False
-    app.layout.focus(values[candidate])
-    return True
+    def decorator(
+        handler: Callable[[KeyPressEvent], None],
+    ) -> Callable[[KeyPressEvent], None]:
+        # Read-only shortcuts should not change under Shift or Caps Lock. The
+        # caller's focus filter still protects writable input from interception.
+        bindings.add(lower, filter=filter, eager=eager)(handler)
+        bindings.add(upper, filter=filter, eager=eager)(handler)
+        return handler
+
+    return decorator
 
 
 @dataclass
@@ -509,6 +518,77 @@ class ScrollableTextPane:
         set_scrollable_pane_text(self, text, anchor=anchor)
 
 
+class _MutableFormattedTextLexer(Lexer):
+    """Keep trusted semantic styles aligned with a read-only text buffer."""
+
+    def __init__(self) -> None:
+        self._lines: tuple[StyleAndTextTuples, ...] = ([],)
+        self._generation = 0
+
+    def replace(self, value: str | StyleAndTextTuples) -> str:
+        fragments = [
+            (style, safe_terminal_text(text))
+            for style, text, *_ in to_formatted_text(value)
+        ]
+        self._lines = tuple(
+            [
+                (style, text)
+                for style, text, *_ in line
+                if text
+            ]
+            for line in split_lines(fragments)
+        ) or ([],)
+        self._generation += 1
+        return "\n".join(
+            "".join(text for _style, text in line)
+            for line in self._lines
+        )
+
+    def lex_document(self, document: Document):
+        lines = self._lines
+
+        def get_line(line_number: int) -> StyleAndTextTuples:
+            if 0 <= line_number < len(lines):
+                return list(lines[line_number])
+            if 0 <= line_number < len(document.lines):
+                return [("", document.lines[line_number])]
+            return []
+
+        return get_line
+
+    def invalidation_hash(self):
+        return self._generation
+
+
+@dataclass(frozen=True)
+class ScrollableFormattedTextPane:
+    """The common read-only pane with dynamic formatted-text presentation."""
+
+    pane: ScrollableTextPane
+    lexer: _MutableFormattedTextLexer
+
+    @property
+    def frame(self) -> Frame:
+        return self.pane.frame
+
+    @property
+    def text_area(self) -> TextArea:
+        return self.pane.text_area
+
+    @property
+    def container(self) -> AnyContainer:
+        return self.pane.container
+
+    def set_formatted_text(
+        self,
+        value: str | StyleAndTextTuples,
+        *,
+        anchor: ScrollAnchor = "preserve",
+    ) -> None:
+        plain_text = self.lexer.replace(value)
+        self.pane.set_text(plain_text, anchor=anchor)
+
+
 @dataclass(frozen=True)
 class FramedMultilineInput:
     """A bordered writable input region with an independently named buffer."""
@@ -870,6 +950,84 @@ def scroll_wrapped_page(event: object, *, direction: int) -> None:
     app.invalidate()
 
 
+def move_wrapped_read_cursor(event: object, *, direction: int) -> bool:
+    """Move one visual row and anchor it in a wrapped read-only viewport.
+
+    Buffer cursor movement alone waits until the cursor reaches the viewport
+    edge before anything visibly scrolls.  Read-only report panes instead use
+    the cursor as a trusted viewport anchor: every arrow press advances one
+    visual row immediately, including inside a wrapped logical line.  The
+    boolean result lets a ``SurfaceFocusController`` cross to the adjacent
+    Surface only at the true document boundary.
+    """
+
+    if direction not in {-1, 1}:
+        raise ValueError("direction must be -1 or 1")
+    app = getattr(event, "app")
+    window = app.layout.current_window
+    buffer = app.current_buffer
+    render_info = window.render_info if window is not None else None
+    if render_info is None or window is None:
+        before = buffer.cursor_position
+        if direction > 0:
+            buffer.cursor_down(count=1)
+        else:
+            buffer.cursor_up(count=1)
+        moved = buffer.cursor_position != before
+        if moved:
+            app.invalidate()
+        return moved
+
+    line_heights = tuple(
+        max(1, render_info.get_height_for_line(line_number))
+        for line_number in range(render_info.content_height)
+    )
+    total_height = sum(line_heights)
+    viewport_height = min(total_height, render_info.window_height)
+    current_offset = (
+        sum(line_heights[: window.vertical_scroll])
+        + window.vertical_scroll_2
+    )
+    maximum_offset = max(0, total_height - viewport_height)
+    target_offset = max(
+        0,
+        min(current_offset + direction, maximum_offset),
+    )
+    if target_offset == current_offset:
+        return False
+
+    row = 0
+    row_offset = target_offset
+    for line_number, line_height in enumerate(line_heights):
+        if row_offset < line_height:
+            row = line_number
+            break
+        row_offset -= line_height
+
+    document = buffer.document
+    column = 0
+    if render_info.wrap_lines and row_offset and render_info.window_width > 0:
+        visual_row = 0
+        visual_width = 0
+        for index, character in enumerate(document.lines[row]):
+            character_width = terminal_cell_width(character)
+            if visual_width + character_width > render_info.window_width:
+                visual_row += 1
+                visual_width = 0
+                if visual_row == row_offset:
+                    column = index
+                    break
+            visual_width += character_width
+        else:
+            column = len(document.lines[row])
+
+    buffer.cursor_position = document.translate_row_col_to_index(row, column)
+    window.vertical_scroll = row
+    window.vertical_scroll_2 = row_offset if render_info.wrap_lines else 0
+    app.invalidate()
+    return True
+
+
 def equal_pane_height(
     *,
     minimum: int = 4,
@@ -903,11 +1061,13 @@ def build_scrollable_text_pane(
     style: str = "",
     frame_style: str = "",
     notification: Callable[[], bool] | None = None,
+    lexer: Lexer | None = None,
 ) -> ScrollableTextPane:
     """Build one independently scrollable, read-only framed component."""
     text_area = TextArea(
         text=safe_terminal_text(text),
         multiline=True,
+        lexer=lexer,
         focusable=focusable,
         focus_on_click=focusable,
         wrap_lines=wrap_lines,
@@ -958,6 +1118,35 @@ def build_scrollable_text_pane(
         scrollbar_margin=scrollbar_margin,
         presentation_container=presentation_container,
     )
+
+
+def build_scrollable_formatted_text_pane(
+    title: str,
+    value: str | StyleAndTextTuples = "",
+    *,
+    buffer_name: str | None = None,
+    height: AnyDimension = None,
+    wrap_lines: bool = True,
+    focusable: bool = True,
+    style: str = "",
+    frame_style: str = "",
+) -> ScrollableFormattedTextPane:
+    """Build a styled report pane on the common cursor-backed viewport."""
+
+    lexer = _MutableFormattedTextLexer()
+    plain_text = lexer.replace(value)
+    pane = build_scrollable_text_pane(
+        title,
+        plain_text,
+        buffer_name=buffer_name,
+        height=height,
+        wrap_lines=wrap_lines,
+        focusable=focusable,
+        style=style,
+        frame_style=frame_style,
+        lexer=lexer,
+    )
+    return ScrollableFormattedTextPane(pane=pane, lexer=lexer)
 
 
 def set_scrollable_pane_text(

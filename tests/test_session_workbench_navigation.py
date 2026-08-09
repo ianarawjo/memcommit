@@ -27,6 +27,22 @@ def test_focus_rows_and_semantic_sections_share_one_controller():
     assert navigation.toggle_frames() == "items"
 
 
+def test_move_and_preview_keeps_items_focus_and_clears_stale_viewer_section():
+    navigation = SessionWorkbenchNavigation(
+        pane="items",
+        section_uid="ITEM:stale",
+    )
+
+    assert navigation.move_and_preview_row(3, 2) == 2
+    assert navigation.row_index == 2
+    assert navigation.viewer_row_index == 2
+    assert navigation.section_uid is None
+    assert navigation.pane == "items"
+
+    assert navigation.move_and_preview_row(3, 100) == 2
+    assert navigation.pane == "items"
+
+
 def test_three_frame_session_cycle_includes_todo_without_affecting_compare_toggle():
     navigation = SessionWorkbenchNavigation()
     panes = ("viewer", "items", "todo")

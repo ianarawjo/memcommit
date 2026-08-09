@@ -8,6 +8,7 @@ import pytest
 from prompt_toolkit.application import Application
 from prompt_toolkit.data_structures import Size
 from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.output import DummyOutput
 
@@ -28,9 +29,11 @@ from memcommit.commands.tui_primitives import (
     NavigationAccelerator,
     TuiRegion,
     anchored_fragments,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     build_framed_multiline_input,
     build_inline_direct_edit_input,
+    build_scrollable_formatted_text_pane,
     build_scrollable_text_pane,
     build_tui_frame,
     classify_inline_edit_submission,
@@ -39,6 +42,7 @@ from memcommit.commands.tui_primitives import (
     equal_pane_height,
     focused_control_style,
     horizontal_rule,
+    move_wrapped_read_cursor,
     safe_terminal_text,
     set_scrollable_pane_text,
 )
@@ -79,6 +83,28 @@ def test_horizontal_rule_is_one_fixed_full_width_separator():
 
     assert rule.char == "─"
     assert (rule.height.min, rule.height.preferred, rule.height.max) == (1, 1, 1)
+
+
+@pytest.mark.parametrize("key", ("q", "Q"))
+def test_case_insensitive_key_binding_accepts_both_cases(key: str) -> None:
+    bindings = KeyBindings()
+    control = FormattedTextControl("", focusable=True)
+
+    @bind_case_insensitive_key(bindings, "q", eager=True)
+    def close(event) -> None:
+        event.app.exit(result="closed")
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(key)
+        result = Application(
+            layout=Layout(Window(control), focused_element=control),
+            key_bindings=bindings,
+            input=pipe_input,
+            output=DummyOutput(),
+            full_screen=False,
+        ).run()
+
+    assert result == "closed"
 
 
 class _RecordingApp:
@@ -479,6 +505,61 @@ def test_scrollable_pane_updates_safely_preserve_or_anchor_viewport():
 
     with pytest.raises(ValueError, match="anchor"):
         pane.set_text("unchanged", anchor="middle")  # type: ignore[arg-type]
+
+
+def test_formatted_scrollable_pane_preserves_styles_across_detail_updates():
+    pane = build_scrollable_formatted_text_pane(
+        "VIEWER",
+        [
+            ("class:report-label", "LABEL\n"),
+            ("class:memory-diff.add", "+ Memory"),
+        ],
+    )
+
+    first_lexer = pane.lexer.lex_document(pane.text_area.buffer.document)
+    assert pane.text_area.text == "LABEL\n+ Memory"
+    assert first_lexer(0) == [("class:report-label", "LABEL")]
+    assert first_lexer(1) == [("class:memory-diff.add", "+ Memory")]
+
+    pane.set_formatted_text(
+        [("class:memory-diff.remove", "− Old")],
+        anchor="start",
+    )
+
+    next_lexer = pane.lexer.lex_document(pane.text_area.buffer.document)
+    assert pane.text_area.text == "− Old"
+    assert next_lexer(0) == [("class:memory-diff.remove", "− Old")]
+    assert pane.text_area.buffer.cursor_position == 0
+
+
+def test_wrapped_read_cursor_scrolls_one_visual_row_and_reports_boundary():
+    pane = build_scrollable_text_pane("VIEWER", "abcdefghijklmnopqrst")
+    window = pane.text_area.window
+    window.render_info = SimpleNamespace(
+        content_height=1,
+        window_height=2,
+        window_width=5,
+        wrap_lines=True,
+        get_height_for_line=lambda _line_number: 4,
+    )
+    invalidations: list[bool] = []
+    app = SimpleNamespace(
+        layout=SimpleNamespace(current_window=window),
+        current_buffer=pane.text_area.buffer,
+        invalidate=lambda: invalidations.append(True),
+    )
+    event = SimpleNamespace(app=app)
+
+    assert move_wrapped_read_cursor(event, direction=1)
+    assert pane.text_area.buffer.cursor_position == 5
+    assert window.vertical_scroll_2 == 1
+    assert move_wrapped_read_cursor(event, direction=1)
+    assert pane.text_area.buffer.cursor_position == 10
+    assert window.vertical_scroll_2 == 2
+    assert not move_wrapped_read_cursor(event, direction=1)
+    assert move_wrapped_read_cursor(event, direction=-1)
+    assert pane.text_area.buffer.cursor_position == 5
+    assert len(invalidations) == 3
 
 
 def test_framed_multiline_input_is_bounded_writable_and_independently_named():

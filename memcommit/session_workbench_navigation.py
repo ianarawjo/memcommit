@@ -102,6 +102,17 @@ class SessionWorkbenchNavigation:
         self.section_uid = None
         return self.viewer_row_index
 
+    def move_and_preview_row(self, row_count: int, delta: int) -> int:
+        """Move the Items cursor and align Viewer without changing pane focus.
+
+        Keeping both indices in one operation prevents an Items renderer from
+        leaving a stale Viewer behind.  The caller still owns the meaning and
+        process-local projection of the newly previewed row.
+        """
+
+        self.move_row(row_count, delta)
+        return self.preview_selected_row()
+
     def bind_sections(self, sections: Sequence[WorkbenchSection]) -> int:
         """Preserve the selected semantic section across projection changes."""
         if not sections:

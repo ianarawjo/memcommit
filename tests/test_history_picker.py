@@ -12,14 +12,12 @@ from memcommit.commands.history_picker import (
     HISTORY_BACK,
     HistoryPickerEntry,
     HistorySelectionReceipt,
-    _PickerState,
-    _activate,
-    _move,
     _render_detail,
     _render_entry_line,
     _visible_bounds,
     choose_history,
 )
+from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 
 def entry(
@@ -105,10 +103,31 @@ def test_revert_arrows_move_and_clamp_before_accepting():
     assert selected.checkpoint_uid == candidates[1].uid
 
 
-def test_log_enter_toggles_details_and_q_closes_without_selection():
+def test_revert_arrow_boundary_enters_viewer_then_returns_to_items():
+    candidates = (entry(1), entry(2))
+    with create_pipe_input() as pipe_input:
+        # Up from the first Item crosses into the Viewer. Enter returns to
+        # Items, where Down must still select the second exact checkpoint.
+        pipe_input.send_text("\x1b[A\r\x1b[B\r")
+        selected = choose_history(
+            candidates,
+            context_name="journal",
+            mode="revert",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == HistorySelectionReceipt(
+        context_name="journal",
+        checkpoint_uid=candidates[1].uid,
+    )
+
+
+def test_log_enter_opens_viewer_and_q_closes_without_selection():
     candidate = entry(1)
     with create_pipe_input() as pipe_input:
-        # Enter must not exit log mode. q closes only after both detail toggles.
+        # Enter opens Viewer, a second Enter returns to Items, and q closes.
         pipe_input.send_text("\r\rq")
         selected = choose_history(
             (candidate,),
@@ -121,24 +140,34 @@ def test_log_enter_toggles_details_and_q_closes_without_selection():
 
     assert selected is None
 
-    state = _PickerState(selected_index=0, details_open=False)
-    assert (
-        _activate(
-            state,
-            mode="log",
+
+def test_log_item_arrow_previews_viewer_without_moving_focus():
+    candidates = (entry(1), entry(2))
+    rendered: list[str] = []
+    navigation = SessionWorkbenchNavigation(pane="items")
+
+    def detail_renderer(candidate):
+        rendered.append(candidate.uid)
+        return candidate.detail
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Bq")
+        selected = choose_history(
+            candidates,
             context_name="journal",
-            entry=candidate,
+            mode="log",
+            detail_renderer=detail_renderer,
+            workbench_navigation=navigation,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
         )
-        is None
-    )
-    assert state.details_open is True
-    _activate(
-        state,
-        mode="log",
-        context_name="journal",
-        entry=candidate,
-    )
-    assert state.details_open is False
+
+    assert selected is None
+    assert rendered[-1] == candidates[1].uid
+    assert navigation.row_index == 1
+    assert navigation.viewer_row_index == 1
+    assert navigation.pane == "items"
 
 
 def test_empty_log_stays_open_until_an_explicit_close_key():
@@ -210,12 +239,30 @@ def test_viewer_back_returns_to_items_before_leaving_history():
     assert selected is HISTORY_BACK
 
 
-def test_move_helper_clamps_at_both_boundaries():
-    state = _PickerState(selected_index=0, details_open=False)
-    _move(state, -100, 3)
-    assert state.selected_index == 0
-    _move(state, 100, 3)
-    assert state.selected_index == 2
+def test_log_viewer_bottom_arrow_returns_to_items_navigation():
+    candidates = (entry(1), entry(2))
+    rendered: list[str] = []
+
+    def detail_renderer(candidate):
+        rendered.append(candidate.uid)
+        return "first\nsecond\nthird"
+
+    with create_pipe_input() as pipe_input:
+        # Open Viewer, jump to its real bottom, then cross down to Items and
+        # move to the next history row before closing.
+        pipe_input.send_text("\r\x1b[F\x1b[B\x1b[Bq")
+        selected = choose_history(
+            candidates,
+            context_name="journal",
+            mode="log",
+            detail_renderer=detail_renderer,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+    assert rendered[-1] == candidates[1].uid
 
 
 def test_visible_window_tracks_selection_and_never_exceeds_twelve_rows():

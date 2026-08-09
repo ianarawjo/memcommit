@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from typing import Callable, Literal, Protocol, runtime_checkable
 
 from prompt_toolkit.application import Application
+from prompt_toolkit.filters import has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import (
@@ -30,8 +31,19 @@ from prompt_toolkit.widgets import Frame
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
+    build_scrollable_formatted_text_pane,
     display_escape_text,
+    move_wrapped_read_cursor,
+    scroll_wrapped_page,
+)
+from memcommit.commands.surface_focus import (
+    FocusSurface,
+    SurfaceActionResult,
+    SurfaceFocusController,
+    SurfaceMoveResult,
+    bind_surface_navigation,
 )
 from memcommit.commands.tui_text_layout import (
     AdaptiveColumn,
@@ -99,42 +111,11 @@ class HistoryBackNavigation:
 HISTORY_BACK = HistoryBackNavigation()
 
 
-@dataclass
-class _PickerState:
-    selected_index: int
-    details_open: bool
-
-
 def _visible_bounds(selected: int, count: int) -> tuple[int, int]:
     visible = min(count, _VISIBLE_ROWS)
     start = max(0, selected - visible // 2)
     start = min(start, count - visible)
     return start, start + visible
-
-
-def _move(state: _PickerState, delta: int, count: int) -> None:
-    state.selected_index = max(
-        0,
-        min(state.selected_index + delta, count - 1),
-    )
-
-
-def _activate(
-    state: _PickerState,
-    *,
-    mode: HistoryPickerMode,
-    context_name: str,
-    entry: HistoryPickerItem,
-) -> HistorySelectionReceipt | None:
-    """Apply Enter's mode-specific behavior without touching persistent state."""
-    if mode == "log":
-        state.details_open = not state.details_open
-        return None
-    return HistorySelectionReceipt(
-        context_name=context_name,
-        checkpoint_uid=entry.uid,
-    )
-
 
 def _compact_timestamp(value: str) -> str:
     return display_escape_text(value[:16].replace("T", " "))
@@ -252,15 +233,21 @@ def choose_history(
     app_output: Output | None = None,
     require_tty: bool = True,
     initial_details_open: bool | None = None,
-    detail_renderer: Callable[[HistoryPickerItem], StyleAndTextTuples] | None = None,
+    detail_renderer: Callable[
+        [HistoryPickerItem], str | StyleAndTextTuples
+    ] | None = None,
     empty_message: str | None = None,
+    empty_detail: str | None = None,
     back_navigation: bool = False,
+    title: str | None = None,
+    workbench_navigation: SessionWorkbenchNavigation | None = None,
 ) -> HistorySelectionReceipt | HistoryBackNavigation | None:
     """Inspect history or return one exact checkpoint selection.
 
-    In ``log`` mode Enter toggles the selected checkpoint's details and only a
-    close/cancel key exits.  In ``revert`` mode the details stay visible and
-    Enter returns an exact UID receipt; this function never performs a revert.
+    In ``log`` mode Enter opens the selected checkpoint in Viewer and only a
+    close/cancel key exits. In ``revert`` mode Enter on Items returns an exact
+    UID receipt; this function never performs a revert. Arrow keys traverse
+    Viewer and Items at their real content boundaries.
     """
     options = tuple(entries)
     if not isinstance(context_name, str) or not context_name:
@@ -287,6 +274,20 @@ def choose_history(
         raise ValueError("History selection received duplicate entry UIDs.")
     if detail_renderer is not None and not callable(detail_renderer):
         raise ValueError("History detail renderer must be callable.")
+    if initial_details_open is not None and not isinstance(
+        initial_details_open, bool
+    ):
+        raise ValueError("History initial detail state must be boolean.")
+    for value, label in (
+        (empty_detail, "History empty detail"),
+        (title, "History picker title"),
+    ):
+        if value is not None and (
+            not isinstance(value, str)
+            or not value
+            or (label == "History picker title" and "\n" in value)
+        ):
+            raise ValueError(f"{label} must be non-empty text.")
     if require_tty and (
         not sys.stdin.isatty() or not sys.stdout.isatty()
     ):
@@ -295,29 +296,31 @@ def choose_history(
             "Pass a checkpoint UID explicitly or use plain log output."
         )
 
-    state = _PickerState(
-        selected_index=0,
-        details_open=(
-            mode == "revert"
-            if initial_details_open is None
-            else initial_details_open
-        ),
-    )
+    navigation = workbench_navigation or SessionWorkbenchNavigation(pane="items")
+    navigation.focus("items")
+    navigation.move_row(len(options), 0)
+    navigation.preview_selected_row()
+    # History now follows the shared Items/Viewer contract by default.  The
+    # explicit override remains for compatibility with callers that want an
+    # initial closed placeholder before the first Enter.
+    details_open = {
+        "value": True if initial_details_open is None else initial_details_open
+    }
     bindings = KeyBindings()
 
     def render_entries() -> list[tuple[str, str]]:
         if not options:
             return [("class:report-neutral", f"  {display_escape_text(empty_message or '')}")]
-        start, end = _visible_bounds(state.selected_index, len(options))
+        start, end = _visible_bounds(navigation.row_index, len(options))
         visible = options[start:end]
         available_width = live_window_content_width(
-            windows.get("items"),
+            options_window,
             fallback_reserved=3,
         )
         fragments: list[tuple[str, str]] = []
         for index in range(start, end):
             entry = options[index]
-            selected = index == state.selected_index
+            selected = index == navigation.row_index
             if selected:
                 fragments.append(("[SetCursorPosition]", ""))
             fragments.append(
@@ -337,10 +340,10 @@ def choose_history(
 
     def render_detail() -> str | StyleAndTextTuples:
         if not options:
-            return " No checkpoint operation is available."
-        if not state.details_open:
+            return empty_detail or " No history item is available."
+        if not details_open["value"]:
             return " Select an item and press Enter to open its detail."
-        entry = options[state.selected_index]
+        entry = options[navigation.viewer_row_index]
         return (
             detail_renderer(entry)
             if detail_renderer is not None
@@ -355,7 +358,7 @@ def choose_history(
         )
         if not options:
             return f" {close}  ·  0/0"
-        position = f"{state.selected_index + 1}/{len(options)}"
+        position = f"{navigation.row_index + 1}/{len(options)}"
         if navigation.pane == "viewer":
             return (
                 " FOCUS VIEWER · ↑/↓ scroll  Enter/Esc/Backspace items  "
@@ -380,12 +383,6 @@ def choose_history(
         focusable=True,
         show_cursor=False,
     )
-    detail_control = FormattedTextControl(
-        text=render_detail,
-        focusable=True,
-        show_cursor=False,
-    )
-    navigation = SessionWorkbenchNavigation(pane="items")
     options_window = Window(
         list_control,
         height=Dimension(
@@ -397,88 +394,121 @@ def choose_history(
         wrap_lines=False,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
-    detail_window = Window(
-        detail_control,
+    detail_pane = build_scrollable_formatted_text_pane(
+        "VIEWER",
+        render_detail(),
         height=Dimension(min=6, preferred=14, weight=7),
-        wrap_lines=True,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
     )
-    windows = {"viewer": detail_window, "items": options_window}
+    detail_window = detail_pane.text_area.window
 
-    @bindings.add("down")
-    def _next_checkpoint(event) -> None:
-        if navigation.pane == "viewer":
-            detail_window.vertical_scroll += 1
-            event.app.invalidate()
-            return
-        if not options:
-            return
-        _move(state, 1, len(options))
-        detail_window.vertical_scroll = 0
-        event.app.invalidate()
+    def sync_detail(*, anchor: Literal["preserve", "start", "end"]) -> None:
+        detail_pane.set_formatted_text(render_detail(), anchor=anchor)
 
-    @bindings.add("up")
-    def _previous_checkpoint(event) -> None:
-        if navigation.pane == "viewer":
-            detail_window.vertical_scroll = max(
-                0,
-                detail_window.vertical_scroll - 1,
-            )
-            event.app.invalidate()
-            return
+    def move_items(_event, delta: int) -> SurfaceMoveResult:
         if not options:
-            return
-        _move(state, -1, len(options))
-        detail_window.vertical_scroll = 0
-        event.app.invalidate()
+            return "BOUNDARY"
+        before = navigation.row_index
+        navigation.move_and_preview_row(len(options), delta)
+        if navigation.row_index == before:
+            return "BOUNDARY"
+        sync_detail(anchor="start")
+        return "MOVED"
 
-    @bindings.add("enter")
-    def _enter(event) -> None:
-        if navigation.pane == "viewer":
-            navigation.focus("items")
-            event.app.layout.focus(windows["items"])
-            event.app.invalidate()
-            return
+    def move_viewer(event, delta: int) -> SurfaceMoveResult:
+        return (
+            "MOVED"
+            if move_wrapped_read_cursor(event, direction=delta)
+            else "BOUNDARY"
+        )
+
+    def enter_viewer(delta: int) -> None:
+        detail_pane.text_area.buffer.cursor_position = (
+            0 if delta > 0 else len(detail_pane.text_area.text)
+        )
+
+    def focus_viewer() -> None:
+        navigation.focus("viewer")
+
+    def focus_items() -> None:
+        navigation.focus("items")
+
+    def activate_items(event) -> SurfaceActionResult:
         if not options:
-            return
+            return "HANDLED"
         if mode == "revert":
-            result = _activate(
-                state,
-                mode=mode,
-                context_name=context_name,
-                entry=options[state.selected_index],
+            event.app.exit(
+                result=HistorySelectionReceipt(
+                    context_name=context_name,
+                    checkpoint_uid=options[navigation.row_index].uid,
+                )
             )
-            event.app.exit(result=result)
-        else:
-            state.details_open = True
-            navigation.open_selected()
-            detail_window.vertical_scroll = 0
-            event.app.layout.focus(windows["viewer"])
-            event.app.invalidate()
+            return "HANDLED"
+        details_open["value"] = True
+        sync_detail(anchor="start")
+        navigation.open_selected()
+        surface_focus.focus_relative(event.app, -1, wrap=False)
+        return "ENTER_CHILD"
 
-    @bindings.add("tab")
-    def _next_pane(event) -> None:
-        pane = navigation.toggle_frames()
-        event.app.layout.focus(windows[pane])
-        event.app.invalidate()
+    def activate_viewer(event) -> SurfaceActionResult:
+        surface_focus.focus_relative(event.app, 1, wrap=False)
+        return "HANDLED"
 
-    @bindings.add("s-tab")
-    def _previous_pane(event) -> None:
-        pane = navigation.toggle_frames()
-        event.app.layout.focus(windows[pane])
-        event.app.invalidate()
+    def back_viewer(event) -> SurfaceActionResult:
+        surface_focus.focus_relative(event.app, 1, wrap=False)
+        return "HANDLED"
 
-    @bindings.add("escape", eager=True)
-    @bindings.add("backspace", eager=True)
-    def _back(event) -> None:
-        if navigation.pane == "viewer":
-            navigation.focus("items")
-            event.app.layout.focus(windows["items"])
-            event.app.invalidate()
-            return
+    def back_items(event) -> SurfaceActionResult:
         event.app.exit(result=HISTORY_BACK if back_navigation else None)
+        return "HANDLED"
 
-    @bindings.add("q", eager=True)
+    surface_focus = SurfaceFocusController(
+        (
+            FocusSurface(
+                "viewer",
+                detail_pane.text_area,
+                move_vertical=move_viewer,
+                activate=activate_viewer,
+                back=back_viewer,
+                on_focus=focus_viewer,
+                on_vertical_enter=enter_viewer,
+            ),
+            FocusSurface(
+                "items",
+                list_control,
+                move_vertical=move_items,
+                activate=activate_items,
+                back=back_items,
+                on_focus=focus_items,
+            ),
+        )
+    )
+    bind_surface_navigation(bindings, surface_focus, back=True)
+
+    viewer_focused = has_focus(detail_pane.text_area)
+
+    @bindings.add("pageup", filter=viewer_focused, eager=True)
+    def _page_up(event) -> None:
+        scroll_wrapped_page(event, direction=-1)
+
+    @bindings.add("pagedown", filter=viewer_focused, eager=True)
+    def _page_down(event) -> None:
+        scroll_wrapped_page(event, direction=1)
+
+    @bindings.add("home", filter=viewer_focused, eager=True)
+    def _home(event) -> None:
+        detail_pane.text_area.buffer.cursor_position = 0
+        detail_window.vertical_scroll = 0
+        detail_window.vertical_scroll_2 = 0
+        event.app.invalidate()
+
+    @bindings.add("end", filter=viewer_focused, eager=True)
+    def _end(event) -> None:
+        detail_pane.text_area.buffer.cursor_position = len(
+            detail_pane.text_area.text
+        )
+        event.app.invalidate()
+
+    @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:
         event.app.exit(result=None)
@@ -486,14 +516,18 @@ def choose_history(
     header = Window(
         FormattedTextControl(
             " "
-            + ("HISTORY" if mode == "log" else "REVERT")
+            + (
+                display_escape_text(title)
+                if title is not None
+                else ("HISTORY" if mode == "log" else "REVERT")
+            )
             + " · "
             + display_escape_text(context_name)
         ),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    viewer_frame = Frame(detail_window, title="VIEWER")
+    viewer_frame = detail_pane.frame
     items_frame = Frame(options_window, title="ITEMS")
     footer = Window(
         FormattedTextControl(render_footer),

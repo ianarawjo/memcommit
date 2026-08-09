@@ -300,8 +300,7 @@ def run_compare_workbench(
         return () if relation is None else relation.members
 
     def move_row(delta: int) -> None:
-        navigation.move_row(len(rows), delta)
-        navigation.preview_selected_row()
+        navigation.move_and_preview_row(len(rows), delta)
         selected["member"] = 0
         selected["expanded"] = False
 

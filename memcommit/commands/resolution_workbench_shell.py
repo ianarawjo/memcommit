@@ -3095,10 +3095,9 @@ def run_resolution_workbench_shell(
             set_status(str(error))
             return None
 
-    def preview_items_row(active_view: ResolutionWorkbenchView) -> None:
-        """Keep Viewer aligned with Items while Items retains keyboard focus."""
+    def project_previewed_items_row(active_view: ResolutionWorkbenchView) -> None:
+        """Project the already-aligned shared Items row into operation state."""
 
-        session_navigation.preview_selected_row()
         other_direction["focused"] = False
         other_direction_editor["open"] = False
         response_state.editing = False
@@ -3118,6 +3117,12 @@ def run_resolution_workbench_shell(
         reset_viewer_section()
         load_draft()
         sync_response_state()
+
+    def preview_items_row(active_view: ResolutionWorkbenchView) -> None:
+        """Align and project one explicitly selected Items row."""
+
+        session_navigation.preview_selected_row()
+        project_previewed_items_row(active_view)
 
     def move(delta: int) -> None:
         active_view = current_view()
@@ -3163,8 +3168,8 @@ def run_resolution_workbench_shell(
                 set_status("")
                 return
             total_rows = len(active_view.items) + 1
-            session_navigation.move_row(total_rows, delta)
-            preview_items_row(active_view)
+            session_navigation.move_and_preview_row(total_rows, delta)
+            project_previewed_items_row(active_view)
             set_status("")
             return
         item = current_navigation.current_item(active_view)

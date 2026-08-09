@@ -33,6 +33,17 @@ Viewer while keyboard focus remains in Items. This prevents a stale detail
 from remaining above a newly selected row. `Enter` transfers focus into that
 already aligned Viewer so the person can navigate its semantic sections or
 open nested choices.
+Callers perform arrow movement through the controller's combined
+`move_and_preview_row` transition so the Items cursor and Viewer projection
+cannot drift apart between two command-local state updates. The transition is
+presentation-only: it neither changes pane focus nor persists, calls a
+provider, or interprets the row. Operation adapters still own projection-side
+cleanup such as closing transient detail, loading a response draft, or
+constructing an exact mutation receipt.
+History Log, Diff, and Revert use the same cursor/preview transition.
+Log-style Enter opens the aligned Viewer, while Revert deliberately keeps
+Enter as selection of the displayed exact checkpoint UID. Previewing a Revert
+row therefore does not weaken or bypass its later mutation receipt boundary.
 
 Resolution sessions use three visible frames with separate responsibilities:
 
