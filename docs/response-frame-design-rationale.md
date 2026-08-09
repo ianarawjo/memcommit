@@ -41,6 +41,12 @@ To Do derives the one whole-session next action. Final Review and Apply omits
 Responses because it confirms already staged state rather than collecting new
 item input.
 
+The live Responses body does not repeat the current item title, obligation, or
+open/answered status. Viewer and Items already provide those orientation facts;
+Responses reserves its limited height for the question, choices, and free-form
+answer. Stable non-interactive snapshots may retain surrounding report context
+supplied by their caller.
+
 The question is explanatory chrome rather than a focus stop. Entering
 Responses focuses the checked choice, or the first proposed choice when no
 value is staged. Up/Down moves directly through every visible choice and then

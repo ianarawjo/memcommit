@@ -26,19 +26,6 @@ def response_frame_fragments(
 
     fragments: list[tuple[str, str]] = []
     body_width = max(16, content_width - 2)
-    status = "ANSWERED" if draft.answered else target.state
-    fragments.extend(
-        [
-            ("class:case-title", f" {safe_terminal_text(target.item_label)}\n"),
-            (
-                "class:detail-heading",
-                (
-                    f" {safe_terminal_text(target.obligation)} · "
-                    f"{safe_terminal_text(status)}\n"
-                ),
-            ),
-        ]
-    )
 
     if target.has_decision:
         decision_parts: list[tuple[str, str]] = []

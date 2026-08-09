@@ -82,7 +82,8 @@ def test_response_renderer_owns_question_options_and_saved_response():
         )
     )
 
-    assert "Campus access ambiguity" in rendered
+    assert "Campus access ambiguity" not in rendered
+    assert "OPTIONAL · ANSWERED" not in rendered
     assert "CLARIFICATION QUESTION" in rendered
     assert "PROPOSED READINGS" in rendered
     assert "✓ 2. Staff entrance" in rendered
