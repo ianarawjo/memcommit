@@ -18,6 +18,13 @@ key:
 - `R/r` opens the report or honest report-building skeleton, when supplied.
 - `H/h/?` opens the shared read-only Help inventory.
 
+Each letter remains a stable named destination on its first press. An
+immediate repeat of that same letter returns to the surface from which that
+destination was opened: `C/c`, `I/i`, and `R/r` use the common wait-shell
+handoff, while `H/h` uses Help's existing open/hide lifecycle. Pressing a
+different destination establishes a new origin for that key pair. The footer
+changes the active key's label to `back` only when such an origin exists.
+
 The footer and bindings are derived from the same available surfaces. `I/i`
 is absent and unbound without a confirmed-input view. `R/r` is absent and
 unbound when the command has no report surface. This keeps a shortcut from
@@ -51,8 +58,10 @@ review, approval, CAS, and materialization boundary.
 - Reusing the actual `mem switch` accept path was rejected because a wait-time
   current-Context mutation would be unrelated to the already frozen semantic
   request and could falsely imply that the request followed the new current.
-- Keeping `C` as a toggle was rejected because its result depended on prior UI
-  state and left no stable key for the namespace browser.
+- The former anonymous `C` toggle between report and inputs was rejected
+  because it gave one key two unnamed destinations. Repeat-to-return is kept
+  only after a key first reaches its explicitly named Context, input, report,
+  or Help surface.
 - Memory rows remain previews, not selectors. Supporting selection here would
   require a new operation-owned receipt and is intentionally out of scope.
 - The Context-name catalog is frozen, while Memory content is loaded lazily
@@ -61,13 +70,15 @@ review, approval, CAS, and materialization boundary.
 
 ## Verification record
 
-Pipe-input tests exercise upper- and lower-case destinations, conditional
-input/report bindings, interleaved Memory navigation, and a guard that fails if
+Pipe-input tests exercise upper- and lower-case destinations, same-key return
+for Contexts, inputs, report, and Help, conditional input/report bindings,
+interleaved Memory navigation, and a guard that fails if
 `MemoryStore.set_current()` is reached from the browser. The real Update path
 is recorded at 180 columns × 52 rows under
 `docs/screenshots/mem-update-command-wait-20260810`: report entry, `c` Context
-entry, `m` plus Down Memory focus, `i` inputs, `h` Help and return, `r` report,
-review, and read-only verification. The symmetric Meld capture under
+entry and same-key return, `m` plus Down Memory focus, `i` input entry and
+return, `h` Help entry and return, `r` report entry and return, review, and
+read-only verification. The symmetric Meld capture under
 `docs/screenshots/meld-auto-compare-basis-20260810` separately verifies that
 the default/R surface is the report and I is the frozen A/B/C input surface
 while an unrelated current Context stays unchanged.

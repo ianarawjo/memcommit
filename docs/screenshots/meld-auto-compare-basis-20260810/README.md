@@ -30,9 +30,9 @@ the live PTY size before it exits.
 | Image | Input since the preceding image | Visible state | Durable mutation |
 | --- | --- | --- | --- |
 | `01-report-building.png` | Launch the exact command | Automatic Compare wait opens on the result-free Meld report topology; `R/r` has one stable meaning from the first frame | None from Meld; only isolated fixture setup predates this screen |
-| `02-context-browser.png` | `c` | The switch-shaped readable namespace marks the unrelated Task 3 current Context while remaining unable to switch it | None |
-| `03-frozen-a-b-c.png` | `i` | Confirmed inputs show frozen A, B, and result C; C explicitly says `UNCHANGED WHILE COMPARE RUNS` | None |
-| `04-report-restored.png` | `r` | The animated, result-free report returns directly without toggling through another surface | None |
+| `02-context-browser.png` | `c` | The switch-shaped readable namespace marks the unrelated Task 3 current Context while remaining unable to switch it; the active `C/c back` hint would return to the report | None |
+| `03-frozen-a-b-c.png` | `i` | Confirmed inputs show frozen A, B, and result C; C explicitly says `UNCHANGED WHILE COMPARE RUNS`, and `I/i back` would return to the Context browser that opened it | None |
+| `04-report-restored.png` | `r` | The animated, result-free report returns directly; the active `R/r back` hint would return to confirmed inputs | None |
 | `05-seeded-review.png` | Provider returns | The saved Compare report seeds the symmetric Meld review; result C is the current save location and has zero proposed Memories | Exact ordered Compare basis, empty result Context, and target-bound Meld session are published |
 | `06-required-issue.png` | `Tab`, `Down`, `Enter` | The required compensation conflict opens with both exact source claims and proposed resolutions | None |
 | `07-staged-response.png` | `Tab`, `Enter` | `Keep all supported terms` is visibly checked; To Do offers `REVIEW AND APPLY` but says nothing changes before review | None; selection is process-local and not incorporated or applied |

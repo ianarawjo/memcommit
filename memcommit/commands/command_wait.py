@@ -422,6 +422,7 @@ def run_command_wait(
     close_requested = {"value": False}
     status_message = {"value": ""}
     active_surface = {"value": "REPORT"}
+    last_destination = {"surface": None, "origin": "REPORT"}
 
     def emit_help_action(action: str, command_name: str | None = None) -> None:
         _study_help_action(action, command_name)
@@ -672,26 +673,45 @@ def run_command_wait(
     )
     help_controller.bind(bindings, additional_keys=("?",))
 
-    def show_surface(event, surface: str) -> None:
+    def show_surface(event, requested_surface: str) -> None:
+        origin = active_surface["value"]
+        returning = (
+            origin == requested_surface
+            and last_destination["surface"] == requested_surface
+        )
+        surface = last_destination["origin"] if returning else requested_surface
+
         if surface == "CONTEXTS":
             if context_control is None:
                 status_message["value"] = "Context browser is unavailable here."
                 event.app.invalidate()
                 return
             target = context_control
-            action = "CONTEXT BROWSER OPEN"
+            open_action = "CONTEXT BROWSER OPEN"
         elif surface == "INPUTS":
             if input_pane is None:
                 status_message["value"] = "Confirmed inputs are unavailable here."
                 event.app.invalidate()
                 return
             target = input_pane.text_area
-            action = "CONFIRMED INPUTS OPEN"
+            open_action = "CONFIRMED INPUTS OPEN"
         else:
             if return_pane is None:
                 return
             target = return_pane.text_area
-            action = "REPORT OPEN"
+            open_action = "REPORT OPEN"
+
+        if returning:
+            action_prefix = {
+                "CONTEXTS": "CONTEXT BROWSER",
+                "INPUTS": "CONFIRMED INPUTS",
+                "REPORT": "REPORT",
+            }[requested_surface]
+            action = f"{action_prefix} RETURN {surface}"
+        else:
+            last_destination["surface"] = requested_surface
+            last_destination["origin"] = origin
+            action = open_action
         status_message["value"] = ""
         active_surface["value"] = surface
         event.app.layout.focus(target)
@@ -968,10 +988,34 @@ def run_command_wait(
         if return_pane is not None:
             help_hint = "H/h/? Help · " if frozen_help_entries else ""
             context_hint = (
-                "C/c Contexts · " if frozen_context_browser is not None else ""
+                (
+                    "C/c back · "
+                    if active_surface["value"] == "CONTEXTS"
+                    and last_destination["surface"] == "CONTEXTS"
+                    and last_destination["origin"] != "CONTEXTS"
+                    else "C/c Contexts · "
+                )
+                if frozen_context_browser is not None
+                else ""
             )
-            input_hint = "I/i inputs · " if input_pane is not None else ""
-            report_hint = "R/r report · "
+            input_hint = (
+                (
+                    "I/i back · "
+                    if active_surface["value"] == "INPUTS"
+                    and last_destination["surface"] == "INPUTS"
+                    and last_destination["origin"] != "INPUTS"
+                    else "I/i inputs · "
+                )
+                if input_pane is not None
+                else ""
+            )
+            report_hint = (
+                "R/r back · "
+                if active_surface["value"] == "REPORT"
+                and last_destination["surface"] == "REPORT"
+                and last_destination["origin"] != "REPORT"
+                else "R/r report · "
+            )
             if active_surface["value"] == "CONTEXTS":
                 memory_hint = (
                     "m Memories here · M all Memories · "

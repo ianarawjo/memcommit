@@ -100,7 +100,7 @@ CAPTURE PTY · 52x180
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;1mv[0m
 
-[59C[0mmove ·[C←/→ expand · Enter[Cbrowse ·[CA/a all · m Memori[Cs here · M all Memories · Q/q close · read-only[47A[159D[0m[?25l[4A[40C[0m. · 0s[0m
+[5C[0mback · I/i[Cinputs · R/r[Crepo[Ct · H/h/? Help · ↑/↓[Cmove · ←/→[Cexpand · E[Cter browse · A/a[Call ·[Cm Memories h[Cre[C· M all Memories · Q/q close · read-only[47A[155D[0m[?25l[4A[40C[0m. · 0s[0m
 
 
 
@@ -109,7 +109,7 @@ CAPTURE PTY · 52x180
 
 
 [C[0m› * ▾ capture/update/source[0m
-[C[0;1;7m  · [memory 218d0540] The south entrance now provides step-free public access.[0m
+[C[0;1;7m  · [memory 71588bb3] The south entrance now provides step-free public access.[0m
 [C[0m    ▸ capture/update/target[A[27D[0m[?25l[5A[39C[0m… · 1s[0m[K[0m
 
 
@@ -120,24 +120,24 @@ CAPTURE PTY · 52x180
 
 
 
-[C[0m[?25l[4A[62C[0m───────| UPDATE CONFI[CMED INPUTS · READ-ONLY |───────[0m
-[C[0mMEM UPDATE · FROZEN INPUTS · RESULT PENDING                                                                                                                                      [0;1m^[0m
+[C[0m[?25l[4A[62C[0m─────────────| UPDATE REPO[CT · BUILDING[C|────────────[0m
+[C[0;38;5;117;1mMEM UPDATE · REPORT BUILDING[0m                                                                                                                                                     [0;1m^[0m
+[C[0;38;5;223;1mCONTENT PENDING · THIS IS NOT A RESULT[0m                                                                                                                                           [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
-[C[0mSOURCE A · capture/update/source                                                                                                                                                 [0;48;5;238m [0m
-[C[0m  SCOPE · SELECTED GRAPH ONLY                                                                                                                                                    [0;48;5;238m [0m
-[C[0m  UPDATE EFFECT · READ-ONLY WHILE PLANNING                                                                                                                                       [0;48;5;238m [0m
+[C[0;38;5;117;1mPLAN[0m                                                                                                                                                                             [0;48;5;238m [0m
+[C[0;38;5;146m  …  [0m                                                                                                                                                                            [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
-[C[0mTARGET B · capture/update/target                                                                                                                                                 [0;48;5;238m [0m
-[C[0m  SCOPE · SELECTED GRAPH ONLY                                                                                                                                                    [0;48;5;238m [0m
-[C[0m  UPDATE EFFECT · READ-ONLY UNTIL EXPLICIT APPLY                                                                                                                                 [0;48;5;238m [0m
+[C[0;38;5;117;1mWHAT WILL CHANGE[0m                                                                                                                                                                 [0;48;5;238m [0m
+[C[0;38;5;146m  .  [0m                                                                                                                                                                            [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
-[C[0mNo target change is applied while this report is being built.                                                                                                                    [0;48;5;238m [0m
+[C[0;38;5;117;1mPLANNED CHANGES[0m                                                                                                                                                                  [0;48;5;238m [0m
+[C[0;38;5;146m  .. [0m                                                                                                                                                                            [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
+[C[0;38;5;117;1mTO DO[0m                                                                                                                                                                            [0;48;5;238m [0m
+[C[0;38;5;146m  …  [0m                                                                                                                                                                            [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
-[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
-[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
-[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
-[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
+[C[0;38;5;231mThe completed report will replace these markers after analysis.[0m                                                                                                                  [0;48;5;238m [0m
+[C[0;38;5;231mC/c opens Contexts; R/r returns here; H/h/? opens Help.[0m                                                                                                                          [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
@@ -170,9 +170,191 @@ CAPTURE PTY · 52x180
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;1mv[0m
 
-[59C[0mscroll[C· PgUp/PgDn page ·[CHome/End[C· Q/q request clos[C · read-only[0m[K[49A[124D[0m[?12l[?25h[?25l[2A[43C[0m.[0m
+[5C[0mContexts ·[CI/i inputs ·[CR/r [Ceport · H/h/? Help ·[C↑/↓ scroll[C· PgUp/PgD[C page · Home/End[C· Q/q[Crequest clos[C ·[Cread-only[0m[K[49A[124D[0m[?12l[?25h[?25l[2A[43C[0m.[0m
 
-[C[0m[?12l[?25h[2A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · explore while work continues[0m · MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 1s[0m
+
+
+
+
+[3C[0;38;5;146m.[0m
+
+
+[4C[0;38;5;146m.[0m
+
+
+[3C[0;38;5;146m… [0m
+
+
+[3C[0;38;5;146m.[13A[3D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[A[69C[0m| UPDATE CONFIRM[CD INPUTS · READ-ONLY |[0m
+[C[0mMEM UPDATE · FROZEN INPUTS ·[CRESULT PENDING [0m
+[C[0m                                       [0m
+[C[0mSOURCE A · capture/update/source [0m
+[C[0m  SCOPE · SELECTED GRAPH ONLY [0m
+[C[0m  UPDATE EFFECT · READ-ONLY WHILE PLANNING [0m
+
+[C[0mTARGET B · capture/update/target [0m
+[C[0m  SCOPE · SELECTED GRAPH ONLY [0m
+[2C[0m UPDATE EFFECT · READ-ONLY UNTIL EXPLICIT APPLY [0m
+[C[0m                [0m
+[C[0mNo target change is applied while this report is being built. [0m
+[C[0m [0m
+[C[0m      [0m
+[C[0m      [0m
+[C[0m [0m
+[C[0m                                                                [0m
+[C[0m                                                        [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[20C[0mback ·[CR/r [Ceport ·[CH/h[C? Help ·[C↑/↓ scroll ·[CPgUp/PgDn page ·[CHome/End ·[CQ/q request close ·[Cread-only[0m[K[49A[122D[0m[?12l[?25h[?25l[2A[44C[0m. · 2s[0m
+
+[C[0m[?12l[?25h[?25l[A[69C[0m──────| UPDATE R[CPORT · BUILDING |─────[0m
+[C[0;38;5;117;1mMEM UPDATE · REPORT BUILDING[C[0m               [0m
+[C[0;38;5;223;1mCONTENT PENDING · THIS IS NOT A RESULT[0m [0m
+[C[0m                                 [0m
+[C[0;38;5;117;1mPLAN[0m                          [0m
+[C[0;38;5;146m  .. [0m                                      [0m
+
+[C[0;38;5;117;1mWHAT WILL CHANGE[0m                 [0m
+[C[0;38;5;146m  …  [0m                         [0m
+[2C[0m                                                [0m
+[C[0;38;5;117;1mPLANNED CHANGES[0m [0m
+[C[0;38;5;146m  .  [0m                                                         [0m
+[C[0m [0m
+[C[0;38;5;117;1mTO DO[0m [0m
+[C[0;38;5;146m  .. [0m [0m
+[C[0m [0m
+[C[0;38;5;231mThe completed report will replace these markers after analysis.[0m [0m
+[C[0;38;5;231mC/c opens Contexts; R/r returns here; H/h/? opens Help.[0m [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[20C[0minputs[C· R/[C report[C· H[Ch/? Help[C· ↑/↓ scroll[C· PgUp/PgDn page[C· Home/End[C· Q/q request close[C· read-only[49A[124D[0m[?12l[?25h[?25l[2A[43C[0m… · 2s[0m[K[0m
+
+
+
+
+
+[3C[0;38;5;146m… [0m
+
+
+[3C[0;38;5;146m.[0m
+
+
+[4C[0;38;5;146m.[0m
+
+
+[3C[0;38;5;146m… [13A[4D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[A[69C[0m| UPDATE CONFIRM[CD INPUTS · READ-ONLY |[0m
+[C[0mMEM UPDATE · FROZEN INPUTS ·[CRESULT PENDING [0m
+[C[0m                                       [0m
+[C[0mSOURCE A · capture/update/source [0m
+[C[0m  SCOPE · SELECTED GRAPH ONLY [0m
+[C[0m  UPDATE EFFECT · READ-ONLY WHILE PLANNING [0m
+
+[C[0mTARGET B · capture/update/target [0m
+[C[0m  SCOPE · SELECTED GRAPH ONLY [0m
+[2C[0m UPDATE EFFECT · READ-ONLY UNTIL EXPLICIT APPLY [0m
+[C[0m                [0m
+[C[0mNo target change is applied while this report is being built. [0m
+[C[0m [0m
+[C[0m      [0m
+[C[0m      [0m
+[C[0m [0m
+[C[0m                                                                [0m
+[C[0m                                                        [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[20C[0mback ·[CR/r [Ceport ·[CH/h[C? Help ·[C↑/↓ scroll ·[CPgUp/PgDn page ·[CHome/End ·[CQ/q request close ·[Cread-only[0m[K[49A[122D[0m[?12l[?25h[?25l[2A[43C[0m.[3C3[0m
+
+[C[0m[?12l[?25h[2A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · explore while work continues[0m · MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 3s[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
@@ -223,7 +405,7 @@ CAPTURE PTY · 52x180
 [0m┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
 [0m│[0;1m ▸ mem find              [0mOpen interactive search when QUERY is omitted, or search once when QUERY is supplied. The default scope includes each selected Context root, its        │[179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  H hide Help  Q return to waiting[104D[29A[0m[22A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?25l[0m[?7l[0m[J[0m MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 2s[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  H hide Help  Q return to waiting[104D[29A[0m[22A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?25l[0m[?7l[0m[J[0m MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 3s[0m
 [0m┌─────────────────────────────────────────────────────────────────────| UPDATE CONFIRMED INPUTS · READ-ONLY |──────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│MEM UPDATE · FROZEN INPUTS · RESULT PENDING                                                                                                                                      [0;1m^[179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -274,7 +456,7 @@ CAPTURE PTY · 52x180
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only[125D[49A[C[0m[?12l[?25h[?25l[2A[43C[0m… · 2s[0m[K[0m
+[0m C/c Contexts · I/i back · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only[123D[49A[C[0m[?12l[?25h[?25l[2A[43C[0m… · 4s[0m[K[0m
 
 [C[0m[?12l[?25h[?25l[A[69C[0m──────| UPDATE R[CPORT · BUILDING |─────[0m
 [C[0;38;5;117;1mMEM UPDATE · REPORT BUILDING[C[0m               [0m
@@ -293,7 +475,40 @@ CAPTURE PTY · 52x180
 [C[0;38;5;146m  …  [0m [0m
 [C[0m [0m
 [C[0;38;5;231mThe completed report will replace these markers after analysis.[0m [0m
-[C[0;38;5;231mC/c opens Contexts; R/r returns here; H/h/? opens Help.[0m [16A[56D[0m[?12l[?25h[?25l[2A[43C[0m.[0m
+[C[0;38;5;231mC/c opens Contexts; R/r returns here; H/h/? opens Help.[0m [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[20C[0minputs[C· R/[C back[49A[36D[0m[?12l[?25h[?25l[2A[43C[0m.[0m
 
 
 
@@ -308,6 +523,4 @@ CAPTURE PTY · 52x180
 [3C[0;38;5;146m… [0m
 
 
-[3C[0;38;5;146m.[13A[3D[0m[?12l[?25h[?25l[2A[47C[0m3[0m
-
-[C[0m[?12l[?25h
+[3C[0;38;5;146m.[13A[3D[0m[?12l[?25h[?25l[0m[?12l[?25h

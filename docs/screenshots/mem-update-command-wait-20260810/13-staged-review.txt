@@ -16,7 +16,7 @@
 ┃ IMPACT · UPDATE                                                                                                                                                                  ┃
 ┃ These exact target changes are staged. Apply remains a separate explicit action.                                                                                                 ┃
 ┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
-┃       ▸ ~ [EDIT] capture/update/target [0b36096f]                                                                                                                                ┃
+┃       ▸ ~ [EDIT] capture/update/target [411117c5]                                                                                                                                ┃
 ┃             - The north entrance provides the only public access.                                                                                                                ┃
 ┃             + The south entrance provides step-free public access.                                                                                                               ┃
 ┃ REVIEW AND APPLY                                                                                                                                                                 ┃
@@ -38,7 +38,7 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Update report                                                                                                                                          ^│
-│  EDIT           capture/update/target Memory [0b36096f-63bf-4da2-a7f8-4db5c3b075e9]                                                                                              │
+│  EDIT           capture/update/target Memory [411117c5-380b-4d16-a343-de9c37ba338b]                                                                                              │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │

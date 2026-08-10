@@ -7,7 +7,7 @@
  The exact target Memory changes are staged and bound to this Source and Target revision. Apply remains separate.                                                                   
                                                                                                                                                                                     
  PLANNED CHANGES                                                                                                                                                                    
- ›  1. [CHANGE] capture/update/target Memory [0b36096f-63bf-4da2-a7f8-4db5c3b075e9]                                                                                                 
+ ›  1. [CHANGE] capture/update/target Memory [411117c5-380b-4d16-a343-de9c37ba338b]                                                                                                 
        EDIT · PLANNED · The verified access update supersedes the old route.                                                                                                        
                                                                                                                                                                                     
  APPLICATION                                                                                                                                                                        
@@ -18,11 +18,11 @@ SCOPE · SOURCE SELECTED GRAPH ONLY · TARGET SELECTED GRAPH ONLY
                                                                                                                                                                                     
 EXACT PLANNED CHANGE DETAILS                                                                                                                                                        
                                                                                                                                                                                     
-EDIT capture/update/target Memory [0b36096f-63bf-4da2-a7f8-4db5c3b075e9]                                                                                                            
+EDIT capture/update/target Memory [411117c5-380b-4d16-a343-de9c37ba338b]                                                                                                            
   OWNER                                                                                                                                                                             
-    Context capture/update/target [3d62e1e5-1f16-4384-a0c3-468404a306ef]                                                                                                            
+    Context capture/update/target [53b9a19b-b439-4d08-bcb5-b04563629ac5]                                                                                                            
   MEMORY UID                                                                                                                                                                        
-    0b36096f-63bf-4da2-a7f8-4db5c3b075e9                                                                                                                                            
+    411117c5-380b-4d16-a343-de9c37ba338b                                                                                                                                            
   BEFORE                                                                                                                                                                            
     The north entrance provides the only public access.                                                                                                                             
   AFTER                                                                                                                                                                             
@@ -30,8 +30,8 @@ EDIT capture/update/target Memory [0b36096f-63bf-4da2-a7f8-4db5c3b075e9]
   REASON                                                                                                                                                                            
     The verified access update supersedes the old route.                                                                                                                            
   SOURCE REFERENCES                                                                                                                                                                 
-    1. Context capture/update/source [05bfb060-15ce-4d5d-bf84-915191395cef]                                                                                                         
-    Memory [218d0540-cf4b-4126-8888-9917f8b88b80]                                                                                                                                   
+    1. Context capture/update/source [2c92da64-f0ab-4985-883f-7191a000dd0f]                                                                                                         
+    Memory [71588bb3-e12d-434a-a5e7-d55d0fb2ead9]                                                                                                                                   
     Content SHA-256: bcba78392517dff2e1ef96d56811588e87717e80bfb2dde2e8b2a27a8a9e6ea3                                                                                               
                                                                                                                                                                                     
 Shared capture/update/target is unchanged.                                                                                                                                          

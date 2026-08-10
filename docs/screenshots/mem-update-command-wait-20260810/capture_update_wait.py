@@ -70,7 +70,7 @@ def _child(store_root: Path) -> None:
             assert output_schema is not None
             # Leave enough time for the capture driver to render the report,
             # confirmed inputs, and nested Help while this one turn remains live.
-            time.sleep(12.0)
+            time.sleep(18.0)
             payload = json.loads(prompt.split("UPDATE PAYLOAD:\n", 1)[1])
             source_id = payload["source"]["memories"][0]["source_id"]
             target_id = payload["target"]["memories"][0]["target_id"]
@@ -151,6 +151,12 @@ def _wait_for(child, raw: bytearray, marker: bytes, *, timeout: float) -> None:
             raise RuntimeError(f"Timed out waiting for {marker!r}.")
         _drain(child, raw)
     time.sleep(0.2)
+    while _drain(child, raw, timeout=0.02):
+        pass
+
+
+def _settle(child, raw: bytearray, *, delay: float = 0.3) -> None:
+    time.sleep(delay)
     while _drain(child, raw, timeout=0.02):
         pass
 
@@ -256,37 +262,51 @@ def _parent() -> None:
         _render_snapshot("01-dot-cycle-report", bytes(raw))
 
         child.send(b"c")
-        time.sleep(0.5)
-        while _drain(child, raw, timeout=0.02):
-            pass
+        _settle(child, raw, delay=0.5)
         _render_snapshot("02-context-browser", bytes(raw))
 
         child.send(b"m\x1b[B")
         _wait_for(child, raw, b"south entrance now", timeout=3)
         _render_snapshot("03-context-memory-preview", bytes(raw))
 
+        child.send(b"c")
+        _settle(child, raw)
+        _render_snapshot("04-report-after-context-repeat", bytes(raw))
+
         child.send(b"i")
         _wait_for(child, raw, b"SOURCE A", timeout=3)
-        _render_snapshot("04-confirmed-inputs", bytes(raw))
+        _render_snapshot("05-confirmed-inputs", bytes(raw))
+
+        child.send(b"i")
+        _settle(child, raw)
+        _render_snapshot("06-report-after-input-repeat", bytes(raw))
+
+        child.send(b"i")
+        _settle(child, raw)
+        _render_snapshot("07-inputs-before-help", bytes(raw))
 
         child.send(b"h")
         _wait_for(child, raw, b"mem help", timeout=3)
-        _render_snapshot("05-help-during-update", bytes(raw))
+        _render_snapshot("08-help-during-update", bytes(raw))
 
         child.send(b"h")
-        time.sleep(0.3)
-        while _drain(child, raw, timeout=0.02):
-            pass
-        _render_snapshot("06-confirmed-inputs-restored", bytes(raw))
+        _settle(child, raw)
+        _render_snapshot("09-inputs-after-help-repeat", bytes(raw))
 
         child.send(b"r")
-        time.sleep(0.3)
-        while _drain(child, raw, timeout=0.02):
-            pass
-        _render_snapshot("07-dot-cycle-report-restored", bytes(raw))
+        _settle(child, raw)
+        _render_snapshot("10-report-destination", bytes(raw))
+
+        child.send(b"r")
+        _settle(child, raw)
+        _render_snapshot("11-inputs-after-report-repeat", bytes(raw))
+
+        child.send(b"r")
+        _settle(child, raw)
+        _render_snapshot("12-report-restored", bytes(raw))
 
         _wait_for(child, raw, b"REVIEW AND APPLY", timeout=20)
-        _render_snapshot("08-staged-review", bytes(raw))
+        _render_snapshot("13-staged-review", bytes(raw))
 
         child.send(b"\x1b")
         deadline = time.monotonic() + 5
@@ -297,7 +317,7 @@ def _parent() -> None:
         child.close()
         if child.exitstatus not in {0, None}:
             raise RuntimeError(f"Capture child exited with {child.exitstatus}.")
-        _render_snapshot("09-staged-receipt-verification", bytes(raw))
+        _render_snapshot("14-staged-receipt-verification", bytes(raw))
 
     if b"\x1b[" not in raw:
         raise RuntimeError("PTY stream did not contain ANSI control sequences.")

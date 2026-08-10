@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ move · ←/→ expand · Enter browse · A/a all · m Memories here · M all Memories · Q/q close · read-only                    
+ C/c back · I/i inputs · R/r report · H/h/? Help · ↑/↓ move · ←/→ expand · Enter browse · A/a all · m Memories here · M all Memories · Q/q close · read-only                        

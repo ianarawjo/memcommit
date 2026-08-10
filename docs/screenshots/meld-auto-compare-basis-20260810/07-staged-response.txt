@@ -13,10 +13,10 @@
 │ SOURCE CLAIMS                                                                                                                                                                    │
 │                                                                                                                                                                                  │
 │ CLAIM 1 · FROM task-2/advisor1                                                                                                                                                   │
-│   [4b7f6be5] Pay CAD 20–30 per hour, including travel time.                                                                                                                      │
+│   [a72a3c98] Pay CAD 20–30 per hour, including travel time.                                                                                                                      │
 │                                                                                                                                                                                  │
 │ CLAIM 2 · FROM task-2/advisor2                                                                                                                                                   │
-│   [77b529dd] Allow cash, e-transfer, or an equivalent-value gift card.                                                                                                           │
+│   [895d1153] Allow cash, e-transfer, or an equivalent-value gift card.                                                                                                           │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RESPONSES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓

@@ -7,7 +7,7 @@
 ┃ │ Reference: task-2/advisor1 (layout only; no authority)                                                                                                                       │ ┃
 ┃ │ Compared: task-2/advisor2                                                                                                                                                    │ ┃
 ┃ │ SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED GRAPH ONLY                                                                                                  │ ┃
-┃ │ Analysis: 737f97db · REUSED                                                                                                                                                  │ ┃
+┃ │ Analysis: 8fce03ad · REUSED                                                                                                                                                  │ ┃
 ┃ │ METRICS · MEMORIES 1 + 1 · RELATIONS 1 · POTENTIAL CONFLICTS 1                                                                                                               │ ┃
 ┃ │ EQUIVALENT 0 · COMPATIBLE 0 · SCOPED 0 · CONFLICT 1 · DISTINCT 0 · UNCLEAR 0                                                                                                 │ ┃
 ┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃

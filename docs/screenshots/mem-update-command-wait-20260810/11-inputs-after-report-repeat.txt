@@ -1,22 +1,22 @@
- MEM MELD · 2/2 · ANALYZING ORDERED SOURCE RELATIONS .. · 2s
-┌────────────────────────────────────────────────────────────────────────────| MELD REPORT · BUILDING |────────────────────────────────────────────────────────────────────────────┐
-│MEM MELD · REPORT BUILDING                                                                                                                                                       ^│
-│CONTENT PENDING · THIS IS NOT A RESULT                                                                                                                                            │
+ MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 4s                                                                                                                                 
+┌─────────────────────────────────────────────────────────────────────| UPDATE CONFIRMED INPUTS · READ-ONLY |──────────────────────────────────────────────────────────────────────┐
+│MEM UPDATE · FROZEN INPUTS · RESULT PENDING                                                                                                                                      ^│
 │                                                                                                                                                                                  │
-│WHAT MEM UNDERSTOOD                                                                                                                                                               │
-│  ..                                                                                                                                                                              │
+│SOURCE A · capture/update/source                                                                                                                                                  │
+│  SCOPE · SELECTED GRAPH ONLY                                                                                                                                                     │
+│  UPDATE EFFECT · READ-ONLY WHILE PLANNING                                                                                                                                        │
 │                                                                                                                                                                                  │
-│BOTH                                                                                                                                                                              │
-│  …                                                                                                                                                                               │
+│TARGET B · capture/update/target                                                                                                                                                  │
+│  SCOPE · SELECTED GRAPH ONLY                                                                                                                                                     │
+│  UPDATE EFFECT · READ-ONLY UNTIL EXPLICIT APPLY                                                                                                                                  │
 │                                                                                                                                                                                  │
-│DIFFERENCES                                                                                                                                                                       │
-│  .                                                                                                                                                                               │
+│No target change is applied while this report is being built.                                                                                                                     │
 │                                                                                                                                                                                  │
-│ITEMS                                                                                                                                                                             │
-│  ..                                                                                                                                                                              │
 │                                                                                                                                                                                  │
-│The completed report will replace these markers after analysis.                                                                                                                   │
-│C/c opens Contexts; R/r returns here; H/h/? opens Help.                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- C/c Contexts · I/i inputs · R/r back · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only
+ C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                       

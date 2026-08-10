@@ -187,6 +187,87 @@ def test_fast_result_returns_from_default_report_without_forcing_help():
     assert ("OPEN", None) not in actions
 
 
+def test_destination_keys_repeat_back_to_their_immediate_origin(monkeypatch):
+    actions: list[str] = []
+    events = {
+        action: threading.Event()
+        for action in (
+            "CONTEXT BROWSER OPEN",
+            "CONTEXT BROWSER RETURN REPORT",
+            "CONFIRMED INPUTS OPEN",
+            "CONFIRMED INPUTS RETURN REPORT",
+            "REPORT OPEN",
+            "REPORT RETURN INPUTS",
+            "HELP OPEN",
+            "HELP CLOSE",
+        )
+    }
+
+    def observe(_event_kind: str, **data: object):
+        action = data.get("action")
+        if isinstance(action, str):
+            actions.append(action)
+            if action in events:
+                events[action].set()
+        return None
+
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.record_study_action",
+        observe,
+    )
+
+    def work(_progress):
+        if not events["HELP CLOSE"].wait(3):
+            raise RuntimeError("The repeated Help key did not return.")
+        return "returned"
+
+    sequence = (
+        ("c", "CONTEXT BROWSER OPEN"),
+        ("C", "CONTEXT BROWSER RETURN REPORT"),
+        ("i", "CONFIRMED INPUTS OPEN"),
+        ("I", "CONFIRMED INPUTS RETURN REPORT"),
+        ("I", "CONFIRMED INPUTS OPEN"),
+        ("R", "REPORT OPEN"),
+        ("r", "REPORT RETURN INPUTS"),
+        ("h", "HELP OPEN"),
+        ("H", "HELP CLOSE"),
+    )
+    with create_pipe_input() as pipe_input:
+        def drive_terminal() -> None:
+            for key, action in sequence:
+                events[action].clear()
+                pipe_input.send_text(key)
+                if not events[action].wait(3):
+                    pipe_input.send_text("\x03")
+                    return
+
+        driver = threading.Thread(target=drive_terminal, daemon=True)
+        driver.start()
+        result = run_command_wait(
+            "UPDATE",
+            "planning",
+            total=1,
+            work=work,
+            help_entries=_entries(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            interactive=True,
+            interval=0.01,
+            return_view=CommandWaitView("REPORT", "pending"),
+            context_view=CommandWaitView("INPUTS", "frozen"),
+            context_browser=CommandWaitContextBrowser.create(
+                ("alpha", "beta"),
+                current_name="alpha",
+            ),
+        )
+        driver.join(timeout=3)
+
+    assert result == "returned"
+    assert not driver.is_alive()
+    expected = [action for _key, action in sequence]
+    assert [action for action in actions if action in events] == expected
+
+
 def test_loading_report_body_advances_with_the_background_busy_frame(monkeypatch):
     rendered: list[str] = []
     original = ScrollableFormattedTextPane.set_formatted_text

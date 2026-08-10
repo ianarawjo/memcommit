@@ -132,7 +132,7 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
 [C[0m                                                                                                                                                                                 [0;1mv[0m
 
-[59C[0mmove ·[C←/→ expand · Enter[Cbrowse ·[CA/a all · m Memori[Cs here · M all Memories · Q/q close · read-only[45A[159D[0m[?25l[6A[52C[0m.[3C1[0m
+[5C[0mback · I/i[Cinputs · R/r[Crepo[Ct · H/h/? Help · ↑/↓[Cmove · ←/→[Cexpand · E[Cter browse · A/a[Call ·[Cm Memories h[Cre[C· M all Memories · Q/q close · read-only[45A[155D[0m[?25l[6A[52C[0m.[3C1[0m
 
 
 
@@ -194,7 +194,7 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
 [C[0m                                                                                                                                                                                 [0;1mv[0m
 
-[59C[0mscroll[C· PgUp/PgDn page ·[CHome/End[C· Q/q request clos[C · read-only[0m[K[49A[124D[0m[?12l[?25h[?25l[2A[52C[0m… · 1s[0m[K[0m
+[5C[0mContexts ·[CI/i back[C· R/[C report[C· H[Ch/? Help[C· ↑/↓ scroll ·[CPgUp/PgDn page[C· Hom[C/End ·[CQ/q[Crequest clo[Ce · read-on[Cy[0m[K[49A[122D[0m[?12l[?25h[?25l[2A[52C[0m… · 1s[0m[K[0m
 
 [C[0m[?12l[?25h[?25l[2A[52C[0m.[3C2[0m
 
@@ -215,7 +215,40 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [C[0;38;2;165;173;203m  .  [0m                                                                                     [0m
 [C[0m [0m
 [C[0;38;2;244;245;247mThe completed report will replace these markers after analysis.[0m [0m
-[C[0;38;2;244;245;247mC/c opens Contexts; R/r returns here; H/h/? opens Help.[0m [16A[56D[0m[?12l[?25h[?25l[2A[53C[0m. · 2s[0m
+[C[0;38;2;244;245;247mC/c opens Contexts; R/r returns here; H/h/? opens Help.[0m [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[20C[0minputs[C· R/[C back[49A[36D[0m[?12l[?25h[?25l[2A[53C[0m. · 2s[0m
 
 
 
@@ -365,7 +398,7 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [3C[0;38;2;165;173;203m.[0m
 
 
-[4C[0;38;2;165;173;203m.[13A[4D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[52C[0m… · 5s[0m[K[0m
+[4C[0;38;2;165;173;203m.[13A[4D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[52C[0m… · 6s[0m[K[0m
 
 
 
@@ -380,9 +413,7 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [4C[0;38;2;165;173;203m.[0m
 
 
-[3C[0;38;2;165;173;203m… [13A[4D[0m[?12l[?25h[?25l[2A[56C[0m6[0m
-
-[C[0m[?12l[?25h[?25l[2A[52C[0m.[0m
+[3C[0;38;2;165;173;203m… [13A[4D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[52C[0m.[0m
 
 
 
@@ -556,7 +587,7 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Reference: task-2/advisor1 (layout only; no authority)                                                                                                                       │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Compared: task-2/advisor2                                                                                                                                                    │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED GRAPH ONLY                                                                                                  │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Analysis: 737f97db · REUSED                                                                                                                                                  │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Analysis: 8fce03ad · REUSED                                                                                                                                                  │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ METRICS · MEMORIES 1 + 1 · RELATIONS 1 · POTENTIAL CONFLICTS 1                                                                                                               │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ EQUIVALENT 0 · COMPATIBLE 0 · SCOPED 0 · CONFLICT 1 · DISTINCT 0 · UNCLEAR 0                                                                                                 │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m

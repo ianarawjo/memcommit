@@ -136,8 +136,10 @@ inventory data and renderer remain shared; only the caller-owned visibility
 and exit policy differs. Ordinary `mem help` retains `H` for full command help.
 The sibling wait destinations are `C/c` for a browse-only switch-shaped
 Context tree, `I/i` for supplied confirmed inputs, and `R/r` for a supplied
-report. `m/M` may reveal Memory previews inside the Context tree, but that
-surface has no switch receipt or current-Context mutation path.
+report. Repeating the active destination key returns to its immediate origin,
+matching `H/h` open/hide without reviving the former unnamed C-only toggle.
+`m/M` may reveal Memory previews inside the Context tree, but that surface has
+no switch receipt or current-Context mutation path.
 See
 [`command-wait-destination-browser-design-rationale.md`](command-wait-destination-browser-design-rationale.md)
 for the destination and browse-only boundary, and
