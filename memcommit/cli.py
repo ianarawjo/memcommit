@@ -306,8 +306,10 @@ app.command(
 app.command(
     "forget",
     help=(
-        "Analyze direct Memories against one instruction, review the proposed "
-        "keep/edit/delete decision for each, and apply only the accepted batch."
+        "Enter interactive instruction and direct-Source setup when no operand "
+        "is supplied, or analyze one instruction against the current direct "
+        "Memories; review each keep/edit/delete decision and apply only the "
+        "accepted batch."
     ),
 )(forget.cmd)
 app.command(

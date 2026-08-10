@@ -1,5 +1,5 @@
 import sys
-from typing import Annotated
+from typing import Annotated, Optional
 
 import typer
 
@@ -9,10 +9,16 @@ from memcommit.commands.command_wait import (
     build_report_loading_view,
     run_command_wait,
 )
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.forget_setup_workbench import choose_forget_setup
 from memcommit.commands.granted_context import (
     authorized_context_mutation,
+    context_access_display_facts,
     grant_checkpoint_args,
     resolve_context_access,
+)
+from memcommit.commands.readable_context_catalog import (
+    freeze_profile_readable_context_catalog,
 )
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import AutoCheckpoint, Context
@@ -218,15 +224,60 @@ def _run_interactive_forget(
         proposals, history = ops.revise_forget(feedback, llm, history, ctx)
 
 
-def cmd(info: Annotated[str, typer.Argument(help="Description of memories to forget")]) -> None:
+def cmd(
+    info: Annotated[
+        Optional[str],
+        typer.Argument(
+            show_default=False,
+            help=(
+                "Description of Memories to forget; omit in a terminal to "
+                "enter an instruction and select one direct Source"
+            ),
+        ),
+    ] = None,
+) -> None:
+    if info is None and not _interactive_terminal():
+        typer.secho(
+            "Forget error: INSTRUCTION is required outside a terminal. In a "
+            "terminal, run 'mem forget' to open the interactive Forget setup.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
     active_store = MemoryStore()
     try:
+        context_snapshot = ContextOperandSnapshot.capture(active_store)
         access = resolve_context_access(
             active_store,
             None,
-            current_name=active_store.current_context_name(),
+            current_name=context_snapshot.current_name,
             required_permission="READ",
         )
+        if info is None:
+            catalog = freeze_profile_readable_context_catalog(
+                active_store,
+                access,
+                include_query_routes=False,
+            )
+            names = tuple(catalog.list_context_names())
+            annotations = {
+                name: context_access_display_facts(catalog.access_for(name))
+                for name in names
+                if catalog.access_for(name).is_granted
+            }
+            receipt = choose_forget_setup(
+                names,
+                current=access.display_name,
+                annotations=annotations,
+            )
+            if receipt is None:
+                typer.echo("Forget cancelled.")
+                return
+            # The receipt names a row from this frozen public catalog. Preserve
+            # its exact Grant/store binding instead of consulting current again.
+            access = catalog.access_for(receipt.context_name)
+            info = receipt.instruction
         store = access.store
         ctx = store.load_direct(access.context_name)
     except (
@@ -241,6 +292,7 @@ def cmd(info: Annotated[str, typer.Argument(help="Description of memories to for
         raise typer.Exit(1)
 
     try:
+        assert info is not None
         provider = connect_codex_chatgpt_provider()
         applied = _run_interactive_forget(ctx, info, provider)
     except (OSError, QueryProviderError, RuntimeError, ValueError) as e:
@@ -260,14 +312,34 @@ def cmd(info: Annotated[str, typer.Argument(help="Description of memories to for
                 access,
                 required_permissions=_required_permissions(applied),
             ):
-                store.save(ctx, AutoCheckpoint(
-                    command="forget",
-                    args={
-                        "query": info,
-                        **grant_checkpoint_args(access),
-                    },
-                    description=f'Forgot ({info[:40]}): {", ".join(parts)}',
-                ))
+                checkpoint = store.save(
+                    ctx,
+                    AutoCheckpoint(
+                        command="forget",
+                        args={
+                            "query": info,
+                            **grant_checkpoint_args(access),
+                        },
+                        description=f'Forgot ({info[:40]}): {", ".join(parts)}',
+                    ),
+                )
         except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
+        if _interactive_terminal():
+            effects = []
+            if removes:
+                effects.append(f"{len(removes)} removed")
+            if edits:
+                effects.append(f"{len(edits)} edited")
+            checkpoint_label = (
+                f" · checkpoint [{checkpoint.uid[:8]}]"
+                if checkpoint is not None
+                else ""
+            )
+            typer.secho(
+                "Forget applied · SOURCE "
+                f"{safe_terminal_text(access.display_name)} · "
+                f"{', '.join(effects)}{checkpoint_label}",
+                fg=typer.colors.GREEN,
+            )

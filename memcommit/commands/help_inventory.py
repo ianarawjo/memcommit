@@ -248,6 +248,7 @@ COMMAND_FORMS = {
         "mem find-duplicates --context [context] (explicit Context; no changes)",
     ),
     "forget": (
+        "mem forget (enter interactive instruction and direct-Source setup)",
         'mem forget "[instruction]" (review and apply selective forgetting)',
     ),
     "ground": (

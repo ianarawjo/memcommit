@@ -68,6 +68,44 @@ changing it updates the durable session but does not create the Context. Its
 expanded editor shares the local parent-Context tree and keeps exact direct
 input as the initial focus.
 
+## Flagless Forget setup
+
+In a TTY, `mem forget` without an instruction opens a process-local setup
+workbench before connecting a provider. The screen composes three vertical
+Surfaces through the common terminal component family:
+
+1. `INSTRUCTION`, a query-like writable single-line field initially focused;
+2. `SOURCE`, the common `ContextSelectorControl` in `SINGLE` mode over one
+   frozen `ALL READABLE CONTEXTS` catalog; and
+3. `TO DO`, the exact `ANALYZE AND REVIEW` action.
+
+The current Context is initially checked and marked only for orientation.
+Selecting another row does not switch the global current Context. Enter from
+the Instruction field analyzes the checked current Source directly, matching
+Query and Find's quick input path; a person who changes Source may instead run
+from To Do. Both paths produce the same process-local `ForgetSetupReceipt`
+containing one canonical public Context name and one nonblank instruction.
+The command retrieves the selected Context's exact store and Grant binding
+from the same frozen catalog rather than resolving current state again.
+
+Forget deliberately exposes no `PROFILE`, `MULTIPLE`, descendant-range, or
+embedded-Context controls. Its mutation unit remains one direct Context and
+one checkpoint, and its semantic invariant remains one complete direct Source
+frame against one instruction. Profile-wide or recursive selection would
+instead require a multi-owner mutation plan, effect permissions, freshness
+checks, rollback, and user-visible application receipt; it is not merely a UI
+option. Granted readable rows retain their full permission annotation, while
+the accepted reviewed edits and deletes continue to determine the exact
+`UPDATE`/`DELETE` union at the normal mutation boundary.
+
+Cancellation publishes no analysis and connects no provider. Outside a TTY,
+an omitted instruction fails with a stable usage error. Supplying
+`mem forget "INSTRUCTION"` preserves the existing current-Context fast path,
+non-TTY prompt compatibility, whole-frame provider turn, Resolution review,
+and checkpoint behavior. After a successful TTY Apply, the command prints the
+canonical public Source, effect counts, and checkpoint prefix as its durable
+success receipt; this appears only after the authorized save succeeds.
+
 ## Operation boundaries
 
 The shared curation module does not resolve Context locators, open grants,
@@ -98,7 +136,9 @@ boundary before advertising resume; the common curation contract alone does
 not provide that authority or freshness guarantee.
 
 The first implementation keeps Forget's non-TTY legacy prompt flow for script
-compatibility. The shared Resolution Workbench is the interactive TTY surface.
+compatibility. In a TTY, flagless setup precedes the shared Resolution
+Workbench; an explicit instruction enters the existing Resolution path
+directly.
 
 Forget now resolves the same configured semantic provider as Sever and invokes
 its bounded `complete()` primitive with the complete-coverage output schema.
