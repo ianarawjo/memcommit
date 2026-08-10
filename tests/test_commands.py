@@ -192,9 +192,10 @@ class TestHelp:
             help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
             == "ANALYZE & TRANSFORM"
         )
+        assert help_inventory.HELP_CATEGORY_BY_COMMAND["reference"] == "MEMORIES"
         names = (
-            "clear", "branch", "status", "delete", "add", "show",
-            "switch", "contexts", "edit", "remove",
+            "clear", "branch", "status", "delete", "add", "reference",
+            "show", "switch", "contexts", "edit", "remove",
         )
         entries = [
             CommandEntry(
@@ -212,7 +213,7 @@ class TestHelp:
 
         assert [entry.name for entry in by_kind] == [
             "status", "contexts", "show", "switch", "branch",
-            "add", "edit", "remove", "delete", "clear",
+            "add", "reference", "edit", "remove", "delete", "clear",
         ]
         assert [entry.name for entry in a_z] == sorted(names, key=str.casefold)
 

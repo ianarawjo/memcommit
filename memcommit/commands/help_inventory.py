@@ -96,13 +96,13 @@ HELP_CATEGORY_GROUPS = (
         (
             "status", "contexts", "list", "ls", "show", "switch",
             "checkout", "init", "branch", "rename", "import", "embed",
-            "reference",
         ),
     ),
     (
         "MEMORIES",
         (
-            "add", "edit", "chunk", "forget", "remove", "delete", "clear",
+            "add", "reference", "edit", "chunk", "forget", "remove",
+            "delete", "clear",
         ),
     ),
     (
