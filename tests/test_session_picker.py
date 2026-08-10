@@ -341,7 +341,7 @@ def test_empty_catalog_selects_add_new_row_for_enter():
     assert selected is receipt
 
 
-def test_add_new_label_and_detail_are_operation_specific_and_nonexecuting():
+def test_add_new_label_and_detail_omit_the_internal_action_receipt():
     receipt = SessionNewReceipt(
         kind="saved_review",
         argv=("mem", "review", "unsafe\nname"),
@@ -350,8 +350,9 @@ def test_add_new_label_and_detail_are_operation_specific_and_nonexecuting():
     assert _new_session_label(receipt) == "Add new Saved Review session"
     detail = _render_new_detail(receipt)
     assert "Add new Saved Review session" in detail
-    assert "NOT EXECUTED" in detail
-    assert "unsafe\\nname" in detail
+    assert "NOT EXECUTED" not in detail
+    assert "[0]" not in detail
+    assert "unsafe\\nname" not in detail
     assert "unsafe\nname" not in detail
 
     unsafe = SessionNewReceipt(kind="meld\nFAKE", argv=("mem", "meld"))
@@ -370,7 +371,8 @@ def test_pinned_action_can_name_selection_instead_of_a_new_session():
     detail = _render_new_detail(receipt)
     assert "SELECT A MEMORY" in detail
     assert "Choose from the common Memory tree." in detail
-    assert "Exact action route · NOT EXECUTED" in detail
+    assert "Exact action route" not in detail
+    assert "[0]" not in detail
 
 
 @pytest.mark.parametrize("key", ["q", "\x1b", "\x03"])
@@ -491,7 +493,7 @@ def test_context_group_sort_keeps_case_variants_contiguous():
     ]
 
 
-def test_detail_escapes_untrusted_metadata_and_each_exact_argv_argument():
+def test_detail_escapes_untrusted_metadata_and_omits_internal_open_argv():
     candidate = SessionPickerEntry(
         kind="ground\nFAKE",
         key="key\u202eexe",
@@ -515,8 +517,10 @@ def test_detail_escapes_untrusted_metadata_and_each_exact_argv_argument():
     assert " Summary      subtitle\\nheading" in rendered
     assert " Subtitle     " not in rendered
     assert "              second line\\u202e" in rendered
-    assert "[2] unsafe\\n--delete" in rendered
-    assert "[3] \\\\literal" in rendered
+    assert "Public route hint" not in rendered
+    assert "[0]" not in rendered
+    assert "unsafe\\n--delete" not in rendered
+    assert "\\\\literal" not in rendered
     assert "\u202e" not in rendered
     assert "\u2066" not in rendered
 

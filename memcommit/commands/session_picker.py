@@ -74,13 +74,13 @@ class SessionPickerEntry:
     group: str
     sort_timestamp: float
     detail: str
-    # This is a display-only public route hint.  It can help a person recognize
-    # the selected work, but it is never authoritative: some operations do not
-    # expose a public command that identifies one immutable saved artifact.
-    # Adapters must reopen by ``key`` and revalidate persisted identity instead.
+    # This exact receipt returns to the operation adapter after selection. It is
+    # deliberately not rendered: a zero-based argv dump exposes implementation
+    # structure without helping a person identify the saved work. Adapters must
+    # still reopen by ``key`` and revalidate persisted identity.
     reopen_argv: tuple[str, ...]
     # Compare uses the detail pane as the report itself. Other adapters retain
-    # the shared metadata envelope and public route hint.
+    # the shared metadata envelope.
     detail_only: bool = False
 
     def __post_init__(self) -> None:
@@ -416,15 +416,11 @@ def _detail_lines(value: str) -> tuple[str, ...]:
 
 
 def _render_detail(entry: SessionPickerEntry) -> str:
-    """Render untrusted metadata and each route-hint element visibly escaped."""
+    """Render untrusted metadata without exposing the internal open receipt."""
     if entry.detail_only:
         return "\n".join(
             display_escape_text(line) for line in entry.detail.split("\n")
         )
-    argv_lines = tuple(
-        f"   [{index}] {display_escape_text(argument)}"
-        for index, argument in enumerate(entry.reopen_argv)
-    )
     subtitle = entry.subtitle or "(none)"
     return "\n".join(
         (
@@ -436,8 +432,6 @@ def _render_detail(entry: SessionPickerEntry) -> str:
             f" Modified     {_format_timestamp(entry.sort_timestamp)}",
             f" Summary      {display_escape_text(subtitle)}",
             *_detail_lines(entry.detail),
-            " Public route hint · NOT EXECUTED",
-            *argv_lines,
         )
     )
 
@@ -462,10 +456,6 @@ def _new_session_label(receipt: SessionNewReceipt) -> str:
 
 
 def _render_new_detail(receipt: SessionNewReceipt) -> str:
-    argv_lines = tuple(
-        f"   [{index}] {display_escape_text(argument)}"
-        for index, argument in enumerate(receipt.argv)
-    )
     return "\n".join(
         (
             f" {_new_session_label(receipt)}",
@@ -475,12 +465,6 @@ def _render_new_detail(receipt: SessionNewReceipt) -> str:
                 if receipt.action_description is not None
                 else "Leave saved-session browsing and enter operation-specific setup."
             ),
-            (
-                " Exact action route · NOT EXECUTED"
-                if receipt.action_label is not None
-                else " Exact new-session route · NOT EXECUTED"
-            ),
-            *argv_lines,
         )
     )
 

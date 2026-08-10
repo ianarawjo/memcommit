@@ -23,8 +23,11 @@ entry:
 ```text
 kind + stable local key + title + status + summary
 + Context grouping label + modification sort value + detail
-+ visible public-route hint
 ```
+
+The entry also carries an exact internal reopen receipt. The picker returns
+that receipt to the operation adapter after selection but does not render it.
+It is control data, not useful saved-work description.
 
 `Summary` is the user-facing label for the compact row description; the
 internal compatibility field remains `subtitle` so existing adapters and
@@ -43,11 +46,11 @@ The shared terminal component owns only arrows, scrolling, filtering, recent
 or name sorting, Context grouping, detail rendering, and a local selection
 receipt. Operation adapters continue to own discovery, parsing,
 freshness checks, provider behavior, and reopening. All untrusted labels,
-detail text, and route-hint elements pass through the terminal display-escape
-boundary. The route hint helps a person recognize an operation, but it is
-explicitly labelled `NOT EXECUTED`: some saved artifacts have no public CLI
-operand that identifies one immutable record. The stable catalog key and the
-operation adapter's reload checks are authoritative.
+detail text, and status values pass through the terminal display-escape
+boundary. The stable catalog key and the operation adapter's reload checks are
+authoritative. The exact receipt remains process-local because rendering its
+zero-based argv elements exposed implementation structure without adding a
+useful recognition or review decision.
 
 Trace and Rationale reuse these frozen catalog mechanics only when completed
 recent report targets exist. Their pinned `SELECT A MEMORY` row is a navigation
@@ -72,7 +75,7 @@ collect the operation-specific Contexts or setup fields. The list reserves one
 of its visible lines for the pinned row so scrolling around a saved selection
 cannot hide the explicit creation path. An empty catalog therefore remains an
 actionable screen instead of short-circuiting before the picker opens. No
-picker executes the displayed argv. When a grouped list scrolls into
+picker executes its internal receipt argv. When a grouped list scrolls into
 the middle of one Context, it repeats that Context heading with `CONTINUED`;
 the visible slice is budgeted by rendered lines rather than item count so
 headings cannot hide the selected session.
@@ -221,9 +224,9 @@ broader saved-view browser, but only Compare is in this implementation slice.
 - Atomize freezes its analysis identity but intentionally resumes the latest
   valid mutable workbench/grounding state under that analysis; its frozen row
   can lag a concurrently saved subordinate turn.
-- A public route hint is displayed and compared as argv elements, not executed
-  by the shared picker and never interpolated through a shell. Selection uses
-  the opaque catalog key, not that hint.
+- The internal reopen receipt is compared as argv elements but is neither
+  rendered nor executed by the shared picker and is never interpolated through
+  a shell. Selection uses the opaque catalog key, not the receipt as identity.
 - The Add-new row is derived only from the adapter's validated
   `SessionNewReceipt`. It never enters the saved catalog, does not acquire a
   fake timestamp or Context group, and returns no open-session key.
