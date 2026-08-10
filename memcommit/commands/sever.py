@@ -19,7 +19,7 @@ from memcommit.commands.session_picker import (
     SessionOpenReceipt,
     choose_session,
 )
-from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.sever_sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
@@ -200,11 +200,8 @@ def _start(
     authorize_derived_transfer(source_access, output_access)
     authorize_derived_transfer(criteria_access, output_access)
     authorize_analysis_save((source_access, criteria_access), retention="RETAINED")
-    with CommandProgress(
-        "SEVER",
-        "freezing source and criteria",
-        total=3,
-    ) as progress:
+
+    def freeze_and_analyze(progress):
         source = _capture_binding(
             source_access,
             include_descendants=source_descendants,
@@ -272,6 +269,13 @@ def _start(
         except SeverProviderError:
             annotate_sever_attempt(failure_kind="VALIDATION")
             raise
+
+    return run_command_wait(
+        "SEVER",
+        "freezing source and criteria",
+        total=3,
+        work=freeze_and_analyze,
+    )
 
 
 def render_sever(session: SeverSession) -> str:

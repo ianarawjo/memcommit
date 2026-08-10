@@ -59,14 +59,20 @@ An eligible command records:
   schema presence, input/output character counts, elapsed time, and coarse
   exception class;
 - explicit semantic actions emitted by shared surfaces, initially Resolution
-  workbench return actions and final approval presentation/acceptance.
+  workbench return actions and final approval presentation/acceptance;
+- content-free waiting Help actions, including opening/closing the shared
+  inventory, the public command identifier whose forms were inspected, and
+  whether the original result or error became ready while Help remained open.
 
 The terminal recorder wraps the prompt-toolkit application session at the root
 command boundary, so existing TUIs do not need parallel arrow-key machinery.
 The exact focused control is sampled when input is read. Semantic surfaces add
 events when a key's meaning matters more than its physical spelling; this is
 why a reviewed Apply can be distinguished from an Enter that merely opens a
-detail.
+detail. Provider work moved to a responsive executor inherits the active
+recording context. Because its provider events can overlap foreground Help
+navigation, one recorder lock serializes both sources into the same durable,
+gap-free attempt sequence.
 
 ## Privacy boundary
 

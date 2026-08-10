@@ -120,19 +120,17 @@ def test_sever_start_reports_real_blocking_stages(isolated_store, monkeypatch):
     events: list[tuple[object, ...]] = []
 
     class Progress:
-        def __init__(self, operation, stage, *, total):
-            events.append(("start", operation, stage, total))
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *args):
-            events.append(("close",))
-
         def update(self, stage, *, step):
             events.append(("update", stage, step))
 
-    monkeypatch.setattr(sever_command, "CommandProgress", Progress)
+    def wait(operation, stage, *, total, work):
+        events.append(("start", operation, stage, total))
+        try:
+            return work(Progress())
+        finally:
+            events.append(("close",))
+
+    monkeypatch.setattr(sever_command, "run_command_wait", wait)
 
     sever_command._start(
         store=store,

@@ -3,8 +3,9 @@ from __future__ import annotations
 
 import sys
 import textwrap
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Annotated
+from typing import Annotated, Literal
 
 import typer
 from prompt_toolkit.application import Application
@@ -567,7 +568,9 @@ def _visible_commands(ctx: typer.Context) -> list[tuple[str, object]]:
     return sorted(commands, key=lambda item: (item[0].casefold(), item[0]))
 
 
-def _command_entries(root: typer.Context) -> list[CommandEntry]:
+def command_entries(root: typer.Context) -> list[CommandEntry]:
+    """Build the one shared visible command inventory for every Help surface."""
+
     commands = _visible_commands(root)
     visible_names = {name for name, _ in commands}
     configured_names = (
@@ -882,10 +885,15 @@ def run_help_selector(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
+    mode: Literal["SELECT", "EXPLORE"] = "SELECT",
+    status_supplier: Callable[[], str] | None = None,
+    on_explore_action: Callable[[str, str | None], None] | None = None,
 ) -> HelpSelection | None:
-    """Return the command selected in the terminal, or ``None`` on cancel."""
+    """Select a command, or browse the same inventory without shell effects."""
     if not entries:
         return None
+    if mode not in {"SELECT", "EXPLORE"}:
+        raise ValueError("Help mode must be SELECT or EXPLORE.")
     if require_tty and (
         not sys.stdin.isatty() or not sys.stdout.isatty()
     ):
@@ -913,6 +921,10 @@ def run_help_selector(
     bindings = KeyBindings()
     navigation_accelerator = NavigationAccelerator()
     app_ref: dict[str, Application[HelpSelection | None]] = {}
+
+    def emit_explore_action(action: str, command_name: str | None = None) -> None:
+        if mode == "EXPLORE" and on_explore_action is not None:
+            on_explore_action(action, command_name)
 
     def select_view(delta: int) -> None:
         selected_name = visible_entries["value"][selected_index["value"]].name
@@ -1173,9 +1185,20 @@ def run_help_selector(
             # template before they had a chance to edit it.
             expanded_index["value"] = index
             selected_form["value"] = 0
+            emit_explore_action(
+                "EXPAND",
+                visible_entries["value"][index].name,
+            )
             event.app.invalidate()
             return
         entry = visible_entries["value"][index]
+        if mode == "EXPLORE":
+            # A waiting Help session is a read-only learning surface. Enter
+            # may inspect a form, but it must never return a shell template or
+            # execute a second command while the frozen operation is running.
+            emit_explore_action("FORM", entry.name)
+            event.app.invalidate()
+            return
         command_line = _selectable_form_line(entry.forms[form_index])
         event.app.exit(
             result=HelpSelection(
@@ -1193,6 +1216,10 @@ def run_help_selector(
         if expanded_index["value"] != index:
             expanded_index["value"] = index
             selected_form["value"] = 0
+            emit_explore_action(
+                "EXPAND",
+                visible_entries["value"][index].name,
+            )
         elif selected_form["value"] is None:
             selected_form["value"] = 0
         event.app.invalidate()
@@ -1214,6 +1241,15 @@ def run_help_selector(
         if concept_focus_active():
             return
         entry = visible_entries["value"][selected_index["value"]]
+        if mode == "EXPLORE":
+            # Complete Click help normally replaces the selector and prints
+            # to the shell. During a background operation, the audited forms
+            # and description stay inside this terminal session instead.
+            expanded_index["value"] = selected_index["value"]
+            selected_form["value"] = 0
+            emit_explore_action("DETAIL", entry.name)
+            event.app.invalidate()
+            return
         event.app.exit(
             result=HelpSelection(
                 command_name=entry.name,
@@ -1269,12 +1305,20 @@ def run_help_selector(
     def _cancel(event) -> None:
         event.app.exit(result=None)
 
+    def header_fragments() -> list[tuple[str, str]]:
+        title = (
+            " mem help · explore while work continues"
+            if mode == "EXPLORE"
+            else " mem help · command inventory"
+        )
+        status = status_supplier() if status_supplier is not None else ""
+        fragments = [("class:title", title)]
+        if status:
+            fragments.append(("", f" · {display_escape_text(status)}"))
+        return fragments
+
     header = Window(
-        FormattedTextControl(
-            [
-                ("class:title", " mem help · command inventory"),
-            ]
-        ),
+        FormattedTextControl(header_fragments),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -1296,23 +1340,35 @@ def run_help_selector(
             and app_ref["app"].layout.has_focus(view_control)
         ),
     )
+
+    def footer_text() -> str:
+        return_label = "return to waiting" if mode == "EXPLORE" else "cancel"
+        if (
+            app_ref.get("app") is not None
+            and app_ref["app"].layout.has_focus(view_control)
+        ):
+            return f" VIEW: ←/→ choose · ↓ list · Tab surface · Q {return_label}"
+        if concept_focus_active():
+            return " ↑/↓ move (hold accelerates)  Tab surface "
+        enter_action = (
+            "Enter open forms"
+            if selected_form["value"] is None
+            else "Enter inspect form"
+            if mode == "EXPLORE"
+            else "Enter prefill command line"
+        )
+        detail_action = (
+            "H show details  Q return to waiting"
+            if mode == "EXPLORE"
+            else "H full help"
+        )
+        return (
+            " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "
+            f"{enter_action}  {detail_action} "
+        )
+
     footer = Window(
-        FormattedTextControl(
-            lambda: (
-                " VIEW: ←/→ choose · ↓ list · Tab surface · Q cancel"
-                if app_ref.get("app") is not None
-                and app_ref["app"].layout.has_focus(view_control)
-                else " ↑/↓ move (hold accelerates)  Tab surface "
-                if concept_focus_active()
-                else " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "
-                + (
-                    "Enter open forms  "
-                    if selected_form["value"] is None
-                    else "Enter prefill command line  "
-                )
-                + "H full help "
-            )
-        ),
+        FormattedTextControl(footer_text),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -1326,6 +1382,7 @@ def run_help_selector(
         erase_when_done=True,
         input=app_input,
         output=app_output,
+        refresh_interval=(0.35 if status_supplier is not None else None),
         style=merge_styles(
             [
                 MEMCOMMIT_TUI_STYLE,
@@ -1429,7 +1486,7 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    entries = _command_entries(root)
+    entries = command_entries(root)
     if emit_selection:
         if not _selection_terminal():
             typer.secho(

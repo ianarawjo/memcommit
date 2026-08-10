@@ -26,7 +26,7 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.endpoint_setup_flows import choose_meld_setup
 from memcommit.derived_policy import (
     analysis_retention,
@@ -861,11 +861,7 @@ def _assess_and_save(
     provider_factory,
     expected_session_digest: str | None,
 ) -> MeldSession:
-    with CommandProgress(
-        "MELD",
-        "connecting provider",
-        total=2,
-    ) as progress:
+    def assess(progress):
         provider = _connect_meld_provider(provider_factory)
         progress.update("analyzing meld turn", step=2)
         assessment = assess_meld_turn(session, provider)
@@ -896,7 +892,14 @@ def _assess_and_save(
                     "Meld validation repair failed after the initial response "
                     f"was rejected ({validation_error}): {repair_error}"
                 ) from repair_error
-        session = candidate
+        return candidate, assessment
+
+    session, assessment = run_command_wait(
+        "MELD",
+        "connecting provider",
+        total=2,
+        work=assess,
+    )
     # Provider latency creates a real race window. Rebind every source and the
     # target after the final call before persisting a claim about them.
     left, right, target = _load_bound_contexts(store, session)

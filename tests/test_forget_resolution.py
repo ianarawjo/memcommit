@@ -223,17 +223,14 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
     source_memory_count = len(context.memories)
     progress_events: list[tuple[object, ...]] = []
 
-    class Progress:
-        def __init__(self, operation, stage, *, total):
-            progress_events.append(("start", operation, stage, total))
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *args):
+    def wait(operation, stage, *, total, work):
+        progress_events.append(("start", operation, stage, total))
+        try:
+            return work(object())
+        finally:
             progress_events.append(("close",))
 
-    monkeypatch.setattr(forget_command, "CommandProgress", Progress)
+    monkeypatch.setattr(forget_command, "run_command_wait", wait)
     actions = iter(
         (
             ResolutionWorkbenchAction(

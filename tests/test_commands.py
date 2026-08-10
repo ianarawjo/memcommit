@@ -648,6 +648,29 @@ class TestHelp:
         assert selected is not None
         assert selected.command_line == "mem switch [context]"
 
+    def test_explore_mode_keeps_forms_inside_help_until_explicit_return(self):
+        actions: list[tuple[str, str | None]] = []
+        with create_pipe_input() as pipe_input:
+            # The second Enter would return a shell template in SELECT mode.
+            # EXPLORE keeps the session open, permits further navigation, and
+            # returns only when Q explicitly leaves Help.
+            pipe_input.send_text("\r\r\x1b[B\rhq")
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+                mode="EXPLORE",
+                on_explore_action=lambda action, command: actions.append(
+                    (action, command)
+                ),
+            )
+
+        assert selected is None
+        assert actions[:2] == [("EXPAND", "alpha"), ("FORM", "alpha")]
+        assert ("FORM", "alpha") in actions
+        assert ("DETAIL", "alpha") in actions
+
     def test_selector_reuses_shared_held_arrow_acceleration(self, monkeypatch):
         class FiveStepAccelerator:
             def move(self, direction, *, app, move_one):

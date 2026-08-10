@@ -4,7 +4,7 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
-from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.granted_context import (
     authorized_context_mutation,
     grant_checkpoint_args,
@@ -52,10 +52,15 @@ def _run_resolution_forget(
         run_resolution_workbench_shell,
     )
 
-    # Forget is one whole-frame provider turn. The shared heartbeat reports
-    # liveness and elapsed time without pretending to observe provider progress.
-    with CommandProgress("FORGET", _forget_analysis_stage(ctx), total=1):
-        analysis, _history = ops.analyze_forget(ctx, info, llm)
+    # Forget remains one whole-frame provider turn. Only its host execution is
+    # moved off the foreground so Help can be explored without partitioning or
+    # changing the semantic request.
+    analysis, _history = run_command_wait(
+        "FORGET",
+        _forget_analysis_stage(ctx),
+        total=1,
+        work=lambda _progress: ops.analyze_forget(ctx, info, llm),
+    )
     if not analysis.decisions:
         typer.echo("Nothing to apply.")
         return []
@@ -136,10 +141,14 @@ def _run_interactive_forget(
     if _interactive_terminal():
         return _run_resolution_forget(ctx, info, llm)
     typer.secho(f"Consulting {_provider_label(llm)!r}...", dim=True)
-    # CommandProgress is intentionally silent outside a TTY, preserving the
+    # The shared wait is intentionally silent outside a TTY, preserving the
     # stable redirected output while keeping one orchestration path.
-    with CommandProgress("FORGET", _forget_analysis_stage(ctx), total=1):
-        proposals, history = ops.forget(ctx, info, llm)
+    proposals, history = run_command_wait(
+        "FORGET",
+        _forget_analysis_stage(ctx),
+        total=1,
+        work=lambda _progress: ops.forget(ctx, info, llm),
+    )
 
     while True:
         _print_proposals(proposals, info)

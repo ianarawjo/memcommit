@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from contextvars import ContextVar
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from functools import wraps
 import json
@@ -20,6 +20,7 @@ import os
 from pathlib import Path
 import re
 import sys
+import threading
 import time
 from typing import Callable, Iterator, ParamSpec, TypeVar
 import uuid
@@ -466,28 +467,39 @@ class ActiveStudyActionRecording:
     attempt_uid: str
     started_monotonic: float
     sequence: int = 0
+    _append_lock: threading.Lock = field(
+        default_factory=threading.Lock,
+        repr=False,
+    )
 
     def append(self, event_kind: str, **data: object) -> StudyActionEvent:
-        next_sequence = self.sequence + 1
-        event = StudyActionEvent(
-            uid=str(uuid.uuid4()),
-            sequence=next_sequence,
-            attempt_uid=self.attempt_uid,
-            study_uid=self.ledger.identity.uid,
-            study_name=self.ledger.identity.name,
-            profile_uid=self.ledger.profile.uid,
-            profile_role=self.ledger.identity.role,
-            occurred_at=_timestamp(),
-            elapsed_seconds=max(0.0, time.monotonic() - self.started_monotonic),
-            action=event_kind,
-            data=dict(data),
-        )
-        self.ledger.append(event)
-        # Advance only after the durable append. A rejected event must not
-        # manufacture a sequence gap that makes later valid telemetry appear
-        # corrupt.
-        self.sequence = next_sequence
-        return event
+        # A responsive waiting TUI can record Help navigation while its copied
+        # executor context records provider progress. Serialize both against
+        # one durable sequence so event order remains complete and readable.
+        with self._append_lock:
+            next_sequence = self.sequence + 1
+            event = StudyActionEvent(
+                uid=str(uuid.uuid4()),
+                sequence=next_sequence,
+                attempt_uid=self.attempt_uid,
+                study_uid=self.ledger.identity.uid,
+                study_name=self.ledger.identity.name,
+                profile_uid=self.ledger.profile.uid,
+                profile_role=self.ledger.identity.role,
+                occurred_at=_timestamp(),
+                elapsed_seconds=max(
+                    0.0,
+                    time.monotonic() - self.started_monotonic,
+                ),
+                action=event_kind,
+                data=dict(data),
+            )
+            self.ledger.append(event)
+            # Advance only after the durable append. A rejected event must not
+            # manufacture a sequence gap that makes later valid telemetry
+            # appear corrupt.
+            self.sequence = next_sequence
+            return event
 
 
 _ACTIVE_STUDY_ACTIONS: ContextVar[ActiveStudyActionRecording | None] = ContextVar(

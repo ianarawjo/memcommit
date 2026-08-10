@@ -47,10 +47,8 @@ from memcommit.commands.compare_sessions import (
     revalidate_saved_comparison,
 )
 from memcommit.commands.compare_workbench import run_compare_workbench
-from memcommit.commands.command_progress import (
-    CommandProgress,
-    progressing_provider_factory,
-)
+from memcommit.commands.command_progress import progressing_provider_factory
+from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.endpoint_setup_flows import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
 from memcommit.commands.session_picker import SessionNewReceipt
@@ -878,14 +876,17 @@ def cmd(
             reference_descendants=reference_descendants,
             compared_descendants=compared_descendants,
         )
-        with CommandProgress(
+        def compare_frames(progress):
+            provider = _connect_compare_provider(connect_codex_chatgpt_provider)
+            progress.update("analyzing relations", step=2)
+            return analyze_comparison(comparison_input, provider)
+
+        analysis = run_command_wait(
             "COMPARE",
             "connecting provider",
             total=2,
-        ) as progress:
-            provider = _connect_compare_provider(connect_codex_chatgpt_provider)
-            progress.update("analyzing relations", step=2)
-            analysis = analyze_comparison(comparison_input, provider)
+            work=compare_frames,
+        )
         if granted:
             with authority_grant_snapshot_lock() as registry:
                 current_reference_access = (

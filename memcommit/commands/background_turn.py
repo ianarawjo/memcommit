@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Callable
+from contextvars import copy_context
 from typing import Generic, TypeVar
 
 from memcommit.commands.command_progress import BUSY_INTERVAL_SECONDS
@@ -49,7 +50,11 @@ class BackgroundExecutorTurn(Generic[T]):
         cancelled_during_shutdown = False
         try:
             loop = asyncio.get_running_loop()
-            worker = loop.run_in_executor(None, work)
+            # Provider and attempt telemetry is process-local ContextVar state.
+            # Copy it into the executor so making a TUI responsive does not
+            # silently erase the same study records produced synchronously.
+            context = copy_context()
+            worker = loop.run_in_executor(None, context.run, work)
             try:
                 result = await asyncio.shield(worker)
             except asyncio.CancelledError:
