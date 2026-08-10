@@ -4,8 +4,8 @@
 
 This note records an exploratory latency direction. It does not enable staged
 execution, change a provider or model, relax an existing semantic contract, or
-authorize hidden provider calls. No new provider experiment was run while
-writing it.
+authorize hidden provider calls. The evaluation-only experiments below retain
+their raw responses and publish no production Compare result.
 
 The initial design workload is the existing 300-Memory Compare case. The
 discussion starts with Compare because it exposes the largest combination of
@@ -531,6 +531,88 @@ unused group, and local typed reconstruction. Semantic agreement remains a
 descriptive measure rather than a gate until reviewed ground truth or an
 explicit acceptable-loss threshold exists.
 
+## Full-context parallel medium result — 2026-08-10
+
+The next evaluation kept `gpt-5.6-sol` and reasoning `medium` unchanged and
+tested responsibility splitting without reducing provider visibility. Six
+workers each received the same complete ordered 150+150 content arrays. Their
+only difference was a frozen, disjoint 50-position ownership range. Each
+worker returned two fixed 50-row vectors: the canonical global anchor for each
+owned position and a relation kind only when the position was itself that
+anchor. The host allowed no retry or provider reconciliation and attempted one
+deterministic merge only after all six calls completed.
+
+The invocation was:
+
+```console
+python -m memcommit.eval.compare_parallel_anchor \
+  --model gpt-5.6-sol \
+  --reasoning medium \
+  --batch-size 50 \
+  --max-workers 6 \
+  --reference-ledger \
+    outputs/compare-latency-ab/20260810-gpt-5.6-sol-medium-minimal-io.json \
+  --output \
+    outputs/compare-latency-ab/20260810-gpt-5.6-sol-medium-parallel-anchor-batch50.json
+```
+
+The raw worker vectors, timings, and failed merge receipt are retained in the
+named output ledger. All six provider calls completed without a provider or
+local vector-schema error, but the global merge was invalid. Therefore this
+run produced no actionable Compare result and its actionable latency is
+recorded as `null`; 135.609 seconds is the observed time to discover the failed
+global state.
+
+| Measure | C — one-shot minimal I/O | P — 6 × 50 parallel | Change |
+| --- | ---: | ---: | ---: |
+| Complete content items visible per call | 300 | 300 | unchanged |
+| Provider calls | 1 | 6 | +5 |
+| Prompt characters per call | 36,482 | 36,746–36,749 | approximately unchanged |
+| Prompt characters, total | 36,482 | 220,490 | 6.04× |
+| Output-schema characters, total | 350 | 1,620 | 4.63× |
+| Response characters, total | 1,637 | 2,262 | +38.2% |
+| Provider seconds, sum | 140.225 | 533.822 | 3.81× |
+| Observed parallel-stage wall time | 140.225 | 135.609 | -3.3% |
+| Actionable result | valid | none | merge rejected |
+
+Individual calls ranged from 61.948 to 135.608 seconds, with a median of
+85.046 seconds. Their sum divided by stage wall time was 3.94, so provider work
+did overlap materially. The slowest worker nevertheless controlled the
+critical path and nearly equalled the one-shot C latency. This one run cannot
+separate ordinary latency variance from shared-capacity or concurrency effects,
+and current official model documentation does not establish an account-specific
+Codex CLI concurrency guarantee. It does establish that simply making six
+simultaneous calls did not approach 30 seconds in this environment.
+
+The semantic failure was cross-worker asymmetry rather than malformed local
+output. Seven positions were referenced as canonical anchors even though the
+worker owning those positions had attached them to an earlier anchor; those
+seven missing anchors received eight references. Following those references
+transitively produced no cycle, but still left 25 groups with an invalid side
+shape: a cross-source kind with members from only one source or a DISTINCT
+anchor later used by both sources. Deterministically chasing anchor chains is
+therefore insufficient reconciliation.
+
+This exposes the deeper task-shape problem. Although a worker emitted decisions
+for only 50 positions, finding each canonical anchor still required it to form
+a view of the global grouping. The experiment repeated most of the global
+reasoning six times and then asked stochastic calls to agree on one clustering
+without communication. Smaller ownership batches would duplicate the same
+complete input and global search more often; this result supplies no basis for
+expecting that batch size alone will fix either tail latency or consistency.
+
+The method remains evaluation-only. Production Compare is unchanged, no
+partial worker result is published, and the incomplete record is retained
+because it rejects this exact scheduling contract. A subsequent parallel
+experiment should change the semantic unit of work, not merely use smaller
+source-position slices. The strongest next candidate is candidate-edge
+judgment: generate a frozen, measurable set of possible cross-source edges,
+assign each edge to exactly one compact parallel judge, construct components
+locally, and send only contradictory or overlapping components to an explicit
+reconciliation stage. That design introduces a candidate-recall dependency and
+cannot claim exhaustive Compare semantics until its generator and reconciler
+are evaluated.
+
 Reasoning can also be reduced structurally, but those changes must remain
 separate from the effort-knob experiment:
 
@@ -550,9 +632,12 @@ separate from the effort-knob experiment:
   recall dependency and is an approximation unless the provider remains
   responsible for correcting missing candidates.
 
-If low or minimal C does not approach 30 seconds, full-context responsibility
-splitting is the next scheduling experiment. Further JSON shortening is
-unlikely to recover the remaining 110 seconds by itself.
+The measured six-worker full-context responsibility split did not approach 30
+seconds and failed global reconstruction. Further JSON shortening or smaller
+ownership batches are therefore weak next candidates by themselves. A future
+reasoning-effort experiment may still isolate the effort axis, while a future
+parallel experiment must change the semantic unit of work and add explicit
+reconciliation.
 
 ## Acceptance record for each 300-item run
 
@@ -596,10 +681,14 @@ be selected explicitly before an approximate method can be accepted.
 
 ## Current decision
 
-Use the 300-item Compare frame as the first design benchmark. Do not yet treat
-one-shot execution or verbose output as the single proven bottleneck. Test a
-lossless compact one-shot contract before introducing a different model or
-parallel stages. Treat a layered Instant mesh as a promising candidate whose
-benefit comes from overlapping calls within a small number of stages, not from
-stacking many sequential calls. Do not transfer it to other operations until
-Compare's reconstruction and reconciliation invariants are demonstrated.
+Continue using the 300-item Compare frame as the design benchmark. Compact
+output materially reduced one-shot latency, but minimal I/O remained at
+140.225 seconds. Reject the tested six-worker source-position ownership split:
+it increased total provider work 3.81 times, reduced observed wall time only
+3.3%, and could not reconstruct a globally consistent result. Do not try to
+recover this contract merely by shrinking batches. The next scheduling design
+must partition genuinely local semantic judgments and include an explicit
+operation-owned reconciler; candidate-edge judgment is the current leading
+hypothesis, with candidate recall named as an approximation boundary. Do not
+transfer parallel staging to another operation until Compare's reconstruction
+and reconciliation invariants are demonstrated.
