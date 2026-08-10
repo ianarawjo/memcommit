@@ -87,6 +87,14 @@ direct-Memory frames. It saves an immutable `ComparisonAnalysis` containing:
 It has no target Context, target proposal, conversational turn, readiness
 state, acceptance action, checkpoint, or mutation authority.
 
+The complete frame is not silently split when model latency is high. Compare
+uses a 900-second operation-local aggregate ceiling for the Codex adapter,
+matching Meld's whole-ledger window. This was raised after a valid 113,198-
+character Task 1 subtree frame passed every local bound but the xhigh provider
+was still running when the configured 600-second transport limit expired. The
+larger ceiling does not relax input, output, schema, coverage, or one-call
+invariants; it only allows the already-authorized indivisible call to finish.
+
 ## Why the analysis persists
 
 One-shot interaction does not imply disposable analysis. Provider output is
@@ -190,11 +198,12 @@ self-describing after a later Compare refresh while continuing to reject live
 source changes through its own Context-digest checks.
 
 Existing unseeded Meld sessions remain readable under their legacy schema.
-Directional Meld does not consume peer Compare output because its
-`INCOMING → BASELINE` authority contract is different. The first handoff slice
-also leaves target materialization for a later Meld turn when Compare reports
-no grounding candidates; it does not infer that a resolved relation ledger is
-itself permission to write a target.
+When an exact current ordered Compare exists, schema-7 Directional Meld now
+freezes its classification ledger and remaps the members by Memory UID onto
+raw owner-aware `INCOMING → BASELINE` frames. Directional authority still owns
+placement and target materialization, and an absent Compare retains the
+schema-6 direct-analysis compatibility path. The handoff therefore never
+infers that a resolved relation ledger is itself permission to write a target.
 
 ## Provider and trust boundary
 

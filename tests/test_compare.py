@@ -4,6 +4,7 @@ from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
+from pathlib import Path
 import threading
 import uuid
 
@@ -11,6 +12,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.compare as compare_command
 import memcommit.commands.compare_sessions as compare_sessions_module
 from memcommit.cli import app
 from memcommit.comparison import ComparisonInput
@@ -34,9 +36,23 @@ from memcommit.commands.compare_sessions import (
 )
 from memcommit.commands.session_picker import SessionNewReceipt, SessionOpenReceipt
 from memcommit.store import MemoryStore
+from memcommit.query_provider import CodexChatGPTProvider
 
 
 runner = CliRunner()
+
+
+def test_compare_codex_provider_uses_whole_ledger_timeout():
+    provider = CodexChatGPTProvider(
+        binary=Path("codex"),
+        env={},
+        timeout=600,
+    )
+
+    connected = compare_command._connect_compare_provider(lambda: provider)
+
+    assert connected is provider
+    assert provider.timeout == compare_command.COMPARE_AGGREGATE_TIMEOUT_SECONDS
 
 
 class ExhaustiveCompareProvider:

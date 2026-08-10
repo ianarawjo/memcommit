@@ -81,7 +81,11 @@ from memcommit.rationale_scope import (
 from memcommit.store import MemoryStore
 
 
-COMPARE_AGGREGATE_TIMEOUT_SECONDS = 300
+# A full Task 1 subtree Compare is one intentionally indivisible relation
+# frame. The subscription-backed xhigh run can remain healthy beyond the
+# configured ten-minute default, so match Meld's documented aggregate window
+# instead of timing out a complete provider turn just before materialization.
+COMPARE_AGGREGATE_TIMEOUT_SECONDS = 900
 
 
 class CompareCommandError(RuntimeError):
