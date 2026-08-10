@@ -31,6 +31,10 @@ from memcommit.commands.find_search_workbench import (
     FindSearchResult,
     run_find_search_workbench,
 )
+from memcommit.commands.find_materialization import (
+    FindMaterializationError,
+    materialize_find_results,
+)
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.history_picker import choose_history
 from memcommit.commands.history_present import (
@@ -40,6 +44,7 @@ from memcommit.commands.history_present import (
 from memcommit.commands.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
+    freeze_profile_readable_context_catalog,
 )
 from memcommit.context_targeting.search import (
     collect_readable_search_candidates,
@@ -1050,12 +1055,31 @@ def _find_search_result(
     index: int,
 ) -> FindSearchResult:
     rendered = _chat_result(match, index)
+    candidate = match.candidate
+    item = candidate.item
+    if isinstance(item, Memory):
+        source_identity = (
+            candidate.context_name,
+            candidate.context_uid,
+            item.uid,
+        )
+    elif isinstance(item, MemoryRef):
+        source_identity = (
+            item.target_context_name,
+            item.target_context_uid,
+            item.target_memory_uid,
+        )
+    else:
+        source_identity = (None, None, None)
     return FindSearchResult(
         context_name=rendered.context_name,
         kind=rendered.kind,
         uid=rendered.uid,
         content=rendered.content,
         relevance=rendered.relevance,
+        source_context_name=source_identity[0],
+        source_context_uid=source_identity[1],
+        source_memory_uid=source_identity[2],
     )
 
 
@@ -1176,7 +1200,7 @@ def _open_find_search_workbench(
 ) -> None:
     """Open a blank, query-focused Find over one frozen readable catalog."""
 
-    catalog = freeze_readable_context_catalog(
+    catalog = freeze_profile_readable_context_catalog(
         store,
         access,
         include_query_routes=True,
@@ -1189,7 +1213,7 @@ def _open_find_search_workbench(
     annotations = {
         name: "READ GRANT" for name in names if catalog.access_for(name).is_granted
     }
-    run_find_search_workbench(
+    workbench_result = run_find_search_workbench(
         names,
         current=displayed_current,
         initial_target=initial_target,
@@ -1202,6 +1226,30 @@ def _open_find_search_workbench(
             request,
         ),
         annotations=annotations,
+        local_context_names=tuple(store.list_context_names()),
+        validate_save_location=store.assert_context_creatable,
+    )
+    # Compatibility capture stubs used by read-only callers historically
+    # returned None; only the typed MATERIALIZE result crosses the write edge.
+    if workbench_result is None or workbench_result.status != "MATERIALIZE":
+        return
+    assert workbench_result.response is not None
+    assert workbench_result.materialize_as is not None
+    assert workbench_result.save_location is not None
+    materialized = materialize_find_results(
+        store,
+        catalog,
+        workbench_result.response,
+        selected_result_indices=workbench_result.selected_result_indices,
+        mode=workbench_result.materialize_as,
+        destination_name=workbench_result.save_location,
+    )
+    typer.secho(
+        f"Materialized {len(materialized.item_uids)} checked Find result(s) as "
+        f"{materialized.mode} in new Context "
+        f"'{display_escape_text(materialized.context_name)}' "
+        f"[{materialized.context_uid[:8]}]; sources unchanged.",
+        fg=typer.colors.GREEN,
     )
 
 
@@ -1212,7 +1260,9 @@ def cmd(
             show_default=False,
             help=(
                 "Natural-language query; omit in a terminal to open the "
-                "interactive search and scope selector"
+                "interactive search with Profile-wide or Context targets, "
+                "Context range, embedded-Context scope, and checked-result "
+                "COPY/REFERENCE materialization"
             ),
         ),
     ] = None,
@@ -1296,6 +1346,7 @@ def cmd(
                 limit=limit,
             )
         except (
+            FindMaterializationError,
             FindError,
             HistoryError,
             HistorySearchError,

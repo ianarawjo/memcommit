@@ -81,14 +81,21 @@ direct root items do not create synthetic namespace branches, `--direct`
 never performs the supplemental pass, and the total visible count still obeys
 `--limit`.
 
-Find is read-only. It does not save the query, matches, a Memory, or a
-checkpoint. Ordinary current-state Find prints the same grouped static result
-rows in TTY and non-TTY execution, then exits. It does not open a composer,
-accept a refinement turn, synthesize an answer, or print a dialogue-closed
-message. A person can run another `mem find` for a revised query or use an
-explicit `mem show` for detail. This keeps Find as a retrieval command and
-avoids retaining a full-screen application merely to offer optional follow-up
-dialogue.
+One-shot `mem find QUERY` is read-only. It does not save the query, matches, a
+Memory, or a checkpoint, and it prints the same grouped static result rows in
+TTY and non-TTY execution before exiting. Operand-free interactive Find keeps
+search and selection process-local by default, but offers one explicit checked
+result materialization boundary: `COPY` creates independent Memories in a new
+local Context, while `REFERENCE` creates the same live pointers as
+`mem reference`. Neither changes Source or the current Context. The detailed
+selection, freshness, authority, and require-new rules are recorded in
+`mem-find-search-workbench-design-rationale.md`.
+
+Find does not open a composer, accept a refinement turn, synthesize an answer,
+or print a dialogue-closed message. A person can run another `mem find` for a
+revised query or use an explicit `mem show` for detail. This keeps Find as a
+retrieval-and-explicit-curation command without retaining a full-screen
+application merely to offer optional follow-up dialogue.
 
 The grouped stdout can be redirected or copied by the shell. It is a
 presentation format, not a durable or supported structured selection for

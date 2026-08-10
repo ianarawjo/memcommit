@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from typing import Literal
 
 from prompt_toolkit.application import Application
-from prompt_toolkit.document import Document
 from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -16,7 +15,7 @@ from prompt_toolkit.key_binding.bindings.scroll import (
     scroll_page_up,
 )
 from prompt_toolkit.keys import Keys
-from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
+from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, VSplit, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
@@ -25,21 +24,13 @@ from prompt_toolkit.widgets import Frame, TextArea
 
 from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import busy_suffix
-from memcommit.context_targeting.tui.rendering import (
-    ContextTreeRowDecoration,
-    render_context_tree_rows,
+from memcommit.context_targeting.tui.range_selection import (
+    ContextRangeSelectionState,
 )
+from memcommit.context_targeting.tui.reach import render_context_reach
 from memcommit.context_targeting.tui.selection import (
-    ContextSelectionState,
-    ContextTargetModeState,
     render_context_target_mode,
 )
-from memcommit.context_targeting.tui.tree import (
-    ContextTreeState,
-    build_context_tree,
-    context_subtree_names,
-)
-from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -48,7 +39,9 @@ from memcommit.commands.horizontal_choice import (
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
+    dispatch_tui_back,
     require_interactive_terminal,
     safe_terminal_text,
 )
@@ -56,6 +49,20 @@ from memcommit.commands.search_result_present import (
     SearchResultViewRow,
     render_grouped_search_results,
 )
+from memcommit.commands.save_location_control import SaveLocationView
+from memcommit.commands.surface_focus import (
+    FocusSurface,
+    SurfaceActionResult,
+    SurfaceFocusController,
+    SurfaceMoveResult,
+    bind_surface_navigation,
+)
+from memcommit.context_targeting.tui.name_editor import (
+    ContextNameControl,
+    suggest_fresh_context_name,
+)
+from memcommit.selection import FlatMultiSelectionState, SelectionOption
+from memcommit.selection.tui.multiple import render_vertical_multi_choice_rows
 
 
 FindSearchMode = Literal["CURRENT", "HISTORY"]
@@ -107,6 +114,9 @@ class FindSearchResult:
     uid: str
     content: str
     relevance: FindSearchRelevance = "primary"
+    source_context_name: str | None = None
+    source_context_uid: str | None = None
+    source_memory_uid: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.context_name, str) or not self.context_name.strip():
@@ -127,6 +137,17 @@ class FindSearchResult:
             raise ValueError("Find results require nonblank content.")
         if self.relevance not in {"primary", "related"}:
             raise ValueError("Find returned invalid relevance.")
+        source_values = (
+            self.source_context_name,
+            self.source_context_uid,
+            self.source_memory_uid,
+        )
+        if any(value is not None for value in source_values) and not all(
+            isinstance(value, str) and value.strip() for value in source_values
+        ):
+            raise ValueError(
+                "Find result materialization identity must be complete or absent."
+            )
 
 
 @dataclass(frozen=True)
@@ -159,13 +180,59 @@ class FindSearchResponse:
 
 @dataclass(frozen=True)
 class FindSearchWorkbenchResult:
-    """The last committed read-only result when the workbench closes."""
+    """Close state or one reviewed materialization request."""
 
-    status: Literal["CLOSED"]
+    status: Literal["CLOSED", "MATERIALIZE"]
     response: FindSearchResponse | None = None
+    selected_result_indices: tuple[int, ...] = ()
+    materialize_as: Literal["COPY", "REFERENCE"] | None = None
+    save_location: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.status == "CLOSED":
+            if (
+                self.selected_result_indices
+                or self.materialize_as is not None
+                or self.save_location is not None
+            ):
+                raise ValueError("A closed Find workbench cannot request a save.")
+            return
+        if (
+            self.response is None
+            or not self.selected_result_indices
+            or self.materialize_as not in {"COPY", "REFERENCE"}
+            or not isinstance(self.save_location, str)
+            or not self.save_location.strip()
+        ):
+            raise ValueError("Find materialization requires reviewed result choices.")
+        if len(set(self.selected_result_indices)) != len(
+            self.selected_result_indices
+        ) or any(
+            isinstance(index, bool)
+            or not isinstance(index, int)
+            or not 0 <= index < len(self.response.results)
+            for index in self.selected_result_indices
+        ):
+            raise ValueError("Find materialization selected invalid result rows.")
 
 
 FindSearchRunner = Callable[[FindSearchRequest], FindSearchResponse]
+FindSaveLocationValidator = Callable[[str], object]
+
+
+def _find_save_location_stem(context_name: str, query: str) -> str:
+    """Build one editable local name suggestion without assigning identity."""
+
+    words = "-".join(query.strip().split()) or "find"
+    safe = "".join(
+        "-" if character in "/\\:" or ord(character) < 32 else character
+        for character in words
+    ).strip("-.")
+    if not safe:
+        safe = "find"
+    if len(safe) > 48:
+        safe = safe[:48].rstrip("-.") or "find"
+    return f"{context_name}/results/{safe}"
 
 
 def render_find_search_results(response: FindSearchResponse | None) -> str:
@@ -193,11 +260,26 @@ def render_find_search_results(response: FindSearchResponse | None) -> str:
 
 def _scope_summary(
     *,
-    target_count: int,
+    explicit_count: int,
+    effective_count: int,
+    profile_selected: bool,
+    include_descendants: bool,
     follow_embeds: bool,
 ) -> str:
+    targets = (
+        f"PROFILE · {effective_count} CONTEXTS"
+        if profile_selected
+        else f"ROOTS {explicit_count} · CONTEXTS {effective_count}"
+    )
+    reach = "INCLUDE DESCENDANTS" if include_descendants else "THIS CONTEXT ONLY"
     embeds = "FOLLOW EMBEDS" if follow_embeds else "EXCLUDE EMBEDS"
-    return f"EXACT CHECKED TARGETS {target_count} · {embeds}"
+    return f"{targets} · {reach} · {embeds}"
+
+
+def _results_frame_title(turn: BackgroundExecutorTurn[FindSearchResponse]) -> str:
+    if turn.busy:
+        return f"RESULTS · SEARCHING {busy_suffix(turn.frame)}"
+    return "RESULTS"
 
 
 def run_find_search_workbench(
@@ -210,6 +292,8 @@ def run_find_search_workbench(
     limit: int,
     run_search: FindSearchRunner,
     annotations: Mapping[str, str] | None = None,
+    local_context_names: Sequence[str] | None = None,
+    validate_save_location: FindSaveLocationValidator | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -236,24 +320,21 @@ def run_find_search_workbench(
     labels = dict(annotations or {})
     if set(labels) - set(catalog):
         raise ValueError("Find Context annotations are outside the catalog.")
-
-    tree = build_context_tree(catalog)
-    tree_state = ContextTreeState.create(tree, selected=initial_target)
-    initial_group = context_subtree_names(tree, initial_target)
-    initial_checked = (
-        tuple(name for name in initial_group if name != initial_target)
-        + (initial_target,)
-        if initial_include_descendants
-        else (initial_target,)
+    local_catalog = tuple(
+        dict.fromkeys(catalog if local_context_names is None else local_context_names)
     )
-    target_selection = ContextSelectionState.create(
+    if any(not isinstance(name, str) or not name for name in local_catalog):
+        raise ValueError("Find local Context names must be nonblank text.")
+
+    target_state = ContextRangeSelectionState.create(
         catalog,
-        selected=initial_checked,
+        current_name=current,
+        initial_target=initial_target,
         # Multiple remains the initial mode so the existing fast path—Tab to
         # Targets and check peers—does not acquire a setup detour.
-        mode="MULTIPLE",
+        multiple=True,
+        include_descendants=initial_include_descendants,
     )
-    target_mode = ContextTargetModeState.create(multiple=True)
     embed_choice = HorizontalChoiceState(
         (
             HorizontalChoiceOption("EXCLUDE", "EXCLUDE"),
@@ -261,8 +342,24 @@ def run_find_search_workbench(
         ),
         selected_uid="FOLLOW" if initial_follow_embeds else "EXCLUDE",
     )
+    materialize_choice = HorizontalChoiceState(
+        (
+            HorizontalChoiceOption(
+                "COPY",
+                "COPY",
+                "Create independent Memory values with fresh identities.",
+            ),
+            HorizontalChoiceOption(
+                "REFERENCE",
+                "REFERENCE",
+                "Create read-only live pointers to locally owned Memories.",
+            ),
+        ),
+        selected_uid="COPY",
+    )
     scope_row = {"value": 0}
     response: FindSearchResponse | None = None
+    result_selection: FlatMultiSelectionState | None = None
     status = {"value": "READY · ENTER A QUERY"}
     background_turn: BackgroundExecutorTurn[FindSearchResponse] = (
         BackgroundExecutorTurn()
@@ -277,26 +374,41 @@ def run_find_search_workbench(
         read_only=Condition(lambda: background_turn.busy),
         name="find-search-query",
     )
+    initial_save_location = suggest_fresh_context_name(
+        _find_save_location_stem(initial_target, "find"),
+        local_catalog,
+    )
+    save_location = ContextNameControl.create(
+        SaveLocationView(
+            value=initial_save_location,
+            state="NEW CONTEXT",
+            detail="Checked results create this exact new local Context.",
+            validate=validate_save_location,
+            context_names=local_catalog,
+            current_context=current if current in local_catalog else None,
+        ),
+        input_name="find-save-location",
+        parent_height=1,
+    )
+    save_location_edit = {"edited": False, "programmatic": False}
+
+    def save_location_changed(_buffer) -> None:
+        if not save_location_edit["programmatic"]:
+            save_location_edit["edited"] = True
+
+    save_location.input.buffer.on_text_changed += save_location_changed
+
+    def request_target_scope() -> tuple[tuple[str, ...], bool]:
+        # PROFILE and subtree selection are process-local presentation concepts.
+        # Freeze the exact visible checked set so a separately unchecked branch
+        # cannot be silently reintroduced by loader-side descendant expansion.
+        return target_state.effective_names, False
 
     def render_targets() -> list[tuple[str, str]]:
-        focused = app.layout.has_focus(target_control)
-
-        def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
-            chosen = row.name in target_selection.selected_set
-            cursor_style, value_style = tree_choice_styles(
-                cursor=cursor,
-                selected=chosen,
-                focused=focused,
-            )
-            return ContextTreeRowDecoration(
-                marker=tree_choice_marker(selected=chosen),
-                active="*" if row.name == current else " ",
-                annotation=labels.get(row.name, ""),
-                cursor_style=cursor_style,
-                value_style=value_style,
-            )
-
-        return render_context_tree_rows(tree_state, decorate)
+        return target_state.render_rows(
+            focused=app.layout.has_focus(target_control),
+            annotations=labels,
+        )
 
     target_control = FormattedTextControl(
         render_targets,
@@ -312,15 +424,23 @@ def run_find_search_workbench(
     def render_scope() -> list[tuple[str, str]]:
         focused = app.layout.has_focus(scope_control)
         fragments = render_context_target_mode(
-            target_mode,
+            target_state.target_mode,
             focused=focused and scope_row["value"] == 0,
+        )
+        fragments.append(("", "\n"))
+        fragments.extend(
+            render_context_reach(
+                target_state.reach,
+                title="CONTEXT RANGE",
+                focused=focused and scope_row["value"] == 1,
+            )
         )
         fragments.append(("", "\n"))
         fragments.extend(
             render_horizontal_choice(
                 embed_choice,
                 title="EMBEDDED CONTEXTS",
-                focused=focused and scope_row["value"] == 1,
+                focused=focused and scope_row["value"] == 2,
             )
         )
         return fragments
@@ -330,20 +450,85 @@ def run_find_search_workbench(
         focusable=True,
         show_cursor=False,
     )
-    results_area = TextArea(
-        text=render_find_search_results(None),
-        multiline=True,
-        read_only=True,
+
+    def render_results() -> list[tuple[str, str]]:
+        if response is None or result_selection is None:
+            return [("", "Enter a query to search the selected scope.")]
+        if not response.results:
+            return [("", "(no matching items)")]
+        fragments: list[tuple[str, str]] = []
+        if response.related_query:
+            fragments.extend(
+                [
+                    ("class:heading", "RELATED RESULTS\n"),
+                    (
+                        "",
+                        f"Broader search: {safe_terminal_text(response.related_query)}\n\n",
+                    ),
+                ]
+            )
+        width = max(24, app.output.get_size().columns // 2 - 6)
+        fragments.extend(
+            render_vertical_multi_choice_rows(
+                result_selection,
+                focused=app.layout.has_focus(results_control),
+                content_width=width,
+            )
+        )
+        return fragments
+
+    results_control = FormattedTextControl(
+        render_results,
         focusable=True,
-        wrap_lines=True,
-        scrollbar=True,
-        name="find-search-results",
+        show_cursor=False,
     )
-    results_control = results_area.control
+    results_window = Window(
+        results_control,
+        wrap_lines=True,
+        right_margins=[ScrollbarMargin(display_arrows=True)],
+    )
+
+    def render_materialize() -> list[tuple[str, str]]:
+        return render_horizontal_choice(
+            materialize_choice,
+            title="MATERIALIZE AS",
+            focused=app.layout.has_focus(materialize_control),
+            show_description=False,
+        )
+
+    materialize_control = FormattedTextControl(
+        render_materialize,
+        focusable=True,
+        show_cursor=False,
+    )
+
+    def render_todo() -> list[tuple[str, str]]:
+        checked = len(result_selection.selected_uids) if result_selection else 0
+        focused = app.layout.has_focus(todo_control)
+        value = f"CREATE {checked} CHECKED AS {materialize_choice.selected_uid}"
+        fragments: list[tuple[str, str]] = []
+        if focused:
+            fragments.append(("[SetCursorPosition]", ""))
+        fragments.append(
+            (
+                "class:memcommit.choice.active.focused" if focused else "",
+                f"{'> ' if focused else '  '}{safe_terminal_text(value)}",
+            )
+        )
+        return fragments
+
+    todo_control = FormattedTextControl(
+        render_todo,
+        focusable=True,
+        show_cursor=False,
+    )
 
     def render_header() -> str:
         summary = _scope_summary(
-            target_count=len(target_selection.selected_names),
+            explicit_count=len(target_state.explicit_context_names),
+            effective_count=len(target_state.effective_names),
+            profile_selected=target_state.profile_selected,
+            include_descendants=target_state.reach.include_descendants,
             follow_embeds=embed_choice.selected_uid == "FOLLOW",
         )
         mode = response.mode if response is not None else "AUTO FROM QUERY"
@@ -361,18 +546,28 @@ def run_find_search_workbench(
     )
     target_frame = Frame(
         target_window,
-        title="TARGETS · * CURRENT · ENTER/SPACE TO SELECT",
-        height=Dimension(min=5, preferred=8, max=12, weight=1),
+        title="TARGETS · PROFILE/CONTEXT · * CURRENT · ENTER/SPACE TO SELECT",
+        height=Dimension.exact(5),
     )
     scope_frame = Frame(
-        Window(scope_control, height=Dimension.exact(2), wrap_lines=False),
+        Window(scope_control, height=Dimension.exact(3), wrap_lines=False),
         title="SCOPE",
-        height=Dimension.exact(4),
+        height=Dimension.exact(5),
     )
     results_frame = Frame(
-        results_area,
-        title="RESULTS",
-        height=Dimension(min=5, weight=2),
+        results_window,
+        title=lambda: _results_frame_title(background_turn),
+        height=Dimension(min=7, weight=2),
+    )
+    materialize_frame = Frame(
+        Window(materialize_control, wrap_lines=True),
+        title="MATERIALIZE",
+        height=Dimension.exact(4),
+    )
+    todo_frame = Frame(
+        Window(todo_control, wrap_lines=True),
+        title="TO DO · ENTER TO CREATE",
+        height=Dimension.exact(3),
     )
 
     def render_footer() -> str:
@@ -382,9 +577,12 @@ def run_find_search_workbench(
                 "scope frozen · Ctrl-C closes after search"
             )
         hint = (
-            "Enter search · Tab/Shift-Tab panes · Ctrl-C close"
+            "Enter search · Tab/Shift-Tab panes · Esc/Ctrl-C close"
             if app.layout.has_focus(search_area)
-            else ("Enter/Space target · ←/→ scope/tree · / returns to search · Q close")
+            else (
+                "↑/↓ move/cross · Enter activate/check · ←/→ adjust · "
+                "/ search · Esc back · Q close"
+            )
         )
         return f" {safe_terminal_text(status['value'])} · {hint}"
 
@@ -393,16 +591,29 @@ def run_find_search_workbench(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    root = HSplit(
+    setup_row = VSplit(
         [
-            header,
-            search_frame,
             target_frame,
+            Window(width=Dimension.exact(1), char=" "),
             scope_frame,
-            results_frame,
-            footer,
         ]
     )
+    materialization_panel = HSplit(
+        [
+            materialize_frame,
+            save_location.container,
+            todo_frame,
+        ],
+        width=Dimension(min=32, preferred=38),
+    )
+    result_row = VSplit(
+        [
+            results_frame,
+            Window(width=Dimension.exact(1), char=" "),
+            materialization_panel,
+        ]
+    )
+    root = HSplit([header, search_frame, setup_row, result_row, footer])
     app: Application[FindSearchWorkbenchResult] = Application(
         layout=Layout(root, focused_element=search_area),
         key_bindings=bindings,
@@ -413,8 +624,6 @@ def run_find_search_workbench(
         mouse_support=False,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
     )
-    controls = (search_area, target_control, scope_control, results_control)
-
     bind_focused_frame_style(
         search_frame,
         is_focused=lambda: app.layout.has_focus(search_area),
@@ -431,16 +640,20 @@ def run_find_search_workbench(
         results_frame,
         is_focused=lambda: app.layout.has_focus(results_control),
     )
+    bind_focused_frame_style(
+        materialize_frame,
+        is_focused=lambda: app.layout.has_focus(materialize_control),
+    )
+    bind_focused_frame_style(
+        todo_frame,
+        is_focused=lambda: app.layout.has_focus(todo_control),
+    )
 
     def clear_results(message: str) -> None:
-        nonlocal response
+        nonlocal response, result_selection
         response = None
+        result_selection = None
         status["value"] = message
-        text = render_find_search_results(None)
-        results_area.buffer.set_document(
-            Document(text, cursor_position=0),
-            bypass_readonly=True,
-        )
 
     def query_changed(_buffer) -> None:
         if response is None or background_turn.busy:
@@ -450,64 +663,41 @@ def run_find_search_workbench(
 
     search_area.buffer.on_text_changed += query_changed
 
-    @bindings.add("tab", eager=True)
-    def _next_pane(event) -> None:
-        index = next(
-            index
-            for index, control in enumerate(controls)
-            if event.app.layout.has_focus(control)
-        )
-        event.app.layout.focus(controls[(index + 1) % len(controls)])
-        event.app.invalidate()
+    def _move_search(_event, _delta: int) -> SurfaceMoveResult:
+        return "BOUNDARY"
 
-    @bindings.add("s-tab", eager=True)
-    def _previous_pane(event) -> None:
-        index = next(
-            index
-            for index, control in enumerate(controls)
-            if event.app.layout.has_focus(control)
-        )
-        event.app.layout.focus(controls[(index - 1) % len(controls)])
-        event.app.invalidate()
+    def _enter_search(_delta: int) -> None:
+        search_area.buffer.cursor_position = len(search_area.text)
 
-    @bindings.add("down", filter=has_focus(target_control), eager=True)
-    def _target_down(event) -> None:
-        tree_state.move(1)
-        event.app.invalidate()
+    def _move_target(_event, delta: int) -> SurfaceMoveResult:
+        return "MOVED" if target_state.move_cursor(delta) else "BOUNDARY"
 
-    @bindings.add("up", filter=has_focus(target_control), eager=True)
-    def _target_up(event) -> None:
-        tree_state.move(-1)
-        event.app.invalidate()
+    def _enter_target(delta: int) -> None:
+        target_state.enter_from_boundary(delta)
 
     @bindings.add("right", filter=has_focus(target_control), eager=True)
     def _target_right(event) -> None:
-        tree_state.expand_selected()
+        target_state.expand_cursor()
         event.app.invalidate()
 
     @bindings.add("left", filter=has_focus(target_control), eager=True)
     def _target_left(event) -> None:
-        tree_state.collapse_selected()
+        target_state.collapse_cursor()
         event.app.invalidate()
 
     @bindings.add("a", filter=has_focus(target_control), eager=True)
     @bindings.add("A", filter=has_focus(target_control), eager=True)
     def _target_expand_all(event) -> None:
-        tree_state.toggle_expand_all()
+        target_state.toggle_expand_all()
         event.app.invalidate()
 
     @bindings.add(" ", filter=has_focus(target_control), eager=True)
-    @bindings.add("enter", filter=has_focus(target_control), eager=True)
-    def _toggle_target(event) -> None:
+    def _toggle_target(event) -> SurfaceActionResult:
         if background_turn.busy:
             status["value"] = "Wait for the current search before changing scope."
         else:
-            name = tree_state.selected_name
             try:
-                changed = target_selection.toggle_group(
-                    context_subtree_names(tree, name),
-                    anchor_name=name,
-                )
+                changed = target_state.toggle_cursor()
             except ValueError as error:
                 status["value"] = str(error)
             else:
@@ -516,16 +706,15 @@ def run_find_search_workbench(
                 else:
                     status["value"] = "TARGET ALREADY SELECTED"
         event.app.invalidate()
+        return "HANDLED"
 
-    @bindings.add("down", filter=has_focus(scope_control), eager=True)
-    def _scope_down(event) -> None:
-        scope_row["value"] = min(1, scope_row["value"] + 1)
-        event.app.invalidate()
+    def _move_scope_vertical(_event, delta: int) -> SurfaceMoveResult:
+        previous = scope_row["value"]
+        scope_row["value"] = max(0, min(previous + delta, 2))
+        return "MOVED" if scope_row["value"] != previous else "BOUNDARY"
 
-    @bindings.add("up", filter=has_focus(scope_control), eager=True)
-    def _scope_up(event) -> None:
-        scope_row["value"] = max(0, scope_row["value"] - 1)
-        event.app.invalidate()
+    def _enter_scope(delta: int) -> None:
+        scope_row["value"] = 0 if delta > 0 else 2
 
     def move_scope(delta: int) -> None:
         if background_turn.busy:
@@ -533,20 +722,21 @@ def run_find_search_workbench(
             return
         row = scope_row["value"]
         if row == 0:
-            if not target_mode.move(delta):
+            control_changed, targets_changed = target_state.move_target_mode(delta)
+            if not control_changed:
                 return
-            selection_changed = target_selection.set_multiple(
-                target_mode.multiple,
-                fallback_name=tree_state.selected_name,
-            )
-            if selection_changed:
+            if targets_changed:
                 clear_results("TARGETS CHANGED · PRESS ENTER TO SEARCH")
             else:
                 status["value"] = (
                     "MULTIPLE TARGET SELECTION"
-                    if target_mode.multiple
+                    if target_state.target_mode.multiple
                     else "SINGLE TARGET SELECTION"
                 )
+            return
+        if row == 1:
+            if target_state.move_reach(delta):
+                clear_results("CONTEXT RANGE CHANGED · PRESS ENTER TO SEARCH")
             return
         if embed_choice.move(delta):
             clear_results("SCOPE CHANGED · PRESS ENTER TO SEARCH")
@@ -561,57 +751,76 @@ def run_find_search_workbench(
         move_scope(-1)
         event.app.invalidate()
 
-    @bindings.add("down", filter=has_focus(results_control), eager=True)
-    def _result_down(event) -> None:
-        results_area.buffer.cursor_down()
-        event.app.invalidate()
+    def _move_results(_event, delta: int) -> SurfaceMoveResult:
+        if result_selection is None or response is None or not response.results:
+            return "BOUNDARY"
+        return "MOVED" if result_selection.move(delta) else "BOUNDARY"
 
-    @bindings.add("up", filter=has_focus(results_control), eager=True)
-    def _result_up(event) -> None:
-        results_area.buffer.cursor_up()
-        event.app.invalidate()
+    def _enter_results(delta: int) -> None:
+        if result_selection is not None:
+            result_selection.cursor_uid = (
+                result_selection.options[0].uid
+                if delta > 0
+                else result_selection.options[-1].uid
+            )
 
     @bindings.add("pageup", filter=has_focus(results_control), eager=True)
     def _result_page_up(event) -> None:
-        scroll_page_up(event)
+        if result_selection is not None:
+            result_selection.move(-5)
+        else:
+            scroll_page_up(event)
         event.app.invalidate()
 
     @bindings.add("pagedown", filter=has_focus(results_control), eager=True)
     def _result_page_down(event) -> None:
-        scroll_page_down(event)
+        if result_selection is not None:
+            result_selection.move(5)
+        else:
+            scroll_page_down(event)
         event.app.invalidate()
 
-    search_return_focus = has_focus(scope_control) | has_focus(results_control)
+    tree_focus = (
+        has_focus(save_location.tree_control)
+        if save_location.tree_control is not None
+        else Condition(lambda: False)
+    )
+    search_return_focus = (
+        has_focus(scope_control)
+        | has_focus(results_control)
+        | has_focus(materialize_control)
+        | has_focus(todo_control)
+        | tree_focus
+    )
     non_search_focus = has_focus(target_control) | search_return_focus
 
-    @bindings.add("enter", filter=search_return_focus, eager=True)
-    @bindings.add("/", filter=non_search_focus, eager=True)
-    def _focus_search(event) -> None:
+    def _focus_search(event) -> SurfaceActionResult:
         event.app.layout.focus(search_area)
         search_area.buffer.cursor_position = len(search_area.text)
+        return "HANDLED"
+
+    @bindings.add("/", filter=non_search_focus, eager=True)
+    def _focus_search_shortcut(event) -> None:
+        _focus_search(event)
         event.app.invalidate()
 
-    @bindings.add("enter", filter=has_focus(search_area), eager=True)
-    def _search(event) -> None:
-        nonlocal response
+    def _search(event) -> SurfaceActionResult:
+        nonlocal response, result_selection
         if background_turn.busy:
             status["value"] = "A Find search is already running."
-            event.app.invalidate()
-            return
+            return "HANDLED"
         try:
+            request_targets, request_descendants = request_target_scope()
             request = FindSearchRequest(
                 query=search_area.text.strip(),
-                target_names=target_selection.selected_names,
-                # Find materializes lexical descendants as visible checkmarks;
-                # re-expanding here would make a manually unchecked child lie.
-                include_descendants=False,
+                target_names=request_targets,
+                include_descendants=request_descendants,
                 follow_embeds=embed_choice.selected_uid == "FOLLOW",
                 limit=limit,
             )
         except ValueError as error:
             status["value"] = str(error)
-            event.app.invalidate()
-            return
+            return "HANDLED"
 
         def work() -> FindSearchResponse:
             next_response = run_search(request)
@@ -622,13 +831,41 @@ def run_find_search_workbench(
             return next_response
 
         def commit(next_response: FindSearchResponse) -> None:
-            nonlocal response
+            nonlocal response, result_selection
             response = next_response
-            result_text = render_find_search_results(response)
-            results_area.buffer.set_document(
-                Document(result_text, cursor_position=0),
-                bypass_readonly=True,
+            result_selection = (
+                FlatMultiSelectionState(
+                    tuple(
+                        SelectionOption(
+                            str(index),
+                            (
+                                f"{result.context_name} · "
+                                f"[{'related ' if result.relevance == 'related' else ''}"
+                                f"{result.kind} {result.uid[:8]}]"
+                            ),
+                            result.content,
+                        )
+                        for index, result in enumerate(response.results)
+                    ),
+                    cursor_uid="0",
+                )
+                if response.results
+                else None
             )
+            if not save_location_edit["edited"]:
+                save_location_edit["programmatic"] = True
+                try:
+                    save_location.set_text(
+                        suggest_fresh_context_name(
+                            _find_save_location_stem(
+                                response.request.target_names[0],
+                                response.request.query,
+                            ),
+                            local_catalog,
+                        )
+                    )
+                finally:
+                    save_location_edit["programmatic"] = False
             status["value"] = (
                 f"{response.mode} · {len(response.results)} RESULT(S) · SCOPE FROZEN"
             )
@@ -655,7 +892,226 @@ def run_find_search_workbench(
         )
         status["value"] = "SEARCHING · SCOPE FROZEN"
         event.app.layout.focus(results_control)
+        return "HANDLED"
+
+    def _toggle_result(event) -> SurfaceActionResult:
+        if background_turn.busy:
+            status["value"] = "Wait for the current search to finish."
+        elif result_selection is None or response is None or not response.results:
+            return _focus_search(event)
+        else:
+            checked = result_selection.toggle_cursor()
+            status["value"] = (
+                f"{'CHECKED' if checked else 'UNCHECKED'} RESULT "
+                f"{result_selection.cursor_index + 1} · "
+                f"{len(result_selection.selected_uids)} TOTAL"
+            )
         event.app.invalidate()
+        return "HANDLED"
+
+    @bindings.add(" ", filter=has_focus(results_control), eager=True)
+    def _space_result(event) -> None:
+        _toggle_result(event)
+
+    def _move_materialize(_event, delta: int) -> SurfaceMoveResult:
+        return "MOVED" if materialize_choice.move(delta) else "BOUNDARY"
+
+    def _activate_materialize(event) -> SurfaceActionResult:
+        event.app.layout.focus(save_location.input)
+        save_location.input.buffer.cursor_position = len(save_location.text)
+        status["value"] = (
+            f"{materialize_choice.selected_uid} · REVIEW THE EXACT SAVE LOCATION"
+        )
+        return "HANDLED"
+
+    @bindings.add("right", filter=has_focus(materialize_control), eager=True)
+    def _materialize_right(event) -> None:
+        materialize_choice.move(1)
+        event.app.invalidate()
+
+    @bindings.add("left", filter=has_focus(materialize_control), eager=True)
+    def _materialize_left(event) -> None:
+        materialize_choice.move(-1)
+        event.app.invalidate()
+
+    def _move_save_location(event, delta: int) -> SurfaceMoveResult:
+        if delta < 0 and save_location.tree_control is not None:
+            event.app.layout.focus(save_location.tree_control)
+            status["value"] = "CHOOSE A PARENT CONTEXT · ENTER TO REPARENT"
+            return "CONSUMED"
+        return "BOUNDARY"
+
+    def _activate_save_location(event) -> SurfaceActionResult:
+        try:
+            save_location.validate_candidate()
+        except (OSError, TypeError, ValueError) as error:
+            status["value"] = str(error)
+            return "HANDLED"
+        event.app.layout.focus(todo_control)
+        status["value"] = "SAVE LOCATION VALID · ENTER TO CREATE"
+        return "HANDLED"
+
+    def _apply_materialization(event) -> SurfaceActionResult:
+        if background_turn.busy:
+            status["value"] = "Wait for the current search to finish."
+            return "HANDLED"
+        if response is None or result_selection is None:
+            status["value"] = "RUN FIND AND CHECK AT LEAST ONE RESULT"
+            return "HANDLED"
+        selected_indices = tuple(int(uid) for uid in result_selection.selected_uids)
+        if not selected_indices:
+            status["value"] = "CHECK AT LEAST ONE RESULT"
+            return "HANDLED"
+        if response.mode != "CURRENT":
+            status["value"] = "HISTORY RESULTS CANNOT BE MATERIALIZED"
+            return "HANDLED"
+        selected_results = tuple(response.results[index] for index in selected_indices)
+        unsupported = next(
+            (
+                result.kind
+                for result in selected_results
+                if result.kind not in {"memory", "ref"}
+            ),
+            None,
+        )
+        if unsupported is not None:
+            status["value"] = f"{unsupported.upper()} RESULTS CANNOT BE MATERIALIZED"
+            return "HANDLED"
+        if any(result.source_memory_uid is None for result in selected_results):
+            status["value"] = "A CHECKED RESULT HAS NO SOURCE MEMORY IDENTITY"
+            return "HANDLED"
+        if materialize_choice.selected_uid == "REFERENCE" and any(
+            labels.get(result.context_name) == "READ GRANT"
+            for result in selected_results
+        ):
+            status["value"] = "REFERENCE REQUIRES LOCALLY OWNED SOURCE MEMORIES"
+            return "HANDLED"
+        try:
+            destination = save_location.validate_candidate()
+        except (OSError, TypeError, ValueError) as error:
+            status["value"] = str(error)
+            event.app.layout.focus(save_location.input)
+            return "HANDLED"
+        event.app.exit(
+            result=FindSearchWorkbenchResult(
+                "MATERIALIZE",
+                response,
+                selected_indices,
+                materialize_choice.selected_uid,
+                destination,
+            )
+        )
+        return "HANDLED"
+
+    if save_location.tree_control is not None:
+        parent_tree = save_location.parent_locator
+        assert parent_tree is not None
+
+        @bindings.add("up", filter=tree_focus, eager=True)
+        def _save_tree_up(event) -> None:
+            parent_tree.move(-1)
+            event.app.invalidate()
+
+        @bindings.add("down", filter=tree_focus, eager=True)
+        def _save_tree_down(event) -> None:
+            state = parent_tree.state.tree
+            before = state.selected_row_index()
+            parent_tree.move(1)
+            if state.selected_row_index() == before:
+                event.app.layout.focus(save_location.input)
+            event.app.invalidate()
+
+        @bindings.add("left", filter=tree_focus, eager=True)
+        def _save_tree_left(event) -> None:
+            parent_tree.collapse()
+            event.app.invalidate()
+
+        @bindings.add("right", filter=tree_focus, eager=True)
+        def _save_tree_right(event) -> None:
+            parent_tree.expand()
+            event.app.invalidate()
+
+        @bindings.add("enter", filter=tree_focus, eager=True)
+        def _save_tree_choose(event) -> None:
+            try:
+                candidate = save_location.choose_cursor_as_parent()
+            except (TypeError, ValueError) as error:
+                status["value"] = str(error)
+            else:
+                event.app.layout.focus(save_location.input)
+                status["value"] = f"PARENT SELECTED · REVIEW {candidate}"
+            event.app.invalidate()
+
+        @bindings.add("tab", filter=tree_focus, eager=True)
+        @bindings.add("s-tab", filter=tree_focus, eager=True)
+        @bindings.add("backspace", filter=tree_focus, eager=True)
+        def _leave_save_tree(event) -> None:
+            event.app.layout.focus(save_location.input)
+            event.app.invalidate()
+
+    @bindings.add("c-j", filter=has_focus(save_location.input), eager=True)
+    def _reject_save_location_newline(event) -> None:
+        status["value"] = "SAVE LOCATION STAYS ON ONE LINE"
+        event.app.invalidate()
+
+    def visible_surfaces() -> tuple[FocusSurface, ...]:
+        surfaces = [
+            FocusSurface(
+                "search",
+                search_area,
+                move_vertical=_move_search,
+                activate=_search,
+                on_vertical_enter=_enter_search,
+            ),
+            FocusSurface(
+                "targets",
+                target_control,
+                move_vertical=_move_target,
+                activate=_toggle_target,
+                on_vertical_enter=_enter_target,
+            ),
+            FocusSurface(
+                "scope",
+                scope_control,
+                move_vertical=_move_scope_vertical,
+                activate=_focus_search,
+                on_vertical_enter=_enter_scope,
+            ),
+            FocusSurface(
+                "results",
+                results_control,
+                move_vertical=_move_results,
+                activate=_toggle_result,
+                on_vertical_enter=_enter_results,
+            ),
+        ]
+        if response is not None and response.results:
+            surfaces.extend(
+                (
+                    FocusSurface(
+                        "materialize",
+                        materialize_control,
+                        move_vertical=_move_materialize,
+                        activate=_activate_materialize,
+                    ),
+                    FocusSurface(
+                        "save-location",
+                        save_location.input,
+                        move_vertical=_move_save_location,
+                        activate=_activate_save_location,
+                    ),
+                    FocusSurface(
+                        "todo",
+                        todo_control,
+                        move_vertical=lambda _event, _delta: "BOUNDARY",
+                        activate=_apply_materialization,
+                    ),
+                )
+            )
+        return tuple(surfaces)
+
+    surface_focus = SurfaceFocusController(visible_surfaces)
+    bind_surface_navigation(bindings, surface_focus)
 
     def close(event) -> None:
         if background_turn.request_close():
@@ -664,14 +1120,29 @@ def run_find_search_workbench(
             return
         event.app.exit(result=FindSearchWorkbenchResult("CLOSED", response))
 
-    @bindings.add("escape", filter=non_search_focus, eager=True)
-    @bindings.add("backspace", filter=non_search_focus, eager=True)
+    @bindings.add("backspace", filter=non_search_focus & ~tree_focus, eager=True)
     def _back_to_search(event) -> None:
         event.app.layout.focus(search_area)
         search_area.buffer.cursor_position = len(search_area.text)
         event.app.invalidate()
 
-    @bindings.add("q", filter=non_search_focus, eager=True)
+    def _return_to_search(event) -> bool:
+        if save_location.tree_control is not None and event.app.layout.has_focus(
+            save_location.tree_control
+        ):
+            event.app.layout.focus(save_location.input)
+            return True
+        if event.app.layout.has_focus(search_area):
+            return False
+        event.app.layout.focus(search_area)
+        search_area.buffer.cursor_position = len(search_area.text)
+        return True
+
+    @bindings.add("escape", eager=True)
+    def _escape(event) -> None:
+        dispatch_tui_back(event, _return_to_search, close=close)
+
+    @bind_case_insensitive_key(bindings, "q", filter=non_search_focus, eager=True)
     def _close_from_read_surface(event) -> None:
         close(event)
 

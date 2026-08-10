@@ -80,3 +80,72 @@ class FlatSelectionState:
 
         if self.selected_uid is not None:
             self.cursor_uid = self.selected_uid
+
+
+@dataclass
+class FlatMultiSelectionState:
+    """Separate one flat cursor from an ordered set of checked values.
+
+    Multi-result controls need the same stable option identity and boundary
+    movement as single-choice controls, but checking one row must not clear a
+    previous row.  The checked order follows the fixed option order rather
+    than interaction history so an executable request is deterministic.
+    """
+
+    options: tuple[SelectionOption, ...]
+    cursor_uid: str
+    selected_uids: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        uids = tuple(option.uid for option in self.options)
+        if not uids or len(set(uids)) != len(uids):
+            raise ValueError("Flat multi-selection requires distinct options.")
+        if self.cursor_uid not in uids:
+            raise ValueError("Flat multi-selection cursor is unavailable.")
+        if len(set(self.selected_uids)) != len(self.selected_uids) or any(
+            uid not in uids for uid in self.selected_uids
+        ):
+            raise ValueError("Flat multi-selection values are unavailable.")
+        selected = set(self.selected_uids)
+        self.selected_uids = tuple(uid for uid in uids if uid in selected)
+
+    @property
+    def cursor_index(self) -> int:
+        return next(
+            index
+            for index, option in enumerate(self.options)
+            if option.uid == self.cursor_uid
+        )
+
+    def move(self, delta: int) -> bool:
+        """Move without wrapping and report whether the cursor changed."""
+
+        if isinstance(delta, bool) or not isinstance(delta, int):
+            raise ValueError("Flat multi-selection movement must be an integer.")
+        index = max(0, min(self.cursor_index + delta, len(self.options) - 1))
+        cursor_uid = self.options[index].uid
+        changed = cursor_uid != self.cursor_uid
+        self.cursor_uid = cursor_uid
+        return changed
+
+    def toggle_cursor(self) -> bool:
+        """Toggle the cursor row while preserving canonical option order."""
+
+        selected = set(self.selected_uids)
+        checked = self.cursor_uid not in selected
+        if checked:
+            selected.add(self.cursor_uid)
+        else:
+            selected.remove(self.cursor_uid)
+        self.selected_uids = tuple(
+            option.uid for option in self.options if option.uid in selected
+        )
+        return checked
+
+    def clear(self) -> None:
+        self.selected_uids = ()
+
+    def is_selected(self, uid: str) -> bool:
+        if all(option.uid != uid for option in self.options):
+            raise ValueError("Flat multi-selection value is unavailable.")
+        return uid in self.selected_uids

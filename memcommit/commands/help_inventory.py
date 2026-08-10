@@ -220,7 +220,7 @@ COMMAND_FORMS = {
         "mem eval semantic run [campaign] (run a semantic evaluation campaign)",
     ),
     "find": (
-        "mem find (interactive search, multi-target, and scope selector)",
+        "mem find (interactive search, checked COPY/REFERENCE, and Save Location)",
         'mem find "[query]" (current Context, namespace descendants, and embedded Contexts)',
         'mem find "[temporal_query]" (retained history when the query explicitly asks about time)',
         'mem find --context [context] "[query]" (explicit Context root, descendants, and embeds)',

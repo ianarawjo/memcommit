@@ -273,3 +273,51 @@ def freeze_readable_context_catalog(
         root_access,
         include_query_routes=include_query_routes,
     )
+
+
+def freeze_profile_readable_context_catalog(
+    active_store: MemoryStore,
+    selected_access: ContextAccess,
+    *,
+    include_query_routes: bool = True,
+) -> ReadableContextCatalog:
+    """Freeze all readable Profile names without losing granted orientation.
+
+    A selected granted view identifies the initial row, not the namespace
+    boundary of a control explicitly labelled PROFILE.  Anchor discovery at
+    the grant's local attachment so ordinary local names and every valid READ
+    grant share the same frozen public hierarchy.
+    """
+
+    root_access = selected_access
+    if selected_access.is_granted:
+        if selected_access.attachment_name is None or selected_access.view is None:
+            raise ProfileError("Granted readable Context has no local attachment.")
+        attachment_name = selected_access.attachment_name
+        attachment = active_store.load_direct(attachment_name)
+        if attachment.uid != selected_access.view.grant.attachment_context_uid:
+            raise ProfileError("Granted readable Context attachment changed.")
+        root_access = ContextAccess(
+            store=active_store,
+            context_name=attachment_name,
+            display_name=attachment_name,
+            attachment_name=None,
+            permission="READ",
+        )
+
+    catalog = ReadableContextCatalog(
+        active_store,
+        root_access,
+        include_query_routes=include_query_routes,
+    )
+    if not catalog.context_exists(selected_access.display_name):
+        raise ProfileError("Selected readable Context left the frozen Profile view.")
+    if selected_access.is_granted:
+        frozen_access = catalog.access_for(selected_access.display_name)
+        if (
+            not frozen_access.is_granted
+            or frozen_access.view is None
+            or frozen_access.view.grant != selected_access.view.grant
+        ):
+            raise ProfileError("Selected readable Context grant changed.")
+    return catalog

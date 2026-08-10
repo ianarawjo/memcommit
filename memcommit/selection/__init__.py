@@ -1,6 +1,6 @@
 """Operation-neutral flat selection contracts."""
 
 from memcommit.selection.model import SelectionOption
-from memcommit.selection.state import FlatSelectionState
+from memcommit.selection.state import FlatMultiSelectionState, FlatSelectionState
 
-__all__ = ["FlatSelectionState", "SelectionOption"]
+__all__ = ["FlatMultiSelectionState", "FlatSelectionState", "SelectionOption"]

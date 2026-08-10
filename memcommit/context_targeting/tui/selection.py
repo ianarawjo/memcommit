@@ -127,6 +127,18 @@ class ContextSelectionState:
         self._selected_order.append(name)
         return True
 
+    def replace(self, names: Sequence[str]) -> bool:
+        """Replace the staged set while preserving the control's cardinality."""
+
+        chosen = list(dict.fromkeys(names))
+        if any(name not in self.catalog for name in chosen):
+            raise ValueError("Context selections are outside the frozen catalog.")
+        if not self.multiple and len(chosen) != 1:
+            raise ValueError("Single Context selection requires exactly one value.")
+        changed = chosen != self._selected_order
+        self._selected_order = chosen
+        return changed
+
     def toggle_group(self, names: Sequence[str], *, anchor_name: str) -> bool:
         """Toggle a caller-defined group through one explicit anchor row.
 

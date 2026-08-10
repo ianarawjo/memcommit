@@ -9,6 +9,9 @@ from memcommit.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
+from memcommit.context_targeting.tui.range_selection import (
+    ContextRangeSelectionState,
+)
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import (
     build_context_tree,
@@ -90,6 +93,22 @@ def test_empty_multiple_selection_requires_a_valid_single_fallback():
     assert state.selected_names == ()
 
 
+def test_selection_can_replace_a_computed_group_without_leaking_cardinality():
+    state = ContextSelectionState.create(
+        ("one", "two", "three"),
+        selected=("one",),
+        mode="MULTIPLE",
+    )
+
+    assert state.replace(("two", "three")) is True
+    assert state.selected_names == ("two", "three")
+    assert state.replace(("two", "three")) is False
+
+    state.set_multiple(False)
+    with pytest.raises(ValueError, match="exactly one"):
+        state.replace(())
+
+
 def test_multiple_selection_group_toggle_checks_and_clears_a_whole_subtree():
     catalog = ("task", "task/a", "task/a/deep", "task/b", "other")
     tree = build_context_tree(catalog)
@@ -121,10 +140,13 @@ def test_group_toggle_on_unchecked_parent_restores_a_partial_subtree():
         mode="MULTIPLE",
     )
 
-    assert state.toggle_group(
-        context_subtree_names(tree, "task"),
-        anchor_name="task",
-    ) is True
+    assert (
+        state.toggle_group(
+            context_subtree_names(tree, "task"),
+            anchor_name="task",
+        )
+        is True
+    )
     assert state.selected_names == catalog
     assert state.set_multiple(False) is True
     assert state.selected_names == ("task",)
@@ -145,3 +167,57 @@ def test_context_reach_uses_one_shared_exact_and_descendant_vocabulary():
     assert "INCLUDE DESCENDANTS" in rendered
     assert state.move(1) is True
     assert state.include_descendants is True
+
+
+def test_context_range_freezes_effective_descendants_without_hidden_reexpansion():
+    state = ContextRangeSelectionState.create(
+        ("task", "task/a", "task/a/deep", "task/b", "other"),
+        current_name="task",
+        initial_target="task",
+        multiple=True,
+        include_descendants=True,
+    )
+
+    assert state.effective_names == (
+        "task",
+        "task/a",
+        "task/a/deep",
+        "task/b",
+    )
+
+    state.tree.selected_name = "task/a"
+    assert state.toggle_cursor() is True
+    assert state.effective_names == ("task", "task/b")
+
+    # A checked parent clears its complete subtree even when a child was
+    # changed independently. Toggling the now-unchecked parent restores the
+    # whole subtree visibly and in the exact executable set.
+    state.tree.selected_name = "task"
+    assert state.toggle_cursor() is True
+    assert state.effective_names == ()
+    assert state.toggle_cursor() is True
+    assert state.effective_names == (
+        "task",
+        "task/a",
+        "task/a/deep",
+        "task/b",
+    )
+
+
+def test_context_range_profile_is_process_local_and_can_be_cleared_while_editing():
+    state = ContextRangeSelectionState.create(
+        ("task", "task/a", "other"),
+        current_name="task",
+        initial_target="task",
+        multiple=True,
+        include_descendants=False,
+    )
+
+    state.profile_cursor = True
+    assert state.toggle_cursor() is True
+    assert state.profile_selected is True
+    assert state.effective_names == state.catalog
+
+    assert state.toggle_cursor() is True
+    assert state.profile_selected is False
+    assert state.effective_names == ()

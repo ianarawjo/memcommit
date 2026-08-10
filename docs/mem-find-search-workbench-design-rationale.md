@@ -12,53 +12,116 @@ the result type but did not make that provider-disclosure boundary legible.
 
 ## Decision
 
-In a TTY, operand-free `mem find` opens one process-local, read-only search
+In a TTY, operand-free `mem find` opens one process-local search
 workbench. It starts with an empty one-line `SEARCH` field focused, the current
 or explicit Context checked, and no provider call. `mem find QUERY` remains the
 non-interactive one-shot route and retains stable grouped output for scripts,
 redirection, and existing callers. Operand-free Find outside a TTY fails with
 an explicit query-required message rather than blocking on terminal input.
 
-The workbench presents four visible controls in screen order:
+The workbench presents seven visible controls in interaction order:
 
 1. `SEARCH`, a one-line query submitted with Enter;
-2. `TARGETS`, the frozen readable Context tree with Enter or Space changing
-   the checked ordinary local or READ-granted root while focus remains in the
-   tree;
-3. `SCOPE`, with independent `TARGET SELECTION` and `EMBEDDED CONTEXTS`
-   choices; and
-4. `RESULTS`, grouped by the exact owning Context.
+2. `TARGETS`, a process-local `PROFILE` row followed by the frozen readable
+   Context tree, with Enter or Space changing the checked range while focus
+   remains in the tree;
+3. `SCOPE`, with independent `TARGET SELECTION`, `CONTEXT RANGE`, and
+   `EMBEDDED CONTEXTS` choices; and
+4. `RESULTS`, one checkable row per canonical ranked result;
+5. `MATERIALIZE AS`, an exact `COPY` or `REFERENCE` choice;
+6. `SAVE LOCATION`, the shared direct exact-name field and frozen local parent
+   browser; and
+7. `TO DO`, the explicit create action for the checked set.
 
-Tab and Shift-Tab move through that same order. The search field owns initial
+At 80×24 the setup controls and result/materialization controls use paired
+columns so all interaction regions remain available without requiring a
+larger initial PTY. This layout does not change the declared keyboard order.
+The Save Location field is the first focus stop in its editor; Up enters the
+parent tree rendered above it, and Enter on a parent reparents the current
+final name segment without creating anything.
+
+Before a successful search, Tab and Shift-Tab retain the original four-control
+loop. Once results exist, they include the materialization controls in that
+same order while preserving the internal
+cursor of each Surface. Up and Down first move inside the focused Surface;
+crossing its first or last row moves to the adjacent visible Surface without
+wrapping the screen. Vertical entry into TARGETS or SCOPE selects the adjacent
+edge row. Enter is routed through the same Surface declaration but retains the
+operation-owned meaning of running Search, checking a Target, checking a
+Result, reviewing the exact Save Location, or creating the displayed output.
+An empty Results surface still returns to Search. The search field owns initial
 focus so opening Find feels like opening a search engine rather than entering
 a setup wizard. An empty query is UI state, not a request to rank every item.
 
-Target cardinality starts in `MULTIPLE` to preserve the fast path of checking
-peers on the first visit to the tree. `SINGLE` makes the next checked row
-replace the current target. Changing an existing multi-root selection to
-`SINGLE` retains the most recently explicitly checked root rather than silently
-returning to the initial current Context. Enter and Space are selection keys
-in `TARGETS`; `/`, Escape, and Backspace are the explicit paths back to
-`SEARCH`. This prevents Enter from appearing to accept a row while actually
-abandoning the tree unchanged.
+`PROFILE` is a virtual Find target above the ordinary namespace. It means every
+name in the frozen readable catalog for this workbench; it is not a persisted
+Context, a locator accepted by storage, or a new authority boundary. Selecting
+it replaces other roots. Acting on an individual Context afterward converts the
+shortcut into ordinary namespace roots before applying that edit, so a checked
+Profile marker never misleadingly means “all” after part of it was removed.
+When the initial Context is a granted READ view, it remains the initially
+checked row but does not narrow this catalog: local Contexts and all other valid
+READ grants remain available under Profile.
 
-In `MULTIPLE`, selecting a parent checks every readable Context in its frozen
-lexical subtree, including descendants that are currently collapsed. Selecting
-that checked parent again clears the same complete subtree. Descendant rows
-remain independently editable after a group action. Search executes the exact
-visible checked set rather than re-expanding a parent behind the UI; otherwise
-an independently unchecked child would still be searched. The legacy default
-`INCLUDE DESCENDANTS` is therefore projected once into the initial checked set,
-while `--direct` starts with only the exact initial target checked. `FOLLOW`
-under `EMBEDDED CONTEXTS` remains an independent graph-traversal choice.
+Target cardinality starts in `MULTIPLE` to preserve the fast path of checking
+peers on the first visit to the tree. It counts selected target ranges rather
+than the number of concrete Contexts produced by a subtree. `SINGLE` makes the
+next checked row replace the current target. Changing an existing multi-root
+selection to `SINGLE` retains the most recently explicitly checked root rather
+than silently returning to the initial current Context. Enter and Space are
+selection keys in `TARGETS`; `/`, Escape, and Backspace are the explicit paths
+back to `SEARCH`. Escape on the root Search field closes the workbench, so a
+person can always leave with Escape after at most one retreat. Backspace stays
+ordinary deletion in Search. This prevents Enter from appearing to accept a
+row while actually abandoning the tree unchanged.
+
+`CONTEXT RANGE` chooses how a Context row behaves. `THIS CONTEXT ONLY` changes
+only that row. `INCLUDE DESCENDANTS` checks or clears its complete readable
+lexical subtree, including descendants that are currently collapsed. Descendant
+rows remain independently editable after a group action. The selected roots
+and any process-local subtree exclusions derive one effective checked set;
+changing the range clears stale exclusions so the newly visible policy starts
+from the explicit roots. The legacy default starts on `INCLUDE DESCENDANTS`,
+while `--direct` starts on `THIS CONTEXT ONLY`. `FOLLOW` under
+`EMBEDDED CONTEXTS` remains an independent graph-traversal choice.
+
+Search executes the exact visible checked set rather than re-expanding a parent
+behind the UI; otherwise an independently unchecked child would still be
+searched. The virtual Profile row likewise resolves to the exact frozen
+readable catalog at this boundary and never enters a request as a fake Context
+name.
+
+While provider-backed search is running, the same animated `SEARCHING` state is
+shown in both the `RESULTS` frame title and the footer. The upper copy keeps the
+work visibly active next to the surface awaiting output; the footer copy remains
+available as the global close and frozen-scope status line. Both disappear when
+the background turn completes or fails.
 
 Every workbench submission freezes the query, ordered exact checked targets,
 embed choice, and limit into one `FindSearchRequest` with descendant expansion
 disabled. Changes to query, targets, or scope invalidate the visible result set
-and require another Enter; stale rows must never appear to describe a new
-frame. Search work runs outside the prompt-toolkit event-loop thread while the
-exact request stays visible and immutable. Closing during a search waits for
-that read-only turn to complete.
+and clear its checked set before requiring another Enter; stale rows must never
+appear to describe a new frame. Result checks default to empty and follow the
+frozen ranked order rather than interaction history. Search work runs outside
+the prompt-toolkit event-loop thread while the exact request stays visible and
+immutable. Closing during a search waits for that read-only turn to complete.
+
+`COPY` and `REFERENCE` are intentionally materialization modes, not semantic
+keep/drop decisions. `COPY` creates one fresh Memory identity per checked
+source using the exact reviewed value. `REFERENCE` delegates to the same live,
+read-only pointer primitive as `mem reference`: it stores the directly owned
+source Context UID and Memory UID, not a content copy. Both modes create one
+new local Context, leave every Source unchanged, preserve ranked selection
+order, and write one automatic `find` checkpoint containing the query, mode,
+source identities, and output identities. Save Location is require-new and
+never changes the current Context.
+
+Immediately before publication, each checked row is resolved from its frozen
+source Context UID and Memory UID and its current content must still equal the
+value displayed by Find. Local sources are then rechecked under the same lock
+set as the require-new output write. Granted sources retain their exact locked
+authority snapshots until local COPY publication commits. Failure publishes
+no partial result.
 
 ## Authority and privacy boundaries
 
@@ -75,16 +138,29 @@ private checkpoints, sessions, traces, or rationale artifacts. Temporal
 queries remain unavailable for a selected granted root because READ authority
 does not expose checkpoint history.
 
-The workbench is read-only and process-local. It does not persist queries,
-targets, tree expansion, scope choices, results, or provider dialogue, and it
-does not change the current Context. Existing one-shot current/history routing
-and provider output validation remain the semantic execution boundaries.
+Search, target, scope, tree expansion, provider results, and checked state stay
+process-local unless the person activates the exact `TO DO` row. The stored
+checkpoint records source identities and the query needed to explain the
+curation, but no search preference or provider dialogue is persisted. Existing
+one-shot current/history routing and provider output validation remain the
+semantic execution boundaries.
+
+Only current-state owned Memory and resolved MemoryRef rows can be
+materialized. History, query-only, and retained-artifact rows remain evidence
+views. REFERENCE is restricted to locally owned sources because the durable
+pointer contract does not grant the destination continuing authority over a
+remote Grant resource. COPY from a granted source requires `DERIVE`, `EXPORT`,
+`SAVE_ANALYSIS`, and `COMBINE` when multiple authority domains contribute;
+grant identity and permission are revalidated through the write boundary.
 
 ## Reuse and limitations
 
-The workbench reuses the common Context tree and checked-selection states,
-horizontal-choice renderer, focused Frame styling, terminal escaping, grouped
-search-result presentation, and close-safe background-turn controller.
+The workbench reuses the common Surface focus controller, Context tree,
+horizontal-choice renderer, shared exact Context-name/parent control, focused
+Frame styling, terminal escaping, and close-safe background-turn controller.
+The flat selection family now includes a reusable multiple-check state whose
+cursor and ordered checked set stay independent; Find renders result rows
+through that shared state rather than cloning checkbox mechanics.
 `ContextTreeState` continues to own only cursor and expansion, while the shared
 `ContextSelectionState` owns checked values. Find is the only current operation
 that configures that state for multiple roots; the common endpoint and Sever
@@ -95,7 +171,9 @@ The one-shot `--context` option remains singular and retains its existing
 descendant behavior. The workbench's embed choice applies uniformly to every
 checked target. Result inspection and conversational follow-up remain separate
 from this Google-like search surface; the retained legacy Find chat shell is
-not silently reactivated. Query-only routes remain a separate authorized
+not silently reactivated. The result action is explicit curation only: it does
+not save the provider's ranking explanation or turn selected rows into proof
+that the query was answered. Query-only routes remain a separate authorized
 interface and never become selectable ordinary roots.
 
 Multiple-target editing may temporarily leave zero rows checked. Clearing the

@@ -58,9 +58,7 @@ class KeywordProvider:
         matches = []
         for candidate in payload["candidates"]:
             searchable = " ".join(
-                str(value)
-                for key, value in candidate.items()
-                if key != "candidate_id"
+                str(value) for key, value in candidate.items() if key != "candidate_id"
             ).casefold()
             if query in searchable:
                 matches.append({"candidate_id": candidate["candidate_id"]})
@@ -224,9 +222,7 @@ def test_interactive_find_searches_multiple_exact_targets_in_one_provider_turn(
         second_memory.uid,
     }
     payload = json.loads(provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1])
-    sent_content = {
-        candidate.get("content", "") for candidate in payload["candidates"]
-    }
+    sent_content = {candidate.get("content", "") for candidate in payload["candidates"]}
     assert first_memory.content in sent_content
     assert second_memory.content in sent_content
     assert omitted_memory.content not in sent_content
@@ -353,10 +349,9 @@ def test_nested_query_context_is_excluded_by_direct_search():
     root.add(child)
 
     assert collect_candidates(root, recursive=False) == []
-    assert [
-        candidate.search_text
-        for candidate in collect_candidates(root)
-    ] == ["restricted-policy"]
+    assert [candidate.search_text for candidate in collect_candidates(root)] == [
+        "restricted-policy"
+    ]
 
 
 def test_rank_candidates_preserves_model_order_and_dedupes_repeats():
@@ -385,10 +380,7 @@ def test_rank_candidates_preserves_model_order_and_dedupes_repeats():
 
     matches = rank_candidates("anything", candidates, Provider(), limit=5)
 
-    assert [
-        match.candidate.candidate_id
-        for match in matches
-    ] == ["c000002", "c000001"]
+    assert [match.candidate.candidate_id for match in matches] == ["c000002", "c000001"]
     assert all(match.relevance == "primary" for match in matches)
 
 
@@ -583,8 +575,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     assert "1 match" not in result.output
     assert "campus/parking\n" in result.output
     assert (
-        f"[memory  {memory.uid[:8]}] "
-        "Temporary parking is available in Lot C."
+        f"[memory  {memory.uid[:8]}] " "Temporary parking is available in Lot C."
     ) in result.output
     assert store.list_checkpoints("facilities-reference") == checkpoints_before
 
@@ -625,9 +616,7 @@ def test_find_cli_searches_materialized_namespace_descendants_by_default(
     assert result.exit_code == 0, result.output
     assert "task-3/personal-memory\n" in result.output
     assert f"[memory  {memory.uid[:8]}]" in result.output
-    payload = json.loads(
-        provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1]
-    )
+    payload = json.loads(provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1])
     candidate_text = json.dumps(payload["candidates"])
     assert memory.content in candidate_text
     assert sibling_memory.content not in candidate_text
@@ -790,6 +779,8 @@ def test_find_help_explains_the_bare_route_and_default_scope():
     assert result.exit_code == 0, result.output
     assert "[QUERY]" in result.output
     assert "interactive search" in result.output
+    assert "Profile-wide or Context" in result.output
+    assert "targets, Context range" in result.output
     assert "namespace descendants" in result.output
     assert "embedded Contexts" in result.output
     assert "--direct excludes" in result.output
@@ -958,10 +949,7 @@ def test_refine_can_replace_zero_results_with_a_labeled_related_fallback(
     assert [result.uid for result in updated.results] == [clinic.uid]
     assert updated.results[0].relevance == "related"
     assert updated.related_query == "health and healthcare memories"
-    assert (
-        updated.status
-        == "NO PRIMARY MATCHES · SHOWING RELATED RESULTS · REFINED"
-    )
+    assert updated.status == "NO PRIMARY MATCHES · SHOWING RELATED RESULTS · REFINED"
     assert "I found no primary matches" in updated.messages[-1].text
 
 
@@ -1075,8 +1063,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
                     ),
                     "visible_sources": ["m1"],
                     "context_text": (
-                        "Another Memory places construction between June and "
-                        "August."
+                        "Another Memory places construction between June and " "August."
                     ),
                     "context_sources": ["c1"],
                     "outside_text": "Other Contexts were not checked.",
@@ -1104,9 +1091,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
     )
 
     assert updated.results == state.results
-    assert updated.status == (
-        "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED"
-    )
+    assert updated.status == ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED")
     assert updated.messages[-2] == FindChatMessage(
         role="USER",
         text="garage will 언제까지 closed?",
@@ -1205,20 +1190,14 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
         FIND_OUTSIDE_CONFIRMATION,
     )
 
-    assert updated.status == (
-        "ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS CHECKED"
-    )
+    assert updated.status == ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS CHECKED")
     assert updated.pending_answer is None
     answer_text = updated.messages[-1].text
     assert "closure. [1]" in answer_text
     assert "August 28. [2]" in answer_text
+    assert f"[1] m1 · memory · {visible.uid[:8]} · Context: task-1" in answer_text
     assert (
-        f"[1] m1 · memory · {visible.uid[:8]} · Context: task-1"
-        in answer_text
-    )
-    assert (
-        f"[2] x1 · memory · {outside.uid[:8]} · "
-        "Context: facilities-calendar"
+        f"[2] x1 · memory · {outside.uid[:8]} · " "Context: facilities-calendar"
     ) in answer_text
     assert outside.content in answer_text
     assert provider.operations == ["find turn", "find answer"]
@@ -1263,9 +1242,7 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
     )
     monkeypatch.setattr(
         "memcommit.commands.find.collect_outside_context_evidence",
-        lambda *_args, **_kwargs: pytest.fail(
-            "outside Contexts must not be collected"
-        ),
+        lambda *_args, **_kwargs: pytest.fail("outside Contexts must not be collected"),
     )
 
     pending = _handle_find_turn(state, "When does it reopen?")
@@ -1373,9 +1350,7 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
     first_label = f"[memory  {first_child.uid[:8]}]"
     first_row = f"{first_label} First child line"
     continuation = " " * (len(first_label) + 1) + "continued detail"
-    second_row = (
-        f"[memory  {second_child.uid[:8]}] Second child result"
-    )
+    second_row = f"[memory  {second_child.uid[:8]}] Second child result"
     root_row = f"[memory  {root_memory.uid[:8]}] Root result"
     assert result.output.count("campus/parking\n") == 1
     assert result.output.count("facilities-reference\n") == 1
@@ -1469,8 +1444,7 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
     assert result.exit_code == 0
     assert "facilities-reference\n" in result.output
     assert (
-        f"[query   {ref.uid[:8]}] "
-        "contractor-agreements (query-only)"
+        f"[query   {ref.uid[:8]}] " "contractor-agreements (query-only)"
     ) in result.output
     assert "mem query" in result.output
     assert HIDDEN_SECRET not in result.output

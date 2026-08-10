@@ -19,6 +19,7 @@ class ContextTreeRowDecoration:
     cursor_style: str = ""
     value_style: str | None = None
     anchor_cursor: bool = True
+    show_cursor: bool = True
 
 
 ContextTreeRowDecorator = Callable[[ContextTreeRow, bool], ContextTreeRowDecoration]
@@ -39,9 +40,9 @@ def render_context_tree_rows(
     for index, row in enumerate(rows):
         cursor = row.name == state.selected_name
         decoration = decorate(row, cursor)
-        if cursor and decoration.anchor_cursor:
+        if cursor and decoration.show_cursor and decoration.anchor_cursor:
             fragments.append(("[SetCursorPosition]", ""))
-        pointer = "›" if cursor else " "
+        pointer = "›" if cursor and decoration.show_cursor else " "
         branch = "▾" if row.expanded else "▸" if row.has_children else "·"
         prefix = (
             f"{pointer} {decoration.marker} {decoration.active} "

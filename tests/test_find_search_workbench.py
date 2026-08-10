@@ -1,16 +1,27 @@
 """Interactive Find search, target, scope, and result contracts."""
 
+import threading
+import time
+
 import pytest
+from prompt_toolkit.data_structures import Size
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
+from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.find_search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,
+    _results_frame_title,
     render_find_search_results,
     run_find_search_workbench,
 )
+
+
+class Terminal80x24(DummyOutput):
+    def get_size(self) -> Size:
+        return Size(rows=24, columns=80)
 
 
 def test_blank_workbench_does_not_search_before_the_person_submits():
@@ -31,13 +42,24 @@ def test_blank_workbench_does_not_search_before_the_person_submits():
             limit=5,
             run_search=search,
             app_input=pipe_input,
-            app_output=DummyOutput(),
+            app_output=Terminal80x24(),
             require_tty=False,
         )
 
     assert result.status == "CLOSED"
     assert result.response is None
     assert requests == []
+
+
+def test_results_title_repeats_animated_search_progress_above_results():
+    turn: BackgroundExecutorTurn[FindSearchResponse] = BackgroundExecutorTurn()
+
+    assert _results_frame_title(turn) == "RESULTS"
+
+    turn.busy = True
+    turn.frame = 2
+
+    assert _results_frame_title(turn) == "RESULTS · SEARCHING …"
 
 
 def test_blank_workbench_initial_focus_accepts_the_query_immediately():
@@ -92,7 +114,7 @@ def test_workbench_submits_multiple_targets_and_independent_scope_choices():
     with create_pipe_input() as pipe_input:
         # Search -> Targets; expand task-1; select its child; Scope: exclude
         # embeds; Results -> Search; submit and close after completion.
-        pipe_input.send_text("\t\x1b[C\x1b[B \t\x1b[B\x1b[D\t\tneedle\r\x03")
+        pipe_input.send_text("\t\x1b[C\x1b[B \t\x1b[B\x1b[B\x1b[D\t\tneedle\r\x03")
         result = run_find_search_workbench(
             ("task-1", "task-1/source", "other"),
             current="task-1",
@@ -245,6 +267,29 @@ def test_escape_and_backspace_return_read_only_scope_to_the_search(back_key):
     ]
 
 
+def test_escape_closes_the_root_search_without_running_find():
+    requests: list[FindSearchRequest] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        result = run_find_search_workbench(
+            ("task-1",),
+            current="task-1",
+            initial_target="task-1",
+            initial_include_descendants=True,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=lambda request: requests.append(request),  # type: ignore[arg-type,return-value]
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CLOSED"
+    assert result.response is None
+    assert requests == []
+
+
 def test_initial_descendant_reach_is_materialized_as_exact_checked_targets():
     requests: list[FindSearchRequest] = []
 
@@ -276,6 +321,104 @@ def test_initial_descendant_reach_is_materialized_as_exact_checked_targets():
     ]
 
 
+def test_profile_target_freezes_the_whole_readable_catalog_without_leaking_a_locator():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # Down enters the virtual Profile row above the Context namespace.
+        pipe_input.send_text("needle\x1b[B\r/\r\x03")
+        run_find_search_workbench(
+            ("task", "task/source", "other"),
+            current="task",
+            initial_target="task",
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task", "task/source", "other"),
+            include_descendants=False,
+        )
+    ]
+
+
+def test_context_range_can_expand_one_checked_root_to_its_visible_subtree():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # Tab to Targets and Scope, then select INCLUDE DESCENDANTS on the
+        # second Scope row before returning to Search.
+        pipe_input.send_text("needle\t\t\x1b[B\x1b[C/\r\x03")
+        run_find_search_workbench(
+            ("task", "task/source", "task/source/deep", "other"),
+            current="task",
+            initial_target="task",
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task", "task/source", "task/source/deep"),
+            include_descendants=False,
+        )
+    ]
+
+
+def test_unchecked_descendant_range_is_not_reintroduced_at_search_time():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # The initial root includes descendants. Expand it, move to task/a,
+        # clear that complete subtree, then search the remaining visible set.
+        pipe_input.send_text("needle\t\x1b[C\x1b[B\r/\r\x03")
+        run_find_search_workbench(
+            ("task", "task/a", "task/a/deep", "task/b"),
+            current="task",
+            initial_target="task",
+            initial_include_descendants=True,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task", "task/b"),
+            include_descendants=False,
+        )
+    ]
+
+
 def test_selecting_a_collapsed_parent_checks_its_hidden_descendants():
     requests: list[FindSearchRequest] = []
 
@@ -291,7 +434,7 @@ def test_selecting_a_collapsed_parent_checks_its_hidden_descendants():
             ("task", "task/a", "task/a/deep", "task/b", "other"),
             current="other",
             initial_target="other",
-            initial_include_descendants=False,
+            initial_include_descendants=True,
             initial_follow_embeds=True,
             limit=5,
             run_search=search,
@@ -305,6 +448,77 @@ def test_selecting_a_collapsed_parent_checks_its_hidden_descendants():
             "needle",
             ("task", "task/a", "task/a/deep", "task/b"),
             include_descendants=False,
+        )
+    ]
+
+
+def test_vertical_arrows_cross_target_boundaries_and_enter_activates_the_row():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # Search Down enters Profile, then the first and second Context roots;
+        # the fourth Down crosses the lower boundary into Scope. Narrow to
+        # SINGLE, return to the last target, activate it, and run the search.
+        pipe_input.send_text("needle\x1b[B\x1b[B\x1b[B\x1b[B\x1b[D\x1b[A\r/\r\x03")
+        run_find_search_workbench(
+            ("first", "second"),
+            current="first",
+            initial_target="first",
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("second",),
+            include_descendants=False,
+        )
+    ]
+
+
+def test_vertical_arrows_cross_scope_boundary_and_results_enter_returns_to_search():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        # Search -> Profile -> Context -> first Scope row -> range -> embeds.
+        # Exclude embeds, cross into Results, then Enter returns to Search and
+        # Enter runs it.
+        pipe_input.send_text(
+            "needle\x1b[B\x1b[B\x1b[B\x1b[D" "\x1b[B\x1b[B\x1b[D\x1b[B\r\r\x03"
+        )
+        run_find_search_workbench(
+            ("task",),
+            current="task",
+            initial_target="task",
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task",),
+            include_descendants=False,
+            follow_embeds=False,
         )
     ]
 
@@ -332,3 +546,53 @@ def test_result_renderer_keeps_related_results_separate_from_primary_matches():
     assert "RELATED RESULTS" in rendered
     assert "Broader search: healthcare" in rendered
     assert "[1 related memory memory-o] Clinic appointment" in rendered
+
+
+def test_checked_result_copy_returns_exact_materialization_request():
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        return FindSearchResponse(
+            request,
+            "CURRENT",
+            (
+                FindSearchResult(
+                    context_name="task",
+                    kind="memory",
+                    uid="memory-one",
+                    content="Accessible entrance",
+                    source_context_name="task",
+                    source_context_uid="context-one",
+                    source_memory_uid="memory-one",
+                ),
+            ),
+        )
+
+    with create_pipe_input() as pipe_input:
+
+        def send_after_search() -> None:
+            pipe_input.send_text("accessibility\r")
+            time.sleep(0.15)
+            # Check result, visit COPY, replace the exact Save Location, then
+            # activate the reviewed To Do row.
+            pipe_input.send_text("\r\t\t\x15task/results/accessibility\t\r")
+
+        sender = threading.Thread(target=send_after_search)
+        sender.start()
+        result = run_find_search_workbench(
+            ("task",),
+            current="task",
+            initial_target="task",
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            validate_save_location=lambda value: value,
+            app_input=pipe_input,
+            app_output=Terminal80x24(),
+            require_tty=False,
+        )
+        sender.join()
+
+    assert result.status == "MATERIALIZE"
+    assert result.selected_result_indices == (0,)
+    assert result.materialize_as == "COPY"
+    assert result.save_location == "task/results/accessibility"
