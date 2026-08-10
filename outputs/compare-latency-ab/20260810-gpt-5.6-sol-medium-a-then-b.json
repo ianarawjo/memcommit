@@ -1,0 +1,1999 @@
+{
+  "agreement": {
+    "baseline_relation_count": 101,
+    "compact_relation_count": 105,
+    "exact_relation_signature_overlap": 57,
+    "pairwise_same_group": {
+      "f1": 0.8203125,
+      "false_negative": 161,
+      "false_positive": 69,
+      "precision": 0.8838383838383839,
+      "recall": 0.7653061224489796,
+      "true_positive": 525
+    },
+    "provider_speedup_ratio": 2.010904571640363,
+    "reference_condition_is_not_ground_truth": true,
+    "response_char_reduction": 0.7962702195262854,
+    "source_count": 300,
+    "source_exact_group_and_kind_agreement": 0.55,
+    "source_kind_agreement": 0.7633333333333333
+  },
+  "calls": [
+    {
+      "condition": "BASELINE_EXHAUSTIVE",
+      "contract_valid": true,
+      "elapsed_seconds": 341.95410312499735,
+      "error_type": null,
+      "failure_category": null,
+      "normalized_analysis": {
+        "analysis_digest": "2b27e061a4c7880fd9b8ae19467a43680f5c86f5cbfe7e637044fffabf120979",
+        "issue_count": 5,
+        "kind_counts": {
+          "COMPATIBLE": 13,
+          "CONFLICT": 5,
+          "DISTINCT": 34,
+          "EQUIVALENT": 20,
+          "SCOPED": 29
+        },
+        "relation_count": 101,
+        "relations": [
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000001",
+              "m1_000002",
+              "m1_000013",
+              "m1_000014",
+              "m2_000001",
+              "m2_000002",
+              "m2_000012",
+              "m2_000013"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000003",
+              "m2_000003"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000004",
+              "m2_000004"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000005",
+              "m2_000005"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000006",
+              "m1_000007",
+              "m2_000006",
+              "m2_000007"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000008",
+              "m2_000008"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000009",
+              "m1_000010",
+              "m1_000011",
+              "m1_000015",
+              "m1_000016",
+              "m1_000017",
+              "m2_000009",
+              "m2_000010",
+              "m2_000093",
+              "m2_000094",
+              "m2_000095",
+              "m2_000096"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000012",
+              "m2_000011"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000018",
+              "m1_000023",
+              "m2_000014",
+              "m2_000019"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000019",
+              "m2_000015"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000020"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000021"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000022",
+              "m1_000078",
+              "m1_000079",
+              "m2_000018",
+              "m2_000118",
+              "m2_000119"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000024",
+              "m1_000026",
+              "m2_000097"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000025",
+              "m1_000149",
+              "m2_000149"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000027",
+              "m1_000063",
+              "m1_000064",
+              "m2_000041",
+              "m2_000042",
+              "m2_000099"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000028",
+              "m2_000020"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000029",
+              "m1_000042",
+              "m1_000043",
+              "m2_000021",
+              "m2_000029",
+              "m2_000030"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000030",
+              "m1_000031",
+              "m1_000057",
+              "m1_000059",
+              "m1_000060",
+              "m2_000022",
+              "m2_000110",
+              "m2_000111",
+              "m2_000112"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000032",
+              "m2_000023"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000033",
+              "m2_000024"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000034",
+              "m2_000025"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000035",
+              "m1_000036",
+              "m2_000026",
+              "m2_000027"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000037",
+              "m1_000040"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000038"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000039",
+              "m1_000085",
+              "m1_000150",
+              "m2_000124"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000041",
+              "m1_000044",
+              "m1_000045",
+              "m1_000047",
+              "m2_000028",
+              "m2_000031",
+              "m2_000104",
+              "m2_000106"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000046",
+              "m2_000105"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000048",
+              "m2_000032"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000049",
+              "m2_000033"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000050",
+              "m1_000052",
+              "m2_000034",
+              "m2_000036"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000051",
+              "m2_000035"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000053"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000054",
+              "m1_000055"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000056",
+              "m2_000037"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000058",
+              "m1_000061",
+              "m2_000039"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000062",
+              "m1_000073",
+              "m2_000040",
+              "m2_000051"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000065",
+              "m1_000066",
+              "m2_000043",
+              "m2_000044"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000067",
+              "m1_000070",
+              "m1_000075",
+              "m1_000076",
+              "m1_000077",
+              "m2_000045",
+              "m2_000048",
+              "m2_000113",
+              "m2_000114",
+              "m2_000115",
+              "m2_000116",
+              "m2_000117"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000068",
+              "m2_000046"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000069",
+              "m2_000047"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000071",
+              "m2_000049"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000072",
+              "m2_000050"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000074",
+              "m2_000052"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000080",
+              "m1_000081",
+              "m2_000053",
+              "m2_000054",
+              "m2_000120"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000082"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000083"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000084",
+              "m1_000148"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000086",
+              "m2_000055"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000087",
+              "m2_000056"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000088",
+              "m2_000057"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000089",
+              "m2_000058"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000090",
+              "m2_000059"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000091",
+              "m2_000060"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000092",
+              "m2_000061"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000093"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000094"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000095"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000096"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000097",
+              "m1_000098",
+              "m2_000062",
+              "m2_000063"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000099",
+              "m2_000129",
+              "m2_000130"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000100"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000101",
+              "m2_000131"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000102",
+              "m1_000103",
+              "m2_000064",
+              "m2_000065"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000104",
+              "m1_000105",
+              "m2_000132"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000106",
+              "m2_000133",
+              "m2_000134"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000107",
+              "m1_000108",
+              "m1_000109",
+              "m2_000066",
+              "m2_000067",
+              "m2_000068"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000110",
+              "m2_000069"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000111",
+              "m1_000112",
+              "m1_000113",
+              "m2_000070",
+              "m2_000071",
+              "m2_000072"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000114",
+              "m1_000116",
+              "m1_000117"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000115",
+              "m2_000098"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000118",
+              "m2_000073"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000119",
+              "m1_000120",
+              "m1_000121",
+              "m2_000140",
+              "m2_000141"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000122",
+              "m1_000123",
+              "m1_000124",
+              "m1_000125",
+              "m1_000126",
+              "m1_000127",
+              "m1_000128",
+              "m2_000074",
+              "m2_000075",
+              "m2_000076",
+              "m2_000077",
+              "m2_000142",
+              "m2_000143",
+              "m2_000144"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000129",
+              "m1_000138",
+              "m2_000078",
+              "m2_000147"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000130"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000131",
+              "m2_000080"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000132"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000133",
+              "m2_000082"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000134",
+              "m2_000083"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000135",
+              "m2_000084"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000136",
+              "m2_000145"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000137",
+              "m2_000079"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000139",
+              "m1_000140",
+              "m1_000141",
+              "m1_000142",
+              "m1_000143",
+              "m1_000144",
+              "m1_000145",
+              "m1_000146",
+              "m1_000147",
+              "m2_000085",
+              "m2_000086",
+              "m2_000087",
+              "m2_000088",
+              "m2_000089",
+              "m2_000090",
+              "m2_000091",
+              "m2_000092"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000016"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000017"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000038"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000081"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000100"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000101"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000102"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000103"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000107",
+              "m2_000108",
+              "m2_000109"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000121"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000122"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000123"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000125",
+              "m2_000126",
+              "m2_000127",
+              "m2_000128"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000135"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000136",
+              "m2_000137",
+              "m2_000138",
+              "m2_000139",
+              "m2_000150"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000146"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000148"
+            ],
+            "status": "RESOLVED"
+          }
+        ],
+        "required_issue_count": 5
+      },
+      "operation": "compare_contexts",
+      "prompt_chars": 79240,
+      "prompt_digest": "3fe407a3ff622a70145c7fd9f1f6908e39d7870863b3a297f5d35275104a7b23",
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-sol",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "medium",
+          "runtime": "codex-cli"
+        },
+        "operation": "compare_contexts",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-sol",
+        "upstream_provider": "openai-codex"
+      },
+      "provider_seconds": 341.94544929100084,
+      "raw_response": "{\"overview\":\"The frames broadly align on proposal rigor, evidence, ethics, feasibility, and evaluation logic, while adapting many recommendations to formative versus field settings. Material disagreements concern opening length, headings, em-dash use, participant targets, and where budget detail belongs; each frame also contributes substantial setting-specific guidance.\",\"reports\":{\"both\":\"Both emphasize traceable research questions, direct evidence, bounded contributions, explicit methods, ethical safeguards, feasibility checks, fair compensation, and coherent review logic.\",\"differences\":\"They adapt guidance to formative versus field evaluation and disagree on opening length, navigational headings, em-dash permission, fixed versus ranged recruitment targets, and prose versus table-based budget detail.\",\"reference_only\":\"Reference uniquely stresses community burden, formative design iteration, analytic generalization, controlled-study limits, prototype safety, and repeated-session compensation.\",\"compared_only\":\"Compared uniquely develops organizational roles, field evidence and confounds, withdrawal protections, deployment recovery, partner dependencies, implementation fidelity, operational outcomes, and field-readiness review.\"},\"relations\":[{\"relation_key\":\"opening_length\",\"kind\":\"CONFLICT\",\"status\":\"UNRESOLVED\",\"summary\":\"The frames prescribe incompatible limits for complete opening problem framing.\",\"reason\":\"Reference requires completion within two sentences, whereas Compared permits and assigns essential setting or consequence material to a third sentence.\"},{\"relation_key\":\"research_question_scope\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Both require the primary HCI question to identify its users and interaction context, with field research additionally naming operational stakeholders and the actual environment.\",\"reason\":\"The added stakeholders and environment are explicit requirements of the field-oriented scope rather than incompatible question structures.\"},{\"relation_key\":\"visual_summary\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"An unfamiliar interaction procedure should receive one compact visual summary.\",\"reason\":\"The operational instruction and scope are identical.\"},{\"relation_key\":\"visual_transitions\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"The visual summary should mark conditions governing movement between procedural steps.\",\"reason\":\"The operational instruction and scope are identical.\"},{\"relation_key\":\"research_schedule\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"The master’s schedule should use named phases or milestones linked to reviewable outputs and progression.\",\"reason\":\"The phase vocabularies differ, but both can govern one schedule without contradiction.\"},{\"relation_key\":\"gap_contribution_flow\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"The research gap and proposed contributions should be presented in close, direct argumentative connection.\",\"reason\":\"One emphasizes HCI evidence and the other actual-use context, while preserving the same presentation decision.\"},{\"relation_key\":\"proposal_navigation\",\"kind\":\"CONFLICT\",\"status\":\"UNRESOLVED\",\"summary\":\"The frames prescribe opposing navigation structures for a two-page proposal.\",\"reason\":\"Reference requires reusable descriptive subheadings, while Compared directs the author to avoid extra headings and rely on continuous paragraph transitions.\"},{\"relation_key\":\"feasibility_evidence\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Preliminary observational, prototype, or technical evidence should sit beside feasibility claims.\",\"reason\":\"The evidence examples reflect different study settings but implement the same adjacency policy.\"},{\"relation_key\":\"contribution_limit\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"The proposal should identify no more than two primary HCI contributions.\",\"reason\":\"Both state the same numerical limit and reviewer-facing rationale.\"},{\"relation_key\":\"contribution_sentences\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Each contribution should be named and expressed in a single sentence, with the contribution type matching the evaluation setting.\",\"reason\":\"Reference discusses design or empirical contributions; Compared discusses design or operational contributions.\"},{\"relation_key\":\"community_time_burden\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Community-participant recruitment should emphasize participation time burden.\",\"reason\":\"This is independently useful guidance supplied only by Reference.\"},{\"relation_key\":\"community_travel_burden\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Community-participant recruitment should emphasize travel burden.\",\"reason\":\"This is independently useful guidance supplied only by Reference.\"},{\"relation_key\":\"organizational_workflow_constraints\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Organizational-member recruitment should emphasize workflow constraints.\",\"reason\":\"This is independently useful field guidance supplied only by Compared.\"},{\"relation_key\":\"organizational_manager_approval\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Organizational-member recruitment should emphasize manager-approval constraints.\",\"reason\":\"This is independently useful field guidance supplied only by Compared.\"},{\"relation_key\":\"em_dash_policy\",\"kind\":\"CONFLICT\",\"status\":\"UNRESOLVED\",\"summary\":\"The frames impose incompatible policies on em-dash use.\",\"reason\":\"Reference prohibits em dashes throughout the proposal, while Compared permits them for deliberate interruption or sharp contrast.\"},{\"relation_key\":\"evaluation_change_focus\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Evaluation should foreground the consequential decision it can change rather than merely showcase a system.\",\"reason\":\"Reference applies this to formative design modification and transferable principles; Compared applies it to a primary field operational decision.\"},{\"relation_key\":\"sentence_claim_structure\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Prose should separate independently reviewable claims while preserving genuinely connected clauses whose joint movement improves readability.\",\"reason\":\"The instructions distinguish claim separability from sentence rhythm and can jointly govern sentence editing.\"},{\"relation_key\":\"behavior_claim_evidence\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Evidence should be adjacent to verifiable claims about users, needs, or technology and field effects.\",\"reason\":\"The evidence policy is shared, while Compared explicitly situates it in observational and field evidence.\"},{\"relation_key\":\"direct_evidence\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Important claims should be supported by the closest evidence that directly examined them.\",\"reason\":\"Both give the same evidence-selection and placement rule and the same reviewer rationale.\"},{\"relation_key\":\"observed_vs_expected\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Confirmed behavior should be written as observed, while unconfirmed behavior should be expressed as a plan, condition, prediction, or expectation.\",\"reason\":\"Reference distinguishes pilot and prototype status; Compared distinguishes confirmation in the field.\"},{\"relation_key\":\"procedure_representation\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Use a branching flow diagram when alternate outcomes must be seen together, but use a stable-row sequence table when frequent procedural revision is the governing need.\",\"reason\":\"The different formats are attached to explicit and compatible selection conditions, including their visibility and maintenance tradeoffs.\"},{\"relation_key\":\"causal_language\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Do not use proof or causal verbs when the study design cannot support causal inference.\",\"reason\":\"The operational claim and scope are the same.\"},{\"relation_key\":\"citation_strategy\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Citation selection should prioritize recent synthesis where evidence is mature and recent systems or field studies where the topic changes rapidly.\",\"reason\":\"Each instruction states a different explicit evidentiary condition.\"},{\"relation_key\":\"design_choice_needs\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Each design choice should be traced to the needs it addresses, including operational stakeholders in field settings.\",\"reason\":\"The shared derivation requirement is extended by the field stakeholder scope.\"},{\"relation_key\":\"conceptual_falsifiability\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"A conceptual contribution should connect design principles to observable behavior and be falsifiable with data.\",\"reason\":\"This empirical testability requirement appears only in Reference.\"},{\"relation_key\":\"formative_decision_trace\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Each item of formative evidence should support an explicit retain, modify, or discard judgment.\",\"reason\":\"This evidence-to-design-judgment rule appears only in Reference.\"},{\"relation_key\":\"evaluation_scope_limits\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Initial or controlled evaluations should not be treated as direct evidence of long-term real-world effects.\",\"reason\":\"Reference identifies omitted real-world conditions and adaptation; Compared identifies changed exposure and repeated-use measurement conditions.\"},{\"relation_key\":\"authorial_and_procedural_voice\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Use explicit first-person agency for author-controlled commitments, but action-first phrasing for reusable procedural steps.\",\"reason\":\"The apparently different voice rules govern explicitly different sentence functions.\"},{\"relation_key\":\"pronoun_consistency\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Choose “I” or “we” according to the responsible party and do not alternate for the same authorial role.\",\"reason\":\"Both state the same responsibility-based consistency rule.\"},{\"relation_key\":\"terminology_consistency\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Use stable names for the same users, functions, concepts, or stages throughout the proposal.\",\"reason\":\"Both prohibit changing terminology for the same referent.\"},{\"relation_key\":\"abbreviation_threshold\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Use abbreviations only for long, recurring terms.\",\"reason\":\"Reference supplies a three-word threshold and Compared frames the same restraint for a two-page proposal.\"},{\"relation_key\":\"abbreviation_first_use\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Define an abbreviation beside its full term at first use because cross-subfield readers may not infer it.\",\"reason\":\"Both provide the same instruction and rationale.\"},{\"relation_key\":\"participant_role_naming\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Refer to participants by their research role rather than diagnostic, deficit, or status labels.\",\"reason\":\"The wording differs slightly but governs the same naming decision.\"},{\"relation_key\":\"formative_evaluation_term\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Reserve “formative evaluation” for studies seeking modification evidence rather than final efficacy judgments.\",\"reason\":\"This terminology distinction appears only in Reference.\"},{\"relation_key\":\"contribution_abstraction\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Contribution labels must match deliverable abstraction, and design principles should relate conditions to outcomes rather than replicate a screen.\",\"reason\":\"These statements split one Reference-only rule about defensible abstraction of design knowledge.\"},{\"relation_key\":\"prototype_fidelity\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Visual fidelity may differ from functional fidelity or connection to real data and services.\",\"reason\":\"Both warn that appearance and operational realism are separate prototype dimensions.\"},{\"relation_key\":\"service_flow_visibility\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Service-flow diagrams reveal human-system transitions not visible in individual screens.\",\"reason\":\"This field-system visualization claim appears only in Compared.\"},{\"relation_key\":\"visual_scanning\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Reviewers often inspect prototype, system-structure, or flow visuals before reading the main explanation.\",\"reason\":\"The visual subjects differ by setting, but the shared navigation implication remains intact.\"},{\"relation_key\":\"question_data_analysis\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Every research question should trace directly to corresponding data sources and analysis procedures so answerability can be assessed.\",\"reason\":\"Both state the same traceability rule and reviewer rationale.\"},{\"relation_key\":\"preregistration_changes\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Preregistered studies should define when plan changes are permissible and where those changes are recorded.\",\"reason\":\"The two frames express the same paired governance requirements.\"},{\"relation_key\":\"participant_target\",\"kind\":\"CONFLICT\",\"status\":\"UNRESOLVED\",\"summary\":\"The frames prescribe incompatible participant-target commitments.\",\"reason\":\"Reference requires one exact target and rejects a range, while Compared requires a justified bounded range with distinct minimum and maximum consequences.\"},{\"relation_key\":\"data_collection_tools\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Specify the tools or records used to collect every data type, including field sources where applicable.\",\"reason\":\"Reference covers user-study tools; Compared extends the same requirement to field observations and system logs.\"},{\"relation_key\":\"data_collection_timing\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Specify when each data type is collected relative to the interaction or deployment.\",\"reason\":\"The timing rule is shared but anchored to different study settings.\"},{\"relation_key\":\"non_design_failure_causes\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Interpret task failure with implementation or infrastructure instability as an independent possible cause alongside design choices.\",\"reason\":\"Reference concerns formative prototypes; Compared concerns network and service instability in field deployment.\"},{\"relation_key\":\"safety_precedence\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Institutional safety procedures take precedence over planned research activity when a safety signal occurs.\",\"reason\":\"The shared precedence rule is applied to formative evaluation and field-system contexts.\"},{\"relation_key\":\"feature_lists_not_contributions\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Implemented feature lists should not be presented directly as design contributions.\",\"reason\":\"Both identify the same recurring authoring error.\"},{\"relation_key\":\"primary_measure_decisions\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Declare one representative measure and thresholds that drive explicit maintain, modify, or discontinue decisions.\",\"reason\":\"Reference applies the measure to compared formative alternatives; Compared applies it to field operational decisions.\"},{\"relation_key\":\"process_measures\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Collect process measures alongside the primary outcome to locate problematic interaction steps.\",\"reason\":\"This diagnostic-measure recommendation appears only in Reference.\"},{\"relation_key\":\"alternative_interpretation\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Interpret formative results as differences among alternatives rather than success or failure of one prototype.\",\"reason\":\"This comparative interpretation rule appears only in Reference.\"},{\"relation_key\":\"principle_boundaries\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Test adjacent boundary cases and present design-principle application conditions together with failure boundaries.\",\"reason\":\"These Reference statements form one rule for assessing the limits of transferable principles.\"},{\"relation_key\":\"burden_mitigation\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"For every study task, link anticipated participant burden to a corresponding mitigation strategy.\",\"reason\":\"The same ethics requirement is applied to general user studies and field user studies.\"},{\"relation_key\":\"access_accommodations\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Specify accommodations participants need to access the prototype or field system and research tasks.\",\"reason\":\"The operational requirement is shared, with the system setting differing.\"},{\"relation_key\":\"accommodation_delivery\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Specify how accessibility accommodations will be delivered during study participation.\",\"reason\":\"Reference addresses sessions generally; Compared addresses field studies.\"},{\"relation_key\":\"identifier_separation\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Separate personal identifiers from research data immediately upon collection.\",\"reason\":\"The operational data-protection instruction is the same.\"},{\"relation_key\":\"loan_equipment\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Identify equipment that will be loaned to participants lacking necessary devices or gear.\",\"reason\":\"Both state the same access-support requirement.\"},{\"relation_key\":\"equipment_return\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Describe how participants return loaned equipment.\",\"reason\":\"The claims are textually identical.\"},{\"relation_key\":\"ethics_burden_review\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Ethics reviewers check task-level correspondence between participant burdens and mitigations.\",\"reason\":\"The same review criterion is applied generally and in field studies.\"},{\"relation_key\":\"unfinished_prototype_notice\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Tell participants that a formative prototype is not a finished service.\",\"reason\":\"This participant notice appears only in Reference.\"},{\"relation_key\":\"cumulative_task_limit\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Set an upper limit on cumulative burden for participants asked to complete repeated evaluations.\",\"reason\":\"This repeated-participation safeguard appears only in Reference.\"},{\"relation_key\":\"benefit_burden_bias\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"The proposal author tends to emphasize prototype benefits over participant burden.\",\"reason\":\"This author-specific diagnostic appears only in Reference.\"},{\"relation_key\":\"recruitment_authority_risk\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Organizational recruitment may combine recruitment power with academic or professional evaluation authority.\",\"reason\":\"This specific authority-risk observation appears only in Reference.\"},{\"relation_key\":\"generalization_boundary\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"State the user population and usage environments that define where design knowledge does and does not apply.\",\"reason\":\"Positive applicability and explicit exclusions are complementary parts of the same boundary decision.\"},{\"relation_key\":\"transfer_conditions\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Transfer claims should specify matching goals, interaction or workflow conditions, technical infrastructure, and authority context.\",\"reason\":\"Reference states general interaction constraints; Compared adds field-site organizational infrastructure.\"},{\"relation_key\":\"analytic_generalization\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Small formative studies may support analytic rather than statistical generalization when claims are expressed through conditions and mechanisms.\",\"reason\":\"This methodological distinction appears only in Reference.\"},{\"relation_key\":\"overgeneralization_tendency\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"The author tends to generalize beyond the evidence source’s supported population or site.\",\"reason\":\"Reference identifies accessible-sample overreach; Compared identifies single-deployment-site overreach.\"},{\"relation_key\":\"discomfort_reporting\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Predefine whom to notify and in what order when serious discomfort is reported.\",\"reason\":\"Both provide the same reporting rule and field-staff rationale.\"},{\"relation_key\":\"safety_stopping\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Define safety-based stopping thresholds and prevent unsafe continuation without corrective action.\",\"reason\":\"Reference addresses severe errors in formative alternatives; Compared expands thresholds to participant harm, disruption, and data anomalies in deployment.\"},{\"relation_key\":\"recovery_planning\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Plan timely recovery after interruption, including restoration procedures, decision authority, and responsible actors.\",\"reason\":\"Reference identifies controlled-session consequences of delay; Compared specifies field-system restoration governance.\"},{\"relation_key\":\"assumption_labels\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Mark unverified schedule, recruitment, and technical assumptions explicitly.\",\"reason\":\"All three category-specific instructions are identical across the frames.\"},{\"relation_key\":\"resource_traceability\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Trace each requested resource to the prototype stage, feature, or research procedure it enables.\",\"reason\":\"Reference emphasizes stages; Compared emphasizes core features and field procedures.\"},{\"relation_key\":\"procedure_feasibility_inputs\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Operations reviewers assess each procedure through its assigned personnel, equipment, and time.\",\"reason\":\"Both provide the same three-part feasibility basis.\"},{\"relation_key\":\"iteration_feasibility\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Formative iteration counts must fit recruitment and the time and personnel needed for prototype modification between iterations.\",\"reason\":\"These Reference statements form one one-sided feasibility rule for iterative design.\"},{\"relation_key\":\"minimum_prototype_scope\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Keep the prototype focused on functionality needed to evaluate the primary design or field problem, treating other features as secondary.\",\"reason\":\"Both constrain prototype scope around the primary evaluative purpose.\"},{\"relation_key\":\"version_disclosure\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Disclose the evaluated prototype or system version so results can be reproduced.\",\"reason\":\"The shared reproducibility requirement is applied to formative evaluation and field deployment.\"},{\"relation_key\":\"decision_and_version_trace\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Maintain versioned records connecting configurations, observations, interpretations, and resulting design changes.\",\"reason\":\"Reference emphasizes formative alternatives and modifications; Compared emphasizes timestamped field configurations across sites.\"},{\"relation_key\":\"budget_location\",\"kind\":\"CONFLICT\",\"status\":\"UNRESOLVED\",\"summary\":\"The frames prescribe incompatible locations for detailed budget evidence.\",\"reason\":\"Reference keeps quantities, unit rates, estimate bases, and activity-linked costs in main-text prose, while Compared moves those details to a stable table or appendix.\"},{\"relation_key\":\"compensation_budget_basis\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Calculate compensation from total participation burden, including sessions and required preparation or reporting work.\",\"reason\":\"The frames name complementary forms of out-of-session effort under the same budgeting rule.\"},{\"relation_key\":\"travel_compensation\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Compensate required travel time in face-to-face studies.\",\"reason\":\"This explicit travel-time payment instruction appears only in Reference.\"},{\"relation_key\":\"actual_session_time\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"Compensate actual session time regardless of study modality.\",\"reason\":\"The operational payment rule is the same.\"},{\"relation_key\":\"cash_option\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Keep cash available as a compensation method for face-to-face studies.\",\"reason\":\"This payment-method option appears only in Reference.\"},{\"relation_key\":\"remote_gift_card_option\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Permit equal-value gift cards for remote participants unable to use electronic transfers.\",\"reason\":\"This payment-method option appears only in Compared.\"},{\"relation_key\":\"unresolved_payment_method\",\"kind\":\"EQUIVALENT\",\"status\":\"RESOLVED\",\"summary\":\"An unresolved payment method need not be a proposal-stage deficiency when compensation equity is explained.\",\"reason\":\"Both allow the exact method to remain unsettled at the proposal stage.\"},{\"relation_key\":\"modality_compensation_rate\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Use the same base rate when burdens are equal and permit different totals when travel or technical preparation changes burden.\",\"reason\":\"The two claims attach compensation parity and variation to explicit, complementary burden conditions.\"},{\"relation_key\":\"compensation_fairness\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Participants assess compensation fairness from combined session, travel, and preparation burden.\",\"reason\":\"Compared adds technical preparation but retains the same total-burden principle.\"},{\"relation_key\":\"repeated_session_compensation\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Compensation should include burdens created outside sessions by iterative returns, rescheduling, diary work, or repeated reporting.\",\"reason\":\"The frames identify different explicit forms of longitudinal participation burden.\"},{\"relation_key\":\"early_exit_compensation\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Participants should be paid for time already invested when participation ends early.\",\"reason\":\"Reference addresses prototype-error termination and Compared addresses participant withdrawal; both can remain as protections.\"},{\"relation_key\":\"logic_review\",\"kind\":\"SCOPED\",\"status\":\"RESOLVED\",\"summary\":\"Before submission, verify a coherent chain from user problem and research questions through system functions, tasks, measures, evidence, decisions, and contributions.\",\"reason\":\"Reference frames this around formative design evaluation; Compared applies the same review logic to systems and field evaluation.\"},{\"relation_key\":\"contribution_decision_value\",\"kind\":\"COMPATIBLE\",\"status\":\"RESOLVED\",\"summary\":\"Separate prototype outcomes from transferable knowledge and show how each contribution can alter a concrete design or operational decision.\",\"reason\":\"The claims complement one another in establishing the practical meaning of contributions.\"},{\"relation_key\":\"field_workaround_evidence\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Use cases where people work around existing tools as evidence of design need.\",\"reason\":\"This field-evidence recommendation appears only in Compared.\"},{\"relation_key\":\"reported_vs_observed_evidence\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Distinguish stakeholder-reported problems from researcher-observed problems as separate evidence forms.\",\"reason\":\"This field-evidence distinction appears only in Compared.\"},{\"relation_key\":\"breakdown_log_evidence\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Field breakdown logs can reveal failures and adaptive behavior together with their timing and conditions.\",\"reason\":\"This evidentiary use of field logs appears only in Compared.\"},{\"relation_key\":\"field_change_confounds\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Coexisting formal and manual routines can make single-design-change effects difficult to isolate during field introduction.\",\"reason\":\"This field-specific confounding condition appears only in Compared.\"},{\"relation_key\":\"operational_role_definition\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Disaggregate field roles and define each role’s actions, decisions, modification privileges, and data access.\",\"reason\":\"These Compared statements split one underlying requirement to replace an undifferentiated “user” label with operationally meaningful roles.\"},{\"relation_key\":\"cross_role_workload\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Evaluate whether reducing one role’s workload creates new work for other roles.\",\"reason\":\"This organizational outcome consideration appears only in Compared.\"},{\"relation_key\":\"separate_field_outcomes\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Treat usability and organizational adoption intent as separate evaluation outcomes.\",\"reason\":\"This outcome distinction appears only in Compared.\"},{\"relation_key\":\"implementation_fidelity\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Measure whether planned features and operational procedures were delivered as specified in the field.\",\"reason\":\"This implementation-fidelity concept appears only in Compared.\"},{\"relation_key\":\"withdrawal_protection\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Field participants need a safe return to existing work, protection from disadvantage, and burden assessment that includes work interruption and managerial exposure.\",\"reason\":\"These Compared statements form one organizational withdrawal-protection policy and its rationale.\"},{\"relation_key\":\"safety_log_separation\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Separating performance-linked safety records from research decision logs can break incident traceability.\",\"reason\":\"This organizational recordkeeping risk appears only in Compared.\"},{\"relation_key\":\"field_partner_dependencies\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Document partner commitments, external dependencies, responsible support parties, confirmation status, and operational volatility affecting deployment.\",\"reason\":\"These Compared statements divide one field-feasibility requirement for visible and owned external dependencies.\"},{\"relation_key\":\"field_staff_labor_cost\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Separate participant compensation from labor costs for field staff performing installation and support duties.\",\"reason\":\"This cost-classification distinction appears only in Compared.\"},{\"relation_key\":\"field_failure_walkthrough\",\"kind\":\"DISTINCT\",\"status\":\"RESOLVED\",\"summary\":\"Conduct a pre-submission walkthrough with field liaisons covering installation failure, interruption, and recovery scenarios.\",\"reason\":\"This field-readiness review appears only in Compared.\"}],\"source_assignments\":[{\"source_memory_id\":\"m1_000001\",\"relation_key\":\"opening_length\"},{\"source_memory_id\":\"m1_000002\",\"relation_key\":\"opening_length\"},{\"source_memory_id\":\"m1_000003\",\"relation_key\":\"research_question_scope\"},{\"source_memory_id\":\"m1_000004\",\"relation_key\":\"visual_summary\"},{\"source_memory_id\":\"m1_000005\",\"relation_key\":\"visual_transitions\"},{\"source_memory_id\":\"m1_000006\",\"relation_key\":\"research_schedule\"},{\"source_memory_id\":\"m1_000007\",\"relation_key\":\"research_schedule\"},{\"source_memory_id\":\"m1_000008\",\"relation_key\":\"gap_contribution_flow\"},{\"source_memory_id\":\"m1_000009\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m1_000010\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m1_000011\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m1_000012\",\"relation_key\":\"feasibility_evidence\"},{\"source_memory_id\":\"m1_000013\",\"relation_key\":\"opening_length\"},{\"source_memory_id\":\"m1_000014\",\"relation_key\":\"opening_length\"},{\"source_memory_id\":\"m1_000015\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m1_000016\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m1_000017\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m1_000018\",\"relation_key\":\"contribution_limit\"},{\"source_memory_id\":\"m1_000019\",\"relation_key\":\"contribution_sentences\"},{\"source_memory_id\":\"m1_000020\",\"relation_key\":\"community_time_burden\"},{\"source_memory_id\":\"m1_000021\",\"relation_key\":\"community_travel_burden\"},{\"source_memory_id\":\"m1_000022\",\"relation_key\":\"em_dash_policy\"},{\"source_memory_id\":\"m1_000023\",\"relation_key\":\"contribution_limit\"},{\"source_memory_id\":\"m1_000024\",\"relation_key\":\"evaluation_change_focus\"},{\"source_memory_id\":\"m1_000025\",\"relation_key\":\"contribution_decision_value\"},{\"source_memory_id\":\"m1_000026\",\"relation_key\":\"evaluation_change_focus\"},{\"source_memory_id\":\"m1_000027\",\"relation_key\":\"sentence_claim_structure\"},{\"source_memory_id\":\"m1_000028\",\"relation_key\":\"behavior_claim_evidence\"},{\"source_memory_id\":\"m1_000029\",\"relation_key\":\"observed_vs_expected\"},{\"source_memory_id\":\"m1_000030\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m1_000031\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m1_000032\",\"relation_key\":\"causal_language\"},{\"source_memory_id\":\"m1_000033\",\"relation_key\":\"citation_strategy\"},{\"source_memory_id\":\"m1_000034\",\"relation_key\":\"design_choice_needs\"},{\"source_memory_id\":\"m1_000035\",\"relation_key\":\"direct_evidence\"},{\"source_memory_id\":\"m1_000036\",\"relation_key\":\"direct_evidence\"},{\"source_memory_id\":\"m1_000037\",\"relation_key\":\"conceptual_falsifiability\"},{\"source_memory_id\":\"m1_000038\",\"relation_key\":\"formative_decision_trace\"},{\"source_memory_id\":\"m1_000039\",\"relation_key\":\"evaluation_scope_limits\"},{\"source_memory_id\":\"m1_000040\",\"relation_key\":\"conceptual_falsifiability\"},{\"source_memory_id\":\"m1_000041\",\"relation_key\":\"authorial_and_procedural_voice\"},{\"source_memory_id\":\"m1_000042\",\"relation_key\":\"observed_vs_expected\"},{\"source_memory_id\":\"m1_000043\",\"relation_key\":\"observed_vs_expected\"},{\"source_memory_id\":\"m1_000044\",\"relation_key\":\"authorial_and_procedural_voice\"},{\"source_memory_id\":\"m1_000045\",\"relation_key\":\"authorial_and_procedural_voice\"},{\"source_memory_id\":\"m1_000046\",\"relation_key\":\"pronoun_consistency\"},{\"source_memory_id\":\"m1_000047\",\"relation_key\":\"authorial_and_procedural_voice\"},{\"source_memory_id\":\"m1_000048\",\"relation_key\":\"terminology_consistency\"},{\"source_memory_id\":\"m1_000049\",\"relation_key\":\"abbreviation_threshold\"},{\"source_memory_id\":\"m1_000050\",\"relation_key\":\"abbreviation_first_use\"},{\"source_memory_id\":\"m1_000051\",\"relation_key\":\"participant_role_naming\"},{\"source_memory_id\":\"m1_000052\",\"relation_key\":\"abbreviation_first_use\"},{\"source_memory_id\":\"m1_000053\",\"relation_key\":\"formative_evaluation_term\"},{\"source_memory_id\":\"m1_000054\",\"relation_key\":\"contribution_abstraction\"},{\"source_memory_id\":\"m1_000055\",\"relation_key\":\"contribution_abstraction\"},{\"source_memory_id\":\"m1_000056\",\"relation_key\":\"prototype_fidelity\"},{\"source_memory_id\":\"m1_000057\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m1_000058\",\"relation_key\":\"visual_scanning\"},{\"source_memory_id\":\"m1_000059\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m1_000060\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m1_000061\",\"relation_key\":\"visual_scanning\"},{\"source_memory_id\":\"m1_000062\",\"relation_key\":\"question_data_analysis\"},{\"source_memory_id\":\"m1_000063\",\"relation_key\":\"sentence_claim_structure\"},{\"source_memory_id\":\"m1_000064\",\"relation_key\":\"sentence_claim_structure\"},{\"source_memory_id\":\"m1_000065\",\"relation_key\":\"preregistration_changes\"},{\"source_memory_id\":\"m1_000066\",\"relation_key\":\"preregistration_changes\"},{\"source_memory_id\":\"m1_000067\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m1_000068\",\"relation_key\":\"data_collection_tools\"},{\"source_memory_id\":\"m1_000069\",\"relation_key\":\"data_collection_timing\"},{\"source_memory_id\":\"m1_000070\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m1_000071\",\"relation_key\":\"non_design_failure_causes\"},{\"source_memory_id\":\"m1_000072\",\"relation_key\":\"safety_precedence\"},{\"source_memory_id\":\"m1_000073\",\"relation_key\":\"question_data_analysis\"},{\"source_memory_id\":\"m1_000074\",\"relation_key\":\"feature_lists_not_contributions\"},{\"source_memory_id\":\"m1_000075\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m1_000076\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m1_000077\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m1_000078\",\"relation_key\":\"em_dash_policy\"},{\"source_memory_id\":\"m1_000079\",\"relation_key\":\"em_dash_policy\"},{\"source_memory_id\":\"m1_000080\",\"relation_key\":\"primary_measure_decisions\"},{\"source_memory_id\":\"m1_000081\",\"relation_key\":\"primary_measure_decisions\"},{\"source_memory_id\":\"m1_000082\",\"relation_key\":\"process_measures\"},{\"source_memory_id\":\"m1_000083\",\"relation_key\":\"alternative_interpretation\"},{\"source_memory_id\":\"m1_000084\",\"relation_key\":\"principle_boundaries\"},{\"source_memory_id\":\"m1_000085\",\"relation_key\":\"evaluation_scope_limits\"},{\"source_memory_id\":\"m1_000086\",\"relation_key\":\"burden_mitigation\"},{\"source_memory_id\":\"m1_000087\",\"relation_key\":\"access_accommodations\"},{\"source_memory_id\":\"m1_000088\",\"relation_key\":\"accommodation_delivery\"},{\"source_memory_id\":\"m1_000089\",\"relation_key\":\"identifier_separation\"},{\"source_memory_id\":\"m1_000090\",\"relation_key\":\"loan_equipment\"},{\"source_memory_id\":\"m1_000091\",\"relation_key\":\"equipment_return\"},{\"source_memory_id\":\"m1_000092\",\"relation_key\":\"ethics_burden_review\"},{\"source_memory_id\":\"m1_000093\",\"relation_key\":\"unfinished_prototype_notice\"},{\"source_memory_id\":\"m1_000094\",\"relation_key\":\"cumulative_task_limit\"},{\"source_memory_id\":\"m1_000095\",\"relation_key\":\"benefit_burden_bias\"},{\"source_memory_id\":\"m1_000096\",\"relation_key\":\"recruitment_authority_risk\"},{\"source_memory_id\":\"m1_000097\",\"relation_key\":\"generalization_boundary\"},{\"source_memory_id\":\"m1_000098\",\"relation_key\":\"generalization_boundary\"},{\"source_memory_id\":\"m1_000099\",\"relation_key\":\"transfer_conditions\"},{\"source_memory_id\":\"m1_000100\",\"relation_key\":\"analytic_generalization\"},{\"source_memory_id\":\"m1_000101\",\"relation_key\":\"overgeneralization_tendency\"},{\"source_memory_id\":\"m1_000102\",\"relation_key\":\"discomfort_reporting\"},{\"source_memory_id\":\"m1_000103\",\"relation_key\":\"discomfort_reporting\"},{\"source_memory_id\":\"m1_000104\",\"relation_key\":\"safety_stopping\"},{\"source_memory_id\":\"m1_000105\",\"relation_key\":\"safety_stopping\"},{\"source_memory_id\":\"m1_000106\",\"relation_key\":\"recovery_planning\"},{\"source_memory_id\":\"m1_000107\",\"relation_key\":\"assumption_labels\"},{\"source_memory_id\":\"m1_000108\",\"relation_key\":\"assumption_labels\"},{\"source_memory_id\":\"m1_000109\",\"relation_key\":\"assumption_labels\"},{\"source_memory_id\":\"m1_000110\",\"relation_key\":\"resource_traceability\"},{\"source_memory_id\":\"m1_000111\",\"relation_key\":\"procedure_feasibility_inputs\"},{\"source_memory_id\":\"m1_000112\",\"relation_key\":\"procedure_feasibility_inputs\"},{\"source_memory_id\":\"m1_000113\",\"relation_key\":\"procedure_feasibility_inputs\"},{\"source_memory_id\":\"m1_000114\",\"relation_key\":\"iteration_feasibility\"},{\"source_memory_id\":\"m1_000115\",\"relation_key\":\"minimum_prototype_scope\"},{\"source_memory_id\":\"m1_000116\",\"relation_key\":\"iteration_feasibility\"},{\"source_memory_id\":\"m1_000117\",\"relation_key\":\"iteration_feasibility\"},{\"source_memory_id\":\"m1_000118\",\"relation_key\":\"version_disclosure\"},{\"source_memory_id\":\"m1_000119\",\"relation_key\":\"decision_and_version_trace\"},{\"source_memory_id\":\"m1_000120\",\"relation_key\":\"decision_and_version_trace\"},{\"source_memory_id\":\"m1_000121\",\"relation_key\":\"decision_and_version_trace\"},{\"source_memory_id\":\"m1_000122\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m1_000123\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m1_000124\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m1_000125\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m1_000126\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m1_000127\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m1_000128\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m1_000129\",\"relation_key\":\"compensation_budget_basis\"},{\"source_memory_id\":\"m1_000130\",\"relation_key\":\"travel_compensation\"},{\"source_memory_id\":\"m1_000131\",\"relation_key\":\"actual_session_time\"},{\"source_memory_id\":\"m1_000132\",\"relation_key\":\"cash_option\"},{\"source_memory_id\":\"m1_000133\",\"relation_key\":\"unresolved_payment_method\"},{\"source_memory_id\":\"m1_000134\",\"relation_key\":\"modality_compensation_rate\"},{\"source_memory_id\":\"m1_000135\",\"relation_key\":\"compensation_fairness\"},{\"source_memory_id\":\"m1_000136\",\"relation_key\":\"repeated_session_compensation\"},{\"source_memory_id\":\"m1_000137\",\"relation_key\":\"early_exit_compensation\"},{\"source_memory_id\":\"m1_000138\",\"relation_key\":\"compensation_budget_basis\"},{\"source_memory_id\":\"m1_000139\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000140\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000141\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000142\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000143\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000144\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000145\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000146\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000147\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m1_000148\",\"relation_key\":\"principle_boundaries\"},{\"source_memory_id\":\"m1_000149\",\"relation_key\":\"contribution_decision_value\"},{\"source_memory_id\":\"m1_000150\",\"relation_key\":\"evaluation_scope_limits\"},{\"source_memory_id\":\"m2_000001\",\"relation_key\":\"opening_length\"},{\"source_memory_id\":\"m2_000002\",\"relation_key\":\"opening_length\"},{\"source_memory_id\":\"m2_000003\",\"relation_key\":\"research_question_scope\"},{\"source_memory_id\":\"m2_000004\",\"relation_key\":\"visual_summary\"},{\"source_memory_id\":\"m2_000005\",\"relation_key\":\"visual_transitions\"},{\"source_memory_id\":\"m2_000006\",\"relation_key\":\"research_schedule\"},{\"source_memory_id\":\"m2_000007\",\"relation_key\":\"research_schedule\"},{\"source_memory_id\":\"m2_000008\",\"relation_key\":\"gap_contribution_flow\"},{\"source_memory_id\":\"m2_000009\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m2_000010\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m2_000011\",\"relation_key\":\"feasibility_evidence\"},{\"source_memory_id\":\"m2_000012\",\"relation_key\":\"opening_length\"},{\"source_memory_id\":\"m2_000013\",\"relation_key\":\"opening_length\"},{\"source_memory_id\":\"m2_000014\",\"relation_key\":\"contribution_limit\"},{\"source_memory_id\":\"m2_000015\",\"relation_key\":\"contribution_sentences\"},{\"source_memory_id\":\"m2_000016\",\"relation_key\":\"organizational_workflow_constraints\"},{\"source_memory_id\":\"m2_000017\",\"relation_key\":\"organizational_manager_approval\"},{\"source_memory_id\":\"m2_000018\",\"relation_key\":\"em_dash_policy\"},{\"source_memory_id\":\"m2_000019\",\"relation_key\":\"contribution_limit\"},{\"source_memory_id\":\"m2_000020\",\"relation_key\":\"behavior_claim_evidence\"},{\"source_memory_id\":\"m2_000021\",\"relation_key\":\"observed_vs_expected\"},{\"source_memory_id\":\"m2_000022\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m2_000023\",\"relation_key\":\"causal_language\"},{\"source_memory_id\":\"m2_000024\",\"relation_key\":\"citation_strategy\"},{\"source_memory_id\":\"m2_000025\",\"relation_key\":\"design_choice_needs\"},{\"source_memory_id\":\"m2_000026\",\"relation_key\":\"direct_evidence\"},{\"source_memory_id\":\"m2_000027\",\"relation_key\":\"direct_evidence\"},{\"source_memory_id\":\"m2_000028\",\"relation_key\":\"authorial_and_procedural_voice\"},{\"source_memory_id\":\"m2_000029\",\"relation_key\":\"observed_vs_expected\"},{\"source_memory_id\":\"m2_000030\",\"relation_key\":\"observed_vs_expected\"},{\"source_memory_id\":\"m2_000031\",\"relation_key\":\"authorial_and_procedural_voice\"},{\"source_memory_id\":\"m2_000032\",\"relation_key\":\"terminology_consistency\"},{\"source_memory_id\":\"m2_000033\",\"relation_key\":\"abbreviation_threshold\"},{\"source_memory_id\":\"m2_000034\",\"relation_key\":\"abbreviation_first_use\"},{\"source_memory_id\":\"m2_000035\",\"relation_key\":\"participant_role_naming\"},{\"source_memory_id\":\"m2_000036\",\"relation_key\":\"abbreviation_first_use\"},{\"source_memory_id\":\"m2_000037\",\"relation_key\":\"prototype_fidelity\"},{\"source_memory_id\":\"m2_000038\",\"relation_key\":\"service_flow_visibility\"},{\"source_memory_id\":\"m2_000039\",\"relation_key\":\"visual_scanning\"},{\"source_memory_id\":\"m2_000040\",\"relation_key\":\"question_data_analysis\"},{\"source_memory_id\":\"m2_000041\",\"relation_key\":\"sentence_claim_structure\"},{\"source_memory_id\":\"m2_000042\",\"relation_key\":\"sentence_claim_structure\"},{\"source_memory_id\":\"m2_000043\",\"relation_key\":\"preregistration_changes\"},{\"source_memory_id\":\"m2_000044\",\"relation_key\":\"preregistration_changes\"},{\"source_memory_id\":\"m2_000045\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m2_000046\",\"relation_key\":\"data_collection_tools\"},{\"source_memory_id\":\"m2_000047\",\"relation_key\":\"data_collection_timing\"},{\"source_memory_id\":\"m2_000048\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m2_000049\",\"relation_key\":\"non_design_failure_causes\"},{\"source_memory_id\":\"m2_000050\",\"relation_key\":\"safety_precedence\"},{\"source_memory_id\":\"m2_000051\",\"relation_key\":\"question_data_analysis\"},{\"source_memory_id\":\"m2_000052\",\"relation_key\":\"feature_lists_not_contributions\"},{\"source_memory_id\":\"m2_000053\",\"relation_key\":\"primary_measure_decisions\"},{\"source_memory_id\":\"m2_000054\",\"relation_key\":\"primary_measure_decisions\"},{\"source_memory_id\":\"m2_000055\",\"relation_key\":\"burden_mitigation\"},{\"source_memory_id\":\"m2_000056\",\"relation_key\":\"access_accommodations\"},{\"source_memory_id\":\"m2_000057\",\"relation_key\":\"accommodation_delivery\"},{\"source_memory_id\":\"m2_000058\",\"relation_key\":\"identifier_separation\"},{\"source_memory_id\":\"m2_000059\",\"relation_key\":\"loan_equipment\"},{\"source_memory_id\":\"m2_000060\",\"relation_key\":\"equipment_return\"},{\"source_memory_id\":\"m2_000061\",\"relation_key\":\"ethics_burden_review\"},{\"source_memory_id\":\"m2_000062\",\"relation_key\":\"generalization_boundary\"},{\"source_memory_id\":\"m2_000063\",\"relation_key\":\"generalization_boundary\"},{\"source_memory_id\":\"m2_000064\",\"relation_key\":\"discomfort_reporting\"},{\"source_memory_id\":\"m2_000065\",\"relation_key\":\"discomfort_reporting\"},{\"source_memory_id\":\"m2_000066\",\"relation_key\":\"assumption_labels\"},{\"source_memory_id\":\"m2_000067\",\"relation_key\":\"assumption_labels\"},{\"source_memory_id\":\"m2_000068\",\"relation_key\":\"assumption_labels\"},{\"source_memory_id\":\"m2_000069\",\"relation_key\":\"resource_traceability\"},{\"source_memory_id\":\"m2_000070\",\"relation_key\":\"procedure_feasibility_inputs\"},{\"source_memory_id\":\"m2_000071\",\"relation_key\":\"procedure_feasibility_inputs\"},{\"source_memory_id\":\"m2_000072\",\"relation_key\":\"procedure_feasibility_inputs\"},{\"source_memory_id\":\"m2_000073\",\"relation_key\":\"version_disclosure\"},{\"source_memory_id\":\"m2_000074\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m2_000075\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m2_000076\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m2_000077\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m2_000078\",\"relation_key\":\"compensation_budget_basis\"},{\"source_memory_id\":\"m2_000079\",\"relation_key\":\"early_exit_compensation\"},{\"source_memory_id\":\"m2_000080\",\"relation_key\":\"actual_session_time\"},{\"source_memory_id\":\"m2_000081\",\"relation_key\":\"remote_gift_card_option\"},{\"source_memory_id\":\"m2_000082\",\"relation_key\":\"unresolved_payment_method\"},{\"source_memory_id\":\"m2_000083\",\"relation_key\":\"modality_compensation_rate\"},{\"source_memory_id\":\"m2_000084\",\"relation_key\":\"compensation_fairness\"},{\"source_memory_id\":\"m2_000085\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m2_000086\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m2_000087\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m2_000088\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m2_000089\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m2_000090\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m2_000091\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m2_000092\",\"relation_key\":\"logic_review\"},{\"source_memory_id\":\"m2_000093\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m2_000094\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m2_000095\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m2_000096\",\"relation_key\":\"proposal_navigation\"},{\"source_memory_id\":\"m2_000097\",\"relation_key\":\"evaluation_change_focus\"},{\"source_memory_id\":\"m2_000098\",\"relation_key\":\"minimum_prototype_scope\"},{\"source_memory_id\":\"m2_000099\",\"relation_key\":\"sentence_claim_structure\"},{\"source_memory_id\":\"m2_000100\",\"relation_key\":\"field_workaround_evidence\"},{\"source_memory_id\":\"m2_000101\",\"relation_key\":\"reported_vs_observed_evidence\"},{\"source_memory_id\":\"m2_000102\",\"relation_key\":\"breakdown_log_evidence\"},{\"source_memory_id\":\"m2_000103\",\"relation_key\":\"field_change_confounds\"},{\"source_memory_id\":\"m2_000104\",\"relation_key\":\"authorial_and_procedural_voice\"},{\"source_memory_id\":\"m2_000105\",\"relation_key\":\"pronoun_consistency\"},{\"source_memory_id\":\"m2_000106\",\"relation_key\":\"authorial_and_procedural_voice\"},{\"source_memory_id\":\"m2_000107\",\"relation_key\":\"operational_role_definition\"},{\"source_memory_id\":\"m2_000108\",\"relation_key\":\"operational_role_definition\"},{\"source_memory_id\":\"m2_000109\",\"relation_key\":\"operational_role_definition\"},{\"source_memory_id\":\"m2_000110\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m2_000111\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m2_000112\",\"relation_key\":\"procedure_representation\"},{\"source_memory_id\":\"m2_000113\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m2_000114\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m2_000115\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m2_000116\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m2_000117\",\"relation_key\":\"participant_target\"},{\"source_memory_id\":\"m2_000118\",\"relation_key\":\"em_dash_policy\"},{\"source_memory_id\":\"m2_000119\",\"relation_key\":\"em_dash_policy\"},{\"source_memory_id\":\"m2_000120\",\"relation_key\":\"primary_measure_decisions\"},{\"source_memory_id\":\"m2_000121\",\"relation_key\":\"cross_role_workload\"},{\"source_memory_id\":\"m2_000122\",\"relation_key\":\"separate_field_outcomes\"},{\"source_memory_id\":\"m2_000123\",\"relation_key\":\"implementation_fidelity\"},{\"source_memory_id\":\"m2_000124\",\"relation_key\":\"evaluation_scope_limits\"},{\"source_memory_id\":\"m2_000125\",\"relation_key\":\"withdrawal_protection\"},{\"source_memory_id\":\"m2_000126\",\"relation_key\":\"withdrawal_protection\"},{\"source_memory_id\":\"m2_000127\",\"relation_key\":\"withdrawal_protection\"},{\"source_memory_id\":\"m2_000128\",\"relation_key\":\"withdrawal_protection\"},{\"source_memory_id\":\"m2_000129\",\"relation_key\":\"transfer_conditions\"},{\"source_memory_id\":\"m2_000130\",\"relation_key\":\"transfer_conditions\"},{\"source_memory_id\":\"m2_000131\",\"relation_key\":\"overgeneralization_tendency\"},{\"source_memory_id\":\"m2_000132\",\"relation_key\":\"safety_stopping\"},{\"source_memory_id\":\"m2_000133\",\"relation_key\":\"recovery_planning\"},{\"source_memory_id\":\"m2_000134\",\"relation_key\":\"recovery_planning\"},{\"source_memory_id\":\"m2_000135\",\"relation_key\":\"safety_log_separation\"},{\"source_memory_id\":\"m2_000136\",\"relation_key\":\"field_partner_dependencies\"},{\"source_memory_id\":\"m2_000137\",\"relation_key\":\"field_partner_dependencies\"},{\"source_memory_id\":\"m2_000138\",\"relation_key\":\"field_partner_dependencies\"},{\"source_memory_id\":\"m2_000139\",\"relation_key\":\"field_partner_dependencies\"},{\"source_memory_id\":\"m2_000140\",\"relation_key\":\"decision_and_version_trace\"},{\"source_memory_id\":\"m2_000141\",\"relation_key\":\"decision_and_version_trace\"},{\"source_memory_id\":\"m2_000142\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m2_000143\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m2_000144\",\"relation_key\":\"budget_location\"},{\"source_memory_id\":\"m2_000145\",\"relation_key\":\"repeated_session_compensation\"},{\"source_memory_id\":\"m2_000146\",\"relation_key\":\"field_staff_labor_cost\"},{\"source_memory_id\":\"m2_000147\",\"relation_key\":\"compensation_budget_basis\"},{\"source_memory_id\":\"m2_000148\",\"relation_key\":\"field_failure_walkthrough\"},{\"source_memory_id\":\"m2_000149\",\"relation_key\":\"contribution_decision_value\"},{\"source_memory_id\":\"m2_000150\",\"relation_key\":\"field_partner_dependencies\"}],\"issues\":[{\"issue_key\":\"opening_rule_grounding\",\"relation_keys\":[\"opening_length\"],\"priority\":\"REQUIRED\",\"title\":\"Choose the opening constraint\",\"question\":\"Must the central problem and consequence always be complete within two sentences, or may a necessary person, setting, or use situation occupy a third sentence?\",\"why_it_matters\":\"The answer determines whether the same opening is compliant or structurally defective.\",\"options\":[{\"label\":\"Strict two sentences\",\"text\":\"Complete the problem and consequence within the first two sentences.\"},{\"label\":\"Conditional third\",\"text\":\"Permit a third sentence when concrete situational detail is necessary for comprehension.\"}]},{\"issue_key\":\"navigation_structure_grounding\",\"relation_keys\":[\"proposal_navigation\"],\"priority\":\"REQUIRED\",\"title\":\"Choose proposal navigation\",\"question\":\"Should the two-page proposal use descriptive subheadings for problem, response, and next steps, or preserve a continuous argument through paragraph transitions without extra headings?\",\"why_it_matters\":\"The same labels are required by one frame and treated as disruptive space costs by the other.\",\"options\":[{\"label\":\"Descriptive headings\",\"text\":\"Use reusable section labels for scanning, return visits, and completeness checks.\"},{\"label\":\"Continuous prose\",\"text\":\"Use linked paragraphs and transitions without extra section labels.\"}]},{\"issue_key\":\"em_dash_grounding\",\"relation_keys\":[\"em_dash_policy\"],\"priority\":\"REQUIRED\",\"title\":\"Set the em-dash rule\",\"question\":\"Are em dashes prohibited throughout the proposal, or allowed when they mark a deliberate interruption or sharp contrast?\",\"why_it_matters\":\"A deliberate em dash is acceptable under one frame and a direct violation under the other.\",\"options\":[{\"label\":\"Prohibit all\",\"text\":\"Replace every em dash with sentence breaks or ordinary punctuation.\"},{\"label\":\"Allow deliberate use\",\"text\":\"Permit an em dash only when its stronger interruption or contrast is intentional.\"}]},{\"issue_key\":\"participant_target_grounding\",\"relation_keys\":[\"participant_target\"],\"priority\":\"REQUIRED\",\"title\":\"Set target commitment\",\"question\":\"Must the proposal commit to one exact participant target, or may it use a justified minimum-to-maximum range with distinct workload, budget, and deliverable cases?\",\"why_it_matters\":\"The target format controls feasibility calculations and is explicitly rejected by the opposing frame.\",\"options\":[{\"label\":\"Exact target\",\"text\":\"Use one quantity and revise it explicitly if recruitment falls short.\"},{\"label\":\"Bounded range\",\"text\":\"Use minimum and maximum cases with stated operational consequences.\"}]},{\"issue_key\":\"budget_location_grounding\",\"relation_keys\":[\"budget_location\"],\"priority\":\"REQUIRED\",\"title\":\"Locate budget detail\",\"question\":\"Should quantities, unit rates, estimate bases, and activity-linked costs remain in main-text prose, or reside in a referenced budget table or appendix?\",\"why_it_matters\":\"The choice changes what must be visible in the argument and how cost revisions remain synchronized.\",\"options\":[{\"label\":\"Main-text detail\",\"text\":\"Keep checkable cost bases beside the activities and benefits they support.\"},{\"label\":\"Separate table\",\"text\":\"Keep prose concise and maintain detailed arithmetic in stable table rows.\"}]}]}",
+      "response_bytes": 55416,
+      "response_chars": 55392,
+      "response_digest": "e94727d0a723634c5120596942769a497eafa60bc3785f1b805ddfd32a5a0444",
+      "schema_chars": 7139,
+      "schema_digest": "f03b4063bbe711747e44ae24e5c6a7674451104bbdfc813b01623405106e5e74",
+      "validation_error": null,
+      "validation_seconds": 0.008653833996504545
+    },
+    {
+      "condition": "COMPACT_DECISION_VECTOR",
+      "contract_valid": true,
+      "elapsed_seconds": 170.05306245799875,
+      "error_type": null,
+      "failure_category": null,
+      "normalized_analysis": {
+        "analysis_digest": "8decbc70b2106bd01cd3b4b05dbad25a92f70f50042f7956c170e59e4871783e",
+        "issue_count": 6,
+        "kind_counts": {
+          "COMPATIBLE": 23,
+          "CONFLICT": 6,
+          "DISTINCT": 34,
+          "EQUIVALENT": 17,
+          "SCOPED": 25
+        },
+        "relation_count": 105,
+        "relations": [
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000001",
+              "m1_000002",
+              "m1_000013",
+              "m1_000014",
+              "m2_000001",
+              "m2_000002",
+              "m2_000012",
+              "m2_000013"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000003",
+              "m2_000003"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000004",
+              "m2_000004"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000005",
+              "m2_000005"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000006",
+              "m2_000006"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000007",
+              "m2_000007"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000008",
+              "m2_000008"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000009",
+              "m1_000010",
+              "m1_000011",
+              "m1_000015",
+              "m1_000016",
+              "m1_000017",
+              "m2_000009",
+              "m2_000010",
+              "m2_000093",
+              "m2_000094",
+              "m2_000095",
+              "m2_000096"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000012",
+              "m2_000011"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000018",
+              "m1_000023",
+              "m2_000014",
+              "m2_000019"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000019",
+              "m2_000015"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000020",
+              "m1_000021"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000022",
+              "m1_000078",
+              "m1_000079",
+              "m2_000018",
+              "m2_000118",
+              "m2_000119"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000024",
+              "m2_000097"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000025"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000026",
+              "m1_000053"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000027",
+              "m1_000063",
+              "m1_000064",
+              "m2_000041",
+              "m2_000042",
+              "m2_000099"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000028",
+              "m2_000020"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000029",
+              "m2_000021"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000030",
+              "m1_000031",
+              "m1_000057",
+              "m1_000059",
+              "m1_000060",
+              "m2_000022",
+              "m2_000110",
+              "m2_000111",
+              "m2_000112"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000032",
+              "m2_000023"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000033",
+              "m2_000024"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000034",
+              "m2_000025"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000035",
+              "m1_000036",
+              "m2_000026",
+              "m2_000027"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000037"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000038",
+              "m1_000080",
+              "m1_000081",
+              "m2_000053",
+              "m2_000054",
+              "m2_000120"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000039",
+              "m1_000085",
+              "m1_000150",
+              "m2_000124"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000040"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000041",
+              "m1_000044",
+              "m1_000045",
+              "m1_000047",
+              "m2_000028",
+              "m2_000031",
+              "m2_000104",
+              "m2_000106"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000042",
+              "m2_000029"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000043",
+              "m2_000030"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000046",
+              "m2_000105"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000048",
+              "m2_000032"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000049",
+              "m2_000033"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000050",
+              "m2_000034"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000051",
+              "m2_000035"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000052",
+              "m2_000036"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000054",
+              "m1_000055"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000056",
+              "m2_000037"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000058",
+              "m1_000061",
+              "m2_000039"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000062",
+              "m1_000073",
+              "m2_000040",
+              "m2_000051"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000065",
+              "m1_000066",
+              "m2_000043",
+              "m2_000044"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000067",
+              "m1_000070",
+              "m1_000075",
+              "m1_000076",
+              "m1_000077",
+              "m2_000045",
+              "m2_000048",
+              "m2_000113",
+              "m2_000114",
+              "m2_000115",
+              "m2_000116",
+              "m2_000117"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000068",
+              "m2_000046"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000069",
+              "m2_000047"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000071",
+              "m2_000049"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000072",
+              "m2_000050"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000074",
+              "m2_000052"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000082"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000083"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000084"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000086",
+              "m1_000092",
+              "m2_000055",
+              "m2_000061"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000087",
+              "m2_000056"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000088",
+              "m2_000057"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000089",
+              "m2_000058"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000090",
+              "m2_000059"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000091",
+              "m2_000060"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000093"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000094"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000095"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000096",
+              "m2_000126"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000097",
+              "m1_000098",
+              "m2_000062",
+              "m2_000063"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000099",
+              "m1_000100",
+              "m1_000101",
+              "m2_000129",
+              "m2_000130",
+              "m2_000131"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000102",
+              "m1_000103",
+              "m2_000064",
+              "m2_000065"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000104",
+              "m1_000105",
+              "m2_000132",
+              "m2_000133",
+              "m2_000134"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000106"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000107",
+              "m1_000108",
+              "m1_000109",
+              "m2_000066",
+              "m2_000067",
+              "m2_000068",
+              "m2_000136",
+              "m2_000138",
+              "m2_000150"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000110",
+              "m2_000069"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000111",
+              "m1_000112",
+              "m1_000113",
+              "m2_000070",
+              "m2_000071",
+              "m2_000072"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000114",
+              "m1_000116",
+              "m1_000117"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000115",
+              "m2_000098"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000118",
+              "m2_000073"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000119"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000120",
+              "m1_000121",
+              "m2_000140",
+              "m2_000141"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "CONFLICT",
+            "members": [
+              "m1_000122",
+              "m1_000123",
+              "m1_000124",
+              "m1_000125",
+              "m1_000126",
+              "m1_000127",
+              "m1_000128",
+              "m2_000074",
+              "m2_000075",
+              "m2_000076",
+              "m2_000077",
+              "m2_000142",
+              "m2_000143",
+              "m2_000144"
+            ],
+            "status": "UNRESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000129",
+              "m1_000135",
+              "m1_000138",
+              "m2_000078",
+              "m2_000084",
+              "m2_000147"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000130",
+              "m1_000134",
+              "m2_000083"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "EQUIVALENT",
+            "members": [
+              "m1_000131",
+              "m2_000080"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000132",
+              "m1_000133",
+              "m2_000081",
+              "m2_000082"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000136",
+              "m2_000145"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000137",
+              "m2_000079"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000139",
+              "m2_000085"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000140",
+              "m1_000144",
+              "m2_000086",
+              "m2_000090"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000141",
+              "m1_000145",
+              "m2_000087",
+              "m2_000091"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "COMPATIBLE",
+            "members": [
+              "m1_000142",
+              "m1_000146",
+              "m2_000088",
+              "m2_000092",
+              "m2_000149"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "SCOPED",
+            "members": [
+              "m1_000143",
+              "m2_000089"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000147"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000148"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m1_000149"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000016",
+              "m2_000017",
+              "m2_000128"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000038"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000100"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000101"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000102"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000103"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000107",
+              "m2_000108",
+              "m2_000109"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000121"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000122"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000123"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000125",
+              "m2_000127"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000135"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000137"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000139"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000146"
+            ],
+            "status": "RESOLVED"
+          },
+          {
+            "kind": "DISTINCT",
+            "members": [
+              "m2_000148"
+            ],
+            "status": "RESOLVED"
+          }
+        ],
+        "required_issue_count": 6
+      },
+      "operation": "compare_contexts_compact_ab_v1",
+      "prompt_chars": 78585,
+      "prompt_digest": "00e45b534a91fcde2dac0912dce8ea98a4b4b508a626bdae6475157bed32f599",
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-sol",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "medium",
+          "runtime": "codex-cli"
+        },
+        "operation": "compare_contexts_compact_ab_v1",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-sol",
+        "upstream_provider": "openai-codex"
+      },
+      "provider_seconds": 170.04558749998978,
+      "raw_response": "{\"reference_group_ids\":[1,1,2,3,4,5,6,7,8,8,8,9,1,1,8,8,8,10,11,12,12,13,10,14,15,16,17,18,19,20,20,21,22,23,24,24,25,26,27,28,29,31,32,29,29,30,29,33,34,35,36,37,16,38,38,39,20,40,20,20,40,42,17,17,43,43,44,45,46,44,47,48,42,49,44,44,44,13,13,26,26,50,51,52,27,53,54,55,56,57,58,53,59,60,61,62,63,63,64,64,64,65,65,66,66,67,68,68,68,69,70,70,70,71,72,71,71,73,74,75,75,76,76,76,76,76,76,76,77,78,79,80,80,78,77,81,82,77,83,84,85,86,87,84,85,86,88,89,90,27],\"compared_group_ids\":[1,1,2,3,4,5,6,7,8,8,9,1,1,10,11,105,105,13,10,18,19,20,21,22,23,24,24,29,31,32,29,33,34,35,36,37,39,41,40,42,17,17,43,43,44,45,46,44,47,48,42,49,26,26,53,54,55,56,57,58,53,63,63,65,65,68,68,68,69,70,70,70,73,76,76,76,76,77,82,79,80,80,78,77,83,84,85,86,87,84,85,86,8,8,8,8,14,72,17,91,92,93,94,29,30,29,95,95,95,20,20,20,44,44,44,44,44,13,13,26,96,97,98,27,99,62,99,105,64,64,64,66,66,66,100,68,101,68,102,75,75,76,76,76,81,103,77,104,86,68],\"groups\":[{\"kind\":\"CONFLICT\",\"note\":\"The frames prescribe incompatible two-sentence and conditionally three-sentence limits for the same proposal opening.\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"The phase labels differ between a formative design trajectory and a field-system research trajectory.\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"CONFLICT\",\"note\":\"One frame requires navigational subheadings while the other requires a continuous transition-led structure without extra headings.\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"The named contribution types differ between design-and-empirical work and design-and-operational work.\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"CONFLICT\",\"note\":\"One frame prohibits em dashes while the other permits them for deliberate interruption or sharp contrast.\"},{\"kind\":\"SCOPED\",\"note\":\"The central decision is framed as formative design modification in one frame and field operational change in the other.\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Sentence splitting is required for independently reviewable claims but longer sentences are preserved when their clauses form one continuous thought.\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"CONFLICT\",\"note\":\"A branching procedure that is also changing repeatedly receives incompatible flow-diagram and sequence-table prescriptions.\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"The citation priority differs between evidence-rich topics and rapidly changing systems or field topics.\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Decision criteria govern formative alternatives in one frame and maintenance or discontinuation of deployed designs in the other.\"},{\"kind\":\"SCOPED\",\"note\":\"The limitation is expressed for controlled formative evidence versus differences between initial evaluation and long-term operation.\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"First-person ownership applies to author-controlled commitments, while action-first phrasing applies to reusable procedural steps.\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Observed-state wording requires implementation and verification in one frame and confirmation in the actual usage environment in the other.\"},{\"kind\":\"SCOPED\",\"note\":\"Future-state wording applies to unimplemented prototype operations in one frame and field-unconfirmed system behavior in the other.\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"CONFLICT\",\"note\":\"One frame requires one exact participant target while the other requires a justified bounded range with separate workload and budget cases.\"},{\"kind\":\"SCOPED\",\"note\":\"Collection instruments cover user-study data in one frame and both field and user data in the other.\"},{\"kind\":\"SCOPED\",\"note\":\"Collection timing is organized around interaction in one frame and deployment in the other.\"},{\"kind\":\"SCOPED\",\"note\":\"Independent technical failure sources are prototype instability in formative evaluation and network or service instability in field deployment.\"},{\"kind\":\"SCOPED\",\"note\":\"Institutional safety precedence applies within formative evaluation in one frame and field deployment in the other.\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Accommodation delivery is specified for study sessions in one frame and field study conditions in the other.\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Transfer boundaries concern formative analytic generalization from an accessible sample versus transfer across deployment sites and infrastructures.\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Stopping rules concern unsafe formative alternatives in one frame and suspension and recovery of field deployment in the other.\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Version disclosure concerns formative prototypes in one frame and deployed field systems in the other.\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Traceability follows formative observations and design modifications in one frame and timestamped field configurations and procedures in the other.\"},{\"kind\":\"CONFLICT\",\"note\":\"One frame keeps cost bases beside activities in the main text while the other moves quantities, rates, assumptions, and arithmetic to a separate table or appendix.\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"EQUIVALENT\",\"note\":\"\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"Additional compensated burden arises from repeated formative sessions in one frame and longitudinal out-of-session reporting in the other.\"},{\"kind\":\"SCOPED\",\"note\":\"Mid-session compensation is triggered by prototype termination in one frame and participant withdrawal in the other.\"},{\"kind\":\"SCOPED\",\"note\":\"The dedicated validity review concerns design and formative evaluation in one frame and systems and field evaluation in the other.\"},{\"kind\":\"SCOPED\",\"note\":\"Research-question alignment is checked against prototype functions in one frame and system functions in the other.\"},{\"kind\":\"SCOPED\",\"note\":\"Representative-measure alignment is checked for evaluation tasks in one frame and field tasks in the other.\"},{\"kind\":\"COMPATIBLE\",\"note\":\"\"},{\"kind\":\"SCOPED\",\"note\":\"The coherence chain uses design interventions and user studies in one frame and system intervention and field evaluation in the other.\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"},{\"kind\":\"DISTINCT\",\"note\":\"\"}],\"issues\":[{\"group_ids\":[1],\"priority\":\"REQUIRED\",\"title\":\"Opening sentence limit\",\"question\":\"When concrete context is necessary for comprehension, must the problem framing still end within two sentences or may it use a third sentence?\",\"why_it_matters\":\"The choice directly determines the permitted structure of the proposal opening.\",\"options\":[{\"label\":\"Two sentences\",\"text\":\"Require the complete problem and consequence within the first two sentences.\"},{\"label\":\"Conditional third\",\"text\":\"Allow a third sentence when a concrete person, setting, or use situation is necessary.\"}]},{\"group_ids\":[8],\"priority\":\"REQUIRED\",\"title\":\"Section navigation\",\"question\":\"Should the two-page proposal use descriptive subheadings or rely on paragraph transitions as one continuous argument?\",\"why_it_matters\":\"The prescriptions cannot both govern the same problem, response, and next-steps structure without deciding whether headings are present.\",\"options\":[{\"label\":\"Use headings\",\"text\":\"Give the major proposal sections short descriptive subheadings.\"},{\"label\":\"Use transitions\",\"text\":\"Avoid extra headings and connect the argument through paragraph transitions.\"}]},{\"group_ids\":[13],\"priority\":\"REQUIRED\",\"title\":\"Em dash policy\",\"question\":\"Are em dashes prohibited throughout the proposal or permitted for deliberate interruption and sharp contrast?\",\"why_it_matters\":\"The frames impose different editing rules on the same punctuation mark.\",\"options\":[{\"label\":\"Prohibit\",\"text\":\"Replace every em dash with sentence breaks or ordinary punctuation.\"},{\"label\":\"Limited use\",\"text\":\"Permit an em dash only for an intentional interruption or sharp contrast.\"}]},{\"group_ids\":[20],\"priority\":\"REQUIRED\",\"title\":\"Procedure visual\",\"question\":\"For a branching procedure expected to change repeatedly, should the proposal use a flow diagram or a sequence table?\",\"why_it_matters\":\"Both stated conditions can hold simultaneously but prescribe different primary visual formats.\",\"options\":[{\"label\":\"Flow diagram\",\"text\":\"Prioritize immediate visibility of branches and outcomes.\"},{\"label\":\"Sequence table\",\"text\":\"Prioritize fast row-level revision during drafting.\"}]},{\"group_ids\":[44],\"priority\":\"REQUIRED\",\"title\":\"Participant target\",\"question\":\"Must the proposal commit to one exact participant target or may it use a justified minimum-to-maximum range?\",\"why_it_matters\":\"The decision changes how schedule, workload, deliverables, and budget quantities are calculated and reviewed.\",\"options\":[{\"label\":\"Exact target\",\"text\":\"Use one participant number across all planning sections.\"},{\"label\":\"Bounded range\",\"text\":\"Use minimum and maximum targets with distinct consequences and resource cases.\"}]},{\"group_ids\":[76],\"priority\":\"REQUIRED\",\"title\":\"Budget placement\",\"question\":\"Should quantity, unit-rate, and estimate-basis details remain beside activities in the main text or reside in a separate budget table or appendix?\",\"why_it_matters\":\"The choice determines where reviewers verify costs and how revisions remain synchronized with the argument.\",\"options\":[{\"label\":\"Main text\",\"text\":\"Keep major cost details and estimate bases beside the activities they enable.\"},{\"label\":\"Separate table\",\"text\":\"Keep only totals and major categories in the narrative and place detailed arithmetic in a referenced table or appendix.\"}]}]}",
+      "response_bytes": 11285,
+      "response_chars": 11285,
+      "response_digest": "44cd7e406c207359646df70156829d4ba1f039121e1fc2f5d63550f14db50f31",
+      "schema_chars": 1389,
+      "schema_digest": "b681d5749819b43c61c758fd338369b6b9e9dcd50c49198ba9fbc18142ff0857",
+      "validation_error": null,
+      "validation_seconds": 0.0074612090102164075
+    }
+  ],
+  "corpus": {
+    "baseline_payload_matches_compact_payload": true,
+    "compared_count": 150,
+    "fixture": "task2-advisor1-vs-task2-advisor2",
+    "language": "en",
+    "provider_payload_chars": 75590,
+    "provider_payload_digest": "92d66d326f30281f0a0b064eed04f790123e0e4338018b3ad910c48ece78a971",
+    "reference_count": 150,
+    "source_count": 300
+  },
+  "experiment": {
+    "baseline": "production exhaustive one-shot Compare output contract",
+    "calls_per_condition": 1,
+    "changed_axis": "OUTPUT_CONTRACT_AND_REQUIRED_NARRATIVE_ONLY",
+    "compact": "same complete provider-visible frames; fixed positional group vectors, relation kinds, sparse notes, and issues",
+    "compact_prompt_version": 1,
+    "order": [
+      "BASELINE_EXHAUSTIVE",
+      "COMPACT_DECISION_VECTOR"
+    ],
+    "production_behavior_changed": false,
+    "same_provider_instance": true
+  },
+  "kind": "memcommit.semantic-eval.compare-latency-ab-v1",
+  "provider": {
+    "endpoint": null,
+    "model": "gpt-5.6-sol",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "medium",
+    "runtime": "codex-cli"
+  },
+  "run_id": "20260810T195758565018Z-2ce209de",
+  "schema_version": 1,
+  "started_at": "2026-08-10T19:57:58.565018Z",
+  "status": "VALID",
+  "timing": {
+    "campaign_seconds": 512.0124223339953,
+    "provider_connection_seconds": 0.02633583299757447,
+    "provider_seconds": 511.9910367909906,
+    "total_seconds": 512.0387581669929
+  }
+}
