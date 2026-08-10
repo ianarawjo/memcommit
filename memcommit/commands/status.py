@@ -93,7 +93,8 @@ def cmd(
             context_access_display_facts(
                 access,
                 states=(SourceState.READ_ONLY,),
-            )
+            ),
+            include_permissions=True,
         )
         + f" · {access.view.grant.uid[:8]} r{access.view.grant.revision}"
         if access.is_granted and access.view is not None
@@ -125,7 +126,8 @@ def cmd(
                 context_access_display_facts(
                     access,
                     states=(SourceState.READ_ONLY,),
-                )
+                ),
+                include_permissions=True,
             ),
             dim=True,
         )

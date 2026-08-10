@@ -67,6 +67,11 @@ bindings, or other typed receipts.  They must never inspect a rendered label.
 In particular, Find receives the frozen set of granted public Context names
 separately from the annotations it renders.
 
+A granted Context remains a read-only projection even when its Grant permits a
+command to mutate the authority-owned target. Status therefore renders both the
+complete permission set and `READ ONLY`; omitting the permissions makes a
+successfully writable operation target look categorically immutable.
+
 The display model does not authorize traversal, resolve MemoryRef targets,
 open QUERY-only content, or turn Grant attachment metadata into a hierarchy
 edge.  Those responsibilities remain with the readable catalog and the

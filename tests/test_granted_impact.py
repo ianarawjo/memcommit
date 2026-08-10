@@ -948,8 +948,8 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
         if isinstance(item, Memory)
     )
     monkeypatch.setattr(
-        "memcommit.commands.forget.Config.require_llm_model",
-        lambda _self: "test-model",
+        "memcommit.commands.forget.connect_codex_chatgpt_provider",
+        lambda: object(),
     )
 
     def approve_remove(ctx, _info, _llm):
@@ -1792,7 +1792,7 @@ def test_switch_to_read_grant_makes_it_current_without_materializing_copy(
     assert "The public service desk is in the west lobby." in listed.output
     assert status.exit_code == 0, status.output
     assert "On context: campus-wiki" in status.output
-    assert "Access: READ GRANT · READ ONLY" in status.output
+    assert "Access: READ GRANT · PERMISSIONS READ · READ ONLY" in status.output
     assert contexts.exit_code == 0, contexts.output
     assert (
         "* campus-wiki  READ GRANT · PERMISSIONS READ · "

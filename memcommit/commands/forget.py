@@ -9,14 +9,17 @@ from memcommit.commands.granted_context import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.config import Config
 from memcommit.context import AutoCheckpoint, Context
 from memcommit.forget_resolution_adapter import ForgetResolutionWorkbenchAdapter
 from memcommit.forget_review import ForgetReview, ForgetSelection
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
+from memcommit.provider_types import ProviderIdentity
+from memcommit.query_provider import (
+    QueryProviderError,
+    connect_codex_chatgpt_provider,
+)
 from memcommit.resolution_workbench import ResolutionNavigation
-from memcommit.semantic.llm import LLMClient, LLMError
 from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange, apply_changes
 from memcommit.store import MemoryStore
 
@@ -25,16 +28,24 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
+def _provider_label(provider: object) -> str:
+    identity = getattr(provider, "identity", None)
+    if isinstance(identity, ProviderIdentity):
+        return identity.display_name()
+    model = getattr(provider, "model", None)
+    return str(model) if model else "configured semantic provider"
+
+
 def _run_resolution_forget(
     ctx: Context,
     info: str,
-    llm: LLMClient,
+    llm: object,
 ) -> list[ProposedChange]:
     from memcommit.commands.resolution_workbench_shell import (
         run_resolution_workbench_shell,
     )
 
-    typer.secho(f"Consulting {llm.model!r}...", dim=True)
+    typer.secho(f"Consulting {_provider_label(llm)!r}...", dim=True)
     analysis, _history = ops.analyze_forget(ctx, info, llm)
     if not analysis.decisions:
         typer.echo("Nothing to apply.")
@@ -111,11 +122,11 @@ def _print_proposals(proposals: list[ProposedChange], query: str) -> None:
 def _run_interactive_forget(
     ctx: Context,
     info: str,
-    llm: LLMClient,
+    llm: object,
 ) -> list[ProposedChange]:
     if _interactive_terminal():
         return _run_resolution_forget(ctx, info, llm)
-    typer.secho(f"Consulting {llm.model!r}...", dim=True)
+    typer.secho(f"Consulting {_provider_label(llm)!r}...", dim=True)
     proposals, history = ops.forget(ctx, info, llm)
 
     while True:
@@ -152,18 +163,11 @@ def _run_interactive_forget(
         if not feedback:
             continue
 
-        typer.secho(f"Revising with {llm.model!r}...", dim=True)
+        typer.secho(f"Revising with {_provider_label(llm)!r}...", dim=True)
         proposals, history = ops.revise_forget(feedback, llm, history, ctx)
 
 
 def cmd(info: Annotated[str, typer.Argument(help="Description of memories to forget")]) -> None:
-    config = Config()
-    try:
-        model = config.require_llm_model()
-    except RuntimeError as e:
-        typer.secho(str(e), fg=typer.colors.RED, err=True)
-        raise typer.Exit(1)
-
     active_store = MemoryStore()
     try:
         access = resolve_context_access(
@@ -186,8 +190,9 @@ def cmd(info: Annotated[str, typer.Argument(help="Description of memories to for
         raise typer.Exit(1)
 
     try:
-        applied = _run_interactive_forget(ctx, info, LLMClient(model=model))
-    except (LLMError, ValueError) as e:
+        provider = connect_codex_chatgpt_provider()
+        applied = _run_interactive_forget(ctx, info, provider)
+    except (OSError, QueryProviderError, RuntimeError, ValueError) as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 

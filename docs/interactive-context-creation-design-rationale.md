@@ -200,6 +200,11 @@ offers granted navigation and Memory previews that Branch does not authorize or
 need. Reusing its lower-level Context tree controls preserves interaction
 grammar without importing Switch semantics.
 
+An explicit Branch launched while the current pointer names a granted view must
+fail as a local-Source eligibility error, not leak the storage-layer `Context
+not found` wording. The public name exists and remains switchable; it is absent
+only from Branch's deliberately local Source catalog.
+
 ## Atomicity and compatibility boundary
 
 Selecting a non-current Source must not first persist an intermediate

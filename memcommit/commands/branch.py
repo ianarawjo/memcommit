@@ -74,6 +74,14 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
+    if source_name not in local_names:
+        typer.secho(
+            "Error: Branch requires a local Source; the current Context "
+            f"'{display_escape_text(source_name)}' is not in the local catalog.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
     try:
         validate_context_name(name)
         if store.context_exists(name):

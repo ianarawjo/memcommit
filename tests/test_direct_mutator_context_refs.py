@@ -128,10 +128,6 @@ def test_forget_preserves_unresolved_context_ref(
 ):
     store, name, memories, reference_uid = _dangling_parent()
 
-    class FakeConfig:
-        def require_llm_model(self) -> str:
-            return "fake-model"
-
     def apply_forget(context, _info, _llm):
         memory = memories[0]
         context.remove(memory.uid)
@@ -143,7 +139,11 @@ def test_forget_preserves_unresolved_context_ref(
             )
         ]
 
-    monkeypatch.setattr(forget_command, "Config", FakeConfig)
+    monkeypatch.setattr(
+        forget_command,
+        "connect_codex_chatgpt_provider",
+        lambda: object(),
+    )
     monkeypatch.setattr(
         forget_command,
         "_run_interactive_forget",

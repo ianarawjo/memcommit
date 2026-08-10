@@ -146,6 +146,30 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
     assert "FROM task-1-campus-authority" in contexts.output
 
 
+def test_status_keeps_read_only_projection_and_shows_granted_target_permissions(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _grant_fixture(isolated_store, tmp_path, monkeypatch)
+    store = MemoryStore()
+    store.set_current_virtual_context_if("task-root", "campus-wiki")
+
+    short = runner.invoke(app, ["status", "--short"])
+    detailed = runner.invoke(app, ["status"])
+
+    assert short.exit_code == 0, short.output
+    assert (
+        "READ GRANT · PERMISSIONS CREATE + READ + UPDATE · READ ONLY"
+        in short.output
+    )
+    assert detailed.exit_code == 0, detailed.output
+    assert (
+        "Access: READ GRANT · PERMISSIONS CREATE + READ + UPDATE · READ ONLY"
+        in detailed.output
+    )
+
+
 def test_profile_readable_catalog_stays_profile_wide_from_a_granted_current_view(
     isolated_store,
     tmp_path,

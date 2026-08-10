@@ -99,3 +99,15 @@ not provide that authority or freshness guarantee.
 
 The first implementation keeps Forget's non-TTY legacy prompt flow for script
 compatibility. The shared Resolution Workbench is the interactive TTY surface.
+
+Forget now resolves the same configured semantic provider as Sever and invokes
+its bounded `complete()` primitive with the complete-coverage output schema.
+The earlier CLI path required a second, Ollama-only `llm` setting even when the
+profile's configured Codex, Ollama, or OpenRouter semantic provider was already
+usable. That split made two implementations of the same selective-curation
+contract fail at different setup boundaries. Existing library callers and test
+doubles may still supply the old `chat(messages)` shape at a compatibility
+boundary, but CLI provider selection, timeouts, and structured output no longer
+use that legacy route. This migration does not make Forget durable or staged:
+the complete Source, instruction, and any revision history still fit and run in
+one provider turn or fail before disclosure.

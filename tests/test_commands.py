@@ -1407,6 +1407,19 @@ class TestBranch:
         result = invoke("branch", "orphan")
         assert result.exit_code == 1
 
+    def test_explicit_branch_explains_nonlocal_current_source(self, isolated_store):
+        store = MemoryStore()
+        store.create_context(ops.init("local"))
+        store.set_current("local")
+        store.set_current_virtual_context_if("local", "granted-campus-wiki")
+
+        result = invoke("branch", "local/wiki-draft")
+
+        assert result.exit_code == 1
+        assert "Branch requires a local Source" in result.stderr
+        assert "'granted-campus-wiki' is not in the local catalog" in result.stderr
+        assert not store.context_exists("local/wiki-draft")
+
 
 # ---------------------------------------------------------------------------
 # merge

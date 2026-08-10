@@ -13,6 +13,7 @@ from memcommit.commands.resolution_workbench_shell import (
 from memcommit.context import Context, Memory
 from memcommit.forget_resolution_adapter import ForgetResolutionWorkbenchAdapter
 from memcommit.forget_review import ForgetReview
+from memcommit.provider_types import ProviderIdentity
 from memcommit.resolution_workbench import ResolutionNavigation, ResolutionWorkbenchAction
 from memcommit.semantic.changes import EditChange, RemoveChange
 
@@ -47,6 +48,36 @@ class BatchForgetLLM:
         if self.omit_last:
             records.pop()
         return json.dumps({"overview": "Reviewed the whole Source.", "candidates": records})
+
+
+class BatchForgetProvider:
+    identity = ProviderIdentity(provider="test", model="batch-provider")
+
+    def __init__(self):
+        self.operation = None
+        self.output_schema = None
+        self.messages = None
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        self.operation = operation
+        self.output_schema = output_schema
+        self.messages = json.loads(prompt.split("FORGET CHAT MESSAGES:\n", 1)[1])
+        payload = json.loads(
+            self.messages[1]["content"].split("FORGET PAYLOAD:\n", 1)[1]
+        )
+        records = [
+            {
+                "source_memory_id": source["item_id"],
+                "decision": "KEEP",
+                "proposed_content": source["content"],
+                "rationale": "The instruction does not cover this Memory.",
+                "criterion_item_ids": ["k1"],
+            }
+            for source in payload["source"]["memories"]
+        ]
+        return json.dumps(
+            {"overview": "Reviewed the complete Source.", "candidates": records}
+        )
 
 
 def _context():
@@ -85,6 +116,26 @@ def test_forget_batch_fails_closed_when_one_source_decision_is_missing():
             "Forget the covered details.",
             BatchForgetLLM(omit_last=True),
         )
+
+
+def test_forget_uses_configured_completion_contract_and_complete_schema():
+    context = _context()
+    provider = BatchForgetProvider()
+
+    analysis, history = ops.analyze_forget(
+        context,
+        "Forget the covered details.",
+        provider,
+    )
+
+    assert provider.operation == "forget"
+    assert provider.output_schema["properties"]["candidates"]["minItems"] == 3
+    assert provider.output_schema["properties"]["candidates"]["maxItems"] == 3
+    assert provider.output_schema["properties"]["candidates"]["items"][
+        "properties"
+    ]["decision"]["enum"] == ["KEEP", "EDIT", "DELETE"]
+    assert len(analysis.decisions) == 3
+    assert history[-1]["role"] == "assistant"
 
 
 def test_forget_projects_instruction_and_memories_into_shared_resolution_report():
