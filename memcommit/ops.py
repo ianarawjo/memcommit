@@ -17,6 +17,7 @@
         from memcommit.semantic.changes import apply_changes
         apply_changes(ctx, proposals)
 """
+
 from __future__ import annotations
 
 import uuid
@@ -51,6 +52,7 @@ if TYPE_CHECKING:
 # Structural operations (no LLM)
 # ---------------------------------------------------------------------------
 
+
 def init(name: str) -> Context:
     """Create a new, empty Context. Does not persist — caller must store.save(ctx)."""
     return Context(uid=str(uuid.uuid4()), name=name)
@@ -65,10 +67,7 @@ def add(ctx: Context, content: str) -> Memory:
 
 def add_many(ctx: Context, contents: list[str]) -> list[Memory]:
     """Append multiple Memories in input order and return the created records."""
-    memories = [
-        Memory(uid=str(uuid.uuid4()), content=content)
-        for content in contents
-    ]
+    memories = [Memory(uid=str(uuid.uuid4()), content=content) for content in contents]
     for memory in memories:
         ctx.add(memory)
     return memories
@@ -238,15 +237,10 @@ def resolve(ctx: Context, selector: str) -> Information:
         info
         for uid, info in ctx.iter_entries()
         if uid.startswith(selector)
-        or (
-            isinstance(info, (Context, QueryContextRef))
-            and info.name == selector
-        )
+        or (isinstance(info, (Context, QueryContextRef)) and info.name == selector)
     ]
     if not matches:
-        raise KeyError(
-            f"No direct item matching '{selector}' in context '{ctx.name}'."
-        )
+        raise KeyError(f"No direct item matching '{selector}' in context '{ctx.name}'.")
     if len(matches) > 1:
         raise ValueError(
             f"Ambiguous selector '{selector}' matches {len(matches)} items: "
@@ -282,10 +276,7 @@ def embed(child: Context, parent: Context) -> None:
     if child.uid == parent.uid:
         raise ValueError("Cannot embed a context into itself.")
     for info in parent.iter_items():
-        if (
-            isinstance(info, (Context, QueryContextRef))
-            and info.name == child.name
-        ):
+        if isinstance(info, (Context, QueryContextRef)) and info.name == child.name:
             raise ValueError(f"'{child.name}' is already embedded in '{parent.name}'.")
     parent.add(child)
 
@@ -308,6 +299,110 @@ def branch(ctx: Context, new_name: str) -> Context:
         else:
             new_ctx.add(info)
     return new_ctx
+
+
+def branch_subtree(
+    contexts: Sequence[Context],
+    source_root: str,
+    new_root: str,
+) -> tuple[Context, ...]:
+    """Copy one frozen lexical Context subtree under a fresh root.
+
+    Context identities are regenerated because every branch is independently
+    editable. Memory identities remain stable so later merge/meld operations
+    can recognize common lineage. Persisted pointers whose targets are inside
+    the frozen subtree follow the new Context identities; outside pointers
+    retain the ordinary shallow Branch live-reference behavior.
+    """
+    sources = tuple(contexts)
+    if not sources:
+        raise ValueError("A subtree branch requires at least one Context.")
+    if not source_root or not new_root or source_root == new_root:
+        raise ValueError("A subtree branch requires distinct named roots.")
+
+    source_by_name = {context.name: context for context in sources}
+    if len(source_by_name) != len(sources) or source_root not in source_by_name:
+        raise ValueError("A subtree branch requires one distinct Source root.")
+    if len({context.uid for context in sources}) != len(sources):
+        raise ValueError("A subtree branch requires distinct Context identities.")
+
+    prefix = source_root + "/"
+    if any(
+        context.name != source_root and not context.name.startswith(prefix)
+        for context in sources
+    ):
+        raise ValueError("A subtree branch received a Context outside its Source root.")
+
+    target_names = {
+        source.name: new_root + source.name[len(source_root) :] for source in sources
+    }
+    if len(set(target_names.values())) != len(sources):
+        raise ValueError("A subtree branch produced duplicate target names.")
+
+    targets = {
+        source.name: Context(uid=str(uuid.uuid4()), name=target_names[source.name])
+        for source in sources
+    }
+    for source in sources:
+        target = targets[source.name]
+        for item in source.iter_items():
+            if isinstance(item, Memory):
+                target.add(Memory(uid=item.uid, content=item.content))
+            elif isinstance(item, MemoryRef):
+                internal_owner = source_by_name.get(item.target_context_name)
+                if internal_owner is None:
+                    target.add(item.copy())
+                    continue
+                if internal_owner.uid != item.target_context_uid:
+                    raise ValueError(
+                        "A subtree Branch found a stale internal Memory reference."
+                    )
+                internal_memory = internal_owner.memories.get(item.target_memory_uid)
+                if not isinstance(internal_memory, Memory):
+                    raise ValueError(
+                        "A subtree Branch found an unavailable internal Memory target."
+                    )
+                target_owner = targets[internal_owner.name]
+                target.add(
+                    MemoryRef(
+                        uid=item.uid,
+                        target_context_uid=target_owner.uid,
+                        target_context_name=target_owner.name,
+                        target_memory_uid=item.target_memory_uid,
+                        target=internal_memory,
+                    )
+                )
+            elif isinstance(item, QueryContextRef):
+                target.add(item.copy())
+            else:
+                internal_context = source_by_name.get(item.name)
+                if internal_context is None:
+                    # Context serialization stores only uid/name. Use a fresh
+                    # stub so the branch cannot share a mutable object merely
+                    # because an external live reference was retained.
+                    target.add(Context(uid=item.uid, name=item.name))
+                    continue
+                if internal_context.uid != item.uid:
+                    raise ValueError(
+                        "A subtree Branch found a stale internal Context reference."
+                    )
+                target.add(targets[internal_context.name])
+        ordinary_names = {
+            item.name for item in target.iter_items() if isinstance(item, Context)
+        }
+        query_names = {
+            item.name
+            for item in target.iter_items()
+            if isinstance(item, QueryContextRef)
+        }
+        collisions = ordinary_names & query_names
+        if collisions:
+            raise ValueError(
+                "A subtree Branch would give ordinary and query-only Context "
+                "pointers the same name: "
+                + ", ".join(repr(name) for name in sorted(collisions))
+            )
+    return tuple(targets[source.name] for source in sources)
 
 
 def merge(source: Context, target: Context) -> list[Information]:
@@ -367,11 +462,7 @@ def merge(source: Context, target: Context) -> list[Information]:
             for existing in target.iter_items()
         ):
             continue
-        item = (
-            info.copy()
-            if isinstance(info, (MemoryRef, QueryContextRef))
-            else info
-        )
+        item = info.copy() if isinstance(info, (MemoryRef, QueryContextRef)) else info
         target.add(item)
         added.append(item)
     return added
@@ -551,11 +642,7 @@ def _decode_forget_analysis(text: str, ctx: Context, query: str):
 def _forget_changes(analysis, ctx: Context) -> list[ProposedChange]:
     from memcommit.semantic.changes import EditChange, RemoveChange
 
-    source = {
-        uid: item
-        for uid, item in ctx.iter_entries()
-        if isinstance(item, Memory)
-    }
+    source = {uid: item for uid, item in ctx.iter_entries() if isinstance(item, Memory)}
     changes: list[ProposedChange] = []
     for decision in analysis.decisions:
         memory = source[decision.source_uid]
@@ -590,10 +677,13 @@ def analyze_forget(ctx: Context, query: str, llm: object):
     from memcommit.semantic.utils import build_messages
 
     if not any(isinstance(item, Memory) for item in ctx.iter_items()):
-        return CurationAnalysis(
-            overview="The Source Context has no direct Memories to review.",
-            decisions=(),
-        ), []
+        return (
+            CurationAnalysis(
+                overview="The Source Context has no direct Memories to review.",
+                decisions=(),
+            ),
+            [],
+        )
     frame = _forget_curation_frame(ctx, query)
     output_schema = curation_output_schema(frame, ("KEEP", "EDIT", "DELETE"))
     execution_plan = plan_curation_execution(frame, output_schema=output_schema)
@@ -667,7 +757,9 @@ def revise_forget(
             query = legacy.group(1)
             break
     if not query:
-        raise ValueError("The forget history does not contain its original instruction.")
+        raise ValueError(
+            "The forget history does not contain its original instruction."
+        )
     messages = build_messages(history=history, feedback=feedback)
     frame = _forget_curation_frame(ctx, query)
     output_schema = curation_output_schema(frame, ("KEEP", "EDIT", "DELETE"))
@@ -799,13 +891,17 @@ def _run_integrate_batch(
     should_add: bool = not bool(data.get("already_captured", False))
     # Integrate never removes — filter defensively in case the model misbehaves.
     from memcommit.semantic.changes import RemoveChange
-    proposals = [p for p in parse_proposals(data, ctx) if not isinstance(p, RemoveChange)]
+
+    proposals = [
+        p for p in parse_proposals(data, ctx) if not isinstance(p, RemoveChange)
+    ]
     return proposals, history, should_add
 
 
 # ---------------------------------------------------------------------------
 # Read-only semantic quality finders
 # ---------------------------------------------------------------------------
+
 
 def impact_atomize(
     ctx: Context,
@@ -892,10 +988,13 @@ def integrate(
 
     # Add iff every batch (including the vacuous case of an empty context) agrees.
     if all(all_should_add):
-        all_proposals.insert(0, AddChange(
-            content=new_info,
-            reason="Novel — not found in existing memories.",
-        ))
+        all_proposals.insert(
+            0,
+            AddChange(
+                content=new_info,
+                reason="Novel — not found in existing memories.",
+            ),
+        )
 
     return all_proposals, all_histories
 
@@ -926,16 +1025,22 @@ def revise_integrate(
         updated = messages + [{"role": "assistant", "content": text}]
         data = extract_json(text)
         from memcommit.semantic.changes import RemoveChange
-        batch_proposals = [p for p in parse_proposals(data, ctx) if not isinstance(p, RemoveChange)]
+
+        batch_proposals = [
+            p for p in parse_proposals(data, ctx) if not isinstance(p, RemoveChange)
+        ]
         all_proposals.extend(batch_proposals)
         new_histories.append(updated)
         all_should_add.append(not bool(data.get("already_captured", False)))
 
     if all(all_should_add):
-        all_proposals.insert(0, AddChange(
-            content=new_info,
-            reason="Novel — not found in existing memories.",
-        ))
+        all_proposals.insert(
+            0,
+            AddChange(
+                content=new_info,
+                reason="Novel — not found in existing memories.",
+            ),
+        )
 
     return all_proposals, new_histories
 
@@ -983,6 +1088,7 @@ def find(
 # Semantic operation: translate
 # ---------------------------------------------------------------------------
 
+
 def translate(
     ctx: Context,
     target_language: str,
@@ -1027,6 +1133,7 @@ def derive_translation_context(
 # ---------------------------------------------------------------------------
 # Structural operation: chunk
 # ---------------------------------------------------------------------------
+
 
 def chunk(ctx: Context, uid: str, method: str) -> tuple[Memory, list[Memory]]:
     """

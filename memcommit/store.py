@@ -180,6 +180,17 @@ class ConcurrentGroundUpdateError(RuntimeError):
 
 
 @dataclass(frozen=True)
+class ContextBranchBinding:
+    """One freshness-bound Source and its newly identified Branch Context."""
+
+    source_name: str
+    expected_source_uid: str
+    expected_source_digest: str
+    expected_history_digest: str
+    target: Context
+
+
+@dataclass(frozen=True)
 class ContextRenameBinding:
     """One stable ordinary-Context identity in a namespace rename plan."""
 
@@ -465,6 +476,133 @@ def _rewrite_checkpoint_record(
         args["log_snapshot"] = next_entries
 
     return rewritten, changed, tuple(sorted(collisions))
+
+
+def _rewrite_branched_context_pointers(
+    value: dict[str, object],
+    *,
+    targets_by_source_uid: dict[str, tuple[str, str]],
+) -> dict[str, object]:
+    """Retarget one historical snapshot to new subtree Context identities.
+
+    Unlike namespace rename, Branch creates new UIDs. A Context reference's
+    uid is also its direct-item key, so the key and explicit order entry must
+    move together. UID is authoritative for historical snapshots whose old
+    locator may predate a source-side rename.
+    """
+    rewritten = copy.deepcopy(value)
+    memories = rewritten.get("memories")
+    if not isinstance(memories, dict):
+        raise ValueError("Context snapshot has no valid memories object.")
+
+    next_memories: dict[str, object] = {}
+    item_uid_mapping: dict[str, str] = {}
+    ordinary_names: set[str] = set()
+    query_names: set[str] = set()
+    for item_uid, item in memories.items():
+        if not isinstance(item_uid, str) or not isinstance(item, dict):
+            raise ValueError("Context snapshot contains an invalid direct item.")
+        if item.get("uid") != item_uid:
+            raise ValueError(
+                "Context snapshot contains a direct item whose uid does not "
+                "match its dictionary key."
+            )
+        next_uid = item_uid
+        kind = item.get("type")
+        if kind == "context_ref":
+            source_uid = item.get("uid")
+            target = (
+                targets_by_source_uid.get(source_uid)
+                if isinstance(source_uid, str)
+                else None
+            )
+            if target is not None:
+                next_uid, next_name = target
+                item["uid"] = next_uid
+                item["name"] = next_name
+            name = item.get("name")
+            if not isinstance(name, str):
+                raise ValueError("Context reference has no valid target name.")
+            ordinary_names.add(name)
+        elif kind == "memory_ref":
+            target_context = item.get("target_context")
+            if not isinstance(target_context, dict):
+                raise ValueError("Memory reference has no valid target Context.")
+            source_uid = target_context.get("uid")
+            target = (
+                targets_by_source_uid.get(source_uid)
+                if isinstance(source_uid, str)
+                else None
+            )
+            if target is not None:
+                target_context["uid"], target_context["name"] = target
+        elif kind == "query_context_ref":
+            name = item.get("name")
+            if not isinstance(name, str):
+                raise ValueError("Query-only Context reference has no valid name.")
+            query_names.add(name)
+        elif kind == "memory":
+            if not isinstance(item.get("content"), str):
+                raise ValueError("Memory content must be a string.")
+        else:
+            raise ValueError(f"Unsupported direct Context item type: {kind!r}.")
+        if next_uid in next_memories:
+            raise ValueError("Subtree Branch checkpoint item identities collide.")
+        next_memories[next_uid] = item
+        item_uid_mapping[item_uid] = next_uid
+
+    collisions = ordinary_names & query_names
+    if collisions:
+        raise ValueError(
+            "Subtree Branch checkpoint would contain ordinary and query-only "
+            "Context pointers with the same name: "
+            + ", ".join(repr(name) for name in sorted(collisions))
+        )
+    rewritten["memories"] = next_memories
+    order = rewritten.get("order")
+    if order is not None:
+        if not isinstance(order, list) or any(
+            not isinstance(item_uid, str) for item_uid in order
+        ):
+            raise ValueError("Context snapshot has an invalid direct-item order.")
+        rewritten["order"] = [
+            item_uid_mapping.get(item_uid, item_uid) for item_uid in order
+        ]
+    return rewritten
+
+
+def _rewrite_branched_checkpoint_record(
+    value: dict[str, object],
+    *,
+    targets_by_source_uid: dict[str, tuple[str, str]],
+) -> dict[str, object]:
+    """Retarget every future-restorable Context frame in a copied history."""
+    rewritten = copy.deepcopy(value)
+    for field in ("snapshot", "command_before"):
+        frame = rewritten.get(field)
+        if isinstance(frame, dict):
+            rewritten[field] = _rewrite_branched_context_pointers(
+                frame,
+                targets_by_source_uid=targets_by_source_uid,
+            )
+
+    args = rewritten.get("args")
+    if isinstance(args, dict) and "log_snapshot" in args:
+        log_snapshot = args["log_snapshot"]
+        if not isinstance(log_snapshot, list):
+            raise ValueError("Checkpoint log_snapshot must be a list.")
+        next_entries: list[dict[str, object]] = []
+        for entry in log_snapshot:
+            if not isinstance(entry, dict):
+                raise ValueError("Checkpoint log_snapshot entry must be an object.")
+            next_entries.append(
+                _rewrite_branched_checkpoint_record(
+                    entry,
+                    targets_by_source_uid=targets_by_source_uid,
+                )
+            )
+        args["log_snapshot"] = next_entries
+    return rewritten
 
 
 def _validate_context_header(data: object, expected_name: str) -> dict:
@@ -4325,45 +4463,196 @@ class MemoryStore:
         expected_history_digest: str,
         expected_current: str | None,
     ) -> None:
-        """Create, inherit history, and select one exact branch atomically.
-
-        Cooperative writers cannot observe a gap between source validation,
-        target publication, history copy, and current-state CAS.  A failure is
-        rolled back while the exact target lock is still held, so cleanup can
-        never delete a replacement or another writer's completed update.
-        """
-        if ctx.name == source_name:
-            raise ValueError("A branch must have a new Context name.")
-        binding = (
-            source_name,
-            expected_source_uid,
-            expected_source_digest,
+        """Create, inherit history, and select one exact branch atomically."""
+        self.create_branch_contexts(
+            (
+                ContextBranchBinding(
+                    source_name=source_name,
+                    expected_source_uid=expected_source_uid,
+                    expected_source_digest=expected_source_digest,
+                    expected_history_digest=expected_history_digest,
+                    target=ctx,
+                ),
+            ),
+            source_root=source_name,
+            target_root=ctx.name,
+            include_descendants=False,
+            expected_current=expected_current,
         )
-        with self._command_write_lock():
-            with self._context_graph_lock(exclusive=False):
-                with self._context_write_locks((source_name, ctx.name)):
-                    self._assert_source_bindings_locked((binding,))
-                    history = self.list_checkpoints(source_name)
-                    if checkpoint_history_digest(history) != expected_history_digest:
-                        raise ConcurrentContextUpdateError(
-                            f"Checkpoint history for '{source_name}' changed "
-                            "before the branch could be created."
-                        )
-                    source_checkpoints = self._checkpoints_dir(source_name)
-                    checkpoint_files: tuple[Path, ...] = ()
-                    if source_checkpoints.exists():
-                        checkpoint_files = tuple(
-                            sorted(source_checkpoints.glob("*.json"))
-                        )
-                        if any(
-                            path.is_symlink() or not path.is_file()
-                            for path in checkpoint_files
-                        ):
-                            raise ValueError(
-                                f"Checkpoint history for '{source_name}' is unsafe."
-                            )
 
-                    created = False
+    def create_branch_contexts(
+        self,
+        bindings: Iterable[ContextBranchBinding],
+        *,
+        source_root: str,
+        target_root: str,
+        include_descendants: bool,
+        expected_current: str | None,
+    ) -> None:
+        """Publish one exact or lexical-subtree Branch as a single command.
+
+        The complete Source membership, every record and checkpoint history,
+        every require-new destination, and current selection remain frozen
+        from final validation through publication and exception rollback.
+        """
+        records = tuple(bindings)
+        if not records:
+            raise ValueError("A Branch requires at least one Context binding.")
+        if type(include_descendants) is not bool:
+            raise ValueError("Branch descendant scope must be a boolean.")
+        _context_name_parts(source_root)
+        _context_name_parts(target_root)
+        if source_root == target_root:
+            raise ValueError("A Branch must have a new Context root name.")
+
+        source_names = tuple(binding.source_name for binding in records)
+        target_names = tuple(binding.target.name for binding in records)
+        if (
+            len(source_names) != len(set(source_names))
+            or len(target_names) != len(set(target_names))
+            or set(source_names) & set(target_names)
+            or source_root not in source_names
+            or target_root not in target_names
+        ):
+            raise ValueError("Invalid Branch Source or target binding set.")
+        if not include_descendants and len(records) != 1:
+            raise ValueError("An exact Branch must create exactly one Context.")
+
+        expected_targets = {
+            source_name: target_root + source_name[len(source_root) :]
+            for source_name in source_names
+            if source_name == source_root or source_name.startswith(source_root + "/")
+        }
+        if len(expected_targets) != len(records) or any(
+            binding.target.name != expected_targets.get(binding.source_name)
+            for binding in records
+        ):
+            raise ValueError("Branch targets must preserve Source subtree suffixes.")
+        source_uids = {binding.expected_source_uid for binding in records}
+        if len({binding.target.uid for binding in records}) != len(records) or any(
+            binding.target.uid in source_uids for binding in records
+        ):
+            raise ValueError("Every Branch Context requires one new identity.")
+        targets_by_source_uid = {
+            binding.expected_source_uid: (
+                binding.target.uid,
+                binding.target.name,
+            )
+            for binding in records
+        }
+
+        source_receipts = tuple(
+            (
+                binding.source_name,
+                binding.expected_source_uid,
+                binding.expected_source_digest,
+            )
+            for binding in records
+        )
+        lock_names = (*source_names, *target_names)
+        with self._command_write_lock():
+            # Subtree membership is itself part of the reviewed request. An
+            # exclusive graph lock prevents a new lexical descendant from
+            # appearing after the final membership recheck.
+            with self._context_graph_lock(exclusive=include_descendants):
+                with self._context_write_locks(lock_names):
+                    if include_descendants:
+                        from memcommit.context_targeting.model import ContextScope
+                        from memcommit.context_targeting.resolution import (
+                            expand_lexical_context_names,
+                        )
+
+                        live_source_names = expand_lexical_context_names(
+                            ContextScope.create(
+                                (source_root,),
+                                include_descendants=True,
+                            ),
+                            self.list_context_names(),
+                        )
+                        if live_source_names != source_names:
+                            raise ConcurrentContextUpdateError(
+                                "The Source Context subtree changed before the "
+                                "Branch could be created."
+                            )
+                    self._assert_source_bindings_locked(
+                        source_receipts,
+                        result_label="branch",
+                    )
+
+                    checkpoint_files: dict[
+                        str,
+                        tuple[tuple[Path, dict[str, object] | None], ...],
+                    ] = {}
+                    for binding in records:
+                        history = self.list_checkpoints(binding.source_name)
+                        if (
+                            checkpoint_history_digest(history)
+                            != binding.expected_history_digest
+                        ):
+                            raise ConcurrentContextUpdateError(
+                                f"Checkpoint history for '{binding.source_name}' "
+                                "changed before the branch could be created."
+                            )
+                        source_checkpoints = self._checkpoints_dir(binding.source_name)
+                        files: tuple[Path, ...] = ()
+                        if source_checkpoints.exists():
+                            if (
+                                source_checkpoints.is_symlink()
+                                or not source_checkpoints.is_dir()
+                            ):
+                                raise ValueError(
+                                    f"Checkpoint history for "
+                                    f"'{binding.source_name}' is unsafe."
+                                )
+                            files = tuple(sorted(source_checkpoints.iterdir()))
+                            if any(
+                                path.is_symlink()
+                                or not path.is_file()
+                                or path.suffix != ".json"
+                                for path in files
+                            ):
+                                raise ValueError(
+                                    f"Checkpoint history for "
+                                    f"'{binding.source_name}' is unsafe."
+                                )
+                        prepared_files: list[tuple[Path, dict[str, object] | None]] = []
+                        for path in files:
+                            rewritten: dict[str, object] | None = None
+                            if include_descendants:
+                                try:
+                                    with open(path, encoding="utf-8") as file:
+                                        raw = json.load(
+                                            file,
+                                            object_pairs_hook=(
+                                                _reject_duplicate_json_keys
+                                            ),
+                                        )
+                                except (json.JSONDecodeError, ValueError) as error:
+                                    raise ValueError(
+                                        f"Checkpoint history for "
+                                        f"'{binding.source_name}' is invalid."
+                                    ) from error
+                                if not isinstance(raw, dict):
+                                    raise ValueError(
+                                        f"Checkpoint history for "
+                                        f"'{binding.source_name}' is invalid."
+                                    )
+                                rewritten = _rewrite_branched_checkpoint_record(
+                                    raw,
+                                    targets_by_source_uid=targets_by_source_uid,
+                                )
+                            prepared_files.append((path, rewritten))
+                        checkpoint_files[binding.source_name] = tuple(prepared_files)
+
+                    for target_name in target_names:
+                        if self.context_exists(target_name):
+                            self.load_direct(target_name)
+                            raise FileExistsError(
+                                f"Context '{target_name}' already exists."
+                            )
+                        self._assert_context_storage_available(target_name)
+
+                    created: list[Context] = []
                     branch_error: Exception | None = None
                     with self._state_write_lock():
                         state = self._read_state()
@@ -4373,40 +4662,51 @@ class MemoryStore:
                                 "could be created."
                             )
                         try:
-                            self._save_locked(
-                                ctx,
-                                None,
-                                expected_context_digest=None,
-                                require_new=True,
-                            )
-                            created = True
-                            target_checkpoints = self._checkpoints_dir(ctx.name)
-                            for source_path in checkpoint_files:
-                                destination = target_checkpoints / source_path.name
-                                if destination.is_symlink():
-                                    raise ValueError(
-                                        f"Refusing to copy checkpoint to "
-                                        f"'{ctx.name}' through a symbolic link."
-                                    )
-                                _write_bytes_atomic(
-                                    destination,
-                                    source_path.read_bytes(),
+                            for binding in records:
+                                target = binding.target
+                                self._save_locked(
+                                    target,
+                                    None,
+                                    expected_context_digest=None,
+                                    require_new=True,
                                 )
-                            state["current"] = ctx.name
+                                created.append(target)
+                                target_checkpoints = self._checkpoints_dir(target.name)
+                                for source_path, rewritten in checkpoint_files[
+                                    binding.source_name
+                                ]:
+                                    destination = target_checkpoints / source_path.name
+                                    if destination.exists() or destination.is_symlink():
+                                        raise FileExistsError(
+                                            f"Branch checkpoint destination for "
+                                            f"'{target.name}' already exists."
+                                        )
+                                    if rewritten is None:
+                                        _write_bytes_atomic(
+                                            destination,
+                                            source_path.read_bytes(),
+                                        )
+                                    else:
+                                        _write_json_atomic(destination, rewritten)
+                            state["current"] = target_root
                             self._write_state(state)
                         except Exception as error:
                             branch_error = error
                     if branch_error is not None:
-                        if created:
+                        rollback_error: Exception | None = None
+                        for target in reversed(created):
                             try:
-                                self._delete_locked(ctx.name)
-                            except Exception as rollback_error:
-                                raise RuntimeError(
-                                    "Branch creation failed and its exact new "
-                                    "Context could not be rolled back."
-                                ) from rollback_error
+                                self._delete_locked(target.name)
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                        if rollback_error is not None:
+                            raise RuntimeError(
+                                "Branch creation failed and its new Context "
+                                "hierarchy could not be fully rolled back."
+                            ) from rollback_error
                         raise branch_error
-        ctx._store_digest = context_record_digest(ctx)
+        for binding in records:
+            binding.target._store_digest = context_record_digest(binding.target)
 
     def create_missing_contexts(
         self,
@@ -5431,7 +5731,9 @@ class MemoryStore:
             or not session_uid
             or not isinstance(reviewing_digest, str)
             or len(reviewing_digest) != 64
-            or any(character not in "0123456789abcdef" for character in reviewing_digest)
+            or any(
+                character not in "0123456789abcdef" for character in reviewing_digest
+            )
             or not isinstance(manifest.get("application"), dict)
         ):
             raise ValueError("Command Context archive manifest is invalid.")
@@ -5482,8 +5784,8 @@ class MemoryStore:
         for path in root.iterdir():
             if path.is_symlink() or not path.is_dir():
                 raise ValueError("Command Context archive storage is invalid.")
-            _archive, _manifest, context, entries = (
-                self._load_command_context_archive(path.name)
+            _archive, _manifest, context, entries = self._load_command_context_archive(
+                path.name
             )
             result.append((context, entries))
         return tuple(sorted(result, key=lambda item: item[0].name))
@@ -5529,8 +5831,7 @@ class MemoryStore:
                     f"command to {direction}."
                 )
             if any(
-                change.before is None or change.after is None
-                for change in unit.changes
+                change.before is None or change.after is None for change in unit.changes
             ):
                 return self._restore_context_creation_command_locked(
                     unit,
@@ -5683,9 +5984,7 @@ class MemoryStore:
 
     def _remove_checkpoint_uid_locked(self, name: str, checkpoint_uid: str) -> None:
         """Remove one exact provisional checkpoint while its Context is locked."""
-        for path in self._checkpoints_dir(name).glob(
-            f"*-{checkpoint_uid[:8]}.json"
-        ):
+        for path in self._checkpoints_dir(name).glob(f"*-{checkpoint_uid[:8]}.json"):
             if path.is_symlink() or not path.is_file():
                 continue
             with open(path, encoding="utf-8") as file:
@@ -5741,11 +6040,9 @@ class MemoryStore:
                         raise ConcurrentContextUpdateError(
                             f"Affected Context '{change.context_name}' no longer exists."
                         ) from error
-                    if (
-                        current.uid != change.context_uid
-                        or context_record_digest(current)
-                        != context_record_digest(change.after)
-                    ):
+                    if current.uid != change.context_uid or context_record_digest(
+                        current
+                    ) != context_record_digest(change.after):
                         raise ConcurrentContextUpdateError(
                             f"Affected Context '{change.context_name}' changed "
                             "after the command selected for undo."
@@ -5764,14 +6061,18 @@ class MemoryStore:
                         if isinstance(source_checkpoint, dict)
                         else None
                     )
-                    sever_receipt = args.get("sever") if isinstance(args, dict) else None
+                    sever_receipt = (
+                        args.get("sever") if isinstance(args, dict) else None
+                    )
                     session_uid = (
                         sever_receipt.get("session_uid")
                         if isinstance(sever_receipt, dict)
                         else None
                     )
                     if not isinstance(session_uid, str) or not session_uid:
-                        raise ValueError("Sever checkpoint has no valid session receipt.")
+                        raise ValueError(
+                            "Sever checkpoint has no valid session receipt."
+                        )
                     session = sessions.load(session_uid)
                     application = session.application
                     if (
@@ -5797,8 +6098,7 @@ class MemoryStore:
                             command="undo",
                             args={"command_restore": restore_metadata},
                             description=(
-                                "Undo command 'mem sever' "
-                                f"[{receipt_uid[:8]}]"
+                                "Undo command 'mem sever' " f"[{receipt_uid[:8]}]"
                             ),
                         ),
                         expected_context_digest=context_record_digest(current),
@@ -5807,15 +6107,11 @@ class MemoryStore:
                         raise RuntimeError(
                             "Sever restoration created no Undo checkpoint."
                         )
-                    archive = self._command_context_archive_path(
-                        change.checkpoint_uid
-                    )
+                    archive = self._command_context_archive_path(change.checkpoint_uid)
                     root = archive.parent
                     root.mkdir(parents=True, exist_ok=True, mode=0o700)
                     if root.is_symlink() or not root.is_dir():
-                        raise ValueError(
-                            "Command Context archive storage is invalid."
-                        )
+                        raise ValueError("Command Context archive storage is invalid.")
                     if archive.exists() or archive.is_symlink():
                         raise ConcurrentContextUpdateError(
                             "A Sever command archive already exists."
@@ -5897,15 +6193,14 @@ class MemoryStore:
                     session_uid = manifest["session_uid"]
                     assert isinstance(session_uid, str)
                     session = sessions.load(session_uid)
-                    if sever_record_digest(session) != manifest[
-                        "reviewing_session_digest"
-                    ]:
+                    if (
+                        sever_record_digest(session)
+                        != manifest["reviewing_session_digest"]
+                    ):
                         raise ConcurrentContextUpdateError(
                             "The Sever session changed before Redo."
                         )
-                    application = SeverApplication.from_dict(
-                        manifest["application"]
-                    )
+                    application = SeverApplication.from_dict(manifest["application"])
                     applied = session.with_application(application)
                     session_before_digest = sever_record_digest(session)
                     self._assert_context_storage_available(change.context_name)
@@ -5926,8 +6221,7 @@ class MemoryStore:
                                 command="redo",
                                 args={"command_restore": restore_metadata},
                                 description=(
-                                    "Redo command 'mem sever' "
-                                    f"[{receipt_uid[:8]}]"
+                                    "Redo command 'mem sever' " f"[{receipt_uid[:8]}]"
                                 ),
                             ),
                             expected_context_digest=context_record_digest(
@@ -6042,17 +6336,13 @@ class MemoryStore:
                 raise ValueError("Meld checkpoint has no valid session receipt.")
             records.append(record)
         session_uids = {record.get("session_uid") for record in records}
-        change_set_digests = {
-            record.get("change_set_digest") for record in records
-        }
+        change_set_digests = {record.get("change_set_digest") for record in records}
         raw_results = records[0].get("results")
         if (
             len(session_uids) != 1
             or len(change_set_digests) != 1
             or not all(isinstance(item, str) and item for item in session_uids)
-            or not all(
-                isinstance(item, str) and item for item in change_set_digests
-            )
+            or not all(isinstance(item, str) and item for item in change_set_digests)
             or not isinstance(raw_results, list)
             or any(record.get("results") != raw_results for record in records[1:])
         ):
@@ -6062,8 +6352,7 @@ class MemoryStore:
         result_uids = tuple(
             result.get("memory_uid")
             for result in raw_results
-            if isinstance(result, dict)
-            and isinstance(result.get("memory_uid"), str)
+            if isinstance(result, dict) and isinstance(result.get("memory_uid"), str)
         )
         if len(result_uids) != len(raw_results):
             raise ValueError("Meld checkpoint result identities are invalid.")
@@ -6177,11 +6466,15 @@ class MemoryStore:
         ):
             raise ValueError("Atomize grounding checkpoint receipt is invalid.")
         raw_proposals = raw_change_set.get("proposals")
-        proposal_uids = tuple(
-            proposal.get("uid")
-            for proposal in raw_proposals
-            if isinstance(proposal, dict) and isinstance(proposal.get("uid"), str)
-        ) if isinstance(raw_proposals, list) else ()
+        proposal_uids = (
+            tuple(
+                proposal.get("uid")
+                for proposal in raw_proposals
+                if isinstance(proposal, dict) and isinstance(proposal.get("uid"), str)
+            )
+            if isinstance(raw_proposals, list)
+            else ()
+        )
         if not isinstance(raw_proposals, list) or len(proposal_uids) != len(
             raw_proposals
         ):

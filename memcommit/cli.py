@@ -1,4 +1,5 @@
 """Entry point for the `mem` CLI."""
+
 from typing import Annotated, Optional
 
 import typer
@@ -94,9 +95,7 @@ app.command(
 )(status.cmd)
 app.command(
     "summarize",
-    help=(
-        "Show what Mem understands from a Context's visible ordinary Memories."
-    ),
+    help=("Show what Mem understands from a Context's visible ordinary Memories."),
 )(summarize.cmd)
 app.command(
     "list",
@@ -178,8 +177,8 @@ app.command(
 app.command(
     "branch",
     help=(
-        "Choose a local Source and exact fresh target when unnamed, "
-        "or branch the current Context to an explicit new name."
+        "Choose a local Source range and exact fresh target when unnamed, "
+        "or branch the current Context or subtree to an explicit new name."
     ),
 )(branch.cmd)
 app.command(
@@ -407,7 +406,9 @@ app.add_typer(
         "MemoryStore Profiles."
     ),
 )
-app.add_typer(dev_app,    name="dev",    help="Developer tools (eval, diagnostics).", hidden=True)
+app.add_typer(
+    dev_app, name="dev", help="Developer tools (eval, diagnostics).", hidden=True
+)
 
 
 app.command(

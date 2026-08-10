@@ -257,8 +257,9 @@ An operation adapter converts the draft into an operation-owned typed receipt:
 - Update: source/target names plus independent descendant-scope flags;
 - Meld: mode plus A/B, mode-enabled descendant-scope flags, and C/create only
   for symmetric mode; and
-- Branch: one existing local Source plus one exact require-new target whose
-  parent tree is only a placement aid; and
+- Branch: one existing local Source with exact-versus-lexical-subtree reach,
+  plus one exact require-new target whose parent tree is only a placement aid;
+  and
 - Sever: source/criteria names, both descendant-scope flags, and new output
   name.
 

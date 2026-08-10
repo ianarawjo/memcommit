@@ -5,8 +5,11 @@ import typer
 import memcommit.ops as ops
 from memcommit.commands.branch_dialog import choose_branch_creation
 from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.tui.name_editor import suggest_fresh_context_name
 from memcommit.store import (
+    ContextBranchBinding,
     MemoryStore,
     checkpoint_history_digest,
     context_record_digest,
@@ -24,6 +27,13 @@ def cmd(
             )
         ),
     ] = None,
+    source_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--source-descendants/--source-only",
+            help="Branch the Source root and every local lexical descendant",
+        ),
+    ] = False,
 ) -> None:
     store = MemoryStore()
     expected_current = store.current_context_name()
@@ -65,6 +75,7 @@ def cmd(
             raise typer.Exit(1)
         source_name = receipt.source_name
         name = receipt.target_name
+        source_descendants = receipt.include_descendants
     else:
         source_name = expected_current
     if not source_name:
@@ -86,15 +97,37 @@ def cmd(
         validate_context_name(name)
         if store.context_exists(name):
             raise FileExistsError(f"Context '{name}' already exists.")
-        source = store.load_for_update(source_name)
-        source_history = store.list_checkpoints(source_name)
-        new_ctx = ops.branch(source, name)
-        store.create_branch_context(
-            new_ctx,
-            source_name=source_name,
-            expected_source_uid=source.uid,
-            expected_source_digest=context_record_digest(source),
-            expected_history_digest=checkpoint_history_digest(source_history),
+        source_names = expand_lexical_context_names(
+            ContextScope.create(
+                (source_name,),
+                include_descendants=source_descendants,
+            ),
+            local_names,
+        )
+        sources = tuple(store.load_for_update(value) for value in source_names)
+        histories = {value: store.list_checkpoints(value) for value in source_names}
+        targets = (
+            ops.branch_subtree(sources, source_name, name)
+            if source_descendants
+            else (ops.branch(sources[0], name),)
+        )
+        bindings = tuple(
+            ContextBranchBinding(
+                source_name=source.name,
+                expected_source_uid=source.uid,
+                expected_source_digest=context_record_digest(source),
+                expected_history_digest=checkpoint_history_digest(
+                    histories[source.name]
+                ),
+                target=target,
+            )
+            for source, target in zip(sources, targets, strict=True)
+        )
+        store.create_branch_contexts(
+            bindings,
+            source_root=source_name,
+            target_root=name,
+            include_descendants=source_descendants,
             expected_current=expected_current,
         )
     except (FileExistsError, FileNotFoundError, OSError, RuntimeError, ValueError) as e:
@@ -104,8 +137,17 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    typer.secho(
-        f"Branched '{display_escape_text(source_name)}' → "
-        f"'{display_escape_text(name)}' and switched to it.",
-        fg=typer.colors.GREEN,
-    )
+    if source_descendants:
+        descendant_count = len(source_names) - 1
+        typer.secho(
+            f"Branched subtree '{display_escape_text(source_name)}' → "
+            f"'{display_escape_text(name)}' · {len(source_names)} Context(s), "
+            f"{descendant_count} descendant(s); switched to its root.",
+            fg=typer.colors.GREEN,
+        )
+    else:
+        typer.secho(
+            f"Branched '{display_escape_text(source_name)}' → "
+            f"'{display_escape_text(name)}' and switched to it.",
+            fg=typer.colors.GREEN,
+        )

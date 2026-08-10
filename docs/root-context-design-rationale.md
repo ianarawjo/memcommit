@@ -284,6 +284,14 @@ Checkpoint inheritance is private to this branch transaction. The earlier
 public copy-only store choreography was removed because create, copy, and
 selection as separate calls could reintroduce the race this boundary closes.
 
+This exact-Context behavior remains the default. Branch may additionally
+freeze the Source's lexical descendants and map the whole set under a fresh
+target root. That subtree form creates new Context identities, remaps internal
+Context and Memory references in both current records and inherited checkpoint
+frames, and publishes or rolls back the complete mapped hierarchy as one
+command. See `mem-branch-design-rationale.md` for the range and identity
+contract.
+
 Creating a checkpoint for an unsaved Context is rejected. Initial auto
 checkpoints are allowed only as part of the internal `save` operation, avoiding
 orphan checkpoint directories.

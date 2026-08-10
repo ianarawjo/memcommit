@@ -19,10 +19,11 @@ from memcommit.commands.session_endpoint_setup import (
 
 @dataclass(frozen=True)
 class BranchCreationReceipt:
-    """One frozen Source and exact require-new branch target."""
+    """One frozen Source range and exact require-new branch target."""
 
     source_name: str
     target_name: str
+    include_descendants: bool = False
 
     @property
     def new_name(self) -> str:
@@ -70,11 +71,20 @@ def choose_branch_creation(
                     "A": "A · FROM CONTEXT",
                     "B": "B · TO · NEW CONTEXT",
                 },
-                "B creates one exact new Context; its tree chooses only a parent.",
+                (
+                    "A chooses this Context or its lexical subtree; B creates "
+                    "one exact new root and preserves descendant suffixes."
+                ),
+                descendant_roles=frozenset({"A"}),
             ),
         ),
         roles=(
-            EndpointRoleSpec("A", frozenset(names), initial_source),
+            EndpointRoleSpec(
+                "A",
+                frozenset(names),
+                initial_source,
+                allow_descendants=True,
+            ),
             EndpointRoleSpec(
                 "B",
                 frozenset(names),
@@ -103,4 +113,5 @@ def choose_branch_creation(
     return BranchCreationReceipt(
         source_name=source.context_name,
         target_name=target.context_name,
+        include_descendants=source.include_descendants,
     )

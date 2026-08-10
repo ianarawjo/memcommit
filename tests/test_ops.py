@@ -1,13 +1,15 @@
 """Unit tests for memcommit.ops — pure in-memory operations, no disk I/O."""
+
 import pytest
 
 import memcommit.ops as ops
-from memcommit.context import Context, Memory
+from memcommit.context import Context, Memory, MemoryRef
 
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def make_ctx(name: str = "test") -> Context:
     return ops.init(name)
@@ -16,6 +18,7 @@ def make_ctx(name: str = "test") -> Context:
 # ---------------------------------------------------------------------------
 # init
 # ---------------------------------------------------------------------------
+
 
 def test_init_returns_context_with_correct_name():
     ctx = ops.init("myctx")
@@ -36,6 +39,7 @@ def test_init_assigns_uid():
 # ---------------------------------------------------------------------------
 # add
 # ---------------------------------------------------------------------------
+
 
 def test_add_returns_memory():
     ctx = make_ctx()
@@ -62,6 +66,7 @@ def test_add_multiple_memories():
 # ---------------------------------------------------------------------------
 # resolve
 # ---------------------------------------------------------------------------
+
 
 def test_resolve_memory_by_uid_prefix():
     ctx = make_ctx()
@@ -108,6 +113,7 @@ def test_resolve_ambiguous_selector_raises_value_error():
 # remove
 # ---------------------------------------------------------------------------
 
+
 def test_remove_by_full_uid():
     ctx = make_ctx()
     mem = ops.add(ctx, "to remove")
@@ -148,6 +154,7 @@ def test_remove_ambiguous_prefix_raises_value_error():
 # branch
 # ---------------------------------------------------------------------------
 
+
 def test_branch_creates_new_context_with_same_memories():
     ctx = make_ctx("main")
     m1 = ops.add(ctx, "alpha")
@@ -176,9 +183,82 @@ def test_branch_of_empty_context():
     assert branched.memories == {}
 
 
+def test_branch_subtree_regenerates_contexts_but_preserves_memory_lineage():
+    root = make_ctx("task")
+    child = make_ctx("task/child")
+    root_memory = ops.add(root, "root fact")
+    child_memory = ops.add(child, "child fact")
+    ops.embed(child, root)
+    root.add(
+        MemoryRef(
+            uid="ref-to-child",
+            target_context_uid=child.uid,
+            target_context_name=child.name,
+            target_memory_uid=child_memory.uid,
+            target=child_memory,
+        )
+    )
+
+    branch_root, branch_child = ops.branch_subtree(
+        (root, child),
+        "task",
+        "experiment",
+    )
+
+    assert (branch_root.name, branch_child.name) == (
+        "experiment",
+        "experiment/child",
+    )
+    assert branch_root.uid != root.uid
+    assert branch_child.uid != child.uid
+    assert branch_root.memories[root_memory.uid].uid == root_memory.uid
+    assert branch_child.memories[child_memory.uid].uid == child_memory.uid
+    embedded = next(
+        item for item in branch_root.iter_items() if isinstance(item, Context)
+    )
+    assert isinstance(embedded, Context)
+    assert (embedded.uid, embedded.name) == (branch_child.uid, branch_child.name)
+    reference = branch_root.memories["ref-to-child"]
+    assert isinstance(reference, MemoryRef)
+    assert (reference.target_context_uid, reference.target_context_name) == (
+        branch_child.uid,
+        branch_child.name,
+    )
+
+
+def test_branch_subtree_retains_external_live_references():
+    root = make_ctx("task")
+    external = make_ctx("shared")
+    external_memory = ops.add(external, "shared fact")
+    ops.embed(external, root)
+    root.add(
+        MemoryRef(
+            uid="external-ref",
+            target_context_uid=external.uid,
+            target_context_name=external.name,
+            target_memory_uid=external_memory.uid,
+            target=external_memory,
+        )
+    )
+
+    (branched,) = ops.branch_subtree((root,), "task", "experiment")
+
+    embedded = branched.memories[external.uid]
+    assert isinstance(embedded, Context)
+    assert embedded is not external
+    assert (embedded.uid, embedded.name) == (external.uid, external.name)
+    reference = branched.memories["external-ref"]
+    assert isinstance(reference, MemoryRef)
+    assert (reference.target_context_uid, reference.target_context_name) == (
+        external.uid,
+        external.name,
+    )
+
+
 # ---------------------------------------------------------------------------
 # merge
 # ---------------------------------------------------------------------------
+
 
 def test_merge_adds_items_from_source():
     src = make_ctx("src")
@@ -230,6 +310,7 @@ def test_merge_returns_only_newly_added():
 # embed
 # ---------------------------------------------------------------------------
 
+
 def test_embed_adds_child_context_to_parent():
     parent = make_ctx("parent")
     child = make_ctx("child")
@@ -254,6 +335,7 @@ def test_embed_already_embedded_raises():
 # ---------------------------------------------------------------------------
 # chunk
 # ---------------------------------------------------------------------------
+
 
 def test_chunk_splits_paragraphs():
     ctx = make_ctx()
