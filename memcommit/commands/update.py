@@ -6,7 +6,11 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands.command_progress import progressing_provider_factory
+from memcommit.commands.command_wait import (
+    CommandWaitView,
+    build_report_loading_view,
+    run_command_wait,
+)
 from memcommit.commands.endpoint_setup_flows import choose_update_setup
 from memcommit.commands.granted_context import (
     GrantedReadStore,
@@ -19,7 +23,13 @@ from memcommit.commands.session_picker import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.commands.update_render import render_plan, review_update_application
+from memcommit.commands.tui_primitives import display_escape_text, safe_terminal_text
+from memcommit.commands.update_render import (
+    render_plan,
+    render_update_report_snapshot,
+    review_update_application,
+)
+from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.granted_source_update_application import (
@@ -34,6 +44,7 @@ from memcommit.query_provider import (
 )
 from memcommit.store import MemoryStore
 from memcommit.update import (
+    GrantedUpdateTarget,
     UpdateError,
     UpdateSession,
     applied_session_matches,
@@ -186,6 +197,159 @@ def _resolve_update_access(
         if "does not exist" not in str(error):
             raise
         raise FileNotFoundError(f"Context '{name}' not found.") from error
+
+
+def _update_confirmed_inputs_view(
+    source: Context,
+    target: Context,
+    *,
+    source_descendants: bool,
+    target_descendants: bool,
+    guidance: str | None = None,
+) -> CommandWaitView:
+    """Freeze the exact Update route shown while its semantic turn runs."""
+
+    lines = [
+        "MEM UPDATE · FROZEN INPUTS · RESULT PENDING",
+        "",
+        f"SOURCE A · {display_escape_text(source.name)}",
+        "  SCOPE · "
+        + ("INCLUDE DESCENDANTS" if source_descendants else "SELECTED GRAPH ONLY"),
+        "  UPDATE EFFECT · READ-ONLY WHILE PLANNING",
+        "",
+        f"TARGET B · {display_escape_text(target.name)}",
+        "  SCOPE · "
+        + ("INCLUDE DESCENDANTS" if target_descendants else "SELECTED GRAPH ONLY"),
+        "  UPDATE EFFECT · READ-ONLY UNTIL EXPLICIT APPLY",
+    ]
+    if guidance is not None:
+        lines.extend(
+            [
+                "",
+                "REVISION COMMENT · SUBMITTED · NOT YET INCORPORATED",
+                safe_terminal_text(guidance),
+            ]
+        )
+    lines.extend(
+        [
+            "",
+            "No target change is applied while this report is being built.",
+        ]
+    )
+    return CommandWaitView(
+        title="UPDATE CONFIRMED INPUTS · READ-ONLY",
+        text="\n".join(lines),
+    )
+
+
+def _update_loading_view() -> CommandWaitView:
+    """Project Update's eventual report topology through shared loading chrome."""
+
+    return build_report_loading_view(
+        "UPDATE",
+        sections=("Plan", "What will change", "Planned changes", "To do"),
+    )
+
+
+def _update_revision_wait_view(
+    session: UpdateSession,
+    guidance: str,
+) -> CommandWaitView:
+    """Keep the reviewed staged report visible until its replacement is ready."""
+
+    text = "\n".join(
+        [
+            render_update_report_snapshot(session, staged=True),
+            "",
+            "PENDING REVISION · SUBMITTED · NOT YET INCORPORATED",
+            safe_terminal_text(guidance),
+        ]
+    )
+    return CommandWaitView(
+        title="PREVIOUS UPDATE REPORT · READ-ONLY",
+        text=text,
+    )
+
+
+def _plan_update_with_wait(
+    source: Context,
+    target: Context,
+    *,
+    source_descendants: bool,
+    target_descendants: bool,
+    granted_source: GrantedUpdateTarget | None,
+    granted_target: GrantedUpdateTarget | None,
+) -> UpdateSession:
+    """Plan one complete Update while sharing the interactive command wait."""
+
+    def plan(progress):
+        def connect():
+            provider = connect_codex_chatgpt_provider()
+            progress.update("planning memory changes", step=2)
+            return provider
+
+        return plan_update(
+            source,
+            target,
+            connect,
+            status="staged",
+            source_include_descendants=source_descendants,
+            target_include_descendants=target_descendants,
+            granted_source=granted_source,
+            granted_target=granted_target,
+        )
+
+    return run_command_wait(
+        "UPDATE",
+        "connecting provider",
+        total=2,
+        work=plan,
+        return_view=_update_loading_view(),
+        context_view=_update_confirmed_inputs_view(
+            source,
+            target,
+            source_descendants=source_descendants,
+            target_descendants=target_descendants,
+        ),
+    )
+
+
+def _revise_update_with_wait(
+    current: UpdateSession,
+    source: Context,
+    target: Context,
+    guidance: str,
+) -> UpdateSession:
+    """Replace a reviewed plan while retaining its frozen report and route."""
+
+    def revise(progress):
+        def connect():
+            provider = connect_codex_chatgpt_provider()
+            progress.update("incorporating review comments", step=2)
+            return provider
+
+        return revise_update(
+            current,
+            source,
+            target,
+            connect,
+            guidance,
+        )
+
+    return run_command_wait(
+        "UPDATE",
+        "connecting provider",
+        total=2,
+        work=revise,
+        return_view=_update_revision_wait_view(current, guidance),
+        context_view=_update_confirmed_inputs_view(
+            source,
+            target,
+            source_descendants=current.source_include_descendants,
+            target_descendants=current.target_include_descendants,
+            guidance=guidance,
+        ),
+    )
 
 
 def cmd(
@@ -393,21 +557,14 @@ def cmd(
             ):
                 session = cached.with_status("staged")
             else:
-                with progressing_provider_factory(
-                    "UPDATE",
-                    "planning memory changes",
-                    connect_codex_chatgpt_provider,
-                ) as provider_factory:
-                    session = plan_update(
-                        source,
-                        target,
-                        provider_factory,
-                        status="staged",
-                        source_include_descendants=source_descendants,
-                        target_include_descendants=target_descendants,
-                        granted_source=granted_source,
-                        granted_target=granted_target,
-                    )
+                session = _plan_update_with_wait(
+                    source,
+                    target,
+                    source_descendants=source_descendants,
+                    target_descendants=target_descendants,
+                    granted_source=granted_source,
+                    granted_target=granted_target,
+                )
             # Bind the staged intent to the active record observed above.
             # This prevents two update processes from silently replacing one
             # another between planning and local application.
@@ -421,18 +578,12 @@ def cmd(
                 current: UpdateSession,
                 guidance: str,
             ) -> UpdateSession:
-                with progressing_provider_factory(
-                    "UPDATE",
-                    "incorporating review comments",
-                    connect_codex_chatgpt_provider,
-                ) as provider_factory:
-                    revised = revise_update(
-                        current,
-                        source,
-                        target,
-                        provider_factory,
-                        guidance,
-                    )
+                revised = _revise_update_with_wait(
+                    current,
+                    source,
+                    target,
+                    guidance,
+                )
                 # The comment turn replaces only the exact staged proposal it
                 # reviewed. A concurrent Update must never be overwritten.
                 store.save_staged_update(revised, expected_current=current)

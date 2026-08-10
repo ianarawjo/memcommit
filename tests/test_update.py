@@ -924,6 +924,26 @@ def test_tty_update_incorporates_review_comment_before_applying(
     )
     monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
     revisions: list[tuple[UpdateSession, UpdateSession]] = []
+    wait_views = []
+    progress_updates = []
+
+    class Progress:
+        def update(self, stage, *, step):
+            progress_updates.append((stage, step))
+
+    def wait(
+        operation,
+        stage,
+        *,
+        total,
+        work,
+        return_view,
+        context_view,
+    ):
+        wait_views.append((operation, stage, total, return_view, context_view))
+        return work(Progress())
+
+    monkeypatch.setattr(update_command, "run_command_wait", wait)
 
     def review(session, *, incorporate):
         revised = incorporate(
@@ -948,6 +968,33 @@ def test_tty_update_incorporates_review_comment_before_applying(
     assert applied is not None
     assert applied.status == "applied"
     assert applied.uid == revised.uid
+    assert [view[0:3] for view in wait_views] == [
+        ("UPDATE", "connecting provider", 2),
+        ("UPDATE", "connecting provider", 2),
+    ]
+    initial_report = "".join(fragment[1] for fragment in wait_views[0][3].text)
+    assert wait_views[0][3].title == "UPDATE REPORT · BUILDING"
+    assert "CONTENT PENDING · THIS IS NOT A RESULT" in initial_report
+    assert "PLANNED CHANGES" in initial_report
+    assert "  .  \n" in initial_report
+    assert "  .. \n" in initial_report
+    assert "  …  \n" in initial_report
+    assert wait_views[0][4].title == "UPDATE CONFIRMED INPUTS · READ-ONLY"
+    assert f"SOURCE A · {TASK1_SOURCE}" in wait_views[0][4].text
+    assert f"TARGET B · {TASK1_TARGET}" in wait_views[0][4].text
+
+    revision_report = wait_views[1][3]
+    assert revision_report.title == "PREVIOUS UPDATE REPORT · READ-ONLY"
+    assert "Staged update:" in revision_report.text
+    assert "PENDING REVISION · SUBMITTED · NOT YET INCORPORATED" in (
+        revision_report.text
+    )
+    assert "Make the accessibility wording less absolute." in revision_report.text
+    assert "REVISION COMMENT · SUBMITTED" in wait_views[1][4].text
+    assert progress_updates == [
+        ("planning memory changes", 2),
+        ("incorporating review comments", 2),
+    ]
 
 
 def test_update_undo_and_redo_follow_the_affected_target_not_current_context(

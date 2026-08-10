@@ -2,7 +2,7 @@
 
 ## Problem and scope
 
-Compare, Meld, Forget, and Sever can each own one intentionally indivisible
+Compare, Meld, Forget, Sever, and Update can each own one intentionally indivisible
 semantic turn for several minutes. The existing `CommandProgress` heartbeat
 proved liveness and elapsed time, but the foreground command remained blocked.
 In a Study run this made the participant wait without being able to learn the
@@ -12,12 +12,12 @@ orientation to the report being constructed or to the exact inputs the person
 had just frozen.
 
 The shared interactive wait keeps that semantic work whole while allowing a
-read-only Help session in the same process and terminal. It is currently used
-for the aggregate analysis in Compare, Forget, and Sever, and for every
-provider-backed assessment turn in Meld, including issue replies and
-`INCORPORATE RESPONSES`. Other call sites that still use `CommandProgress`
-retain the one-line heartbeat until their operation adapters are migrated
-deliberately.
+read-only Help session in the same process and terminal. It is used for the
+aggregate analysis in Compare, Forget, and Sever; every provider-backed
+assessment turn in Meld, including issue replies and `INCORPORATE RESPONSES`;
+and Update's initial plan and whole-proposal comment revision. Other call sites
+that still use `CommandProgress` retain the one-line heartbeat until their
+operation adapters are migrated deliberately.
 
 ## Interaction contract
 
@@ -36,17 +36,25 @@ above every host surface and reports only host-owned stages and elapsed time.
 Both views are supplied by the operation as frozen values; the common shell
 owns only switching, wrapping, and scrolling. Meld follow-up turns restore the
 immediately preceding complete report and show the submitted turn separately
-as not yet incorporated. A first Compare, Forget, Sever, or Meld analysis has
-no result report yet, so the default surface shows only its expected section
-topology and rounded skeleton rows. It is explicitly labeled
+as not yet incorporated. Update comment revisions likewise retain the complete
+reviewed staged report and show the submitted comment as not yet incorporated.
+A first Compare, Forget, Sever, Meld, or Update analysis has no result report
+yet, so the default surface shows only its expected section topology and
+one shared busy marker under each section. It is explicitly labeled
 `CONTENT PENDING · THIS IS NOT A RESULT`; it contains no inferred prose,
-decision, count, or recommendation. Prompt-toolkit cannot select Flow Rounded
-for one terminal region, so neutral rounded line glyphs provide the analogous
-skeleton effect without assuming the participant's terminal font.
+decision, count, or recommendation. The markers reuse the command progress
+contract's `.`, `..`, `…` frames and cadence, staggered across sections so a
+still screen also communicates the sequence. This keeps the loading grammar
+font-independent and uses the same liveness signal in the header and report
+body. Flow Circular remains appropriate for placeholders derived from known
+text, but a result-free wait has no prose shape to preserve. The markers use a
+legible neutral gray: softer than completed report prose, but neither Memory
+lavender nor focused-control blue.
 
 `C` exposes the exact frozen setup facts instead: selected Contexts and scope,
 frozen counts where already available, the Forget instruction, submitted Meld
-turn, and any not-yet-created output name. `C` returns to the report surface.
+turn, the Update Source→Target route and submitted revision comment, and any
+not-yet-created output name. `C` returns to the report surface.
 Both surfaces are read-only because changing a source or response while the
 provider owns the turn would invalidate the frozen request.
 
@@ -139,6 +147,17 @@ Compare wait: report skeleton, `C` confirmed inputs, `H` Help, `H` back to the
 same confirmed inputs, and `C` back to the skeleton. The header advanced from
 `CONNECTING PROVIDER` to `ANALYZING RELATIONS`; no switch restarted the worker,
 and every skeleton row remained visibly distinct from result prose.
+
+Update's migrated path was then captured through the real Typer command in a
+color-capable 180×52 PTY. Its initial report reused the shared `.`, `..`, `…`
+cadence under `PLAN`, `WHAT WILL CHANGE`, `PLANNED CHANGES`, and `TO DO`.
+`C` exposed the frozen Source→Target route, `H` opened the complete root
+inventory, `H` restored those confirmed inputs, and `C` returned to the
+animated report while the deterministic provider continued. Closing the
+resulting staged review left both Contexts unchanged and retained exactly one
+staged receipt. The ordered ANSI evidence, text screens, PNGs, and reproduction
+driver are under
+[`screenshots/mem-update-command-wait-20260810/`](screenshots/mem-update-command-wait-20260810/).
 
 A real Task 2 Directional Meld follow-up then exercised the production
 provider boundary with 300 Source Memories. The provider received 122,310

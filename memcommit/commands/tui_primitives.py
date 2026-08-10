@@ -269,12 +269,12 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         # making explanatory text look like another heading.
         "viewer-body": "fg:#f4f5f7",
         "viewer-body.focused": "fg:#8bd5ff",
-        # Skeleton rows describe report shape while content is unavailable.
-        # They are deliberately dimmer than prose and must never be confused
-        # with a Memory object or a completed semantic result.
+        # Busy markers preserve report topology while content is unavailable.
+        # They stay softer than prose but remain legible in terminal captures;
+        # neutral gray avoids Memory lavender and focused-control blue.
         "loading-label": "fg:#8bd5ff bold",
         "loading-status": "fg:#eed49f bold",
-        "loading-placeholder": "fg:#5b6078",
+        "loading-placeholder": "fg:#a5adcb",
         "detail-card": "fg:#ffffff",
         "detail-card.focused": "fg:#8bd5ff bold",
         # Lavender is reserved for actual Memory objects, not report prose.

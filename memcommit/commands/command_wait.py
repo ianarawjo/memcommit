@@ -30,6 +30,7 @@ from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import (
     BUSY_INTERVAL_SECONDS,
     CommandProgress,
+    busy_suffix,
     render_progress_line,
 )
 from memcommit.commands.help_inventory import CommandEntry
@@ -69,35 +70,42 @@ class CommandWaitView:
 
     title: str
     text: str | StyleAndTextTuples
+    frame_renderer: (
+        Callable[[int], str | StyleAndTextTuples] | None
+    ) = None
+
+    def render(self, frame_index: int) -> str | StyleAndTextTuples:
+        """Render one animation frame while preserving static-view callers."""
+
+        if self.frame_renderer is None:
+            return self.text
+        return self.frame_renderer(frame_index)
 
 
-def build_report_loading_view(
+def _render_report_loading_frame(
     operation: str,
-    *,
     sections: Sequence[str],
-) -> CommandWaitView:
-    """Build an honest report-shaped skeleton without invented content."""
+    *,
+    frame_index: int,
+) -> StyleAndTextTuples:
+    """Project the shared busy cadence into an honest report topology."""
 
-    if not operation.strip() or not sections or any(
-        not section.strip() for section in sections
-    ):
-        raise ValueError("A loading report requires an operation and sections.")
-    widths = (58, 44, 66, 36)
     fragments: StyleAndTextTuples = [
         ("class:loading-label", f"MEM {operation.upper()} · REPORT BUILDING\n"),
         ("class:loading-status", "CONTENT PENDING · THIS IS NOT A RESULT\n\n"),
     ]
     for section_index, section in enumerate(sections):
         fragments.append(("class:viewer-section", section.upper() + "\n"))
-        row_count = 3 if section_index == 0 else 2
-        for row_index in range(row_count):
-            width = widths[(section_index + row_index) % len(widths)]
-            fragments.append(
-                (
-                    "class:loading-placeholder",
-                    "  ╶" + ("━" * width) + "╴\n",
-                )
+        # Stagger the same three shared frames so a still capture communicates
+        # the cadence without introducing a second loading grammar.
+        fragments.append(
+            (
+                "class:loading-placeholder",
+                # Equal buffer width prevents animation from shifting a
+                # reader's preserved cursor or scroll anchor.
+                f"  {busy_suffix(frame_index + section_index):<3}\n",
             )
+        )
         if section_index < len(sections) - 1:
             fragments.append(("", "\n"))
     fragments.extend(
@@ -105,7 +113,7 @@ def build_report_loading_view(
             ("", "\n"),
             (
                 "class:report-neutral",
-                "The completed report will replace this shape after analysis.\n",
+                "The completed report will replace these markers after analysis.\n",
             ),
             (
                 "class:report-neutral",
@@ -113,9 +121,34 @@ def build_report_loading_view(
             ),
         ]
     )
+    return fragments
+
+
+def build_report_loading_view(
+    operation: str,
+    *,
+    sections: Sequence[str],
+) -> CommandWaitView:
+    """Build an animated report-shaped wait view without invented content."""
+
+    if not operation.strip() or not sections or any(
+        not section.strip() for section in sections
+    ):
+        raise ValueError("A loading report requires an operation and sections.")
+    frozen_operation = operation.strip()
+    frozen_sections = tuple(section.strip() for section in sections)
+
+    def render(frame_index: int) -> StyleAndTextTuples:
+        return _render_report_loading_frame(
+            frozen_operation,
+            frozen_sections,
+            frame_index=frame_index,
+        )
+
     return CommandWaitView(
         title=f"{operation.upper()} REPORT · BUILDING",
-        text=fragments,
+        text=render(0),
+        frame_renderer=render,
     )
 
 
@@ -311,7 +344,7 @@ def run_command_wait(
     return_pane = (
         build_scrollable_formatted_text_pane(
             return_view.title,
-            return_view.text,
+            return_view.render(0),
             height=Dimension(min=4, weight=1),
         )
         if return_view is not None
@@ -488,6 +521,26 @@ def run_command_wait(
         mouse_support=False,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
     )
+
+    if (
+        return_view is not None
+        and return_view.frame_renderer is not None
+        and return_pane is not None
+    ):
+        rendered_frame = {"value": 0}
+
+        def refresh_animated_return_view(_application: Application) -> None:
+            frame_index = background.frame
+            if rendered_frame["value"] == frame_index:
+                return
+            return_pane.set_formatted_text(
+                return_view.render(frame_index),
+                anchor="preserve",
+            )
+            rendered_frame["value"] = frame_index
+
+        application.before_render.add_handler(refresh_animated_return_view)
+
     progress.bind(application)
 
     def on_success(value: T) -> None:

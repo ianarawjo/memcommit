@@ -29,11 +29,11 @@ MEM COMPARE · 2/2 · ANALYZING RELATIONS … · 18s
   the reusable workflow actually requests a provider, so a valid saved result
   or cache hit does not flash a false `CONNECTING PROVIDER` state.
 
-Compare, Meld, Forget, and Sever now reuse the same stage line inside the
-full-screen interactive command-wait TUI when stdin and stdout are terminals.
-Their frozen work runs in an executor so `H` or `?` can open the read-only
-shared Help inventory. Non-TTY execution and other unmigrated commands retain
-the transient-line contract above. See
+Compare, Meld, Forget, Sever, and Update now reuse the same stage line inside
+the full-screen interactive command-wait TUI when stdin and stdout are
+terminals. Their frozen work runs in an executor so `H` or `?` can open the
+read-only shared Help inventory. Non-TTY execution and other unmigrated
+commands retain the transient-line contract above. See
 [`interactive-command-wait-design-rationale.md`](interactive-command-wait-design-rationale.md).
 
 ## Coverage audit
@@ -41,7 +41,8 @@ the transient-line contract above. See
 The ordinary user-facing provider boundaries now use either the shared line or
 its interactive command-wait projection:
 
-- Update and directional Impact Update planning.
+- Update planning and comment-driven replanning use the interactive wait in a
+  TTY; directional Impact Update planning retains the transient line.
 - Atomize analysis from Atomize or Impact, plus Atomize grounding turns.
 - Meld initial analysis and later issue or whole-set turns, including Review
   and Compare handoffs that re-enter the same Meld controller; Meld uses the

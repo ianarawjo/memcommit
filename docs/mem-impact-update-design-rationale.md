@@ -310,6 +310,17 @@ only the exact receipt reviewed through record CAS and returns to review; it is
 not applied implicitly. An empty comment batch leaves the original Apply path
 unchanged.
 
+Update's initial provider plan and a comment-driven replacement both use the
+shared interactive command wait. Initial planning shows the eventual `PLAN`,
+`WHAT WILL CHANGE`, `PLANNED CHANGES`, and `TO DO` topology with the same
+font-independent `.`, `..`, `…` busy cadence used by the progress header. `C`
+shows the exact frozen Source→Target route and scopes, while `H` or `?` opens
+the read-only command inventory without restarting the provider turn. During
+comment revision, the previously reviewed staged report remains visible and
+the submitted comment is marked not yet incorporated. Provider completion
+alone still publishes nothing: the existing record CAS must replace the
+reviewed staged receipt before the revised report can return to review.
+
 The `--from` and `--to` operands locate existing Contexts through the shared
 Context locator contract. Bare names remain canonical global names; `.`,
 `..`, `./...`, and `../...` resolve lexically against the same one

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import threading
+import time
 import uuid
 
 from prompt_toolkit.input.defaults import create_pipe_input
@@ -14,6 +15,7 @@ from memcommit.commands.command_wait import (
     run_command_wait,
 )
 from memcommit.commands.help_inventory import CommandEntry
+from memcommit.commands.tui_primitives import ScrollableFormattedTextPane
 from memcommit.profile_config import ProfileEntry
 from memcommit.study_action_log import (
     StudyActionLedger,
@@ -174,18 +176,67 @@ def test_fast_result_returns_from_default_report_without_forcing_help():
     assert ("OPEN", None) not in actions
 
 
-def test_loading_report_is_shaped_but_contains_no_semantic_result():
+def test_loading_report_body_advances_with_the_background_busy_frame(monkeypatch):
+    rendered: list[str] = []
+    original = ScrollableFormattedTextPane.set_formatted_text
+
+    def record_frame(self, value, *, anchor="preserve"):
+        rendered.append("".join(fragment[1] for fragment in value))
+        return original(self, value, anchor=anchor)
+
+    monkeypatch.setattr(
+        ScrollableFormattedTextPane,
+        "set_formatted_text",
+        record_frame,
+    )
+
+    def work(_progress):
+        time.sleep(0.08)
+        return "complete"
+
+    with create_pipe_input() as pipe_input:
+        result = run_command_wait(
+            "UPDATE",
+            "planning",
+            total=1,
+            work=work,
+            help_entries=(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            interactive=True,
+            interval=0.01,
+            return_view=build_report_loading_view(
+                "UPDATE",
+                sections=("Plan", "What will change", "To do"),
+            ),
+        )
+
+    assert result == "complete"
+    assert len(set(rendered)) >= 2
+
+
+def test_loading_report_uses_shared_busy_cadence_without_semantic_result():
     view = build_report_loading_view(
         "FORGET",
         sections=("What mem understood", "Review decisions", "To do"),
     )
-    text = "".join(fragment[1] for fragment in view.text)
+    frame_zero = "".join(fragment[1] for fragment in view.render(0))
+    frame_one = "".join(fragment[1] for fragment in view.render(1))
+    frame_two = "".join(fragment[1] for fragment in view.render(2))
 
     assert view.title == "FORGET REPORT · BUILDING"
-    assert "CONTENT PENDING · THIS IS NOT A RESULT" in text
-    assert "WHAT MEM UNDERSTOOD" in text
-    assert "REVIEW DECISIONS" in text
-    assert "╶" in text and "╴" in text
+    assert "CONTENT PENDING · THIS IS NOT A RESULT" in frame_zero
+    assert "WHAT MEM UNDERSTOOD" in frame_zero
+    assert "REVIEW DECISIONS" in frame_zero
+    assert "  .  \n" in frame_zero
+    assert "  .. \n" in frame_zero
+    assert "  …  \n" in frame_zero
+    assert frame_zero != frame_one != frame_two
+    assert all(
+        not any(0x2801 <= ord(character) <= 0x28FF for character in frame)
+        for frame in (frame_zero, frame_one, frame_two)
+    )
+    assert "╶" not in frame_zero and "╴" not in frame_zero
 
 
 def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):

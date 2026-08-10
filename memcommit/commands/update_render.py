@@ -135,6 +135,25 @@ def review_update_application(
         return None
 
 
+def render_update_report_snapshot(
+    session: UpdateSession,
+    *,
+    staged: bool = False,
+    applied: bool = False,
+    undone: bool = False,
+) -> str:
+    """Render the common Update report for read-only reuse by other shells."""
+
+    return render_resolution_workbench_snapshot(
+        _view(
+            session,
+            staged=staged,
+            applied=applied,
+            undone=undone,
+        )
+    )
+
+
 def render_plan(
     session: UpdateSession,
     *,

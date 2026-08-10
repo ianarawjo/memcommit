@@ -1,0 +1,52 @@
+ Staged update: capture/update/source -> capture/update/target                                                                                                                      
+ SOURCE capture/update/source → TARGET capture/update/target                                                                                                                        
+ STAGED · 1 EDITS · 0 ADDITIONS · 0 REMOVALS · 1 CHANGES                                                                                                                            
+                                                                                                                                                                                    
+ WHAT MEM UNDERSTOOD                                                                                                                                                                
+ PLAN                                                                                                                                                                               
+ The exact target Memory changes are staged and bound to this Source and Target revision. Apply remains separate.                                                                   
+                                                                                                                                                                                    
+ PLANNED CHANGES                                                                                                                                                                    
+ ›  1. [CHANGE] capture/update/target Memory [45b5de77-1cc9-4da1-91d4-9448517e0e70]                                                                                                 
+       EDIT · PLANNED · The verified access update supersedes the old route.                                                                                                        
+                                                                                                                                                                                    
+ APPLICATION                                                                                                                                                                        
+  (none)                                                                                                                                                                            
+                                                                                                                                                                                    
+SUMMARY · 1 edit, 0 additions, 0 removals                                                                                                                                           
+SCOPE · SOURCE SELECTED GRAPH ONLY · TARGET SELECTED GRAPH ONLY                                                                                                                     
+                                                                                                                                                                                    
+EXACT PLANNED CHANGE DETAILS                                                                                                                                                        
+                                                                                                                                                                                    
+EDIT capture/update/target Memory [45b5de77-1cc9-4da1-91d4-9448517e0e70]                                                                                                            
+  OWNER                                                                                                                                                                             
+    Context capture/update/target [1cbba22b-b07b-47f3-a4e4-4526dc826a9a]                                                                                                            
+  MEMORY UID                                                                                                                                                                        
+    45b5de77-1cc9-4da1-91d4-9448517e0e70                                                                                                                                            
+  BEFORE                                                                                                                                                                            
+    The north entrance provides the only public access.                                                                                                                             
+  AFTER                                                                                                                                                                             
+    The south entrance provides step-free public access.                                                                                                                            
+  REASON                                                                                                                                                                            
+    The verified access update supersedes the old route.                                                                                                                            
+  SOURCE REFERENCES                                                                                                                                                                 
+    1. Context capture/update/source [f0185ebe-b06d-47f3-b70b-c477110d1493]                                                                                                         
+    Memory [e2842ba5-c3fa-4b80-9a12-46f4ea040f7f]                                                                                                                                   
+    Content SHA-256: bcba78392517dff2e1ef96d56811588e87717e80bfb2dde2e8b2a27a8a9e6ea3                                                                                               
+                                                                                                                                                                                    
+Shared capture/update/target is unchanged.                                                                                                                                          
+Update remains staged; no target changes were applied.                                                                                                                              
+CAPTURE VERIFICATION · READ-ONLY                                                                                                                                                    
+STAGED RECEIPT · PRESENT                                                                                                                                                            
+SOURCE UNCHANGED · YES                                                                                                                                                              
+TARGET UNCHANGED · YES                                                                                                                                                              
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
