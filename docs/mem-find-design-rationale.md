@@ -85,7 +85,7 @@ One-shot `mem find QUERY` is read-only. It does not save the query, matches, a
 Memory, or a checkpoint, and it prints the same grouped static result rows in
 TTY and non-TTY execution before exiting. Operand-free interactive Find keeps
 search and selection process-local by default, but offers one explicit checked
-result materialization boundary: `COPY` creates independent Memories in a new
+result Save As boundary: `COPY` creates independent Memories in a new
 local Context, while `REFERENCE` creates the same live pointers as
 `mem reference`. Neither changes Source or the current Context. The detailed
 selection, freshness, authority, and require-new rules are recorded in

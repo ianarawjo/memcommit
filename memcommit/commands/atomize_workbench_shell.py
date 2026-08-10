@@ -16,7 +16,6 @@ from prompt_toolkit.layout import (
     FormattedTextControl,
     HSplit,
     Layout,
-    VSplit,
     Window,
 )
 from prompt_toolkit.layout.dimension import Dimension
@@ -44,7 +43,9 @@ from memcommit.commands.result_workbench_shell import (
     result_workbench_fragments,
 )
 from memcommit.commands.tui_primitives import (
+    TuiRegion,
     bind_case_insensitive_key,
+    build_tui_frame,
     safe_terminal_text,
 )
 from memcommit.commands.tui_text_layout import (
@@ -528,11 +529,6 @@ def run_atomize_workbench_shell(
         height=Dimension(min=3, max=5),
         prompt="> ",
     )
-    list_window = Window(
-        list_control,
-        width=Dimension(min=42, preferred=56),
-        wrap_lines=True,
-    )
     detail_panel = HSplit(
         [
             Window(detail_control, wrap_lines=True),
@@ -545,20 +541,18 @@ def run_atomize_workbench_shell(
             response_area,
         ]
     )
-    split_body = VSplit([list_window, Window(width=1, char="│"), detail_panel])
-    stacked_body = HSplit(
-        [
+    # Retain this legacy controller only as a compatibility boundary. Its
+    # visual composition follows the shared one-column session rule even when
+    # an older serialized session still carries the historical SPLIT token.
+    issue_body = build_tui_frame(
+        TuiRegion(
             Window(
                 list_control,
                 height=Dimension(min=12, preferred=18),
                 wrap_lines=True,
-            ),
-            Window(height=1, char="─"),
-            detail_panel,
-        ]
-    )
-    issue_body = DynamicContainer(
-        lambda: split_body if session.layout == "SPLIT" else stacked_body
+            )
+        ),
+        TuiRegion(detail_panel, separator_before=True),
     )
     result_body = Window(
         result_control,
@@ -575,7 +569,7 @@ def run_atomize_workbench_shell(
                 f"OUTPUT {safe_terminal_text(session.output_context_name or analysis.context_name)} · "
                 f"analysis={analysis.uid[:8]} "
                 f"view={'RESULT' if navigation.result_mode else 'ISSUES'} "
-                f"sort={session.sort_mode} layout={session.layout} "
+                f"sort={session.sort_mode} "
                 f"answered={session.answered_count}/{len(findings)}"
             )
         ),
@@ -605,7 +599,7 @@ def run_atomize_workbench_shell(
             )
         else:
             navigation_help = " Enter close  Esc/Backspace up  Tab input  "
-        return navigation_help + "F2/Ctrl-S save+next  S sort  L layout  Q quit "
+        return navigation_help + "F2/Ctrl-S save+next  S sort  Q quit "
 
     footer = Window(
         FormattedTextControl(footer_text),
@@ -828,12 +822,6 @@ def run_atomize_workbench_shell(
             save(session)
         event.app.invalidate()
 
-    @bindings.add("l", filter=has_focus(list_control))
-    def _toggle_layout(event) -> None:
-        session.toggle_layout()
-        save(session)
-        event.app.invalidate()
-
     @bind_case_insensitive_key(
         bindings, "q", filter=has_focus(list_control), eager=True
     )
@@ -849,7 +837,11 @@ def run_atomize_workbench_shell(
 
     app: Application[AtomizeWorkbenchSession] = Application(
         layout=Layout(
-            HSplit([header, body, footer]),
+            build_tui_frame(
+                TuiRegion(header),
+                TuiRegion(body),
+                TuiRegion(footer),
+            ),
             focused_element=list_control,
         ),
         key_bindings=bindings,

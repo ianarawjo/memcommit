@@ -15,7 +15,12 @@ from prompt_toolkit.key_binding.bindings.scroll import (
     scroll_page_up,
 )
 from prompt_toolkit.keys import Keys
-from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, VSplit, Window
+from prompt_toolkit.layout import (
+    ConditionalContainer,
+    FormattedTextControl,
+    Layout,
+    Window,
+)
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
@@ -39,8 +44,10 @@ from memcommit.commands.horizontal_choice import (
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    TuiRegion,
     bind_case_insensitive_key,
     bind_focused_frame_style,
+    build_tui_frame,
     dispatch_tui_back,
     require_interactive_terminal,
     safe_terminal_text,
@@ -63,7 +70,7 @@ from memcommit.context_targeting.tui.name_editor import (
 )
 from memcommit.selection import FlatMultiSelectionState, SelectionOption
 from memcommit.selection.tui.multiple import render_vertical_multi_choice_rows
-from memcommit.source_projection.model import SourceDisplayFacts, SourceForm
+from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
     normalize_source_display_tokens,
@@ -181,7 +188,7 @@ class FindSearchResult:
             isinstance(value, str) and value.strip() for value in source_values
         ):
             raise ValueError(
-                "Find result materialization identity must be complete or absent."
+                "Find result Save As identity must be complete or absent."
             )
 
 
@@ -239,7 +246,7 @@ class FindSearchWorkbenchResult:
             or not isinstance(self.save_location, str)
             or not self.save_location.strip()
         ):
-            raise ValueError("Find materialization requires reviewed result choices.")
+            raise ValueError("Find Save As requires reviewed result choices.")
         if len(set(self.selected_result_indices)) != len(
             self.selected_result_indices
         ) or any(
@@ -248,7 +255,7 @@ class FindSearchWorkbenchResult:
             or not 0 <= index < len(self.response.results)
             for index in self.selected_result_indices
         ):
-            raise ValueError("Find materialization selected invalid result rows.")
+            raise ValueError("Find Save As selected invalid result rows.")
 
 
 FindSearchRunner = Callable[[FindSearchRequest], FindSearchResponse]
@@ -318,6 +325,16 @@ def _results_frame_title(turn: BackgroundExecutorTurn[FindSearchResponse]) -> st
     if turn.busy:
         return f"RESULTS · SEARCHING {busy_suffix(turn.frame)}"
     return "RESULTS"
+
+
+def _find_save_as_available(
+    response: FindSearchResponse | None,
+    *,
+    busy: bool,
+) -> bool:
+    """Expose outcome controls only for one completed nonempty result set."""
+
+    return response is not None and bool(response.results) and not busy
 
 
 def run_find_search_workbench(
@@ -514,7 +531,10 @@ def run_find_search_workbench(
                     ),
                 ]
             )
-        width = max(24, app.output.get_size().columns // 2 - 6)
+        # Find now follows the service-wide one-column session grammar. Result
+        # rows therefore own the full frame width instead of retaining the
+        # former side-by-side Save As allowance.
+        width = max(24, app.output.get_size().columns - 6)
         fragments.extend(
             render_vertical_multi_choice_rows(
                 result_selection,
@@ -538,7 +558,7 @@ def run_find_search_workbench(
     def render_materialize() -> list[tuple[str, str]]:
         return render_horizontal_choice(
             materialize_choice,
-            title="MATERIALIZE AS",
+            title="MODE",
             focused=app.layout.has_focus(materialize_control),
             show_description=False,
         )
@@ -552,7 +572,7 @@ def run_find_search_workbench(
     def render_todo() -> list[tuple[str, str]]:
         checked = len(result_selection.selected_uids) if result_selection else 0
         focused = app.layout.has_focus(todo_control)
-        value = f"CREATE {checked} CHECKED AS {materialize_choice.selected_uid}"
+        value = f"SAVE {checked} CHECKED AS {materialize_choice.selected_uid}"
         fragments: list[tuple[str, str]] = []
         if focused:
             fragments.append(("[SetCursorPosition]", ""))
@@ -606,14 +626,14 @@ def run_find_search_workbench(
         title=lambda: _results_frame_title(background_turn),
         height=Dimension(min=7, weight=2),
     )
-    materialize_frame = Frame(
+    save_as_frame = Frame(
         Window(materialize_control, wrap_lines=True),
-        title="MATERIALIZE",
+        title="SAVE AS",
         height=Dimension.exact(4),
     )
     todo_frame = Frame(
         Window(todo_control, wrap_lines=True),
-        title="TO DO · ENTER TO CREATE",
+        title="TO DO · ENTER TO SAVE",
         height=Dimension.exact(3),
     )
 
@@ -638,29 +658,31 @@ def run_find_search_workbench(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    setup_row = VSplit(
-        [
-            target_frame,
-            Window(width=Dimension.exact(1), char=" "),
-            scope_frame,
-        ]
+    # SAVE AS is an outcome action, not search setup. Keep the complete group
+    # out of both the canvas and keyboard topology until a successful search
+    # has produced at least one result.
+    save_as_panel = ConditionalContainer(
+        build_tui_frame(
+            TuiRegion(save_as_frame),
+            TuiRegion(save_location.container),
+            TuiRegion(todo_frame),
+        ),
+        filter=Condition(
+            lambda: _find_save_as_available(
+                response,
+                busy=background_turn.busy,
+            )
+        ),
     )
-    materialization_panel = HSplit(
-        [
-            materialize_frame,
-            save_location.container,
-            todo_frame,
-        ],
-        width=Dimension(min=32, preferred=38),
+    root = build_tui_frame(
+        TuiRegion(header),
+        TuiRegion(search_frame),
+        TuiRegion(target_frame),
+        TuiRegion(scope_frame),
+        TuiRegion(results_frame),
+        TuiRegion(save_as_panel),
+        TuiRegion(footer),
     )
-    result_row = VSplit(
-        [
-            results_frame,
-            Window(width=Dimension.exact(1), char=" "),
-            materialization_panel,
-        ]
-    )
-    root = HSplit([header, search_frame, setup_row, result_row, footer])
     app: Application[FindSearchWorkbenchResult] = Application(
         layout=Layout(root, focused_element=search_area),
         key_bindings=bindings,
@@ -688,7 +710,7 @@ def run_find_search_workbench(
         is_focused=lambda: app.layout.has_focus(results_control),
     )
     bind_focused_frame_style(
-        materialize_frame,
+        save_as_frame,
         is_focused=lambda: app.layout.has_focus(materialize_control),
     )
     bind_focused_frame_style(
@@ -1008,7 +1030,7 @@ def run_find_search_workbench(
             status["value"] = str(error)
             return "HANDLED"
         event.app.layout.focus(todo_control)
-        status["value"] = "SAVE LOCATION VALID · ENTER TO CREATE"
+        status["value"] = "SAVE LOCATION VALID · ENTER TO SAVE"
         return "HANDLED"
 
     def _apply_materialization(event) -> SurfaceActionResult:
@@ -1023,7 +1045,7 @@ def run_find_search_workbench(
             status["value"] = "CHECK AT LEAST ONE RESULT"
             return "HANDLED"
         if response.mode != "CURRENT":
-            status["value"] = "HISTORY RESULTS CANNOT BE MATERIALIZED"
+            status["value"] = "HISTORY RESULTS CANNOT BE SAVED AS A CONTEXT"
             return "HANDLED"
         selected_results = tuple(response.results[index] for index in selected_indices)
         unsupported = next(
@@ -1035,7 +1057,7 @@ def run_find_search_workbench(
             None,
         )
         if unsupported is not None:
-            status["value"] = f"{unsupported.upper()} RESULTS CANNOT BE MATERIALIZED"
+            status["value"] = f"{unsupported.upper()} RESULTS CANNOT BE SAVED"
             return "HANDLED"
         if any(result.source_memory_uid is None for result in selected_results):
             status["value"] = "A CHECKED RESULT HAS NO SOURCE MEMORY IDENTITY"

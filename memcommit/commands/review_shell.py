@@ -8,11 +8,9 @@ from prompt_toolkit.filters import has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import (
-    DynamicContainer,
     FormattedTextControl,
     HSplit,
     Layout,
-    VSplit,
     Window,
 )
 from prompt_toolkit.layout.dimension import Dimension
@@ -227,7 +225,6 @@ def run_review_shell(
 
     memories = _direct_memory_map(ctx)
     bindings = KeyBindings()
-    layout_mode = {"value": "SPLIT"}
     status_message = {"value": ""}
 
     list_control = FormattedTextControl(
@@ -249,11 +246,6 @@ def run_review_shell(
         prompt="> ",
     )
 
-    list_window = Window(
-        list_control,
-        width=Dimension(min=30, preferred=38),
-        wrap_lines=False,
-    )
     detail_window = Window(
         detail_control,
         wrap_lines=True,
@@ -271,30 +263,18 @@ def run_review_shell(
             response_area,
         ]
     )
-    split_body = VSplit(
-        [
-            list_window,
-            Window(width=1, char="│"),
-            detail_panel,
-        ]
-    )
-    stacked_body = HSplit(
-        [
+    # This legacy entry point remains callable for compatibility, but its
+    # presentation follows the same one-column frame rule as the current
+    # Resolution Session used by the CLI.
+    body = build_tui_frame(
+        TuiRegion(
             Window(
                 list_control,
                 height=Dimension(min=5, preferred=8, max=10),
                 wrap_lines=False,
-            ),
-            Window(height=1, char="─"),
-            detail_panel,
-        ]
-    )
-    body = DynamicContainer(
-        lambda: (
-            split_body
-            if layout_mode["value"] == "SPLIT"
-            else stacked_body
-        )
+            )
+        ),
+        TuiRegion(detail_panel, separator_before=True),
     )
     header = Window(
         FormattedTextControl(
@@ -310,7 +290,6 @@ def run_review_shell(
                     "",
                     (
                         f"sort={session.sort_mode} "
-                        f"layout={layout_mode['value']} "
                         f"answered={session.answered_count}/{len(session.items)}"
                     ),
                 ),
@@ -332,7 +311,7 @@ def run_review_shell(
                         else ""
                     )
                     + "Enter input  "
-                    "Esc back/quit  F2/Ctrl-S save+next  S sort  L layout  Q quit "
+                    "Esc back/quit  F2/Ctrl-S save+next  S sort  Q quit "
                 )
             )
         ),
@@ -458,15 +437,6 @@ def run_review_shell(
         session.toggle_sort()
         load_response()
         save(session)
-        event.app.invalidate()
-
-    @bindings.add("l", filter=has_focus(list_control))
-    def _toggle_layout(event) -> None:
-        layout_mode["value"] = (
-            "STACKED"
-            if layout_mode["value"] == "SPLIT"
-            else "SPLIT"
-        )
         event.app.invalidate()
 
     @bind_case_insensitive_key(

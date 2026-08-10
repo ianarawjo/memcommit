@@ -13,6 +13,7 @@ from memcommit.commands.find_search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,
+    _find_save_as_available,
     _results_frame_title,
     render_find_search_results,
     run_find_search_workbench,
@@ -60,6 +61,28 @@ def test_results_title_repeats_animated_search_progress_above_results():
     turn.frame = 2
 
     assert _results_frame_title(turn) == "RESULTS · SEARCHING …"
+
+
+def test_save_as_is_available_only_after_a_completed_nonempty_search():
+    request = FindSearchRequest("needle", ("task-1",))
+    empty = FindSearchResponse(request, "CURRENT", ())
+    found = FindSearchResponse(
+        request,
+        "CURRENT",
+        (
+            FindSearchResult(
+                context_name="task-1",
+                kind="memory",
+                uid="memory-one",
+                content="Matched content",
+            ),
+        ),
+    )
+
+    assert not _find_save_as_available(None, busy=False)
+    assert not _find_save_as_available(empty, busy=False)
+    assert not _find_save_as_available(found, busy=True)
+    assert _find_save_as_available(found, busy=False)
 
 
 def test_blank_workbench_initial_focus_accepts_the_query_immediately():

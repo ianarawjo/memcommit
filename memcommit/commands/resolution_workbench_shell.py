@@ -4515,7 +4515,10 @@ def run_resolution_workbench_shell(
         if destination_available:
             session_frames.append(destination_frame)
         session_frames.extend([todo_frame, footer])
-        root = HSplit(session_frames)
+        # ``split_viewer_items`` separates semantic surfaces, not columns.
+        # Compose those peer frames through the same one-column rule used by
+        # Find and every other session workbench.
+        root = build_tui_frame(*(TuiRegion(frame) for frame in session_frames))
         bind_focused_frame_style(
             viewer_frame,
             is_focused=lambda: session_navigation.pane == "viewer",

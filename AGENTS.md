@@ -237,6 +237,13 @@ conversation.
   interaction mechanics common. When a missing capability belongs to an
   existing shared pattern, add it to that shared component and migrate the
   relevant caller rather than introducing a parallel grammar.
+- Compose peer workbench frames as one top-to-bottom sequence through
+  `build_tui_frame` or the common Resolution Session. Do not place operation
+  frames side by side with `VSplit`; horizontal choices inside one frame are
+  still allowed. Keep outcome-only frames out of both the canvas and focus
+  order until their prerequisite exists. In Find, the `SAVE AS`, Save Location,
+  and To Do frames appear only after a completed search returns at least one
+  result.
 - Declare multi-frame keyboard topology with `FocusSurface` and
   `SurfaceFocusController` from `memcommit.commands.surface_focus`. Let the
   shared controller route Tab/Shift-Tab, boundary-aware Up/Down, Enter, and

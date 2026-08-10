@@ -80,6 +80,9 @@ def test_copy_creates_fresh_memory_values_and_leaves_source_unchanged(
     checkpoint = store.list_checkpoints(result.context_name)[0]
     assert checkpoint["command"] == "find"
     assert checkpoint["args"]["find_materialization"]["mode"] == "COPY"
+    assert checkpoint["description"].startswith(
+        "Saved 1 checked Find result(s) as COPY"
+    )
 
 
 def test_reference_reuses_the_existing_live_reference_primitive(isolated_store):

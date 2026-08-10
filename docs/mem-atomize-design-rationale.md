@@ -514,8 +514,9 @@ saved reading text remains complete and is the authority for detail, choice
 semantics, and reviewed reanalysis; the label is only a navigation aid.
 `SOURCE` means `Context.order`, not chronology.
 `PRIORITY` uses only grounded issue classifications; it does not invent
-affected-result counts. `SPLIT` and `STACKED` are layouts over the same durable
-cursor, choices, and responses.
+affected-result counts. Historical `SPLIT` and `STACKED` tokens remain readable
+for durable-session compatibility, but the live workbench projects both
+through the common one-column Resolution Session.
 
 Every issue uses one freeform field:
 
@@ -527,8 +528,8 @@ REFINE, COMMENT, OR ENTER A DIFFERENT READING
 When an issue offers readings, the workbench stores the selected reading
 identity separately from the response text preserved verbatim. The workbench
 is bound to the exact Context identity and digest, analysis UID, issue
-projection, and choice identities. Resume, sorting, layout changes, and
-snapshots do not call the provider, modify a Memory, or create a checkpoint.
+projection, and choice identities. Resume, sorting, and snapshots do not call
+the provider, modify a Memory, or create a checkpoint.
 
 Eligible unary responses enter semantic analysis only through:
 
@@ -872,8 +873,9 @@ Implemented operation tests cover the current preview-and-apply boundary:
   same exact analysis/workbench without duplicate provider calls;
 - the aggregate completion supplies source-linked overview sections and typed
   one-source ambiguity and two-source conflict issues alongside atomization;
-- `SOURCE`/`PRIORITY`, `SPLIT`/`STACKED`, cursor, choices, and responses survive
-  resume without mutating the Context;
+- `SOURCE`/`PRIORITY`, cursor, choices, and responses survive resume without
+  mutating the Context; legacy `SPLIT`/`STACKED` tokens remain readable but no
+  longer select different live layouts;
 - `--refresh` is the explicit unframed reanalysis boundary, while stale
   analysis fails closed without a provider call;
 - reviewed context is incorporated only by

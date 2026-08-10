@@ -104,7 +104,7 @@ def _resolve_sources(
 ) -> tuple[_ResolvedSource, ...]:
     if response.mode != "CURRENT":
         raise FindMaterializationError(
-            "History results are evidence views and cannot be materialized."
+            "History results are evidence views and cannot be saved as a new Context."
         )
     if not selected_result_indices:
         raise FindMaterializationError("Check at least one Find result.")
@@ -286,7 +286,7 @@ def materialize_find_results(
             },
         },
         description=(
-            f"Materialized {len(sources)} checked Find result(s) as {mode} "
+            f"Saved {len(sources)} checked Find result(s) as {mode} "
             f"in new Context '{destination_name}'; sources unchanged"
         ),
     )

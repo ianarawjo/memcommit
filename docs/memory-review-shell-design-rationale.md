@@ -381,8 +381,9 @@ locking and multi-revision storage are future work.
 
 ## Terminal and chat-controller boundary
 
-The older standalone ambiguity shell accepts ordinary concrete terminal input
-through prompt-toolkit:
+The older standalone ambiguity shell remains a compatibility entry point and
+accepts ordinary concrete terminal input through prompt-toolkit. Its frames now
+use the same one-column composition rule as the common Resolution Session:
 
 - left/right: previous or next issue;
 - up/down or digits: select a proposed reading when the current ambiguity
@@ -392,7 +393,6 @@ through prompt-toolkit:
   issue surface;
 - F2 or Ctrl-S: save and move to the next issue;
 - `S`: toggle source/priority order;
-- `L`: toggle split/stacked layout;
 - `Q` or Ctrl-C: save and close.
 
 The atomize workbench now keeps the same list/detail/choice/response semantics
@@ -459,8 +459,10 @@ rather than a replacement.
 A sequence of isolated yes/no prompts was considered. It hides the size and
 shape of the review, makes prioritization difficult, and gives a remote
 controller no stable overview to return as a snapshot. The selected design
-uses a vertical issue list plus one expanded detail. Split and stacked layouts
-are two presentations of the same state, not different review models.
+uses a vertical issue list plus one expanded detail. Older split-layout
+implementations were retained only while the shared Resolution Session was
+introduced; current live screens use one stacked presentation so visible frame
+order and keyboard order cannot diverge.
 
 ### Separate refinement and replacement inputs
 

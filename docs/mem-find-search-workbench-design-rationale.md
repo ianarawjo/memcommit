@@ -19,7 +19,9 @@ non-interactive one-shot route and retains stable grouped output for scripts,
 redirection, and existing callers. Operand-free Find outside a TTY fails with
 an explicit query-required message rather than blocking on terminal input.
 
-The workbench presents seven visible controls in interaction order:
+The workbench presents four setup/search controls in interaction order, then
+adds three outcome controls only after a completed search returns at least one
+result:
 
 1. `SEARCH`, a one-line query submitted with Enter;
 2. `TARGETS`, a process-local `PROFILE` row followed by the frozen readable
@@ -28,21 +30,24 @@ The workbench presents seven visible controls in interaction order:
 3. `SCOPE`, with independent `TARGET SELECTION`, `CONTEXT RANGE`, and
    `EMBEDDED CONTEXTS` choices; and
 4. `RESULTS`, one checkable row per canonical ranked result;
-5. `MATERIALIZE AS`, an exact `COPY` or `REFERENCE` choice;
+5. `SAVE AS`, with an exact `COPY` or `REFERENCE` mode;
 6. `SAVE LOCATION`, the shared direct exact-name field and frozen local parent
    browser; and
 7. `TO DO`, the explicit create action for the checked set.
 
-At 80×24 the setup controls and result/materialization controls use paired
-columns so all interaction regions remain available without requiring a
-larger initial PTY. This layout does not change the declared keyboard order.
-The Save Location field is the first focus stop in its editor; Up enters the
-parent tree rendered above it, and Enter on a parent reparents the current
-final name segment without creating anything.
+Every peer frame is composed through the service-wide vertical workbench rule:
+`SEARCH → TARGETS → SCOPE → RESULTS`, followed conditionally by
+`SAVE AS → SAVE LOCATION → TO DO`. Find does not use side-by-side frame
+columns. This keeps visible order, Tab order, and vertical arrow traversal
+identical across viewport sizes and matches Review, Atomize, and the common
+Resolution Session. The Save Location field is the first focus stop in its
+editor; Up enters the parent tree rendered above it, and Enter on a parent
+reparents the current final name segment without creating anything.
 
-Before a successful search, Tab and Shift-Tab retain the original four-control
-loop. Once results exist, they include the materialization controls in that
-same order while preserving the internal
+Before a successful nonempty search, the Save As group is absent from both the
+canvas and focus topology, and Tab and Shift-Tab retain the original
+four-control loop. Once results exist, they include the Save As controls in
+that same order while preserving the internal
 cursor of each Surface. Up and Down first move inside the focused Surface;
 crossing its first or last row moves to the adjacent visible Surface without
 wrapping the screen. Vertical entry into TARGETS or SCOPE selects the adjacent
@@ -106,7 +111,7 @@ frozen ranked order rather than interaction history. Search work runs outside
 the prompt-toolkit event-loop thread while the exact request stays visible and
 immutable. Closing during a search waits for that read-only turn to complete.
 
-`COPY` and `REFERENCE` are intentionally materialization modes, not semantic
+`COPY` and `REFERENCE` are intentionally Save As modes, not semantic
 keep/drop decisions. `COPY` creates one fresh Memory identity per checked
 source using the exact reviewed value. `REFERENCE` delegates to the same live,
 read-only pointer primitive as `mem reference`: it stores the directly owned
@@ -145,13 +150,18 @@ curation, but no search preference or provider dialogue is persisted. Existing
 one-shot current/history routing and provider output validation remain the
 semantic execution boundaries.
 
-Only current-state owned Memory and resolved MemoryRef rows can be
-materialized. History, query-only, and retained-artifact rows remain evidence
+Only current-state owned Memory and resolved MemoryRef rows can be saved as a
+new Context. History, query-only, and retained-artifact rows remain evidence
 views. REFERENCE is restricted to locally owned sources because the durable
 pointer contract does not grant the destination continuing authority over a
 remote Grant resource. COPY from a granted source requires `DERIVE`, `EXPORT`,
 `SAVE_ANALYSIS`, and `COMBINE` when multiple authority domains contribute;
 grant identity and permission are revalidated through the write boundary.
+
+The user-facing operation is consistently named `SAVE AS`. The existing
+`find_materialization` checkpoint field and Python compatibility symbols remain
+unchanged so previously written checkpoints and callers retain their exact
+schema; those tokens are implementation history, not terminal language.
 
 ## Reuse and limitations
 

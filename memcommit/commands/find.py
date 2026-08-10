@@ -1274,7 +1274,7 @@ def _open_find_search_workbench(
         destination_name=workbench_result.save_location,
     )
     typer.secho(
-        f"Materialized {len(materialized.item_uids)} checked Find result(s) as "
+        f"Saved {len(materialized.item_uids)} checked Find result(s) as "
         f"{materialized.mode} in new Context "
         f"'{display_escape_text(materialized.context_name)}' "
         f"[{materialized.context_uid[:8]}]; sources unchanged.",
@@ -1291,7 +1291,7 @@ def cmd(
                 "Natural-language query; omit in a terminal to open the "
                 "interactive search with Profile-wide or Context targets, "
                 "Context range, embedded-Context scope, and checked-result "
-                "COPY/REFERENCE materialization"
+                "COPY/REFERENCE Save As"
             ),
         ),
     ] = None,

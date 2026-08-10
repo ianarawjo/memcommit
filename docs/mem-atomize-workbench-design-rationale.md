@@ -677,8 +677,7 @@ The implemented prompt-toolkit interaction is:
 - Tab: focus the unified response field;
 - Escape or Tab from that field: return to list navigation;
 - F2 or Ctrl-S: save the current response and move to the next issue;
-- `S`: toggle `SOURCE` and `PRIORITY`;
-- `L`: toggle split and stacked layouts; and
+- `S`: toggle `SOURCE` and `PRIORITY`; and
 - `Q` or Ctrl-C: save and close.
 
 Earlier builds used left/right for issue movement and up/down for choices.
@@ -703,8 +702,11 @@ This is deterministic outcome coverage, not a claim that the examples are
 statistically typical or semantically hardest. The complete `ACTIONABLE
 ISSUES` list remains authoritative and must not be replaced by the sample.
 
-Split and stacked layouts are two presentations of the same state, not two
-review models. Cursor, choices, and responses must survive a layout switch.
+The common Resolution Session is the sole live presentation. Historical
+`SPLIT` and `STACKED` values remain readable in serialized workbench state for
+compatibility, but both project to the same one-column frame sequence. Cursor,
+choices, and responses therefore survive old-session resume without reviving a
+second visual grammar.
 
 A stable, non-interactive snapshot is part of the contract. It lets a remote
 or non-TTY controller show the current overview or selected detail without
