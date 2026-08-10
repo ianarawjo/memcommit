@@ -466,6 +466,94 @@ The result supports two next hypotheses without selecting either one yet:
 2. evaluate full-context responsibility splitting or a faster model because
    compact one-shot latency remains more than five times the 30-second target.
 
+## Minimal-I/O medium result — 2026-08-10
+
+A third evaluation-only condition tested the smallest useful one-shot envelope
+before changing reasoning effort or model. C preserved every ordered content
+string from both 150-Memory frames but represented provider input as only two
+arrays, `a` and `b`. It omitted aliases, positions, content digests, frame
+metadata, relation notes, and provider-authored issues. Its output contained
+only fixed group-ID vectors and one-letter kind codes. The host reconstructed
+the current typed analysis and generic unresolved review markers.
+
+The raw C response and its comparisons with the retained A/B normalized
+ledgers are stored in
+`outputs/compare-latency-ab/20260810-gpt-5.6-sol-medium-minimal-io.json`.
+
+| Measure | A — exhaustive | B — compact output | C — minimal I/O |
+| --- | ---: | ---: | ---: |
+| Complete content items | 300 | 300 | 300 |
+| Provider payload characters | 75,590 | 75,590 | 35,005 |
+| Prompt characters | 79,240 | 78,585 | 36,482 |
+| Output-schema characters | 7,139 | 1,389 | 350 |
+| Response characters | 55,392 | 11,285 | 1,637 |
+| Provider completion | 341.945 s | 170.046 s | 140.225 s |
+| Relation groups | 101 | 105 | 156 |
+
+C reduced prompt size by 53.6% and response size by 85.5% relative to B, but
+provider completion improved by only 17.5%. Relative to A, C was 2.44 times
+faster and returned 97.0% fewer response characters, yet it remained 4.67
+times slower than the 30-second target. Local reconstruction and validation
+took about 0.014 seconds, so host decoding is immaterial at this scale.
+
+This is the strongest evidence so far that medium-effort global grouping, not
+JSON serialization alone, dominates the remaining critical path. The provider
+interface is non-streaming and does not expose hidden reasoning duration, so
+the experiment cannot prove an exact time allocation. It does show that
+removing another 40,585 prompt characters and 9,648 response characters saved
+only about 30 seconds after B.
+
+C was structurally valid and covered 300 of 300 inputs. It produced 156 groups:
+60 COMPATIBLE, 18 CONFLICT, 33 DISTINCT, 30 EQUIVALENT, and 15 SCOPED. Its
+agreement with A and B was lower than their mutual agreement. This does not
+establish that C is less accurate because none of the stochastic runs is
+reviewed ground truth, but it does show that a very terse task representation
+changes grouping behavior. The current conclusion concerns latency causality,
+not semantic acceptance.
+
+## Next reasoning-axis experiments
+
+The next controlled condition should preserve C's exact input, prompt, schema,
+and output contract and change only the Codex reasoning-effort setting. The
+local provider adapter accepts `low` and `minimal` in addition to the measured
+`medium`; current official account-specific latency and availability are not
+assumed by this note.
+
+1. **R0 — C at medium:** the retained 140.225-second control.
+2. **R1 — C at low:** one diagnostic run, then three repetitions only if it is
+   contract-valid and materially closer to 30 seconds.
+3. **R2 — C at minimal:** run only if low remains above the target or if the
+   difference between low and medium is too small to explain the remaining
+   latency.
+
+Each condition must retain exact 300/300 coverage, valid group side shape, no
+unused group, and local typed reconstruction. Semantic agreement remains a
+descriptive measure rather than a gate until reviewed ground truth or an
+explicit acceptable-loss threshold exists.
+
+Reasoning can also be reduced structurally, but those changes must remain
+separate from the effort-knob experiment:
+
+- **Ontology reduction:** collapse six relation kinds into a smaller product
+  decision such as SAME, RELATED/CONFLICTING, and DISTINCT. This removes
+  distinctions and therefore requires an explicit product decision.
+- **Frozen easy anchors:** deterministically pre-assign exact textual matches
+  or other proof-level relations, expose those anchors with both complete
+  content arrays, and ask the provider only for the remaining ownership. A
+  heuristic near-match is not proof and cannot be silently frozen.
+- **Full-context responsibility splitting:** give every parallel call both
+  complete content arrays but assign a disjoint canonical anchor range. This
+  trades repeated input work and reconciliation for shorter per-call reasoning
+  and wall-clock overlap.
+- **Candidate-guided verification:** provide host-generated candidate hints
+  while retaining all content. This may reduce search but creates a measurable
+  recall dependency and is an approximation unless the provider remains
+  responsible for correcting missing candidates.
+
+If low or minimal C does not approach 30 seconds, full-context responsibility
+splitting is the next scheduling experiment. Further JSON shortening is
+unlikely to recover the remaining 110 seconds by itself.
+
 ## Acceptance record for each 300-item run
 
 Each run should record:
