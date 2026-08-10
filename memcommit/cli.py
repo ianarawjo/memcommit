@@ -6,6 +6,7 @@ import typer
 
 from memcommit.commands import (
     add,
+    audit,
     atomize,
     branch,
     checkpoint,
@@ -343,6 +344,13 @@ app.command(
         "Context; no Context changes."
     ),
 )(find_conflicts.cmd)
+app.command(
+    "audit",
+    help=(
+        "Run the Duplicate, Ambiguity, and Conflict finders over one frozen "
+        "direct Context, save their exact combined snapshot, and open Review."
+    ),
+)(audit.cmd)
 app.command(
     "review",
     help=(

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM REVIEW · SEVER                                                                                                                                                              ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · task-3/local/candidates/coordination-preparation                                                                                                                      ┃
+┃   CRITERIA · task-3/local/criteria/additive-minimum                                                                                                                              ┃
+┃   RESULT · task-3/local/reviewed/coordination-preparation · CREATED                                                                                                              ┃
+┃ APPLIED · REVIEW · 2 SOURCE · 1 Context CRITERIA · 1 RESULT                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ The Source describes week-to-week variability in the user's availability and a past occasion when the user completed all preparation items after information was converted into  ┃
+┃a checklist.                                                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT APPLIED                                                                                                                                                                     ┃
+┃ All 2 Source Memories were evaluated in one contextual batch. The variable-availability history was reduced to a minimal policy requiring fresh confirmation for each appointmen ┃
+┃t, while the one-time checklist completion was forgotten because it does not independently support a stable preparation preference. Affected Source examples: “The user's availab ┃
+┃le days and times vary by week, making it difficult to apply last month…”, “After changing the same content into a checklist, the user marked every item they had pre…”. Main Cri ┃
+┃teria: “Keep only information that independently states a stable accessibility, communication, sc…”, “Prefer the smallest preference or policy summary over a historical event; p ┃
+┃reserve uncert…”, “Treat medication, availability, appointments, contact details, locations, and functional…”, and 1 more. Exact Source-to-Criteria mappings, rationale, and alte ┃
+┃rnatives remain inspectable in Items; the complete per-Memory outcome appears once in the full result view. The Source is unchanged. The Result Context task-3/local/reviewed/coo ┃
+┃rdination-preparation was created in checkpoint [e4a601b0].                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ LOCAL RESULT DRAFT · SOURCE UNCHANGED · 2                                                                                                                                        ┃
+┃  + 1. [REFRAME] Because the user's availability varies by week, confirm it for each appointment rather than relying on availability from prior weeks or months.                  ┃
+┃  − 2. [FORGET] Forgotten from the local result.                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Sever report                                                                                                                                           ^│
+│  SEVER DECISION The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.                          │
+│  SEVER DECISION After changing the same content into a checklist, the user marked every item they had prepared.                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · APPLIED · REVIEW · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  Q close

@@ -199,21 +199,40 @@ recently saved Ground first inside each Context. Meld, Atomize, and Compare
 retain the neutral recent-first flat view. `G` and `S` still let the person
 switch grouping and ordering without persisting presentation state.
 
-## Review follow-up plan
+## Review aggregate launcher
 
-The current ambiguity Review uses one global `~/.mem/review-session.json` and
-bare `mem review` already resumes that singleton. It therefore has no honest
-collection for this picker to browse. After Review gains independent durable
-records—at minimum a stable key, Context and review-kind binding, status, and
-created/updated metadata—it should implement the same adapter contract and
-join the saved-work launcher. That migration must first define replacement,
-archive, and concurrency behavior; the picker must not manufacture apparent
-history from the current single overwrite slot.
+In a TTY, bare `mem review` is a read-only union of the saved artifacts that
+the Review host can already render: Atomize, Compare, Meld, Sever, Update, and
+the older global `ReviewSession`. The union does not introduce a common Review
+schema or lifecycle. Each row retains its operation-owned state, stable key,
+Context grouping, summary, activity timestamp, and exact reopen validation;
+Enter dispatches to that operation's existing Review controller.
 
-Find conversations remain process-local, while Impact/Update retain global
-single records. The Update launcher exposes that honest singleton rather than
-implying an append-only session history. Compare and translation artifacts may eventually share a
-broader saved-view browser, but only Compare is in this implementation slice.
+The launcher contains every retained state that remains honestly viewable,
+including in-progress, awaiting-response, ready, applied, completed, and stale
+artifacts. It is not a completed-work ledger. Recent activity is the default
+ordering because most non-applying Review artifacts have no checkpoint.
+Applied artifacts may report their operation-owned checkpoint receipt, but a
+checkpoint is not fabricated for analysis or review-only work.
+
+The ambiguity Review still uses one global `~/.mem/review-session.json`. It is
+therefore projected as exactly one singleton row, not as invented historical
+records. Update's global staged/Impact receipt follows the same rule. A future
+multi-record migration may add real history only after defining replacement,
+archive, timestamp, and concurrency behavior.
+
+The aggregate detail view deliberately omits the shared picker's defensive
+argv-index rendering such as `[0] mem` and `[1] review`. Those indexes identify
+argument-vector positions and are useful to host validation, but they are not
+part of a person's Review decision. The frozen argv remains on the local
+selection receipt and is compared after selection without being rendered or
+executed.
+
+The launcher has no generic New row because starting Atomize, Compare, Meld,
+Sever, Update, or Ambiguities requires different operation-owned setup and may
+call different semantic producers. Explicit operation commands retain those
+creation paths. Non-TTY bare Review, `--snapshot`, response staging, and an
+explicit Context retain the prior direct compatibility behavior.
 
 ## Safety and limitations
 

@@ -35,6 +35,149 @@ is a separate consumer of an ambiguity report. It persists selected readings
 and one freeform reviewer annotation, but it does not change the finder's
 read-only/mutation contract or apply those annotations to Memories.
 
+## Flagless terminal workbench
+
+The explicit Context forms retain the stable one-shot report contract:
+
+```text
+mem find-duplicates --context NAME
+mem find-ambiguities --context NAME
+mem find-conflicts --context NAME
+```
+
+In a TTY, invoking one of the commands without flags opens a shared setup
+surface instead of immediately analyzing the global current Context. The
+screen contains exactly two top-to-bottom controls:
+
+1. `SOURCE`, the common single-selection Context namespace tree over one
+   frozen `ALL READABLE CONTEXTS` catalog; and
+2. `TO DO`, the exact `RUN FIND ...` action for the checked Context.
+
+The current Context is initially checked and marked for orientation. Moving
+the tree cursor does not change the checked value; Enter or Space on a row
+makes that exact readable Context the sole Source. Enter on `TO DO` freezes one
+`QualityFindSetupReceipt` and exits setup. Cancellation creates no provider
+connection, finding artifact, Context write, or checkpoint.
+
+The finder kind is fixed by the command and therefore is not another setup
+choice. All three operations inspect direct Memories only, so the screen also
+does not expose descendant or embedded-Context reach controls. Adding either
+would change the semantic frame rather than merely configure presentation.
+
+After setup, the existing one-shot finder runs against the frozen exact
+Context and its validated report is projected into the common Resolution
+Session presentation. The complete report starts focused, followed by the
+finding Items list and To Do. Opening an item uses the shared
+`VIEWER → RESPONSES → ITEMS → TO DO` topology. Ambiguity keeps its proposed
+reading choices, Conflict keeps its exact pair and question, and Duplicate
+adds an operation-owned review disposition for one emitted evidence link.
+Responses in this first rollout are process-local review state: they do not
+alter the report, persist a new artifact, imply resolution, or mutate Memory.
+The individual finder workbenches retain that compatibility boundary. Durable
+multi-session retention is instead explicit through `mem audit`, which records
+all three reports, each finder ruleset, and provider/model provenance without
+silently changing a one-shot `find-* --context` invocation into a stored
+artifact. The older ambiguity Review singleton remains independently readable.
+
+This split deliberately reuses two existing component families rather than
+creating a finder-specific full-screen grammar: common Context targeting owns
+setup selection, while the common Resolution Session owns finding inspection
+and response mechanics. The receipt between them is the semantic boundary;
+the setup UI never calls a finder merely because a cursor moved or a Context
+was checked.
+
+## Durable three-finder Audit
+
+`mem audit` is the user-facing orchestration operation for running Duplicate,
+Ambiguity, and Conflict analysis together. It is not a fourth semantic finder
+and it does not merge the three judgments into one provider prompt. Its help
+text names all three finders explicitly.
+
+In a flagless TTY, Audit reuses the common single Context selector and exposes
+one `RUN AUDIT` action. An explicit `--context NAME` skips setup. Both routes
+freeze the same direct-Memory frame, then run the existing finder contracts in
+the stable order Duplicate, Ambiguity, Conflict. Each finder retains its own
+operation name, schema, ruleset, provider call, report type, and cardinality.
+The first result is not passed to the second or third. A progress screen may
+show the three host-owned stages, but no partial combined report is published
+if any finder fails.
+
+In an interactive terminal those stages share one cumulative wait surface
+rather than replacing the entire screen at every provider boundary. The
+stable rows are numbered `1. DUPLICATES`, `2. AMBIGUITIES`, and
+`3. CONFLICTS`. A row becomes `COMPLETE` only after that finder's typed report
+has returned and validated; the active row is `RUNNING`, and later rows remain
+`WAITING`. This exposes orchestration order without exposing report content or
+implying a percentage. The completed rows are evidence of host-side stage
+completion, not a partial durable Audit: persistence still occurs only after
+all three reports form one valid snapshot.
+
+Audit uses the shared interactive command-wait shell for this surface. `H` or
+`?` opens the frozen read-only `mem help` inventory while the active finder
+continues in the background; closing Help restores the same cumulative rows.
+Help cannot change the Source, restart a finder, submit another command, or
+observe a partial report. Outside an interactive terminal, the same work
+retains the stable one-line `CommandProgress` behavior.
+
+After all three checks validate, Audit creates one new UID-addressed artifact
+under the Profile's private Audit session directory. It never overwrites a
+latest-by-Context slot: repeated runs are separate evidence because a semantic
+provider can return different valid judgments for the same Source. The
+artifact freezes:
+
+- the canonical Context UID and name;
+- every direct Memory UID, content string, and order supplied to all checks;
+- the direct-frame digest;
+- all three typed reports, including zero-finding reports;
+- the ruleset and available provider/model provenance for each independent
+  finder run; and
+- the creation time and immutable Audit UID.
+
+The completed snapshot is saved before the Resolution Workbench receives
+terminal control. A disconnect therefore cannot discard the provider result.
+Reviewer responses are the only mutable portion of the session and use CAS
+persistence. Every response target is namespaced by its finder kind and must
+still exist in the immutable snapshot; a response save cannot replace or
+rewrite the report it claims to annotate.
+
+Durable Audit requires retained-analysis authority before provider connection.
+An ordinary local Context satisfies that ownership boundary. A granted Source
+must authorize `DERIVE` and `SAVE_ANALYSIS`; READ alone remains sufficient only
+for the non-retained individual finder route.
+
+### Audit report composition
+
+The report deliberately has no overall quality score and no `PASS` result.
+Absence of findings is a model-assisted production result, not proof that the
+Source is clean. The complete Viewer is composed from five neutral report
+sections:
+
+1. `AUDIT SUMMARY`, stating that all three checks completed over one frozen
+   frame and giving the total positive finding count;
+2. `CHECKS`, listing Duplicate, Ambiguity, and Conflict separately as
+   `COMPLETE`, including an explicit zero count;
+3. `FROZEN SOURCE`, recording the exact direct Context boundary;
+4. `PROVENANCE`, retaining each finder ruleset and provider/model identity; and
+5. `BOUNDARY`, stating the non-proof and non-mutation limits.
+
+The Items frame contains review targets only, in the stable group order
+Duplicate, Ambiguity, Conflict. A zero-finding check remains visible in
+`CHECKS` but does not become a synthetic Item. Each positive result keeps its
+operation-owned detail and response mechanics: Duplicate retains its emitted
+evidence pair and confirm/reject/defer disposition, Ambiguity retains its
+classification, readings, and clarification question, and Conflict retains
+its exact pair, scope dimensions, and free-form response without fabricated
+resolution choices. A `REQUIRED` ambiguity remains finding priority rather
+than becoming a mandatory reviewer answer; Audit does not conflate the need
+for source clarification with an obligation to submit a response.
+
+Saved Audits appear in the aggregate `mem review` launcher and reopen exactly
+through `mem review audit --session UID`. Review renders the frozen Source and
+never reruns a finder. It does not fail merely because the live Context later
+changes or disappears: the reviewed object is the historical snapshot, not a
+claim about the current Context. Review and Audit never mutate a Context,
+Memory, or checkpoint.
+
 ## Units of judgment
 
 The judgments and their public evidence deliberately have different arities:
@@ -124,11 +267,12 @@ local exact or conservative surface comparison; it is not a similarity
 heuristic. Version 1 otherwise performs no embedding prefilter, similarity
 cutoff, or multi-call batching.
 
-The fixtures carry `ruleset_version` fields, but the current operation does
-not validate, forward, or record that metadata in its provider payload or
-finding report. Reproducible semantic evaluation therefore remains future
-work; fixture versioning should not be mistaken for end-to-end ruleset
-provenance.
+The fixture loader validates each calibration file against the operation's
+declared `ruleset_version`. Individual one-shot reports do not retain that
+metadata, while durable Audit records the declared version beside each typed
+report. The provider payload still sends the calibrated cases rather than a
+separate ruleset field, so an Audit version identifies the host judgment
+contract but is not by itself full prompt-byte provenance.
 
 This choice favors an inspectable research contract:
 

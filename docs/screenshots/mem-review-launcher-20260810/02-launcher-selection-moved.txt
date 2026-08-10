@@ -1,0 +1,52 @@
+ MEM REVIEW · SAVED SESSIONS · RECENT FIRST · ALL                                                                                                                                   
+ PROFILE · study-alt-20260810-t3-find-additive                                                                                                                                      
+ STORE   · /Users/KimMunyeong/.mem-profiles/stores/c8651b54-005b-471e-aa24-579dff2ee3a1                                                                                             
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  2026-08-10 13:44Z  SEVER · task-3/local/results/additive-allowlist × task-3/local/criteria/additive-minimum → task-3/local/results/add…  [APPLIED · SOURCE UNCHANGED]  3 result… ^
+› 2026-08-10 13:40Z  SEVER · task-3/local/candidates/coordination-preparation × task-3/local/criteria/additive-minimum → task-3/local/re…  [APPLIED · SOURCE UNCHANGED]  2 result…  
+  2026-08-10 13:39Z  SEVER · task-3/local/candidates/accessibility-communication × task-3/local/criteria/additive-minimum → task-3/local…  [APPLIED · SOURCE UNCHANGED]  4 result…  
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SEVER REVIEW                                                                                                                                                                       ^
+State: APPLIED · SOURCE UNCHANGED                                                                                                                                                   
+Context: task-3/local/candidates/coordination-preparation                                                                                                                           
+Summary: 2 result decisions                                                                                                                                                         
+                                                                                                                                                                                    
+Last saved: 2026-08-10T13:40:34+00:00                                                                                                                                               
+Source: task-3/local/candidates/coordination-preparation (THIS CONTEXT ONLY)                                                                                                        
+Criteria: task-3/local/criteria/additive-minimum (THIS CONTEXT ONLY)                                                                                                                
+Output: task-3/local/reviewed/coordination-preparation · CREATED LOCALLY                                                                                                            
+Source: UNCHANGED                                                                                                                                                                   
+                                                                                                                                                                                    
+Enter views this saved session in its existing review screen.                                                                                                                       
+Review does not apply Memory changes or create a checkpoint.                                                                                                                        
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter view  S sort  G group  / filter  Esc/q cancel  ·  2/3

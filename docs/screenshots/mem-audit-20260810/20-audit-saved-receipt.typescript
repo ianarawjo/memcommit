@@ -1,0 +1,914 @@
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM AUDIT · 1/3 · FINDING DUPLICATES . · 0s[0m
+[0m┌───────────────────────────────────────────────────────────────────────────| AUDIT CHECKS · 1 → 2 → 3 |───────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;5;117;1mMEM AUDIT · THREE QUALITY FINDERS[0m                                                                                                                                                [0;1m^[179C[0m│[0m
+[0m│[0;38;5;223;1mRESULT PENDING · SOURCE UNCHANGED[0m                                                                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231;1mFROZEN SOURCE[0m                                                                                                                                                                    [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mtask-3/local/results/additive-final · 3 direct Memories[0m                                                                                                                          [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;117;1mCHECKS · SAME FROZEN DIRECT SOURCE[0m                                                                                                                                               [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m1. DUPLICATES   · [0;38;5;146mWAITING[0m                                                                                                                                                        [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m2. AMBIGUITIES  · [0;38;5;146mWAITING[0m                                                                                                                                                        [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m3. CONFLICTS    · [0;38;5;146mWAITING[0m                                                                                                                                                        [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mEach finder runs independently in this displayed order. No partial Audit is saved.[0m                                                                                               [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mH or ? opens Help while the active finder continues.[0m                                                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m C/c Contexts · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only[112D[49A[C[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m. · 0s[0m
+
+
+
+
+
+
+
+
+[19C[0;38;5;223;1mRUNNING ..[0m [7A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m… · 0s[0m[K[0m
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [7A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m.[3C1[0m
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[7A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m. · 1s[0m
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [7A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m… · 1s[0m[K[0m
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [7A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m.[3C2[0m
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[7A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m. · 2s[0m
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [7A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m… · 2s[0m[K[0m
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [7A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m.[3C3[0m
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[7A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[12C[0m2[13CAMBIGUI[CIES . · 3s[0m
+
+[C[0m[?12l[?25h[?25l[2A[39C[0m. · 3s[0m
+
+
+
+
+
+
+
+
+[19C[0;38;5;150;1mCOMPLETE[0m  [0m
+[19C[0;38;5;223;1mRUNNING ..[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 4s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 4s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 5s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 5s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 6s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 6s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 7s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 7s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 8s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 8s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 9s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 9s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 10[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 11s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 1[Cs[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · [C2s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 12s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 13s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 13s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 14s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 14s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 15s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 15s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 16s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 16s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[2A[43C[0m7[0m
+
+[C[0m[?12l[?25h[?25l[2A[39C[0m. · 17s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m… · 17s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[38C[0m.[4C8[0m
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[8A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[39C[0m. · 18s[0m
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [8A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[12C[0m3[13CCONFLIC[CS .. ·[C18s[0m[K[0m
+
+[C[0m[?12l[?25h[?25l[2A[36C[0m… · 18s[0m[K[0m
+
+
+
+
+
+
+
+
+
+[19C[0;38;5;150;1mCOMPLETE[0m   [0m
+[19C[0;38;5;223;1mRUNNING …[0m [9A[28D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[36C[0m.[4C9[0m
+
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[9A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[2A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · explore while work continues[0m · MEM AUDIT · 3/3 · FINDING CONFLICTS . · 19s[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;1m^[0m
+[0m│ [0;1mMEMORY      [0mAn atomic unit of information stored in a Context.                                                                                                                  [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mCONTEXT     [0mA named workspace that organizes Memories and other Contexts.                                                                                                       [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mPROFILE     [0mAn ownership and storage boundary for Contexts.                                                                                                                     [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing someone without direct ownership to read or query a Context and its Memories, or run  [0m│[179C[0;48;5;238m [0m
+[0m│             permitted operations on them, while the Grant remains valid.                                                                                                        [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mSESSION     [0mA saved record of an analysis or review workflow that can be reopened and continued; it does not itself mean Context changes were applied.                          [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per affected Context.                                                                [0m│[179C[0;48;5;238m [0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤[179C[0;48;5;238m [0m
+[0m│ [0;1m↑/↓              [0mMove or scroll within the focused surface.                                                                                                                     [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.                                                                                             [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                                                                                                           [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                                                                                                    [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mH                [0mOpen or hide Help from a session's read-only navigation surface.                                                                                               [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                                                                                                    [0m│[179C[0;48;5;238m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0;38;5;117;1m┏ CONTEXTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m ▸ mem status    Show current Context counts, recent Memories, and checkpoints.                                                                                                  [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem contexts  [0mList ordinary local Contexts and readable cross-Profile Context views, marking the current Context and each granted permission set.                             [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem list      [0mEnter the interactive Context browser for the current Context in a TTY, or print child Contexts and direct items.                                               [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem ls        [0mEnter the interactive Context browser for the current Context in a TTY, or print child Contexts and direct items.                                               [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem show      [0mShow a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                               [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem switch    [0mEnter the interactive Context picker, or switch to an explicit Context.                                                                                         [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem checkout  [0mAlias for switch, including its picker; with -b, alias for branch.                                                                                              [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem init      [0mEdit a suggested name, or create an explicitly named Context, and switch to it; --parents ensures its hierarchy.                                                [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem branch    [0mChoose a local Source range and exact fresh target when unnamed, or branch the current Context or subtree to an explicit new name.                              [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem rename    [0mRename an ordinary Context namespace and all lexical descendants.                                                                                               [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem import    [0mImport a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                           [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem embed     [0mAdd one Context to another as a live nested Context while the source retains its own identity and ownership.                                                    [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[179C[0;48;5;248m [0m
+[179C[0;48;5;248m [0m
+[0m┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem add        [0mAdd one or more Memories to the current or explicit Context.                                                                                                   [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem reference  [0mAdd a read-only live pointer to a directly owned source Memory; the target stores identity metadata rather than copying its content.                           [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem edit       [0mReplace direct Memory content by UID or prefix in the current or explicit Context.                                                                             [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem chunk      [0mPreview and, after confirmation, split one direct current-Context Memory by headers, paragraphs, or sentences.                                                 [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem forget     [0mEnter interactive instruction and direct-Source setup when no operand is supplied, or analyze one instruction against the current direct Memories; review each [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m                  [0mkeep/edit/delete decision and apply only the accepted batch.                                                                                                   [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem remove     [0mSelect a Context or direct item to delete, or name it by locator, name, or UID.                                                                                [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem delete     [0mSelect a Context or direct item to delete, or name it by locator, name, or UID.                                                                                [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem clear      [0mRemove all direct items from the current or explicit Context after confirmation.                                                                               [0m│[179C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
+[179C[0;48;5;248m [0m
+[0m┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem find              [0mOpen interactive search when QUERY is omitted, or search once when QUERY is supplied. The default scope includes each selected Context root, its        │[179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  H hide Help  Q return to waiting[104D[29A[0m[22A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?25l[0m[?7l[0m[J[0m MEM AUDIT · 3/3 · FINDING CONFLICTS .. · 19s[0m
+[0m┌───────────────────────────────────────────────────────────────────────────| AUDIT CHECKS · 1 → 2 → 3 |───────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;5;117;1mMEM AUDIT · THREE QUALITY FINDERS[0m                                                                                                                                                [0;1m^[179C[0m│[0m
+[0m│[0;38;5;223;1mRESULT PENDING · SOURCE UNCHANGED[0m                                                                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231;1mFROZEN SOURCE[0m                                                                                                                                                                    [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mtask-3/local/results/additive-final · 3 direct Memories[0m                                                                                                                          [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;117;1mCHECKS · SAME FROZEN DIRECT SOURCE[0m                                                                                                                                               [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m1. DUPLICATES   · [0;38;5;150;1mCOMPLETE[0m                                                                                                                                                       [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m2. AMBIGUITIES  · [0;38;5;150;1mCOMPLETE[0m                                                                                                                                                       [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m3. CONFLICTS    · [0;38;5;223;1mRUNNING ..[0m                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mEach finder runs independently in this displayed order. No partial Audit is saved.[0m                                                                                               [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mH or ? opens Help while the active finder continues.[0m                                                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m C/c Contexts · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only[112D[49A[C[0m[?12l[?25h[?25l[2A[41C[0m20[0m
+
+[C[0m[?12l[?25h[?25l[2A[36C[0m… · 20s[0m[K[0m
+
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [9A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[36C[0m.[0m
+
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[9A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m. · 21s[0m
+
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [9A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[36C[0m… · 21s[0m[K[0m
+
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m…[0m  [9A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[36C[0m.[0m
+
+
+
+
+
+
+
+
+
+
+[27C[0;38;5;223;1m.[9A[27D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m. · 22s[0m
+
+
+
+
+
+
+
+
+
+
+[28C[0;38;5;223;1m.[0m [9A[29D[0m[?12l[?25h[?25l[0m[?12l[?25h[2A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m MEM AUDIT                                                                                                                                                                       [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m CONTEXT LOCATIONS                                                                                                                                                               [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m   FROZEN SOURCE · task-3/local/results/additive-final                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m SAVED · 3/3 CHECKS · 0/1 ANSWERED · 3 SOURCE MEMORIES · 0 DUPLICATES · 1 AMBIGUITIES · 0 CONFLICTS                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m WHAT MEM UNDERSTOOD                                                                                                                                                             [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃ AUDIT SUMMARY[0m                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;117m All three quality finders completed over the same frozen direct Context frame. Reported 1 total finding.[0m                                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231;1m CHECKS[0m                                                                                                                                                                          [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m DUPLICATES · COMPLETE · 0 findings[0m                                                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231mAMBIGUITIES · COMPLETE · 1 finding[0m                                                                                                                                               [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231mCONFLICTS · COMPLETE · 0 findings[0m                                                                                                                                                [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231;1m FROZEN SOURCE[0m                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m task-3/local/results/additive-final · 3 direct Memories. Descendants and embedded Contexts were not analyzed.[0m                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231;1m PROVENANCE[0m                                                                                                                                                                      [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m DUPLICATES · duplicates-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium[0m                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231mAMBIGUITIES · ambiguity-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium[0m                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231mCONFLICTS · conflict-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium[0m                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231;1m BOUNDARY[0m                                                                                                                                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Review responses do not alter the snapshot, Context, or Memories.[0m   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231;1m AUDIT FINDINGS · DUPLICATES → AMBIGUITIES → CONFLICTS · 1[0m                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231;1m AMBIGUITY 1 · The user considers a reminder the day before an appointment sufficient for rechecking preparation items.[0m                                                          [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m [HELPFUL] The phrase “the day before” ordinarily means the preceding calendar day, so the instruction has one reading, but it does not specify a reminder time. Any time that da[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231my can satisfy the stated preference, while clarification would make calendar scheduling more precise.[0m                                                                            [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m QUESTION · What time on the day before should the reminder be scheduled?[0m                                                                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m COMPLETE                                                                                                                                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m 1 optional review remains open. No whole-set action is required; close or revisit an item.[0m                                                                                      [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Audit report[0m                                                                                                                                           [0;1m^[179C[0m│[0m
+[0m│  AMBIGUITY      The user considers a reminder the day before an appointment sufficient for rechecking preparation items.                                                        [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[ COMPLETE ]  Required review is complete · 1 optional review remains open. No whole-set action is required; close or revisit an item.                                            [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close H Help  Q close[118D[44A[C[0m[?25l[6A[0m          [0m
+[2C[0mAMBIGUITY 1/1    [0m
+[C[0;38;5;231;1m The user considers a reminder the day before an appointment sufficient for rechecking preparation items.[0m
+[2C[0m[HELPFUL] OPEN                                                                                    [0m
+[C[0m REVIEW SET · REQUIRED 0 · OPTIONAL 1[0m
+[C[0;38;5;117;1m CLASSIFICATION[0m     [0m
+[C[0;38;5;117m SINGLE · HELPFUL[0m
+[C[0m                                                                                                         [0m
+[C[0;38;5;231;1m SOURCE MEMORY[0m
+[C[0m       [0m
+[C[0;38;5;231;1m SOURCE 1 · FROM task-3/local/results/additive-final[0m
+[C[0m   [a3bef2e1] [0;38;5;189mThe user considers a reminder the day before an appointment sufficient for rechecking preparation items.[0m
+[C[0m                                 [0m
+[C[0;38;5;231;1m WHY THIS IS UNCLEAR[0m
+[C[0;38;5;231m The phrase “the day before” ordinarily means the preceding calendar day, so the instruction has one reading, but it does not specify a reminder time. Any time that day can sati[0m
+[C[0;38;5;231msfy the stated preference, while clarification would make[Ccalendar scheduling more[Cprecise.[0m                   [0m
+[178C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;5;231;1m CLARIFICATION QUESTION[0m                                                                                                                                                          [0;1m^[179C[0m│[0m
+[0m│[0;38;5;231m What time on the day before should the reminder be scheduled?[0m                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231;1m PROPOSED READINGS[0m                                                                                                                                                               [0;48;5;238m [179C[0m│[0m
+[0m│ ↑/↓ move through choices and Response · Enter select                                                                                                                            [0;48;5;238m [179C[0m│[0m
+[0m│  1. SINGLE                                                                                                                                                                      [0;48;5;238m [179C[0m│[0m
+[0m│  A reminder scheduled for the calendar day before an appointment is sufficient for prompting the user to recheck the relevant preparation items.                                [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m│[0;38;5;231m┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐[179C[0m│[0m
+[0m│[0;38;5;231m│›                                                                                                                                                                              [0;1m^[0;38;5;231m│[179C[0m│[0m
+[0m│[0;38;5;231m│                                                                                                                                                                               [0;38;5;231;48;5;238m [0;38;5;231m│[179C[0m│[0m
+[0m│[0;38;5;231m│                                                                                                                                                                               [0;38;5;231;48;5;238m [0;38;5;231m│[179C[0m│[0m
+[0m│[0;38;5;231m│                                                                                                                                                                               [0;1mv[0;38;5;231m│[179C[0m│[0m
+[0m│[0;38;5;231m└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+[C[0m  REPORT         Complete Audit report[0m
+[C[0;1m› AMBIGUITY      The user considers a reminder the day before an appointment sufficient for rechecking preparation items.[0m
+
+
+
+
+
+
+
+
+
+
+[5C[0msection/item  Tab switch[2C←/→ option  Enter choo[Ce/other  C send/comment  Esc/Backspace report H Help  Q[Cclose[0m[K[45A[114D[0m[?25l[6A[0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│ MEM AUDIT                                                                                                                                                                       [0;1m^[179C[0m│[0m
+[0m│ CONTEXT LOCATIONS                                                                                                                                                               [0;48;5;238m [179C[0m│[0m
+[0m│   FROZEN SOURCE · task-3/local/results/additive-final                                                                                                                           [0;48;5;238m [179C[0m│[0m
+[0m│ SAVED · 3/3 CHECKS · 0/1 ANSWERED · 3 SOURCE MEMORIES · 0 DUPLICATES · 1 AMBIGUITIES · 0 CONFLICTS                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│ WHAT MEM UNDERSTOOD                                                                                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│ AUDIT SUMMARY                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m All three quality finders completed over the same frozen direct Context frame. Reported 1 total finding.[0m                                                                        [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231;1m CHECKS[0m                                                                                                                                                                          [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m DUPLICATES · COMPLETE · 0 findings[0m                                                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mAMBIGUITIES · COMPLETE · 1 finding[0m                                                                                                                                               [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mCONFLICTS · COMPLETE · 0 findings[0m                                                                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231;1m FROZEN SOURCE[0m                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m task-3/local/results/additive-final · 3 direct Memories. Descendants and embedded Contexts were not analyzed.[0m                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231;1m PROVENANCE[0m                                                                                                                                                                      [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231m DUPLICATES · duplicates-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium[0m                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mAMBIGUITIES · ambiguity-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium[0m                                                                                                  [0;48;5;238m [179C[0m│[0m
+[C[0;38;5;231mCONFLICTS · conflict-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium[0m                                                                                                     [0;48;5;238m [0m
+[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
+[C[0;38;5;231;1m BOUNDARY[0m                                                                                                                                                                        [0;48;5;238m [0m
+[C[0;38;5;231m This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Review responses do not alter the snapshot, Context, or Memories.[0m   [0;48;5;238m [0m
+[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
+[C[0;38;5;231;1m AUDIT FINDINGS · DUPLICATES → AMBIGUITIES → CONFLICTS · 1[0m                                                                                                                       [0;48;5;238m [0m
+[C[0;38;5;231;1m AMBIGUITY 1 · The user considers a reminder the day before an appointment sufficient for rechecking preparation items.[0m                                                          [0;48;5;238m [0m
+[C[0;38;5;231m [HELPFUL] The phrase “the day before” ordinarily means the preceding calendar day, so the instruction has one reading, but it does not specify a reminder time. Any time that da[0;48;5;238m [0m
+[C[0;38;5;231my can satisfy the stated preference, while clarification would make calendar scheduling more precise.[0m                                                                            [0;48;5;238m [0m
+[C[0;38;5;231m QUESTION · What time on the day before should the reminder be scheduled?[0m                                                                                                        [0;48;5;238m [0m
+[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
+[C[0m COMPLETE                                                                                                                                                                        [0;48;5;238m [0m
+[C[0;38;5;231m 1 optional review remains open. No whole-set action is required; close or revisit an item.[0m                                                                                      [0;48;5;238m [0m
+[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
+[C[0m                                                                                                                                                                                 [0;48;5;238m [0m
+[C[0m                                                                                                                                                                                 [0;1mv[0m
+
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0;1;7m› REPORT         Complete Audit report[0m                                                                                                                                           [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  AMBIGUITY      The user considers a reminder the day before an appointment sufficient for rechecking preparation items.                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+
+
+[5C[0mblock (hold accelerates)[2CPgUp/PgDn page  End la[Ct  Tab switch  Enter open  Esc/Backspace/Q close H Help[C Q close[12A[117D[0m[39A[J[0m[?7h[?1049l[?2004l[32m[1mAudit saved: 0/1 findings answered.[0m
+No Context or Memory changes applied. No checkpoint created.

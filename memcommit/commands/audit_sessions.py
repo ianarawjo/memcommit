@@ -1,0 +1,77 @@
+"""Read-only catalog adapter for saved Memory quality Audit sessions."""
+
+from __future__ import annotations
+
+from datetime import datetime
+
+from memcommit.commands.session_picker import SessionPickerEntry
+from memcommit.quality_audit import QualityAuditSession
+from memcommit.quality_audit_store import QualityAuditStore
+
+
+def _timestamp(session: QualityAuditSession, sessions: QualityAuditStore) -> float:
+    try:
+        created = datetime.fromisoformat(session.created_at).timestamp()
+    except (TypeError, ValueError) as error:
+        raise ValueError("Saved Audit has an invalid creation time.") from error
+    path = sessions.path(session.uid)
+    try:
+        if path.is_file() and not path.is_symlink():
+            return max(created, path.stat().st_mtime)
+    except FileNotFoundError:
+        pass
+    return created
+
+
+def audit_session_entries(
+    sessions: QualityAuditStore,
+) -> tuple[SessionPickerEntry, ...]:
+    """Project every validated completed Audit into the common picker."""
+
+    entries: list[SessionPickerEntry] = []
+    for session in sessions.list():
+        counts = {check.kind: len(check.report.findings) for check in session.checks}
+        entries.append(
+            SessionPickerEntry(
+                kind="audit",
+                key=session.uid,
+                title=session.source.context_name,
+                status=(
+                    f"3/3 CHECKS · {session.answered_count}/"
+                    f"{session.finding_count} ANSWERED"
+                ),
+                subtitle=(
+                    f"DUP {counts['duplicates']} · AMB {counts['ambiguities']} · "
+                    f"CONFLICT {counts['conflicts']}"
+                ),
+                group=session.source.context_name,
+                sort_timestamp=_timestamp(session, sessions),
+                detail="\n".join(
+                    (
+                        f"Audit {session.uid}",
+                        f"Created {session.created_at}",
+                        f"Frozen Source {session.source.context_name}",
+                        f"Direct Memories {len(session.source.memories)}",
+                        "Duplicate, Ambiguity, and Conflict checks: COMPLETE",
+                        "Source: UNCHANGED BY AUDIT",
+                    )
+                ),
+                reopen_argv=(
+                    "mem",
+                    "review",
+                    "audit",
+                    "--session",
+                    session.uid,
+                ),
+            )
+        )
+    return tuple(
+        sorted(
+            entries,
+            key=lambda entry: (
+                -entry.sort_timestamp,
+                entry.title.casefold(),
+                entry.key,
+            ),
+        )
+    )

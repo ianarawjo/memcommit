@@ -33,12 +33,21 @@ from memcommit.commands.session_picker import (
     SessionPickerEntry,
     choose_session,
 )
+from memcommit.commands.review_sessions import (
+    SAVED_REVIEW_KIND,
+    choose_review_session,
+)
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
+from memcommit.quality_audit import (
+    QualityAuditError,
+    quality_audit_resolution_view,
+)
+from memcommit.quality_audit_store import QualityAuditStore
 from memcommit.review import (
     ReviewError,
     atomize_review_matches_analysis,
@@ -46,6 +55,10 @@ from memcommit.review import (
     review_matches_context,
 )
 from memcommit.store import MemoryStore
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def _select_report_session(
@@ -113,6 +126,38 @@ def _run_update_report(
     _show_operation_review(update_review_report(session), snapshot=snapshot)
 
 
+def _run_audit_review(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+    snapshot: bool,
+) -> None:
+    """Open one exact saved Audit without rerunning any finder."""
+
+    from memcommit.commands.audit import run_quality_audit_review
+    from memcommit.commands.audit_sessions import audit_session_entries
+    from memcommit.commands.resolution_workbench_shell import (
+        render_resolution_workbench_snapshot,
+    )
+
+    sessions = QualityAuditStore(store)
+    selected = _select_report_session(
+        audit_session_entries(sessions),
+        kind="audit",
+        title="MEM REVIEW · AUDIT REPORTS",
+        session_uid=session_uid,
+    )
+    if selected is None:
+        return
+    session = sessions.load(selected.key)
+    if snapshot or not _interactive_terminal():
+        typer.echo(
+            render_resolution_workbench_snapshot(quality_audit_resolution_view(session))
+        )
+        return
+    run_quality_audit_review(store, session)
+
+
 def _run_compare_report(
     store: MemoryStore,
     *,
@@ -176,7 +221,11 @@ def _run_meld_report(
     if selected is None:
         return
     session = reload_selected_meld_session(store, by_key[selected.key])
-    if not snapshot and sys.stdin.isatty() and sys.stdout.isatty():
+    if (
+        not snapshot
+        and _interactive_terminal()
+        and session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}
+    ):
         from memcommit.commands.meld import run_meld_review
 
         run_meld_review(
@@ -185,7 +234,7 @@ def _run_meld_report(
             provider_factory=connect_codex_chatgpt_provider,
         )
         return
-    _show_operation_review(meld_review_report(session), snapshot=True)
+    _show_operation_review(meld_review_report(session), snapshot=snapshot)
 
 
 def _run_sever_report(
@@ -213,12 +262,12 @@ def _run_sever_report(
     if selected is None:
         return
     session = reload_selected_sever_session(sessions, by_key[selected.key])
-    if not snapshot and sys.stdin.isatty() and sys.stdout.isatty():
+    if not snapshot and _interactive_terminal() and session.state == "REVIEWING":
         from memcommit.commands.sever import run_sever_review
 
         run_sever_review(store, session)
         return
-    _show_operation_review(sever_review_report(session), snapshot=True)
+    _show_operation_review(sever_review_report(session), snapshot=snapshot)
 
 
 def _load_direct_context(
@@ -244,8 +293,19 @@ def _run_atomize_workbench(
     replace: bool,
     respond_to: str | None,
     response: str | None,
+    expected_analysis_uid: str | None = None,
 ) -> None:
     """Resume the Context-bound atomize workbench compatibility adapter."""
+    if expected_analysis_uid is not None:
+        from memcommit.commands.atomize_sessions import (
+            load_saved_atomize_analysis,
+        )
+
+        selected_analysis = load_saved_atomize_analysis(
+            store,
+            expected_analysis_uid,
+        )
+        context_name = selected_analysis.context_name
     ctx = _load_direct_context(
         store,
         context_name,
@@ -256,6 +316,11 @@ def _run_atomize_workbench(
         raise ReviewError(
             "No saved atomize analysis exists for this Context. Run "
             "'mem impact atomize' or 'mem atomize' first."
+        )
+    if expected_analysis_uid is not None and analysis.uid != expected_analysis_uid:
+        raise ReviewError(
+            "The selected atomize analysis changed while the Review launcher "
+            "was open. Reopen the launcher."
         )
     if not atomize_analysis_matches_context(analysis, ctx):
         raise ReviewError(
@@ -378,8 +443,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Open a review report (compare, meld, sever, update, atomize, "
-                "or ambiguities); "
+                "Open a review report (audit, compare, meld, sever, update, "
+                "atomize, or ambiguities); "
                 "omit to enter the interactive Review session"
             )
         ),
@@ -439,6 +504,40 @@ def cmd(
             None if context_name is None else context_snapshot.resolve(context_name)
         )
         normalized_kind = kind.casefold() if kind is not None else None
+        selected_session_uid = session_uid
+        launcher_receipt = None
+        if (
+            kind is None
+            and session_uid is None
+            and context_name is None
+            and not snapshot
+            and not replace_review
+            and respond_to is None
+            and response is None
+            and _interactive_terminal()
+        ):
+            launcher_receipt = choose_review_session(store)
+            if launcher_receipt is None:
+                typer.echo("Review selection cancelled.")
+                return
+            normalized_kind = launcher_receipt.kind
+            selected_session_uid = launcher_receipt.key
+        if normalized_kind == "audit":
+            if (
+                replace_review
+                or context_name is not None
+                or respond_to is not None
+                or response is not None
+            ):
+                raise ReviewError(
+                    "Saved Audit Review uses --session and --snapshot only."
+                )
+            _run_audit_review(
+                store,
+                session_uid=selected_session_uid,
+                snapshot=snapshot,
+            )
+            return
         if normalized_kind in {"compare", "meld", "sever", "update"}:
             if replace_review or respond_to is not None or response is not None:
                 raise ReviewError(
@@ -453,12 +552,12 @@ def cmd(
             }
             runners[normalized_kind](
                 store,
-                session_uid=session_uid,
+                session_uid=selected_session_uid,
                 snapshot=snapshot,
             )
             return
         if normalized_kind == "atomize":
-            if session_uid is not None:
+            if launcher_receipt is None and session_uid is not None:
                 raise ReviewError(
                     "Atomize Review is Context-bound; use --context instead of "
                     "--session."
@@ -471,9 +570,22 @@ def cmd(
                 replace=replace_review,
                 respond_to=respond_to,
                 response=response,
+                expected_analysis_uid=(
+                    selected_session_uid if launcher_receipt is not None else None
+                ),
             )
             return
-        if kind is None:
+        if normalized_kind == SAVED_REVIEW_KIND:
+            if launcher_receipt is None:
+                raise ReviewError("Unsupported review adapter.")
+            session = store.load_review_session()
+            if session is None or session.uid != selected_session_uid:
+                raise ReviewError(
+                    "The selected saved review changed while the Review "
+                    "launcher was open. Reopen the launcher."
+                )
+            ctx = store.load_direct(session.context_name)
+        elif normalized_kind is None:
             if session_uid is not None:
                 raise ReviewError("--session requires an explicit review kind.")
             if replace_review:
@@ -506,7 +618,7 @@ def cmd(
                 raise ReviewError(
                     "Unsupported review adapter. "
                     "Implemented adapters are 'ambiguities', 'atomize', "
-                    "'compare', 'meld', 'sever', and 'update'."
+                    "'audit', 'compare', 'meld', 'sever', and 'update'."
                 )
             if session_uid is not None:
                 raise ReviewError(
@@ -549,6 +661,7 @@ def cmd(
         AtomizeImpactError,
         AtomizeWorkbenchError,
         QueryProviderError,
+        QualityAuditError,
         ReviewError,
     ) as error:
         typer.secho(

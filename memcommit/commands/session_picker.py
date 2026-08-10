@@ -478,6 +478,7 @@ def choose_session(
     initial_sort_mode: SessionSortMode = "recent",
     initial_group_mode: SessionGroupMode = "all",
     catalog_label: str = "saved sessions",
+    enter_action: str = "open",
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -510,6 +511,14 @@ def choose_session(
         or any(character in catalog_label for character in "\r\n")
     ):
         raise ValueError("Session picker catalog label must be non-empty text.")
+    if (
+        not isinstance(enter_action, str)
+        or not enter_action
+        or any(character in enter_action for character in "\r\n")
+    ):
+        raise ValueError(
+            "Session picker Enter action must be non-empty single-line text."
+        )
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive session selection requires a terminal. "
@@ -727,7 +736,9 @@ def choose_session(
             else ""
         )
         return (
-            " ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter"
+            " ↑/↓ move  PgUp/PgDn detail  "
+            f"Enter {display_escape_text(enter_action)}  "
+            "S sort  G group  / filter"
             f"{new_hint}  Esc/q cancel  ·  {position}{query_hint}"
         )
 

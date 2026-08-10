@@ -1,0 +1,52 @@
+ MEM AUDIT · 3/3 · FINDING CONFLICTS … · 20s                                                                                                                                        
+┌───────────────────────────────────────────────────────────────────────────| AUDIT CHECKS · 1 → 2 → 3 |───────────────────────────────────────────────────────────────────────────┐
+│MEM AUDIT · THREE QUALITY FINDERS                                                                                                                                                ^│
+│RESULT PENDING · SOURCE UNCHANGED                                                                                                                                                 │
+│                                                                                                                                                                                  │
+│FROZEN SOURCE                                                                                                                                                                     │
+│task-3/local/results/additive-final · 3 direct Memories                                                                                                                           │
+│                                                                                                                                                                                  │
+│CHECKS · SAME FROZEN DIRECT SOURCE                                                                                                                                                │
+│1. DUPLICATES   · COMPLETE                                                                                                                                                        │
+│2. AMBIGUITIES  · COMPLETE                                                                                                                                                        │
+│3. CONFLICTS    · RUNNING …                                                                                                                                                       │
+│                                                                                                                                                                                  │
+│Each finder runs independently in this displayed order. No partial Audit is saved.                                                                                                │
+│H or ? opens Help while the active finder continues.                                                                                                                              │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ C/c Contexts · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                                    

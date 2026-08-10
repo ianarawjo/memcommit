@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ SEVER DECISION 1/2                                                                                                                                                               ┃
+┃ The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.                                          ┃
+┃ [REQUIRED] RECOMMENDED                                                                                                                                                           ┃
+┃ REVIEW SET · REQUIRED 2 · OPTIONAL 0                                                                                                                                             ┃
+┃ SEVER ASSESSMENT                                                                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ RECOMMENDED RESULT · REFRAME                                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ EVIDENCE MEMORIES                                                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE MEMORY · FROM task-3/local/candidates/coordination-preparation                                                                                                            ┃
+┃   [eb87552a] The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.                             ┃
+┃                                                                                                                                                                                  ┃
+┃ APPLICABLE CRITERION 1 · FROM task-3/local/criteria/additive-minimum                                                                                                             ┃
+┃   [0b4adf1a] Keep only information that independently states a stable accessibility, communication, scheduling, preparation, or safety preference useful across healthcare       ┃
+┃              interactions.                                                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ APPLICABLE CRITERION 2 · FROM task-3/local/criteria/additive-minimum                                                                                                             ┃
+┃   [0e146ea6] Treat medication, availability, appointments, contact details, locations, and functional status as stale unless the Memory itself states a stable preference        ┃
+┃              rather than a current fact.                                                                                                                                        v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ SEVER QUESTION                                                                                                                                                                  ^│
+│ Choose what the local result should remember.                                                                                                                                    │
+│ PROPOSED RESULT TREATMENTS                                                                                                                                                       │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│✓ 1. Use recommendation · REFRAME                                                                                                                                                 │
+│  Because the user's availability varies by week, confirm it for each appointment rather than relying on availability from prior weeks or months.                                 │
+│                                                                                                                                                                                  │
+│  2. Keep                                                                                                                                                                         │
+│  The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.                                        v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Sever report                                                                                                                                           ^│
+│› SEVER DECISION The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.                          │
+│  SEVER DECISION After changing the same content into a checklist, the user marked every item they had prepared.                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · APPLIED · REVIEW · ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report H Help  Q close

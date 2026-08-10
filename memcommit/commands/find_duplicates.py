@@ -15,6 +15,10 @@ from memcommit.commands.findings_render import (
     render_reason,
 )
 from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.quality_find_workbench import (
+    interactive_quality_find_available,
+    run_interactive_quality_find,
+)
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
@@ -46,6 +50,37 @@ def cmd(
 ) -> None:
     """Report duplicate evidence; never merge, remove, or checkpoint it."""
     store = MemoryStore(create=False)
+    if context_name is None and interactive_quality_find_available():
+        try:
+            context_snapshot = ContextOperandSnapshot.capture(store)
+            completed = run_interactive_quality_find(
+                store,
+                current_name=context_snapshot.current_name,
+                kind="duplicates",
+                analyze=lambda ctx: ops.find_duplicates(
+                    ctx,
+                    connect_codex_chatgpt_provider,
+                ),
+            )
+        except (
+            FileNotFoundError,
+            OSError,
+            ProfileConfigError,
+            ProfileError,
+            RuntimeError,
+            ValueError,
+            FindingsError,
+            QueryProviderError,
+        ) as error:
+            typer.secho(
+                "Find duplicates error: " + display_escape_text(str(error)),
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not completed:
+            typer.echo("Find duplicates cancelled.")
+        return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         access = resolve_context_access(

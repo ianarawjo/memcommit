@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ AMBIGUITY 1/1                                                                                                                                                                    ┃
+┃ The user considers a reminder the day before an appointment sufficient for rechecking preparation items.                                                                         ┃
+┃ [HELPFUL] OPEN                                                                                                                                                                   ┃
+┃ REVIEW SET · REQUIRED 0 · OPTIONAL 1                                                                                                                                             ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ SINGLE · HELPFUL                                                                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE MEMORY                                                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE 1 · FROM task-3/local/results/additive-final                                                                                                                              ┃
+┃   [a3bef2e1] The user considers a reminder the day before an appointment sufficient for rechecking preparation items.                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃ WHY THIS IS UNCLEAR                                                                                                                                                              ┃
+┃ The phrase “the day before” ordinarily means the preceding calendar day, so the instruction has one reading, but it does not specify a reminder time. Any time that day can sati ┃
+┃sfy the stated preference, while clarification would make calendar scheduling more precise.                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ CLARIFICATION QUESTION                                                                                                                                                          ^│
+│ What time on the day before should the reminder be scheduled?                                                                                                                    │
+│ PROPOSED READINGS                                                                                                                                                                │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│  1. SINGLE                                                                                                                                                                       │
+│  A reminder scheduled for the calendar day before an appointment is sufficient for prompting the user to recheck the relevant preparation items.                                 │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Audit report                                                                                                                                           ^│
+│› AMBIGUITY      The user considers a reminder the day before an appointment sufficient for rechecking preparation items.                                                         │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · 1 optional review remains open. No whole-set action is required; close or revisit an item.                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report H Help  Q close                                                                 

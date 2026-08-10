@@ -54,34 +54,29 @@ mem review atomize --respond-to UID --response TEXT  # save without a TUI
 mem impact atomize --refresh             # explicit unframed reanalysis
 ```
 
-## Planned saved-Review selector
+## Aggregate saved-Review selector
 
-`mem review` does **not** receive the saved-work picker in this slice. Ground,
-Meld, Atomize, and Compare have enumerable named, Context-bound, or
-ordered-pair artifacts. The older ambiguity Review instead still occupies one
-global latest slot, while Atomize Review is already resumed through its
-Context-scoped Atomize workbench. Presenting those as a list today would imply
-multiple independently resumable Review records that do not exist.
+TTY bare `mem review` projects the independently enumerable Atomize, Compare,
+Meld, and Sever artifacts, the Update/Impact singleton, and the older global
+Review singleton into the common picker. This is a union of existing operation
+records, not a new universal Review persistence model. In particular, the
+ambiguity Review appears exactly once; the launcher does not imply unavailable
+history behind its global latest slot.
 
-After Review has an enumerable persistence model with stable per-record
-identity and a provider-free exact reopen boundary, it should adopt the same
-interaction grammar:
+The selector sorts recent-first, allows Context grouping and filtering,
+freezes one selected operation kind and record key, and revalidates that exact
+artifact before rendering. It does not rescan semantic input, replace a
+review, call a provider, promote staged evidence, or expose an Apply action
+merely because a row was selected. Every retained operation state remains
+visible; this is not a completed-only history view.
 
-```text
-mem review --sessions
-```
-
-The future adapter should project each saved Review into the common picker,
-sort recent-first, allow Context grouping and filtering, freeze one selected
-record identity, and revalidate its finder result, Context frame, and revision
-before rendering. It must not rescan, replace a review, call a provider, or
-promote staged evidence merely because a row was selected. Blank/bare Review
-behavior should be reconsidered only after that multi-record model exists;
-this note is a plan, not an implemented command contract.
-
-Bare `mem review` resumes the Context's atomize workbench only when the older
-global review slot is empty; an existing global ambiguity review keeps
-precedence for backward compatibility.
+TTY bare `mem review` now opens the aggregate saved-session launcher. Choosing
+an Audit row resumes the exact saved three-finder snapshot and its response
+ledger without rerunning a provider. Choosing an Atomize row resumes its exact
+analysis/workbench, while choosing the older global ambiguity Review resumes
+that singleton in this shell. Non-TTY and explicit snapshot/response
+compatibility forms retain the prior precedence: the global Review slot first,
+then the current Context's Atomize workbench.
 
 Standalone conflict and update have existing semantic producers but no
 dedicated adapter in this shell yet. Conflict issues produced inside an
@@ -337,6 +332,19 @@ Context UID:
 ~/.mem/atomize-analyses/<context-uid>.json
 ~/.mem/atomize-workbenches/<context-uid>.json
 ```
+
+Completed `mem audit` runs use a multi-session UID catalog rather than a
+latest slot:
+
+```text
+~/.mem/quality-audits/<audit-uid>.json
+```
+
+Each Audit record keeps its immutable frozen Source, all three typed finder
+reports, and per-check ruleset/provider provenance beside a CAS-protected
+mutable response ledger. Unlike the current-frame ambiguity and Atomize
+adapters, `mem review audit --session UID` is historical review: a later live
+Context change does not reinterpret or invalidate the frozen artifact.
 
 The relevant records include:
 

@@ -30,6 +30,11 @@ QUALITY_RESPONSE_CHAR_LIMIT = 1_000_000
 QUALITY_REASON_CHAR_LIMIT = 1_000
 QUALITY_QUESTION_CHAR_LIMIT = 500
 QUALITY_READING_LIMIT = 5
+QUALITY_RULESET_VERSIONS = {
+    "find_duplicates": "duplicates-v1-draft",
+    "find_ambiguities": "ambiguity-v1-draft",
+    "find_conflicts": "conflict-v1-draft",
+}
 
 DuplicateRelation = Literal[
     "EXACT",
@@ -263,7 +268,17 @@ def _load_calibration_cases(filename: str) -> list[object]:
         raise FindingsError(
             f"Could not load semantic finder calibration fixture '{filename}'."
         ) from error
-    if not isinstance(data, dict) or not isinstance(data.get("cases"), list):
+    operation = {
+        "duplicates.json": "find_duplicates",
+        "ambiguity.json": "find_ambiguities",
+        "conflict.json": "find_conflicts",
+    }.get(filename)
+    if (
+        operation is None
+        or not isinstance(data, dict)
+        or data.get("ruleset_version") != QUALITY_RULESET_VERSIONS[operation]
+        or not isinstance(data.get("cases"), list)
+    ):
         raise FindingsError(
             f"Invalid semantic finder calibration fixture '{filename}'."
         )

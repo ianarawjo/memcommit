@@ -17,6 +17,10 @@ from memcommit.commands.findings_render import (
     render_values,
 )
 from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.quality_find_workbench import (
+    interactive_quality_find_available,
+    run_interactive_quality_find,
+)
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
@@ -47,6 +51,37 @@ def cmd(
 ) -> None:
     """Report per-Memory ambiguity; never edit or checkpoint the Context."""
     store = MemoryStore(create=False)
+    if context_name is None and interactive_quality_find_available():
+        try:
+            context_snapshot = ContextOperandSnapshot.capture(store)
+            completed = run_interactive_quality_find(
+                store,
+                current_name=context_snapshot.current_name,
+                kind="ambiguities",
+                analyze=lambda ctx: ops.find_ambiguities(
+                    ctx,
+                    connect_codex_chatgpt_provider,
+                ),
+            )
+        except (
+            FileNotFoundError,
+            OSError,
+            ProfileConfigError,
+            ProfileError,
+            RuntimeError,
+            ValueError,
+            FindingsError,
+            QueryProviderError,
+        ) as error:
+            typer.secho(
+                "Find ambiguities error: " + display_escape_text(str(error)),
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not completed:
+            typer.echo("Find ambiguities cancelled.")
+        return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         access = resolve_context_access(

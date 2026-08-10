@@ -274,6 +274,7 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         # neutral gray avoids Memory lavender and focused-control blue.
         "loading-label": "fg:#8bd5ff bold",
         "loading-status": "fg:#eed49f bold",
+        "loading-complete": "fg:#a6da95 bold",
         "loading-placeholder": "fg:#a5adcb",
         "detail-card": "fg:#ffffff",
         "detail-card.focused": "fg:#8bd5ff bold",

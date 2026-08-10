@@ -1,0 +1,52 @@
+ MEM AUDIT · SETUP                                                                                                                                                                  
+ ONE DIRECT CONTEXT · SOURCE UNCHANGED                                                                                                                                              
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SOURCE · ALL READABLE CONTEXTS · * CURRENT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ·   ▸ task-2                                                                                                                                                                   ^┃
+┃  ·   ▾ task-3                                                                                                                                                                    ┃
+┃  ·     · task-3/description                                                                                                                                                      ┃
+┃  ·     ▾ task-3/local                                                                                                                                                            ┃
+┃  ·       · task-3/local/candidates/accessibility-communication                                                                                                                   ┃
+┃  ·       · task-3/local/candidates/coordination-preparation                                                                                                                      ┃
+┃  ·       ▸ task-3/local/criteria                                                                                                                                                 ┃
+┃  ·       ▸ task-3/local/guardrails                                                                                                                                               ┃
+┃› ✓ *     ▸ task-3/local/personal-memory                                                                                                                                         v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────────────────────────────────────────────| TO DO · ENTER TO RUN |─────────────────────────────────────────────────────────────────────────────┐
+│  RUN AUDIT                                                                                                                                                                       │
+│  Run Duplicate, Ambiguity, and Conflict finders over the same frozen direct Source.                                                                                              │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ move/cross · ←/→ collapse/expand · Enter/Space select · A expand all · Tab/Shift-Tab pane · Esc/Q cancel                                                                       
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

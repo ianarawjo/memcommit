@@ -115,7 +115,7 @@ HELP_CATEGORY_GROUPS = (
     (
         "ANALYZE & TRANSFORM",
         (
-            "atomize", "compare", "impact", "review", "meld", "update",
+            "audit", "atomize", "compare", "impact", "review", "meld", "update",
             "sever", "translate", "merge",
         ),
     ),
@@ -159,6 +159,11 @@ COMMAND_FORMS = {
         'mem add "[memory]" --context [context] (add to an explicit Context)',
         "mem add --input [file] --context [context] (batch-add to an explicit Context)",
         "mem add --paste --context [context] (paste into an explicit Context)",
+    ),
+    "audit": (
+        "mem audit (choose one Context, run Duplicate + Ambiguity + Conflict, save, and review)",
+        "mem audit --context [context] (run and save all three finders for one exact Context)",
+        "mem audit --context [context] --snapshot (save and print the combined report)",
     ),
     "atomize": (
         "mem atomize (enter the current Context's interactive Atomize session)",
@@ -410,11 +415,12 @@ COMMAND_FORMS = {
     ),
     "review": (
         "mem review (enter the interactive Review session)",
+        "mem review audit (open a saved three-finder Audit)",
         "mem review compare (open a saved Compare report)",
         "mem review meld (open a saved Meld report)",
         "mem review sever (open a saved Sever report)",
         "mem review update (open the saved Update report)",
-        "mem review [kind] --session [uid] (exact Compare, Meld, Sever, or Update artifact)",
+        "mem review [kind] --session [uid] (exact Audit, Compare, Meld, Sever, or Update artifact)",
         "mem review atomize (open the current Context's saved Atomize analysis)",
         "mem review atomize --context [context] (Context-bound Atomize review)",
         "mem review ambiguities (analyze current-Context ambiguities)",

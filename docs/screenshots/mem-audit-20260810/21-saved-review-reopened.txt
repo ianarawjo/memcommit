@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM AUDIT                                                                                                                                                                       ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   FROZEN SOURCE · task-3/local/results/additive-final                                                                                                                            ┃
+┃ SAVED · 3/3 CHECKS · 0/1 ANSWERED · 3 SOURCE MEMORIES · 0 DUPLICATES · 1 AMBIGUITIES · 0 CONFLICTS                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ AUDIT SUMMARY                                                                                                                                                                    ┃
+┃ All three quality finders completed over the same frozen direct Context frame. Reported 1 total finding.                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ CHECKS                                                                                                                                                                           ┃
+┃ DUPLICATES · COMPLETE · 0 findings                                                                                                                                               ┃
+┃AMBIGUITIES · COMPLETE · 1 finding                                                                                                                                                ┃
+┃CONFLICTS · COMPLETE · 0 findings                                                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ FROZEN SOURCE                                                                                                                                                                    ┃
+┃ task-3/local/results/additive-final · 3 direct Memories. Descendants and embedded Contexts were not analyzed.                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ PROVENANCE                                                                                                                                                                       ┃
+┃ DUPLICATES · duplicates-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium                                                                                                  ┃
+┃AMBIGUITIES · ambiguity-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium                                                                                                   ┃
+┃CONFLICTS · conflict-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning medium                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Review responses do not alter the snapshot, Context, or Memories.    ┃
+┃                                                                                                                                                                                  ┃
+┃ AUDIT FINDINGS · DUPLICATES → AMBIGUITIES → CONFLICTS · 1                                                                                                                        ┃
+┃ AMBIGUITY 1 · The user considers a reminder the day before an appointment sufficient for rechecking preparation items.                                                           ┃
+┃ [HELPFUL] The phrase “the day before” ordinarily means the preceding calendar day, so the instruction has one reading, but it does not specify a reminder time. Any time that da ┃
+┃y can satisfy the stated preference, while clarification would make calendar scheduling more precise.                                                                             ┃
+┃ QUESTION · What time on the day before should the reminder be scheduled?                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ COMPLETE                                                                                                                                                                         ┃
+┃ 1 optional review remains open. No whole-set action is required; close or revisit an item.                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Audit report                                                                                                                                           ^│
+│  AMBIGUITY      The user considers a reminder the day before an appointment sufficient for rechecking preparation items.                                                         │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · 1 optional review remains open. No whole-set action is required; close or revisit an item.                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close H Help  Q close                                                              
