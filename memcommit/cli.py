@@ -213,8 +213,9 @@ app.command(
 app.command(
     "query",
     help=(
-        "Open interactive Query or ask visible Context knowledge or a concealed "
-        "query-only view; sessions retain only visible Q/A when permitted."
+        "Open interactive Query with a read-only saved transcript browser, or "
+        "ask visible Context knowledge or a concealed query-only view; sessions "
+        "retain only visible Q/A when permitted."
     ),
 )(query.cmd)
 
@@ -313,10 +314,10 @@ app.command(
     "find",
     help=(
         "Open interactive search when QUERY is omitted, or search once when "
-        "QUERY is supplied. The default scope includes the selected Context, "
-        "its namespace descendants, and embedded Contexts; --direct excludes "
-        "both kinds of reach. Explicitly temporal wording searches retained "
-        "Memory history."
+        "QUERY is supplied. The default scope includes each selected Context "
+        "root, its namespace descendants, and embedded Contexts. Descendant "
+        "and embedded reach have independent flags; --direct disables both. "
+        "Explicitly temporal wording searches retained Memory history."
     ),
 )(find.cmd)
 app.command(

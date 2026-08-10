@@ -21,7 +21,10 @@ from memcommit.commands.query_execution import (
     run_granted_query_request,
     run_ordinary_query_request,
 )
-from memcommit.commands.query_workbench import run_query_workbench
+from memcommit.commands.query_workbench import (
+    SavedQueryTranscript,
+    run_query_workbench,
+)
 from memcommit.commands.readable_context_catalog import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
@@ -31,7 +34,7 @@ from memcommit.commands.tui_primitives import (
     safe_terminal_text,
 )
 from memcommit.context import QueryContextRef
-from memcommit.source_projection.model import SourceDisplayFacts, SourceForm
+from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import source_object_label
 from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
@@ -130,6 +133,18 @@ def _open_query_workbench(
         for name in names
         if catalog.access_for(name).is_granted
     }
+    saved_transcripts = tuple(
+        SavedQueryTranscript(
+            name=session.name,
+            requested_name=session.binding.requested_name,
+            language=session.binding.language,
+            revision=session.revision,
+            turns=tuple(
+                (turn.question, turn.answer) for turn in session.turns
+            ),
+        )
+        for session in QuerySessionStore(store.store_dir).list_sessions()
+    )
     run_query_workbench(
         names,
         current_context=displayed_current,
@@ -148,6 +163,7 @@ def _open_query_workbench(
             load_catalog=load_authority_query_catalog,
         ),
         annotations=annotations,
+        saved_transcripts=saved_transcripts,
         initial_language=language,
         initial_session_name=session_name,
     )

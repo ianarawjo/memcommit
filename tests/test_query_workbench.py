@@ -1,6 +1,7 @@
 """Interactive Query question, source, scope, and answer contracts."""
 
 import threading
+from types import SimpleNamespace
 
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
@@ -18,8 +19,10 @@ from memcommit.commands.query_execution import (
 )
 from memcommit.commands.query_workbench import (
     QueryAnswerFocus,
+    SavedQueryTranscript,
     query_answer_stop_count,
     render_query_answer_fragments,
+    render_saved_query_transcript,
     run_query_workbench,
 )
 from memcommit.find_answer_references import (
@@ -51,6 +54,46 @@ def test_blank_query_workbench_does_not_connect_before_submission():
     assert result.response is None
     assert ordinary == []
     assert granted == []
+
+
+def test_saved_transcript_is_visible_and_browsable_without_a_provider_turn():
+    transcript = SavedQueryTranscript(
+        name="review-log",
+        requested_name="construction-details",
+        language="en",
+        revision=2,
+        turns=(("What changed?", "The deadline moved to Friday."),),
+    )
+
+    rendered = render_saved_query_transcript(transcript)
+
+    assert "QUERY SESSION · review-log" in rendered
+    assert "VIEW · construction-details · LANGUAGE en · REVISION 2" in rendered
+    assert "Q1\nWhat changed?" in rendered
+    assert "A1\nThe deadline moved to Friday." in rendered
+
+    with create_pipe_input() as pipe_input:
+        # Question → Sources → Scope → Saved Transcripts, then view and close.
+        pipe_input.send_text("\t\t\t\r\x03")
+        result = run_query_workbench(
+            ("task",),
+            current_context="task",
+            initial_context="task",
+            query_targets=(),
+            saved_transcripts=(transcript,),
+            run_ordinary=lambda _request: (_ for _ in ()).throw(
+                AssertionError("transcript browsing must not query")
+            ),
+            run_granted=lambda _request: (_ for _ in ()).throw(
+                AssertionError("transcript browsing must not query")
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CLOSED"
+    assert result.response is None
 
 
 def test_query_question_keeps_h_and_uppercase_h_as_text():
@@ -420,6 +463,61 @@ def test_initial_saved_session_is_visibly_and_executably_exact():
             federate_descendants=False,
         )
     ]
+
+
+def test_query_command_projects_saved_transcripts_into_the_bare_workbench(
+    isolated_store,
+    monkeypatch,
+):
+    store = query_command.MemoryStore()
+    context = query_command.ops.init("task")
+    store.save(context)
+    store.set_current(context.name)
+    session = SimpleNamespace(
+        name="review-log",
+        binding=SimpleNamespace(requested_name="public-view", language="ko"),
+        revision=3,
+        turns=(SimpleNamespace(question="질문", answer="답변"),),
+    )
+
+    class FakeSessionStore:
+        def __init__(self, _root):
+            pass
+
+        def list_sessions(self):
+            return (session,)
+
+    observed = {}
+    monkeypatch.setattr(query_command, "QuerySessionStore", FakeSessionStore)
+    monkeypatch.setattr(
+        query_command,
+        "freeze_granted_query_targets",
+        lambda _store: (),
+    )
+    monkeypatch.setattr(
+        query_command,
+        "run_query_workbench",
+        lambda *args, **kwargs: observed.update(
+            {"context_names": args[0], **kwargs}
+        ),
+    )
+
+    query_command._open_query_workbench(
+        store,
+        context_name=None,
+        language="en",
+        session_name=None,
+    )
+
+    assert observed["saved_transcripts"] == (
+        SavedQueryTranscript(
+            name="review-log",
+            requested_name="public-view",
+            language="ko",
+            revision=3,
+            turns=(("질문", "답변"),),
+        ),
+    )
 
 
 def test_bare_query_routes_to_the_workbench_only_in_a_terminal(

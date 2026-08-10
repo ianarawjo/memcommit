@@ -230,7 +230,10 @@ COMMAND_FORMS = {
         'mem find "[query]" (current Context, namespace descendants, and embedded Contexts)',
         'mem find "[temporal_query]" (retained history when the query explicitly asks about time)',
         'mem find --context [context] "[query]" (explicit Context root, descendants, and embeds)',
-        'mem find --direct "[query]" (selected Context only; no descendants or embeds)',
+        'mem find --context [context1] --context [context2] --descendants "[query]" (multiple roots with lexical descendants)',
+        'mem find --context-only --follow-embeds "[query]" (exact lexical roots while following embedded Contexts)',
+        'mem find --descendants --exclude-embeds "[query]" (lexical subtrees without embedded traversal)',
+        'mem find --direct "[query]" (compatibility shorthand for context-only plus exclude-embeds)',
     ),
     "find-ambiguities": (
         "mem find-ambiguities (current Context; no changes)",
@@ -367,7 +370,7 @@ COMMAND_FORMS = {
         "mem provider probe (test the current selection)",
     ),
     "query": (
-        "mem query (open the interactive Question and Source workbench)",
+        "mem query (open the interactive Question, Source, and saved transcript workbench)",
         'mem query "[question]" (ask the current ordinary Context)',
         'mem query --context [context] "[question]" (ask an explicit ordinary Context)',
         "mem query [query_view] (browse opaque Memory handles)",

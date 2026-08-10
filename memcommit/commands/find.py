@@ -1219,7 +1219,9 @@ def _open_find_search_workbench(
     access: ContextAccess,
     *,
     current_name: str | None,
-    direct: bool,
+    initial_targets: Sequence[str] = (),
+    include_descendants: bool,
+    follow_embeds: bool,
     limit: int,
 ) -> None:
     """Open a blank, query-focused Find over one frozen readable catalog."""
@@ -1245,8 +1247,9 @@ def _open_find_search_workbench(
         names,
         current=displayed_current,
         initial_target=initial_target,
-        initial_include_descendants=not direct,
-        initial_follow_embeds=not direct,
+        initial_targets=initial_targets or (initial_target,),
+        initial_include_descendants=include_descendants,
+        initial_follow_embeds=follow_embeds,
         limit=limit,
         run_search=lambda request: _run_find_search_request(
             store,
@@ -1296,12 +1299,15 @@ def cmd(
         ),
     ] = None,
     context_name: Annotated[
-        Optional[str],
+        Optional[list[str]],
         typer.Option(
             "--context",
             "-c",
             show_default=False,
-            help="Context to search (defaults to current)",
+            help=(
+                "Context root to search; repeat for multiple roots "
+                "(defaults to current)"
+            ),
         ),
     ] = None,
     limit: Annotated[
@@ -1312,29 +1318,65 @@ def cmd(
             help="Maximum matches to return (1-20)",
         ),
     ] = 5,
+    include_descendants: Annotated[
+        bool,
+        typer.Option(
+            "--descendants/--context-only",
+            help=(
+                "Include each selected Context root's readable lexical "
+                "descendants, independently of embedded Context traversal"
+            ),
+        ),
+    ] = True,
+    follow_embeds: Annotated[
+        bool,
+        typer.Option(
+            "--follow-embeds/--exclude-embeds",
+            help=(
+                "Follow embedded Context links from the selected lexical "
+                "scope, independently of descendant expansion"
+            ),
+        ),
+    ] = True,
     direct: Annotated[
         bool,
         typer.Option(
             "--direct",
             help=(
-                "Search only direct items in the selected Context; exclude "
-                "namespace descendants and embedded Contexts"
+                "Compatibility shorthand for --context-only --exclude-embeds; "
+                "takes precedence over the separate scope flags"
             ),
         ),
     ] = False,
 ) -> None:
     store = MemoryStore()
+    # Keep the established --direct script contract while exposing the same
+    # independent lexical and embedded axes as the interactive Scope control.
+    if direct:
+        include_descendants = False
+        follow_embeds = False
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        selected_name = context_snapshot.resolve_or_current(context_name)
-        if selected_name is None:
-            raise RuntimeError("No current context. Run 'mem init <name>' first.")
-        access = resolve_context_access(
-            store,
-            context_name,
-            current_name=context_snapshot.current_name,
-            required_permission="READ",
+        operands: tuple[str | None, ...] = (
+            (context_name,)
+            if isinstance(context_name, str)
+            else tuple(context_name)
+            if context_name
+            else (None,)
         )
+        accesses = tuple(
+            resolve_context_access(
+                store,
+                operand,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            )
+            for operand in operands
+        )
+        target_names = tuple(access.display_name for access in accesses)
+        if len(set(target_names)) != len(target_names):
+            raise ValueError("Find Context roots must be distinct.")
+        access = accesses[0]
     except (
         FileNotFoundError,
         OSError,
@@ -1367,13 +1409,15 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
-            _open_find_search_workbench(
-                store,
-                access,
-                current_name=context_snapshot.current_name,
-                direct=direct,
-                limit=limit,
-            )
+            workbench_options = {
+                "current_name": context_snapshot.current_name,
+                "include_descendants": include_descendants,
+                "follow_embeds": follow_embeds,
+                "limit": limit,
+            }
+            if len(target_names) > 1:
+                workbench_options["initial_targets"] = target_names
+            _open_find_search_workbench(store, access, **workbench_options)
         except (
             FindMaterializationError,
             FindError,
@@ -1393,6 +1437,76 @@ def cmd(
             raise typer.Exit(1)
         return
 
+    if len(target_names) > 1:
+        try:
+            catalog = freeze_profile_readable_context_catalog(
+                store,
+                access,
+                include_query_routes=follow_embeds,
+            )
+            for target_access in accesses:
+                catalog.access_for(target_access.display_name)
+            response = _run_find_search_request(
+                store,
+                catalog,
+                FindSearchRequest(
+                    query=query,
+                    target_names=target_names,
+                    include_descendants=include_descendants,
+                    follow_embeds=follow_embeds,
+                    limit=limit,
+                ),
+            )
+        except (
+            FindError,
+            HistoryError,
+            HistorySearchError,
+            QueryProviderError,
+            FileNotFoundError,
+            OSError,
+            RuntimeError,
+            ValueError,
+        ) as error:
+            typer.secho(
+                f"Find error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not response.results:
+            typer.secho(
+                " + ".join(display_escape_text(name) for name in target_names),
+                bold=True,
+            )
+            typer.echo(
+                "  (no matching historical items)"
+                if response.mode == "HISTORY"
+                else "  (no matching items)"
+            )
+            return
+        if response.related_query:
+            typer.secho("RELATED RESULTS", bold=True)
+            typer.echo(
+                "  Broader search: "
+                + display_escape_text(response.related_query)
+            )
+            typer.echo("  Related items do not satisfy the original query.")
+            typer.echo()
+        grouped: dict[str, list[FindSearchResult]] = {}
+        for result in response.results:
+            grouped.setdefault(result.context_name, []).append(result)
+        for group_index, (owner_name, results) in enumerate(grouped.items()):
+            if group_index:
+                typer.echo()
+            typer.secho(display_escape_text(owner_name), bold=True)
+            for result in results:
+                related = " · RELATED" if result.relevance == "related" else ""
+                _render_labeled_content(
+                    f"[{result.kind} {result.uid[:8]}]{related}",
+                    result.content,
+                )
+        return
+
     temporal = is_temporal_query(query)
     try:
         if temporal and access.is_granted:
@@ -1407,14 +1521,18 @@ def cmd(
             read_store = freeze_readable_context_catalog(
                 store,
                 access,
-                include_query_routes=not direct,
+                include_query_routes=follow_embeds,
             )
-            ctx = read_store.load(access.display_name)
+            ctx = (
+                read_store.load(access.display_name)
+                if follow_embeds
+                else read_store.load_direct(access.display_name)
+            )
         frame_roots = _load_find_frame_roots(
             read_store,
             ctx,
-            recursive=not direct,
-            resolve_embeds=not temporal,
+            recursive=include_descendants,
+            resolve_embeds=follow_embeds and not temporal,
         )
     except (
         FileNotFoundError,
@@ -1435,7 +1553,7 @@ def cmd(
                 read_store,
                 frame_roots,
                 query,
-                recursive=not direct,
+                recursive=follow_embeds,
                 limit=limit,
             )
         except (
@@ -1474,7 +1592,7 @@ def cmd(
         frame_candidates = _collect_find_frame_candidates(
             store,
             frame_roots,
-            recursive=not direct,
+            recursive=follow_embeds,
             include_artifacts=not access.is_granted,
         )
         with CommandProgress(
@@ -1490,7 +1608,7 @@ def cmd(
                 provider,
                 limit=limit,
             )
-            if not direct:
+            if include_descendants:
                 progress.update("checking namespace coverage", step=3)
                 matches = _supplement_namespace_branch_coverage(
                     query,

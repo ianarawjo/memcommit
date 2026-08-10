@@ -64,11 +64,10 @@ from memcommit.context_targeting.tui.selection import render_context_target_mode
 from memcommit.selection.model import SelectionOption
 from memcommit.selection.state import FlatSelectionState
 from memcommit.selection.tui import render_vertical_choice_rows
-from memcommit.source_projection.model import SourceDisplayFacts, SourceForm
+from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
     normalize_source_display_tokens,
-    source_display_text,
     source_object_label,
 )
 from memcommit.find_answer_references import (
@@ -82,6 +81,61 @@ OrdinaryQueryRunner = Callable[[OrdinaryQueryRequest], OrdinaryQueryResponse]
 GrantedQueryRunner = Callable[[GrantedQueryRequest], GrantedQueryResponse]
 
 _QUERY_VIEW_LABEL = source_object_label(SourceForm.QUERY_VIEW).upper()
+
+
+@dataclass(frozen=True)
+class SavedQueryTranscript:
+    """Task-owned visible Q/A projected without reopening its Source."""
+
+    name: str
+    requested_name: str
+    language: str
+    revision: int
+    turns: tuple[tuple[str, str], ...]
+
+    def __post_init__(self) -> None:
+        if not self.name or not self.requested_name or not self.language:
+            raise ValueError("Saved Query transcript labels must be nonblank.")
+        if (
+            not isinstance(self.revision, int)
+            or isinstance(self.revision, bool)
+            or self.revision < 0
+        ):
+            raise ValueError("Saved Query transcript revision is invalid.")
+        if any(
+            not isinstance(turn, tuple)
+            or len(turn) != 2
+            or not all(isinstance(value, str) and value for value in turn)
+            for turn in self.turns
+        ):
+            raise ValueError("Saved Query transcript turns must be nonblank.")
+
+
+def render_saved_query_transcript(transcript: SavedQueryTranscript) -> str:
+    """Render only the durable, person-visible transcript projection."""
+
+    lines = [
+        f"QUERY SESSION · {safe_terminal_text(transcript.name)}",
+        "VIEW · "
+        + safe_terminal_text(transcript.requested_name)
+        + " · LANGUAGE "
+        + safe_terminal_text(transcript.language)
+        + f" · REVISION {transcript.revision}",
+    ]
+    if not transcript.turns:
+        lines.extend(("", "(no turns)"))
+        return "\n".join(lines)
+    for index, (question, answer) in enumerate(transcript.turns, start=1):
+        lines.extend(
+            (
+                "",
+                f"Q{index}",
+                safe_terminal_text(question),
+                f"A{index}",
+                safe_terminal_text(answer),
+            )
+        )
+    return "\n".join(lines)
 
 
 @dataclass(frozen=True)
@@ -209,6 +263,7 @@ def run_query_workbench(
     run_ordinary: OrdinaryQueryRunner,
     run_granted: GrantedQueryRunner,
     annotations: Mapping[str, SourceDisplayValue] | None = None,
+    saved_transcripts: Sequence[SavedQueryTranscript] = (),
     initial_language: str = "en",
     initial_session_name: str | None = None,
     app_input: Input | None = None,
@@ -223,6 +278,12 @@ def run_query_workbench(
             snapshot_hint='Pass a question, for example: mem query "What changed?".',
         )
     targets = tuple(query_targets)
+    transcripts = tuple(saved_transcripts)
+    if (
+        any(not isinstance(transcript, SavedQueryTranscript) for transcript in transcripts)
+        or len({transcript.name for transcript in transcripts}) != len(transcripts)
+    ):
+        raise ValueError("Saved Query transcripts must have distinct names.")
     target_by_uid = {target.grant_uid: target for target in targets}
     if len(target_by_uid) != len(targets):
         raise ValueError("Query-only target identities must be distinct.")
@@ -300,6 +361,7 @@ def run_query_workbench(
         raise ValueError("Query received an invalid Context annotation.") from error
     scope_row = {"value": 0}
     response: QueryWorkbenchResponse | None = None
+    viewed_transcript: SavedQueryTranscript | None = None
     answer_focus = QueryAnswerFocus()
     status = {"value": "READY · ENTER A QUESTION"}
     background_turn: BackgroundExecutorTurn[QueryWorkbenchResponse] = (
@@ -412,10 +474,14 @@ def run_query_workbench(
 
     scope_control = FormattedTextControl(render_scope, focusable=True, show_cursor=False)
     answer_control = FormattedTextControl(
-        lambda: render_query_answer_fragments(
-            response,
-            focus=answer_focus,
-            focused=app.layout.has_focus(answer_control),
+        lambda: (
+            [("", render_saved_query_transcript(viewed_transcript))]
+            if viewed_transcript is not None
+            else render_query_answer_fragments(
+                response,
+                focus=answer_focus,
+                focused=app.layout.has_focus(answer_control),
+            )
         ),
         focusable=True,
         show_cursor=False,
@@ -423,6 +489,48 @@ def run_query_workbench(
     answer_window = Window(
         answer_control,
         wrap_lines=True,
+        right_margins=[ScrollbarMargin(display_arrows=True)],
+    )
+    transcript_selection = (
+        FlatSelectionState(
+            tuple(
+                SelectionOption(
+                    transcript.name,
+                    transcript.name,
+                    f"{transcript.requested_name} · {transcript.language} · "
+                    f"{len(transcript.turns)} TURN(S) · REVISION "
+                    f"{transcript.revision}",
+                )
+                for transcript in transcripts
+            ),
+            cursor_uid=transcripts[0].name,
+            selected_uid=None,
+            allow_empty=True,
+        )
+        if transcripts
+        else None
+    )
+    transcript_by_name = {transcript.name: transcript for transcript in transcripts}
+
+    def render_transcript_rows() -> list[tuple[str, str]]:
+        if transcript_selection is None:
+            return [("", "  No saved query transcripts.")]
+        width = max(30, app.output.get_size().columns - 8)
+        return render_vertical_choice_rows(
+            transcript_selection,
+            focused=app.layout.has_focus(transcripts_control),
+            content_width=width,
+            numbered=False,
+        )
+
+    transcripts_control = FormattedTextControl(
+        render_transcript_rows,
+        focusable=True,
+        show_cursor=False,
+    )
+    transcripts_window = Window(
+        transcripts_control,
+        wrap_lines=False,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
 
@@ -481,10 +589,17 @@ def run_query_workbench(
         title="SESSION NAME · VISIBLE Q/A ONLY",
         height=Dimension.exact(3),
     )
+    transcripts_frame = Frame(
+        transcripts_window,
+        title="SAVED TRANSCRIPTS · ENTER TO VIEW",
+        height=Dimension(min=3, preferred=5, max=7),
+    )
 
     def answer_title() -> str:
         if background_turn.busy:
             return f"ANSWER · QUERYING {busy_suffix(background_turn.frame)}"
+        if viewed_transcript is not None:
+            return "ANSWER · SAVED TRANSCRIPT · READ ONLY"
         return "ANSWER"
 
     answer_frame = Frame(
@@ -530,6 +645,7 @@ def run_query_workbench(
                 session_frame,
                 filter=Condition(session_visible),
             ),
+            transcripts_frame,
             answer_frame,
             footer,
         ]
@@ -561,13 +677,18 @@ def run_query_workbench(
         is_focused=lambda: app.layout.has_focus(session_area),
     )
     bind_focused_frame_style(
+        transcripts_frame,
+        is_focused=lambda: app.layout.has_focus(transcripts_control),
+    )
+    bind_focused_frame_style(
         answer_frame,
         is_focused=lambda: app.layout.has_focus(answer_control),
     )
 
     def clear_answer(message: str) -> None:
-        nonlocal response
+        nonlocal response, viewed_transcript
         response = None
+        viewed_transcript = None
         answer_focus.reset()
         answer_window.vertical_scroll = 0
         status["value"] = message
@@ -709,8 +830,43 @@ def run_query_workbench(
     def _enter_session(_delta: int) -> None:
         session_area.buffer.cursor_position = len(session_area.text)
 
+    def _move_transcripts(_event, delta: int) -> SurfaceMoveResult:
+        if transcript_selection is None:
+            return "BOUNDARY"
+        return "MOVED" if transcript_selection.move(delta) else "BOUNDARY"
+
+    def _enter_transcripts(delta: int) -> None:
+        if transcript_selection is None:
+            return
+        transcript_selection.cursor_uid = (
+            transcript_selection.options[0].uid
+            if delta > 0
+            else transcript_selection.options[-1].uid
+        )
+
+    def _view_transcript(event) -> SurfaceActionResult:
+        nonlocal viewed_transcript
+        if transcript_selection is None:
+            status["value"] = "NO SAVED QUERY TRANSCRIPTS"
+            return "HANDLED"
+        selected_name = transcript_selection.select_cursor(toggle=False)
+        assert selected_name is not None
+        viewed_transcript = transcript_by_name[selected_name]
+        answer_focus.reset()
+        answer_window.vertical_scroll = 0
+        status["value"] = (
+            f"TRANSCRIPT {safe_terminal_text(selected_name)} · "
+            f"{len(viewed_transcript.turns)} TURN(S) · READ ONLY"
+        )
+        event.app.invalidate()
+        return "HANDLED"
+
     def _move_answer(_event, delta: int) -> SurfaceMoveResult:
-        document = _query_answer_reference_document(response)
+        document = (
+            None
+            if viewed_transcript is not None
+            else _query_answer_reference_document(response)
+        )
         if document is not None:
             return "MOVED" if answer_focus.move(response, delta) else "BOUNDARY"
 
@@ -730,7 +886,10 @@ def run_query_workbench(
         )
 
     def _enter_answer(delta: int) -> None:
-        if _query_answer_reference_document(response) is not None:
+        if (
+            viewed_transcript is None
+            and _query_answer_reference_document(response) is not None
+        ):
             answer_focus.enter(response, delta)
             return
         render_info = answer_window.render_info
@@ -747,7 +906,7 @@ def run_query_workbench(
         return "HANDLED"
 
     def _query(event) -> SurfaceActionResult:
-        nonlocal response
+        nonlocal response, viewed_transcript
         if background_turn.busy:
             status["value"] = "A Query is already running."
             return "HANDLED"
@@ -788,8 +947,9 @@ def run_query_workbench(
             return "HANDLED"
 
         def commit(next_response: QueryWorkbenchResponse) -> None:
-            nonlocal response
+            nonlocal response, viewed_transcript
             response = next_response
+            viewed_transcript = None
             answer_focus.reset()
             answer_window.vertical_scroll = 0
             status["value"] = "QUERY COMPLETE · SOURCE AND SCOPE FROZEN"
@@ -852,6 +1012,16 @@ def run_query_workbench(
                     on_vertical_enter=_enter_session,
                 )
             )
+        if transcript_selection is not None:
+            surfaces.append(
+                FocusSurface(
+                    "transcripts",
+                    transcripts_control,
+                    move_vertical=_move_transcripts,
+                    activate=_view_transcript,
+                    on_vertical_enter=_enter_transcripts,
+                )
+            )
         surfaces.append(
             FocusSurface(
                 "answer",
@@ -869,6 +1039,7 @@ def run_query_workbench(
     read_only_focus = (
         has_focus(sources_control)
         | has_focus(scope_control)
+        | has_focus(transcripts_control)
         | has_focus(answer_control)
     )
     bind_session_help(
@@ -886,7 +1057,11 @@ def run_query_workbench(
 
     @bindings.add("pageup", filter=has_focus(answer_control), eager=True)
     def _answer_page_up(event) -> None:
-        document = _query_answer_reference_document(response)
+        document = (
+            None
+            if viewed_transcript is not None
+            else _query_answer_reference_document(response)
+        )
         if document is not None:
             answer_focus.stop_index = max(0, answer_focus.stop_index - 4)
         else:
@@ -900,7 +1075,11 @@ def run_query_workbench(
 
     @bindings.add("pagedown", filter=has_focus(answer_control), eager=True)
     def _answer_page_down(event) -> None:
-        document = _query_answer_reference_document(response)
+        document = (
+            None
+            if viewed_transcript is not None
+            else _query_answer_reference_document(response)
+        )
         if document is not None:
             answer_focus.stop_index = min(
                 query_answer_stop_count(response) - 1,

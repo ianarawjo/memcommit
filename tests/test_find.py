@@ -27,7 +27,10 @@ from memcommit.commands.readable_context_catalog import (
 from memcommit.commands.find_chat_shell import (
     FindChatMessage,
 )
-from memcommit.commands.find_search_workbench import FindSearchRequest
+from memcommit.commands.find_search_workbench import (
+    FindSearchRequest,
+    FindSearchResponse,
+)
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.find_turn_dialogue import FindTurnAction
 from memcommit.search import (
@@ -226,6 +229,129 @@ def test_interactive_find_searches_multiple_exact_targets_in_one_provider_turn(
     assert first_memory.content in sent_content
     assert second_memory.content in sent_content
     assert omitted_memory.content not in sent_content
+
+
+def test_explicit_find_repeats_context_for_the_same_multi_root_request(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    first = ops.init("first")
+    second = ops.init("second")
+    for context in (first, second):
+        store.save(context)
+    store.set_current(first.name)
+    observed: list[FindSearchRequest] = []
+
+    def run_request(_store, _catalog, request):
+        observed.append(request)
+        return FindSearchResponse(request=request, mode="CURRENT", results=())
+
+    monkeypatch.setattr(
+        "memcommit.commands.find._run_find_search_request",
+        run_request,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "find",
+            "--context",
+            first.name,
+            "--context",
+            second.name,
+            "shared detail",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert observed == [
+        FindSearchRequest(
+            query="shared detail",
+            target_names=(first.name, second.name),
+            include_descendants=True,
+            follow_embeds=True,
+            limit=5,
+        )
+    ]
+
+
+def test_find_cli_multi_roots_keep_descendants_and_embeds_independent(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    frames = {}
+    for name, content in (
+        ("multi/a", "ROOT_A_SCOPE"),
+        ("multi/a/child", "CHILD_A_SCOPE"),
+        ("multi/b", "ROOT_B_SCOPE"),
+        ("multi/b/child", "CHILD_B_SCOPE"),
+        ("embedded", "EMBEDDED_SCOPE"),
+    ):
+        context = ops.init(name)
+        ops.add(context, content)
+        frames[name] = context
+    ops.embed(frames["embedded"], frames["multi/a"])
+    for context in frames.values():
+        store.save(context)
+    store.set_current("multi/a")
+    scope_values = {
+        "ROOT_A_SCOPE",
+        "CHILD_A_SCOPE",
+        "ROOT_B_SCOPE",
+        "CHILD_B_SCOPE",
+        "EMBEDDED_SCOPE",
+    }
+
+    def exposed_memories(*scope_args: str) -> set[str]:
+        provider = KeywordProvider()
+        monkeypatch.setattr(
+            "memcommit.commands.find.connect_codex_chatgpt_provider",
+            lambda: provider,
+        )
+        result = runner.invoke(
+            app,
+            [
+                "find",
+                "-c",
+                "multi/a",
+                "-c",
+                "multi/b",
+                *scope_args,
+                "scope",
+            ],
+        )
+        assert result.exit_code == 0, result.output
+        payload = json.loads(provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1])
+        return {
+            candidate.get("content", "")
+            for candidate in payload["candidates"]
+        } & scope_values
+
+    assert exposed_memories("--descendants", "--exclude-embeds") == {
+        "ROOT_A_SCOPE",
+        "CHILD_A_SCOPE",
+        "ROOT_B_SCOPE",
+        "CHILD_B_SCOPE",
+    }
+    assert exposed_memories("--context-only", "--follow-embeds") == {
+        "ROOT_A_SCOPE",
+        "ROOT_B_SCOPE",
+        "EMBEDDED_SCOPE",
+    }
+    assert exposed_memories("--direct") == {
+        "ROOT_A_SCOPE",
+        "ROOT_B_SCOPE",
+    }
+    assert exposed_memories(
+        "--direct",
+        "--descendants",
+        "--follow-embeds",
+    ) == {
+        "ROOT_A_SCOPE",
+        "ROOT_B_SCOPE",
+    }
 
 
 def test_collect_candidates_terminates_cycles_and_visits_shared_context_once():
@@ -746,18 +872,31 @@ def test_find_without_query_opens_blank_interactive_search_in_a_tty(
     )
 
     result = runner.invoke(app, ["find"])
+    scoped = runner.invoke(app, ["find", "--context-only", "--follow-embeds"])
 
     assert result.exit_code == 0, result.output
+    assert scoped.exit_code == 0, scoped.output
     assert opened == [
         (
             store.store_dir,
             ctx.name,
             {
                 "current_name": ctx.name,
-                "direct": False,
+                "include_descendants": True,
+                "follow_embeds": True,
                 "limit": 5,
             },
-        )
+        ),
+        (
+            store.store_dir,
+            ctx.name,
+            {
+                "current_name": ctx.name,
+                "include_descendants": False,
+                "follow_embeds": True,
+                "limit": 5,
+            },
+        ),
     ]
 
 
@@ -781,9 +920,13 @@ def test_find_help_explains_the_bare_route_and_default_scope():
     assert "interactive search" in result.output
     assert "Profile-wide or Context" in result.output
     assert "targets, Context range" in result.output
-    assert "namespace descendants" in result.output
+    assert "lexical descendants" in result.output
     assert "embedded Contexts" in result.output
-    assert "--direct excludes" in result.output
+    assert "--descendants" in result.output
+    assert "--context-only" in result.output
+    assert "--follow-embeds" in result.output
+    assert "--exclude-embeds" in result.output
+    assert "Compatibility shorthand" in result.output
 
 
 def test_find_cli_tty_static_results_include_namespace_descendants(

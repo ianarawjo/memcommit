@@ -500,6 +500,20 @@ class TestHelp:
         assert not any("--history" in form for form in forms)
         assert any('mem find "[temporal_query]"' in form for form in forms)
 
+    def test_find_forms_expose_independent_multi_root_scope_axes(self):
+        forms = help_inventory.COMMAND_FORMS["find"]
+
+        assert any(
+            "--context [context1] --context [context2] --descendants" in form
+            for form in forms
+        )
+        assert any("--context-only --follow-embeds" in form for form in forms)
+        assert any("--descendants --exclude-embeds" in form for form in forms)
+        assert any(
+            "--direct" in form and "compatibility shorthand" in form
+            for form in forms
+        )
+
     def test_free_text_placeholders_include_shell_quotes(self):
         assert help_inventory._selectable_form_line(
             help_inventory.COMMAND_FORMS["add"][0]

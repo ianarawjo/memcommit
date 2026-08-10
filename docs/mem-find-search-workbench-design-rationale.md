@@ -3,12 +3,14 @@
 ## Problem
 
 The one-shot `mem find QUERY` contract required a person to know both the query
-and the search frame before entering the command. Its default frame combined
-three different ideas: one selected Context, lexical namespace descendants,
-and explicitly embedded Contexts. `--direct` disabled both descendant and
-embed traversal together, and the CLI exposed only one root even though the
-candidate collector already accepted multiple roots. The help text described
-the result type but did not make that provider-disclosure boundary legible.
+and the search frame before entering the command. Its default frame originally
+combined three different ideas: one selected Context, lexical namespace
+descendants, and explicitly embedded Contexts. `--direct` disabled both
+descendant and embed traversal together, and the CLI exposed only one root even
+though the candidate collector already accepted multiple roots. The help text
+described the result type but did not make that provider-disclosure boundary
+legible. Later repeatable roots still left the two scope axes implicit, while
+the workbench displayed them independently.
 
 ## Decision
 
@@ -34,6 +36,15 @@ result:
 6. `SAVE LOCATION`, the shared direct exact-name field and frozen local parent
    browser; and
 7. `TO DO`, the explicit create action for the checked set.
+
+The one-shot CLI exposes the same two scope axes. `--descendants` and
+`--context-only` choose lexical reach; `--follow-embeds` and
+`--exclude-embeds` independently choose embedded-Context traversal. Both
+positive choices remain the compatibility defaults. Repeatable `--context`
+operands apply that shared scope to every selected root. The older `--direct`
+form remains a compatibility shorthand that forces both axes off and takes
+precedence when supplied, so existing scripts retain their exact disclosure
+boundary.
 
 Every peer frame is composed through the service-wide vertical workbench rule:
 `SEARCH → TARGETS → SCOPE → RESULTS`, followed conditionally by
@@ -87,8 +98,10 @@ rows remain independently editable after a group action. The selected roots
 and any process-local subtree exclusions derive one effective checked set;
 changing the range clears stale exclusions so the newly visible policy starts
 from the explicit roots. The legacy default starts on `INCLUDE DESCENDANTS`,
-while `--direct` starts on `THIS CONTEXT ONLY`. `FOLLOW` under
-`EMBEDDED CONTEXTS` remains an independent graph-traversal choice.
+matching the one-shot `--descendants` default. `FOLLOW` under
+`EMBEDDED CONTEXTS` remains an independent graph-traversal choice and matches
+the one-shot `--follow-embeds` default. `--direct` starts both workbench axes in
+their restricted state when it seeds an operand-free TTY launch.
 
 Search executes the exact visible checked set rather than re-expanding a parent
 behind the UI; otherwise an independently unchecked child would still be
@@ -177,14 +190,16 @@ that configures that state for multiple roots; the common endpoint and Sever
 setups use the same state in single-selection mode. Multi-selection semantics
 are not added to the full-screen generic picker or exposed to those operations.
 
-The one-shot `--context` option remains singular and retains its existing
-descendant behavior. The workbench's embed choice applies uniformly to every
-checked target. Result inspection and conversational follow-up remain separate
-from this Google-like search surface; the retained legacy Find chat shell is
-not silently reactivated. The result action is explicit curation only: it does
-not save the provider's ranking explanation or turn selected rows into proof
-that the query was answered. Query-only routes remain a separate authorized
-interface and never become selectable ordinary roots.
+The one-shot `--context` option is repeatable, but its two scope choices apply
+uniformly to every supplied root. Per-root mixtures such as subtree A plus
+exact B, and TUI-only independent descendant exclusions, are intentionally not
+encoded in the one-shot flag grammar. Result inspection and conversational
+follow-up remain separate from this Google-like search surface; the retained
+legacy Find chat shell is not silently reactivated. The result action is
+explicit curation only: it does not save the provider's ranking explanation or
+turn selected rows into proof that the query was answered. Query-only routes
+remain a separate authorized interface and never become selectable ordinary
+roots.
 
 Multiple-target editing may temporarily leave zero rows checked. Clearing the
 last row changes only process-local UI state; pressing Search then fails before

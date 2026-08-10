@@ -343,6 +343,7 @@ def run_find_search_workbench(
     *,
     current: str,
     initial_target: str,
+    initial_targets: Sequence[str] | None = None,
     initial_include_descendants: bool,
     initial_follow_embeds: bool,
     limit: int,
@@ -364,7 +365,19 @@ def run_find_search_workbench(
         or any(not isinstance(name, str) or not name for name in catalog)
     ):
         raise ValueError("Find requires a distinct readable Context catalog.")
-    if current not in catalog or initial_target not in catalog:
+    staged_initial_targets = tuple(
+        dict.fromkeys(
+            (initial_target,)
+            if initial_targets is None
+            else initial_targets
+        )
+    )
+    if (
+        current not in catalog
+        or initial_target not in catalog
+        or not staged_initial_targets
+        or any(name not in catalog for name in staged_initial_targets)
+    ):
         raise ValueError("Find's initial Context is outside the readable catalog.")
     if not callable(run_search):
         raise ValueError("Find requires a search controller.")
@@ -400,6 +413,10 @@ def run_find_search_workbench(
         multiple=True,
         include_descendants=initial_include_descendants,
     )
+    # Repeated CLI --context values seed the same checked-root state that a
+    # person can construct in the TUI.  Reach expansion remains a separate
+    # control, so these are roots rather than an already-expanded hidden set.
+    target_state.selection.replace(staged_initial_targets)
     embed_choice = HorizontalChoiceState(
         (
             HorizontalChoiceOption("EXCLUDE", "EXCLUDE"),

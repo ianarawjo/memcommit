@@ -15,6 +15,14 @@ mem query --sessions
 mem query --show-session campus-review
 ```
 
+Bare `mem query` in a TTY also freezes the task-owned session catalog once and
+renders it in a read-only `SAVED TRANSCRIPTS` frame beneath Query scope. Enter
+on a transcript displays its already-visible Q/A in the existing Answer frame;
+it does not reopen the authority Source, connect a provider, or change the
+session. Starting a new query clears that projection and restores the ordinary
+Answer lifecycle. The explicit `--sessions` and `--show-session` forms remain
+stable noninteractive inspection routes.
+
 The session belongs to the active task Profile. It stores the questions and
 answers that were already visible to the person, plus opaque binding and
 freshness digests. It never stores the authority source, source entry
