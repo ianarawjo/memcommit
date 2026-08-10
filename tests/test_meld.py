@@ -55,6 +55,7 @@ from memcommit.commands.resolution_workbench_shell import (
     resolution_seeded_report_fragments,
 )
 from memcommit.meld import (
+    MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
     MeldCheckpointReceipt,
     MeldError,
@@ -582,6 +583,71 @@ def test_directional_meld_freezes_incoming_descendants_but_direct_baseline(
     assert child_memory.content == "Child-owned incoming evidence."
 
 
+def test_directional_compare_seed_maps_projected_descendants_to_exact_owners(
+    isolated_store,
+):
+    store = MemoryStore()
+    incoming = ops.init("direction/compare/incoming")
+    incoming_child = ops.init("direction/compare/incoming/child")
+    incoming_memory = ops.add(incoming_child, "Use the east entrance.")
+    baseline = ops.init("direction/compare/baseline")
+    baseline_child = ops.init("direction/compare/baseline/child")
+    baseline_memory = ops.add(baseline_child, "Use the main entrance.")
+    for context in (incoming, incoming_child, baseline, baseline_child):
+        store.create_context(context)
+
+    projected_incoming = meld_command._load_local_meld_source(
+        store,
+        incoming.name,
+        include_descendants=True,
+    )
+    projected_baseline = meld_command._load_local_meld_source(
+        store,
+        baseline.name,
+        include_descendants=True,
+    )
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(
+            projected_incoming,
+            projected_baseline,
+            reference_descendants=True,
+            compared_descendants=True,
+        ),
+        Task2CompareProvider(),
+    )
+    raw_incoming = meld_command._load_local_meld_source(
+        store,
+        incoming.name,
+        include_descendants=True,
+        project=False,
+    )
+    raw_baseline = meld_command._load_local_meld_source(
+        store,
+        baseline.name,
+        include_descendants=True,
+        project=False,
+    )
+
+    session = MeldSession.create_directional_from_comparison(
+        comparison,
+        raw_incoming,
+        raw_baseline,
+    )
+    restored = MeldSession.from_dict(session.to_dict())
+
+    assert restored.schema_version == MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
+    assert restored.comparison_seed is not None
+    assert restored.comparison_seed.analysis.uid == comparison.uid
+    assert [memory.content for memory in restored.frames[0].memories] == [
+        incoming_memory.content
+    ]
+    assert [memory.content for memory in restored.frames[1].memories] == [
+        baseline_memory.content
+    ]
+    assert restored.frames[0].memories[0].owner_context_name == incoming_child.name
+    assert restored.frames[1].memories[0].owner_context_name == baseline_child.name
+
+
 def test_directional_schema_four_direct_session_remains_readable():
     incoming = ops.init("direction/v4/incoming")
     ops.add(incoming, "Incoming evidence.")
@@ -944,6 +1010,98 @@ def _zero_change_directional_contexts(store: MemoryStore):
     store.save(baseline)
     store.set_current(incoming.name)
     return incoming, baseline, memory
+
+
+class DirectionalCompareEchoProvider:
+    """Materialize only from the frozen ordered Compare basis."""
+
+    def __init__(self):
+        self.payloads: list[dict] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "meld_contexts"
+        assert "exact reviewed ordered INCOMING-to-BASELINE Compare" in prompt
+        payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+        self.payloads.append(payload)
+        basis = payload["comparison_basis"]
+        return json.dumps(
+            {
+                **basis,
+                "overview": (
+                    "The reviewed Compare ledger is retained while the "
+                    "directional target remains unresolved."
+                ),
+            }
+        )
+
+
+def test_directional_command_uses_exact_saved_compare_basis(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming = ops.init("direction/compare-command/incoming")
+    ops.add(incoming, "Pay participants in cash.")
+    baseline = ops.init("direction/compare-command/baseline")
+    ops.add(baseline, "Pay participants by e-transfer.")
+    store.save(incoming)
+    store.save(baseline)
+    comparison = _save_task2_comparison(store, incoming, baseline)
+    provider = DirectionalCompareEchoProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        ["meld", incoming.name, "--into", baseline.name],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert len(provider.payloads) == 1
+    assert provider.payloads[0]["comparison_basis"]["paired_relations"]
+    session = store.load_meld_session(baseline.uid)
+    assert session is not None
+    assert session.schema_version == MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
+    assert session.comparison_seed is not None
+    assert session.comparison_seed.analysis.uid == comparison.uid
+    assert [relation.uid for relation in session.current_assessment.relations] == [
+        relation.uid for relation in comparison.relations
+    ]
+    assert "Compare:" in result.output
+    assert "· IMPORTED" in result.output
+
+
+def test_directional_compare_seed_rejects_initial_relation_drift():
+    incoming = ops.init("direction/compare-drift/incoming")
+    ops.add(incoming, "Pay participants in cash.")
+    baseline = ops.init("direction/compare-drift/baseline")
+    ops.add(baseline, "Pay participants by e-transfer.")
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(incoming, baseline),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_directional_from_comparison(
+        comparison,
+        incoming,
+        baseline,
+    )
+    session.start_initial_analysis()
+
+    class DriftedCompareProvider(DirectionalCompareEchoProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            value = json.loads(
+                super().complete(
+                    prompt,
+                    operation=operation,
+                    output_schema=output_schema,
+                )
+            )
+            value["paired_relations"][0]["summary"] = "A rewritten judgment."
+            return json.dumps(value)
+
+    assessment = assess_meld_turn(session, DriftedCompareProvider())
+
+    with pytest.raises(MeldError, match="changed its Compare relation ledger"):
+        session.record_assessment(session.current_turn.uid, assessment)
 
 
 def test_compare_seed_adds_stable_helpful_materialization_after_required():
@@ -3170,6 +3328,162 @@ def test_directional_v6_accepts_one_exact_preserve_add_per_incoming_memory():
         and len(proposal.source_members) == 1
         for proposal in session.current_assessment.proposals
     )
+
+
+def test_directional_validation_repairs_one_rejected_assessment_before_save(
+    isolated_store,
+):
+    store = MemoryStore()
+    incoming = ops.init("incoming/preservation-repair")
+    incoming_memory = ops.add(incoming, "Use the east entrance on Monday.")
+    baseline = ops.init("baseline/preservation-repair")
+    ops.add(baseline, "Construction changes building access by day.")
+    store.save(incoming)
+    store.save(baseline)
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+
+    class RepairingProvider:
+        def __init__(self):
+            self.operations = []
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            self.operations.append(operation)
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            if operation == "meld_contexts_repair":
+                assert "validation_error" in payload
+                assert "exact content" in payload["validation_error"]
+                repaired = payload["rejected_assessment"]
+                repaired["results"][0]["content"] = payload["frames"][0][
+                    "memories"
+                ][0]["content"]
+                return json.dumps(repaired)
+            incoming_id = payload["frames"][0]["memories"][0]["memory_id"]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "The incoming access fact remains independently editable.",
+                    "paired_relations": [
+                        {
+                            "relation_key": "access",
+                            "left_memory_ids": [incoming_id],
+                            "right_memory_ids": [baseline_id],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The incoming fact supplies a dated access scope.",
+                            "reason": "Its exact day remains operationally relevant.",
+                        }
+                    ],
+                    "distinct_relations": [],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": "access_add",
+                            "operation": "ADD",
+                            "target_memory_ids": [],
+                            "disposition": "PRESERVE",
+                            # This paraphrase passes the output schema and decoder
+                            # but fails the session's exact-preservation contract.
+                            "content": "Use the eastern entrance on Monday.",
+                            "reason": "Preserves the dated access fact.",
+                            "relation_keys": ["access"],
+                            "source_memory_ids": [incoming_id],
+                            "grounded_turn_ids": [],
+                        }
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    provider = RepairingProvider()
+    repaired = meld_command._assess_and_save(
+        store=store,
+        session=session,
+        provider_factory=lambda: provider,
+        expected_session_digest=None,
+    )
+
+    assert provider.operations == ["meld_contexts", "meld_contexts_repair"]
+    assert repaired.current_assessment is not None
+    assert repaired.current_assessment.proposals[0].content == incoming_memory.content
+    saved = store.load_meld_session(baseline.uid)
+    assert saved is not None
+    assert saved.current_assessment is not None
+    assert saved.current_assessment.proposals[0].content == incoming_memory.content
+    assert store.load_direct(baseline.name).to_dict() == baseline.to_dict()
+
+
+def test_directional_validation_repair_is_bounded_and_publishes_nothing(
+    isolated_store,
+):
+    store = MemoryStore()
+    incoming = ops.init("incoming/preservation-repair-fails")
+    ops.add(incoming, "Use the east entrance on Monday.")
+    baseline = ops.init("baseline/preservation-repair-fails")
+    ops.add(baseline, "Construction changes building access by day.")
+    store.save(incoming)
+    store.save(baseline)
+    original_baseline = baseline.to_dict()
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+
+    class InvalidTwice:
+        def __init__(self):
+            self.operations = []
+            self.first_response = None
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            self.operations.append(operation)
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            if operation == "meld_contexts_repair":
+                return json.dumps(payload["rejected_assessment"])
+            incoming_id = payload["frames"][0]["memories"][0]["memory_id"]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "The incoming access fact is paraphrased.",
+                    "paired_relations": [
+                        {
+                            "relation_key": "access",
+                            "left_memory_ids": [incoming_id],
+                            "right_memory_ids": [baseline_id],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The incoming fact has a dated scope.",
+                            "reason": "The date remains operationally relevant.",
+                        }
+                    ],
+                    "distinct_relations": [],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": "access_add",
+                            "operation": "ADD",
+                            "target_memory_ids": [],
+                            "disposition": "PRESERVE",
+                            "content": "Use the eastern entrance on Monday.",
+                            "reason": "Paraphrases the dated access fact.",
+                            "relation_keys": ["access"],
+                            "source_memory_ids": [incoming_id],
+                            "grounded_turn_ids": [],
+                        }
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    provider = InvalidTwice()
+    with pytest.raises(MeldError, match="validation repair failed"):
+        meld_command._assess_and_save(
+            store=store,
+            session=session,
+            provider_factory=lambda: provider,
+            expected_session_digest=None,
+        )
+
+    assert provider.operations == ["meld_contexts", "meld_contexts_repair"]
+    assert store.load_meld_session(baseline.uid) is None
+    assert store.load_direct(baseline.name).to_dict() == original_baseline
 
 
 def test_directional_schema_five_keeps_legacy_materialization_readable():

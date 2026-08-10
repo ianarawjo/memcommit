@@ -31,12 +31,16 @@ exact ready proposal only after explicit acceptance through the TUI's `A`
 action or the `--accept` option. Symmetric Meld imports its initial ordered
 ledger and candidate issues provider-free from an exact fresh
 `ComparisonAnalysis`; the first user grounding turn is its first semantic
-Meld call. Directional Meld performs its own aggregate analysis because
-`INCOMING → BASELINE` has a different authority contract. Symmetric meld adds
-a complete result to an empty third Context. Directional meld leaves the
-incoming Context read-only and applies only exact material `EDIT` and `ADD`
-changes to its baseline; a fully represented input may instead produce an
-accepted zero-change checkpoint.
+Meld call. Directional Meld still performs one authority-specific aggregate
+materialization call, but when an exact current ordered
+`INCOMING → BASELINE` Compare artifact exists it freezes that reviewed relation
+ledger as the call's basis instead of asking Meld to classify the pair again.
+Absence retains the schema-6 direct-analysis path for already supported
+workflows; a present but stale basis fails closed rather than being silently
+ignored. Symmetric meld adds a complete result to an empty third Context.
+Directional meld leaves the incoming Context read-only and applies only exact
+material `EDIT` and `ADD` changes to its baseline; a fully represented input
+may instead produce an accepted zero-change checkpoint.
 
 Saved Context Melds can also be entered through `mem meld` or
 `mem meld --sessions` without restating their Context operands. This is a
@@ -803,6 +807,20 @@ scoped incoming Memories requires an explicit user-grounded turn. Versions 1,
 4, and 5 remain readable and resumable under their original contracts so saved
 review and applied study evidence is not reinterpreted retroactively.
 
+Schema version 7 is the comparison-backed Directional variant. It stores the
+exact ordered Compare snapshot while retaining the raw owner-aware Directional
+frames. Descendant Compare content is intentionally decorated with its public
+Context name, whereas a Directional proposal must preserve raw content and the
+exact writable owner. The implementation therefore maps Compare members onto
+the Directional frames by ordered Memory UID and locally proves equal scope and
+coverage. On initial materialization the provider must return the frozen
+relation identities, grouping, judgments, prose, and imported issues unchanged;
+it may add only Directional-specific issues and exact result proposals. A local
+validator rejects relation drift before anything is saved. Later explicit user
+turns may still revise the complete ledger because they introduce new reviewed
+evidence. Schema-6 sessions and new runs with no saved Compare remain compatible
+with the original direct Directional analysis.
+
 Directional preservation is deliberately about materialization cardinality,
 not a second Atomize pass. Meld treats each frozen source Memory as an already
 independently revisable unit. An `EQUIVALENT` incoming Memory therefore needs no
@@ -812,6 +830,31 @@ and a conflict may still produce a reviewed EDIT or ADD. This prevents the Task
 into six owner-routed summaries. Owner routing was correct in that run; the
 missing invariant was the separation between relation grouping and result
 Memory grouping.
+
+JSON Schema cannot express every cross-record preservation invariant. In
+particular, it cannot prove that a proposal copied one frozen source string
+exactly, covered each incoming member once, or combined `ADD`, `PRESERVE`, and
+source provenance consistently. When a response decodes into a complete typed
+assessment but fails one of the directional preservation-result invariants,
+the command now makes at most one validation-repair provider call in the same
+frozen Meld turn. The
+repair input includes the complete original frame payload, the rejected
+assessment projected back through call-local aliases, and the trusted local
+validation error. It is explicitly not a user turn: the error supplies no
+semantic evidence, cannot ground synthesis, and cannot resolve a conflict.
+
+The repair must return one complete assessment, which is decoded and validated
+from the beginning before anything is saved. The original overview, relation
+ledger, issues, readiness, and their identities are frozen; only the result
+proposal set may change. Rejected aliases retain their local identities when
+returned, and the repair call is recorded separately as
+`meld_contexts_repair`. Invalid JSON, unknown aliases, incomplete primary
+coverage, a non-preservation validation failure, source or Grant drift, a
+semantic-analysis change, and a second invalid assessment still fail closed;
+no partial proposal or target mutation is published. This first slice
+intentionally does not persist the raw rejected completion or collect several
+session violations before repair. Those diagnostics remain a follow-up if
+one-error feedback proves insufficient in larger Study runs.
 
 The review queue has two priority bands. Compare's unresolved questions remain
 `REQUIRED` and are shown first. Every otherwise resolved `COMPATIBLE` or
@@ -873,15 +916,18 @@ own compact renderer, preserving `WHAT BOTH CONTAIN`, `WHAT DIFFERS`, both
 `ONLY IN` sections, and `POTENTIAL CONFLICTS` verbatim. Meld removes only the
 Compare navigation footer that would tell the user to start Meld again, then
 appends its current proposed target Memories and whole-set strategy section.
-Directional Meld has no Compare seed and therefore keeps its authority-specific
-report projection.
+Comparison-backed Directional Meld keeps its authority-specific report
+projection: its saved Compare is a relation-classification basis, not permission
+to display peer-authority wording for a mutation-target operation. Legacy
+Directional sessions have no Compare seed and use the same projection.
 
 Before Apply, Meld also exposes the shared revision-bound Impact surface. For
 symmetric Meld this Impact is the saved Compare report itself:
 the equal-authority analysis is reused rather than summarized into a second
-dialect. Directional Meld deliberately does not call its Impact Compare; it
-shows the exact proposed baseline effects because incoming and baseline do not
-have peer authority. Impact is provider-free and cannot apply the Meld.
+dialect. Directional Meld deliberately does not call its Impact Compare, even
+when turn zero imported a relation basis; it shows the exact proposed baseline
+effects because incoming and baseline do not have peer authority. Impact is
+provider-free and cannot apply the Meld.
 
 The Resolution report names these endpoints separately from its semantic
 understanding. Directional Meld shows `INCOMING` and `BASELINE / TARGET`;
@@ -1022,7 +1068,9 @@ overview and pending-issue list
 For symmetric Meld, the initial screen imports the complete relation ledger
 and unresolved or consequential decisions from the exact saved Compare
 analysis. For directional Meld, its initial one-shot analysis produces that
-state directly. The user may then work in either of two ways:
+state directly from either the frozen ordered Compare ledger plus a
+Directional materialization call, or the compatible schema-6 direct-analysis
+call when no saved basis exists. The user may then work in either of two ways:
 
 - **Issue-by-issue.** Move through the list, open one issue, inspect both
   sources and rationale, choose a proposed resolution, or refine, comment on,
@@ -1088,7 +1136,7 @@ The representative adapters use this rule differently:
 | Adapter | Initial bounded one-shot | Later calls |
 | --- | --- | --- |
 | Atomize directional (`ISSUE`) | One selected issue, user clarification, current local frame, and known affected findings | One call for each corrective, extending, confirming, or retracting user turn |
-| Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope, returning relations and exact owner-routed `EDIT` / `ADD` changes | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
+| Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope. An exact saved ordered Compare, when present, freezes the initial relation ledger; the call then returns only Directional-specific issues and exact owner-routed `EDIT` / `ADD` changes over that basis. Without one, the compatible direct call also classifies relations. | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
 | Context symmetric | Two bounded peer Context frames and their authority contract, returning a relation ledger and unresolved issues | One call per user resolution turn; final materialization remains provider-free |
 
 This strategy was selected because relations are Context-dependent. Independent
@@ -1363,6 +1411,13 @@ application and checkpoint boundary.
    session-CAS, and acceptance machinery while enforcing ordered `INCOMING`
    and `BASELINE` authority, exact material `EDIT` / fresh-UID `ADD`
    validation, provider-free acceptance, and zero-change receipts.
+6. **Completed: admit an exact ordered Compare basis in Directional Meld.** A
+   fresh saved `INCOMING → BASELINE` analysis is frozen into schema 7, its
+   relation members are remapped by Memory UID onto raw owner-aware frames, and
+   the initial provider turn is locally prevented from drifting from that
+   reviewed ledger. The schema-6 no-basis path remains a compatibility boundary
+   until the study establishes whether Compare should become a mandatory
+   prerequisite.
 6. **Completed: share the state-free message composer with Ground.** Ground
    and meld now use the same bordered multiline editor with an independently
    named buffer and the same focused-input convention (`Enter` sends;

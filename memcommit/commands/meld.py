@@ -46,6 +46,7 @@ from memcommit.meld import (
     MeldError,
     MeldFrame,
     MeldIssue,
+    MeldRepairableAssessmentError,
     MeldSession,
     materialize_preservation_assessment,
     meld_accounting,
@@ -54,6 +55,7 @@ from memcommit.meld import (
 from memcommit.meld_provider import (
     MeldProviderError,
     assess_meld_turn,
+    repair_meld_assessment,
 )
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.commands.tui_text_layout import (
@@ -115,6 +117,7 @@ def _comparison_prerequisite_error(
     reason: str,
     create_target: bool = False,
     include_descendants: tuple[bool, bool] = (False, False),
+    directional: bool = False,
 ) -> MeldCommandError:
     compare_argv = ["mem", "compare", "--to", right.name]
     if include_descendants[0]:
@@ -123,12 +126,16 @@ def _comparison_prerequisite_error(
         compare_argv.append("--compared-descendants")
     if refresh:
         compare_argv.append("--refresh")
-    rerun_argv = ["mem", "meld", left.name, right.name]
+    rerun_argv = (
+        ["mem", "meld", left.name, "--into", right.name]
+        if directional
+        else ["mem", "meld", left.name, right.name]
+    )
     if include_descendants[0]:
         rerun_argv.append("--left-descendants")
     if include_descendants[1]:
         rerun_argv.append("--right-descendants")
-    if create_target:
+    if create_target and not directional:
         rerun_argv.extend(("--to", target.name))
     lines = [
         reason,
@@ -136,7 +143,7 @@ def _comparison_prerequisite_error(
         f"  {shlex.join(['mem', 'switch', left.name])}",
         f"  {shlex.join(compare_argv)}",
     ]
-    if not create_target:
+    if not create_target and not directional:
         lines.append(f"  {shlex.join(['mem', 'switch', target.name])}")
     lines.extend(("Then rerun:", f"  {shlex.join(rerun_argv)}"))
     return MeldCommandError("\n".join(lines))
@@ -199,6 +206,60 @@ def _load_symmetric_comparison(
             ),
             create_target=create_target,
             include_descendants=include_descendants,
+        )
+    return analysis
+
+
+def _load_directional_comparison(
+    *,
+    incoming: Context,
+    baseline: Context,
+    include_descendants: tuple[bool, bool] = (False, False),
+) -> ComparisonAnalysis | None:
+    """Load an exact ordered basis when present, retaining legacy fallback.
+
+    Existing Directional sessions predate the Compare contract. Absence keeps
+    that compatible one-shot path, while any present artifact must be current:
+    silently ignoring a stale reviewed basis would make two identical commands
+    appear Compare-backed while using different semantics.
+    """
+    try:
+        analysis = load_comparison_analysis(incoming.uid, baseline.uid)
+        if analysis is None:
+            artifact = load_granted_comparison_artifact(
+                MemoryStore(create=False),
+                incoming.uid,
+                baseline.uid,
+            )
+            analysis = artifact.analysis if artifact is not None else None
+    except ValueError as error:
+        raise _comparison_prerequisite_error(
+            left=incoming,
+            right=baseline,
+            target=baseline,
+            refresh=True,
+            reason="The saved ordered Directional Compare analysis is invalid.",
+            include_descendants=include_descendants,
+            directional=True,
+        ) from error
+    if analysis is None:
+        return None
+    if (
+        not analysis.matches(incoming, baseline)
+        or analysis.include_descendants != include_descendants
+        or analysis.ruleset_version != COMPARISON_RULESET_VERSION
+    ):
+        raise _comparison_prerequisite_error(
+            left=incoming,
+            right=baseline,
+            target=baseline,
+            refresh=True,
+            reason=(
+                f"The saved Directional Compare analysis for '{incoming.name}' → "
+                f"'{baseline.name}' is stale."
+            ),
+            include_descendants=include_descendants,
+            directional=True,
         )
     return analysis
 
@@ -808,13 +869,39 @@ def _assess_and_save(
         provider = _connect_meld_provider(provider_factory)
         progress.update("analyzing meld turn", step=2)
         assessment = assess_meld_turn(session, provider)
+        try:
+            candidate = MeldSession.from_dict(session.to_dict())
+            current = candidate.current_turn
+            assert current is not None
+            candidate.record_assessment(current.uid, assessment)
+        except MeldRepairableAssessmentError as validation_error:
+            # A decoded provider response may violate a cross-record invariant
+            # that JSON Schema cannot express. Repair it once in the same
+            # frozen turn; the validation error is not user evidence and no
+            # partial proposal is published or applied.
+            progress.update("repairing invalid meld turn", step=2)
+            try:
+                assessment = repair_meld_assessment(
+                    session,
+                    assessment,
+                    str(validation_error),
+                    provider,
+                )
+                candidate = MeldSession.from_dict(session.to_dict())
+                current = candidate.current_turn
+                assert current is not None
+                candidate.record_assessment(current.uid, assessment)
+            except MeldError as repair_error:
+                raise MeldError(
+                    "Meld validation repair failed after the initial response "
+                    f"was rejected ({validation_error}): {repair_error}"
+                ) from repair_error
+        session = candidate
     # Provider latency creates a real race window. Rebind every source and the
-    # target after the call before persisting a claim about them.
+    # target after the final call before persisting a claim about them.
     left, right, target = _load_bound_contexts(store, session)
     _assert_source_bindings(session, left, right)
     _assert_unapplied_target(session, target)
-    current = session.current_turn
-    assert current is not None
     if session.granted_target is not None:
         if session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION:
             with authority_grant_snapshot_lock() as registry:
@@ -839,7 +926,6 @@ def _assess_and_save(
                     + " + ".join(missing)
                     + " required by the proposed Meld changes."
                 )
-    session.record_assessment(current.uid, assessment)
     store.save_meld_session(
         session,
         expected_session_digest=expected_session_digest,
@@ -2911,21 +2997,41 @@ def cmd(
                 )
             )
             if requested_mode == "DIRECTIONAL":
-                session = MeldSession.create_directional(
-                    left_ctx,
-                    right_ctx,
-                    incoming_descendants=left_descendants,
-                    baseline_descendants=right_descendants,
-                    granted_incoming=(
-                        freeze_granted_context_binding(left_access)
-                        if left_access is not None and left_access.is_granted
-                        else None
+                granted_incoming = (
+                    freeze_granted_context_binding(left_access)
+                    if left_access is not None and left_access.is_granted
+                    else None
+                )
+                granted_target = (
+                    freeze_granted_context_binding(right_access)
+                    if right_access is not None and right_access.is_granted
+                    else None
+                )
+                comparison = _load_directional_comparison(
+                    incoming=recursive_comparison_projection(left_ctx),
+                    baseline=recursive_comparison_projection(right_ctx),
+                    include_descendants=(
+                        left_descendants,
+                        right_descendants,
                     ),
-                    granted_target=(
-                        freeze_granted_context_binding(right_access)
-                        if right_access is not None and right_access.is_granted
-                        else None
-                    ),
+                )
+                session = (
+                    MeldSession.create_directional(
+                        left_ctx,
+                        right_ctx,
+                        incoming_descendants=left_descendants,
+                        baseline_descendants=right_descendants,
+                        granted_incoming=granted_incoming,
+                        granted_target=granted_target,
+                    )
+                    if comparison is None
+                    else MeldSession.create_directional_from_comparison(
+                        comparison,
+                        left_ctx,
+                        right_ctx,
+                        granted_incoming=granted_incoming,
+                        granted_target=granted_target,
+                    )
                 )
                 session.start_initial_analysis()
                 session = _assess_and_save(
@@ -3057,21 +3163,41 @@ def cmd(
                     )
                 )
             if requested_mode == "DIRECTIONAL":
-                replacement = MeldSession.create_directional(
-                    left_ctx,
-                    right_ctx,
-                    incoming_descendants=left_descendants,
-                    baseline_descendants=right_descendants,
-                    granted_incoming=(
-                        freeze_granted_context_binding(left_access)
-                        if left_access is not None and left_access.is_granted
-                        else None
+                granted_incoming = (
+                    freeze_granted_context_binding(left_access)
+                    if left_access is not None and left_access.is_granted
+                    else None
+                )
+                granted_target = (
+                    freeze_granted_context_binding(right_access)
+                    if right_access is not None and right_access.is_granted
+                    else None
+                )
+                comparison = _load_directional_comparison(
+                    incoming=recursive_comparison_projection(left_ctx),
+                    baseline=recursive_comparison_projection(right_ctx),
+                    include_descendants=(
+                        left_descendants,
+                        right_descendants,
                     ),
-                    granted_target=(
-                        freeze_granted_context_binding(right_access)
-                        if right_access is not None and right_access.is_granted
-                        else None
-                    ),
+                )
+                replacement = (
+                    MeldSession.create_directional(
+                        left_ctx,
+                        right_ctx,
+                        incoming_descendants=left_descendants,
+                        baseline_descendants=right_descendants,
+                        granted_incoming=granted_incoming,
+                        granted_target=granted_target,
+                    )
+                    if comparison is None
+                    else MeldSession.create_directional_from_comparison(
+                        comparison,
+                        left_ctx,
+                        right_ctx,
+                        granted_incoming=granted_incoming,
+                        granted_target=granted_target,
+                    )
                 )
                 replacement.start_initial_analysis()
                 session = _assess_and_save(

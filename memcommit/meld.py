@@ -33,6 +33,7 @@ MELD_SCHEMA_VERSION = 3
 MELD_GRANTED_SCHEMA_VERSION = 4
 MELD_OWNER_AWARE_SCHEMA_VERSION = 5
 MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION = 6
+MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION = 7
 MELD_COMPARISON_SCHEMA_VERSION = 2
 MELD_LEGACY_SCHEMA_VERSION = 1
 MELD_TEXT_LIMIT = 20_000
@@ -101,6 +102,10 @@ _OPERATIONS = {"ADD", "EDIT"}
 
 class MeldError(ValueError):
     """Invalid, stale, or internally inconsistent meld state."""
+
+
+class MeldRepairableAssessmentError(MeldError):
+    """A decoded assessment violates a provider-repairable result invariant."""
 
 
 def _exact_dict(
@@ -1505,6 +1510,91 @@ def _comparison_meld_assessment(
     )
 
 
+def directional_comparison_basis_assessment(
+    analysis: ComparisonAnalysis,
+    frames: tuple[MeldFrame, MeldFrame],
+) -> MeldAssessment:
+    """Project one ordered Compare ledger onto owner-aware directional frames.
+
+    Recursive Compare snapshots intentionally decorate Memory content with its
+    public Context name, while Directional Meld must retain raw content and its
+    exact writable owner. Memory identity is therefore the stable bridge; the
+    Compare frame objects themselves are not safe Directional source frames.
+    """
+    if tuple(analysis.include_descendants) != tuple(
+        bool(frame.include_descendants) for frame in frames
+    ):
+        raise MeldError(
+            "Directional meld descendant scopes do not match their comparison seed."
+        )
+    frame_uid_map: dict[str, str] = {}
+    for comparison_frame, directional_frame in zip(
+        analysis.frames,
+        frames,
+        strict=True,
+    ):
+        if (
+            comparison_frame.context_uid != directional_frame.context_uid
+            or comparison_frame.context_name != directional_frame.context_name
+            or tuple(memory.uid for memory in comparison_frame.memories)
+            != tuple(memory.uid for memory in directional_frame.memories)
+        ):
+            raise MeldError(
+                "Directional meld source Memories do not match their comparison seed."
+            )
+        frame_uid_map[comparison_frame.uid] = directional_frame.uid
+
+    relation_values: list[dict[str, object]] = []
+    # Provider output separates paired and one-sided relations. Canonicalize
+    # once here so the visible basis and decoded result share one stable order
+    # even when an older Compare happened to interleave the two categories.
+    ordered_relations = (
+        *(relation for relation in analysis.relations if relation.kind != "DISTINCT"),
+        *(relation for relation in analysis.relations if relation.kind == "DISTINCT"),
+    )
+    for relation in ordered_relations:
+        value = relation.to_dict()
+        value["members"] = [
+            {
+                "frame_uid": frame_uid_map[member.frame_uid],
+                "memory_uid": member.memory_uid,
+            }
+            for member in relation.members
+        ]
+        relation_values.append(value)
+
+    # The provider decoder derives option identities from the stable issue
+    # identity and ordinal. Normalize the imported options to that same rule so
+    # local validation can prove that a reviewed Compare issue was not dropped
+    # or rewritten during Directional materialization.
+    issue_values: list[dict[str, object]] = []
+    for issue in analysis.issues:
+        value = issue.to_dict()
+        value["options"] = [
+            {
+                **option.to_dict(),
+                "uid": str(
+                    uuid.uuid5(
+                        uuid.UUID(issue.uid),
+                        f"option:{index}",
+                    )
+                ),
+            }
+            for index, option in enumerate(issue.options, start=1)
+        ]
+        issue_values.append(value)
+
+    return MeldAssessment.from_dict(
+        {
+            "overview": analysis.overview,
+            "relations": relation_values,
+            "issues": issue_values,
+            "proposals": [],
+            "ready_to_apply": False,
+        }
+    )
+
+
 @dataclass
 class MeldSession:
     uid: str
@@ -1617,6 +1707,50 @@ class MeldSession:
         )
         return cls.from_dict(session.to_dict())
 
+    @classmethod
+    def create_directional_from_comparison(
+        cls,
+        analysis: ComparisonAnalysis,
+        incoming: Context,
+        baseline: Context,
+        *,
+        granted_incoming: GrantedUpdateTarget | None = None,
+        granted_target: GrantedUpdateTarget | None = None,
+    ) -> "MeldSession":
+        """Bind Directional materialization to an exact ordered Compare ledger."""
+        seed = MeldComparisonSeed.create(analysis)
+        if incoming.uid == baseline.uid or incoming.name == baseline.name:
+            raise MeldError(
+                "Directional meld requires distinct INCOMING and BASELINE Contexts."
+            )
+        incoming_descendants, baseline_descendants = seed.analysis.include_descendants
+        incoming_frame = MeldFrame.from_context(
+            incoming,
+            role="INCOMING",
+            include_descendants=incoming_descendants,
+            owner_aware=True,
+        )
+        baseline_frame = MeldFrame.from_context(
+            baseline,
+            role="BASELINE",
+            include_descendants=baseline_descendants,
+            owner_aware=True,
+        )
+        session = cls(
+            uid=str(uuid.uuid4()),
+            mode="DIRECTIONAL",
+            frames=(incoming_frame, baseline_frame),
+            target=MeldTarget.from_baseline_context(
+                baseline,
+                context_digest=baseline_frame.context_digest,
+            ),
+            schema_version=MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
+            comparison_seed=seed,
+            granted_incoming=granted_incoming,
+            granted_target=granted_target,
+        )
+        return cls.from_dict(session.to_dict())
+
     def to_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
             "schema_version": self.schema_version,
@@ -1661,6 +1795,7 @@ class MeldSession:
             MELD_GRANTED_SCHEMA_VERSION,
             MELD_OWNER_AWARE_SCHEMA_VERSION,
             MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
+            MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         keys = {
@@ -1920,6 +2055,7 @@ class MeldSession:
             MELD_GRANTED_SCHEMA_VERSION,
             MELD_OWNER_AWARE_SCHEMA_VERSION,
             MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
+            MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         if self.schema_version == MELD_LEGACY_SCHEMA_VERSION:
@@ -1954,8 +2090,20 @@ class MeldSession:
             if any(frame.role != "PEER" for frame in self.frames):
                 raise MeldError("Symmetric meld requires two PEER frames.")
         else:
-            if self.comparison_seed is not None:
-                raise MeldError("Directional meld cannot use a peer comparison seed.")
+            if (
+                self.schema_version >= MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
+                and self.comparison_seed is None
+            ):
+                raise MeldError(
+                    "A comparison-based directional meld requires its ordered seed."
+                )
+            if (
+                self.schema_version < MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
+                and self.comparison_seed is not None
+            ):
+                raise MeldError(
+                    "A legacy directional meld cannot contain a comparison seed."
+                )
             incoming, baseline = self.frames
             if incoming.role != "INCOMING" or baseline.role != "BASELINE":
                 raise MeldError(
@@ -2015,12 +2163,18 @@ class MeldSession:
                 raise MeldError(
                     "Meld comparison seed uses an unsupported relation ruleset."
                 )
-            expected_frames = _comparison_meld_frames(analysis)
-            if tuple(frame.to_dict() for frame in self.frames) != tuple(
-                frame.to_dict() for frame in expected_frames
-            ):
-                raise MeldError(
-                    "Meld source frames do not match their comparison seed."
+            if self.mode == "SYMMETRIC":
+                expected_frames = _comparison_meld_frames(analysis)
+                if tuple(frame.to_dict() for frame in self.frames) != tuple(
+                    frame.to_dict() for frame in expected_frames
+                ):
+                    raise MeldError(
+                        "Meld source frames do not match their comparison seed."
+                    )
+            else:
+                directional_comparison_basis_assessment(
+                    analysis,
+                    (self.frames[0], self.frames[1]),
                 )
 
         known_turn_uids: list[str] = []
@@ -2057,7 +2211,8 @@ class MeldSession:
             seen_turn_uids.add(turn.uid)
 
         if (
-            self.comparison_seed is not None
+            self.mode == "SYMMETRIC"
+            and self.comparison_seed is not None
             and self.turns
             and self.turns[0].assessment is not None
             and self.turns[0].assessment.to_dict()
@@ -2146,6 +2301,30 @@ class MeldSession:
     def _validate_assessment(self, turn: MeldTurn) -> None:
         assessment = turn.assessment
         assert assessment is not None
+        if (
+            self.mode == "DIRECTIONAL"
+            and self.comparison_seed is not None
+            and turn.sequence == 0
+        ):
+            basis = directional_comparison_basis_assessment(
+                self.comparison_seed.analysis,
+                (self.frames[0], self.frames[1]),
+            )
+            if tuple(
+                relation.to_dict() for relation in assessment.relations
+            ) != tuple(relation.to_dict() for relation in basis.relations):
+                raise MeldError(
+                    "Directional meld turn zero changed its Compare relation ledger."
+                )
+            issue_by_uid = {issue.uid: issue for issue in assessment.issues}
+            if any(
+                issue.uid not in issue_by_uid
+                or issue_by_uid[issue.uid].to_dict() != issue.to_dict()
+                for issue in basis.issues
+            ):
+                raise MeldError(
+                    "Directional meld turn zero changed an imported Compare issue."
+                )
         incoming_frame = self.frames[0] if self.mode == "DIRECTIONAL" else None
         baseline_frame = self.frames[1] if self.mode == "DIRECTIONAL" else None
         baseline_memory_by_uid = (
@@ -2322,7 +2501,7 @@ class MeldSession:
                 and len(proposal.relation_uids) != 1
                 for proposal in assessment.proposals
             ):
-                raise MeldError(
+                raise MeldRepairableAssessmentError(
                     "A preservation-first directional result must belong to "
                     "exactly one primary relation."
                 )
@@ -2335,7 +2514,7 @@ class MeldSession:
                 }
                 if relation.kind == "EQUIVALENT":
                     if relation_proposals:
-                        raise MeldError(
+                        raise MeldRepairableAssessmentError(
                             "An EQUIVALENT directional relation is already "
                             "represented by the BASELINE and must not create a change."
                         )
@@ -2360,14 +2539,14 @@ class MeldSession:
                             or proposal.disposition != "SYNTHESIZE"
                             or not user_grounded
                         ):
-                            raise MeldError(
+                            raise MeldRepairableAssessmentError(
                                 "Combining directional INCOMING Memories requires "
                                 "an explicit user-grounded relation-local SYNTHESIZE "
                                 "result."
                             )
                         continue
                     if len(proposal_incoming) != 1:
-                        raise MeldError(
+                        raise MeldRepairableAssessmentError(
                             "A directional source-derived change must represent "
                             "INCOMING Memory evidence."
                         )
@@ -2380,7 +2559,7 @@ class MeldSession:
                     ) and not (
                         proposal.disposition == "SYNTHESIZE" and user_grounded
                     ):
-                        raise MeldError(
+                        raise MeldRepairableAssessmentError(
                             "An uncombined directional INCOMING Memory must be "
                             "added once with its exact content, or an explicit "
                             "user turn must ground its rewrite."
@@ -2388,7 +2567,7 @@ class MeldSession:
                 if set(incoming_occurrences) != relation_incoming or any(
                     count != 1 for count in incoming_occurrences.values()
                 ):
-                    raise MeldError(
+                    raise MeldRepairableAssessmentError(
                         "A ready directional DISTINCT, COMPATIBLE, or SCOPED "
                         "relation must materialize every INCOMING Memory exactly once."
                     )

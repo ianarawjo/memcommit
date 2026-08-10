@@ -210,11 +210,26 @@ revision and mapping. Revocation or drift leaves the participant artifact
 stored but prevents Grant-bound review or mutation; retained-analysis access
 follows the Grant artifact retention rules.
 
-The first invocation performs one bounded semantic analysis, saves a
-non-applying relation ledger and proposal, and opens the interactive
-workbench in a terminal. Repeating the same resolved incoming–baseline command
-resumes without another provider call. Directional roles are ordered:
-reversing the two Contexts is a different operation.
+The first invocation performs one bounded semantic turn, saves a non-applying
+relation ledger and proposal, and opens the interactive workbench in a
+terminal. If the active Profile already contains an exact fresh ordered
+Compare for the same `INCOMING → BASELINE` pair and descendant flags, Meld
+imports that relation ledger and asks the provider only for the
+authority-specific Directional issues and materialization over it:
+
+```bash
+mem switch INCOMING
+mem compare --to BASELINE
+mem meld INCOMING --into BASELINE
+```
+
+A present but stale Compare must be refreshed; it is not silently ignored. If
+no saved Compare exists, the compatible direct Directional analysis remains
+available. The rendered session marks an imported basis with `Compare: … ·
+IMPORTED`. Repeating the same resolved incoming–baseline command resumes
+without another provider call. Directional roles are ordered: reversing the
+two Contexts is a different operation and requires its own ordered Compare to
+be comparison-backed.
 
 The shared issue and whole-set actions use the directional command prefix:
 

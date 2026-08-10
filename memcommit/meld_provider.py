@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import json
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Protocol
 
 from memcommit.meld import (
+    MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
     MELD_TEXT_LIMIT,
     MeldAssessment,
@@ -18,6 +19,7 @@ from memcommit.meld import (
     MeldProposal,
     MeldRelation,
     MeldSession,
+    directional_comparison_basis_assessment,
 )
 from memcommit.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
@@ -197,6 +199,120 @@ def _split_relation_payloads(
             }
         )
     return paired, distinct
+
+
+def _assessment_provider_payload(
+    session: MeldSession,
+    assessment: MeldAssessment,
+    view: _ProviderView,
+) -> tuple[
+    dict[str, object],
+    dict[str, str],
+    dict[str, str],
+    dict[str, str],
+]:
+    """Project one decoded assessment back into its provider-visible aliases."""
+    relation_id_by_uid = {
+        relation.uid: f"r{index:06d}"
+        for index, relation in enumerate(assessment.relations, start=1)
+    }
+    issue_id_by_uid = {
+        issue.uid: f"i{index:06d}"
+        for index, issue in enumerate(assessment.issues, start=1)
+    }
+    proposal_id_by_uid = {
+        proposal.uid: f"p{index:06d}"
+        for index, proposal in enumerate(assessment.proposals, start=1)
+    }
+    relation_records = [
+        {
+            "relation_key": relation_id_by_uid[relation.uid],
+            "left_memory_ids": [
+                view.memory_id_by_key[(member.frame_uid, member.memory_uid)]
+                for member in relation.members
+                if member.frame_uid == session.frames[0].uid
+            ],
+            "right_memory_ids": [
+                view.memory_id_by_key[(member.frame_uid, member.memory_uid)]
+                for member in relation.members
+                if member.frame_uid == session.frames[1].uid
+            ],
+            "kind": relation.kind,
+            "status": relation.status,
+            "summary": relation.summary,
+            "reason": relation.reason,
+        }
+        for relation in assessment.relations
+    ]
+    paired_relations, distinct_relations = _split_relation_payloads(
+        relation_records
+    )
+    results: list[dict[str, object]] = []
+    for proposal in assessment.proposals:
+        result: dict[str, object] = {
+            "result_key": proposal_id_by_uid[proposal.uid],
+            "disposition": proposal.disposition,
+            "content": proposal.content,
+            "reason": proposal.reason,
+            "relation_keys": [
+                relation_id_by_uid[uid] for uid in proposal.relation_uids
+            ],
+            "source_memory_ids": [
+                view.memory_id_by_key[(member.frame_uid, member.memory_uid)]
+                for member in proposal.source_members
+            ],
+            "grounded_turn_ids": [
+                view.turn_id_by_uid[uid]
+                for uid in proposal.grounded_by_turn_uids
+            ],
+        }
+        if session.mode == "DIRECTIONAL":
+            baseline = session.frames[1]
+            result["operation"] = proposal.operation
+            result["target_memory_ids"] = (
+                [view.memory_id_by_key[(baseline.uid, proposal.memory_uid)]]
+                if proposal.operation == "EDIT"
+                else []
+            )
+            if len(view.target_context_by_id) > 1:
+                owner_identity = (
+                    proposal.owner_context_uid,
+                    proposal.owner_context_name,
+                )
+                result["target_context_id"] = (
+                    view.target_context_id_by_identity[owner_identity]
+                )
+        results.append(result)
+
+    return (
+        {
+            "overview": assessment.overview,
+            "paired_relations": paired_relations,
+            "distinct_relations": distinct_relations,
+            "issues": [
+                {
+                    "issue_key": issue_id_by_uid[issue.uid],
+                    "relation_keys": [
+                        relation_id_by_uid[uid] for uid in issue.relation_uids
+                    ],
+                    "priority": issue.priority,
+                    "title": issue.title,
+                    "question": issue.question,
+                    "why_it_matters": issue.why_it_matters,
+                    "options": [
+                        {"label": option.label, "text": option.text}
+                        for option in issue.options
+                    ],
+                }
+                for issue in assessment.issues
+            ],
+            "results": results,
+            "ready_to_apply": assessment.ready_to_apply,
+        },
+        {alias: uid for uid, alias in relation_id_by_uid.items()},
+        {alias: uid for uid, alias in issue_id_by_uid.items()},
+        {alias: uid for uid, alias in proposal_id_by_uid.items()},
+    )
 
 
 def _provider_view(session: MeldSession) -> _ProviderView:
@@ -437,7 +553,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
         "comment": current.comment,
         "revises_turn_ids": [turn_id_by_uid[uid] for uid in current.revises_turn_uids],
     }
-    payload = {
+    payload: dict[str, object] = {
         "mode": session.mode,
         "authority": (
             ("Both PEER sources have equal authority. Neither source wins by default.")
@@ -465,7 +581,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
         "previous": previous,
         "current_turn": current_payload,
     }
-    return _ProviderView(
+    view = _ProviderView(
         memory_by_id=memory_by_id,
         memory_id_by_key=memory_id_by_key,
         memory_owner_by_id=memory_owner_by_id,
@@ -480,6 +596,33 @@ def _provider_view(session: MeldSession) -> _ProviderView:
         prior_proposal_by_id=prior_proposal_by_id,
         payload=payload,
     )
+    if (
+        session.mode == "DIRECTIONAL"
+        and session.schema_version >= MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
+        and session.comparison_seed is not None
+        and current.sequence == 0
+    ):
+        basis = directional_comparison_basis_assessment(
+            session.comparison_seed.analysis,
+            (session.frames[0], session.frames[1]),
+        )
+        (
+            basis_payload,
+            basis_relations,
+            basis_issues,
+            _basis_proposals,
+        ) = _assessment_provider_payload(session, basis, view)
+        payload["comparison_basis"] = basis_payload
+        view = replace(
+            view,
+            # Stable aliases let the decoder retain the exact reviewed Compare
+            # identities while still requiring a complete returned ledger.
+            prior_relation_by_id=basis_relations,
+            prior_relation_records={},
+            prior_issue_by_id=basis_issues,
+            payload=payload,
+        )
+    return view
 
 
 def meld_output_schema(
@@ -689,6 +832,7 @@ def _prompt(
     payload: dict[str, object],
     *,
     directional_preservation: bool = False,
+    repair: bool = False,
 ) -> str:
     encoded = json.dumps(
         payload,
@@ -707,6 +851,7 @@ def _prompt(
             "truncated or split into hidden calls."
         )
     directional = payload.get("mode") == "DIRECTIONAL"
+    directional_comparison = directional and "comparison_basis" in payload
     authority_contract = (
         (
             "Perform one bounded DIRECTIONAL semantic meld analysis. The "
@@ -762,8 +907,45 @@ def _prompt(
         if directional and directional_preservation
         else ""
     )
+    directional_comparison_contract = (
+        (
+            "The payload comparison_basis is the exact reviewed ordered "
+            "INCOMING-to-BASELINE Compare result. For this initial turn, copy "
+            "every comparison relation unchanged: preserve its relation_key, "
+            "members, kind, status, summary, reason, and order. Do not "
+            "reclassify, split, combine, or omit a relation. Preserve every "
+            "comparison_basis issue unchanged, including its issue_key, "
+            "relation keys, priority, text, options, and order. You may add "
+            "only Directional-specific placement or materialization issues. "
+            "Use the frozen relation ledger to produce the exact Directional "
+            "results; comparison_basis itself has no mutation authority. "
+        )
+        if directional_comparison
+        else ""
+    )
+    repair_contract = (
+        (
+            "This is one explicit validation-repair call, not a new user turn. "
+            "The payload contains a rejected_assessment and one trusted local "
+            "validation_error. Return one complete corrected assessment. Keep "
+            "the rejected relation grouping, issue judgments, and already valid "
+            "results unchanged unless the validation error makes a local change "
+            "strictly necessary. Do not treat the validation error as semantic "
+            "evidence, do not invent a grounded user turn, and do not resolve a "
+            "CONFLICT or UNCLEAR relation merely to make the response valid. "
+            "Repair exact preservation by copying the supplied source Memory "
+            "content verbatim. The later instruction to recompute after every "
+            "turn does not apply because this repair is not a turn. Never "
+            "return a patch or omit unchanged records.\n"
+        )
+        if repair
+        else ""
+    )
     return (
-        authority_contract + "\n"
+        repair_contract
+        + authority_contract
+        + directional_comparison_contract
+        + "\n"
         "Every supplied source Memory must appear in exactly one primary "
         "relation. Return cross-source relations in paired_relations and "
         "one-sided DISTINCT relations in distinct_relations. A relation may "
@@ -1446,3 +1628,92 @@ def assess_meld_turn(
         ),
     )
     return _parse_assessment(response, session=session, view=view)
+
+
+def repair_meld_assessment(
+    session: MeldSession,
+    rejected: MeldAssessment,
+    validation_error: str,
+    provider: MeldProvider,
+) -> MeldAssessment:
+    """Request one bounded repair of a decoded but session-invalid assessment."""
+    if not isinstance(session, MeldSession):
+        raise MeldProviderError("Expected a MeldSession.")
+    if not isinstance(rejected, MeldAssessment):
+        raise MeldProviderError("Expected a rejected MeldAssessment.")
+    if not isinstance(validation_error, str) or not validation_error.strip():
+        raise MeldProviderError("Expected one local Meld validation error.")
+
+    base_view = _provider_view(session)
+    (
+        rejected_payload,
+        rejected_relations,
+        rejected_issues,
+        rejected_proposals,
+    ) = _assessment_provider_payload(session, rejected, base_view)
+    repair_payload = {
+        **base_view.payload,
+        "rejected_assessment": rejected_payload,
+        "validation_error": validation_error,
+    }
+    # Reusing the rejected aliases preserves stable local identities when the
+    # provider repairs a record in place. Prior relation carry-forward remains
+    # disabled: a repair must return a complete assessment for atomic review.
+    view = replace(
+        base_view,
+        prior_relation_by_id=rejected_relations,
+        prior_relation_records={},
+        prior_issue_by_id=rejected_issues,
+        prior_proposal_by_id=rejected_proposals,
+        payload=repair_payload,
+    )
+    source_count = len(view.memory_by_id)
+    left_count = len(session.frames[0].memories)
+    right_count = len(session.frames[1].memories)
+    schema = meld_output_schema(
+        source_count,
+        mode=session.mode,
+        target_context_count=len(view.target_context_by_id) or 1,
+    )
+    plan = plan_semantic_execution(
+        MELD_EXECUTION_POLICY,
+        json_budget(
+            view.payload,
+            item_count=source_count,
+            output_schema=schema,
+            expected_output_items=source_count,
+            relation_edges=left_count * right_count,
+        ),
+    )
+    if plan.mode is not ExecutionMode.ONE_SHOT:
+        axes = ", ".join(plan.exceeded_axes)
+        raise MeldProviderError(
+            "This rejected Meld assessment exceeds the bounded repair plan "
+            f"({axes}). It was not truncated or partially repaired."
+        )
+    response = provider.complete(
+        _prompt(
+            view.payload,
+            directional_preservation=(
+                session.mode == "DIRECTIONAL"
+                and session.schema_version
+                >= MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION
+            ),
+            repair=True,
+        ),
+        operation="meld_contexts_repair",
+        output_schema=schema,
+    )
+    repaired = _parse_assessment(response, session=session, view=view)
+    if (
+        repaired.overview != rejected.overview
+        or tuple(relation.to_dict() for relation in repaired.relations)
+        != tuple(relation.to_dict() for relation in rejected.relations)
+        or tuple(issue.to_dict() for issue in repaired.issues)
+        != tuple(issue.to_dict() for issue in rejected.issues)
+        or repaired.ready_to_apply != rejected.ready_to_apply
+    ):
+        raise MeldProviderError(
+            "Codex meld repair changed the frozen semantic analysis."
+        )
+    return repaired
