@@ -28,6 +28,7 @@ from memcommit.commands.ground_shell import (
     GROUND_CONTEXTS_FRAME_HEIGHT,
     GROUND_GOAL_FRAME_HEIGHT,
 )
+from memcommit.commands.session_help import bind_session_help
 from memcommit.commands.tui_primitives import (
     InFrameInputManager,
     InFrameInputSection,
@@ -2706,6 +2707,14 @@ def run_named_ground_shell(
     @bind_case_insensitive_key(bindings, "q", filter=read_pane_focus, eager=True)
     def _quit_ground(event) -> None:
         exit_view(event, status="CLOSED")
+
+    bind_session_help(
+        bindings,
+        filter=read_pane_focus,
+        app_input=app_input,
+        app_output=app_output,
+        study_surface="ground-named",
+    )
 
     @bindings.add("escape", eager=True)
     def _close_on_escape(event) -> None:

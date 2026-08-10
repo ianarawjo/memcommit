@@ -15,7 +15,7 @@ import threading
 import time
 from typing import Protocol, TypeVar
 
-from prompt_toolkit.application import Application, run_in_terminal
+from prompt_toolkit.application import Application
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -26,21 +26,16 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
-try:  # Typer 0.27+ vendors Click but does not re-export this helper.
-    from typer._click.globals import get_current_context
-except ImportError:  # pragma: no cover - compatibility with older Typer
-    from click import get_current_context
-
 from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import (
     BUSY_INTERVAL_SECONDS,
     CommandProgress,
     render_progress_line,
 )
-from memcommit.commands.help_inventory import (
-    CommandEntry,
-    command_entries,
-    run_help_selector,
+from memcommit.commands.help_inventory import CommandEntry
+from memcommit.commands.session_help import (
+    SessionHelpController,
+    current_help_entries,
 )
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
@@ -195,17 +190,6 @@ class _InteractiveProgress:
         )
 
 
-def _current_help_entries() -> tuple[CommandEntry, ...]:
-    """Freeze the root command inventory before background work begins."""
-
-    current = get_current_context(silent=True)
-    if current is None:
-        return ()
-    while current.parent is not None:
-        current = current.parent
-    return tuple(command_entries(current))
-
-
 def _study_help_action(action: str, command_name: str | None) -> None:
     detail = f"HELP {action}"
     if command_name is not None:
@@ -259,7 +243,7 @@ def run_command_wait(
             return work(progress)
 
     frozen_help_entries = tuple(
-        _current_help_entries() if help_entries is None else help_entries
+        current_help_entries() if help_entries is None else help_entries
     )
     started_at = time.monotonic()
     progress = _InteractiveProgress(
@@ -275,12 +259,10 @@ def run_command_wait(
     bindings = KeyBindings()
     result: dict[str, T] = {}
     error: dict[str, Exception] = {}
-    help_open = {"value": False}
     ready = {"value": False}
     close_requested = {"value": False}
     status_message = {"value": ""}
     context_open = {"value": False}
-    application_ref: dict[str, Application[None]] = {}
 
     def emit_help_action(action: str, command_name: str | None = None) -> None:
         _study_help_action(action, command_name)
@@ -354,57 +336,29 @@ def run_command_wait(
         )
     )
 
-    async def explore_help() -> None:
-        try:
-            await run_in_terminal(
-                lambda: run_help_selector(
-                    list(frozen_help_entries),
-                    app_input=app_input,
-                    app_output=app_output,
-                    require_tty=False,
-                    mode="EXPLORE",
-                    status_supplier=help_status,
-                    on_explore_action=emit_help_action,
-                    # OPEN means the nested application owns input, not merely
-                    # that its handoff task was scheduled. Pipe input and a
-                    # fast participant can otherwise race the transition.
-                    on_ready=lambda: emit_help_action("OPEN"),
-                ),
-                # The nested Help Application owns its own event loop. Keep it
-                # in this process but outside the waiting Application's loop.
-                in_executor=True,
-            )
-        finally:
-            help_open["value"] = False
-            emit_help_action("CLOSE")
-        application = application_ref["application"]
+    def return_from_help(application: Application) -> None:
         if ready["value"]:
             application.exit()
         else:
             application.invalidate()
 
-    def open_help(application: Application[None]) -> bool:
-        if help_open["value"] or not frozen_help_entries:
-            return False
-        # Reserve the visible Help state before scheduling either it or the
-        # worker. A very fast worker must still see Help as open and leave its
-        # completed result waiting for the participant's explicit H/Q return.
-        help_open["value"] = True
-        try:
-            application.create_background_task(explore_help())
-        except Exception:
-            help_open["value"] = False
-            raise
-        return True
-
-    @bind_case_insensitive_key(bindings, "h", eager=True)
-    @bindings.add("?", eager=True)
-    def _open_help(event) -> None:
+    def help_unavailable(application: Application) -> None:
         if not frozen_help_entries:
             status_message["value"] = "Help inventory is unavailable here."
-            event.app.invalidate()
-            return
-        open_help(event.app)
+            application.invalidate()
+
+    help_controller = SessionHelpController(
+        entries=frozen_help_entries,
+        app_input=app_input,
+        app_output=app_output,
+        title="mem help · explore while work continues",
+        return_label="waiting",
+        status_supplier=help_status,
+        on_action=emit_help_action,
+        on_closed=return_from_help,
+        on_unavailable=help_unavailable,
+    )
+    help_controller.bind(bindings, additional_keys=("?",))
 
     if context_pane is not None and return_pane is not None:
 
@@ -534,7 +488,6 @@ def run_command_wait(
         mouse_support=False,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
     )
-    application_ref["application"] = application
     progress.bind(application)
 
     def on_success(value: T) -> None:
@@ -550,7 +503,7 @@ def run_command_wait(
         emit_help_action("ERROR_READY")
 
     def on_idle() -> None:
-        if help_open["value"]:
+        if help_controller.is_open:
             application.invalidate()
         else:
             application.exit()

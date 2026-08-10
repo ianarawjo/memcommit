@@ -38,6 +38,7 @@ from memcommit.commands.semantic_viewer import (
     SemanticViewerController,
     semantic_viewer_block_fragments,
 )
+from memcommit.commands.session_help import bind_session_help
 from memcommit.result_workbench import (
     ResultCase,
     ResultCaseDetail,
@@ -441,6 +442,14 @@ def run_result_workbench_shell(
     def _quit(event) -> None:
         close(event)
 
+    bind_session_help(
+        bindings,
+        filter=has_focus(body_control),
+        app_input=app_input,
+        app_output=app_output,
+        study_surface="result",
+    )
+
     footer = Window(
         FormattedTextControl(
             lambda: (
@@ -448,7 +457,7 @@ def run_result_workbench_shell(
                 if status["value"]
                 else (
                     " ↑/↓ section  Enter expand case  "
-                    "Esc/Backspace back or close  Q quit · read-only "
+                    "Esc/Backspace back or close  H Help  Q quit · read-only "
                 )
             )
         ),

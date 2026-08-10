@@ -56,6 +56,7 @@ from memcommit.commands.save_location_control import (
     save_location_row_fragments,
     save_location_tree_fragments,
 )
+from memcommit.commands.session_help import bind_session_help
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
     semantic_detail_header_fragments,
@@ -4334,6 +4335,14 @@ def run_resolution_workbench_shell(
     def _quit(event) -> None:
         _close(event)
 
+    bind_session_help(
+        bindings,
+        filter=~writable_input_focused,
+        app_input=app_input,
+        app_output=app_output,
+        study_surface="resolution",
+    )
+
     def footer_text() -> str:
         if status["value"]:
             return f" {status['value']}"
@@ -4463,6 +4472,11 @@ def run_resolution_workbench_shell(
             actions.append("A review & apply" if review_and_apply else "A accept")
         if toggle_sort is not None:
             actions.append("S sort")
+        if not (
+            get_app().layout.has_focus(input_area)
+            or get_app().layout.has_focus(destination_input)
+        ):
+            actions.append("H Help")
         actions.append("Q close")
         state_label = (
             f" READ ONLY · {safe_terminal_text(active_view.status)} ·"

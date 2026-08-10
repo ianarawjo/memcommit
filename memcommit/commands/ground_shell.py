@@ -41,6 +41,7 @@ from memcommit.commands.exact_command_review import (
     render_exact_command_blocks,
     render_exact_command_review,
 )
+from memcommit.commands.session_help import bind_session_help
 from memcommit.commands.context_picker import choose_context
 from memcommit.commands.tui_primitives import (
     InFrameInputManager,
@@ -3053,6 +3054,14 @@ def run_ground_shell(
     @bind_case_insensitive_key(bindings, "q", filter=read_pane_focus, eager=True)
     def _quit_ground(event) -> None:
         cancel(event)
+
+    bind_session_help(
+        bindings,
+        filter=read_pane_focus,
+        app_input=app_input,
+        app_output=app_output,
+        study_surface="ground",
+    )
 
     @bindings.add("escape", eager=True)
     def _cancel_on_escape(event) -> None:

@@ -81,6 +81,10 @@ HELP_COMMON_KEYS = (
     ("Tab / Shift-Tab", "Move focus between visible surfaces."),
     ("Enter", "Open, select, or submit the focused action."),
     (
+        "H",
+        "Open or hide Help from a session's read-only navigation surface.",
+    ),
+    (
         "Esc / Backspace",
         "Go back one layer; Backspace edits text in writable fields.",
     ),
@@ -889,12 +893,16 @@ def run_help_selector(
     status_supplier: Callable[[], str] | None = None,
     on_explore_action: Callable[[str, str | None], None] | None = None,
     on_ready: Callable[[], None] | None = None,
+    explore_title: str = "mem help · explore while work continues",
+    explore_return_label: str = "waiting",
 ) -> HelpSelection | None:
     """Select a command, or browse the same inventory without shell effects."""
     if not entries:
         return None
     if mode not in {"SELECT", "EXPLORE"}:
         raise ValueError("Help mode must be SELECT or EXPLORE.")
+    if not explore_title.strip() or not explore_return_label.strip():
+        raise ValueError("Help exploration labels must be nonblank.")
     if require_tty and (
         not sys.stdin.isatty() or not sys.stdout.isatty()
     ):
@@ -1318,7 +1326,7 @@ def run_help_selector(
 
     def header_fragments() -> list[tuple[str, str]]:
         title = (
-            " mem help · explore while work continues"
+            " " + explore_title
             if mode == "EXPLORE"
             else " mem help · command inventory"
         )
@@ -1353,7 +1361,11 @@ def run_help_selector(
     )
 
     def footer_text() -> str:
-        return_label = "return to waiting" if mode == "EXPLORE" else "cancel"
+        return_label = (
+            f"return to {explore_return_label}"
+            if mode == "EXPLORE"
+            else "cancel"
+        )
         if (
             app_ref.get("app") is not None
             and app_ref["app"].layout.has_focus(view_control)
@@ -1365,7 +1377,7 @@ def run_help_selector(
             )
         if concept_focus_active():
             toggle = (
-                " H hide Help · Q return to waiting"
+                f" H hide Help · Q return to {explore_return_label}"
                 if mode == "EXPLORE"
                 else ""
             )
@@ -1378,7 +1390,7 @@ def run_help_selector(
             else "Enter prefill command line"
         )
         detail_action = (
-            "H hide Help  Q return to waiting"
+            f"H hide Help  Q return to {explore_return_label}"
             if mode == "EXPLORE"
             else "H full help"
         )

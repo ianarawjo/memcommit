@@ -43,6 +43,7 @@ from memcommit.commands.command_progress import (
     BUSY_INTERVAL_SECONDS,
     busy_suffix,
 )
+from memcommit.commands.session_help import bind_session_help
 from memcommit.commands.search_result_present import (
     SearchResultViewRow,
     render_grouped_search_results,
@@ -443,7 +444,8 @@ def _run_find_chat_application(
                     else (
                         " Enter · submit    Ctrl-J · newline    "
                         "Tab · results/dialogue/input    "
-                        "↑/↓ or PgUp/PgDn · scroll    Esc/Ctrl-C · close"
+                        "↑/↓ or PgUp/PgDn · scroll    H · Help    "
+                        "Esc/Ctrl-C · close"
                     )
                 )
             )
@@ -611,6 +613,13 @@ def _run_find_chat_application(
         event.app.exit(result=result)
 
     navigation_focus = has_focus(conversation_control) | has_focus(results_control)
+    bind_session_help(
+        bindings,
+        filter=navigation_focus,
+        app_input=app_input,
+        app_output=app_output,
+        study_surface="find-chat",
+    )
 
     @bindings.add("pageup", filter=navigation_focus, eager=True)
     def _scroll_page_up(event) -> None:

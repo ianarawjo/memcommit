@@ -57,6 +57,7 @@ from memcommit.commands.search_result_present import (
     render_grouped_search_results,
 )
 from memcommit.commands.save_location_control import SaveLocationView
+from memcommit.commands.session_help import bind_session_help
 from memcommit.commands.surface_focus import (
     FocusSurface,
     SurfaceActionResult,
@@ -648,7 +649,7 @@ def run_find_search_workbench(
             if app.layout.has_focus(search_area)
             else (
                 "↑/↓ move/cross · Enter activate/check · ←/→ adjust · "
-                "/ search · Esc back · Q close"
+                "/ search · Esc back · H Help · Q close"
             )
         )
         return f" {safe_terminal_text(status['value'])} · {hint}"
@@ -862,6 +863,13 @@ def run_find_search_workbench(
         | tree_focus
     )
     non_search_focus = has_focus(target_control) | search_return_focus
+    bind_session_help(
+        bindings,
+        filter=non_search_focus,
+        app_input=app_input,
+        app_output=app_output,
+        study_surface="find-search",
+    )
 
     def _focus_search(event) -> SurfaceActionResult:
         event.app.layout.focus(search_area)

@@ -38,6 +38,7 @@ from memcommit.commands.query_execution import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )
+from memcommit.commands.session_help import bind_session_help
 from memcommit.commands.surface_focus import (
     FocusSurface,
     SurfaceActionResult,
@@ -499,7 +500,7 @@ def run_query_workbench(
         if background_turn.busy:
             return (
                 f" QUERYING {busy_suffix(background_turn.frame)} · "
-                "scope frozen · Ctrl-C closes after query"
+                "scope frozen · H Help · Ctrl-C closes after query"
             )
         if app.layout.has_focus(question_area):
             navigation = "Enter ask · Tab switch · Esc close"
@@ -508,7 +509,7 @@ def run_query_workbench(
         else:
             navigation = (
                 "↑/↓ move/cross · Tab switch · / question · "
-                "Esc/Backspace question · Q close"
+                "Esc/Backspace question · H Help · Q close"
             )
         return (
             f" {safe_terminal_text(status['value'])} · {navigation}"
@@ -869,6 +870,13 @@ def run_query_workbench(
         has_focus(sources_control)
         | has_focus(scope_control)
         | has_focus(answer_control)
+    )
+    bind_session_help(
+        bindings,
+        filter=read_only_focus,
+        app_input=app_input,
+        app_output=app_output,
+        study_surface="query",
     )
 
     @bindings.add("/", filter=read_only_focus, eager=True)

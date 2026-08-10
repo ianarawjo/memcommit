@@ -1,6 +1,6 @@
 """Click-context compatibility for the shared command wait inventory."""
 
-from memcommit.commands import command_wait
+from memcommit.commands import session_help
 from memcommit.commands.help_inventory import CommandEntry
 
 
@@ -19,15 +19,15 @@ def test_help_inventory_uses_the_vendored_click_context_helper(monkeypatch):
     )
 
     monkeypatch.setattr(
-        command_wait,
+        session_help,
         "get_current_context",
         lambda *, silent: child if silent else None,
     )
     monkeypatch.setattr(
-        command_wait,
+        session_help,
         "command_entries",
         lambda context: seen.append(context) or expected,
     )
 
-    assert command_wait._current_help_entries() == expected
+    assert session_help.current_help_entries() == expected
     assert seen == [root]

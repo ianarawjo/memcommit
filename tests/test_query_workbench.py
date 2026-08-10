@@ -1,11 +1,14 @@
 """Interactive Query question, source, scope, and answer contracts."""
 
+import threading
+
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import typer
 
 import memcommit.commands.query as query_command
+import memcommit.commands.query_workbench as query_workbench_module
 from memcommit.commands.query_execution import (
     GrantedQueryRequest,
     GrantedQueryResponse,
@@ -48,6 +51,68 @@ def test_blank_query_workbench_does_not_connect_before_submission():
     assert result.response is None
     assert ordinary == []
     assert granted == []
+
+
+def test_query_question_keeps_h_and_uppercase_h_as_text():
+    requests: list[OrdinaryQueryRequest] = []
+
+    def ordinary(request: OrdinaryQueryRequest) -> OrdinaryQueryResponse:
+        requests.append(request)
+        return OrdinaryQueryResponse(request, "Answer.", True)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("hH question\r\x03")
+        run_query_workbench(
+            ("task",),
+            current_context="task",
+            initial_context="task",
+            query_targets=(),
+            run_ordinary=ordinary,
+            run_granted=lambda _request: (_ for _ in ()).throw(AssertionError()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests[0].question == "hH question"
+
+
+def test_query_binds_help_only_after_leaving_the_question(monkeypatch):
+    help_opened = threading.Event()
+
+    def bind_help(bindings, *, filter, **_kwargs):
+        @bindings.add("h", filter=filter, eager=True)
+        def open_help(_event) -> None:
+            help_opened.set()
+
+    monkeypatch.setattr(query_workbench_module, "bind_session_help", bind_help)
+
+    with create_pipe_input() as pipe_input:
+        def drive() -> None:
+            pipe_input.send_text("\th")
+            if not help_opened.wait(3):
+                pipe_input.send_text("\x03")
+                return
+            pipe_input.send_text("\x03")
+
+        driver = threading.Thread(target=drive, daemon=True)
+        driver.start()
+        result = run_query_workbench(
+            ("task",),
+            current_context="task",
+            initial_context="task",
+            query_targets=(),
+            run_ordinary=lambda _request: (_ for _ in ()).throw(AssertionError()),
+            run_granted=lambda _request: (_ for _ in ()).throw(AssertionError()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        driver.join(timeout=3)
+
+    assert result.status == "CLOSED"
+    assert help_opened.is_set()
+    assert not driver.is_alive()
 
 
 def test_escape_closes_the_root_question_without_submission():

@@ -138,6 +138,15 @@ See
 [`interactive-command-wait-design-rationale.md`](interactive-command-wait-design-rationale.md)
 for the background execution and consistency boundary.
 
+Long-lived terminal sessions now reuse that same `EXPLORE` renderer through
+the operation-neutral Session Help controller. On a read-only navigation
+surface, `H` or `h` opens `mem help · session guide`; the same key hides it and
+restores the exact parent focus and buffers. Writable Questions, Search text,
+Messages, Responses, comments, direct edits, and exact names retain both
+letters as ordinary input. Query, Find, Compare, Result, Resolution, and Ground
+share this lifecycle without sharing semantic or persisted session state. See
+[`session-help-design-rationale.md`](session-help-design-rationale.md).
+
 The child `mem help` process cannot itself prefill its parent shell's next
 editable command line. The opt-in output of `mem shell-init zsh` now supplies
 a parent-shell wrapper for zsh: its private selection mode keeps the TUI on

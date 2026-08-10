@@ -29,6 +29,7 @@ from memcommit.commands.semantic_viewer import (
     SemanticViewerDocument,
     SemanticViewerSection,
 )
+from memcommit.commands.session_help import bind_session_help
 from memcommit.commands.tui_text_layout import (
     elide_terminal_text,
     live_window_content_width,
@@ -695,6 +696,13 @@ def run_compare_workbench(
     def _close(event) -> None:
         event.app.exit(result=CompareWorkbenchReceipt(action="close"))
 
+    bind_session_help(
+        bindings,
+        app_input=app_input,
+        app_output=app_output,
+        study_surface="compare",
+    )
+
     reference, compared = analysis.frames
     header = Window(
         FormattedTextControl(
@@ -726,7 +734,8 @@ def run_compare_workbench(
     footer = Window(
         FormattedTextControl(
             lambda: (
-                f" FOCUS {navigation.pane.upper()} · B/Esc/Backspace back · Q close · "
+                f" FOCUS {navigation.pane.upper()} · "
+                "B/Esc/Backspace back · H Help · Q close · "
                 "Tab switch · ↑↓ section/item · Enter deeper · ←→ source · "
                 "PgUp/PgDn page · Home/End · R rationale · L ledger · M meld"
                 f"  ·  {navigation.row_index + 1}/{len(rows)}"

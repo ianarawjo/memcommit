@@ -155,6 +155,9 @@ The shared interaction grammar is:
 - `PageUp` and `PageDown` move eight semantic stops in the focused frame;
 - `Home` and `End` move to the first or last stop;
 - `B`, `Escape`, or `Backspace` unwinds a detail to the report/Items state; and
+- `H` or `h` opens the shared read-only Help inventory from a navigation
+  surface and the same key hides it back to the exact retained session focus;
+  and
 - `q` or `Q` closes without implying a semantic response or application.
 
 Escape and Backspace are equivalent back-navigation keys throughout session
@@ -319,6 +322,10 @@ semantics without creating a giant universal operation schema.
 
 Ground keeps its exact-command approval and conversational navigation rules.
 It may reuse low-level frame and scrolling primitives, but it is not governed
-by this session-workbench action grammar. SessionPicker also remains a launcher
+by this session-workbench action grammar. Ground does reuse the lower-level
+Session Help handoff on read panes; Help cannot approve a command or intercept
+its writable Message and edit fields. SessionPicker also remains a launcher
 rather than an active workbench. Composer behavior is operation-dependent even
-though its focus identity is represented by the common controller.
+though its focus identity is represented by the common controller. The full
+Help lifecycle and rollout boundary are recorded in
+[`session-help-design-rationale.md`](session-help-design-rationale.md).
