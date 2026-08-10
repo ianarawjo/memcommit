@@ -1,0 +1,12 @@
+  [0b1a1d28/1] 2026-08-10 12:21:01 +0.000s  COMMAND_STARTED
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=80 · terminal_rows=24
+  [0b1a1d28/2] 2026-08-10 12:21:01 +0.045s  PROVIDER_CONNECT_STARTED
+      operation=semantic
+  [0b1a1d28/3] 2026-08-10 12:21:02 +0.067s  PROVIDER_CONNECT_COMPLETED
+      elapsed_seconds=0.021716166003898252 · operation=semantic · provider=codex_chatgpt
+  [0b1a1d28/4] 2026-08-10 12:21:02 +0.069s  PROVIDER_TURN_STARTED
+      has_schema=True · input_characters=113198 · operation=compare_contexts · provider=codex_chatgpt
+  [0b1a1d28/5] 2026-08-10 12:31:01 +600.075s  PROVIDER_TURN_FAILED
+      elapsed_seconds=600.006462624995 · failure_kind=QueryProviderTimeoutError · operation=compare_contexts · provider=codex_chatgpt
+  [0b1a1d28/6] 2026-08-10 12:31:01 +600.076s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED

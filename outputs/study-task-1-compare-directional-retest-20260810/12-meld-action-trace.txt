@@ -1,0 +1,40 @@
+  [228d0dd1/1] 2026-08-10 12:43:53 +0.000s  COMMAND_STARTED
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=80 · terminal_rows=24
+  [228d0dd1/2] 2026-08-10 12:43:53 +0.092s  PROVIDER_CONNECT_STARTED
+      operation=semantic
+  [228d0dd1/3] 2026-08-10 12:43:53 +0.116s  PROVIDER_CONNECT_COMPLETED
+      elapsed_seconds=0.02283479100151453 · operation=semantic · provider=codex_chatgpt
+  [228d0dd1/4] 2026-08-10 12:43:53 +0.120s  PROVIDER_TURN_STARTED
+      has_schema=True · input_characters=201057 · operation=meld_contexts · provider=codex_chatgpt
+  [228d0dd1/5] 2026-08-10 12:52:42 +529.265s  PROVIDER_TURN_COMPLETED
+      elapsed_seconds=529.1455289579972 · operation=meld_contexts · output_characters=121881 · provider=codex_chatgpt
+  [228d0dd1/6] 2026-08-10 12:53:22 +568.664s  KEY
+      count=1 · focus=FormattedTextControl · key=c-i
+  [228d0dd1/7] 2026-08-10 12:53:25 +572.059s  KEY
+      count=1 · focus=FormattedTextControl · key=down
+  [228d0dd1/8] 2026-08-10 12:53:25 +572.060s  KEY
+      count=1 · focus=FormattedTextControl · key=c-m
+  [228d0dd1/9] 2026-08-10 12:53:36 +583.319s  KEY
+      count=1 · focus=FormattedTextControl · key=escape
+  [228d0dd1/10] 2026-08-10 12:53:48 +594.719s  KEY
+      count=1 · focus=FormattedTextControl · key=c-i
+  [228d0dd1/11] 2026-08-10 12:53:53 +599.714s  KEY
+      count=1 · focus=FormattedTextControl · key=c-m
+  [228d0dd1/12] 2026-08-10 12:53:53 +599.727s  APPROVAL_PRESENTED
+      action=REVIEW AND APPLY · surface=resolution
+  [228d0dd1/13] 2026-08-10 12:54:05 +612.438s  KEY
+      count=1 · focus=FormattedTextControl · key=c-m
+  [228d0dd1/14] 2026-08-10 12:54:14 +620.988s  KEY
+      count=1 · focus=FormattedTextControl · key=c-m
+  [228d0dd1/15] 2026-08-10 12:54:14 +620.989s  KEY
+      count=1 · focus=FormattedTextControl · key=end
+  [228d0dd1/16] 2026-08-10 12:54:14 +621.003s  APPROVAL_PRESENTED
+      action=REVIEW AND APPLY · surface=resolution
+  [228d0dd1/17] 2026-08-10 12:54:19 +626.004s  KEY
+      count=1 · focus=FormattedTextControl · key=c-m
+  [228d0dd1/18] 2026-08-10 12:54:19 +626.021s  APPROVAL_ACCEPTED
+      action=ACCEPT · surface=resolution
+  [228d0dd1/19] 2026-08-10 12:54:19 +626.022s  TUI_ACTION
+      action=ACCEPT · surface=resolution
+  [228d0dd1/20] 2026-08-10 12:54:19 +626.170s  COMMAND_FINISHED
+      status=COMPLETED

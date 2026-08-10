@@ -1,0 +1,32 @@
+PROPOSED BASELINE CHANGES · 75 SEPARATE RESULTS
+  BUILDING ACCESS      · 11 proposals
+  EVENT RELOCATIONS    · 10 proposals
+  TEMPORARY PARKING    · 15 proposals
+  SHOP UPDATES         · 13 proposals
+  FACILITY UPDATES     · 17 proposals
+  ROUTE CHANGES        ·  9 proposals
+
+FIRST PROPOSAL PER OWNER
+  +  1. [ADD · PRESERVE] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preservation-first default.
+
+  + 12. [ADD · PRESERVE] Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preservation-first default.
+
+  + 22. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: During the construction period, the underground parking garage cannot be used for general parking.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preservation-first default.
+
+  + 37. [ADD · PRESERVE] Add campus-wiki/shop-updates: The ATM on the first floor of the Main Building is closed during the construction period.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Distinct incoming evidence is preserved.
+
+  + 50. [ADD · PRESERVE] Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Distinct incoming evidence is preserved.
+
+  + 67. [ADD · PRESERVE] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preservation-first default.

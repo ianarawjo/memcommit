@@ -1,0 +1,173 @@
+ISSUES
+›  1. [HELPFUL] Scoped · The rear entrance normally connects general passage to the library route but is…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  2. [HELPFUL] Scoped · The usual 10 p.m. main-entrance closing time becomes 5 p.m. during construction.
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  3. [HELPFUL] Scoped · Normal step-free access beside the main entrance is replaced during reconstructi…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  4. [HELPFUL] Scoped · After-hours students normally may use a physical card or registered app, but con…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  5. [HELPFUL] Scoped · The separate controlled staff entrance requires staff eligibility and becomes th…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  6. [HELPFUL] Scoped · Access guidance normally explains posted hours and entrance uses, while construc…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  7. [HELPFUL] Scoped · Students normally expect the rear entrance to connect to the library, creating a…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  8. [HELPFUL] Scoped · Returning tour leaders tend to reuse the rear-entrance route, which during const…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  9. [HELPFUL] Scoped · Tenth-floor exhibition viewing normally remains open during recess but is suspen…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 10. [HELPFUL] Scoped · Main Building meeting and event spaces normally accept reservations or reserved…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 11. [HELPFUL] Scoped · Event guidance compares published spaces and hours, presents confirmed alternati…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 12. [HELPFUL] Compatible · The event agent does not create reservations and instead directs requests th…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 13. [HELPFUL] Scoped · Returning visitors look for a familiar Main Building entrance and floor, which d…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 14. [HELPFUL] Scoped · Event operators and vendors expect loading times, entrances, and stage routes to…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 15. [HELPFUL] Scoped · General vehicles normally may use the underground garage during operating hours,…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 16. [HELPFUL] Scoped · The garage pedestrian entrance is normally open during operating hours but remai…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 17. [HELPFUL] Scoped · The interior stairs to the garage are normally available but are closed to every…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 18. [HELPFUL] Compatible · Lot C accepts visitor vehicles through a separate road outside the construct…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 19. [HELPFUL] Scoped · The inclined road normally connects Lot A and the underground garage but is bloc…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 20. [HELPFUL] Compatible · Parking guidance uses posted statuses, connecting routes, and mapped access…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 21. [HELPFUL] Compatible · Parking guidance may explain Lot C but cannot check or guarantee a particula…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 22. [HELPFUL] Scoped · Drivers may expect nearby Main Building parking or confuse Lots A and C, creatin…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 23. [HELPFUL] Scoped · Delivery and maintenance drivers may expect to unload at Lot A, but construction…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 24. [HELPFUL] Scoped · Students normally expect the Main Building's 24-hour store to be open, but it cl…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 25. [HELPFUL] Compatible · The separate West Complex ATM is the construction alternative, reached witho…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 26. [HELPFUL] Scoped · The separately accessible Engineering Building store normally has recess hours o…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 27. [HELPFUL] Scoped · The Main Building Campus Store normally operates during recess but closes during…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 28. [HELPFUL] Scoped · The Main Building cafe normally operates during summer break but does not operat…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 29. [HELPFUL] Compatible · The Innovation Hub contains a coffee machine restricted to staff, and constr…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 30. [HELPFUL] Scoped · Students may expect evening access to the Main Building ATM, but construction ca…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 31. [HELPFUL] Scoped · Amenities guidance uses posted locations and hours and seeks same-type alternati…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 32. [HELPFUL] Scoped · Store demand planning considers evening ATM and store use, with construction exp…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 33. [HELPFUL] Scoped · The first-floor visitor desk normally provides maps and immediate facility guida…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 34. [HELPFUL] Scoped · General restrooms exist on the first three Main Building floors but cannot be us…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 35. [HELPFUL] Scoped · Main Building accessible restrooms are normally located on the first three floor…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 36. [HELPFUL] Compatible · Facility guidance is limited to public operational impacts and must not infe…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 37. [HELPFUL] Scoped · Cleaning and security contractors prefer separated service routes, but the const…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 38. [HELPFUL] Scoped · Students normally prefer the air-conditioned indoor library route, but its const…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 39. [HELPFUL] Scoped · The familiar Lot A–Main Building–Library route is normally short and largely ind…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 40. [HELPFUL] Compatible · Accessible guidance points left from the Main Building, consistent with sign…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 41. [HELPFUL] Compatible · The step-free route runs from Lot C through the Student Centre accessible en…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 42. [HELPFUL] Scoped · Route guidance checks current entrance notices and recommends confirmed-open rou…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 43. [HELPFUL] Scoped · Mobility companions prefer the weather-protected indoor route, so construction d…
+      WHY · Combination requires an explicit user choice.
+      ↳ 1. Keep separate
+      ↳ 2. Combine

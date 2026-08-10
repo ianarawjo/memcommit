@@ -1,0 +1,17 @@
+MEM MELD · DIRECTIONAL · PRE-APPLY TTY
+
+CONTEXT LOCATIONS
+  INCOMING · task-1/participant/construction-updates
+  BASELINE / TARGET · task-1/campus-wiki
+
+READY_TO_APPLY · DIRECTIONAL MODE · 227 RELATIONS · 0 required + 43 helpful ISSUES
+75 CHANGES · 75/375 SOURCE COVERAGE
+
+WHAT MEM UNDERSTOOD
+The baseline remains intact. Every construction-specific incoming memory is preserved as a separate addition in its corresponding baseline subtree, while optional coalescing of compatible or scoped claims remains open as helpful materialization guidance.
+
+VISIBLE TTY NAVIGATION
+  Tab → Down → Enter       open R1 detail
+  Escape → Tab → Enter     open REVIEW AND APPLY
+  End                      move to APPLY card
+  Enter                    accept exact proposal

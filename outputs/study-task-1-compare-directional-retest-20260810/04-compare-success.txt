@@ -1,0 +1,22 @@
+MEM COMPARE · SYMMETRIC PEERS
+Reference: task-1/participant/construction-updates (layout only; no authority)
+Compared:  task-1/campus-wiki
+SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS
+Analysis: 6b3a2f35 · NEW · SAVED · RETAINED
+METRICS · MEMORIES 75 + 300 · RELATIONS 227 · POTENTIAL CONFLICTS 0
+EQUIVALENT 0 · COMPATIBLE 9 · SCOPED 34 · CONFLICT 0 · DISTINCT 184 · UNCLEAR 0
+
+WHAT MEM UNDERSTOOD
+The frames preserve a broad normal-operations baseline alongside construction-specific changes to entrances, routes, parking, events, amenities, and facilities. Their overlapping guidance is generally compatible once construction scope is retained; each side also contributes substantial independent operational detail.
+
+WHAT BOTH CONTAIN · 9
+Both support verified, posted guidance for accessible travel, alternative venues, parking, amenities, and agent limitations.
+
+WHAT DIFFERS · 34
+Construction changes normal opening, access, reservation, parking, shop, restroom, and route availability while adding temporary alternatives and detours.
+
+ONLY IN task-1/participant/construction-updates · 20 · not automatically a deficiency
+The reference adds construction dates, closures, replacements, reopening plans, operational interruptions, and audience-specific redirections.
+
+ONLY IN task-1/campus-wiki · 164 · not automatically a deficiency
+The compared frame adds extensive baseline layouts, schedules, eligibility rules, reservation procedures, parking controls, amenity details, route geography, and live-information limits.

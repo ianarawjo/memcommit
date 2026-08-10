@@ -1,0 +1,17 @@
+MEM MELD · FINAL REVIEW · PRE-APPLY TTY
+
+OPEN REVIEWS · OPTIONAL 43
+Nothing changes until the final action below is confirmed.
+
+╭─ APPLY ───────────────────────────────────────────────────────────────────────────────╮
+│ Apply Meld                                                                           │
+│ Enter to apply the exact current proposal shown in the report.                       │
+│ Esc/Backspace returns without applying.                                              │
+╰──────────────────────────────────────────────────────────────────────────────────────╯
+
+KEY TRACE FROM STUDY ACTION LOG
+  APPROVAL_PRESENTED · action=REVIEW AND APPLY · surface=resolution
+  KEY · end
+  KEY · c-m (Enter)
+  APPROVAL_ACCEPTED · action=ACCEPT · surface=resolution
+  TUI_ACTION · action=ACCEPT · surface=resolution

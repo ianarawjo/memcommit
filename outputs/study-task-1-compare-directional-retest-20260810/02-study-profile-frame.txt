@@ -1,0 +1,18 @@
+STUDY PROFILE · FRESH TASK 1 RERUN
+
+Profile: study-retest-t1-compare-directional-20260810
+Store: /Users/KimMunyeong/.mem-profiles/stores/6621f927-7fcd-4c9c-9a4f-ec7172f4b9cf
+Contexts 65 owned + 43 granted · Memories 457 owned + 700 granted
+Current Context: task-1/participant/construction-updates
+
+EXECUTED FROM DESCRIPTION + mem help ONLY
+  mem compare --to task-1/campus-wiki --reference-descendants --compared-descendants
+  mem meld task-1/participant/construction-updates --left-descendants --into task-1/campus-wiki --right-descendants
+
+FRAME
+  INCOMING · task-1/participant/construction-updates + descendants · 75 Memories
+  BASELINE · task-1/campus-wiki + descendants · 300 Memories
+
+EXPECTED CONTRACT
+  Compare first; Directional Meld imports that exact ordered analysis.
+  Preserve individual incoming facts and route each proposal to its target owner.
