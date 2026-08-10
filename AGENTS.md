@@ -189,6 +189,43 @@ conversation.
 
 ## Terminal color semantics
 
+### TTY debugging captures
+
+- When the user asks for screenshots, snapshots, or captures of a terminal UI,
+  run the reproduction in a color-capable PTY. Explicitly remove `NO_COLOR`
+  from the capture process and set a capable terminal such as
+  `TERM=xterm-256color`; set `COLORTERM=truecolor` when the renderer supports
+  it. Verify that the raw PTY stream contains the expected foreground and
+  background ANSI styles before treating a missing color as application
+  behavior. A CI or agent shell commonly starts with `TERM=dumb` and
+  `NO_COLOR=1`, which is not representative of the interactive UI.
+- Unless the purpose is explicitly to test compact or responsive behavior, use
+  a `180`-column by `52`-row PTY for debugging and study captures. Set the size
+  before launching the TUI and verify the live value (for example with
+  `stty size`) instead of accepting an agent, CI, or recorder default such as
+  `80×24` or `90×40`. If multiple viewport sizes are under test, capture and
+  label each size separately; do not let a smaller fallback silently replace
+  the full-size evidence.
+- During interactive debugging, capture every materially distinct state needed
+  to reconstruct the path: the initial screen, the chosen Source or target,
+  each selection or range change, direct text entry, the final Apply/review
+  state, the success or failure receipt, and a read-only result verification.
+  Do not omit an intermediate state merely because the final command succeeds,
+  and do not create duplicate captures when no visible or semantic state
+  changed.
+- Record the exact command, PTY dimensions, profile and current Context when
+  relevant, and the ordered keys or text sent between captures. For a failure,
+  also record the precondition that triggered it and verify whether any partial
+  state was published. Keep this interaction log beside the images under a
+  focused `docs/screenshots/...` directory when the captures are part of the
+  repository's debugging or study record.
+- Prefer a real terminal screenshot. If GUI automation is unavailable, render
+  the actual color-preserving PTY byte stream rather than substituting a
+  synthetic fixture, and label the image with that provenance. Preserve the
+  full terminal canvas at a legible native or enlarged pixel size instead of
+  downscaling it to fit a compact preview. Never silently publish a no-color or
+  reduced-size capture as evidence of the intended UI semantics.
+
 ### Shared terminal interaction mechanics
 
 - Before adding operation-specific TUI state, rendering, focus traversal,
