@@ -220,6 +220,20 @@ def test_forget_review_materializes_only_reviewed_operation_specific_changes():
 def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monkeypatch):
     context = _context()
     first_uid = next(iter(context.memories))
+    source_memory_count = len(context.memories)
+    progress_events: list[tuple[object, ...]] = []
+
+    class Progress:
+        def __init__(self, operation, stage, *, total):
+            progress_events.append(("start", operation, stage, total))
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            progress_events.append(("close",))
+
+    monkeypatch.setattr(forget_command, "CommandProgress", Progress)
     actions = iter(
         (
             ResolutionWorkbenchAction(
@@ -256,3 +270,12 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
     assert first_uid not in {change.uid for change in changes}
     assert any(isinstance(change, RemoveChange) for change in changes)
     assert first_uid in context.memories
+    assert progress_events == [
+        (
+            "start",
+            "FORGET",
+            f"analyzing {source_memory_count} source memories x 1 instruction",
+            1,
+        ),
+        ("close",),
+    ]

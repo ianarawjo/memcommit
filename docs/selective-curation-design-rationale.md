@@ -111,3 +111,10 @@ boundary, but CLI provider selection, timeouts, and structured output no longer
 use that legacy route. This migration does not make Forget durable or staged:
 the complete Source, instruction, and any revision history still fit and run in
 one provider turn or fail before disclosure.
+
+The interactive Forget command wraps that indivisible whole-frame turn in the
+shared `CommandProgress` heartbeat. It reports the frozen Source Memory count,
+the one instruction criterion, animation, and elapsed seconds, but no invented
+percentage or provider-internal stage. The transient line closes before the
+Resolution Workbench opens. Redirected and non-TTY output retains the stable
+legacy `Consulting ...` line because shared progress is deliberately TTY-only.

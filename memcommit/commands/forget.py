@@ -4,6 +4,7 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.granted_context import (
     authorized_context_mutation,
     grant_checkpoint_args,
@@ -36,6 +37,12 @@ def _provider_label(provider: object) -> str:
     return str(model) if model else "configured semantic provider"
 
 
+def _forget_analysis_stage(ctx: Context) -> str:
+    """Describe the one honest blocking boundary without implying percent progress."""
+
+    return f"analyzing {len(ctx.memories)} source memories x 1 instruction"
+
+
 def _run_resolution_forget(
     ctx: Context,
     info: str,
@@ -45,8 +52,10 @@ def _run_resolution_forget(
         run_resolution_workbench_shell,
     )
 
-    typer.secho(f"Consulting {_provider_label(llm)!r}...", dim=True)
-    analysis, _history = ops.analyze_forget(ctx, info, llm)
+    # Forget is one whole-frame provider turn. The shared heartbeat reports
+    # liveness and elapsed time without pretending to observe provider progress.
+    with CommandProgress("FORGET", _forget_analysis_stage(ctx), total=1):
+        analysis, _history = ops.analyze_forget(ctx, info, llm)
     if not analysis.decisions:
         typer.echo("Nothing to apply.")
         return []
@@ -127,7 +136,10 @@ def _run_interactive_forget(
     if _interactive_terminal():
         return _run_resolution_forget(ctx, info, llm)
     typer.secho(f"Consulting {_provider_label(llm)!r}...", dim=True)
-    proposals, history = ops.forget(ctx, info, llm)
+    # CommandProgress is intentionally silent outside a TTY, preserving the
+    # stable redirected output while keeping one orchestration path.
+    with CommandProgress("FORGET", _forget_analysis_stage(ctx), total=1):
+        proposals, history = ops.forget(ctx, info, llm)
 
     while True:
         _print_proposals(proposals, info)

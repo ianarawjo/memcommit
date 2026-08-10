@@ -131,6 +131,9 @@ instructions were then applied separately:
 Provider turns took 308, 271, 230, and 126 seconds and returned 71,681, 68,155,
 59,150, and 34,282 characters respectively. Forget had no elapsed-time
 heartbeat: only `Consulting ...` remained visible until each result arrived.
+That observed liveness defect subsequently motivated a shared TTY progress
+heartbeat around the indivisible Forget provider turn; the historical timings
+and interaction record above remain unchanged.
 
 The first attempt exposed a real routing bug: Forget still required the legacy
 Ollama-only `llm` setting even though Meld, Query, and Sever used the configured
