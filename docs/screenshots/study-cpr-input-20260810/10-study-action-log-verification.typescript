@@ -1,0 +1,26 @@
+52 180
+[1mStudy actions · recent first · content-free[0m
+  [e3fe5db1/2] 2026-08-10 17:01:30 +0.127s  COMMAND_FINISHED
+      status=COMPLETED
+  [e3fe5db1/1] 2026-08-10 17:01:30 +0.000s  COMMAND_STARTED
+      operation=profile · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [cea01924/3] 2026-08-10 17:01:30 +3.421s  COMMAND_FINISHED
+      status=COMPLETED
+  [cea01924/2] 2026-08-10 17:01:30 +3.415s  KEY
+      count=1 · focus=FormattedTextControl · key=escape
+  [cea01924/1] 2026-08-10 17:01:26 +0.000s  COMMAND_STARTED
+      operation=profile · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [9ca1932e/5] 2026-08-10 17:01:26 +1.351s  COMMAND_FINISHED
+      status=COMPLETED
+  [9ca1932e/4] 2026-08-10 17:01:26 +1.340s  KEY
+      count=1 · focus=BufferControl · key=c-m
+  [9ca1932e/3] 2026-08-10 17:01:25 +0.707s  TEXT_INPUT
+      character_count=16 · focus=BufferControl · line_break_count=0 · paste=False
+  [9ca1932e/2] 2026-08-10 17:01:25 +0.707s  KEY
+      count=1 · focus=BufferControl · key=c-u
+  [9ca1932e/1] 2026-08-10 17:01:24 +0.000s  COMMAND_STARTED
+      operation=init · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [9a49ae29/2] 2026-08-10 17:01:24  PROFILE_ENTERED
+      other_profile_name=cpr-seed-study · other_profile_uid=69277521-a4af-454a-a636-ad11b9088e47
+  [9a49ae29/1] 2026-08-10 17:01:24  STUDY_CREATED
+      baseline_profile_name=study-baseline · baseline_profile_uid=0303e347-73fb-47a3-9df5-bb268fa48de3 · paired_profile_uid=bddad6ad-4533-4171-af08-6e123148e9e7 · role=PARTICIPANT

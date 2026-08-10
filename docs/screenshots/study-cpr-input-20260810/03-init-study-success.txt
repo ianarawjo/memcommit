@@ -1,0 +1,14 @@
+ STUDY NAME                                                                                                                                                                         
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+┃cpr-verified-study                                                                                                                                                                ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Edit directly · Ctrl-U clear · Enter create · Esc cancel                                                                                                                           
+Initialized Study run 'cpr-verified-study'.                                                                                                                                         
+Baseline Profile: study-baseline                                                                                                                                                    
+Participant Profile: cpr-verified-study                                                                                                                                             
+Granted-memory Profile: cpr-verified-study-granted-memory                                                                                                                           
+Contexts 65 · Memories 457 · current=task-1/participant/construction-updates                                                                                                        
+Granted Contexts 43 · Granted Memories 625                                                                                                                                          
+Task-owned and granted-memory data were copied into isolated run Profiles and connected with real authority grants.                                                                 
+Operational history starts empty; checkpoints, sessions, caches, locks, and run logs were not imported.                                                                             
+Active Profile: cpr-verified-study

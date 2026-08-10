@@ -6,6 +6,7 @@ import json
 import uuid
 
 from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.keys import Keys
 import pytest
 
 from memcommit.profile_config import ProfileEntry, study_run_identity
@@ -89,6 +90,37 @@ def test_study_input_log_keeps_navigation_but_redacts_printable_text(tmp_path):
     assert "down" in keys
     assert any(event.data["character_count"] == 14 for event in text_events)
     assert "private answer" not in encoded
+    assert [event.sequence for event in events] == list(range(1, len(events) + 1))
+
+
+def test_study_input_log_passes_through_cpr_and_normalizes_control_keys(tmp_path):
+    store_dir = tmp_path / "store"
+    store_dir.mkdir()
+    attempt_uid = str(uuid.uuid4())
+    active = begin_study_action_recording(
+        profile=_study_profile(),
+        store_dir=store_dir,
+        attempt_uid=attempt_uid,
+        operation="init",
+        stdin_tty=True,
+        stdout_tty=True,
+    )
+    assert active is not None
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[12;34R\x1c")
+        recorder = StudyRecordingInput(pipe_input)
+        presses = recorder.read_keys()
+        assert any(press.key == Keys.CPRResponse for press in presses)
+    finish_study_action_recording(active, status="COMPLETED")
+
+    events = StudyActionLedger(
+        _study_profile(),
+        store_dir=store_dir,
+    ).events_for_attempt(attempt_uid)
+    keys = [event.data["key"] for event in events if event.action == "KEY"]
+
+    assert keys == ["ControlBackslash"]
+    assert all("cursor-position" not in str(key) for key in keys)
     assert [event.sequence for event in events] == list(range(1, len(events) + 1))
 
 

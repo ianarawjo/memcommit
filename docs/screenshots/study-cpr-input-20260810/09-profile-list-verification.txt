@@ -1,0 +1,15 @@
+52 180                                                                                                                                                                              
+  authoring    USE     authoring Contexts 1 owned + 0 granted · Memories 0 owned + 0 granted · current=capture-authoring-seed                                                       
+  study-baseline USE     managed   Contexts 141 owned + 0 granted · Memories 1310 owned + 0 granted · current=task-1                                                                
+  cpr-seed-study  STUDY   created=2026-08-10T17:01:21.662148+00:00                                                                                                                  
+    ├─   Participant  USE     profile=cpr-seed-study · managed · Contexts 65 owned + 43 granted · Memories 457 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/con
+struction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/tr
+ansmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=task-1/participant/construction-updates                                  
+    └─   Granted memory  USE     profile=cpr-seed-study-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki      
+  cpr-verified-study  STUDY   created=2026-08-10T17:01:23.790746+00:00                                                                                                              
+    ├─ * Participant  CURRENT profile=cpr-verified-study · managed · Contexts 66 owned + 43 granted · Memories 457 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki
+/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-reques
+t/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=cpr-init-context                                                     
+    └─   Granted memory  USE     profile=cpr-verified-study-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki  
+Granted views are permission projections, not copied Profiles.                                                                                                                      
+Authority Profiles are ordinary switchable owners of source data.

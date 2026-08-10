@@ -701,7 +701,11 @@ def _key_name(press: KeyPress) -> str | None:
     if key == Keys.BracketedPaste:
         return None
     if isinstance(key, Keys):
-        return key.value
+        # Most prompt-toolkit values (for example ``down`` and ``c-a``) are
+        # already durable tokens. A few control and synthetic keys contain
+        # schema punctuation, so retain their stable Enum name instead of
+        # letting a wire spelling abort the input loop.
+        return key.value if _SAFE_TOKEN.fullmatch(key.value) is not None else key.name
     value = str(key)
     if len(value) == 1 and value.isprintable():
         # A printable byte may be a shortcut or private composer text. The
@@ -758,6 +762,11 @@ class StudyRecordingInput(Input):
             text_paste = False
 
         for press in presses:
+            if press.key == Keys.CPRResponse:
+                # CPR is a terminal-renderer protocol response, not a person
+                # action. It must still pass through read_keys unchanged so
+                # prompt-toolkit can complete its pending cursor query.
+                continue
             key_name = _key_name(press)
             if key_name is None:
                 flush_key()

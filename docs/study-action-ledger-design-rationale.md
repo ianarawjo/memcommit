@@ -53,6 +53,9 @@ An eligible command records:
 - command start and finish, terminal presence and available terminal size;
 - exact non-printable prompt-toolkit input such as Up, Down, Left, Right,
   Enter, Escape, Tab, Shift-Tab, Backspace, control keys, and paste boundaries;
+- stable names for non-text key variants whose prompt-toolkit wire value is not
+  a ledger-safe token; terminal protocol responses such as CPR continue to the
+  renderer unchanged but are not recorded as person actions;
 - printable input and pasted text only as character count, line-break count,
   paste flag, and focused control class;
 - provider connection and completion phases, provider/operation identity,
