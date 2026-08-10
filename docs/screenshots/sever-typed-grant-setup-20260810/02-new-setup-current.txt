@@ -1,0 +1,52 @@
+ MEM SEVER · SETUP · SOURCE UNCHANGED                                                                                                                                               
+ SOURCE task-3/local/personal-memory (SUBTREE) × CRITERIA task-3/local/personal-memory (SUBTREE) → OUTPUT task-3/local/personal-memory/severed                                      
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SOURCE · ORDINARY CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  SCOPE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             ┃
+┃──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┃
+┃  ·   ▸ practice                                                                                                                                                                 ^┃
+┃  ·   ▸ task-1                                                                                                                                                                    ┃
+┃  ·   ▸ task-2                                                                                                                                                                    ┃
+┃  ·   ▾ task-3                                                                                                                                                                    ┃
+┃  ·     · task-3/description                                                                                                                                                      ┃
+┃  ·     ▾ task-3/local                                                                                                                                                            ┃
+┃  ·       · task-3/local/candidates/accessibility-communication                                                                                                                   ┃
+┃  ·       · task-3/local/candidates/coordination-preparation                                                                                                                      ┃
+┃  ·       ▸ task-3/local/criteria                                                                                                                                                 ┃
+┃  ·       ▸ task-3/local/guardrails                                                                                                                                               ┃
+┃› ✓ *     ▸ task-3/local/personal-memory                                                                                                                                          ┃
+┃  ·       ▸ task-3/local/results                                                                                                                                                  ┃
+┃  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                     ┃
+┃  ·       · task-3/local/reviewed/coordination-preparation                                                                                                                        ┃
+┃  ×     · task-3/government/healthcare-agent  QUERY GRANT · PERMISSIONS SHARE · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · UNAVAILABLE                                          ┃
+┃  ×     · task-3/remote/government/healthcare-agent/info-request/questions-and-answers  QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · ANALYSIS RATIONALE BLOCKED + TRACE ┃
+┃  ·     ▸ task-3/remote/government/healthcare-agent/info-request/transmission-guidance  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_AN ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────────────────────────────────────| CRITERIA · ONE ORDINARY CONTEXT ROOT |─────────────────────────────────────────────────────────────────────┐
+│  SCOPE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             │
+│──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│
+│  ·   ▸ practice                                                                                                                                                                 ^│
+│  ·   ▸ task-1                                                                                                                                                                    │
+│  ·   ▸ task-2                                                                                                                                                                    │
+│  ·   ▾ task-3                                                                                                                                                                    │
+│  ·     · task-3/description                                                                                                                                                      │
+│  ·     ▾ task-3/local                                                                                                                                                            │
+│  ·       · task-3/local/candidates/accessibility-communication                                                                                                                   │
+│  ·       · task-3/local/candidates/coordination-preparation                                                                                                                      │
+│  ·       ▸ task-3/local/criteria                                                                                                                                                 │
+│  ·       ▸ task-3/local/guardrails                                                                                                                                               │
+│› ✓ *     ▸ task-3/local/personal-memory                                                                                                                                          │
+│  ·       ▸ task-3/local/results                                                                                                                                                  │
+│  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                     │
+│  ·       · task-3/local/reviewed/coordination-preparation                                                                                                                        │
+│  ×     · task-3/government/healthcare-agent  QUERY GRANT · PERMISSIONS SHARE · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · UNAVAILABLE                                          │
+│  ×     · task-3/remote/government/healthcare-agent/info-request/questions-and-answers  QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · ANALYSIS RATIONALE BLOCKED + TRACE │
+│  ·     ▸ task-3/remote/government/healthcare-agent/info-request/transmission-guidance  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_AN │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────| OUTPUT CONTEXT NAME · EDIT DIRECTLY · NOT CREATED |───────────────────────────────────────────────────────────────┐
+│› task-3/local/personal-memory/severed                                                                                                                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ SOURCE: ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · top ↑ enters scope · A expand all · Tab/Shift-Tab pane · F continue · Q cancel

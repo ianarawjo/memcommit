@@ -1,0 +1,204 @@
+52 180
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM SEVER · SAVED SESSIONS · RECENT FIRST · ALL[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0;1m  + Add new Sever session[154C^[0m
+[0;1;7m› 2026-08-10 13:44Z  task-3/local/results/additive-allowlist × task-3/local/criteria/additive-minimum → task-3/local/results/additive-fi…  [APPLIED · SOURCE UNCHANGED]  3 result…[C[0;48;5;238m [0m
+[0m  2026-08-10 13:40Z  task-3/local/candidates/coordination-preparation × task-3/local/criteria/additive-minimum → task-3/local/reviewed/c…  [APPLIED · SOURCE UNCHANGED]  2 result…[C[0;48;5;238m [0m
+[0m  2026-08-10 13:39Z  task-3/local/candidates/accessibility-communication × task-3/local/criteria/additive-minimum → task-3/local/reviewe…  [APPLIED · SOURCE UNCHANGED]  4 result…[C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m Kind         sever[160C[0;1m^[0m
+[0m Key          74f7e47e-dfea-4ef5-8756-47e00266b78f[129C[0;48;5;238m [0m
+[0m Title        task-3/local/results/additive-allowlist × task-3/local/criteria/additive-minimum → task-3/local/results/additive-final[47C[0;48;5;238m [0m
+[0m Status       APPLIED · SOURCE UNCHANGED[139C[0;48;5;238m [0m
+[0m Context      task-3/local/results/additive-allowlist[126C[0;48;5;238m [0m
+[0m Modified     2026-08-10 13:44Z[148C[0;48;5;238m [0m
+[0m Summary      3 result decisions[147C[0;48;5;238m [0m
+[0m Detail       Last saved: 2026-08-10T13:44:44+00:00[128C[0;48;5;238m [0m
+[0m              Source: task-3/local/results/additive-allowlist (THIS CONTEXT ONLY)[98C[0;48;5;238m [0m
+[0m              Criteria: task-3/local/criteria/additive-minimum (THIS CONTEXT ONLY)[97C[0;48;5;238m [0m
+[0m              Output: task-3/local/results/additive-final · CREATED LOCALLY[104C[0;48;5;238m [0m
+[0m              Source: UNCHANGED[148C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N Add new Sever session  Esc/q cancel  ·  2/4[113D[48A[0m[3A[J[0m[?7h[?1049l[?2004l[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM SEVER · SETUP · SOURCE UNCHANGED[0m
+[0m SOURCE task-3/local/personal-memory (SUBTREE) × CRITERIA task-3/local/personal-memory (SUBTREE) → OUTPUT task-3/local/personal-memory/severed[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SOURCE · ORDINARY CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m  SCOPE · [ THIS CONTEXT ONLY ]  [0;38;5;234;48;5;117m[ INCLUDE DESCENDANTS ][0m · ←/→ SELECT                                                                                                             [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·   ▸ practice                                                                                                                                                                 [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·   ▸ task-2                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·   ▾ task-3                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·     · task-3/description                                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·     ▾ task-3/local                                                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       · task-3/local/candidates/accessibility-communication                                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       · task-3/local/candidates/coordination-preparation                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       ▸ task-3/local/criteria                                                                                                                                                [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       ▸ task-3/local/guardrails                                                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1;7m› ✓ *     ▸ [0;38;5;234;48;5;117;1mtask-3/local/personal-memory[0m                                                                                                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       ▸ task-3/local/results                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                    [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       · task-3/local/reviewed/coordination-preparation                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ×     · task-3/government/healthcare-agent  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS SHARE[0m · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · [0;38;5;216;1mUNAVAILABLE[0m                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ×     · task-3/remote/government/healthcare-agent/info-request/questions-and-answers  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS QUERY + SAVE QUERY SESSION[0m · ANALYSIS RATIONALE BLOCKED + TRACE[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·     ▸ task-3/remote/government/healthcare-agent/info-request/transmission-guidance  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_AN[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌─────────────────────────────────────────────────────────────────────| CRITERIA · ONE ORDINARY CONTEXT ROOT |─────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  SCOPE · [ THIS CONTEXT ONLY ]  [0;38;5;234;48;5;117m[ INCLUDE DESCENDANTS ][0m · ←/→ SELECT                                                                                                             [179C│[0m
+[0m│──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C│[0m
+[0m│  ·   ▸ practice                                                                                                                                                                 [0;1m^[179C[0m│[0m
+[0m│  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·   ▸ task-2                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·   ▾ task-3                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·     · task-3/description                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·     ▾ task-3/local                                                                                                                                                           [0;48;5;238m [179C[0m│[0m
+[0m│  ·       · task-3/local/candidates/accessibility-communication                                                                                                                  [0;48;5;238m [179C[0m│[0m
+[0m│  ·       · task-3/local/candidates/coordination-preparation                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/criteria                                                                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/guardrails                                                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│› ✓ *     ▸ [0;38;5;234;48;5;117mtask-3/local/personal-memory[0m                                                                                                                                         [0;48;5;238m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/results                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                    [0;48;5;238m [179C[0m│[0m
+[0m│  ·       · task-3/local/reviewed/coordination-preparation                                                                                                                       [0;48;5;238m [179C[0m│[0m
+[0m│  ×     · task-3/government/healthcare-agent  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS SHARE[0m · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · [0;38;5;216;1mUNAVAILABLE[0m                                         [0;48;5;238m [179C[0m│[0m
+[0m│  ×     · task-3/remote/government/healthcare-agent/info-request/questions-and-answers  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS QUERY + SAVE QUERY SESSION[0m · ANALYSIS RATIONALE BLOCKED + TRACE[0;48;5;238m [179C[0m│[0m
+[0m│  ·     ▸ task-3/remote/government/healthcare-agent/info-request/transmission-guidance  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_AN[0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌──────────────────────────────────────────────────────────────| OUTPUT CONTEXT NAME · EDIT DIRECTLY · NOT CREATED |───────────────────────────────────────────────────────────────[179C┐[0m
+[0m│› task-3/local/personal-memory/severed                                                                                                                                            [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m SOURCE: ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · top ↑ enters scope · A expand all · Tab/Shift-Tab pane · F continue · Q cancel[141D[35A[C[0m[15A[12C[0m2[Cadvisor1 (SUBTREE) × CRITERIA task-3/local/persona[C-memory (SUBTREE) → OUTPU[C severed[0m[K[0m
+
+[0m┌──────────────────────────────────────────────────────────────────────────| SOURCE · ORDINARY CONTEXT |───────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  SCOPE · [ THIS CONTEXT ONLY ]  [0;38;5;234;48;5;117m[ INCLUDE DESCENDANTS ][0m · ←/→ SELECT                                                                                                             [179C│[0m
+[0m│──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C│[0m
+[0m│  ·   ▸ practice                                                                                                                                                                 [0;1m^[179C[0m│[0m
+[0m│  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·   ▾ task-2                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·     · task-2/description                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·     ▸ task-2/participant                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│› ✓     ▸ [0;38;5;234;48;5;117mtask-2/advisor1  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[0m          [0;48;5;238m [179C[0m│[0m
+[0m│  ·     ▸ task-2/advisor2  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED          [0;48;5;238m [179C[0m│[0m
+[0m│  ×     · task-2/proposal-submission-guidelines  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS QUERY + SAVE QUERY SESSION[0m · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · [0;38;5;216;1mUNAVAILABLE[0m                 [0;48;5;238m [179C[0m│[0m
+[0m│  ·   ▾ task-3                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·     · task-3/description                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·     ▾ task-3/local                                                                                                                                                           [0;48;5;238m [179C[0m│[0m
+[0m│  ·       · task-3/local/candidates/accessibility-communication                                                                                                                  [0;48;5;238m [179C[0m│[0m
+[0m│  ·       · task-3/local/candidates/coordination-preparation                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/criteria                                                                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/guardrails                                                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│  · *     ▸ task-3/local/personal-memory                                                                                                                                         [0;48;5;238m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/results                                                                                                                                                 [0;48;5;248m [179C[0m│[0m
+[0m│  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                    [0;48;5;248m [179C[0m│[0m
+[0m│  ·       · task-3/local/reviewed/coordination-preparation                                                                                                                       [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CRITERIA · ONE ORDINARY CONTEXT ROOT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m  SCOPE · [ THIS CONTEXT ONLY ]  [0;38;5;234;48;5;117m[ INCLUDE DESCENDANTS ][0m · ←/→ SELECT                                                                                                             [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·   ▸ practice                                                                                                                                                                 [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·   ▸ task-2                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·   ▾ task-3                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·     · task-3/description                                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·     ▾ task-3/local                                                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       · task-3/local/candidates/accessibility-communication                                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       · task-3/local/candidates/coordination-preparation                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       ▸ task-3/local/criteria                                                                                                                                                [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       ▸ task-3/local/guardrails                                                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1;7m› ✓ *     ▸ [0;38;5;234;48;5;117;1mtask-3/local/personal-memory[0m                                                                                                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       ▸ task-3/local/results                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                    [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·       · task-3/local/reviewed/coordination-preparation                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ×     · task-3/government/healthcare-agent  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS SHARE[0m · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · [0;38;5;216;1mUNAVAILABLE[0m                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ×     · task-3/remote/government/healthcare-agent/info-request/questions-and-answers  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS QUERY + SAVE QUERY SESSION[0m · ANALYSIS RATIONALE BLOCKED + TRACE[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  ·     ▸ task-3/remote/government/healthcare-agent/info-request/transmission-guidance  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_AN[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+[3C[0msevered                              [0m
+
+[C[0mCRITERIA: ↑/↓ move[C· ←/→ collaps[C/expand[C· Enter/Space choose[C· top[C↑ enter[C scope[C·[CA expand all[C· Tab/Shift-Tab pane[C·[CF continue[C·[CQ cancel[12A[142D[0m[38A[49C[0m2[Cadvisor2 (SUBTREE) → OUTPU[C task-2/severed[0m[K[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m┌─────────────────────────────────────────────────────────────────────| CRITERIA · ONE ORDINARY CONTEXT ROOT |─────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  SCOPE · [ THIS CONTEXT ONLY ]  [0;38;5;234;48;5;117m[ INCLUDE DESCENDANTS ][0m · ←/→ SELECT                                                                                                             [179C│[0m
+[0m│──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C│[0m
+[0m│  ·   ▸ practice                                                                                                                                                                 [0;1m^[179C[0m│[0m
+[0m│  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·   ▾ task-2                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·     · task-2/description                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·     ▸ task-2/participant                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·     ▸ task-2/advisor1  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED          [0;48;5;238m [179C[0m│[0m
+[0m│› ✓     ▸ [0;38;5;234;48;5;117mtask-2/advisor2  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[0m          [0;48;5;238m [179C[0m│[0m
+[0m│  ×     · task-2/proposal-submission-guidelines  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS QUERY + SAVE QUERY SESSION[0m · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · [0;38;5;216;1mUNAVAILABLE[0m                 [0;48;5;238m [179C[0m│[0m
+[0m│  ·   ▾ task-3                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·     · task-3/description                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·     ▾ task-3/local                                                                                                                                                           [0;48;5;238m [179C[0m│[0m
+[0m│  ·       · task-3/local/candidates/accessibility-communication                                                                                                                  [0;48;5;238m [179C[0m│[0m
+[0m│  ·       · task-3/local/candidates/coordination-preparation                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/criteria                                                                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/guardrails                                                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│  · *     ▸ task-3/local/personal-memory                                                                                                                                         [0;48;5;248m [179C[0m│[0m
+[0m│  ·       ▸ task-3/local/results                                                                                                                                                 [0;48;5;248m [179C[0m│[0m
+[0m│  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                    [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ OUTPUT CONTEXT NAME · EDIT DIRECTLY · NOT CREATED ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m› task-2/severed                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[C[0mOUTPUT: edit directly · Enter continue ·[CTab/Shift-Tab[Cpane ·[CCtrl-C ca[Cc[Cl[0m[K[2A[59D[0m[?12l[?25h

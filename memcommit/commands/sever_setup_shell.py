@@ -28,6 +28,12 @@ from memcommit.context_targeting.tui.rendering import (
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.source_projection.model import SourceDisplayFacts, SourceState
+from memcommit.source_projection.presentation import (
+    SourceDisplayValue,
+    combine_source_display_tokens,
+    normalize_source_display_tokens,
+)
 from memcommit.commands.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
@@ -93,7 +99,7 @@ def choose_sever_setup(
     current: str | None,
     virtual_names: Sequence[str] = (),
     selectable_virtual_names: AbstractSet[str] = frozenset(),
-    annotations: Mapping[str, str] | None = None,
+    annotations: Mapping[str, SourceDisplayValue] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -114,10 +120,16 @@ def choose_sever_setup(
         raise ValueError("Sever setup received invalid virtual Context permissions.")
     selectable = frozenset(local) | selectable_virtual
     labels = dict(annotations or {})
-    if set(labels) - set(catalog) or any(
-        not isinstance(label, str) or not label for label in labels.values()
-    ):
+    if set(labels) - set(catalog):
         raise ValueError("Sever setup received invalid Context annotations.")
+    try:
+        for annotation in labels.values():
+            if not normalize_source_display_tokens(annotation):
+                raise ValueError("Context annotations must not be empty.")
+    except (TypeError, ValueError) as error:
+        raise ValueError(
+            "Sever setup received invalid Context annotations."
+        ) from error
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive Sever setup requires a TTY. Pass --source, --criteria, "
@@ -172,10 +184,11 @@ def choose_sever_setup(
         def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
             available = row.name in selectable
             chosen = selections[role].selected_name == row.name
-            annotation = labels.get(row.name, "")
+            annotation: SourceDisplayValue | None = labels.get(row.name)
             if not available:
-                annotation = (annotation + " · " if annotation else "") + (
-                    "UNAVAILABLE"
+                annotation = combine_source_display_tokens(
+                    annotation,
+                    SourceDisplayFacts(states=(SourceState.UNAVAILABLE,)),
                 )
             cursor_style, value_style = tree_choice_styles(
                 cursor=cursor,

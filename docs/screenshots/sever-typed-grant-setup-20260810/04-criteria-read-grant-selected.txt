@@ -1,0 +1,52 @@
+ MEM SEVER · SETUP · SOURCE UNCHANGED                                                                                                                                               
+ SOURCE task-2/advisor1 (SUBTREE) × CRITERIA task-2/advisor2 (SUBTREE) → OUTPUT task-2/severed                                                                                      
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌──────────────────────────────────────────────────────────────────────────| SOURCE · ORDINARY CONTEXT |───────────────────────────────────────────────────────────────────────────┐
+│  SCOPE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             │
+│──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│
+│  ·   ▸ practice                                                                                                                                                                 ^│
+│  ·   ▸ task-1                                                                                                                                                                    │
+│  ·   ▾ task-2                                                                                                                                                                    │
+│  ·     · task-2/description                                                                                                                                                      │
+│  ·     ▸ task-2/participant                                                                                                                                                      │
+│› ✓     ▸ task-2/advisor1  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED           │
+│  ·     ▸ task-2/advisor2  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED           │
+│  ×     · task-2/proposal-submission-guidelines  QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · UNAVAILABLE                  │
+│  ·   ▾ task-3                                                                                                                                                                    │
+│  ·     · task-3/description                                                                                                                                                      │
+│  ·     ▾ task-3/local                                                                                                                                                            │
+│  ·       · task-3/local/candidates/accessibility-communication                                                                                                                   │
+│  ·       · task-3/local/candidates/coordination-preparation                                                                                                                      │
+│  ·       ▸ task-3/local/criteria                                                                                                                                                 │
+│  ·       ▸ task-3/local/guardrails                                                                                                                                               │
+│  · *     ▸ task-3/local/personal-memory                                                                                                                                          │
+│  ·       ▸ task-3/local/results                                                                                                                                                  │
+│  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                     │
+│  ·       · task-3/local/reviewed/coordination-preparation                                                                                                                       v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────| CRITERIA · ONE ORDINARY CONTEXT ROOT |─────────────────────────────────────────────────────────────────────┐
+│  SCOPE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             │
+│──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│
+│  ·   ▸ practice                                                                                                                                                                 ^│
+│  ·   ▸ task-1                                                                                                                                                                    │
+│  ·   ▾ task-2                                                                                                                                                                    │
+│  ·     · task-2/description                                                                                                                                                      │
+│  ·     ▸ task-2/participant                                                                                                                                                      │
+│  ·     ▸ task-2/advisor1  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED           │
+│› ✓     ▸ task-2/advisor2  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED           │
+│  ×     · task-2/proposal-submission-guidelines  QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · UNAVAILABLE                  │
+│  ·   ▾ task-3                                                                                                                                                                    │
+│  ·     · task-3/description                                                                                                                                                      │
+│  ·     ▾ task-3/local                                                                                                                                                            │
+│  ·       · task-3/local/candidates/accessibility-communication                                                                                                                   │
+│  ·       · task-3/local/candidates/coordination-preparation                                                                                                                      │
+│  ·       ▸ task-3/local/criteria                                                                                                                                                 │
+│  ·       ▸ task-3/local/guardrails                                                                                                                                               │
+│  · *     ▸ task-3/local/personal-memory                                                                                                                                          │
+│  ·       ▸ task-3/local/results                                                                                                                                                  │
+│  ·       · task-3/local/reviewed/accessibility-communication                                                                                                                    v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ OUTPUT CONTEXT NAME · EDIT DIRECTLY · NOT CREATED ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› task-2/severed                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ OUTPUT: edit directly · Enter continue · Tab/Shift-Tab pane · Ctrl-C cancel

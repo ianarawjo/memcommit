@@ -10,6 +10,7 @@ from memcommit.commands.sever_setup_shell import (
     _shared_local_output_name,
     choose_sever_setup,
 )
+from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
 
 
 def test_three_pane_setup_stacks_roles_and_supplies_a_default_output() -> None:
@@ -46,8 +47,14 @@ def test_query_only_row_is_visible_but_cannot_be_selected_as_criteria() -> None:
             virtual_names=("government/qna", "public-guidance"),
             selectable_virtual_names=frozenset({"public-guidance"}),
             annotations={
-                "government/qna": "[grant QUERY + SAVE QUERY SESSION]",
-                "public-guidance": "[grant READ + DERIVE]",
+                "government/qna": SourceDisplayFacts(
+                    access=SourceAccess.QUERY_GRANT,
+                    permissions=("QUERY", "SESSION_LOG"),
+                ),
+                "public-guidance": SourceDisplayFacts(
+                    access=SourceAccess.READ_GRANT,
+                    permissions=("READ", "DERIVE"),
+                ),
             },
             app_input=pipe_input,
             app_output=DummyOutput(),

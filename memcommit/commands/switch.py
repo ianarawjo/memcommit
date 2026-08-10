@@ -71,7 +71,7 @@ def _granted_picker_state(
         # host Profile is active. Never leak that host's virtual grants into
         # navigation for an unrelated storage boundary.
         return _GrantedPickerState((), {}, frozenset())
-    names: dict[str, str] = {}
+    names: dict[str, SourceDisplayValue] = {}
     selectable_names: set[str] = set()
     for grant in registry.grants:
         if grant.grantee_profile_uid != registry.active.uid:

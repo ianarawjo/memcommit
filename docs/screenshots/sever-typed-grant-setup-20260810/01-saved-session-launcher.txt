@@ -1,0 +1,52 @@
+ MEM SEVER · SAVED SESSIONS · RECENT FIRST · ALL                                                                                                                                    
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  + Add new Sever session                                                                                                                                                          ^
+› 2026-08-10 13:44Z  task-3/local/results/additive-allowlist × task-3/local/criteria/additive-minimum → task-3/local/results/additive-fi…  [APPLIED · SOURCE UNCHANGED]  3 result…  
+  2026-08-10 13:40Z  task-3/local/candidates/coordination-preparation × task-3/local/criteria/additive-minimum → task-3/local/reviewed/c…  [APPLIED · SOURCE UNCHANGED]  2 result…  
+  2026-08-10 13:39Z  task-3/local/candidates/accessibility-communication × task-3/local/criteria/additive-minimum → task-3/local/reviewe…  [APPLIED · SOURCE UNCHANGED]  4 result…  
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Kind         sever                                                                                                                                                                ^
+ Key          74f7e47e-dfea-4ef5-8756-47e00266b78f                                                                                                                                  
+ Title        task-3/local/results/additive-allowlist × task-3/local/criteria/additive-minimum → task-3/local/results/additive-final                                                
+ Status       APPLIED · SOURCE UNCHANGED                                                                                                                                            
+ Context      task-3/local/results/additive-allowlist                                                                                                                               
+ Modified     2026-08-10 13:44Z                                                                                                                                                     
+ Summary      3 result decisions                                                                                                                                                    
+ Detail       Last saved: 2026-08-10T13:44:44+00:00                                                                                                                                 
+              Source: task-3/local/results/additive-allowlist (THIS CONTEXT ONLY)                                                                                                   
+              Criteria: task-3/local/criteria/additive-minimum (THIS CONTEXT ONLY)                                                                                                  
+              Output: task-3/local/results/additive-final · CREATED LOCALLY                                                                                                         
+              Source: UNCHANGED                                                                                                                                                     
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N Add new Sever session  Esc/q cancel  ·  2/4

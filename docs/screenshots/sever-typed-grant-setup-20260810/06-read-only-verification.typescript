@@ -1,0 +1,23 @@
+52 180
+READ-ONLY VERIFICATION · NO NEW SEVER STATE
+Profile: study-alt-20260810-t3-find-additive
+Store: /Users/KimMunyeong/.mem-profiles/stores/c8651b54-005b-471e-aa24-579dff2ee3a1
+Contexts 74 owned + 43 granted · Memories 478 owned + 668 granted
+Current Context: task-3/local/personal-memory
+[1mOn context: task-3/local/personal-memory[0m
+  Memories 0  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 3  |  Checkpoints 0
+[1m
+VIA EMBED Contexts:[0m
+  [f60cba75] task-3/local/personal-memory/2024
+  [dbe52d14] task-3/local/personal-memory/2025
+  [03415050] task-3/local/personal-memory/2026
+
+  (no memories yet)
+
+  (no checkpoints yet)
+SAVED SEVER SESSIONS · NON-TTY SNAPSHOT
+4eef1709-156d-439c-96ba-fb084337b109 · APPLIED · task-3/local/candidates/accessibility-communication × task-3/local/criteria/additive-minimum → task-3/local/reviewed/accessibility-communication
+74f7e47e-dfea-4ef5-8756-47e00266b78f · APPLIED · task-3/local/results/additive-allowlist × task-3/local/criteria/additive-minimum → task-3/local/results/additive-final
+e9629d10-8cab-478d-9827-c21b94155c2b · APPLIED · task-3/local/candidates/coordination-preparation × task-3/local/criteria/additive-minimum → task-3/local/reviewed/coordination-preparation
+EXPECTED ABSENT OUTPUT · task-2/severed
+[31mError: Granted view 'task-2/severed' does not exist.[0m

@@ -58,6 +58,14 @@ route; it does not imply that ordinary Memory content was opened.
   provenance labels are not shortened independently into ambiguous text.
 - Raw string annotations remain a compatibility input for callers not yet
   migrated, but new source-aware callers pass typed facts.
+- Sever's Source/Criteria setup is a typed consumer even though its three-pane
+  composition remains operation-owned. It accepts the same
+  `SourceDisplayValue` contract as Switch and the shared endpoint shell,
+  validates through the common normalizer, and adds `UNAVAILABLE` as a typed
+  state. This prevents a READ/QUERY Grant annotation migration from making
+  `N → New Sever` fail before the setup screen opens. Stringifying at the
+  Sever boundary was rejected because it would discard semantic token roles
+  and recreate an operation-local annotation grammar.
 
 ## Authority boundary
 
