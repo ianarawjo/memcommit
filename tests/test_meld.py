@@ -3413,6 +3413,63 @@ def test_directional_validation_repairs_one_rejected_assessment_before_save(
     assert store.load_direct(baseline.name).to_dict() == baseline.to_dict()
 
 
+def test_followup_meld_turn_uses_shared_interactive_wait(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left = ops.init("left/followup-wait")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("right/followup-wait")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    target = ops.init("target/followup-wait")
+    for context in (left, right, target):
+        store.save(context)
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    store.save_meld_session(session, expected_session_digest=None)
+    expected = meld_canonical_digest(session.to_dict())
+    issue_uid = session.current_assessment.issues[0].uid
+    session.start_turn(
+        "Keep all supported compensation details.",
+        scope="ISSUE",
+        issue_uids=(issue_uid,),
+    )
+
+    calls = []
+
+    class Progress:
+        def update(self, stage, *, step):
+            calls.append(("UPDATE", stage, step))
+
+    def run_wait(operation, stage, *, total, work):
+        calls.append(("WAIT", operation, stage, total))
+        return work(Progress())
+
+    monkeypatch.setattr(meld_command, "run_command_wait", run_wait)
+
+    revised = meld_command._assess_and_save(
+        store=store,
+        session=session,
+        provider_factory=Task2Provider,
+        expected_session_digest=expected,
+    )
+
+    assert calls == [
+        ("WAIT", "MELD", "connecting provider", 2),
+        ("UPDATE", "analyzing meld turn", 2),
+    ]
+    assert len(revised.turns) == 2
+    assert revised.current_assessment is not None
+    saved = store.load_meld_session(target.uid)
+    assert saved is not None
+    assert saved.current_turn.uid == revised.current_turn.uid
+    assert saved.current_assessment is not None
+
+
 def test_directional_validation_repair_is_bounded_and_publishes_nothing(
     isolated_store,
 ):

@@ -641,6 +641,16 @@ classification alone never authorizes an edit; the exact target UID, content,
 source evidence, current baseline digest, and accepted change-set digest must
 all validate locally.
 
+Directional Source coverage counts explicit proposal provenance, not the
+post-image's unchanged baseline. A ready preservation-first result must
+materialize every incoming member of each `DISTINCT`, `COMPATIBLE`, or `SCOPED`
+relation exactly once; `EQUIVALENT` is already represented by the baseline.
+A reviewed `CONFLICT` may instead retain or synthesize only the incoming claims
+selected by that resolution. Losing or merely supporting conflict claims stay
+in the complete relation ledger but do not become unexplained additions.
+Consequently directional Source coverage can be lower than the complete input
+count while relation coverage remains exhaustive and the change set is ready.
+
 The provider-facing JSON Schema deliberately stays within Codex's supported
 structured-output subset. In particular, it does not use `uniqueItems`, which
 the provider rejects. Duplicate opaque aliases are still rejected by the local
@@ -1118,6 +1128,30 @@ The first implementation uses **one aggregate semantic call per bounded
 analysis or conversational reply**, not one call for every possible
 Memory pair. It does not use one opaque call for the entire
 analysis–conversation–application lifecycle.
+
+Every one of those provider-backed assessments crosses the same Meld-owned
+interactive wait boundary. This includes initial analysis, issue-scoped
+replies, whole-set guidance, and the `INCORPORATE RESPONSES` turn assembled by
+the Resolution Workbench. Task 2 produced valid first-turn Directional
+sessions whose response-incorporation calls ran for more than ten minutes and
+looked frozen after the review screen closed. Keeping every call on the shared
+wait surface preserves the indivisible semantic turn while exposing honest
+elapsed time and read-only Help.
+
+An interrupted provider call publishes no replacement assessment. The saved
+session remains at its last fully assessed turn and the target stays unchanged.
+Process-local response drafts from an interrupted review are not a durable
+provider result and must not be presented as incorporated on reopen. Durable
+retry or resubmission of that exact draft batch is a separate recovery contract;
+the wait-surface change deliberately does not invent one.
+
+The Task 2 A→B rerun completed this exact path in one 459.43-second provider
+turn after four reviewed conflict responses. It produced 20/20 represented
+relations, no open issues, 125 relation-local `ADD/PRESERVE` changes, and six
+user-grounded `EDIT/SYNTHESIZE` changes. Applying it would leave the 150-Memory
+baseline in place, edit six of those Memories, and add 125 for a 275-Memory
+post-image; the Study rerun deliberately stopped at `READY_TO_APPLY` and did
+not mutate the target.
 
 The boundary is:
 

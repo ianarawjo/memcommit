@@ -22,10 +22,10 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame
 
-try:  # Typer 0.27+ vendors Click; older supported releases do not.
-    from typer import _click as click
+try:  # Typer 0.27+ vendors Click but does not re-export this helper.
+    from typer._click.globals import get_current_context
 except ImportError:  # pragma: no cover - compatibility with older Typer
-    import click
+    from click import get_current_context
 
 from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import (
@@ -129,7 +129,7 @@ class _InteractiveProgress:
 def _current_help_entries() -> tuple[CommandEntry, ...]:
     """Freeze the root command inventory before background work begins."""
 
-    current = click.get_current_context(silent=True)
+    current = get_current_context(silent=True)
     if current is None:
         return ()
     while current.parent is not None:

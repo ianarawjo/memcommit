@@ -861,6 +861,10 @@ def _assess_and_save(
     provider_factory,
     expected_session_digest: str | None,
 ) -> MeldSession:
+    # This boundary is shared by initial analysis and every ISSUE/ALL follow-up.
+    # Keep response incorporation on the same visible wait surface: Task 2
+    # showed that a long second provider turn otherwise looks like a frozen
+    # review even though the indivisible semantic call is still running.
     def assess(progress):
         provider = _connect_meld_provider(provider_factory)
         progress.update("analyzing meld turn", step=2)
