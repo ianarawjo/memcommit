@@ -55,6 +55,27 @@ def test_compare_codex_provider_uses_whole_ledger_timeout():
     assert provider.timeout == compare_command.COMPARE_AGGREGATE_TIMEOUT_SECONDS
 
 
+def test_compare_wait_view_restores_frozen_setup_without_claiming_a_report():
+    reference = ops.init("wait/reference")
+    compared = ops.init("wait/compared")
+    ops.add(reference, "Reference fact.")
+    ops.add(compared, "Compared fact.")
+    comparison_input = ComparisonInput.from_contexts(
+        reference,
+        compared,
+        reference_descendants=True,
+    )
+
+    view = compare_command._comparison_wait_view(comparison_input)
+
+    assert view.title == "COMPARE CONFIRMED INPUTS · READ-ONLY"
+    assert "REFERENCE A · wait/reference" in view.text
+    assert "PEER B · wait/compared" in view.text
+    assert "INCLUDE DESCENDANTS" in view.text
+    assert "RESULT PENDING" in view.text
+    assert "WHAT MEM UNDERSTOOD" not in view.text
+
+
 class ExhaustiveCompareProvider:
     """Return one paired relation plus exhaustive one-sided relations."""
 

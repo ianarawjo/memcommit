@@ -7,38 +7,72 @@ semantic turn for several minutes. The existing `CommandProgress` heartbeat
 proved liveness and elapsed time, but the foreground command remained blocked.
 In a Study run this made the participant wait without being able to learn the
 available command vocabulary, even though `mem help` already contains the
-audited command descriptions and forms.
+audited command descriptions and forms. A generic progress box also gave no
+orientation to the report being constructed or to the exact inputs the person
+had just frozen.
 
 The shared interactive wait keeps that semantic work whole while allowing a
 read-only Help session in the same process and terminal. It is currently used
-for the initial aggregate analysis in Compare, Meld, Forget, and Sever. Other
-call sites that still use `CommandProgress` retain the one-line heartbeat until
-their operation adapters are migrated deliberately.
+for the aggregate analysis in Compare, Forget, and Sever, and for every
+provider-backed assessment turn in Meld, including issue replies and
+`INCORPORATE RESPONSES`. Other call sites that still use `CommandProgress`
+retain the one-line heartbeat until their operation adapters are migrated
+deliberately.
 
 ## Interaction contract
 
 In an interactive terminal, `run_command_wait` starts the frozen operation in
 an executor and gives the foreground to one operation-neutral waiting TUI. The
 screen reports only real host-owned stages and elapsed time; it does not invent
-a provider percentage. `H` or `?` suspends that screen and opens the same
-command inventory, category order, descriptions, and audited forms used by
-`mem help`.
+a provider percentage. Its default foreground is the operation-owned report
+surface: an existing complete report during a Meld follow-up, or a report-shaped
+loading skeleton during first analysis. `C` toggles a separately frozen
+`CONFIRMED INPUTS` copy, and `H` or `?` opens the same command inventory,
+category order, descriptions, and audited forms used by `mem help`. `H` inside
+Help returns to whichever report or input copy was previously visible. None of
+these switches restarts or alters the frozen worker. The progress header remains
+above every host surface and reports only host-owned stages and elapsed time.
+
+Both views are supplied by the operation as frozen values; the common shell
+owns only switching, wrapping, and scrolling. Meld follow-up turns restore the
+immediately preceding complete report and show the submitted turn separately
+as not yet incorporated. A first Compare, Forget, Sever, or Meld analysis has
+no result report yet, so the default surface shows only its expected section
+topology and rounded skeleton rows. It is explicitly labeled
+`CONTENT PENDING · THIS IS NOT A RESULT`; it contains no inferred prose,
+decision, count, or recommendation. Prompt-toolkit cannot select Flow Rounded
+for one terminal region, so neutral rounded line glyphs provide the analogous
+skeleton effect without assuming the participant's terminal font.
+
+`C` exposes the exact frozen setup facts instead: selected Contexts and scope,
+frozen counts where already available, the Forget instruction, submitted Meld
+turn, and any not-yet-created output name. `C` returns to the report surface.
+Both surfaces are read-only because changing a source or response while the
+provider owns the turn would invalidate the frozen request.
 
 The nested Help application runs in `EXPLORE` mode:
 
 - Up/Down, category/A–Z selection, expansion, scrolling, and form inspection
   remain available.
-- Enter, Right, and `H` may reveal descriptions and forms, but cannot return a
-  shell template, execute a command, or mutate storage.
-- `Q` or Escape returns to the waiting operation.
+- Enter and Right may reveal descriptions and forms, but cannot return a shell
+  template, execute a command, or mutate storage.
+- `H` hides Help; `Q` or Escape also returns to the waiting operation. From
+  either report or confirmed-input view, `H` reopens the same frozen inventory.
 - If work finishes while Help is open, the Help header changes to
   `RESULT READY` (or `ERROR READY`) and remains open. The participant chooses
   when to return; completion never yanks focus away from what they are reading.
 
-After Help closes, the original command receives the completed value or error
-and continues through its unchanged review, revalidation, save, and apply
-boundaries. Help does not receive provider input, Memory content, result data,
-or a writable command composer.
+The `HELP OPEN` interaction boundary is emitted only after the nested Help
+application owns terminal input. Scheduling the handoff is not sufficient: a
+fast key sequence or pipe-driven Study replay could otherwise send its first
+Help key back to the waiting application during the transition.
+
+If Help closes before work completes, the previously visible operation view
+remains live, scrollable, and able to reopen it. Once work is complete, closing Help returns
+the completed value or error to the original command, which continues through
+its unchanged review, revalidation, save, and apply boundaries. Help does not
+receive provider input, Memory content, result data, or a writable command
+composer.
 
 Outside an interactive stdin/stdout terminal, `run_command_wait` executes the
 same work synchronously through `CommandProgress`. Stable stdout and redirected
@@ -64,10 +98,11 @@ itself can always be closed independently with `Q` or Escape.
 
 ## Study recording
 
-The wait surface emits content-free `TUI_ACTION` records for opening and
-closing Help, expanding a command, inspecting a form or detail, and result/error
-readiness. Command names are public inventory identifiers; raw arguments,
-Memory text, provider payloads, and output remain excluded.
+The wait surface emits content-free `TUI_ACTION` records for confirmed-input
+open/close, Help lifecycle transitions, explicit `H` hides, command expansion,
+form inspection, report/input scrolling, and result/error readiness. Command
+names are public inventory identifiers; raw arguments, Memory text, provider
+payloads, and output remain excluded.
 
 The worker inherits the command's `ContextVar` state so provider and command
 attempt telemetry is not lost merely because the TUI became responsive. Help
@@ -80,16 +115,45 @@ gap-free attempt sequence.
 On 2026-08-10 the shared helper was exercised in a real color-capable
 180-column by 52-row PTY with the complete root inventory (54 visible
 commands) and a deterministic three-stage background worker. No Profile or
-Context was opened or changed. The ordered keys were `H`, `Down`, `Down`,
-`Right`, a further `Down` after completion, and `Q`.
+Context was opened or changed. The original opt-in run used `H`, `Down`,
+`Down`, `Right`, a further `Down` after completion, and `Q`.
 
-The initial wait screen continued advancing its honest stages while Help was
-open. The arrows reached `mem list`, Right expanded all seven audited forms,
-and completion changed the Help header to `RESULT READY · Q RETURN` without
-closing the browser. Navigation remained active after readiness; `Q` then
+Help's header continued advancing the worker's honest stages; hiding and
+reopening it did not restart that worker.
+The arrows reached `mem list`, Right expanded all seven audited forms, and
+completion changed the Help header to `RESULT READY · H / Q RETURN` without
+closing the browser. Navigation remained active after readiness; `H` then
 returned the worker's exact result. Automated pipe-input tests reproduce the
-same ordering and additionally verify that Study Help and executor events keep
-one gap-free sequence.
+same toggle ordering and additionally verify that Study Help and executor
+events keep one gap-free sequence.
+
+The operation-owned return view was then checked in the same 180×52 PTY with
+a frozen Directional Meld follow-up. The previous report plus visibly
+unincorporated submitted turn remained read-only and scrollable while `H`
+opened and closed Help. The stage advanced from connection to analysis across
+these switches, and the deterministic worker returned once without being
+restarted.
+
+The first-analysis topology was separately replayed with a deterministic
+Compare wait: report skeleton, `C` confirmed inputs, `H` Help, `H` back to the
+same confirmed inputs, and `C` back to the skeleton. The header advanced from
+`CONNECTING PROVIDER` to `ANALYZING RELATIONS`; no switch restarted the worker,
+and every skeleton row remained visibly distinct from result prose.
+
+A real Task 2 Directional Meld follow-up then exercised the production
+provider boundary with 300 Source Memories. The provider received 122,310
+characters, returned 71,419 characters in 459.43 seconds, and required no
+repair call. `H` opened Help five seconds into the turn and `Q` returned to the
+wait screen at nine seconds while the elapsed counter continued. The result
+was saved as a non-applying `READY_TO_APPLY` assessment; the target remained
+unchanged.
+
+That first production rerun also exposed a packaging boundary before the
+provider connected. Typer 0.27 vendors Click but does not re-export
+`get_current_context` from `typer._click`. The wait helper therefore imports
+the function from `typer._click.globals`, with external Click as the older
+Typer fallback. Keeping this compatibility import at the inventory-freeze seam
+prevents Help setup from crashing an otherwise valid semantic turn.
 
 ## Alternatives and limitations
 
@@ -102,8 +166,16 @@ one gap-free sequence.
 - Passive rotating tips were rejected as the primary interaction because they
   choose what the participant sees and provide weaker evidence of
   self-directed discovery. They may be added later without replacing Help.
+- Fabricated report prose was rejected for first analysis. The skeleton shows
+  only stable section shape and explicitly denies result status; exact source
+  facts live behind `C` instead.
 - The provider primitive remains non-cancellable. The UI can defer closing but
   cannot truthfully claim that a remote request was stopped.
+- Re-entering the exact live setup or workbench `Application` was rejected for
+  this boundary. Those applications have already returned a frozen receipt or
+  submitted action, and making them writable again would let visible state
+  diverge from provider input. The return view therefore reuses their semantic
+  state as a read-only snapshot; it is not a second active editor.
 - Only migrated operations receive interactive Help today. The shared helper
   is operation-neutral, but each remaining blocking adapter must preserve its
   cache, staging, validation, and mutation boundaries before migration.

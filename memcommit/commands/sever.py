@@ -19,7 +19,11 @@ from memcommit.commands.session_picker import (
     SessionOpenReceipt,
     choose_session,
 )
-from memcommit.commands.command_wait import run_command_wait
+from memcommit.commands.command_wait import (
+    CommandWaitView,
+    build_report_loading_view,
+    run_command_wait,
+)
 from memcommit.commands.sever_sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
@@ -201,6 +205,36 @@ def _start(
     authorize_derived_transfer(criteria_access, output_access)
     authorize_analysis_save((source_access, criteria_access), retention="RETAINED")
 
+    wait_view = CommandWaitView(
+        title="SEVER CONFIRMED INPUTS · READ-ONLY",
+        text="\n".join(
+            [
+                "MEM SEVER · FROZEN SETUP · RESULT PENDING",
+                "",
+                f"SOURCE · {safe_terminal_text(source_access.display_name)}",
+                "  SCOPE · "
+                + (
+                    "INCLUDE DESCENDANTS"
+                    if source_descendants
+                    else "THIS CONTEXT ONLY"
+                ),
+                "  STATE · UNCHANGED",
+                "",
+                f"CRITERIA · {safe_terminal_text(criteria_access.display_name)}",
+                "  SCOPE · "
+                + (
+                    "INCLUDE DESCENDANTS"
+                    if criteria_descendants
+                    else "THIS CONTEXT ONLY"
+                ),
+                "",
+                f"OUTPUT · {safe_terminal_text(output_name)} · NOT CREATED",
+                "",
+                "The Sever review will replace this setup after analysis.",
+            ]
+        ),
+    )
+
     def freeze_and_analyze(progress):
         source = _capture_binding(
             source_access,
@@ -275,6 +309,11 @@ def _start(
         "freezing source and criteria",
         total=3,
         work=freeze_and_analyze,
+        return_view=build_report_loading_view(
+            "SEVER",
+            sections=("What mem understood", "Candidates", "Output preview"),
+        ),
+        context_view=wait_view,
     )
 
 

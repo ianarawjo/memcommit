@@ -8,7 +8,11 @@ import uuid
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.commands.command_wait import run_command_wait
+from memcommit.commands.command_wait import (
+    CommandWaitView,
+    build_report_loading_view,
+    run_command_wait,
+)
 from memcommit.commands.help_inventory import CommandEntry
 from memcommit.profile_config import ProfileEntry
 from memcommit.study_action_log import (
@@ -49,16 +53,23 @@ def _study_profile() -> ProfileEntry:
     )
 
 
-def test_help_can_be_explored_while_work_finishes_and_result_waits_for_return():
+def test_report_is_default_and_h_toggles_help_without_restarting_work():
     help_opened = threading.Event()
+    help_hidden = threading.Event()
+    help_reopened = threading.Event()
     command_expanded = threading.Event()
     result_ready = threading.Event()
     actions: list[tuple[str, str | None]] = []
+    open_count = 0
 
     def observe(action: str, command_name: str | None) -> None:
+        nonlocal open_count
         actions.append((action, command_name))
         if action == "OPEN":
-            help_opened.set()
+            open_count += 1
+            (help_opened if open_count == 1 else help_reopened).set()
+        elif action == "CLOSE" and open_count == 1:
+            help_hidden.set()
         elif action == "EXPAND":
             command_expanded.set()
         elif action == "RESULT_READY":
@@ -72,17 +83,27 @@ def test_help_can_be_explored_while_work_finishes_and_result_waits_for_return():
 
     with create_pipe_input() as pipe_input:
         def drive_terminal() -> None:
-            pipe_input.send_text("h")
+            # The report-shaped wait screen is the default. C toggles its
+            # frozen inputs and H enters the optional Help layer.
+            pipe_input.send_text("cch")
             if not help_opened.wait(3):
+                pipe_input.send_text("\x03")
+                return
+            pipe_input.send_text("h")
+            if not help_hidden.wait(3):
+                pipe_input.send_text("\x03")
+                return
+            pipe_input.send_text("h")
+            if not help_reopened.wait(3):
                 pipe_input.send_text("\x03")
                 return
             pipe_input.send_text("\r")
             if not result_ready.wait(3):
                 pipe_input.send_text("q")
                 return
-            # Completion must not yank the participant out of Help. Q is the
-            # explicit return to the waiting operation and its ready result.
-            pipe_input.send_text("q")
+            # Completion must not yank the participant out of Help. H returns
+            # to the waiting operation and its ready result.
+            pipe_input.send_text("h")
 
         driver = threading.Thread(target=drive_terminal, daemon=True)
         driver.start()
@@ -97,16 +118,74 @@ def test_help_can_be_explored_while_work_finishes_and_result_waits_for_return():
             interactive=True,
             interval=0.01,
             on_help_action=observe,
+            return_view=CommandWaitView(
+                title="SEVER REPORT · BUILDING",
+                text="CONTENT PENDING · THIS IS NOT A RESULT",
+            ),
+            context_view=CommandWaitView(
+                title="SEVER CONFIRMED INPUTS · READ-ONLY",
+                text="SOURCE · frozen/source\nCRITERIA · frozen/criteria",
+            ),
         )
         driver.join(timeout=3)
 
     assert result == "completed result"
     assert not driver.is_alive()
-    assert actions.index(("OPEN", None)) < actions.index(("EXPAND", "add"))
+    first_open = actions.index(("OPEN", None))
+    first_hide = actions.index(("HIDE", None))
+    first_close = actions.index(("CLOSE", None))
+    second_open = actions.index(("OPEN", None), first_open + 1)
+    assert first_open < first_hide < first_close < second_open
+    assert second_open < actions.index(("EXPAND", "add"))
     assert actions.index(("EXPAND", "add")) < actions.index(
         ("RESULT_READY", None)
     )
-    assert actions.index(("RESULT_READY", None)) < actions.index(("CLOSE", None))
+    final_hide = actions.index(("HIDE", None), first_hide + 1)
+    final_close = actions.index(("CLOSE", None), first_close + 1)
+    assert actions.index(("RESULT_READY", None)) < final_hide < final_close
+
+
+def test_fast_result_returns_from_default_report_without_forcing_help():
+    actions: list[tuple[str, str | None]] = []
+
+    def observe(action: str, command_name: str | None) -> None:
+        actions.append((action, command_name))
+
+    with create_pipe_input() as pipe_input:
+        result = run_command_wait(
+            "COMPARE",
+            "analyzing",
+            total=1,
+            work=lambda _progress: "immediate result",
+            help_entries=_entries(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            interactive=True,
+            interval=0.01,
+            on_help_action=observe,
+            return_view=build_report_loading_view(
+                "COMPARE",
+                sections=("What mem understood", "Differences"),
+            ),
+        )
+
+    assert result == "immediate result"
+    assert ("RESULT_READY", None) in actions
+    assert ("OPEN", None) not in actions
+
+
+def test_loading_report_is_shaped_but_contains_no_semantic_result():
+    view = build_report_loading_view(
+        "FORGET",
+        sections=("What mem understood", "Review decisions", "To do"),
+    )
+    text = "".join(fragment[1] for fragment in view.text)
+
+    assert view.title == "FORGET REPORT · BUILDING"
+    assert "CONTENT PENDING · THIS IS NOT A RESULT" in text
+    assert "WHAT MEM UNDERSTOOD" in text
+    assert "REVIEW DECISIONS" in text
+    assert "╶" in text and "╴" in text
 
 
 def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
@@ -124,15 +203,18 @@ def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
     )
     assert active is not None
     help_opened = threading.Event()
+    result_ready = threading.Event()
     worker_recorded = threading.Event()
 
     def observe(action: str, _command_name: str | None) -> None:
         if action == "OPEN":
             help_opened.set()
+        elif action == "RESULT_READY":
+            result_ready.set()
 
     def work(_progress):
         if not help_opened.wait(3):
-            raise RuntimeError("Help did not open.")
+            raise RuntimeError("Help was not opened from the report view.")
         record_study_action(
             "TUI_ACTION",
             surface="worker",
@@ -144,11 +226,14 @@ def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
     try:
         with create_pipe_input() as pipe_input:
             def drive_terminal() -> None:
-                pipe_input.send_text("h")
-                if worker_recorded.wait(3):
-                    pipe_input.send_text("q")
-                else:
+                # The frozen return view is a real read-only viewport. Its
+                # navigation joins the same Study action sequence.
+                pipe_input.send_text("\x1b[B")
+                pipe_input.send_text("cch")
+                if not worker_recorded.wait(3) or not result_ready.wait(3):
                     pipe_input.send_text("\x03")
+                    return
+                pipe_input.send_text("h")
 
             driver = threading.Thread(target=drive_terminal, daemon=True)
             driver.start()
@@ -163,6 +248,14 @@ def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
                 interactive=True,
                 interval=0.01,
                 on_help_action=observe,
+                return_view=CommandWaitView(
+                    title="FORGET REPORT · BUILDING",
+                    text="REPORT\nline one\nline two\nline three",
+                ),
+                context_view=CommandWaitView(
+                    title="FORGET CONFIRMED INPUTS · READ-ONLY",
+                    text="SOURCE\nline one\nline two\nline three",
+                ),
             ) == 7
             driver.join(timeout=3)
     finally:
@@ -179,7 +272,11 @@ def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
     ]
 
     assert "HELP OPEN" in tui_actions
+    assert "RETURN VIEW DOWN" in tui_actions
+    assert "CONFIRMED INPUTS OPEN" in tui_actions
+    assert "CONFIRMED INPUTS CLOSE" in tui_actions
     assert "EXECUTED" in tui_actions
     assert "HELP RESULT_READY" in tui_actions
+    assert "HELP HIDE" in tui_actions
     assert "HELP CLOSE" in tui_actions
     assert [event.sequence for event in events] == list(range(1, len(events) + 1))

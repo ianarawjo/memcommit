@@ -888,6 +888,7 @@ def run_help_selector(
     mode: Literal["SELECT", "EXPLORE"] = "SELECT",
     status_supplier: Callable[[], str] | None = None,
     on_explore_action: Callable[[str, str | None], None] | None = None,
+    on_ready: Callable[[], None] | None = None,
 ) -> HelpSelection | None:
     """Select a command, or browse the same inventory without shell effects."""
     if not entries:
@@ -1235,21 +1236,18 @@ def run_help_selector(
             expanded_index["value"] = None
         event.app.invalidate()
 
-    @bindings.add("h", filter=has_focus(list_control))
-    def _open_full_help(event) -> None:
+    def _handle_help_key(event) -> None:
         navigation_accelerator.reset()
+        if mode == "EXPLORE":
+            # The command-wait shell presents Help by default. H therefore
+            # means the same thing on both sides of that shell: hide the
+            # visible inventory here, and reopen it from the waiting surface.
+            emit_explore_action("HIDE")
+            event.app.exit(result=None)
+            return
         if concept_focus_active():
             return
         entry = visible_entries["value"][selected_index["value"]]
-        if mode == "EXPLORE":
-            # Complete Click help normally replaces the selector and prints
-            # to the shell. During a background operation, the audited forms
-            # and description stay inside this terminal session instead.
-            expanded_index["value"] = selected_index["value"]
-            selected_form["value"] = 0
-            emit_explore_action("DETAIL", entry.name)
-            event.app.invalidate()
-            return
         event.app.exit(
             result=HelpSelection(
                 command_name=entry.name,
@@ -1257,6 +1255,19 @@ def run_help_selector(
                 show_help=True,
             )
         )
+
+    if mode == "EXPLORE":
+        bind_case_insensitive_key(
+            bindings,
+            "h",
+            eager=True,
+        )(_handle_help_key)
+    else:
+        bind_case_insensitive_key(
+            bindings,
+            "h",
+            filter=has_focus(list_control),
+        )(_handle_help_key)
 
     @bindings.add("left", filter=has_focus(view_control), eager=True)
     def _previous_view(event) -> None:
@@ -1347,9 +1358,18 @@ def run_help_selector(
             app_ref.get("app") is not None
             and app_ref["app"].layout.has_focus(view_control)
         ):
-            return f" VIEW: ←/→ choose · ↓ list · Tab surface · Q {return_label}"
+            toggle = " · H hide Help" if mode == "EXPLORE" else ""
+            return (
+                " VIEW: ←/→ choose · ↓ list · Tab surface"
+                f"{toggle} · Q {return_label}"
+            )
         if concept_focus_active():
-            return " ↑/↓ move (hold accelerates)  Tab surface "
+            toggle = (
+                " H hide Help · Q return to waiting"
+                if mode == "EXPLORE"
+                else ""
+            )
+            return f" ↑/↓ move (hold accelerates)  Tab surface {toggle}"
         enter_action = (
             "Enter open forms"
             if selected_form["value"] is None
@@ -1358,7 +1378,7 @@ def run_help_selector(
             else "Enter prefill command line"
         )
         detail_action = (
-            "H show details  Q return to waiting"
+            "H hide Help  Q return to waiting"
             if mode == "EXPLORE"
             else "H full help"
         )
@@ -1405,7 +1425,7 @@ def run_help_selector(
     )
     app_ref["app"] = application
     try:
-        return application.run()
+        return application.run(pre_run=on_ready)
     except (EOFError, KeyboardInterrupt):
         return None
 

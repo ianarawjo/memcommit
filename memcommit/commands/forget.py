@@ -4,12 +4,17 @@ from typing import Annotated
 import typer
 
 import memcommit.ops as ops
-from memcommit.commands.command_wait import run_command_wait
+from memcommit.commands.command_wait import (
+    CommandWaitView,
+    build_report_loading_view,
+    run_command_wait,
+)
 from memcommit.commands.granted_context import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,
 )
+from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import AutoCheckpoint, Context
 from memcommit.forget_resolution_adapter import ForgetResolutionWorkbenchAdapter
 from memcommit.forget_review import ForgetReview, ForgetSelection
@@ -43,6 +48,26 @@ def _forget_analysis_stage(ctx: Context) -> str:
     return f"analyzing {len(ctx.memories)} source memories x 1 instruction"
 
 
+def _forget_wait_view(ctx: Context, info: str) -> CommandWaitView:
+    """Show the reviewed input because no Forget report exists pre-analysis."""
+
+    text = "\n".join(
+        [
+            "MEM FORGET · FROZEN INPUT · RESULT PENDING",
+            "",
+            f"SOURCE · {safe_terminal_text(ctx.name)} · THIS CONTEXT ONLY",
+            f"FROZEN MEMORIES · {len(ctx.memories)}",
+            "SOURCE STATE · UNCHANGED",
+            "",
+            "INSTRUCTION",
+            safe_terminal_text(info),
+            "",
+            "The review report will replace this setup after the provider returns.",
+        ]
+    )
+    return CommandWaitView(title="FORGET CONFIRMED INPUTS · READ-ONLY", text=text)
+
+
 def _run_resolution_forget(
     ctx: Context,
     info: str,
@@ -60,6 +85,11 @@ def _run_resolution_forget(
         _forget_analysis_stage(ctx),
         total=1,
         work=lambda _progress: ops.analyze_forget(ctx, info, llm),
+        return_view=build_report_loading_view(
+            "FORGET",
+            sections=("What mem understood", "Review decisions", "To do"),
+        ),
+        context_view=_forget_wait_view(ctx, info),
     )
     if not analysis.decisions:
         typer.echo("Nothing to apply.")

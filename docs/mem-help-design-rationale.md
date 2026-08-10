@@ -125,11 +125,15 @@ command callback; selection only returns editable shell text. Execution remains
 a later, separate Enter after the person has reviewed and edited that text.
 
 The same inventory also has a stricter `EXPLORE` presentation used by the
-shared interactive command-wait screen. In that mode Enter, Right, and `H`
-keep descriptions and audited Forms inside Help; they never return a shell
-template. `Q` or Escape returns to the waiting operation, and a completed
-background turn appears as `RESULT READY` without closing Help. The inventory
-data and renderer remain shared; only the caller-owned exit policy differs.
+shared interactive command-wait screen, where an operation-owned report or
+report skeleton is the default foreground.
+In that mode Enter and Right keep descriptions and audited Forms inside Help;
+they never return a shell template. `H` opens Help from the report or confirmed
+input copy and hides it back to the same surface; `Q` or Escape also returns. A
+completed background turn appears as `RESULT READY · H / Q RETURN` without
+closing Help. The
+inventory data and renderer remain shared; only the caller-owned visibility
+and exit policy differs. Ordinary `mem help` retains `H` for full command help.
 See
 [`interactive-command-wait-design-rationale.md`](interactive-command-wait-design-rationale.md)
 for the background execution and consistency boundary.

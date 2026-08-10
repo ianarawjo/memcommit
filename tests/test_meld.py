@@ -3445,7 +3445,13 @@ def test_followup_meld_turn_uses_shared_interactive_wait(
         def update(self, stage, *, step):
             calls.append(("UPDATE", stage, step))
 
-    def run_wait(operation, stage, *, total, work):
+    def run_wait(operation, stage, *, total, work, return_view, context_view):
+        return_text = "".join(fragment[1] for fragment in return_view.text)
+        assert return_view.title == "PREVIOUS MELD REPORT · READ-ONLY"
+        assert "PENDING TURN · SUBMITTED · NOT YET INCORPORATED" in return_text
+        assert "Keep all supported compensation details." in return_text
+        assert context_view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
+        assert "Keep all supported compensation details." in context_view.text
         calls.append(("WAIT", operation, stage, total))
         return work(Progress())
 
@@ -3468,6 +3474,44 @@ def test_followup_meld_turn_uses_shared_interactive_wait(
     assert saved is not None
     assert saved.current_turn.uid == revised.current_turn.uid
     assert saved.current_assessment is not None
+
+
+def test_initial_meld_wait_view_shows_report_shape_and_confirmed_inputs():
+    incoming = ops.init("wait/incoming")
+    baseline = ops.init("wait/baseline")
+    ops.add(incoming, "Incoming fact.")
+    ops.add(baseline, "Baseline fact.")
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+
+    view = meld_command._meld_wait_view(session)
+    view_text = "".join(fragment[1] for fragment in view.text)
+    context_view = meld_command._meld_wait_context_view(session)
+
+    assert view.title == "MELD REPORT · BUILDING"
+    assert "CONTENT PENDING · THIS IS NOT A RESULT" in view_text
+    assert "PROPOSED BASELINE CHANGES" in view_text
+    assert context_view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
+    assert "wait/incoming" in context_view.text
+    assert "wait/baseline" in context_view.text
+    assert "FROZEN MEMORIES · 1" in context_view.text
+
+
+def test_meld_wait_view_styles_memory_objects_without_tinting_report_prose():
+    fragments = meld_command._meld_wait_fragments(
+        "WHAT MEM UNDERSTOOD\nNeutral report prose.\n"
+        "PROPOSED TARGET MEMORIES\n"
+        "  +  1. [PRESERVE] One proposed Memory.\n"
+        "       WHY · Supporting explanation."
+    )
+
+    assert ("class:section", "WHAT MEM UNDERSTOOD\n") in fragments
+    assert (
+        "class:memory-object",
+        "  +  1. [PRESERVE] One proposed Memory.\n",
+    ) in fragments
+    assert ("", "Neutral report prose.\n") in fragments
+    assert ("", "       WHY · Supporting explanation.") in fragments
 
 
 def test_directional_validation_repair_is_bounded_and_publishes_nothing(

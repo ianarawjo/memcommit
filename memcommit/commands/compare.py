@@ -48,7 +48,11 @@ from memcommit.commands.compare_sessions import (
 )
 from memcommit.commands.compare_workbench import run_compare_workbench
 from memcommit.commands.command_progress import progressing_provider_factory
-from memcommit.commands.command_wait import run_command_wait
+from memcommit.commands.command_wait import (
+    CommandWaitView,
+    build_report_loading_view,
+    run_command_wait,
+)
 from memcommit.commands.endpoint_setup_flows import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
 from memcommit.commands.session_picker import SessionNewReceipt
@@ -589,6 +593,40 @@ def _present_comparison(
         typer.echo("Compare view closed.")
 
 
+def _comparison_wait_view(comparison_input: ComparisonInput) -> CommandWaitView:
+    """Restore the exact frozen setup while the first report is unavailable."""
+
+    lines = [
+        "MEM COMPARE · FROZEN INPUT · RESULT PENDING",
+        "",
+    ]
+    labels = ("REFERENCE A", "PEER B")
+    for label, frame, descendants in zip(
+        labels,
+        comparison_input.frames,
+        comparison_input.include_descendants,
+    ):
+        lines.append(
+            f"{label} · {display_escape_text(frame.context_name)}"
+        )
+        lines.append(
+            "  SCOPE · "
+            + ("INCLUDE DESCENDANTS" if descendants else "THIS CONTEXT ONLY")
+        )
+        lines.append(f"  FROZEN MEMORIES · {len(frame.memories)}")
+        lines.append("")
+    lines.extend(
+        [
+            "The comparison report will replace this setup after the provider",
+            "returns. The two frozen source frames cannot be changed here.",
+        ]
+    )
+    return CommandWaitView(
+        title="COMPARE CONFIRMED INPUTS · READ-ONLY",
+        text="\n".join(lines),
+    )
+
+
 def _recursive_compare_projection(root: Context) -> Context:
     """Flatten one loaded tree while retaining each Memory's public path."""
 
@@ -886,6 +924,16 @@ def cmd(
             "connecting provider",
             total=2,
             work=compare_frames,
+            return_view=build_report_loading_view(
+                "COMPARE",
+                sections=(
+                    "What mem understood",
+                    "Both",
+                    "Differences",
+                    "Items",
+                ),
+            ),
+            context_view=_comparison_wait_view(comparison_input),
         )
         if granted:
             with authority_grant_snapshot_lock() as registry:

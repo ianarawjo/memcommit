@@ -26,7 +26,11 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.commands.command_wait import run_command_wait
+from memcommit.commands.command_wait import (
+    CommandWaitView,
+    build_report_loading_view,
+    run_command_wait,
+)
 from memcommit.commands.endpoint_setup_flows import choose_meld_setup
 from memcommit.derived_policy import (
     analysis_retention,
@@ -854,6 +858,138 @@ def _target_save_source_bindings(
     return tuple(bindings)
 
 
+def _meld_wait_view(session: MeldSession) -> CommandWaitView:
+    """Restore the last complete Meld report beneath one pending turn.
+
+    A newly started turn intentionally has no assessment, so rendering the
+    live object would replace the participant's report with only "pending".
+    Reconstruct the immediately preceding durable view for display only and
+    keep the submitted turn visibly separate. Initial analysis has no prior
+    report and therefore shows its frozen route and pending state instead.
+    """
+
+    current = session.current_turn
+    if current is None or current.assessment is not None or len(session.turns) <= 1:
+        result_section = (
+            "Proposed baseline changes"
+            if session.mode == "DIRECTIONAL"
+            else "Proposed target Memories"
+        )
+        return build_report_loading_view(
+            "MELD",
+            sections=(
+                "What mem understood",
+                "Relations",
+                "Issues",
+                result_section,
+            ),
+        )
+
+    prior_turn = session.turns[-2]
+    assert prior_turn.assessment is not None
+    prior_payload = session.to_dict()
+    prior_payload["turns"] = [turn.to_dict() for turn in session.turns[:-1]]
+    prior_payload["state"] = (
+        "READY_TO_APPLY"
+        if prior_turn.assessment.ready_to_apply
+        else "AWAITING_REPLY"
+    )
+    prior_session = MeldSession.from_dict(prior_payload)
+    pending_lines = [
+        render_meld_session(prior_session),
+        "",
+        "PENDING TURN · SUBMITTED · NOT YET INCORPORATED",
+        f"SCOPE · {current.scope}",
+    ]
+    if current.issue_uids:
+        pending_lines.append(
+            "ISSUES · " + ", ".join(uid[:8] for uid in current.issue_uids)
+        )
+    if current.comment:
+        pending_lines.extend(["", "COMMENT", safe_terminal_text(current.comment)])
+    return CommandWaitView(
+        title="PREVIOUS MELD REPORT · READ-ONLY",
+        text=_meld_wait_fragments("\n".join(pending_lines)),
+    )
+
+
+def _meld_wait_context_view(session: MeldSession) -> CommandWaitView:
+    """Show the exact route, scopes, and submitted turn frozen for analysis."""
+
+    lines = [
+        f"MEM MELD · {session.mode} · FROZEN INPUTS",
+        _session_route(session),
+        _session_scope(session),
+        "",
+        "SOURCE FRAMES",
+    ]
+    for frame in session.frames:
+        scope = (
+            "INCLUDE DESCENDANTS"
+            if frame.include_descendants
+            else "THIS CONTEXT ONLY"
+        )
+        lines.extend(
+            [
+                f"  {frame.role} · {safe_terminal_text(frame.context_name)}",
+                f"    SCOPE · {scope}",
+                f"    FROZEN MEMORIES · {len(frame.memories)}",
+            ]
+        )
+    lines.extend(
+        [
+            "",
+            f"TARGET · {safe_terminal_text(session.target.context_name)}",
+            "TARGET STATE · UNCHANGED WHILE ANALYSIS RUNS",
+        ]
+    )
+    current = session.current_turn
+    if current is not None:
+        lines.extend(
+            [
+                "",
+                "SUBMITTED TURN",
+                f"  SCOPE · {current.scope}",
+            ]
+        )
+        if current.issue_uids:
+            lines.append(
+                "  ISSUES · " + ", ".join(uid[:8] for uid in current.issue_uids)
+            )
+        if current.comment:
+            lines.extend(["", "COMMENT", safe_terminal_text(current.comment)])
+    return CommandWaitView(
+        title="MELD CONFIRMED INPUTS · READ-ONLY",
+        text="\n".join(lines),
+    )
+
+
+def _meld_wait_fragments(text: str) -> list[tuple[str, str]]:
+    """Retain Meld report semantics on the shared read-only return pane."""
+
+    section_headings = {
+        "WHAT MEM UNDERSTOOD",
+        "ACCOUNTING",
+        "ISSUES",
+        "PROPOSED BASELINE CHANGES",
+        "PROPOSED TARGET MEMORIES",
+        "PENDING TURN · SUBMITTED · NOT YET INCORPORATED",
+        "COMMENT",
+    }
+    lines = text.splitlines()
+    fragments: list[tuple[str, str]] = []
+    for index, line in enumerate(lines):
+        style = ""
+        if line in section_headings:
+            style = "class:section"
+        elif line.startswith(("  + ", "  ~ ")):
+            # A proposed target/baseline Memory is the only object text on the
+            # compact report. Explanations and surrounding chrome stay white.
+            style = "class:memory-object"
+        fragments.append((style, line + ("\n" if index < len(lines) - 1 else "")))
+    return fragments
+
+
 def _assess_and_save(
     *,
     store: MemoryStore,
@@ -903,6 +1039,8 @@ def _assess_and_save(
         "connecting provider",
         total=2,
         work=assess,
+        return_view=_meld_wait_view(session),
+        context_view=_meld_wait_context_view(session),
     )
     # Provider latency creates a real race window. Rebind every source and the
     # target after the final call before persisting a claim about them.
