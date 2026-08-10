@@ -31,6 +31,7 @@ from memcommit.semantic_execution import (
     BudgetVector,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     plan_semantic_execution,
@@ -38,7 +39,7 @@ from memcommit.semantic_execution import (
 from memcommit.store import MemoryStore, context_record_digest
 
 
-RATIONALE_INPUT_CHAR_LIMIT = 200_000
+RATIONALE_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 RATIONALE_RESPONSE_CHAR_LIMIT = 100_000
 RATIONALE_EXPLANATION_CHAR_LIMIT = 4_000
 RATIONALE_READING_CHAR_LIMIT = 2_000

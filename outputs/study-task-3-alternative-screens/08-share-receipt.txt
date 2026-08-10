@@ -1,0 +1,11 @@
+Shared Context.
+Share: 675fa52f-9c7f-57aa-831e-6b36a8654984
+To: task-3/government/healthcare-agent
+Memories: 97
+Consent digest: 2d316e225557a9d26509783639974d6931d20d13129edd6962758b593c764aae
+Receiver: study-20260810T000728Z-54da735c-granted-memory:
+  task-3/remote/government/healthcare-agent/received-shares/
+  675fa52f-9c7f-57aa-831e-6b36a8654984
+
+Receiver verification:
+  97 memories · 0 references · 0 query-only Contexts · 0 embeds

@@ -18,6 +18,16 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceReach,
+    SourceState,
+)
+from memcommit.source_projection.presentation import (
+    source_annotation_text,
+    source_object_label,
+)
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -152,21 +162,33 @@ def _render_catalog(
         if selector is not None:
             continue
         if isinstance(item, Context):
+            facts = SourceDisplayFacts(reach=SourceReach.VIA_EMBED)
             typer.echo(
-                f"[context {item.uid[:8]}] "
-                f"{safe_terminal_text(item.name)} (not translated)"
+                f"[{source_object_label(facts)} {item.uid[:8]}] "
+                f"{safe_terminal_text(item.name)} · "
+                f"{source_annotation_text(facts)} (not translated)"
             )
         elif isinstance(item, QueryContextRef):
+            label = source_object_label(SourceForm.QUERY_VIEW)
             typer.echo(
-                f"[query   {item.uid[:8]}] "
-                f"{safe_terminal_text(item.name)} "
-                "(query-only; not translated)"
+                f"[{label} {item.uid[:8]}] "
+                f"{safe_terminal_text(item.name)} (not translated)"
             )
         elif isinstance(item, MemoryRef):
+            facts = SourceDisplayFacts(
+                form=SourceForm.MEMORY_REF,
+                states=(
+                    (SourceState.READ_ONLY,)
+                    if item.is_resolved
+                    else (SourceState.DANGLING,)
+                ),
+            )
+            label = source_object_label(facts)
             typer.echo(
-                f"[ref     {item.uid[:8]}] "
+                f"[{label} {item.uid[:8]}] "
                 f"{safe_terminal_text(item.target_context_name)}"
-                f"#{item.target_memory_uid[:8]} (not translated)"
+                f"#{item.target_memory_uid[:8]} · "
+                f"{source_annotation_text(facts)} (not translated)"
             )
     typer.echo("─" * 64)
     stale = catalog.stale_curated_uids(ctx)

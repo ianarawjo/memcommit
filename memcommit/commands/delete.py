@@ -34,6 +34,16 @@ from memcommit.store import (
     MemoryStore,
     context_record_digest,
 )
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceReach,
+    SourceState,
+)
+from memcommit.source_projection.presentation import (
+    source_annotation_text,
+    source_object_label,
+)
 
 
 @dataclass(frozen=True)
@@ -54,25 +64,36 @@ def _picker_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
     rows: list[ContextMemoryRow] = []
     for item in context.iter_items():
         if isinstance(item, Memory):
-            label = f"memory {item.uid[:8]}"
+            label = item.uid[:8]
             content = item.content
             style = "memory-object"
+            source = SourceDisplayFacts(form=SourceForm.MEMORY)
         elif isinstance(item, MemoryRef):
-            label = f"ref {item.uid[:8]}"
+            label = item.uid[:8]
             content = (
                 item.target.content
                 if item.target is not None
-                else f"(dangling reference) {item.target_context_name}"
+                else item.target_context_name
             )
             style = "memory-object"
+            source = SourceDisplayFacts(
+                form=SourceForm.MEMORY_REF,
+                states=(
+                    (SourceState.READ_ONLY,)
+                    if item.is_resolved
+                    else (SourceState.DANGLING,)
+                ),
+            )
         elif isinstance(item, QueryContextRef):
-            label = f"query {item.uid[:8]}"
-            content = f"query-only Context {item.name}"
+            label = item.uid[:8]
+            content = item.name
             style = "report-neutral"
+            source = SourceDisplayFacts(form=SourceForm.QUERY_VIEW)
         elif isinstance(item, Context):
-            label = f"embedded {item.uid[:8]}"
-            content = f"embedded Context {item.name}"
+            label = item.uid[:8]
+            content = item.name
             style = "report-neutral"
+            source = SourceDisplayFacts(reach=SourceReach.VIA_EMBED)
         else:  # pragma: no cover - Information is a closed union.
             continue
         rows.append(
@@ -81,6 +102,7 @@ def _picker_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
                 content,
                 style=style,
                 selector=item.uid,
+                source=source,
             )
         )
     return tuple(rows)
@@ -221,14 +243,20 @@ def _item_description(item: Information) -> str:
     if isinstance(item, Memory):
         return f'Removed memory [{item.uid[:8]}]: "{item.content[:80]}"'
     if isinstance(item, MemoryRef):
+        label = source_object_label(SourceForm.MEMORY_REF)
         return (
-            f"Removed memory reference [{item.uid[:8]}] to "
+            f"Removed {label} [{item.uid[:8]}] to "
             f"'{item.target_context_name}' [{item.target_memory_uid[:8]}]"
         )
     if isinstance(item, QueryContextRef):
-        return f"Removed query-only Context '{item.name}' [{item.uid[:8]}]"
+        label = source_object_label(SourceForm.QUERY_VIEW)
+        return f"Removed {label} '{item.name}' [{item.uid[:8]}]"
     if isinstance(item, Context):
-        return f"Removed embedded context '{item.name}' [{item.uid[:8]}]"
+        facts = SourceDisplayFacts(reach=SourceReach.VIA_EMBED)
+        return (
+            f"Removed {source_object_label(facts)} '{item.name}' "
+            f"[{item.uid[:8]}] · {source_annotation_text(facts)}"
+        )
     raise TypeError(f"Unsupported direct item type: {type(item).__name__}")
 
 
@@ -236,19 +264,24 @@ def _report_removed_item(item: Information) -> None:
     if isinstance(item, Memory):
         typer.secho(f"Removed [{item.uid[:8]}] {item.content}", fg=typer.colors.GREEN)
     elif isinstance(item, MemoryRef):
+        label = source_object_label(SourceForm.MEMORY_REF)
         typer.secho(
-            f"Removed reference [{item.uid[:8]}] to "
+            f"Removed {label} [{item.uid[:8]}] to "
             f"'{item.target_context_name}' [{item.target_memory_uid[:8]}].",
             fg=typer.colors.GREEN,
         )
     elif isinstance(item, QueryContextRef):
+        label = source_object_label(SourceForm.QUERY_VIEW)
         typer.secho(
-            f"Removed query-only Context '{item.name}' [{item.uid[:8]}].",
+            f"Removed {label} '{item.name}' [{item.uid[:8]}].",
             fg=typer.colors.GREEN,
         )
     elif isinstance(item, Context):
+        facts = SourceDisplayFacts(reach=SourceReach.VIA_EMBED)
+        label = source_object_label(facts)
+        annotation = source_annotation_text(facts)
         typer.secho(
-            f"Removed embedded context '{item.name}' [{item.uid[:8]}]",
+            f"Removed {label} '{item.name}' [{item.uid[:8]}] · {annotation}",
             fg=typer.colors.GREEN,
         )
 

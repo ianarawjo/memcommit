@@ -11,11 +11,19 @@ import typer
 from memcommit.command_history import CommandRestoreResult, ContextCommandUnit
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.context import Checkpoint
+from memcommit.source_projection.model import SourceForm
+from memcommit.source_projection.presentation import source_object_label
 
 
 _MAX_ITEM_LINES = 12
 _MAX_CONTENT_CODEPOINTS = 240
 _MAX_DESCRIPTION_CODEPOINTS = 240
+
+_MEMORY_REF_KIND = source_object_label(SourceForm.MEMORY_REF, title=True)
+_QUERY_VIEW_KIND = source_object_label(SourceForm.QUERY_VIEW, title=True)
+_EMBEDDED_CONTEXT_KIND = "Embedded " + source_object_label(
+    SourceForm.CONTEXT
+)
 
 
 @dataclass(frozen=True)
@@ -104,9 +112,9 @@ def _item_kind(item: Mapping[str, Any] | None) -> str:
     raw = item.get("type") if item is not None else None
     return {
         "memory": "Memory",
-        "memory_ref": "MemoryRef",
-        "query_context_ref": "query-only Context",
-        "context_ref": "embedded Context",
+        "memory_ref": _MEMORY_REF_KIND,
+        "query_context_ref": _QUERY_VIEW_KIND,
+        "context_ref": _EMBEDDED_CONTEXT_KIND,
     }.get(raw, "direct item")
 
 
@@ -171,18 +179,18 @@ def _impact_summary(changes: list[_ItemChange], reordered: bool) -> str:
 
     plural = {
         "Memory": "Memories",
-        "MemoryRef": "MemoryRefs",
-        "query-only Context": "query-only Contexts",
-        "embedded Context": "embedded Contexts",
+        _MEMORY_REF_KIND: _MEMORY_REF_KIND + "s",
+        _QUERY_VIEW_KIND: _QUERY_VIEW_KIND + "s",
+        _EMBEDDED_CONTEXT_KIND: _EMBEDDED_CONTEXT_KIND + "s",
         "direct item": "direct items",
     }
     parts: list[str] = []
     for change_kind in ("added", "edited", "removed"):
         for item_kind in (
             "Memory",
-            "MemoryRef",
-            "query-only Context",
-            "embedded Context",
+            _MEMORY_REF_KIND,
+            _QUERY_VIEW_KIND,
+            _EMBEDDED_CONTEXT_KIND,
             "direct item",
         ):
             count = counts.get((item_kind, change_kind), 0)

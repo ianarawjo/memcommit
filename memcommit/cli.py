@@ -178,8 +178,8 @@ app.command(
 app.command(
     "branch",
     help=(
-        "Choose a local Source when unnamed, or use the current Context, then "
-        "create and switch to a new branch Context."
+        "Choose a local Source and exact fresh target when unnamed, "
+        "or branch the current Context to an explicit new name."
     ),
 )(branch.cmd)
 app.command(
@@ -214,8 +214,8 @@ app.command(
 app.command(
     "query",
     help=(
-        "Ask visible Context knowledge or a concealed query-only view; explicit "
-        "query-only sessions retain only visible Q/A when permitted."
+        "Open interactive Query or ask visible Context knowledge or a concealed "
+        "query-only view; sessions retain only visible Q/A when permitted."
     ),
 )(query.cmd)
 
@@ -267,8 +267,8 @@ app.command(
 app.command(
     "log",
     help=(
-        "Select a Context and browse its checkpoints in a TTY, search current-"
-        "Context history, or list Profile command attempts."
+        "Browse Context checkpoints, inspect one Memory lineage with --memory, "
+        "search history, or list Profile command attempts."
     ),
 )(log.cmd)
 app.command(
@@ -282,8 +282,8 @@ app.command(
 app.command(
     "trace",
     help=(
-        "Enter interactive recent reports or the Memory picker when no Memory "
-        "is given, or trace one retained origin through its current descendants."
+        "Memory-focused shorthand for Log history: open recent targets or "
+        "trace one retained lineage in the shared History explorer."
     ),
 )(trace.cmd)
 app.command(

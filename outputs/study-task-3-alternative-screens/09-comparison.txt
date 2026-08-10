@@ -1,0 +1,19 @@
+ALTERNATIVE TASK 3 RESULT
+
+First run
+  Criteria: 8 direct Memories + guardrails embed
+  Reviewed ordinary draft: 116 Memories
+  Receiver copy: 116 Memories
+
+Find-first alternative
+  Discovery: 5 + 4 live local Memory references
+  Criteria: 8 direct Memories + guardrails embed = 83 criteria Memories
+  Sever: 300 Source Memories reviewed in one whole frame
+  Reviewed ordinary draft: 97 Memories
+  Receiver copy: 97 Memories
+
+Difference
+  19 fewer outbound Memories
+  Source unchanged
+  Current Context unchanged by Find materialization
+  Reference candidate sets were not transmitted

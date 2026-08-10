@@ -7,6 +7,11 @@ from dataclasses import dataclass
 
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.context_targeting.tui.tree import ContextTreeRow, ContextTreeState
+from memcommit.source_projection.presentation import (
+    SourceDisplayValue,
+    normalize_source_display_tokens,
+)
+from memcommit.source_projection.tui import render_source_display_tokens
 
 
 @dataclass(frozen=True)
@@ -15,7 +20,8 @@ class ContextTreeRowDecoration:
 
     marker: str = ""
     active: str = ""
-    annotation: str = ""
+    annotation: SourceDisplayValue | None = None
+    value_suffix: str = ""
     cursor_style: str = ""
     value_style: str | None = None
     anchor_cursor: bool = True
@@ -48,19 +54,25 @@ def render_context_tree_rows(
             f"{pointer} {decoration.marker} {decoration.active} "
             f"{'  ' * row.depth}{branch} "
         )
-        suffix = (
-            f"  {display_escape_text(decoration.annotation)}"
-            if decoration.annotation
-            else ""
-        )
-        value = f"{display_escape_text(row.name)}{suffix}"
+        value = f"{display_escape_text(row.name)}{display_escape_text(decoration.value_suffix)}"
+        annotation_tokens = normalize_source_display_tokens(decoration.annotation)
         if decoration.value_style is None:
             fragments.append((decoration.cursor_style, prefix + value))
+            annotation_style = decoration.cursor_style
         else:
             fragments.extend(
                 (
                     (decoration.cursor_style, prefix),
                     (decoration.value_style, value),
+                )
+            )
+            annotation_style = decoration.value_style
+        if annotation_tokens:
+            fragments.append((annotation_style, "  "))
+            fragments.extend(
+                render_source_display_tokens(
+                    annotation_tokens,
+                    override_style=annotation_style,
                 )
             )
         if index < len(rows) - 1:

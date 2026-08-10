@@ -305,7 +305,7 @@ def test_ls_show_and_status_reveal_metadata_but_not_source(isolated_store):
     assert "contractor-agreements" in combined
     assert "query-only" in combined
     assert SECRET not in combined
-    assert "[query   " in results[0].output
+    assert "[query view " in results[0].output
     assert "Ask with: mem query" in results[3].output
 
 

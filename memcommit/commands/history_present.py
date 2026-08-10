@@ -6,6 +6,13 @@ from typing import Any
 
 from memcommit.commands.history_picker import HistoryPickerEntry
 from memcommit.history_search import HistorySearchResult
+from memcommit.source_projection.model import SourceForm
+from memcommit.source_projection.presentation import source_object_label
+
+
+_MEMORY_REF_LABEL = source_object_label(SourceForm.MEMORY_REF)
+_QUERY_VIEW_LABEL = source_object_label(SourceForm.QUERY_VIEW)
+_EMBEDDED_CONTEXT_LABEL = "embedded " + source_object_label(SourceForm.CONTEXT)
 
 
 def history_result_recovery_label(result: HistorySearchResult) -> str:
@@ -166,9 +173,9 @@ def checkpoint_picker_entries(
         snapshot_line = (
             f"Snapshot: {total} direct items · "
             f"{counts['memory']} Memories · "
-            f"{counts['memory_ref']} MemoryRefs · "
-            f"{counts['query_context_ref']} query-only Contexts · "
-            f"{counts['context_ref']} embedded Contexts"
+            f"{counts['memory_ref']} {_MEMORY_REF_LABEL}s · "
+            f"{counts['query_context_ref']} {_QUERY_VIEW_LABEL}s · "
+            f"{counts['context_ref']} {_EMBEDDED_CONTEXT_LABEL}s"
         )
         before = previous_snapshot_by_uid.get(uid)
         transition_line = (

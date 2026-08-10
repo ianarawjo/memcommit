@@ -25,6 +25,11 @@ from memcommit.query_provider import (
     QueryProviderError,
     _build_query_prompt,
 )
+from memcommit.study_action_log import (
+    record_provider_connection_finished,
+    record_provider_connection_started,
+    record_study_provider_turn,
+)
 
 
 OLLAMA_DEFAULT_BASE_URL = "http://127.0.0.1:11434"
@@ -255,6 +260,7 @@ class OllamaProvider:
             _requester=requester,
         )
 
+    @record_study_provider_turn
     def complete(
         self,
         prompt: str,
@@ -387,6 +393,7 @@ class OpenRouterProvider:
             _requester=requester,
         )
 
+    @record_study_provider_turn
     def complete(
         self,
         prompt: str,
@@ -480,6 +487,35 @@ def connect_provider(
     env: dict[str, str] | None = None,
 ) -> SemanticProvider:
     """Connect one allowlisted provider; never interpret config as executable."""
+    started_at = record_provider_connection_started("semantic")
+    try:
+        provider = _connect_provider(provider_id, config=config, env=env)
+    except BaseException as error:
+        record_provider_connection_finished(
+            "semantic",
+            started_at,
+            failure=error,
+        )
+        raise
+    record_provider_connection_finished(
+        "semantic",
+        started_at,
+        provider=getattr(
+            getattr(provider, "identity", None),
+            "provider",
+            provider_id,
+        ),
+    )
+    return provider
+
+
+def _connect_provider(
+    provider_id: str,
+    *,
+    config: Config | None = None,
+    env: dict[str, str] | None = None,
+) -> SemanticProvider:
+    """Connect after the caller has opened the content-free audit phase."""
     settings = config or Config()
     environment = os.environ if env is None else env
     if provider_id == CODEX_CHATGPT_PROVIDER:

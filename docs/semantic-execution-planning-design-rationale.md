@@ -13,9 +13,20 @@ limit was raised instead of changing the execution model.
 
 The immediate failure that motivated this shared layer was an interactive Find
 over 106 exact checked Contexts with embedded reach enabled. Its corpus crossed
-the 200,000-character guard before provider connection even though the selected
-provider might support a larger context. Raising the constant would only move
-the same problem to a later workload or a smaller provider.
+the former 200,000-character guard before provider connection even though the
+configured provider supports a substantially larger turn. A later preflight
+also rejected the canonical Task 1 Update solely because 75 Source candidates
+plus 300 Target candidates produced a theoretical 375-operation maximum, even
+though its encoded input was 82,945 characters and its studied complete result
+contains 77 changes. These failures established that lower operation-local
+corpus and candidate-count ceilings were preventing supported provider work.
+
+Aggregate semantic adapters now share a 1,000,000-character effective provider
+input capacity. Candidate, expected-output, schema, and relation counts remain
+observable workload axes, but candidate cardinality alone is not a rejection
+condition. Structural response bounds still derive from the frozen candidate
+sets, and validation continues to reject unknown, duplicate, uncovered, or
+otherwise invalid results.
 
 ## Boundary
 
@@ -57,6 +68,12 @@ Character accounting remains deterministic because the current configured
 provider does not always expose a resolved model-specific tokenizer or context
 window. The vector can later accept a trustworthy token estimate without
 collapsing the existing axes.
+
+For the current provider contract, aggregate policies constrain only encoded
+input characters. Item, output, and relation axes are diagnostics and staging
+inputs, not independent hard ceilings. A future runtime capability handshake
+may replace the shared 1,000,000-character value with model-specific token and
+reserved-output budgets without changing operation semantics.
 
 ## Strategies
 
@@ -118,12 +135,14 @@ and Rationale now declare shared policies and budget vectors, but their staged
 reconcilers are not enabled. Their existing exhaustive or source-linked result
 contracts remain one-shot below the bound and fail closed above it.
 
-Update models its existing 200-operation ceiling independently from its
-200,000-character ceiling. The workload records the complete worst case of one
-addition per Source plus one mutually exclusive edit or removal per Target;
-crossing either axis requires a future Source-by-Target relation reconciler.
-An Update review turn budgets the Source, Target, current reviewed proposal,
-and guidance together, so revision cannot bypass the initial plan.
+Update records the complete theoretical workload of one addition per Source
+plus one mutually exclusive edit or removal per Target, but does not confuse
+that candidate-derived maximum with provider capacity. Its output schema and
+parser derive structural maxima from the exact frozen Source and Target sets;
+there is no separate 200-operation or 50-source-reference gate. An Update
+review turn still budgets the Source, Target, current reviewed proposal, and
+guidance together, so revision cannot bypass the 1,000,000-character input
+boundary.
 
 The shared block-matrix scheduler makes every left-batch/right-batch coordinate
 observable once without allocating a Cartesian list of item pairs. The shared
@@ -141,13 +160,13 @@ exhaustive ledger without an explicit coverage contract.
 
 ## Whole-frame selective curation
 
-Forget and Sever declare `WHOLE_FRAME_ONLY`. They share a 400,000-character and
-500-item host preflight so a clearly oversized batch fails before provider
-connection. These are safety ceilings, not permission to sample. The complete
-frozen Source and criterion frame must still appear in one turn and return one
-decision per Source Memory because neighboring Source Memories may affect a
-decision. A Forget review turn also budgets its complete retained dialogue and
-fails before the provider rather than treating follow-up history as exempt.
+Forget and Sever declare `WHOLE_FRAME_ONLY`. They share the 1,000,000-character
+provider-capacity preflight and have no independent item-count gate. The
+complete frozen Source and criterion frame must still appear in one turn and
+return one decision per Source Memory because neighboring Source Memories may
+affect a decision. A Forget review turn also budgets its complete retained
+dialogue and fails before the provider rather than treating follow-up history
+as exempt.
 
 ## Migration scope
 
@@ -174,10 +193,13 @@ on transport-level splitting.
 
 ## Alternatives rejected
 
-Raising every character constant was rejected because it ignores provider
-variation, output/schema growth, and item or relation complexity. Generic
-provider-level prompt splitting was rejected because it cannot preserve
-operation meaning. Silent local semantic prefiltering was rejected because it
-can remove the only relevant candidate without a recall receipt. Treating a
-block matrix or connected components as a final Compare/Meld answer was
+Retaining lower per-operation character ceilings and fixed candidate-count
+gates was rejected because those limits contradicted the effective provider
+capacity and made canonical Study frames unreachable. The shared 1,000,000
+character value is an explicit current-provider contract, not a claim that
+characters are a permanent substitute for model capabilities. Generic
+provider-level prompt splitting remains rejected because it cannot preserve
+operation meaning. Silent local semantic prefiltering remains rejected because
+it can remove the only relevant candidate without a recall receipt. Treating a
+block matrix or connected components as a final Compare/Meld answer remains
 rejected because exposure coverage is not semantic reconciliation.

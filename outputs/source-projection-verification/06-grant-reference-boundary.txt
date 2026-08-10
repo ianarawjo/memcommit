@@ -1,0 +1,4 @@
+ACCESS · task-1/campus-wiki/building-access · READ GRANT
+MODE · REFERENCE
+EXPECTED BOUNDARY · REFERENCE requires locally owned source Memories; use COPY for an export-authorized Grant result.
+DESTINATION CREATED · False

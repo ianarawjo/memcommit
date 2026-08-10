@@ -1570,6 +1570,55 @@ def test_atomize_persists_shared_destination_change_before_final_apply(
     assert store.current_context_name() == "workbench/final-output"
 
 
+def test_applied_output_preview_does_not_become_a_second_session_owner(
+    isolated_store,
+):
+    store = MemoryStore()
+    source, _memory = _init_context(store)
+    opened = open_or_create_atomize_workbench(
+        store=store,
+        ctx=source,
+        provider_factory=AggregateProvider,
+        output_context_name="workbench/applied-output",
+    )
+
+    applied = runner.invoke(
+        app,
+        [
+            "atomize",
+            "--context",
+            source.name,
+            "--save-as",
+            "workbench/applied-output",
+        ],
+    )
+    assert applied.exit_code == 0, applied.output
+    output = store.load_direct("workbench/applied-output")
+    output_analysis = store.load_atomize_analysis(output.uid)
+    assert output_analysis is not None
+    assert output_analysis.uid == opened.analysis.uid
+    assert store.load_atomize_workbench(output_analysis) is None
+
+    # Reading the applied Output needs a temporary projection for display, but
+    # it must not persist that projection as a second shared-session owner.
+    preview = runner.invoke(
+        app,
+        ["atomize", "--context", "workbench/applied-output"],
+    )
+    assert preview.exit_code == 0, preview.output
+    assert "APPLIED" in preview.output
+    assert store.load_atomize_workbench(output_analysis) is None
+
+    # Recover catalogs produced by the historical bug without deleting the
+    # derived file: the Source terminal receipt remains the canonical owner.
+    store.save_atomize_workbench(create_atomize_workbench(output_analysis))
+    entries = atomize_session_entries(store)
+    assert len(entries) == 1
+    assert entries[0].key == opened.analysis.uid
+    assert entries[0].title == source.name
+    assert entries[0].status == "APPLIED"
+
+
 def test_compound_atomize_action_incorporates_then_uses_normal_apply_boundary(
     isolated_store,
     monkeypatch,

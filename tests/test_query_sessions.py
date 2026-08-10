@@ -299,7 +299,7 @@ def test_authority_query_without_question_lists_only_opaque_memory_shapes(
     result = runner.invoke(app, ["query", "construction-details"])
 
     assert result.exit_code == 0, result.output
-    assert "Query-only Memories: construction-details" in result.output
+    assert "Query view Memories: construction-details" in result.output
     assert "1 queryable Memory" in result.output
     assert "[q-" in result.output
     for expected_shape in render_flow_circular_placeholder(SECRET):

@@ -15,20 +15,19 @@ from memcommit.semantic_execution import (
     BudgetLimits,
     ExecutionPlan,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     plan_semantic_execution,
 )
 
 
-SELECTIVE_CURATION_INPUT_CHAR_LIMIT = 400_000
-SELECTIVE_CURATION_ITEM_LIMIT = 500
+SELECTIVE_CURATION_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 SELECTIVE_CURATION_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="selective curation",
     strategy=ExecutionStrategy.WHOLE_FRAME_ONLY,
     one_shot_limits=BudgetLimits(
         max_input_chars=SELECTIVE_CURATION_INPUT_CHAR_LIMIT,
-        max_items=SELECTIVE_CURATION_ITEM_LIMIT,
     ),
     staged_supported=False,
 )

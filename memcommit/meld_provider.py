@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from memcommit.meld import (
+    MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
     MELD_TEXT_LIMIT,
     MeldAssessment,
     MeldError,
@@ -24,9 +25,9 @@ from memcommit.result_workbench import (
 )
 from memcommit.semantic_execution import (
     BudgetLimits,
-    BudgetVector,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     plan_semantic_execution,
@@ -34,22 +35,15 @@ from memcommit.semantic_execution import (
 
 
 MELD_PAYLOAD_MARKER = "MELD TURN PAYLOAD:\n"
-MELD_INPUT_CHAR_LIMIT = 400_000
+MELD_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 MELD_RESPONSE_CHAR_LIMIT = 1_000_000
-# The canonical Task 2 pair contains 150 + 150 Memories. Keep one bounded,
-# lossless call large enough for that studied topology; the independent encoded
-# input limit remains the primary protection against oversized provider turns.
-MELD_ITEM_LIMIT = 500
 MELD_KEY_LIMIT = 100
 MELD_OPTION_LIMIT = 5
 
 MELD_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="meld_contexts",
     strategy=ExecutionStrategy.BLOCK_RELATIONS,
-    one_shot_limits=BudgetLimits(
-        max_input_chars=MELD_INPUT_CHAR_LIMIT,
-        max_items=MELD_ITEM_LIMIT,
-    ),
+    one_shot_limits=BudgetLimits(max_input_chars=MELD_INPUT_CHAR_LIMIT),
     staged_supported=False,
 )
 
@@ -85,6 +79,9 @@ class MeldProvider(Protocol):
 class _ProviderView:
     memory_by_id: dict[str, MeldMember]
     memory_id_by_key: dict[tuple[str, str], str]
+    memory_owner_by_id: dict[str, tuple[str, str] | None]
+    target_context_by_id: dict[str, tuple[str, str]]
+    target_context_id_by_identity: dict[tuple[str, str], str]
     frame_ids: tuple[str, str]
     turn_by_id: dict[str, str]
     turn_id_by_uid: dict[str, str]
@@ -173,24 +170,59 @@ def _mapped(
     return tuple(mapping[value] for value in values)
 
 
+def _split_relation_payloads(
+    records: list[dict[str, object]],
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    paired: list[dict[str, object]] = []
+    distinct: list[dict[str, object]] = []
+    for record in records:
+        if record["kind"] != "DISTINCT":
+            paired.append(record)
+            continue
+        left_ids = record["left_memory_ids"]
+        right_ids = record["right_memory_ids"]
+        if not isinstance(left_ids, list) or not isinstance(right_ids, list):
+            raise MeldProviderError("Invalid prior DISTINCT relation.")
+        side = "LEFT" if left_ids else "RIGHT"
+        memory_ids = left_ids if left_ids else right_ids
+        distinct.append(
+            {
+                "relation_key": record["relation_key"],
+                "side": side,
+                "memory_ids": memory_ids,
+                "kind": "DISTINCT",
+                "status": record["status"],
+                "summary": record["summary"],
+                "reason": record["reason"],
+            }
+        )
+    return paired, distinct
+
+
 def _provider_view(session: MeldSession) -> _ProviderView:
     if session.current_turn is None:
         raise MeldProviderError("No meld turn is awaiting analysis.")
     if session.current_turn.assessment is not None:
         raise MeldProviderError("The current meld turn is already assessed.")
-    source_count = sum(len(frame.memories) for frame in session.frames)
-    item_plan = plan_semantic_execution(
-        MELD_EXECUTION_POLICY,
-        BudgetVector(item_count=source_count),
-    )
-    if item_plan.mode is not ExecutionMode.ONE_SHOT:
-        raise MeldProviderError(
-            "This Context pair exceeds the bounded Meld execution plan of "
-            f"{MELD_ITEM_LIMIT} direct Memories. Input is never truncated; "
-            "staged block reconciliation is not yet enabled."
-        )
     memory_by_id: dict[str, MeldMember] = {}
     memory_id_by_key: dict[tuple[str, str], str] = {}
+    memory_owner_by_id: dict[str, tuple[str, str] | None] = {}
+    target_context_by_id: dict[str, tuple[str, str]] = {}
+    target_context_id_by_identity: dict[tuple[str, str], str] = {}
+    if session.mode == "DIRECTIONAL":
+        baseline = session.frames[1]
+        target_context_identities = (
+            [(context.uid, context.name) for context in baseline.contexts]
+            if baseline.contexts
+            else [(baseline.context_uid, baseline.context_name)]
+        )
+        for context_index, identity in enumerate(
+            target_context_identities,
+            start=1,
+        ):
+            context_id = f"k{context_index:06d}"
+            target_context_by_id[context_id] = identity
+            target_context_id_by_identity[identity] = context_id
     frame_ids = (
         ("left", "right") if session.mode == "SYMMETRIC" else ("incoming", "baseline")
     )
@@ -208,14 +240,26 @@ def _provider_view(session: MeldSession) -> _ProviderView:
             )
             memory_by_id[memory_id] = member
             memory_id_by_key[(frame.uid, memory.uid)] = memory_id
-            memories.append(
-                {
+            owner = (
+                (memory.owner_context_uid, memory.owner_context_name)
+                if memory.owner_context_uid is not None
+                and memory.owner_context_name is not None
+                else None
+            )
+            memory_owner_by_id[memory_id] = owner
+            memory_payload: dict[str, object] = {
                     "memory_id": memory_id,
                     "position": memory.position,
                     "content": memory.content,
                     "content_sha256": memory.content_digest,
                 }
-            )
+            if owner is not None:
+                memory_payload["owner_context_name"] = owner[1]
+                if frame.role == "BASELINE":
+                    memory_payload["target_context_id"] = (
+                        target_context_id_by_identity[owner]
+                    )
+            memories.append(memory_payload)
         frame_payloads.append(
             {
                 "frame_id": frame_id,
@@ -283,6 +327,14 @@ def _provider_view(session: MeldSession) -> _ProviderView:
                 if proposal.operation == "EDIT"
                 else []
             )
+            if len(target_context_by_id) > 1:
+                owner_identity = (
+                    proposal.owner_context_uid,
+                    proposal.owner_context_name,
+                )
+                payload["target_context_id"] = target_context_id_by_identity[
+                    owner_identity
+                ]
         return payload
 
     if len(session.turns) > 1:
@@ -309,28 +361,33 @@ def _provider_view(session: MeldSession) -> _ProviderView:
             alias = f"p{index:06d}"
             prior_proposal_by_id[alias] = proposal.uid
             proposal_id_by_uid[proposal.uid] = alias
+        previous_relations = [
+            {
+                "relation_key": relation_id_by_uid[relation.uid],
+                "left_memory_ids": [
+                    memory_id_by_key[(member.frame_uid, member.memory_uid)]
+                    for member in relation.members
+                    if member.frame_uid == session.frames[0].uid
+                ],
+                "right_memory_ids": [
+                    memory_id_by_key[(member.frame_uid, member.memory_uid)]
+                    for member in relation.members
+                    if member.frame_uid == session.frames[1].uid
+                ],
+                "kind": relation.kind,
+                "status": relation.status,
+                "summary": relation.summary,
+                "reason": relation.reason,
+            }
+            for relation in prior_assessment.relations
+        ]
+        previous_paired, previous_distinct = _split_relation_payloads(
+            previous_relations
+        )
         previous = {
             "overview": prior_assessment.overview,
-            "relations": [
-                {
-                    "relation_key": relation_id_by_uid[relation.uid],
-                    "left_memory_ids": [
-                        memory_id_by_key[(member.frame_uid, member.memory_uid)]
-                        for member in relation.members
-                        if member.frame_uid == session.frames[0].uid
-                    ],
-                    "right_memory_ids": [
-                        memory_id_by_key[(member.frame_uid, member.memory_uid)]
-                        for member in relation.members
-                        if member.frame_uid == session.frames[1].uid
-                    ],
-                    "kind": relation.kind,
-                    "status": relation.status,
-                    "summary": relation.summary,
-                    "reason": relation.reason,
-                }
-                for relation in prior_assessment.relations
-            ],
+            "paired_relations": previous_paired,
+            "distinct_relations": previous_distinct,
             "issues": [
                 {
                     "issue_key": issue_id_by_uid[issue.uid],
@@ -361,7 +418,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
             ],
         }
         prior_relation_records = {
-            record["relation_key"]: record for record in previous["relations"]
+            record["relation_key"]: record for record in previous_relations
         }
 
     current = session.current_turn
@@ -393,6 +450,13 @@ def _provider_view(session: MeldSession) -> _ProviderView:
         ),
         "target": {
             "context_name": session.target.context_name,
+            "contexts": [
+                {
+                    "target_context_id": context_id,
+                    "context_name": identity[1],
+                }
+                for context_id, identity in target_context_by_id.items()
+            ],
             "must_remain_empty_until_acceptance": (session.mode == "SYMMETRIC"),
             "must_remain_unchanged_until_acceptance": True,
         },
@@ -404,6 +468,9 @@ def _provider_view(session: MeldSession) -> _ProviderView:
     return _ProviderView(
         memory_by_id=memory_by_id,
         memory_id_by_key=memory_id_by_key,
+        memory_owner_by_id=memory_owner_by_id,
+        target_context_by_id=target_context_by_id,
+        target_context_id_by_identity=target_context_id_by_identity,
         frame_ids=frame_ids,
         turn_by_id=turn_by_id,
         turn_id_by_uid=turn_id_by_uid,
@@ -419,6 +486,7 @@ def meld_output_schema(
     source_count: int,
     *,
     mode: str = "SYMMETRIC",
+    target_context_count: int = 1,
 ) -> dict[str, object]:
     key = {"type": "string", "minLength": 1, "maxLength": MELD_KEY_LIMIT}
     text = {"type": "string", "minLength": 1, "maxLength": MELD_TEXT_LIMIT}
@@ -439,22 +507,22 @@ def meld_output_schema(
     }
     key_refs = {
         "type": "array",
-        "maxItems": MELD_ITEM_LIMIT,
         "items": key,
     }
     # Codex structured output accepts only a JSON Schema subset and rejects
     # `uniqueItems`. Duplicate aliases are still rejected after generation by
     # `_keys`, so removing that provider-side hint does not weaken authority or
     # provenance validation.
-    relation = {
+    paired_memory_refs = {**memory_refs, "minItems": 1}
+    paired_relation = {
         "type": "object",
         "properties": {
             "relation_key": key,
-            "left_memory_ids": memory_refs,
-            "right_memory_ids": memory_refs,
+            "left_memory_ids": paired_memory_refs,
+            "right_memory_ids": paired_memory_refs,
             "kind": {
                 "type": "string",
-                "enum": sorted(_RELATIONS),
+                "enum": sorted(_RELATIONS - {"DISTINCT"}),
             },
             "status": {
                 "type": "string",
@@ -467,6 +535,31 @@ def meld_output_schema(
             "relation_key",
             "left_memory_ids",
             "right_memory_ids",
+            "kind",
+            "status",
+            "summary",
+            "reason",
+        ],
+        "additionalProperties": False,
+    }
+    distinct_relation = {
+        "type": "object",
+        "properties": {
+            "relation_key": key,
+            "side": {"type": "string", "enum": ["LEFT", "RIGHT"]},
+            "memory_ids": paired_memory_refs,
+            "kind": {"type": "string", "enum": ["DISTINCT"]},
+            "status": {
+                "type": "string",
+                "enum": sorted(_STATUSES),
+            },
+            "summary": text,
+            "reason": text,
+        },
+        "required": [
+            "relation_key",
+            "side",
+            "memory_ids",
             "kind",
             "status",
             "summary",
@@ -549,15 +642,25 @@ def meld_output_schema(
             "operation",
             "target_memory_ids",
         ]
+        if target_context_count > 1:
+            result["properties"]["target_context_id"] = key
+            result["required"] = [
+                *result["required"],
+                "target_context_id",
+            ]
     return {
         "type": "object",
         "properties": {
             "overview": overview_text,
-            "relations": {
+            "paired_relations": {
                 "type": "array",
-                "minItems": 1,
                 "maxItems": source_count,
-                "items": relation,
+                "items": paired_relation,
+            },
+            "distinct_relations": {
+                "type": "array",
+                "maxItems": source_count,
+                "items": distinct_relation,
             },
             "issues": {
                 "type": "array",
@@ -566,14 +669,14 @@ def meld_output_schema(
             },
             "results": {
                 "type": "array",
-                "maxItems": MELD_ITEM_LIMIT,
                 "items": result,
             },
             "ready_to_apply": {"type": "boolean"},
         },
         "required": [
             "overview",
-            "relations",
+            "paired_relations",
+            "distinct_relations",
             "issues",
             "results",
             "ready_to_apply",
@@ -582,7 +685,11 @@ def meld_output_schema(
     }
 
 
-def _prompt(payload: dict[str, object]) -> str:
+def _prompt(
+    payload: dict[str, object],
+    *,
+    directional_preservation: bool = False,
+) -> str:
     encoded = json.dumps(
         payload,
         ensure_ascii=False,
@@ -629,21 +736,46 @@ def _prompt(payload: dict[str, object]) -> str:
             "already cites its BASELINE Memory. A source-derived ADD must cite "
             "at least one INCOMING Memory. Do not target an INCOMING Memory. "
             "DELETE is not supported: surface a REQUIRED issue instead of "
-            "silently removing knowledge. "
+            "silently removing knowledge. When target.contexts contains more "
+            "than one Context, every result must return the exact supplied "
+            "target_context_id. An EDIT must name its target Memory's owner; "
+            "an ADD must choose one owner from the bounded BASELINE subtree. "
+            "If placement is ambiguous, return a REQUIRED issue instead of "
+            "defaulting to the BASELINE root. "
         )
         if directional
+        else ""
+    )
+    directional_materialization_contract = (
+        (
+            "Directional relation groups are analysis units, not result-Memory "
+            "units. An EQUIVALENT relation is already represented by BASELINE "
+            "and produces no change. For DISTINCT, and for COMPATIBLE or SCOPED "
+            "unless an explicit user turn chooses combination, return one ADD "
+            "per INCOMING Memory with disposition PRESERVE, its exact unmodified "
+            "content, and that one INCOMING Memory as its incoming source. Every "
+            "such INCOMING Memory must be materialized exactly once. Only an "
+            "explicit user turn may ground a relation-local SYNTHESIZE that "
+            "combines multiple COMPATIBLE or SCOPED INCOMING Memories; cite that "
+            "turn. Do not turn a topical relation into one summary ADD. "
+        )
+        if directional and directional_preservation
         else ""
     )
     return (
         authority_contract + "\n"
         "Every supplied source Memory must appear in exactly one primary "
-        "relation. A relation may contain one-to-many or many-to-one members; "
+        "relation. Return cross-source relations in paired_relations and "
+        "one-sided DISTINCT relations in distinct_relations. A relation may "
+        "contain one-to-many or many-to-one members; "
         "do not enumerate a Cartesian product. EQUIVALENT means the same "
         "underlying claim can be coalesced. COMPATIBLE means both can remain. "
         "SCOPED means an apparent difference is explained by an explicit "
         "condition that must be retained. CONFLICT means ordinary local "
         "readings cannot both govern the same scope. DISTINCT is an "
-        "independent one-sided claim. UNCLEAR means the supplied frame cannot "
+        "independent one-sided claim. Every one-sided relation MUST be "
+        "DISTINCT, and every non-DISTINCT relation MUST contain at least one "
+        "Memory from both source sides. UNCLEAR means the supplied frame cannot "
         "justify placement or interpretation.\n"
         "For REQUIRED uncertainty or conflict, ask a concrete question and "
         "set ready_to_apply false. HELPFUL questions may remain in a ready "
@@ -665,6 +797,7 @@ def _prompt(payload: dict[str, object]) -> str:
         "to repeat the same decision. Do not broaden a local answer merely to "
         "reduce the issue count.\n"
         + result_contract
+        + directional_materialization_contract
         + (
             "For a symmetric target, materialization is preservation-first. "
             "Every source-derived result must cite exactly one primary relation; "
@@ -732,15 +865,21 @@ def _parse_assessment(
         raise MeldProviderError(
             "Codex meld returned invalid structured output."
         ) from error
+    legacy_relation_shape = isinstance(value, dict) and "relations" in value
+    response_keys = {
+        "overview",
+        "issues",
+        "results",
+        "ready_to_apply",
+    }
+    response_keys.update(
+        {"relations"}
+        if legacy_relation_shape
+        else {"paired_relations", "distinct_relations"}
+    )
     data = _exact_dict(
         value,
-        {
-            "overview",
-            "relations",
-            "issues",
-            "results",
-            "ready_to_apply",
-        },
+        response_keys,
         "meld response",
     )
     if not isinstance(data["ready_to_apply"], bool):
@@ -748,11 +887,54 @@ def _parse_assessment(
     current = session.current_turn
     assert current is not None
 
-    raw_relations = _array(data["relations"], "meld relations")
-    if not 1 <= len(raw_relations) <= MELD_ITEM_LIMIT:
+    if legacy_relation_shape:
+        legacy_records = _array(data["relations"], "meld relations")
+        raw_paired_relations = [
+            item
+            for item in legacy_records
+            if isinstance(item, dict) and item.get("kind") != "DISTINCT"
+        ]
+        raw_distinct_relations = []
+        legacy_distinct_records = [
+            item
+            for item in legacy_records
+            if isinstance(item, dict) and item.get("kind") == "DISTINCT"
+        ]
+    else:
+        raw_paired_relations = _array(
+            data["paired_relations"],
+            "paired meld relations",
+        )
+        raw_distinct_relations = _array(
+            data["distinct_relations"],
+            "distinct meld relations",
+        )
+        legacy_distinct_records = []
+    if not raw_paired_relations and not raw_distinct_relations:
         raise MeldProviderError("Codex meld returned an invalid number of relations.")
     relation_records: list[tuple[str, dict[str, object]]] = []
-    for item in raw_relations:
+    for item in raw_paired_relations:
+        record = _exact_dict(
+            item,
+            {
+                "relation_key",
+                "left_memory_ids",
+                "right_memory_ids",
+                "kind",
+                "status",
+                "summary",
+                "reason",
+            },
+            "meld relation",
+        )
+        if record["kind"] == "DISTINCT":
+            raise MeldProviderError(
+                "Codex meld returned DISTINCT in paired_relations."
+            )
+        relation_records.append(
+            (_key(record["relation_key"], "meld relation key"), record)
+        )
+    for item in legacy_distinct_records:
         record = _exact_dict(
             item,
             {
@@ -768,6 +950,47 @@ def _parse_assessment(
         )
         relation_records.append(
             (_key(record["relation_key"], "meld relation key"), record)
+        )
+    for item in raw_distinct_relations:
+        record = _exact_dict(
+            item,
+            {
+                "relation_key",
+                "side",
+                "memory_ids",
+                "kind",
+                "status",
+                "summary",
+                "reason",
+            },
+            "distinct meld relation",
+        )
+        side = _literal(
+            record["side"],
+            {"LEFT", "RIGHT"},
+            "distinct meld relation side",
+        )
+        if record["kind"] != "DISTINCT":
+            raise MeldProviderError(
+                "Codex meld returned a non-DISTINCT one-sided relation."
+            )
+        memory_ids = list(
+            _keys(record["memory_ids"], "distinct Memory ids")
+        )
+        normalized = {
+            "relation_key": record["relation_key"],
+            "left_memory_ids": memory_ids if side == "LEFT" else [],
+            "right_memory_ids": memory_ids if side == "RIGHT" else [],
+            "kind": "DISTINCT",
+            "status": record["status"],
+            "summary": record["summary"],
+            "reason": record["reason"],
+        }
+        relation_records.append(
+            (
+                _key(record["relation_key"], "meld relation key"),
+                normalized,
+            )
         )
     relation_keys = [key for key, _ in relation_records]
     if not relation_records or len(relation_keys) != len(set(relation_keys)):
@@ -853,7 +1076,8 @@ def _parse_assessment(
                 )
         elif not left_ids or not right_ids:
             raise MeldProviderError(
-                "Codex meld returned a cross-source relation without both PEER sides."
+                "Codex meld returned an invalid paired relation "
+                f"'{key}' ({kind}; left={len(left_ids)}, right={len(right_ids)})."
             )
         covered_memory_ids.extend(memory_ids)
         relations.append(
@@ -889,8 +1113,6 @@ def _parse_assessment(
         )
 
     raw_issues = _array(data["issues"], "meld issues")
-    if len(raw_issues) > MELD_ITEM_LIMIT:
-        raise MeldProviderError("Codex meld returned too many issues.")
     issue_records: list[tuple[str, dict[str, object]]] = []
     for item in raw_issues:
         record = _exact_dict(
@@ -992,8 +1214,7 @@ def _parse_assessment(
         )
 
     raw_results = _array(data["results"], "meld results")
-    if len(raw_results) > MELD_ITEM_LIMIT:
-        raise MeldProviderError("Codex meld returned too many results.")
+    multi_target = len(view.target_context_by_id) > 1
     result_records: list[tuple[str, dict[str, object]]] = []
     for item in raw_results:
         result_keys = {
@@ -1007,6 +1228,8 @@ def _parse_assessment(
         }
         if session.mode == "DIRECTIONAL":
             result_keys.update({"operation", "target_memory_ids"})
+            if multi_target:
+                result_keys.add("target_context_id")
         record = _exact_dict(
             item,
             result_keys,
@@ -1067,6 +1290,7 @@ def _parse_assessment(
         )
         operation = "ADD"
         proposal_source_ids = source_ids
+        owner_identity: tuple[str, str] | None = None
         memory_uid = str(
             uuid.uuid5(
                 uuid.UUID(session.uid),
@@ -1074,6 +1298,18 @@ def _parse_assessment(
             )
         )
         if session.mode == "DIRECTIONAL":
+            if multi_target:
+                target_context_id = _key(
+                    record["target_context_id"],
+                    "meld result target Context id",
+                )
+                owner_identity = view.target_context_by_id.get(target_context_id)
+                if owner_identity is None:
+                    raise MeldProviderError(
+                        "Codex meld returned a result outside the BASELINE subtree."
+                    )
+            else:
+                owner_identity = next(iter(view.target_context_by_id.values()))
             operation = _literal(
                 record["operation"],
                 {"ADD", "EDIT"},
@@ -1104,6 +1340,11 @@ def _parse_assessment(
                     raise MeldProviderError(
                         "Codex meld returned an EDIT outside the BASELINE."
                     )
+                target_owner = view.memory_owner_by_id.get(target_id)
+                if target_owner is not None and target_owner != owner_identity:
+                    raise MeldProviderError(
+                        "Codex meld returned an EDIT under the wrong target Context."
+                    )
                 memory_uid = target_member.memory_uid
                 # `target_memory_ids` is already an explicit, validated
                 # BASELINE citation. Store it once in the proposal evidence
@@ -1112,30 +1353,32 @@ def _parse_assessment(
                 proposal_source_ids = (
                     source_ids if target_id in source_ids else (*source_ids, target_id)
                 )
-        proposals.append(
-            MeldProposal.from_dict(
-                {
-                    "uid": proposal_uid,
-                    "operation": operation,
-                    "disposition": disposition,
-                    "memory_uid": memory_uid,
-                    "content": _string(
-                        record["content"],
-                        "meld result content",
-                    ),
-                    "reason": _string(
-                        record["reason"],
-                        "meld result reason",
-                    ),
-                    "relation_uids": list(relation_uids),
-                    "source_members": [
-                        view.memory_by_id[source_id].to_dict()
-                        for source_id in proposal_source_ids
-                    ],
-                    "grounded_by_turn_uids": list(turn_uids),
-                }
-            )
-        )
+        proposal_value: dict[str, object] = {
+            "uid": proposal_uid,
+            "operation": operation,
+            "disposition": disposition,
+            "memory_uid": memory_uid,
+            "content": _string(
+                record["content"],
+                "meld result content",
+            ),
+            "reason": _string(
+                record["reason"],
+                "meld result reason",
+            ),
+            "relation_uids": list(relation_uids),
+            "source_members": [
+                view.memory_by_id[source_id].to_dict()
+                for source_id in proposal_source_ids
+            ],
+            "grounded_by_turn_uids": list(turn_uids),
+        }
+        if owner_identity is not None:
+            proposal_value["owner_context"] = {
+                "uid": owner_identity[0],
+                "name": owner_identity[1],
+            }
+        proposals.append(MeldProposal.from_dict(proposal_value))
 
     try:
         return MeldAssessment.from_dict(
@@ -1173,6 +1416,7 @@ def assess_meld_turn(
             output_schema=meld_output_schema(
                 source_count,
                 mode=session.mode,
+                target_context_count=len(view.target_context_by_id) or 1,
             ),
             expected_output_items=source_count,
             relation_edges=left_count * right_count,
@@ -1186,11 +1430,19 @@ def assess_meld_turn(
             "is not yet enabled for this complete ledger."
         )
     response = provider.complete(
-        _prompt(view.payload),
+        _prompt(
+            view.payload,
+            directional_preservation=(
+                session.mode == "DIRECTIONAL"
+                and session.schema_version
+                >= MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION
+            ),
+        ),
         operation="meld_contexts",
         output_schema=meld_output_schema(
             source_count,
             mode=session.mode,
+            target_context_count=len(view.target_context_by_id) or 1,
         ),
     )
     return _parse_assessment(response, session=session, view=view)

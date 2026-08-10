@@ -259,9 +259,10 @@ The persisted frame also recomputes its canonical Context record digest from
 the exact ordered Memory snapshot. A stored analysis cannot retain a valid
 live-Context digest while displaying altered “exact source” text.
 
-The first slice supports at most 200 direct Memories and 400,000 encoded input
-characters. It rejects an over-limit frame rather than truncating or hiding
-retrieval calls.
+Compare has no independent direct-Memory count gate. It accepts the complete
+frozen pair while its encoded input fits the shared 1,000,000-character
+effective provider capacity, and rejects an over-capacity frame rather than
+truncating or hiding retrieval calls.
 
 After provider latency, both Contexts are reloaded while their cooperative
 write locks are held. Their complete records must still match the analysis.

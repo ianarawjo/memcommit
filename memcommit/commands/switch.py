@@ -22,23 +22,39 @@ from memcommit.commands.granted_context import (
 from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.study_operation_policy import analysis_boundary_label
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceState,
+    context_access_facts,
+)
+from memcommit.source_projection.presentation import (
+    SourceDisplayToken,
+    SourceDisplayValue,
+    SourceTokenRole,
+    combine_source_display_tokens,
+    source_display_tokens,
+)
 
 
 @dataclass(frozen=True)
 class _GrantedPickerState:
     names: tuple[str, ...]
-    annotations: dict[str, str]
+    annotations: dict[str, SourceDisplayValue]
     selectable_names: frozenset[str]
 
 
-def _grant_annotation(permissions: tuple[str, ...]) -> str:
-    """Render every permission, translating opaque storage tokens for people."""
+def _grant_annotation(
+    permissions: tuple[str, ...],
+) -> tuple[SourceDisplayToken, ...]:
+    """Render Grant authority through the application-wide source grammar."""
 
-    labels = (
-        "SAVE QUERY SESSION" if permission == "SESSION_LOG" else permission
-        for permission in permissions
+    facts = context_access_facts(
+        granted=True,
+        permission="READ" if "READ" in permissions else "QUERY",
+        permissions=permissions,
     )
-    return "[grant " + " + ".join(labels) + "]"
+    return source_display_tokens(facts, include_permissions=True)
 
 
 def _granted_picker_state(
@@ -65,14 +81,19 @@ def _granted_picker_state(
         attachment = store.load_direct(grant.attachment_context_name)
         if attachment.uid != grant.attachment_context_uid:
             continue
-        annotation = _grant_annotation(grant.permissions)[:-1] + " · " + (
-            analysis_boundary_label(
-                grant.public_name,
-                granted=True,
-                readable="READ" in grant.permissions,
-                registry=registry,
-            )
-        ) + "]"
+        annotation = combine_source_display_tokens(
+            _grant_annotation(grant.permissions),
+            SourceDisplayToken(
+                "ANALYSIS "
+                + analysis_boundary_label(
+                    grant.public_name,
+                    granted=True,
+                    readable="READ" in grant.permissions,
+                    registry=registry,
+                ),
+                SourceTokenRole.NOTE,
+            ),
+        )
         if "READ" not in grant.permissions:
             # A query-only grant exposes its reviewed public route, never its
             # frozen authority descendants, in ordinary navigation.
@@ -95,7 +116,7 @@ def _granted_picker_state(
 
 def _granted_picker_views(
     store: MemoryStore | None = None,
-) -> tuple[tuple[str, ...], dict[str, str]]:
+) -> tuple[tuple[str, ...], dict[str, SourceDisplayValue]]:
     """Return granted rows and their permission labels."""
 
     state = _granted_picker_state(store)
@@ -106,28 +127,10 @@ def _local_picker_annotations(
     names: tuple[str, ...] | list[str],
     store: MemoryStore | None = None,
 ) -> dict[str, str]:
-    """Expose Study-only analysis boundaries without annotating normal stores."""
+    """Return no redundant annotation for locally owned history."""
 
-    registry = load_profile_registry()
-    if (
-        store is not None
-        and store.store_dir.resolve()
-        != profile_store_dir(registry.active).resolve()
-    ):
-        return {}
-    source = registry.active.source
-    if not isinstance(source, dict) or source.get("kind") != "STUDY_RUN":
-        return {}
-    return {
-        name: "["
-        + analysis_boundary_label(
-            name,
-            granted=False,
-            registry=registry,
-        )
-        + "]"
-        for name in names
-    }
+    del names, store
+    return {}
 
 
 def _picker_memory_rows(context) -> tuple[ContextMemoryRow, ...]:
@@ -136,14 +139,33 @@ def _picker_memory_rows(context) -> tuple[ContextMemoryRow, ...]:
     rows: list[ContextMemoryRow] = []
     for item in context.iter_items():
         if isinstance(item, Memory):
-            rows.append(ContextMemoryRow(f"memory {item.uid[:8]}", item.content))
+            rows.append(
+                ContextMemoryRow(
+                    item.uid[:8],
+                    item.content,
+                    source=SourceDisplayFacts(form=SourceForm.MEMORY),
+                )
+            )
         elif isinstance(item, MemoryRef):
             content = (
                 item.target.content
                 if item.target is not None
                 else f"(dangling reference) {item.target_context_name}"
             )
-            rows.append(ContextMemoryRow(f"ref {item.uid[:8]}", content))
+            rows.append(
+                ContextMemoryRow(
+                    item.uid[:8],
+                    content,
+                    source=SourceDisplayFacts(
+                        form=SourceForm.MEMORY_REF,
+                        states=(
+                            (SourceState.READ_ONLY,)
+                            if item.target is not None
+                            else (SourceState.DANGLING,)
+                        ),
+                    ),
+                )
+            )
     return tuple(rows)
 
 

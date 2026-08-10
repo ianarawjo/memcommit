@@ -5,6 +5,7 @@ from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
+from memcommit.source_projection.presentation import source_display_text
 
 
 def cmd() -> None:
@@ -38,13 +39,6 @@ def cmd() -> None:
     for name in virtual_names:
         if name in local_names:
             continue
-        if name == current:
-            typer.secho(
-                "* " + display_escape_text(name) + "  " + annotations[name],
-                fg=typer.colors.GREEN,
-                bold=True,
-            )
-            continue
         candidates = tuple(
             grant
             for grant in active_grants
@@ -57,15 +51,18 @@ def cmd() -> None:
             candidates,
             key=lambda grant: len(grant.public_name.split("/")),
         )
-        mode = ",".join(
-            permission.lower() for permission in effective.permissions
-        )
-        typer.echo(
-            "  "
-            + display_escape_text(name)
-            + "  [view "
-            + mode
-            + " from "
+        annotation = (
+            source_display_text(annotations[name])
+            + " · FROM "
             + display_escape_text(profiles[effective.authority_profile_uid])
-            + "]"
         )
+        line = (
+            ("* " if name == current else "  ")
+            + display_escape_text(name)
+            + "  "
+            + annotation
+        )
+        if name == current:
+            typer.secho(line, fg=typer.colors.GREEN, bold=True)
+        else:
+            typer.echo(line)

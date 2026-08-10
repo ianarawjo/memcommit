@@ -239,6 +239,28 @@ def test_report_places_context_locations_above_understanding_and_apply_last():
     assert "REVIEW AND APPLY" in rendered
 
 
+def test_report_action_focus_includes_its_explanatory_paragraph():
+    view = _view(
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+    )
+
+    fragments = resolution_report_fragments(
+        view,
+        focused_section=2,
+        review_and_apply=True,
+    )
+
+    assert any(
+        style == "class:viewer-section" and "REVIEW AND APPLY" in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:viewer-body.focused" and "Enter to review" in text
+        for style, text in fragments
+    )
+
+
 def test_report_focuses_operation_declared_overview_units_not_the_group():
     view = replace(
         _view(),
@@ -497,6 +519,64 @@ def test_split_report_contains_conflicts_and_whole_set_strategies():
     assert "ISSUE 2 · Issue b" in rendered
     assert "RESOLVE ALL · WHOLE-SET STRATEGY" in rendered
     assert "Choose broadest" in rendered
+
+
+def test_report_focuses_a_finding_title_summary_and_question_as_one_block():
+    item = _item(
+        "a",
+        options=(ResolutionOption("reading", "Reading", "Use this reading."),),
+    )
+    view = _view(item)
+
+    fragments = resolution_report_fragments(view, focused_section=1)
+
+    assert any(
+        style == "class:report-label.focused" and "ISSUE 1 · Issue a" in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:viewer-body.focused" and "Summary for a." in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:viewer-body.focused" and "QUESTION · Which answer" in text
+        for style, text in fragments
+    )
+    assert (
+        RESOLUTION_WORKBENCH_STYLE.get_attrs_for_style_str(
+            "class:viewer-body.focused"
+        ).bold
+        is False
+    )
+
+
+def test_report_navigation_moves_once_per_complete_finding():
+    first = _item(
+        "a",
+        options=(ResolutionOption("reading", "Reading", "Use this reading."),),
+    )
+    second = _item(
+        "b",
+        options=(ResolutionOption("reading", "Reading", "Use this reading."),),
+    )
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Overview → complete finding A → complete finding B. A long finding's
+        # title, explanation, and question never become separate arrow stops.
+        pipe_input.send_text("\x1b[B" * 2 + "q")
+        action = run_resolution_workbench_shell(
+            _view(first, second),
+            split_viewer_items=True,
+            workbench_navigation=navigation,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+    )
+
+    assert action.kind == "CLOSE"
+    assert navigation.section_uid == "ITEM:b"
+    assert navigation.row_index == 2
 
 
 def test_operation_can_hide_an_inapplicable_generic_results_section():
@@ -1245,9 +1325,10 @@ def test_up_on_the_report_row_replaces_a_stale_item_viewer():
     workbench_navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
-        # Open item a, return focus to Items, then Up selects REPORT. A second
-        # Up at the boundary must still align Viewer with REPORT.
-        pipe_input.send_text("\t\x1b[B\r\t\x1b[A\x1b[Aq")
+        # Open item a, return focus to Items, then Up selects REPORT and aligns
+        # Viewer immediately. Another Up now belongs to shared frame-boundary
+        # traversal and would intentionally return focus to Viewer.
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[Aq")
         action = run_resolution_workbench_shell(
             _view(_item("a")),
             navigation=item_navigation,
@@ -1400,10 +1481,10 @@ def test_apply_section_uses_stable_identity_after_review_items_and_impact():
     workbench_navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
-        # Viewer order is title, understanding, review-items, item, results,
-        # impact, one impact Memory, then apply. The controller must retain
-        # APPLY by identity rather than by the numeric offset.
-        pipe_input.send_text("\x1b[B" * 7 + "q")
+        # End resolves the last semantic stop by stable identity regardless of
+        # how many review, result, or impact sections precede APPLY. Repeated
+        # Down now has a separate meaning at the boundary: enter Items.
+        pipe_input.send_text("\x1b[Fq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1603,7 +1684,9 @@ def test_expanded_update_impact_comment_revises_the_same_change_draft():
     with create_pipe_input() as pipe_input:
         # Move through Viewer to the Impact change, expand it, and comment
         # without detouring through the separate Items detail.
-        pipe_input.send_text("\x1b[B" * 3 + "\x1b[CcKeep the date less specific.\rq")
+        pipe_input.send_text(
+            "\x1b[B" * 3 + "\x1b[CcKeep the date less specific.\rq"
+        )
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1773,6 +1856,11 @@ def test_review_and_apply_requires_final_confirmation_and_can_go_back():
         style == "class:detail-card.focused" and "APPLY AS IS" in text
         for style, text in fragments
     )
+    assert any(
+        style == "class:detail-card.focused"
+        and "Enter to apply the exact current proposal as is" in text
+        for style, text in fragments
+    )
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b[Z\r\x1b[F\r")
@@ -1786,6 +1874,175 @@ def test_review_and_apply_requires_final_confirmation_and_can_go_back():
         )
 
     assert action.kind == "ACCEPT"
+
+
+def test_final_review_cards_focus_their_complete_semantic_content():
+    view = replace(
+        _view(),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+    action = SessionTodoView(
+        "INCORPORATE RESPONSES",
+        "Incorporate saved responses",
+        "Request one revised complete proposal.",
+    )
+    strategy = ResolutionGlobalStrategy("Preserve unresolved", "SUBMIT_ALL")
+
+    summary = resolution_review_fragments(view, {}, (strategy,), 0, action, 0)
+    policy = resolution_review_fragments(view, {}, (strategy,), 0, action, 1)
+    final_action = resolution_review_fragments(view, {}, (strategy,), 0, action, 2)
+
+    assert any(
+        style == "class:detail-card.focused"
+        and "No staged issue responses yet." in text
+        for style, text in summary
+    )
+    assert any(
+        style == "class:detail-card.focused" and "Preserve unresolved" in text
+        for style, text in policy
+    )
+    assert any(
+        style == "class:detail-card.focused"
+        and "Request one revised complete proposal." in text
+        for style, text in final_action
+    )
+
+
+def test_ready_final_review_omits_a_meaningless_zero_response_count():
+    view = replace(
+        _view(),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="CHANGES",
+    )
+
+    fragments = resolution_review_fragments(
+        view,
+        {},
+        (),
+        0,
+        SessionTodoView("APPLY", "Apply proposal", "Apply the reviewed result."),
+    )
+    rendered = "".join(text for _style, text in fragments)
+
+    assert "No open issue responses remain in the current proposal." in rendered
+    assert "RESPONSES · 0/0 ANSWERED" not in rendered
+    assert "OPEN REVIEWS · NONE" in rendered
+
+
+@pytest.mark.parametrize(
+    ("entry_keys", "expected_pane", "expected_section"),
+    [
+        ("\x1b[Z", "todo", None),
+        ("\x1b[F", "viewer", "REPORT:ACTION"),
+    ],
+)
+def test_final_review_summary_enter_restores_the_exact_entry_surface(
+    entry_keys,
+    expected_pane,
+    expected_section,
+):
+    view = replace(
+        _view(),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Enter opens final review from the chosen surface; the summary's own
+        # Enter returns without applying, and Q then closes the restored view.
+        pipe_input.send_text(entry_keys + "\r\rq")
+        result = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            workbench_navigation=navigation,
+        )
+
+    assert result.kind == "CLOSE"
+    assert navigation.pane == expected_pane
+    if expected_section is not None:
+        assert navigation.section_uid == expected_section
+
+
+@pytest.mark.parametrize("entry_keys", ("\x1b[Z", "\x1b[F"))
+def test_todo_and_report_resolve_all_open_the_shared_final_review(entry_keys):
+    strategy = ResolutionGlobalStrategy(
+        "Preserve every unresolved distinction",
+        "SUBMIT_ALL",
+        "Preserve every unresolved distinction.",
+    )
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Shift-Tab enters To Do; End targets Report's RESOLVE ALL. Either Enter
+        # must open the same non-mutating review instead of merely refocusing
+        # Report or redrawing the current surface.
+        pipe_input.send_text(entry_keys + "\rq")
+        action = run_resolution_workbench_shell(
+            _view(capabilities=frozenset({"SUBMIT_ALL"})),
+            split_viewer_items=True,
+            global_strategies=(strategy,),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            workbench_navigation=navigation,
+        )
+
+    assert action.kind == "CLOSE"
+    assert navigation.pane == "viewer"
+    assert navigation.section_uid == "REVIEW:SUMMARY"
+
+
+def test_resolve_all_review_uses_its_own_shared_surface_title():
+    strategy = ResolutionGlobalStrategy(
+        "Preserve every unresolved distinction",
+        "SUBMIT_ALL",
+        "Preserve every unresolved distinction.",
+    )
+    fragments = resolution_review_fragments(
+        _view(),
+        {},
+        (strategy,),
+        0,
+        SessionTodoView("RESOLVE ALL", strategy.label, strategy.comment),
+        review_title="RESOLVE ALL",
+    )
+
+    rendered = "".join(text for _style, text in fragments)
+    assert "╭─ RESOLVE ALL" in rendered
+    assert "Esc/Backspace returns without resolving." in rendered
+
+
+def test_resolve_all_final_review_runs_only_its_confirmed_strategy():
+    strategy = ResolutionGlobalStrategy(
+        "Preserve every unresolved distinction",
+        "SUBMIT_ALL",
+        "Preserve every unresolved distinction.",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # To Do Enter opens review, End reaches its final action, and only the
+        # second Enter returns the operation-authored whole-set action.
+        pipe_input.send_text("\x1b[Z\r\x1b[F\r")
+        action = run_resolution_workbench_shell(
+            _view(capabilities=frozenset({"SUBMIT_ALL"})),
+            split_viewer_items=True,
+            global_strategies=(strategy,),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ALL"
+    assert action.comment == "Preserve every unresolved distinction."
 
 
 def test_final_review_hides_viewer_title_and_focuses_top_summary(monkeypatch):
@@ -1877,6 +2134,51 @@ def test_final_review_tab_order_visits_viewer_items_todo_without_closing_review(
 
     assert action.kind == "CLOSE"
     assert navigation.pane == expected_pane
+    if expected_pane == "items":
+        assert navigation.row_index == 0
+    assert any(frame.title == "" for frame in frames)
+
+
+def test_final_review_down_crosses_from_action_to_items_without_closing_review(
+    monkeypatch,
+):
+    view = replace(
+        _view(_item("optional")),
+        items=(replace(_item("optional"), obligation="OPTIONAL"),),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+    frames = []
+    original_frame = resolution_shell_module.Frame
+
+    def recording_frame(*args, **kwargs):
+        frame = original_frame(*args, **kwargs)
+        frames.append(frame)
+        return frame
+
+    monkeypatch.setattr(resolution_shell_module, "Frame", recording_frame)
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # A opens final review at its summary. End reaches APPLY AS IS, and the
+        # next Down crosses the Viewer boundary into Items without activating
+        # or discarding the reviewed confirmation surface.
+        pipe_input.send_text("a\x1b[F\x1b[Bq")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            workbench_navigation=navigation,
+        )
+
+    assert action.kind == "CLOSE"
+    assert navigation.pane == "items"
+    assert navigation.row_index == 0
+    assert navigation.section_uid == "REVIEW:ACTION"
     assert any(frame.title == "" for frame in frames)
 
 

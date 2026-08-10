@@ -29,6 +29,22 @@ Memories, and `ACTION` contains the one `SEND CONTEXT` action. It has no
 provider turn, semantic options, or durable Share session. If no source or
 endpoint exists, the same surface opens read-only with `SEND UNAVAILABLE`.
 
+These three regions declare the shared Surface topology
+`CONTEXT → MEMORIES → ACTION`. Tab and Shift-Tab wrap without resetting the
+Viewer section or Memory cursor. Up and Down first move within the current
+region, then cross a real top or bottom boundary without wrapping; vertical
+entry selects the nearest Context section or Memory row. Enter has a Share
+effect only in `ACTION`. Escape and Backspace use the same read-only close path,
+while Q and Ctrl-C remain immediate close aliases. The unavailable projection
+uses the same topology but deliberately gives its `ACTION` Surface no activation
+capability, so no navigation or Enter sequence can manufacture a send action.
+
+The shared Surface controller owns only focus and key routing. Share continues
+to own Source and endpoint eligibility, the frozen preview, the exact send
+meaning, authority revalidation, and delivery. This separation keeps keyboard
+behavior consistent with other workbenches without turning a presentation
+component into a disclosure boundary.
+
 The viewer freezes the canonical Source name and UID, Source digest, ordered
 Memory contents, consent digest, endpoint Grant UID and revision, receiver
 identity, and deterministic placement. Send revalidates the complete frozen
@@ -72,6 +88,11 @@ Context; a collision with different data fails closed.
   would create general cross-Profile write authority.
 - Moving or referencing the Source was rejected because later sender edits or
   deletion must not rewrite the receiver-owned copy.
+- Keeping Share-authored Tab and arrow handlers was rejected after the common
+  Surface contract existed. That duplicate path clamped Up/Down inside each
+  frame and maintained a second Memory cursor beside the shared workbench
+  navigation state. Adapting the three existing regions to `FocusSurface`
+  preserves Share semantics while removing the divergent mechanics.
 
 This remains a local research-profile transfer, not an authenticated network
 transfer. There is no sender-side receipt artifact, receiver acknowledgement,

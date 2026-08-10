@@ -17,7 +17,6 @@ from memcommit.query_sessions import QuerySessionStore
 from memcommit.rationale_cache import list_rationale_inferences
 from memcommit.search import SearchArtifact
 from memcommit.store import MemoryStore
-from memcommit.study_operation_policy import operation_policy
 
 
 SearchArtifactRecord = tuple[str, str, SearchArtifact]
@@ -301,18 +300,9 @@ def collect_search_artifacts(
 ) -> tuple[SearchArtifactRecord, ...]:
     """Collect bounded artifacts owned by the active Profile and frame."""
     unique_contexts = tuple({context.uid: context for context in contexts}.values())
-    trace_contexts = tuple(
-        context
-        for context in unique_contexts
-        if operation_policy(
-            context.name,
-            granted=False,
-            store_root=store.store_dir,
-        ).trace_allowed
-    )
     return tuple(
         [
-            *_checkpoint_artifacts(store, trace_contexts),
+            *_checkpoint_artifacts(store, unique_contexts),
             *_query_session_artifacts(store, unique_contexts),
             *_comparison_artifacts(store, unique_contexts),
             *_meld_artifacts(store, unique_contexts),

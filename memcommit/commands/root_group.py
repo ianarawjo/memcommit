@@ -35,6 +35,8 @@ class MemCommandGroup(TyperGroup):
 
         reset_semantic_provider_cache()
         active_attempt = None
+        active_study_actions = None
+        command_store_dir = None
         if os.environ.get("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG") != "1":
             from memcommit.command_attempts import begin_command_attempt
             from memcommit.store import MemoryStore
@@ -52,15 +54,51 @@ class MemCommandGroup(TyperGroup):
                 and entered[0] in self.commands
                 else "mem"
             )
+            command_store_dir = MemoryStore(create=False).store_dir
             active_attempt = begin_command_attempt(
-                store_dir=MemoryStore(create=False).store_dir,
+                store_dir=command_store_dir,
                 operation=operation,
                 stdin_tty=sys.stdin.isatty(),
                 stdout_tty=sys.stdout.isatty(),
             )
         try:
+            if active_attempt is not None:
+                from memcommit.profile_config import (
+                    load_profile_registry,
+                    profile_store_dir,
+                )
+                from memcommit.study_action_log import (
+                    begin_study_action_recording,
+                )
+
+                registry = load_profile_registry()
+                process_profile = next(
+                    (
+                        profile
+                        for profile in registry.profiles
+                        if profile_store_dir(profile) == command_store_dir
+                    ),
+                    None,
+                )
+                if process_profile is not None:
+                    active_study_actions = begin_study_action_recording(
+                        profile=process_profile,
+                        store_dir=command_store_dir,
+                        attempt_uid=active_attempt.record.uid,
+                        operation=active_attempt.record.operation,
+                        stdin_tty=active_attempt.record.stdin_tty,
+                        stdout_tty=active_attempt.record.stdout_tty,
+                    )
             try:
-                result = super().invoke(ctx)
+                if active_study_actions is None:
+                    result = super().invoke(ctx)
+                else:
+                    from memcommit.study_action_log import (
+                        study_recording_app_session,
+                    )
+
+                    with study_recording_app_session():
+                        result = super().invoke(ctx)
             except (WriteProtectionError, WriteProtectionRegistryError) as error:
                 raise click.ClickException(str(error)) from error
         except BaseException as error:
@@ -76,16 +114,61 @@ class MemCommandGroup(TyperGroup):
                         raw_exit_code = error.code
                     exit_code = raw_exit_code if isinstance(raw_exit_code, int) else None
                     status = "COMPLETED" if exit_code == 0 else "FAILED"
-                finish_command_attempt(
-                    active_attempt,
-                    status=status,
-                    failure_kind=type(error).__name__,
-                    exit_code=exit_code,
-                )
+                try:
+                    if active_study_actions is not None:
+                        from memcommit.study_action_log import (
+                            finish_study_action_recording,
+                        )
+
+                        finish_study_action_recording(
+                            active_study_actions,
+                            status=status,
+                            failure_kind=type(error).__name__,
+                            exit_code=exit_code,
+                        )
+                except BaseException as logging_error:
+                    error.add_note(
+                        "The Study action ledger also failed to finalize: "
+                        f"{logging_error}"
+                    )
+                finally:
+                    try:
+                        finish_command_attempt(
+                            active_attempt,
+                            status=status,
+                            failure_kind=type(error).__name__,
+                            exit_code=exit_code,
+                        )
+                    except BaseException as logging_error:
+                        error.add_note(
+                            "The command-attempt ledger also failed to finalize: "
+                            f"{logging_error}"
+                        )
             raise
         else:
             if active_attempt is not None:
                 from memcommit.command_attempts import finish_command_attempt
 
-                finish_command_attempt(active_attempt, status="COMPLETED")
+                study_error: BaseException | None = None
+                try:
+                    if active_study_actions is not None:
+                        from memcommit.study_action_log import (
+                            finish_study_action_recording,
+                        )
+
+                        finish_study_action_recording(
+                            active_study_actions,
+                            status="COMPLETED",
+                        )
+                except BaseException as error:
+                    study_error = error
+                if study_error is None:
+                    finish_command_attempt(active_attempt, status="COMPLETED")
+                else:
+                    finish_command_attempt(
+                        active_attempt,
+                        status="FAILED",
+                        failure_kind=type(study_error).__name__,
+                    )
+                    raise study_error
             return result

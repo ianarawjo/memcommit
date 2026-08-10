@@ -10,14 +10,24 @@ from memcommit.command_attempts import (
     CommandAttemptError,
     CommandAttemptLedger,
     current_command_attempt_uid,
+    annotate_memory_report_attempt,
 )
 from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.diff_browser import browse_checkpoint_locations
 from memcommit.commands.history_picker import choose_history
 from memcommit.commands.history_present import (
     checkpoint_picker_entries,
     history_result_recovery_label,
     history_result_picker_entries,
+)
+from memcommit.commands.memory_history import (
+    build_memory_history,
+    load_retained_history_context,
+)
+from memcommit.commands.trace_projection import (
+    format_compact_trace_report,
+    open_trace_history,
 )
 from memcommit.commands.tui_primitives import display_escape_text, safe_terminal_text
 from memcommit.history import HistoryError, build_history
@@ -30,7 +40,16 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
+from memcommit.provenance import ProvenanceError
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profile_config import load_profile_registry
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
+from memcommit.study_action_log import (
+    StudyActionError,
+    StudyActionEvent,
+    StudyActionLedger,
+)
 
 
 def render_checkpoint_rows(entries: Sequence[dict[str, Any]], limit: int | None = None) -> None:
@@ -128,6 +147,53 @@ def _render_operation_attempts(attempts: Sequence[CommandAttempt]) -> None:
             typer.echo(f"      COMMAND · {kind}{suffix}")
 
 
+def _missing_study_action_sequences(events: Sequence[StudyActionEvent]) -> int:
+    sequences_by_attempt: dict[str, list[int]] = {}
+    for event in events:
+        sequences_by_attempt.setdefault(event.attempt_uid, []).append(event.sequence)
+    return sum(
+        max(sequences) - min(sequences) + 1 - len(set(sequences))
+        for sequences in sequences_by_attempt.values()
+    )
+
+
+def _render_study_actions(
+    events: Sequence[StudyActionEvent],
+    *,
+    unavailable_sequences: int | None = None,
+) -> None:
+    typer.secho("Study actions · recent first · content-free", bold=True)
+    if not events:
+        typer.echo("  (no earlier Study actions)")
+        return
+    missing = (
+        _missing_study_action_sequences(events)
+        if unavailable_sequences is None
+        else unavailable_sequences
+    )
+    if missing:
+        typer.echo(
+            f"  WARNING · {missing} earlier event sequence position(s) unavailable."
+        )
+    for event in events:
+        timestamp = event.occurred_at[:19].replace("T", " ")
+        elapsed = (
+            ""
+            if event.elapsed_seconds is None
+            else f" +{event.elapsed_seconds:.3f}s"
+        )
+        typer.echo(
+            f"  [{event.attempt_uid[:8]}/{event.sequence}] "
+            f"{display_escape_text(timestamp)}{elapsed}  {event.action}"
+        )
+        details = " · ".join(
+            f"{display_escape_text(key)}={display_escape_text(str(value))}"
+            for key, value in sorted(event.data.items())
+        )
+        if details:
+            typer.echo("      " + details)
+
+
 def cmd(
     query: Annotated[
         Optional[str],
@@ -162,11 +228,88 @@ def cmd(
             help="Show Profile-scoped mem command attempts instead of Context checkpoints",
         ),
     ] = False,
+    actions: Annotated[
+        bool,
+        typer.Option(
+            "--actions",
+            help=(
+                "Show detailed content-free actions for the active init-study "
+                "Profile"
+            ),
+        ),
+    ] = False,
+    memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--memory",
+            help=(
+                "Inspect one current or historical Memory lineage; "
+                "mem trace is the shorthand route"
+            ),
+        ),
+    ] = None,
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Context whose retained history to inspect (defaults to current)",
+        ),
+    ] = None,
 ) -> None:
-    if operations:
-        if query is not None or manual:
+    if operations and actions:
+        typer.secho(
+            "--operations and --actions are separate log views.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if actions:
+        if query is not None or manual or memory is not None or context_name is not None:
             typer.secho(
-                "--operations cannot be combined with a history query or --manual.",
+                "--actions cannot be combined with a history query, "
+                "--manual, --memory, or --context.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not 1 <= limit <= 1000:
+            typer.secho(
+                "--limit must be between 1 and 1000 for Study actions.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        store = MemoryStore(create=False)
+        try:
+            current_uid = current_command_attempt_uid()
+            profile = load_profile_registry().active
+            all_events = tuple(
+                event
+                for event in StudyActionLedger(
+                    profile,
+                    store_dir=store.store_dir,
+                ).list()
+                if event.attempt_uid != current_uid
+            )
+        except (OSError, ProfileConfigError, StudyActionError) as error:
+            typer.secho(
+                f"Study action log error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        _render_study_actions(
+            all_events[:limit],
+            unavailable_sequences=_missing_study_action_sequences(all_events),
+        )
+        return
+
+    if operations:
+        if query is not None or manual or memory is not None or context_name is not None:
+            typer.secho(
+                "--operations cannot be combined with a history query, "
+                "--manual, --memory, or --context.",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -197,16 +340,77 @@ def cmd(
         return
 
     store = MemoryStore()
-    name = store.current_context_name()
+    try:
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        name = context_snapshot.resolve_or_current(context_name)
+    except ValueError as error:
+        typer.secho(
+            f"History Context error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if memory is not None:
+        if query is not None or manual:
+            typer.secho(
+                "--memory cannot be combined with a history query or --manual.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not name:
+            typer.secho(
+                "No current context. Pass --context or run 'mem init <name>' first.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        try:
+            history_context = load_retained_history_context(
+                store,
+                context_locator=name if context_name is not None else None,
+                current_name=context_snapshot.current_name,
+            )
+            report = build_memory_history(store, history_context, memory)
+            annotate_memory_report_attempt(
+                operation="trace",
+                context_name=history_context.display_name,
+                memory_uid=report.selected_uid,
+            )
+        except (
+            FileNotFoundError,
+            OSError,
+            RuntimeError,
+            ValueError,
+            ProvenanceError,
+            ProfileConfigError,
+            ProfileError,
+            PermissionError,
+        ) as error:
+            typer.secho(
+                f"Log Memory error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if _interactive_terminal() and not plain:
+            open_trace_history(report, context_name=history_context.display_name)
+        else:
+            typer.echo(format_compact_trace_report(report))
+        return
+
     if query is None and _interactive_terminal() and not plain:
         try:
             browse_checkpoint_locations(
                 store,
                 session=None if manual else store.load_staged_update(),
-                context_locator=None,
+                context_locator=name if context_name is not None else None,
                 title="LOG",
                 manual=manual,
-                show_diffs=False,
+                # Log and Diff share one temporal explorer. Log keeps the
+                # checkpoint catalog while Viewer exposes the selected exact
+                # direct-item transition, including Memory UIDs.
+                show_diffs=True,
             )
         except ValueError as error:
             typer.secho(

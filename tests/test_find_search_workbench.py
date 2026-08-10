@@ -545,7 +545,7 @@ def test_result_renderer_keeps_related_results_separate_from_primary_matches():
     assert "PRIMARY MATCHES\n  (none)" in rendered
     assert "RELATED RESULTS" in rendered
     assert "Broader search: healthcare" in rendered
-    assert "[1 related memory memory-o] Clinic appointment" in rendered
+    assert "[1 memory memory-o] · RELATED Clinic appointment" in rendered
 
 
 def test_checked_result_copy_returns_exact_materialization_request():

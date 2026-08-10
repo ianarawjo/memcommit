@@ -50,6 +50,9 @@ class SeverProvider:
 
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "sever_context"
+        summary_schema = output_schema["properties"]["application_summary"]
+        assert "maxItems" not in summary_schema["properties"]["source_memory_ids"]
+        assert "maxItems" not in summary_schema["properties"]["criterion_memory_ids"]
         assert "query-only sources" in prompt
         assert "selectively forgetting information" in prompt
         assert "decide only what the local Result remembers" in prompt

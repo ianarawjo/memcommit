@@ -183,7 +183,7 @@ def test_memory_ref_impact_shows_pointer_but_not_target_content(
         f"Undid command: mem reference {stored_source_uid} "
         "--from source --into notes"
     ) in result.output
-    assert "Affected Memories: 0 · Other: 1 MemoryRef removed" in result.output
+    assert "Affected Memories: 0 · Other: 1 Memory ref removed" in result.output
     assert "SECRET TARGET" not in result.output
 
 

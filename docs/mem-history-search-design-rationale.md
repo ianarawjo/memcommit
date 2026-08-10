@@ -16,6 +16,14 @@ checkpoint selection for `mem revert`, and the state comparison used by
 `mem undo`. Sharing the model prevents each command from inventing a different
 meaning for “before,” “after,” “latest,” or “the previous state.”
 
+Log and Trace additionally share `memcommit.temporal_history` for direct-Memory
+delta extraction. The common layer compares adjacent direct frames by UID and
+returns only `CREATED`, `EDITED`, and `REMOVED`. A removal and addition in the
+same checkpoint remain independent changes: only recorded or deterministically
+reconstructable provenance may connect distinct UIDs as `SPLIT`, `ABSORB`, or
+translation lineage. Log may display those enriched edges, while Trace follows
+them from one selected Memory and filters out unrelated changes.
+
 Ordinary `mem find` remains a search over the current Context graph. It must
 not silently enumerate or transmit history for every query. The history path
 is activated only when the query contains a supported temporal or
@@ -167,16 +175,34 @@ inspection, not as a persisted selection receipt.
 ```text
 mem log
 mem log "the last version before the detour ended"
+mem log --memory MEMORY
+mem log --memory MEMORY --context CONTEXT
 mem log --manual
 mem log --plain
 ```
 
 In a TTY, operand-free `mem log` first opens the shared complete Context tree.
-Selecting a location opens the shared history picker for that Context. Contexts
-with zero eligible checkpoints remain selectable and open an explicit empty
-history view; only Escape or `q` closes it. Up and down move through populated
-entries, Enter toggles the selected entry's details, and Escape or `q` closes
-the view. Closing or inspecting a Context or log entry has no write effect.
+Selecting a location opens the shared history picker for that Context. Its
+Viewer uses the same exact direct-item transition projection as Diff, so a
+checkpoint row can expose affected Memory UIDs and before/after values without
+turning Log into a restore action. Contexts with zero eligible checkpoints
+remain selectable and open an explicit empty history view; only Escape or `q`
+closes it. The declared screen topology is `VIEWER → ITEMS`: Up/Down first
+scrolls wrapped Viewer content or moves the Items cursor, then crosses the real
+Surface boundary without wrapping. Up from the first Item enters the Viewer at
+its lower edge, and Down from the Viewer bottom returns to Items. Enter opens
+the selected entry's detail or returns from Viewer to Items; Escape/Backspace
+follows the same one-level retreat before closing. Closing or inspecting a
+Context or log entry has no write effect.
+
+`--memory` selects the Memory-lineage projection of the same retained Context
+history. It accepts a current or historical direct-Memory UID or unambiguous
+prefix. In a TTY, checkpoint-derived lineage operations use the same
+`ITEMS + VIEWER` workbench as Context Log; outside a TTY or with `--plain`, the
+stable compact lineage is printed. `mem trace MEMORY` is the discoverable
+shorthand for this route. The two commands share retained-history access,
+direct-Memory delta extraction, operation grouping, and TTY projection rather
+than recursively invoking one CLI command from the other.
 
 Outside a TTY, `mem log` retains plain checkpoint rows. This preserves shell
 redirection and automation and avoids requiring terminal key input.
@@ -292,12 +318,12 @@ reference changes show pointer metadata without resolving or reading their
 targets. Relative order is compared only among surviving direct items, so an
 insertion or removal does not falsely report every shifted item as reordered.
 
-`mem trace` remains a separate read-only Memory-lineage view over these
-operations. Its default terminal projection groups shared receipts into
-newest-first one-line command rows and links a restoration to its source
-operation. It is not used to choose or authorize Undo/Redo: restoration still
-requires the complete command-unit pre/post frames described above, whereas a
-Trace intentionally contains only the selected lineage's local effect.
+`mem trace` remains the separate public shorthand for Log's read-only
+Memory-lineage projection. Its projection groups shared receipts into
+newest-first operation rows and links a restoration to its source operation.
+It is not used to choose or authorize Undo/Redo: restoration still requires the
+complete command-unit pre/post frames described above, whereas a Trace
+intentionally contains only the selected lineage's local effect.
 
 Undo and Redo use a single-line terminal receipt containing only the source
 action and affected Context and Memory counts with `+`/`~`/`-` effect totals.

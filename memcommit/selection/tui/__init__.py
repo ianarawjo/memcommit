@@ -6,6 +6,7 @@ from memcommit.selection.tui.rendering import (
     choice_visual_state,
     render_choice_card_rows,
     render_vertical_choice_cards,
+    render_vertical_choice_rows,
     tree_choice_marker,
     tree_choice_styles,
 )
@@ -16,6 +17,7 @@ __all__ = [
     "choice_visual_state",
     "render_choice_card_rows",
     "render_vertical_choice_cards",
+    "render_vertical_choice_rows",
     "tree_choice_marker",
     "tree_choice_styles",
 ]

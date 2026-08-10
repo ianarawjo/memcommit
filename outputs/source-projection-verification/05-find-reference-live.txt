@@ -1,0 +1,10 @@
+FIND MATERIALIZATION RECEIPT
+  MODE          · REFERENCE
+  OUTPUT        · results/reference
+  OUTPUT ITEM   · 26866171 · MemoryRef
+  TARGET        · source#da942470
+  INITIAL VALUE · version two
+
+SOURCE UPDATED TO 'version three'
+  RESOLVED VALUE · version three
+  SOURCE UNCHANGED BY MATERIALIZATION · yes

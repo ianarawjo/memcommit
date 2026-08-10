@@ -1,0 +1,5 @@
+FIND MATERIALIZATION COMPLETE
+REFERENCE · task-3/local/results/accessibility-reference · 2 items
+COPY      · task-3/local/results/accessibility-copy · 2 items
+LIVE CHECK · source changed → REFERENCE updated · COPY unchanged
+CURRENT   · task-3 (unchanged)

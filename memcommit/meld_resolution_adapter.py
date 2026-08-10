@@ -48,7 +48,14 @@ def _proposal_marker(session: MeldSession, proposal: MeldProposal) -> str:
 
 def _proposal_label(session: MeldSession, proposal: MeldProposal) -> str:
     if session.mode == "DIRECTIONAL":
-        return f"{proposal.operation} · {proposal.disposition}"
+        label = f"{proposal.operation} · {proposal.disposition}"
+        baseline = session.frames[1]
+        if (
+            len(baseline.contexts or ()) > 1
+            and proposal.owner_context_name is not None
+        ):
+            return f"{label} · OWNER {proposal.owner_context_name}"
+        return label
     return proposal.disposition
 
 

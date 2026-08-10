@@ -933,8 +933,12 @@ def cmd(
             ):
                 workbench = store.load_atomize_workbench(session)
                 if workbench is None:
+                    # A save-as Output owns an applied analysis copy for
+                    # provenance, not a second mutable shared session. Build
+                    # only the read-only presentation projection here; saving
+                    # it would make the session launcher observe two owners
+                    # for one analysis UID on the next invocation.
                     workbench = create_atomize_workbench(session)
-                    store.save_atomize_workbench(workbench)
                 _present_workbench(
                     store=store,
                     analysis=session,

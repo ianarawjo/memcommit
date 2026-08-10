@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 import re
 import uuid
@@ -18,7 +19,10 @@ PROFILE_REGISTRY_SCHEMA_VERSION = 2
 LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION = 1
 AUTHORING_PROFILE_UID = "00000000-0000-0000-0000-000000000001"
 AUTHORING_PROFILE_NAME = "authoring"
+STUDY_RUN_PARTICIPANT_SOURCE_KIND = "STUDY_RUN"
+STUDY_RUN_AUTHORITY_SOURCE_KIND = "STUDY_RUN_GRANTED_MEMORY"
 _PROFILE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}\Z")
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 GRANT_RESOURCE_CONTEXT_TREE = "CONTEXT_TREE"
 GRANT_PERMISSIONS = frozenset(
     {
@@ -76,6 +80,77 @@ class ProfileEntry:
         if self.source is not None:
             result["source"] = self.source
         return result
+
+
+@dataclass(frozen=True)
+class StudyRunIdentity:
+    """Validated immutable provenance shared by one current Study pair."""
+
+    uid: str
+    name: str
+    created_at: str
+    role: str
+    baseline_profile_uid: str
+    baseline_profile_name: str
+    baseline_sha256: str
+
+
+def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
+    """Return current ``init-study`` identity without relying on its name.
+
+    Profile display names may change independently from provenance.  The
+    source record is therefore the only durable Study discriminator used by
+    logging and presentation.
+    """
+
+    source = profile.source
+    if not isinstance(source, dict) or source.get("kind") not in {
+        STUDY_RUN_PARTICIPANT_SOURCE_KIND,
+        STUDY_RUN_AUTHORITY_SOURCE_KIND,
+    }:
+        return None
+    expected_fields = {
+        "kind",
+        "study_uid",
+        "study_name",
+        "created_at",
+        "baseline_sha256",
+        "baseline_profile_uid",
+        "baseline_profile_name",
+    }
+    if set(source) != expected_fields or profile.kind != "MANAGED":
+        raise ProfileConfigError("Study run Profile provenance is invalid.")
+    study_uid = _canonical_uid(source.get("study_uid"), field="Study uid")
+    study_name = validate_profile_name(source.get("study_name"))
+    created_at = source.get("created_at")
+    try:
+        parsed_created_at = datetime.fromisoformat(created_at)  # type: ignore[arg-type]
+    except (TypeError, ValueError) as error:
+        raise ProfileConfigError("Study creation timestamp is invalid.") from error
+    if parsed_created_at.tzinfo is None or parsed_created_at.utcoffset() is None:
+        raise ProfileConfigError("Study creation timestamp must include a timezone.")
+    baseline_sha256 = source.get("baseline_sha256")
+    if not isinstance(baseline_sha256, str) or _SHA256.fullmatch(baseline_sha256) is None:
+        raise ProfileConfigError("Study baseline digest is invalid.")
+    baseline_profile_uid = _canonical_uid(
+        source.get("baseline_profile_uid"),
+        field="Study baseline Profile uid",
+    )
+    baseline_profile_name = validate_profile_name(source.get("baseline_profile_name"))
+    role = (
+        "PARTICIPANT"
+        if source.get("kind") == STUDY_RUN_PARTICIPANT_SOURCE_KIND
+        else "GRANTED_MEMORY"
+    )
+    return StudyRunIdentity(
+        uid=study_uid,
+        name=study_name,
+        created_at=created_at,  # type: ignore[arg-type]
+        role=role,
+        baseline_profile_uid=baseline_profile_uid,
+        baseline_profile_name=baseline_profile_name,
+        baseline_sha256=baseline_sha256,
+    )
 
 
 def validate_grant_resource_name(value: object) -> str:

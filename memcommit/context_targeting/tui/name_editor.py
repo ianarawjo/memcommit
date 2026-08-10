@@ -43,6 +43,10 @@ from memcommit.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
+from memcommit.context_targeting.tui.name_draft import (
+    ContextNameDraftState,
+    infer_context_parent,
+)
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
@@ -130,17 +134,14 @@ class ContextParentLocatorState:
     def choose_cursor_as_parent(self, exact_value: str) -> str:
         """Reparent the exact final segment beneath the visible tree cursor."""
 
-        value = exact_value.strip()
-        if not value:
-            raise ValueError("Context name must be nonempty text.")
-        leaf = value.rsplit("/", 1)[-1]
-        if not leaf:
-            raise ValueError("Context name must end with an exact name segment.")
         parent = self.tree.selected_name
+        draft = ContextNameDraftState(
+            exact_name=exact_value,
+            parent_name=self.selected_parent,
+        )
+        candidate = draft.choose_parent(parent)
         self.selection.choose(parent)
-        if parent == value:
-            return value
-        return f"{parent}/{leaf}"
+        return candidate
 
 
 # Compatibility for Save Location and early Context-name callers. New code
@@ -151,17 +152,11 @@ ContextNameEditorState = ContextParentLocatorState
 def _initial_parent_context(view: ContextNameView) -> str:
     """Prefer the nearest materialized ancestor without inventing tree rows."""
 
-    ancestors = tuple(
-        name for name in view.context_names if view.value.startswith(name + "/")
+    return infer_context_parent(
+        view.value,
+        view.context_names,
+        fallback=view.current_context,
     )
-    if ancestors:
-        return max(ancestors, key=lambda name: (name.count("/"), len(name)))
-    if view.current_context in view.context_names:
-        assert view.current_context is not None
-        return view.current_context
-    if view.value in view.context_names:
-        return view.value
-    return view.context_names[0]
 
 
 def context_name_tree_fragments(
@@ -256,7 +251,7 @@ class ContextParentLocatorControl:
         state: ContextParentLocatorState,
         *,
         height: int = 5,
-        label: str = "PARENT CONTEXT · ENTER REPARENTS NAME",
+        label: str = "PARENT CONTEXT · ENTER SELECTS LOCATION",
     ) -> "ContextParentLocatorControl":
         if height < 1:
             raise ValueError("Context parent-locator height must be positive.")
@@ -309,6 +304,8 @@ class ContextNameControl:
     field: ExactNameFieldControl
     parent_locator: ContextParentLocatorControl | None
     container: object
+    draft_state: ContextNameDraftState
+    _updating_input: bool = False
 
     @classmethod
     def create(
@@ -336,12 +333,27 @@ class ContextNameControl:
             else [parent_locator.frame, field.frame]
         )
         container = HSplit(parts)
-        return cls(
+        control = cls(
             view=view,
             field=field,
             parent_locator=parent_locator,
             container=container,
+            draft_state=ContextNameDraftState(
+                exact_name=view.value,
+                parent_name=(
+                    editor_state.selected_parent
+                    if editor_state is not None
+                    else None
+                ),
+            ),
         )
+
+        def record_direct_edit(_buffer) -> None:
+            if not control._updating_input:
+                control.draft_state.record_direct_edit(control.field.text)
+
+        control.input.buffer.on_text_changed += record_direct_edit
+        return control
 
     @property
     def editor_state(self) -> ContextParentLocatorState | None:
@@ -368,7 +380,12 @@ class ContextNameControl:
         return self.field.text
 
     def set_text(self, value: str) -> None:
-        self.field.set_text(value)
+        self.draft_state.replace_programmatically(value)
+        self._updating_input = True
+        try:
+            self.field.set_text(value)
+        finally:
+            self._updating_input = False
 
     def validate_candidate(self) -> str:
         return self.field.validate_candidate()
@@ -376,9 +393,15 @@ class ContextNameControl:
     def choose_cursor_as_parent(self) -> str:
         if self.parent_locator is None:
             raise ValueError("No parent Context catalog is available.")
-        candidate = self.parent_locator.choose_parent(self.field.text)
+        parent = self.parent_locator.state.tree.selected_name
+        candidate = self.draft_state.choose_parent(parent)
+        self.parent_locator.state.selection.choose(parent)
         self.set_text(candidate)
         return candidate
+
+    @property
+    def direct_edit_started(self) -> bool:
+        return self.draft_state.edited
 
     @property
     def focusables(self) -> tuple[object, ...]:
@@ -448,6 +471,7 @@ def choose_context_name(
 
         @bindings.add("enter", filter=tree_focus, eager=True)
         def _choose_parent(event) -> None:
+            edited = control.direct_edit_started
             try:
                 candidate = control.choose_cursor_as_parent()
             except (TypeError, ValueError) as error:
@@ -455,7 +479,11 @@ def choose_context_name(
                 event.app.invalidate()
                 return
             event.app.layout.focus(control.input)
-            set_status(f"Parent selected · edit {candidate} or press Enter.")
+            set_status(
+                "Parent selected · edited exact name preserved."
+                if edited
+                else f"Parent selected · edit {candidate} or press Enter."
+            )
             event.app.invalidate()
 
         @bindings.add("escape", filter=tree_focus, eager=True)

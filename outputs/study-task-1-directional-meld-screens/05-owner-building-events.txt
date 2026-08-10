@@ -1,0 +1,9 @@
+PROPOSED BASELINE CHANGES · DISPLAY EXCERPTS
+
+  +  1. [ADD · SYNTHESIZE] During the construction period, the Main Building third-floor rear entrance cannot be used for general passage, and general access through the first-floor main entrance ends at 5:00 p.m. rather than 10:00 p.m. The existing accessible route beside the main entrance cannot be us…
+       OWNER · task-1/campus-wiki/building-access
+       WHY · This adds the supported temporary access overlay while preserving all standing baseline access memories separately under the preservation-first default.
+
+  +  2. [ADD · SYNTHESIZE] During the construction period, viewing in the Main Building tenth-floor exhibition and event hall is suspended, and no new reservations may be accepted for Main Building event venues. Direct users instead to the auditorium in the detached east building or the third-floor mult…
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · This adds the supported temporary event overlay without rewriting standing venue, reservation, or safety memories.

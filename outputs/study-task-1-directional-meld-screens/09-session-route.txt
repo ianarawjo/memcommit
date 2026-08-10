@@ -1,0 +1,28 @@
+MELD SESSIONS · RECENTLY MODIFIED · RECENT FIRST · ALL
+
+Status       APPLIED
+Context      task-1/campus-wiki
+Summary      Directional · INCOMING → BASELINE / TARGET · 1 turn
+Session      c34b1cd9-2d2f-491b-8f99-146dd652342f
+
+Public route hint · NOT EXECUTED
+  [0] mem
+  [1] meld
+  [2] task-1/participant/construction-updates
+  [3] --left-descendants
+  [4] --into
+  [5] task-1/campus-wiki
+  [6] --right-descendants
+
+Study action ledger · command c7446a4f
+  TTY · 120 columns × 40 rows
+  Setup keys · Right · Down · Down×5 · Enter · Tab · Right · Tab
+               Down · Right · Down · Enter · Tab · Right · Tab · Enter
+  PROVIDER_TURN_STARTED · input 131,612 chars · codex_chatgpt
+  PROVIDER_TURN_COMPLETED · 179.612s · output 22,794 chars
+  APPROVAL_PRESENTED → Down → Enter → APPROVAL_ACCEPTED
+  COMMAND_FINISHED · 461.462s · COMPLETED
+
+Post-run display regression:
+  tests/test_meld_sessions.py · 9 passed
+  Both descendant flags survive saved-session reopening.

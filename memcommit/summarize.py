@@ -15,6 +15,7 @@ from memcommit.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     plan_semantic_execution,
@@ -27,7 +28,7 @@ from memcommit.understanding import (
 )
 
 
-SUMMARIZE_INPUT_CHAR_LIMIT = 400_000
+SUMMARIZE_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 SUMMARIZE_RESPONSE_CHAR_LIMIT = 50_000
 SUMMARIZE_TEXT_LIMIT = 4_000
 SUMMARIZE_OPERATION = "summarize_context"

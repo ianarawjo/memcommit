@@ -129,7 +129,7 @@ class TestBranchAndMergeWorkflow:
 
         r = mem("status")
         assert r.exit_code == 0
-        assert f"{parent_cp_count} checkpoint" in r.output
+        assert f"Checkpoints {parent_cp_count}" in r.output
 
     def test_branch_log_shows_parent_history(self, isolated_store):
         mem("init", "main")

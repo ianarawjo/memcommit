@@ -134,7 +134,13 @@ def test_issue_can_choose_either_exact_source_for_rationale():
 
 @pytest.mark.parametrize(
     ("key", "action"),
-    [("l", "ledger"), ("m", "meld"), ("q", "close"), ("\x1b", "close")],
+    [
+        ("l", "ledger"),
+        ("m", "meld"),
+        ("q", "close"),
+        ("Q", "close"),
+        ("\x1b", "close"),
+    ],
 )
 def test_workbench_returns_explicit_read_only_actions(key: str, action: str):
     analysis, _left, _right = _analysis()

@@ -56,7 +56,8 @@ def _recent_from_attempt(
     details = attempt.details.get("memory_report")
     if (
         attempt.status != "COMPLETED"
-        or attempt.operation != operation
+        or attempt.operation
+        not in ({operation, "log"} if operation == "trace" else {operation})
         or not isinstance(details, dict)
         or details.get("operation") != operation
     ):
@@ -145,6 +146,11 @@ def choose_memory_report_recent(
     """Choose a frozen recent target or enter the normal Memory selector."""
     recents = memory_report_recents(store, operation=operation)
     entries = tuple(_entry(recent) for recent in recents)
+    if not entries:
+        # With no navigation history there is no catalog decision to make.
+        # Continue directly to the common Context/Memory target picker instead
+        # of presenting an empty saved-session-shaped launcher.
+        return MemoryReportSelectAction()
     select_receipt = SessionNewReceipt(
         kind=f"{operation}-select",
         argv=("mem", operation),

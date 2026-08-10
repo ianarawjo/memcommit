@@ -19,8 +19,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Name for the new branch Context; omit in a terminal to choose "
-                "a local Source and edit a suggested fresh name"
+                "Name for a new branch Context; omit in a terminal to choose "
+                "a local Source, parent location, and exact fresh name"
             )
         ),
     ] = None,
@@ -41,7 +41,7 @@ def cmd(
                 local_names,
                 current=expected_current,
                 suggest_name=lambda source: suggest_fresh_context_name(
-                    f"{source}-branch",
+                    f"{source}/branch",
                     local_names,
                 ),
                 validate_name=store.assert_context_creatable,
@@ -54,7 +54,7 @@ def cmd(
             )
             raise typer.Exit(1)
         if receipt is None:
-            typer.echo("Branch cancelled — no Context was created.")
+            typer.echo("Branch cancelled — no Context was changed.")
             return
         if receipt.source_name not in local_names:
             typer.secho(
@@ -64,7 +64,7 @@ def cmd(
             )
             raise typer.Exit(1)
         source_name = receipt.source_name
-        name = receipt.new_name
+        name = receipt.target_name
     else:
         source_name = expected_current
     if not source_name:

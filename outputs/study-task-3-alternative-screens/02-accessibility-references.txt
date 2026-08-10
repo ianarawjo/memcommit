@@ -1,0 +1,14 @@
+Context: task-3/local/results/accessibility-communication
+  0 memories  |  5 memory references  |  0 query-only contexts  |  0 embedded contexts
+
+Items (in context order):
+  [ref     62f4b3f9] task-3/local/personal-memory/2024/12#a6923620 (read-only)
+           The user used an accessible entrance at a clinic in December 2024.
+  [ref     bb4ee9e3] task-3/local/personal-memory/2024/03#e6023aed (read-only)
+           The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.
+  [ref     e93c5630] task-3/local/personal-memory/2024/04#cd0bce79 (read-only)
+           At the next visit, when questions were asked one at a time, the user answered each without omission.
+  [ref     31bc7e6e] task-3/local/personal-memory/2024/12#fb0e1d1f (read-only)
+           On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.
+  [ref     29e03f58] task-3/local/personal-memory/2024/12#479f4434 (read-only)
+           The day before the next visit, the user called to check whether the elevator would be operating.

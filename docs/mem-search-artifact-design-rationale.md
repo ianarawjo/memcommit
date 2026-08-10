@@ -41,6 +41,10 @@ A recognized query-only selector keeps its concealed-source provider and grant
 contract. An unrecognized single operand is instead a question for the Context
 selected by `--context` or the current Context.
 
+Bare `mem query` in a terminal composes the same candidate frame with the
+shared Profile/Context range controls. It freezes the exact checked readable
+Contexts before ranking; query-only Views remain a separate typed Source mode.
+
 ## Authority and privacy invariants
 
 - Artifact discovery is rooted in the active Profile's stores, so Profiles do
@@ -48,9 +52,10 @@ selected by `--context` or the current Context.
 - A granted `READ` Context exposes the granted Memory projection but does not
   grant the authority Profile's private activity artifacts. Separate artifact
   sharing would require a future explicit permission.
-- Checkpoint-derived trace candidates pass the same Study operation policy as
-  `mem trace`; Task 1 and Task 2 cannot recover blocked history through Find or
-  Query, while Task 3 and non-Study Profiles retain their normal trace scope.
+- Checkpoint-derived trace candidates follow the same ownership boundary as
+  `mem trace`: every locally owned Context may contribute its retained history,
+  independent of Study task numbering, while a granted READ view never exposes
+  the authority Profile's private history artifacts through Find or Query.
 - Query-only source bodies never become Find candidates. Existing public
   query-only names remain name-only candidates, and the concealed Query path
   still opens source content only after its normal authorization boundary.
@@ -71,6 +76,11 @@ excerpts and do not reproduce the complete artifact or every Memory in the
 Context. Query answer synthesis also receives only primary semantic matches;
 the broader same-Context expansion remains an explicit capability of the
 interactive Find dialogue.
+
+The common citation renderer also retains a typed document containing the
+answer body and each numbered used Reference. Plain Find and Query output still
+uses the document's stable text rendering, while Query's terminal Answer uses
+the retained Reference boundaries for block navigation and focus presentation.
 
 ## Limitations
 

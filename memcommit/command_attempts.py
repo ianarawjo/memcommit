@@ -387,7 +387,10 @@ def annotate_memory_report_attempt(
     active = _ACTIVE_ATTEMPT.get()
     if active is None:
         return
-    if active.record.operation != operation:
+    active_matches_view = active.record.operation == operation or (
+        operation == "trace" and active.record.operation == "log"
+    )
+    if not active_matches_view:
         raise CommandAttemptError(
             "Memory report metadata does not match the active operation."
         )

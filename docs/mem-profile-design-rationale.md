@@ -154,8 +154,8 @@ publishes nothing. If replacement is already visible but the following
 directory `fsync` cannot confirm durability, deleting the store would corrupt
 the visible registry; the command instead reports the uncertain durability and
 leaves the complete pair and grants registered with both stores intact.
-The previously active Profile intentionally remains active, so initialization
-never silently redirects an unrelated terminal's next `mem` command.
+The participant Profile becomes active in the same registry generation, so the
+next `mem` process enters the isolated run without exposing a partial pair.
 
 ## Why initialized topology is a pair rather than six Profiles
 
@@ -172,6 +172,24 @@ bypass the grant engine.
 Registries containing older
 `STUDY_RUN_TASK`/`STUDY_RUN_AUTHORITY` Profiles remain readable and selectable;
 the legacy six-Profile grouping UI is retained only for those persisted records.
+
+Current `STUDY_RUN`/`STUDY_RUN_GRANTED_MEMORY` provenance is also projected as
+one group in both the terminal picker and stable list:
+
+```text
+pilot-001  STUDY
+├─ Participant     profile=pilot-001
+└─ Granted memory  profile=pilot-001-granted-memory
+```
+
+The group and roles come from immutable Study UID/source-kind provenance, not
+from the current display names. A Profile rename therefore keeps the same Study
+label and role. These two current roles also opt into the content-free Study
+action ledger; the baseline, ordinary Profiles, and legacy six-Profile runs do
+not. Initialization selects the new participant Profile in the same atomic
+registry generation that publishes the complete pair and grants. Its detailed
+ledger is seeded explicitly because the `init-study` root attempt began in the
+previous Profile.
 
 ## Recoverable legacy Study archive
 

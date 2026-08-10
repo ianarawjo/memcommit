@@ -126,17 +126,48 @@ def _canonical_saved_atomize_analyses(
         if len(records) == 1:
             canonical.append(records[0])
             continue
-        owners = [
-            record
-            for record in records
-            if store.load_atomize_workbench(record[0]) is not None
+        workbenches = [
+            (record, store.load_atomize_workbench(record[0])) for record in records
         ]
-        if len(owners) != 1:
+        owners = [record for record, workbench in workbenches if workbench is not None]
+        if len(owners) == 1:
+            canonical.append(owners[0])
+            continue
+
+        # A buggy applied-Output read used to persist its presentation-only
+        # workbench. Prefer the exact Source terminal receipt when available;
+        # legacy Source owners are identified by their route to another copy
+        # of this same analysis UID. The derived Output file is left untouched
+        # so recovery never requires a destructive picker-side migration.
+        copied_context_names = {record[0].context_name for record in records}
+        terminal_owners = [
+            record
+            for record, workbench in workbenches
+            if workbench is not None
+            and workbench.application is not None
+            and workbench.output_context_name != record[0].context_name
+            and workbench.output_context_name in copied_context_names
+        ]
+        routed_source_owners = [
+            record
+            for record, workbench in workbenches
+            if workbench is not None
+            and workbench.output_context_name != record[0].context_name
+            and workbench.output_context_name in copied_context_names
+        ]
+        recovered_owner = (
+            terminal_owners[0]
+            if len(terminal_owners) == 1
+            else routed_source_owners[0]
+            if not terminal_owners and len(routed_source_owners) == 1
+            else None
+        )
+        if recovered_owner is None:
             raise ValueError(
                 "Saved atomize analysis identity is not uniquely owned by "
                 "one shared workbench session."
             )
-        canonical.append(owners[0])
+        canonical.append(recovered_owner)
     return tuple(sorted(canonical, key=lambda record: record[0].context_name))
 
 

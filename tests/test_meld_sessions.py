@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.commands.meld import _session_command
 from memcommit.commands.meld_sessions import (
     MeldSessionCatalogError,
     list_meld_session_catalog,
@@ -70,6 +71,41 @@ def test_meld_catalog_is_recently_modified_and_grouped_by_target(
         "catalog/newer/incoming",
         "--into",
         "catalog/newer/baseline",
+    )
+
+
+def test_directional_meld_catalog_preserves_both_descendant_ranges(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    incoming = ops.init("catalog/scoped/incoming")
+    baseline = ops.init("catalog/scoped/baseline")
+    ops.add(incoming, "Incoming scoped knowledge.")
+    ops.add(baseline, "Baseline scoped knowledge.")
+    store.save(incoming)
+    store.save(baseline)
+    session = MeldSession.create_directional(
+        incoming,
+        baseline,
+        incoming_descendants=True,
+        baseline_descendants=True,
+    )
+    store.save_meld_session(session, expected_session_digest=None)
+
+    entry = list_meld_session_catalog(store)[0]
+
+    assert entry.reopen_argv == (
+        "mem",
+        "meld",
+        "catalog/scoped/incoming",
+        "--left-descendants",
+        "--into",
+        "catalog/scoped/baseline",
+        "--right-descendants",
+    )
+    assert _session_command(session) == (
+        "mem meld catalog/scoped/incoming --left-descendants "
+        "--into catalog/scoped/baseline --right-descendants"
     )
 
 

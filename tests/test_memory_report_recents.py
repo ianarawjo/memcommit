@@ -20,7 +20,7 @@ from memcommit.commands.memory_report_recents import (
     choose_memory_report_recent,
     memory_report_recents,
 )
-from memcommit.commands.session_picker import SessionNewReceipt, SessionOpenReceipt
+from memcommit.commands.session_picker import SessionOpenReceipt
 from memcommit.store import MemoryStore
 
 
@@ -97,29 +97,19 @@ def test_recents_are_latest_unique_completed_targets_and_content_free(isolated_s
     }
 
 
-def test_launcher_select_action_uses_common_picker_contract(
+def test_empty_launcher_goes_directly_to_common_memory_picker(
     isolated_store, monkeypatch
 ):
-    captured: dict[str, object] = {}
-
-    def choose(entries, **kwargs):
-        captured["entries"] = entries
-        captured.update(kwargs)
-        return kwargs["new_receipt"]
-
     monkeypatch.setattr(
         "memcommit.commands.memory_report_recents.choose_session",
-        choose,
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("an empty recent catalog must be skipped")
+        ),
     )
 
     selected = choose_memory_report_recent(MemoryStore(), operation="trace")
 
     assert isinstance(selected, MemoryReportSelectAction)
-    assert captured["entries"] == ()
-    assert captured["catalog_label"] == "recent reports"
-    receipt = captured["new_receipt"]
-    assert isinstance(receipt, SessionNewReceipt)
-    assert receipt.action_label == "SELECT A MEMORY"
 
 
 def test_launcher_revalidates_selected_recent(isolated_store, monkeypatch):
@@ -212,3 +202,24 @@ def test_report_annotation_must_match_active_operation(isolated_store):
         )
 
     finish_command_attempt(active, status="INTERRUPTED", failure_kind="TestCleanup")
+
+
+def test_trace_recents_include_the_log_memory_alias(isolated_store):
+    active = begin_command_attempt(
+        store_dir=isolated_store,
+        operation="log",
+        stdin_tty=True,
+        stdout_tty=True,
+    )
+    annotate_memory_report_attempt(
+        operation="trace",
+        context_name="notes",
+        memory_uid="memory-through-log",
+    )
+    finish_command_attempt(active, status="COMPLETED")
+
+    recents = memory_report_recents(MemoryStore(), operation="trace")
+
+    assert [(item.context_name, item.memory_uid) for item in recents] == [
+        ("notes", "memory-through-log")
+    ]

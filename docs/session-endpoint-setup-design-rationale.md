@@ -110,12 +110,13 @@ component later, but that is not required to prove the extraction.
 This boundary avoids making a visual segmented selector responsible for
 review acceptance or durable decisions.
 
-Tab cycling and cross-surface Up/Down transitions use the shared
-`focus_in_order` primitive. The caller supplies the currently visible controls
-in screen order and decides whether movement wraps; the primitive owns only
-focus indexing. Help reuses the same primitive for its VIEW/list topology,
-while endpoint setup continues to derive its active controls from the selected
-operation shape.
+Tab cycling uses the shared `focus_in_order` compatibility route. Cross-surface
+Up/Down transitions use `SurfaceFocusController` over the dynamic operation
+shape. Endpoint Setup declares its currently visible controls in screen order;
+the controller owns focus indexing and non-wrapping boundary movement, while
+the endpoint adapter selects the first or last visible Context row when a tree
+is entered vertically. New-name input keeps its deliberate special Tab exit.
+Help reuses the same controller for its VIEW/list topology.
 
 ## Grant-aware selector audit
 
@@ -163,12 +164,28 @@ The shell owns only a process-local draft:
 - one independent tree state and selected canonical name for each existing
   role;
 - one process-local new-name draft for each creatable role;
-- one separately confirmed new name, entered through the shared unframed
-  `ExactNameInputControl`, so text merely typed into an editor does not become
-  an endpoint choice when focus moves away;
+- one optional caller-owned annotation for selectable rows in a specific role,
+  so operation-specific eligibility meaning does not leak into another role
+  that renders the same frozen catalog;
+- one optional caller-owned new-name suggester driven by the currently checked
+  endpoint names; it may refresh an untouched draft, but the first direct text
+  edit permanently prevents later endpoint changes from overwriting that draft;
+- one optional new-only parent-locator role: its tree chooses an existing
+  lexical parent but never turns that Context into the operation target;
+- one separately confirmed new name for existing-or-new roles, entered through
+  the shared unframed `ExactNameInputControl`, so text merely typed into those
+  editors does not become an endpoint choice when focus moves away. A new-only
+  parent-locator role instead treats its visible complete exact path as
+  authoritative and validates that current value at Apply;
 - whether an existing-or-new role currently names an existing Context or a
   proposed new one; and
 - focus and validation-message presentation.
+
+New-only placement does not define a second inheritance state inside this
+shell. It composes `ContextNameDraftState`, the same operation-neutral state
+used by Init's `ContextNameControl`. Source-driven suggestions and explicit
+parent choices may update an untouched draft; `record_direct_edit` permanently
+hands authority to the exact field for the lifetime of that editor.
 
 For Meld, switching modes preserves the A and B selections. A C choice or
 new-name draft is also retained while C is hidden so that exploratory mode
@@ -199,7 +216,10 @@ saved session, or start an operation.
   Tab skips the editor when traversing panes, so Down from the role tree is
   the only way to enter it. Once inside, Tab or Shift-Tab may still leave the
   editor without confirming it.
-- `Enter` or `Space` selects the current existing Context row.
+- `Enter` or `Space` selects the current existing Context row. In a new-only
+  parent-locator role it instead selects that row as a placement aid. Before
+  direct editing, this reparents the exact draft; after the first direct edit,
+  the complete typed path remains unchanged and authoritative.
 - A mode may opt each readable endpoint into one `THIS CONTEXT ONLY` versus
   `INCLUDE DESCENDANTS` control below a separator. It is exact-only by default;
   Left and Right choose the shared reach, while Enter or Space remains a
@@ -212,7 +232,10 @@ saved session, or start an operation.
   selector as `NEW · NOT CREATED`, and advances to the next setup control.
   Merely typing and leaving with Tab does not confirm the name. While the
   editor is focused, its footer explicitly renders `Esc back`; Escape returns
-  to the role tree without canceling the whole setup.
+  to the role tree without canceling the whole setup. The new-only
+  parent-locator variant has no separate projected target row: its visible
+  exact field is the draft, so Apply validates that current value even after a
+  Tab exit.
 - A dedicated `APPLY` frame follows the endpoint panes in the Tab order. Its
   left-aligned `[ PRESS ENTER TO APPLY ]` control makes the final action
   visually distinct from both the endpoint trees and passive footer guidance. `Enter`
@@ -234,6 +257,8 @@ An operation adapter converts the draft into an operation-owned typed receipt:
 - Update: source/target names plus independent descendant-scope flags;
 - Meld: mode plus A/B, mode-enabled descendant-scope flags, and C/create only
   for symmetric mode; and
+- Branch: one existing local Source plus one exact require-new target whose
+  parent tree is only a placement aid; and
 - Sever: source/criteria names, both descendant-scope flags, and new output
   name.
 

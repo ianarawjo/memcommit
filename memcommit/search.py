@@ -15,6 +15,7 @@ from memcommit.semantic_execution import (
     ExecutionProgress,
     ExecutionStrategy,
     PartitionError,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     pack_grouped_items,
@@ -23,7 +24,7 @@ from memcommit.semantic_execution import (
 )
 
 
-FIND_CORPUS_CHAR_LIMIT = 200_000
+FIND_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 FIND_RELATED_QUERY_LIMIT = 2_000
 SearchKind = Literal["memory", "memory_ref", "query_context", "artifact"]
 SearchRelevance = Literal["primary", "related"]

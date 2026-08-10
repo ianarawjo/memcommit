@@ -20,6 +20,7 @@ from prompt_toolkit.widgets import Frame
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     display_escape_text,
 )
@@ -29,6 +30,13 @@ from memcommit.commands.semantic_viewer import (
     SemanticViewerDocument,
     SemanticViewerSection,
     semantic_viewer_block_fragments,
+)
+from memcommit.commands.surface_focus import (
+    FocusSurface,
+    SurfaceActionResult,
+    SurfaceFocusController,
+    SurfaceMoveResult,
+    bind_surface_navigation,
 )
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.share import SharePreview
@@ -79,9 +87,10 @@ def run_share_viewer(
 
     nav = navigation or SessionWorkbenchNavigation(pane="viewer")
     viewer_controller = SemanticViewerController(nav)
-    selected = {"memory": 0}
-    windows: dict[str, Window] = {}
     bindings = KeyBindings()
+    if nav.pane not in {"viewer", "items", "todo"}:
+        nav.focus("viewer")
+    nav.move_row(len(preview.memories), 0)
 
     context_document = SemanticViewerDocument(
         (
@@ -124,7 +133,7 @@ def run_share_viewer(
     def render_memories():
         fragments: list[tuple[str, str]] = []
         for index, memory in enumerate(preview.memories):
-            focused = nav.pane == "items" and index == selected["memory"]
+            focused = nav.pane == "items" and index == nav.row_index
             marker = "›" if focused else " "
             fragments.extend(
                 semantic_viewer_block_fragments(
@@ -147,47 +156,7 @@ def run_share_viewer(
             active=nav.pane == "todo",
         )
 
-    def focus_current(event) -> None:
-        event.app.layout.focus(windows[nav.pane])
-        event.app.invalidate()
-
-    @bindings.add("tab")
-    def _next(event) -> None:
-        nav.cycle_panes(("viewer", "items", "todo"), 1)
-        focus_current(event)
-
-    @bindings.add("s-tab")
-    def _previous(event) -> None:
-        nav.cycle_panes(("viewer", "items", "todo"), -1)
-        focus_current(event)
-
-    @bindings.add("down")
-    def _down(event) -> None:
-        if nav.pane == "viewer":
-            viewer_controller.move(context_document, 1)
-        elif nav.pane == "items":
-            selected["memory"] = min(
-                selected["memory"] + 1,
-                len(preview.memories) - 1,
-            )
-        event.app.invalidate()
-
-    @bindings.add("up")
-    def _up(event) -> None:
-        if nav.pane == "viewer":
-            viewer_controller.move(context_document, -1)
-        elif nav.pane == "items":
-            selected["memory"] = max(0, selected["memory"] - 1)
-        event.app.invalidate()
-
-    @bindings.add("enter")
-    def _enter(event) -> None:
-        if nav.pane == "todo":
-            event.app.exit(result=ShareViewerReceipt(action="send"))
-
-    @bindings.add("escape", eager=True)
-    @bindings.add("backspace", eager=True)
-    @bindings.add("q", eager=True)
+    @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("c-c", eager=True)
     def _close(event) -> None:
         event.app.exit(result=ShareViewerReceipt(action="close"))
@@ -214,11 +183,67 @@ def run_share_viewer(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    windows.update(
-        viewer=context_window,
-        items=memories_window,
-        todo=send_window,
+
+    def move_viewer(_event, delta: int) -> SurfaceMoveResult:
+        before = viewer_controller.index(context_document)
+        viewer_controller.move(context_document, delta)
+        after = viewer_controller.index(context_document)
+        return "MOVED" if after != before else "BOUNDARY"
+
+    def enter_viewer(delta: int) -> None:
+        if delta > 0:
+            viewer_controller.home(context_document)
+        else:
+            viewer_controller.end(context_document)
+
+    def move_memories(_event, delta: int) -> SurfaceMoveResult:
+        before = nav.row_index
+        nav.move_row(len(preview.memories), delta)
+        return "MOVED" if nav.row_index != before else "BOUNDARY"
+
+    def enter_memories(delta: int) -> None:
+        nav.row_index = 0 if delta > 0 else max(0, len(preview.memories) - 1)
+
+    def boundary(_event, _delta: int) -> SurfaceMoveResult:
+        return "BOUNDARY"
+
+    def send(event) -> SurfaceActionResult:
+        event.app.exit(result=ShareViewerReceipt(action="send"))
+        return "HANDLED"
+
+    def close(event) -> SurfaceActionResult:
+        event.app.exit(result=ShareViewerReceipt(action="close"))
+        return "HANDLED"
+
+    surface_controller = SurfaceFocusController(
+        (
+            FocusSurface(
+                "share-context",
+                context_window,
+                move_vertical=move_viewer,
+                back=close,
+                on_focus=lambda: nav.focus("viewer"),
+                on_vertical_enter=enter_viewer,
+            ),
+            FocusSurface(
+                "share-memories",
+                memories_window,
+                move_vertical=move_memories,
+                back=close,
+                on_focus=lambda: nav.focus("items"),
+                on_vertical_enter=enter_memories,
+            ),
+            FocusSurface(
+                "share-action",
+                send_window,
+                move_vertical=boundary,
+                activate=send,
+                back=close,
+                on_focus=lambda: nav.focus("todo"),
+            ),
+        )
     )
+    bind_surface_navigation(bindings, surface_controller, back=True)
     context_frame = Frame(
         context_window,
         title="CONTEXT",
@@ -261,7 +286,11 @@ def run_share_viewer(
                     footer,
                 ]
             ),
-            focused_element=context_window,
+            focused_element={
+                "viewer": context_window,
+                "items": memories_window,
+                "todo": send_window,
+            }[nav.pane],
         ),
         key_bindings=bindings,
         full_screen=True,
@@ -298,26 +327,9 @@ def run_share_unavailable_viewer(
         raise ValueError("Interactive Share requires a terminal.")
     safe_reason = display_escape_text(reason)
     nav = SessionWorkbenchNavigation(pane="viewer")
-    windows: dict[str, Window] = {}
     bindings = KeyBindings()
 
-    def focus_current(event) -> None:
-        event.app.layout.focus(windows[nav.pane])
-        event.app.invalidate()
-
-    @bindings.add("tab")
-    def _next(event) -> None:
-        nav.cycle_panes(("viewer", "items", "todo"), 1)
-        focus_current(event)
-
-    @bindings.add("s-tab")
-    def _previous(event) -> None:
-        nav.cycle_panes(("viewer", "items", "todo"), -1)
-        focus_current(event)
-
-    @bindings.add("escape", eager=True)
-    @bindings.add("backspace", eager=True)
-    @bindings.add("q", eager=True)
+    @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("c-c", eager=True)
     def _close(event) -> None:
         event.app.exit(result=ShareViewerReceipt(action="close"))
@@ -355,11 +367,40 @@ def run_share_unavailable_viewer(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    windows.update(
-        viewer=context_window,
-        items=memories_window,
-        todo=action_window,
+
+    def boundary(_event, _delta: int) -> SurfaceMoveResult:
+        return "BOUNDARY"
+
+    def close(event) -> SurfaceActionResult:
+        event.app.exit(result=ShareViewerReceipt(action="close"))
+        return "HANDLED"
+
+    surface_controller = SurfaceFocusController(
+        (
+            FocusSurface(
+                "share-unavailable-context",
+                context_window,
+                move_vertical=boundary,
+                back=close,
+                on_focus=lambda: nav.focus("viewer"),
+            ),
+            FocusSurface(
+                "share-unavailable-memories",
+                memories_window,
+                move_vertical=boundary,
+                back=close,
+                on_focus=lambda: nav.focus("items"),
+            ),
+            FocusSurface(
+                "share-unavailable-action",
+                action_window,
+                move_vertical=boundary,
+                back=close,
+                on_focus=lambda: nav.focus("todo"),
+            ),
+        )
     )
+    bind_surface_navigation(bindings, surface_controller, back=True)
     frames = (
         ("viewer", Frame(context_window, title="CONTEXT")),
         ("items", Frame(memories_window, title="MEMORIES")),

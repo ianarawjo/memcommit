@@ -18,6 +18,12 @@ from memcommit.context_targeting.tui.rendering import (
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.source_projection.model import SourceDisplayFacts, SourceState
+from memcommit.source_projection.presentation import (
+    SourceDisplayValue,
+    combine_source_display_tokens,
+    normalize_source_display_tokens,
+)
 
 
 @dataclass(frozen=True)
@@ -30,7 +36,7 @@ class ContextSelectorView:
     label: str = "CONTEXT"
     current_context: str | None = None
     selectable_names: frozenset[str] | None = None
-    annotations: tuple[tuple[str, str], ...] = ()
+    annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
 
     def __post_init__(self) -> None:
         if (
@@ -49,6 +55,11 @@ class ContextSelectorView:
         labels = dict(self.annotations)
         if len(labels) != len(self.annotations) or set(labels) - set(self.names):
             raise ValueError("Context selector annotations are invalid.")
+        try:
+            for annotation in labels.values():
+                normalize_source_display_tokens(annotation)
+        except (TypeError, ValueError) as error:
+            raise ValueError("Context selector annotations are invalid.") from error
 
     @property
     def selectable(self) -> frozenset[str]:
@@ -72,7 +83,7 @@ class ContextSelectorControl:
             raise ValueError("Context selector height must be positive.")
         self.view = view
         self.selectable = view.selectable
-        self.annotations: Mapping[str, str] = dict(view.annotations)
+        self.annotations: Mapping[str, SourceDisplayValue] = dict(view.annotations)
         tree = build_context_tree(view.names, materialized_names=self.selectable)
         initial_cursor = view.selected[-1] if view.selected else view.names[0]
         self.tree = ContextTreeState.create(tree, selected=initial_cursor)
@@ -103,9 +114,12 @@ class ContextSelectorControl:
         def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
             available = row.name in self.selectable
             selected = row.name in self.selection.selected_set
-            annotation = self.annotations.get(row.name, "")
+            annotation: SourceDisplayValue | None = self.annotations.get(row.name)
             if not available:
-                annotation = (annotation + " · " if annotation else "") + "UNAVAILABLE"
+                annotation = combine_source_display_tokens(
+                    annotation,
+                    SourceDisplayFacts(states=(SourceState.UNAVAILABLE,)),
+                )
             cursor_style, value_style = tree_choice_styles(
                 cursor=cursor,
                 selected=selected,

@@ -32,7 +32,11 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.commands.tui_primitives import display_escape_text, horizontal_rule
+from memcommit.commands.tui_primitives import (
+    bind_case_insensitive_key,
+    display_escape_text,
+    horizontal_rule,
+)
 from memcommit.commands.tui_text_layout import (
     AdaptiveColumn,
     allocate_adaptive_columns,
@@ -845,7 +849,7 @@ def choose_session(
         def _new_session(event) -> None:
             event.app.exit(result=new_receipt)
 
-    @bindings.add("q", filter=list_focused, eager=True)
+    @bind_case_insensitive_key(bindings, "q", filter=list_focused, eager=True)
     @bindings.add("escape", filter=list_focused, eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:

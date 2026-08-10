@@ -244,6 +244,38 @@ def test_bare_init_preserves_a_switch_made_while_the_editor_is_open(
     assert not store.context_exists("new-context")
 
 
+def test_bare_branch_does_not_overwrite_a_target_created_during_setup(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("source")
+    ops.add(source, "source fact")
+    _save(store, source)
+    store.set_current(source.name)
+
+    def create_target_then_choose(*args, **kwargs):
+        target = ops.init("feature")
+        ops.add(target, "concurrent fact")
+        _save(store, target)
+        return BranchCreationReceipt("source", "feature")
+
+    monkeypatch.setattr(
+        "memcommit.commands.branch.choose_branch_creation",
+        create_target_then_choose,
+    )
+
+    result = runner.invoke(app, ["branch"])
+
+    assert result.exit_code == 1
+    assert "already exists" in result.stderr
+    preserved = store.load_direct("feature")
+    assert [item.content for item in preserved.memories.values()] == [
+        "concurrent fact"
+    ]
+    assert store.current_context_name() == "source"
+
+
 def test_branch_rejects_history_changed_after_snapshot(
     isolated_store,
     monkeypatch,

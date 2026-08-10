@@ -1,0 +1,5 @@
+Context: task-1/description
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [MEMORY 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work memory. This memory contains confirmed event relocations, temporary parking arrangements, updated shop and facility information, and related changes to nearby routes and facilities. Using this verified local memory, you must update all affected parts of the organizational wiki and contribute the completed update.

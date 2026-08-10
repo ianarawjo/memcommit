@@ -27,6 +27,7 @@ def _proposal(
     disposition: str,
     members: tuple[MeldMember, ...],
     reason: str,
+    owner: Context,
 ) -> MeldProposal:
     return MeldProposal.from_dict(
         {
@@ -41,6 +42,7 @@ def _proposal(
                 member.to_dict() for member in members
             ],
             "grounded_by_turn_uids": [],
+            "owner_context": {"uid": owner.uid, "name": owner.name},
         }
     )
 
@@ -104,6 +106,7 @@ def _applied_directional_meld(
             reason=(
                 "The incoming access rule narrows the authoritative baseline."
             ),
+            owner=baseline,
         ),
         _proposal(
             uid="60000000-0000-4000-8000-000000000006",
@@ -118,6 +121,7 @@ def _applied_directional_meld(
                 ),
             ),
             reason="The incoming staff rule is new to the baseline.",
+            owner=baseline,
         ),
     )
     change_set = MeldChangeSet.create(
@@ -129,7 +133,11 @@ def _applied_directional_meld(
         turns=session.turns,
         proposals=proposals,
     )
-    record = _meld_checkpoint_record(session, change_set)
+    record = _meld_checkpoint_record(
+        session,
+        change_set,
+        owner=(baseline.uid, baseline.name),
+    )
     if mutate_record is not None:
         mutate_record(record)
 
@@ -269,7 +277,11 @@ def test_directional_zero_change_receipt_accepts_an_unchanged_post_image(
         turns=session.turns,
         proposals=(),
     )
-    record = _meld_checkpoint_record(session, change_set)
+    record = _meld_checkpoint_record(
+        session,
+        change_set,
+        owner=(baseline.uid, baseline.name),
+    )
 
     store.save(
         baseline,

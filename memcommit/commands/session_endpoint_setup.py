@@ -26,6 +26,10 @@ from memcommit.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
+from memcommit.context_targeting.tui.name_draft import (
+    ContextNameDraftState,
+    infer_context_parent,
+)
 from memcommit.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
@@ -42,12 +46,25 @@ from memcommit.commands.tui_primitives import (
     ExactNameFieldView,
     ExactNameInputControl,
     MEMCOMMIT_TUI_STYLE,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     display_escape_text,
     focused_control_style,
+)
+from memcommit.commands.surface_focus import (
+    FocusSurface,
+    SurfaceFocusController,
     focus_in_order,
 )
 from memcommit.store import validate_context_name
+from memcommit.source_projection.model import SourceDisplayFacts, SourceState
+from memcommit.source_projection.presentation import (
+    SourceDisplayToken,
+    SourceDisplayValue,
+    SourceTokenRole,
+    combine_source_display_tokens,
+    normalize_source_display_tokens,
+)
 
 
 @dataclass(frozen=True)
@@ -70,6 +87,9 @@ class EndpointRoleSpec:
     initial_new_name: str = ""
     prefer_new: bool = False
     allow_descendants: bool = False
+    selectable_annotation: str = ""
+    new_name_suggester: Callable[[Mapping[str, str]], str] | None = None
+    new_parent_locator: bool = False
 
 
 @dataclass(frozen=True)
@@ -151,7 +171,7 @@ def choose_session_endpoints(
     modes: Sequence[EndpointModeSpec],
     roles: Sequence[EndpointRoleSpec],
     initial_mode_uid: str,
-    annotations: Mapping[str, str] | None = None,
+    annotations: Mapping[str, SourceDisplayValue] | None = None,
     validate_draft: DraftValidator | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -199,9 +219,35 @@ def choose_session_endpoints(
             or role.initial_name not in catalog_set
         ):
             raise ValueError("Endpoint setup received an invalid role spec.")
+        if not isinstance(role.selectable_annotation, str) or any(
+            character in role.selectable_annotation for character in "\r\n"
+        ):
+            raise ValueError("Endpoint role annotation must be one-line text.")
+        if role.new_name_suggester is not None and (
+            not role.allow_new or not callable(role.new_name_suggester)
+        ):
+            raise ValueError(
+                "Endpoint new-name suggestion requires a creatable role callback."
+            )
+        if role.new_parent_locator and (
+            not role.allow_new
+            or not role.prefer_new
+            or not role.initial_new_name.strip()
+            or role.allow_descendants
+            or role.selectable_annotation
+        ):
+            raise ValueError(
+                "Endpoint parent location requires a new-only role without "
+                "descendant or row-availability semantics."
+            )
     labels = dict(annotations or {})
     if set(labels) - catalog_set:
         raise ValueError("Endpoint setup annotations are outside the catalog.")
+    try:
+        for annotation in labels.values():
+            normalize_source_display_tokens(annotation)
+    except (TypeError, ValueError) as error:
+        raise ValueError("Endpoint setup received an invalid annotation.") from error
 
     tree = build_context_tree(catalog, materialized_names=catalog_set)
     states = {
@@ -239,6 +285,19 @@ def choose_session_endpoints(
     frames: dict[str, Frame] = {}
     new_inputs: dict[str, TextArea] = {}
     new_name_fields: dict[str, ExactNameInputControl] = {}
+    suggested_new_names = {
+        role.uid: role.initial_new_name for role in role_specs if role.allow_new
+    }
+    edited_new_names = {role.uid: False for role in role_specs if role.allow_new}
+    new_name_drafts = {
+        role.uid: ContextNameDraftState(
+            exact_name=role.initial_new_name,
+            parent_name=role.initial_name,
+        )
+        for role in role_specs
+        if role.new_parent_locator
+    }
+    updating_new_names: set[str] = set()
     app_ref: dict[str, Application[EndpointSetupDraft | None]] = {}
 
     def active_mode() -> EndpointModeSpec:
@@ -263,10 +322,23 @@ def choose_session_endpoints(
         def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
             confirmed_name = confirmed_new_names[uid]
             available = row.name in role.selectable_names
-            chosen = not create[uid] and selections[uid].selected_name == row.name
-            annotation = labels.get(row.name, "")
+            chosen = (
+                role.new_parent_locator or not create[uid]
+            ) and selections[uid].selected_name == row.name
+            annotation: SourceDisplayValue | None = labels.get(row.name)
             if not available:
-                annotation = annotation or "UNAVAILABLE"
+                annotation = combine_source_display_tokens(
+                    annotation,
+                    SourceDisplayFacts(states=(SourceState.UNAVAILABLE,)),
+                )
+            elif role.selectable_annotation:
+                annotation = combine_source_display_tokens(
+                    annotation,
+                    SourceDisplayToken(
+                        role.selectable_annotation,
+                        SourceTokenRole.NOTE,
+                    ),
+                )
             cursor_style, value_style = _endpoint_row_styles(
                 cursor=cursor,
                 chosen=chosen,
@@ -274,14 +346,19 @@ def choose_session_endpoints(
             )
             return ContextTreeRowDecoration(
                 annotation=annotation,
+                value_suffix="/" if role.new_parent_locator else "",
                 cursor_style=cursor_style,
                 value_style=value_style,
-                anchor_cursor=(tree_focused or not (create[uid] and confirmed_name)),
+                anchor_cursor=(
+                    tree_focused
+                    or role.new_parent_locator
+                    or not (create[uid] and confirmed_name)
+                ),
             )
 
         fragments = render_context_tree_rows(state, decorate)
         confirmed_name = confirmed_new_names[uid]
-        if create[uid] and confirmed_name:
+        if create[uid] and confirmed_name and not role.new_parent_locator:
             if fragments:
                 fragments.append(("", "\n"))
             # Once confirmation advances focus, anchor this retained choice so
@@ -348,9 +425,13 @@ def choose_session_endpoints(
                 )
             )
         if role.allow_new:
-            def validate_new_name(candidate: str) -> None:
+            def validate_new_name(candidate: str, *, role_spec=role) -> None:
                 validate_context_name(candidate)
                 if candidate in catalog_set:
+                    if role_spec.new_parent_locator:
+                        raise ValueError(
+                            "That Context already exists; enter a different exact name."
+                        )
                     raise ValueError(
                         "That Context already exists; select its tree row."
                     )
@@ -368,6 +449,18 @@ def choose_session_endpoints(
             new_name_fields[role.uid] = name_field
             editor = name_field.input
             new_inputs[role.uid] = editor
+
+            def mark_new_name_edited(_buffer, *, role_uid=role.uid) -> None:
+                if role_uid not in updating_new_names:
+                    # Once the person changes the draft, later endpoint choices
+                    # must not silently replace it with another suggestion.
+                    edited_new_names[role_uid] = True
+                    if role_uid in new_name_drafts:
+                        new_name_drafts[role_uid].record_direct_edit(
+                            new_name_fields[role_uid].text
+                        )
+
+            editor.buffer.on_text_changed += mark_new_name_edited
             body_parts.extend(
                 [
                     Window(height=1, char="─"),
@@ -390,11 +483,19 @@ def choose_session_endpoints(
                                 ),
                                 (
                                     "",
-                                    _new_context_action_hint(
-                                        focused=(
-                                            app_ref.get("app") is not None
-                                            and app_ref["app"].layout.has_focus(
-                                                new_inputs[uid]
+                                    (
+                                        " · ENTER CONTINUE"
+                                        if role_by_uid[uid].new_parent_locator
+                                        and app_ref.get("app") is not None
+                                        and app_ref["app"].layout.has_focus(
+                                            new_inputs[uid]
+                                        )
+                                        else _new_context_action_hint(
+                                            focused=(
+                                                app_ref.get("app") is not None
+                                                and app_ref["app"].layout.has_focus(
+                                                    new_inputs[uid]
+                                                )
                                             )
                                         )
                                     ),
@@ -427,6 +528,50 @@ def choose_session_endpoints(
                 )
             ),
         )
+
+    def refresh_new_name_suggestions() -> None:
+        selected_names = {
+            role.uid: selections[role.uid].selected_name for role in role_specs
+        }
+        for role in role_specs:
+            if role.new_name_suggester is None:
+                continue
+            candidate = role.new_name_suggester(selected_names)
+            validate_context_name(candidate)
+            if candidate in catalog_set:
+                raise ValueError(
+                    f"Suggested {role_title(role.uid)} Context already exists."
+                )
+            previous = suggested_new_names[role.uid]
+            suggested_new_names[role.uid] = candidate
+            if role.new_parent_locator:
+                draft = new_name_drafts[role.uid]
+                parent = infer_context_parent(
+                    candidate,
+                    tuple(
+                        name for name in catalog if name in role.selectable_names
+                    ),
+                    fallback=selections[role.uid].selected_name,
+                )
+                visible_candidate = draft.inherit_suggestion(
+                    candidate,
+                    parent_name=parent,
+                )
+                if draft.edited:
+                    continue
+                states[role.uid].selected_name = parent
+                selections[role.uid].choose(parent)
+            else:
+                if edited_new_names[role.uid]:
+                    continue
+                visible_candidate = candidate
+            updating_new_names.add(role.uid)
+            try:
+                new_name_fields[role.uid].set_text(visible_candidate)
+            finally:
+                updating_new_names.remove(role.uid)
+            if confirmed_new_names[role.uid] == previous:
+                confirmed_new_names[role.uid] = visible_candidate
 
     mode_control = FormattedTextControl(
         lambda: render_horizontal_choice(
@@ -490,48 +635,45 @@ def choose_session_endpoints(
         values.append(apply_control)
         return values
 
-    def vertical_focusables():
-        """Return visible controls in their top-to-bottom screen order."""
+    def vertical_surfaces() -> tuple[FocusSurface, ...]:
+        """Declare visible controls in top-to-bottom screen order."""
 
-        values: list[object] = []
+        values: list[FocusSurface] = []
         if len(mode_specs) > 1:
-            values.append(mode_control)
+            values.append(FocusSurface("mode", mode_control))
         for uid in active_mode().active_roles:
-            values.append(controls[uid])
+
+            def enter_tree(delta: int, *, role_uid: str = uid) -> None:
+                rows = states[role_uid].visible_rows()
+                states[role_uid].selected_name = rows[0 if delta > 0 else -1].name
+
+            values.append(
+                FocusSurface(
+                    f"role:{uid}",
+                    controls[uid],
+                    on_vertical_enter=enter_tree,
+                )
+            )
             if uid in descendant_controls and role_descendants_active(uid):
-                values.append(descendant_controls[uid])
+                values.append(
+                    FocusSurface(f"descendants:{uid}", descendant_controls[uid])
+                )
             if uid in new_inputs:
-                values.append(new_inputs[uid])
-        values.append(apply_control)
-        return values
+                values.append(FocusSurface(f"new:{uid}", new_inputs[uid]))
+        values.append(FocusSurface("apply", apply_control))
+        return tuple(values)
+
+    vertical_focus = SurfaceFocusController(vertical_surfaces)
 
     def focus_vertical_neighbor(event, delta: int) -> bool:
         """Cross a visible surface boundary without wrapping the screen."""
 
-        focusables = vertical_focusables()
-        index = next(
-            (
-                i
-                for i, control in enumerate(focusables)
-                if event.app.layout.has_focus(control)
-            ),
-            -1,
+        return vertical_focus.focus_relative(
+            event.app,
+            delta,
+            wrap=False,
+            vertical_entry=True,
         )
-        next_index = index + delta
-        if index < 0 or not 0 <= next_index < len(focusables):
-            return False
-        target = focusables[next_index]
-        # A Context tree is one visual run of rows in the larger screen. Enter
-        # it at the adjacent edge so Up/Down never skips a visible Context.
-        target_uid = next(
-            (uid for uid, control in controls.items() if control is target),
-            None,
-        )
-        if target_uid is not None:
-            rows = states[target_uid].visible_rows()
-            states[target_uid].selected_name = rows[0 if delta > 0 else -1].name
-        event.app.layout.focus(target)
-        return True
 
     def focused_role_uid() -> str | None:
         app = app_ref["app"]
@@ -555,14 +697,27 @@ def choose_session_endpoints(
             if create[uid]:
                 if not role.allow_new:
                     raise ValueError(f"{role_title(uid)} cannot create a Context.")
-                name = confirmed_new_names[uid]
-                if not name:
+                name = (
+                    new_name_fields[uid].text.strip()
+                    if role.new_parent_locator
+                    else confirmed_new_names[uid]
+                )
+                if not name and not role.new_parent_locator:
                     raise ValueError(
                         f"{role_title(uid)} new Context name must be confirmed "
                         "with Enter."
                     )
+                if not name:
+                    raise ValueError(
+                        f"{role_title(uid)} new Context name must be nonempty."
+                    )
                 validate_context_name(name)
                 if name in catalog_set:
+                    if role.new_parent_locator:
+                        raise ValueError(
+                            f"{role_title(uid)} new Context already exists. "
+                            "Enter a different exact name."
+                        )
                     raise ValueError(
                         f"{role_title(uid)} new Context already exists. Select it instead."
                     )
@@ -702,12 +857,42 @@ def choose_session_endpoints(
         if uid is None:
             return
         name = states[uid].selected_name
-        if name not in role_by_uid[uid].selectable_names:
+        role = role_by_uid[uid]
+        if name not in role.selectable_names:
             status["value"] = f"{role_title(uid)} is unavailable."
+        elif role.new_parent_locator:
+            try:
+                draft = new_name_drafts[uid]
+                previous = draft.exact_name
+                candidate = draft.choose_parent(name)
+                selections[uid].choose(name)
+                create[uid] = True
+                if candidate != new_name_fields[uid].text:
+                    updating_new_names.add(uid)
+                    try:
+                        new_name_fields[uid].set_text(candidate)
+                    finally:
+                        updating_new_names.remove(uid)
+                suggested_new_names[uid] = candidate
+                if confirmed_new_names[uid] == previous:
+                    confirmed_new_names[uid] = candidate
+            except (TypeError, ValueError) as error:
+                status["value"] = str(error)
+            else:
+                status["value"] = (
+                    "Parent selected; edited exact name preserved."
+                    if draft.edited
+                    else ""
+                )
         else:
             selections[uid].choose(name)
             create[uid] = False
-            status["value"] = ""
+            try:
+                refresh_new_name_suggestions()
+            except (TypeError, ValueError) as error:
+                status["value"] = str(error)
+            else:
+                status["value"] = ""
         event.app.invalidate()
 
     @bindings.add("enter", filter=descendant_focus, eager=True)
@@ -802,8 +987,9 @@ def choose_session_endpoints(
         event.app.invalidate()
 
     @bindings.add("escape", filter=~new_input_focus, eager=True)
-    @bindings.add("q", filter=~new_input_focus, eager=True)
-    @bindings.add("Q", filter=~new_input_focus, eager=True)
+    @bind_case_insensitive_key(
+        bindings, "q", filter=~new_input_focus, eager=True
+    )
     def _cancel(event) -> None:
         event.app.exit(result=None)
 
@@ -817,7 +1003,11 @@ def choose_session_endpoints(
             and uid in new_inputs
             and app_ref["app"].layout.has_focus(new_inputs[uid])
         ):
-            guidance = "Enter confirm name · Esc back · Tab pane"
+            guidance = (
+                "Enter continue · Esc back · Tab pane"
+                if role_by_uid[uid].new_parent_locator
+                else "Enter confirm name · Esc back · Tab pane"
+            )
             if status["value"]:
                 return f" {display_escape_text(status['value'])} · {guidance}"
             return f" NEW CONTEXT NAME: {guidance}"
@@ -836,6 +1026,11 @@ def choose_session_endpoints(
                 " RANGE: ← this Context only · → include descendants · "
                 "Enter/Space toggle · "
                 "↑/↓ move · Tab pane · Q cancel"
+            )
+        if uid is not None and role_by_uid[uid].new_parent_locator:
+            return (
+                " ↑/↓ move · ←/→ tree · Enter/Space choose parent · "
+                "Tab pane · Q cancel"
             )
         return " ↑/↓ move · ←/→ tree · Enter/Space choose · Tab pane · Q cancel"
 

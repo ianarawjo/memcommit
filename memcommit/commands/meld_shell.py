@@ -15,6 +15,7 @@ from prompt_toolkit.output import Output
 
 from memcommit.commands.tui_primitives import (
     TuiRegion,
+    bind_case_insensitive_key,
     build_framed_multiline_input,
     build_tui_frame,
     dispatch_tui_back,
@@ -431,7 +432,9 @@ def run_meld_shell(
     def _back_or_close(event) -> None:
         dispatch_tui_back(event, _collapse_detail, close=_close)
 
-    @bindings.add("q", filter=~has_focus(input_area), eager=True)
+    @bind_case_insensitive_key(
+        bindings, "q", filter=~has_focus(input_area), eager=True
+    )
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
         _close(event)

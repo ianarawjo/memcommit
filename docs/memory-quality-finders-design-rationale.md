@@ -141,10 +141,11 @@ This choice favors an inspectable research contract:
   prompt contexts;
 - duplicate discovery does not depend on an undocumented retrieval heuristic.
 
-All one-shot operations still have a finite input boundary. The initial
-`QUALITY_INPUT_CHAR_LIMIT` is 200,000 encoded characters. Conflict additionally
-has a `CONFLICT_PAIR_LIMIT` of 5,000 because it still materializes explicit pair
-targets. Duplicate is not subject to that pair limit: its keyed grouping,
+All one-shot operations still have a finite input boundary. Quality finders use
+the shared 1,000,000-character effective provider capacity and have no separate
+Memory-pair count gate. Conflict still materializes every explicit pair and is
+therefore ultimately bounded by the encoded provider payload rather than an
+arbitrary fixed pair count. Duplicate remains linear: its keyed grouping,
 representative payload, and returned spanning evidence are linear in the
 number and total text of the supplied Memories.
 

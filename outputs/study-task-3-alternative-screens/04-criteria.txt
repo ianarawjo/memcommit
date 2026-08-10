@@ -1,0 +1,13 @@
+Context: task-3/local/healthcare-sharing-criteria-find
+  8 memories  |  0 memory references  |  0 query-only contexts  |  1 embedded context
+
+Items (in context order):
+  [memory  d31f93bb] The reviewed initial recipient is the grant-backed task-3/government/healthcare-agent endpoint for government healthcare support; actual downstream recipients, routing, retention, and deletion remain unknown.
+  [memory  eb00f1e9] The current purpose is limited to arranging and explaining healthcare support: accessibility or environmental accommodations, communication preferences, scheduling and preparation continuity, and a care-coordination contact only when necessary.
+  [memory  e8bd17ca] Include only the smallest useful condition, preference, instruction, or current coordination need; transform a private event into a minimal summary when its cause is unnecessary.
+  [memory  f443dc1a] Exclude unrelated life details, identifiers, private causes, rare identifying combinations, and third-party information unless the third party role or contact is necessary, current, confirmed, and separately reviewed.
+  [memory  61eeec84] Treat historical medication instructions, availability, contact details, facility conditions, and functional experiences as possibly stale; preserve uncertainty or state that current confirmation is required.
+  [memory  7393e8ca] The Find REFERENCE Contexts are local discovery aids, not approval and not transmission; review the whole Source and create a separate ordinary minimal outbound draft.
+  [memory  23a9cac8] Do not claim that the recipient will synchronize corrections, limit reuse, avoid internal processors, retain briefly, or delete later when those facts are not established.
+  [memory  29bbae37] Before Share, review the exact ordinary draft together with this recipient, healthcare-support purpose, grant-backed channel, excluded categories, and all remaining uncertainties.
+  [context 10c1e5b1] task-3/local/guardrails

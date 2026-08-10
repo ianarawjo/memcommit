@@ -37,12 +37,16 @@ from memcommit.profile_config import (
     ProfileConfigError,
     ProfileEntry,
     ProfileRegistry,
+    STUDY_RUN_AUTHORITY_SOURCE_KIND,
+    STUDY_RUN_PARTICIPANT_SOURCE_KIND,
+    StudyRunIdentity,
     load_profile_registry,
     profile_control_dir,
     profile_registry_file,
     profile_registry_lock_file,
     profile_store_dir,
     profile_stores_dir,
+    study_run_identity,
     canonical_grant_permissions,
     validate_grant_permission,
     validate_grant_resource_name,
@@ -120,6 +124,17 @@ class StudyProfileGroup:
     created_at: str
     profiles: tuple[ProfileEntry, ...]
     support_profiles: tuple[ProfileEntry, ...] = ()
+
+
+@dataclass(frozen=True)
+class StudyRunProfilePair:
+    """One current ``init-study`` participant/authority Profile pair."""
+
+    uid: str
+    name: str
+    created_at: str
+    participant: ProfileEntry
+    authority: ProfileEntry
 
 
 @dataclass(frozen=True)
@@ -234,8 +249,8 @@ _STUDY_BASELINE_SCHEMA_VERSION = 1
 _STUDY_BASELINE_GRANTED_ROOT = "granted-memory"
 _STUDY_PROFILE_SOURCE_KIND = "STUDY_RUN_TASK"
 _STUDY_AUTHORITY_SOURCE_KIND = "STUDY_RUN_AUTHORITY"
-_STUDY_RUN_SOURCE_KIND = "STUDY_RUN"
-_STUDY_RUN_GRANTED_SOURCE_KIND = "STUDY_RUN_GRANTED_MEMORY"
+_STUDY_RUN_SOURCE_KIND = STUDY_RUN_PARTICIPANT_SOURCE_KIND
+_STUDY_RUN_GRANTED_SOURCE_KIND = STUDY_RUN_AUTHORITY_SOURCE_KIND
 _STUDY_PROFILE_SOURCE_FIELDS = {
     "kind",
     "study_uid",
@@ -414,6 +429,68 @@ def study_profile_groups(
                     profile
                     for _task, _role, profile, _name, _created in support_members
                 ),
+            )
+        )
+    return tuple(result)
+
+
+def study_run_profile_pairs(
+    profiles: tuple[ProfileEntry, ...],
+) -> tuple[StudyRunProfilePair, ...]:
+    """Validate and group current two-Profile Study runs by provenance."""
+
+    grouped: dict[str, list[tuple[ProfileEntry, StudyRunIdentity]]] = {}
+    order: list[str] = []
+    for profile in profiles:
+        identity = study_run_identity(profile)
+        if identity is None:
+            continue
+        if identity.uid not in grouped:
+            grouped[identity.uid] = []
+            order.append(identity.uid)
+        grouped[identity.uid].append((profile, identity))
+
+    result: list[StudyRunProfilePair] = []
+    seen_names: set[str] = set()
+    for study_uid in order:
+        members = grouped[study_uid]
+        roles = {identity.role for _profile, identity in members}
+        if len(members) != 2 or roles != {"PARTICIPANT", "GRANTED_MEMORY"}:
+            raise ProfileError("Study run Profile pair is incomplete.")
+        identities = [identity for _profile, identity in members]
+        shared = {
+            (
+                identity.name,
+                identity.created_at,
+                identity.baseline_profile_uid,
+                identity.baseline_profile_name,
+                identity.baseline_sha256,
+            )
+            for identity in identities
+        }
+        if len(shared) != 1:
+            raise ProfileError("Study run Profile provenance is inconsistent.")
+        name, created_at, _baseline_uid, _baseline_name, _digest = next(iter(shared))
+        if name.casefold() in seen_names:
+            raise ProfileError("Study run names must be unique.")
+        seen_names.add(name.casefold())
+        participant = next(
+            profile
+            for profile, identity in members
+            if identity.role == "PARTICIPANT"
+        )
+        authority = next(
+            profile
+            for profile, identity in members
+            if identity.role == "GRANTED_MEMORY"
+        )
+        result.append(
+            StudyRunProfilePair(
+                uid=study_uid,
+                name=name,
+                created_at=created_at,
+                participant=participant,
+                authority=authority,
             )
         )
     return tuple(result)

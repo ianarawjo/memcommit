@@ -1,0 +1,24 @@
+ MEM FIND · INTERACTIVE · CURRENT
+ ROOTS 1 · CONTEXTS 3 · INCLUDE DESCENDANTS · FOLLOW EMBEDS
+┌──────────────────────────| SEARCH · ENTER TO RUN |───────────────────────────┐
+│› accessibility                                                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌| TARGETS · PROFILE/CONTEXT · * CURRE|┐ ┌──────────────| SCOPE |──────────────┐
+│  ·   PROFILE  ALL READABLE CONTEXTS ^│ │  TARGET SELECTION · [ SINGLE TARGET │
+│› ✓ * ▸ task-3                        │ │  CONTEXT RANGE · [ THIS CONTEXT ONLY│
+│                                     v│ │  EMBEDDED CONTEXTS · [ EXCLUDE ]  [ │
+└──────────────────────────────────────┘ └─────────────────────────────────────┘
+┏━━━━━━━━━━━━━┃ RESULTS ┃━━━━━━━━━━━━━┓ ┌───────────| MATERIALIZE |────────────┐
+┃✓ 1. task-3/local/source · [memory  ^┃ │  MATERIALIZE AS · [ COPY ]  [ REFEREN│
+┃     65f53929]                       ┃ │CE ] · ←/→ SELECT                     │
+┃  Accessible entrance is on the      ┃ └──────────────────────────────────────┘
+┃  east side.                         ┃ ┌| PARENT CONTEXT · ENTER SELECTS LOCA|┐
+┃                                     ┃ │› ✓ * ▸ task-3                       ^│
+┃  2. task-3/local/source · [memory   ┃ └──────────────────────────────────────┘
+┃     a435df51]                       ┃ ┌───| SAVE LOCATION · NEW CONTEXT |────┐
+┃  Elevator reaches every public      ┃ │› task-3/results/accessibility        │
+┃  floor.                             ┃ └──────────────────────────────────────┘
+┃                                     ┃ ┌─────| TO DO · ENTER TO CREATE |──────┐
+┃                                    v┃ │  CREATE 1 CHECKED AS COPY            │
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ └──────────────────────────────────────┘
+ CHECKED RESULT 1 · 1 TOTAL · ↑/↓ move/cross · Enter activate/check · ←/→ adjust

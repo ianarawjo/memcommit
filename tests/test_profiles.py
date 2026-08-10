@@ -42,6 +42,8 @@ from memcommit.profiles import (
 )
 from memcommit.query_sessions import load_authority_query_catalog
 from memcommit.store import MemoryStore
+from memcommit.source_projection.presentation import source_display_text
+from memcommit.study_action_log import StudyActionLedger
 
 
 runner = CliRunner(mix_stderr=False)
@@ -486,15 +488,16 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "task-1/participant/construction-updates" in contexts.stdout
     assert "task-1/campus-wiki" in contexts.stdout
     assert (
-        "[view create,read,update,delete,query,derive,combine,export,"
-        "accept_derived,save_bound_analysis,save_analysis from "
-        "profile-view-granted-memory]"
+        "READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + "
+        "DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + "
+        "SAVE_ANALYSIS"
         in contexts.stdout
     )
     assert "task-1/campus-wiki/construction-details" in contexts.stdout
     assert (
-        "[view query,session_log from profile-view-granted-memory]" in contexts.stdout
+        "QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION" in contexts.stdout
     )
+    assert "FROM profile-view-granted-memory" in contexts.stdout
     assert "authoring-notes" not in contexts.stdout
 
     readable = _subprocess_mem(
@@ -572,8 +575,8 @@ def test_init_study_selects_the_initialized_complete_profile(
     task_two_contexts = _subprocess_mem(tmp_path, "contexts")
     assert "task-2/advisor1" in task_two_contexts.stdout
     assert (
-        "[view read,derive,combine,export,save_bound_analysis,save_analysis from "
-        "profile-view-granted-memory]" in task_two_contexts.stdout
+        "READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + "
+        "SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS" in task_two_contexts.stdout
     )
     read_only_add = _subprocess_mem(
         tmp_path,
@@ -595,17 +598,21 @@ def test_init_study_selects_the_initialized_complete_profile(
     virtual_names, annotations = _granted_picker_views()
     assert "task-1/campus-wiki" in virtual_names
     assert "task-1/campus-wiki/route-changes" in virtual_names
-    assert annotations["task-1/campus-wiki"] == (
-        "[grant CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + "
-        "EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · "
-        "RATIONALE SUBTREE + TRACE BLOCKED]"
+    assert source_display_text(annotations["task-1/campus-wiki"]) == (
+        "READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + "
+        "DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + "
+        "SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED"
     )
-    assert annotations["task-2/advisor1"] == (
-        "[grant READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + "
-        "SAVE_ANALYSIS · RATIONALE SUBTREE + TRACE BLOCKED]"
+    assert source_display_text(annotations["task-2/advisor1"]) == (
+        "READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + "
+        "SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · "
+        "ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED"
     )
-    assert annotations["task-2/proposal-submission-guidelines"] == (
-        "[grant QUERY + SAVE QUERY SESSION · RATIONALE BLOCKED + TRACE BLOCKED]"
+    assert source_display_text(
+        annotations["task-2/proposal-submission-guidelines"]
+    ) == (
+        "QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · "
+        "ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED"
     )
     picker_state = _granted_picker_state()
     assert "task-2/advisor1" in picker_state.selectable_names
@@ -620,10 +627,10 @@ def test_init_study_selects_the_initialized_complete_profile(
 
     profile_list = runner.invoke(app, ["profile", "list"])
     assert profile_list.exit_code == 0
-    assert "* profile-view" in profile_list.output
+    assert "├─ * Participant  CURRENT profile=profile-view" in profile_list.output
     assert "profile-view-granted-memory" in profile_list.output
     assert "43 granted" in profile_list.output
-    assert "STUDY profile-view" not in profile_list.output
+    assert "profile-view  STUDY" in profile_list.output
     assert "authoring" in profile_list.output
 
 
@@ -1130,6 +1137,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert any(bundle_root.rglob("checkpoints/*.json"))
     source_digest = _tree_digest(bundle_root)
     _bootstrap_study_baseline(bundle_root)
+    monkeypatch.delenv("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG", raising=False)
 
     result = runner.invoke(
         app,
@@ -1176,6 +1184,27 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     copied_root = profile_store_dir(copied)
     authority_root = profile_store_dir(authority)
     assert copied_root != baseline_root
+    participant_actions = StudyActionLedger(copied).list()
+    authority_actions = StudyActionLedger(authority).list()
+    assert [event.action for event in reversed(participant_actions)] == [
+        "STUDY_CREATED",
+        "PROFILE_ENTERED",
+    ]
+    assert [event.action for event in authority_actions] == ["STUDY_CREATED"]
+    assert participant_actions[0].attempt_uid == authority_actions[0].attempt_uid
+
+    profile_list = _subprocess_mem(tmp_path, "profile", "list")
+    assert profile_list.returncode == 0, profile_list.stderr
+    assert "pilot-001  STUDY" in profile_list.stdout
+    assert "Participant" in profile_list.stdout
+    assert "Granted memory" in profile_list.stdout
+    actions = _subprocess_mem(tmp_path, "log", "--actions")
+    assert actions.returncode == 0, actions.stderr
+    assert "Study actions · recent first · content-free" in actions.stdout
+    assert "STUDY_CREATED" in actions.stdout
+    assert "COMMAND_STARTED" in actions.stdout
+    assert "private" not in actions.stdout
+
     baseline_store = MemoryStore(root=baseline_root, create=False)
     copied_store = MemoryStore(root=copied_root, create=False)
     authority_store = MemoryStore(root=authority_root, create=False)
@@ -1359,7 +1388,9 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
 
     assert result.exit_code == 0, result.output
     profile_line = next(
-        line for line in result.output.splitlines() if "pilot-002" in line
+        line
+        for line in result.output.splitlines()
+        if "Participant" in line and "profile=pilot-002 " in line
     )
     assert "Contexts 65 owned + 43 granted" in profile_line
     assert "Memories 457 owned + 625 granted" in profile_line
@@ -1370,7 +1401,7 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
     )
     assert "Contexts 75 owned + 0 granted" in authority_line
     assert "Memories 853 owned + 0 granted" in authority_line
-    assert "STUDY pilot-002" not in result.output
+    assert "pilot-002  STUDY" in result.output
     assert "pilot-002-task-" not in result.output
     assert "Authority 1" not in result.output
 
@@ -1412,8 +1443,8 @@ def test_initialized_study_picker_shows_participant_and_authority_profiles(
     assert observed == [
         ("authoring", None),
         ("study-baseline", None),
-        ("pilot-picker", None),
-        ("pilot-picker-granted-memory", None),
+        ("pilot-picker", "PARTICIPANT"),
+        ("pilot-picker-granted-memory", "GRANTED_MEMORY"),
     ]
     assert load_profile_registry().active.name == "pilot-picker"
 
@@ -1628,7 +1659,7 @@ def test_repeated_init_study_run_pairs_are_independent(
     current_inventory = runner.invoke(app, ["profile", "list"])
     assert current_inventory.exit_code == 0, current_inventory.output
     assert any(
-        line.startswith("* pilot-v2-a")
+        "* Participant" in line and "profile=pilot-v2-a " in line
         for line in current_inventory.output.splitlines()
     )
 

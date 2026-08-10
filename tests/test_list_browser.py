@@ -6,6 +6,7 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.commands.list_memories import _snapshot_browser_tree
+from memcommit.source_projection.model import SourceReach
 
 
 runner = CliRunner()
@@ -117,4 +118,8 @@ def test_snapshot_browser_preserves_repeated_context_occurrences():
     shared_ids = tree.children_by_name[tree.roots[0]]
     assert [row.content for row in memories[shared_ids[0]]] == ["same"]
     assert [row.content for row in memories[shared_ids[1]]] == ["same"]
-    assert annotations == {}
+    assert set(annotations) == set(shared_ids)
+    assert all(
+        annotation.reach is SourceReach.VIA_EMBED
+        for annotation in annotations.values()
+    )

@@ -71,6 +71,13 @@ previous committed results, appends a visible failure receipt in the same
 screen, and re-enables input. Provider latency does not block a prompt-toolkit
 key handler or make the terminal appear to leave Find.
 
+Escape closes from the input, results, or transcript through the shared
+operation-owned close dispatcher; an in-flight turn still finishes before the
+alternate screen closes. The composer retains `Ctrl-J` for a newline and no
+longer binds Alt-Enter, because a terminal may encode Alt-Enter as the same
+Escape-prefixed sequence needed for immediate cancellation. Backspace remains
+ordinary composer deletion.
+
 The result panel uses a read-only text buffer rather than a cursorless
 formatted-text control. Its hidden cursor moves with the result-panel arrow
 keys, giving prompt-toolkit a real scroll anchor while keeping result content

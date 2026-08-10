@@ -44,6 +44,7 @@ from memcommit.commands.result_workbench_shell import (
     result_workbench_fragments,
 )
 from memcommit.commands.tui_primitives import (
+    bind_case_insensitive_key,
     safe_terminal_text,
 )
 from memcommit.commands.tui_text_layout import (
@@ -833,8 +834,12 @@ def run_atomize_workbench_shell(
         save(session)
         event.app.invalidate()
 
-    @bindings.add("q", filter=has_focus(list_control), eager=True)
-    @bindings.add("q", filter=has_focus(result_control), eager=True)
+    @bind_case_insensitive_key(
+        bindings, "q", filter=has_focus(list_control), eager=True
+    )
+    @bind_case_insensitive_key(
+        bindings, "q", filter=has_focus(result_control), eager=True
+    )
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
         if persist():

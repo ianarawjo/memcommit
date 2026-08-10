@@ -32,7 +32,9 @@ from prompt_toolkit.widgets import TextArea
 
 from memcommit.commands.tui_primitives import (
     TuiRegion,
+    bind_case_insensitive_key,
     build_tui_frame,
+    dispatch_tui_back,
     require_interactive_terminal,
     safe_terminal_text,
 )
@@ -439,9 +441,9 @@ def _run_find_chat_application(
                     "Ctrl-C · close after this turn"
                     if background_turn.busy
                     else (
-                        " Enter · submit    Ctrl-J / Alt-Enter · newline    "
+                        " Enter · submit    Ctrl-J · newline    "
                         "Tab · results/dialogue/input    "
-                        "↑/↓ or PgUp/PgDn · scroll    Ctrl-C · close"
+                        "↑/↓ or PgUp/PgDn · scroll    Esc/Ctrl-C · close"
                     )
                 )
             )
@@ -556,12 +558,6 @@ def _run_find_chat_application(
         event.app.invalidate()
 
     @bindings.add("c-j", filter=has_focus(input_area), eager=True)
-    @bindings.add(
-        "escape",
-        "enter",
-        filter=has_focus(input_area),
-        eager=True,
-    )
     def _insert_newline(event) -> None:
         if background_turn.busy:
             status_message["value"] = "Wait for the current Find turn."
@@ -626,10 +622,13 @@ def _run_find_chat_application(
         scroll_page_down(event)
         event.app.invalidate()
 
-    @bindings.add("q", filter=navigation_focus, eager=True)
-    @bindings.add("escape", filter=navigation_focus, eager=True)
+    @bind_case_insensitive_key(bindings, "q", filter=navigation_focus, eager=True)
     def _close_from_transcript(event) -> None:
         close(event)
+
+    @bindings.add("escape", eager=True)
+    def _close_on_escape(event) -> None:
+        dispatch_tui_back(event, close=close)
 
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)

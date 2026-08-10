@@ -18,6 +18,7 @@ from memcommit.semantic_execution import (
     BudgetVector,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     plan_semantic_execution,
 )
@@ -25,7 +26,7 @@ from memcommit.semantic_execution import (
 
 FIND_ANSWER_OPERATION = "find answer"
 FIND_ANSWER_RESPONSE_LIMIT = 50_000
-FIND_ANSWER_CORPUS_LIMIT = 220_000
+FIND_ANSWER_CORPUS_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 FIND_ANSWER_REQUEST_LIMIT = 20_000
 def _find_answer_execution_policy() -> SemanticExecutionPolicy:
     return SemanticExecutionPolicy(

@@ -7,10 +7,13 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.commands.granted_context import ContextAccess
+from memcommit.commands.granted_context import (
+    ContextAccess,
+    context_access_display_facts,
+)
 from memcommit.commands.meld_target_picker import eligible_meld_targets
 from memcommit.commands.readable_context_catalog import (
-    freeze_readable_context_catalog,
+    freeze_profile_readable_context_catalog,
 )
 from memcommit.commands.session_endpoint_setup import (
     EndpointModeSpec,
@@ -18,6 +21,7 @@ from memcommit.commands.session_endpoint_setup import (
     EndpointSetupDraft,
     choose_session_endpoints,
 )
+from memcommit.source_projection.model import SourceDisplayFacts
 from memcommit.store import MemoryStore
 
 
@@ -57,7 +61,7 @@ class MeldSetupReceipt:
 
 def _readable_endpoint_catalog(
     store: MemoryStore,
-) -> tuple[tuple[str, ...], str, str, dict[str, str]]:
+) -> tuple[tuple[str, ...], str, str, dict[str, SourceDisplayFacts]]:
     """Freeze local and READ-granted names for two-readable-Context setup."""
 
     local_names = tuple(store.list_context_names())
@@ -72,7 +76,7 @@ def _readable_endpoint_catalog(
         attachment_name=None,
         permission="READ",
     )
-    catalog = freeze_readable_context_catalog(
+    catalog = freeze_profile_readable_context_catalog(
         store,
         root_access,
         include_query_routes=False,
@@ -82,20 +86,18 @@ def _readable_endpoint_catalog(
         raise ValueError("Starting this operation requires two readable Contexts.")
     first = current if current in names else names[0]
     second = next(name for name in names if name != first)
-    annotations: dict[str, str] = {}
+    annotations: dict[str, SourceDisplayFacts] = {}
     for name in names:
         access = catalog.access_for(name)
         if not access.is_granted:
             continue
-        assert access.view is not None
-        permissions = " + ".join(access.view.grant.permissions)
-        annotations[name] = f"GRANTED · {permissions}"
+        annotations[name] = context_access_display_facts(access)
     return names, first, second, annotations
 
 
 def _meld_source_catalog(
     store: MemoryStore,
-) -> tuple[tuple[str, ...], str, str, dict[str, str]]:
+) -> tuple[tuple[str, ...], str, str, dict[str, SourceDisplayFacts]]:
     """Freeze local and granted public names offered as Meld sources."""
 
     local_names = tuple(store.list_context_names())
@@ -110,7 +112,7 @@ def _meld_source_catalog(
         attachment_name=None,
         permission="READ",
     )
-    catalog = freeze_readable_context_catalog(
+    catalog = freeze_profile_readable_context_catalog(
         store,
         root_access,
         include_query_routes=False,
@@ -121,7 +123,7 @@ def _meld_source_catalog(
     first = current if current in names else names[0]
     second = next(name for name in names if name != first)
     annotations = {
-        name: "GRANTED · READ SOURCE"
+        name: context_access_display_facts(catalog.access_for(name))
         for name in names
         if catalog.access_for(name).is_granted
     }
@@ -348,7 +350,7 @@ def choose_meld_setup(
                 ("A", "B"),
                 {"A": "A · INCOMING", "B": "B · BASELINE + RESULT"},
                 "A is incoming evidence. B remains authoritative and is the result target.",
-                descendant_roles=frozenset({"A"}),
+                descendant_roles=frozenset({"A", "B"}),
             ),
         ),
         roles=(

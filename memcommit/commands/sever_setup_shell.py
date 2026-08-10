@@ -15,7 +15,7 @@ from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.widgets import Frame, TextArea
+from prompt_toolkit.widgets import Frame
 
 from memcommit.context_targeting.tui.reach import (
     ContextReachState,
@@ -29,7 +29,10 @@ from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.commands.tui_primitives import (
+    ExactNameFieldControl,
+    ExactNameFieldView,
     MEMCOMMIT_TUI_STYLE,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     display_escape_text,
 )
@@ -227,21 +230,24 @@ def choose_sever_setup(
 
     source_frame = context_frame("SOURCE", source_control)
     criteria_frame = context_frame("CRITERIA", criteria_control)
-    output_editor = TextArea(
-        text=default_output,
-        multiline=False,
-        prompt="› ",
-        focusable=True,
-        wrap_lines=False,
-        height=Dimension.exact(1),
-        name="sever-output-name",
+
+    def validate_output_name(candidate: str) -> None:
+        validate_context_name(candidate)
+        if candidate in catalog:
+            raise ValueError("Output must be a new Context name.")
+
+    output_field = ExactNameFieldControl.create(
+        ExactNameFieldView(
+            value=default_output,
+            label="OUTPUT CONTEXT NAME · EDIT DIRECTLY",
+            state="NOT CREATED",
+            validate=validate_output_name,
+            value_label="Output Context name",
+        ),
+        input_name="sever-output-name",
     )
-    output_editor.buffer.cursor_position = len(default_output)
-    output_frame = Frame(
-        output_editor,
-        title="OUTPUT CONTEXT NAME · EDIT DIRECTLY · NOT CREATED",
-        height=Dimension.exact(3),
-    )
+    output_editor = output_field.input
+    output_frame = output_field.frame
 
     bind_focused_frame_style(
         source_frame,
@@ -251,11 +257,6 @@ def choose_sever_setup(
         criteria_frame,
         is_focused=lambda: app.layout.has_focus(criteria_control),
     )
-    bind_focused_frame_style(
-        output_frame,
-        is_focused=lambda: app.layout.has_focus(output_editor),
-    )
-
     def render_header() -> str:
         return (
             " MEM SEVER · SETUP · SOURCE UNCHANGED\n "
@@ -435,11 +436,8 @@ def choose_sever_setup(
             app.layout.focus(criteria_control)
             event.app.invalidate()
             return
-        candidate = output_editor.text.strip()
         try:
-            validate_context_name(candidate)
-            if candidate in catalog:
-                raise ValueError("Output must be a new Context name.")
+            candidate = output_field.validate_candidate()
         except ValueError as error:
             error_message["value"] = str(error)
             app.layout.focus(output_editor)
@@ -467,8 +465,7 @@ def choose_sever_setup(
         )
         suggested_output["value"] = suggested
         if output_editor.text == previous:
-            output_editor.text = suggested
-            output_editor.buffer.cursor_position = len(suggested)
+            output_field.set_text(suggested)
 
     @bindings.add("f", filter=tree_focus, eager=True)
     @bindings.add("F", filter=tree_focus, eager=True)
@@ -479,7 +476,7 @@ def choose_sever_setup(
     def _finish_from_output(event) -> None:
         finish(event)
 
-    @bindings.add("q", filter=tree_focus, eager=True)
+    @bind_case_insensitive_key(bindings, "q", filter=tree_focus, eager=True)
     @bindings.add("escape", eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:

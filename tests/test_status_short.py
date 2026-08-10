@@ -22,10 +22,10 @@ def test_status_sb_is_one_line_with_profile_context_lineage_and_counts(
     assert result.exit_code == 0, result.output
     assert result.output.count("\n") == 1
     assert result.output.startswith(
-        "## standalone :: task-2 > participant > proposal-workspace [local]"
+        "## standalone :: task-2 > participant > proposal-workspace [OWNED]"
     )
-    assert "memories 1" in result.output
-    assert "checkpoints 0" in result.output
+    assert "Memories 1" in result.output
+    assert "Checkpoints 0" in result.output
 
 
 def test_status_short_does_not_change_detailed_default(isolated_store):
@@ -38,7 +38,7 @@ def test_status_short_does_not_change_detailed_default(isolated_store):
     detailed = runner.invoke(app, ["status"])
 
     assert short.exit_code == 0, short.output
-    assert short.output.startswith("notes [local] · memories 0")
+    assert short.output.startswith("notes [OWNED] · Memories 0")
     assert detailed.exit_code == 0, detailed.output
     assert "On context: notes" in detailed.output
     assert "(no memories yet)" in detailed.output

@@ -12,6 +12,7 @@ from memcommit.semantic_execution.model import (
     ExecutionMode,
     ExecutionPlan,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
 )
 from memcommit.semantic_execution.partitioning import (
@@ -38,6 +39,7 @@ __all__ = [
     "PartitionError",
     "RelationBlock",
     "RelationScheduleError",
+    "SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT",
     "SemanticExecutionPolicy",
     "json_budget",
     "build_relation_block_matrix",

@@ -16,9 +16,11 @@ from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     TuiRegion,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     build_scrollable_text_pane,
     build_tui_frame,
+    move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
 
@@ -57,11 +59,11 @@ def run_read_only_viewer(
 
     @bindings.add("up")
     def _up(event) -> None:
-        event.current_buffer.cursor_up(count=1)
+        move_wrapped_read_cursor(event, direction=-1)
 
     @bindings.add("down")
     def _down(event) -> None:
-        event.current_buffer.cursor_down(count=1)
+        move_wrapped_read_cursor(event, direction=1)
 
     @bindings.add("pageup")
     def _page_up(event) -> None:
@@ -82,8 +84,9 @@ def run_read_only_viewer(
     def close(event) -> None:
         event.app.exit()
 
-    for key in ("escape", "backspace", "q", "c-c"):
+    for key in ("escape", "backspace", "c-c"):
         bindings.add(key)(close)
+    bind_case_insensitive_key(bindings, "q")(close)
 
     app: Application[None] = Application(
         layout=Layout(

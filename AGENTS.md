@@ -72,6 +72,12 @@ conversation.
   namespace, do not build its catalog from `MemoryStore.list_context_names()`
   alone. Use `ReadableContextCatalog` so effectively READ-granted public names
   and ordinary local names share the same command-local public hierarchy.
+- When a control is explicitly labelled `PROFILE` or `ALL READABLE CONTEXTS`,
+  freeze it with `freeze_profile_readable_context_catalog`. A selected granted
+  Context is the initial row, not the namespace boundary: the catalog must
+  still contain ordinary local names and every valid READ-granted public name.
+  Keep selected-Context commands on `freeze_readable_context_catalog`; Profile
+  breadth must not silently broaden an ordinary exact or subtree operation.
 - Public names determine semantic parent/child placement. A Grant attachment
   is authorization metadata and must never be treated as a hierarchy edge.
   Keep the exact `ContextAccess` for every selected name so loading,
@@ -107,11 +113,17 @@ conversation.
   constructing its executable request or typed receipt. SINGLE mode must
   contain exactly one name; when switching an empty MULTIPLE control to SINGLE,
   use the composing tree's visible cursor as the explicit fallback.
-- For hierarchical MULTIPLE selection, compose the frozen Context tree with
-  the shared selection state's group toggle: checking a parent checks its full
-  lexical subtree and unchecking it clears that subtree. Render every effective
-  target as checked and execute the exact checked set; do not also apply hidden
-  descendant expansion that could re-include an independently unchecked row.
+- For hierarchical selection, compose the frozen Context tree, shared
+  selection state, and shared reach control. Keep one-versus-many target ranges
+  independent from exact-versus-descendant row behavior. Checking a parent in
+  descendant mode checks its full lexical subtree and unchecking it clears that
+  subtree. Render every effective target as checked and execute the exact
+  checked set in Find and ordinary Query; do not also apply hidden descendant
+  expansion that could re-include an independently unchecked row.
+- Keep Find and ordinary Query's `PROFILE` target process-local. Expand it only
+  to the frozen `ReadableContextCatalog` at request construction; never persist
+  it, pass it to storage as a Context locator, or let it broaden readable
+  authority. Keep query-only grant routes in a separate typed Source catalog.
 - Use `expand_lexical_context_names` for canonical name-prefix expansion.
   Keep lexical descendants and embedded-Context traversal as independent axes,
   and never interpret Grant attachment metadata as a hierarchy edge.
@@ -188,12 +200,29 @@ conversation.
   interaction mechanics common. When a missing capability belongs to an
   existing shared pattern, add it to that shared component and migrate the
   relevant caller rather than introducing a parallel grammar.
+- Declare multi-frame keyboard topology with `FocusSurface` and
+  `SurfaceFocusController` from `memcommit.commands.surface_focus`. Let the
+  shared controller route Tab/Shift-Tab, boundary-aware Up/Down, Enter, and
+  read-only back keys, while Surface adapters retain operation meaning. Report
+  internal movement as `MOVED`, an edge as `BOUNDARY`, and an intentionally
+  retained key as `CONSUMED`; do not duplicate focus indexing in a command.
+  Vertical entry may select the adjacent first/last row, but Tab traversal must
+  preserve each Surface's internal cursor. Never steal Backspace or cursor keys
+  from writable input unless that Surface explicitly declares the capability.
 - Project fixed flat choices through `SelectionOption` and
   `FlatSelectionState`. Use the common checked-card renderer for horizontal or
   stacked choices and the common tree marker/style projection for hierarchical
   selectors. Layout and operation key meanings may differ, but `✓`, retained
   selection color, focused border/color, escaping, and cursor-versus-selection
   meaning must not be redrawn by an operation.
+- For an exact writable one-line name, reuse `ExactNameInputControl` from
+  `memcommit.commands.tui_primitives`; add `ExactNameFieldControl` only when the
+  field owns its own focused box. Context placement additionally composes
+  `ContextParentLocatorControl` from `memcommit.context_targeting.tui`; do not
+  make a Save Location, Meld, Sever, Study, or other operation-named editor own
+  these mechanics. Use `build_focused_frame` for arbitrary shared frame chrome,
+  while labels, validators, receipts, persistence, and Apply meaning remain in
+  the operation adapter.
 
 - Keep report structure, explanatory prose, cards, and ordinary labels neutral
   white. Do not tint a whole Compare, Meld, Review, or Impact report merely to
@@ -209,6 +238,12 @@ conversation.
   one-level back-navigation path while focus is in a read-only surface. Do not
   steal Backspace from a composer or other writable input, where it must remain
   ordinary text deletion.
+- Give every interactive terminal surface an Escape path to its operation-owned
+  close or cancel action. Use `dispatch_tui_back` for layered screens: Escape
+  retreats one visible layer first and closes from the root, while Backspace
+  remains ordinary deletion in writable fields. Do not retain `Alt-Enter` when
+  a lone Escape is reserved, because terminals commonly encode it as an
+  Escape-prefixed Enter sequence.
 - Keep focused detail-card viewport behavior in the shared session Viewer, not
   in an operation-specific adapter. Place the hidden cursor anchor after the
   focused card's closing border so a lower card is not rendered as only a top
@@ -221,11 +256,13 @@ conversation.
   a preliminary Enter or Escape merely to enter or leave an option layer. A transient hover
   must not replace the checked value: crossing the choice/Response or frame
   boundary restores the cursor to the checked choice when one exists.
-- Render every option with the common Meld-style checked card: `✓` marks the
-  staged selection, retained selection keeps the common fill, and the keyboard
-  target receives the heavy blue border. Do not use radio circles, diamonds,
-  or operation-authored option boxes. The clarification or resolution question
-  is explanatory chrome above the choices, not an independent focus stop.
+- In Responses, project the common flat selection state as unboxed stacked
+  rows: `✓` marks the staged selection, the keyboard target fills the label and
+  description blue, and only the label is bold. Do not use radio circles,
+  diamonds, or operation-authored option boxes. The clarification or resolution
+  question is explanatory chrome above the choices, not an independent focus
+  stop. Keep the nested Response box neutral while a choice row owns focus; the
+  outer focused frame must not make both controls appear active.
 - Put free-form input in a separate inner `RESPONSE` box after the real
   operation-supplied choices; do not fabricate a `Different`/`Other` choice.
   Reuse the shared framed multiline input inside the existing `RESPONSES`
@@ -272,6 +309,12 @@ conversation.
   its member Memories into one claim per source frame; do not flatten issue
   evidence away from the relation that judged it or repeat the same Context
   heading for every supporting Memory.
+- Keep ordinary Query's answer body and used citation References as one typed
+  document rather than reparsing its final CLI text. In the Answer frame,
+  Up/Down traverses the neutral answer body followed by individual Reference
+  blocks. The active Reference uses the shared blue focused-control background
+  and owns the viewport anchor; unfocused References remain neutral. Preserve
+  the existing plain rendered answer for non-interactive CLI compatibility.
 
 ## Agent-mediated Ground turns
 

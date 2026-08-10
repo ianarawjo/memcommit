@@ -13,6 +13,7 @@ from typing import Any, Literal
 
 from memcommit.context import Context, Memory
 from memcommit.store import MemoryStore, canonical_context_record
+from memcommit.temporal_history import direct_memory_deltas
 
 
 HistoryTransitionKind = Literal[
@@ -352,28 +353,21 @@ def _memory_changes(
 ) -> list[MemoryTransition]:
     before_by_uid = {version.memory_uid: version for version in before.memories}
     after_by_uid = {version.memory_uid: version for version in after.memories}
-    ordered_uids = [
-        *[version.memory_uid for version in before.memories],
-        *[
-            version.memory_uid
-            for version in after.memories
-            if version.memory_uid not in before_by_uid
-        ],
-    ]
     changes: list[MemoryTransition] = []
-    for memory_uid in ordered_uids:
-        old = before_by_uid.get(memory_uid)
-        new = after_by_uid.get(memory_uid)
-        if old is not None and new is not None and old.content_digest == new.content_digest:
-            continue
+    deltas = direct_memory_deltas(
+        before_by_uid,
+        after_by_uid,
+        before_order=tuple(version.memory_uid for version in before.memories),
+        after_order=tuple(version.memory_uid for version in after.memories),
+        content=lambda version: version.content_digest,
+    )
+    for delta in deltas:
+        old = delta.before
+        new = delta.after
         if restoration:
             kind: HistoryTransitionKind = "RESTORED"
-        elif old is None:
-            kind = "CREATED"
-        elif new is None:
-            kind = "REMOVED"
         else:
-            kind = "EDITED"
+            kind = delta.kind
         changes.append(
             MemoryTransition(
                 index=transition_offset + len(changes),
@@ -393,7 +387,7 @@ def _memory_changes(
                 ),
                 kind=kind,
                 evidence=evidence,
-                memory_uid=memory_uid,
+                memory_uid=delta.memory_uid,
                 before=old,
                 after=new,
                 from_state_index=before.index,

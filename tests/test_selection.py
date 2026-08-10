@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from memcommit.selection.model import SelectionOption
 from memcommit.selection.state import FlatSelectionState
-from memcommit.selection.tui import render_vertical_choice_cards, tree_choice_styles
+from memcommit.selection.tui import (
+    render_vertical_choice_cards,
+    render_vertical_choice_rows,
+    tree_choice_styles,
+)
 
 
 def test_flat_selection_keeps_cursor_and_checked_value_independent():
@@ -58,6 +62,30 @@ def test_vertical_choices_use_meld_rectangles_without_radio_markers():
         if style == "[SetCursorPosition]"
     )
     assert cursor_anchor > focused_bottom
+
+
+def test_vertical_choice_rows_highlight_content_without_boxing_description_bold():
+    state = FlatSelectionState(
+        (SelectionOption("one", "[SINGLE] First", "Use the first form."),),
+        cursor_uid="one",
+    )
+
+    fragments = render_vertical_choice_rows(
+        state,
+        focused=True,
+        content_width=36,
+    )
+    rendered = "".join(text for _style, text in fragments)
+
+    assert not any(glyph in rendered for glyph in "┏┓┗┛┌┐└┘")
+    assert (
+        "class:memcommit.choice.active.focused",
+        "  1. [SINGLE] First\n",
+    ) in fragments
+    assert (
+        "class:memcommit.choice.active",
+        "  Use the first form.\n",
+    ) in fragments
 
 
 def test_tree_variant_shares_checked_color_without_losing_tree_cursor():

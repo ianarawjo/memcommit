@@ -398,16 +398,17 @@ production security boundary: the Codex process retains a tool surface and may
 be able to read host files. Use only approved study data. A production
 implementation should use a tool-less, access-controlled ranking service.
 
-The initial ranking path keeps each provider payload within 200,000 characters.
+The ranking path keeps each provider payload within the shared
+1,000,000-character effective provider capacity.
 When the frozen ordinary corpus exceeds that boundary, Find preserves Context
 groups where they fit, ranks every batch, and globally reranks the validated
 shortlist. One oversized candidate and an oversized final shortlist still fail
 without truncation. Small corpora retain one provider call. Temporal Find
 remains one-shot until independently planned subject/anchor relations have an
-explicit reconciliation contract. The follow-up synthesis has its own 220,000-character
-scope ceiling. If explicitly requested other-Context evidence causes that
-ceiling to be exceeded, Find retries with the frozen visible and same-frame
-evidence and reports the wider check as unavailable instead of sampling an
-arbitrary subset. If the same-frame payload alone exceeds the ceiling, the
-turn currently fails. The common planning and coverage contract is recorded in
+explicit reconciliation contract. Follow-up synthesis uses the same shared
+capacity. If explicitly requested other-Context evidence causes that ceiling
+to be exceeded, Find retries with the frozen visible and same-frame evidence
+and reports the wider check as unavailable instead of sampling an arbitrary
+subset. If the same-frame payload alone exceeds the ceiling, the turn currently
+fails. The common planning and coverage contract is recorded in
 `semantic-execution-planning-design-rationale.md`.

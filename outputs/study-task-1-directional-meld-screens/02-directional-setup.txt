@@ -1,0 +1,22 @@
+NEW MELD · DIRECTIONAL · A → B
+
+OPERATION SHAPE
+  [ SYMMETRIC · A + B → C ]  [ ✓ DIRECTIONAL · A → B ]
+
+A · INCOMING
+  › task-1/participant/construction-updates
+  RANGE · [ THIS CONTEXT ONLY ]  [ ✓ INCLUDE DESCENDANTS ]
+
+B · BASELINE + RESULT
+  › task-1/campus-wiki  READ GRANT
+  RANGE · [ THIS CONTEXT ONLY ]  [ ✓ INCLUDE DESCENDANTS ]
+
+APPLY · [ PRESS ENTER TO APPLY ]
+
+LITERAL TTY KEY TRACE
+  N → Right → Down → Down×5 → Enter
+  Tab → Right → Tab → Down → Right → Down → Enter
+  Tab → Right → Tab → Enter
+
+Execution receipt:
+  SCOPE · A SELECTED + ALL DESCENDANTS · B SELECTED + ALL DESCENDANTS

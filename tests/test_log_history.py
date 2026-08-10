@@ -6,6 +6,8 @@ import json
 from typer.testing import CliRunner
 
 from memcommit.cli import app
+from memcommit.context import Memory
+from memcommit.store import MemoryStore
 
 
 runner = CliRunner()
@@ -13,6 +15,14 @@ runner = CliRunner()
 
 def invoke(*args: str):
     return runner.invoke(app, list(args))
+
+
+def _memory_uid(context_name: str) -> str:
+    return next(
+        item.uid
+        for item in MemoryStore().load_direct(context_name).iter_items()
+        if isinstance(item, Memory)
+    )
 
 
 class CheckpointPlanProvider:
@@ -116,6 +126,42 @@ def test_plain_log_bypasses_picker_even_in_a_tty(
 
     assert result.exit_code == 0
     assert "Log for 'notes'" in result.output
+
+
+def test_log_memory_plain_is_the_canonical_trace_projection(isolated_store):
+    invoke("init", "notes")
+    invoke("add", "one")
+    memory_uid = _memory_uid("notes")
+
+    through_log = invoke("log", "--memory", memory_uid, "--plain")
+    through_trace = invoke("trace", memory_uid, "--plain")
+
+    assert through_log.exit_code == 0, through_log.output
+    assert through_trace.exit_code == 0, through_trace.output
+    assert through_log.output == through_trace.output
+
+
+def test_log_memory_uses_the_shared_trace_history_explorer(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "notes")
+    invoke("add", "one")
+    memory_uid = _memory_uid("notes")
+    observed: dict[str, str] = {}
+    monkeypatch.setattr("memcommit.commands.log._interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        "memcommit.commands.log.open_trace_history",
+        lambda report, *, context_name: observed.update(
+            context_name=context_name,
+            memory_uid=report.selected_uid,
+        ),
+    )
+
+    result = invoke("log", "--memory", memory_uid)
+
+    assert result.exit_code == 0, result.output
+    assert observed == {"context_name": "notes", "memory_uid": memory_uid}
 
 
 def test_semantic_log_prints_locally_resolved_checkpoint_outside_tty(

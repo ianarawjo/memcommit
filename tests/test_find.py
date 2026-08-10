@@ -575,7 +575,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     assert "1 match" not in result.output
     assert "campus/parking\n" in result.output
     assert (
-        f"[memory  {memory.uid[:8]}] " "Temporary parking is available in Lot C."
+        f"[memory {memory.uid[:8]}] " "Temporary parking is available in Lot C."
     ) in result.output
     assert store.list_checkpoints("facilities-reference") == checkpoints_before
 
@@ -615,7 +615,7 @@ def test_find_cli_searches_materialized_namespace_descendants_by_default(
 
     assert result.exit_code == 0, result.output
     assert "task-3/personal-memory\n" in result.output
-    assert f"[memory  {memory.uid[:8]}]" in result.output
+    assert f"[memory {memory.uid[:8]}]" in result.output
     payload = json.loads(provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1])
     candidate_text = json.dumps(payload["candidates"])
     assert memory.content in candidate_text
@@ -667,7 +667,7 @@ def test_find_cli_labels_related_fallback_when_primary_matches_are_empty(
     assert "RELATED RESULTS" in result.output
     assert "Broader search: health and healthcare memories" in result.output
     assert "Related items do not satisfy the original query." in result.output
-    assert f"[related memory {clinic.uid[:8]}]" in result.output
+    assert f"[memory {clinic.uid[:8]}] · RELATED" in result.output
     assert "parking permit" not in result.output
 
 
@@ -720,7 +720,7 @@ def test_find_cli_tty_prints_static_results_without_opening_chat(
 
     assert result.exit_code == 0, result.output
     assert ctx.name in result.output
-    assert f"[memory  {memory.uid[:8]}]" in result.output
+    assert f"[memory {memory.uid[:8]}]" in result.output
     assert memory.content in result.output
     assert "Find dialogue closed" not in result.output
 
@@ -817,7 +817,7 @@ def test_find_cli_tty_static_results_include_namespace_descendants(
 
     assert result.exit_code == 0, result.output
     assert child.name in result.output
-    assert f"[memory  {memory.uid[:8]}]" in result.output
+    assert f"[memory {memory.uid[:8]}]" in result.output
     assert "Find dialogue closed" not in result.output
 
 
@@ -1347,11 +1347,11 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
     result = runner.invoke(app, ["find", "anything"])
 
     assert result.exit_code == 0
-    first_label = f"[memory  {first_child.uid[:8]}]"
+    first_label = f"[memory {first_child.uid[:8]}]"
     first_row = f"{first_label} First child line"
     continuation = " " * (len(first_label) + 1) + "continued detail"
-    second_row = f"[memory  {second_child.uid[:8]}] Second child result"
-    root_row = f"[memory  {root_memory.uid[:8]}] Root result"
+    second_row = f"[memory {second_child.uid[:8]}] Second child result"
+    root_row = f"[memory {root_memory.uid[:8]}] Root result"
     assert result.output.count("campus/parking\n") == 1
     assert result.output.count("facilities-reference\n") == 1
     assert (
@@ -1386,7 +1386,7 @@ def test_find_cli_groups_memory_ref_and_renders_target_inline(
     assert result.exit_code == 0
     assert result.output == (
         "parent\n"
-        f"[ref     {ref.uid[:8]}] "
+        f"[memory ref {ref.uid[:8]}] · READ ONLY "
         f"-> source#{memory.uid[:8]} Referenced parking detail\n"
     )
 
@@ -1444,7 +1444,7 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
     assert result.exit_code == 0
     assert "facilities-reference\n" in result.output
     assert (
-        f"[query   {ref.uid[:8]}] " "contractor-agreements (query-only)"
+        f"[query view {ref.uid[:8]}] contractor-agreements"
     ) in result.output
     assert "mem query" in result.output
     assert HIDDEN_SECRET not in result.output

@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import MemoryRef, QueryContextRef
 from memcommit.findings import (
     FindingsError,
     collect_direct_memories,
@@ -171,7 +171,6 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
             "duplicate discovery must not enumerate pair targets"
         ),
     )
-    monkeypatch.setattr("memcommit.findings.CONFLICT_PAIR_LIMIT", 0)
     provider = PayloadProvider(respond)
     report = find_duplicates(ctx, lambda: provider)
 
@@ -690,21 +689,22 @@ def test_cli_direct_scope_does_not_open_memory_ref_or_embedded_context_files(
     )
 
 
-def test_pair_limit_fails_before_provider_connection(monkeypatch):
+def test_conflicts_enumerates_all_pairs_without_count_gate():
     ctx = ops.init("large")
     for index in range(4):
         ops.add(ctx, str(index))
-    monkeypatch.setattr("memcommit.findings.CONFLICT_PAIR_LIMIT", 5)
+    provider = PayloadProvider(lambda _operation, _payload: {"findings": []})
 
-    with pytest.raises(FindingsError, match="exceeding"):
-        find_conflicts(ctx, ForbiddenProvider())
+    report = find_conflicts(ctx, lambda: provider)
+
+    assert report.findings == ()
+    assert len(provider.calls[0][3]["pairs"]) == 6
 
 
-def test_duplicate_scan_does_not_use_conflict_pair_limit(monkeypatch):
+def test_duplicate_scan_does_not_allocate_pair_records(monkeypatch):
     ctx = ops.init("linear-duplicates")
     for index in range(4):
         ops.add(ctx, str(index))
-    monkeypatch.setattr("memcommit.findings.CONFLICT_PAIR_LIMIT", 0)
     monkeypatch.setattr(
         "memcommit.findings.MemoryPair",
         lambda *args, **kwargs: pytest.fail(
@@ -723,21 +723,22 @@ def test_duplicate_scan_does_not_use_conflict_pair_limit(monkeypatch):
     assert "pairs" not in provider.calls[0][3]
 
 
-def test_pair_limit_is_checked_before_allocating_pair_records(monkeypatch):
+def test_enumerate_pairs_has_no_fixed_pair_count_gate():
     ctx = ops.init("large")
     for index in range(4):
         ops.add(ctx, str(index))
     candidates = collect_direct_memories(ctx)
-    monkeypatch.setattr("memcommit.findings.CONFLICT_PAIR_LIMIT", 5)
-    monkeypatch.setattr(
-        "memcommit.findings.MemoryPair",
-        lambda *args, **kwargs: pytest.fail(
-            "pair records were allocated before the size check"
-        ),
-    )
+    pairs = enumerate_pairs(candidates)
 
-    with pytest.raises(FindingsError, match="exceeding"):
-        enumerate_pairs(candidates)
+    assert len(pairs) == 6
+    assert [pair.pair_id for pair in pairs] == [
+        "p000001",
+        "p000002",
+        "p000003",
+        "p000004",
+        "p000005",
+        "p000006",
+    ]
 
 
 def test_ambiguity_fixture_covers_the_complete_three_by_three_matrix():

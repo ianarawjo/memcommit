@@ -7,14 +7,24 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.command_attempts import current_command_attempt_uid
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.commands.study_name_dialog import choose_study_profile_name
-from memcommit.profile_config import ProfileConfigError
+from memcommit.profile_config import (
+    ProfileConfigError,
+    load_profile_registry,
+    study_run_identity,
+)
 from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
     generate_study_profile_name,
     init_study_profile,
+)
+from memcommit.study_action_log import (
+    StudyActionError,
+    record_study_action,
+    record_study_action_for_profile,
 )
 
 
@@ -43,6 +53,7 @@ def cmd(
     """Clone one live Study baseline and restore its real grants."""
 
     try:
+        previous_profile = load_profile_registry().active
         if name is None and _is_interactive_terminal():
             name = choose_study_profile_name(generate_study_profile_name())
             if name is None:
@@ -56,6 +67,55 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
+
+    attempt_uid = current_command_attempt_uid()
+    if attempt_uid is not None:
+        try:
+            participant_identity = study_run_identity(result.profile)
+            authority_identity = study_run_identity(result.authority_profile)
+            assert participant_identity is not None
+            assert authority_identity is not None
+            record_study_action(
+                "PROFILE_LEFT",
+                other_profile_uid=result.profile.uid,
+                other_profile_name=result.profile.name,
+            )
+            for profile, identity, paired_profile in (
+                (
+                    result.profile,
+                    participant_identity,
+                    result.authority_profile,
+                ),
+                (
+                    result.authority_profile,
+                    authority_identity,
+                    result.profile,
+                ),
+            ):
+                record_study_action_for_profile(
+                    profile,
+                    attempt_uid=attempt_uid,
+                    event_kind="STUDY_CREATED",
+                    role=identity.role,
+                    paired_profile_uid=paired_profile.uid,
+                    baseline_profile_uid=identity.baseline_profile_uid,
+                    baseline_profile_name=identity.baseline_profile_name,
+                )
+            record_study_action_for_profile(
+                result.profile,
+                attempt_uid=attempt_uid,
+                event_kind="PROFILE_ENTERED",
+                other_profile_uid=previous_profile.uid,
+                other_profile_name=previous_profile.name,
+            )
+        except (OSError, ProfileConfigError, StudyActionError, ValueError) as error:
+            typer.secho(
+                "Error: Study Profiles were created, but their initial action "
+                "ledger could not be written: " + display_escape_text(str(error)),
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
 
     typer.secho(
         f"Initialized Study run '{display_escape_text(result.profile.name)}'.",

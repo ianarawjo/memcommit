@@ -17,6 +17,11 @@ from memcommit.provider_types import (
     CompletionRun,
     ProviderIdentity,
 )
+from memcommit.study_action_log import (
+    record_provider_connection_finished,
+    record_provider_connection_started,
+    record_study_provider_turn,
+)
 
 
 API_BILLING_ENV = ("OPENAI_API_KEY", "CODEX_API_KEY")
@@ -245,6 +250,7 @@ class CodexChatGPTProvider:
             _runner=process_runner,
         )
 
+    @record_study_provider_turn
     def complete(
         self,
         prompt: str,
@@ -337,7 +343,26 @@ class CodexChatGPTProvider:
 
 def connect_codex_subscription_provider() -> CodexChatGPTProvider:
     """Connect the exact subscription-only Codex provider."""
-    return CodexChatGPTProvider.connect()
+    started_at = record_provider_connection_started("query")
+    try:
+        provider = CodexChatGPTProvider.connect()
+    except BaseException as error:
+        record_provider_connection_finished(
+            "query",
+            started_at,
+            failure=error,
+        )
+        raise
+    record_provider_connection_finished(
+        "query",
+        started_at,
+        provider=getattr(
+            getattr(provider, "identity", None),
+            "provider",
+            CODEX_CHATGPT_PROVIDER,
+        ),
+    )
+    return provider
 
 
 def connect_semantic_provider():

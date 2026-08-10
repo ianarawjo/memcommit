@@ -1,0 +1,24 @@
+ MEM FIND · INTERACTIVE · AUTO FROM QUERY
+ ROOTS 1 · CONTEXTS 3 · INCLUDE DESCENDANTS · FOLLOW EMBEDS
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SEARCH · ENTER TO RUN ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› accessibility                                                               ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌| TARGETS · PROFILE/CONTEXT · * CURRE|┐ ┌──────────────| SCOPE |──────────────┐
+│  ·   PROFILE  ALL READABLE CONTEXTS ^│ │  TARGET SELECTION · [ SINGLE TARGET │
+│› ✓ * ▸ task-3                        │ │  CONTEXT RANGE · [ THIS CONTEXT ONLY│
+│                                     v│ │  EMBEDDED CONTEXTS · [ EXCLUDE ]  [ │
+└──────────────────────────────────────┘ └─────────────────────────────────────┘
+┌──────────────| RESULTS |──────────────┐ ┌──────────| MATERIALIZE |───────────┐
+│Enter a query to search the selected s^│ │  MATERIALIZE AS · [ COPY ]  [ REFER│
+│cope.                                  │ │ENCE ] · ←/→ SELECT                 │
+│                                       │ └────────────────────────────────────┘
+│                                       │ ┌| PARENT CONTEXT · ENTER SELECTS LO|┐
+│                                       │ │› ✓ * ▸ task-3                     ^│
+│                                       │ └────────────────────────────────────┘
+│                                       │ ┌──| SAVE LOCATION · NEW CONTEXT |───┐
+│                                       │ │› task-3/results/find               │
+│                                       │ └────────────────────────────────────┘
+│                                       │ ┌────| TO DO · ENTER TO CREATE |─────┐
+│                                      v│ │  CREATE 0 CHECKED AS COPY          │
+└───────────────────────────────────────┘ └────────────────────────────────────┘
+ READY · ENTER A QUERY · Enter search · Tab/Shift-Tab panes · Esc/Ctrl-C close

@@ -173,6 +173,37 @@ def _make_nested_pair():
     )
 
 
+def test_task1_sized_frame_reaches_provider_without_operation_count_gate():
+    source = Context(uid="task1-source", name=TASK1_SOURCE)
+    for index in range(75):
+        source.add(
+            Memory(
+                uid=f"source-memory-{index}",
+                content=f"Verified construction update {index}.",
+            )
+        )
+    target = Context(uid="task1-target", name=TASK1_TARGET)
+    for index in range(300):
+        target.add(
+            Memory(
+                uid=f"target-memory-{index}",
+                content=f"Existing campus wiki fact {index}.",
+            )
+        )
+    provider = PlanProvider(
+        {"edits": [], "additions": [], "removals": []}
+    )
+
+    session = plan_update(source, target, lambda: provider, status="staged")
+
+    assert len(provider.calls) == 1
+    assert session.operations == ()
+    schema = provider.calls[0][2]
+    assert schema["properties"]["edits"]["maxItems"] == 300
+    assert schema["properties"]["additions"]["maxItems"] == 75
+    assert schema["properties"]["removals"]["maxItems"] == 300
+
+
 def _persist_pair(store):
     (
         source,

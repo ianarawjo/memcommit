@@ -188,3 +188,64 @@ def render_vertical_choice_cards(
         if index < len(state.options):
             fragments.append(("", "\n"))
     return fragments
+
+def render_vertical_choice_rows(
+    state: FlatSelectionState,
+    *,
+    focused: bool,
+    content_width: int,
+    numbered: bool = True,
+    anchor_cursor: bool = True,
+) -> list[tuple[str, str]]:
+    """Render stacked choices as highlighted text rows without card chrome.
+
+    The label is bold at the keyboard target, while the wrapped description
+    keeps the same highlight without bold. This preserves one visible focus
+    region without turning explanatory prose into a second heading.
+    """
+
+    width = max(12, content_width)
+    fragments: list[tuple[str, str]] = []
+    for index, option in enumerate(state.options, start=1):
+        cursor = option.uid == state.cursor_uid
+        selected = option.uid == state.selected_uid
+        keyboard_target = cursor and focused
+        highlighted = selected or keyboard_target
+        label_style = focused_control_style(
+            focused=keyboard_target,
+            selected=highlighted,
+        )
+        description_style = focused_control_style(
+            focused=False,
+            selected=highlighted,
+        )
+        prefix = f"{choice_marker(selected=selected)} "
+        if numbered:
+            prefix += f"{index}. "
+        label_width = max(1, width - terminal_cell_width(prefix))
+        label_lines = tuple(
+            wrap_terminal_text(safe_terminal_text(option.label), label_width)
+        )
+        fragments.append((label_style, prefix + label_lines[0] + "\n"))
+        continuation = " " * terminal_cell_width(prefix)
+        fragments.extend(
+            (label_style, continuation + line + "\n") for line in label_lines[1:]
+        )
+        if option.description:
+            description_prefix = "  "
+            description_width = max(
+                1,
+                width - terminal_cell_width(description_prefix),
+            )
+            fragments.extend(
+                (description_style, description_prefix + line + "\n")
+                for line in wrap_terminal_text(
+                    safe_terminal_text(option.description),
+                    description_width,
+                )
+            )
+        if keyboard_target and anchor_cursor:
+            fragments.append(("[SetCursorPosition]", ""))
+        if index < len(state.options):
+            fragments.append(("", "\n"))
+    return fragments

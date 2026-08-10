@@ -1,0 +1,34 @@
+SEVER · APPLIED · SOURCE UNCHANGED
+SOURCE · task-3/local/personal-memory · INCLUDE DESCENDANTS · 300 Memories
+CRITERIA · task-3/local/healthcare-sharing-criteria-find · INCLUDE DESCENDANTS
+OUTPUT · task-3/local/healthcare-sharing-draft-find · CREATED LOCALLY
+
+The Source contains detailed personal memories from 2024 through 2026 about family life, healthcare visits, accessibility, scheduling, communication, household routines, errands, travel, and preferences, including many third-party details and historical observations.
+
+CANDIDATES
+  1. [5aca1186] FORGET
+     SOURCE · The user's mother's birthday falls in the third week of January.
+     RESULT · (forgotten)
+     WHY · Birthday detail is unrelated to healthcare support.
+  2. [b082a3bc] KEEP_SUMMARY
+     SOURCE · At the user's last family meal out, noise from the next table made conversation nearly impossible.
+     RESULT · The user has previously found conversation nearly impossible in a noisy environment.
+     WHY · Keeps a minimal environmental communication need without the private event.
+  3. [06ccf1c0] FORGET
+     SOURCE · At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.
+     RESULT · (forgotten)
+     WHY · Private social event is unnecessary after retaining the communication need.
+  4. [411b7339] KEEP_SUMMARY
+     SOURCE · During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.
+     RESULT · Loud background music has previously caused the user to leave an environment early.
+     WHY · Retains a minimal environmental accommodation consideration.
+  5. [966042cc] KEEP_PREFERENCE_OR_POLICY
+     SOURCE · When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.
+     RESULT · For sensitive or postponed discussions, the user prefers a quiet, one-on-one environment.
+     WHY · Directly relevant communication preference.
+  6. [c70b2672] FORGET
+     SOURCE · At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.
+     RESULT · (forgotten)
+     WHY · Private family dining detail is unnecessary.
+  7. [0b81dd9b] FORGET
+     SOURCE · On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.

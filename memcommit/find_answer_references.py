@@ -150,16 +150,84 @@ class FindAnswerSentence:
         object.__setattr__(self, "source_aliases", aliases)
 
 
-def render_find_answer_references(
+@dataclass(frozen=True)
+class NumberedFindAnswerReference:
+    """One used evidence item with its stable display citation number."""
+
+    number: int
+    evidence: FindAnswerEvidence
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.number, int)
+            or isinstance(self.number, bool)
+            or self.number < 1
+        ):
+            raise FindAnswerReferenceError(
+                "Reference number must be a positive integer."
+            )
+        if not isinstance(self.evidence, FindAnswerEvidence):
+            raise FindAnswerReferenceError("Invalid numbered answer evidence.")
+
+
+@dataclass(frozen=True)
+class FindAnswerReferenceDocument:
+    """Typed answer body and independently navigable citation blocks."""
+
+    body: str
+    references: tuple[NumberedFindAnswerReference, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.body, str) or not self.body.strip():
+            raise FindAnswerReferenceError(
+                "Rendered answer body must be nonblank text."
+            )
+        if not isinstance(self.references, tuple) or any(
+            not isinstance(reference, NumberedFindAnswerReference)
+            for reference in self.references
+        ):
+            raise FindAnswerReferenceError(
+                "Rendered answer references must be typed."
+            )
+        if tuple(reference.number for reference in self.references) != tuple(
+            range(1, len(self.references) + 1)
+        ):
+            raise FindAnswerReferenceError(
+                "Rendered answer reference numbers must be contiguous."
+            )
+        aliases = tuple(reference.evidence.alias for reference in self.references)
+        if len(set(aliases)) != len(aliases):
+            raise FindAnswerReferenceError(
+                "Rendered answer references must use distinct evidence aliases."
+            )
+
+    @property
+    def text(self) -> str:
+        references = "\n\n".join(
+            render_numbered_find_answer_reference(reference)
+            for reference in self.references
+        )
+        if references:
+            return f"{self.body}\n\nReferences\n{references}"
+        return f"{self.body}\n\nReferences"
+
+
+def render_numbered_find_answer_reference(
+    reference: NumberedFindAnswerReference,
+) -> str:
+    """Render one typed citation block without losing its navigation identity."""
+
+    if not isinstance(reference, NumberedFindAnswerReference):
+        raise FindAnswerReferenceError("Invalid numbered answer reference.")
+    return _render_reference(reference.number, reference.evidence)
+
+
+def build_find_answer_reference_document(
     evidence: Sequence[FindAnswerEvidence],
     sentences: Sequence[FindAnswerSentence],
-) -> str:
-    """Render exactly three answer sentences and their used references.
+) -> FindAnswerReferenceDocument:
+    """Validate and retain the same structure used by the plain-text renderer."""
 
-    Reference numbers are assigned by the first citation occurrence while
-    walking the sentences from first to third.  Reusing an alias in a later
-    sentence therefore reuses its original number.
-    """
     if isinstance(evidence, (str, bytes)):
         raise FindAnswerReferenceError("Evidence must be a sequence.")
     if isinstance(sentences, (str, bytes)):
@@ -171,14 +239,10 @@ def render_find_answer_references(
         raise FindAnswerReferenceError(
             "Evidence and answer sentences must be sequences."
         ) from error
-    if any(
-        not isinstance(item, FindAnswerEvidence)
-        for item in evidence_items
-    ):
+    if any(not isinstance(item, FindAnswerEvidence) for item in evidence_items):
         raise FindAnswerReferenceError("Invalid Find answer evidence.")
     if any(
-        not isinstance(sentence, FindAnswerSentence)
-        for sentence in sentence_items
+        not isinstance(sentence, FindAnswerSentence) for sentence in sentence_items
     ):
         raise FindAnswerReferenceError("Invalid Find answer sentence.")
     if len(sentence_items) != 3:
@@ -189,9 +253,7 @@ def render_find_answer_references(
     by_alias: dict[str, FindAnswerEvidence] = {}
     for item in evidence_items:
         if item.alias in by_alias:
-            raise FindAnswerReferenceError(
-                f"Duplicate evidence alias: {item.alias}"
-            )
+            raise FindAnswerReferenceError(f"Duplicate evidence alias: {item.alias}")
         by_alias[item.alias] = item
 
     citation_numbers: dict[str, int] = {}
@@ -200,28 +262,33 @@ def render_find_answer_references(
         markers: list[str] = []
         for alias in sentence.source_aliases:
             if alias not in by_alias:
-                raise FindAnswerReferenceError(
-                    f"Unknown evidence alias: {alias}"
-                )
-            number = citation_numbers.setdefault(
-                alias,
-                len(citation_numbers) + 1,
-            )
+                raise FindAnswerReferenceError(f"Unknown evidence alias: {alias}")
+            number = citation_numbers.setdefault(alias, len(citation_numbers) + 1)
             markers.append(f"[{number}]")
         marker_suffix = f" {' '.join(markers)}" if markers else ""
         rendered_sentences.append(f"{sentence.text}{marker_suffix}")
 
-    reference_blocks = [
-        _render_reference(number, by_alias[alias])
+    references = tuple(
+        NumberedFindAnswerReference(number, by_alias[alias])
         for alias, number in citation_numbers.items()
-    ]
-    references = "\n\n".join(reference_blocks)
-    if references:
-        return (
-            f"{' '.join(rendered_sentences)}\n\n"
-            f"References\n{references}"
-        )
-    return f"{' '.join(rendered_sentences)}\n\nReferences"
+    )
+    return FindAnswerReferenceDocument(
+        body=" ".join(rendered_sentences),
+        references=references,
+    )
+
+
+def render_find_answer_references(
+    evidence: Sequence[FindAnswerEvidence],
+    sentences: Sequence[FindAnswerSentence],
+) -> str:
+    """Render exactly three answer sentences and their used references.
+
+    Reference numbers are assigned by the first citation occurrence while
+    walking the sentences from first to third.  Reusing an alias in a later
+    sentence therefore reuses its original number.
+    """
+    return build_find_answer_reference_document(evidence, sentences).text
 
 
 def _render_reference(

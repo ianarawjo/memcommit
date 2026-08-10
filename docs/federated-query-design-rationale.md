@@ -29,6 +29,12 @@ descendant participates only when it independently grants `QUERY`; federation
 does not infer access from namespace shape and does not merge stores, grants,
 or ordinary Context trees.
 
+The terminal Query workbench exposes the same distinction as an explicit
+`EXACT VIEW` versus `FEDERATE DESCENDANTS` Scope choice. The exact choice skips
+the name-only routing turn. Federation preserves the CLI behavior described
+above. A saved session still forces one exact grant binding even if the visible
+control had previously selected federation.
+
 ## Invariants
 
 - Relevance routing receives public view names, never concealed source text.

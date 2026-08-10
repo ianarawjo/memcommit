@@ -49,6 +49,13 @@ explicitly labelled `NOT EXECUTED`: some saved artifacts have no public CLI
 operand that identifies one immutable record. The stable catalog key and the
 operation adapter's reload checks are authoritative.
 
+Trace and Rationale reuse these frozen catalog mechanics only when completed
+recent report targets exist. Their pinned `SELECT A MEMORY` row is a navigation
+action, not a fabricated new session. When no recent target exists, the catalog
+screen is skipped and the common Context/Memory target picker opens directly.
+This preserves the useful list/filter/focus mechanics without making an empty
+report history look like durable saved work.
+
 `Enter` returns the selected receipt. `PageUp`/`PageDown` scroll a long detail
 preview without moving the selected entry. `S` switches between recently modified
 and name order, `G` switches between a flat list and Context grouping, `/`

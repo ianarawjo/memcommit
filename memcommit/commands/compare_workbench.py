@@ -19,6 +19,7 @@ from prompt_toolkit.widgets import Frame
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     display_escape_text,
 )
@@ -689,7 +690,7 @@ def run_compare_workbench(
             return
         event.app.exit(result=CompareWorkbenchReceipt(action="close"))
 
-    @bindings.add("q", eager=True)
+    @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("c-c", eager=True)
     def _close(event) -> None:
         event.app.exit(result=CompareWorkbenchReceipt(action="close"))

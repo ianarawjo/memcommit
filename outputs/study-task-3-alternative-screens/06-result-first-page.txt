@@ -1,0 +1,34 @@
+Context: task-3/local/healthcare-sharing-draft-find
+  97 memories  |  0 memory references  |  0 query-only contexts  |  0 embedded contexts
+
+Items (in context order):
+  [memory  7560e80c] The user has previously found conversation nearly impossible in a noisy environment.
+  [memory  242a4a18] Loud background music has previously caused the user to leave an environment early.
+  [memory  624d1d11] For sensitive or postponed discussions, the user prefers a quiet, one-on-one environment.
+  [memory  95705a22] When conversation is important, first consider a low-noise setting and confirm the final arrangement with the user.
+  [memory  edc72a6e] Past environmental responses may inform options but do not determine the user's next location choice; confirm it with the user.
+  [memory  13f690f6] Advance notice is helpful because the user may be unable to respond immediately during a meeting.
+  [memory  b5bb66d9] A historical medication instruction said to take one medication after the evening meal; the current prescription and instructions require confirmation.
+  [memory  7f8f88ff] The user has previously needed to recheck a fasting period for a morning appointment; confirm current fasting instructions directly.
+  [memory  8160d718] The user previously felt less rushed preparing for an afternoon visit than for a morning visit; confirm current scheduling preferences.
+  [memory  74f74a42] Standing for about 20 minutes while waiting has previously caused the user back discomfort, so seating may be helpful.
+  [memory  1807fdf7] The user has previously missed an important medication time when lengthy instructions were delivered all at once.
+  [memory  2b230990] Present medication times one line at a time so the user can record them accurately.
+  [memory  c4415c62] Do not infer the user's current prescription or continued medication use from historical notes; confirm current medication information.
+  [memory  e63b33c0] The user has previously needed the first question repeated when several checkup questions were asked in succession.
+  [memory  5c6b6730] Ask healthcare questions one at a time to reduce omissions.
+  [memory  f5df5d6d] The user has previously retained a photo of paper clinic instructions for later reference.
+  [memory  29d35e04] A healthcare calendar entry containing only the address was insufficient because the user later had to search for the floor.
+  [memory  1fb381ef] Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.
+  [memory  db22a758] Past and scheduled checkups may be tracked, but whether follow-up care is needed must not be inferred from those records alone.
+  [memory  c2d3e957] Do not generalize a lifestyle habit from only one or two historical records.
+  [memory  776bb9b9] Historical records suggest the user may go to bed much later after late-afternoon coffee; treat this as a past pattern, not a confirmed current habit.
+  [memory  c3daec67] A trip involving two bus transfers previously left the user needing an hour of rest afterward.
+  [memory  0741b661] On a direct route of similar duration, the user was able to remain seated until arrival.
+  [memory  60ef14ce] When faced with a stairs-only entrance, the user used another entrance on the opposite side of the building.
+  [memory  6ef9b89e] Checking the accessible entrance location in advance has previously supported timely arrival.
+  [memory  1ccc5ac4] Past route records cannot establish whether an accessible entrance is operating currently; verify it for the relevant day.
+  [memory  38aae34e] The user's transfer route involves more boarding, alighting, and walking segments than the direct route.
+  [memory  288506a7] The user's availability varies by week, so prior-month availability should not be treated as current.
+  [memory  833b98ca] The user has previously canceled an appointment scheduled by carrying forward a weekday from the prior month.
+  [memory  ff90ad3a] Ask the user for current availability shortly before booking rather than relying on older availability.

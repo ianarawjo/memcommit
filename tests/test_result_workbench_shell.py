@@ -333,6 +333,23 @@ def test_tty_navigation_and_quit_remain_read_only_without_detail_lookup():
     assert adapter.calls == ["view"]
 
 
+def test_tty_escape_closes_when_no_detail_layer_is_open():
+    view, details = _fixture()
+    adapter = RecordingAdapter(view, details)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        result = run_result_workbench_shell(
+            adapter,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is view
+    assert adapter.calls == ["view"]
+
+
 def test_snapshot_handles_an_artifact_without_selected_cases():
     view, _ = _fixture()
     view = replace(view, cases=())

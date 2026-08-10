@@ -238,6 +238,13 @@ unless incoming evidence explicitly supports a correction and retains
 supported incoming distinctions with their scope. `--defer-all` keeps the
 analysis as review-only. Neither action changes either Context.
 
+New preservation-first directional sessions treat relation groups as analysis,
+not as permission to create one topical summary. Novel `DISTINCT`,
+`COMPATIBLE`, and `SCOPED` incoming Memories are separate exact additions by
+default. Combining several compatible or scoped incoming Memories requires an
+explicit reviewed user turn; an equivalent incoming Memory can correctly
+produce no baseline change.
+
 A ready directional proposal contains only material baseline changes:
 
 - `EDIT` replaces the content of one cited baseline Memory while preserving
@@ -261,10 +268,12 @@ session after its bound Contexts have been rechecked:
 mem meld INCOMING --into BASELINE --restart
 ```
 
-Both Context-to-Context modes currently accept bounded Contexts containing
-direct owned Memories only. Memory references, embedded Contexts, and
-query-only references are rejected rather than dereferenced or silently
-omitted.
+Symmetric Context-to-Context Meld retains the direct-owned-Memory boundary.
+Directional Meld may explicitly select readable descendants for INCOMING and
+writable descendants for BASELINE; it retains each Memory's exact owner and
+applies accepted changes to that owner rather than flattening them into the
+root. Memory references remain unsupported. Query-only routes are never
+dereferenced or treated as ordinary Meld evidence or target owners.
 
 ### Why `--into` is not `--to`
 

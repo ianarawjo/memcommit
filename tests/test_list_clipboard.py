@@ -64,7 +64,7 @@ def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
         "  Café north entrance. Closed through Friday.\n"
     )
     assert (
-        f"  [memory  {memory.uid[:8]}] "
+        f"  [memory {memory.uid[:8]}] "
         "Café north entrance. Closed through Friday.\n"
     ) in result.stdout
     assert "[memory " in result.stdout
@@ -105,7 +105,7 @@ def test_list_copy_with_ids_uses_inline_clipboard_and_hanging_stdout(
         "Context: source\n"
         "  1 item\n"
         "\n"
-        f"  [memory  {memory.uid[:8]}] "
+        f"  [memory {memory.uid[:8]}] "
         "Keep this object's visible identifier.\n"
     )
 
@@ -117,7 +117,7 @@ def test_list_copy_with_ids_uses_inline_clipboard_and_hanging_stdout(
         "Context: source\n"
         "  1 item\n"
         "\n"
-        f"  [memory  {memory.uid[:8]}] "
+        f"  [memory {memory.uid[:8]}] "
         "Keep this object's visible identifier.\n"
     )
     assert fake_system_clipboard["text"] == inline
@@ -150,7 +150,7 @@ def test_list_long_memory_uses_hanging_indent_but_clipboard_stays_one_line(
 
     copied = invoke("ls", "--copy", "--with-ids")
 
-    label = f"  [memory  {memory.uid[:8]}]"
+    label = f"  [memory {memory.uid[:8]}]"
     visible_lines = copied.stdout.splitlines()
     first = next(line for line in visible_lines if line.startswith(label))
     continuation = visible_lines[visible_lines.index(first) + 1]
@@ -183,7 +183,7 @@ def test_recursive_list_uses_same_hanging_and_inline_clipboard_contract(
 
     copied = invoke("ls", "-R", "parent", "--copy", "--with-ids")
 
-    label = f"    [memory  {memory.uid[:8]}]"
+    label = f"    [memory {memory.uid[:8]}]"
     visible_lines = copied.stdout.splitlines()
     first = next(line for line in visible_lines if line.startswith(label))
     continuation = visible_lines[visible_lines.index(first) + 1]
@@ -244,7 +244,7 @@ def test_recursive_copy_freezes_visible_tree_and_paste_replays_it(
         "Context: parent\n"
         "  2 items\n"
         "\n"
-        "  child/\n"
+        "  child/ · VIA EMBED\n"
         "    Nested fact.\n"
         "  Parent fact.\n"
     )
@@ -277,7 +277,7 @@ def test_copy_freezes_a_typed_namespace_child_for_later_paste(
         "Context: parent\n"
         "  2 items\n"
         "\n"
-        "  parent/child/\n"
+        "  parent/child/ · DESCENDANT\n"
         "  Parent fact.\n"
     )
     record = json.loads(
@@ -336,8 +336,8 @@ def test_copy_stages_query_pointer_without_hidden_source_content(
     assert source.uid in stage_text
     assert "SECRET QUERY-ONLY CONTRACT TEXT" not in stage_text
     assert "SECRET QUERY-ONLY CONTRACT TEXT" not in fake_system_clipboard["text"]
-    assert "contracts/private/ (query-only)" in fake_system_clipboard["text"]
-    assert "[query " not in fake_system_clipboard["text"]
+    assert "contracts/private/ · query view" in fake_system_clipboard["text"]
+    assert "[query view " not in fake_system_clipboard["text"]
 
 
 def test_clean_copy_keeps_reference_meaning_without_object_ids(
@@ -354,12 +354,13 @@ def test_clean_copy_keeps_reference_meaning_without_object_ids(
     result = invoke("ls", "--copy")
 
     assert result.exit_code == 0
-    assert "[ref     " in result.stdout
+    assert "[memory ref " in result.stdout
+    assert "READ ONLY" in result.stdout
     assert (
         "Referenced atomic name. -> source"
         in fake_system_clipboard["text"]
     )
-    assert "[ref " not in fake_system_clipboard["text"]
+    assert "[memory ref " not in fake_system_clipboard["text"]
     assert f"#{source_memory_uid[:8]}" not in fake_system_clipboard["text"]
     record = json.loads(
         (Path(isolated_store) / "clipboard.json").read_text(encoding="utf-8")
@@ -379,7 +380,7 @@ def test_clean_copy_keeps_user_authored_bracket_text_literal(
     result = invoke("ls", "--copy")
 
     assert result.exit_code == 0
-    assert "[memory  " in result.stdout
+    assert "[memory " in result.stdout
     assert (
         "  [memory literal] This is user-authored text.\n"
         in fake_system_clipboard["text"]
@@ -401,7 +402,7 @@ def test_clean_copy_describes_a_dangling_reference_without_ids(
     result = invoke("ls", "target", "--copy")
 
     assert result.exit_code == 0
-    assert "(dangling reference) source" in fake_system_clipboard["text"]
+    assert "memory ref · source · DANGLING" in fake_system_clipboard["text"]
     assert source_memory_uid[:8] not in fake_system_clipboard["text"]
 
 

@@ -18,16 +18,21 @@ change was applied.
 ## Command contract
 
 ```text
+mem log --memory MEMORY
 mem trace
 mem trace MEMORY
+mem trace MEMORY --plain
 mem rationale
 mem rationale MEMORY
 mem rationale MEMORY --recorded-only
 mem rationale MEMORY --refresh
 ```
 
-Both commands accept a current or retained historical direct-Memory UID or
-unambiguous prefix. Neither command changes Contexts, checkpoints, saved
+All Memory-targeted routes accept a current or retained historical direct-Memory
+UID or unambiguous prefix. `mem trace MEMORY` is the public shorthand for
+`mem log --memory MEMORY`; both enter the same retained-history controller and
+projection rather than invoking another CLI command. Neither command changes
+Contexts, checkpoints, saved
 semantic analyses, proposals, or active state. `mem rationale` may update a
 replaceable provider-inference cache after a successful validated inference;
 `mem trace` and `mem rationale --recorded-only` remain storage-read-only.
@@ -37,11 +42,15 @@ picker as a Recents launcher. Recent rows are scoped to the current operation,
 ordered newest first, and deduplicated by public Context name plus Memory UID.
 The pinned `SELECT A MEMORY` action then opens the common read-only
 Context/Memory tree. This keeps repeated inspection quick without replacing
-the complete namespace route needed for a new target.
+the complete namespace route needed for a new target. When the operation has no
+recent rows, the empty catalog is skipped and the Context/Memory tree opens
+directly; no saved-session-shaped decision exists in that case.
 
 Recents are derived only from completed command-attempt records. A record
 stores the operation, public or scoped Context name, and Memory UID; it never
 copies Memory content, inferred rationale, Grant material, or provider data.
+Trace Recents also include completed `mem log --memory` attempts because that
+route is the same Memory-lineage view.
 Failed and cancelled attempts are not offered. Selecting a recent row freezes
 and revalidates its command-attempt receipt, then enters the ordinary command
 path, where current Context existence, UID resolution, and effective
@@ -79,12 +88,18 @@ choosing a Memory; it does not silently choose an operation subrange.
 
 Rationale renders its complete interactive report inside the common framed,
 wrapped, read-only `VIEWER`, whether its Memory came from Recents, the tree, or
-an explicit operand. Bare Trace likewise continues from either launcher route
-into that same Viewer so the no-operand interaction is one coherent flow;
-explicit Trace remains a direct stdout report for shell inspection and piping.
-The Viewer shares Up/Down, PageUp/PageDown, Home/End, and Escape/Backspace/Q
-close behavior. Non-TTY and JSON output retain their stable non-full-screen
-forms.
+an explicit operand. Trace uses the shared temporal `ITEMS + VIEWER` workbench
+also used by Log and Diff: Items are lineage-affecting command units and Viewer
+shows the selected before/after evidence together with the complete lineage
+endpoints. Bare, recent, and explicit Trace targets all enter this workbench in
+a TTY. `--plain`, non-TTY, and JSON routes retain stable non-full-screen output.
+Both the standalone Rationale Viewer and the temporal Viewer move by visible
+wrapped rows through the common cursor-backed read pane; a hidden fixed cursor
+must not reset the viewport to its first logical line. The temporal workbench
+additionally uses shared Surface boundary traversal between Viewer and Items.
+Rationale reuses the same target and Trace projection, then adds its
+interpretation sections; it does not inherit Trace's owner-history authority
+when the target is granted.
 
 Outside a TTY, omission fails instead of silently selecting the first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an
@@ -115,9 +130,10 @@ structured event order for programmatic consumers.
 Thus the human-facing scopes remain distinct:
 
 - `mem log` browses Context checkpoint states and restoration addresses;
+- `mem log --memory` filters that retained history to one proven UID lineage;
 - `mem revert` restores one reviewed checkpoint;
 - `mem undo` and `mem redo` restore one global command unit;
-- `mem trace` shows operations that affected one Memory lineage; and
+- `mem trace` is the shorthand for Log's Memory-lineage projection; and
 - `mem rationale` adds recorded reasons, saved analysis, and contextual
   interpretation to that lineage.
 
@@ -403,12 +419,13 @@ precisely the history that READ does not expose; a local target can still show
 its retained local evidence without invoking the provider. Trace is always
 rejected for a granted target.
 
-Within a composed participant Study run, local Trace is additionally limited
-to the `task-3` subtree. Task 3 deliberately studies local/personal-memory history;
-Tasks 1 and 2 do not. Normal authoring stores retain Trace. `mem ls` and the
-Switch picker render `RATIONALE SUBTREE` together with `TRACE ALLOWED` or
-`TRACE BLOCKED` so the difference is visible before a participant selects an
-operation.
+Every locally owned ordinary Context may inspect its own retained history,
+including every task namespace in a composed participant Study run. Task names
+are research organization, not an authority primitive. Granted READ remains
+different: it exposes the reviewed current content projection but not the
+authority Profile's checkpoints, command receipts, or saved history artifacts.
+Only Grant rows therefore need a visible `TRACE BLOCKED` analysis boundary;
+local Study rows no longer repeat task-dependent Trace annotations.
 
 Recursive inference is not cached yet. Publishing a reusable result safely
 would require one freshness boundary over every Context in the subtree, while

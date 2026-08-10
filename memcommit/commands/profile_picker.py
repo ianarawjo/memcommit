@@ -15,7 +15,10 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
 
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.commands.tui_primitives import (
+    bind_case_insensitive_key,
+    display_escape_text,
+)
 
 
 @dataclass(frozen=True)
@@ -71,15 +74,24 @@ def _validate_entries(
                 and bool(entry.study_name)
                 and isinstance(entry.study_created_at, str)
                 and bool(entry.study_created_at)
-                and type(entry.study_task) is int
-                and entry.study_task in {1, 2, 3}
-                and entry.study_role in {None, "TASK", "AUTHORITY"}
+                and (
+                    (
+                        type(entry.study_task) is int
+                        and entry.study_task in {1, 2, 3}
+                        and entry.study_role in {None, "TASK", "AUTHORITY"}
+                    )
+                    or (
+                        entry.study_task is None
+                        and entry.study_role
+                        in {"PARTICIPANT", "GRANTED_MEMORY"}
+                    )
+                )
             )
         )
         for entry in options
     ) or len(set(names)) != len(names):
         raise ValueError("Profile selection received invalid entries.")
-    study_metadata: dict[str, tuple[str, set[tuple[str, int]]]] = {}
+    study_metadata: dict[str, tuple[str, set[tuple[str, int | None]]]] = {}
     finished_studies: set[str] = set()
     previous_study: str | None = None
     for entry in options:
@@ -95,7 +107,7 @@ def _validate_entries(
             raise ValueError("Study Profile entries must remain contiguous.")
         created_at = entry.study_created_at
         task = entry.study_task
-        assert isinstance(created_at, str) and type(task) is int
+        assert isinstance(created_at, str)
         member = (entry.study_role or "TASK", task)
         existing = study_metadata.get(study_name)
         if existing is None:
@@ -120,15 +132,18 @@ def _render_profile_options(
     options = _validate_entries(entries, current=current)
     if selected < 0 or selected >= len(options):
         raise ValueError("Selected profile index is out of range.")
-    name_labels = tuple(
-        (
-            f"{(entry.study_role or 'TASK').title()} {entry.study_task} · "
-            f"{display_escape_text(entry.name)}"
-            if entry.study_name is not None
-            else display_escape_text(entry.name)
-        )
-        for entry in options
-    )
+    def entry_name_label(entry: ProfilePickerEntry) -> str:
+        if entry.study_name is None:
+            return display_escape_text(entry.name)
+        if entry.study_role == "PARTICIPANT":
+            role = "Participant"
+        elif entry.study_role == "GRANTED_MEMORY":
+            role = "Granted memory"
+        else:
+            role = f"{(entry.study_role or 'TASK').title()} {entry.study_task}"
+        return f"{role} · {display_escape_text(entry.name)}"
+
+    name_labels = tuple(entry_name_label(entry) for entry in options)
     name_width = min(max(max(len(label) for label in name_labels), 8), 24)
     fragments: list[tuple[str, str]] = []
     previous_study: str | None = None
@@ -251,7 +266,7 @@ def choose_profile(
     def _accept_profile(event) -> None:
         event.app.exit(result=options[selected["index"]].name)
 
-    @bindings.add("q", eager=True)
+    @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("escape")
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:

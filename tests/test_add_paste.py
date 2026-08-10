@@ -99,6 +99,17 @@ def test_capture_paste_ctrl_c_cancels():
             )
 
 
+def test_capture_paste_escape_cancels():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        with pytest.raises(PasteCancelled):
+            capture_paste(
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+
 def test_add_paste_saves_in_order_with_one_checkpoint_and_no_echo(
     isolated_store,
     monkeypatch,

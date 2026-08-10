@@ -51,6 +51,8 @@ from memcommit.profiles import (
 )
 from memcommit.store import MemoryStore
 from memcommit.semantic.changes import RemoveChange, apply_changes
+from memcommit.source_projection.model import SourceAccess
+from memcommit.source_projection.presentation import source_display_text
 
 
 runner = CliRunner(mix_stderr=False)
@@ -94,6 +96,71 @@ class _GrantedDirectionalMeldProvider:
                         "grounded_turn_ids": [],
                     }
                 ],
+                "ready_to_apply": True,
+            }
+        )
+
+
+class _GrantedSubtreeDirectionalMeldProvider:
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "meld_contexts"
+        payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+        incoming = payload["frames"][0]["memories"][0]
+        baseline_by_owner = {
+            memory["owner_context_name"]: memory
+            for memory in payload["frames"][1]["memories"]
+        }
+        assert set(baseline_by_owner) == {
+            "campus-wiki",
+            "campus-wiki/services",
+        }
+        target_ids = {
+            item["context_name"]: item["target_context_id"]
+            for item in payload["target"]["contexts"]
+        }
+        results = []
+        for owner_name, suffix in (
+            ("campus-wiki", "Root guidance now points east."),
+            ("campus-wiki/services", "Service guidance now points east."),
+        ):
+            target = baseline_by_owner[owner_name]
+            results.append(
+                {
+                    "result_key": owner_name.replace("/", "_"),
+                    "operation": "EDIT",
+                    "target_memory_ids": [target["memory_id"]],
+                    "target_context_id": target_ids[owner_name],
+                    "disposition": "SYNTHESIZE",
+                    "content": suffix,
+                    "reason": "Apply the incoming reviewed correction in place.",
+                    "relation_keys": ["coverage"],
+                    "source_memory_ids": [
+                        incoming["memory_id"],
+                        target["memory_id"],
+                    ],
+                    "grounded_turn_ids": [],
+                }
+            )
+        return json.dumps(
+            {
+                "overview": "The correction updates both selected owners in place.",
+                "paired_relations": [
+                    {
+                        "relation_key": "coverage",
+                        "left_memory_ids": [incoming["memory_id"]],
+                        "right_memory_ids": [
+                            memory["memory_id"]
+                            for memory in baseline_by_owner.values()
+                        ],
+                        "kind": "CONFLICT",
+                        "status": "RESOLVED",
+                        "summary": "The selected baseline guidance is outdated.",
+                        "reason": "The incoming reviewed correction governs both owners.",
+                    }
+                ],
+                "distinct_relations": [],
+                "issues": [],
+                "results": results,
                 "ready_to_apply": True,
             }
         )
@@ -261,6 +328,121 @@ def test_directional_meld_updates_granted_baseline_authority_context(
     # The attachment remains participant-owned authorization metadata; Meld
     # must not materialize an authority baseline copy into it.
     assert active.load_direct(incoming.name).uid == incoming.uid
+
+
+def test_directional_meld_applies_granted_target_subtree_to_exact_owners(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, incoming, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        lambda: _GrantedSubtreeDirectionalMeldProvider(),
+    )
+
+    started = runner.invoke(
+        app,
+        [
+            "meld",
+            incoming.name,
+            "--into",
+            "campus-wiki",
+            "--right-descendants",
+        ],
+    )
+    assert started.exit_code == 0, started.output + started.stderr
+    session = active.load_meld_session(wiki.uid)
+    assert session is not None and session.state == "READY_TO_APPLY"
+    assert [context.name for context in session.frames[1].contexts or ()] == [
+        "campus-wiki",
+        "campus-wiki/services",
+    ]
+
+    accepted = runner.invoke(
+        app,
+        [
+            "meld",
+            incoming.name,
+            "--into",
+            "campus-wiki",
+            "--right-descendants",
+            "--accept",
+        ],
+    )
+    assert accepted.exit_code == 0, accepted.output + accepted.stderr
+    root_memories = [
+        item.content
+        for item in authority.load_direct("campus-wiki").iter_items()
+        if isinstance(item, Memory)
+    ]
+    child_memories = [
+        item.content
+        for item in authority.load_direct("campus-wiki/services").iter_items()
+        if isinstance(item, Memory)
+    ]
+    assert root_memories == ["Root guidance now points east."]
+    assert child_memories == ["Service guidance now points east."]
+    assert session.application is None
+    applied = active.load_meld_session(wiki.uid)
+    assert applied is not None and applied.application is not None
+    assert [receipt.context_name for receipt in applied.application.checkpoints] == [
+        "campus-wiki",
+        "campus-wiki/services",
+    ]
+
+
+def test_directional_meld_rejects_narrower_grant_for_proposed_child_owner(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, incoming, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    create_authority_grant(
+        authority_name="run-granted-memory",
+        grantee_name=AUTHORING_PROFILE_NAME,
+        resource_name="campus-wiki/services",
+        attachment_name=incoming.name,
+        public_name="campus-wiki/services",
+        permissions=(
+            "READ",
+            "CREATE",
+            "DERIVE",
+            "COMBINE",
+            "ACCEPT_DERIVED",
+            "SAVE_ANALYSIS",
+        ),
+        recursive=True,
+    )
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        lambda: _GrantedSubtreeDirectionalMeldProvider(),
+    )
+
+    started = runner.invoke(
+        app,
+        [
+            "meld",
+            incoming.name,
+            "--into",
+            "campus-wiki",
+            "--right-descendants",
+        ],
+    )
+
+    assert started.exit_code == 1
+    assert "does not allow update access" in started.stderr.casefold()
+    assert active.load_meld_session(wiki.uid) is None
 
 
 def test_directional_meld_reads_granted_incoming_into_local_baseline(
@@ -891,7 +1073,8 @@ def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
     )
 
     assert copied.exit_code == 0, copied.output
-    assert "Access: GRANTED VIEW · from run-granted-memory" in copied.output
+    assert "Access: READ GRANT · PERMISSIONS READ · READ ONLY" in copied.output
+    assert "FROM run-granted-memory" in copied.output
     assert "Permissions: READ" in copied.output
     assert (
         "Source boundary: DERIVE blocked · COMBINE blocked · EXPORT blocked"
@@ -977,7 +1160,7 @@ def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing
 
     assert switched.exit_code == 0, switched.output
     assert compared.exit_code == 0, compared.output + compared.stderr
-    assert "NOT SAVED (GRANTED VIEW)" in compared.output
+    assert "NOT SAVED · READ GRANT" in compared.output
     assert len(payloads) == 1
     encoded = json.dumps(payloads[0])
     assert "west lobby" in encoded
@@ -1152,8 +1335,9 @@ def test_new_compare_and_update_setup_include_a_granted_target(
     assert wiki.name in names
     assert f"{wiki.name}/services" in names
     assert f"{wiki.name}/construction-details" not in names
-    assert annotations[wiki.name].startswith("GRANTED · ")
-    assert "READ" in annotations[wiki.name]
+    assert annotations[wiki.name].access is SourceAccess.READ_GRANT
+    assert "READ" in annotations[wiki.name].permissions
+    assert source_display_text(annotations[wiki.name]) == "READ GRANT"
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t\t\t\t\r")
@@ -1286,7 +1470,8 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     source_names, _first, _second, annotations = _meld_source_catalog(active)
     assert source.name in source_names
     assert wiki.name in source_names
-    assert annotations[wiki.name] == "GRANTED · READ SOURCE"
+    assert annotations[wiki.name].access is SourceAccess.READ_GRANT
+    assert source_display_text(annotations[wiki.name]) == "READ GRANT"
     assert "campus-wiki/construction-details" not in source_names
     calls = 0
 
@@ -1607,13 +1792,14 @@ def test_switch_to_read_grant_makes_it_current_without_materializing_copy(
     assert "The public service desk is in the west lobby." in listed.output
     assert status.exit_code == 0, status.output
     assert "On context: campus-wiki" in status.output
-    assert "Granted view: read only" in status.output
+    assert "Access: READ GRANT · READ ONLY" in status.output
     assert contexts.exit_code == 0, contexts.output
     assert (
-        "* campus-wiki  [grant READ · RATIONALE SUBTREE + TRACE BLOCKED]"
+        "* campus-wiki  READ GRANT · PERMISSIONS READ · "
+        "ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED · FROM run-granted-memory"
         in contexts.output
     )
-    assert "campus-wiki/services  [view read from run-granted-memory]" in (
+    assert "campus-wiki/services  READ GRANT · PERMISSIONS READ" in (
         contexts.output
     )
     assert profile_current.exit_code == 0, profile_current.output

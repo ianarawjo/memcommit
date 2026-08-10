@@ -1,0 +1,22 @@
+$ mem init source
+Initialized context 'source'.
+$ mem add 'version one'
+Added [da942470] version one
+$ mem reference da942470 --from source
+Referenced [da942470] from 'source' as [2c26fa3d] in 'parent'.
+$ mem show 2c26fa3d
+MEMORY REF · READ ONLY: 2c26fa3d-0762-47b6-8ae2-b6b298f6ac6d
+Context: parent
+Source: source [3220994f]
+Target Memory: da942470-f00a-4297-bf2d-50761030db31
+
+version one
+
+SOURCE UPDATED TO 'version two'
+$ mem show 2c26fa3d
+MEMORY REF · READ ONLY: 2c26fa3d-0762-47b6-8ae2-b6b298f6ac6d
+Context: parent
+Source: source [3220994f]
+Target Memory: da942470-f00a-4297-bf2d-50761030db31
+
+version two

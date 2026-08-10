@@ -11,6 +11,7 @@ from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.granted_context import (
     ContextAccess,
     GrantedReadStore,
+    context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.commands.exact_command_review import (
@@ -96,6 +97,15 @@ from memcommit.search import (
     SearchCandidate,
     SearchMatch,
     rank_candidates,
+)
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceState,
+)
+from memcommit.source_projection.presentation import (
+    source_annotation_text,
+    source_object_label,
 )
 from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
@@ -692,21 +702,31 @@ def _render_match(match: SearchMatch) -> None:
     candidate = match.candidate
     item = candidate.item
     if isinstance(item, Memory):
+        item_label = source_object_label(SourceForm.MEMORY)
+        relevance = " · RELATED" if match.relevance == "related" else ""
         _render_labeled_content(
-            (
-                f"[related memory {item.uid[:8]}]"
-                if match.relevance == "related"
-                else f"[memory  {item.uid[:8]}]"
-            ),
+            f"[{item_label} {item.uid[:8]}]{relevance}",
             item.content,
         )
     elif isinstance(item, MemoryRef):
+        facts = SourceDisplayFacts(
+            form=SourceForm.MEMORY_REF,
+            states=(
+                (SourceState.READ_ONLY,)
+                if item.target is not None
+                else (SourceState.DANGLING,)
+            ),
+        )
+        item_label = source_object_label(facts)
+        annotations = [
+            *(("RELATED",) if match.relevance == "related" else ()),
+            source_annotation_text(facts),
+        ]
+        annotation = " · ".join(value for value in annotations if value)
         label = (
-            (
-                f"[related ref {item.uid[:8]}] "
-                if match.relevance == "related"
-                else f"[ref     {item.uid[:8]}] "
-            )
+            f"[{item_label} {item.uid[:8]}]"
+            + (f" · {annotation}" if annotation else "")
+            + " "
             + f"-> {display_escape_text(item.target_context_name)}#"
             f"{display_escape_text(item.target_memory_uid[:8])}"
         )
@@ -715,12 +735,10 @@ def _render_match(match: SearchMatch) -> None:
         else:
             typer.echo(label)
     elif isinstance(item, QueryContextRef):
-        label = (
-            f"[related query {item.uid[:8]}]"
-            if match.relevance == "related"
-            else f"[query   {item.uid[:8]}]"
-        )
-        typer.echo(f"{label} {display_escape_text(item.name)} (query-only)")
+        item_label = source_object_label(SourceForm.QUERY_VIEW)
+        relevance = " · RELATED" if match.relevance == "related" else ""
+        label = f"[{item_label} {item.uid[:8]}]{relevance}"
+        typer.echo(f"{label} {display_escape_text(item.name)}")
         command = shlex.join(
             [
                 "mem",
@@ -748,11 +766,17 @@ def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
     if isinstance(item, Memory):
         content = item.content
     elif isinstance(item, MemoryRef):
+        facts = SourceDisplayFacts(
+            form=SourceForm.MEMORY_REF,
+            states=(SourceState.DANGLING,),
+        )
         content = (
-            item.target.content if item.target is not None else "(dangling reference)"
+            item.target.content
+            if item.target is not None
+            else f"({source_annotation_text(facts)} memory ref)"
         )
     elif isinstance(item, QueryContextRef):
-        content = f"{item.name} (query-only)"
+        content = f"{item.name} · {source_object_label(SourceForm.QUERY_VIEW)}"
     elif isinstance(item, SearchArtifact):
         content = f"{item.title}\n{item.content}"
     else:  # pragma: no cover - SearchMatch validates the result union
@@ -1210,8 +1234,12 @@ def _open_find_search_workbench(
     if initial_target not in names:
         raise RuntimeError("The selected Context is outside the readable catalog.")
     displayed_current = current_name if current_name in names else initial_target
+    granted_names = frozenset(
+        name for name in names if catalog.access_for(name).is_granted
+    )
     annotations = {
-        name: "READ GRANT" for name in names if catalog.access_for(name).is_granted
+        name: context_access_display_facts(catalog.access_for(name))
+        for name in granted_names
     }
     workbench_result = run_find_search_workbench(
         names,
@@ -1226,6 +1254,7 @@ def _open_find_search_workbench(
             request,
         ),
         annotations=annotations,
+        granted_context_names=granted_names,
         local_context_names=tuple(store.list_context_names()),
         validate_save_location=store.assert_context_creatable,
     )

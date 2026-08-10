@@ -13,10 +13,13 @@ from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
-from prompt_toolkit.widgets import Frame, TextArea
+from prompt_toolkit.widgets import Frame
 
 from memcommit.commands.tui_primitives import (
+    ExactNameFieldControl,
+    ExactNameFieldView,
     MEMCOMMIT_TUI_STYLE,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     display_escape_text,
 )
@@ -75,12 +78,17 @@ def choose_meld_target(
     selected = {"index": 0}
     status = {"value": ""}
     bindings = KeyBindings()
-    name_input = TextArea(
-        multiline=False,
-        prompt="› ",
-        height=1,
-        name="meld-result-context-name",
+    name_field = ExactNameFieldControl.create(
+        ExactNameFieldView(
+            value="",
+            label="NEW RESULT CONTEXT",
+            state="NOT CREATED",
+            validate=store.assert_context_creatable,
+            value_label="Context name",
+        ),
+        input_name="meld-result-context-name",
     )
+    name_input = name_field.input
 
     def render_rows():
         fragments: list[tuple[str, str]] = []
@@ -104,7 +112,7 @@ def choose_meld_target(
         FormattedTextControl(render_rows, focusable=True, show_cursor=False),
         wrap_lines=False,
     )
-    name_frame = Frame(name_input, title="NEW RESULT CONTEXT")
+    name_frame = name_field.frame
     target_frame = Frame(row_window, title="RESULT TARGET")
 
     def move(delta: int) -> None:
@@ -112,7 +120,7 @@ def choose_meld_target(
         status["value"] = ""
 
     def open_name(event) -> None:
-        name_input.text = ""
+        name_field.set_text("")
         event.app.layout.focus(name_input)
         status["value"] = "Enter one exact new Context name."
 
@@ -142,9 +150,8 @@ def choose_meld_target(
 
     @bindings.add("enter", filter=has_focus(name_input), eager=True)
     def _submit_name(event) -> None:
-        name = name_input.text.strip()
         try:
-            store.assert_context_creatable(name)
+            name = name_field.validate_candidate()
         except (OSError, TypeError, ValueError) as error:
             status["value"] = str(error)
             event.app.invalidate()
@@ -158,7 +165,9 @@ def choose_meld_target(
         event.app.invalidate()
 
     @bindings.add("escape", filter=~has_focus(name_input), eager=True)
-    @bindings.add("q", filter=~has_focus(name_input), eager=True)
+    @bind_case_insensitive_key(
+        bindings, "q", filter=~has_focus(name_input), eager=True
+    )
     @bindings.add("c-c", eager=True)
     def _close(event) -> None:
         event.app.exit(result=None)
@@ -205,10 +214,6 @@ def choose_meld_target(
     bind_focused_frame_style(
         target_frame,
         is_focused=lambda: not app.layout.has_focus(name_input),
-    )
-    bind_focused_frame_style(
-        name_frame,
-        is_focused=lambda: app.layout.has_focus(name_input),
     )
     try:
         return app.run()

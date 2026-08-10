@@ -1078,3 +1078,13 @@ where an accepted exact result is materialized, not what the semantic
 analysis or reviewed answers mean. Explicit refresh carries the Output plan
 to the replacement workbench while still replacing issue responses under the
 existing fresh-analysis rule.
+
+A require-new Apply persists an immutable analysis copy under the Output
+Context for provenance, but the mutable shared workbench remains Input-owned.
+Opening the applied Output may construct a process-local read-only workbench
+projection; it must never save that projection as a second session owner. The
+session catalog collapses same-UID Input/Output analysis copies through the
+Source terminal application receipt, with the legacy Source-to-Output route as
+a compatibility fallback. If neither relation identifies exactly one Source,
+discovery still fails closed. Historical derived Output workbench files are
+ignored rather than deleted, keeping picker recovery non-destructive.

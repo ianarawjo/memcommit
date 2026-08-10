@@ -23,6 +23,7 @@ packages = [
   "memcommit",
   "memcommit.commands",
   "memcommit.semantic",
+  "memcommit.source_projection",
   "memcommit.eval",
 ]
 

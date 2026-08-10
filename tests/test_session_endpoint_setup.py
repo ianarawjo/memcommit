@@ -1,5 +1,6 @@
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+import pytest
 
 import memcommit.ops as ops
 from memcommit.commands.endpoint_setup_flows import (
@@ -63,6 +64,24 @@ def test_horizontal_choice_clamps_and_renders_active_value():
         and text == "[ RIGHT MODE ]"
         for style, text in inactive_fragments
     )
+
+
+def test_horizontal_choice_can_choose_an_exact_typed_value():
+    state = HorizontalChoiceState(
+        (
+            HorizontalChoiceOption("ORDINARY", "CONTEXTS"),
+            HorizontalChoiceOption("GRANTED", "QUERY-ONLY VIEW"),
+        ),
+        selected_uid="ORDINARY",
+    )
+
+    assert state.choose("GRANTED") is True
+    assert state.selected_uid == "GRANTED"
+    assert state.selected_index == 1
+    assert state.choose("GRANTED") is False
+
+    with pytest.raises(ValueError, match="unavailable"):
+        state.choose("MISSING")
 
 
 def test_horizontal_choice_can_render_each_option_as_a_focused_box():
@@ -336,7 +355,9 @@ def test_meld_directional_option_has_no_third_target(isolated_store):
     store.create_context(ops.init("meld-setup/b"))
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[C\t\t\r\t\t\r")
+        # Directional mode exposes independent A and B reach controls but no
+        # C surface. Four Tabs reach B's control; the final Tab reaches Apply.
+        pipe_input.send_text("\x1b[C\t\t\t\t\r\t\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,
@@ -349,8 +370,8 @@ def test_meld_directional_option_has_no_third_target(isolated_store):
     assert receipt.left_name != receipt.right_name
     assert receipt.target_name is None
     assert receipt.create_target is False
-    assert receipt.left_descendants is True
-    assert receipt.right_descendants is False
+    assert receipt.left_descendants is False
+    assert receipt.right_descendants is True
 
 
 def test_meld_symmetric_mode_collects_new_result_c(isolated_store):

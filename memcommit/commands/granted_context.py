@@ -18,6 +18,13 @@ from memcommit.profiles import (
     resolve_granted_context_view,
 )
 from memcommit.store import MemoryStore
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceReach,
+    SourceState,
+    context_access_facts,
+)
 from memcommit.update import GrantedUpdateTarget, granted_target_digest
 
 
@@ -35,6 +42,26 @@ class ContextAccess:
     @property
     def is_granted(self) -> bool:
         return self.view is not None
+
+
+def context_access_display_facts(
+    access: ContextAccess,
+    *,
+    reach: SourceReach = SourceReach.DIRECT,
+    form: SourceForm = SourceForm.CONTEXT,
+    states: tuple[SourceState, ...] = (),
+) -> SourceDisplayFacts:
+    """Project authority facts without leaking operation wording into callers."""
+
+    permissions = access.view.grant.permissions if access.view is not None else ()
+    return context_access_facts(
+        granted=access.is_granted,
+        permission=access.permission,
+        permissions=permissions,
+        reach=reach,
+        form=form,
+        states=states,
+    )
 
 
 def freeze_granted_context_binding(access: ContextAccess) -> GrantedUpdateTarget:

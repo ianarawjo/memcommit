@@ -19,14 +19,14 @@ from memcommit.semantic_execution import (
     BudgetVector,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     plan_semantic_execution,
 )
 
 
-QUALITY_INPUT_CHAR_LIMIT = 200_000
+QUALITY_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 QUALITY_RESPONSE_CHAR_LIMIT = 1_000_000
-CONFLICT_PAIR_LIMIT = 5_000
 QUALITY_REASON_CHAR_LIMIT = 1_000
 QUALITY_QUESTION_CHAR_LIMIT = 500
 QUALITY_READING_LIMIT = 5
@@ -64,18 +64,14 @@ def _findings_execution_policy(operation: str) -> SemanticExecutionPolicy:
         "find_conflicts",
     }:
         raise FindingsError(f"Unknown semantic finder operation '{operation}'.")
-    conflict = operation == "find_conflicts"
     return SemanticExecutionPolicy(
         operation=operation,
         strategy=(
             ExecutionStrategy.BLOCK_RELATIONS
-            if conflict
+            if operation == "find_conflicts"
             else ExecutionStrategy.MAP_PLUS_GLOBAL
         ),
-        one_shot_limits=BudgetLimits(
-            max_input_chars=QUALITY_INPUT_CHAR_LIMIT,
-            max_relation_edges=(CONFLICT_PAIR_LIMIT if conflict else None),
-        ),
+        one_shot_limits=BudgetLimits(max_input_chars=QUALITY_INPUT_CHAR_LIMIT),
         staged_supported=False,
     )
 
@@ -216,19 +212,6 @@ def enumerate_pairs(
     candidates: list[MemoryCandidate],
 ) -> list[MemoryPair]:
     """Enumerate canonical unordered pairs without self or reverse duplicates."""
-    pair_count = len(candidates) * (len(candidates) - 1) // 2
-    pair_plan = plan_semantic_execution(
-        _findings_execution_policy("find_conflicts"),
-        BudgetVector(relation_edges=pair_count),
-    )
-    if pair_plan.mode is not ExecutionMode.ONE_SHOT:
-        # Check the quadratic size before allocating pair records; the limit is
-        # a resource boundary, so enforcing it after construction is too late.
-        raise FindingsError(
-            f"This Context has {pair_count} Memory pairs, exceeding the "
-            f"one-shot prototype limit of {CONFLICT_PAIR_LIMIT}. Use a smaller "
-            "Context; candidates are never silently omitted."
-        )
     pairs: list[MemoryPair] = []
     for left_index, left in enumerate(candidates):
         for right in candidates[left_index + 1 :]:

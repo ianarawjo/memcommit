@@ -306,6 +306,26 @@ def test_prompt_shell_accepts_candidate_plus_korean_comment_and_right_arrow():
     assert second_session.cursor_uid == third.uid
 
 
+def test_prompt_shell_escape_closes_from_the_root_review_surface():
+    ctx, report, _, _ = _context_and_report()
+    session = create_ambiguity_review(ctx, report)
+    saved: list[dict[str, object]] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        result = run_review_shell(
+            session,
+            ctx,
+            save=lambda value: saved.append(value.to_dict()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is session
+    assert saved
+
+
 def test_prompt_shell_rejects_oversized_response_without_silent_truncation(
     monkeypatch,
 ):

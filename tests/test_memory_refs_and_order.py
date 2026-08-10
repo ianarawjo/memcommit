@@ -347,7 +347,8 @@ def test_reference_cli_lists_shows_updates_and_detaches(isolated_store):
 
     shown = runner.invoke(app, ["show", ref.uid[:8]])
     assert shown.exit_code == 0
-    assert "read-only live reference" in shown.output
+    assert "Memory ref:" in shown.output
+    assert "State: READ ONLY" in shown.output
     assert "version one" in shown.output
 
     source.replace(Memory(uid=memory.uid, content="version two"))
@@ -379,7 +380,8 @@ def test_show_handles_a_dangling_reference(isolated_store):
     result = runner.invoke(app, ["show", ref.uid[:8]])
 
     assert result.exit_code == 0
-    assert "dangling reference" in result.output
+    assert "Memory ref:" in result.output
+    assert "State: DANGLING" in result.output
 
 
 def test_chunk_replaces_a_memory_at_its_original_order_position(isolated_store):

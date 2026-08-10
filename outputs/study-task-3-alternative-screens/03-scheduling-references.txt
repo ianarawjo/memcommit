@@ -1,0 +1,12 @@
+Context: task-3/local/results/scheduling-preparation
+  0 memories  |  4 memory references  |  0 query-only contexts  |  0 embedded contexts
+
+Items (in context order):
+  [ref     b04d1b37] task-3/local/personal-memory/2025/02#e6f89ded (read-only)
+           Before using an emergency contact, reconfirm the number and relationship information with the user.
+  [ref     b9c70d0a] task-3/local/personal-memory/2025/02#f9197c33 (read-only)
+           The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.
+  [ref     0d7b6021] task-3/local/personal-memory/2024/09#9b667d0d (read-only)
+           When asked again about availability just before booking, the user provided three free times for that week.
+  [ref     34bd4293] task-3/local/personal-memory/2024/04#e265e637 (read-only)
+           Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.

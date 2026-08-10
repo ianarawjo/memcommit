@@ -22,11 +22,12 @@ from prompt_toolkit.widgets import Frame
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     NavigationAccelerator,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     display_escape_text,
-    focus_in_order,
     horizontal_rule,
 )
+from memcommit.commands.surface_focus import FocusSurface, SurfaceFocusController
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -161,7 +162,7 @@ COMMAND_FORMS = {
         'mem atomize --evaluate "[issue]" (directional atomic review)',
     ),
     "branch": (
-        "mem branch (choose a local Source and edit a suggested branch name)",
+        "mem branch (choose a local Source, parent location, and fresh target)",
         "mem branch [new_context] (branch the current Context and switch)",
     ),
     "checkout": (
@@ -305,7 +306,10 @@ COMMAND_FORMS = {
     "log": (
         "mem log (select a Context, then browse its checkpoints in a TTY; print otherwise)",
         'mem log "[query]" (semantic history search)',
+        "mem log --memory [memory] (Memory-lineage view; canonical Trace route)",
+        "mem log --memory [memory] --context [context] (explicit Context and Memory)",
         "mem log --operations (Profile command attempts)",
+        "mem log --actions (current Study Profile action events)",
     ),
     "ls": (
         "mem ls (enter the interactive Context browser in a TTY; print otherwise)",
@@ -323,7 +327,7 @@ COMMAND_FORMS = {
         "mem meld [context1] [context2] --to [result_context] (symmetric new Result)",
         "mem meld [context1] [context2] --left-descendants --right-descendants --to [result_context] (symmetric readable subtrees)",
         "mem meld [incoming_context] --into [baseline_context] (directional)",
-        "mem meld [incoming_context] --left-descendants --into [baseline_context] (directional incoming subtree)",
+        "mem meld [incoming_context] --left-descendants --into [baseline_context] --right-descendants (directional selected subtrees with owner-aware baseline writes)",
         "mem meld --into [baseline_context] (current Context is incoming)",
         "mem meld --from [incoming_context] (current Context is baseline)",
     ),
@@ -358,6 +362,7 @@ COMMAND_FORMS = {
         "mem provider probe (test the current selection)",
     ),
     "query": (
+        "mem query (open the interactive Question and Source workbench)",
         'mem query "[question]" (ask the current ordinary Context)',
         'mem query --context [context] "[question]" (ask an explicit ordinary Context)',
         "mem query [query_view] (browse opaque Memory handles)",
@@ -460,9 +465,10 @@ COMMAND_FORMS = {
     ),
     "trace": (
         "mem trace (open recent Trace targets or select a Memory)",
-        "mem trace [memory] (trace one current or historical Memory)",
+        "mem trace [memory] (shorthand for mem log --memory [memory])",
         "mem trace --context [context] (open Recents; Memory selection starts there)",
         "mem trace [memory] --context [context] (explicit Context and Memory)",
+        "mem trace [memory] --plain (print instead of opening History explorer)",
     ),
     "undo": ("mem undo (undo the latest recorded Context command)",),
     "unlock": (
@@ -992,6 +998,12 @@ def run_help_selector(
         focusable=True,
         show_cursor=False,
     )
+    surface_focus = SurfaceFocusController(
+        (
+            FocusSurface("view", view_control),
+            FocusSurface("commands", list_control),
+        )
+    )
 
     def move_one(direction: int) -> None:
         concept_index = selected_concept_index["value"]
@@ -1053,9 +1065,8 @@ def run_help_selector(
             and selected_concept_index["value"] == 0
         ):
             navigation_accelerator.reset()
-            focus_in_order(
+            surface_focus.focus_relative(
                 event.app,
-                (view_control, list_control),
                 -1,
                 wrap=False,
             )
@@ -1067,9 +1078,8 @@ def run_help_selector(
             and view_state.selected_uid != "CATEGORY"
         ):
             navigation_accelerator.reset()
-            focus_in_order(
+            surface_focus.focus_relative(
                 event.app,
-                (view_control, list_control),
                 -1,
                 wrap=False,
             )
@@ -1226,9 +1236,8 @@ def run_help_selector(
 
     @bindings.add("down", filter=has_focus(view_control), eager=True)
     def _leave_view(event) -> None:
-        focus_in_order(
+        surface_focus.focus_relative(
             event.app,
-            (view_control, list_control),
             1,
             wrap=False,
         )
@@ -1237,9 +1246,8 @@ def run_help_selector(
     @bindings.add("tab")
     def _next_surface(event) -> None:
         navigation_accelerator.reset()
-        focus_in_order(
+        surface_focus.focus_relative(
             event.app,
-            (view_control, list_control),
             1,
             wrap=True,
         )
@@ -1248,15 +1256,14 @@ def run_help_selector(
     @bindings.add("s-tab")
     def _previous_surface(event) -> None:
         navigation_accelerator.reset()
-        focus_in_order(
+        surface_focus.focus_relative(
             event.app,
-            (view_control, list_control),
             -1,
             wrap=True,
         )
         event.app.invalidate()
 
-    @bindings.add("q", eager=True)
+    @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("escape", eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:

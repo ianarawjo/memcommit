@@ -28,6 +28,7 @@ from memcommit.semantic_execution import (
     BudgetVector,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     plan_semantic_execution,
 )
@@ -39,7 +40,7 @@ from memcommit.understanding import (
 )
 
 
-ATOMIZE_INPUT_CHAR_LIMIT = 200_000
+ATOMIZE_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 ATOMIZE_RESPONSE_CHAR_LIMIT = 1_000_000
 ATOMIZE_REASON_CHAR_LIMIT = 1_000
 ATOMIZE_CHILD_CHAR_LIMIT = 20_000
@@ -50,21 +51,14 @@ ATOMIZE_OVERVIEW_CHAR_LIMIT = 1_500
 ATOMIZE_QUALITY_READING_LIMIT = 5
 ATOMIZE_READING_LABEL_CHAR_LIMIT = 160
 ATOMIZE_READING_LABEL_WORD_LIMIT = 20
-ATOMIZE_QUALITY_ISSUE_LIMIT = 5_000
 
 # Classification can eventually map over Memory batches, but quality findings
 # require a complete cross-batch pass before Atomize may claim full coverage.
-def _atomize_execution_policy(
-    *,
-    relation_limit: int = ATOMIZE_QUALITY_ISSUE_LIMIT,
-) -> SemanticExecutionPolicy:
+def _atomize_execution_policy() -> SemanticExecutionPolicy:
     return SemanticExecutionPolicy(
         operation="impact_atomize",
         strategy=ExecutionStrategy.MAP_PLUS_GLOBAL,
-        one_shot_limits=BudgetLimits(
-            max_input_chars=ATOMIZE_INPUT_CHAR_LIMIT,
-            max_relation_edges=relation_limit,
-        ),
+        one_shot_limits=BudgetLimits(max_input_chars=ATOMIZE_INPUT_CHAR_LIMIT),
         staged_supported=False,
     )
 ATOMIZE_RULESET_VERSION = "atomize-v2-reviewed-frame-draft"
@@ -1167,7 +1161,6 @@ class AtomizeAnalysisSession:
                 )
                 for source_uid in section.source_uids
             )
-            or len(quality_issues) > ATOMIZE_QUALITY_ISSUE_LIMIT
             or len({issue.uid for issue in quality_issues})
             != len(quality_issues)
             or any(
@@ -1724,25 +1717,12 @@ def _payload(
     profile, calibration = _load_calibration(
         include_declared_frames=bool(declared_frames),
     )
-    pair_count = len(candidates) * (len(candidates) - 1) // 2
     # The aggregate call names the complete pair space instead of asking the
-    # model to silently choose likely pairs.  This preserves the same bounded
-    # one-shot contract as the standalone conflict finder.
+    # model to silently choose likely pairs. The provider-capacity preflight
+    # below remains the only aggregate size boundary.
     from memcommit.findings import (
-        CONFLICT_PAIR_LIMIT,
         _load_calibration_cases,
     )
-
-    pair_plan = plan_semantic_execution(
-        _atomize_execution_policy(relation_limit=CONFLICT_PAIR_LIMIT),
-        BudgetVector(relation_edges=pair_count),
-    )
-    if pair_plan.mode is not ExecutionMode.ONE_SHOT:
-        raise AtomizeImpactError(
-            f"This Context has {pair_count} Memory pairs, exceeding the "
-            f"one-shot prototype limit of {CONFLICT_PAIR_LIMIT}. Use a "
-            "smaller Context; quality candidates are never silently omitted."
-        )
     pairs: list[dict[str, str]] = []
     for left_index, left in enumerate(candidates):
         for right in candidates[left_index + 1 :]:
@@ -1967,10 +1947,9 @@ def _output_schema(
             },
             "quality_issues": {
                 "type": "array",
-                "maxItems": min(
-                    ATOMIZE_QUALITY_ISSUE_LIMIT,
+                "maxItems": (
                     len(candidates)
-                    + len(candidates) * (len(candidates) - 1) // 2,
+                    + len(candidates) * (len(candidates) - 1) // 2
                 ),
                 "items": quality_issue,
             },
@@ -2244,10 +2223,7 @@ def _parse_quality_issues(
     value: object,
     candidate_by_id: dict[str, AtomizeCandidate],
 ) -> tuple[AtomizeQualityIssue, ...]:
-    if (
-        not isinstance(value, list)
-        or len(value) > ATOMIZE_QUALITY_ISSUE_LIMIT
-    ):
+    if not isinstance(value, list):
         raise AtomizeImpactError(
             "Codex atomize impact returned invalid quality issues."
         )

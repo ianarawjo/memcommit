@@ -232,6 +232,11 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
         "memcommit.choice.active": "fg:#10242f bg:#8bd5ff",
         "memcommit.choice.active.focused": "fg:#10242f bg:#8bd5ff bold",
         "memcommit.choice.border.focused": "fg:#8bd5ff bold",
+        # Source badges are available to every shared selector, not only to
+        # semantic report viewers. Availability alone carries warning color.
+        "source-access": "fg:#f4f5f7 bold",
+        "source-reach": "fg:#f4f5f7",
+        "source-state": "fg:#f5a97f bold",
     }
 )
 

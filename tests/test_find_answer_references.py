@@ -7,6 +7,7 @@ from memcommit.find_answer_references import (
     FindAnswerEvidence,
     FindAnswerReferenceError,
     FindAnswerSentence,
+    build_find_answer_reference_document,
     render_find_answer_references,
 )
 
@@ -78,6 +79,23 @@ def test_numbers_references_by_first_citation_occurrence():
     ) in rendered
     assert rendered.index("[1] m1 ·") < rendered.index("[2] c1 ·")
     assert rendered.index("[2] c1 ·") < rendered.index("[3] x1 ·")
+
+
+def test_typed_reference_document_preserves_body_and_reference_boundaries():
+    sentences = (
+        FindAnswerSentence("First claim.", ("c1",)),
+        FindAnswerSentence("Second claim.", ("m1", "c1")),
+        FindAnswerSentence("Third claim."),
+    )
+
+    document = build_find_answer_reference_document(_evidence(), sentences)
+
+    assert document.body == "First claim. [1] Second claim. [2] [1] Third claim."
+    assert tuple(
+        (reference.number, reference.evidence.alias)
+        for reference in document.references
+    ) == ((1, "c1"), (2, "m1"))
+    assert document.text == render_find_answer_references(_evidence(), sentences)
 
 
 def test_repeated_citation_across_sentences_reuses_one_reference():

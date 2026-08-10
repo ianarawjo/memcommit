@@ -17,10 +17,15 @@ from memcommit.selective_curation import (
     CurationBatch,
     CurationItem,
     CriterionFrame,
+    SELECTIVE_CURATION_EXECUTION_POLICY,
     build_provider_frame,
     plan_curation_execution,
 )
-from memcommit.semantic_execution import ExecutionMode, ExecutionStrategy
+from memcommit.semantic_execution import (
+    ExecutionMode,
+    ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
+)
 from memcommit.summarize import SUMMARIZE_EXECUTION_POLICY
 from memcommit.translate import TRANSLATE_EXECUTION_POLICY
 from memcommit.update import UPDATE_EXECUTION_POLICY
@@ -57,20 +62,40 @@ def test_only_implemented_find_and_translate_policies_advertise_staging():
     }
 
 
-def test_update_keeps_character_and_operation_budgets_independent():
-    limits = UPDATE_EXECUTION_POLICY.one_shot_limits
+def test_aggregate_policies_share_provider_capacity_without_count_gates():
+    policies = (
+        COMPARISON_EXECUTION_POLICY,
+        MELD_EXECUTION_POLICY,
+        UPDATE_EXECUTION_POLICY,
+        _atomize_execution_policy(),
+        SUMMARIZE_EXECUTION_POLICY,
+        _findings_execution_policy("find_duplicates"),
+        _findings_execution_policy("find_ambiguities"),
+        _findings_execution_policy("find_conflicts"),
+        HISTORY_SEARCH_EXECUTION_POLICY,
+        _find_answer_execution_policy(),
+        RATIONALE_EXECUTION_POLICY,
+        ATOMIZE_GROUNDING_EXECUTION_POLICY,
+        FIND_EXECUTION_POLICY,
+        TRANSLATE_EXECUTION_POLICY,
+        SELECTIVE_CURATION_EXECUTION_POLICY,
+    )
 
-    assert limits.max_input_chars == 200_000
-    assert limits.max_output_items == 200
+    for policy in policies:
+        limits = policy.one_shot_limits
+        assert limits.max_input_chars == SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
+        assert limits.max_items is None
+        assert limits.max_output_items is None
+        assert limits.max_relation_edges is None
 
 
-def test_selective_curation_is_explicitly_whole_frame_only():
+def test_selective_curation_has_no_fixed_item_count_gate():
     frame = build_provider_frame(
         CurationBatch(
             source_label="source",
             source=tuple(
                 CurationItem(f"s{index}", "source content")
-                for index in range(500)
+                for index in range(501)
             ),
             criteria=CriterionFrame(
                 kind="INSTRUCTION",
@@ -83,5 +108,5 @@ def test_selective_curation_is_explicitly_whole_frame_only():
     plan = plan_curation_execution(frame)
 
     assert plan.policy.strategy is ExecutionStrategy.WHOLE_FRAME_ONLY
-    assert plan.mode is ExecutionMode.REJECTED
-    assert plan.exceeded_axes == ("item_count",)
+    assert plan.mode is ExecutionMode.ONE_SHOT
+    assert plan.exceeded_axes == ()

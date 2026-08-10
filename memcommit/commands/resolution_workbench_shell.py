@@ -34,6 +34,7 @@ from memcommit.commands.tui_primitives import (
     SEMANTIC_VIEWER_STYLE,
     TuiRegion,
     WrappedScrollbarMargin,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     boxed_lines,
     build_framed_multiline_input,
@@ -66,6 +67,13 @@ from memcommit.commands.semantic_viewer import (
     deactivate_semantic_viewer_fragments,
     semantic_viewer_block_fragments,
 )
+from memcommit.commands.surface_focus import (
+    FocusSurface,
+    SurfaceActionResult,
+    SurfaceFocusController,
+    SurfaceMoveResult,
+    bind_surface_navigation,
+)
 from memcommit.impact_controller import ImpactController, ImpactView
 from memcommit.memory_diff import MemoryChange, MemoryDiffSpan, memory_diff_lines
 from memcommit.resolution_workbench import (
@@ -81,6 +89,7 @@ from memcommit.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )
+from memcommit.study_action_log import record_study_action
 from memcommit.responses.state import ResponseFrameState
 from memcommit.responses.tui import response_frame_fragments
 from memcommit.selection.model import SelectionOption
@@ -89,6 +98,7 @@ from memcommit.selection.tui import render_vertical_choice_cards
 from memcommit.session_workbench_navigation import (
     SessionWorkbenchNavigation,
     WorkbenchSection,
+    WorkbenchPane,
 )
 
 
@@ -120,6 +130,17 @@ class SessionTodoView:
     label: str
     detail: str
     unresolved_item_uids: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class _FinalReviewOrigin:
+    """Exact process-local focus state to restore after final review."""
+
+    viewer_kind: str
+    pane: WorkbenchPane
+    row_index: int
+    viewer_row_index: int
+    section_uid: str | None
 
 
 def _item_draft(
@@ -1363,6 +1384,24 @@ def resolution_report_fragments(
         )
         section_index += 1
 
+    def section_block(
+        block_fragments: list[tuple[str, str]],
+        *,
+        focus_indices: tuple[int, ...] | None = None,
+    ) -> None:
+        """Render one report stop whose semantic content may span paragraphs."""
+
+        nonlocal section_index
+        active = section_index == focused_section
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                block_fragments,
+                active=active,
+                focus_indices=focus_indices,
+            )
+        )
+        section_index += 1
+
     # Report identity and endpoint metadata orient the reader but are not
     # semantic inspection targets. Initial Viewer focus therefore lands on
     # the first operation-declared overview section.
@@ -1416,9 +1455,18 @@ def resolution_report_fragments(
         )
         section_index += 1
     if view.report_items_summary is not None:
-        heading(view.report_items_summary.heading)
-        fragments.append(
-            ("", f" {safe_terminal_text(view.report_items_summary.text)}\n\n")
+        section_block(
+            [
+                (
+                    "class:section",
+                    f" {safe_terminal_text(view.report_items_summary.heading)}\n",
+                ),
+                (
+                    "class:viewer-body",
+                    f" {safe_terminal_text(view.report_items_summary.text)}\n\n",
+                ),
+            ],
+            focus_indices=(0, 1),
         )
     else:
         # The collection label is report chrome. Individual operation items
@@ -1432,25 +1480,32 @@ def resolution_report_fragments(
         if not view.items:
             fragments.append(("", f"  {safe_terminal_text(view.empty_message)}\n"))
         for index, item in enumerate(view.items, start=1):
-            heading(
-                f"{_item_kind_label(item)} {index} · {item.title}",
-                style="class:report-label",
-            )
-            fragments.extend(
-                [
+            item_fragments = [
+                (
+                    "class:report-label",
+                    " "
+                    + safe_terminal_text(
+                        f"{_item_kind_label(item)} {index} · {item.title}"
+                    )
+                    + "\n",
+                ),
+                (
+                    "class:viewer-body",
+                    f" [{safe_terminal_text(item.priority)}] {safe_terminal_text(item.summary)}\n",
+                ),
+            ]
+            if item.question:
+                item_fragments.append(
                     (
-                        "",
-                        f" [{safe_terminal_text(item.priority)}] {safe_terminal_text(item.summary)}\n",
-                    ),
-                    (
-                        "",
-                        (
-                            f" QUESTION · {safe_terminal_text(item.question)}\n\n"
-                            if item.question
-                            else "\n"
-                        ),
-                    ),
-                ]
+                        "class:viewer-body",
+                        f" QUESTION · {safe_terminal_text(item.question)}\n\n",
+                    )
+                )
+            else:
+                item_fragments.append(("", "\n"))
+            section_block(
+                item_fragments,
+                focus_indices=tuple(range(len(item_fragments))),
             )
     if show_results:
         heading(
@@ -1676,12 +1731,12 @@ def resolution_report_fragments(
                 draft_values,
                 strategies,
             )
-        heading(action_heading)
-        fragments.append(
-            (
-                "",
-                f" {action_detail}\n",
-            )
+        section_block(
+            [
+                ("class:section", f" {safe_terminal_text(action_heading)}\n"),
+                ("class:viewer-body", f" {safe_terminal_text(action_detail)}\n"),
+            ],
+            focus_indices=(0, 1),
         )
         if show_strategies:
             for index, item in enumerate(strategies):
@@ -2124,12 +2179,14 @@ def resolution_review_fragments(
     action: SessionTodoView,
     focused_section: int = 0,
     content_width: int = 76,
+    review_title: str = "REVIEW AND APPLY",
 ) -> list[tuple[str, str]]:
     """Render the explicit final review without performing its action."""
 
     show_policy = action.kind in {
         "INCORPORATE RESPONSES",
         "INCORPORATE AND APPLY",
+        "RESOLVE ALL",
     }
     section_count = 3 if show_policy else 2
     focused_section = max(0, min(focused_section, section_count - 1))
@@ -2166,8 +2223,15 @@ def resolution_review_fragments(
             continue
         response_lines.extend([f"{index}. {item.title}", f"   {answer}"])
 
+    ready_without_open_reviews = (
+        reviewable == 0 and action.kind in {"APPLY", "APPLY AS IS"}
+    )
     if not response_lines:
-        response_lines.append("No staged issue responses yet.")
+        response_lines.append(
+            "No open issue responses remain in the current proposal."
+            if ready_without_open_reviews
+            else "No staged issue responses yet."
+        )
     remaining_summary = (
         " · ".join(
             f"{priority} {count}"
@@ -2179,9 +2243,10 @@ def resolution_review_fragments(
         )
         or "NONE"
     )
+    if not ready_without_open_reviews:
+        response_lines.append(f"RESPONSES · {answered}/{reviewable} ANSWERED")
     response_lines.extend(
         [
-            f"RESPONSES · {answered}/{reviewable} ANSWERED",
             f"OPEN REVIEWS · {remaining_summary}",
             "Nothing changes until the final action below is confirmed.",
         ]
@@ -2190,7 +2255,7 @@ def resolution_review_fragments(
     summary_fragments = [
         ("class:detail-card", f" {line}\n")
         for line in boxed_lines(
-            "REVIEW AND APPLY",
+            review_title,
             "\n".join(response_lines).rstrip(),
             width=max(24, content_width - 1),
         )
@@ -2200,7 +2265,6 @@ def resolution_review_fragments(
             summary_fragments,
             active=focused_section == 0,
             anchor="end",
-            focus_indices=(0,),
         )
     )
     fragments.append(("", "\n"))
@@ -2223,15 +2287,19 @@ def resolution_review_fragments(
                 policy_fragments,
                 active=focused_section == 1,
                 anchor="end",
-                focus_indices=(0,),
             )
         )
         fragments.append(("", "\n"))
         action_section = 2
 
+    return_note = (
+        "Esc/Backspace returns without applying."
+        if "APPLY" in action.kind
+        else "Esc/Backspace returns without resolving."
+    )
     action_box = boxed_lines(
         action.kind,
-        f"{action.label}\n{action.detail}\nEsc/Backspace returns without applying.",
+        f"{action.label}\n{action.detail}\n{return_note}",
         width=max(24, content_width - 1),
     )
     action_fragments = [("class:detail-card", f" {line}\n") for line in action_box]
@@ -2240,7 +2308,6 @@ def resolution_review_fragments(
             action_fragments,
             active=focused_section == action_section,
             anchor="end",
-            focus_indices=(0,),
         )
     )
     return fragments
@@ -2568,6 +2635,20 @@ def run_resolution_workbench_shell(
         return None
 
     def review_action() -> SessionTodoView:
+        if final_review_title["value"] == "RESOLVE ALL":
+            if not global_strategies:
+                return SessionTodoView(
+                    "COMPLETE",
+                    "No whole-set strategy available",
+                    "Return and review an individual item.",
+                )
+            selected_strategy = global_strategies[strategy["index"]]
+            return SessionTodoView(
+                "RESOLVE ALL",
+                selected_strategy.label,
+                selected_strategy.comment
+                or "Enter to run the selected whole-set strategy.",
+            )
         return session_review_action_view(
             current_view(),
             local_drafts,
@@ -2578,10 +2659,10 @@ def run_resolution_workbench_shell(
         """Describe review entry before opening and confirmation after it."""
 
         active_view = current_view()
-        if review_and_apply and viewer_content["kind"] == "REVIEW":
+        if viewer_content["kind"] == "REVIEW":
             action = review_action()
             return SessionTodoView(
-                "REVIEW AND APPLY",
+                final_review_title["value"],
                 f"Confirm final {active_view.operation.title()} action",
                 (f"{action.kind} is ready. Enter to {action.kind.lower()} now."),
             )
@@ -2606,6 +2687,7 @@ def run_resolution_workbench_shell(
                     review_action(),
                     viewer_section_index(),
                     content_width=pane_content_width(),
+                    review_title=final_review_title["value"],
                 ),
                 focused=session_navigation.pane == "viewer",
             )
@@ -2662,6 +2744,8 @@ def run_resolution_workbench_shell(
     global_comment = {"value": False}
     strategy = {"index": 0}
     viewer_content = {"kind": "REPORT"}
+    final_review_title = {"value": "REVIEW AND APPLY"}
+    final_review_origin: dict[str, _FinalReviewOrigin | None] = {"value": None}
     impact_reason_expanded: dict[str, str | None] = {"uid": None}
     navigation_accelerator = NavigationAccelerator()
     other_direction = {"focused": False}
@@ -2737,9 +2821,9 @@ def run_resolution_workbench_shell(
         """Keep the outer frame label aligned with its semantic surface."""
 
         viewer_content["kind"] = kind
-        # Final approval is a distinct confirmation surface, not another
-        # report/detail Viewer. Removing the label also avoids two competing
-        # headings: VIEWER and REVIEW AND APPLY.
+        # A final whole-set review is a distinct confirmation surface, not
+        # another report/detail Viewer. Removing the label also avoids two
+        # competing headings such as VIEWER and REVIEW AND APPLY.
         viewer_frame.title = "" if kind == "REVIEW" else "VIEWER"
 
     # To Do summarizes the whole session before any individual row is opened,
@@ -2759,6 +2843,10 @@ def run_resolution_workbench_shell(
         prompt="› ",
         buffer_name="resolution-message",
         height=Dimension(min=4, preferred=5, max=7),
+        # The outer Responses frame may be focused while a choice row owns the
+        # keyboard. Reset inherited focus styling until this inner box itself
+        # becomes the active stop.
+        frame_style="fg:#f4f5f7 nobold",
     )
     input_area = composer.text_area
     body_control = FormattedTextControl(
@@ -3188,13 +3276,6 @@ def run_resolution_workbench_shell(
         composer.frame.title = "RESPONSE" if split_viewer_items else "MESSAGE"
         set_status("")
 
-    def viewer_navigation_accelerates() -> bool:
-        """Use the shared held-arrow movement throughout the active Viewer."""
-        if not (split_viewer_items and session_navigation.pane == "viewer"):
-            navigation_accelerator.reset()
-            return False
-        return True
-
     def open_item_input(*, title: str, clear: bool = False) -> None:
         destination_editing["value"] = False
         global_comment["value"] = False
@@ -3235,8 +3316,7 @@ def run_resolution_workbench_shell(
         destination_frame.title = safe_terminal_text(
             f"{destination.label} · CHOOSE PARENT OR EDIT DIRECTLY"
         )
-        destination_input.text = destination.value
-        destination_input.buffer.cursor_position = len(destination.value)
+        destination_name_field.set_text(destination.value)
         session_navigation.focus("save_location")
         get_app().layout.focus(destination_input)
         set_status("")
@@ -3251,8 +3331,7 @@ def run_resolution_workbench_shell(
         except (TypeError, ValueError) as error:
             set_status(str(error))
             return
-        destination_input.text = candidate
-        destination_input.buffer.cursor_position = len(candidate)
+        destination_name_field.set_text(candidate)
         get_app().layout.focus(destination_input)
         set_status(
             f"Parent selected · {state.selected_parent} · edit the exact name or Enter."
@@ -3280,8 +3359,54 @@ def run_resolution_workbench_shell(
         event_app.layout.focus(body_control)
         set_status("")
 
-    def open_review_and_apply() -> None:
-        """Open the non-mutating final review before any apply action."""
+    def close_final_review() -> None:
+        """Return from final review to the exact process-local entry surface."""
+
+        origin = final_review_origin["value"]
+        final_review_origin["value"] = None
+        if origin is None:
+            # Compatibility fallback for navigation state created before this
+            # shell began tracking review entry. The report action is the
+            # closest stable semantic parent of the confirmation surface.
+            session_navigation.row_index = 0
+            session_navigation.viewer_row_index = 0
+            set_viewer_content("REPORT")
+            sections = report_sections()
+            action_section = next(
+                (section for section in sections if section.uid == "REPORT:ACTION"),
+                sections[0] if sections else None,
+            )
+            session_navigation.section_uid = (
+                action_section.uid if action_section is not None else None
+            )
+            pane: WorkbenchPane = "viewer"
+        else:
+            session_navigation.row_index = origin.row_index
+            session_navigation.viewer_row_index = origin.viewer_row_index
+            set_viewer_content(origin.viewer_kind)
+            session_navigation.section_uid = origin.section_uid
+            viewer_controller.index(active_viewer_sections())
+            pane = origin.pane
+
+        if pane == "responses" and not response_visible():
+            pane = "viewer"
+        if pane == "save_location" and not destination_available:
+            pane = "viewer"
+        if pane == "composer":
+            pane = "viewer"
+        controls = {
+            "viewer": body_control,
+            "responses": responses_control,
+            "items": items_control,
+            "save_location": destination_control,
+            "todo": todo_control,
+        }
+        _focus_surface_pane(pane)
+        get_app().layout.focus(controls[pane])
+        set_status("")
+
+    def open_final_review() -> None:
+        """Open the non-mutating review before a whole-set or apply action."""
 
         save_draft()
         active_view = current_view()
@@ -3293,12 +3418,24 @@ def run_resolution_workbench_shell(
             whole_set_available=bool(global_strategies),
             read_only_handoff=read_only_handoff,
         )
-        if todo.kind != "REVIEW AND APPLY":
+        if todo.kind not in {"REVIEW AND APPLY", "RESOLVE ALL"}:
             if todo.unresolved_item_uids:
                 open_split_item(todo.unresolved_item_uids[0])
             else:
                 set_status(todo.detail)
             return
+        final_review_title["value"] = todo.kind
+        if viewer_content["kind"] != "REVIEW":
+            # Review is a temporary confirmation layer. Preserve the exact
+            # semantic stop and visible frame so both Enter on its summary and
+            # the shared back keys can unwind without guessing a destination.
+            final_review_origin["value"] = _FinalReviewOrigin(
+                viewer_kind=viewer_content["kind"],
+                pane=session_navigation.pane,
+                row_index=session_navigation.row_index,
+                viewer_row_index=session_navigation.viewer_row_index,
+                section_uid=session_navigation.section_uid,
+            )
         session_navigation.row_index = len(active_view.items) + 1
         session_navigation.viewer_row_index = session_navigation.row_index
         set_viewer_content("REVIEW")
@@ -3312,6 +3449,11 @@ def run_resolution_workbench_shell(
         session_navigation.focus("viewer")
         get_app().layout.focus(body_control)
         set_status("")
+        record_study_action(
+            "APPROVAL_PRESENTED",
+            surface="resolution",
+            action=todo.kind,
+        )
 
     def final_review_action(
         active_view: ResolutionWorkbenchView,
@@ -3326,6 +3468,15 @@ def run_resolution_workbench_shell(
             )
         if final_action.kind == "INCORPORATE RESPONSES":
             return incorporate_responses_action(active_view)
+        if final_action.kind == "RESOLVE ALL":
+            selected_strategy = global_strategies[strategy["index"]]
+            if selected_strategy.action_kind == "CUSTOM":
+                open_global_input(clear=True)
+                return None
+            return semantic_action(
+                selected_strategy.action_kind,
+                comment=selected_strategy.comment,
+            )
         set_status("No final action is available.")
         return None
 
@@ -3369,22 +3520,6 @@ def run_resolution_workbench_shell(
             )
         if action is not None:
             event.app.exit(result=action)
-
-    @bindings.add("down", filter=~writable_input_focused)
-    def _down(event) -> None:
-        if viewer_navigation_accelerates():
-            navigation_accelerator.move(1, app=event.app, move_one=move)
-        else:
-            move(1)
-            event.app.invalidate()
-
-    @bindings.add("up", filter=~writable_input_focused)
-    def _up(event) -> None:
-        if viewer_navigation_accelerates():
-            navigation_accelerator.move(-1, app=event.app, move_one=move)
-        else:
-            move(-1)
-            event.app.invalidate()
 
     @bindings.add("pagedown", filter=~writable_input_focused)
     def _page_down(event) -> None:
@@ -3470,7 +3605,6 @@ def run_resolution_workbench_shell(
         load_draft()
         event.app.invalidate()
 
-    @bindings.add("enter", filter=~writable_input_focused)
     def _open_or_choose(event) -> None:
         active_view = current_view()
         if split_viewer_items:
@@ -3535,10 +3669,8 @@ def run_resolution_workbench_shell(
                         )
                         event.app.invalidate()
                         return
-                    if section.kind == "REVIEW_AND_APPLY" or (
-                        review_and_apply and section.kind == "RESOLVE_ALL"
-                    ):
-                        open_review_and_apply()
+                    if section.kind in {"REVIEW_AND_APPLY", "RESOLVE_ALL"}:
+                        open_final_review()
                         event.app.invalidate()
                         return
                 other_direction_editor["open"] = False
@@ -3601,16 +3733,28 @@ def run_resolution_workbench_shell(
                     )
             elif kind == "RESOLVE_ALL" and viewer_content["kind"] == "REVIEW":
                 section = active_viewer_sections()[viewer_section_index()]
-                if section.kind != "ACTION":
+                if section.kind == "SUMMARY":
+                    close_final_review()
+                elif section.kind != "ACTION":
                     set_status("Move to the final action and press Enter.")
                 else:
                     action = final_review_action(active_view)
                     if action is not None:
+                        record_study_action(
+                            "APPROVAL_ACCEPTED",
+                            surface="resolution",
+                            action=action.kind,
+                        )
                         event.app.exit(result=action)
                         return
             elif kind == "TODO" and viewer_content["kind"] == "REVIEW":
                 action = final_review_action(active_view)
                 if action is not None:
+                    record_study_action(
+                        "APPROVAL_ACCEPTED",
+                        surface="resolution",
+                        action=action.kind,
+                    )
                     event.app.exit(result=action)
                     return
             elif (
@@ -3658,36 +3802,11 @@ def run_resolution_workbench_shell(
                     "Required review is complete; close or revisit an optional review."
                 )
             elif kind == "TODO" and review_and_apply:
-                open_review_and_apply()
+                open_final_review()
             elif kind == "TODO" and not global_strategies:
                 set_status("No whole-set strategies are available.")
-            elif kind == "TODO" and (
-                viewer_content["kind"] != "REPORT"
-                or session_navigation.section_uid
-                != next(
-                    section.uid
-                    for section in report_sections()
-                    if section.kind == "RESOLVE_ALL"
-                )
-            ):
-                set_viewer_content("REPORT")
-                session_navigation.focus_section(
-                    report_sections(),
-                    kind="RESOLVE_ALL",
-                    last=True,
-                )
-                set_status("")
             elif kind == "TODO":
-                selected_strategy = global_strategies[strategy["index"]]
-                if selected_strategy.action_kind == "CUSTOM":
-                    open_global_input(clear=True)
-                else:
-                    action = semantic_action(
-                        selected_strategy.action_kind,
-                        comment=selected_strategy.comment,
-                    )
-                    if action is not None:
-                        event.app.exit(result=action)
+                open_final_review()
             event.app.invalidate()
             return
         item = current_navigation.current_item(active_view)
@@ -3716,8 +3835,201 @@ def run_resolution_workbench_shell(
             set_status("")
         event.app.invalidate()
 
-    @bindings.add("tab")
-    @bindings.add("s-tab")
+    def _focus_surface_pane(pane: WorkbenchPane) -> None:
+        """Keep semantic frame state aligned with prompt-toolkit focus."""
+
+        if pane != "viewer":
+            navigation_accelerator.reset()
+            viewer_controller.close_nested()
+        if pane == "items" and viewer_content["kind"] == "REVIEW":
+            # Final review is not an Items row. Both Tab and vertical entry
+            # expose the ordinary Report selection while leaving the reviewed
+            # confirmation visible until the person moves or activates it.
+            session_navigation.row_index = 0
+        session_navigation.focus(pane)
+        set_status("")
+
+    def _move_viewer_surface(event, delta: int) -> SurfaceMoveResult:
+        sections = active_viewer_sections()
+        if viewer_controller.nested_uid is not None:
+            # Nested Memory reading deliberately keeps its own Escape boundary;
+            # reaching the last wrapped line must not silently leave the reader.
+            navigation_accelerator.move(delta, app=event.app, move_one=move)
+            return "CONSUMED"
+        index = viewer_section_index()
+        if (delta < 0 and index == 0) or (
+            delta > 0 and index == len(sections) - 1
+        ):
+            navigation_accelerator.reset()
+            return "BOUNDARY"
+        navigation_accelerator.move(delta, app=event.app, move_one=move)
+        return "MOVED"
+
+    def _enter_viewer_surface(delta: int) -> None:
+        sections = active_viewer_sections()
+        if sections:
+            session_navigation.section_uid = sections[0 if delta > 0 else -1].uid
+
+    def _move_responses_surface(_event, delta: int) -> SurfaceMoveResult:
+        target = sync_response_state()
+        if target is None:
+            return "BOUNDARY"
+        before = (
+            response_state.section,
+            response_state.option_cursor_uid,
+        )
+        response_state.move_focus(target, delta)
+        after = (
+            response_state.section,
+            response_state.option_cursor_uid,
+        )
+        set_status("")
+        return "MOVED" if after != before else "BOUNDARY"
+
+    def _enter_responses_surface(delta: int) -> None:
+        target = sync_response_state()
+        if target is None:
+            return
+        if delta < 0 or not target.choices:
+            response_state.focus_response()
+            return
+        response_state.open_options(target)
+        choices = response_state.choice_state
+        if choices is not None:
+            choices.cursor_uid = choices.options[0].uid
+
+    def _move_items_surface(_event, delta: int) -> SurfaceMoveResult:
+        active_view = current_view()
+        total_rows = len(active_view.items) + 1
+        before = session_navigation.row_index
+        if (delta < 0 and before == 0) or (
+            delta > 0 and before == total_rows - 1
+        ):
+            return "BOUNDARY"
+        move(delta)
+        return (
+            "MOVED" if session_navigation.row_index != before else "BOUNDARY"
+        )
+
+    def _enter_items_surface(delta: int) -> None:
+        # Entering a frame chooses its nearest edge without opening that row.
+        # In particular, crossing out of final review must not close the review
+        # until the person actually moves or activates an Items selection.
+        session_navigation.row_index = (
+            0 if delta > 0 else len(current_view().items)
+        )
+
+    def _single_row_surface_move(
+        _event,
+        _delta: int,
+    ) -> SurfaceMoveResult:
+        return "BOUNDARY"
+
+    def _activate_surface(event) -> SurfaceActionResult:
+        _open_or_choose(event)
+        return "HANDLED"
+
+    if split_viewer_items:
+
+        def visible_focus_surfaces() -> tuple[FocusSurface, ...]:
+            surfaces = [
+                FocusSurface(
+                    "viewer",
+                    body_control,
+                    move_vertical=_move_viewer_surface,
+                    activate=_activate_surface,
+                    on_focus=lambda: _focus_surface_pane("viewer"),
+                    on_vertical_enter=_enter_viewer_surface,
+                )
+            ]
+            if response_visible():
+                surfaces.append(
+                    FocusSurface(
+                        "responses",
+                        responses_control,
+                        move_vertical=_move_responses_surface,
+                        activate=_activate_surface,
+                        on_focus=lambda: _focus_surface_pane("responses"),
+                        on_vertical_enter=_enter_responses_surface,
+                    )
+                )
+            surfaces.append(
+                FocusSurface(
+                    "items",
+                    items_control,
+                    move_vertical=_move_items_surface,
+                    activate=_activate_surface,
+                    on_focus=lambda: _focus_surface_pane("items"),
+                    on_vertical_enter=_enter_items_surface,
+                )
+            )
+            if destination_available:
+                surfaces.append(
+                    FocusSurface(
+                        "save-location",
+                        destination_control,
+                        move_vertical=_single_row_surface_move,
+                        activate=_activate_surface,
+                        on_focus=lambda: _focus_surface_pane("save_location"),
+                    )
+                )
+            surfaces.append(
+                FocusSurface(
+                    "todo",
+                    todo_control,
+                    move_vertical=_single_row_surface_move,
+                    activate=_activate_surface,
+                    on_focus=lambda: _focus_surface_pane("todo"),
+                )
+            )
+            return tuple(surfaces)
+
+        surface_focus = SurfaceFocusController(visible_focus_surfaces)
+        bind_surface_navigation(bindings, surface_focus)
+    else:
+
+        @bindings.add("down", filter=~writable_input_focused)
+        def _legacy_down(event) -> None:
+            move(1)
+            event.app.invalidate()
+
+        @bindings.add("up", filter=~writable_input_focused)
+        def _legacy_up(event) -> None:
+            move(-1)
+            event.app.invalidate()
+
+        @bindings.add("enter", filter=~writable_input_focused)
+        def _legacy_open_or_choose(event) -> None:
+            _open_or_choose(event)
+
+        @bindings.add("tab", filter=has_focus(body_control), eager=True)
+        @bindings.add("s-tab", filter=has_focus(body_control), eager=True)
+        def _legacy_focus_input(event) -> None:
+            active_view = current_view()
+            if active_view.input_locked:
+                set_status("Resolution input is locked while analysis is pending.")
+                event.app.invalidate()
+                return
+            if "SUBMIT_ITEM" not in active_view.capabilities:
+                set_status("Item comments are unavailable here.")
+                event.app.invalidate()
+                return
+            global_comment["value"] = False
+            heading = current_response_heading()
+            other_direction_editor["open"] = True
+            composer.frame.title = heading
+            input_heading["value"] = heading
+            event.app.layout.focus(input_area)
+            event.app.invalidate()
+
+    editor_tab_focused = (
+        has_focus(input_area)
+        | has_focus(destination_input)
+        | has_focus(destination_tree_control)
+    )
+
+    @bindings.add("tab", filter=editor_tab_focused, eager=True)
+    @bindings.add("s-tab", filter=editor_tab_focused, eager=True)
     def _focus_input(event) -> None:
         if event.app.layout.has_focus(destination_input):
             if destination_editor_state["value"] is not None:
@@ -3755,58 +4067,6 @@ def run_resolution_workbench_shell(
                 event.app.layout.focus(body_control)
             event.app.invalidate()
             return
-        if split_viewer_items:
-            response_state.option_navigation_active = False
-            response_state.other_choice_focused = False
-            viewer_controller.close_nested()
-            delta = -1 if event.key_sequence[0].key == Keys.BackTab else 1
-            visible_panes = ["viewer"]
-            if response_visible():
-                visible_panes.append("responses")
-            visible_panes.append("items")
-            if destination_available:
-                visible_panes.append("save_location")
-            visible_panes.append("todo")
-            pane = session_navigation.cycle_panes(
-                # Focus follows the visible top-to-bottom frame order from the
-                # first interaction; there is no hidden Items-first phase.
-                visible_panes,
-                delta,
-            )
-            if pane == "items" and viewer_content["kind"] == "REVIEW":
-                # The final review is not an Items row. Give Items its normal
-                # report selection without closing the visible review merely
-                # because Tab passed through the middle frame; Enter or arrow
-                # movement can then intentionally reopen that selected row.
-                session_navigation.row_index = 0
-            controls = {
-                "viewer": body_control,
-                "responses": responses_control,
-                "items": items_control,
-                "save_location": destination_control,
-                "todo": todo_control,
-            }
-            event.app.layout.focus(controls[pane])
-            event.app.invalidate()
-            return
-        active_view = current_view()
-        if active_view.input_locked:
-            set_status("Resolution input is locked while analysis is pending.")
-            event.app.invalidate()
-            return
-        if "SUBMIT_ITEM" not in active_view.capabilities:
-            set_status("Item comments are unavailable here.")
-            event.app.invalidate()
-            return
-        global_comment["value"] = False
-        heading = current_response_heading()
-        other_direction_editor["open"] = True
-        composer.frame.title = heading
-        input_heading["value"] = heading
-        if split_viewer_items:
-            session_navigation.focus("composer")
-        event.app.layout.focus(input_area)
-
     @bindings.add("c", filter=~writable_input_focused)
     def _comment_item(event) -> None:
         if not split_viewer_items:
@@ -3898,6 +4158,21 @@ def run_resolution_workbench_shell(
             set_status("Choose a parent Context with arrows, then press Enter.")
         event.app.invalidate()
 
+    @bindings.add("down", filter=has_focus(destination_tree_control), eager=True)
+    @bindings.add("up", filter=has_focus(destination_tree_control), eager=True)
+    def _move_destination_parent(event) -> None:
+        state = destination_editor_state["value"]
+        if state is not None:
+            delta = -1 if event.key_sequence[0].key == Keys.Up else 1
+            state.tree.move(delta)
+            set_status("")
+        event.app.invalidate()
+
+    @bindings.add("enter", filter=has_focus(destination_tree_control), eager=True)
+    def _use_destination_parent(event) -> None:
+        use_destination_parent()
+        event.app.invalidate()
+
     @bindings.add("c-j", filter=has_focus(destination_input), eager=True)
     def _reject_destination_newline(event) -> None:
         set_status("A Context name must stay on one line.")
@@ -3921,7 +4196,7 @@ def run_resolution_workbench_shell(
     @bindings.add("a", filter=~writable_input_focused)
     def _accept(event) -> None:
         if split_viewer_items and review_and_apply:
-            open_review_and_apply()
+            open_final_review()
             event.app.invalidate()
             return
         exit_simple(event, "ACCEPT")
@@ -4029,12 +4304,7 @@ def run_resolution_workbench_shell(
             event.app.invalidate()
             return
         if split_viewer_items and viewer_content["kind"] == "REVIEW":
-            session_navigation.row_index = 0
-            session_navigation.viewer_row_index = 0
-            set_viewer_content("REPORT")
-            reset_viewer_section()
-            session_navigation.focus("items")
-            event.app.layout.focus(items_control)
+            close_final_review()
             event.app.invalidate()
             return
         if (
@@ -4057,7 +4327,9 @@ def run_resolution_workbench_shell(
             return
         _close(event)
 
-    @bindings.add("q", filter=~writable_input_focused, eager=True)
+    @bind_case_insensitive_key(
+        bindings, "q", filter=~writable_input_focused, eager=True
+    )
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
         _close(event)
@@ -4105,7 +4377,7 @@ def run_resolution_workbench_shell(
                 )
         elif split_viewer_items and split_kind() == "TODO":
             todo = displayed_todo()
-            if review_and_apply and viewer_content["kind"] == "REVIEW":
+            if viewer_content["kind"] == "REVIEW":
                 final_action = review_action()
                 navigation_help = (
                     f" Enter {final_action.kind.lower()}  "
@@ -4118,11 +4390,18 @@ def run_resolution_workbench_shell(
                     else f" Enter {todo.kind.lower()}  Tab switch  Esc/Backspace back "
                 )
         elif split_viewer_items and split_kind() == "RESOLVE_ALL":
-            if review_and_apply and viewer_content["kind"] == "REVIEW":
+            if viewer_content["kind"] == "REVIEW":
                 final_action = review_action()
+                review_section = active_viewer_sections()[viewer_section_index()]
+                enter_hint = (
+                    "Enter return"
+                    if review_section.kind == "SUMMARY"
+                    else f"Enter {final_action.kind.lower()}"
+                    if review_section.kind == "ACTION"
+                    else "←/→ policy"
+                )
                 navigation_help = (
-                    " ↑/↓ review  Tab switch  "
-                    f"Enter {final_action.kind.lower()}  "
+                    f" ↑/↓ review  Tab switch  {enter_hint}  "
                     "Esc/Backspace return "
                 )
             else:
@@ -4241,10 +4520,9 @@ def run_resolution_workbench_shell(
             viewer_frame,
             is_focused=lambda: session_navigation.pane == "viewer",
         )
-        bind_focused_frame_style(
-            responses_frame,
-            is_focused=lambda: session_navigation.pane in {"responses", "composer"},
-        )
+        # Bind the nested box first. Its border glyphs become dynamic, so the
+        # later outer-frame binding cannot accidentally make both surfaces
+        # look focused at once.
         bind_focused_frame_style(
             composer.frame,
             is_focused=lambda: (
@@ -4254,6 +4532,10 @@ def run_resolution_workbench_shell(
                     and response_state.section == "RESPONSE"
                 )
             ),
+        )
+        bind_focused_frame_style(
+            responses_frame,
+            is_focused=lambda: session_navigation.pane in {"responses", "composer"},
         )
         bind_focused_frame_style(
             items_frame,
@@ -4303,6 +4585,12 @@ def run_resolution_workbench_shell(
     )
     load_draft()
     try:
-        return application.run()
+        result = application.run()
     except (EOFError, KeyboardInterrupt):
-        return ResolutionWorkbenchAction(kind="CLOSE")
+        result = ResolutionWorkbenchAction(kind="CLOSE")
+    record_study_action(
+        "TUI_ACTION",
+        surface="resolution",
+        action=result.kind,
+    )
+    return result

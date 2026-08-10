@@ -46,9 +46,11 @@ becoming the source of a service-wide policy rather than a special case.
 
 The common `RESPONSES` frame and the older Resolution Viewer compatibility path
 project their operation-owned choices into the same stacked-card renderer.
-Responses places those visible cards and its free-form Response stop in one
-linear Up/Down sequence; this topology remains Response-owned rather than part
-of the operation-neutral flat state.
+Responses projects the same flat state as unboxed stacked rows and places them
+with its free-form Response stop in one linear Up/Down sequence. The focused
+label is bold over the shared blue fill, while its description keeps the fill
+without bold. This layout and topology remain Response-owned rather than part
+of the operation-neutral flat state; other callers may retain bordered cards.
 Older compact Meld and Atomize snapshot paths use the same checked-marker
 policy, even though a stable text snapshot does not reproduce interactive focus
 borders. Context endpoint, Find target, and Sever setup trees use the common

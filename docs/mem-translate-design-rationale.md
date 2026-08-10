@@ -288,8 +288,9 @@ terminal control characters. Provider order is ignored; results are rebound
 to sources in canonical source order. Any validation failure occurs before a
 sidecar or materialized result is published.
 
-Each provider payload is capped at 200,000 characters and uses a 300-second
-Codex timeout. A fitting selection retains the historical one-call path. A
+Each provider payload uses the shared 1,000,000-character effective provider
+capacity and a 300-second Codex timeout. A fitting selection retains the
+historical one-call path. A
 larger selection uses the shared `COVERAGE_MAP` plan: batches split only between
 Memories, every global candidate alias is exposed exactly once, every batch is
 fully validated, and no plan is returned after a partial failure. One oversized

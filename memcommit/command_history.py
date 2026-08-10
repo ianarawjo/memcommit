@@ -263,6 +263,18 @@ def _unit_uid(
             and operation_digest
         ):
             return f"update:{session_uid}:{operation_digest}"
+    if command == "meld":
+        record = args.get("meld")
+        if isinstance(record, dict):
+            session_uid = record.get("session_uid")
+            change_set_digest = record.get("change_set_digest")
+            if (
+                isinstance(session_uid, str)
+                and session_uid
+                and isinstance(change_set_digest, str)
+                and change_set_digest
+            ):
+                return f"meld:{session_uid}:{change_set_digest}"
     return f"checkpoint:{checkpoint_uid}"
 
 

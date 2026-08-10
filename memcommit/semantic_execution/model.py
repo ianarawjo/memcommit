@@ -6,6 +6,13 @@ from dataclasses import dataclass
 from enum import Enum
 
 
+# Aggregate semantic operations share the provider's effective one-turn input
+# capacity.  Operation adapters may still enforce smaller field-level text
+# contracts, but they must not reintroduce lower corpus ceilings or candidate
+# count gates that prevent an otherwise supported provider call.
+SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT = 1_000_000
+
+
 class ExecutionStrategy(str, Enum):
     """How an operation may preserve meaning after one-shot bounds are crossed."""
 

@@ -12,6 +12,7 @@ from memcommit.commands.switch import _local_picker_annotations
 from memcommit.context import Memory
 from memcommit.profile_config import ProfileEntry, ProfileRegistry
 from memcommit.store import MemoryStore
+from memcommit.study_operation_policy import operation_policy
 
 
 runner = CliRunner()
@@ -83,9 +84,8 @@ def test_rationale_from_parent_uses_owned_descendant_memories(
     )
 
 
-def test_study_run_trace_is_local_to_task_three_and_visible_in_ls_and_switch(
+def test_locally_owned_trace_is_available_independent_of_study_task(
     isolated_store,
-    monkeypatch,
 ):
     assert runner.invoke(app, ["init", "task-1/participant"]).exit_code == 0
     assert runner.invoke(app, ["add", "Task 1 note."]).exit_code == 0
@@ -94,31 +94,7 @@ def test_study_run_trace_is_local_to_task_three_and_visible_in_ls_and_switch(
     store = MemoryStore()
     task1 = _memory(store, "task-1/participant", "Task 1 note.")
     task3 = _memory(store, "task-3/personal-memory", "Task 3 note.")
-    profile = ProfileEntry(
-        uid=str(uuid.uuid4()),
-        name="study-run",
-        kind="MANAGED",
-        source={"kind": "STUDY_RUN"},
-    )
-    registry = ProfileRegistry(
-        generation=1,
-        active_uid=profile.uid,
-        profiles=(profile,),
-    )
-    monkeypatch.setattr(
-        "memcommit.study_operation_policy.load_profile_registry",
-        lambda: registry,
-    )
-    monkeypatch.setattr(
-        "memcommit.study_operation_policy.profile_store_dir",
-        lambda _profile: isolated_store,
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.switch.load_profile_registry",
-        lambda: registry,
-    )
-
-    blocked = runner.invoke(
+    task1_result = runner.invoke(
         app,
         ["trace", task1.uid[:8], "--context", "task-1/participant"],
     )
@@ -130,14 +106,38 @@ def test_study_run_trace_is_local_to_task_three_and_visible_in_ls_and_switch(
     task3_ls = runner.invoke(app, ["ls", "task-3/personal-memory"])
     annotations = _local_picker_annotations(store.list_context_names())
 
-    assert blocked.exit_code == 1
-    assert "only in the Task 3 subtree" in blocked.output
+    assert task1_result.exit_code == 0, task1_result.output
     assert allowed.exit_code == 0, allowed.output
-    assert "RATIONALE SUBTREE + TRACE BLOCKED" in task1_ls.output
-    assert "RATIONALE SUBTREE + TRACE ALLOWED" in task3_ls.output
-    assert annotations["task-1/participant"] == (
-        "[RATIONALE SUBTREE + TRACE BLOCKED]"
+    assert "Analysis:" not in task1_ls.output
+    assert "Analysis:" not in task3_ls.output
+    assert annotations == {}
+
+
+def test_study_profile_metadata_does_not_reduce_local_trace_authority():
+    profile = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name="study-run",
+        kind="MANAGED",
+        source={"kind": "STUDY_RUN"},
     )
-    assert annotations["task-3/personal-memory"] == (
-        "[RATIONALE SUBTREE + TRACE ALLOWED]"
+    registry = ProfileRegistry(
+        generation=1,
+        active_uid=profile.uid,
+        profiles=(profile,),
     )
+
+    assert operation_policy(
+        "task-1/participant",
+        granted=False,
+        registry=registry,
+    ).trace_allowed
+    assert operation_policy(
+        "task-3/personal-memory",
+        granted=False,
+        registry=registry,
+    ).trace_allowed
+    assert not operation_policy(
+        "task-3/shared-view",
+        granted=True,
+        registry=registry,
+    ).trace_allowed

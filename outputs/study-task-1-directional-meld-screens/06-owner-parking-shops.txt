@@ -1,0 +1,9 @@
+PROPOSED BASELINE CHANGES · DISPLAY EXCERPTS
+
+  +  3. [ADD · SYNTHESIZE] During the construction period, the Main Building underground parking garage cannot be used for general parking, its pedestrian entrance door remains locked, the interior stairs from the Main Building are closed to all users, and the sloped access road connecting Outdoor Parki…
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · This adds the complete supported construction parking overlay while retaining ordinary parking rules and facility facts.
+
+  +  4. [ADD · SYNTHESIZE] During the construction period, the Main Building first-floor ATM, 24-hour unattended store, Campus Store, and cafe are closed. Direct ATM users to the ATM on the first floor of the West Complex by a route that does not pass through the Main Building construction zone. Direct…
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · This adds the supported temporary amenity overlay while preserving normal-location, operating, and service guidance.

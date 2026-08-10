@@ -1,0 +1,9 @@
+PROPOSED BASELINE CHANGES · DISPLAY EXCERPTS
+
+  +  5. [ADD · SYNTHESIZE] The Main Building undergoes major facility-improvement construction during summer break from June 24 through August 23. During this period, its elevators operate alternately, one at a time; the visitor services desk suspends in-person operations and visitor services are replac…
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · This adds the complete dated facility overlay while preserving stable floor-directory and general facility knowledge.
+
+  +  6. [ADD · SYNTHESIZE] During the construction period, the indoor route through the first through third floors of the Main Building to the Central Library, the route from the third-floor rear entrance to the Central Library, and the Outdoor Parking Lot A–Main Building–Central Library route are close…
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · This adds the supported construction route overlay while preserving the ordinary route network and standing wayfinding safeguards.

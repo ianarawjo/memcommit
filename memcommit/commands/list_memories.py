@@ -22,6 +22,7 @@ from memcommit.commands.granted_context import (
     ContextAccess,
     GrantedReadStore,
     attached_grants,
+    context_access_display_facts,
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,
@@ -39,7 +40,19 @@ from memcommit.profile_config import AuthorityGrant, ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 from memcommit.update import GrantedUpdateTarget
-from memcommit.study_operation_policy import analysis_boundary_label, operation_policy
+from memcommit.study_operation_policy import analysis_boundary_label
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceReach,
+    SourceState,
+)
+from memcommit.source_projection.presentation import (
+    SourceDisplayValue,
+    source_annotation_text,
+    source_display_text,
+    source_object_label,
+)
 
 
 _LIST_SNAPSHOT_VERSION = 2
@@ -338,8 +351,9 @@ def _snapshot_memory_rows(
         if kind == "memory":
             rows.append(
                 ContextMemoryRow(
-                    f"memory {uid[:8]}",
+                    uid[:8],
                     _require_string(item, "content"),
+                    source=SourceDisplayFacts(form=SourceForm.MEMORY),
                 )
             )
         elif kind == "memory_ref":
@@ -347,10 +361,18 @@ def _snapshot_memory_rows(
             target_name = _require_string(item, "target_context_name")
             rows.append(
                 ContextMemoryRow(
-                    f"ref {uid[:8]}",
+                    uid[:8],
                     content
                     if isinstance(content, str)
-                    else f"(dangling reference) {target_name}",
+                    else target_name,
+                    source=SourceDisplayFacts(
+                        form=SourceForm.MEMORY_REF,
+                        states=(
+                            (SourceState.READ_ONLY,)
+                            if isinstance(content, str)
+                            else (SourceState.DANGLING,)
+                        ),
+                    ),
                 )
             )
     return tuple(rows)
@@ -363,7 +385,7 @@ def _snapshot_browser_tree(
     tuple[str, ...],
     tuple[str, ...],
     dict[str, str],
-    dict[str, str],
+    dict[str, SourceDisplayValue],
     dict[str, tuple[ContextMemoryRow, ...]],
 ]:
     """Adapt the frozen recursive occurrence graph to the common tree UI.
@@ -380,7 +402,7 @@ def _snapshot_browser_tree(
     children: dict[str, tuple[str, ...]] = {}
     parents: dict[str, str | None] = {root_id: None}
     labels = {root_id: root_name}
-    annotations: dict[str, str] = {}
+    annotations: dict[str, SourceDisplayValue] = {}
     memories: dict[str, tuple[ContextMemoryRow, ...]] = {}
 
     def visit(parent_id: str, items: list[dict[str, object]]) -> None:
@@ -395,14 +417,23 @@ def _snapshot_browser_tree(
             parents[child_id] = parent_id
             if kind == "query_context_ref":
                 labels[child_id] = _require_string(item, "name")
-                annotations[child_id] = "[query-only]"
+                annotations[child_id] = SourceDisplayFacts(
+                    form=SourceForm.QUERY_VIEW,
+                )
                 virtual.append(child_id)
                 children[child_id] = ()
                 continue
             labels[child_id] = _require_string(item, "name")
             cycle = _require_bool(item, "cycle")
+            annotations[child_id] = SourceDisplayFacts(
+                reach=(
+                    SourceReach.VIA_EMBED
+                    if kind == "context"
+                    else SourceReach.DESCENDANT
+                ),
+                states=(SourceState.CYCLE,) if cycle else (),
+            )
             if cycle:
-                annotations[child_id] = "[cycle]"
                 child_items: list[dict[str, object]] = []
             else:
                 value = item.get("children")
@@ -506,13 +537,27 @@ def _render_snapshot_item(
             children = _require_items(children_value)
         if cycle and children is not None:
             raise _snapshot_error()
+        context_facts = SourceDisplayFacts(
+            reach=(
+                SourceReach.VIA_EMBED
+                if kind == "context"
+                else SourceReach.DESCENDANT
+            ),
+            states=(SourceState.CYCLE,) if cycle else (),
+        )
+        context_annotation = source_annotation_text(context_facts)
         if with_ids:
-            lines.append(f"{prefix}[context {uid[:8]}] {name}")
+            lines.append(
+                f"{prefix}[{source_object_label(context_facts)} {uid[:8]}] "
+                f"{name}"
+                + (f"  {context_annotation}" if context_annotation else "")
+            )
         else:
-            lines.append(f"{prefix}{name}/")
-        if cycle:
-            lines.append(f"{' ' * (indent + 2)}(cycle)")
-        elif children is not None:
+            lines.append(
+                f"{prefix}{name}/"
+                + (f" · {context_annotation}" if context_annotation else "")
+            )
+        if not cycle and children is not None:
             if not children:
                 lines.append(f"{' ' * (indent + 2)}(no items)")
             else:
@@ -540,12 +585,12 @@ def _render_snapshot_item(
         name = _require_string(item, "name")
         _require_string(item, "target_source_uid")
         _require_string(item, "provider")
+        query_facts = SourceDisplayFacts(form=SourceForm.QUERY_VIEW)
+        query_label = source_object_label(query_facts)
         if with_ids:
-            lines.append(
-                f"{prefix}[query   {uid[:8]}] {name} (query-only)"
-            )
+            lines.append(f"{prefix}[{query_label} {uid[:8]}] {name}")
         else:
-            lines.append(f"{prefix}{name}/ (query-only)")
+            lines.append(f"{prefix}{name}/ · {query_label}")
         return
     if kind == "memory_ref":
         expected = {
@@ -563,24 +608,37 @@ def _render_snapshot_item(
         target_memory_uid = _require_string(item, "target_memory_uid")
         content = item.get("resolved_content")
         if content is None:
+            reference_facts = SourceDisplayFacts(
+                form=SourceForm.MEMORY_REF,
+                states=(SourceState.DANGLING,),
+            )
+            reference_label = source_object_label(reference_facts)
+            annotation = source_annotation_text(reference_facts)
             if with_ids:
                 lines.append(
-                    f"{prefix}[ref     {uid[:8]}] (dangling) "
-                    f"{target_context_name}#{target_memory_uid[:8]}"
+                    f"{prefix}[{reference_label} {uid[:8]}] "
+                    f"{target_context_name}#{target_memory_uid[:8]}  {annotation}"
                 )
             else:
                 lines.append(
-                    f"{prefix}(dangling reference) {target_context_name}"
+                    f"{prefix}{reference_label} · {target_context_name} · {annotation}"
                 )
         elif isinstance(content, str):
+            reference_facts = SourceDisplayFacts(
+                form=SourceForm.MEMORY_REF,
+                states=(SourceState.READ_ONLY,),
+            )
+            reference_label = source_object_label(reference_facts)
+            annotation = source_annotation_text(reference_facts)
             if with_ids:
                 lines.append(
-                    f"{prefix}[ref     {uid[:8]}] {_one_line(content)} "
-                    f"-> {target_context_name}#{target_memory_uid[:8]}"
+                    f"{prefix}[{reference_label} {uid[:8]}] {_one_line(content)} "
+                    f"-> {target_context_name}#{target_memory_uid[:8]}  {annotation}"
                 )
             else:
                 lines.append(
-                    f"{prefix}{_one_line(content)} -> {target_context_name}"
+                    f"{prefix}{reference_label} · {_one_line(content)} "
+                    f"-> {target_context_name} · {annotation}"
                 )
         else:
             raise _snapshot_error()
@@ -590,7 +648,8 @@ def _render_snapshot_item(
             raise _snapshot_error()
         content = _require_string(item, "content")
         if with_ids:
-            label = f"{prefix}[memory  {uid[:8]}]"
+            memory_label = source_object_label(SourceForm.MEMORY)
+            label = f"{prefix}[{memory_label} {uid[:8]}]"
             if memory_layout == "hanging":
                 lines.extend(
                     _hanging_memory_lines(
@@ -834,9 +893,17 @@ def _granted_access_notes(access: ContextAccess) -> tuple[str, ...]:
         return ()
     grant = view.grant
     return (
-        "  Access: GRANTED VIEW · from "
+        "  Access: "
+        + source_display_text(
+            context_access_display_facts(
+                access,
+                states=(SourceState.READ_ONLY,),
+            ),
+            include_permissions=True,
+        )
+        + " · FROM "
         + display_escape_text(view.authority.name)
-        + f" · grant {grant.uid[:8]} revision {grant.revision}",
+        + f" · GRANT {grant.uid[:8]} · REVISION {grant.revision}",
         "  Permissions: " + _permission_text(grant.permissions),
         "  Analysis: "
         + analysis_boundary_label(
@@ -852,21 +919,11 @@ def _local_analysis_notes(
     context_name: str,
     store: MemoryStore,
 ) -> tuple[str, ...]:
-    policy = operation_policy(
-        context_name,
-        granted=False,
-        store_root=store.store_dir,
-    )
-    if policy.study_task is None:
-        return ()
-    return (
-        "  Analysis: "
-        + analysis_boundary_label(
-            context_name,
-            granted=False,
-            store_root=store.store_dir,
-        ),
-    )
+    # Local retained history is always readable by its owning Profile.  Only
+    # Grant rows need an annotation because READ does not expose authority
+    # checkpoints or command receipts.
+    del context_name, store
+    return ()
 
 
 def _emit_grant_notes(attachment_name: str) -> None:

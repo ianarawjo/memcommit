@@ -355,19 +355,22 @@ may each be local or READ-granted. The session freezes each granted endpoint's
 exact Profile, attachment, Grant revision, resource, public name, and authority
 mapping; a public name by itself is not durable authority.
 
-The same setup shell also owns optional, default-off descendant controls, but
-each Meld authority mode enables only scopes it can materialize safely.
+The same setup shell also owns optional, default-off descendant controls.
 Symmetric Meld enables A and B independently because it writes a separate C;
 it consumes only a saved ordered Compare whose two scope flags match exactly.
-Directional Meld enables descendants for incoming A only. Its B is the
-authoritative mutation target, so widening B today could flatten child-owned
-Memories into the root baseline. B therefore remains direct and the CLI
-rejects `--right-descendants` in directional mode until owner-aware target
-materialization exists.
+Directional Meld also enables A and B independently, but widening B changes
+the application shape: every BASELINE Memory retains its exact owner Context,
+every EDIT returns to that owner, and every ADD names one frozen target Context
+inside B's selected subtree. Ambiguous placement becomes a REQUIRED issue; it
+never defaults to the root. All affected owners are revalidated and written as
+one command unit with per-owner checkpoints and exception rollback. The
+owner-aware mechanics can be applied similarly to Update-style multi-owner
+handling where their selected scopes align, but each operation keeps its own
+authority policy, provider contract, and session.
 
 | Mode | Inputs | Authority contract | Target | Representative case | Current status |
 | --- | --- | --- | --- | --- | --- |
-| **Directional** | Prepared incoming evidence, optionally including its readable lexical descendants, plus one direct existing baseline frame | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it | The baseline's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
+| **Directional** | Prepared incoming evidence and an existing baseline, each optionally widened to explicit lexical descendants | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it; every changed Memory retains an exact B owner | The baseline scope's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
 | **Symmetric** | Two independent Context frames, each optionally including its readable lexical descendants, treated as peers | Neither source wins by default; source-specific scope and unresolved differences remain visible | A distinct new result Context | Two co-advisors' proposal-writing policies | Implemented through an exact saved ordered Compare basis |
 
 `atomic` and `batch` are not additional modes. The semantic call always
@@ -751,13 +754,12 @@ separate incorporation turn because a provider-created target must be
 inspected before exact `ACCEPT`. Thus application remains gated by a ready
 exact proposal and can no longer occur from one Enter on To Do.
 
-The one-shot Meld item bound is 500 source Memories. The canonical Task 2
-topology contains 150 Memories from each Advisor, so the former total bound of
-200 allowed Compare to produce a reviewed relation ledger but made its Meld
-impossible to resolve. Raising only the item-count bound admits that intended
-300-Memory case without truncation; the independent 400,000-character input
-bound, strict output schema, complete source coverage, and single-call contract
-remain unchanged.
+Meld has no independent source-Memory count bound. The canonical Task 2
+topology contains 150 Memories from each Advisor; earlier 200- and 500-item
+gates made the intended 300-Memory flow depend on arbitrary host constants.
+The complete frame is now admitted whenever it fits the shared
+1,000,000-character effective provider capacity. Strict output validation,
+complete source coverage, and the single-call contract remain unchanged.
 
 The aggregate Meld call has a 900-second completion allowance. The canonical
 300-Memory Task 2 follow-up exceeded the previous five-minute window while
@@ -789,11 +791,27 @@ cannot absorb unrelated relations. Older schema version 1 and 2 sessions remain
 readable so an already reviewed or applied study artifact is not retroactively
 invalidated by the stronger materialization contract.
 
-New directional sessions use schema version 4. It preserves the same relation
-and proposal model while adding optional frozen Grant bindings for INCOMING
-and BASELINE. Local-only directional sessions also use version 4 with null
-bindings so one current decoder covers restart and mixed local/granted routes;
-legacy version 1 directional sessions remain readable and resumable.
+Directional schema version 4 added optional frozen Grant bindings for INCOMING
+and BASELINE, and version 5 added frozen Context fingerprints and exact Memory
+owners so a BASELINE subtree can be applied without flattening descendants into
+its root. New directional sessions use schema version 6. It keeps those routing
+properties and adds preservation-first materialization: a many-member relation
+is an analysis group, not permission to emit one topical summary. `DISTINCT`,
+`COMPATIBLE`, and `SCOPED` incoming Memories become separate exact `PRESERVE`
+additions by default. A relation-local synthesis of several compatible or
+scoped incoming Memories requires an explicit user-grounded turn. Versions 1,
+4, and 5 remain readable and resumable under their original contracts so saved
+review and applied study evidence is not reinterpreted retroactively.
+
+Directional preservation is deliberately about materialization cardinality,
+not a second Atomize pass. Meld treats each frozen source Memory as an already
+independently revisable unit. An `EQUIVALENT` incoming Memory therefore needs no
+baseline change, an independent or scoped incoming fact remains one exact ADD,
+and a conflict may still produce a reviewed EDIT or ADD. This prevents the Task
+1 failure in which 75 incoming facts were technically covered but collapsed
+into six owner-routed summaries. Owner routing was correct in that run; the
+missing invariant was the separation between relation grouping and result
+Memory grouping.
 
 The review queue has two priority bands. Compare's unresolved questions remain
 `REQUIRED` and are shown first. Every otherwise resolved `COMPATIBLE` or
@@ -819,6 +837,16 @@ and cross-relation result count. This exposes both omission and over-compression
 before apply. It intentionally does not impose one universal final count;
 equivalence, explicit synthesis, and reviewed conflicts can legitimately alter
 that count while the relation-local invariants remain checkable.
+
+Applying a symmetric descendant-scope result locks every physical source
+Context in both selected lexical subtrees. The aggregate projection digest is
+rechecked before those bindings are built, but it is never passed to storage as
+if it were the direct root Context's digest: those are different records when
+lexical children are projected into an otherwise empty root. Each direct owner
+UID and digest is frozen, the aggregate projection is checked again, and the
+target CAS then retains all owner locks through its write. This avoids both the
+false-stale rejection observed in the Task 1 symmetric run and a weaker fix
+that would have locked only the two roots while descendants could change.
 
 For symmetric schema version 3, `--preserve-all` is provider-free after the
 relation ledger exists. The host copies each non-equivalent relation member as
@@ -1060,7 +1088,7 @@ The representative adapters use this rule differently:
 | Adapter | Initial bounded one-shot | Later calls |
 | --- | --- | --- |
 | Atomize directional (`ISSUE`) | One selected issue, user clarification, current local frame, and known affected findings | One call for each corrective, extending, confirming, or retracting user turn |
-| Context directional | Every direct incoming Memory plus the complete bounded baseline frame, returning relations and exact material `EDIT` / `ADD` changes | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
+| Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope, returning relations and exact owner-routed `EDIT` / `ADD` changes | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
 | Context symmetric | Two bounded peer Context frames and their authority contract, returning a relation ledger and unresolved issues | One call per user resolution turn; final materialization remains provider-free |
 
 This strategy was selected because relations are Context-dependent. Independent
@@ -1098,6 +1126,15 @@ that the meld preserved every fact or chose the correct reading. Golden
 scenarios, local schema and coverage validation, user review, and later
 independent semantic regression remain separate trust layers.
 
+The provider schema separates `paired_relations` from `distinct_relations`.
+Paired records require at least one alias from each source and cannot select
+`DISTINCT`; one-sided records carry one explicit side and can select only
+`DISTINCT`. This stays inside the provider's supported JSON-Schema subset while
+making the formerly possible “non-DISTINCT with one empty side” response
+unrepresentable. The decoder still validates aliases, sides, coverage, and
+relation semantics locally and reports structural counts for a legacy-shaped
+invalid response rather than coercing it into `DISTINCT`.
+
 ## Provenance and mutation invariants
 
 1. Every input Context, Memory, issue, rule, and raw source used by a meld is
@@ -1108,9 +1145,9 @@ independent semantic regression remain separate trust layers.
    user turn. A `USER_ADD` result cites that turn and must not claim false peer
    support. Existing Context may resolve a referent or supply a declared frame,
    but it cannot become hidden evidence for an invented incoming fact.
-4. A directional meld may edit only the explicitly authorized target Context.
-   Its incoming Context remains read-only; a symmetric meld never mutates
-   either peer source.
+4. A directional meld may edit only explicitly selected and authorized target
+   Context owners inside its B scope. Its incoming Context remains read-only;
+   a symmetric meld never mutates either peer source.
 5. No source Memory is silently removed. Duplicate handling either links
    provenance to an existing representation, records a directional no-change
    result, or coalesces only in a new symmetric target.
@@ -1131,14 +1168,18 @@ independent semantic regression remain separate trust layers.
    participant session. As with granted Update, a process crash between those
    two durable stores still needs a future cross-Profile transaction journal;
    the authority checkpoint supports exact retry recovery in the meantime.
-9. Each accepted single-target meld creates one operation checkpoint in its
-   authorized target. This includes a resolved directional proposal with zero
-   material changes: the checkpoint records the accepted semantic decision
-   without inventing a no-op `EDIT`. A future operation that mutates several
-   targets will require a recoverable linked boundary rather than pretending
-   several saves are atomic.
-10. Query-only source content remains opaque. A meld may use only the public
-    name and the authorized query interface, never the raw hidden store.
+9. Each affected directional owner receives one linked operation checkpoint;
+   a direct or zero-change target therefore still receives exactly one. The
+   linked local command is exception-atomic and local Undo/Redo restores every
+   owner as one unit. Granted multi-owner application also rolls back ordinary
+   failures across its authority Contexts and participant receipt, but a
+   cross-Profile Undo/Redo coordinator remains future work. As with multi-owner
+   Update, a process crash during several per-Context atomic replacements still
+   needs a future durable transaction journal.
+10. Query-only source content remains opaque. Meld has no query-source
+    contract, so query routes may remain visible navigation metadata in a
+    loaded public tree but never enter the source frame, provider input, or
+    writable target-owner set.
 11. The checkpoint records input roles, relations, accepted outcomes, exact
     source-to-result links, user-supported understanding, proposal digest, and
     operation identity for `trace` and `rationale`. It retains the bounded

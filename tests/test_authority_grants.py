@@ -7,7 +7,13 @@ import uuid
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.find as find_command
+import memcommit.commands.query as query_command
 from memcommit.cli import app
+from memcommit.commands.granted_context import resolve_context_access
+from memcommit.commands.readable_context_catalog import (
+    freeze_profile_readable_context_catalog,
+)
 from memcommit.context import Memory
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
@@ -123,18 +129,101 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
         "SAVE_BOUND_ANALYSIS blocked · SAVE_ANALYSIS blocked" in root.output
     )
     assert view.exit_code == 0, view.output
-    assert "Access: GRANTED VIEW · from task-1-campus-authority" in view.output
-    assert f"grant {campus_grant.uid[:8]} revision 1" in view.output
+    assert "Access: READ GRANT · PERMISSIONS CREATE + READ + UPDATE" in view.output
+    assert "READ ONLY · FROM task-1-campus-authority" in view.output
+    assert f"GRANT {campus_grant.uid[:8]} · REVISION 1" in view.output
     assert PUBLIC in view.output
-    assert "campus-wiki/construction-details (query-only)" in view.output
+    assert "[query view " in view.output
+    assert "campus-wiki/construction-details" in view.output
     assert view.output.count("campus-wiki/construction-details") == 1
     assert SECRET not in view.output
     assert "Additional concealed construction detail" not in view.output
     assert shown.exit_code == 0, shown.output
     assert PUBLIC in shown.output
     assert contexts.exit_code == 0, contexts.output
-    assert "[view create,read,update from task-1-campus-authority]" in contexts.output
-    assert "[view query from task-1-campus-authority]" in contexts.output
+    assert "READ GRANT · PERMISSIONS CREATE + READ + UPDATE" in contexts.output
+    assert "QUERY GRANT · PERMISSIONS QUERY" in contexts.output
+    assert "FROM task-1-campus-authority" in contexts.output
+
+
+def test_profile_readable_catalog_stays_profile_wide_from_a_granted_current_view(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _grant_fixture(isolated_store, tmp_path, monkeypatch)
+    store = MemoryStore()
+    access = resolve_context_access(
+        store,
+        "campus-wiki",
+        current_name="task-root",
+        required_permission="READ",
+    )
+    store.set_current_virtual_context_if("task-root", "campus-wiki")
+
+    catalog = freeze_profile_readable_context_catalog(store, access)
+
+    assert tuple(catalog.list_context_names()) == (
+        "campus-wiki",
+        "campus-wiki/public",
+        "task-root",
+    )
+    assert catalog.access_for("task-root").is_granted is False
+    assert catalog.access_for("campus-wiki").is_granted is True
+
+
+def test_profile_target_workbenches_keep_all_readable_names_from_a_grant(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _grant_fixture(isolated_store, tmp_path, monkeypatch)
+    store = MemoryStore()
+    store.set_current_virtual_context_if("task-root", "campus-wiki")
+    access = resolve_context_access(
+        store,
+        None,
+        current_name="campus-wiki",
+        required_permission="READ",
+    )
+    opened: dict[str, tuple[tuple[str, ...], str, str]] = {}
+
+    def capture_query(context_names, **kwargs):
+        opened["query"] = (
+            tuple(context_names),
+            kwargs["current_context"],
+            kwargs["initial_context"],
+        )
+
+    def capture_find(context_names, **kwargs):
+        opened["find"] = (
+            tuple(context_names),
+            kwargs["current"],
+            kwargs["initial_target"],
+        )
+
+    monkeypatch.setattr(query_command, "run_query_workbench", capture_query)
+    monkeypatch.setattr(find_command, "run_find_search_workbench", capture_find)
+
+    query_command._open_query_workbench(
+        store,
+        context_name=None,
+        language="en",
+        session_name=None,
+    )
+    find_command._open_find_search_workbench(
+        store,
+        access,
+        current_name="campus-wiki",
+        direct=False,
+        limit=5,
+    )
+
+    expected = ("campus-wiki", "campus-wiki/public", "task-root")
+    assert opened == {
+        "query": (expected, "campus-wiki", "campus-wiki"),
+        "find": (expected, "campus-wiki", "campus-wiki"),
+    }
 
 
 def test_granted_read_allows_subtree_rationale_but_never_trace_history(
@@ -185,6 +274,16 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
         app,
         ["trace", target.uid[:8], "--context", "campus-wiki/public"],
     )
+    log_memory = runner.invoke(
+        app,
+        [
+            "log",
+            "--memory",
+            target.uid[:8],
+            "--context",
+            "campus-wiki/public",
+        ],
+    )
     recorded = runner.invoke(
         app,
         [
@@ -206,6 +305,8 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
     assert SECRET not in json.dumps(calls)
     assert trace.exit_code == 1
     assert "READ does not expose authority checkpoint" in trace.stderr
+    assert log_memory.exit_code == 1
+    assert "READ does not expose authority checkpoint" in log_memory.stderr
     assert recorded.exit_code == 1
     assert "--recorded-only is unavailable" in recorded.stderr
 
@@ -234,7 +335,8 @@ def test_read_view_does_not_open_nested_query_authority_record(
     assert selected.exit_code == 0, selected.output
     assert view.exit_code == 0, view.output
     assert PUBLIC in view.output
-    assert "campus-wiki/construction-details (query-only)" in view.output
+    assert "[query view " in view.output
+    assert "campus-wiki/construction-details" in view.output
 
 
 def test_granted_memory_create_and_update_write_authority_store_only(

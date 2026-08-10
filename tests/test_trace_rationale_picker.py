@@ -164,21 +164,23 @@ def test_interactive_rationale_report_uses_common_viewer(
     assert "portable note" in observed["text"]
 
 
-def test_only_bare_interactive_trace_continues_into_common_viewer(
+def test_interactive_trace_routes_bare_and_explicit_targets_to_history_explorer(
     isolated_store,
     monkeypatch,
 ):
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
-    viewed: list[str] = []
+    viewed: list[tuple[str, str]] = []
     monkeypatch.setattr(
         "memcommit.commands.trace.interactive_report_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.run_read_only_viewer",
-        lambda text, *, title: viewed.append(f"{title}\n{text}"),
+        "memcommit.commands.trace.open_trace_history",
+        lambda report, *, context_name, verbose: viewed.append(
+            (context_name, report.selected_uid)
+        ),
     )
     monkeypatch.setattr(
         "memcommit.commands.trace.choose_memory",
@@ -194,10 +196,7 @@ def test_only_bare_interactive_trace_continues_into_common_viewer(
 
     assert bare.exit_code == 0, bare.output
     assert explicit.exit_code == 0, explicit.output
-    assert len(viewed) == 1
-    assert viewed[0].startswith("TRACE REPORT\n")
-    assert "portable note" in viewed[0]
-    assert "portable note" in explicit.output
+    assert viewed == [("notes", target.uid), ("notes", target.uid)]
 
 
 def test_bare_trace_recent_reopens_without_context_memory_selector(
@@ -226,15 +225,17 @@ def test_bare_trace_recent_reopens_without_context_memory_selector(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.run_read_only_viewer",
-        lambda text, *, title: viewed.append(text),
+        "memcommit.commands.trace.open_trace_history",
+        lambda report, *, context_name, verbose: viewed.append(
+            report.current[0].content
+        ),
     )
 
     result = invoke("trace")
 
     assert result.exit_code == 0, result.output
     assert len(viewed) == 1
-    assert "portable note" in viewed[0]
+    assert viewed == ["portable note"]
 
 
 def test_bare_rationale_recent_reopens_its_recorded_scope(

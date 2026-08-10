@@ -89,6 +89,16 @@ to Items. Items likewise reports its first and last row boundaries instead of
 clamping invisibly. Rationale has only the common read-only Viewer, so it reuses
 the same wrapped-row movement primitive without fabricating an Items Surface.
 
+Share declares `CONTEXT → MEMORIES → ACTION`. Its Context Surface retains the
+two semantic Viewer sections for the selected Source and destination, while its
+Memories Surface stores the inspected row in the shared session navigation
+state. Arrow movement crosses only at the true first or last section or row,
+Tab preserves both internal cursors, and only the Action Surface declares Enter
+as the operation-owned send effect. The read-only `SEND UNAVAILABLE` projection
+uses the same topology without an activation handler. This migration does not
+move Source eligibility, endpoint authority, preview freezing, or delivery into
+the Surface controller.
+
 ## Boundaries and alternatives
 
 A single universal Frame widget was rejected because multiline composers,

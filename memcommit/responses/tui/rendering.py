@@ -7,7 +7,7 @@ from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.commands.tui_text_layout import wrap_terminal_text
 from memcommit.responses.model import ResponseDraft, ResponseTarget
 from memcommit.responses.state import ResponseFrameState
-from memcommit.selection.tui import render_vertical_choice_cards
+from memcommit.selection.tui import render_vertical_choice_rows
 
 
 def _wrap(value: str, width: int) -> tuple[str, ...]:
@@ -54,21 +54,25 @@ def response_frame_fragments(
                     "Response choices require synchronized selection state."
                 )
             decision_parts.extend(
-                render_vertical_choice_cards(
+                render_vertical_choice_rows(
                     choice_state,
                     focused=(focused and state.section == "DECISION"),
                     content_width=body_width,
                 )
             )
-        fragments.extend(
-            semantic_viewer_block_fragments(
-                decision_parts,
-                active=focused and state.section == "DECISION",
-                # The focused card owns the effective viewport anchor. An
-                # outer start anchor would mask it in prompt-toolkit.
-                anchor="end" if target.choices else "start",
+        if target.choices:
+            # The common choice-row renderer owns the only focus treatment and
+            # viewport anchor here. Wrapping the entire Decision as an active
+            # semantic block would also light the explanatory question.
+            fragments.extend(decision_parts)
+        else:
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    decision_parts,
+                    active=focused and state.section == "DECISION",
+                    anchor="start",
+                )
             )
-        )
 
     return fragments
 

@@ -5,6 +5,7 @@ import typer
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.commands.granted_context import (
     GrantedReadStore,
+    context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.commands.log import render_checkpoint_rows
@@ -15,6 +16,8 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
+from memcommit.source_projection.model import SourceState
+from memcommit.source_projection.presentation import source_display_text
 
 
 def _profile_name(store: MemoryStore) -> str:
@@ -86,14 +89,20 @@ def cmd(
 
     profile_name = _profile_name(store) if branch else None
     access_label = (
-        f"granted {access.view.grant.uid[:8]} r{access.view.grant.revision}"
+        source_display_text(
+            context_access_display_facts(
+                access,
+                states=(SourceState.READ_ONLY,),
+            )
+        )
+        + f" · {access.view.grant.uid[:8]} r{access.view.grant.revision}"
         if access.is_granted and access.view is not None
-        else "local"
+        else "OWNED"
     )
     counts = (
-        f"memories {len(memories)} · refs {len(references)} · "
-        f"queries {len(query_contexts)} · children {len(embedded)} · "
-        f"checkpoints {len(checkpoints)}"
+        f"Memories {len(memories)} · Memory Refs {len(references)} · "
+        f"Query Views {len(query_contexts)} · Embedded Contexts {len(embedded)} · "
+        f"Checkpoints {len(checkpoints)}"
     )
     if short:
         prefix = (
@@ -110,34 +119,43 @@ def cmd(
 
     typer.secho(f"On context: {name}", bold=True)
     if access.is_granted:
-        typer.secho("  Granted view: read only", dim=True)
+        typer.secho(
+            "  Access: "
+            + source_display_text(
+                context_access_display_facts(
+                    access,
+                    states=(SourceState.READ_ONLY,),
+                )
+            ),
+            dim=True,
+        )
     typer.echo(
-        f"  {len(memories)} memor{'y' if len(memories) == 1 else 'ies'}"
-        f"  |  {len(references)} memory reference{'s' if len(references) != 1 else ''}"
-        f"  |  {len(query_contexts)} query-only context{'s' if len(query_contexts) != 1 else ''}"
-        f"  |  {len(embedded)} embedded context{'s' if len(embedded) != 1 else ''}"
-        f"  |  {len(checkpoints)} checkpoint{'s' if len(checkpoints) != 1 else ''}"
+        f"  Memories {len(memories)}"
+        f"  |  Memory Refs {len(references)}"
+        f"  |  Query Views {len(query_contexts)}"
+        f"  |  Embedded Contexts {len(embedded)}"
+        f"  |  Checkpoints {len(checkpoints)}"
     )
 
     if embedded:
-        typer.secho("\nEmbedded contexts:", bold=True)
+        typer.secho("\nVIA EMBED Contexts:", bold=True)
         for ec in embedded:
             typer.echo(f"  [{ec.uid[:8]}] {ec.name}")
 
     if query_contexts:
-        typer.secho("\nQuery-only contexts:", bold=True)
+        typer.secho("\nQUERY VIEWS:", bold=True)
         for query_context in query_contexts:
             typer.echo(
                 f"  [{query_context.uid[:8]}] {query_context.name}"
             )
 
     if references:
-        typer.secho("\nMemory references:", bold=True)
+        typer.secho("\nMEMORY REFS:", bold=True)
         for ref in references:
-            state = "" if ref.is_resolved else " (dangling)"
+            state = "READ ONLY" if ref.is_resolved else "DANGLING"
             typer.echo(
                 f"  [{ref.uid[:8]}] "
-                f"{ref.target_context_name}#{ref.target_memory_uid[:8]}{state}"
+                f"{ref.target_context_name}#{ref.target_memory_uid[:8]} · {state}"
             )
 
     if memories:

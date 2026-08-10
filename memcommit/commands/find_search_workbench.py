@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
-from typing import Literal
+from typing import AbstractSet, Literal
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.filters import Condition, has_focus
@@ -63,6 +63,13 @@ from memcommit.context_targeting.tui.name_editor import (
 )
 from memcommit.selection import FlatMultiSelectionState, SelectionOption
 from memcommit.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.source_projection.model import SourceDisplayFacts, SourceForm
+from memcommit.source_projection.presentation import (
+    SourceDisplayValue,
+    normalize_source_display_tokens,
+    source_display_text,
+    source_object_label,
+)
 
 
 FindSearchMode = Literal["CURRENT", "HISTORY"]
@@ -76,6 +83,34 @@ FindSearchResultKind = Literal[
     "checkpoint",
 ]
 FindSearchRelevance = Literal["primary", "related"]
+
+_RESULT_SOURCE_FORMS = {
+    "memory": SourceForm.MEMORY,
+    "ref": SourceForm.MEMORY_REF,
+    "query": SourceForm.QUERY_VIEW,
+}
+
+
+def _find_result_kind_label(result: "FindSearchResult") -> str:
+    form = _RESULT_SOURCE_FORMS.get(result.kind)
+    return (
+        source_object_label(form)
+        if form is not None
+        else result.kind.replace("_", " ").upper()
+    )
+
+
+def _find_result_annotation(result: "FindSearchResult") -> str:
+    return "RELATED" if result.relevance == "related" else ""
+
+
+def _has_granted_materialization_source(
+    results: Sequence["FindSearchResult"],
+    granted_context_names: AbstractSet[str],
+) -> bool:
+    """Keep authority decisions independent from presentation annotations."""
+
+    return any(result.context_name in granted_context_names for result in results)
 
 
 @dataclass(frozen=True)
@@ -244,9 +279,12 @@ def render_find_search_results(response: FindSearchResponse | None) -> str:
         SearchResultViewRow(
             context_name=result.context_name,
             label=(
-                f"[{index} "
-                f"{'related ' if result.relevance == 'related' else ''}"
-                f"{result.kind} {result.uid[:8]}]"
+                f"[{index} {_find_result_kind_label(result)} {result.uid[:8]}]"
+                + (
+                    f" · {_find_result_annotation(result)}"
+                    if _find_result_annotation(result)
+                    else ""
+                )
             ),
             content=result.content,
         )
@@ -291,7 +329,8 @@ def run_find_search_workbench(
     initial_follow_embeds: bool,
     limit: int,
     run_search: FindSearchRunner,
-    annotations: Mapping[str, str] | None = None,
+    annotations: Mapping[str, SourceDisplayValue] | None = None,
+    granted_context_names: AbstractSet[str] = frozenset(),
     local_context_names: Sequence[str] | None = None,
     validate_save_location: FindSaveLocationValidator | None = None,
     app_input: Input | None = None,
@@ -320,6 +359,14 @@ def run_find_search_workbench(
     labels = dict(annotations or {})
     if set(labels) - set(catalog):
         raise ValueError("Find Context annotations are outside the catalog.")
+    try:
+        for annotation in labels.values():
+            normalize_source_display_tokens(annotation)
+    except (TypeError, ValueError) as error:
+        raise ValueError("Find received an invalid Context annotation.") from error
+    granted_catalog = frozenset(granted_context_names)
+    if not granted_catalog <= set(catalog):
+        raise ValueError("Find granted Context names are outside the catalog.")
     local_catalog = tuple(
         dict.fromkeys(catalog if local_context_names is None else local_context_names)
     )
@@ -839,9 +886,22 @@ def run_find_search_workbench(
                         SelectionOption(
                             str(index),
                             (
-                                f"{result.context_name} · "
-                                f"[{'related ' if result.relevance == 'related' else ''}"
-                                f"{result.kind} {result.uid[:8]}]"
+                                f"{result.context_name}"
+                                + (
+                                    " · "
+                                    + source_display_text(
+                                        labels.get(result.context_name)
+                                    )
+                                    if labels.get(result.context_name)
+                                    else ""
+                                )
+                                + f" · [{_find_result_kind_label(result)} "
+                                f"{result.uid[:8]}]"
+                                + (
+                                    f" · {_find_result_annotation(result)}"
+                                    if _find_result_annotation(result)
+                                    else ""
+                                )
                             ),
                             result.content,
                         )
@@ -980,9 +1040,8 @@ def run_find_search_workbench(
         if any(result.source_memory_uid is None for result in selected_results):
             status["value"] = "A CHECKED RESULT HAS NO SOURCE MEMORY IDENTITY"
             return "HANDLED"
-        if materialize_choice.selected_uid == "REFERENCE" and any(
-            labels.get(result.context_name) == "READ GRANT"
-            for result in selected_results
+        if materialize_choice.selected_uid == "REFERENCE" and (
+            _has_granted_materialization_source(selected_results, granted_catalog)
         ):
             status["value"] = "REFERENCE REQUIRES LOCALLY OWNED SOURCE MEMORIES"
             return "HANDLED"

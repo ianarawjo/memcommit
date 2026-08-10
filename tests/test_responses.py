@@ -68,22 +68,36 @@ def test_response_renderer_owns_question_and_real_options_only():
     state = ResponseFrameState()
     state.sync(target, draft)
 
-    rendered = "".join(
-        text
-        for _style, text in response_frame_fragments(
-            target,
-            draft,
-            state,
-            focused=True,
-            content_width=72,
-        )
+    fragments = response_frame_fragments(
+        target,
+        draft,
+        state,
+        focused=True,
+        content_width=72,
     )
+    rendered = "".join(text for _style, text in fragments)
 
     assert "Campus access ambiguity" not in rendered
     assert "OPTIONAL · ANSWERED" not in rendered
     assert "CLARIFICATION QUESTION" in rendered
     assert "PROPOSED READINGS" in rendered
     assert "✓ 2. Staff entrance" in rendered
+    assert not any(glyph in rendered for glyph in "┏┓┗┛┌┐└┘")
+    assert (
+        "class:memcommit.choice.active.focused",
+        "✓ 2. Staff entrance\n",
+    ) in fragments
+    assert (
+        "class:memcommit.choice.active",
+        "  Use the staff entrance.\n",
+    ) in fragments
+    assert (
+        "class:viewer-body",
+        " Which entrance does the rule describe?\n",
+    ) in fragments
+    assert not any(
+        style == "class:viewer-body.focused" for style, _text in fragments
+    )
     assert "Different reading" not in rendered
     assert "RESPONSE" not in rendered
     assert "Only during construction." not in rendered

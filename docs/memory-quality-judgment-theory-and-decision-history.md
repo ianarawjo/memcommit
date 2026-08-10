@@ -873,7 +873,7 @@ The costs are:
 The revised duplicate input is approximately `O(total text + n)` and its
 spanning evidence is at most linear in `n`. This still does not make the
 current one-shot provider suitable for a million Memories: their contents
-cannot fit within the 200,000-character prototype payload. True million-scale
+cannot fit within the 1,000,000-character effective provider payload. True million-scale
 semantic duplicate discovery needs indexed candidate generation and
 reproducible sharding or batching with an explicit recall and coverage
 contract. The current command fails rather than silently truncating or

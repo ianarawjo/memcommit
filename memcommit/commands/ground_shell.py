@@ -49,6 +49,7 @@ from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     TuiRegion,
     anchored_fragments,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     build_framed_multiline_input,
     build_inline_direct_edit_input,
@@ -3049,7 +3050,7 @@ def run_ground_shell(
             )
         )
 
-    @bindings.add("q", filter=read_pane_focus, eager=True)
+    @bind_case_insensitive_key(bindings, "q", filter=read_pane_focus, eager=True)
     def _quit_ground(event) -> None:
         cancel(event)
 

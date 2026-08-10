@@ -30,6 +30,9 @@ there is intentionally no profile-wide “last Scope” preference.
 - `tui/selection.py` owns checked values and single-versus-multiple cardinality.
 - `tui/selector.py` composes that cardinality state with the common framed
   namespace tree while callers retain role labels and availability.
+- `tui/range_selection.py` composes the frozen readable tree with a process-local
+  Profile shortcut, one-versus-many roots, exact-versus-descendant reach, and
+  independently unchecked subtree exclusions.
 - `tui/reach.py` owns the shared exact-versus-descendant segmented control.
 - `tui/rendering.py` owns pointer, marker-slot, indentation, branch, escaping,
   annotation, and line-break grammar while operations supply semantic markers.
@@ -37,8 +40,9 @@ there is intentionally no profile-wide “last Scope” preference.
   with the operation-neutral exact-name input from `commands.tui_primitives`.
   Callers supply labels such as Save Location, New Context, or Branch Name.
 
-Find, the common endpoint setup used by Compare/Update/Meld/Atomize, and Sever
-import these controls directly. The older `commands/context_picker.py` keeps
+Find, ordinary Query, the common endpoint setup used by
+Compare/Update/Meld/Atomize, and Sever import these controls directly. The
+older `commands/context_picker.py` keeps
 its established public and test-facing tree names as imports from the new
 module because it still owns full picker receipts, Memory preview rendering,
 and terminal orchestration. `memcommit.context_scope` is likewise a thin
@@ -52,7 +56,8 @@ become synthetic Contexts, and Grant attachments never become hierarchy edges.
 deduplicates overlapping roots. Loaders retain their authority-bearing store
 and deduplicate loaded Context identities before adding the same graph twice.
 
-Lexical descendant reach and embedded graph traversal remain separate. The
+Lexical descendant reach, target cardinality, and embedded graph traversal
+remain separate. The
 merged loader follows its store's normal `load` behavior for compatibility.
 Search exposes `follow_embeds` independently and cannot admit query-only
 content through the ordinary Context store protocol.
@@ -61,7 +66,26 @@ Common controls own mechanics only. Operations still decide selectable names,
 role availability, initial scope, validation, provider disclosure, receipts,
 and application authority. Sever therefore continues to default to descendant
 reach while Compare, Update, and Meld setup default to exact roots. Find keeps
-multiple roots and independently configurable embeds.
+one-versus-many roots, exact-versus-descendant row behavior, and embedded
+traversal as three independently configurable controls.
+
+Presentation labels do not define shared-control ownership. `SAVE LOCATION`,
+`FROM CONTEXT`, `CRITERIA`, and `NEW CONTEXT NAME` are adapter-supplied roles;
+the common name editor and selector do not infer creation, copying, saving, or
+authority from those strings. New Context names remain exact lexical values,
+not existing-Context locators, even when their editor also offers an existing
+parent tree for placement.
+
+The composed Context-name editor is not the smallest reusable unit. An
+`ExactNameInputControl` can be embedded without a box, while
+`ExactNameFieldControl` adds the common focused Frame. A
+`ContextParentLocatorState` and `ContextParentLocatorControl` can likewise be
+used without owning a name field; the control receives an exact value only
+when the caller chooses to reparent it. The older `ContextNameEditorState`
+spelling remains a compatibility alias rather than the reusable identity.
+`ContextNameControl` is the convenience composition of the framed name field
+and optional parent locator. This keeps Study Profile names and endpoint drafts
+on the shared one-line mechanics without pretending they are Context locators.
 
 A MULTIPLE checked-selection control may temporarily contain zero names. This
 lets a person clear and rebuild a set without the last row becoming a special
@@ -70,21 +94,40 @@ executable request or typed receipt. SINGLE mode still contains exactly one
 name; switching an empty MULTIPLE control to SINGLE checks the visible tree
 cursor supplied by the composing UI.
 
-Hierarchical group selection is an explicit composition of those two common
-controls. The tree supplies the complete frozen subtree and the selection
-state toggles that caller-defined group through its anchor row. It does not
-infer hierarchy itself, so flat pickers retain ordinary per-row selection. A
-checked parent action clears its whole group; an unchecked parent action fills
-the whole group and records the parent as the most recent explicit choice.
-Find uses this composition so every lexical Context it will search is visibly
-checked. Saved-session operations retain their separate descendant-reach
-boolean and are not migrated to expanded checked lists.
+Hierarchical group selection is an explicit composition of the common tree,
+selection, and reach controls. The tree supplies the complete frozen subtree;
+the selection state does not infer hierarchy, so flat pickers retain ordinary
+per-row selection. A checked parent action clears its whole group; an unchecked
+parent action fills it. Find and ordinary Query retain selected range roots
+plus process-local subtree exclusions so cardinality can still mean one or many
+ranges while every effective Context it will search remains visibly checked.
+It freezes that effective checked set exactly at execution, preventing a hidden
+descendant expansion from reintroducing an independently unchecked row. Saved-session
+operations retain their separate descendant-reach boolean and are not migrated
+to expanded checked lists.
+
+The `PROFILE` row is a process-local shortcut composed above the shared Context
+tree. Find and ordinary Query resolve it to their workbench's frozen
+`ReadableContextCatalog`; it never becomes a persisted Context or locator and
+does not broaden the catalog's existing READ authority. Query-only grant routes
+remain a separate typed Source catalog and never enter this ordinary tree.
+
+Profile breadth and selected-Context breadth use separate catalog constructors.
+`freeze_profile_readable_context_catalog` anchors discovery at the active
+Profile's local attachment when the initial row is granted. This retains that
+public granted name as the initial selection while including ordinary local
+names and every other valid READ grant. `freeze_readable_context_catalog`
+retains its narrower selected-view behavior for explicit Query, explicit Find,
+`ls`, rationale, and other operations whose operand defines their whole scope.
+The blank Find and Query workbenches use the Profile-wide form because they
+render `PROFILE · ALL READABLE CONTEXTS` as an executable target.
 
 ## Persistence and compatibility boundary
 
-No common control is a durable preference. Repeating searches in one open Find
-screen retains its process-local state, but reopening Find starts from explicit
-command defaults. Reopening a saved Compare, Update, Meld, or Sever session
+No common control is a durable preference. Repeating searches or questions in
+one open Find or Query screen retains its process-local state, but reopening a
+screen starts from explicit command defaults. Reopening a saved Compare,
+Update, Meld, or Sever session
 continues to restore the operation's own serialized booleans.
 
 Those schemas are intentionally not migrated into one shared JSON structure:

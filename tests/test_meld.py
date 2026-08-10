@@ -55,6 +55,8 @@ from memcommit.commands.resolution_workbench_shell import (
     resolution_seeded_report_fragments,
 )
 from memcommit.meld import (
+    MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
+    MeldCheckpointReceipt,
     MeldError,
     MeldSession,
     meld_canonical_digest,
@@ -72,6 +74,7 @@ from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
+    context_record_digest,
 )
 
 
@@ -145,7 +148,8 @@ class Task2Provider:
         assert operation == "meld_contexts"
         assert set(output_schema["required"]) == {
             "overview",
-            "relations",
+            "paired_relations",
+            "distinct_relations",
             "issues",
             "results",
             "ready_to_apply",
@@ -490,6 +494,46 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
         "[scope/left/child]" in memory.content for memory in restored.frames[0].memories
     )
 
+    started = runner.invoke(
+        app,
+        [
+            "meld",
+            left.name,
+            right.name,
+            "--left-descendants",
+            "--right-descendants",
+            "--to",
+            target.name,
+        ],
+    )
+    assert started.exit_code == 0, started.output
+    assert runner.invoke(app, ["switch", target.name]).exit_code == 0
+    preserved = runner.invoke(
+        app,
+        [
+            "meld",
+            left.name,
+            right.name,
+            "--left-descendants",
+            "--right-descendants",
+            "--preserve-all",
+        ],
+    )
+    assert preserved.exit_code == 0, preserved.output
+    accepted = runner.invoke(
+        app,
+        [
+            "meld",
+            left.name,
+            right.name,
+            "--left-descendants",
+            "--right-descendants",
+            "--accept",
+        ],
+    )
+    assert accepted.exit_code == 0, accepted.output
+    assert len(store.load_direct(target.name).memories) == 2
+
 
 def test_directional_meld_freezes_incoming_descendants_but_direct_baseline(
     isolated_store,
@@ -500,13 +544,16 @@ def test_directional_meld_freezes_incoming_descendants_but_direct_baseline(
     ops.add(incoming_child, "Child-owned incoming evidence.")
     baseline = ops.init("direction/baseline")
     ops.add(baseline, "Direct authoritative baseline.")
-    for context in (incoming, incoming_child, baseline):
+    baseline_child = ops.init("direction/baseline/child")
+    ops.add(baseline_child, "Unselected child baseline.")
+    for context in (incoming, incoming_child, baseline, baseline_child):
         store.create_context(context)
 
     incoming_scope = meld_command._load_local_meld_source(
         store,
         incoming.name,
         include_descendants=True,
+        project=False,
     )
     session = MeldSession.create_directional(
         incoming_scope,
@@ -520,10 +567,64 @@ def test_directional_meld_freezes_incoming_descendants_but_direct_baseline(
     meld_command._assert_source_bindings(restored, left, right)
     assert restored.frames[0].include_descendants is True
     assert restored.frames[1].include_descendants is False
-    assert any(
-        "[direction/incoming/child]" in memory.content
-        for memory in restored.frames[0].memories
+    assert [context.name for context in restored.frames[1].contexts or ()] == [
+        baseline.name
+    ]
+    assert all(
+        memory.owner_context_name != baseline_child.name
+        for memory in restored.frames[1].memories
     )
+    child_memory = next(
+        memory
+        for memory in restored.frames[0].memories
+        if memory.owner_context_name == incoming_child.name
+    )
+    assert child_memory.content == "Child-owned incoming evidence."
+
+
+def test_directional_schema_four_direct_session_remains_readable():
+    incoming = ops.init("direction/v4/incoming")
+    ops.add(incoming, "Incoming evidence.")
+    baseline = ops.init("direction/v4/baseline")
+    ops.add(baseline, "Direct baseline.")
+    value = MeldSession.create_directional(incoming, baseline).to_dict()
+    value["schema_version"] = 4
+    for frame_value, context in zip(
+        value["frames"],
+        (incoming, baseline),
+        strict=True,
+    ):
+        frame_value.pop("contexts")
+        frame_value["context_digest"] = context_record_digest(context)
+        for memory in frame_value["memories"]:
+            memory.pop("owner_context")
+    value["target"]["context_digest"] = context_record_digest(baseline)
+
+    restored = MeldSession.from_dict(value)
+
+    assert restored.schema_version == 4
+    assert all(frame.contexts is None for frame in restored.frames)
+    assert all(
+        memory.owner_context_uid is None
+        for frame in restored.frames
+        for memory in frame.memories
+    )
+
+
+def test_directional_owner_aware_scopes_reject_a_shared_descendant():
+    incoming = ops.init("direction/overlap/incoming")
+    ops.add(incoming, "Incoming root evidence.")
+    shared = ops.init("direction/overlap/shared")
+    ops.add(shared, "The shared target claim.")
+    incoming.add(shared)
+
+    with pytest.raises(MeldError, match="scopes must not overlap"):
+        MeldSession.create_directional(
+            incoming,
+            shared,
+            incoming_descendants=True,
+            baseline_descendants=False,
+        )
 
 
 def _task2_contexts(
@@ -580,6 +681,12 @@ class DirectionalProvider:
         ]
         assert payload["target"] == {
             "context_name": "test/update/to",
+            "contexts": [
+                {
+                    "target_context_id": "k000001",
+                    "context_name": "test/update/to",
+                }
+            ],
             "must_remain_empty_until_acceptance": False,
             "must_remain_unchanged_until_acceptance": True,
         }
@@ -662,6 +769,99 @@ class DirectionalProvider:
                         "reason": "The incoming Context supplies a novel route.",
                         "relation_keys": ["atm"],
                         "source_memory_ids": [incoming_add],
+                        "grounded_turn_ids": [],
+                    },
+                ],
+                "ready_to_apply": True,
+            }
+        )
+
+
+class DirectionalSubtreeProvider:
+    """Place one edit and one addition under exact BASELINE owners."""
+
+    def __init__(self):
+        self.payloads: list[dict] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "meld_contexts"
+        required = output_schema["properties"]["results"]["items"]["required"]
+        assert "target_context_id" in required
+        payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+        self.payloads.append(payload)
+        incoming = payload["frames"][0]["memories"]
+        baseline = payload["frames"][1]["memories"]
+        target_ids = {
+            item["context_name"]: item["target_context_id"]
+            for item in payload["target"]["contexts"]
+        }
+        incoming_edit, incoming_add = incoming
+        baseline_edit, baseline_untouched = baseline
+        return json.dumps(
+            {
+                "overview": (
+                    "One child-owned baseline rule is corrected and one novel "
+                    "incoming rule is added under another explicit child owner."
+                ),
+                "paired_relations": [
+                    {
+                        "relation_key": "access",
+                        "left_memory_ids": [incoming_edit["memory_id"]],
+                        "right_memory_ids": [baseline_edit["memory_id"]],
+                        "kind": "CONFLICT",
+                        "status": "RESOLVED",
+                        "summary": "The access rules conflict.",
+                        "reason": "Incoming evidence narrows the closure.",
+                    }
+                ],
+                "distinct_relations": [
+                    {
+                        "relation_key": "atm",
+                        "side": "LEFT",
+                        "memory_ids": [incoming_add["memory_id"]],
+                        "kind": "DISTINCT",
+                        "status": "RESOLVED",
+                        "summary": "The ATM guidance is new.",
+                        "reason": "No baseline Memory contains it.",
+                    },
+                    {
+                        "relation_key": "hours",
+                        "side": "RIGHT",
+                        "memory_ids": [baseline_untouched["memory_id"]],
+                        "kind": "DISTINCT",
+                        "status": "RESOLVED",
+                        "summary": "The hours guidance is unaffected.",
+                        "reason": "No incoming Memory changes it.",
+                    },
+                ],
+                "issues": [],
+                "results": [
+                    {
+                        "result_key": "access_edit",
+                        "operation": "EDIT",
+                        "target_memory_ids": [baseline_edit["memory_id"]],
+                        "target_context_id": target_ids[
+                            baseline_edit["owner_context_name"]
+                        ],
+                        "disposition": "SYNTHESIZE",
+                        "content": "Only the vehicle entrance is closed.",
+                        "reason": "Applies the narrower supported access scope.",
+                        "relation_keys": ["access"],
+                        "source_memory_ids": [incoming_edit["memory_id"]],
+                        "grounded_turn_ids": [],
+                    },
+                    {
+                        "result_key": "atm_add",
+                        "operation": "ADD",
+                        "target_memory_ids": [],
+                        "target_context_id": target_ids[
+                            baseline_untouched["owner_context_name"]
+                        ],
+                        "disposition": "PRESERVE",
+                        "content": "Use the Annex ATM during construction.",
+                        "reason": "Preserves novel incoming ATM guidance.",
+                        "relation_keys": ["atm"],
+                        "source_memory_ids": [incoming_add["memory_id"]],
                         "grounded_turn_ids": [],
                     },
                 ],
@@ -1067,7 +1267,29 @@ def test_v3_rejects_cross_relation_thematic_compression():
     class CompressedProvider:
         def complete(self, prompt, *, operation, output_schema=None):
             payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
-            relations = payload["previous"]["relations"]
+            relations = [
+                *payload["previous"]["paired_relations"],
+                *[
+                    {
+                        "relation_key": relation["relation_key"],
+                        "left_memory_ids": (
+                            relation["memory_ids"]
+                            if relation["side"] == "LEFT"
+                            else []
+                        ),
+                        "right_memory_ids": (
+                            relation["memory_ids"]
+                            if relation["side"] == "RIGHT"
+                            else []
+                        ),
+                        "kind": "DISTINCT",
+                        "status": relation["status"],
+                        "summary": relation["summary"],
+                        "reason": relation["reason"],
+                    }
+                    for relation in payload["previous"]["distinct_relations"]
+                ],
+            ]
             source_ids = [
                 memory["memory_id"]
                 for frame in payload["frames"]
@@ -1526,7 +1748,7 @@ def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
     checkpoints = store.list_checkpoints(baseline.name)
     assert len(checkpoints) == 1
     record = checkpoints[0]["args"]["meld"]
-    assert record["schema_version"] == 2
+    assert record["schema_version"] == 3
     assert record["mode"] == "DIRECTIONAL"
     assert [source["role"] for source in record["sources"]] == [
         "INCOMING",
@@ -1559,6 +1781,123 @@ def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
 
     redone = runner.invoke(app, ["redo"])
     assert redone.exit_code == 0, redone.output
+    assert store.load_meld_session(baseline.uid).state == "APPLIED"
+
+
+def test_directional_meld_applies_descendants_to_exact_owners_as_one_command(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming = ops.init("directional-tree/incoming")
+    incoming_access = ops.init("directional-tree/incoming/access")
+    ops.add(incoming_access, "Only the vehicle entrance is closed.")
+    incoming_atm = ops.init("directional-tree/incoming/atm")
+    ops.add(incoming_atm, "Use the Annex ATM during construction.")
+    baseline = ops.init("directional-tree/baseline")
+    baseline_access = ops.init("directional-tree/baseline/access")
+    edited = ops.add(baseline_access, "The parking area is fully closed.")
+    baseline_hours = ops.init("directional-tree/baseline/hours")
+    retained = ops.add(baseline_hours, "The Campus Store closes at 6 p.m.")
+    for context in (
+        incoming,
+        incoming_access,
+        incoming_atm,
+        baseline,
+        baseline_access,
+        baseline_hours,
+    ):
+        store.create_context(context)
+    provider = DirectionalSubtreeProvider()
+    _patch_provider(monkeypatch, provider)
+    scoped_baseline = meld_command._load_local_meld_source(
+        store,
+        baseline.name,
+        include_descendants=True,
+        project=False,
+    )
+    assert [
+        item.name for item in scoped_baseline.iter_items() if isinstance(item, Context)
+    ] == [baseline_access.name, baseline_hours.name]
+
+    initial = runner.invoke(
+        app,
+        [
+            "meld",
+            incoming.name,
+            "--left-descendants",
+            "--into",
+            baseline.name,
+            "--right-descendants",
+        ],
+    )
+
+    assert initial.exit_code == 0, initial.output
+    assert "State: READY_TO_APPLY" in initial.output
+    assert f"OWNER · {baseline_access.name}" in initial.output
+    assert f"OWNER · {baseline_hours.name}" in initial.output
+    assert [
+        item["context_name"] for item in provider.payloads[0]["target"]["contexts"]
+    ] == [baseline.name, baseline_access.name, baseline_hours.name]
+    session = store.load_meld_session(baseline.uid)
+    assert session is not None
+    assert session.frames[1].include_descendants is True
+    assert {
+        proposal.owner_context_name for proposal in session.current_assessment.proposals
+    } == {baseline_access.name, baseline_hours.name}
+    result_labels = {
+        result.label for result in MeldResolutionWorkbenchAdapter(session).view().results
+    }
+    assert any(baseline_access.name in label for label in result_labels)
+    assert any(baseline_hours.name in label for label in result_labels)
+
+    applied = runner.invoke(
+        app,
+        [
+            "meld",
+            incoming.name,
+            "--left-descendants",
+            "--into",
+            baseline.name,
+            "--right-descendants",
+            "--accept",
+        ],
+    )
+
+    assert applied.exit_code == 0, applied.output
+    assert tuple(store.load_direct(baseline.name).iter_items()) == ()
+    assert [
+        memory.content for memory in store.load_direct(baseline_access.name).iter_items()
+    ] == ["Only the vehicle entrance is closed."]
+    assert [
+        memory.content for memory in store.load_direct(baseline_hours.name).iter_items()
+    ] == [
+        retained.content,
+        "Use the Annex ATM during construction.",
+    ]
+    assert len(store.list_checkpoints(baseline_access.name)) == 1
+    assert len(store.list_checkpoints(baseline_hours.name)) == 1
+    applied_session = store.load_meld_session(baseline.uid)
+    assert applied_session is not None and applied_session.application is not None
+    assert [
+        receipt.context_name for receipt in applied_session.application.checkpoints
+    ] == [baseline_access.name, baseline_hours.name]
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert store.load_direct(baseline_access.name).memories[edited.uid].content == (
+        "The parking area is fully closed."
+    )
+    assert [
+        memory.content for memory in store.load_direct(baseline_hours.name).iter_items()
+    ] == [retained.content]
+    assert store.load_meld_session(baseline.uid).state == "READY_TO_APPLY"
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert store.load_direct(baseline_access.name).memories[edited.uid].content == (
+        "Only the vehicle entrance is closed."
+    )
     assert store.load_meld_session(baseline.uid).state == "APPLIED"
 
 
@@ -2576,7 +2915,11 @@ def test_provider_rejects_incomplete_primary_source_coverage():
 
 @pytest.mark.parametrize("mode", ["SYMMETRIC", "DIRECTIONAL"])
 def test_meld_output_schema_uses_the_codex_supported_subset(mode):
-    schema = meld_output_schema(4, mode=mode)
+    schema = meld_output_schema(
+        4,
+        mode=mode,
+        target_context_count=2 if mode == "DIRECTIONAL" else 1,
+    )
     allowed_keywords = {
         "type",
         "properties",
@@ -2602,6 +2945,16 @@ def test_meld_output_schema_uses_the_codex_supported_subset(mode):
             assert_supported(items)
 
     assert_supported(schema)
+    paired = schema["properties"]["paired_relations"]["items"]
+    assert paired["properties"]["left_memory_ids"]["minItems"] == 1
+    assert paired["properties"]["right_memory_ids"]["minItems"] == 1
+    assert "DISTINCT" not in paired["properties"]["kind"]["enum"]
+    distinct = schema["properties"]["distinct_relations"]["items"]
+    assert distinct["properties"]["memory_ids"]["minItems"] == 1
+    assert distinct["properties"]["kind"]["enum"] == ["DISTINCT"]
+    if mode == "DIRECTIONAL":
+        result = schema["properties"]["results"]["items"]
+        assert "target_context_id" in result["required"]
 
 
 def test_provider_parser_rejects_duplicate_aliases_without_unique_items():
@@ -2690,6 +3043,190 @@ def test_directional_edit_target_field_supplies_baseline_provenance():
         incoming_memory.uid,
         baseline_memory.uid,
     }
+
+
+def test_directional_v6_rejects_ungrounded_topical_synthesis():
+    incoming = ops.init("incoming/preservation-v6")
+    first = ops.add(incoming, "Use the east entrance on Monday.")
+    second = ops.add(incoming, "Use the west entrance on Tuesday.")
+    baseline = ops.init("baseline/preservation-v6")
+    ops.add(baseline, "Construction changes building access by day.")
+    session = MeldSession.create_directional(incoming, baseline)
+    assert session.schema_version == MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION
+    session.start_initial_analysis()
+
+    class TopicalSummary:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert "relation groups are analysis units" in prompt
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            incoming_ids = [
+                memory["memory_id"] for memory in payload["frames"][0]["memories"]
+            ]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "Both daily access facts are summarized together.",
+                    "paired_relations": [
+                        {
+                            "relation_key": "access",
+                            "left_memory_ids": incoming_ids,
+                            "right_memory_ids": [baseline_id],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The facts have different daily scopes.",
+                            "reason": "They concern the same construction topic.",
+                        }
+                    ],
+                    "distinct_relations": [],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": "access_summary",
+                            "operation": "ADD",
+                            "target_memory_ids": [],
+                            "disposition": "SYNTHESIZE",
+                            "content": "Use different entrances on Monday and Tuesday.",
+                            "reason": "Summarizes both access facts.",
+                            "relation_keys": ["access"],
+                            "source_memory_ids": incoming_ids,
+                            "grounded_turn_ids": [],
+                        }
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    assessment = assess_meld_turn(session, TopicalSummary())
+    with pytest.raises(MeldError, match="explicit user-grounded"):
+        session.record_assessment(session.current_turn.uid, assessment)
+    assert {memory.uid for memory in incoming.memories.values()} == {
+        first.uid,
+        second.uid,
+    }
+
+
+def test_directional_v6_accepts_one_exact_preserve_add_per_incoming_memory():
+    incoming = ops.init("incoming/preservation-v6-exact")
+    contents = (
+        "Use the east entrance on Monday.",
+        "Use the west entrance on Tuesday.",
+    )
+    for content in contents:
+        ops.add(incoming, content)
+    baseline = ops.init("baseline/preservation-v6-exact")
+    ops.add(baseline, "Construction changes building access by day.")
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+
+    class ExactPreserves:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            incoming_records = payload["frames"][0]["memories"]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "Both scoped access facts remain independently editable.",
+                    "paired_relations": [
+                        {
+                            "relation_key": "access",
+                            "left_memory_ids": [
+                                memory["memory_id"] for memory in incoming_records
+                            ],
+                            "right_memory_ids": [baseline_id],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The facts have different daily scopes.",
+                            "reason": "Each day remains an independent instruction.",
+                        }
+                    ],
+                    "distinct_relations": [],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": f"access_{index}",
+                            "operation": "ADD",
+                            "target_memory_ids": [],
+                            "disposition": "PRESERVE",
+                            "content": memory["content"],
+                            "reason": "Preserves one independently revisable fact.",
+                            "relation_keys": ["access"],
+                            "source_memory_ids": [memory["memory_id"]],
+                            "grounded_turn_ids": [],
+                        }
+                        for index, memory in enumerate(incoming_records, start=1)
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    assessment = assess_meld_turn(session, ExactPreserves())
+    session.record_assessment(session.current_turn.uid, assessment)
+
+    assert [proposal.content for proposal in session.current_assessment.proposals] == list(
+        contents
+    )
+    assert all(
+        proposal.disposition == "PRESERVE"
+        and len(proposal.source_members) == 1
+        for proposal in session.current_assessment.proposals
+    )
+
+
+def test_directional_schema_five_keeps_legacy_materialization_readable():
+    incoming = ops.init("incoming/preservation-v5")
+    ops.add(incoming, "Use the east entrance on Monday.")
+    ops.add(incoming, "Use the west entrance on Tuesday.")
+    baseline = ops.init("baseline/preservation-v5")
+    ops.add(baseline, "Construction changes building access by day.")
+    value = MeldSession.create_directional(incoming, baseline).to_dict()
+    value["schema_version"] = 5
+    session = MeldSession.from_dict(value)
+    session.start_initial_analysis()
+
+    class LegacyTopicalSummary:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert "relation groups are analysis units" not in prompt
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            incoming_ids = [
+                memory["memory_id"] for memory in payload["frames"][0]["memories"]
+            ]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "Legacy materialization remains resumable.",
+                    "paired_relations": [
+                        {
+                            "relation_key": "access",
+                            "left_memory_ids": incoming_ids,
+                            "right_memory_ids": [baseline_id],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The facts have daily scopes.",
+                            "reason": "They concern the same topic.",
+                        }
+                    ],
+                    "distinct_relations": [],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": "access_summary",
+                            "operation": "ADD",
+                            "target_memory_ids": [],
+                            "disposition": "SYNTHESIZE",
+                            "content": "Use different entrances on Monday and Tuesday.",
+                            "reason": "Legacy broad result.",
+                            "relation_keys": ["access"],
+                            "source_memory_ids": incoming_ids,
+                            "grounded_turn_ids": [],
+                        }
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    assessment = assess_meld_turn(session, LegacyTopicalSummary())
+    session.record_assessment(session.current_turn.uid, assessment)
+    assert session.state == "READY_TO_APPLY"
 
 
 def test_directional_edit_target_must_belong_to_baseline():
@@ -3055,6 +3592,13 @@ def test_applied_meld_reopens_in_read_only_workbench():
         change_set_digest=change_set.digest,
         checkpoint_uid="00000000-0000-4000-8000-000000000001",
         result_memory_uids=(),
+        checkpoints=(
+            MeldCheckpointReceipt(
+                context_uid=baseline.uid,
+                context_name=baseline.name,
+                checkpoint_uid="00000000-0000-4000-8000-000000000001",
+            ),
+        ),
     )
     before = session.to_dict()
 

@@ -233,6 +233,19 @@ def test_result_arrow_keys_move_the_read_only_scroll_cursor(monkeypatch):
     assert results_area.buffer.read_only()
 
 
+def test_escape_closes_find_chat_from_the_root_input():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        action = run_find_chat_shell(
+            _state(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action == FindChatAction(kind="CLOSE")
+
+
 def test_dialogue_arrow_keys_scroll_long_references(monkeypatch):
     original_text_area = find_chat_shell_module.TextArea
     captured = {}

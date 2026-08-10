@@ -1,0 +1,8 @@
+$ mem show --context task-1/campus-wiki task-1/campus-wiki/construction-details
+QUERY VIEW: task-1/campus-wiki/construction-details
+Route: 5e52cb85-8c49-529a-ba67-463cdd43bde9
+Parent Context: task-1/campus-wiki
+Mode: QUERY ONLY
+Content: concealed from mem ls and mem show
+
+Ask with: mem query task-1/campus-wiki/construction-details '<question>'

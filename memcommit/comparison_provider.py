@@ -24,9 +24,9 @@ from memcommit.result_workbench import (
 )
 from memcommit.semantic_execution import (
     BudgetLimits,
-    BudgetVector,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     plan_semantic_execution,
@@ -35,19 +35,15 @@ from memcommit.understanding import understanding_text_schema
 
 
 COMPARISON_PAYLOAD_MARKER = "COMPARISON PAYLOAD:\n"
-COMPARISON_INPUT_CHAR_LIMIT = 400_000
+COMPARISON_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 COMPARISON_RESPONSE_CHAR_LIMIT = 1_000_000
-COMPARISON_ITEM_LIMIT = 400
 COMPARISON_KEY_LIMIT = 100
 COMPARISON_OPTION_LIMIT = 5
 
 COMPARISON_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="compare_contexts",
     strategy=ExecutionStrategy.BLOCK_RELATIONS,
-    one_shot_limits=BudgetLimits(
-        max_input_chars=COMPARISON_INPUT_CHAR_LIMIT,
-        max_items=COMPARISON_ITEM_LIMIT,
-    ),
+    one_shot_limits=BudgetLimits(max_input_chars=COMPARISON_INPUT_CHAR_LIMIT),
     # A block reconciler must preserve the exhaustive relation ledger before
     # production Compare can advertise staged execution.
     staged_supported=False,
@@ -171,19 +167,6 @@ def _provider_view(
     comparison_input: ComparisonInput,
 ) -> _ProviderView:
     comparison_input.validate()
-    source_count = sum(
-        len(frame.memories) for frame in comparison_input.frames
-    )
-    item_plan = plan_semantic_execution(
-        COMPARISON_EXECUTION_POLICY,
-        BudgetVector(item_count=source_count),
-    )
-    if item_plan.mode is not ExecutionMode.ONE_SHOT:
-        raise ComparisonProviderError(
-            "This Context pair exceeds the bounded Compare execution plan "
-            f"of {COMPARISON_ITEM_LIMIT} projected Memories. Input is never "
-            "truncated; staged block reconciliation is not yet enabled."
-        )
     frame_ids = ("reference", "compared")
     memory_by_id: dict[str, ComparisonMember] = {}
     frame_payloads: list[dict[str, object]] = []
@@ -557,14 +540,9 @@ def _parse_analysis(
             )
         )
     relation_keys = [key for key, _ in relation_records]
-    if (
-        not relation_records
-        or len(relation_records) > COMPARISON_ITEM_LIMIT
-        or len(relation_keys) != len(set(relation_keys))
-    ):
+    if not relation_records or len(relation_keys) != len(set(relation_keys)):
         raise ComparisonProviderError(
-            "Codex compare returned duplicate, empty, or excessive "
-            "relations."
+            "Codex compare returned duplicate or empty relations."
         )
 
     relation_uid_by_key = {

@@ -304,9 +304,85 @@ def test_share_context_moves_between_stable_semantic_sections(
     assert navigation.section_uid == "SHARE:DESTINATION"
 
 
+def test_share_arrow_boundaries_cross_surfaces_and_tab_preserves_memory_cursor(
+    tmp_path,
+    monkeypatch,
+):
+    _sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    preview = prepare_share(source.name, "government/healthcare-agent")
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # CONTEXT title -> destination -> MEMORIES first -> MEMORIES second.
+        # Tab enters ACTION and Shift-Tab must restore the second Memory.
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\t\x1b[Zq")
+        receipt = run_share_viewer(
+            preview,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            navigation=navigation,
+        )
+
+    assert receipt.action == "close"
+    assert navigation.section_uid == "SHARE:DESTINATION"
+    assert navigation.pane == "items"
+    assert navigation.row_index == 1
+
+
+def test_share_arrow_boundaries_reach_action_before_enter_sends(
+    tmp_path,
+    monkeypatch,
+):
+    _sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    preview = prepare_share(source.name, "government/healthcare-agent")
+
+    with create_pipe_input() as pipe_input:
+        # Two Context stops, two Memory rows, then the ACTION Surface.
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\x1b[B\r")
+        receipt = run_share_viewer(
+            preview,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt.action == "send"
+
+
+def test_share_enter_outside_action_does_not_send(
+    tmp_path,
+    monkeypatch,
+):
+    _sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    preview = prepare_share(source.name, "government/healthcare-agent")
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r\t\rq")
+        receipt = run_share_viewer(
+            preview,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt.action == "close"
+
+
+@pytest.mark.parametrize("close_key", ["\x1b", "\x7f"])
 def test_closing_share_viewer_does_not_deliver(
     tmp_path,
     monkeypatch,
+    close_key,
 ):
     _sender_store, receiver_store, source, _receiver = _study_share_topology(
         tmp_path,
@@ -315,7 +391,7 @@ def test_closing_share_viewer_does_not_deliver(
     preview = prepare_share(source.name, "government/healthcare-agent")
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b")
+        pipe_input.send_text(close_key)
         receipt = run_share_viewer(
             preview,
             app_input=pipe_input,

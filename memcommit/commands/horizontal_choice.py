@@ -53,6 +53,16 @@ class HorizontalChoiceState:
         self.selected_uid = self._selection.selected_uid or self.selected_uid
         return changed
 
+    def choose(self, uid: str) -> bool:
+        """Select one exact option without exposing the shared flat state."""
+
+        if all(option.uid != uid for option in self.options):
+            raise ValueError("Horizontal choice value is unavailable.")
+        changed = self._selection.set_selected(uid)
+        self._selection.cursor_uid = uid
+        self.selected_uid = uid
+        return changed
+
 
 def render_horizontal_choice(
     state: HorizontalChoiceState,

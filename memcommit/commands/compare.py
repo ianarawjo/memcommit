@@ -66,6 +66,8 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
+from memcommit.source_projection.presentation import source_display_text
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.profile_config import ProfileConfigError
 from memcommit.provenance import ProvenanceError
@@ -159,6 +161,9 @@ def _header_lines(
 ) -> list[str]:
     reference, compared = analysis.frames
     counts = Counter(relation.kind for relation in analysis.relations)
+    read_grant_label = source_display_text(
+        SourceDisplayFacts(access=SourceAccess.READ_GRANT)
+    )
     return [
         "MEM COMPARE · SYMMETRIC PEERS",
         (
@@ -186,11 +191,11 @@ def _header_lines(
             + (
                 " · SAVED · RETAINED"
                 if retention == "RETAINED"
-                else " · SAVED · GRANT-BOUND"
+                else f" · SAVED · {read_grant_label} BOUND"
                 if retention == "GRANT_BOUND"
                 else ""
                 if durable
-                else " · NOT SAVED (GRANTED VIEW)"
+                else f" · NOT SAVED · {read_grant_label}"
             )
         ),
         (

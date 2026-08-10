@@ -34,8 +34,10 @@ prompt-toolkit selector:
   Left and Right
   change the projection through the common `HorizontalChoiceState` only while
   VIEW has focus. Up from the first command reaches VIEW, Down returns to the
-  command list, and Tab/Shift-Tab traverse the same two visible surfaces. A
-  view change retains the selected command by name but closes its Forms because
+  command list, and Tab/Shift-Tab traverse the same two visible surfaces. These
+  transitions use the common `SurfaceFocusController`; Help retains only its
+  accelerated internal command/Form movement and activation semantics. A view
+  change retains the selected command by name but closes its Forms because
   their row offsets belong to the old projection.
 - The two inline choice boxes sit inside one `INVENTORY VIEW` frame, matching the
   common endpoint setup hierarchy where Meld's mode boxes sit inside
@@ -186,8 +188,10 @@ no-argument behavior, its exact `mem <name>` spelling appears as a Form.
 This prevents a current-target route, generated default, or interactive picker
 from disappearing merely because the same callback also accepts operands or
 subcommands. Parser-valid spellings whose callback deliberately returns a
-usage error, such as bare `mem impact` or `mem query`, are not advertised as
-meaningful Forms. Group help alone is also not treated as an operation, while
+usage error, such as bare `mem impact`, are not advertised as meaningful Forms.
+Bare `mem query` now appears because a terminal opens its interactive Question
+and Source workbench; outside a terminal it still requires an explicit
+selector. Group help alone is also not treated as an operation, while
 groups with real bare callbacks (`lock`, `unlock`, and `profile`) expose them.
 
 For example, `mem update` exposes its interactive Update session launcher

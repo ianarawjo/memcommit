@@ -2,20 +2,25 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 import sys
 from typing import Annotated, Optional
 
 import typer
 
+from memcommit.command_attempts import current_command_attempt_uid
 from memcommit.commands.profile_group import ProfileAliasGroup
 from memcommit.commands.profile_picker import ProfilePickerEntry, choose_profile
 from memcommit.commands.tui_primitives import display_escape_text
-from memcommit.profile_config import ProfileConfigError, profile_store_dir
+from memcommit.profile_config import (
+    ProfileConfigError,
+    load_profile_registry,
+    profile_store_dir,
+)
 from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
-    StudyProfileGroup,
     archive_legacy_study,
     create_authority_grant,
     default_study_bundle_root,
@@ -26,9 +31,15 @@ from memcommit.profiles import (
     list_profiles,
     refresh_study_profile,
     rename_profile,
+    study_run_profile_pairs,
     study_profile_groups,
     update_authority_grant,
     use_profile,
+)
+from memcommit.study_action_log import (
+    StudyActionError,
+    record_study_action,
+    record_study_action_for_profile,
 )
 
 
@@ -85,27 +96,66 @@ def _grant_permissions_label(permissions: tuple[str, ...]) -> str:
     return ",".join(permission.lower() for permission in permissions)
 
 
-def _study_memberships(
-    registry,
-) -> dict[str, tuple[StudyProfileGroup, int, str]]:
+@dataclass(frozen=True)
+class _ProfileStudyMembership:
+    name: str
+    created_at: str
+    role: str
+    task: int | None
+    first: bool
+    last: bool
+
+
+def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
     try:
         groups = study_profile_groups(registry.profiles)
+        pairs = study_run_profile_pairs(registry.profiles)
     except (ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
-    memberships: dict[str, tuple[StudyProfileGroup, int, str]] = {}
+    study_names = [group.name.casefold() for group in groups] + [
+        pair.name.casefold() for pair in pairs
+    ]
+    if len(study_names) != len(set(study_names)):
+        _fail(ProfileError("Study display names must be unique."))
+    profile_positions = {
+        profile.uid: index for index, profile in enumerate(registry.profiles)
+    }
+    memberships: dict[str, _ProfileStudyMembership] = {}
     for group in groups:
-        memberships.update(
-            {
-                profile.uid: (group, task, "TASK")
-                for task, profile in enumerate(group.profiles, start=1)
-            }
-        )
-        memberships.update(
-            {
-                profile.uid: (group, task, "AUTHORITY")
-                for task, profile in enumerate(group.support_profiles, start=1)
-            }
-        )
+        members = (*group.profiles, *group.support_profiles)
+        for index, profile in enumerate(members):
+            is_task = index < len(group.profiles)
+            task = index + 1 if is_task else index - len(group.profiles) + 1
+            memberships[profile.uid] = _ProfileStudyMembership(
+                name=group.name,
+                created_at=group.created_at,
+                role="TASK" if is_task else "AUTHORITY",
+                task=task,
+                first=index == 0,
+                last=index == len(members) - 1,
+            )
+    for pair in pairs:
+        if (
+            profile_positions[pair.authority.uid]
+            != profile_positions[pair.participant.uid] + 1
+        ):
+            _fail(ProfileError("Study run Profile pair must remain contiguous."))
+        for index, (profile, role) in enumerate(
+            (
+                (pair.participant, "PARTICIPANT"),
+                (pair.authority, "GRANTED_MEMORY"),
+            )
+        ):
+            if profile.uid in memberships:
+                _fail(ProfileError("Profile has conflicting Study provenance."))
+            memberships[profile.uid] = _ProfileStudyMembership(
+                name=pair.name,
+                created_at=pair.created_at,
+                role=role,
+                task=None,
+                first=index == 0,
+                last=index == 1,
+            )
     return memberships
 
 
@@ -138,22 +188,22 @@ def _pick_profile() -> str | None:
             query_source_count=inspection.query_source_count,
             query_source_names=inspection.query_source_names,
             study_name=(
-                memberships[profile.uid][0].name
+                memberships[profile.uid].name
                 if profile.uid in memberships
                 else None
             ),
             study_created_at=(
-                memberships[profile.uid][0].created_at
+                memberships[profile.uid].created_at
                 if profile.uid in memberships
                 else None
             ),
             study_task=(
-                memberships[profile.uid][1]
+                memberships[profile.uid].task
                 if profile.uid in memberships
                 else None
             ),
             study_role=(
-                memberships[profile.uid][2]
+                memberships[profile.uid].role
                 if profile.uid in memberships
                 else None
             ),
@@ -172,6 +222,7 @@ def _pick_profile() -> str | None:
 
 def _use_profile(name: str) -> None:
     try:
+        previous_profile = load_profile_registry().active
         registry, inspection, changed = use_profile(name)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
@@ -180,6 +231,29 @@ def _use_profile(name: str) -> None:
             "Already using profile '" + display_escape_text(registry.active.name) + "'."
         )
         return
+    attempt_uid = current_command_attempt_uid()
+    if attempt_uid is not None:
+        try:
+            record_study_action(
+                "PROFILE_LEFT",
+                other_profile_uid=registry.active.uid,
+                other_profile_name=registry.active.name,
+            )
+            record_study_action_for_profile(
+                registry.active,
+                attempt_uid=attempt_uid,
+                event_kind="PROFILE_ENTERED",
+                other_profile_uid=previous_profile.uid,
+                other_profile_name=previous_profile.name,
+            )
+        except (OSError, ProfileConfigError, StudyActionError, ValueError) as error:
+            typer.secho(
+                "Error: Profile selection changed, but its Study action ledger "
+                "could not be written: " + display_escape_text(str(error)),
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
     typer.secho(
         f"Selected profile '{display_escape_text(registry.active.name)}'.",
         fg=typer.colors.GREEN,
@@ -258,21 +332,23 @@ def list_cmd() -> None:
         )
         membership = memberships.get(profile.uid)
         if membership is not None:
-            group, task, role = membership
-            if task == 1 and role == "TASK":
+            if membership.first:
                 typer.echo(
                     "  "
-                    + display_escape_text(group.name)
+                    + display_escape_text(membership.name)
                     + "  STUDY   created="
-                    + display_escape_text(group.created_at)
+                    + display_escape_text(membership.created_at)
                 )
-            is_last = task == 3 and (
-                role == "AUTHORITY" or not group.support_profiles
-            )
-            branch = "└─" if is_last else "├─"
-            role_label = "Task" if role == "TASK" else "Authority"
+            branch = "└─" if membership.last else "├─"
+            if membership.role == "PARTICIPANT":
+                role_label = "Participant"
+            elif membership.role == "GRANTED_MEMORY":
+                role_label = "Granted memory"
+            else:
+                role_name = "Task" if membership.role == "TASK" else "Authority"
+                role_label = f"{role_name} {membership.task}"
             typer.echo(
-                f"    {branch} {marker} {role_label} {task}  "
+                f"    {branch} {marker} {role_label}  "
                 f"{action:<7} profile={profile_label} · "
                 f"{profile.kind.lower()} · {_inventory_label(inspection)}"
                 f"{query_note}{view_note} · current={current}"

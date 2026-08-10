@@ -20,6 +20,7 @@ from memcommit.context_targeting.tui.tree import (
     context_subtree_names,
 )
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.source_projection.presentation import SourceDisplayValue
 
 
 _PROFILE_TARGET_UID = "\x00PROFILE"
@@ -223,7 +224,7 @@ class ContextRangeSelectionState:
         self,
         *,
         focused: bool,
-        annotations: Mapping[str, str] | None = None,
+        annotations: Mapping[str, SourceDisplayValue] | None = None,
     ) -> list[tuple[str, str]]:
         labels = dict(annotations or {})
         effective = frozenset(self.effective_names)

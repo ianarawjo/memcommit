@@ -17,6 +17,7 @@ from memcommit.semantic_execution import (
     ExecutionProgress,
     ExecutionStrategy,
     PartitionError,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     pack_grouped_items,
@@ -26,9 +27,9 @@ from memcommit.semantic_execution import (
 from memcommit.store import context_record_digest
 
 
-TRANSLATE_CORPUS_CHAR_LIMIT = 200_000
-TRANSLATE_RESPONSE_CHAR_LIMIT = 500_000
-TRANSLATED_CONTENT_CHAR_LIMIT = 200_000
+TRANSLATE_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
+TRANSLATE_RESPONSE_CHAR_LIMIT = 1_000_000
+TRANSLATED_CONTENT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 TRANSLATION_TARGET_CHAR_LIMIT = 500
 TRANSLATE_TIMEOUT_SECONDS = 300
 

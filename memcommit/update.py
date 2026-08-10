@@ -16,16 +16,15 @@ from memcommit.semantic_execution import (
     BudgetVector,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     plan_semantic_execution,
 )
 
 
-UPDATE_CORPUS_CHAR_LIMIT = 200_000
+UPDATE_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 UPDATE_RESPONSE_CHAR_LIMIT = 1_000_000
-UPDATE_OPERATION_LIMIT = 200
-UPDATE_SOURCE_REFS_PER_OPERATION = 50
 UPDATE_REASON_CHAR_LIMIT = 1_000
 UPDATE_REVIEW_GUIDANCE_CHAR_LIMIT = 20_000
 UPDATE_SCHEMA_VERSION = 6
@@ -34,10 +33,7 @@ UpdateStatus = Literal["impact", "staged", "applied", "undone"]
 UPDATE_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="update planning",
     strategy=ExecutionStrategy.BLOCK_RELATIONS,
-    one_shot_limits=BudgetLimits(
-        max_input_chars=UPDATE_CORPUS_CHAR_LIMIT,
-        max_output_items=UPDATE_OPERATION_LIMIT,
-    ),
+    one_shot_limits=BudgetLimits(max_input_chars=UPDATE_CORPUS_CHAR_LIMIT),
     staged_supported=False,
 )
 
@@ -1374,10 +1370,7 @@ def _update_output_schema(inputs: UpdateInputs) -> dict[str, object]:
         "properties": {
             "edits": {
                 "type": "array",
-                "maxItems": min(
-                    len(inputs.target_memories),
-                    UPDATE_OPERATION_LIMIT,
-                ),
+                "maxItems": len(inputs.target_memories),
                 "items": {
                     "type": "object",
                     "properties": {
@@ -1390,7 +1383,7 @@ def _update_output_schema(inputs: UpdateInputs) -> dict[str, object]:
                         "source_ids": {
                             "type": "array",
                             "minItems": 1,
-                            "maxItems": UPDATE_SOURCE_REFS_PER_OPERATION,
+                            "maxItems": len(inputs.source_candidates),
                             "items": source_id,
                         },
                         "reason": {
@@ -1410,10 +1403,7 @@ def _update_output_schema(inputs: UpdateInputs) -> dict[str, object]:
             },
             "additions": {
                 "type": "array",
-                "maxItems": min(
-                    max(1, len(inputs.source_candidates)),
-                    UPDATE_OPERATION_LIMIT,
-                ),
+                "maxItems": len(inputs.source_candidates),
                 "items": {
                     "type": "object",
                     "properties": {
@@ -1432,7 +1422,7 @@ def _update_output_schema(inputs: UpdateInputs) -> dict[str, object]:
                         "source_ids": {
                             "type": "array",
                             "minItems": 1,
-                            "maxItems": UPDATE_SOURCE_REFS_PER_OPERATION,
+                            "maxItems": len(inputs.source_candidates),
                             "items": source_id,
                         },
                         "reason": {
@@ -1452,10 +1442,7 @@ def _update_output_schema(inputs: UpdateInputs) -> dict[str, object]:
             },
             "removals": {
                 "type": "array",
-                "maxItems": min(
-                    len(inputs.target_memories),
-                    UPDATE_OPERATION_LIMIT,
-                ),
+                "maxItems": len(inputs.target_memories),
                 "items": {
                     "type": "object",
                     "properties": {
@@ -1463,7 +1450,7 @@ def _update_output_schema(inputs: UpdateInputs) -> dict[str, object]:
                         "source_ids": {
                             "type": "array",
                             "minItems": 1,
-                            "maxItems": UPDATE_SOURCE_REFS_PER_OPERATION,
+                            "maxItems": len(inputs.source_candidates),
                             "items": source_id,
                         },
                         "reason": {
@@ -1492,8 +1479,6 @@ def _parse_source_ids(
 ) -> tuple[SourceReference, ...]:
     if not isinstance(value, list) or not value:
         raise UpdateError("Codex update returned invalid source provenance.")
-    if len(value) > UPDATE_SOURCE_REFS_PER_OPERATION:
-        raise UpdateError("Codex update returned too much source provenance.")
     if not all(isinstance(item, str) for item in value):
         raise UpdateError("Codex update returned invalid source provenance.")
     if len(value) != len(set(value)):
@@ -1521,23 +1506,9 @@ def _parse_provider_operations(
         or not isinstance(value["edits"], list)
         or not isinstance(value["additions"], list)
         or not isinstance(value["removals"], list)
-        or len(value["edits"])
-        > min(
-            len(inputs.target_memories),
-            UPDATE_OPERATION_LIMIT,
-        )
-        or len(value["additions"])
-        > min(
-            max(1, len(inputs.source_candidates)),
-            UPDATE_OPERATION_LIMIT,
-        )
-        or len(value["removals"])
-        > min(
-            len(inputs.target_memories),
-            UPDATE_OPERATION_LIMIT,
-        )
-        or (len(value["edits"]) + len(value["additions"]) + len(value["removals"]))
-        > UPDATE_OPERATION_LIMIT
+        or len(value["edits"]) > len(inputs.target_memories)
+        or len(value["additions"]) > len(inputs.source_candidates)
+        or len(value["removals"]) > len(inputs.target_memories)
     ):
         raise UpdateError("Codex update returned invalid structured output.")
 

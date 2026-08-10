@@ -1,0 +1,34 @@
+     SOURCE · The user held the next gathering in their father's yard and moved between seats while speaking with everyone.
+     RESULT · (forgotten)
+     WHY · Private family gathering detail is unnecessary.
+  294. [d522f8d9] KEEP_SUMMARY
+     SOURCE · On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.
+     RESULT · Strong midday sunlight previously caused the user to shorten an outdoor meal.
+     WHY · Minimal environmental response.
+  295. [3c29f416] KEEP_SUMMARY
+     SOURCE · The next time, the user started at 6 p.m. and remained outside until sunset.
+     RESULT · At a later outdoor event beginning at 6 p.m., the user remained outside until sunset.
+     WHY · Relevant time-of-day environmental comparison.
+  296. [41a7d352] FORGET
+     SOURCE · Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.
+     RESULT · (forgotten)
+     WHY · Family food-labeling event is unrelated.
+  297. [eaeba13d] FORGET
+     SOURCE · At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.
+     RESULT · (forgotten)
+     WHY · Family food-labeling event is unrelated.
+  298. [0c0225fd] FORGET
+     SOURCE · After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.
+     RESULT · (forgotten)
+     WHY · Third-party leftover-food preference is unrelated.
+  299. [045ae94d] KEEP_PREFERENCE_OR_POLICY
+     SOURCE · The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.
+     RESULT · Past event responses do not establish current attendees, weather, or accommodation needs; confirm current circumstances with the user.
+     WHY · Preserves uncertainty without retaining private family-event details.
+  300. [9c56f5d7] KEEP_SUMMARY
+     SOURCE · The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.
+     RESULT · One previously used outdoor location receives strong direct sunlight at midday, while after 6 p.m. shade and wind reduce the felt heat; current conditions still require confirmation.
+     WHY · Relevant environmental accommodation information with uncertainty and identifying ownership removed.
+
+The Source Context is unchanged.
+Session · cf07e7c4-4bbf-4f3b-abbc-e87570002761

@@ -22,6 +22,8 @@ from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore, context_record_digest
+from memcommit.source_projection.model import SourceForm
+from memcommit.source_projection.presentation import source_object_label
 
 
 def _memory_only_source(source: Context) -> Context:
@@ -103,16 +105,14 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
     if mem_count:
         parts.append(f"{mem_count} memor{'y' if mem_count == 1 else 'ies'}")
     if ref_count:
-        parts.append(
-            f"{ref_count} memory reference{'s' if ref_count != 1 else ''}"
-        )
+        label = source_object_label(SourceForm.MEMORY_REF)
+        parts.append(f"{ref_count} {label}{'s' if ref_count != 1 else ''}")
     if query_count:
-        parts.append(
-            f"{query_count} query-only context"
-            f"{'s' if query_count != 1 else ''}"
-        )
+        label = source_object_label(SourceForm.QUERY_VIEW)
+        parts.append(f"{query_count} {label}{'s' if query_count != 1 else ''}")
     if ctx_count:
-        parts.append(f"{ctx_count} embedded context{'s' if ctx_count != 1 else ''}")
+        label = source_object_label(SourceForm.CONTEXT)
+        parts.append(f"{ctx_count} embedded {label}{'s' if ctx_count != 1 else ''}")
     summary = ", ".join(parts) if parts else "nothing new"
 
     try:

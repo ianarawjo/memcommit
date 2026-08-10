@@ -24,13 +24,15 @@ from memcommit.comparison import (
     ComparisonAnalysis,
     comparison_canonical_digest,
 )
-from memcommit.context import Context, Memory
+from memcommit.context import Context, Memory, QueryContextRef
 from memcommit.store import context_record_digest
-from memcommit.update import GrantedUpdateTarget
+from memcommit.update import ContextFingerprint, GrantedUpdateTarget
 
 
 MELD_SCHEMA_VERSION = 3
 MELD_GRANTED_SCHEMA_VERSION = 4
+MELD_OWNER_AWARE_SCHEMA_VERSION = 5
+MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION = 6
 MELD_COMPARISON_SCHEMA_VERSION = 2
 MELD_LEGACY_SCHEMA_VERSION = 1
 MELD_TEXT_LIMIT = 20_000
@@ -230,11 +232,18 @@ class MeldMemory:
     content: str
     position: int
     content_digest: str
+    owner_context_uid: str | None = None
+    owner_context_name: str | None = None
 
     @classmethod
-    def create(cls, memory: Memory, position: int) -> "MeldMemory":
-        return cls.from_dict(
-            {
+    def create(
+        cls,
+        memory: Memory,
+        position: int,
+        *,
+        owner: Context | None = None,
+    ) -> "MeldMemory":
+        value: dict[str, object] = {
                 "uid": memory.uid,
                 "content": memory.content,
                 "position": position,
@@ -242,23 +251,44 @@ class MeldMemory:
                     memory.content.encode("utf-8")
                 ).hexdigest(),
             }
-        )
+        if owner is not None:
+            value["owner_context"] = {"uid": owner.uid, "name": owner.name}
+        return cls.from_dict(value)
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "uid": self.uid,
             "content": self.content,
             "position": self.position,
             "content_digest": self.content_digest,
         }
+        if self.owner_context_uid is not None:
+            result["owner_context"] = {
+                "uid": self.owner_context_uid,
+                "name": self.owner_context_name,
+            }
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "MeldMemory":
-        data = _exact_dict(
-            value,
-            {"uid", "content", "position", "content_digest"},
-            "meld Memory",
-        )
+        keys = {"uid", "content", "position", "content_digest"}
+        if isinstance(value, dict) and "owner_context" in value:
+            keys.add("owner_context")
+        data = _exact_dict(value, keys, "meld Memory")
+        owner_uid = None
+        owner_name = None
+        if "owner_context" in data:
+            owner = _exact_dict(
+                data["owner_context"],
+                {"uid", "name"},
+                "meld Memory owner",
+            )
+            owner_uid = _canonical_uuid(owner["uid"], "meld Memory owner Context uid")
+            owner_name = _string(
+                owner["name"],
+                "meld Memory owner Context name",
+                limit=MELD_NAME_LIMIT,
+            )
         result = cls(
             uid=_canonical_uuid(data["uid"], "meld Memory uid"),
             content=_string(data["content"], "meld Memory content"),
@@ -267,6 +297,8 @@ class MeldMemory:
                 data["content_digest"],
                 "meld Memory content digest",
             ),
+            owner_context_uid=owner_uid,
+            owner_context_name=owner_name,
         )
         if (
             result.content_digest
@@ -285,6 +317,7 @@ class MeldFrame:
     role: MeldRole
     memories: tuple[MeldMemory, ...]
     include_descendants: bool | None = None
+    contexts: tuple[ContextFingerprint, ...] | None = None
 
     @classmethod
     def from_context(
@@ -293,12 +326,44 @@ class MeldFrame:
         *,
         role: MeldRole,
         include_descendants: bool | None = None,
+        owner_aware: bool = False,
     ) -> "MeldFrame":
         if not isinstance(ctx, Context):
             raise MeldError("Meld source must be a Context.")
+        contexts: list[Context] = []
+        seen_contexts: set[str] = set()
+
+        def visit(context: Context) -> None:
+            if context.uid in seen_contexts:
+                return
+            seen_contexts.add(context.uid)
+            contexts.append(context)
+            if not (owner_aware and include_descendants is True):
+                return
+            for item in context.iter_items():
+                if isinstance(item, Context):
+                    visit(item)
+
+        visit(ctx)
         non_memories = [
-            uid for uid, item in ctx.iter_entries() if not isinstance(item, Memory)
+            uid
+            for context in contexts
+            for uid, item in context.iter_entries()
+            if not isinstance(
+                item,
+                # Query-only routes are visible navigation metadata, not
+                # ordinary readable evidence or writable target owners.
+                (Memory, Context, QueryContextRef)
+                if owner_aware
+                else (Memory, Context),
+            )
         ]
+        if not owner_aware:
+            non_memories.extend(
+                uid
+                for uid, item in ctx.iter_entries()
+                if isinstance(item, Context)
+            )
         if non_memories:
             raise MeldError(
                 "Context-to-Context meld version 1 supports direct owned "
@@ -306,23 +371,52 @@ class MeldFrame:
                 + ", ".join(uid[:8] for uid in non_memories)
                 + "."
             )
-        memories = tuple(
-            MeldMemory.create(item, position)
-            for position, item in enumerate(ctx.iter_items())
+        owned_memories = [
+            (context, item)
+            for context in (contexts if owner_aware else [ctx])
+            for item in context.iter_items()
             if isinstance(item, Memory)
+        ]
+        memories = tuple(
+            MeldMemory.create(
+                item,
+                position,
+                owner=context if owner_aware else None,
+            )
+            for position, (context, item) in enumerate(owned_memories)
         )
         if not memories:
             raise MeldError(f"Source Context '{ctx.name}' has no direct Memories.")
+        fingerprints = (
+            tuple(
+                ContextFingerprint(
+                    uid=context.uid,
+                    name=context.name,
+                    digest=context_record_digest(context),
+                )
+                for context in contexts
+            )
+            if owner_aware
+            else None
+        )
         value: dict[str, object] = {
                 "uid": str(uuid.uuid4()),
                 "context_uid": ctx.uid,
                 "context_name": ctx.name,
-                "context_digest": context_record_digest(ctx),
+                "context_digest": (
+                    meld_canonical_digest(
+                        [fingerprint.to_dict() for fingerprint in fingerprints]
+                    )
+                    if fingerprints is not None
+                    else context_record_digest(ctx)
+                ),
                 "role": role,
                 "memories": [memory.to_dict() for memory in memories],
             }
         if include_descendants is not None:
             value["include_descendants"] = include_descendants
+        if fingerprints is not None:
+            value["contexts"] = [item.to_dict() for item in fingerprints]
         return cls.from_dict(value)
 
     def to_dict(self) -> dict[str, object]:
@@ -336,6 +430,8 @@ class MeldFrame:
         }
         if self.include_descendants is not None:
             result["include_descendants"] = self.include_descendants
+        if self.contexts is not None:
+            result["contexts"] = [context.to_dict() for context in self.contexts]
         return result
 
     @classmethod
@@ -350,6 +446,8 @@ class MeldFrame:
             }
         if isinstance(value, dict) and "include_descendants" in value:
             keys.add("include_descendants")
+        if isinstance(value, dict) and "contexts" in value:
+            keys.add("contexts")
         data = _exact_dict(value, keys, "meld frame")
         memories = tuple(
             MeldMemory.from_dict(item)
@@ -364,6 +462,38 @@ class MeldFrame:
         include_descendants = data.get("include_descendants")
         if include_descendants is not None and type(include_descendants) is not bool:
             raise MeldError("Invalid meld frame descendant scope.")
+        contexts = None
+        if "contexts" in data:
+            try:
+                contexts = tuple(
+                    ContextFingerprint.from_dict(item)
+                    for item in _array(data["contexts"], "meld frame Contexts")
+                )
+            except ValueError as error:
+                raise MeldError("Invalid meld frame Context fingerprints.") from error
+            identities = [(context.uid, context.name) for context in contexts]
+            if (
+                not contexts
+                or len(identities) != len(set(identities))
+                or len({context.uid for context in contexts}) != len(contexts)
+                or len({context.name for context in contexts}) != len(contexts)
+                or contexts[0].uid != data["context_uid"]
+                or contexts[0].name != data["context_name"]
+                or any(
+                    memory.owner_context_uid is None
+                    or (
+                        memory.owner_context_uid,
+                        memory.owner_context_name,
+                    )
+                    not in set(identities)
+                    for memory in memories
+                )
+                or data["context_digest"]
+                != meld_canonical_digest(
+                    [context.to_dict() for context in contexts]
+                )
+            ):
+                raise MeldError("Invalid owner-aware meld frame.")
         return cls(
             uid=_canonical_uuid(data["uid"], "meld frame uid"),
             context_uid=_canonical_uuid(
@@ -382,6 +512,7 @@ class MeldFrame:
             role=_literal(data["role"], _ROLES, "meld frame role"),  # type: ignore[arg-type]
             memories=memories,
             include_descendants=include_descendants,  # type: ignore[arg-type]
+            contexts=contexts,
         )
 
 
@@ -402,7 +533,12 @@ class MeldTarget:
         return cls.from_baseline_context(ctx)
 
     @classmethod
-    def from_baseline_context(cls, ctx: Context) -> "MeldTarget":
+    def from_baseline_context(
+        cls,
+        ctx: Context,
+        *,
+        context_digest: str | None = None,
+    ) -> "MeldTarget":
         """Bind an existing Context as a directional meld baseline/target."""
         if not isinstance(ctx, Context):
             raise MeldError("Meld target must be a Context.")
@@ -410,7 +546,7 @@ class MeldTarget:
             {
                 "context_uid": ctx.uid,
                 "context_name": ctx.name,
-                "context_digest": context_record_digest(ctx),
+                "context_digest": context_digest or context_record_digest(ctx),
             }
         )
 
@@ -625,9 +761,11 @@ class MeldProposal:
     relation_uids: tuple[str, ...]
     source_members: tuple[MeldMember, ...]
     grounded_by_turn_uids: tuple[str, ...]
+    owner_context_uid: str | None = None
+    owner_context_name: str | None = None
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "uid": self.uid,
             "operation": self.operation,
             "disposition": self.disposition,
@@ -638,12 +776,16 @@ class MeldProposal:
             "source_members": [member.to_dict() for member in self.source_members],
             "grounded_by_turn_uids": list(self.grounded_by_turn_uids),
         }
+        if self.owner_context_uid is not None:
+            result["owner_context"] = {
+                "uid": self.owner_context_uid,
+                "name": self.owner_context_name,
+            }
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "MeldProposal":
-        data = _exact_dict(
-            value,
-            {
+        keys = {
                 "uid",
                 "operation",
                 "disposition",
@@ -653,9 +795,27 @@ class MeldProposal:
                 "relation_uids",
                 "source_members",
                 "grounded_by_turn_uids",
-            },
-            "meld proposal",
-        )
+            }
+        if isinstance(value, dict) and "owner_context" in value:
+            keys.add("owner_context")
+        data = _exact_dict(value, keys, "meld proposal")
+        owner_uid = None
+        owner_name = None
+        if "owner_context" in data:
+            owner = _exact_dict(
+                data["owner_context"],
+                {"uid", "name"},
+                "meld proposal owner",
+            )
+            owner_uid = _canonical_uuid(
+                owner["uid"],
+                "meld proposal owner Context uid",
+            )
+            owner_name = _string(
+                owner["name"],
+                "meld proposal owner Context name",
+                limit=MELD_NAME_LIMIT,
+            )
         source_members = tuple(
             MeldMember.from_dict(item)
             for item in _array(
@@ -703,6 +863,8 @@ class MeldProposal:
             ),
             source_members=source_members,
             grounded_by_turn_uids=grounded_by,
+            owner_context_uid=owner_uid,
+            owner_context_name=owner_name,
         )
 
 
@@ -1086,29 +1248,87 @@ class MeldChangeSet:
 
 
 @dataclass(frozen=True)
+class MeldCheckpointReceipt:
+    context_uid: str
+    context_name: str
+    checkpoint_uid: str
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "context_uid": self.context_uid,
+            "context_name": self.context_name,
+            "checkpoint_uid": self.checkpoint_uid,
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> "MeldCheckpointReceipt":
+        data = _exact_dict(
+            value,
+            {"context_uid", "context_name", "checkpoint_uid"},
+            "meld checkpoint receipt",
+        )
+        return cls(
+            context_uid=_canonical_uuid(
+                data["context_uid"],
+                "meld checkpoint owner Context uid",
+            ),
+            context_name=_string(
+                data["context_name"],
+                "meld checkpoint owner Context name",
+                limit=MELD_NAME_LIMIT,
+            ),
+            checkpoint_uid=_canonical_uuid(
+                data["checkpoint_uid"],
+                "meld application checkpoint uid",
+            ),
+        )
+
+
+@dataclass(frozen=True)
 class MeldApplication:
     change_set_digest: str
     checkpoint_uid: str
     result_memory_uids: tuple[str, ...]
+    checkpoints: tuple[MeldCheckpointReceipt, ...] = ()
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "change_set_digest": self.change_set_digest,
             "checkpoint_uid": self.checkpoint_uid,
             "result_memory_uids": list(self.result_memory_uids),
         }
+        if self.checkpoints:
+            result["checkpoints"] = [item.to_dict() for item in self.checkpoints]
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "MeldApplication":
-        data = _exact_dict(
-            value,
-            {
+        keys = {
                 "change_set_digest",
                 "checkpoint_uid",
                 "result_memory_uids",
-            },
-            "meld application",
+            }
+        if isinstance(value, dict) and "checkpoints" in value:
+            keys.add("checkpoints")
+        data = _exact_dict(value, keys, "meld application")
+        checkpoints = tuple(
+            MeldCheckpointReceipt.from_dict(item)
+            for item in _array(data.get("checkpoints", []), "meld checkpoints")
         )
+        identities = [
+            (item.context_uid, item.context_name) for item in checkpoints
+        ]
+        if (
+            len(identities) != len(set(identities))
+            or len({item.context_uid for item in checkpoints}) != len(checkpoints)
+            or len({item.context_name for item in checkpoints}) != len(checkpoints)
+            or len({item.checkpoint_uid for item in checkpoints}) != len(checkpoints)
+            or (
+                checkpoints
+                and checkpoints[0].checkpoint_uid != data["checkpoint_uid"]
+            )
+        ):
+            raise MeldError("Invalid meld application checkpoints.")
         return cls(
             change_set_digest=_digest(
                 data["change_set_digest"],
@@ -1124,6 +1344,7 @@ class MeldApplication:
                 empty=True,
                 uuids=True,
             ),
+            checkpoints=checkpoints,
         )
 
 
@@ -1368,25 +1589,29 @@ class MeldSession:
             raise MeldError(
                 "Directional meld requires distinct INCOMING and BASELINE Contexts."
             )
+        incoming_frame = MeldFrame.from_context(
+            incoming,
+            role="INCOMING",
+            include_descendants=incoming_descendants,
+            owner_aware=True,
+        )
+        baseline_frame = MeldFrame.from_context(
+            baseline,
+            role="BASELINE",
+            include_descendants=baseline_descendants,
+            owner_aware=True,
+        )
         session = cls(
             uid=str(uuid.uuid4()),
             mode="DIRECTIONAL",
-            frames=(
-                MeldFrame.from_context(
-                    incoming,
-                    role="INCOMING",
-                    include_descendants=incoming_descendants,
-                ),
-                MeldFrame.from_context(
-                    baseline,
-                    role="BASELINE",
-                    include_descendants=baseline_descendants,
-                ),
+            frames=(incoming_frame, baseline_frame),
+            target=MeldTarget.from_baseline_context(
+                baseline,
+                context_digest=baseline_frame.context_digest,
             ),
-            target=MeldTarget.from_baseline_context(baseline),
-            # Directional schema four freezes authorization independently for
-            # each endpoint.  Public names alone are not stable authority.
-            schema_version=MELD_GRANTED_SCHEMA_VERSION,
+            # Owner-aware directional sessions freeze every Context in each
+            # selected scope; public names alone are not stable authority.
+            schema_version=MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
             granted_incoming=granted_incoming,
             granted_target=granted_target,
         )
@@ -1434,6 +1659,8 @@ class MeldSession:
             MELD_COMPARISON_SCHEMA_VERSION,
             MELD_SCHEMA_VERSION,
             MELD_GRANTED_SCHEMA_VERSION,
+            MELD_OWNER_AWARE_SCHEMA_VERSION,
+            MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         keys = {
@@ -1636,6 +1863,7 @@ class MeldSession:
         change_set_digest: str,
         checkpoint_uid: str,
         result_memory_uids: Iterable[str],
+        checkpoints: Iterable[MeldCheckpointReceipt] = (),
     ) -> None:
         change_set = self.prepare_changes()
         if change_set.digest != change_set_digest:
@@ -1650,6 +1878,11 @@ class MeldSession:
                 "change_set_digest": change_set_digest,
                 "checkpoint_uid": checkpoint_uid,
                 "result_memory_uids": list(result_uids),
+                **(
+                    {"checkpoints": [item.to_dict() for item in checkpoints]}
+                    if self.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
+                    else {}
+                ),
             }
         )
         self.state = "APPLIED"
@@ -1660,13 +1893,19 @@ class MeldSession:
         *,
         change_set_digest: str,
         checkpoint_uid: str,
+        checkpoints: Iterable[MeldCheckpointReceipt] = (),
     ) -> None:
         """Return one exact applied session to its reviewed ready state."""
         if self.state != "APPLIED" or self.application is None:
             raise MeldError("Meld application is not currently applied.")
+        checkpoint_receipts = tuple(checkpoints)
         if (
             self.application.change_set_digest != change_set_digest
             or self.application.checkpoint_uid != checkpoint_uid
+            or (
+                checkpoint_receipts
+                and self.application.checkpoints != checkpoint_receipts
+            )
         ):
             raise MeldError("Meld application receipt does not match this undo.")
         self.application = None
@@ -1679,6 +1918,8 @@ class MeldSession:
             MELD_COMPARISON_SCHEMA_VERSION,
             MELD_SCHEMA_VERSION,
             MELD_GRANTED_SCHEMA_VERSION,
+            MELD_OWNER_AWARE_SCHEMA_VERSION,
+            MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         if self.schema_version == MELD_LEGACY_SCHEMA_VERSION:
@@ -1728,6 +1969,30 @@ class MeldSession:
                 raise MeldError(
                     "Directional meld target must exactly match its BASELINE frame."
                 )
+            if self.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION and (
+                incoming.contexts is None
+                or baseline.contexts is None
+                or not all(
+                    memory.owner_context_uid is not None
+                    for frame in (incoming, baseline)
+                    for memory in frame.memories
+                )
+            ):
+                raise MeldError(
+                    "Owner-aware directional meld requires complete Context ownership."
+                )
+            if self.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION:
+                incoming_contexts = incoming.contexts or ()
+                baseline_contexts = baseline.contexts or ()
+                if (
+                    {context.uid for context in incoming_contexts}
+                    & {context.uid for context in baseline_contexts}
+                    or {context.name for context in incoming_contexts}
+                    & {context.name for context in baseline_contexts}
+                ):
+                    raise MeldError(
+                        "Directional INCOMING and BASELINE scopes must not overlap."
+                    )
             if (
                 self.target.context_uid == incoming.context_uid
                 or self.target.context_name == incoming.context_name
@@ -1849,6 +2114,32 @@ class MeldSession:
                 raise MeldError(
                     "Applied meld receipt does not match its exact proposal."
                 )
+            if self.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION:
+                baseline = self.frames[1]
+                requested_owners = {
+                    (
+                        proposal.owner_context_uid,
+                        proposal.owner_context_name,
+                    )
+                    for proposal in expected.proposals
+                }
+                if not requested_owners:
+                    requested_owners.add(
+                        (baseline.context_uid, baseline.context_name)
+                    )
+                ordered_owners = tuple(
+                    (context.uid, context.name)
+                    for context in (baseline.contexts or ())
+                    if (context.uid, context.name) in requested_owners
+                )
+                receipt_owners = tuple(
+                    (receipt.context_uid, receipt.context_name)
+                    for receipt in self.application.checkpoints
+                )
+                if receipt_owners != ordered_owners:
+                    raise MeldError(
+                        "Owner-aware meld receipt does not cover its exact targets."
+                    )
         elif self.application is not None:
             raise MeldError("Only an applied meld may retain an application.")
 
@@ -1960,9 +2251,24 @@ class MeldSession:
                     raise MeldError(
                         "Symmetric Context meld may only ADD to its empty target."
                     )
+                if proposal.owner_context_uid is not None:
+                    raise MeldError(
+                        "A symmetric meld proposal cannot name a source owner."
+                    )
                 continue
 
             assert incoming_frame is not None and baseline_frame is not None
+            baseline_context_identities = {
+                (context.uid, context.name)
+                for context in (baseline_frame.contexts or ())
+            }
+            if self.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION and (
+                proposal.owner_context_uid,
+                proposal.owner_context_name,
+            ) not in baseline_context_identities:
+                raise MeldError(
+                    "A directional meld proposal owner is outside the BASELINE scope."
+                )
             incoming_evidence = any(
                 frame_uid == incoming_frame.uid for frame_uid, _ in source_keys
             )
@@ -1992,8 +2298,100 @@ class MeldSession:
                     raise MeldError(
                         "A directional EDIT must materially change its BASELINE Memory."
                     )
+                if self.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION and (
+                    proposal.owner_context_uid != target_memory.owner_context_uid
+                    or proposal.owner_context_name != target_memory.owner_context_name
+                ):
+                    raise MeldError(
+                        "A directional EDIT owner must match its BASELINE Memory."
+                    )
             elif proposal.memory_uid in source_memory_uids:
                 raise MeldError("A directional ADD must use a fresh Memory uid.")
+        if (
+            self.schema_version >= MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION
+            and self.mode == "DIRECTIONAL"
+            and assessment.ready_to_apply
+        ):
+            assert incoming_frame is not None
+            incoming_memory_by_key = {
+                (incoming_frame.uid, memory.uid): memory
+                for memory in incoming_frame.memories
+            }
+            if any(
+                proposal.disposition != "USER_ADD"
+                and len(proposal.relation_uids) != 1
+                for proposal in assessment.proposals
+            ):
+                raise MeldError(
+                    "A preservation-first directional result must belong to "
+                    "exactly one primary relation."
+                )
+            for relation_uid, relation in relation_by_uid.items():
+                relation_proposals = proposals_by_relation.get(relation_uid, [])
+                relation_incoming = {
+                    key
+                    for key in relation_members_by_uid[relation_uid]
+                    if key[0] == incoming_frame.uid
+                }
+                if relation.kind == "EQUIVALENT":
+                    if relation_proposals:
+                        raise MeldError(
+                            "An EQUIVALENT directional relation is already "
+                            "represented by the BASELINE and must not create a change."
+                        )
+                    continue
+                if relation.kind not in {"DISTINCT", "COMPATIBLE", "SCOPED"}:
+                    continue
+
+                incoming_occurrences: Counter[tuple[str, str]] = Counter()
+                for proposal in relation_proposals:
+                    proposal_incoming = {
+                        (member.frame_uid, member.memory_uid)
+                        for member in proposal.source_members
+                        if member.frame_uid == incoming_frame.uid
+                    }
+                    incoming_occurrences.update(proposal_incoming)
+                    user_grounded = bool(
+                        set(proposal.grounded_by_turn_uids) & actual_user_turn_uids
+                    )
+                    if len(proposal_incoming) > 1:
+                        if (
+                            relation.kind not in {"COMPATIBLE", "SCOPED"}
+                            or proposal.disposition != "SYNTHESIZE"
+                            or not user_grounded
+                        ):
+                            raise MeldError(
+                                "Combining directional INCOMING Memories requires "
+                                "an explicit user-grounded relation-local SYNTHESIZE "
+                                "result."
+                            )
+                        continue
+                    if len(proposal_incoming) != 1:
+                        raise MeldError(
+                            "A directional source-derived change must represent "
+                            "INCOMING Memory evidence."
+                        )
+                    incoming_key = next(iter(proposal_incoming))
+                    incoming_memory = incoming_memory_by_key[incoming_key]
+                    if not (
+                        proposal.operation == "ADD"
+                        and proposal.disposition == "PRESERVE"
+                        and proposal.content == incoming_memory.content
+                    ) and not (
+                        proposal.disposition == "SYNTHESIZE" and user_grounded
+                    ):
+                        raise MeldError(
+                            "An uncombined directional INCOMING Memory must be "
+                            "added once with its exact content, or an explicit "
+                            "user turn must ground its rewrite."
+                        )
+                if set(incoming_occurrences) != relation_incoming or any(
+                    count != 1 for count in incoming_occurrences.values()
+                ):
+                    raise MeldError(
+                        "A ready directional DISTINCT, COMPATIBLE, or SCOPED "
+                        "relation must materialize every INCOMING Memory exactly once."
+                    )
         if (
             self.schema_version >= MELD_SCHEMA_VERSION
             and self.mode == "SYMMETRIC"

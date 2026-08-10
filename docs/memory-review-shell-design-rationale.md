@@ -388,7 +388,8 @@ through prompt-toolkit:
 - up/down or digits: select a proposed reading when the current ambiguity
   finding offers choices;
 - Enter or Tab: focus the freeform response;
-- Escape: return to issue navigation;
+- Escape: return from Response to issue navigation, then close from the root
+  issue surface;
 - F2 or Ctrl-S: save and move to the next issue;
 - `S`: toggle source/priority order;
 - `L`: toggle split/stacked layout;

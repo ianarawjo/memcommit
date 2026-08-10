@@ -21,7 +21,9 @@ from prompt_toolkit.widgets import TextArea
 
 from memcommit.commands.tui_primitives import (
     TuiRegion,
+    bind_case_insensitive_key,
     build_tui_frame,
+    dispatch_tui_back,
     require_interactive_terminal,
     safe_terminal_text,
 )
@@ -330,7 +332,7 @@ def run_review_shell(
                         else ""
                     )
                     + "Enter input  "
-                    "Esc review  F2/Ctrl-S save+next  S sort  L layout  Q quit "
+                    "Esc back/quit  F2/Ctrl-S save+next  S sort  L layout  Q quit "
                 )
             )
         ),
@@ -427,7 +429,6 @@ def run_review_shell(
     def _focus_response(event) -> None:
         event.app.layout.focus(response_area)
 
-    @bindings.add("escape", filter=has_focus(response_area))
     @bindings.add("tab", filter=has_focus(response_area))
     def _focus_review(event) -> None:
         if not capture_response():
@@ -468,13 +469,29 @@ def run_review_shell(
         )
         event.app.invalidate()
 
-    @bindings.add("q", filter=has_focus(list_control), eager=True)
+    @bind_case_insensitive_key(
+        bindings, "q", filter=has_focus(list_control), eager=True
+    )
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
         if not persist():
             event.app.invalidate()
             return
         event.app.exit(result=session)
+
+    def _return_to_review(event) -> bool:
+        if not event.app.layout.has_focus(response_area):
+            return False
+        _focus_review(event)
+        return True
+
+    @bindings.add("escape", eager=True)
+    def _escape(event) -> None:
+        dispatch_tui_back(event, _return_to_review, close=_quit)
+
+    @bindings.add("backspace", filter=has_focus(list_control), eager=True)
+    def _backspace_from_review(event) -> None:
+        _quit(event)
 
     app: Application[ReviewSession] = Application(
         layout=Layout(

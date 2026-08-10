@@ -40,8 +40,11 @@ from memcommit.granted_comparison_store import (
     recursive_comparison_projection,
 )
 from memcommit.meld import (
+    MELD_OWNER_AWARE_SCHEMA_VERSION,
     MELD_SCHEMA_VERSION,
+    MeldCheckpointReceipt,
     MeldError,
+    MeldFrame,
     MeldIssue,
     MeldSession,
     materialize_preservation_assessment,
@@ -76,8 +79,11 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
-from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.profiles import (
+    ProfileError,
+    authority_grant_snapshot_lock,
+    resolve_granted_context_view,
+)
 from memcommit.granted_update_application import _remove_checkpoint
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
@@ -205,6 +211,8 @@ def _session_command(session: MeldSession) -> str:
         parts.append("--left-descendants")
     if session.mode == "DIRECTIONAL":
         parts.extend(("--into", right.context_name))
+        if right.include_descendants:
+            parts.append("--right-descendants")
     else:
         parts.append(right.context_name)
         if right.include_descendants:
@@ -459,6 +467,15 @@ def render_meld_session(
         lines.append(
             f"  {marker} {index:>2}. [{label}] {safe_terminal_text(proposal.content)}"
         )
+        if (
+            session.mode == "DIRECTIONAL"
+            and len(session.frames[1].contexts or ()) > 1
+            and proposal.owner_context_name is not None
+        ):
+            lines.append(
+                "       OWNER · "
+                + safe_terminal_text(proposal.owner_context_name)
+            )
         lines.append(f"       WHY · {safe_terminal_text(proposal.reason)}")
     if session.state == "AWAITING_REPLY":
         command = _session_command(session)
@@ -511,6 +528,9 @@ def _load_bound_contexts(
                 _load_meld_source(
                     access,
                     include_descendants=bool(frame.include_descendants),
+                    project=(
+                        session.schema_version < MELD_OWNER_AWARE_SCHEMA_VERSION
+                    ),
                 )
             )
         left, right = loaded
@@ -520,17 +540,27 @@ def _load_bound_contexts(
     try:
         loaded: list[Context] = []
         for frame in session.frames:
-            context = (
-                recursive_comparison_projection(
-                    load_context_scope(
-                        store,
-                        frame.context_name,
-                        include_descendants=bool(frame.include_descendants),
-                    )
+            if (
+                session.mode == "DIRECTIONAL"
+                and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
+            ):
+                context = load_context_scope(
+                    store,
+                    frame.context_name,
+                    include_descendants=bool(frame.include_descendants),
                 )
-                if frame.include_descendants
-                else store.load_direct(frame.context_name)
-            )
+            else:
+                context = (
+                    recursive_comparison_projection(
+                        load_context_scope(
+                            store,
+                            frame.context_name,
+                            include_descendants=bool(frame.include_descendants),
+                        )
+                    )
+                    if frame.include_descendants
+                    else store.load_direct(frame.context_name)
+                )
             loaded.append(context)
         left, right = loaded
     except FileNotFoundError:
@@ -546,7 +576,12 @@ def _load_bound_contexts(
                 "The granted Compare basis for this Meld is unavailable."
             )
         left, right = granted_artifact_contexts(store, artifact)
-    target = store.load_direct(session.target.context_name)
+    target = (
+        right
+        if session.mode == "DIRECTIONAL"
+        and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
+        else store.load_direct(session.target.context_name)
+    )
     return left, right, target
 
 
@@ -568,6 +603,7 @@ def _load_meld_source(
     access: ContextAccess,
     *,
     include_descendants: bool = False,
+    project: bool = True,
 ) -> Context:
     if include_descendants:
         reader = GrantedReadStore(access) if access.is_granted else access.store
@@ -578,11 +614,15 @@ def _load_meld_source(
         )
     else:
         context = (
-            GrantedReadStore(access).load(access.display_name)
+            (
+                GrantedReadStore(access).load(access.display_name)
+                if project
+                else GrantedReadStore(access).load_direct(access.display_name)
+            )
             if access.is_granted
             else access.store.load_direct(access.context_name)
         )
-    return recursive_comparison_projection(context)
+    return recursive_comparison_projection(context) if project else context
 
 
 def _load_local_meld_source(
@@ -590,16 +630,27 @@ def _load_local_meld_source(
     name: str,
     *,
     include_descendants: bool,
+    project: bool = True,
 ) -> Context:
     if not include_descendants:
         return store.load_direct(name)
-    return recursive_comparison_projection(
-        load_context_scope(
-            store,
-            name,
-            include_descendants=True,
-        )
+    context = load_context_scope(
+        store,
+        name,
+        include_descendants=True,
     )
+    return recursive_comparison_projection(context) if project else context
+
+
+def _bound_frame_digest(frame, context: Context) -> str:
+    if frame.contexts is None:
+        return context_record_digest(context)
+    return MeldFrame.from_context(
+        context,
+        role=frame.role,
+        include_descendants=frame.include_descendants,
+        owner_aware=True,
+    ).context_digest
 
 
 def _assert_source_bindings(
@@ -615,7 +666,7 @@ def _assert_source_bindings(
         if (
             context.uid != frame.context_uid
             or context.name != frame.context_name
-            or context_record_digest(context) != frame.context_digest
+            or _bound_frame_digest(frame, context) != frame.context_digest
         ):
             raise MeldCommandError(
                 f"Source Context '{frame.context_name}' changed after this "
@@ -642,7 +693,7 @@ def _assert_non_target_source_bindings(
         if (
             context.uid != frame.context_uid
             or context.name != frame.context_name
-            or context_record_digest(context) != frame.context_digest
+            or _bound_frame_digest(frame, context) != frame.context_digest
         ):
             raise MeldCommandError(
                 f"Source Context '{frame.context_name}' changed after this "
@@ -654,10 +705,15 @@ def _assert_unapplied_target(
     session: MeldSession,
     target: Context,
 ) -> None:
+    target_digest = (
+        _bound_frame_digest(session.frames[1], target)
+        if session.mode == "DIRECTIONAL"
+        else context_record_digest(target)
+    )
     if (
         target.uid != session.target.context_uid
         or target.name != session.target.context_name
-        or context_record_digest(target) != session.target.context_digest
+        or target_digest != session.target.context_digest
     ):
         raise MeldCommandError(
             "The meld target changed after analysis; the proposal is stale."
@@ -680,19 +736,61 @@ def _target_save_source_bindings(
             # Requiring same-name ordinary Contexts here would both fail for a
             # granted alias and incorrectly reintroduce live authority state.
             return ()
-    return tuple(
-        (frame.context_name, frame.context_uid, frame.context_digest)
-        for index, frame in enumerate(session.frames)
+    bindings: list[tuple[str, str, str]] = []
+    for index, frame in enumerate(session.frames):
         if (
-            frame.context_uid != session.target.context_uid
-            or frame.context_name != session.target.context_name
-        )
-        and not (
+            frame.context_uid == session.target.context_uid
+            and frame.context_name == session.target.context_name
+        ) or (
             session.mode == "DIRECTIONAL"
             and index == 0
             and session.granted_incoming is not None
+        ):
+            continue
+        if session.mode == "SYMMETRIC" and frame.include_descendants:
+            scope = load_context_scope(
+                store,
+                frame.context_name,
+                include_descendants=True,
+            )
+            projected = recursive_comparison_projection(scope)
+            if (
+                projected.uid != frame.context_uid
+                or projected.name != frame.context_name
+                or context_record_digest(projected) != frame.context_digest
+            ):
+                raise MeldCommandError(
+                    f"Source Context '{frame.context_name}' changed after this "
+                    "meld was analyzed."
+                )
+            # A projected subtree digest cannot be compared to the root's
+            # physical context.json under the store lock. Freeze every exact
+            # local owner instead so the complete projection remains stable
+            # through target CAS.
+            physical_contexts = tuple(
+                store.load_direct(context.name)
+                for context in _walk_meld_target_contexts(scope)
+            )
+            bindings.extend(
+                (context.name, context.uid, context_record_digest(context))
+                for context in physical_contexts
+            )
+            reloaded_scope = load_context_scope(
+                store,
+                frame.context_name,
+                include_descendants=True,
+            )
+            reloaded_projection = recursive_comparison_projection(reloaded_scope)
+            if context_record_digest(reloaded_projection) != frame.context_digest:
+                raise MeldCommandError(
+                    f"Source Context '{frame.context_name}' changed after this "
+                    "meld was analyzed."
+                )
+            continue
+        bindings.append(
+            (frame.context_name, frame.context_uid, frame.context_digest)
         )
-    )
+    return tuple(bindings)
 
 
 def _assess_and_save(
@@ -718,17 +816,29 @@ def _assess_and_save(
     current = session.current_turn
     assert current is not None
     if session.granted_target is not None:
-        required = {
-            "UPDATE" if proposal.operation == "EDIT" else "CREATE"
-            for proposal in assessment.proposals
-        }
-        missing = sorted(required - set(session.granted_target.permissions))
-        if missing:
-            raise ProfileError(
-                "The BASELINE Grant does not authorize "
-                + " + ".join(missing)
-                + " required by the proposed Meld changes."
-            )
+        if session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION:
+            with authority_grant_snapshot_lock() as registry:
+                revalidate_granted_context_binding(
+                    session.granted_target,
+                    registry=registry,
+                )
+                _validate_owner_aware_grant_permissions(
+                    session,
+                    assessment.proposals,
+                    registry=registry,
+                )
+        else:
+            required = {
+                "UPDATE" if proposal.operation == "EDIT" else "CREATE"
+                for proposal in assessment.proposals
+            }
+            missing = sorted(required - set(session.granted_target.permissions))
+            if missing:
+                raise ProfileError(
+                    "The BASELINE Grant does not authorize "
+                    + " + ".join(missing)
+                    + " required by the proposed Meld changes."
+                )
     session.record_assessment(current.uid, assessment)
     store.save_meld_session(
         session,
@@ -761,9 +871,21 @@ def _materialize_preservation_and_save(
 def _meld_checkpoint_record(
     session: MeldSession,
     change_set,
+    *,
+    owner: tuple[str, str] | None = None,
 ) -> dict[str, object]:
-    return {
-        "schema_version": 2 if session.mode == "DIRECTIONAL" else 1,
+    owner_aware = (
+        session.mode == "DIRECTIONAL"
+        and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
+    )
+    record: dict[str, object] = {
+        "schema_version": (
+            3
+            if owner_aware
+            else 2
+            if session.mode == "DIRECTIONAL"
+            else 1
+        ),
         "session_uid": session.uid,
         "turn_uid": change_set.turn_uid,
         "mode": session.mode,
@@ -777,6 +899,20 @@ def _meld_checkpoint_record(
                 "context_name": frame.context_name,
                 "context_digest": frame.context_digest,
                 "memories": [memory.to_dict() for memory in frame.memories],
+                **(
+                    {"include_descendants": frame.include_descendants}
+                    if owner_aware and frame.include_descendants is not None
+                    else {}
+                ),
+                **(
+                    {
+                        "contexts": [
+                            context.to_dict() for context in frame.contexts
+                        ]
+                    }
+                    if owner_aware and frame.contexts is not None
+                    else {}
+                ),
             }
             for frame in session.frames
         ],
@@ -804,6 +940,16 @@ def _meld_checkpoint_record(
                     if session.mode == "DIRECTIONAL"
                     else {}
                 ),
+                **(
+                    {
+                        "owner_context": {
+                            "uid": proposal.owner_context_uid,
+                            "name": proposal.owner_context_name,
+                        }
+                    }
+                    if proposal.owner_context_uid is not None
+                    else {}
+                ),
                 "memory_uid": proposal.memory_uid,
                 "disposition": proposal.disposition,
                 "content_sha256": hashlib.sha256(
@@ -819,6 +965,10 @@ def _meld_checkpoint_record(
             for proposal in change_set.proposals
         ],
     }
+    if owner is not None:
+        record["owner_context_uid"] = owner[0]
+        record["owner_context_name"] = owner[1]
+    return record
 
 
 def _expected_target_memories(
@@ -847,6 +997,155 @@ def _expected_target_memories(
             position_by_uid[proposal.memory_uid] = len(expected)
             expected.append(candidate)
     return tuple(expected)
+
+
+def _walk_meld_target_contexts(root: Context) -> tuple[Context, ...]:
+    contexts: list[Context] = []
+    seen: set[str] = set()
+
+    def visit(context: Context) -> None:
+        if context.uid in seen:
+            return
+        seen.add(context.uid)
+        contexts.append(context)
+        for item in context.iter_items():
+            if isinstance(item, Context):
+                visit(item)
+
+    visit(root)
+    return tuple(contexts)
+
+
+def _affected_meld_owners(session: MeldSession, change_set) -> tuple[tuple[str, str], ...]:
+    """Return target owners in the frozen BASELINE's canonical scope order."""
+    baseline = session.frames[1]
+    ordered = (
+        tuple((context.uid, context.name) for context in baseline.contexts)
+        if baseline.contexts is not None
+        else ((baseline.context_uid, baseline.context_name),)
+    )
+    requested = {
+        (proposal.owner_context_uid, proposal.owner_context_name)
+        for proposal in change_set.proposals
+    }
+    if not requested:
+        # A zero-change acceptance still needs one durable command checkpoint.
+        requested.add((baseline.context_uid, baseline.context_name))
+    result = tuple(identity for identity in ordered if identity in requested)
+    if len(result) != len(requested):
+        raise MeldCommandError("A Meld proposal owner is outside the BASELINE scope.")
+    return result
+
+
+def _expected_owner_memories(
+    session: MeldSession,
+    change_set,
+) -> dict[tuple[str, str], tuple[Memory, ...]]:
+    baseline = session.frames[1]
+    owner_order = (
+        tuple((context.uid, context.name) for context in baseline.contexts)
+        if baseline.contexts is not None
+        else ((baseline.context_uid, baseline.context_name),)
+    )
+    expected: dict[tuple[str, str], list[Memory]] = {
+        identity: [] for identity in owner_order
+    }
+    for memory in baseline.memories:
+        identity = (
+            memory.owner_context_uid or baseline.context_uid,
+            memory.owner_context_name or baseline.context_name,
+        )
+        if identity not in expected:
+            raise MeldCommandError("A BASELINE Memory has an invalid owner.")
+        expected[identity].append(Memory(uid=memory.uid, content=memory.content))
+    positions = {
+        identity: {memory.uid: index for index, memory in enumerate(memories)}
+        for identity, memories in expected.items()
+    }
+    for proposal in change_set.proposals:
+        identity = (proposal.owner_context_uid, proposal.owner_context_name)
+        if identity not in expected:
+            raise MeldCommandError("A Meld proposal owner is outside the BASELINE scope.")
+        memory = Memory(uid=proposal.memory_uid, content=proposal.content)
+        if proposal.operation == "EDIT":
+            try:
+                positions[identity][proposal.memory_uid]
+            except KeyError as error:
+                raise MeldCommandError(
+                    "A directional Meld EDIT does not belong to its target owner."
+                ) from error
+            expected[identity][positions[identity][proposal.memory_uid]] = memory
+        else:
+            if proposal.memory_uid in positions[identity]:
+                raise MeldCommandError("A directional Meld ADD collides with its owner.")
+            positions[identity][proposal.memory_uid] = len(expected[identity])
+            expected[identity].append(memory)
+    return {identity: tuple(memories) for identity, memories in expected.items()}
+
+
+def _recover_owner_aware_application(
+    *,
+    session: MeldSession,
+    target: Context,
+    change_set,
+    checkpoint_store: MemoryStore,
+    checkpoint_name_by_public: dict[str, str] | None = None,
+) -> tuple[tuple[MeldCheckpointReceipt, ...], tuple[str, ...]] | None:
+    if target.uid != session.target.context_uid or target.name != session.target.context_name:
+        return None
+    contexts = {
+        (context.uid, context.name): context
+        for context in _walk_meld_target_contexts(target)
+    }
+    expected = _expected_owner_memories(session, change_set)
+    owners = _affected_meld_owners(session, change_set)
+    # Recovery proves the complete selected BASELINE post-image, not merely
+    # the owners this proposal happened to change. Otherwise unrelated drift
+    # could be mistaken for a successfully completed prior application.
+    for identity, wanted in expected.items():
+        context = contexts.get(identity)
+        if context is None:
+            return None
+        current = tuple(
+            item for item in context.iter_items() if isinstance(item, Memory)
+        )
+        if [item.uid for item in current] != [item.uid for item in wanted] or [
+            item.content for item in current
+        ] != [item.content for item in wanted]:
+            return None
+    receipts: list[MeldCheckpointReceipt] = []
+    for context_uid, public_name in owners:
+        checkpoint_name = (
+            checkpoint_name_by_public.get(public_name, public_name)
+            if checkpoint_name_by_public is not None
+            else public_name
+        )
+        checkpoint_uid = None
+        for checkpoint in reversed(checkpoint_store.list_checkpoints(checkpoint_name)):
+            args = checkpoint.get("args")
+            record = args.get("meld") if isinstance(args, dict) else None
+            if (
+                checkpoint.get("command") == "meld"
+                and isinstance(record, dict)
+                and record.get("session_uid") == session.uid
+                and record.get("change_set_digest") == change_set.digest
+                and record.get("owner_context_uid") == context_uid
+                and isinstance(checkpoint.get("uid"), str)
+            ):
+                checkpoint_uid = checkpoint["uid"]
+                break
+        if checkpoint_uid is None:
+            return None
+        receipts.append(
+            MeldCheckpointReceipt(
+                context_uid=context_uid,
+                context_name=public_name,
+                checkpoint_uid=checkpoint_uid,
+            )
+        )
+    return tuple(receipts), tuple(
+        proposal.memory_uid for proposal in change_set.proposals
+    )
 
 
 def _recover_application(
@@ -902,6 +1201,481 @@ def _required_directional_target_permissions(change_set) -> tuple[str, ...]:
     return tuple(sorted(required))
 
 
+def _validate_owner_aware_grant_permissions(
+    session: MeldSession,
+    proposals,
+    *,
+    registry,
+) -> None:
+    """Recheck each owner against the most-specific live Grant.
+
+    A recursive root Grant can be narrowed below the root. The frozen root
+    binding therefore cannot authorize every descendant write by itself.
+    """
+    binding = session.granted_target
+    if binding is None:
+        raise MeldCommandError("Expected a granted directional Meld target.")
+    proposal_values = tuple(proposals)
+    required = {
+        "UPDATE" if proposal.operation == "EDIT" else "CREATE"
+        for proposal in proposal_values
+    }
+    missing = sorted(required - set(binding.permissions))
+    if missing:
+        raise ProfileError(
+            "The BASELINE Grant does not authorize "
+            + " + ".join(missing)
+            + " required by the proposed Meld changes."
+        )
+    for proposal in proposal_values:
+        permission = "UPDATE" if proposal.operation == "EDIT" else "CREATE"
+        view = resolve_granted_context_view(
+            proposal.owner_context_name,
+            attachment_name=binding.attachment_context_name,
+            required_permission=permission,
+            registry=registry,
+        )
+        if (
+            view.grant.uid != binding.grant_uid
+            or view.grant.revision != binding.grant_revision
+            or view.authority.uid != binding.authority_profile_uid
+            or view.grantee.uid != binding.grantee_profile_uid
+        ):
+            raise ProfileError(
+                "A planned Meld owner is controlled by a different or "
+                "changed Grant."
+            )
+
+
+def _apply_owner_proposals(
+    direct: Context,
+    proposals,
+) -> Context:
+    post_image = Context.from_dict(direct.to_dict())
+    post_image._store_digest = direct._store_digest
+    for proposal in proposals:
+        memory = Memory(uid=proposal.memory_uid, content=proposal.content)
+        if proposal.operation == "EDIT":
+            post_image.replace(memory)
+        else:
+            if proposal.memory_uid in post_image.memories:
+                raise MeldCommandError(
+                    "A directional Meld ADD collides with an existing owner item."
+                )
+            post_image.add(memory)
+    return post_image
+
+
+def _granted_owner_name(binding, public_name: str) -> str:
+    if not (
+        public_name == binding.public_name
+        or public_name.startswith(binding.public_name + "/")
+    ):
+        raise MeldCommandError(
+            "A directional Meld owner is outside the granted BASELINE namespace."
+        )
+    # The selected public root may be a descendant of the Grant's resource
+    # root. Map relative to the exact frozen endpoint, not the broader Grant.
+    return binding.authority_context_name + public_name[len(binding.public_name) :]
+
+
+def _accept_owner_aware_local(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    expected_session_digest: str,
+) -> tuple[bool, str, int]:
+    """Apply one directional subtree Meld without flattening owner Contexts."""
+    change_set = session.prepare_changes()
+    owners = _affected_meld_owners(session, change_set)
+    owner_proposals = {
+        identity: tuple(
+            proposal
+            for proposal in change_set.proposals
+            if (proposal.owner_context_uid, proposal.owner_context_name) == identity
+        )
+        for identity in owners
+    }
+    local_lock_names: set[str] = {name for _uid, name in owners}
+    for index, frame in enumerate(session.frames):
+        if index == 0 and session.granted_incoming is not None:
+            continue
+        local_lock_names.update(
+            context.name
+            for context in (frame.contexts or ())
+        )
+
+    receipts: tuple[MeldCheckpointReceipt, ...] | None = None
+    recovered_result_uids: tuple[str, ...] = ()
+    recovered_prior = False
+    with store._command_write_lock():
+        store._assert_profile_write_allowed()
+        with store._context_write_locks(local_lock_names):
+            left, right, target = _load_bound_contexts(store, session)
+            _assert_non_target_source_bindings(session, left, right)
+            recovered = _recover_owner_aware_application(
+                session=session,
+                target=target,
+                change_set=change_set,
+                checkpoint_store=store,
+            )
+            if recovered is not None:
+                receipts, recovered_result_uids = recovered
+                recovered_prior = True
+            elif session.state == "APPLIED":
+                raise MeldCommandError(
+                    "The applied Meld receipt no longer matches its target owners."
+                )
+            else:
+                _assert_unapplied_target(session, target)
+                originals: dict[str, dict[str, object]] = {}
+                expected_digests: dict[str, str] = {}
+                post_images: dict[str, Context] = {}
+                for _context_uid, context_name in owners:
+                    direct = store.load_direct(context_name)
+                    originals[context_name] = direct.to_dict()
+                    expected_digests[context_name] = context_record_digest(direct)
+                    post_images[context_name] = _apply_owner_proposals(
+                        direct,
+                        owner_proposals[(_context_uid, context_name)],
+                    )
+                command_contexts = [
+                    {"uid": context_uid, "name": context_name}
+                    for context_uid, context_name in owners
+                ]
+                created: list[MeldCheckpointReceipt] = []
+                written_names: list[str] = []
+                try:
+                    for context_uid, context_name in owners:
+                        checkpoint = store._save_locked(
+                            post_images[context_name],
+                            AutoCheckpoint(
+                                command="meld",
+                                args={
+                                    "meld": _meld_checkpoint_record(
+                                        session,
+                                        change_set,
+                                        owner=(context_uid, context_name),
+                                    ),
+                                    "command_contexts": command_contexts,
+                                },
+                                description=(
+                                    f"Melded INCOMING '{session.frames[0].context_name}' "
+                                    f"into BASELINE subtree '{session.target.context_name}': "
+                                    f"{len(change_set.proposals)} changes"
+                                ),
+                            ),
+                            expected_context_digest=expected_digests[context_name],
+                        )
+                        if checkpoint is None:
+                            raise MeldCommandError(
+                                "Directional Meld application created no checkpoint."
+                            )
+                        written_names.append(context_name)
+                        created.append(
+                            MeldCheckpointReceipt(
+                                context_uid=context_uid,
+                                context_name=context_name,
+                                checkpoint_uid=checkpoint.uid,
+                            )
+                        )
+                except Exception:
+                    rollback_error: Exception | None = None
+                    for context_name in written_names:
+                        try:
+                            _write_json_atomic(
+                                store._context_file(context_name),
+                                originals[context_name],
+                            )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    for receipt in created:
+                        try:
+                            _remove_checkpoint(
+                                store,
+                                receipt.context_name,
+                                receipt.checkpoint_uid,
+                            )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    if rollback_error is not None:
+                        raise RuntimeError(
+                            "Directional Meld failed and its target subtree "
+                            "could not be fully rolled back."
+                        ) from rollback_error
+                    raise
+                receipts = tuple(created)
+                recovered_result_uids = tuple(
+                    proposal.memory_uid for proposal in change_set.proposals
+                )
+
+    assert receipts
+    if session.state == "APPLIED":
+        assert session.application is not None
+        if (
+            session.application.checkpoints != receipts
+            or session.application.result_memory_uids != recovered_result_uids
+        ):
+            raise MeldCommandError(
+                "The applied Meld receipt no longer matches its checkpoints."
+            )
+        return True, receipts[0].checkpoint_uid, len(recovered_result_uids)
+    session.record_application(
+        change_set_digest=change_set.digest,
+        checkpoint_uid=receipts[0].checkpoint_uid,
+        result_memory_uids=recovered_result_uids,
+        checkpoints=receipts,
+    )
+    store.save_meld_session(
+        session,
+        expected_session_digest=expected_session_digest,
+    )
+    return recovered_prior, receipts[0].checkpoint_uid, len(recovered_result_uids)
+
+
+def _accept_owner_aware_granted(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    expected_session_digest: str,
+) -> tuple[bool, str, int]:
+    binding = session.granted_target
+    if binding is None:
+        raise ValueError("Expected a granted directional Meld target.")
+    change_set = session.prepare_changes()
+    owners = _affected_meld_owners(session, change_set)
+    owner_proposals = {
+        identity: tuple(
+            proposal
+            for proposal in change_set.proposals
+            if (proposal.owner_context_uid, proposal.owner_context_name) == identity
+        )
+        for identity in owners
+    }
+
+    with authority_grant_snapshot_lock() as registry:
+        target_access = revalidate_granted_context_binding(
+            binding,
+            registry=registry,
+        )
+        authority_source = target_access.view.authority.source or {}
+        if (
+            target_access.view.authority.name.casefold() == "study-baseline"
+            or authority_source.get("kind") == "STUDY_BASELINE"
+        ):
+            raise MeldCommandError(
+                "The fixed study-baseline Profile cannot be updated."
+            )
+        _validate_owner_aware_grant_permissions(
+            session,
+            change_set.proposals,
+            registry=registry,
+        )
+        source_access = (
+            revalidate_granted_context_binding(
+                session.granted_incoming,
+                registry=registry,
+            )
+            if session.granted_incoming is not None
+            else ContextAccess(
+                store=store,
+                context_name=session.frames[0].context_name,
+                display_name=session.frames[0].context_name,
+                attachment_name=None,
+                permission="READ",
+            )
+        )
+        authority_store = target_access.store
+        source_store = source_access.store
+        target_name_by_public = {
+            context.name: _granted_owner_name(binding, context.name)
+            for context in (session.frames[1].contexts or ())
+        }
+        authority_lock_names = set(target_name_by_public.values())
+        if session.granted_incoming is not None:
+            source_binding = session.granted_incoming
+            source_lock_names = {
+                _granted_owner_name(source_binding, context.name)
+                for context in (session.frames[0].contexts or ())
+            }
+        else:
+            source_lock_names = {
+                context.name for context in (session.frames[0].contexts or ())
+            }
+
+        recovered_prior = False
+        receipts: tuple[MeldCheckpointReceipt, ...] | None = None
+        result_uids: tuple[str, ...] = ()
+        with ExitStack() as locks:
+            if source_store.store_dir != authority_store.store_dir:
+                locks.enter_context(
+                    source_store._context_write_locks(source_lock_names)
+                )
+            locks.enter_context(authority_store._command_write_lock())
+            authority_store._assert_profile_write_allowed()
+            if source_store.store_dir == authority_store.store_dir:
+                authority_lock_names.update(source_lock_names)
+            locks.enter_context(
+                authority_store._context_write_locks(authority_lock_names)
+            )
+
+            left, right, public_target = _load_bound_contexts(
+                store,
+                session,
+                registry=registry,
+            )
+            _assert_non_target_source_bindings(session, left, right)
+            recovered = _recover_owner_aware_application(
+                session=session,
+                target=public_target,
+                change_set=change_set,
+                checkpoint_store=authority_store,
+                checkpoint_name_by_public=target_name_by_public,
+            )
+            if recovered is not None:
+                receipts, result_uids = recovered
+                recovered_prior = True
+            elif session.state == "APPLIED":
+                raise MeldCommandError(
+                    "The applied granted Meld receipt no longer matches "
+                    "the authority BASELINE subtree."
+                )
+            else:
+                _assert_unapplied_target(session, public_target)
+                originals: dict[str, dict[str, object]] = {}
+                expected_digests: dict[str, str] = {}
+                post_images: dict[str, Context] = {}
+                for context_uid, public_name in owners:
+                    authority_name = target_name_by_public[public_name]
+                    direct = authority_store.load_direct(authority_name)
+                    if direct.uid != context_uid:
+                        raise ConcurrentContextUpdateError(
+                            "A granted BASELINE owner identity changed before Meld."
+                        )
+                    originals[authority_name] = direct.to_dict()
+                    expected_digests[authority_name] = context_record_digest(direct)
+                    post_images[authority_name] = _apply_owner_proposals(
+                        direct,
+                        owner_proposals[(context_uid, public_name)],
+                    )
+                physical_contexts = [
+                    {
+                        "uid": context_uid,
+                        "name": target_name_by_public[public_name],
+                    }
+                    for context_uid, public_name in owners
+                ]
+                created: list[tuple[str, MeldCheckpointReceipt]] = []
+                written_names: list[str] = []
+                try:
+                    for context_uid, public_name in owners:
+                        authority_name = target_name_by_public[public_name]
+                        checkpoint = authority_store._save_locked(
+                            post_images[authority_name],
+                            AutoCheckpoint(
+                                command="meld",
+                                args={
+                                    "meld": _meld_checkpoint_record(
+                                        session,
+                                        change_set,
+                                        owner=(context_uid, public_name),
+                                    ),
+                                    "authority_target_context_name": (
+                                        binding.authority_context_name
+                                    ),
+                                    "authority_owner_context_name": authority_name,
+                                    "authority_grant": binding.to_dict(),
+                                    "command_contexts": physical_contexts,
+                                },
+                                description=(
+                                    f"Melded INCOMING '{session.frames[0].context_name}' "
+                                    f"into granted BASELINE subtree "
+                                    f"'{session.target.context_name}': "
+                                    f"{len(change_set.proposals)} changes"
+                                ),
+                            ),
+                            expected_context_digest=expected_digests[authority_name],
+                        )
+                        if checkpoint is None:
+                            raise MeldCommandError(
+                                "Granted Meld application created no checkpoint."
+                            )
+                        written_names.append(authority_name)
+                        created.append(
+                            (
+                                authority_name,
+                                MeldCheckpointReceipt(
+                                    context_uid=context_uid,
+                                    context_name=public_name,
+                                    checkpoint_uid=checkpoint.uid,
+                                ),
+                            )
+                        )
+                    receipts = tuple(receipt for _name, receipt in created)
+                    result_uids = tuple(
+                        proposal.memory_uid for proposal in change_set.proposals
+                    )
+                    session.record_application(
+                        change_set_digest=change_set.digest,
+                        checkpoint_uid=receipts[0].checkpoint_uid,
+                        result_memory_uids=result_uids,
+                        checkpoints=receipts,
+                    )
+                    store.save_meld_session(
+                        session,
+                        expected_session_digest=expected_session_digest,
+                    )
+                except Exception:
+                    rollback_error: Exception | None = None
+                    for authority_name in written_names:
+                        try:
+                            _write_json_atomic(
+                                authority_store._context_file(authority_name),
+                                originals[authority_name],
+                            )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    for authority_name, receipt in created:
+                        try:
+                            _remove_checkpoint(
+                                authority_store,
+                                authority_name,
+                                receipt.checkpoint_uid,
+                            )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    if rollback_error is not None:
+                        raise RuntimeError(
+                            "Granted Meld failed and its authority BASELINE "
+                            "subtree could not be fully rolled back."
+                        ) from rollback_error
+                    raise
+
+        assert receipts
+        if recovered_prior:
+            if session.state == "APPLIED":
+                assert session.application is not None
+                if (
+                    session.application.checkpoints != receipts
+                    or session.application.result_memory_uids != result_uids
+                ):
+                    raise MeldCommandError(
+                        "The granted Meld receipt no longer matches its checkpoints."
+                    )
+            else:
+                session.record_application(
+                    change_set_digest=change_set.digest,
+                    checkpoint_uid=receipts[0].checkpoint_uid,
+                    result_memory_uids=result_uids,
+                    checkpoints=receipts,
+                )
+                store.save_meld_session(
+                    session,
+                    expected_session_digest=expected_session_digest,
+                )
+        return recovered_prior, receipts[0].checkpoint_uid, len(result_uids)
+
+
 def _accept_granted_directional(
     *,
     store: MemoryStore,
@@ -919,6 +1693,12 @@ def _accept_granted_directional(
     binding = session.granted_target
     if session.mode != "DIRECTIONAL" or binding is None:
         raise ValueError("Expected a granted directional Meld target.")
+    if session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION:
+        return _accept_owner_aware_granted(
+            store=store,
+            session=session,
+            expected_session_digest=expected_session_digest,
+        )
     change_set = session.prepare_changes()
     required_permissions = _required_directional_target_permissions(change_set)
 
@@ -1118,6 +1898,15 @@ def _accept(
                     expected_session_digest=expected_session_digest,
                     _granted_source_locked=True,
                 )
+    if (
+        session.mode == "DIRECTIONAL"
+        and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
+    ):
+        return _accept_owner_aware_local(
+            store=store,
+            session=session,
+            expected_session_digest=expected_session_digest,
+        )
     change_set = session.prepare_changes()
     left, right, direct_target = _load_bound_contexts(store, session)
     # After a directional application the BASELINE frame intentionally differs
@@ -1596,7 +2385,7 @@ def _start_new_meld_from_picker(store: MemoryStore) -> None:
             left=left,
             into=right,
             left_descendants=receipt.left_descendants,
-            right_descendants=False,
+            right_descendants=receipt.right_descendants,
         )
         return
 
@@ -1787,7 +2576,10 @@ def cmd(
         bool,
         typer.Option(
             "--right-descendants/--right-only",
-            help="Include all readable descendants under symmetric PEER B",
+            help=(
+                "Include readable descendants under PEER B, or writable "
+                "owner Contexts under directional BASELINE B"
+            ),
         ),
     ] = False,
 ) -> None:
@@ -1849,14 +2641,6 @@ def cmd(
         typer.secho(
             "Meld error: --to creates a symmetric result and cannot be "
             "combined with directional --into or --from.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if right_descendants and (into is not None or from_ is not None):
-        typer.secho(
-            "Meld error: directional BASELINE descendants are not supported; "
-            "B is the direct mutation target.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -1981,6 +2765,8 @@ def cmd(
             if left_descendants:
                 start_parts.append("--left-descendants")
             start_parts.extend(("--into", right_name))
+            if right_descendants:
+                start_parts.append("--right-descendants")
         else:
             start_parts = ["mem", "meld", left_name]
             if left_descendants:
@@ -2100,24 +2886,28 @@ def cmd(
                 _load_meld_source(
                     left_access,
                     include_descendants=left_descendants,
+                    project=requested_mode != "DIRECTIONAL",
                 )
                 if left_access is not None
                 else _load_local_meld_source(
                     store,
                     left_name,
                     include_descendants=left_descendants,
+                    project=requested_mode != "DIRECTIONAL",
                 )
             )
             right_ctx = (
                 _load_meld_source(
                     right_access,
                     include_descendants=right_descendants,
+                    project=requested_mode != "DIRECTIONAL",
                 )
                 if right_access is not None
                 else _load_local_meld_source(
                     store,
                     right_name,
                     include_descendants=right_descendants,
+                    project=requested_mode != "DIRECTIONAL",
                 )
             )
             if requested_mode == "DIRECTIONAL":
@@ -2125,7 +2915,7 @@ def cmd(
                     left_ctx,
                     right_ctx,
                     incoming_descendants=left_descendants,
-                    baseline_descendants=False,
+                    baseline_descendants=right_descendants,
                     granted_incoming=(
                         freeze_granted_context_binding(left_access)
                         if left_access is not None and left_access.is_granted
@@ -2242,24 +3032,28 @@ def cmd(
                     _load_meld_source(
                         left_access,
                         include_descendants=left_descendants,
+                        project=False,
                     )
                     if left_access is not None
                     else _load_local_meld_source(
                         store,
                         left_name,
                         include_descendants=left_descendants,
+                        project=False,
                     )
                 )
                 right_ctx = (
                     _load_meld_source(
                         right_access,
                         include_descendants=right_descendants,
+                        project=False,
                     )
                     if right_access is not None
                     else _load_local_meld_source(
                         store,
                         right_name,
                         include_descendants=right_descendants,
+                        project=False,
                     )
                 )
             if requested_mode == "DIRECTIONAL":
@@ -2267,7 +3061,7 @@ def cmd(
                     left_ctx,
                     right_ctx,
                     incoming_descendants=left_descendants,
-                    baseline_descendants=False,
+                    baseline_descendants=right_descendants,
                     granted_incoming=(
                         freeze_granted_context_binding(left_access)
                         if left_access is not None and left_access.is_granted

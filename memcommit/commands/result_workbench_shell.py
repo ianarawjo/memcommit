@@ -21,8 +21,10 @@ from memcommit.commands.tui_primitives import (
     TuiRegion,
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    bind_case_insensitive_key,
     bind_focused_frame_style,
     build_tui_frame,
+    dispatch_tui_back,
     require_interactive_terminal,
     safe_terminal_text,
 )
@@ -417,16 +419,27 @@ def run_result_workbench_shell(
             status["value"] = f"Cannot open case: {error}"
         event.app.invalidate()
 
-    @bindings.add("escape", filter=has_focus(body_control))
-    @bindings.add("backspace", filter=has_focus(body_control))
-    def _collapse(event) -> None:
+    def _collapse_detail(_event) -> bool:
+        if expanded["detail"] is None:
+            return False
         collapse()
-        event.app.invalidate()
 
-    @bindings.add("q", filter=has_focus(body_control), eager=True)
+        return True
+
+    def close(event) -> None:
+        event.app.exit(result=view)
+
+    @bindings.add("escape", filter=has_focus(body_control), eager=True)
+    @bindings.add("backspace", filter=has_focus(body_control), eager=True)
+    def _back_or_close(event) -> None:
+        dispatch_tui_back(event, _collapse_detail, close=close)
+
+    @bind_case_insensitive_key(
+        bindings, "q", filter=has_focus(body_control), eager=True
+    )
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
-        event.app.exit(result=view)
+        close(event)
 
     footer = Window(
         FormattedTextControl(
@@ -434,8 +447,8 @@ def run_result_workbench_shell(
                 f" {status['value']}"
                 if status["value"]
                 else (
-                    " ↑/↓ section  Enter expand case  Esc/Backspace collapse  "
-                    "Q quit · read-only "
+                    " ↑/↓ section  Enter expand case  "
+                    "Esc/Backspace back or close  Q quit · read-only "
                 )
             )
         ),

@@ -8,11 +8,14 @@ import memcommit.ops as ops
 import pytest
 from memcommit.context import Memory
 from memcommit.search import SearchCandidate, rank_candidates
+from memcommit.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 from memcommit.translate import plan_translation
 
 
 def _large_text(marker: str) -> str:
-    return marker + " " + ("x" * 60_000)
+    return marker + " " + (
+        "x" * (SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT // 4 + 10_000)
+    )
 
 
 class FirstFindCandidateProvider:
@@ -152,7 +155,13 @@ def test_forget_revision_cannot_bypass_whole_frame_budget_with_large_history():
     ops.add(ctx, "Keep this Memory.")
     first = KeepForgetLLM()
     _changes, history = ops.forget(ctx, "Forget nothing here.", first)
-    history.insert(0, {"role": "system", "content": "x" * 400_001})
+    history.insert(
+        0,
+        {
+            "role": "system",
+            "content": "x" * (SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT + 1),
+        },
+    )
     forbidden = KeepForgetLLM()
 
     with pytest.raises(ValueError, match="review history exceed"):

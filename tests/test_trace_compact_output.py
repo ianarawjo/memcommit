@@ -8,6 +8,8 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.commands import trace as trace_command
+from memcommit.commands import trace_projection
+from memcommit.commands.trace_projection import trace_history_entries
 from memcommit.provenance import MemoryState, TraceEvent, TraceReport
 
 
@@ -116,6 +118,59 @@ def test_default_trace_is_newest_first_with_explicit_scope_and_endpoints(
     assert "first wording” → [11111111]@1 “current wording" in rows[0]
     assert "CREATED" in rows[1]
     assert "∅ → [11111111]@1 “first wording”" in rows[1]
+
+
+def test_trace_operations_project_into_the_common_history_items_viewer(
+    monkeypatch,
+):
+    original = _state(SELECTED_UID, "first wording")
+    current = _state(SELECTED_UID, "current wording")
+    report = _report(
+        originals=(original,),
+        current=(current,),
+        events=(
+            _event(
+                "CREATED",
+                timestamp="2026-07-30T11:31:00Z",
+                command="add",
+                checkpoint_uid=CREATE_CHECKPOINT_UID,
+                after=(original,),
+            ),
+            _event(
+                "EDITED",
+                timestamp="2026-08-01T09:15:00Z",
+                command="edit",
+                checkpoint_uid=EDIT_CHECKPOINT_UID,
+                before=(original,),
+                after=(current,),
+            ),
+        ),
+    )
+    entries = trace_history_entries(report)
+    observed: dict[str, object] = {}
+    monkeypatch.setattr(
+        trace_projection,
+        "choose_history",
+        lambda projected, **kwargs: observed.update(
+            entries=projected,
+            kwargs=kwargs,
+        ),
+    )
+
+    trace_projection.open_trace_history(
+        report,
+        context_name="public/notes",
+        require_tty=False,
+    )
+
+    assert [entry.command for entry in entries] == ["mem edit", "mem add"]
+    assert entries[0].uid == EDIT_CHECKPOINT_UID
+    assert "BEFORE:" in entries[0].detail
+    assert "AFTER:" in entries[0].detail
+    assert observed["entries"] == entries
+    assert observed["kwargs"]["mode"] == "log"
+    assert observed["kwargs"]["context_name"] == "public/notes"
+    assert observed["kwargs"]["title"] == "TRACE · MEMORY [11111111]"
 
 
 def test_restore_that_removes_lineage_is_one_forward_transition_to_empty(
@@ -283,7 +338,11 @@ def test_json_keeps_structured_events_in_chronological_order(
         ),
     )
 
-    monkeypatch.setattr(trace_command, "build_trace", lambda *_args: report)
+    monkeypatch.setattr(
+        trace_command,
+        "build_memory_history",
+        lambda *_args: report,
+    )
 
     result = runner.invoke(app, ["trace", SELECTED_UID, "--json"])
 

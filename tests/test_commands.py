@@ -922,22 +922,24 @@ class TestList:
         context_index = next(
             index
             for index, line in enumerate(lines)
-            if "[context " in line and line.endswith("] aaa/ab")
+            if "[context " in line and line.endswith("aaa/ab  VIA EMBED")
         )
         first_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory  " in line and line.endswith("] aaa")
+            if "[memory " in line and line.endswith("] aaa")
         )
         reference_index = next(
             index
             for index, line in enumerate(lines)
-            if "[ref     " in line and "Referenced atomic name." in line
+            if "[memory ref " in line
+            and "READ ONLY" in line
+            and "Referenced atomic name." in line
         )
         last_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory  " in line
+            if "[memory " in line
             and line.endswith("] Last atomic name.")
         )
         assert context_index < first_memory_index < reference_index < last_memory_index
@@ -962,29 +964,30 @@ class TestList:
         child_index = next(
             index
             for index, line in enumerate(lines)
-            if "[context " in line and line.endswith("] child")
+            if "[context " in line and line.endswith("child  VIA EMBED")
         )
         grandchild_index = next(
             index
             for index, line in enumerate(lines)
-            if "[context " in line and line.endswith("] grandchild")
+            if "[context " in line
+            and line.endswith("grandchild  VIA EMBED")
         )
         grandchild_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory  " in line
+            if "[memory " in line
             and line.endswith("] Grandchild memory.")
         )
         child_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory  " in line
+            if "[memory " in line
             and line.endswith("] Child memory.")
         )
         parent_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory  " in line
+            if "[memory " in line
             and line.endswith("] Parent memory.")
         )
         assert (
@@ -1017,12 +1020,12 @@ class TestList:
         alpha_index = next(
             index
             for index, line in enumerate(recursive_lines)
-            if "[context " in line and line.endswith("] alpha")
+            if "[context " in line and line.endswith("alpha  VIA EMBED")
         )
         beta_index = next(
             index
             for index, line in enumerate(recursive_lines)
-            if "[context " in line and line.endswith("] beta")
+            if "[context " in line and line.endswith("beta  VIA EMBED")
         )
         assert recursive_lines[alpha_index - 1] == ""
         assert recursive_lines[alpha_index - 2] != ""
@@ -1033,9 +1036,9 @@ class TestList:
         direct_beta_index = next(
             index
             for index, line in enumerate(direct_lines)
-            if "[context " in line and line.endswith("] beta")
+            if "[context " in line and line.endswith("beta  VIA EMBED")
         )
-        assert direct_lines[direct_beta_index - 1].endswith("] alpha")
+        assert direct_lines[direct_beta_index - 1].endswith("alpha  VIA EMBED")
 
     def test_recursive_long_option_matches_short_option(self, isolated_store):
         invoke("init", "child")
@@ -1280,7 +1283,7 @@ class TestBranch:
             "memcommit.commands.branch.choose_branch_creation",
             lambda *args, **kwargs: BranchCreationReceipt(
                 source_name="source",
-                new_name="experiment",
+                target_name="experiment",
             ),
         )
 
@@ -1322,7 +1325,7 @@ class TestBranch:
             "memcommit.commands.branch.choose_branch_creation",
             lambda *args, **kwargs: BranchCreationReceipt(
                 source_name="source",
-                new_name="feature",
+                target_name="feature",
             ),
         )
 
@@ -1331,6 +1334,33 @@ class TestBranch:
         assert result.exit_code == 0
         assert store.context_exists("feature")
         assert store.current_context_name() == "feature"
+
+    def test_bare_branch_refuses_an_existing_empty_target(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        invoke("init", "source")
+        invoke("add", "source-only")
+        invoke("init", "empty")
+        empty_uid = MemoryStore().load_direct("empty").uid
+        invoke("switch", "source")
+        monkeypatch.setattr(
+            "memcommit.commands.branch.choose_branch_creation",
+            lambda *args, **kwargs: BranchCreationReceipt(
+                source_name="source",
+                target_name="empty",
+            ),
+        )
+
+        result = invoke("branch")
+
+        assert result.exit_code == 1
+        assert "already exists" in result.stderr
+        target = MemoryStore().load_direct("empty")
+        assert target.uid == empty_uid
+        assert list(target.memories.values()) == []
+        assert MemoryStore().current_context_name() == "source"
 
     def test_bare_branch_requires_a_terminal_without_an_explicit_name(
         self,
@@ -1398,7 +1428,7 @@ class TestMerge:
         invoke("init", "tgt")
         result = invoke("merge", "src")
         assert result.exit_code == 0
-        assert "2 memories" in result.output
+        assert "added 2 memories" in result.output
 
     def test_merge_nothing_new_when_already_merged(self, isolated_store):
         invoke("init", "src")
@@ -1526,14 +1556,14 @@ class TestStatus:
         result = invoke("status")
         assert result.exit_code == 0
         assert "On context: ctx" in result.output
-        assert "2 memories" in result.output
+        assert "Memories 2" in result.output
 
     def test_shows_checkpoint_count(self, isolated_store):
         invoke("init", "ctx")
         invoke("add", "a memory")
         result = invoke("status")
         # init + add = 2 auto-checkpoints
-        assert "2 checkpoints" in result.output
+        assert "Checkpoints 2" in result.output
 
     def test_shows_no_memories_message_when_empty(self, isolated_store):
         invoke("init", "ctx")
@@ -1711,7 +1741,7 @@ class TestCheckout:
             "memcommit.commands.branch.choose_branch_creation",
             lambda *args, **kwargs: BranchCreationReceipt(
                 source_name="main",
-                new_name="feature",
+                target_name="feature",
             ),
         )
 

@@ -235,3 +235,35 @@ def test_profile_picker_keeps_study_authorities_with_their_tasks():
     assert "Task 1 · pilot-001-task-1" in rendered
     assert "Authority 1 · pilot-001-task-1-campus-authority" in rendered
     assert "Task 2 · pilot-001-task-2" in rendered
+
+
+def test_profile_picker_labels_current_init_study_pair():
+    entries = (
+        ENTRIES[0],
+        ProfilePickerEntry(
+            name="pilot-current",
+            context_count=65,
+            memory_count=457,
+            current_context="task-1/participant",
+            study_name="pilot-current",
+            study_created_at="2026-08-09T20:34:05+00:00",
+            study_role="PARTICIPANT",
+        ),
+        ProfilePickerEntry(
+            name="renamed-authority",
+            context_count=75,
+            memory_count=625,
+            current_context="task-1/campus-wiki",
+            study_name="pilot-current",
+            study_created_at="2026-08-09T20:34:05+00:00",
+            study_role="GRANTED_MEMORY",
+        ),
+    )
+
+    rendered = _visible_text(
+        _render_profile_options(entries, selected=1, current="pilot-current")
+    )
+
+    assert rendered.count("STUDY pilot-current") == 1
+    assert "Participant · pilot-current" in rendered
+    assert "Granted memory · renamed-authority" in rendered

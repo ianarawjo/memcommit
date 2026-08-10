@@ -32,7 +32,7 @@ Moving through Items immediately previews the selected report or item in
 Viewer while keyboard focus remains in Items. This prevents a stale detail
 from remaining above a newly selected row. `Enter` transfers focus into that
 already aligned Viewer so the person can navigate its semantic sections or
-open nested choices.
+open nested detail content.
 Callers perform arrow movement through the controller's combined
 `move_and_preview_row` transition so the Items cursor and Viewer projection
 cannot drift apart between two command-local state updates. The transition is
@@ -40,7 +40,7 @@ presentation-only: it neither changes pane focus nor persists, calls a
 provider, or interprets the row. Operation adapters still own projection-side
 cleanup such as closing transient detail, loading a response draft, or
 constructing an exact mutation receipt.
-History Log, Diff, and Revert use the same cursor/preview transition.
+History Log, Trace, Diff, and Revert use the same cursor/preview transition.
 Log-style Enter opens the aligned Viewer, while Revert deliberately keeps
 Enter as selection of the displayed exact checkpoint UID. Previewing a Revert
 row therefore does not weaken or bypass its later mutation receipt boundary.
@@ -68,13 +68,29 @@ proposal, `APPLY AS IS` when the adapter declares open findings or reviews,
 or an incorporation action when saved responses are not yet part of the
 proposal. OPTIONAL reviews remain selectable in Items but do not gate this
 transition, and the final review reports how many remain open.
+When a non-applying session has operation-authored whole-set strategies, both
+the Report `RESOLVE ALL` stop and the `TO DO · RESOLVE ALL` control enter the
+same non-mutating final-review surface directly. They must not use the former
+two-step behavior in which To Do only refocused Report and Report Enter then
+redrew itself. The `RESOLVE ALL` review shows the shared summary, the selectable
+strategy policy, and one final action; only Enter on that final action returns
+the selected operation-authored action.
 Because this is a confirmation boundary rather than another report/detail
 view, its outer frame omits the `VIEWER` label. It opens at the top
 `REVIEW AND APPLY` summary inside Viewer so the viewport and keyboard focus do
 not remain on the lower `TO DO` handoff. Down moves through any policy card to
-the exact final action; Enter there runs only that disclosed action. Forward
-Tab follows `Viewer → Items → To Do` and Shift-Tab reverses it; merely passing
-through Items must not close the final review.
+the exact final action; the next Down crosses into Items without closing or
+applying the review, and Enter on the action runs only that disclosed action.
+Each of the summary, policy, and final-action cards is one semantic stop, and
+focus fills the complete card rather than only its first border row. Enter on
+the summary is the explicit non-applying return action. The shell snapshots the
+entry pane, Viewer kind, row, and stable section UID before opening review, so
+that Enter, Escape, and Backspace all restore the same exact origin rather than
+guessing that Items or the start of Report was intended. If an old process-local
+state has no origin snapshot, the stable Report action is the compatibility
+fallback.
+Forward Tab follows `Viewer → Items → To Do` and Shift-Tab reverses it; merely
+passing through Items must not close the final review.
 Selecting or opening an Items row intentionally returns to ordinary report or
 item content. Escape or Backspace returns without applying.
 Non-applying resolution sessions expose their whole-set resolution there
@@ -133,15 +149,21 @@ The shared interaction grammar is:
 - `Up` and `Down` move one row or semantic Viewer section in the focused frame;
   while Viewer has focus, held-arrow repeats use the shared navigation
   accelerator and still visit every intermediate semantic section;
+- at the first or last internal stop, another `Up` or `Down` crosses to the
+  adjacent visible frame through the shared Surface controller; unlike Tab,
+  arrow traversal does not wrap at the top or bottom of the screen;
 - `PageUp` and `PageDown` move eight semantic stops in the focused frame;
 - `Home` and `End` move to the first or last stop;
 - `B`, `Escape`, or `Backspace` unwinds a detail to the report/Items state; and
-- `Q` closes without implying a semantic response or application.
+- `q` or `Q` closes without implying a semantic response or application.
 
 Escape and Backspace are equivalent back-navigation keys throughout session
 reading surfaces. When no shallower presentation layer remains, they follow
 that surface's existing Escape close behavior. Backspace remains ordinary text
 deletion while a composer or another writable input has focus.
+The close shortcut is deliberately case-insensitive across terminal screens so
+Shift and Caps Lock cannot change its meaning. Existing focus filters remain
+authoritative, so neither form is intercepted inside writable input.
 
 Every focused detail card places its hidden viewport anchor after the closing
 border rather than at the heading. This prevents a lower card such as Meld's
@@ -167,6 +189,17 @@ Escape, or Backspace returns to section navigation. A source-frame/claim
 heading remains attached to the first Memory in that group. The item kind,
 ordinal, title, status, and review-set counts remain visible as non-focusable
 report chrome, so opening an actionable detail starts on Classification.
+
+The complete Report follows the same reviewability rule. One actionable
+finding is one stable stop containing its title, priority/summary paragraph,
+and clarification question. Focus fills all three parts together while the
+title keeps the bold report-label treatment and the explanatory paragraphs use
+the non-bold Viewer-body treatment. Up/Down therefore advances by problem, not
+by the visual paragraphs that explain one problem, and Enter opens the one
+corresponding Items target. A report-level action likewise keeps its heading
+and explanatory paragraph in one stop because they jointly describe a single
+transition; both lines receive focus so the available action is not represented
+by an isolated highlighted heading.
 
 Compact technical refs use the shared purple reference style rather than the
 blue focus color. When a ref denotes an individual proposed Memory and its
@@ -196,11 +229,12 @@ choices into Response or leaving the frame restores that cursor to the checked
 choice when one exists; returning to the frame must not preserve a stale hover
 over a different reading.
 
-Choices use the shared Meld-style cards. The focused card receives the heavy
-blue border, a durable staged selection carries `✓` and the retained fill, and
-the hidden viewport anchor follows the focused card's closing border. Reopening
-a durable draft restores the option cursor to that checked row; otherwise the
-screen would advertise one selection while Enter acts on another. This
+Choices reuse the shared flat selection state but render as unboxed stacked
+rows in Responses. The focused label and description receive the blue fill,
+only the label becomes bold, and a durable staged selection carries `✓` and
+the retained fill. The hidden viewport anchor follows the complete row group.
+Reopening a durable draft restores the option cursor to that checked row;
+otherwise the screen would advertise one selection while Enter acts on another. This
 interaction belongs to the common Resolution Session Responses frame, so Meld,
 Sever, Update, Atomize, and adaptive Review do not define divergent controls.
 
@@ -216,6 +250,10 @@ offers `INCORPORATE AND APPLY`: one explicit approval reanalyzes the complete
 reviewed response set and then enters the normal validated application path.
 The final surface states this compound behavior and Escape/Backspace returns
 without either step. Responses itself never incorporates or applies.
+When a ready final proposal has no reviewable issues, the review summary says
+that no open responses remain and omits a meaningless `0/0 ANSWERED` count.
+This describes the current proposal only; it does not invent a historical count
+of responses that an operation adapter did not preserve.
 
 Opening an item's Response keeps the current item visible. The writable field
 is a persistent inner box within the independent Responses frame rather than a

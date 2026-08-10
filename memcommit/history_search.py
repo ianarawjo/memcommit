@@ -18,13 +18,14 @@ from memcommit.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     plan_semantic_execution,
 )
 
 
-HISTORY_SEARCH_CORPUS_CHAR_LIMIT = 200_000
+HISTORY_SEARCH_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 HISTORY_SEARCH_RESPONSE_CHAR_LIMIT = 50_000
 HISTORY_SEARCH_TEXT_LIMIT = 2_000
 

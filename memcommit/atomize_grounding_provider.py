@@ -47,6 +47,7 @@ from memcommit.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
     json_budget,
     plan_semantic_execution,
@@ -54,10 +55,8 @@ from memcommit.semantic_execution import (
 
 
 ATOMIZE_GROUNDING_PAYLOAD_MARKER = "ATOMIZE GROUNDING TURN PAYLOAD:\n"
-ATOMIZE_GROUNDING_INPUT_CHAR_LIMIT = 400_000
+ATOMIZE_GROUNDING_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 ATOMIZE_GROUNDING_RESPONSE_CHAR_LIMIT = 1_000_000
-ATOMIZE_GROUNDING_ITEM_LIMIT = 200
-ATOMIZE_GROUNDING_UNDERSTANDING_LIMIT = 50
 ATOMIZE_GROUNDING_KEY_LIMIT = 100
 
 ATOMIZE_GROUNDING_EXECUTION_POLICY = SemanticExecutionPolicy(
@@ -65,7 +64,6 @@ ATOMIZE_GROUNDING_EXECUTION_POLICY = SemanticExecutionPolicy(
     strategy=ExecutionStrategy.BLOCK_RELATIONS,
     one_shot_limits=BudgetLimits(
         max_input_chars=ATOMIZE_GROUNDING_INPUT_CHAR_LIMIT,
-        max_items=ATOMIZE_GROUNDING_ITEM_LIMIT,
     ),
     staged_supported=False,
 )
@@ -609,19 +607,21 @@ def _build_provider_view(
 
 def _reference_schema(
     *,
-    max_items: int,
+    max_items: int | None = None,
     enum: list[str] | None = None,
     min_items: int = 0,
 ) -> dict[str, object]:
     item: dict[str, object] = {"type": "string"}
     if enum:
         item["enum"] = enum
-    return {
+    schema: dict[str, object] = {
         "type": "array",
         "minItems": min_items,
-        "maxItems": max_items,
         "items": item,
     }
+    if max_items is not None:
+        schema["maxItems"] = max_items
+    return schema
 
 
 def atomize_grounding_output_schema(
@@ -657,12 +657,8 @@ def atomize_grounding_output_schema(
         "minLength": 1,
         "maxLength": ATOMIZE_GROUNDING_KEY_LIMIT,
     }
-    proposal_refs = _reference_schema(
-        max_items=ATOMIZE_GROUNDING_ITEM_LIMIT,
-    )
-    question_refs = _reference_schema(
-        max_items=ATOMIZE_GROUNDING_ITEM_LIMIT,
-    )
+    proposal_refs = _reference_schema()
+    question_refs = _reference_schema()
     issue_refs = _reference_schema(
         max_items=max(1, len(issue_ids)),
         enum=issue_ids,
@@ -810,7 +806,6 @@ def atomize_grounding_output_schema(
             "active_understanding": {
                 "type": "array",
                 "minItems": 0,
-                "maxItems": ATOMIZE_GROUNDING_UNDERSTANDING_LIMIT,
                 "items": text,
             },
             "answered_prior_question_ids": _reference_schema(
@@ -825,20 +820,15 @@ def atomize_grounding_output_schema(
             },
             "follow_ups": {
                 "type": "array",
-                "maxItems": ATOMIZE_GROUNDING_ITEM_LIMIT,
                 "items": follow_up,
             },
             "edits": {
                 "type": "array",
-                "maxItems": min(
-                    len(view.memory_by_id),
-                    ATOMIZE_GROUNDING_ITEM_LIMIT,
-                ),
+                "maxItems": len(view.memory_by_id),
                 "items": edit,
             },
             "additions": {
                 "type": "array",
-                "maxItems": ATOMIZE_GROUNDING_ITEM_LIMIT,
                 "items": addition,
             },
             "ready_to_apply": {"type": "boolean"},
@@ -982,12 +972,6 @@ def _parse_assessment(
         data["active_understanding"],
         "active understanding",
     )
-    if not 0 <= len(understanding_values) <= (
-        ATOMIZE_GROUNDING_UNDERSTANDING_LIMIT
-    ):
-        raise AtomizeGroundingProviderError(
-            "Codex atomize grounding returned invalid active understanding."
-        )
     active_understanding = tuple(
         _string(item, "active understanding")
         for item in understanding_values
@@ -1046,16 +1030,7 @@ def _parse_assessment(
     raw_follow_ups = _array(data["follow_ups"], "follow-ups")
     raw_edits = _array(data["edits"], "edits")
     raw_additions = _array(data["additions"], "additions")
-    if (
-        len(raw_follow_ups) > ATOMIZE_GROUNDING_ITEM_LIMIT
-        or len(raw_edits) > min(
-            len(view.memory_by_id),
-            ATOMIZE_GROUNDING_ITEM_LIMIT,
-        )
-        or len(raw_additions) > ATOMIZE_GROUNDING_ITEM_LIMIT
-        or len(raw_edits) + len(raw_additions)
-        > ATOMIZE_GROUNDING_ITEM_LIMIT
-    ):
+    if len(raw_edits) > len(view.memory_by_id):
         raise AtomizeGroundingProviderError(
             "Codex atomize grounding returned too many records."
         )

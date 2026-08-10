@@ -20,6 +20,7 @@ from memcommit.commands.tui_primitives import (
     NavigationAccelerator,
     SEMANTIC_VIEWER_STYLE,
     WrappedScrollbarMargin,
+    bind_case_insensitive_key,
     display_escape_text,
     navigable_tree_row_prefix,
 )
@@ -32,6 +33,14 @@ from memcommit.context_targeting.tui.tree import (
     expandable_context_subtree,
     visible_context_rows,
 )
+from memcommit.source_projection.model import SourceDisplayFacts, SourceState
+from memcommit.source_projection.presentation import (
+    SourceDisplayValue,
+    normalize_source_display_tokens,
+    source_annotation_tokens,
+    source_object_label,
+)
+from memcommit.source_projection.tui import render_source_display_tokens
 
 
 _CONTEXT_NAVIGATION_HINT = " ↑↓ move  ←→ expand  "
@@ -58,6 +67,7 @@ class ContextMemoryRow:
     content: str
     style: Literal["memory-object", "report-neutral"] = "memory-object"
     selector: str | None = None
+    source: SourceDisplayFacts | None = None
 
 
 @dataclass(frozen=True)
@@ -89,7 +99,7 @@ def render_context_options(
     *,
     selected: str,
     current: str | None,
-    annotations: Mapping[str, str] | None = None,
+    annotations: Mapping[str, SourceDisplayValue] | None = None,
     memories_by_context: Mapping[str, Sequence[ContextMemoryRow]] | None = None,
     show_memories: bool = False,
     visible_memory_contexts: AbstractSet[str] | None = None,
@@ -130,14 +140,10 @@ def render_context_options(
             else "·"
         )
         annotation = (annotations or {}).get(row.name)
+        if annotation is None and not row.materialized:
+            annotation = SourceDisplayFacts(states=(SourceState.UNAVAILABLE,))
+        annotation_tokens = normalize_source_display_tokens(annotation)
         display_name = (display_names or {}).get(row.name, row.name)
-        suffix = (
-            "  " + annotation
-            if annotation is not None
-            else "  [unavailable]"
-            if not row.materialized
-            else ""
-        )
         # Keep raw names in the tree for identity and return only an escaped
         # label to prompt-toolkit; selection never returns presentation text.
         fragments.append(
@@ -149,9 +155,17 @@ def render_context_options(
                     depth=row.depth,
                     branch=branch,
                 )
-                + f"{display_escape_text(display_name)}{suffix}",
+                + display_escape_text(display_name),
             )
         )
+        if annotation_tokens:
+            fragments.append((style, "  "))
+            fragments.extend(
+                render_source_display_tokens(
+                    annotation_tokens,
+                    override_style=style,
+                )
+            )
         if memory_is_visible and row.materialized:
             memories = (memories_by_context or {}).get(row.name, ())
             for memory_index, memory in enumerate(memories):
@@ -167,30 +181,59 @@ def render_context_options(
                 memory_pointer = (
                     "›" if selectable_memories and memory_is_focused else "·"
                 )
+                object_label = (
+                    source_object_label(memory.source)
+                    if memory.source is not None
+                    else ""
+                )
+                display_label = (
+                    f"{object_label} " if object_label else ""
+                ) + memory.label
+                memory_annotations = (
+                    source_annotation_tokens(memory.source)
+                    if memory.source is not None
+                    else ()
+                )
                 leading = (
                     "  " * (row.depth + 1)
-                    + f"{memory_pointer} [{display_escape_text(memory.label)}] "
+                    + f"{memory_pointer} [{display_escape_text(display_label)}] "
+                )
+                annotation_width = get_cwidth(
+                    " · ".join(token.text for token in memory_annotations)
+                    + (" · " if memory_annotations else "")
                 )
                 content_lines = _wrap_memory_preview(
                     display_escape_text(memory.content),
                     available_width=(
                         None
                         if wrap_width is None
-                        else max(1, wrap_width - get_cwidth(leading))
+                        else max(
+                            1,
+                            wrap_width - get_cwidth(leading) - annotation_width,
+                        )
                     ),
                 )
-                fragments.append(
-                    (
-                        memory_style,
-                        leading + content_lines[0],
+                if not memory_annotations:
+                    fragments.append((memory_style, leading + content_lines[0]))
+                else:
+                    fragments.append((memory_style, leading))
+                    fragments.extend(
+                        render_source_display_tokens(
+                            memory_annotations,
+                            override_style=(
+                                memory_style if memory_is_focused else ""
+                            ),
+                        )
                     )
-                )
+                    fragments.append((memory_style, " · "))
+                    fragments.append((memory_style, content_lines[0]))
                 for continuation in content_lines[1:]:
                     fragments.append(("", "\n"))
                     fragments.append(
                         (
                             memory_style,
-                            " " * get_cwidth(leading) + continuation,
+                            " " * (get_cwidth(leading) + annotation_width)
+                            + continuation,
                         )
                     )
         if index < len(rows) - 1:
@@ -328,10 +371,10 @@ def choose_context(
     names: Sequence[str],
     *,
     current: str | None,
-    local_annotations: Mapping[str, str] | None = None,
+    local_annotations: Mapping[str, SourceDisplayValue] | None = None,
     virtual_names: Sequence[str] = (),
     selectable_virtual_names: AbstractSet[str] = frozenset(),
-    virtual_annotations: Mapping[str, str] | None = None,
+    virtual_annotations: Mapping[str, SourceDisplayValue] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -369,8 +412,16 @@ def choose_context(
         raise ValueError("Selectable virtual Contexts are invalid.")
     if set(local_labels) - set(options):
         raise ValueError("Local Context annotations are invalid.")
-    if set(virtual_annotations or {}) - set(virtual) or any(
-        not isinstance(label, str) or not label for label in annotations.values()
+    try:
+        annotations_are_valid = all(
+            bool(normalize_source_display_tokens(value))
+            for value in annotations.values()
+        )
+    except (TypeError, ValueError):
+        annotations_are_valid = False
+    if (
+        set(virtual_annotations or {}) - set(virtual)
+        or not annotations_are_valid
     ):
         raise ValueError("Virtual Context annotations are invalid.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
@@ -643,7 +694,7 @@ def choose_context(
             state.expand_selected()
         event.app.invalidate()
 
-    @bindings.add("q", eager=True)
+    @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("escape")
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:

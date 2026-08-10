@@ -1,0 +1,7 @@
+$ mem ls -R task-1
+  [DESCENDANT · CONTEXT a63350c9] task-1/campus-wiki
+    [VIA EMBED · CONTEXT 91ee5b65] task-1/campus-wiki/building-access
+      [MEMORY 1cb2aa88] The Main Building third-floor rear entrance may be used for general passage
+                        during regular opening hours in both the academic term and recess.
+      [MEMORY a8b11b27] The Main Building main entrance is on the first floor.
+      [MEMORY 62214c26] The Main Building rear entrance on the opposite side of the sloping site is

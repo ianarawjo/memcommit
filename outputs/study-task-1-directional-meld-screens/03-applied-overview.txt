@@ -1,0 +1,22 @@
+MEM MELD · DIRECTIONAL
+INCOMING task-1/participant/construction-updates → BASELINE / TARGET task-1/campus-wiki
+SCOPE · A SELECTED + ALL DESCENDANTS · B SELECTED + ALL DESCENDANTS
+State: APPLIED · Round: 1
+
+WHAT MEM UNDERSTOOD
+The construction evidence forms six condition-scoped overlays on the standing campus guidance. Baseline knowledge remains unchanged, while complete temporary guidance is added for each affected area. Optional questions allow later consolidation with baseline memories without blocking this preservation-first meld.
+
+RELATIONS · 6  ISSUES · 6  RESULTS · 6
+
+ACCOUNTING
+  Source coverage: 75/375
+  Relation coverage: 6/6
+  Final Memories: 6 · PRESERVE 0 · COALESCE 0 · SYNTHESIZE 6 · USER_ADD 0
+  Open issues: REQUIRED 0 · HELPFUL 6
+  Cross-relation results: 0
+  ✓ R1. SCOPED · Construction-period access restrictions and temporary routes overlay the standing Main Bu…
+  ✓ R2. SCOPED · Construction-period venue closures, reservation restrictions, alternatives, and loading c…
+  ✓ R3. SCOPED · Construction-period garage and Lot A closures, controlled exceptions, storage use, and Lo…
+  ✓ R4. SCOPED · Construction-period amenity closures, substitute locations, hours, and recommendation lim…
+  ✓ R5. SCOPED · The dated summer construction overlay temporarily changes elevators, visitor services, re…
+  ✓ R6. SCOPED · Construction-period route closures and designated accessible alternatives overlay the nor…

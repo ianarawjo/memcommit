@@ -361,17 +361,19 @@ def test_ls_sorts_immediate_children_before_current_memories(isolated_store):
     from_index = next(
         index
         for index, line in enumerate(direct_lines)
-        if line.endswith("] test/update/from")
+        if "[context " in line
+        and line.endswith("test/update/from  DESCENDANT")
     )
     to_index = next(
         index
         for index, line in enumerate(direct_lines)
-        if line.endswith("] test/update/to")
+        if "[context " in line
+        and line.endswith("test/update/to  DESCENDANT")
     )
     summary_index = next(
         index
         for index, line in enumerate(direct_lines)
-        if "[memory  " in line
+        if "[memory " in line
         and line.endswith("] Current summary.")
     )
     assert from_index < to_index < summary_index

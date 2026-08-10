@@ -89,6 +89,7 @@ def capture_paste(
     def _finish(event) -> None:
         event.app.exit(result=captured_text())
 
+    @bindings.add("escape", eager=True)
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)
     def _cancel(event) -> None:
@@ -105,7 +106,7 @@ def capture_paste(
         noun = "line" if count == 1 else "lines"
         status = (
             f"[{count} {noun} pasted]  "
-            f"F2/Ctrl-D: review  Ctrl-C: cancel"
+            f"F2/Ctrl-D: review  Esc/Ctrl-C: cancel"
         )
         return [
             (

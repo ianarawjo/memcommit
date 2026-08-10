@@ -67,15 +67,20 @@ crossing into Response or leaving the frame restores the choice cursor to the
 checked UID when one exists. Returning therefore acts on the durable selection
 rather than a stale exploratory row without changing the stored draft.
 
-Decision choices use the service-wide Meld-style selection cards rather than a
-Response-specific radio-row renderer. The staged value carries `✓`; the current
-keyboard target carries the heavy blue border, and descriptions wrap in stacked
-full-width cards. `SelectionOption` and `FlatSelectionState` own the flat cursor
-and checked-value mechanics while the Response adapter retains draft and
-persistence meaning. See `docs/selection-control-design-rationale.md`.
-The focused card owns the frame's effective viewport anchor, placed after its
-closing border; the surrounding Decision presentation must not emit an earlier
-anchor that masks the exact row.
+Decision choices reuse the service-wide flat selection state but project it as
+unboxed stacked rows in Responses. The current label line receives the blue
+focus fill and bold text; its wrapped description receives the same fill
+without bold so explanatory prose does not become another heading. A staged
+value carries `✓`, including after keyboard focus moves away. The hidden
+viewport anchor follows the complete focused row group. `SelectionOption` and
+`FlatSelectionState` continue to own cursor and checked-value mechanics while
+the Response adapter retains draft and persistence meaning. See
+`docs/selection-control-design-rationale.md`.
+
+The nested Response box must remain neutral while a choice row owns focus.
+Bind its dynamic chrome before the outer Responses frame and reset inherited
+text style at the inner boundary; otherwise the outer focused frame makes both
+the choice and Response box appear active simultaneously.
 
 ## Operation adapters
 

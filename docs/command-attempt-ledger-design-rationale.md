@@ -18,6 +18,9 @@ ledger/command-attempts/ATTEMPT_UID.json
 
 This is an execution audit ledger, not a replacement for Context checkpoints,
 semantic sessions, provider-evaluation ledgers, or Undo/Redo receipts.
+Current Profiles created by `mem init-study` additionally use the narrower,
+content-free detailed telemetry described in
+`docs/study-action-ledger-design-rationale.md`; ordinary Profiles do not.
 
 ## Lifecycle contract
 
@@ -72,6 +75,10 @@ selects the Profile command-attempt ledger and prints recent attempts with
 status and elapsed time. The currently executing log invocation is omitted
 from its own output but becomes visible on the next inspection. Sever rows add
 their bounded frame and provider diagnostics.
+
+`mem log --actions` is a separate current-Study-only view. It uses the generic
+attempt UID to correlate command lifecycle with terminal, provider, and
+review-action phases without changing the all-Profile attempt schema.
 
 ## Alternatives and limitations
 

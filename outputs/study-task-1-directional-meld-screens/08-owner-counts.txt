@@ -1,0 +1,18 @@
+POST-APPLY OWNER VERIFICATION
+Context: task-1/campus-wiki/building-access
+  Memories 51  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Context: task-1/campus-wiki/event-relocations
+  Memories 51  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Context: task-1/campus-wiki/temporary-parking
+  Memories 51  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Context: task-1/campus-wiki/shop-updates
+  Memories 51  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Context: task-1/campus-wiki/facility-updates
+  Memories 51  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Context: task-1/campus-wiki/route-changes
+  Memories 51  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0

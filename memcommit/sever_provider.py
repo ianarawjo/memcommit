@@ -140,7 +140,6 @@ def analyze_sever(
             "text": {"type": "string"},
             "source_memory_ids": {
                 "type": "array",
-                "maxItems": 5,
                 "items": {
                     "type": "string",
                     "enum": list(source_aliases.values()),
@@ -148,7 +147,6 @@ def analyze_sever(
             },
             "criterion_memory_ids": {
                 "type": "array",
-                "maxItems": 5,
                 "items": {
                     "type": "string",
                     "enum": list(criterion_aliases.values()),
@@ -186,8 +184,8 @@ def analyze_sever(
         "natural-language paragraph explaining the main kinds of material changes or "
         "preservation decisions and which Criteria drove them, like a WHAT CHANGED "
         "summary rather than a count report. In application_summary.source_memory_ids, "
-        "cite up to five representative Source Memories that were transformed or "
-        "forgotten. In application_summary.criterion_memory_ids, cite up to five "
+        "cite representative Source Memories that were transformed or "
+        "forgotten. In application_summary.criterion_memory_ids, cite the "
         "Criteria Memories that materially drove those cited changes. Use empty arrays "
         "when nothing changed. Do not use bullets or headings inside either paragraph. "
         "Do not use tools, filesystem, "
