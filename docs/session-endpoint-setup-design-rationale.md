@@ -284,9 +284,11 @@ continues to own all consequential checks:
   and target and rechecks both frozen inputs. Descendant B is deliberately
   unavailable until materialization can preserve each child owner instead of
   moving child Memories into the root baseline.
-- Symmetric Meld requires the saved ordered Compare analysis with the exact
-  same A/B scope flags, rechecks both peers, and verifies that C is distinct,
-  eligible, empty/session-free when existing, or atomically creatable when new.
+- Symmetric Meld requires an exact durable ordered Compare analysis with the
+  same A/B scope flags. It reuses a fresh basis or prepares and saves one from
+  the frozen receipt itself, then rechecks both peers and verifies that C is
+  distinct, eligible, empty/session-free when existing, or atomically
+  creatable when new.
 - Sever freezes its independently scoped Source and Criteria projections and
   requires a new Output at its established application boundary.
 

@@ -32,6 +32,7 @@ from memcommit.commands.endpoint_setup_flows import (
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.derived_policy import analysis_retention, authorize_analysis_save
 from memcommit.granted_comparison_store import (
+    granted_comparison_analysis_path,
     load_granted_comparison_artifact,
 )
 from memcommit.meld_provider import MELD_PAYLOAD_MARKER
@@ -1457,6 +1458,39 @@ def test_analysis_retention_uses_weakest_granted_storage_mode(
     assert analysis_retention((source_access, granted_access)) == "GRANT_BOUND"
 
 
+def test_symmetric_meld_requires_durable_grant_basis_before_provider(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=(
+            "READ",
+            "DERIVE",
+            "COMBINE",
+            "EXPORT",
+        ),
+    )
+    active.set_current(source.name)
+    result_name = "participant/unsavable-meld"
+    monkeypatch.setattr(
+        "memcommit.commands.meld.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("provider must not run without analysis retention"),
+    )
+
+    result = runner.invoke(
+        app,
+        ["meld", source.name, wiki.name, "--to", result_name],
+    )
+
+    assert result.exit_code == 1
+    assert "SAVE_ANALYSIS or SAVE_BOUND_ANALYSIS" in result.stderr
+    assert not active.context_exists(result_name)
+
+
 def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     isolated_store,
     tmp_path,
@@ -1525,6 +1559,15 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     assert [entry.key for entry in saved_entries] == [artifact.analysis.uid]
     assert saved_entries[0].title == f"{source.name} ↔ {wiki.name}"
 
+    # Symmetric Meld owns the same exact-basis creation path. Removing the
+    # isolated test artifact proves the setup does not depend on a separate
+    # Compare command or a hidden current-Context switch.
+    granted_comparison_analysis_path(active, source.uid, wiki.uid).unlink()
+    monkeypatch.setattr(
+        "memcommit.commands.meld.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+
     target = ops.init("participant-meld")
     active.save(target)
     active.set_current(target.name)
@@ -1544,6 +1587,10 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
         ),
     )
     meld_command._start_new_meld_from_picker(active)
+    assert calls == 2
+    meld_artifact = load_granted_comparison_artifact(active, source.uid, wiki.uid)
+    assert meld_artifact is not None
+    assert meld_artifact.retention == "RETAINED"
 
     melded = runner.invoke(app, ["meld", source.name, wiki.name])
 

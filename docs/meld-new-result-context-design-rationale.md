@@ -30,8 +30,9 @@ The two options cannot be combined.
 ## Invariants
 
 - Both peer sources must exist and be distinct from each other and the result.
-- The exact ordered Compare analysis must already exist and still match both
-  sources before the result is created.
+- The command must obtain an exact fresh ordered Compare analysis matching
+  both sources and scope flags. It reuses a durable basis when available and
+  otherwise creates and saves one before publishing the result.
 - The result name must not already identify a Context. `--to` never adopts or
   overwrites an existing Context.
 - The result is empty until an explicitly accepted Meld proposal is applied.
@@ -46,8 +47,10 @@ The two options cannot be combined.
 Automatically running `mem init RESULT_CONTEXT`, switching globally, and then
 invoking the old symmetric command would reproduce the visible outcome but
 would expose intermediate global state and leave an empty Context if the Meld
-preconditions failed. Keeping result creation inside Meld makes the intended
-three-frame operation explicit and allows failure before publication.
+preconditions failed. Hidden switching also would not change the active
+Profile that owns analysis and result artifacts. Keeping basis preparation and
+result creation inside Meld makes the intended three-frame operation explicit
+and allows a Compare/provider/retention failure before target publication.
 
 ## Compatibility boundary
 

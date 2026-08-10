@@ -576,6 +576,33 @@ def test_compare_explicit_from_does_not_change_current_context(
     assert store.current_context_name() == orientation.name
 
 
+def test_compare_explicit_endpoints_work_without_current_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+    store._write_state({"current": None})
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        [
+            "compare",
+            "--from",
+            reference.name,
+            "--to",
+            compared.name,
+            "--snapshot",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert len(provider.payloads) == 1
+    assert store.current_context_name() is None
+
+
 def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
     isolated_store,
 ):

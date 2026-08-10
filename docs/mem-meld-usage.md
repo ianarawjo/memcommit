@@ -304,45 +304,45 @@ mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
 
 That form would name a distinct result for a symmetric meld and would not make
 either peer authoritative. Reusing `--to` for directional mutation now would
-make those two contracts indistinguishable. Until explicit symmetric result
-selection is implemented, symmetric meld continues to use the current empty
-Context as its target.
+make those two contracts indistinguishable. Omitting `--to` retains the
+compatibility form in which the current empty Context is the result target.
 
 ## Symmetric Context meld: combine two equal-authority Contexts
 
-### 1. Compare the peers in the intended display order
+### 1. Start with explicit sources and a result
 
 ```bash
-mem switch LEFT_PEER
-mem compare --to RIGHT_PEER
+mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
 ```
 
-This saved `LEFT_PEER → RIGHT_PEER` analysis is the exact read-only basis for
-the Meld. The reverse Compare slot is deliberately different and is not used
-as a fallback. If either source changes, rerun the command with `--refresh`
-before starting or restarting the Meld.
+Meld freezes the exact `LEFT_PEER → RIGHT_PEER` order and descendant flags.
+It reuses a matching fresh Compare basis or creates and saves that basis itself
+before publishing the new Result Context and session. The reverse Compare slot
+is deliberately different and is never used as a fallback. Missing or stale
+analysis does not require changing the current Context.
 
-### 2. Create and enter an empty result Context
+To inspect the same basis separately first, use the fully explicit Compare
+form; it also leaves the current Context unchanged:
+
+```bash
+mem compare --from LEFT_PEER --to RIGHT_PEER
+```
+
+### 2. Compatibility form with an existing current result
+
+An existing empty current Context can still supply the result:
 
 ```bash
 mem init RESULT_CONTEXT
-```
-
-The current Context is the target. It must be empty. Neither peer source is
-mutated.
-
-### 3. Start or resume the symmetric meld
-
-```bash
 mem meld LEFT_PEER RIGHT_PEER
 ```
 
-The first invocation imports the exact Compare overview, relation ledger, and
-grounding candidates without another provider call. It preserves their frame,
-relation, issue, and option identities in the target-bound Meld session but
-does not treat inspection as permission to create target Memories. In a
-terminal this opens the interactive workbench. Repeating the same command
-resumes the saved session. Outside a terminal it prints the saved snapshot.
+The first invocation reuses or prepares the exact Compare overview, relation
+ledger, and grounding candidates. It preserves their frame, relation, issue,
+and option identities in the target-bound Meld session but does not treat
+inspection as permission to create target Memories. In a terminal this opens
+the interactive workbench. Repeating the same command resumes the saved
+session. Outside a terminal it prints the saved snapshot.
 
 The primary controls are:
 

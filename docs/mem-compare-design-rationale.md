@@ -58,9 +58,12 @@ save a granted Compare result but have no route back to it from bare
 mode and never broadens its source grant.
 
 The active Context is the display reference and `--to` names the compared
-Context when `--from` is omitted. The shared New setup may instead select both
-A and B without switching the active Context; it invokes the same explicit
-`--from REFERENCE --to PEER` endpoint contract. Both sources have equal
+Context when `--from` is omitted. When both `--from REFERENCE` and `--to PEER`
+are supplied as canonical names, Compare does not require any current Context
+and never changes one that exists. A current snapshot is needed only for an
+omitted reference or an explicitly relative locator. The shared New setup may
+select both A and B without switching the active Context; it invokes the same
+explicit endpoint contract. Both sources have equal
 authority. `REFERENCE` controls layout and navigation only; it is not a
 baseline and does not win a disagreement.
 
@@ -175,21 +178,22 @@ silently entering an unchecked analysis.
 
 ## Compare-to-Meld handoff
 
-A new symmetric Meld now requires the exact current ordered Compare slot for
-its two sources and the exact same descendant-scope pair. `mem meld LEFT RIGHT`
-loads only `LEFT → RIGHT`; it never
-silently substitutes `RIGHT → LEFT`, because the two saved slots deliberately
-retain observable presentation-order effects. A missing, stale, invalid, or
-older-ruleset analysis fails before a Meld provider is connected or a session
-is created and prints the commands needed to refresh the exact basis.
+A new symmetric Meld always consumes the exact current ordered Compare slot
+for its two sources and the exact same descendant-scope pair. `mem meld LEFT
+RIGHT` loads only `LEFT → RIGHT`; it never silently substitutes `RIGHT →
+LEFT`, because the two saved slots deliberately retain observable
+presentation-order effects. A fresh slot is reused provider-free. A missing,
+stale, differently scoped, or older-ruleset slot is regenerated and saved
+through the same shared Compare execution path before the Meld session is
+created. An invalid stored artifact still fails closed.
 
-The handoff is provider-free. The new Meld session embeds the complete
-`ComparisonAnalysis`, its canonical digest, and the same frame, relation,
-issue, and option identities. Its initial assessment is the inspected Compare
-overview, ledger, and grounding candidates with no target proposals and no
-readiness authority. The first issue or whole-set response becomes the first
-Meld semantic call; that grounded turn may then revise relationships and
-produce exact target Memories.
+The fresh-slot handoff is provider-free. The new Meld session embeds the
+complete `ComparisonAnalysis`, its canonical digest, and the same frame,
+relation, issue, and option identities. Its initial assessment is the
+inspected Compare overview, ledger, and grounding candidates with no target
+proposals and no readiness authority. The first issue or whole-set response
+becomes the first Meld semantic call; that grounded turn may then revise
+relationships and produce exact target Memories.
 
 Embedding the full basis instead of storing only a pointer is intentional.
 Compare retains only the latest ordered analysis and deletes pair artifacts

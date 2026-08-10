@@ -29,10 +29,10 @@ from memcommit.comparison import (
 )
 from memcommit.comparison_provider import (
     COMPARISON_PAYLOAD_MARKER,
+    ComparisonProviderError,
     analyze_comparison,
 )
 from memcommit.comparison_store import (
-    comparison_analysis_path,
     load_comparison_analysis,
     save_comparison_analysis,
 )
@@ -294,9 +294,13 @@ class Task2Provider:
 class Task2CompareProvider:
     """Deterministic read-only basis for the Task 2 Meld tests."""
 
+    def __init__(self):
+        self.payloads: list[dict[str, object]] = []
+
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "compare_contexts"
         payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+        self.payloads.append(payload)
         reference_id = payload["frames"][0]["memories"][0]["memory_id"]
         compared_id = payload["frames"][1]["memories"][0]["memory_id"]
         return json.dumps(
@@ -1678,7 +1682,7 @@ def test_undo_and_redo_restore_meld_application_state_as_one_operation(
     assert store.load_meld_session(target.uid).state == "READY_TO_APPLY"
 
 
-def test_symmetric_meld_requires_saved_compare_before_provider_connection(
+def test_symmetric_meld_creates_missing_compare_without_switching_current(
     isolated_store,
     monkeypatch,
 ):
@@ -1688,39 +1692,38 @@ def test_symmetric_meld_requires_saved_compare_before_provider_connection(
         with_comparison=False,
     )
 
-    def unexpected_provider_factory():
-        raise AssertionError("Meld connected a provider before Compare.")
-
+    provider = Task2CompareProvider()
     monkeypatch.setattr(
         "memcommit.commands.meld.connect_codex_chatgpt_provider",
-        unexpected_provider_factory,
+        lambda: provider,
     )
-    target_before = store._context_file(target.name).read_bytes()
+    current_before = store.current_context_name()
 
     result = runner.invoke(app, ["meld", left.name, right.name])
 
-    assert result.exit_code == 1
-    assert "requires a saved Compare analysis" in result.output
-    assert f"mem switch {left.name}" in result.output
-    assert f"mem compare --to {right.name}" in result.output
-    assert f"mem switch {target.name}" in result.output
-    assert store.load_meld_session(target.uid) is None
-    assert store._context_file(target.name).read_bytes() == target_before
+    assert result.exit_code == 0, result.output
+    assert len(provider.payloads) == 1
+    analysis = load_comparison_analysis(left.uid, right.uid)
+    assert analysis is not None
+    session = store.load_meld_session(target.uid)
+    assert session is not None
+    assert session.comparison_seed is not None
+    assert session.comparison_seed.analysis.uid == analysis.uid
+    assert store.current_context_name() == current_before
 
 
-def test_symmetric_meld_rejects_stale_or_reverse_only_compare(
+def test_symmetric_meld_refreshes_stale_compare(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
     left, right, target = _task2_contexts(store)
-
-    def unexpected_provider_factory():
-        raise AssertionError("Meld connected a provider for an invalid basis.")
-
+    prior = load_comparison_analysis(left.uid, right.uid)
+    assert prior is not None
+    provider = Task2CompareProvider()
     monkeypatch.setattr(
         "memcommit.commands.meld.connect_codex_chatgpt_provider",
-        unexpected_provider_factory,
+        lambda: provider,
     )
     changed = store.load_direct(left.name)
     memory = next(iter(changed.iter_items()))
@@ -1734,22 +1737,42 @@ def test_symmetric_meld_rejects_stale_or_reverse_only_compare(
 
     stale = runner.invoke(app, ["meld", left.name, right.name])
 
-    assert stale.exit_code == 1
-    assert "is stale" in stale.output
-    assert "--refresh" in stale.output
-    assert store.load_meld_session(target.uid) is None
+    assert stale.exit_code == 0, stale.output
+    assert len(provider.payloads) == 1
+    refreshed = load_comparison_analysis(left.uid, right.uid)
+    assert refreshed is not None
+    assert refreshed.uid != prior.uid
+    session = store.load_meld_session(target.uid)
+    assert session is not None
+    assert session.comparison_seed is not None
+    assert session.comparison_seed.analysis.uid == refreshed.uid
 
-    fresh_left = store.load_direct(left.name)
-    comparison_analysis_path(left.uid, right.uid).unlink()
-    _save_task2_comparison(store, right, fresh_left)
-    reverse_only = runner.invoke(
-        app,
-        ["meld", left.name, right.name],
+
+def test_symmetric_meld_creates_exact_order_when_only_reverse_exists(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store, with_comparison=False)
+    reverse = _save_task2_comparison(store, right, left)
+    provider = Task2CompareProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.meld.connect_codex_chatgpt_provider",
+        lambda: provider,
     )
 
-    assert reverse_only.exit_code == 1
-    assert "requires a saved Compare analysis" in reverse_only.output
-    assert store.load_meld_session(target.uid) is None
+    result = runner.invoke(app, ["meld", left.name, right.name])
+
+    assert result.exit_code == 0, result.output
+    assert len(provider.payloads) == 1
+    forward = load_comparison_analysis(left.uid, right.uid)
+    assert forward is not None
+    assert forward.uid != reverse.uid
+    assert load_comparison_analysis(right.uid, left.uid).uid == reverse.uid
+    session = store.load_meld_session(target.uid)
+    assert session is not None
+    assert session.comparison_seed is not None
+    assert session.comparison_seed.analysis.uid == forward.uid
 
 
 def test_seeded_meld_schema_round_trips_and_rejects_tampering(
@@ -2302,8 +2325,47 @@ def test_symmetric_meld_to_creates_empty_result_without_switching(
     }
 
 
+def test_symmetric_meld_to_creates_missing_basis_and_result_without_switching(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, _ = _task2_contexts(store, with_comparison=False)
+    current = ops.init("task-3/orientation")
+    store.create_context(current)
+    store.set_current(current.name)
+    result_name = "task-2/participant/proposal-workspace2"
+    provider = Task2CompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        [
+            "meld",
+            left.name,
+            right.name,
+            "--left-descendants",
+            "--to",
+            result_name,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert len(provider.payloads) == 1
+    assert store.current_context_name() == current.name
+    analysis = load_comparison_analysis(left.uid, right.uid)
+    assert analysis is not None
+    assert analysis.include_descendants == (True, False)
+    created = store.load_direct(result_name)
+    session = store.load_meld_session(created.uid)
+    assert session is not None
+    assert session.comparison_seed is not None
+    assert session.comparison_seed.analysis.uid == analysis.uid
+
+
 def test_symmetric_meld_to_never_adopts_existing_or_leaves_failed_target(
     isolated_store,
+    monkeypatch,
 ):
     store = MemoryStore()
     left, right, existing = _task2_contexts(store, with_comparison=False)
@@ -2316,15 +2378,22 @@ def test_symmetric_meld_to_never_adopts_existing_or_leaves_failed_target(
     assert "already exists" in occupied.output
     assert store.load_meld_session(existing.uid) is None
 
+    class FailingCompareProvider:
+        def complete(self, *args, **kwargs):
+            raise ComparisonProviderError("comparison basis failed")
+
+    monkeypatch.setattr(
+        "memcommit.commands.meld.connect_codex_chatgpt_provider",
+        lambda: FailingCompareProvider(),
+    )
     missing_name = "task-2/participant/missing-compare-result"
     missing_compare = runner.invoke(
         app,
         ["meld", left.name, right.name, "--to", missing_name],
     )
     assert missing_compare.exit_code == 1
-    assert "requires a saved Compare analysis" in missing_compare.output
+    assert "comparison basis failed" in missing_compare.output
     assert not store.context_exists(missing_name)
-    assert f"--to {missing_name}" in missing_compare.output
 
 
 def test_directional_meld_from_rejects_ambiguous_or_missing_baseline(
@@ -2397,7 +2466,7 @@ def test_defer_all_is_provider_free_and_does_not_mutate_target(
     assert store.list_checkpoints(target.name) == []
 
 
-def test_deferred_session_restart_requires_exact_ordered_compare_basis(
+def test_deferred_session_restart_creates_exact_ordered_compare_basis(
     isolated_store,
     monkeypatch,
 ):
@@ -2416,24 +2485,17 @@ def test_deferred_session_restart_requires_exact_ordered_compare_basis(
     deferred = store.load_meld_session(target.uid)
     assert deferred is not None
 
-    failed = runner.invoke(
-        app,
-        ["meld", right.name, left.name, "--restart"],
-    )
-    assert failed.exit_code == 1
-    assert "requires a saved Compare analysis" in failed.output
-    still_deferred = store.load_meld_session(target.uid)
-    assert still_deferred is not None
-    assert still_deferred.uid == deferred.uid
-
-    reverse = _save_task2_comparison(store, right, left)
+    compare_provider = Task2CompareProvider()
+    _patch_provider(monkeypatch, compare_provider)
     restarted = runner.invoke(
         app,
         ["meld", right.name, left.name, "--restart"],
     )
 
     assert restarted.exit_code == 0, restarted.output
-    assert len(provider.payloads) == 0
+    assert len(compare_provider.payloads) == 1
+    reverse = load_comparison_analysis(right.uid, left.uid)
+    assert reverse is not None
     replacement = store.load_meld_session(target.uid)
     assert replacement is not None
     assert replacement.uid != deferred.uid
@@ -3495,6 +3557,68 @@ def test_initial_meld_wait_view_shows_report_shape_and_confirmed_inputs():
     assert "wait/incoming" in context_view.text
     assert "wait/baseline" in context_view.text
     assert "FROZEN MEMORIES · 1" in context_view.text
+
+
+def test_symmetric_basis_wait_view_shows_sources_and_unchanged_result():
+    left = ops.init("wait/advisor1")
+    right = ops.init("wait/advisor2")
+    ops.add(left, "Left fact.")
+    ops.add(right, "Right fact.")
+    comparison_input = ComparisonInput.from_contexts(
+        left,
+        right,
+        reference_descendants=True,
+    )
+
+    view = meld_command._symmetric_comparison_wait_context_view(
+        comparison_input,
+        target_name="wait/proposal-workspace",
+    )
+
+    assert view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
+    assert "REFERENCE A · wait/advisor1" in view.text
+    assert "PEER B · wait/advisor2" in view.text
+    assert "RESULT C · wait/proposal-workspace" in view.text
+    assert "TARGET STATE · UNCHANGED WHILE COMPARE RUNS" in view.text
+    assert "INCLUDE DESCENDANTS" in view.text
+
+
+def test_symmetric_basis_wait_opens_on_operands_before_report_shape(monkeypatch):
+    left = ops.init("wait/advisor1")
+    right = ops.init("wait/advisor2")
+    ops.add(left, "Pay CAD 20–30 per hour, including travel time.")
+    ops.add(right, "Allow cash, e-transfer, or a gift card.")
+    comparison_input = ComparisonInput.from_contexts(left, right)
+    calls = []
+
+    class Progress:
+        def update(self, stage, *, step):
+            calls.append(("UPDATE", stage, step))
+
+    def run_wait(operation, stage, *, total, work, return_view, context_view):
+        assert return_view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
+        assert "RESULT C · wait/proposal-workspace" in return_view.text
+        assert context_view.title == "MELD REPORT · BUILDING"
+        calls.append(("WAIT", operation, stage, total))
+        return work(Progress())
+
+    monkeypatch.setattr(meld_command, "run_command_wait", run_wait)
+    monkeypatch.setattr(
+        meld_command,
+        "connect_codex_chatgpt_provider",
+        Task2CompareProvider,
+    )
+
+    analysis = meld_command._analyze_symmetric_comparison_basis(
+        comparison_input,
+        target_name="wait/proposal-workspace",
+    )
+
+    assert analysis.matches(left, right)
+    assert calls == [
+        ("WAIT", "MELD", "preparing ordered Compare basis", 2),
+        ("UPDATE", "analyzing ordered source relations", 2),
+    ]
 
 
 def test_meld_wait_view_styles_memory_objects_without_tinting_report_prose():

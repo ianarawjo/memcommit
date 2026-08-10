@@ -436,6 +436,12 @@ sha256: 6f5a89ed97369ca98f482b5f317a6c58ad91f0477e18c5f7cee0f7369d04926a
      mem meld task-2/advisor1 task-2/advisor2
    ```
 
+   This is retained as the exact historical observation. A later
+   implementation change replaced that separate-command prerequisite:
+   symmetric Meld now prepares and saves the exact ordered Compare basis from
+   its frozen A/B receipt without switching the current Context. See
+   `docs/mem-meld-design-rationale.md`.
+
 9. No disclosed prerequisite command was run. A final read-only
    `mem profile current` instead established that the shared global active
    Profile had changed to `study-20260810T000728Z-54da735c`, whose current

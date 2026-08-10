@@ -28,10 +28,12 @@ mem meld --from INCOMING
 Both save a resumable relation ledger and workbench, accept issue-scoped or
 whole-set comments, support preserve-all and provider-free defer, and apply an
 exact ready proposal only after explicit acceptance through the TUI's `A`
-action or the `--accept` option. Symmetric Meld imports its initial ordered
-ledger and candidate issues provider-free from an exact fresh
-`ComparisonAnalysis`; the first user grounding turn is its first semantic
-Meld call. Directional Meld still performs one authority-specific aggregate
+action or the `--accept` option. Symmetric Meld reuses an exact fresh ordered
+`ComparisonAnalysis` provider-free. When that basis is missing, stale, scoped
+differently, or from an older ruleset, the same Meld command runs and durably
+saves the exact `LEFT → RIGHT` Compare before it creates a target-bound
+session; the first user grounding turn remains the first semantic Meld call.
+Directional Meld still performs one authority-specific aggregate
 materialization call, but when an exact current ordered
 `INCOMING → BASELINE` Compare artifact exists it freezes that reviewed relation
 ledger as the call's basis instead of asking Meld to classify the pair again.
@@ -71,6 +73,48 @@ exact ordered Compare UID, source UIDs and digests, grant combination and
 derived-transfer policy, and target state before it creates the target-bound
 session. A new target and its initial Meld session are written through the
 same atomic store boundary; the picker itself never creates a Context.
+
+### Automatic exact-basis preparation
+
+The explicit symmetric command is also complete on its own:
+
+```text
+mem meld LEFT_PEER RIGHT_PEER --to NEW_RESULT
+```
+
+The active Context is orientation and a relative-locator base, not a hidden
+fourth operand. Meld therefore never implements this command by switching to
+LEFT, invoking Compare, and switching back. Such a sequence would mutate
+process-external navigation state, race with other terminals, and still would
+not change the active Profile in which analysis and result artifacts belong.
+
+Instead Meld freezes both source locators and descendant flags from one
+command-start current-name snapshot. It reuses only the exact fresh
+`LEFT → RIGHT` slot. A missing, stale, differently scoped, or older-ruleset
+slot is regenerated through the same Compare execution component and saved in
+the active Profile under the same local or Grant-authorized retention rules.
+The reverse slot is never substituted, and an invalid stored artifact still
+fails closed rather than being silently overwritten.
+
+This relaxes command sequencing, not evidence identity. The target Context and
+Meld session are published only after the basis succeeds; a provider or
+retention failure leaves the target absent. A successful basis may remain as a
+reusable read-only Compare artifact if a later target precondition races or
+fails. That artifact is not a partial Meld result and carries no application
+authority. The Result remains unchanged until the ordinary explicit Meld Apply
+boundary.
+
+The former separate-command requirement did not prove human inspection:
+`ComparisonAnalysis` has no reviewed or acknowledged state, and Meld already
+renders the exact seeded report before application. Keeping `mem compare` as an
+optional inspection entry while allowing Meld to prepare the same artifact
+therefore preserves the actual review boundary without forcing global
+navigation choreography.
+
+While that automatic basis is pending, the Meld wait shell opens on the frozen
+A, B, and C operands and states that C remains unchanged. The report-building
+shape remains available through the shared `C` toggle. This makes the absence
+of a hidden current-Context switch visible during the long-running step.
 
 The earlier local conversational change flow inside atomize grounding is also
 retained:
@@ -361,7 +405,9 @@ mapping; a public name by itself is not durable authority.
 
 The same setup shell also owns optional, default-off descendant controls.
 Symmetric Meld enables A and B independently because it writes a separate C;
-it consumes only a saved ordered Compare whose two scope flags match exactly.
+it always consumes an exact durably saved ordered Compare whose two scope
+flags match exactly, but prepares that basis itself when no reusable one
+exists.
 Directional Meld also enables A and B independently, but widening B changes
 the application shape: every BASELINE Memory retains its exact owner Context,
 every EDIT returns to that owner, and every ADD names one frozen target Context
@@ -375,7 +421,7 @@ authority policy, provider contract, and session.
 | Mode | Inputs | Authority contract | Target | Representative case | Current status |
 | --- | --- | --- | --- | --- | --- |
 | **Directional** | Prepared incoming evidence and an existing baseline, each optionally widened to explicit lexical descendants | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it; every changed Memory retains an exact B owner | The baseline scope's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
-| **Symmetric** | Two independent Context frames, each optionally including its readable lexical descendants, treated as peers | Neither source wins by default; source-specific scope and unresolved differences remain visible | A distinct new result Context | Two co-advisors' proposal-writing policies | Implemented through an exact saved ordered Compare basis |
+| **Symmetric** | Two independent Context frames, each optionally including its readable lexical descendants, treated as peers | Neither source wins by default; source-specific scope and unresolved differences remain visible | A distinct new result Context | Two co-advisors' proposal-writing policies | Reuses or prepares an exact saved ordered Compare basis |
 
 `atomic` and `batch` are not additional modes. The semantic call always
 receives one complete bounded batch. What changes during interaction is the
@@ -391,13 +437,14 @@ An “atomic” case is therefore the special case in which the selected scope h
 one primary issue or proposition. It may still affect several downstream
 Memories. Unary ambiguity and pair-shaped conflict are both valid issue scopes.
 
-Task 2 begins with one saved batch Compare analysis. Starting symmetric Meld
-copies that exact ordered analysis and its identities into the target-bound
-session without another provider call. Opening the compensation issue does not
-launch a different atomic engine; it creates an `ISSUE`-scoped turn within the
-saved batch. The result returns to the complete relation ledger, where it may
-resolve or alter other pending issues. A whole-set comment or preserve-all
-action uses `ALL` or `REMAINING` over the same session.
+Task 2 may begin with a separately inspected batch Compare analysis, but this
+is not a command-order prerequisite. Starting symmetric Meld reuses a fresh
+exact analysis or prepares and saves the same ordered basis itself, then copies
+its identities into the target-bound session. Opening the compensation issue
+does not launch a different atomic engine; it creates an `ISSUE`-scoped turn
+within the saved batch. The result returns to the complete relation ledger,
+where it may resolve or alter other pending issues. A whole-set comment or
+preserve-all action uses `ALL` or `REMAINING` over the same session.
 
 This makes meld compositional rather than merely UI-reusable. The user changes
 the turn's **scope**, not the semantic machinery, when moving between overview
@@ -1171,7 +1218,7 @@ The representative adapters use this rule differently:
 | --- | --- | --- |
 | Atomize directional (`ISSUE`) | One selected issue, user clarification, current local frame, and known affected findings | One call for each corrective, extending, confirming, or retracting user turn |
 | Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope. An exact saved ordered Compare, when present, freezes the initial relation ledger; the call then returns only Directional-specific issues and exact owner-routed `EDIT` / `ADD` changes over that basis. Without one, the compatible direct call also classifies relations. | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
-| Context symmetric | Two bounded peer Context frames and their authority contract, returning a relation ledger and unresolved issues | One call per user resolution turn; final materialization remains provider-free |
+| Context symmetric | A fresh exact ordered Compare is reused provider-free; otherwise one complete Compare call over the two bounded peer frames creates and saves the relation ledger before the Meld session is published | One call per user resolution turn; final materialization remains provider-free |
 
 This strategy was selected because relations are Context-dependent. Independent
 pair calls can produce mutually inconsistent decisions, miss that one
@@ -1428,8 +1475,9 @@ application and checkpoint boundary.
    validation, exposing a lossless directional/issue adapter view, and
    declaring that adapter contract in each semantic-turn payload.
 2. **Completed: implement bounded symmetric Context melding.** Two direct-
-   Memory PEER Contexts import one exact ordered Compare ledger and its saved
-   issues provider-free. A subsequent grounding or whole-set turn may produce
+   Memory PEER Contexts reuse one exact fresh ordered Compare ledger
+   provider-free or prepare and save it through the shared Compare execution
+   path when necessary. A subsequent grounding or whole-set turn may produce
    exact non-applying target proposals without favoring either peer.
 3. **Completed: add shared issue and whole-set interaction.** The terminal
    shell supports issue selection, reading plus free-form refinement,

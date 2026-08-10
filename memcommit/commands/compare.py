@@ -10,7 +10,6 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.comparison import (
-    COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonError,
     ComparisonInput,
@@ -22,25 +21,19 @@ from memcommit.comparison_provider import (
 )
 from memcommit.comparison_store import (
     ConcurrentComparisonUpdateError,
-    load_comparison_analysis,
-    save_comparison_analysis,
+)
+from memcommit.commands.comparison_execution import (
+    COMPARISON_AGGREGATE_TIMEOUT_SECONDS as SHARED_COMPARISON_TIMEOUT_SECONDS,
+    comparison_wait_view,
+    connect_comparison_provider,
+    ensure_comparison_analysis,
+    load_comparison_context,
 )
 from memcommit.commands.granted_context import (
-    GrantedReadStore,
-    freeze_granted_context_binding,
     resolve_context_access,
-    revalidate_granted_context_binding,
 )
 from memcommit.context_locator import resolve_context_locator
-from memcommit.derived_policy import (
-    AnalysisRetention,
-    analysis_retention,
-    authorize_combination,
-)
-from memcommit.granted_comparison_store import (
-    load_granted_comparison_artifact,
-    save_granted_comparison_artifact,
-)
+from memcommit.derived_policy import AnalysisRetention
 from memcommit.commands.compare_sessions import (
     choose_comparison_session,
     load_saved_comparison,
@@ -63,14 +56,11 @@ from memcommit.commands.tui_text_layout import (
 )
 from memcommit.commands.understanding_render import understanding_lines
 from memcommit.query_provider import (
-    CodexChatGPTProvider,
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.context_targeting.loading import load_context_scope
 from memcommit.profile_config import ProfileConfigError
 from memcommit.provenance import ProvenanceError
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
@@ -87,7 +77,7 @@ from memcommit.store import MemoryStore
 # frame. The subscription-backed xhigh run can remain healthy beyond the
 # configured ten-minute default, so match Meld's documented aggregate window
 # instead of timing out a complete provider turn just before materialization.
-COMPARE_AGGREGATE_TIMEOUT_SECONDS = 900
+COMPARE_AGGREGATE_TIMEOUT_SECONDS = SHARED_COMPARISON_TIMEOUT_SECONDS
 
 
 class CompareCommandError(RuntimeError):
@@ -442,13 +432,7 @@ def render_comparison(
 
 
 def _connect_compare_provider(provider_factory):
-    provider = provider_factory()
-    if isinstance(provider, CodexChatGPTProvider):
-        provider.timeout = max(
-            provider.timeout,
-            COMPARE_AGGREGATE_TIMEOUT_SECONDS,
-        )
-    return provider
+    return connect_comparison_provider(provider_factory)
 
 
 def _resume_selected_comparison(
@@ -594,87 +578,7 @@ def _present_comparison(
 
 
 def _comparison_wait_view(comparison_input: ComparisonInput) -> CommandWaitView:
-    """Restore the exact frozen setup while the first report is unavailable."""
-
-    lines = [
-        "MEM COMPARE · FROZEN INPUT · RESULT PENDING",
-        "",
-    ]
-    labels = ("REFERENCE A", "PEER B")
-    for label, frame, descendants in zip(
-        labels,
-        comparison_input.frames,
-        comparison_input.include_descendants,
-    ):
-        lines.append(
-            f"{label} · {display_escape_text(frame.context_name)}"
-        )
-        lines.append(
-            "  SCOPE · "
-            + ("INCLUDE DESCENDANTS" if descendants else "THIS CONTEXT ONLY")
-        )
-        lines.append(f"  FROZEN MEMORIES · {len(frame.memories)}")
-        lines.append("")
-    lines.extend(
-        [
-            "The comparison report will replace this setup after the provider",
-            "returns. The two frozen source frames cannot be changed here.",
-        ]
-    )
-    return CommandWaitView(
-        title="COMPARE CONFIRMED INPUTS · READ-ONLY",
-        text="\n".join(lines),
-    )
-
-
-def _recursive_compare_projection(root: Context) -> Context:
-    """Flatten one loaded tree while retaining each Memory's public path."""
-
-    if not any(isinstance(item, Context) for item in root.iter_items()):
-        return root
-    projected = Context(uid=root.uid, name=root.name)
-    seen_contexts: set[str] = set()
-
-    def visit(context: Context) -> None:
-        if context.uid in seen_contexts:
-            return
-        seen_contexts.add(context.uid)
-        for item in context.iter_items():
-            if isinstance(item, Memory):
-                projected.add(
-                    Memory(
-                        uid=item.uid,
-                        content=f"[{context.name}] {item.content}",
-                    )
-                )
-            elif isinstance(item, Context):
-                visit(item)
-            elif isinstance(item, QueryContextRef):
-                # A nested query-only override is visible as a route but its
-                # concealed content never enters ordinary comparison input.
-                continue
-            elif isinstance(item, MemoryRef):
-                raise ComparisonError(
-                    "Recursive Compare does not copy live Memory references; "
-                    f"unsupported item [{item.uid[:8]}] in {context.name!r}."
-                )
-
-    visit(root)
-    return projected
-
-
-def _load_compare_context(
-    access,
-    *,
-    include_descendants: bool = False,
-) -> Context:
-    reader = GrantedReadStore(access) if access.is_granted else access.store
-    context = load_context_scope(
-        reader,
-        access.display_name if access.is_granted else access.context_name,
-        include_descendants=include_descendants,
-    )
-    return _recursive_compare_projection(context)
+    return comparison_wait_view(comparison_input)
 
 
 def cmd(
@@ -741,7 +645,7 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Compare the active Context with one equal-authority PEER Context."""
+    """Compare two equal-authority Contexts, defaulting A to current."""
     if sessions and (
         from_ is not None
         or to is not None
@@ -805,7 +709,7 @@ def cmd(
             )
             return
         current_name = store.current_context_name()
-        if not current_name:
+        if from_ is None and not current_name:
             raise CompareCommandError(
                 "No current reference Context. Run 'mem switch NAME' first."
             )
@@ -814,6 +718,7 @@ def cmd(
             if from_ is not None
             else current_name
         )
+        assert reference_name is not None
         compared_name = resolve_context_locator(to, current=current_name)
         with authority_grant_snapshot_lock() as registry:
             try:
@@ -850,168 +755,64 @@ def cmd(
                 raise CompareCommandError(
                     f"Compared Context '{to}'{resolution} does not exist."
                 ) from error
-            authorize_combination((reference_access, compared_access))
-            reference = _load_compare_context(
+            reference = load_comparison_context(
                 reference_access,
                 include_descendants=reference_descendants,
             )
-            compared = _load_compare_context(
+            compared = load_comparison_context(
                 compared_access,
                 include_descendants=compared_descendants,
-            )
-            reference_binding = (
-                freeze_granted_context_binding(reference_access)
-                if reference_access.is_granted
-                else None
-            )
-            compared_binding = (
-                freeze_granted_context_binding(compared_access)
-                if compared_access.is_granted
-                else None
             )
         if reference.uid == compared.uid or reference.name == compared.name:
             raise CompareCommandError("Compare requires two distinct Contexts.")
 
-        granted = reference_binding is not None or compared_binding is not None
-        granted_artifact = (
-            load_granted_comparison_artifact(store, reference.uid, compared.uid)
-            if granted
-            else None
-        )
-        if granted:
-            existing = (
-                granted_artifact.analysis
-                if granted_artifact is not None
-                else None
-            )
-        else:
-            existing = load_comparison_analysis(reference.uid, compared.uid)
-        if (
-            existing is not None
-            and existing.include_descendants
-            == (reference_descendants, compared_descendants)
-            and existing.matches(reference, compared)
-            and existing.ruleset_version == COMPARISON_RULESET_VERSION
-            and not refresh
-        ):
-            _present_comparison(
-                store=store,
-                analysis=existing,
-                reused=True,
-                ledger=ledger,
-                snapshot=snapshot,
-                retention=(
-                    granted_artifact.retention
-                    if granted_artifact is not None
-                    else None
-                ),
-            )
-            return
+        def analyze_input(comparison_input: ComparisonInput) -> ComparisonAnalysis:
+            def compare_frames(progress):
+                provider = _connect_compare_provider(
+                    connect_codex_chatgpt_provider
+                )
+                progress.update("analyzing relations", step=2)
+                return analyze_comparison(comparison_input, provider)
 
-        comparison_input = ComparisonInput.from_contexts(
-            reference,
-            compared,
-            reference_descendants=reference_descendants,
-            compared_descendants=compared_descendants,
-        )
-        def compare_frames(progress):
-            provider = _connect_compare_provider(connect_codex_chatgpt_provider)
-            progress.update("analyzing relations", step=2)
-            return analyze_comparison(comparison_input, provider)
-
-        analysis = run_command_wait(
-            "COMPARE",
-            "connecting provider",
-            total=2,
-            work=compare_frames,
-            return_view=build_report_loading_view(
+            return run_command_wait(
                 "COMPARE",
-                sections=(
-                    "What mem understood",
-                    "Both",
-                    "Differences",
-                    "Items",
+                "connecting provider",
+                total=2,
+                work=compare_frames,
+                return_view=build_report_loading_view(
+                    "COMPARE",
+                    sections=(
+                        "What mem understood",
+                        "Both",
+                        "Differences",
+                        "Items",
+                    ),
                 ),
-            ),
-            context_view=_comparison_wait_view(comparison_input),
-        )
-        if granted:
-            with authority_grant_snapshot_lock() as registry:
-                current_reference_access = (
-                    revalidate_granted_context_binding(
-                        reference_binding,
-                        registry=registry,
-                    )
-                    if reference_binding is not None
-                    else resolve_context_access(
-                        store,
-                        reference.name,
-                        current_name=current_name,
-                        required_permission="READ",
-                        registry=registry,
-                    )
-                )
-                current_compared_access = (
-                    revalidate_granted_context_binding(
-                        compared_binding,
-                        registry=registry,
-                    )
-                    if compared_binding is not None
-                    else resolve_context_access(
-                        store,
-                        compared.name,
-                        current_name=current_name,
-                        required_permission="READ",
-                        registry=registry,
-                    )
-                )
-                current_reference = _load_compare_context(
-                    current_reference_access,
-                    include_descendants=reference_descendants,
-                )
-                current_compared = _load_compare_context(
-                    current_compared_access,
-                    include_descendants=compared_descendants,
-                )
-                if not analysis.matches(current_reference, current_compared):
-                    raise ConcurrentComparisonUpdateError(
-                        "A granted comparison source changed while Compare was "
-                        "analyzing it; no result was published."
-                    )
-                retention = analysis_retention(
-                    (current_reference_access, current_compared_access)
-                )
-                if retention is not None:
-                    save_granted_comparison_artifact(
-                        store,
-                        analysis,
-                        (current_reference_access, current_compared_access),
-                        retention=retention,
-                        expected_analysis_uid=(
-                            existing.uid if existing is not None else None
-                        ),
-                    )
-            _present_comparison(
-                store=store,
-                analysis=analysis,
-                reused=False,
-                ledger=ledger,
-                snapshot=snapshot,
-                durable=retention is not None,
-                retention=retention,
+                context_view=_comparison_wait_view(comparison_input),
             )
-            return
-        save_comparison_analysis(
-            store,
-            analysis,
-            expected_analysis_uid=(existing.uid if existing is not None else None),
+
+        execution = ensure_comparison_analysis(
+            store=store,
+            reference_access=reference_access,
+            compared_access=compared_access,
+            reference=reference,
+            compared=compared,
+            current_name=current_name,
+            include_descendants=(
+                reference_descendants,
+                compared_descendants,
+            ),
+            refresh=refresh,
+            analyze=analyze_input,
         )
         _present_comparison(
             store=store,
-            analysis=analysis,
-            reused=False,
+            analysis=execution.analysis,
+            reused=execution.reused,
             ledger=ledger,
             snapshot=snapshot,
+            durable=execution.durable,
+            retention=execution.retention,
         )
     except (
         CompareCommandError,

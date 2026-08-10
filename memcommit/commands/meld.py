@@ -14,8 +14,18 @@ import memcommit.ops as ops
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
+    ComparisonInput,
+)
+from memcommit.comparison_provider import (
+    ComparisonProviderError,
+    analyze_comparison,
 )
 from memcommit.comparison_store import load_comparison_analysis
+from memcommit.commands.comparison_execution import (
+    comparison_wait_view,
+    connect_comparison_provider,
+    ensure_comparison_analysis,
+)
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_locator import resolve_context_locator
@@ -123,7 +133,14 @@ def _comparison_prerequisite_error(
     include_descendants: tuple[bool, bool] = (False, False),
     directional: bool = False,
 ) -> MeldCommandError:
-    compare_argv = ["mem", "compare", "--to", right.name]
+    compare_argv = [
+        "mem",
+        "compare",
+        "--from",
+        left.name,
+        "--to",
+        right.name,
+    ]
     if include_descendants[0]:
         compare_argv.append("--reference-descendants")
     if include_descendants[1]:
@@ -144,7 +161,6 @@ def _comparison_prerequisite_error(
     lines = [
         reason,
         "Create the exact ordered Compare basis first:",
-        f"  {shlex.join(['mem', 'switch', left.name])}",
         f"  {shlex.join(compare_argv)}",
     ]
     if not create_target and not directional:
@@ -212,6 +228,99 @@ def _load_symmetric_comparison(
             include_descendants=include_descendants,
         )
     return analysis
+
+
+def _analyze_symmetric_comparison_basis(
+    comparison_input: ComparisonInput,
+    *,
+    target_name: str,
+) -> ComparisonAnalysis:
+    """Create a missing or stale symmetric basis without changing current."""
+
+    def compare_frames(progress):
+        provider = connect_comparison_provider(
+            connect_codex_chatgpt_provider
+        )
+        progress.update("analyzing ordered source relations", step=2)
+        return analyze_comparison(comparison_input, provider)
+
+    confirmed_inputs = _symmetric_comparison_wait_context_view(
+        comparison_input,
+        target_name=target_name,
+    )
+    return run_command_wait(
+        "MELD",
+        "preparing ordered Compare basis",
+        total=2,
+        work=compare_frames,
+        # This automatic prerequisite has no earlier report to preserve. Show
+        # all three operands first so a cross-task current Context cannot look
+        # like an implicit source or target; C still exposes the report shape.
+        return_view=confirmed_inputs,
+        context_view=build_report_loading_view(
+            "MELD",
+            sections=(
+                "What mem understood",
+                "Both",
+                "Differences",
+                "Items",
+            ),
+        ),
+    )
+
+
+def _symmetric_comparison_wait_context_view(
+    comparison_input: ComparisonInput,
+    *,
+    target_name: str,
+) -> CommandWaitView:
+    """Show all three frozen symmetric operands while Compare is pending."""
+
+    base = comparison_wait_view(comparison_input)
+    assert isinstance(base.text, str)
+    source_text = base.text.partition(
+        "\nThe comparison report will replace this setup"
+    )[0]
+    return CommandWaitView(
+        title="MELD CONFIRMED INPUTS · READ-ONLY",
+        text=(
+            source_text.rstrip()
+            + "\n\n"
+            + f"RESULT C · {safe_terminal_text(target_name)}\n"
+            + "  TARGET STATE · UNCHANGED WHILE COMPARE RUNS\n\n"
+            + "The ordered Compare basis will be saved before the Meld "
+            + "target and session are published."
+        ),
+    )
+
+
+def _ensure_symmetric_comparison(
+    *,
+    store: MemoryStore,
+    left_access: ContextAccess,
+    right_access: ContextAccess,
+    left: Context,
+    right: Context,
+    target_name: str,
+    current_name: str | None,
+    include_descendants: tuple[bool, bool] = (False, False),
+) -> ComparisonAnalysis:
+    """Return the exact durable LEFT→RIGHT basis, creating it when needed."""
+
+    return ensure_comparison_analysis(
+        store=store,
+        reference_access=left_access,
+        compared_access=right_access,
+        reference=left,
+        compared=right,
+        current_name=current_name,
+        include_descendants=include_descendants,
+        require_durable=True,
+        analyze=lambda comparison_input: _analyze_symmetric_comparison_basis(
+            comparison_input,
+            target_name=target_name,
+        ),
+    ).analysis
 
 
 def _load_directional_comparison(
@@ -2641,16 +2750,14 @@ def _start_new_meld_from_picker(store: MemoryStore) -> None:
         right_access,
         include_descendants=receipt.right_descendants,
     )
-    target = (
-        ops.init(receipt.target_name)
-        if receipt.create_target
-        else store.load_direct(receipt.target_name)
-    )
-    analysis = _load_symmetric_comparison(
+    analysis = _ensure_symmetric_comparison(
+        store=store,
+        left_access=left_access,
+        right_access=right_access,
         left=left_ctx,
         right=right_ctx,
-        target=target,
-        create_target=receipt.create_target,
+        target_name=receipt.target_name,
+        current_name=current_name,
         include_descendants=(
             receipt.left_descendants,
             receipt.right_descendants,
@@ -3186,11 +3293,16 @@ def cmd(
                     expected_session_digest=None,
                 )
             else:
-                comparison = _load_symmetric_comparison(
+                assert left_access is not None
+                assert right_access is not None
+                comparison = _ensure_symmetric_comparison(
+                    store=store,
+                    left_access=left_access,
+                    right_access=right_access,
                     left=left_ctx,
                     right=right_ctx,
-                    target=target,
-                    create_target=create_target,
+                    target_name=target.name,
+                    current_name=current_name,
                     include_descendants=(
                         left_descendants,
                         right_descendants,
@@ -3352,10 +3464,14 @@ def cmd(
                     expected_session_digest=prior_digest,
                 )
             else:
-                comparison = _load_symmetric_comparison(
+                comparison = _ensure_symmetric_comparison(
+                    store=store,
+                    left_access=restart_left_access,
+                    right_access=restart_right_access,
                     left=left_ctx,
                     right=right_ctx,
-                    target=target,
+                    target_name=target.name,
+                    current_name=current_name,
                     include_descendants=(
                         left_descendants,
                         right_descendants,
@@ -3559,6 +3675,7 @@ def cmd(
         RuntimeError,
         TypeError,
         ValueError,
+        ComparisonProviderError,
         ConcurrentContextUpdateError,
         MeldError,
         MeldProviderError,
