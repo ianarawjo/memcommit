@@ -613,6 +613,86 @@ reconciliation stage. That design introduces a candidate-recall dependency and
 cannot claim exhaustive Compare semantics until its generator and reconciler
 are evaluated.
 
+### Explicit parallelization conclusion
+
+The measured condition did **not** improve actionable Compare latency. The
+calls overlapped, but overlap is not itself a product speedup: the parallel run
+produced no valid global result. Its 135.609-second terminal observation must
+not be compared with the valid 140.225-second C result as though both were
+actionable completions. The experiment therefore supplies no evidence of an
+actionable latency improvement, and its 3.3% observed wall difference may not
+be credited to the design.
+
+The rejected mechanism is specifically full-context source-position ownership.
+It divided response rows while leaving the global clustering problem inside
+every call. This repeated most of the reasoning, increased total provider work,
+and introduced stochastic disagreement between workers. Parallel execution may
+still help after the semantic work is made genuinely local, but concurrency
+alone and smaller batches of the same ownership contract are not accepted next
+steps.
+
+## Low-loss candidate-graph algorithm
+
+Compare is closer to unordered bipartite record linkage and typed relation-graph
+construction than to a sequential text diff. It is also not Meld itself:
+Compare classifies relationships without materializing a merged result, while
+Meld must later preserve provenance and produce application-ready content. A
+one-to-one matching algorithm such as Hungarian assignment is therefore a poor
+fit because Compare permits 1:N, N:1, and N:M groups.
+
+For 150 by 150 Memories there are 22,500 possible cross-source pairs. Scoring
+that complete pair plane with cheap host algorithms is practical; asking a
+reasoning model to semantically judge every pair is the expensive part. The
+leading low-loss design is:
+
+1. **Freeze complete coverage.** Freeze both Contexts, all 300 identities,
+   canonical ordering, content digests, and the model contract before routing.
+   Every Memory must appear in the final disposition even if it has no judged
+   relation edge.
+2. **Generate a recall-first candidate union locally.** Score all 22,500 pairs
+   with multiple independent signals such as exact-content equality, token or
+   character n-gram similarity, BM25-style retrieval, and semantic embeddings
+   when an approved local or separately measured embedding path exists. Keep
+   the union of bidirectional top-k results and a deliberately broad threshold
+   band. Exact equality is a safe candidate signal, not automatically proof of
+   equal scope.
+3. **Judge candidate edges exactly once.** Partition candidate pairs rather
+   than source rows. Each compact provider row classifies one assigned pair as
+   EQUIVALENT, COMPATIBLE, SCOPED, CONFLICT, NONE, or UNCLEAR. Its request
+   contains the two endpoints and a bounded neighborhood needed to interpret
+   them; it does not ask the worker to rediscover the global clustering.
+4. **Construct the typed graph locally.** Use EQUIVALENT edges to propose
+   components only after checking incompatible constraints. Retain COMPATIBLE,
+   SCOPED, and CONFLICT as typed edges between or within components rather than
+   assuming every relation is transitively mergeable. This preserves N:M
+   structure without forcing a one-to-one match.
+5. **Reconcile only coupled components.** Send overlapping anchors,
+   contradictory edge labels, UNCLEAR edges, and components with incompatible
+   scope or conflict structure to an explicit second-stage judge. Independent
+   components need no global provider turn. Publish only after reconciliation
+   and complete 300-item disposition validation.
+6. **Audit the candidate boundary.** Judge a frozen sample of rejected pairs
+   plus pairs immediately below each retrieval threshold. If the audit finds a
+   missed relation, widen k or the thresholds and rerun before publication.
+   Record candidate recall against reviewed fixtures and retained Compare runs;
+   the retained stochastic runs are orientation, not ground truth.
+
+This algorithm can reduce provider reasoning from one global clustering problem
+to a sparse set of local edge decisions. Its principal possible loss is not
+output compression but candidate recall: a true relation omitted by every host
+signal may be defaulted to DISTINCT. Random negative auditing estimates this
+risk but cannot prove exhaustive recall. A production fast mode must therefore
+name this as approximation, select an explicit acceptable-loss threshold, and
+retain a broader or one-shot fallback for frames that fail the audit.
+
+Both complete Contexts remain the operation input and every Memory remains in
+the final coverage ledger. They would no longer both be copied verbatim into
+every provider call. If provider-visible full raw Contexts are required on every
+turn, the measured 61.948–135.608-second worker range indicates that a
+sub-30-second result is unlikely through batching alone; the product would need
+a provider mechanism for reusable cached context, a faster measured model, or a
+relaxed visibility requirement.
+
 Reasoning can also be reduced structurally, but those changes must remain
 separate from the effort-knob experiment:
 
