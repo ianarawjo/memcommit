@@ -36,7 +36,11 @@ def _memory_only_source(source: Context) -> Context:
     return result
 
 
-def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge into the current one")]) -> None:
+def cmd(
+    other: Annotated[
+        str, typer.Argument(help="Name of the context to merge into the current one")
+    ]
+) -> None:
     active_store = MemoryStore()
     snapshot = ContextOperandSnapshot.capture(active_store)
     current = snapshot.current_name
@@ -84,7 +88,9 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
         )
         raise typer.Exit(1)
     if target.uid == source.uid and source_store.store_dir == target_store.store_dir:
-        typer.secho("Error: cannot merge a context into itself.", fg=typer.colors.RED, err=True)
+        typer.secho(
+            "Error: cannot merge a context into itself.", fg=typer.colors.RED, err=True
+        )
         raise typer.Exit(1)
 
     cross_profile = source_store.store_dir != target_store.store_dir
@@ -134,11 +140,17 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
                 (target_access, ("CREATE",)),
             )
         ):
-            current_source = (
-                GrantedReadStore(source_access).load(source_access.display_name)
-                if source_access.is_granted
-                else source_store.load_for_update(source_access.context_name)
-            )
+            try:
+                current_source = (
+                    GrantedReadStore(source_access).load(source_access.display_name)
+                    if source_access.is_granted
+                    else source_store.load_for_update(source_access.context_name)
+                )
+            except FileNotFoundError as error:
+                raise RuntimeError(
+                    "The source Context no longer exists: "
+                    f"'{source_access.context_name}'."
+                ) from error
             if context_record_digest(current_source) != source_projection_digest:
                 raise RuntimeError(
                     "The merge source changed before the target could be saved."
@@ -154,11 +166,13 @@ def cmd(other: Annotated[str, typer.Argument(help="Name of the context to merge 
                     target,
                     checkpoint,
                     expected_context_digest=target._store_digest or "",
-                    source_bindings=((
-                        source_access.context_name,
-                        source.uid,
-                        source_projection_digest,
-                    ),),
+                    source_bindings=(
+                        (
+                            source_access.context_name,
+                            source.uid,
+                            source_projection_digest,
+                        ),
+                    ),
                 )
     except (
         OSError,
