@@ -8,14 +8,14 @@ preserved.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 import sys
 import threading
 import time
 from typing import Protocol, TypeVar
 
-from prompt_toolkit.application import Application
+from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -33,7 +33,24 @@ from memcommit.commands.command_progress import (
     busy_suffix,
     render_progress_line,
 )
+from memcommit.commands.context_picker import (
+    CONTEXT_PICKER_STYLE,
+    ContextMemoryRow,
+    ContextPickerNavigationUnit,
+    context_memory_rows,
+    context_option_continuation_prefixes,
+    context_picker_navigation_units,
+    render_context_options,
+    render_context_roots,
+)
+from memcommit.commands.granted_context import (
+    context_access_display_facts,
+    resolve_context_access,
+)
 from memcommit.commands.help_inventory import CommandEntry
+from memcommit.commands.readable_context_catalog import (
+    freeze_profile_readable_context_catalog,
+)
 from memcommit.commands.session_help import (
     SessionHelpController,
     current_help_entries,
@@ -41,12 +58,21 @@ from memcommit.commands.session_help import (
 from memcommit.commands.tui_primitives import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    WrappedScrollbarMargin,
     bind_case_insensitive_key,
     build_scrollable_formatted_text_pane,
     display_escape_text,
     move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
+from memcommit.context_targeting.tui.tree import (
+    ContextTreeState,
+    build_context_tree,
+)
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
+from memcommit.source_projection.presentation import SourceDisplayValue
+from memcommit.store import MemoryStore
 from memcommit.study_action_log import record_study_action
 
 
@@ -80,6 +106,101 @@ class CommandWaitView:
         if self.frame_renderer is None:
             return self.text
         return self.frame_renderer(frame_index)
+
+
+@dataclass(frozen=True)
+class CommandWaitContextBrowser:
+    """One frozen readable Profile namespace shown like ``mem switch``.
+
+    The catalog and current marker are captured before background work starts.
+    Tree expansion and cursor movement remain process-local and cannot produce
+    a switch receipt or change the global current Context.
+    """
+
+    names: tuple[str, ...]
+    current_name: str | None
+    annotations: Mapping[str, SourceDisplayValue]
+    memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None
+
+    @classmethod
+    def create(
+        cls,
+        names: Sequence[str],
+        *,
+        current_name: str | None,
+        annotations: Mapping[str, SourceDisplayValue] | None = None,
+        memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None,
+    ) -> "CommandWaitContextBrowser":
+        frozen_names = tuple(names)
+        if not frozen_names or any(not name for name in frozen_names):
+            raise ValueError("A command-wait Context browser requires names.")
+        if len(set(frozen_names)) != len(frozen_names):
+            raise ValueError("Command-wait Context browser names must be unique.")
+        frozen_annotations = dict(annotations or {})
+        if set(frozen_annotations) - set(frozen_names):
+            raise ValueError("Context browser annotations are outside the catalog.")
+        return cls(
+            names=frozen_names,
+            current_name=current_name,
+            annotations=frozen_annotations,
+            memory_loader=memory_loader,
+        )
+
+
+def _freeze_default_context_browser() -> CommandWaitContextBrowser | None:
+    """Freeze the same readable Profile namespace used by Context controls."""
+
+    try:
+        store = MemoryStore(create=False)
+        local_names = tuple(store.list_context_names())
+        if not local_names:
+            return None
+        current_name = store.current_context_name()
+    except (OSError, RuntimeError, ValueError):
+        return None
+
+    local_browser = CommandWaitContextBrowser.create(
+        local_names,
+        current_name=current_name,
+        memory_loader=lambda name: context_memory_rows(store.load(name)),
+    )
+    try:
+        anchor_name = current_name or local_names[0]
+        anchor_access = resolve_context_access(
+            store,
+            anchor_name,
+            current_name=current_name,
+            required_permission="READ",
+        )
+        catalog = freeze_profile_readable_context_catalog(
+            store,
+            anchor_access,
+            include_query_routes=False,
+        )
+        names = tuple(catalog.list_context_names())
+        annotations = {
+            name: context_access_display_facts(catalog.access_for(name))
+            for name in names
+            if catalog.access_for(name).is_granted
+        }
+        return CommandWaitContextBrowser.create(
+            names,
+            current_name=current_name,
+            annotations=annotations,
+            memory_loader=lambda name: context_memory_rows(catalog.load(name)),
+        )
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ):
+        # Isolated stores and stale Profile metadata can still expose their
+        # ordinary local namespace, exactly as the local part of `mem switch`.
+        # The optional browser must not fail or restart the frozen operation.
+        return local_browser
 
 
 def _render_report_loading_frame(
@@ -117,7 +238,7 @@ def _render_report_loading_frame(
             ),
             (
                 "class:report-neutral",
-                "C shows the exact frozen inputs; H opens Help.",
+                "C/c opens Contexts; R/r returns here; H/h/? opens Help.",
             ),
         ]
     )
@@ -249,6 +370,7 @@ def run_command_wait(
     on_help_action: Callable[[str, str | None], None] | None = None,
     return_view: CommandWaitView | None = None,
     context_view: CommandWaitView | None = None,
+    context_browser: CommandWaitContextBrowser | None = None,
 ) -> T:
     """Run blocking work while a TTY may browse the shared Help inventory.
 
@@ -257,7 +379,11 @@ def run_command_wait(
     command while the operation owns a frozen semantic turn.
     """
 
-    if context_view is not None and return_view is None:
+    # ``context_view`` is the long-standing API name for the operation-owned
+    # confirmed-input copy. The user-facing key is now I/i; C/c belongs to the
+    # separate switch-style Context namespace browser.
+    input_view = context_view
+    if input_view is not None and return_view is None:
         raise ValueError("A confirmed-input view requires a primary return view.")
 
     enabled = (
@@ -295,7 +421,7 @@ def run_command_wait(
     ready = {"value": False}
     close_requested = {"value": False}
     status_message = {"value": ""}
-    context_open = {"value": False}
+    active_surface = {"value": "REPORT"}
 
     def emit_help_action(action: str, command_name: str | None = None) -> None:
         _study_help_action(action, command_name)
@@ -350,15 +476,168 @@ def run_command_wait(
         if return_view is not None
         else None
     )
-    context_pane = (
+    input_pane = (
         build_scrollable_formatted_text_pane(
-            context_view.title,
-            context_view.text,
+            input_view.title,
+            input_view.text,
             height=Dimension(min=4, weight=1),
         )
-        if context_view is not None
+        if input_view is not None
         else None
     )
+    frozen_context_browser = (
+        context_browser
+        if context_browser is not None
+        else _freeze_default_context_browser()
+        if return_pane is not None
+        else None
+    )
+    context_tree_state: ContextTreeState | None = None
+    context_control: FormattedTextControl | None = None
+    context_container = None
+    context_memory_cache: dict[str, tuple[ContextMemoryRow, ...]] = {}
+    context_memory_anchor: tuple[str, int] | None = None
+    if frozen_context_browser is not None:
+        context_tree = build_context_tree(frozen_context_browser.names)
+        initial_name = (
+            frozen_context_browser.current_name
+            if frozen_context_browser.current_name in frozen_context_browser.names
+            else frozen_context_browser.names[0]
+        )
+        context_tree_state = ContextTreeState.create(
+            context_tree,
+            selected=initial_name,
+        )
+
+        def visible_memory_contexts() -> frozenset[str]:
+            assert context_tree_state is not None
+            return frozenset(
+                row.name
+                for row in context_tree_state.visible_rows()
+                if context_tree_state.memories_visible_for(row.name)
+            )
+
+        def load_visible_context_memories() -> None:
+            assert context_tree_state is not None
+            memory_loader = frozen_context_browser.memory_loader
+            if memory_loader is None:
+                return
+            for row in context_tree_state.visible_rows():
+                if (
+                    not row.materialized
+                    or not context_tree_state.memories_visible_for(row.name)
+                    or row.name in context_memory_cache
+                ):
+                    continue
+                try:
+                    context_memory_cache[row.name] = tuple(memory_loader(row.name))
+                except (OSError, RuntimeError, ValueError):
+                    # This is a read-only aid, not a new authority boundary.
+                    # A concurrent disappearance stays inside the browser.
+                    context_memory_cache[row.name] = (
+                        ContextMemoryRow("unavailable", "Memory preview changed"),
+                    )
+
+        def context_navigation_units() -> tuple[ContextPickerNavigationUnit, ...]:
+            assert context_tree_state is not None
+            return context_picker_navigation_units(
+                context_tree_state.visible_rows(),
+                memories_by_context=context_memory_cache,
+                visible_memory_contexts=visible_memory_contexts(),
+            )
+
+        def current_context_navigation_unit() -> ContextPickerNavigationUnit:
+            assert context_tree_state is not None
+            units = context_navigation_units()
+            if context_memory_anchor is not None:
+                candidate = ContextPickerNavigationUnit(
+                    "MEMORY",
+                    context_memory_anchor[0],
+                    context_memory_anchor[1],
+                )
+                if candidate in units:
+                    return candidate
+            return ContextPickerNavigationUnit(
+                "CONTEXT",
+                context_tree_state.selected_name,
+            )
+
+        def move_context_navigation(direction: int) -> None:
+            nonlocal context_memory_anchor
+            assert context_tree_state is not None
+            units = context_navigation_units()
+            current = current_context_navigation_unit()
+            index = units.index(current)
+            target = units[max(0, min(index + direction, len(units) - 1))]
+            context_tree_state.selected_name = target.context_name
+            context_memory_anchor = (
+                (target.context_name, target.memory_index)
+                if target.kind == "MEMORY" and target.memory_index is not None
+                else None
+            )
+
+        def jump_context_navigation(to_end: bool) -> None:
+            nonlocal context_memory_anchor
+            assert context_tree_state is not None
+            units = context_navigation_units()
+            target = units[-1] if to_end else units[0]
+            context_tree_state.selected_name = target.context_name
+            context_memory_anchor = (
+                (target.context_name, target.memory_index)
+                if target.kind == "MEMORY" and target.memory_index is not None
+                else None
+            )
+
+        def context_continuation_prefix(line_number: int, wrap_count: int):
+            if wrap_count == 0:
+                return ""
+            assert context_tree_state is not None
+            wrap_width = max(1, get_app().output.get_size().columns - 1)
+            prefixes = context_option_continuation_prefixes(
+                context_tree_state.visible_rows(),
+                memories_by_context=context_memory_cache,
+                visible_memory_contexts=visible_memory_contexts(),
+                wrap_width=wrap_width,
+            )
+            return prefixes[line_number] if line_number < len(prefixes) else ""
+
+        def render_context_browser() -> StyleAndTextTuples:
+            assert context_tree_state is not None
+            wrap_width = max(1, get_app().output.get_size().columns - 1)
+            fragments: StyleAndTextTuples = [
+                (
+                    "class:report-neutral",
+                    render_context_roots(context_tree) + "\n\n",
+                )
+            ]
+            fragments.extend(
+                render_context_options(
+                    context_tree_state.visible_rows(),
+                    selected=context_tree_state.selected_name,
+                    current=frozen_context_browser.current_name,
+                    annotations=frozen_context_browser.annotations,
+                    memories_by_context=context_memory_cache,
+                    visible_memory_contexts=visible_memory_contexts(),
+                    wrap_width=wrap_width,
+                    memory_anchor=context_memory_anchor,
+                )
+            )
+            return fragments
+
+        context_control = FormattedTextControl(
+            render_context_browser,
+            focusable=True,
+            show_cursor=False,
+        )
+        context_container = Frame(
+            Window(
+                context_control,
+                wrap_lines=True,
+                get_line_prefix=context_continuation_prefix,
+                right_margins=[WrappedScrollbarMargin(display_arrows=True)],
+            ),
+            title="CONTEXTS · SWITCH BROWSER · READ-ONLY · * CURRENT",
+        )
     body_control = (
         return_pane.text_area
         if return_pane is not None
@@ -393,21 +672,174 @@ def run_command_wait(
     )
     help_controller.bind(bindings, additional_keys=("?",))
 
-    if context_pane is not None and return_pane is not None:
+    def show_surface(event, surface: str) -> None:
+        if surface == "CONTEXTS":
+            if context_control is None:
+                status_message["value"] = "Context browser is unavailable here."
+                event.app.invalidate()
+                return
+            target = context_control
+            action = "CONTEXT BROWSER OPEN"
+        elif surface == "INPUTS":
+            if input_pane is None:
+                status_message["value"] = "Confirmed inputs are unavailable here."
+                event.app.invalidate()
+                return
+            target = input_pane.text_area
+            action = "CONFIRMED INPUTS OPEN"
+        else:
+            if return_pane is None:
+                return
+            target = return_pane.text_area
+            action = "REPORT OPEN"
+        status_message["value"] = ""
+        active_surface["value"] = surface
+        event.app.layout.focus(target)
+        record_study_action(
+            "TUI_ACTION",
+            surface="command-wait",
+            action=action,
+        )
+        event.app.invalidate()
 
-        @bind_case_insensitive_key(bindings, "c", eager=True)
-        def _toggle_context(event) -> None:
-            context_open["value"] = not context_open["value"]
-            target = context_pane if context_open["value"] else return_pane
-            event.app.layout.focus(target.text_area)
+    if return_pane is not None:
+
+        if context_control is not None:
+
+            @bind_case_insensitive_key(bindings, "c", eager=True)
+            def _show_contexts(event) -> None:
+                show_surface(event, "CONTEXTS")
+
+        if input_pane is not None:
+
+            @bind_case_insensitive_key(bindings, "i", eager=True)
+            def _show_inputs(event) -> None:
+                show_surface(event, "INPUTS")
+
+        @bind_case_insensitive_key(bindings, "r", eager=True)
+        def _show_report(event) -> None:
+            show_surface(event, "REPORT")
+
+    if context_tree_state is not None:
+
+        @bindings.add("left")
+        def _collapse_context(event) -> None:
+            nonlocal context_memory_anchor
+            if active_surface["value"] != "CONTEXTS":
+                return
+            if context_memory_anchor is not None:
+                context_memory_anchor = None
+            else:
+                context_tree_state.collapse_selected(
+                    include_leaf_memories=(
+                        frozen_context_browser.memory_loader is not None
+                    )
+                )
             record_study_action(
                 "TUI_ACTION",
                 surface="command-wait",
-                action=(
-                    "CONFIRMED INPUTS OPEN"
-                    if context_open["value"]
-                    else "CONFIRMED INPUTS CLOSE"
-                ),
+                action="CONTEXT BROWSER COLLAPSE",
+            )
+            event.app.invalidate()
+
+        @bindings.add("right")
+        def _expand_context(event) -> None:
+            if active_surface["value"] != "CONTEXTS":
+                return
+            if context_memory_anchor is not None:
+                return
+            context_tree_state.expand_selected(
+                include_leaf_memories=(
+                    frozen_context_browser.memory_loader is not None
+                )
+            )
+            load_visible_context_memories()
+            record_study_action(
+                "TUI_ACTION",
+                surface="command-wait",
+                action="CONTEXT BROWSER EXPAND",
+            )
+            event.app.invalidate()
+
+        @bindings.add("enter")
+        def _toggle_context(event) -> None:
+            if active_surface["value"] != "CONTEXTS":
+                return
+            if context_memory_anchor is not None:
+                # Memory rows are viewport anchors only. In particular, Enter
+                # cannot turn one into a switch or selection receipt.
+                action = "CONTEXT BROWSER MEMORY PREVIEW"
+            elif (
+                not context_tree.children_by_name[context_tree_state.selected_name]
+                and frozen_context_browser.memory_loader is not None
+            ):
+                context_tree_state.toggle_selected_memories()
+                load_visible_context_memories()
+                action = "CONTEXT BROWSER MEMORIES HERE"
+            elif context_tree_state.selected_name in context_tree_state.expanded:
+                context_tree_state.collapse_selected()
+                action = "CONTEXT BROWSER COLLAPSE"
+            else:
+                context_tree_state.expand_selected()
+                load_visible_context_memories()
+                action = "CONTEXT BROWSER EXPAND"
+            record_study_action(
+                "TUI_ACTION",
+                surface="command-wait",
+                action=action,
+            )
+            event.app.invalidate()
+
+        @bind_case_insensitive_key(bindings, "a", eager=True)
+        def _toggle_all_contexts(event) -> None:
+            nonlocal context_memory_anchor
+            if active_surface["value"] != "CONTEXTS":
+                return
+            context_memory_anchor = None
+            context_tree_state.toggle_expand_all()
+            load_visible_context_memories()
+            record_study_action(
+                "TUI_ACTION",
+                surface="command-wait",
+                action="CONTEXT BROWSER TOGGLE ALL",
+            )
+            event.app.invalidate()
+
+        @bindings.add("m", eager=True)
+        def _toggle_selected_context_memories(event) -> None:
+            nonlocal context_memory_anchor
+            if active_surface["value"] != "CONTEXTS":
+                return
+            if frozen_context_browser.memory_loader is not None:
+                context_tree_state.toggle_selected_memories()
+                load_visible_context_memories()
+                if not context_tree_state.memories_visible_for(
+                    context_tree_state.selected_name
+                ):
+                    context_memory_anchor = None
+            record_study_action(
+                "TUI_ACTION",
+                surface="command-wait",
+                action="CONTEXT BROWSER MEMORIES HERE",
+            )
+            event.app.invalidate()
+
+        @bindings.add("M", eager=True)
+        def _toggle_all_context_memories(event) -> None:
+            nonlocal context_memory_anchor
+            if active_surface["value"] != "CONTEXTS":
+                return
+            if frozen_context_browser.memory_loader is not None:
+                context_tree_state.toggle_memories()
+                load_visible_context_memories()
+                if not context_tree_state.memories_visible_for(
+                    context_tree_state.selected_name
+                ):
+                    context_memory_anchor = None
+            record_study_action(
+                "TUI_ACTION",
+                surface="command-wait",
+                action="CONTEXT BROWSER MEMORIES ALL",
             )
             event.app.invalidate()
 
@@ -422,31 +854,69 @@ def run_command_wait(
 
         @bindings.add("up")
         def _scroll_return_view_up(event) -> None:
+            if active_surface["value"] == "CONTEXTS":
+                assert context_tree_state is not None
+                move_context_navigation(-1)
+                record_return_view_action("CONTEXT UP")
+                event.app.invalidate()
+                return
             move_wrapped_read_cursor(event, direction=-1)
             record_return_view_action("UP")
 
         @bindings.add("down")
         def _scroll_return_view_down(event) -> None:
+            if active_surface["value"] == "CONTEXTS":
+                assert context_tree_state is not None
+                move_context_navigation(1)
+                record_return_view_action("CONTEXT DOWN")
+                event.app.invalidate()
+                return
             move_wrapped_read_cursor(event, direction=1)
             record_return_view_action("DOWN")
 
         @bindings.add("pageup")
         def _page_return_view_up(event) -> None:
+            if active_surface["value"] == "CONTEXTS":
+                assert context_tree_state is not None
+                for _ in range(10):
+                    move_context_navigation(-1)
+                record_return_view_action("CONTEXT PAGE UP")
+                event.app.invalidate()
+                return
             scroll_wrapped_page(event, direction=-1)
             record_return_view_action("PAGE UP")
 
         @bindings.add("pagedown")
         def _page_return_view_down(event) -> None:
+            if active_surface["value"] == "CONTEXTS":
+                assert context_tree_state is not None
+                for _ in range(10):
+                    move_context_navigation(1)
+                record_return_view_action("CONTEXT PAGE DOWN")
+                event.app.invalidate()
+                return
             scroll_wrapped_page(event, direction=1)
             record_return_view_action("PAGE DOWN")
 
         @bindings.add("home")
         def _return_view_home(event) -> None:
+            if active_surface["value"] == "CONTEXTS":
+                assert context_tree_state is not None
+                jump_context_navigation(False)
+                record_return_view_action("CONTEXT HOME")
+                event.app.invalidate()
+                return
             event.current_buffer.cursor_position = 0
             record_return_view_action("HOME")
 
         @bindings.add("end")
         def _return_view_end(event) -> None:
+            if active_surface["value"] == "CONTEXTS":
+                assert context_tree_state is not None
+                jump_context_navigation(True)
+                record_return_view_action("CONTEXT END")
+                event.app.invalidate()
+                return
             event.current_buffer.cursor_position = len(event.current_buffer.text)
             record_return_view_action("END")
 
@@ -481,8 +951,11 @@ def run_command_wait(
     if return_pane is not None:
         body = DynamicContainer(
             lambda: (
-                context_pane.container
-                if context_open["value"] and context_pane is not None
+                context_container
+                if active_surface["value"] == "CONTEXTS"
+                and context_container is not None
+                else input_pane.container
+                if active_surface["value"] == "INPUTS" and input_pane is not None
                 else return_pane.container
             )
         )
@@ -493,17 +966,34 @@ def run_command_wait(
         if status_message["value"]:
             return " " + display_escape_text(status_message["value"])
         if return_pane is not None:
-            help_hint = "H / ? Help · " if frozen_help_entries else ""
-            context_hint = "C inputs/report · " if context_pane is not None else ""
+            help_hint = "H/h/? Help · " if frozen_help_entries else ""
+            context_hint = (
+                "C/c Contexts · " if frozen_context_browser is not None else ""
+            )
+            input_hint = "I/i inputs · " if input_pane is not None else ""
+            report_hint = "R/r report · "
+            if active_surface["value"] == "CONTEXTS":
+                memory_hint = (
+                    "m Memories here · M all Memories · "
+                    if frozen_context_browser is not None
+                    and frozen_context_browser.memory_loader is not None
+                    else ""
+                )
+                return (
+                    f" {context_hint}{input_hint}{report_hint}{help_hint}"
+                    "↑/↓ move · ←/→ expand · Enter browse · "
+                    f"A/a all · {memory_hint}"
+                    "Q/q close · read-only"
+                )
             return (
-                f" {context_hint}{help_hint}↑/↓ scroll · "
+                f" {context_hint}{input_hint}{report_hint}{help_hint}↑/↓ scroll · "
                 "PgUp/PgDn page · Home/End · "
-                "Q request close · read-only"
+                "Q/q request close · read-only"
             )
         return (
-            " H / ? Help · Q request close"
+            " H/h/? Help · Q/q request close"
             if frozen_help_entries
-            else " Q request close"
+            else " Q/q request close"
         )
 
     footer = Window(
@@ -519,7 +1009,9 @@ def run_command_wait(
         input=app_input,
         output=app_output,
         mouse_support=False,
-        style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
+        style=merge_styles(
+            [MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE, CONTEXT_PICKER_STYLE]
+        ),
     )
 
     if (

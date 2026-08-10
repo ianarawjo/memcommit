@@ -1,19 +1,19 @@
- MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0s                                                                                                                                      
-┌───────────────────────────────────────────────────────────────────────────| UPDATE REPORT · BUILDING |───────────────────────────────────────────────────────────────────────────┐
-│MEM UPDATE · REPORT BUILDING                                                                                                                                                     ^│
+ MEM MELD · 2/2 · ANALYZING ORDERED SOURCE RELATIONS .. · 0s
+┌────────────────────────────────────────────────────────────────────────────| MELD REPORT · BUILDING |────────────────────────────────────────────────────────────────────────────┐
+│MEM MELD · REPORT BUILDING                                                                                                                                                       ^│
 │CONTENT PENDING · THIS IS NOT A RESULT                                                                                                                                            │
 │                                                                                                                                                                                  │
-│PLAN                                                                                                                                                                              │
-│  .                                                                                                                                                                               │
-│                                                                                                                                                                                  │
-│WHAT WILL CHANGE                                                                                                                                                                  │
+│WHAT MEM UNDERSTOOD                                                                                                                                                               │
 │  ..                                                                                                                                                                              │
 │                                                                                                                                                                                  │
-│PLANNED CHANGES                                                                                                                                                                   │
+│BOTH                                                                                                                                                                              │
 │  …                                                                                                                                                                               │
 │                                                                                                                                                                                  │
-│TO DO                                                                                                                                                                             │
+│DIFFERENCES                                                                                                                                                                       │
 │  .                                                                                                                                                                               │
+│                                                                                                                                                                                  │
+│ITEMS                                                                                                                                                                             │
+│  ..                                                                                                                                                                              │
 │                                                                                                                                                                                  │
 │The completed report will replace these markers after analysis.                                                                                                                   │
 │C/c opens Contexts; R/r returns here; H/h/? opens Help.                                                                                                                           │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                       
+ C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only

@@ -128,15 +128,21 @@ The same inventory also has a stricter `EXPLORE` presentation used by the
 shared interactive command-wait screen, where an operation-owned report or
 report skeleton is the default foreground.
 In that mode Enter and Right keep descriptions and audited Forms inside Help;
-they never return a shell template. `H` opens Help from the report or confirmed
-input copy and hides it back to the same surface; `Q` or Escape also returns. A
-completed background turn appears as `RESULT READY · H / Q RETURN` without
-closing Help. The
+they never return a shell template. `H` or `h` opens Help from the report,
+confirmed-input copy, or read-only Context browser and hides it back to the
+same surface; `Q`, `q`, or Escape also returns. A completed background turn
+appears as `RESULT READY · H / Q RETURN` without closing Help. The
 inventory data and renderer remain shared; only the caller-owned visibility
 and exit policy differs. Ordinary `mem help` retains `H` for full command help.
+The sibling wait destinations are `C/c` for a browse-only switch-shaped
+Context tree, `I/i` for supplied confirmed inputs, and `R/r` for a supplied
+report. `m/M` may reveal Memory previews inside the Context tree, but that
+surface has no switch receipt or current-Context mutation path.
 See
+[`command-wait-destination-browser-design-rationale.md`](command-wait-destination-browser-design-rationale.md)
+for the destination and browse-only boundary, and
 [`interactive-command-wait-design-rationale.md`](interactive-command-wait-design-rationale.md)
-for the background execution and consistency boundary.
+for background execution consistency.
 
 Long-lived terminal sessions now reuse that same `EXPLORE` renderer through
 the operation-neutral Session Help controller. On a read-only navigation

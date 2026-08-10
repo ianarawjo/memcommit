@@ -10,13 +10,16 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.command_wait import (
+    CommandWaitContextBrowser,
     CommandWaitView,
     build_report_loading_view,
     run_command_wait,
 )
+from memcommit.commands.context_picker import ContextMemoryRow
 from memcommit.commands.help_inventory import CommandEntry
 from memcommit.commands.tui_primitives import ScrollableFormattedTextPane
 from memcommit.profile_config import ProfileEntry
+from memcommit.store import MemoryStore
 from memcommit.study_action_log import (
     StudyActionLedger,
     begin_study_action_recording,
@@ -85,9 +88,10 @@ def test_report_is_default_and_h_toggles_help_without_restarting_work():
 
     with create_pipe_input() as pipe_input:
         def drive_terminal() -> None:
-            # The report-shaped wait screen is the default. C toggles its
-            # frozen inputs and H enters the optional Help layer.
-            pipe_input.send_text("cch")
+            # The report-shaped wait screen is the default. C opens the
+            # switch-style Context tree, I opens inputs, R restores report,
+            # and lower-case H enters the optional Help layer.
+            pipe_input.send_text("cm\x1b[B\rirh")
             if not help_opened.wait(3):
                 pipe_input.send_text("\x03")
                 return
@@ -127,6 +131,13 @@ def test_report_is_default_and_h_toggles_help_without_restarting_work():
             context_view=CommandWaitView(
                 title="SEVER CONFIRMED INPUTS · READ-ONLY",
                 text="SOURCE · frozen/source\nCRITERIA · frozen/criteria",
+            ),
+            context_browser=CommandWaitContextBrowser.create(
+                ("alpha", "alpha/child", "beta"),
+                current_name="alpha",
+                memory_loader=lambda name: (
+                    ContextMemoryRow("memory 11111111", f"{name} preview"),
+                ),
             ),
         )
         driver.join(timeout=3)
@@ -280,7 +291,7 @@ def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
                 # The frozen return view is a real read-only viewport. Its
                 # navigation joins the same Study action sequence.
                 pipe_input.send_text("\x1b[B")
-                pipe_input.send_text("cch")
+                pipe_input.send_text("cm\x1b[B\rIRh")
                 if not worker_recorded.wait(3) or not result_ready.wait(3):
                     pipe_input.send_text("\x03")
                     return
@@ -307,6 +318,13 @@ def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
                     title="FORGET CONFIRMED INPUTS · READ-ONLY",
                     text="SOURCE\nline one\nline two\nline three",
                 ),
+                context_browser=CommandWaitContextBrowser.create(
+                    ("alpha", "alpha/child", "beta"),
+                    current_name="alpha",
+                    memory_loader=lambda name: (
+                        ContextMemoryRow("memory 11111111", f"{name} preview"),
+                    ),
+                ),
             ) == 7
             driver.join(timeout=3)
     finally:
@@ -324,10 +342,153 @@ def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
 
     assert "HELP OPEN" in tui_actions
     assert "RETURN VIEW DOWN" in tui_actions
+    assert "CONTEXT BROWSER OPEN" in tui_actions
+    assert "CONTEXT BROWSER MEMORIES HERE" in tui_actions
+    assert "RETURN VIEW CONTEXT DOWN" in tui_actions
+    assert "CONTEXT BROWSER MEMORY PREVIEW" in tui_actions
     assert "CONFIRMED INPUTS OPEN" in tui_actions
-    assert "CONFIRMED INPUTS CLOSE" in tui_actions
+    assert "REPORT OPEN" in tui_actions
     assert "EXECUTED" in tui_actions
     assert "HELP RESULT_READY" in tui_actions
     assert "HELP HIDE" in tui_actions
     assert "HELP CLOSE" in tui_actions
     assert [event.sequence for event in events] == list(range(1, len(events) + 1))
+
+
+def test_context_memory_browsing_never_switches_current(monkeypatch):
+    previewed = threading.Event()
+    actions: list[str] = []
+
+    def observe(_event_kind: str, **data: object):
+        action = data.get("action")
+        if isinstance(action, str):
+            actions.append(action)
+            if action == "CONTEXT BROWSER MEMORY PREVIEW":
+                previewed.set()
+        return None
+
+    def reject_switch(_store, _name: str) -> None:
+        raise AssertionError("The read-only Context browser attempted a switch.")
+
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.record_study_action",
+        observe,
+    )
+    monkeypatch.setattr(MemoryStore, "set_current", reject_switch)
+
+    def work(_progress):
+        if not previewed.wait(3):
+            raise RuntimeError("The Memory preview was not reached.")
+        return "unchanged"
+
+    with create_pipe_input() as pipe_input:
+        driver = threading.Thread(
+            target=lambda: pipe_input.send_text("CM\x1b[B\r"),
+            daemon=True,
+        )
+        driver.start()
+        result = run_command_wait(
+            "COMPARE",
+            "analyzing",
+            total=1,
+            work=work,
+            help_entries=(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            interactive=True,
+            interval=0.01,
+            return_view=CommandWaitView("REPORT", "pending"),
+            context_browser=CommandWaitContextBrowser.create(
+                ("alpha", "beta"),
+                current_name="alpha",
+                memory_loader=lambda name: (
+                    ContextMemoryRow("memory 11111111", f"{name} preview"),
+                ),
+            ),
+        )
+        driver.join(timeout=3)
+
+    assert result == "unchanged"
+    assert not driver.is_alive()
+    assert "CONTEXT BROWSER MEMORIES ALL" in actions
+    assert "CONTEXT BROWSER MEMORY PREVIEW" in actions
+
+
+def test_input_and_report_shortcuts_are_bound_only_when_views_exist(monkeypatch):
+    actions: list[str] = []
+    report_opened = threading.Event()
+
+    def observe(_event_kind: str, **data: object):
+        action = data.get("action")
+        if isinstance(action, str):
+            actions.append(action)
+            if action == "REPORT OPEN":
+                report_opened.set()
+        return None
+
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.record_study_action",
+        observe,
+    )
+
+    def work(_progress):
+        if not report_opened.wait(3):
+            raise RuntimeError("R/r was not bound.")
+        return "report only"
+
+    with create_pipe_input() as pipe_input:
+        driver = threading.Thread(
+            target=lambda: pipe_input.send_text("ir"),
+            daemon=True,
+        )
+        driver.start()
+        result = run_command_wait(
+            "COMPARE",
+            "analyzing",
+            total=1,
+            work=work,
+            help_entries=(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            interactive=True,
+            interval=0.01,
+            return_view=CommandWaitView("REPORT", "pending"),
+            context_browser=CommandWaitContextBrowser.create(
+                ("alpha",),
+                current_name="alpha",
+            ),
+        )
+        driver.join(timeout=3)
+
+    assert result == "report only"
+    assert "REPORT OPEN" in actions
+    assert "CONFIRMED INPUTS OPEN" not in actions
+
+    actions.clear()
+
+    def work_without_report(_progress):
+        time.sleep(0.05)
+        return "no report"
+
+    with create_pipe_input() as pipe_input:
+        driver = threading.Thread(
+            target=lambda: pipe_input.send_text("r"),
+            daemon=True,
+        )
+        driver.start()
+        result = run_command_wait(
+            "COMPARE",
+            "analyzing",
+            total=1,
+            work=work_without_report,
+            help_entries=(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            interactive=True,
+            interval=0.01,
+        )
+        driver.join(timeout=3)
+
+    assert result == "no report"
+    assert "REPORT OPEN" not in actions
+    assert "CONFIRMED INPUTS OPEN" not in actions

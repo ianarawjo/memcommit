@@ -24,6 +24,7 @@ from memcommit.commands.tui_primitives import (
     display_escape_text,
     navigable_tree_row_prefix,
 )
+from memcommit.context import Context, Memory, MemoryRef
 from memcommit.context_targeting.tui.tree import (
     ContextTree,
     ContextTreeRow,
@@ -33,7 +34,11 @@ from memcommit.context_targeting.tui.tree import (
     expandable_context_subtree,
     visible_context_rows,
 )
-from memcommit.source_projection.model import SourceDisplayFacts, SourceState
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceState,
+)
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
     normalize_source_display_tokens,
@@ -57,6 +62,9 @@ _CONTEXT_PICKER_STYLE = merge_styles(
         ),
     ]
 )
+# Embedded browse-only surfaces share the picker's focus grammar without
+# reaching through its complete selection application.
+CONTEXT_PICKER_STYLE = _CONTEXT_PICKER_STYLE
 
 
 @dataclass(frozen=True)
@@ -68,6 +76,47 @@ class ContextMemoryRow:
     style: Literal["memory-object", "report-neutral"] = "memory-object"
     selector: str | None = None
     source: SourceDisplayFacts | None = None
+
+
+def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
+    """Project direct Context items as read-only picker Memory rows.
+
+    Keeping this projection beside the common renderer gives ``mem switch``
+    and embedded browse-only trees the same Memory/MemoryRef presentation.
+    It deliberately returns no Context-selection receipt or persistence hook.
+    """
+
+    rows: list[ContextMemoryRow] = []
+    for item in context.iter_items():
+        if isinstance(item, Memory):
+            rows.append(
+                ContextMemoryRow(
+                    item.uid[:8],
+                    item.content,
+                    source=SourceDisplayFacts(form=SourceForm.MEMORY),
+                )
+            )
+        elif isinstance(item, MemoryRef):
+            content = (
+                item.target.content
+                if item.target is not None
+                else f"(dangling reference) {item.target_context_name}"
+            )
+            rows.append(
+                ContextMemoryRow(
+                    item.uid[:8],
+                    content,
+                    source=SourceDisplayFacts(
+                        form=SourceForm.MEMORY_REF,
+                        states=(
+                            (SourceState.READ_ONLY,)
+                            if item.target is not None
+                            else (SourceState.DANGLING,)
+                        ),
+                    ),
+                )
+            )
+    return tuple(rows)
 
 
 @dataclass(frozen=True)

@@ -253,11 +253,10 @@ def _analyze_symmetric_comparison_basis(
         "preparing ordered Compare basis",
         total=2,
         work=compare_frames,
-        # This automatic prerequisite has no earlier report to preserve. Show
-        # all three operands first so a cross-task current Context cannot look
-        # like an implicit source or target; C still exposes the report shape.
-        return_view=confirmed_inputs,
-        context_view=build_report_loading_view(
+        # The destination keys retain one meaning across every wait: Report is
+        # the default R/r surface, while I/i exposes all three frozen operands
+        # so a cross-task current Context cannot look implicit.
+        return_view=build_report_loading_view(
             "MELD",
             sections=(
                 "What mem understood",
@@ -266,6 +265,7 @@ def _analyze_symmetric_comparison_basis(
                 "Items",
             ),
         ),
+        context_view=confirmed_inputs,
     )
 
 

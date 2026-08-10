@@ -3583,7 +3583,9 @@ def test_symmetric_basis_wait_view_shows_sources_and_unchanged_result():
     assert "INCLUDE DESCENDANTS" in view.text
 
 
-def test_symmetric_basis_wait_opens_on_operands_before_report_shape(monkeypatch):
+def test_symmetric_basis_wait_keeps_report_and_inputs_on_explicit_destinations(
+    monkeypatch,
+):
     left = ops.init("wait/advisor1")
     right = ops.init("wait/advisor2")
     ops.add(left, "Pay CAD 20–30 per hour, including travel time.")
@@ -3596,9 +3598,9 @@ def test_symmetric_basis_wait_opens_on_operands_before_report_shape(monkeypatch)
             calls.append(("UPDATE", stage, step))
 
     def run_wait(operation, stage, *, total, work, return_view, context_view):
-        assert return_view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
-        assert "RESULT C · wait/proposal-workspace" in return_view.text
-        assert context_view.title == "MELD REPORT · BUILDING"
+        assert return_view.title == "MELD REPORT · BUILDING"
+        assert context_view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
+        assert "RESULT C · wait/proposal-workspace" in context_view.text
         calls.append(("WAIT", operation, stage, total))
         return work(Progress())
 

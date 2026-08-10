@@ -1,22 +1,22 @@
- MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0s                                                                                                                                      
-┌───────────────────────────────────────────────────────────────────────────| UPDATE REPORT · BUILDING |───────────────────────────────────────────────────────────────────────────┐
-│MEM UPDATE · REPORT BUILDING                                                                                                                                                     ^│
-│CONTENT PENDING · THIS IS NOT A RESULT                                                                                                                                            │
+ MEM MELD · 2/2 · ANALYZING ORDERED SOURCE RELATIONS … · 1s
+┌──────────────────────────────────────────────────────────────────────| MELD CONFIRMED INPUTS · READ-ONLY |───────────────────────────────────────────────────────────────────────┐
+│MEM COMPARE · FROZEN INPUT · RESULT PENDING                                                                                                                                      ^│
 │                                                                                                                                                                                  │
-│PLAN                                                                                                                                                                              │
-│  .                                                                                                                                                                               │
+│REFERENCE A · task-2/advisor1                                                                                                                                                     │
+│  SCOPE · INCLUDE DESCENDANTS                                                                                                                                                     │
+│  FROZEN MEMORIES · 1                                                                                                                                                             │
 │                                                                                                                                                                                  │
-│WHAT WILL CHANGE                                                                                                                                                                  │
-│  ..                                                                                                                                                                              │
+│PEER B · task-2/advisor2                                                                                                                                                          │
+│  SCOPE · THIS CONTEXT ONLY                                                                                                                                                       │
+│  FROZEN MEMORIES · 1                                                                                                                                                             │
 │                                                                                                                                                                                  │
-│PLANNED CHANGES                                                                                                                                                                   │
-│  …                                                                                                                                                                               │
+│RESULT C · task-2/participant/proposal-workspace2                                                                                                                                 │
+│  TARGET STATE · UNCHANGED WHILE COMPARE RUNS                                                                                                                                     │
 │                                                                                                                                                                                  │
-│TO DO                                                                                                                                                                             │
-│  .                                                                                                                                                                               │
+│The ordered Compare basis will be saved before the Meld target and session are published.                                                                                         │
 │                                                                                                                                                                                  │
-│The completed report will replace these markers after analysis.                                                                                                                   │
-│C/c opens Contexts; R/r returns here; H/h/? opens Help.                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                       
+ C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only

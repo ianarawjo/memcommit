@@ -342,14 +342,27 @@ def _capture() -> None:
     )
     child.logfile_read = recorder
     try:
+        child.expect(b"MELD REPORT .* BUILDING")
+        _settle(child)
+        _render(bytes(recorder.data), "01-report-building")
+
+        child.send(b"c")
+        _settle(child)
+        _render(bytes(recorder.data), "02-context-browser")
+
+        child.send(b"i")
         child.expect(b"MELD CONFIRMED INPUTS .* READ-ONLY")
         _settle(child)
-        _render(bytes(recorder.data), "01-frozen-a-b-c")
+        _render(bytes(recorder.data), "03-frozen-a-b-c")
+
+        child.send(b"r")
+        _settle(child)
+        _render(bytes(recorder.data), "04-report-restored")
 
         child.expect(b"CONTEXT LOCATIONS")
         child.expect(b"TO DO")
         _settle(child)
-        _render(bytes(recorder.data), "02-seeded-review")
+        _render(bytes(recorder.data), "05-seeded-review")
 
         child.send(b"\t")
         _settle(child, 0.2)
@@ -358,25 +371,25 @@ def _capture() -> None:
         child.send(b"\r")
         child.expect(b"MEMORY COLLISION")
         _settle(child)
-        _render(bytes(recorder.data), "03-required-issue")
+        _render(bytes(recorder.data), "06-required-issue")
 
         child.send(b"\t")
         _settle(child, 0.2)
         child.send(b"\r")
         child.expect("✓ Keep all supported ".encode())
         _settle(child)
-        _render(bytes(recorder.data), "04-staged-response")
+        _render(bytes(recorder.data), "07-staged-response")
 
         child.send(b"q")
         child.expect(b"CAPTURE GATE .* PRESS V")
         _settle(child)
-        _render(bytes(recorder.data), "05-close-receipt")
+        _render(bytes(recorder.data), "08-close-receipt")
 
         child.send(b"v\r")
         child.expect(b"READ-ONLY CONTRACT CHECK")
         child.expect(b"MELD SESSION .* NOT APPLIED")
         child.expect(pexpect.EOF)
-        _render(bytes(recorder.data), "06-read-only-verification")
+        _render(bytes(recorder.data), "09-read-only-verification")
     finally:
         child.close(force=True)
         shutil.rmtree(store_root)

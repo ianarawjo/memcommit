@@ -3,8 +3,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands.context_picker import ContextMemoryRow, choose_context
-from memcommit.context import Memory, MemoryRef
+from memcommit.commands.context_picker import choose_context, context_memory_rows
 from memcommit.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
@@ -22,12 +21,7 @@ from memcommit.commands.granted_context import (
 from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.study_operation_policy import analysis_boundary_label
-from memcommit.source_projection.model import (
-    SourceDisplayFacts,
-    SourceForm,
-    SourceState,
-    context_access_facts,
-)
+from memcommit.source_projection.model import context_access_facts
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
     SourceDisplayValue,
@@ -133,42 +127,6 @@ def _local_picker_annotations(
     return {}
 
 
-def _picker_memory_rows(context) -> tuple[ContextMemoryRow, ...]:
-    """Project direct Memories without making them selectable tree nodes."""
-
-    rows: list[ContextMemoryRow] = []
-    for item in context.iter_items():
-        if isinstance(item, Memory):
-            rows.append(
-                ContextMemoryRow(
-                    item.uid[:8],
-                    item.content,
-                    source=SourceDisplayFacts(form=SourceForm.MEMORY),
-                )
-            )
-        elif isinstance(item, MemoryRef):
-            content = (
-                item.target.content
-                if item.target is not None
-                else f"(dangling reference) {item.target_context_name}"
-            )
-            rows.append(
-                ContextMemoryRow(
-                    item.uid[:8],
-                    content,
-                    source=SourceDisplayFacts(
-                        form=SourceForm.MEMORY_REF,
-                        states=(
-                            (SourceState.READ_ONLY,)
-                            if item.target is not None
-                            else (SourceState.DANGLING,)
-                        ),
-                    ),
-                )
-            )
-    return tuple(rows)
-
-
 def cmd(
     name: Annotated[
         Optional[str],
@@ -205,14 +163,14 @@ def cmd(
 
             def load_picker_memories(context_name: str):
                 if context_name in names:
-                    return _picker_memory_rows(store.load(context_name))
+                    return context_memory_rows(store.load(context_name))
                 access = resolve_context_access(
                     store,
                     context_name,
                     current_name=expected_current,
                     required_permission="READ",
                 )
-                return _picker_memory_rows(
+                return context_memory_rows(
                     GrantedReadStore(access).load(access.display_name)
                 )
 

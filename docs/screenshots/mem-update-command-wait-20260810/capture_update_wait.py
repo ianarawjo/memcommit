@@ -256,27 +256,37 @@ def _parent() -> None:
         _render_snapshot("01-dot-cycle-report", bytes(raw))
 
         child.send(b"c")
+        time.sleep(0.5)
+        while _drain(child, raw, timeout=0.02):
+            pass
+        _render_snapshot("02-context-browser", bytes(raw))
+
+        child.send(b"m\x1b[B")
+        _wait_for(child, raw, b"south entrance now", timeout=3)
+        _render_snapshot("03-context-memory-preview", bytes(raw))
+
+        child.send(b"i")
         _wait_for(child, raw, b"SOURCE A", timeout=3)
-        _render_snapshot("02-confirmed-inputs", bytes(raw))
+        _render_snapshot("04-confirmed-inputs", bytes(raw))
 
         child.send(b"h")
         _wait_for(child, raw, b"mem help", timeout=3)
-        _render_snapshot("03-help-during-update", bytes(raw))
+        _render_snapshot("05-help-during-update", bytes(raw))
 
         child.send(b"h")
         time.sleep(0.3)
         while _drain(child, raw, timeout=0.02):
             pass
-        _render_snapshot("04-confirmed-inputs-restored", bytes(raw))
+        _render_snapshot("06-confirmed-inputs-restored", bytes(raw))
 
-        child.send(b"c")
+        child.send(b"r")
         time.sleep(0.3)
         while _drain(child, raw, timeout=0.02):
             pass
-        _render_snapshot("05-dot-cycle-report-restored", bytes(raw))
+        _render_snapshot("07-dot-cycle-report-restored", bytes(raw))
 
         _wait_for(child, raw, b"REVIEW AND APPLY", timeout=20)
-        _render_snapshot("06-staged-review", bytes(raw))
+        _render_snapshot("08-staged-review", bytes(raw))
 
         child.send(b"\x1b")
         deadline = time.monotonic() + 5
@@ -287,7 +297,7 @@ def _parent() -> None:
         child.close()
         if child.exitstatus not in {0, None}:
             raise RuntimeError(f"Capture child exited with {child.exitstatus}.")
-        _render_snapshot("07-staged-receipt-verification", bytes(raw))
+        _render_snapshot("09-staged-receipt-verification", bytes(raw))
 
     if b"\x1b[" not in raw:
         raise RuntimeError("PTY stream did not contain ANSI control sequences.")

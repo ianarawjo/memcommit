@@ -1,22 +1,22 @@
- MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0s                                                                                                                                      
-┌───────────────────────────────────────────────────────────────────────────| UPDATE REPORT · BUILDING |───────────────────────────────────────────────────────────────────────────┐
-│MEM UPDATE · REPORT BUILDING                                                                                                                                                     ^│
-│CONTENT PENDING · THIS IS NOT A RESULT                                                                                                                                            │
+ MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 1s                                                                                                                                  
+┌─────────────────────────────────────────────────────────────────────| UPDATE CONFIRMED INPUTS · READ-ONLY |──────────────────────────────────────────────────────────────────────┐
+│MEM UPDATE · FROZEN INPUTS · RESULT PENDING                                                                                                                                      ^│
 │                                                                                                                                                                                  │
-│PLAN                                                                                                                                                                              │
-│  .                                                                                                                                                                               │
+│SOURCE A · capture/update/source                                                                                                                                                  │
+│  SCOPE · SELECTED GRAPH ONLY                                                                                                                                                     │
+│  UPDATE EFFECT · READ-ONLY WHILE PLANNING                                                                                                                                        │
 │                                                                                                                                                                                  │
-│WHAT WILL CHANGE                                                                                                                                                                  │
-│  ..                                                                                                                                                                              │
+│TARGET B · capture/update/target                                                                                                                                                  │
+│  SCOPE · SELECTED GRAPH ONLY                                                                                                                                                     │
+│  UPDATE EFFECT · READ-ONLY UNTIL EXPLICIT APPLY                                                                                                                                  │
 │                                                                                                                                                                                  │
-│PLANNED CHANGES                                                                                                                                                                   │
-│  …                                                                                                                                                                               │
+│No target change is applied while this report is being built.                                                                                                                     │
 │                                                                                                                                                                                  │
-│TO DO                                                                                                                                                                             │
-│  .                                                                                                                                                                               │
 │                                                                                                                                                                                  │
-│The completed report will replace these markers after analysis.                                                                                                                   │
-│C/c opens Contexts; R/r returns here; H/h/? opens Help.                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
