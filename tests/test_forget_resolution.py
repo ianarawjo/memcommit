@@ -2,20 +2,30 @@ import json
 import uuid
 
 import pytest
+from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.output import DummyOutput
 
 import memcommit.ops as ops
 from memcommit.commands import forget as forget_command
 from memcommit.commands.resolution_workbench_shell import (
+    resolution_report_fragments,
     resolution_viewer_fragments,
+    run_resolution_workbench_shell,
     session_review_action_view,
     session_todo_view,
 )
 from memcommit.context import Context, Memory
-from memcommit.forget_resolution_adapter import ForgetResolutionWorkbenchAdapter
+from memcommit.forget_resolution_adapter import (
+    ForgetResolutionWorkbenchAdapter,
+    forget_memory_changes,
+)
 from memcommit.forget_review import ForgetReview
+from memcommit.impact_controller import ImpactController
 from memcommit.provider_types import ProviderIdentity
 from memcommit.resolution_workbench import ResolutionNavigation, ResolutionWorkbenchAction
+from memcommit.selective_curation import CurationAnalysis, CurationDecision
 from memcommit.semantic.changes import EditChange, RemoveChange
+from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 
 class BatchForgetLLM:
@@ -180,6 +190,124 @@ def test_forget_projects_instruction_and_memories_into_shared_resolution_report(
     assert positions == sorted(positions)
 
 
+def test_forget_projects_complete_source_as_exact_in_place_memory_changes():
+    context = _context()
+    analysis, _history = ops.analyze_forget(
+        context,
+        "Forget the covered details.",
+        BatchForgetLLM(),
+    )
+    review = ForgetReview.create(context, "Forget the covered details.", analysis)
+
+    changes = forget_memory_changes(review)
+
+    assert [(change.marker, change.treatment) for change in changes] == [
+        ("~", "TRANSFORM"),
+        ("−", "DROP"),
+        ("=", "KEEP"),
+    ]
+    assert all(change.location == context.name for change in changes)
+    assert changes[0].before == "Forget this part, but keep the independent remainder."
+    assert changes[0].after == "Keep the independent remainder."
+    assert changes[1].before == "Forget all of this."
+    assert changes[1].after is None
+    assert changes[2].before == changes[2].after == "Keep this unrelated Memory."
+
+
+def test_forget_impact_replaces_generic_results_with_source_aware_diff():
+    context = _context()
+    analysis, _history = ops.analyze_forget(
+        context,
+        "Forget the covered details.",
+        BatchForgetLLM(),
+    )
+    review = ForgetReview.create(context, "Forget the covered details.", analysis)
+    view = ForgetResolutionWorkbenchAdapter(review).view()
+    impact = ImpactController.from_memory_changes(
+        operation=view.operation,
+        artifact_uid=view.artifact_uid,
+        revision=view.revision,
+        title="IMPACT · PROPOSED SOURCE REVISION",
+        summary="Exact frozen Source transitions.",
+        changes=forget_memory_changes(review),
+    )
+
+    rendered = "".join(
+        text
+        for _style, text in resolution_report_fragments(
+            view,
+            review_and_apply=True,
+            impact_controller=impact,
+        )
+    )
+
+    assert "PROPOSED SOURCE RESULT" not in rendered
+    assert "IMPACT · PROPOSED SOURCE REVISION" in rendered
+    assert "- Forget this part, but keep the independent remainder." in rendered
+    assert "+ Keep the independent remainder." in rendered
+    assert "- Forget all of this." in rendered
+    assert "= Keep this unrelated Memory." in rendered
+    assert "This Source Memory will be removed." not in rendered
+
+
+def test_large_forget_impact_moves_down_one_source_memory_at_a_time():
+    context = Context(uid=str(uuid.uuid4()), name="large-source")
+    decisions = []
+    source_uids = []
+    for index in range(278):
+        memory = Memory(
+            uid=str(uuid.uuid4()),
+            content=f"Frozen Source Memory {index + 1:03d}.",
+        )
+        context.add(memory)
+        source_uids.append(memory.uid)
+        decisions.append(
+            CurationDecision(
+                source_uid=memory.uid,
+                action="KEEP",
+                variant="KEEP",
+                proposed_content=memory.content,
+                rationale="The instruction does not cover this Memory.",
+                criterion_uids=("k1",),
+            )
+        )
+    review = ForgetReview.create(
+        context,
+        "Forget nothing in this navigation fixture.",
+        CurationAnalysis(
+            overview="Reviewed the complete large Source.",
+            decisions=tuple(decisions),
+        ),
+    )
+    view = ForgetResolutionWorkbenchAdapter(review).view()
+    impact = ImpactController.from_memory_changes(
+        operation=view.operation,
+        artifact_uid=view.artifact_uid,
+        revision=view.revision,
+        title="IMPACT · PROPOSED SOURCE REVISION",
+        summary="Exact frozen Source transitions.",
+        changes=forget_memory_changes(review),
+    )
+    workbench_navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        # Overview -> review summary -> Impact heading -> first Memory -> second.
+        pipe_input.send_text("\x1b[B" * 4 + "q")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            impact_controller=impact,
+            workbench_navigation=workbench_navigation,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert workbench_navigation.section_uid == f"REPORT:IMPACT:{source_uids[1]}"
+
+
 def test_forget_review_materializes_only_reviewed_operation_specific_changes():
     context = _context()
     analysis, _history = ops.analyze_forget(
@@ -248,10 +376,17 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
         )
     )
 
-    def choose(view_supplier, **_kwargs):
+    impact_labels = []
+
+    def choose(view_or_supplier, **kwargs):
+        view = view_or_supplier() if callable(view_or_supplier) else view_or_supplier
+        impact = kwargs["impact_controller"].view()
+        assert impact.replaces_results is True
+        assert impact.revision == view.revision
+        impact_labels.append(impact.entries[0].label)
         action = next(actions)
         if action.kind == "SUBMIT_ITEM":
-            candidate_uid = view_supplier().items[0].uid
+            candidate_uid = view.items[0].uid
             return ResolutionWorkbenchAction(
                 kind="SUBMIT_ITEM",
                 item_uid=candidate_uid,
@@ -273,6 +408,7 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
     assert first_uid not in {change.uid for change in changes}
     assert any(isinstance(change, RemoveChange) for change in changes)
     assert first_uid in context.memories
+    assert impact_labels == ["TRANSFORM", "KEEP"]
     assert progress_events == [
         (
             "start",

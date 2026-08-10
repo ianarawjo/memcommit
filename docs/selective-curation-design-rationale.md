@@ -68,6 +68,19 @@ changing it updates the durable session but does not create the Context. Its
 expanded editor shares the local parent-Context tree and keeps exact direct
 input as the initial focus.
 
+The complete Forget result uses the same located `MemoryChange` projection as
+Sever and Diff instead of flattening every outcome into one Results paragraph.
+Each frozen Source Memory is one independent Viewer stop: DROP renders the
+original as a removal, TRANSFORM renders the original and reviewed replacement
+as a before/after diff, and KEEP renders the original as equal. This is a
+presentation projection of the complete review, not a change to Forget's sparse
+public mutation API. Reusing the shared Impact controller also supplies common
+Up/Down, PageUp/PageDown, Home/End, focus, wrapping, and rationale expansion;
+Forget does not own a parallel large-result navigation grammar. The Impact is
+rebuilt with every process-local review revision so a changed treatment cannot
+leave a stale before/after display, while the frozen Source value remains the
+authoritative `before` side until Apply.
+
 ## Flagless Forget setup
 
 In a TTY, `mem forget` without an instruction opens a process-local setup

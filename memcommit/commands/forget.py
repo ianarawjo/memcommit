@@ -22,8 +22,12 @@ from memcommit.commands.readable_context_catalog import (
 )
 from memcommit.commands.tui_primitives import safe_terminal_text
 from memcommit.context import AutoCheckpoint, Context
-from memcommit.forget_resolution_adapter import ForgetResolutionWorkbenchAdapter
+from memcommit.forget_resolution_adapter import (
+    ForgetResolutionWorkbenchAdapter,
+    forget_memory_changes,
+)
 from memcommit.forget_review import ForgetReview, ForgetSelection
+from memcommit.impact_controller import ImpactController
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.provider_types import ProviderIdentity
@@ -103,8 +107,20 @@ def _run_resolution_forget(
     review = ForgetReview.create(ctx, info, analysis)
     navigation = ResolutionNavigation()
     while True:
+        active_view = ForgetResolutionWorkbenchAdapter(review).view()
+        impact_controller = ImpactController.from_memory_changes(
+            operation=active_view.operation,
+            artifact_uid=active_view.artifact_uid,
+            revision=active_view.revision,
+            title="IMPACT · PROPOSED SOURCE REVISION",
+            summary=(
+                "These are the exact changes Apply would make to the frozen "
+                "Source. Nothing has changed yet."
+            ),
+            changes=forget_memory_changes(review),
+        )
         action = run_resolution_workbench_shell(
-            ForgetResolutionWorkbenchAdapter(review).view,
+            active_view,
             navigation=navigation,
             terminal_label="Interactive Forget",
             snapshot_hint=(
@@ -112,6 +128,7 @@ def _run_resolution_forget(
             ),
             review_and_apply=True,
             split_viewer_items=True,
+            impact_controller=impact_controller,
         )
         if action.kind == "CLOSE":
             return []

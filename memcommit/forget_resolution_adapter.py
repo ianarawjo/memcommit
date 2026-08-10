@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from memcommit.forget_review import ForgetReview
+from memcommit.memory_diff import MemoryChange
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
@@ -17,6 +18,33 @@ from memcommit.resolution_workbench import (
     ResolutionWorkbenchView,
 )
 from memcommit.result_workbench import ResultRef
+
+
+def forget_memory_changes(review: ForgetReview) -> tuple[MemoryChange, ...]:
+    """Project every reviewed Source Memory as one exact in-place transition.
+
+    Forget's public mutation API remains sparse, but its review must keep the
+    complete frozen Source visible.  In particular, a DROP needs the original
+    value as ``before`` so the shared diff surface never replaces evidence with
+    a generic "will be removed" sentence.
+    """
+
+    changes: list[MemoryChange] = []
+    for candidate in review.candidates:
+        action, content = candidate.selected_action()
+        source = candidate.source
+        changes.append(
+            MemoryChange(
+                marker="−" if action == "DROP" else "=" if action == "KEEP" else "~",
+                treatment=action,
+                location=review.context_name,
+                memory_uid=source.uid,
+                before=source.content,
+                after=None if action == "DROP" else content,
+                reason=candidate.decision.rationale,
+            )
+        )
+    return tuple(changes)
 
 
 class ForgetResolutionWorkbenchAdapter:

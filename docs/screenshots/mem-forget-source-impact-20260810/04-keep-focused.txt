@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FORGET · SELECTIVE SOURCE REVISION                                                                                                                                          ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · beta                                                                                                                                                                  ┃
+┃ REVIEWING · 3 SOURCE · 1 instruction CRITERION · 2 CHANGES                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ ASSESSMENT                                                                                                                                                                       ┃
+┃ Remove the obsolete location and code while preserving general step-free guidance.                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT APPLIES                                                                                                                                                                     ┃
+┃ The one Forget instruction was evaluated against all 3 direct Source Memories in one batch. The current reviewed result changes 2; unchanged Memories remain explicit and inspec ┃
+┃table in Items.                                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · PROPOSED SOURCE REVISION                                                                                                                                                ┃
+┃ These are the exact changes Apply would make to the frozen Source. Nothing has changed yet.                                                                                      ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ ~ [TRANSFORM] beta [20000001]                                                                                                                                            ┃
+┃             - The desk was previously beside the west entrance. The route remains step-free.                                                                                     ┃
+┃             + The route remains step-free.                                                                                                                                       ┃
+┃       ▸ − [DROP]      beta [20000002]                                                                                                                                            ┃
+┃             - The obsolete access code was 4815.                                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ ›     ▸ = [KEEP]      beta [20000003]                                                                                                                                            ┃
+┃             = Visitors should verify the step-free route before arrival.                                                                                                         ┃
+┃ REVIEW AND APPLY                                                                                                                                                                 ┃
+┃ APPLY is available. Enter to review before anything changes.                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Forget report                                                                                                                                          ^│
+│  FORGET DECISION The desk was previously beside the west entrance. The route remains step-free.                                                                                  │
+│  FORGET DECISION The obsolete access code was 4815.                                                                                                                              │
+│  FORGET DECISION Visitors should verify the step-free route before arrival.                                                                                                      │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Forget action · APPLY is available. Enter to review before anything changes.                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ Memory  → show  ← hide  Enter toggle  Tab switch  Esc/Backspace close A review & apply  H Help  Q close                                                                        
