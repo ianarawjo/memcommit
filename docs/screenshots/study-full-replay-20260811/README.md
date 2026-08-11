@@ -5,6 +5,12 @@ Every capture uses the real `mem` executable in a `180 × 52` color-capable PTY.
 The run name is `study-snapshot-replay-20260811`; the selected baseline is
 `study-baseline`.
 
+Observer-authored participant journals narrate every capture in order and
+separate the operation, visible outcome, and issue or research note:
+
+- [English participant journal](./PARTICIPANT-JOURNAL.en.md)
+- [한국어 참가자 저널](./PARTICIPANT-JOURNAL.ko.md)
+
 ## Init Study interaction log
 
 | Capture | Command | Preceding input | Visible state | Durable mutation |
