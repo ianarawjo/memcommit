@@ -10,6 +10,8 @@ separate the operation, visible outcome, and issue or research note:
 
 - [English participant journal](./PARTICIPANT-JOURNAL.en.md)
 - [한국어 참가자 저널](./PARTICIPANT-JOURNAL.ko.md)
+- [Editable English Word journal](./PARTICIPANT-JOURNAL.en.docx)
+- [수정 가능한 한국어 Word 저널](./PARTICIPANT-JOURNAL.ko.docx)
 
 ## Init Study interaction log
 
