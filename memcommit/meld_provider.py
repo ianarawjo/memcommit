@@ -27,10 +27,13 @@ from memcommit.result_workbench import (
 )
 from memcommit.semantic_execution import (
     BudgetLimits,
+    CoverageError,
     ExecutionMode,
     ExecutionStrategy,
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
+    decode_exact_source_assignments,
+    exact_source_assignment_schema,
     json_budget,
     plan_semantic_execution,
 )
@@ -626,11 +629,12 @@ def _provider_view(session: MeldSession) -> _ProviderView:
 
 
 def meld_output_schema(
-    source_count: int,
+    source_memory_ids: tuple[str, ...],
     *,
     mode: str = "SYMMETRIC",
     target_context_count: int = 1,
 ) -> dict[str, object]:
+    source_count = len(source_memory_ids)
     key = {"type": "string", "minLength": 1, "maxLength": MELD_KEY_LIMIT}
     text = {"type": "string", "minLength": 1, "maxLength": MELD_TEXT_LIMIT}
     overview_text = {
@@ -652,17 +656,10 @@ def meld_output_schema(
         "type": "array",
         "items": key,
     }
-    # Codex structured output accepts only a JSON Schema subset and rejects
-    # `uniqueItems`. Duplicate aliases are still rejected after generation by
-    # `_keys`, so removing that provider-side hint does not weaken authority or
-    # provenance validation.
-    paired_memory_refs = {**memory_refs, "minItems": 1}
     paired_relation = {
         "type": "object",
         "properties": {
             "relation_key": key,
-            "left_memory_ids": paired_memory_refs,
-            "right_memory_ids": paired_memory_refs,
             "kind": {
                 "type": "string",
                 "enum": sorted(_RELATIONS - {"DISTINCT"}),
@@ -676,8 +673,6 @@ def meld_output_schema(
         },
         "required": [
             "relation_key",
-            "left_memory_ids",
-            "right_memory_ids",
             "kind",
             "status",
             "summary",
@@ -690,7 +685,6 @@ def meld_output_schema(
         "properties": {
             "relation_key": key,
             "side": {"type": "string", "enum": ["LEFT", "RIGHT"]},
-            "memory_ids": paired_memory_refs,
             "kind": {"type": "string", "enum": ["DISTINCT"]},
             "status": {
                 "type": "string",
@@ -702,7 +696,6 @@ def meld_output_schema(
         "required": [
             "relation_key",
             "side",
-            "memory_ids",
             "kind",
             "status",
             "summary",
@@ -805,6 +798,10 @@ def meld_output_schema(
                 "maxItems": source_count,
                 "items": distinct_relation,
             },
+            "source_assignments": exact_source_assignment_schema(
+                source_memory_ids,
+                relation_key_schema=key,
+            ),
             "issues": {
                 "type": "array",
                 "maxItems": source_count,
@@ -820,6 +817,7 @@ def meld_output_schema(
             "overview",
             "paired_relations",
             "distinct_relations",
+            "source_assignments",
             "issues",
             "results",
             "ready_to_apply",
@@ -912,8 +910,9 @@ def _prompt(
             "The payload comparison_basis is the exact reviewed ordered "
             "INCOMING-to-BASELINE Compare result. For this initial turn, copy "
             "every comparison relation unchanged: preserve its relation_key, "
-            "members, kind, status, summary, reason, and order. Do not "
-            "reclassify, split, combine, or omit a relation. Preserve every "
+            "kind, status, summary, reason, order, and exact member grouping. "
+            "Translate every basis member into exactly one source_assignment; "
+            "do not reclassify, split, combine, or omit a relation. Preserve every "
             "comparison_basis issue unchanged, including its issue_key, "
             "relation keys, priority, text, options, and order. You may add "
             "only Directional-specific placement or materialization issues. "
@@ -946,8 +945,10 @@ def _prompt(
         + authority_contract
         + directional_comparison_contract
         + "\n"
-        "Every supplied source Memory must appear in exactly one primary "
-        "relation. Return cross-source relations in paired_relations and "
+        "In source_assignments, return exactly one row for every supplied "
+        "source Memory and assign it to exactly one returned relation_key. "
+        "Relation objects describe their groups and must not repeat member-ID "
+        "arrays. Return cross-source relations in paired_relations and "
         "one-sided DISTINCT relations in distinct_relations. A relation may "
         "contain one-to-many or many-to-one members; "
         "do not enumerate a Cartesian product. EQUIVALENT means the same "
@@ -1048,6 +1049,11 @@ def _parse_assessment(
             "Codex meld returned invalid structured output."
         ) from error
     legacy_relation_shape = isinstance(value, dict) and "relations" in value
+    source_assignment_shape = (
+        isinstance(value, dict) and "source_assignments" in value
+    )
+    if legacy_relation_shape and source_assignment_shape:
+        raise MeldProviderError("Codex meld returned mixed relation formats.")
     response_keys = {
         "overview",
         "issues",
@@ -1059,6 +1065,8 @@ def _parse_assessment(
         if legacy_relation_shape
         else {"paired_relations", "distinct_relations"}
     )
+    if source_assignment_shape:
+        response_keys.add("source_assignments")
     data = _exact_dict(
         value,
         response_keys,
@@ -1096,17 +1104,18 @@ def _parse_assessment(
         raise MeldProviderError("Codex meld returned an invalid number of relations.")
     relation_records: list[tuple[str, dict[str, object]]] = []
     for item in raw_paired_relations:
+        relation_fields = {
+            "relation_key",
+            "kind",
+            "status",
+            "summary",
+            "reason",
+        }
+        if not source_assignment_shape:
+            relation_fields.update({"left_memory_ids", "right_memory_ids"})
         record = _exact_dict(
             item,
-            {
-                "relation_key",
-                "left_memory_ids",
-                "right_memory_ids",
-                "kind",
-                "status",
-                "summary",
-                "reason",
-            },
+            relation_fields,
             "meld relation",
         )
         if record["kind"] == "DISTINCT":
@@ -1134,17 +1143,19 @@ def _parse_assessment(
             (_key(record["relation_key"], "meld relation key"), record)
         )
     for item in raw_distinct_relations:
+        distinct_fields = {
+            "relation_key",
+            "side",
+            "kind",
+            "status",
+            "summary",
+            "reason",
+        }
+        if not source_assignment_shape:
+            distinct_fields.add("memory_ids")
         record = _exact_dict(
             item,
-            {
-                "relation_key",
-                "side",
-                "memory_ids",
-                "kind",
-                "status",
-                "summary",
-                "reason",
-            },
+            distinct_fields,
             "distinct meld relation",
         )
         side = _literal(
@@ -1156,18 +1167,21 @@ def _parse_assessment(
             raise MeldProviderError(
                 "Codex meld returned a non-DISTINCT one-sided relation."
             )
-        memory_ids = list(
-            _keys(record["memory_ids"], "distinct Memory ids")
-        )
-        normalized = {
-            "relation_key": record["relation_key"],
-            "left_memory_ids": memory_ids if side == "LEFT" else [],
-            "right_memory_ids": memory_ids if side == "RIGHT" else [],
-            "kind": "DISTINCT",
-            "status": record["status"],
-            "summary": record["summary"],
-            "reason": record["reason"],
-        }
+        if source_assignment_shape:
+            normalized = record
+        else:
+            memory_ids = list(
+                _keys(record["memory_ids"], "distinct Memory ids")
+            )
+            normalized = {
+                "relation_key": record["relation_key"],
+                "left_memory_ids": memory_ids if side == "LEFT" else [],
+                "right_memory_ids": memory_ids if side == "RIGHT" else [],
+                "kind": "DISTINCT",
+                "status": record["status"],
+                "summary": record["summary"],
+                "reason": record["reason"],
+            }
         relation_records.append(
             (
                 _key(record["relation_key"], "meld relation key"),
@@ -1177,30 +1191,100 @@ def _parse_assessment(
     relation_keys = [key for key, _ in relation_records]
     if not relation_records or len(relation_keys) != len(set(relation_keys)):
         raise MeldProviderError("Codex meld returned duplicate or empty relation keys.")
-    # A follow-up may return only relations it changed even though the prompt
-    # requests the cumulative ledger. Carry forward an omitted prior relation
-    # only when none of its members appears in the new response. Partial
-    # overlap remains a hard failure because locally guessing how a provider
-    # split or regrouped that relation could corrupt provenance.
-    returned_memory_ids: set[str] = set()
-    for _key_value, record in relation_records:
-        returned_memory_ids.update(
-            _keys(record["left_memory_ids"], "left Memory ids", empty=True)
-        )
-        returned_memory_ids.update(
-            _keys(record["right_memory_ids"], "right Memory ids", empty=True)
-        )
-    returned_relation_keys = set(relation_keys)
-    for key, record in view.prior_relation_records.items():
-        if key in returned_relation_keys:
-            continue
-        prior_member_ids = {
-            *_keys(record["left_memory_ids"], "left Memory ids", empty=True),
-            *_keys(record["right_memory_ids"], "right Memory ids", empty=True),
+    if source_assignment_shape:
+        try:
+            assignments = decode_exact_source_assignments(
+                data["source_assignments"],
+                tuple(view.memory_by_id),
+            )
+        except CoverageError as error:
+            raise MeldProviderError(
+                "Codex meld source assignments must cover every source Memory "
+                "exactly once."
+            ) from error
+        assignment_by_source: dict[str, str] = {}
+        relation_key_set = set(relation_keys)
+        for source_id, raw_relation_key in assignments:
+            relation_key = _key(
+                raw_relation_key,
+                "meld source assignment relation key",
+            )
+            if relation_key not in relation_key_set:
+                raise MeldProviderError(
+                    "Codex meld assigned a source Memory to an unknown relation."
+                )
+            assignment_by_source[source_id] = relation_key
+        left_frame_uid = session.frames[0].uid
+        assigned_members = {
+            key: {"LEFT": [], "RIGHT": []} for key in relation_keys
         }
-        if prior_member_ids.isdisjoint(returned_memory_ids):
-            relation_records.append((key, record))
-            relation_keys.append(key)
+        # Model row order is presentation noise; canonical Source order keeps
+        # durable relation members stable across equivalent completions.
+        for source_id, member in view.memory_by_id.items():
+            side = "LEFT" if member.frame_uid == left_frame_uid else "RIGHT"
+            assigned_members[assignment_by_source[source_id]][side].append(
+                source_id
+            )
+        normalized_records: list[tuple[str, dict[str, object]]] = []
+        for key, record in relation_records:
+            left_ids = assigned_members[key]["LEFT"]
+            right_ids = assigned_members[key]["RIGHT"]
+            if record["kind"] == "DISTINCT":
+                declared_side = _literal(
+                    record["side"],
+                    {"LEFT", "RIGHT"},
+                    "distinct meld relation side",
+                )
+                actual_side = (
+                    "LEFT"
+                    if left_ids and not right_ids
+                    else "RIGHT"
+                    if right_ids and not left_ids
+                    else None
+                )
+                if actual_side != declared_side:
+                    raise MeldProviderError(
+                        "Codex meld assigned a DISTINCT relation to invalid "
+                        "source sides."
+                    )
+            normalized_records.append(
+                (
+                    key,
+                    {
+                        "relation_key": record["relation_key"],
+                        "left_memory_ids": left_ids,
+                        "right_memory_ids": right_ids,
+                        "kind": record["kind"],
+                        "status": record["status"],
+                        "summary": record["summary"],
+                        "reason": record["reason"],
+                    },
+                )
+            )
+        relation_records = normalized_records
+    else:
+        # A legacy follow-up may return only relations it changed. Carry forward
+        # an omitted prior relation only when none of its members appears in the
+        # response. New source-indexed responses are always cumulative instead.
+        returned_memory_ids: set[str] = set()
+        for _key_value, record in relation_records:
+            returned_memory_ids.update(
+                _keys(record["left_memory_ids"], "left Memory ids", empty=True)
+            )
+            returned_memory_ids.update(
+                _keys(record["right_memory_ids"], "right Memory ids", empty=True)
+            )
+        returned_relation_keys = set(relation_keys)
+        for key, record in view.prior_relation_records.items():
+            if key in returned_relation_keys:
+                continue
+            prior_member_ids = {
+                *_keys(record["left_memory_ids"], "left Memory ids", empty=True),
+                *_keys(record["right_memory_ids"], "right Memory ids", empty=True),
+            }
+            if prior_member_ids.isdisjoint(returned_memory_ids):
+                relation_records.append((key, record))
+                relation_keys.append(key)
     relation_uid_by_key = {
         key: (
             view.prior_relation_by_id[key]
@@ -1588,6 +1672,7 @@ def assess_meld_turn(
         raise MeldProviderError("Expected a MeldSession.")
     view = _provider_view(session)
     source_count = len(view.memory_by_id)
+    source_memory_ids = tuple(view.memory_by_id)
     left_count = len(session.frames[0].memories)
     right_count = len(session.frames[1].memories)
     plan = plan_semantic_execution(
@@ -1596,7 +1681,7 @@ def assess_meld_turn(
             view.payload,
             item_count=source_count,
             output_schema=meld_output_schema(
-                source_count,
+                source_memory_ids,
                 mode=session.mode,
                 target_context_count=len(view.target_context_by_id) or 1,
             ),
@@ -1622,7 +1707,7 @@ def assess_meld_turn(
         ),
         operation="meld_contexts",
         output_schema=meld_output_schema(
-            source_count,
+            source_memory_ids,
             mode=session.mode,
             target_context_count=len(view.target_context_by_id) or 1,
         ),
@@ -1668,10 +1753,11 @@ def repair_meld_assessment(
         payload=repair_payload,
     )
     source_count = len(view.memory_by_id)
+    source_memory_ids = tuple(view.memory_by_id)
     left_count = len(session.frames[0].memories)
     right_count = len(session.frames[1].memories)
     schema = meld_output_schema(
-        source_count,
+        source_memory_ids,
         mode=session.mode,
         target_context_count=len(view.target_context_by_id) or 1,
     )

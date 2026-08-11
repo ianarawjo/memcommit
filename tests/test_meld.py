@@ -151,6 +151,7 @@ class Task2Provider:
             "overview",
             "paired_relations",
             "distinct_relations",
+            "source_assignments",
             "issues",
             "results",
             "ready_to_apply",
@@ -3135,8 +3136,9 @@ def test_provider_rejects_incomplete_primary_source_coverage():
 
 @pytest.mark.parametrize("mode", ["SYMMETRIC", "DIRECTIONAL"])
 def test_meld_output_schema_uses_the_codex_supported_subset(mode):
+    source_ids = tuple(f"m{index:06d}" for index in range(1, 5))
     schema = meld_output_schema(
-        4,
+        source_ids,
         mode=mode,
         target_context_count=2 if mode == "DIRECTIONAL" else 1,
     )
@@ -3166,15 +3168,122 @@ def test_meld_output_schema_uses_the_codex_supported_subset(mode):
 
     assert_supported(schema)
     paired = schema["properties"]["paired_relations"]["items"]
-    assert paired["properties"]["left_memory_ids"]["minItems"] == 1
-    assert paired["properties"]["right_memory_ids"]["minItems"] == 1
+    assert "left_memory_ids" not in paired["properties"]
+    assert "right_memory_ids" not in paired["properties"]
     assert "DISTINCT" not in paired["properties"]["kind"]["enum"]
     distinct = schema["properties"]["distinct_relations"]["items"]
-    assert distinct["properties"]["memory_ids"]["minItems"] == 1
+    assert "memory_ids" not in distinct["properties"]
     assert distinct["properties"]["kind"]["enum"] == ["DISTINCT"]
+    assignments = schema["properties"]["source_assignments"]
+    assert assignments["minItems"] == len(source_ids)
+    assert assignments["maxItems"] == len(source_ids)
+    assert assignments["items"]["properties"]["source_memory_id"]["enum"] == list(
+        source_ids
+    )
     if mode == "DIRECTIONAL":
         result = schema["properties"]["results"]["items"]
         assert "target_context_id" in result["required"]
+
+
+def test_source_indexed_meld_assignments_reconstruct_complete_relations():
+    left = ops.init("left/source-indexed")
+    left_memory = ops.add(left, "Left policy.")
+    right = ops.init("right/source-indexed")
+    right_memory = ops.add(right, "Right policy.")
+    target = ops.init("target/source-indexed")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+
+    class SourceIndexed:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            left_id = payload["frames"][0]["memories"][0]["memory_id"]
+            right_id = payload["frames"][1]["memories"][0]["memory_id"]
+            assert output_schema["properties"]["source_assignments"][
+                "minItems"
+            ] == 2
+            return json.dumps(
+                {
+                    "overview": "The two source policies are equivalent.",
+                    "paired_relations": [
+                        {
+                            "relation_key": "shared",
+                            "kind": "EQUIVALENT",
+                            "status": "RESOLVED",
+                            "summary": "Both sources state one policy.",
+                            "reason": "Their operational meaning agrees.",
+                        }
+                    ],
+                    "distinct_relations": [],
+                    "source_assignments": [
+                        {
+                            "source_memory_id": right_id,
+                            "relation_key": "shared",
+                        },
+                        {
+                            "source_memory_id": left_id,
+                            "relation_key": "shared",
+                        },
+                    ],
+                    "issues": [],
+                    "results": [],
+                    "ready_to_apply": False,
+                }
+            )
+
+    assessment = assess_meld_turn(session, SourceIndexed())
+
+    assert len(assessment.relations) == 1
+    assert [member.memory_uid for member in assessment.relations[0].members] == [
+        left_memory.uid,
+        right_memory.uid,
+    ]
+
+
+def test_source_indexed_meld_assignments_reject_duplicate_source_alias():
+    left = ops.init("left/source-indexed-duplicate")
+    ops.add(left, "Left policy.")
+    right = ops.init("right/source-indexed-duplicate")
+    ops.add(right, "Right policy.")
+    target = ops.init("target/source-indexed-duplicate")
+    session = MeldSession.create_symmetric(left, right, target)
+    session.start_initial_analysis()
+
+    class DuplicateSourceIndexed:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            left_id = payload["frames"][0]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "Invalid duplicate assignment.",
+                    "paired_relations": [
+                        {
+                            "relation_key": "shared",
+                            "kind": "EQUIVALENT",
+                            "status": "RESOLVED",
+                            "summary": "Both sources state one policy.",
+                            "reason": "Their operational meaning agrees.",
+                        }
+                    ],
+                    "distinct_relations": [],
+                    "source_assignments": [
+                        {
+                            "source_memory_id": left_id,
+                            "relation_key": "shared",
+                        },
+                        {
+                            "source_memory_id": left_id,
+                            "relation_key": "shared",
+                        },
+                    ],
+                    "issues": [],
+                    "results": [],
+                    "ready_to_apply": False,
+                }
+            )
+
+    with pytest.raises(MeldError, match="cover every source Memory exactly once"):
+        assess_meld_turn(session, DuplicateSourceIndexed())
 
 
 def test_provider_parser_rejects_duplicate_aliases_without_unique_items():

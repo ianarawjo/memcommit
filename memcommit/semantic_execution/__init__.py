@@ -1,7 +1,12 @@
 """Operation-aware planning for bounded semantic provider work."""
 
 from memcommit.semantic_execution.budgeting import json_budget
-from memcommit.semantic_execution.coverage import CoverageError, InputCoverageLedger
+from memcommit.semantic_execution.coverage import (
+    CoverageError,
+    InputCoverageLedger,
+    decode_exact_source_assignments,
+    exact_source_assignment_schema,
+)
 from memcommit.semantic_execution.execution import (
     ExecutionProgress,
     run_partitioned,
@@ -44,6 +49,8 @@ __all__ = [
     "json_budget",
     "build_relation_block_matrix",
     "connected_relation_components",
+    "decode_exact_source_assignments",
+    "exact_source_assignment_schema",
     "pack_grouped_items",
     "plan_semantic_execution",
     "run_partitioned",

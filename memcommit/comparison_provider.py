@@ -24,10 +24,13 @@ from memcommit.result_workbench import (
 )
 from memcommit.semantic_execution import (
     BudgetLimits,
+    CoverageError,
     ExecutionMode,
     ExecutionStrategy,
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
+    decode_exact_source_assignments,
+    exact_source_assignment_schema,
     json_budget,
     plan_semantic_execution,
 )
@@ -35,6 +38,7 @@ from memcommit.understanding import understanding_text_schema
 
 
 COMPARISON_PAYLOAD_MARKER = "COMPARISON PAYLOAD:\n"
+COMPARISON_PROVIDER_CONTRACT_VERSION = "one-shot-exhaustive-v1"
 COMPARISON_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 COMPARISON_RESPONSE_CHAR_LIMIT = 1_000_000
 COMPARISON_KEY_LIMIT = 100
@@ -212,7 +216,10 @@ def _provider_view(
     )
 
 
-def comparison_output_schema(source_count: int) -> dict[str, object]:
+def comparison_output_schema(
+    source_memory_ids: tuple[str, ...],
+) -> dict[str, object]:
+    source_count = len(source_memory_ids)
     text = {"type": "string", "minLength": 1, "maxLength": COMPARISON_TEXT_LIMIT}
     overview_text = understanding_text_schema(limit=COMPARISON_TEXT_LIMIT)
     overview_text["description"] = (
@@ -240,11 +247,6 @@ def comparison_output_schema(source_count: int) -> dict[str, object]:
         "minLength": 1,
         "maxLength": COMPARISON_KEY_LIMIT,
     }
-    memory_refs = {
-        "type": "array",
-        "maxItems": source_count,
-        "items": key,
-    }
     key_refs = {
         "type": "array",
         "minItems": 1,
@@ -255,8 +257,6 @@ def comparison_output_schema(source_count: int) -> dict[str, object]:
         "type": "object",
         "properties": {
             "relation_key": key,
-            "reference_memory_ids": memory_refs,
-            "compared_memory_ids": memory_refs,
             "kind": {
                 "type": "string",
                 "enum": sorted(_RELATIONS),
@@ -270,8 +270,6 @@ def comparison_output_schema(source_count: int) -> dict[str, object]:
         },
         "required": [
             "relation_key",
-            "reference_memory_ids",
-            "compared_memory_ids",
             "kind",
             "status",
             "summary",
@@ -341,13 +339,23 @@ def comparison_output_schema(source_count: int) -> dict[str, object]:
                 "maxItems": source_count,
                 "items": relation,
             },
+            "source_assignments": exact_source_assignment_schema(
+                source_memory_ids,
+                relation_key_schema=key,
+            ),
             "issues": {
                 "type": "array",
                 "maxItems": source_count,
                 "items": issue,
             },
         },
-        "required": ["overview", "reports", "relations", "issues"],
+        "required": [
+            "overview",
+            "reports",
+            "relations",
+            "source_assignments",
+            "issues",
+        ],
         "additionalProperties": False,
     }
 
@@ -373,8 +381,10 @@ def _prompt(payload: dict[str, object]) -> str:
         "Perform one complete targetless semantic comparison of two PEER "
         "Context frames. They have equal authority. REFERENCE is only the "
         "layout and navigation anchor; do not make it win because it is first.\n"
-        "Return one exhaustive primary relation ledger. Every supplied source "
-        "Memory must appear in exactly one relation. Relations may be 1:1, "
+        "Return one exhaustive primary relation ledger. In source_assignments, "
+        "return exactly one row for every supplied source Memory and assign it "
+        "to exactly one returned relation_key. Relation objects describe the "
+        "group and must not repeat member-ID arrays. Relations may be 1:1, "
         "1:N, N:1, or N:M; do not zip by position and do not enumerate a "
         "Cartesian product.\n"
         "Use EQUIVALENT only for the same operational claim under the same "
@@ -472,9 +482,15 @@ def _parse_analysis(
         raise ComparisonProviderError(
             "Codex compare returned invalid structured output."
         ) from error
+    source_assignment_shape = (
+        isinstance(value, dict) and "source_assignments" in value
+    )
+    response_keys = {"overview", "reports", "relations", "issues"}
+    if source_assignment_shape:
+        response_keys.add("source_assignments")
     data = _exact_dict(
         value,
-        {"overview", "reports", "relations", "issues"},
+        response_keys,
         "comparison response",
     )
     report_record = _exact_dict(
@@ -517,17 +533,20 @@ def _parse_analysis(
 
     relation_records: list[tuple[str, dict[str, object]]] = []
     for item in _array(data["relations"], "comparison relations"):
+        relation_fields = {
+            "relation_key",
+            "kind",
+            "status",
+            "summary",
+            "reason",
+        }
+        if not source_assignment_shape:
+            relation_fields.update(
+                {"reference_memory_ids", "compared_memory_ids"}
+            )
         record = _exact_dict(
             item,
-            {
-                "relation_key",
-                "reference_memory_ids",
-                "compared_memory_ids",
-                "kind",
-                "status",
-                "summary",
-                "reason",
-            },
+            relation_fields,
             "comparison relation",
         )
         relation_records.append(
@@ -544,6 +563,57 @@ def _parse_analysis(
         raise ComparisonProviderError(
             "Codex compare returned duplicate or empty relations."
         )
+
+    if source_assignment_shape:
+        try:
+            assignments = decode_exact_source_assignments(
+                data["source_assignments"],
+                tuple(view.memory_by_id),
+            )
+        except CoverageError as error:
+            raise ComparisonProviderError(
+                "Codex compare source assignments must cover every source "
+                "Memory exactly once."
+            ) from error
+        assignment_by_source: dict[str, str] = {}
+        relation_key_set = set(relation_keys)
+        for source_id, raw_relation_key in assignments:
+            relation_key = _key(
+                raw_relation_key,
+                "comparison source assignment relation key",
+            )
+            if relation_key not in relation_key_set:
+                raise ComparisonProviderError(
+                    "Codex compare assigned a source Memory to an unknown "
+                    "relation."
+                )
+            assignment_by_source[source_id] = relation_key
+        reference_frame_uid = comparison_input.frames[0].uid
+        assigned_members = {
+            key: {"reference": [], "compared": []} for key in relation_keys
+        }
+        # Canonical Source order, rather than model row order, keeps durable
+        # member ordering stable across semantically equivalent completions.
+        for source_id, member in view.memory_by_id.items():
+            side = (
+                "reference"
+                if member.frame_uid == reference_frame_uid
+                else "compared"
+            )
+            assigned_members[assignment_by_source[source_id]][side].append(
+                source_id
+            )
+        relation_records = [
+            (
+                key,
+                {
+                    **record,
+                    "reference_memory_ids": assigned_members[key]["reference"],
+                    "compared_memory_ids": assigned_members[key]["compared"],
+                },
+            )
+            for key, record in relation_records
+        ]
 
     relation_uid_by_key = {
         key: _stable_uid(
@@ -784,6 +854,7 @@ def analyze_comparison(
         )
     view = _provider_view(comparison_input)
     source_count = len(view.memory_by_id)
+    source_memory_ids = tuple(view.memory_by_id)
     left_count = len(comparison_input.frames[0].memories)
     right_count = len(comparison_input.frames[1].memories)
     plan = plan_semantic_execution(
@@ -791,7 +862,7 @@ def analyze_comparison(
         json_budget(
             view.payload,
             item_count=source_count,
-            output_schema=comparison_output_schema(source_count),
+            output_schema=comparison_output_schema(source_memory_ids),
             expected_output_items=source_count,
             relation_edges=left_count * right_count,
         ),
@@ -806,7 +877,7 @@ def analyze_comparison(
     response = provider.complete(
         _prompt(view.payload),
         operation="compare_contexts",
-        output_schema=comparison_output_schema(source_count),
+        output_schema=comparison_output_schema(source_memory_ids),
     )
     return _parse_analysis(
         response,

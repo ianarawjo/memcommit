@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass, field
+from typing import Mapping
 
 
 class CoverageError(RuntimeError):
@@ -37,3 +39,68 @@ class InputCoverageLedger:
     def finalize(self) -> None:
         if self._seen != set(self.expected_ids):
             raise CoverageError("Staged semantic execution did not cover every input.")
+
+
+def exact_source_assignment_schema(
+    expected_ids: tuple[str, ...],
+    *,
+    relation_key_schema: Mapping[str, object],
+) -> dict[str, object]:
+    """Describe one source-to-relation assignment for every frozen input.
+
+    Codex structured output does not support ``uniqueItems``. Exact cardinality
+    plus a frozen alias enum makes omissions harder during generation, while
+    :func:`decode_exact_source_assignments` remains the authority for global
+    uniqueness and complete coverage.
+    """
+
+    InputCoverageLedger(expected_ids)
+    return {
+        "type": "array",
+        "minItems": len(expected_ids),
+        "maxItems": len(expected_ids),
+        "items": {
+            "type": "object",
+            "properties": {
+                "source_memory_id": {
+                    "type": "string",
+                    "enum": list(expected_ids),
+                },
+                "relation_key": deepcopy(dict(relation_key_schema)),
+            },
+            "required": ["source_memory_id", "relation_key"],
+            "additionalProperties": False,
+        },
+    }
+
+
+def decode_exact_source_assignments(
+    value: object,
+    expected_ids: tuple[str, ...],
+) -> tuple[tuple[str, str], ...]:
+    """Decode an exact source-indexed relation assignment ledger."""
+
+    ledger = InputCoverageLedger(expected_ids)
+    if not isinstance(value, list) or len(value) != len(expected_ids):
+        raise CoverageError(
+            "Semantic source assignments must contain one row per input."
+        )
+    assignments: list[tuple[str, str]] = []
+    for record in value:
+        if (
+            not isinstance(record, dict)
+            or set(record) != {"source_memory_id", "relation_key"}
+        ):
+            raise CoverageError("Invalid semantic source assignment.")
+        source_id = record["source_memory_id"]
+        relation_key = record["relation_key"]
+        if (
+            not isinstance(source_id, str)
+            or not isinstance(relation_key, str)
+            or not relation_key
+        ):
+            raise CoverageError("Invalid semantic source assignment.")
+        ledger.record((source_id,))
+        assignments.append((source_id, relation_key))
+    ledger.finalize()
+    return tuple(assignments)

@@ -20,6 +20,7 @@ from memcommit.comparison_provider import (
     COMPARISON_PAYLOAD_MARKER,
     ComparisonProviderError,
     analyze_comparison,
+    comparison_output_schema,
 )
 from memcommit.comparison_store import (
     ConcurrentComparisonUpdateError,
@@ -153,6 +154,30 @@ class ExhaustiveCompareProvider:
             "issues": [],
         }
 
+    @staticmethod
+    def source_indexed_response(
+        response: dict[str, object],
+    ) -> dict[str, object]:
+        assignments: list[dict[str, str]] = []
+        for relation in response["relations"]:
+            relation_key = relation["relation_key"]
+            for source_id in relation.pop("reference_memory_ids"):
+                assignments.append(
+                    {
+                        "source_memory_id": source_id,
+                        "relation_key": relation_key,
+                    }
+                )
+            for source_id in relation.pop("compared_memory_ids"):
+                assignments.append(
+                    {
+                        "source_memory_id": source_id,
+                        "relation_key": relation_key,
+                    }
+                )
+        response["source_assignments"] = assignments
+        return response
+
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "compare_contexts"
         assert output_schema is not None
@@ -160,6 +185,7 @@ class ExhaustiveCompareProvider:
             "overview",
             "reports",
             "relations",
+            "source_assignments",
             "issues",
         }
         # Codex structured output rejects JSON Schema uniqueItems. The strict
@@ -192,7 +218,25 @@ class ExhaustiveCompareProvider:
         self.payloads.append(payload)
         self.schemas.append(output_schema)
         builder = self.response_builder or self.default_response
-        return json.dumps(builder(payload))
+        return json.dumps(self.source_indexed_response(builder(payload)))
+
+
+def test_compare_output_schema_requires_one_assignment_per_frozen_source():
+    source_ids = ("m1_000001", "m2_000001", "m2_000002")
+
+    schema = comparison_output_schema(source_ids)
+
+    assignments = schema["properties"]["source_assignments"]
+    assert assignments["minItems"] == len(source_ids)
+    assert assignments["maxItems"] == len(source_ids)
+    assert assignments["items"]["properties"]["source_memory_id"]["enum"] == list(
+        source_ids
+    )
+    relation_properties = schema["properties"]["relations"]["items"][
+        "properties"
+    ]
+    assert "reference_memory_ids" not in relation_properties
+    assert "compared_memory_ids" not in relation_properties
 
 
 def _task2_contexts(store: MemoryStore):

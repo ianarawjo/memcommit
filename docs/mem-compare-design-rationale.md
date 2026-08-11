@@ -215,8 +215,26 @@ The provider receives call-local opaque frame and Memory IDs, full bounded
 direct Memory content, source order, and equal-authority instructions. Context
 names remain local presentation metadata: sending advisor names is unnecessary
 for comparison and could introduce identity or ordering bias. The provider may
-return only `overview`, `reports`, `relations`, and `issues` under a strict
-JSON schema.
+return only `overview`, `reports`, `relations`, `source_assignments`, and
+`issues` under a strict JSON schema.
+
+Relation definitions carry semantic judgment and prose but no nested member-ID
+arrays. `source_assignments` instead contains exactly one
+`{source_memory_id, relation_key}` row per frozen Memory. Its schema fixes the
+row count to the Source count and restricts every source ID to the exact frozen
+alias enum. This source-indexed shape was selected after a 300-Memory Task 2
+frame repeatedly returned structurally valid relation JSON that omitted or
+duplicated at least one member. It gives structured generation one uniform
+coverage task instead of asking the model to maintain a global partition across
+variable-size nested arrays.
+
+The repaired contract was verified live against the same Task 2 route that had
+failed twice under the nested-array contract. The provider completed a
+87,527-character prompt in about 304 seconds and returned 58,201 characters.
+The saved analysis contained 109 relations, 300 relation members, and 300
+unique `(frame_uid, memory_uid)` pairs for the frozen 150+150 frame. Symmetric
+Meld opened the imported result workbench, and closing it without acceptance
+left the target Context at zero Memories and zero checkpoints.
 
 The four reports are produced in the same one-shot call as the exhaustive
 ledger. They are not presentation-layer concatenations of relation summaries.
@@ -252,9 +270,15 @@ reports for newly created analyses, so an unchanged pair with a version-1/2
 analysis is refreshed rather than reused.
 
 The schema deliberately omits JSON Schema `uniqueItems` because the Codex
-structured-output subset rejects that keyword. Alias uniqueness remains an
-invariant and is enforced by the strict local parser before an analysis can
-be saved.
+structured-output subset rejects that keyword. Exact row count and alias enums
+therefore reduce, but cannot prove, global uniqueness. The shared exact-source
+decoder rejects a repeated, omitted, or unknown alias and a relation key that
+was not returned. The operation parser then reconstructs relation members in
+canonical Source order and rechecks side shape and exhaustive coverage before
+an analysis can be saved. Legacy call-local responses that embedded member
+arrays remain parser-compatible for tests and older provider adapters; all new
+schema-constrained turns use source assignments. The persisted
+`ComparisonAnalysis` schema does not change.
 
 Local validation rejects:
 

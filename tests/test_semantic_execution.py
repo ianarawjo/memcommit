@@ -13,6 +13,8 @@ from memcommit.semantic_execution import (
     PartitionError,
     RelationScheduleError,
     SemanticExecutionPolicy,
+    decode_exact_source_assignments,
+    exact_source_assignment_schema,
     pack_grouped_items,
     plan_semantic_execution,
     build_relation_block_matrix,
@@ -156,6 +158,41 @@ def test_partitioned_execution_rejects_duplicate_frozen_inputs():
             (("same",), ("same",)),
             item_id=lambda item: item,
             execute=lambda batch, _index, _total: batch,
+        )
+
+
+def test_exact_source_assignment_schema_freezes_count_and_alias_universe():
+    schema = exact_source_assignment_schema(
+        ("m1", "m2"),
+        relation_key_schema={"type": "string", "maxLength": 20},
+    )
+
+    assert schema["minItems"] == 2
+    assert schema["maxItems"] == 2
+    item = schema["items"]
+    assert item["properties"]["source_memory_id"]["enum"] == ["m1", "m2"]
+    assert item["properties"]["relation_key"]["maxLength"] == 20
+    assert "uniqueItems" not in schema
+
+
+def test_exact_source_assignment_decoder_requires_every_alias_once():
+    expected = ("m1", "m2")
+
+    assert decode_exact_source_assignments(
+        [
+            {"source_memory_id": "m2", "relation_key": "r2"},
+            {"source_memory_id": "m1", "relation_key": "r1"},
+        ],
+        expected,
+    ) == (("m2", "r2"), ("m1", "r1"))
+
+    with pytest.raises(CoverageError, match="repeated"):
+        decode_exact_source_assignments(
+            [
+                {"source_memory_id": "m1", "relation_key": "r1"},
+                {"source_memory_id": "m1", "relation_key": "r2"},
+            ],
+            expected,
         )
 
 

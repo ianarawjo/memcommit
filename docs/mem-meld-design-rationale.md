@@ -700,12 +700,19 @@ count while relation coverage remains exhaustive and the change set is ready.
 
 The provider-facing JSON Schema deliberately stays within Codex's supported
 structured-output subset. In particular, it does not use `uniqueItems`, which
-the provider rejects. Duplicate opaque aliases are still rejected by the local
-parser. For `EDIT`, the validated baseline target field is authoritative
-provenance evidence; the parser folds that target into the saved source-member
-set, so the model need not repeat the same alias in both the target and source
-arrays. This removes redundant output syntax without relaxing the requirement
-for at least one incoming source or the local baseline-role check.
+the provider rejects. Every new Meld turn instead returns a source-indexed
+`source_assignments` ledger with exactly one row per frozen Memory, an enum of
+the exact allowed aliases, and one returned relation key per row. Relation
+definitions no longer repeat variable-size member arrays. The shared decoder
+and Meld parser still reject duplicate, omitted, or unknown aliases, unknown
+relation keys, empty groups, wrong-side membership, and non-DISTINCT groups
+without both sides. Canonical Source order, rather than provider row order,
+determines saved member order. For `EDIT`, the validated baseline target field
+is authoritative provenance evidence; the parser folds that target into the
+saved source-member set, so the model need not repeat the same alias in both
+the target and source arrays. This removes redundant output syntax without
+relaxing the requirement for at least one incoming source or the local
+baseline-role check.
 
 ## Shared conversational frame
 
@@ -828,12 +835,22 @@ producing its complete cumulative ledger. This longer timeout is local to Meld;
 it does not change other semantic commands, permit multiple hidden calls, or
 relax source, response, and compare-seed validation.
 
-A follow-up response may omit a prior relation despite the cumulative-ledger
-instruction. Mem carries such a relation forward only when every member of that
-prior relation is absent from every newly returned relation. Any partial member
-overlap still fails closed, because locally guessing a provider-intended split
-or regrouping would change provenance. Exact once-only coverage is rechecked
-after this conservative carry-forward step.
+New source-indexed follow-up and explicit repair responses must return the
+complete cumulative assignment ledger; the exact-count schema does not permit a
+patch-shaped response. The parser retains the older split/unified member-array
+formats for saved workflow compatibility and tests. Only that legacy path may
+conservatively carry forward a wholly omitted prior relation when none of its
+members appears in a newly returned relation. Any partial overlap still fails
+closed, and exact once-only coverage is rechecked after normalization. The
+persisted Meld session and assessment schemas are unchanged because the new
+shape is confined to provider I/O.
+
+The Meld-specific contract was also verified with the configured provider on a
+store-free in-memory 1+1 frame. It returned one relation covering both source
+members, no issues, one proposal, and `ready_to_apply=true`; no Context or
+session record was written. This complements the 300-Memory symmetric command
+verification, whose first stage exercises Compare before importing the basis
+provider-free into Meld.
 
 ## Preservation-first materialization and priority flow
 
