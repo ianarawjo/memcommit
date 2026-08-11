@@ -1,0 +1,52 @@
+ MEM COMPARE · task-3/local/personal-memory/2024 ↔ task-3/local/personal-memory/2026                                                                                                
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃RELATION · COMPATIBLE · RESOLVED                                                                                                                                                 ^┃
+┃Both frames connect restaurant noise with impaired conversation and home-based gatherings with easier interaction.                                                                ┃
+┃Both frames connect restaurant noise with impaired conversation and home-based gatherings with easier interaction.                                                                ┃
+┃› task-3/local/personal-memory/2024 [c62f1669] [task-3/local/personal-memory/2024/01] At the user's last family meal out, noise from the next table made conversation nearly impo ┃
+┃ssible.                                                                                                                                                                           ┃
+┃  task-3/local/personal-memory/2024 [674f4bdf] [task-3/local/personal-memory/2024/01] At a barbecue at home in the same month, the user was comfortable because no one had to rai ┃
+┃se their voice.                                                                                                                                                                   ┃
+┃  task-3/local/personal-memory/2024 [21509788] [task-3/local/personal-memory/2024/01] During their mother's birthday meal, the user left a restaurant with loud music after 30 mi ┃
+┃nutes.                                                                                                                                                                            ┃
+┃  task-3/local/personal-memory/2024 [74eaea9d] [task-3/local/personal-memory/2024/01] When discussing postponed matters with family, the user prefers a quiet, one-on-one dining  ┃
+┃environment.                                                                                                                                                                      ┃
+┃  task-3/local/personal-memory/2024 [1384df1d] [task-3/local/personal-memory/2024/01] At a large banquet hall reserved by their older sister, the user remembered the surrounding ┃
+┃ noise more than the food.                                                                                                                                                        ┃
+┃  task-3/local/personal-memory/2024 [3cf68c8e] [task-3/local/personal-memory/2024/01] On a day the user ate grilled food at home with their younger brother, conversation was eas ┃
+┃y to continue, so the user stayed another hour after the meal.                                                                                                                    ┃
+┃  task-3/local/personal-memory/2026 [e682f0fd] [task-3/local/personal-memory/2026/06] When six family members gathered in a noisy indoor restaurant, the user asked several times ┃
+┃ for the person across from them to repeat what was said.                                                                                                                         ┃
+┃  task-3/local/personal-memory/2026 [c1f2b53e] [task-3/local/personal-memory/2026/06] The user held the next gathering in their father's yard and moved between seats while speak ┃
+┃ing with everyone.                                                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› R1 · COMPATIBLE · Both frames connect restaurant noise with impaired conversation and home-based gatherings with easier interaction.                                           ^│
+│  R2 · COMPATIBLE · Both frames limit what prior family-gathering evidence can determine about a future event.                                                                    │
+│  R3 · SCOPED · The shared planning principle is current-condition verification, while explicit environmental conditions preserve different hazards and checks.                   │
+│  R4 · SCOPED · The entrance-coordination claim is shared, while travel-facility and park-meeting contexts impose different explicit requirements.                                │
+│  R5 · SCOPED · The compared record is a later, event-scoped confirmation of the standing custody claim.                                                                          │
+│  R6 · COMPATIBLE · Both claims govern disclosure or transfer of spare-key access and require user confirmation.                                                                  │
+│  R7 · COMPATIBLE · The entrance and under-sink examples address the same preparation decision in different repair areas.                                                         │
+│  R8 · COMPATIBLE · Both policies require user confirmation before committing to an in-home service visit.                                                                       v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

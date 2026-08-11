@@ -160,3 +160,20 @@ claims were coalesced, so 300 inputs produced 249 provenance-bearing result
 Memories. Required conflicts remain visible in the participant-guided path;
 preserve-all is retained here only as the provider-free coverage control. The
 provider-event counter remained `0`.
+
+## Task 3 year-pair Compare interaction log
+
+| Captures | Command pair | Visible states | Durable mutation |
+| --- | --- | --- | --- |
+| `57` through `60` | `2024` versus `2025`, both descendant-inclusive | Exact 120+120 report, 119 relations, first birthday-timing relation, close receipt, stable snapshot | None |
+| `61` through `64` | `2024` versus `2026`, both descendant-inclusive | Exact 120+60 report, 96 relations, first restaurant-noise relation, close receipt, stable snapshot | None |
+| `65` through `68` | `2025` versus `2026`, both descendant-inclusive | Exact 120+60 report, 102 relations, first repeated-speech relation, close receipt, stable snapshot | None |
+| `69-task3-year-compares-action-log` | `mem log --actions --limit 30` | The three interactive and three snapshot Compare completions with no provider event | None; read-only |
+
+For every pair, the ordered captures are `exact-entry`, `relation-detail`,
+`close-receipt`, then `snapshot-verification`. The reports appeared in `0.368`,
+`0.371`, and `0.403` seconds respectively. The local-local retained label is
+`EXACT PREWARM`; unlike granted comparisons, it does not need a run-local
+Grant-binding suffix. `task3-year-compares-replay-metrics.json` records all
+three input sizes, relation counts, timings, and the unchanged provider-event
+counter of `0`.

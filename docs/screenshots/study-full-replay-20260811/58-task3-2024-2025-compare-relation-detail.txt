@@ -1,0 +1,52 @@
+ MEM COMPARE · task-3/local/personal-memory/2024 ↔ task-3/local/personal-memory/2025                                                                                                
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃RELATION · DISTINCT · RESOLVED                                                                                                                                                   ^┃
+┃Only Reference supplies the birthday timing.                                                                                                                                      ┃
+┃Only Reference supplies the birthday timing.                                                                                                                                      ┃
+┃› task-3/local/personal-memory/2024 [2cd0229d] [task-3/local/personal-memory/2024/01] The user's mother's birthday falls in the third week of January.                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› R1 · DISTINCT · Only Reference supplies the birthday timing.                                                                                                                   ^│
+│  R2 · COMPATIBLE · Both frames support the same venue-noise decision.                                                                                                            │
+│  R3 · DISTINCT · Only Reference states this priority.                                                                                                                            │
+│  R4 · COMPATIBLE · The planning guidance is complementary and scope-aligned.                                                                                                     │
+│  R5 · DISTINCT · Only Reference states this inference limit.                                                                                                                     │
+│  R6 · DISTINCT · Only Reference describes this access procedure.                                                                                                                 │
+│  R7 · DISTINCT · Only Reference describes this handover coordination.                                                                                                            │
+│  R8 · DISTINCT · Only Reference states this return preference.                                                                                                                  v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

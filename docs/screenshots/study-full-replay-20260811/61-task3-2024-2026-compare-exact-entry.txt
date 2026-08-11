@@ -1,0 +1,52 @@
+ MEM COMPARE · task-3/local/personal-memory/2024 ↔ task-3/local/personal-memory/2026                                                                                                
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃MEM COMPARE · SYMMETRIC PEERS                                                                                                                                                    ^┃
+┃Reference: task-3/local/personal-memory/2024 (layout only; no authority)                                                                                                          ┃
+┃Compared:  task-3/local/personal-memory/2026                                                                                                                                      ┃
+┃SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                                ┃
+┃Analysis: bee10da5 · EXACT PREWARM                                                                                                                                                ┃
+┃METRICS · MEMORIES 120 + 60 · RELATIONS 96 · POTENTIAL CONFLICTS 0                                                                                                                ┃
+┃EQUIVALENT 0 · COMPATIBLE 6 · SCOPED 4 · CONFLICT 0 · DISTINCT 86 · UNCLEAR 0                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT MEM UNDERSTOOD                                                                                                                                                               ┃
+┃Prepared comparison of the two declared Task 3 year frames.                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT BOTH CONTAIN · 6                                                                                                                                                             ┃
+┃6 shared or compatible relation groups.                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT DIFFERS · 4                                                                                                                                                                  ┃
+┃4 scoped, conflicting, or unclear relation groups.                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃ONLY IN task-3/local/personal-memory/2024 · 58 · not automatically a deficiency                                                                                                   ┃
+┃Distinct material from the reference year remains separate.                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ONLY IN task-3/local/personal-memory/2026 · 28 · not automatically a deficiency                                                                                                   ┃
+┃Distinct material from the compared year remains separate.                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃The complete source-linked relation ledger is saved. Inspect it with:                                                                                                             ┃
+┃  mem compare --from task-3/local/personal-memory/2024 --to task-3/local/personal-memory/2026 --reference-descendants --compared-descendants --ledger                             ┃
+┃                                                                                                                                                                                  ┃
+┃Create a new result Context and review both sources with Meld:                                                                                                                    ┃
+┃  mem meld task-3/local/personal-memory/2024 task-3/local/personal-memory/2026 --left-descendants --right-descendants --to RESULT_CONTEXT                                         ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT   Complete Compare report                                                                                                                                               ^│
+│  SECTION  What Mem understood · 1                                                                                                                                                │
+│  SECTION  What both contain · 6                                                                                                                                                  │
+│  SECTION  What differs · 4                                                                                                                                                       │
+│  SECTION  Only in task-3/local/personal-memory/2024 · 58                                                                                                                         │
+│  SECTION  Only in task-3/local/personal-memory/2026 · 28                                                                                                                         │
+│  LEDGER   Relation ledger · 96                                                                                                                                                   │
+│  R1 · COMPATIBLE · Both frames connect restaurant noise with impaired conversation and home-based gatherings with easier interaction.                                           v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

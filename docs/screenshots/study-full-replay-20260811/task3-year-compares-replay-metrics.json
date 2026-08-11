@@ -1,0 +1,46 @@
+{
+  "profile": "study-snapshot-replay-20260811",
+  "pairs": [
+    {
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "input_memories": [
+        120,
+        120
+      ],
+      "relations": 119,
+      "elapsed_to_report_seconds": 0.36839674998191185,
+      "origin": "EXACT_PREWARM"
+    },
+    {
+      "years": [
+        "2024",
+        "2026"
+      ],
+      "input_memories": [
+        120,
+        60
+      ],
+      "relations": 96,
+      "elapsed_to_report_seconds": 0.3706721659982577,
+      "origin": "EXACT_PREWARM"
+    },
+    {
+      "years": [
+        "2025",
+        "2026"
+      ],
+      "input_memories": [
+        120,
+        60
+      ],
+      "relations": 102,
+      "elapsed_to_report_seconds": 0.4029615840117913,
+      "origin": "EXACT_PREWARM"
+    }
+  ],
+  "provider_events_before": 0,
+  "provider_events_after": 0
+}

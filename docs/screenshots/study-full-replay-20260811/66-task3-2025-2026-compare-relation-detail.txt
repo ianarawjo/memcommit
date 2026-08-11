@@ -1,0 +1,52 @@
+ MEM COMPARE · task-3/local/personal-memory/2025 ↔ task-3/local/personal-memory/2026                                                                                                
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃RELATION · EQUIVALENT · RESOLVED                                                                                                                                                 ^┃
+┃Both describe repeated requests for speech to be repeated during a family meal in a noisy restaurant.                                                                             ┃
+┃Both describe repeated requests for speech to be repeated during a family meal in a noisy restaurant.                                                                             ┃
+┃› task-3/local/personal-memory/2025 [9fd0b9b6] [task-3/local/personal-memory/2025/11] In a crowded restaurant, the user had to ask several times for orders to be repeated, inter ┃
+┃rupting the flow of conversation.                                                                                                                                                 ┃
+┃  task-3/local/personal-memory/2026 [e682f0fd] [task-3/local/personal-memory/2026/06] When six family members gathered in a noisy indoor restaurant, the user asked several times ┃
+┃ for the person across from them to repeat what was said.                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› R1 · EQUIVALENT · Both describe repeated requests for speech to be repeated during a family meal in a noisy restaurant.                                                        ^│
+│  R2 · COMPATIBLE · One attributes easier conversation to dispersed sound; the other records the user circulating among guests in the father's yard.                              │
+│  R3 · EQUIVALENT · Both frames present the same timing-dependent yard-comfort pattern through observations, preference, and environmental detail.                                │
+│  R4 · COMPATIBLE · The reference directs confirmation of attendance timing and location, while the compared frame limits inference about attendees and weather from past barbec… │
+│  R5 · DISTINCT · This time-specific renewal fact appears only in the reference frame.                                                                                            │
+│  R6 · DISTINCT · The reference alone records delay from scattered files followed by completion after consolidation.                                                              │
+│  R7 · DISTINCT · The reference alone supplies the mismatch and the successful later check.                                                                                       │
+│  R8 · DISTINCT · The reference alone links incomplete calendar tracking to a missed deadline and records the corrected practice.                                                v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

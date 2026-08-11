@@ -1,0 +1,29 @@
+52 180
+MEM COMPARE · SYMMETRIC PEERS
+Reference: task-3/local/personal-memory/2024 (layout only; no authority)
+Compared:  task-3/local/personal-memory/2026
+SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS
+Analysis: bee10da5 · EXACT PREWARM
+METRICS · MEMORIES 120 + 60 · RELATIONS 96 · POTENTIAL CONFLICTS 0
+EQUIVALENT 0 · COMPATIBLE 6 · SCOPED 4 · CONFLICT 0 · DISTINCT 86 · UNCLEAR 0
+
+WHAT MEM UNDERSTOOD
+Prepared comparison of the two declared Task 3 year frames.
+
+WHAT BOTH CONTAIN · 6
+6 shared or compatible relation groups.
+
+WHAT DIFFERS · 4
+4 scoped, conflicting, or unclear relation groups.
+
+ONLY IN task-3/local/personal-memory/2024 · 58 · not automatically a deficiency
+Distinct material from the reference year remains separate.
+
+ONLY IN task-3/local/personal-memory/2026 · 28 · not automatically a deficiency
+Distinct material from the compared year remains separate.
+
+The complete source-linked relation ledger is saved. Inspect it with:
+  mem compare --from task-3/local/personal-memory/2024 --to task-3/local/personal-memory/2026 --reference-descendants --compared-descendants --ledger
+
+Create a new result Context and review both sources with Meld:
+  mem meld task-3/local/personal-memory/2024 task-3/local/personal-memory/2026 --left-descendants --right-descendants --to RESULT_CONTEXT
