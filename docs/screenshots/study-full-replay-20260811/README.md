@@ -45,3 +45,17 @@ The capture harness independently compares the Study ledger's provider-event
 count before and after the Atomize command. The count must remain unchanged;
 the installed exact analysis is decoded and applied without a live semantic
 turn.
+
+## Task 1 Compare interaction log
+
+| Capture | Command | Preceding input | Visible state | Durable mutation |
+| --- | --- | --- | --- | --- |
+| `14-task1-compare-exact-entry` | `mem compare --from task-1/participant/construction-updates --to task-1/campus-wiki --reference-descendants --compared-descendants` | None | Exact 75+300 report with 51 retained relations | None |
+| `15-task1-compare-relation-detail` | same | `Tab`, `End`, `Up` × 50, `Enter` | First source-linked retained relation and its judgment | None |
+| `16-task1-compare-close-receipt` | same | `Q` | Explicit close receipt | None |
+| `17-task1-compare-snapshot-verification` | same with `--snapshot` | None | Stable noninteractive exact report | None; read-only |
+| `18-task1-compare-action-log` | `mem log --actions --limit 20` | None | Completed Compare command with no provider event | None; read-only |
+
+`task1-compare-replay-metrics.json` records the measured time from process
+start to the first complete report and the unchanged provider-event counter.
+The exact analysis remains retained under the run-local current Grant binding.

@@ -1,0 +1,13 @@
+{
+  "command": "mem compare --from task-1/participant/construction-updates --to task-1/campus-wiki --reference-descendants --compared-descendants",
+  "profile": "study-snapshot-replay-20260811",
+  "elapsed_to_report_seconds": 0.3867488329997286,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "input_memories": [
+    75,
+    300
+  ],
+  "relations": 51,
+  "origin": "EXACT_PREWARM"
+}

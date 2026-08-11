@@ -1,0 +1,52 @@
+ MEM COMPARE · task-1/participant/construction-updates ↔ task-1/campus-wiki                                                                                                         
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃RELATION · SCOPED · RESOLVED                                                                                                                                                     ^┃
+┃The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                                          ┃
+┃The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                                          ┃
+┃› task-1/campus-wiki [1cb2aa88] [task-1/campus-wiki/building-access] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in  ┃
+┃both the academic term and recess.                                                                                                                                                ┃
+┃  task-1/campus-wiki [62214c26] [task-1/campus-wiki/building-access] The Main Building rear entrance on the opposite side of the sloping site is at the third-floor level.        ┃
+┃  task-1/campus-wiki [e3929a49] [task-1/campus-wiki/building-access] Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connect ┃
+┃ion normally available for passage.                                                                                                                                               ┃
+┃  task-1/campus-wiki [804bfc6b] [task-1/campus-wiki/building-access] Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on ┃
+┃ their next visit that they used on a previous visit.                                                                                                                             ┃
+┃  task-1/campus-wiki [6620e427] [task-1/campus-wiki/facility-updates] The rear entrance is on the third floor of the Main Building.                                               ┃
+┃  task-1/campus-wiki [ee271f65] [task-1/campus-wiki/route-changes] The rear entrance on the third floor of the Main Building connects directly to the pedestrian route leading to ┃
+┃ the Central Library.                                                                                                                                                             ┃
+┃  task-1/campus-wiki [4369c450] [task-1/campus-wiki/route-changes] In summer, students prefer the air-conditioned indoor route from the first to the third floor of the Main Buil ┃
+┃ding over the outdoor route.                                                                                                                                                      ┃
+┃  task-1/participant/construction-updates [8b077f2a] [task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period ┃
+┃, the third-floor rear entrance cannot be used for general passage.                                                                                                               ┃
+┃  task-1/participant/construction-updates [2d8e8c75] [task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: A student accustomed to reachi ┃
+┃ng the Central Library through the third-floor rear entrance may expect to be able to pass through during the construction period, go as far as the closed rear entrance, and the ┃
+┃n turn back or search again for an alternative route there.                                                                                                                       ┃
+┃  task-1/participant/construction-updates [ebc1d272] [task-1/participant/construction-updates/building-access] Add campus-wiki/building-access: Proactively inform students who a ┃
+┃re trying to reach the Central Library or who normally use the third-floor rear entrance that they cannot use that route during the construction period.                          ┃
+┃  task-1/participant/construction-updates [31f5b67b] [task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: A leader of an external group  ┃
+┃tour may expect the route used on a previous visit to remain valid during the construction period and lead the visiting group to the closed third-floor rear entrance.            ┃
+┃  task-1/participant/construction-updates [8017409a] [task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: The indoor route that passed through  ┃
+┃the first through third floors of the Main Building to the Central Library cannot be used during the construction period.                                                         ┃
+┃  task-1/participant/construction-updates [dbb3c40c] [task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: The route from the third-floor rear e ┃
+┃ntrance to the Central Library is closed during the construction period.                                                                                                          ┃
+┃  task-1/participant/construction-updates [a8bb36e1] [task-1/participant/construction-updates/route-changes] Modify campus-wiki/route-changes: A student who prefers the air-cond ┃
+┃itioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the constructio ┃
+┃n period.                                                                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› R1 · SCOPED · The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                         ^│
+│  R2 · SCOPED · The different end time is expressly limited to the construction period.                                                                                           │
+│  R3 · SCOPED · Reconstruction explicitly makes the existing route unavailable while preserving accessible lobby entry through a substitute.                                      │
+│  R4 · SCOPED · The credential restriction is tied to the changed construction access period.                                                                                     │
+│  R5 · SCOPED · The temporary routing condition refines ordinary staff-only eligibility and service-route separation.                                                             │
+│  R6 · SCOPED · Construction is an explicit temporary exception to published viewing availability.                                                                                │
+│  R7 · SCOPED · The construction period limits otherwise available reservation channels and confirmation rules.                                                                   │
+│  R8 · SCOPED · The temporary venue condition explains exclusion of closed spaces while retaining confirmation and agent-capability safeguards.                                  v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

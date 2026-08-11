@@ -1,0 +1,42 @@
+52 180                                                                                                                                                                              
+Study actions · recent first · content-free                                                                                                                                         
+  [65f4da7b/2] 2026-08-11 11:19:46 +0.056s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [65f4da7b/1] 2026-08-11 11:19:46 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                
+  [a3d1a93b/7] 2026-08-11 11:19:45 +3.087s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [a3d1a93b/6] 2026-08-11 11:19:45 +3.085s  TEXT_INPUT                                                                                                                              
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False                                                                                             
+  [a3d1a93b/5] 2026-08-11 11:19:44 +2.113s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-m                                                                                                                                
+  [a3d1a93b/4] 2026-08-11 11:19:44 +1.543s  KEY                                                                                                                                     
+      count=50 · focus=FormattedTextControl · key=up                                                                                                                                
+  [a3d1a93b/3] 2026-08-11 11:19:43 +1.152s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=end                                                                                                                                
+  [a3d1a93b/2] 2026-08-11 11:19:43 +0.755s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-i                                                                                                                                
+  [a3d1a93b/1] 2026-08-11 11:19:42 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                
+  [98a6917d/2] 2026-08-11 11:18:52 +0.019s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [98a6917d/1] 2026-08-11 11:18:52 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=log · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                    
+  [03466cf7/2] 2026-08-11 11:18:52 +0.056s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [03466cf7/1] 2026-08-11 11:18:52 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                
+  [50c7d71c/7] 2026-08-11 11:18:51 +4.316s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [50c7d71c/6] 2026-08-11 11:18:51 +4.315s  TEXT_INPUT                                                                                                                              
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False                                                                                             
+  [50c7d71c/5] 2026-08-11 11:18:50 +3.338s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-m                                                                                                                                
+  [50c7d71c/4] 2026-08-11 11:18:50 +2.772s  KEY                                                                                                                                     
+      count=50 · focus=FormattedTextControl · key=up                                                                                                                                
+  [50c7d71c/3] 2026-08-11 11:18:49 +2.367s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=end                                                                                                                                
+  [50c7d71c/2] 2026-08-11 11:18:49 +1.973s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-i                                                                                                                                
+  [50c7d71c/1] 2026-08-11 11:18:47 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
