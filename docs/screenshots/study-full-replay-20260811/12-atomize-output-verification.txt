@@ -1,0 +1,13 @@
+52 180                                                                                                                                                                              
+Context: practice/source-atomized                                                                                                                                                   
+  Memories 8  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory 3b773e6f] Please avoid using the expression “rather than” in the text.                                                                                                    
+  [memory 30743f5e] Do not add a forced concluding sentence that uses wording such as “taken together.”                                                                             
+  [memory e4709a30] Do not use em dashes or colons.                                                                                                                                 
+  [memory b50f69f1] Keep the refinement close to the original text.                                                                                                                 
+  [memory dfa9406e] Preserve the original meaning.                                                                                                                                  
+  [memory e9cac07b] Limit the changes mainly to necessary grammatical corrections.                                                                                                  
+  [memory d9a21f87] Avoid an overly casual style.                                                                                                                                   
+  [memory 4fbeb0b0] Keep the writing concise while giving it a minimally formal tone.

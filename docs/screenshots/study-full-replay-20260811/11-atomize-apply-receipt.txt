@@ -1,0 +1,6 @@
+Created and atomized 'practice/source-atomized' from analysis [496dd810].                                                                                                           
+  1 split -> 8 children                                                                                                                                                             
+  0 Memories preserved in place                                                                                                                                                     
+  [ac614cce] -> [3b773e6f], [30743f5e], [e4709a30], [b50f69f1], [dfa9406e], [e9cac07b], [d9a21f87], [4fbeb0b0]                                                                      
+Two checkpoints created: the source-based initial state and the atomized state.                                                                                                     
+Switched to 'practice/source-atomized'.

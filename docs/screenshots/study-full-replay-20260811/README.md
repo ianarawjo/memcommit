@@ -27,3 +27,21 @@ Capture environment:
 Later sections in this directory will continue the same run through each
 prepared semantic operation. A new capture is added only when visible state or
 the durable safety boundary changes.
+
+## Tutorial Atomize interaction log
+
+| Capture | Command | Preceding input | Visible state | Durable mutation |
+| --- | --- | --- | --- | --- |
+| `06-atomize-exact-prewarm-entry` | `mem atomize --context practice/source` | None | Installed one-to-eight exact analysis in the common workbench | None |
+| `07-atomize-split-detail` | same | `Tab`, `Down`, `Enter` | Source-linked split rationale and proposed result | None |
+| `08-atomize-review-handoff` | same | `Backspace` | Restored report with visible `REVIEW AND APPLY` handoff | None |
+| `09-atomize-final-review` | same | `A` | Non-mutating final review summary | None |
+| `10-atomize-exact-approval` | same | `End` | Exact `APPLY AS IS` action focused | None |
+| `11-atomize-apply-receipt` | same | `Enter` | Eight projected Memories and checkpoint receipt | Created `practice/source-atomized` and switched to it |
+| `12-atomize-output-verification` | `mem show --context practice/source-atomized` | None | All eight durable projected Memories | None; read-only |
+| `13-atomize-action-log` | `mem log --actions --limit 35` | None | Approval and completed-command boundary events, with no provider event | None; read-only |
+
+The capture harness independently compares the Study ledger's provider-event
+count before and after the Atomize command. The count must remain unchanged;
+the installed exact analysis is decoded and applied without a live semantic
+turn.

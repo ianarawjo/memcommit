@@ -1,0 +1,52 @@
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│ MEM ATOMIZE                                                                                                                                                                     ^│
+│ CONTEXT LOCATIONS                                                                                                                                                                │
+│   SOURCE · practice/source                                                                                                                                                       │
+│   OUTPUT · practice/source-atomized · NOT CREATED                                                                                                                                │
+│ READY_TO_APPLY_AS_IS · 1 SOURCE MEMORIES · 8 PROJECTED MEMORIES · 1 FINDINGS · 0 ANSWERED                                                                                        │
+│                                                                                                                                                                                  │
+│ WHAT MEM UNDERSTOOD                                                                                                                                                              │
+│ UNDERSTOOD                                                                                                                                                                       │
+│ The requested refinement should preserve meaning, stay close to the source, focus on grammatical corrections, remain concise and minimally formal, and avoid specified wording,  │
+│punctuation, casualness, and a forced conclusion.                                                                                                                                 │
+│                                                                                                                                                                                  │
+│ CHANGED                                                                                                                                                                          │
+│ The editing requirements were separated into independently revisable commitments, while coordinated punctuation restrictions, the qualified concluding-sentence rule, and the co │
+│mbined concise yet minimally formal style requirement were preserved intact.                                                                                                      │
+│                                                                                                                                                                                  │
+│ UNRESOLVED                                                                                                                                                                       │
+│ (none)                                                                                                                                                                           │
+│                                                                                                                                                                                  │
+│ ACTIONABLE FINDINGS · 1                                                                                                                                                          │
+│ SUGGESTED SPLIT 1 · Please avoid using the expression “rather than” in the text. Do not add a forced concluding sentence that uses wording such as “taken together.” Do not use  │
+│em dashes or colons. Ke…                                                                                                                                                          │
+│ [REVIEW] The source contains multiple independently revisable editing requirements. Each is separated with its explicit scope preserved, while linked alternatives and qualifica │
+│tions remain together; the length lint does not determine the classification.                                                                                                     │
+│                                                                                                                                                                                  │
+│ REVIEW AND APPLY                                                                                                                                                                 │
+│ APPLY AS IS is available. Enter to review before anything changes.                                                                                                               │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› REPORT         Complete Atomize report                                                                                                                                         ^┃
+┃  SUGGESTED SPLIT Please avoid using the expression “rather than” in the text. Do not add a forced concluding sentence that uses wording such as “taken together.” Do not use em  ┃
+┃                  dashes or colons. Ke…                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│practice/source-atomized · NOT CREATED    Enter to change                                                                                                                         │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Atomize action · APPLY AS IS is available. Enter to review before anything changes.                                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  A review & apply  S sort  H Help  Q close
