@@ -98,7 +98,7 @@ def _analysis(reference, compared) -> ComparisonAnalysis:
     )
 
 
-def _fixture(tmp_path, monkeypatch):
+def _fixture(tmp_path, monkeypatch, *, task: str = "task-2"):
     root = tmp_path / "run"
     monkeypatch.setattr(store_module, "STORE_DIR", root)
     monkeypatch.setattr(config_module, "CONFIG_FILE", tmp_path / "config.json")
@@ -110,9 +110,14 @@ def _fixture(tmp_path, monkeypatch):
         }
     )
     store = MemoryStore(root=root)
-    description = ops.init("task-2/description")
-    reference = ops.init("task-2/advisor1")
-    compared = ops.init("task-2/advisor2")
+    if task == "task-1":
+        description = ops.init("task-1/description")
+        reference = ops.init("task-1/participant/construction-updates")
+        compared = ops.init("task-1/campus-wiki")
+    else:
+        description = ops.init("task-2/description")
+        reference = ops.init("task-2/advisor1")
+        compared = ops.init("task-2/advisor2")
     ops.add(description, "Compare the two advisor documents.")
     ops.add(reference, "Reference-only guidance.")
     ops.add(compared, "Compared-only guidance.")
@@ -128,7 +133,7 @@ def _fixture(tmp_path, monkeypatch):
     )
     analysis = _analysis(reference, compared)
     key, artifact = build_compare_prewarm_artifact(
-        task="task-2",
+        task=task,
         task_description=description,
         analysis=analysis,
         provider="codex_chatgpt",
@@ -140,11 +145,68 @@ def _fixture(tmp_path, monkeypatch):
         root,
         baseline_profile_uid=baseline_uid,
         operation="COMPARE",
-        task="task-2",
+        task=task,
         key=key,
         artifact=artifact,
     )
     return store, profile, registry, reference, compared, analysis
+
+
+def test_task1_exact_basis_and_opposite_descendants_use_generic_registry(
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, reference, compared, prepared = _fixture(
+        tmp_path,
+        monkeypatch,
+        task="task-1",
+    )
+    installed = install_declared_compare_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    exact_calls = 0
+
+    def forbidden(_comparison_input):
+        nonlocal exact_calls
+        exact_calls += 1
+        raise AssertionError("Task 1 exact prewarm called the analyzer")
+
+    exact = ensure_comparison_analysis(
+        store=store,
+        reference_access=_access(store, reference),
+        compared_access=_access(store, compared),
+        reference=reference,
+        compared=compared,
+        current_name=reference.name,
+        include_descendants=(True, True),
+        analyze=forbidden,
+    )
+    reference_child = _subset_context(
+        reference,
+        reference.name + "/building-access",
+    )
+    compared_child = _subset_context(
+        compared,
+        compared.name + "/building-access",
+    )
+    projected = project_declared_compare_analysis(
+        store=store,
+        comparison_input=ComparisonInput.from_contexts(
+            reference_child,
+            compared_child,
+        ),
+        current_name=reference.name,
+        registry_snapshot=registry,
+    )
+
+    assert installed.installed == 1
+    assert exact_calls == 0
+    assert exact.analysis.uid == prepared.uid
+    assert projected is not None
+    assert sum(len(relation.members) for relation in projected.relations) == 2
+    assert len(projected.relations) <= 2
 
 
 def _access(store: MemoryStore, context) -> ContextAccess:

@@ -1,0 +1,52 @@
+{
+  "basis": {
+    "analysis_uid": "74bf4d5f-6e42-4b49-a3a0-66ee389eb1f8",
+    "compared_memories": 300,
+    "coverage_expected": 375,
+    "coverage_observed": 375,
+    "provider_calls": 2,
+    "provider_seconds": 414.0063945840084,
+    "reference_memories": 75,
+    "relation_groups": 51
+  },
+  "exact_reopen": {
+    "cli_wall_seconds": 0.41,
+    "direct_max_ms": 7.506,
+    "direct_median_ms": 7.37,
+    "direct_min_ms": 7.242,
+    "direct_repetitions": 10,
+    "provider_calls": 0
+  },
+  "kind": "STUDY_TASK1_COMPARE_PREWARM_E2E_EVIDENCE",
+  "profile": "task1-compare-prewarm-proof-20260810",
+  "projections": [
+    {
+      "compared_memories": 50,
+      "reference_memories": 11,
+      "relation_groups": 12,
+      "topic": "building-access",
+      "wall_seconds": 0.43
+    },
+    {
+      "compared_memories": 50,
+      "reference_memories": 9,
+      "relation_groups": 10,
+      "topic": "route-changes",
+      "wall_seconds": 0.43
+    },
+    {
+      "compared_memories": 50,
+      "reference_memories": 13,
+      "relation_groups": 8,
+      "topic": "shop-updates",
+      "wall_seconds": 0.44
+    }
+  ],
+  "schema_version": 1,
+  "semantic_content_in_evidence": false,
+  "setup": {
+    "atomize_prewarms_installed": 1,
+    "compare_prewarms_installed": 2,
+    "wall_seconds": 1.22
+  }
+}

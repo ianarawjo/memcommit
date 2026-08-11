@@ -5,9 +5,9 @@
 This note defines a study-design registry for moving known long semantic work
 out of participant-facing time. It is a cache-hit eligibility list, never an
 operation allowlist. The implemented production slices now install the
-declared Task 2 full Compare seed and Tutorial Atomize analysis when
-`init-study` creates a run. Compare also projects declared opposite-side
-descendant subsets from its exact seed. Other checked cells remain an
+declared Task 1 and Task 2 full Compare seeds and Tutorial Atomize analysis
+when `init-study` creates a run. Compare also projects declared opposite-side
+descendant subsets from each exact seed. Other checked cells remain an
 implementation plan. The registry itself never runs a provider, and an
 unlisted operation remains available through its ordinary live path.
 
@@ -109,6 +109,29 @@ metrics are recorded in
 [`outputs/atomize-prewarm/20260810-tutorial-e2e.json`](../outputs/atomize-prewarm/20260810-tutorial-e2e.json),
 with ordered real-PTY evidence under
 [`docs/screenshots/study-atomize-exact-prewarm-20260810/`](screenshots/study-atomize-exact-prewarm-20260810/).
+
+### Task 1 peer Compare basis
+
+The second declared Compare basis freezes descendant-inclusive
+`task-1/participant/construction-updates` `75` against
+`task-1/campus-wiki` `300`. Its prepared all-pairs artifact matched the current
+baseline's endpoint names, Context UIDs, complete digests, Memory counts, and
+`375/375` source ledger exactly. The compact call failed its unused-group
+validator, so preparation correctly used the exhaustive fallback rather than
+publishing the malformed compact result. The two calls took `414.006` provider
+seconds and yielded 51 validated groups with complete exactly-once coverage.
+
+The artifact was explicitly promoted into the same production Compare
+registry used by Task 2; participant commands never search the all-pairs output
+tree. A new run installed both Compare bases and the Tutorial Atomize basis in
+`1.22` seconds. The exact Task 1 CLI report reopened in `0.41` seconds, while
+ten direct production lookups had a `7.370` ms median and zero analyzer calls.
+Three declared opposite-side topic projections also remained below one second:
+building access `11:50` in `0.43` seconds, route changes `9:50` in `0.43`
+seconds, and shop updates `13:50` in `0.44` seconds. Every projection was
+visibly labeled `PROJECTED · NOT SAVED · PREVIEW`; group counts remained no
+larger than input count. Content-free evidence is stored in
+[`outputs/compare-prewarm/20260810-task1-exact-projection-e2e.json`](../outputs/compare-prewarm/20260810-task1-exact-projection-e2e.json).
 
 There is no independent production Refine operator in the current repository,
 so it is not an implementation target yet. Generic Update, Meld, Atomize, and
