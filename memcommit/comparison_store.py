@@ -30,9 +30,10 @@ _ATOMIC_TEMP_NAME = re.compile(
 )
 
 
-def comparison_analyses_dir() -> Path:
+def comparison_analyses_dir(store: store_module.MemoryStore | None = None) -> Path:
     """Resolve against the store root at call time for isolated tests."""
-    return store_module.STORE_DIR / "comparison-analyses"
+    root = store.store_dir if store is not None else store_module.STORE_DIR
+    return root / "comparison-analyses"
 
 
 def _canonical_uuid(value: str, label: str) -> str:
@@ -48,6 +49,8 @@ def _canonical_uuid(value: str, label: str) -> str:
 def comparison_analysis_path(
     reference_context_uid: str,
     compared_context_uid: str,
+    *,
+    store: store_module.MemoryStore | None = None,
 ) -> Path:
     reference = _canonical_uuid(
         reference_context_uid,
@@ -59,7 +62,7 @@ def comparison_analysis_path(
     )
     if reference == compared:
         raise ValueError("Comparison analysis requires distinct Context uids.")
-    root = comparison_analyses_dir()
+    root = comparison_analyses_dir(store)
     if root.is_symlink():
         raise ValueError("Comparison analysis storage cannot be a symbolic link.")
     if root.exists() and not root.is_dir():
@@ -81,11 +84,14 @@ def _strict_json_object(
 def load_comparison_analysis(
     reference_context_uid: str,
     compared_context_uid: str,
+    *,
+    store: store_module.MemoryStore | None = None,
 ) -> ComparisonAnalysis | None:
     """Load one ordered latest slot without creating store state."""
     path = comparison_analysis_path(
         reference_context_uid,
         compared_context_uid,
+        store=store,
     )
     if not path.exists():
         return None
@@ -138,6 +144,7 @@ def save_comparison_analysis(
     path = comparison_analysis_path(
         reference_frame.context_uid,
         compared_frame.context_uid,
+        store=store,
     )
     with ExitStack() as locks:
         if any(analysis.include_descendants):
@@ -191,6 +198,7 @@ def save_comparison_analysis(
         current = load_comparison_analysis(
             reference_frame.context_uid,
             compared_frame.context_uid,
+            store=store,
         )
         current_uid = current.uid if current is not None else None
         if current_uid != expected_analysis_uid:
@@ -199,7 +207,7 @@ def save_comparison_analysis(
                 "could be saved."
             )
 
-        root = comparison_analyses_dir()
+        root = comparison_analyses_dir(store)
         if root.exists() and (not root.is_dir() or root.is_symlink()):
             raise ValueError("Comparison analysis storage is invalid.")
         root.mkdir(parents=True, exist_ok=True)

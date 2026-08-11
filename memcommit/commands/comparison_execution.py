@@ -211,7 +211,11 @@ def ensure_comparison_analysis(
             else None
         )
     else:
-        existing = load_comparison_analysis(reference.uid, compared.uid)
+        existing = load_comparison_analysis(
+            reference.uid,
+            compared.uid,
+            store=store,
+        )
     if (
         existing is not None
         and existing.include_descendants == include_descendants

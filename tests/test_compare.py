@@ -996,6 +996,46 @@ def test_ordered_slot_cas_rejects_stale_competing_refresh(
     assert saved.uid == winner.uid
 
 
+def test_explicit_store_controls_local_comparison_slot(tmp_path):
+    first = MemoryStore(root=tmp_path / "first")
+    second = MemoryStore(root=tmp_path / "second")
+    reference = ops.init("reference")
+    compared = ops.init("compared")
+    ops.add(reference, "Reference claim.")
+    ops.add(compared, "Compared claim.")
+    first.create_context(reference)
+    first.create_context(compared)
+    analysis = analyze_comparison(
+        ComparisonInput.from_contexts(reference, compared),
+        ExhaustiveCompareProvider(),
+    )
+
+    save_comparison_analysis(first, analysis, expected_analysis_uid=None)
+
+    first_path = comparison_analysis_path(
+        reference.uid,
+        compared.uid,
+        store=first,
+    )
+    second_path = comparison_analysis_path(
+        reference.uid,
+        compared.uid,
+        store=second,
+    )
+    assert first_path.exists()
+    assert not second_path.exists()
+    assert load_comparison_analysis(
+        reference.uid,
+        compared.uid,
+        store=first,
+    ) == analysis
+    assert load_comparison_analysis(
+        reference.uid,
+        compared.uid,
+        store=second,
+    ) is None
+
+
 def test_local_parser_enforces_issue_count_even_without_schema_enforcement(
     isolated_store,
 ):

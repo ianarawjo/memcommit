@@ -199,6 +199,24 @@ distinct source claims retained provenance. The five required conflicts remain
 visible in the ordinary participant-guided route; preserve-all is again a
 mechanical coverage control rather than a substitute for those choices.
 
+### Task 3 year-pair Compare bases
+
+All three frozen year pairs are now declared exact Compare bases: `2024:2025`
+(`120:120`), `2024:2026` (`120:60`), and `2025:2026` (`120:60`). Their existing
+all-pairs Sol-medium runs required two calls each because compact validation
+fell back to exhaustive output, taking `355.413`, `377.982`, and `393.082`
+seconds respectively. Promotion reconstructed typed production analyses only
+after exact frame digest and `240`, `180`, and `180` source coverage checks.
+
+A fresh run installed five total Compare bases. Provider-forbidden production
+lookups reopened the three year pairs in `3.983`, `2.994`, and `2.908` ms with
+`119`, `96`, and `102` relation groups. The public report labels the result
+`EXACT PREWARM`. This step also corrected a storage bug exposed only by local
+Task 3 pairs: Compare save/load now honors the explicitly supplied
+`MemoryStore` root during `init-study` instead of writing through the process's
+previous global active-store path. Granted Task 1/2 storage had hidden that
+boundary error.
+
 ## Relationship to the earlier FIT idea
 
 The surviving repository account of the earlier `fit` notes describes a

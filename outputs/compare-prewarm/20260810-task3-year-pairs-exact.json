@@ -1,0 +1,9 @@
+{
+  "kind": "STUDY_COMPARE_TASK3_YEAR_EXACT_EVIDENCE",
+  "pairs": [
+    {"left": "2024", "right": "2025", "left_memories": 120, "right_memories": 120, "relations": 119, "offline_provider_calls": 2, "offline_provider_seconds": 355.4129160419834, "foreground_ms": 3.983, "provider_calls": 0, "analysis_uid": "317e28b5-5fb2-4068-ac40-9a77b7e89f4b"},
+    {"left": "2024", "right": "2026", "left_memories": 120, "right_memories": 60, "relations": 96, "offline_provider_calls": 2, "offline_provider_seconds": 377.98225058300886, "foreground_ms": 2.994, "provider_calls": 0, "analysis_uid": "bee10da5-b9c5-447b-9b6f-5ce6fda5cff5"},
+    {"left": "2025", "right": "2026", "left_memories": 120, "right_memories": 60, "relations": 102, "offline_provider_calls": 2, "offline_provider_seconds": 393.0822779999871, "foreground_ms": 2.908, "provider_calls": 0, "analysis_uid": "6a147f78-670c-4938-b5d2-5262dd5332e0"}
+  ],
+  "schema_version": 1
+}
