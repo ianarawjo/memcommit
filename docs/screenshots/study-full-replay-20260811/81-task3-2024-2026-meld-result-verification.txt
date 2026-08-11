@@ -1,0 +1,51 @@
+  [memory b95ddb4c] [task-3/local/personal-memory/2024/11] Some daily-life services may operate for shorter hours during the year-end holiday period.                               
+  [memory 27a6e154] [task-3/local/personal-memory/2024/12] The user used an accessible entrance at a clinic in December 2024.                                                       
+  [memory 3c1be7c2] [task-3/local/personal-memory/2024/12] Reception staff expect that a first-time visitor may ask where the accessible entrance is.                               
+  [memory 7a07a028] [task-3/local/personal-memory/2024/12] The local agent cannot infer the user's condition from a record of using an accessible route alone.                      
+  [memory 51086d2d] [task-3/local/personal-memory/2026/01] The user keeps gloves and scarves in a basket inside the entrance.                                                       
+  [memory eace4fe6] [task-3/local/personal-memory/2026/01] On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.         
+  [memory 7ea0693b] [task-3/local/personal-memory/2026/01] Before the next outing, the user put the gloves in the entrance basket the night before and left on time.                
+  [memory 16c0b861] [task-3/local/personal-memory/2026/01] The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.                               
+  [memory c7b04949] [task-3/local/personal-memory/2026/01] The next night, the user turned down the heat and used one additional thin blanket.                                      
+  [memory 4209415b] [task-3/local/personal-memory/2026/01] On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before
+ departure.                                                                                                                                                                         
+  [memory 13db4fe8] [task-3/local/personal-memory/2026/02] The user keeps basic repair tools in a box beneath the sink.                                                             
+  [memory 5f30eacc] [task-3/local/personal-memory/2026/02] On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.                   
+  [memory 0a254a4b] [task-3/local/personal-memory/2026/02] After sending a photo to building management, the user finalized the time for a repair visit.                            
+  [memory dfd17596] [task-3/local/personal-memory/2026/02] On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.   
+  [memory 0022d5d9] [task-3/local/personal-memory/2026/02] For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.          
+  [memory 731ec942] [task-3/local/personal-memory/2026/03] The user stores tax-related receipts in digital folders by year.                                                         
+  [memory d5249249] [task-3/local/personal-memory/2026/03] The user named every file with only the photo date and spent a long time looking for a needed receipt.                   
+  [memory 4e249734] [task-3/local/personal-memory/2026/03] The user later included the expense category in the filename and found the receipt immediately through search.           
+  [memory 337f77cd] [task-3/local/personal-memory/2026/03] While reviewing documents just before submission, the user discovered one blank signature field.                         
+  [memory 6c79a7a3] [task-3/local/personal-memory/2026/03] Before submitting an administrative document, the user checks the signature field as the final item on the checklist.    
+  [memory 1df11e68] [task-3/local/personal-memory/2026/03] Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred 
+or cropped photo.                                                                                                                                                                   
+  [memory 5fa8ebaf] [task-3/local/personal-memory/2026/03] The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.        
+  [memory 6dbc96e2] [task-3/local/personal-memory/2026/03] The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.            
+  [memory 689da853] [task-3/local/personal-memory/2026/04] The user collects clothes for donation in a large bag beside the entrance.                                               
+  [memory 26504cf7] [task-3/local/personal-memory/2026/04] After emptying an entire drawer at once, the user could not find a charger they needed.                                  
+  [memory d4359aff] [task-3/local/personal-memory/2026/04] During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.         
+  [memory 4fb1322f] [task-3/local/personal-memory/2026/04] Even after photographing unworn clothes, the user did not take them out again for one month.                             
+  [memory bc783cd2] [task-3/local/personal-memory/2026/04] After moving those clothes to the donation bag, the user cleared one closet compartment.                                 
+  [memory f21b5a36] [task-3/local/personal-memory/2026/04] The user nearly discarded an important paper with advertising and checked the recycling box again.                       
+  [memory 63b574ef] [task-3/local/personal-memory/2026/04] During the next organizing session, the user kept a separate document box and did not mix the papers.                    
+  [memory 7f486d4d] [task-3/local/personal-memory/2026/04] The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.       
+  [memory 95ca76b8] [task-3/local/personal-memory/2026/04] Confirm with the user before marking a personal document or another person's property as a disposal candidate.           
+  [memory e5c84563] [task-3/local/personal-memory/2026/04] The local agent cannot determine an object's emotional meaning from frequency of use alone.                              
+  [memory e2f3fbe7] [task-3/local/personal-memory/2026/05] The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.                                         
+  [memory 02d0d414] [task-3/local/personal-memory/2026/05] On a day the user went to the riverside, they sat in a place without shade and moved after an hour.                      
+  [memory 40766827] [task-3/local/personal-memory/2026/05] At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.                             
+  [memory c524d39e] [task-3/local/personal-memory/2026/05] On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.       
+  [memory d940793b] [task-3/local/personal-memory/2026/05] On the next outing, the user brought two small bottles of water after freezing them.                                     
+  [memory de9a01b8] [task-3/local/personal-memory/2026/05] Some park restrooms and drinking fountains may be closed seasonally.                                                     
+  [memory 91fbc830] [task-3/local/personal-memory/2026/06] The user keeps four folding chairs for family barbecues in storage.                                                      
+  [memory b7244981] [task-3/local/personal-memory/2026/06] On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.                          
+  [memory a3602bdf] [task-3/local/personal-memory/2026/06] The next time, the user started at 6 p.m. and remained outside until sunset.                                             
+  [memory c59f771c] [task-3/local/personal-memory/2026/06] The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperatu
+re.                                                                                                                                                                                 
+  [memory 634cf0e6] [task-3/local/personal-memory/2026/06] Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container t
+wice.                                                                                                                                                                               
+  [memory 91d72cd9] [task-3/local/personal-memory/2026/06] At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.                     
+  [memory 0bec2120] [task-3/local/personal-memory/2026/06] After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather th
+an discard it.

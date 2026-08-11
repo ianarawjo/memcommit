@@ -1,0 +1,51 @@
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 217. [PRESERVE] [task-3/local/personal-memory/2025/10] On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 218. [PRESERVE] [task-3/local/personal-memory/2025/10] On the next rainy day, the user wore waterproof shoes and their feet remained dry.                                       
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 219. [PRESERVE] [task-3/local/personal-memory/2025/10] On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.              
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 220. [PRESERVE] [task-3/local/personal-memory/2025/10] The user wore the same shoes on two short outings before using them on a long walk.                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 221. [PRESERVE] [task-3/local/personal-memory/2025/10] When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 222. [PRESERVE] [task-3/local/personal-memory/2025/10] On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.              
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 223. [PRESERVE] [task-3/local/personal-memory/2025/10] On a day the user put a folded wet umbrella in their bag, documents inside became wet.                                   
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 224. [PRESERVE] [task-3/local/personal-memory/2025/10] When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.   
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 225. [PRESERVE] [task-3/local/personal-memory/2025/10] Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.           
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 226. [PRESERVE] [task-3/local/personal-memory/2025/11] The user recorded a family dinner in the calendar for the final week of November.                                        
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 227. [PRESERVE] [task-3/local/personal-memory/2025/11] After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.    
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 228. [PRESERVE] [task-3/local/personal-memory/2025/11] On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.              
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 229. [PRESERVE] [task-3/local/personal-memory/2025/11] The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance
+.                                                                                                                                                                                   
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 230. [PRESERVE] [task-3/local/personal-memory/2025/11] Available restaurant reservation times may diminish quickly during the year-end gathering season.                        
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 231. [PRESERVE] [task-3/local/personal-memory/2025/12] The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.                            
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 232. [PRESERVE] [task-3/local/personal-memory/2025/12] From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row. 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 233. [PRESERVE] [task-3/local/personal-memory/2025/12] This year, the user went to the market with their mother and let her choose a needed item directly.                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 234. [PRESERVE] [task-3/local/personal-memory/2025/12] The local agent can find past gift records and flag duplicates but cannot know what is needed this year.                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 235. [PRESERVE] [task-3/local/personal-memory/2025/12] The user once ordered a gift late and had it delivered the day after the gathering.                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 236. [PRESERVE] [task-3/local/personal-memory/2025/12] The next year, the user checked the expected delivery date and ordered one week before the gathering.                    
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 237. [PRESERVE] [task-3/local/personal-memory/2025/12] Year-end deliveries may take longer than usual or have their expected dates changed.                                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 238. [PRESERVE] [task-3/local/personal-memory/2025/12] The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.        
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 239. [PRESERVE] [task-3/local/personal-memory/2025/12] The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.                                
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 240. [PRESERVE] [task-3/local/personal-memory/2025/12] The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.        
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+Applied 240 meld results in checkpoint [10051300].

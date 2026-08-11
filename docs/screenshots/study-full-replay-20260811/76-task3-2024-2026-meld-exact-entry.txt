@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ╭─ MEM COMPARE · SYMMETRIC PEERS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮^┃
+┃ │ CONTEXT LOCATIONS                                                                                                                                                            │ ┃
+┃ │   SOURCE A · task-3/local/personal-memory/2024                                                                                                                               │ ┃
+┃ │   SOURCE B · task-3/local/personal-memory/2026                                                                                                                               │ ┃
+┃ │   RESULT · task-3/participant/year-meld-2024-2026                                                                                                                            │ ┃
+┃ │ Reference: task-3/local/personal-memory/2024 (layout only; no authority)                                                                                                     │ ┃
+┃ │ Compared: task-3/local/personal-memory/2026                                                                                                                                  │ ┃
+┃ │ SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                           │ ┃
+┃ │ Analysis: bee10da5 · REUSED                                                                                                                                                  │ ┃
+┃ │ METRICS · MEMORIES 120 + 60 · RELATIONS 96 · POTENTIAL CONFLICTS 0                                                                                                           │ ┃
+┃ │ EQUIVALENT 0 · COMPATIBLE 6 · SCOPED 4 · CONFLICT 0 · DISTINCT 86 · UNCLEAR 0                                                                                                │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT MEM UNDERSTOOD ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ Prepared comparison of the two declared Task 3 year frames.                                                                                                                  │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT BOTH CONTAIN · 6 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ 6 shared or compatible relation groups.                                                                                                                                      │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT DIFFERS · 4 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ 4 scoped, conflicting, or unclear relation groups.                                                                                                                           │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ ONLY IN task-3/local/personal-memory/2024 · 58 · not automatically a deficiency ────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ Distinct material from the reference year remains separate.                                                                                                                  │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ ONLY IN task-3/local/personal-memory/2026 · 28 · not automatically a deficiency ────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ Distinct material from the compared year remains separate.                                                                                                                   │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ PROPOSED TARGET MEMORIES · 0                                                                                                                                                     ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Compare report                                                                                                                                         ^│
+│  COMPATIBLE     Both frames connect restaurant noise with impaired conversation and home-based gatherings with easier interaction.                                               │
+│  COMPATIBLE     Both frames limit what prior family-gathering evidence can determine about a future event.                                                                       │
+│  SCOPED         The shared planning principle is current-condition verification, while explicit environmental conditions preserve different hazards and checks.                  │
+│  SCOPED         The entrance-coordination claim is shared, while travel-facility and park-meeting contexts impose different explicit requirements.                               │
+│  SCOPED         The compared record is a later, event-scoped confirmation of the standing custody claim.                                                                        v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-3/participant/year-meld-2024-2026 · CURRENT TARGET    Enter to change                                                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  P preserve all  D defer  A review & apply  H Help  Q close

@@ -1,0 +1,51 @@
+  + 151. [PRESERVE] [task-3/local/personal-memory/2026/04] The user collects clothes for donation in a large bag beside the entrance.                                               
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 152. [PRESERVE] [task-3/local/personal-memory/2026/04] After emptying an entire drawer at once, the user could not find a charger they needed.                                  
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 153. [PRESERVE] [task-3/local/personal-memory/2026/04] During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.         
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 154. [PRESERVE] [task-3/local/personal-memory/2026/04] Even after photographing unworn clothes, the user did not take them out again for one month.                             
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 155. [PRESERVE] [task-3/local/personal-memory/2026/04] After moving those clothes to the donation bag, the user cleared one closet compartment.                                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 156. [PRESERVE] [task-3/local/personal-memory/2026/04] The user nearly discarded an important paper with advertising and checked the recycling box again.                       
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 157. [PRESERVE] [task-3/local/personal-memory/2026/04] During the next organizing session, the user kept a separate document box and did not mix the papers.                    
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 158. [PRESERVE] [task-3/local/personal-memory/2026/04] Confirm with the user before marking a personal document or another person's property as a disposal candidate.           
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 159. [PRESERVE] [task-3/local/personal-memory/2026/04] The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.       
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 160. [PRESERVE] [task-3/local/personal-memory/2026/04] The local agent cannot determine an object's emotional meaning from frequency of use alone.                              
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 161. [PRESERVE] [task-3/local/personal-memory/2026/05] The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.                                         
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 162. [PRESERVE] [task-3/local/personal-memory/2026/05] On a day the user went to the riverside, they sat in a place without shade and moved after an hour.                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 163. [PRESERVE] [task-3/local/personal-memory/2026/05] At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.                             
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 164. [PRESERVE] [task-3/local/personal-memory/2026/05] On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.       
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 165. [PRESERVE] [task-3/local/personal-memory/2026/05] On the next outing, the user brought two small bottles of water after freezing them.                                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 166. [PRESERVE] [task-3/local/personal-memory/2026/05] When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.        
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 167. [PRESERVE] [task-3/local/personal-memory/2026/05] For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.                        
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 168. [PRESERVE] [task-3/local/personal-memory/2026/05] For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 169. [PRESERVE] [task-3/local/personal-memory/2026/05] When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 170. [PRESERVE] [task-3/local/personal-memory/2026/05] Some park restrooms and drinking fountains may be closed seasonally.                                                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 171. [PRESERVE] [task-3/local/personal-memory/2026/06] The user keeps four folding chairs for family barbecues in storage.                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 172. [PRESERVE] [task-3/local/personal-memory/2026/06] Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container t
+wice.                                                                                                                                                                               
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 173. [PRESERVE] [task-3/local/personal-memory/2026/06] At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 174. [PRESERVE] [task-3/local/personal-memory/2026/06] After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather th
+an discard it.                                                                                                                                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+Applied 174 meld results in checkpoint [506baf87].

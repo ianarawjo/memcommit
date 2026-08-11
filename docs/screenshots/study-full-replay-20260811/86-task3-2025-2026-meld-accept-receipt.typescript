@@ -1,0 +1,474 @@
+52 180
+MEM MELD · SYMMETRIC
+task-3/local/personal-memory/2025 + task-3/local/personal-memory/2026 → task-3/participant/year-meld-2025-2026
+SCOPE · A SELECTED + ALL DESCENDANTS · B SELECTED + ALL DESCENDANTS
+Compare: 6a147f78 · IMPORTED
+State: APPLIED · Round: 2
+
+WHAT MEM UNDERSTOOD
+Every supported source distinction is preserved in a relation-local target Memory, while equivalent Memories are coalesced without a semantic rewrite.
+
+RELATIONS · 102  ISSUES · 0  RESULTS · 174
+
+ACCOUNTING
+  Source coverage: 180/180
+  Relation coverage: 102/102
+  Final Memories: 174 · PRESERVE 172 · COALESCE 2 · SYNTHESIZE 0 · USER_ADD 0
+  Open issues: REQUIRED 0 · HELPFUL 0
+  Cross-relation results: 0
+  ✓ R1. EQUIVALENT · Both describe repeated requests for speech to be repeated during a family meal in a noisy…
+  ✓ R2. COMPATIBLE · One attributes easier conversation to dispersed sound; the other records the user circula…
+  ✓ R3. EQUIVALENT · Both frames present the same timing-dependent yard-comfort pattern through observations,…
+  ✓ R4. COMPATIBLE · The reference directs confirmation of attendance timing and location, while the compared…
+  ✓ R5. DISTINCT · This time-specific renewal fact appears only in the reference frame.
+  ✓ R6. DISTINCT · The reference alone records delay from scattered files followed by completion after conso…
+  ✓ R7. DISTINCT · The reference alone supplies the mismatch and the successful later check.
+  ✓ R8. DISTINCT · The reference alone links incomplete calendar tracking to a missed deadline and records t…
+  ✓ R9. DISTINCT · This counter expectation appears only in the reference frame.
+  ✓ R10. DISTINCT · This information limitation appears only in the reference frame.
+  ✓ R11. DISTINCT · This review event appears only in the reference frame.
+  ✓ R12. DISTINCT · The reference alone records the contrasting preparation formats and outcomes.
+  ✓ R13. DISTINCT · The reference alone records the two call timings and their differing durations.
+  ✓ R14. DISTINCT · The reference alone links a failed message to an outdated number, its correction, and the…
+  ✓ R15. DISTINCT · This communication preference appears only in the reference frame.
+  ✓ R16. DISTINCT · This reminder preference appears only in the reference frame.
+  ✓ R17. DISTINCT · This storage location appears only in the reference frame.
+  ✓ R18. DISTINCT · The reference alone contrasts an unplanned duplicate purchase with successful photo-based…
+  ✓ R19. DISTINCT · The reference alone records the spicy-stew observations and explicitly limits the inferen…
+  ✓ R20. DISTINCT · The reference alone contrasts duplicated work with faster role division and records the b…
+  ✓ R21. DISTINCT · This storage caveat appears only in the reference frame.
+  ✓ R22. DISTINCT · This location appears only in the reference frame.
+  ✓ R23. DISTINCT · The reference alone links delayed collection, successful advance reminding, the manager's…
+  ✓ R24. DISTINCT · The reference alone records the transfer incident and the successful later separation.
+  ✓ R25. DISTINCT · The reference alone contrasts unchecked and emptied-filter outcomes.
+  ✓ R26. DISTINCT · This operational limitation appears only in the reference frame.
+  ✓ R27. DISTINCT · This plant location appears only in the reference frame.
+  ✓ R28. DISTINCT · The reference alone contrasts yellowing under daily watering with new growth after deeper…
+  ✓ R29. DISTINCT · The reference alone records the wind accident and the subsequent placement change.
+  ✓ R30. DISTINCT · The reference alone records both labeling and confusion involving an unlabeled pot.
+  ✓ R31. DISTINCT · This plant-care judgment appears only in the reference frame.
+  ✓ R32. DISTINCT · This reminder-input policy appears only in the reference frame.
+  ✓ R33. DISTINCT · This environmental variability appears only in the reference frame.
+  ✓ R34. DISTINCT · This charger location appears only in the reference frame.
+  ✓ R35. DISTINCT · The reference alone records focus loss with only an open window, reduced warming after cl…
+  ✓ R36. DISTINCT · The reference alone contrasts an uncharged failure with successful advance charging.
+  ✓ R37. DISTINCT · This limitation appears only in the reference frame.
+  ✓ R38. DISTINCT · This storage location appears only in the reference frame.
+  ✓ R39. DISTINCT · The reference alone contrasts three packed pairs with the later lighter choice.
+  ✓ R40. DISTINCT · The reference alone records a forgotten cable, successful photo-based checking, and the o…
+  ✓ R41. DISTINCT · The reference alone contrasts departure-day packing and lateness with advance packing and…
+  ✓ R42. DISTINCT · The reference alone supplies both the confirmation policy and its inference limit.
+  ✓ R43. DISTINCT · This storage location appears only in the reference frame.
+  ✓ R44. DISTINCT · The reference alone contrasts late arrival with successful advance checking.
+  ✓ R45. DISTINCT · The reference alone contrasts an unsealed-box delay with successful advance sealing.
+  ✓ R46. DISTINCT · The reference alone links inefficient routing to map-based sequencing and warns that inst…
+  ✓ R47. DISTINCT · This postal requirement appears only in the reference frame.
+  ✓ R48. DISTINCT · This reading-material location appears only in the reference frame.
+  ✓ R49. DISTINCT · The reference alone records rereading with television on, uninterrupted reading with it o…
+  ✓ R50. DISTINCT · The reference alone records notification interruptions, successful phone separation, and…
+  ✓ R51. DISTINCT · The reference alone contrasts a lost loose note with successful notebook tracking.
+  ✓ R52. DISTINCT · This limitation appears only in the reference frame.
+  ✓ R53. DISTINCT · This storage location appears only in the reference frame.
+  ✓ R54. DISTINCT · The reference alone contrasts wet and dry footwear outcomes.
+  ✓ R55. DISTINCT · The reference alone records heel chafing, later short tests, and the associated planning…
+  ✓ R56. DISTINCT · The reference alone records both the successful drying location and the consequence of ba…
+  ✓ R57. DISTINCT · This family assistance pattern appears only in the reference frame.
+  ✓ R58. DISTINCT · This limitation appears only in the reference frame.
+  ✓ R59. DISTINCT · This scheduling fact appears only in the reference frame.
+  ✓ R60. DISTINCT · This indoor-home gathering outcome appears only in the reference frame.
+  ✓ R61. DISTINCT · This sound-sensitivity event appears only in the reference frame.
+  ✓ R62. DISTINCT · The reference alone contrasts known and unknown arrival timing and records the maternal u…
+  ✓ R63. DISTINCT · This seasonal reservation constraint appears only in the reference frame.
+  ✓ R64. DISTINCT · This storage location appears only in the reference frame.
+  ✓ R65. DISTINCT · The reference alone records a repeated gift, successful direct selection with the mother,…
+  ✓ R66. DISTINCT · The reference alone contrasts a late delivery with successful early ordering and supplies…
+  ✓ R67. DISTINCT · The reference alone records the mix-up and the later labeling practice.
+  ✓ R68. DISTINCT · This gift preference appears only in the reference frame.
+  ✓ R69. DISTINCT · This winter-accessory location appears only in the compared frame.
+  ✓ R70. DISTINCT · The compared frame alone contrasts a delayed search with successful advance placement.
+  ✓ R71. DISTINCT · The compared frame alone records blocked and cleared routes, the checking policy, and the…
+  ✓ R72. DISTINCT · The compared frame alone contrasts overheating and waking with the adjusted sleeping arra…
+  ✓ R73. DISTINCT · This family support pattern appears only in the compared frame.
+  ✓ R74. DISTINCT · This tool location appears only in the compared frame.
+  ✓ R75. DISTINCT · This leak-response outcome appears only in the compared frame.
+  ✓ R76. DISTINCT · This repair-coordination event appears only in the compared frame.
+  ✓ R77. DISTINCT · This visit-preparation practice appears only in the compared frame.
+  ✓ R78. DISTINCT · The compared frame alone contrasts a disabled reminder and late response with successful…
+  ✓ R79. DISTINCT · The compared frame alone records the key check and the aunt's access boundary.
+  ✓ R80. DISTINCT · This residential-access policy appears only in the compared frame.
+  ✓ R81. DISTINCT · This scheduling caveat appears only in the compared frame.
+  ✓ R82. DISTINCT · This filing structure appears only in the compared frame.
+  ✓ R83. DISTINCT · The compared frame alone contrasts late-discovered paper receipts with prompt capture.
+  ✓ R84. DISTINCT · The compared frame alone contrasts date-only names with searchable category names.
+  ✓ R85. DISTINCT · The compared frame alone records the omission and the resulting final-check practice.
+  ✓ R86. DISTINCT · This submission-quality requirement appears only in the compared frame.
+  ✓ R87. DISTINCT · This tax-judgment limitation appears only in the compared frame.
+  ✓ R88. DISTINCT · This annual-guidance caveat appears only in the compared frame.
+  ✓ R89. DISTINCT · This donation-storage practice appears only in the compared frame.
+  ✓ R90. DISTINCT · The compared frame alone contrasts emptying a whole drawer with a controlled sorting proc…
+  ✓ R91. DISTINCT · The compared frame alone records prolonged nonuse after photographing and the later space…
+  ✓ R92. DISTINCT · The compared frame alone records the near-discard, successful separate box, and explicit…
+  ✓ R93. DISTINCT · This reuse preference appears only in the compared frame.
+  ✓ R94. DISTINCT · This decluttering limitation appears only in the compared frame.
+  ✓ R95. DISTINCT · This storage location appears only in the compared frame.
+  ✓ R96. DISTINCT · The compared frame alone contrasts the two park seating outcomes.
+  ✓ R97. DISTINCT · The compared frame alone contrasts needing an extra drink with the later preparation.
+  ✓ R98. DISTINCT · The compared frame alone links entrance confusion, successful photo identification, the u…
+  ✓ R99. DISTINCT · This facility-availability caveat appears only in the compared frame.
+  ✓ R100. DISTINCT · This equipment inventory appears only in the compared frame.
+  ✓ R101. DISTINCT · The compared frame alone records the unlabeled-container confusion and later labeling pra…
+  ✓ R102. DISTINCT · This leftover-food preference appears only in the compared frame.
+
+ISSUES
+  (none)
+
+PROPOSED TARGET MEMORIES
+  +  1. [COALESCE] [task-3/local/personal-memory/2025/11] In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  +  2. [PRESERVE] [task-3/local/personal-memory/2025/11] On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  3. [PRESERVE] [task-3/local/personal-memory/2026/06] The user held the next gathering in their father's yard and moved between seats while speaking with everyone.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  4. [COALESCE] [task-3/local/personal-memory/2025/06] On a hot weekend, the user was eating lunch in their father's yard and moved indoors.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  +  5. [PRESERVE] [task-3/local/personal-memory/2025/11] Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  6. [PRESERVE] [task-3/local/personal-memory/2026/06] The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  7. [PRESERVE] [task-3/local/personal-memory/2025/01] One of the user's identity documents needs renewal in the second half of 2025.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  8. [PRESERVE] [task-3/local/personal-memory/2025/01] The user postponed an application until the next day after spending time looking for document photos in scattered folders.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  9. [PRESERVE] [task-3/local/personal-memory/2025/01] After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 10. [PRESERVE] [task-3/local/personal-memory/2025/01] The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 11. [PRESERVE] [task-3/local/personal-memory/2025/01] On the next application, after comparing the name with the source document, the user did not receive a correction request.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 12. [PRESERVE] [task-3/local/personal-memory/2025/01] The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 13. [PRESERVE] [task-3/local/personal-memory/2025/01] On the next application, the user recorded the expected issuance date separately in the calendar.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 14. [PRESERVE] [task-3/local/personal-memory/2025/01] When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 15. [PRESERVE] [task-3/local/personal-memory/2025/01] Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 16. [PRESERVE] [task-3/local/personal-memory/2025/01] The local agent cannot determine the current validity of an identity document without its expiration date.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 17. [PRESERVE] [task-3/local/personal-memory/2025/02] The user reviewed their emergency-contact list in February 2025.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 18. [PRESERVE] [task-3/local/personal-memory/2025/02] When preparation instructions arrived as a long paragraph, the user missed two items.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 19. [PRESERVE] [task-3/local/personal-memory/2025/02] After changing the same content into a checklist, the user marked every item they had prepared.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 20. [PRESERVE] [task-3/local/personal-memory/2025/02] The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 21. [PRESERVE] [task-3/local/personal-memory/2025/02] The user called again on Saturday morning the following week and spoke for 40 minutes.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 22. [PRESERVE] [task-3/local/personal-memory/2025/02] The user sent a text to an old number for an emergency contact and saw that delivery failed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 23. [PRESERVE] [task-3/local/personal-memory/2025/02] After confirming the new number with their older sister, the user updated the contact list.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 24. [PRESERVE] [task-3/local/personal-memory/2025/02] Before using an emergency contact, reconfirm the number and relationship information with the user.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 25. [PRESERVE] [task-3/local/personal-memory/2025/02] For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 26. [PRESERVE] [task-3/local/personal-memory/2025/02] The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 27. [PRESERVE] [task-3/local/personal-memory/2025/03] The user stores prepared meals on the second shelf of the freezer.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 28. [PRESERVE] [task-3/local/personal-memory/2025/03] The user went to the market without a shopping list and bought onions that were already at home.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 29. [PRESERVE] [task-3/local/personal-memory/2025/03] On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 30. [PRESERVE] [task-3/local/personal-memory/2025/03] On a day the user made a spicy stew, they left part of one bowl uneaten.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 31. [PRESERVE] [task-3/local/personal-memory/2025/03] The next time the user cooked it, they used half as much chili powder and finished the meal.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 32. [PRESERVE] [task-3/local/personal-memory/2025/03] The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 33. [PRESERVE] [task-3/local/personal-memory/2025/03] When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 34. [PRESERVE] [task-3/local/personal-memory/2025/03] The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 35. [PRESERVE] [task-3/local/personal-memory/2025/03] When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 36. [PRESERVE] [task-3/local/personal-memory/2025/03] The condition of frozen prepared food may vary with its packaging and storage duration.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 37. [PRESERVE] [task-3/local/personal-memory/2025/04] The user keeps the shared laundry-room access card in an entrance drawer.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 38. [PRESERVE] [task-3/local/personal-memory/2025/04] The user went downstairs 25 minutes after the laundry finished and received a note from another household.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 39. [PRESERVE] [task-3/local/personal-memory/2025/04] For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 40. [PRESERVE] [task-3/local/personal-memory/2025/04] The building manager judges that not leaving finished laundry for a long time is fair to other households.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 41. [PRESERVE] [task-3/local/personal-memory/2025/04] When creating a shared laundry-room reminder, base it on the end time of the machine the user started.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 42. [PRESERVE] [task-3/local/personal-memory/2025/04] The user washed light-colored clothes with new jeans, and color transferred onto white socks.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 43. [PRESERVE] [task-3/local/personal-memory/2025/04] The user later washed the new jeans separately, and the color of the other clothes did not change.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 44. [PRESERVE] [task-3/local/personal-memory/2025/04] On a day the user did not check the dryer filter, the clothes needed another drying cycle.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 45. [PRESERVE] [task-3/local/personal-memory/2025/04] On the next use, after emptying the filter, the user finished drying in one cycle.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 46. [PRESERVE] [task-3/local/personal-memory/2025/04] Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 47. [PRESERVE] [task-3/local/personal-memory/2025/05] The user keeps two potted herbs beside a south-facing window.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 48. [PRESERVE] [task-3/local/personal-memory/2025/05] During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 49. [PRESERVE] [task-3/local/personal-memory/2025/05] During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 50. [PRESERVE] [task-3/local/personal-memory/2025/05] On a day the user left the window open for a long time, strong wind knocked over one pot.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 51. [PRESERVE] [task-3/local/personal-memory/2025/05] The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 52. [PRESERVE] [task-3/local/personal-memory/2025/05] The user put a plant-name label in a small pot received from their maternal aunt.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 53. [PRESERVE] [task-3/local/personal-memory/2025/05] The user confused the care instructions for an unlabeled pot with those for another plant.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 54. [PRESERVE] [task-3/local/personal-memory/2025/05] The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 55. [PRESERVE] [task-3/local/personal-memory/2025/05] Before creating a plant-care reminder, check each plant's name and most recent watering date.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 56. [PRESERVE] [task-3/local/personal-memory/2025/05] The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 57. [PRESERVE] [task-3/local/personal-memory/2025/06] The user keeps a portable fan charger on a living-room shelf.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 58. [PRESERVE] [task-3/local/personal-memory/2025/06] On a hot day, the user worked with only the window open and lost focus in the afternoon.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 59. [PRESERVE] [task-3/local/personal-memory/2025/06] In the room where the user closed the curtains the next morning, the temperature rose less.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 60. [PRESERVE] [task-3/local/personal-memory/2025/06] A room with a west-facing window can warm rapidly in the late afternoon.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 61. [PRESERVE] [task-3/local/personal-memory/2025/06] The user took the portable fan out without charging it, and it turned off after an hour.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 62. [PRESERVE] [task-3/local/personal-memory/2025/06] Before the next outing, the user charged it the night before and used the fan throughout the trip.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 63. [PRESERVE] [task-3/local/personal-memory/2025/06] The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 64. [PRESERVE] [task-3/local/personal-memory/2025/07] The user keeps a travel power bank in the first drawer beneath the desk.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 65. [PRESERVE] [task-3/local/personal-memory/2025/07] The user packed three pairs of shoes for a two-night trip but wore only one pair.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 66. [PRESERVE] [task-3/local/personal-memory/2025/07] For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 67. [PRESERVE] [task-3/local/personal-memory/2025/07] On a trip when the user forgot a charging cable, they bought a new one after arrival.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 68. [PRESERVE] [task-3/local/personal-memory/2025/07] Before the next trip, the user checked charging items against a photo and packed all of them.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 69. [PRESERVE] [task-3/local/personal-memory/2025/07] The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 70. [PRESERVE] [task-3/local/personal-memory/2025/07] The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 71. [PRESERVE] [task-3/local/personal-memory/2025/07] The next time, the user closed the bag the night before and departed on time.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 72. [PRESERVE] [task-3/local/personal-memory/2025/07] When creating a travel preparation list, confirm the trip length and actual activities with the user.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 73. [PRESERVE] [task-3/local/personal-memory/2025/07] The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 74. [PRESERVE] [task-3/local/personal-memory/2025/08] The user keeps packing tape for returns in an upper kitchen drawer.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 75. [PRESERVE] [task-3/local/personal-memory/2025/08] The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 76. [PRESERVE] [task-3/local/personal-memory/2025/08] Before the next visit, the user checked the operating hours and arrived one hour before closing.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 77. [PRESERVE] [task-3/local/personal-memory/2025/08] The user went to the counter without closing a return box and had to go back to the packing station.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 78. [PRESERVE] [task-3/local/personal-memory/2025/08] For the next return, the user sealed the box at home and completed intake in one attempt.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 79. [PRESERVE] [task-3/local/personal-memory/2025/08] The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 80. [PRESERVE] [task-3/local/personal-memory/2025/08] The following week, after checking the locations on a map, the user visited nearby branches in sequence.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 81. [PRESERVE] [task-3/local/personal-memory/2025/08] Before grouping errands into one outing, check each institution's location and operating hours that day.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 82. [PRESERVE] [task-3/local/personal-memory/2025/08] Postal and financial counters may operate on different hours than usual around public holidays.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 83. [PRESERVE] [task-3/local/personal-memory/2025/08] Postal staff expect a return-label barcode to arrive affixed flat, without a fold.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 84. [PRESERVE] [task-3/local/personal-memory/2025/09] The user keeps the book they are reading and a note-taking notebook on a small living-room desk.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 85. [PRESERVE] [task-3/local/personal-memory/2025/09] While reading in the living room with the television on, the user read the same paragraph three times.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 86. [PRESERVE] [task-3/local/personal-memory/2025/09] The next day, after turning off the television, the user read 40 pages without interruption.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 87. [PRESERVE] [task-3/local/personal-memory/2025/09] The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 88. [PRESERVE] [task-3/local/personal-memory/2025/09] On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 89. [PRESERVE] [task-3/local/personal-memory/2025/09] During the next reading period, the user left the phone in another room and did not check it for an hour.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 90. [PRESERVE] [task-3/local/personal-memory/2025/09] The user feels that repeated notifications interrupt their flow of concentration.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 91. [PRESERVE] [task-3/local/personal-memory/2025/09] A note attached to a paper book fell out, and the user had to find their place again.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 92. [PRESERVE] [task-3/local/personal-memory/2025/09] With the next book, the user recorded the page number in the notebook and resumed reading immediately.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 93. [PRESERVE] [task-3/local/personal-memory/2025/09] The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 94. [PRESERVE] [task-3/local/personal-memory/2025/10] The user keeps waterproof shoes for rainy days to the left of the entrance.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 95. [PRESERVE] [task-3/local/personal-memory/2025/10] On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 96. [PRESERVE] [task-3/local/personal-memory/2025/10] On the next rainy day, the user wore waterproof shoes and their feet remained dry.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 97. [PRESERVE] [task-3/local/personal-memory/2025/10] On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 98. [PRESERVE] [task-3/local/personal-memory/2025/10] The user wore the same shoes on two short outings before using them on a long walk.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 99. [PRESERVE] [task-3/local/personal-memory/2025/10] When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 100. [PRESERVE] [task-3/local/personal-memory/2025/10] On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 101. [PRESERVE] [task-3/local/personal-memory/2025/10] On a day the user put a folded wet umbrella in their bag, documents inside became wet.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 102. [PRESERVE] [task-3/local/personal-memory/2025/10] When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 103. [PRESERVE] [task-3/local/personal-memory/2025/10] Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 104. [PRESERVE] [task-3/local/personal-memory/2025/11] The user recorded a family dinner in the calendar for the final week of November.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 105. [PRESERVE] [task-3/local/personal-memory/2025/11] When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 106. [PRESERVE] [task-3/local/personal-memory/2025/11] At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 107. [PRESERVE] [task-3/local/personal-memory/2025/11] After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 108. [PRESERVE] [task-3/local/personal-memory/2025/11] On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 109. [PRESERVE] [task-3/local/personal-memory/2025/11] The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 110. [PRESERVE] [task-3/local/personal-memory/2025/11] Available restaurant reservation times may diminish quickly during the year-end gathering season.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 111. [PRESERVE] [task-3/local/personal-memory/2025/12] The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 112. [PRESERVE] [task-3/local/personal-memory/2025/12] From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 113. [PRESERVE] [task-3/local/personal-memory/2025/12] This year, the user went to the market with their mother and let her choose a needed item directly.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 114. [PRESERVE] [task-3/local/personal-memory/2025/12] The local agent can find past gift records and flag duplicates but cannot know what is needed this year.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 115. [PRESERVE] [task-3/local/personal-memory/2025/12] The user once ordered a gift late and had it delivered the day after the gathering.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 116. [PRESERVE] [task-3/local/personal-memory/2025/12] The next year, the user checked the expected delivery date and ordered one week before the gathering.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 117. [PRESERVE] [task-3/local/personal-memory/2025/12] Year-end deliveries may take longer than usual or have their expected dates changed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 118. [PRESERVE] [task-3/local/personal-memory/2025/12] The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 119. [PRESERVE] [task-3/local/personal-memory/2025/12] The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 120. [PRESERVE] [task-3/local/personal-memory/2025/12] The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 121. [PRESERVE] [task-3/local/personal-memory/2026/01] The user keeps gloves and scarves in a basket inside the entrance.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 122. [PRESERVE] [task-3/local/personal-memory/2026/01] On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 123. [PRESERVE] [task-3/local/personal-memory/2026/01] Before the next outing, the user put the gloves in the entrance basket the night before and left on time.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 124. [PRESERVE] [task-3/local/personal-memory/2026/01] On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 125. [PRESERVE] [task-3/local/personal-memory/2026/01] The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 126. [PRESERVE] [task-3/local/personal-memory/2026/01] Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 127. [PRESERVE] [task-3/local/personal-memory/2026/01] The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 128. [PRESERVE] [task-3/local/personal-memory/2026/01] The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 129. [PRESERVE] [task-3/local/personal-memory/2026/01] The next night, the user turned down the heat and used one additional thin blanket.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 130. [PRESERVE] [task-3/local/personal-memory/2026/01] On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 131. [PRESERVE] [task-3/local/personal-memory/2026/02] The user keeps basic repair tools in a box beneath the sink.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 132. [PRESERVE] [task-3/local/personal-memory/2026/02] On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 133. [PRESERVE] [task-3/local/personal-memory/2026/02] After sending a photo to building management, the user finalized the time for a repair visit.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 134. [PRESERVE] [task-3/local/personal-memory/2026/02] Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 135. [PRESERVE] [task-3/local/personal-memory/2026/02] On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 136. [PRESERVE] [task-3/local/personal-memory/2026/02] For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 137. [PRESERVE] [task-3/local/personal-memory/2026/02] After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 138. [PRESERVE] [task-3/local/personal-memory/2026/02] The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 139. [PRESERVE] [task-3/local/personal-memory/2026/02] Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 140. [PRESERVE] [task-3/local/personal-memory/2026/02] A multi-unit residential building's repair schedule may change because of emergency work or parts availability.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 141. [PRESERVE] [task-3/local/personal-memory/2026/03] The user stores tax-related receipts in digital folders by year.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 142. [PRESERVE] [task-3/local/personal-memory/2026/03] The user found three paper receipts late and recalculated the expense total already prepared.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 143. [PRESERVE] [task-3/local/personal-memory/2026/03] Starting the next month, the user photographed receipts on the day they were received and reduced omissions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 144. [PRESERVE] [task-3/local/personal-memory/2026/03] The user named every file with only the photo date and spent a long time looking for a needed receipt.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 145. [PRESERVE] [task-3/local/personal-memory/2026/03] The user later included the expense category in the filename and found the receipt immediately through search.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 146. [PRESERVE] [task-3/local/personal-memory/2026/03] While reviewing documents just before submission, the user discovered one blank signature field.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 147. [PRESERVE] [task-3/local/personal-memory/2026/03] Before submitting an administrative document, the user checks the signature field as the final item on the checklist.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 148. [PRESERVE] [task-3/local/personal-memory/2026/03] Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 149. [PRESERVE] [task-3/local/personal-memory/2026/03] The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 150. [PRESERVE] [task-3/local/personal-memory/2026/03] The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 151. [PRESERVE] [task-3/local/personal-memory/2026/04] The user collects clothes for donation in a large bag beside the entrance.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 152. [PRESERVE] [task-3/local/personal-memory/2026/04] After emptying an entire drawer at once, the user could not find a charger they needed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 153. [PRESERVE] [task-3/local/personal-memory/2026/04] During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 154. [PRESERVE] [task-3/local/personal-memory/2026/04] Even after photographing unworn clothes, the user did not take them out again for one month.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 155. [PRESERVE] [task-3/local/personal-memory/2026/04] After moving those clothes to the donation bag, the user cleared one closet compartment.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 156. [PRESERVE] [task-3/local/personal-memory/2026/04] The user nearly discarded an important paper with advertising and checked the recycling box again.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 157. [PRESERVE] [task-3/local/personal-memory/2026/04] During the next organizing session, the user kept a separate document box and did not mix the papers.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 158. [PRESERVE] [task-3/local/personal-memory/2026/04] Confirm with the user before marking a personal document or another person's property as a disposal candidate.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 159. [PRESERVE] [task-3/local/personal-memory/2026/04] The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 160. [PRESERVE] [task-3/local/personal-memory/2026/04] The local agent cannot determine an object's emotional meaning from frequency of use alone.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 161. [PRESERVE] [task-3/local/personal-memory/2026/05] The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 162. [PRESERVE] [task-3/local/personal-memory/2026/05] On a day the user went to the riverside, they sat in a place without shade and moved after an hour.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 163. [PRESERVE] [task-3/local/personal-memory/2026/05] At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 164. [PRESERVE] [task-3/local/personal-memory/2026/05] On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 165. [PRESERVE] [task-3/local/personal-memory/2026/05] On the next outing, the user brought two small bottles of water after freezing them.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 166. [PRESERVE] [task-3/local/personal-memory/2026/05] When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 167. [PRESERVE] [task-3/local/personal-memory/2026/05] For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 168. [PRESERVE] [task-3/local/personal-memory/2026/05] For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 169. [PRESERVE] [task-3/local/personal-memory/2026/05] When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 170. [PRESERVE] [task-3/local/personal-memory/2026/05] Some park restrooms and drinking fountains may be closed seasonally.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 171. [PRESERVE] [task-3/local/personal-memory/2026/06] The user keeps four folding chairs for family barbecues in storage.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 172. [PRESERVE] [task-3/local/personal-memory/2026/06] Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 173. [PRESERVE] [task-3/local/personal-memory/2026/06] At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 174. [PRESERVE] [task-3/local/personal-memory/2026/06] After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+[32m[1mApplied 174 meld results in checkpoint [506baf87].[0m

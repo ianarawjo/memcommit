@@ -177,3 +177,20 @@ For every pair, the ordered captures are `exact-entry`, `relation-detail`,
 Grant-binding suffix. `task3-year-compares-replay-metrics.json` records all
 three input sizes, relation counts, timings, and the unchanged provider-event
 counter of `0`.
+
+## Task 3 year-pair symmetric Meld interaction log
+
+| Captures | Pair | Visible and durable result |
+| --- | --- | --- |
+| `70` through `75` | `2024 + 2025` | 119-relation review, seven optional issues, complete preservation, exact acceptance, 240-Memory result |
+| `76` through `81` | `2024 + 2026` | 96-relation review, ten optional issues, complete preservation, exact acceptance, 180-Memory result |
+| `82` through `87` | `2025 + 2026` | 102-relation review, two optional issues, complete preservation, exact acceptance, 174-Memory result after equivalent claims coalesce |
+| `88-task3-year-melds-current-restored` | all pairs complete | `practice/source-atomized` restored as current; the three result Contexts remain separate |
+| `89-task3-year-melds-action-log` | `mem log --actions --limit 60` | Initial review, preserve, accept, and verification command boundaries with no provider event |
+
+Each six-capture pair follows the same order: `exact-entry`, `issue-detail`,
+`target-switch`, `preserve-all`, `accept-receipt`, and
+`result-verification`. The initial reviews took `0.400`, `0.388`, and `0.390`
+seconds. Preservation took `0.490`, `0.470`, and `0.458` seconds; acceptance
+took `0.536`, `0.505`, and `0.506` seconds. All three branches covered every
+input and retained the exact relation basis without a provider event.

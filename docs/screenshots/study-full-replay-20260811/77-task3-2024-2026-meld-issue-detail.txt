@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ COMPATIBLE 1/10                                                                                                                                                                  ┃
+┃ Both frames connect restaurant noise with impaired conversation and home-based gatherings with easier interaction.                                                               ┃
+┃ [HELPFUL] OPEN                                                                                                                                                                   ┃
+┃ REVIEW SET · REQUIRED 0 · OPTIONAL 10                                                                                                                                            ┃
+┃ SOURCE RELATION · R1                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ COMPATIBLE · RESOLVED                                                                                                                                                            ┃
+┃Both frames connect restaurant noise with impaired conversation and home-based gatherings with easier interaction.                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE CLAIMS                                                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ CLAIM 1 · FROM task-3/local/personal-memory/2024                                                                                                                                 ┃
+┃   [c62f1669] At the user's last family meal out, noise from the next table made conversation nearly impossible.                                                                  ┃
+┃   [674f4bdf] At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.                                                          ┃
+┃   [21509788] During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.                                                                   ┃
+┃   [74eaea9d] When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.                                                             ┃
+┃   [1384df1d] At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.                                              v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ RESOLUTION QUESTION                                                                                                                                                             ^│
+│ Should these source Memories remain separately editable, or can they become one independently revisable Memory without losing any supported detail?                              │
+│ PROPOSED RESOLUTIONS                                                                                                                                                             │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│  1. Keep separately                                                                                                                                                              │
+│  Preserve each independently useful source Memory as its own target Memory.                                                                                                      │
+│                                                                                                                                                                                  │
+│  2. Combine if lossless                                                                                                                                                          │
+│  Combine these members only if one atomic target Memory retains every supported condition, scope, audience, modality, rate, and exception.                                      v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Compare report                                                                                                                                         ^│
+│› COMPATIBLE     Both frames connect restaurant noise with impaired conversation and home-based gatherings with easier interaction.                                               │
+│  COMPATIBLE     Both frames limit what prior family-gathering evidence can determine about a future event.                                                                       │
+│  SCOPED         The shared planning principle is current-condition verification, while explicit environmental conditions preserve different hazards and checks.                  │
+│  SCOPED         The entrance-coordination claim is shared, while travel-facility and park-meeting contexts impose different explicit requirements.                               │
+│  SCOPED         The compared record is a later, event-scoped confirmation of the standing custody claim.                                                                        v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-3/participant/year-meld-2024-2026 · CURRENT TARGET    Enter to change                                                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  P preserve all  D defer  A review & apply  H Help  Q close

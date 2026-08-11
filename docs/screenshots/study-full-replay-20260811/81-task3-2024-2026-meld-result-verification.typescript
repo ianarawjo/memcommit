@@ -1,0 +1,185 @@
+52 180
+[1mContext: task-3/participant/year-meld-2024-2026[0m
+  Memories 180  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory f6b6d5ca] [2m[task-3/local/personal-memory/2024/01] At the user's last family meal out, noise from the next table made conversation nearly impossible.[0m
+  [memory cb8122ea] [2m[task-3/local/personal-memory/2024/01] At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.[0m
+  [memory 58a06300] [2m[task-3/local/personal-memory/2024/01] During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.[0m
+  [memory 5be3db47] [2m[task-3/local/personal-memory/2024/01] When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.[0m
+  [memory 47400335] [2m[task-3/local/personal-memory/2024/01] At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.[0m
+  [memory f8e1df26] [2m[task-3/local/personal-memory/2024/01] On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.[0m
+  [memory 05657404] [2m[task-3/local/personal-memory/2026/06] When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.[0m
+  [memory 1c7de560] [2m[task-3/local/personal-memory/2026/06] The user held the next gathering in their father's yard and moved between seats while speaking with everyone.[0m
+  [memory 8b12a2a6] [2m[task-3/local/personal-memory/2024/01] The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.[0m
+  [memory 59353dec] [2m[task-3/local/personal-memory/2026/06] The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.[0m
+  [memory a0341fce] [2m[task-3/local/personal-memory/2024/10] On an evening walk, the user saw an unlit street and took a detour along a main road.[0m
+  [memory a0cfe22b] [2m[task-3/local/personal-memory/2024/10] On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.[0m
+  [memory 53269003] [2m[task-3/local/personal-memory/2024/10] Check recent lighting and pedestrian conditions before proposing an evening walking route.[0m
+  [memory 917bd5a2] [2m[task-3/local/personal-memory/2024/10] The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.[0m
+  [memory 975424b1] [2m[task-3/local/personal-memory/2024/12] On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.[0m
+  [memory d5cdadf5] [2m[task-3/local/personal-memory/2024/12] Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.[0m
+  [memory 4d2a2a47] [2m[task-3/local/personal-memory/2026/01] On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.[0m
+  [memory ffa9502b] [2m[task-3/local/personal-memory/2026/01] The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.[0m
+  [memory d7f8bdba] [2m[task-3/local/personal-memory/2026/01] Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.[0m
+  [memory a50269b9] [2m[task-3/local/personal-memory/2026/01] The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.[0m
+  [memory 0276859c] [2m[task-3/local/personal-memory/2024/06] On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.[0m
+  [memory b63463f2] [2m[task-3/local/personal-memory/2026/05] When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.[0m
+  [memory 6eb66e65] [2m[task-3/local/personal-memory/2026/05] For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.[0m
+  [memory ed097bea] [2m[task-3/local/personal-memory/2026/05] For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.[0m
+  [memory 5771657a] [2m[task-3/local/personal-memory/2026/05] When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.[0m
+  [memory 84aee641] [2m[task-3/local/personal-memory/2024/02] The user's maternal aunt keeps one spare key to the user's home.[0m
+  [memory 6920af29] [2m[task-3/local/personal-memory/2026/02] After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.[0m
+  [memory 8aeca321] [2m[task-3/local/personal-memory/2024/02] Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.[0m
+  [memory 20f47a81] [2m[task-3/local/personal-memory/2026/02] The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.[0m
+  [memory 2d8bc8b4] [2m[task-3/local/personal-memory/2024/07] During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.[0m
+  [memory f78f7eb0] [2m[task-3/local/personal-memory/2024/07] The user cleared the entrance the day before the next visit so the inspection could begin immediately.[0m
+  [memory 88e89638] [2m[task-3/local/personal-memory/2026/02] Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.[0m
+  [memory 3d23c8f0] [2m[task-3/local/personal-memory/2024/07] Confirm the user's available time before finalizing a service visit to the residence.[0m
+  [memory 688618e3] [2m[task-3/local/personal-memory/2026/02] Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.[0m
+  [memory 796a33d2] [2m[task-3/local/personal-memory/2024/07] The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.[0m
+  [memory 893acdb8] [2m[task-3/local/personal-memory/2026/02] A multi-unit residential building's repair schedule may change because of emergency work or parts availability.[0m
+  [memory 49907682] [2m[task-3/local/personal-memory/2024/08] The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.[0m
+  [memory 0499a03d] [2m[task-3/local/personal-memory/2026/03] The user found three paper receipts late and recalculated the expense total already prepared.[0m
+  [memory 0652b26a] [2m[task-3/local/personal-memory/2026/03] Starting the next month, the user photographed receipts on the day they were received and reduced omissions.[0m
+  [memory 11dbb6c6] [2m[task-3/local/personal-memory/2024/01] The user's mother's birthday falls in the third week of January.[0m
+  [memory bbbb82f1] [2m[task-3/local/personal-memory/2024/01] The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.[0m
+  [memory 11f0cff3] [2m[task-3/local/personal-memory/2024/01] When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.[0m
+  [memory 85fd0677] [2m[task-3/local/personal-memory/2024/02] If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.[0m
+  [memory 2d3f21e2] [2m[task-3/local/personal-memory/2024/02] When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.[0m
+  [memory 4e89a615] [2m[task-3/local/personal-memory/2024/02] The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.[0m
+  [memory 9747bf72] [2m[task-3/local/personal-memory/2024/02] The user feels at ease only after returning a borrowed spare key in person on the same day.[0m
+  [memory a0e9e337] [2m[task-3/local/personal-memory/2024/02] The user feels uneasy about writing down a new entrance passcode on paper.[0m
+  [memory 11351192] [2m[task-3/local/personal-memory/2024/02] The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.[0m
+  [memory 7abb9b0b] [2m[task-3/local/personal-memory/2024/02] On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.[0m
+  [memory 321740f6] [2m[task-3/local/personal-memory/2024/02] The management office of a multi-unit residential building does not hold a unit key without verifying identity.[0m
+  [memory 46589ce2] [2m[task-3/local/personal-memory/2024/03] The instructions for one medication the user takes say to take it after the evening meal.[0m
+  [memory ba708d98] [2m[task-3/local/personal-memory/2024/03] On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.[0m
+  [memory 8a9b8ff1] [2m[task-3/local/personal-memory/2024/03] For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.[0m
+  [memory a292eba2] [2m[task-3/local/personal-memory/2024/03] On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.[0m
+  [memory ee2085eb] [2m[task-3/local/personal-memory/2024/03] The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.[0m
+  [memory 7df79908] [2m[task-3/local/personal-memory/2024/12] The user waited for their turn in front of a ticket machine near the waiting chairs.[0m
+  [memory a5dd691d] [2m[task-3/local/personal-memory/2024/12] On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.[0m
+  [memory 015dd0b3] [2m[task-3/local/personal-memory/2024/12] On a day their older sister accompanied them, the user found a place to sit immediately after reception.[0m
+  [memory 711f834c] [2m[task-3/local/personal-memory/2024/03] On a day medication instructions were explained all at once and at length, the user failed to write down an important time.[0m
+  [memory dda62395] [2m[task-3/local/personal-memory/2024/03] On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.[0m
+  [memory 8ef6868e] [2m[task-3/local/personal-memory/2024/04] When the user heard three checkup questions in succession, they asked for the first question again.[0m
+  [memory d4d2f4b0] [2m[task-3/local/personal-memory/2024/04] At the next visit, when questions were asked one at a time, the user answered each without omission.[0m
+  [memory 8a408053] [2m[task-3/local/personal-memory/2024/11] After hearing preparation items from their mother by phone, the user omitted two items.[0m
+  [memory 22781085] [2m[task-3/local/personal-memory/2024/11] After receiving the preparation items again by text, the user put all of them in their bag.[0m
+  [memory 1ea1433d] [2m[task-3/local/personal-memory/2024/03] On a visit when their younger brother drove them, the user did not have to find a separate route home.[0m
+  [memory a87b8e4c] [2m[task-3/local/personal-memory/2024/03] The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.[0m
+  [memory 3ecd2cd9] [2m[task-3/local/personal-memory/2024/03] The local agent cannot determine the current prescription or whether use continues from medication notes alone.[0m
+  [memory fbbe67dd] [2m[task-3/local/personal-memory/2024/04] The user completed a routine dental checkup in April 2024.[0m
+  [memory 8c8c6f79] [2m[task-3/local/personal-memory/2024/04] The user called to reschedule an appointment at lunchtime but did not reach anyone.[0m
+  [memory 092d83aa] [2m[task-3/local/personal-memory/2024/04] The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.[0m
+  [memory 58a105a5] [2m[task-3/local/personal-memory/2024/04] After returning home, the user kept a photo of the paper instructions received at the clinic.[0m
+  [memory 691f0b11] [2m[task-3/local/personal-memory/2024/04] On a day the user put only the visit address in the calendar, they had to search again for the floor.[0m
+  [memory aaf7112f] [2m[task-3/local/personal-memory/2024/04] Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.[0m
+  [memory df904681] [2m[task-3/local/personal-memory/2024/04] On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.[0m
+  [memory f3ee91f0] [2m[task-3/local/personal-memory/2024/04] The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.[0m
+  [memory 511d1721] [2m[task-3/local/personal-memory/2024/05] The user keeps a small table fan beside the bedroom window.[0m
+  [memory 3f6b2720] [2m[task-3/local/personal-memory/2024/05] On a night the window was left open, street noise woke the user twice.[0m
+  [memory 23395a65] [2m[task-3/local/personal-memory/2024/05] On a night the table fan was running, the user was not too warm even with the window closed.[0m
+  [memory a485a3f1] [2m[task-3/local/personal-memory/2024/05] On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.[0m
+  [memory 07799b79] [2m[task-3/local/personal-memory/2024/05] On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.[0m
+  [memory 2ee56b1b] [2m[task-3/local/personal-memory/2024/05] The user tends to go to bed much later after drinking coffee late in the afternoon.[0m
+  [memory a96fa82f] [2m[task-3/local/personal-memory/2024/05] On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.[0m
+  [memory 8952c8d4] [2m[task-3/local/personal-memory/2024/05] In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.[0m
+  [memory 9307092b] [2m[task-3/local/personal-memory/2024/05] The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.[0m
+  [memory 7331acd7] [2m[task-3/local/personal-memory/2024/05] When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.[0m
+  [memory a8033da5] [2m[task-3/local/personal-memory/2024/06] The user stores copies of identity documents in an encrypted folder.[0m
+  [memory c26b39e6] [2m[task-3/local/personal-memory/2024/06] On a day the user transferred between buses twice, they rested for an hour after the trip.[0m
+  [memory 001ab8fc] [2m[task-3/local/personal-memory/2024/06] On a day the user took a direct route with a similar travel time, they remained seated to the destination.[0m
+  [memory ccc058b4] [2m[task-3/local/personal-memory/2024/06] The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.[0m
+  [memory 59b9614f] [2m[task-3/local/personal-memory/2024/06] After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.[0m
+  [memory db66b8ea] [2m[task-3/local/personal-memory/2024/06] On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.[0m
+  [memory b096084c] [2m[task-3/local/personal-memory/2024/06] On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.[0m
+  [memory ee60b42b] [2m[task-3/local/personal-memory/2024/06] The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.[0m
+  [memory fc5498fe] [2m[task-3/local/personal-memory/2024/06] The local agent cannot know whether an accessible entrance is operating that day from past route records alone.[0m
+  [memory 974552ec] [2m[task-3/local/personal-memory/2024/12] The user learned on site that the elevator was under inspection and delayed the appointment.[0m
+  [memory dd4b2f91] [2m[task-3/local/personal-memory/2024/12] The day before the next visit, the user called to check whether the elevator would be operating.[0m
+  [memory 20c0b384] [2m[task-3/local/personal-memory/2024/07] The user updated the utility account for their residence in July 2024.[0m
+  [memory e8ceebc9] [2m[task-3/local/personal-memory/2024/07] After putting a paper bill in a drawer, the user checked it one day after the payment date.[0m
+  [memory 11891f0a] [2m[task-3/local/personal-memory/2024/07] In the month after receiving an electronic billing alert, the user paid two days before the deadline.[0m
+  [memory d79bd085] [2m[task-3/local/personal-memory/2024/07] The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.[0m
+  [memory ba128611] [2m[task-3/local/personal-memory/2024/07] After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.[0m
+  [memory df17536e] [2m[task-3/local/personal-memory/2024/07] The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.[0m
+  [memory b90f5d7a] [2m[task-3/local/personal-memory/2024/08] The user has set a monthly limit in their budget record for spending other than living expenses.[0m
+  [memory 44d99750] [2m[task-3/local/personal-memory/2024/08] In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.[0m
+  [memory 3536bf4c] [2m[task-3/local/personal-memory/2024/08] The following week, the user completed both errands in one outing and reduced travel time.[0m
+  [memory 3cd9d0c4] [2m[task-3/local/personal-memory/2024/08] When a bill alert arrived on the due date, the user postponed payment until after a meeting.[0m
+  [memory 11a0886f] [2m[task-3/local/personal-memory/2024/08] In a month when the user received an alert three days before the deadline, they finished payment before dinner.[0m
+  [memory 22d037de] [2m[task-3/local/personal-memory/2024/08] After recording one large expense, the user ate out two fewer times that week.[0m
+  [memory 13d3639a] [2m[task-3/local/personal-memory/2024/08] The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.[0m
+  [memory 5c56cc49] [2m[task-3/local/personal-memory/2024/08] Confirm the amount and account with the user before creating an automatic payment schedule.[0m
+  [memory 94e4d499] [2m[task-3/local/personal-memory/2024/08] The timing of payment processing and late-payment recording may differ by billing institution.[0m
+  [memory 6c4cc143] [2m[task-3/local/personal-memory/2024/09] The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.[0m
+  [memory 52e1eedf] [2m[task-3/local/personal-memory/2024/09] The user once canceled an appointment booked for the same weekday as in the previous month.[0m
+  [memory 44c779da] [2m[task-3/local/personal-memory/2024/09] When asked again about availability just before booking, the user provided three free times for that week.[0m
+  [memory cbeb7f17] [2m[task-3/local/personal-memory/2024/09] On a day with two consecutive morning appointments, the user ate lunch at 3 p.m.[0m
+  [memory caeea12e] [2m[task-3/local/personal-memory/2024/09] On a day the user left an hour between appointments, they ate while traveling.[0m
+  [memory 0a7fdbed] [2m[task-3/local/personal-memory/2024/09] The user's shared calendar does not automatically reserve travel time between events.[0m
+  [memory e8c6f3ae] [2m[task-3/local/personal-memory/2024/09] After seeing a private reason written directly in a calendar title, the user removed the wording.[0m
+  [memory 8691aff0] [2m[task-3/local/personal-memory/2024/09] The user checked that a calendar-sharing screen showed only the time and hid the details.[0m
+  [memory ffe69898] [2m[task-3/local/personal-memory/2024/09] The local agent cannot know the private reason for unavailability from the unavailable time alone.[0m
+  [memory 2d7b8323] [2m[task-3/local/personal-memory/2024/11] The user changed their schedule once in November 2024 because of their mother's hospital visit.[0m
+  [memory 6da651c4] [2m[task-3/local/personal-memory/2024/11] After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.[0m
+  [memory fe610b84] [2m[task-3/local/personal-memory/2024/11] The user was able to reschedule the appointment after providing only a new time, without a reason.[0m
+  [memory 52ab3cdc] [2m[task-3/local/personal-memory/2024/11] The user's mother does not want the reason for her visit disclosed in the user's external schedule.[0m
+  [memory fdf91c75] [2m[task-3/local/personal-memory/2024/11] Do not include the mother's reason for a visit when conveying the user's availability externally.[0m
+  [memory 25eeaea8] [2m[task-3/local/personal-memory/2024/09] When evening plans on the same day must change, the user's mother wants advance notice on the weekend morning.[0m
+  [memory 9a993ca0] [2m[task-3/local/personal-memory/2024/10] The user renewed their local library membership in October 2024.[0m
+  [memory 4859e7c0] [2m[task-3/local/personal-memory/2024/10] On a day the user sat by the library window, they heard vehicle noise with every page they read.[0m
+  [memory 7c022a60] [2m[task-3/local/personal-memory/2024/10] On the next visit, the user sat farther inside and did not move for an hour.[0m
+  [memory 488c557d] [2m[task-3/local/personal-memory/2024/10] The user wrote the due date of a borrowed book on paper and then lost the paper.[0m
+  [memory c1443d94] [2m[task-3/local/personal-memory/2024/10] After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.[0m
+  [memory 52cefa2b] [2m[task-3/local/personal-memory/2024/10] Library staff expect a person requesting a replacement membership card to bring identity-verification material.[0m
+  [memory 8bb9df5d] [2m[task-3/local/personal-memory/2024/11] On a day the user traveled in their father's car, they photographed the parking location.[0m
+  [memory 9db86e92] [2m[task-3/local/personal-memory/2024/11] On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.[0m
+  [memory b95ddb4c] [2m[task-3/local/personal-memory/2024/11] Some daily-life services may operate for shorter hours during the year-end holiday period.[0m
+  [memory 27a6e154] [2m[task-3/local/personal-memory/2024/12] The user used an accessible entrance at a clinic in December 2024.[0m
+  [memory 3c1be7c2] [2m[task-3/local/personal-memory/2024/12] Reception staff expect that a first-time visitor may ask where the accessible entrance is.[0m
+  [memory 7a07a028] [2m[task-3/local/personal-memory/2024/12] The local agent cannot infer the user's condition from a record of using an accessible route alone.[0m
+  [memory 51086d2d] [2m[task-3/local/personal-memory/2026/01] The user keeps gloves and scarves in a basket inside the entrance.[0m
+  [memory eace4fe6] [2m[task-3/local/personal-memory/2026/01] On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.[0m
+  [memory 7ea0693b] [2m[task-3/local/personal-memory/2026/01] Before the next outing, the user put the gloves in the entrance basket the night before and left on time.[0m
+  [memory 16c0b861] [2m[task-3/local/personal-memory/2026/01] The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.[0m
+  [memory c7b04949] [2m[task-3/local/personal-memory/2026/01] The next night, the user turned down the heat and used one additional thin blanket.[0m
+  [memory 4209415b] [2m[task-3/local/personal-memory/2026/01] On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.[0m
+  [memory 13db4fe8] [2m[task-3/local/personal-memory/2026/02] The user keeps basic repair tools in a box beneath the sink.[0m
+  [memory 5f30eacc] [2m[task-3/local/personal-memory/2026/02] On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.[0m
+  [memory 0a254a4b] [2m[task-3/local/personal-memory/2026/02] After sending a photo to building management, the user finalized the time for a repair visit.[0m
+  [memory dfd17596] [2m[task-3/local/personal-memory/2026/02] On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.[0m
+  [memory 0022d5d9] [2m[task-3/local/personal-memory/2026/02] For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.[0m
+  [memory 731ec942] [2m[task-3/local/personal-memory/2026/03] The user stores tax-related receipts in digital folders by year.[0m
+  [memory d5249249] [2m[task-3/local/personal-memory/2026/03] The user named every file with only the photo date and spent a long time looking for a needed receipt.[0m
+  [memory 4e249734] [2m[task-3/local/personal-memory/2026/03] The user later included the expense category in the filename and found the receipt immediately through search.[0m
+  [memory 337f77cd] [2m[task-3/local/personal-memory/2026/03] While reviewing documents just before submission, the user discovered one blank signature field.[0m
+  [memory 6c79a7a3] [2m[task-3/local/personal-memory/2026/03] Before submitting an administrative document, the user checks the signature field as the final item on the checklist.[0m
+  [memory 1df11e68] [2m[task-3/local/personal-memory/2026/03] Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.[0m
+  [memory 5fa8ebaf] [2m[task-3/local/personal-memory/2026/03] The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.[0m
+  [memory 6dbc96e2] [2m[task-3/local/personal-memory/2026/03] The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.[0m
+  [memory 689da853] [2m[task-3/local/personal-memory/2026/04] The user collects clothes for donation in a large bag beside the entrance.[0m
+  [memory 26504cf7] [2m[task-3/local/personal-memory/2026/04] After emptying an entire drawer at once, the user could not find a charger they needed.[0m
+  [memory d4359aff] [2m[task-3/local/personal-memory/2026/04] During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.[0m
+  [memory 4fb1322f] [2m[task-3/local/personal-memory/2026/04] Even after photographing unworn clothes, the user did not take them out again for one month.[0m
+  [memory bc783cd2] [2m[task-3/local/personal-memory/2026/04] After moving those clothes to the donation bag, the user cleared one closet compartment.[0m
+  [memory f21b5a36] [2m[task-3/local/personal-memory/2026/04] The user nearly discarded an important paper with advertising and checked the recycling box again.[0m
+  [memory 63b574ef] [2m[task-3/local/personal-memory/2026/04] During the next organizing session, the user kept a separate document box and did not mix the papers.[0m
+  [memory 7f486d4d] [2m[task-3/local/personal-memory/2026/04] The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.[0m
+  [memory 95ca76b8] [2m[task-3/local/personal-memory/2026/04] Confirm with the user before marking a personal document or another person's property as a disposal candidate.[0m
+  [memory e5c84563] [2m[task-3/local/personal-memory/2026/04] The local agent cannot determine an object's emotional meaning from frequency of use alone.[0m
+  [memory e2f3fbe7] [2m[task-3/local/personal-memory/2026/05] The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.[0m
+  [memory 02d0d414] [2m[task-3/local/personal-memory/2026/05] On a day the user went to the riverside, they sat in a place without shade and moved after an hour.[0m
+  [memory 40766827] [2m[task-3/local/personal-memory/2026/05] At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.[0m
+  [memory c524d39e] [2m[task-3/local/personal-memory/2026/05] On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.[0m
+  [memory d940793b] [2m[task-3/local/personal-memory/2026/05] On the next outing, the user brought two small bottles of water after freezing them.[0m
+  [memory de9a01b8] [2m[task-3/local/personal-memory/2026/05] Some park restrooms and drinking fountains may be closed seasonally.[0m
+  [memory 91fbc830] [2m[task-3/local/personal-memory/2026/06] The user keeps four folding chairs for family barbecues in storage.[0m
+  [memory b7244981] [2m[task-3/local/personal-memory/2026/06] On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.[0m
+  [memory a3602bdf] [2m[task-3/local/personal-memory/2026/06] The next time, the user started at 6 p.m. and remained outside until sunset.[0m
+  [memory c59f771c] [2m[task-3/local/personal-memory/2026/06] The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.[0m
+  [memory 634cf0e6] [2m[task-3/local/personal-memory/2026/06] Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.[0m
+  [memory 91d72cd9] [2m[task-3/local/personal-memory/2026/06] At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.[0m
+  [memory 0bec2120] [2m[task-3/local/personal-memory/2026/06] After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.[0m

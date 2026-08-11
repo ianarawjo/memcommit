@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ COMPATIBLE 1/2                                                                                                                                                                   ┃
+┃ One attributes easier conversation to dispersed sound; the other records the user circulating among guests in the father's yard.                                                 ┃
+┃ [HELPFUL] OPEN                                                                                                                                                                   ┃
+┃ REVIEW SET · REQUIRED 0 · OPTIONAL 2                                                                                                                                             ┃
+┃ SOURCE RELATION · R2                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ COMPATIBLE · RESOLVED                                                                                                                                                            ┃
+┃One attributes easier conversation to dispersed sound; the other records the user circulating among guests in the father's yard.                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE CLAIMS                                                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ CLAIM 1 · FROM task-3/local/personal-memory/2025                                                                                                                                 ┃
+┃   [b61367fa] On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ CLAIM 2 · FROM task-3/local/personal-memory/2026                                                                                                                                 ┃
+┃   [c1f2b53e] The user held the next gathering in their father's yard and moved between seats while speaking with everyone.                                                       ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ RESOLUTION QUESTION                                                                                                                                                             ^│
+│ Should these source Memories remain separately editable, or can they become one independently revisable Memory without losing any supported detail?                              │
+│ PROPOSED RESOLUTIONS                                                                                                                                                             │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│  1. Keep separately                                                                                                                                                              │
+│  Preserve each independently useful source Memory as its own target Memory.                                                                                                      │
+│                                                                                                                                                                                  │
+│  2. Combine if lossless                                                                                                                                                          │
+│  Combine these members only if one atomic target Memory retains every supported condition, scope, audience, modality, rate, and exception.                                      v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Compare report                                                                                                                                         ^│
+│› COMPATIBLE     One attributes easier conversation to dispersed sound; the other records the user circulating among guests in the father's yard.                                 │
+│  COMPATIBLE     The reference directs confirmation of attendance timing and location, while the compared frame limits inference about attendees and weather from past barbecues. │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-3/participant/year-meld-2025-2026 · CURRENT TARGET    Enter to change                                                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  P preserve all  D defer  A review & apply  H Help  Q close

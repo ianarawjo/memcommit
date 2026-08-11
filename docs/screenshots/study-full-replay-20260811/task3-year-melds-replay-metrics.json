@@ -1,0 +1,61 @@
+{
+  "profile": "study-snapshot-replay-20260811",
+  "pairs": [
+    {
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "input_memories": [
+        120,
+        120
+      ],
+      "relations": 119,
+      "issues": 7,
+      "result_memories": 240,
+      "elapsed_to_review_seconds": 0.3995020000147633,
+      "preserve_all_seconds": 0.4904487089952454,
+      "accept_seconds": 0.5362024169880897,
+      "target": "task-3/participant/year-meld-2024-2025"
+    },
+    {
+      "years": [
+        "2024",
+        "2026"
+      ],
+      "input_memories": [
+        120,
+        60
+      ],
+      "relations": 96,
+      "issues": 10,
+      "result_memories": 180,
+      "elapsed_to_review_seconds": 0.3884753749880474,
+      "preserve_all_seconds": 0.46993866699631326,
+      "accept_seconds": 0.5045302080106921,
+      "target": "task-3/participant/year-meld-2024-2026"
+    },
+    {
+      "years": [
+        "2025",
+        "2026"
+      ],
+      "input_memories": [
+        120,
+        60
+      ],
+      "relations": 102,
+      "issues": 2,
+      "result_memories": 174,
+      "elapsed_to_review_seconds": 0.3902356670005247,
+      "preserve_all_seconds": 0.4582769169937819,
+      "accept_seconds": 0.5056505000102334,
+      "target": "task-3/participant/year-meld-2025-2026"
+    }
+  ],
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "origin": "EXACT_PREWARM_COMPARE_BASES",
+  "current_before": "practice/source-atomized",
+  "current_after": "practice/source-atomized"
+}

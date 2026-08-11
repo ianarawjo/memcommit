@@ -1,0 +1,51 @@
+ture record.                                                                                                                                                                        
+  [memory 781393ba] [task-3/local/personal-memory/2025/07] The user keeps a travel power bank in the first drawer beneath the desk.                                                 
+  [memory 7286e03d] [task-3/local/personal-memory/2025/07] The user packed three pairs of shoes for a two-night trip but wore only one pair.                                        
+  [memory 0dc70b1a] [task-3/local/personal-memory/2025/07] For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.                
+  [memory 84693ded] [task-3/local/personal-memory/2025/07] On a trip when the user forgot a charging cable, they bought a new one after arrival.                                    
+  [memory 1e096581] [task-3/local/personal-memory/2025/07] Before the next trip, the user checked charging items against a photo and packed all of them.                            
+  [memory 206d7d20] [task-3/local/personal-memory/2025/07] The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.      
+  [memory 58da9acb] [task-3/local/personal-memory/2025/07] The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.                        
+  [memory 4dbb7107] [task-3/local/personal-memory/2025/07] The next time, the user closed the bag the night before and departed on time.                                            
+  [memory 9a0a8833] [task-3/local/personal-memory/2025/07] When creating a travel preparation list, confirm the trip length and actual activities with the user.                    
+  [memory 408e3147] [task-3/local/personal-memory/2025/07] The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.           
+  [memory bc045c77] [task-3/local/personal-memory/2025/08] The user keeps packing tape for returns in an upper kitchen drawer.                                                      
+  [memory 00ad340f] [task-3/local/personal-memory/2025/08] The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.              
+  [memory 3a17a23a] [task-3/local/personal-memory/2025/08] Before the next visit, the user checked the operating hours and arrived one hour before closing.                         
+  [memory 878a6b2e] [task-3/local/personal-memory/2025/08] The user went to the counter without closing a return box and had to go back to the packing station.                     
+  [memory 079c0dd1] [task-3/local/personal-memory/2025/08] For the next return, the user sealed the box at home and completed intake in one attempt.                                
+  [memory 6e9fa57a] [task-3/local/personal-memory/2025/08] Postal staff expect a return-label barcode to arrive affixed flat, without a fold.                                       
+  [memory 9ddacb8a] [task-3/local/personal-memory/2025/09] The user keeps the book they are reading and a note-taking notebook on a small living-room desk.                         
+  [memory 1513b055] [task-3/local/personal-memory/2025/09] On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.                 
+  [memory 3811cd01] [task-3/local/personal-memory/2025/09] During the next reading period, the user left the phone in another room and did not check it for an hour.                
+  [memory 6075551f] [task-3/local/personal-memory/2025/09] The user feels that repeated notifications interrupt their flow of concentration.                                        
+  [memory 7f223e6d] [task-3/local/personal-memory/2025/09] A note attached to a paper book fell out, and the user had to find their place again.                                    
+  [memory 0160bdc8] [task-3/local/personal-memory/2025/09] With the next book, the user recorded the page number in the notebook and resumed reading immediately.                   
+  [memory 863fd3cc] [task-3/local/personal-memory/2025/09] The local agent can summarize past reading environments and interruption records but cannot predict the next reading time
+.                                                                                                                                                                                   
+  [memory 2690c402] [task-3/local/personal-memory/2025/10] The user keeps waterproof shoes for rainy days to the left of the entrance.                                              
+  [memory 182b4a8f] [task-3/local/personal-memory/2025/10] On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.     
+  [memory 3354aff8] [task-3/local/personal-memory/2025/10] On the next rainy day, the user wore waterproof shoes and their feet remained dry.                                       
+  [memory c26fd4f0] [task-3/local/personal-memory/2025/10] On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.              
+  [memory 66df2373] [task-3/local/personal-memory/2025/10] The user wore the same shoes on two short outings before using them on a long walk.                                      
+  [memory 04cdb25f] [task-3/local/personal-memory/2025/10] When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.      
+  [memory 7d7fd3ca] [task-3/local/personal-memory/2025/10] On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.              
+  [memory 7cbb1949] [task-3/local/personal-memory/2025/10] On a day the user put a folded wet umbrella in their bag, documents inside became wet.                                   
+  [memory 7da273b1] [task-3/local/personal-memory/2025/10] When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.   
+  [memory 2ff7d9bc] [task-3/local/personal-memory/2025/10] Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.           
+  [memory e7e9ca29] [task-3/local/personal-memory/2025/11] The user recorded a family dinner in the calendar for the final week of November.                                        
+  [memory 353db5a3] [task-3/local/personal-memory/2025/11] After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.    
+  [memory 4c17c2fa] [task-3/local/personal-memory/2025/11] On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.              
+  [memory f69c5ebe] [task-3/local/personal-memory/2025/11] The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance
+.                                                                                                                                                                                   
+  [memory ef6da00b] [task-3/local/personal-memory/2025/11] Available restaurant reservation times may diminish quickly during the year-end gathering season.                        
+  [memory 0d147bc0] [task-3/local/personal-memory/2025/12] The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.                            
+  [memory b53885b8] [task-3/local/personal-memory/2025/12] From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row. 
+  [memory dacac53c] [task-3/local/personal-memory/2025/12] This year, the user went to the market with their mother and let her choose a needed item directly.                      
+  [memory 52dd2072] [task-3/local/personal-memory/2025/12] The local agent can find past gift records and flag duplicates but cannot know what is needed this year.                 
+  [memory 4a5b4158] [task-3/local/personal-memory/2025/12] The user once ordered a gift late and had it delivered the day after the gathering.                                      
+  [memory f6d4b724] [task-3/local/personal-memory/2025/12] The next year, the user checked the expected delivery date and ordered one week before the gathering.                    
+  [memory 70b5fe5c] [task-3/local/personal-memory/2025/12] Year-end deliveries may take longer than usual or have their expected dates changed.                                     
+  [memory 65dcc1f5] [task-3/local/personal-memory/2025/12] The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.        
+  [memory b6625794] [task-3/local/personal-memory/2025/12] The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.                                
+  [memory aaa8a9c8] [task-3/local/personal-memory/2025/12] The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.

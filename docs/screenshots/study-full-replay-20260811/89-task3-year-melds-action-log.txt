@@ -1,0 +1,51 @@
+      status=COMPLETED                                                                                                                                                              
+  [31850989/1] 2026-08-11 11:50:55 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [6df0439f/2] 2026-08-11 11:50:55 +0.090s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [6df0439f/1] 2026-08-11 11:50:55 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [daa411fa/2] 2026-08-11 11:50:54 +0.002s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [daa411fa/1] 2026-08-11 11:50:54 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=switch · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                 
+  [e3d2f57f/7] 2026-08-11 11:50:54 +1.932s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [e3d2f57f/6] 2026-08-11 11:50:54 +1.931s  TUI_ACTION                                                                                                                              
+      action=CLOSE · surface=resolution                                                                                                                                             
+  [e3d2f57f/5] 2026-08-11 11:50:54 +1.930s  TEXT_INPUT                                                                                                                              
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False                                                                                             
+  [e3d2f57f/4] 2026-08-11 11:50:53 +0.891s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-m                                                                                                                                
+  [e3d2f57f/3] 2026-08-11 11:50:53 +0.891s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=down                                                                                                                               
+  [e3d2f57f/2] 2026-08-11 11:50:53 +0.890s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-i                                                                                                                                
+  [e3d2f57f/1] 2026-08-11 11:50:52 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [106f5914/2] 2026-08-11 11:48:39 +0.022s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [106f5914/1] 2026-08-11 11:48:39 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=log · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                    
+  [e281af0f/2] 2026-08-11 11:48:38 +0.037s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [e281af0f/1] 2026-08-11 11:48:38 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                
+  [57603236/7] 2026-08-11 11:48:38 +3.319s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [57603236/6] 2026-08-11 11:48:38 +3.317s  TEXT_INPUT                                                                                                                              
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False                                                                                             
+  [57603236/5] 2026-08-11 11:48:37 +2.396s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-m                                                                                                                                
+  [57603236/4] 2026-08-11 11:48:36 +1.510s  KEY                                                                                                                                     
+      count=101 · focus=FormattedTextControl · key=up                                                                                                                               
+  [57603236/3] 2026-08-11 11:48:36 +1.113s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=end                                                                                                                                
+  [57603236/2] 2026-08-11 11:48:35 +0.720s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-i                                                                                                                                
+  [57603236/1] 2026-08-11 11:48:34 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                
+  [892bee6e/2] 2026-08-11 11:48:34 +0.036s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [892bee6e/1] 2026-08-11 11:48:34 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
